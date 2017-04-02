@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anotations\Columna.cs" />
+    <Compile Include="CotizacionDAL.cs" />
     <Compile Include="ClienteDAL.cs" />
     <Compile Include="CiudadDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

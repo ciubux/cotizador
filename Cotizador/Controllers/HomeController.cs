@@ -57,6 +57,26 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public ActionResult GenerarPDF()
+        {
+            Cotizacion cot = new Cotizacion();
+
+            cot.fecha = DateTime.ParseExact(Request["fecha"].ToString(), "dd/MM/YYYY", null);
+            cot.idCiudad = Guid.Parse(Request["idCiudad"].ToString());
+            cot.idCliente = Guid.Parse(Request["idCliente"].ToString());
+            cot.incluidoIgv = int.Parse(Request["igv"].ToString());
+            cot.mostrarCodProveedor = int.Parse(Request["codigoproveedor"].ToString());
+            cot.idMoneda = Guid.Parse(Request["moneda"].ToString());
+            cot.idTipoCambio = Guid.Parse(Request["tipocambio"].ToString());
+            cot.idPrecio = Guid.Parse(Request["precio"].ToString());
+            cot.flete = Decimal.Parse(Request["flete"].ToString());
+
+            
+            
+            CotizacionDal dal = new CotizacionDal();
+
+            return RedirectToAction("Index", "Home");
+        }
 
         /*
         public ActionResult About()
