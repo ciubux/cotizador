@@ -64,8 +64,8 @@ namespace Cotizador.Controllers
             cot.fecha = DateTime.ParseExact(Request["fecha"].ToString(), "dd/MM/YYYY", null);
             cot.idCiudad = Guid.Parse(Request["idCiudad"].ToString());
             cot.idCliente = Guid.Parse(Request["idCliente"].ToString());
-            cot.incluidoIgv = int.Parse(Request["igv"].ToString());
-            cot.mostrarCodProveedor = int.Parse(Request["codigoproveedor"].ToString());
+            cot.incluidoIgv = short.Parse(Request["igv"].ToString());
+            cot.mostrarCodProveedor = short.Parse(Request["codigoproveedor"].ToString());
             cot.idMoneda = Guid.Parse(Request["moneda"].ToString());
             cot.idTipoCambio = Guid.Parse(Request["tipocambio"].ToString());
             cot.idPrecio = Guid.Parse(Request["precio"].ToString());
@@ -73,7 +73,7 @@ namespace Cotizador.Controllers
 
             
             
-            CotizacionDal dal = new CotizacionDal();
+            CotizacionBL bl = new CotizacionBL();
 
             return RedirectToAction("Index", "Home");
         }
