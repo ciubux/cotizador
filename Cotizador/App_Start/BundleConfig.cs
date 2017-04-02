@@ -35,7 +35,7 @@ namespace Cotizador
                       "~/Content/footable.bootstrap.min.css",
                       "~/Content/jquery-ui.min.css",
                       "~/Content/site.css",
-                      "~/Content/chosen.css"));
+                      "~/Content/chosen/chosen.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-chosen").Include(
                        "~/Scripts/chosen/chosen.jquery.min.js", "~/Scripts/chosen/chosen.ajaxaddition.jquery.js", "~/Scripts/chosen/PrintArea.js"));

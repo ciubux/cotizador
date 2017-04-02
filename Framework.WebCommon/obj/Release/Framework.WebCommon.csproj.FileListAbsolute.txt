@@ -3,3 +3,8 @@ C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\bin\Release\Framework.WebCommon.p
 C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\obj\Release\Framework.WebCommon.csprojResolveAssemblyReference.cache
 C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\obj\Release\Framework.WebCommon.dll
 C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb
+C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\bin\Release\Framework.WebCommon.dll
+C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\bin\Release\Framework.WebCommon.pdb
+C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.dll
+C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb

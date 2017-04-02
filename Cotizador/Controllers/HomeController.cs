@@ -45,14 +45,18 @@ namespace Cotizador.Controllers
             List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data);
 
             String resultado = "{\"q\":\"" + data + "\",\"results\":[";
-
+            Boolean existeCliente = false;
             foreach (Cliente cliente in clienteList)
             {
                 cliente.razonSocial = cliente.codigo+  " - " +cliente.razonSocial + " - RUC: " + cliente ;
                 resultado += "{\"id\":\"" + cliente.idCliente + "\",\"text\":\"" + cliente.razonSocial + "\"},";
+                existeCliente = true;
             }
 
-            resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+            if (existeCliente)
+                resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+            else
+                resultado = resultado.Substring(0, resultado.Length) + "]}";
 
             return resultado;
         }

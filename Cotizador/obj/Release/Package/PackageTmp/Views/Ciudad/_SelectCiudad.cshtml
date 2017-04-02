@@ -1,0 +1,5 @@
+﻿@model IEnumerable<Model.Ciudad>
+
+@Html.DropDownList("idCiudad",
+new SelectList(Model, "idCiudad", "nombre"),
+new { value = "0", @class = "form-control" })

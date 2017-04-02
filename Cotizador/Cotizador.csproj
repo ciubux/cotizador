@@ -216,6 +216,7 @@
     <Content Include="Content\chosen\chosen-sprite.png" />
     <Content Include="Content\chosen\chosen.css" />
     <Content Include="Content\chosen\chosen.min.css" />
+    <Content Include="Content\chosen\images\loading.gif" />
     <Content Include="Content\chosen\multiple-select.css" />
     <Content Include="Content\footable.bootstrap.min.css" />
     <Content Include="Content\jquery-ui.min.css" />
@@ -229,6 +230,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\cotizadormp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen\chosen.ajaxaddition.jquery.js" />
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
