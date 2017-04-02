@@ -49,3 +49,18 @@ C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin
 C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.pdb
 C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Model.pdb
 C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.pdb
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\DataLayer.dll
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\Framework.DAL.dll
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\Model.dll
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\DataLayer.pdb
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\Framework.DAL.pdb
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\Model.pdb
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
+C:\Users\cesar\Source\Repos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
