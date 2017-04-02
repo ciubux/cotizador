@@ -1,0 +1,23 @@
+C:\Proyectos\NETLAB\NetLab\Model\bin\Debug\Model.dll
+C:\Proyectos\NETLAB\NetLab\Model\bin\Debug\Model.pdb
+C:\Proyectos\NETLAB\NetLab\Model\bin\Debug\MVC Foolproof Validation.dll
+C:\Proyectos\NETLAB\NetLab\Model\bin\Debug\System.Web.Mvc.dll
+C:\Proyectos\NETLAB\NetLab\Model\bin\Debug\System.Web.Mvc.xml
+C:\Proyectos\NETLAB\NetLab\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
+C:\Proyectos\NETLAB\NetLab\Model\obj\Debug\Model.dll
+C:\Proyectos\NETLAB\NetLab\Model\obj\Debug\Model.pdb
+F:\CODIGO\NetLab_2404\NetLab\Model\bin\Debug\Model.dll
+F:\CODIGO\NetLab_2404\NetLab\Model\bin\Debug\Model.pdb
+F:\CODIGO\NetLab_2404\NetLab\Model\bin\Debug\MVC Foolproof Validation.dll
+F:\CODIGO\NetLab_2404\NetLab\Model\bin\Debug\System.Web.Mvc.dll
+F:\CODIGO\NetLab_2404\NetLab\Model\bin\Debug\System.Web.Mvc.xml
+F:\CODIGO\NetLab_2404\NetLab\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
+F:\CODIGO\NetLab_2404\NetLab\Model\obj\Debug\Model.dll
+F:\CODIGO\NetLab_2404\NetLab\Model\obj\Debug\Model.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\obj\Debug\Model.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\obj\Debug\Model.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\bin\Debug\Model.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\bin\Debug\Model.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\bin\Debug\System.Web.Mvc.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\bin\Debug\System.Web.Mvc.xml

@@ -1,0 +1,15 @@
+C:\Proyectos\NETLAB\NetLab\Framework.DAL\bin\Debug\Framework.DAL.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL\bin\Debug\Framework.DAL.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.DAL\obj\Debug\Framework.DAL.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL\obj\Debug\Framework.DAL.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.DAL\obj\Debug\Framework.DAL.csprojResolveAssemblyReference.cache
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL\bin\Debug\Framework.DAL.dll
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL\bin\Debug\Framework.DAL.pdb
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL\obj\Debug\Framework.DAL.csprojResolveAssemblyReference.cache
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL\obj\Debug\Framework.DAL.dll
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL\obj\Debug\Framework.DAL.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb

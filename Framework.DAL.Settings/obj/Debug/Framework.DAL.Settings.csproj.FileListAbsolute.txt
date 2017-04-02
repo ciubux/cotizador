@@ -1,0 +1,27 @@
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csprojResolveAssemblyReference.cache
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.dll
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csprojResolveAssemblyReference.cache
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
+F:\CODIGO\NetLab_2404\NetLab\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb

@@ -1,0 +1,9 @@
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Release\Framework.DAL.Settings.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Release\Framework.DAL.Settings.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Release\Framework.DAL.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Release\Framework.WebCommon.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Release\Framework.DAL.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\bin\Release\Framework.WebCommon.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.csprojResolveAssemblyReference.cache
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.pdb

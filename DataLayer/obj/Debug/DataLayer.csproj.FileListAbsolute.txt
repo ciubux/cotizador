@@ -1,0 +1,41 @@
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\DataLayer.dll.config
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\DataLayer.dll
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\DataLayer.pdb
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\Framework.DAL.dll
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\Framework.WebCommon.dll
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\Model.dll
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\Framework.DAL.pdb
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\Framework.WebCommon.pdb
+C:\Proyectos\NETLAB\NetLab\DataLayer\bin\Debug\Model.pdb
+C:\Proyectos\NETLAB\NetLab\DataLayer\obj\Debug\DataLayer.csprojResolveAssemblyReference.cache
+C:\Proyectos\NETLAB\NetLab\DataLayer\obj\Debug\DataLayer.dll
+C:\Proyectos\NETLAB\NetLab\DataLayer\obj\Debug\DataLayer.pdb
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\DataLayer.dll.config
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\DataLayer.dll
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\DataLayer.pdb
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\Framework.DAL.dll
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\Framework.DAL.Settings.dll
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\Framework.WebCommon.dll
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\Model.dll
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\Framework.DAL.pdb
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\Framework.WebCommon.pdb
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\bin\Debug\Model.pdb
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\obj\Debug\DataLayer.csprojResolveAssemblyReference.cache
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\obj\Debug\DataLayer.dll
+F:\CODIGO\NetLab_2404\NetLab\DataLayer\obj\Debug\DataLayer.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\obj\Debug\DataLayer.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\obj\Debug\DataLayer.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\obj\Debug\DataLayer.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\bin\Debug\DataLayer.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\bin\Debug\DataLayer.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\bin\Debug\Framework.DAL.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\bin\Debug\Model.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\bin\Debug\Framework.DAL.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\DataLayer\bin\Debug\Model.pdb

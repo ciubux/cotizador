@@ -1,0 +1,51 @@
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\BusinessLayer.dll.config
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\BusinessLayer.dll
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\BusinessLayer.pdb
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\DataLayer.dll
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\Framework.DAL.dll
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\Framework.WebCommon.dll
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\Model.dll
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\Reniec.dll
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\DataLayer.pdb
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\Framework.DAL.pdb
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\Framework.WebCommon.pdb
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\Model.pdb
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\Reniec.pdb
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\obj\Debug\BusinessLayer.csprojResolveAssemblyReference.cache
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\obj\Debug\BusinessLayer.dll
+C:\Proyectos\NETLAB\NetLab\BusinessLayer\obj\Debug\BusinessLayer.pdb
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\BusinessLayer.dll.config
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\BusinessLayer.dll
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\BusinessLayer.pdb
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\DataLayer.dll
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\Framework.DAL.dll
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\Framework.WebCommon.dll
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\Model.dll
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\Reniec.dll
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\Framework.DAL.Settings.dll
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\DataLayer.pdb
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\Framework.DAL.pdb
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\Framework.WebCommon.pdb
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\Model.pdb
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\Reniec.pdb
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\obj\Debug\BusinessLayer.csprojResolveAssemblyReference.cache
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\obj\Debug\BusinessLayer.dll
+F:\CODIGO\NetLab_2404\NetLab\BusinessLayer\obj\Debug\BusinessLayer.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\obj\Debug\BusinessLayer.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\BusinessLayer.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\DataLayer.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Framework.DAL.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Model.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\DataLayer.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Framework.DAL.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Model.pdb
+C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb

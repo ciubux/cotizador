@@ -1,0 +1,8 @@
+C:\Proyectos\NETLAB\NetLab\Model\bin\Release\Model.dll
+C:\Proyectos\NETLAB\NetLab\Model\bin\Release\Model.pdb
+C:\Proyectos\NETLAB\NetLab\Model\obj\Release\Model.csprojResolveAssemblyReference.cache
+C:\Proyectos\NETLAB\NetLab\Model\obj\Release\Model.dll
+C:\Proyectos\NETLAB\NetLab\Model\obj\Release\Model.pdb
+C:\Proyectos\NETLAB\NetLab\Model\bin\Release\MVC Foolproof Validation.dll
+C:\Proyectos\NETLAB\NetLab\Model\bin\Release\System.Web.Mvc.dll
+C:\Proyectos\NETLAB\NetLab\Model\bin\Release\System.Web.Mvc.xml

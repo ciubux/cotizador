@@ -1,0 +1,10 @@
+C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
+F:\CODIGO\NetLab_2404\NetLab\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+F:\CODIGO\NetLab_2404\NetLab\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+F:\CODIGO\NetLab_2404\NetLab\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
+F:\CODIGO\NetLab_2404\NetLab\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+F:\CODIGO\NetLab_2404\NetLab\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb

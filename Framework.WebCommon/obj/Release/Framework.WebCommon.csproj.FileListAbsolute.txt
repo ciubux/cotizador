@@ -1,0 +1,5 @@
+C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\bin\Release\Framework.WebCommon.dll
+C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\bin\Release\Framework.WebCommon.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\obj\Release\Framework.WebCommon.csprojResolveAssemblyReference.cache
+C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\obj\Release\Framework.WebCommon.dll
+C:\Proyectos\NETLAB\NetLab\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb

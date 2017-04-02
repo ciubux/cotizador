@@ -1,0 +1,5 @@
+C:\Proyectos\NETLAB\NetLab\Framework.DAL\bin\Release\Framework.DAL.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL\bin\Release\Framework.DAL.pdb
+C:\Proyectos\NETLAB\NetLab\Framework.DAL\obj\Release\Framework.DAL.csprojResolveAssemblyReference.cache
+C:\Proyectos\NETLAB\NetLab\Framework.DAL\obj\Release\Framework.DAL.dll
+C:\Proyectos\NETLAB\NetLab\Framework.DAL\obj\Release\Framework.DAL.pdb
