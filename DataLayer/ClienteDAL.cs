@@ -20,7 +20,7 @@ namespace DataLayer
         public List<Cliente> getClientesBusqueda(String textoBusqueda)
         {
             var objCommand = GetSqlCommand("ps_getclientes_search");
-       //     InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
+            InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
             DataTable dataTable = Execute(objCommand);
             List<Cliente> clienteList = new List<Cliente>();
 
