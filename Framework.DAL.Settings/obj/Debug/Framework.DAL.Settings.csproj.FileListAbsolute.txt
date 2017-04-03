@@ -34,3 +34,12 @@ D:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.p
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csprojResolveAssemblyReference.cache
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb

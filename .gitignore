@@ -1,5 +1,7 @@
 .vs/Cotizador/v14/.suo
-.vs/Cotizador/v14/.suo
+Cotizador/bin
+Cotizador/obj/Debug
+Cotizador/obj/Release
 *.dll
 BusinessLayer/bin/Debug/BusinessLayer.pdb
 *.pdb
