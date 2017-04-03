@@ -8,11 +8,11 @@ namespace BusinessLayer
 {
     public class PrecioBL
     {
-        public List<Ciudad> getCiudades()
+        public List<PrecioLista> getListas()
         {
-            using (var ciudadDAL = new CiudadDAL())
+            using (var dal = new PrecioListaDAL())
             {
-                return ciudadDAL.getCiudades();
+                return dal.getListas();
             }
         }
 

@@ -1,5 +1,9 @@
 ﻿@{
     ViewBag.Title = "Inicio";
+    List<Model.PrecioLista> precios = ViewBag.Precios;
+    List<Model.Moneda> monedas = ViewBag.Monedas;
+    List<Model.Categoria> categorias = ViewBag.Categorias;
+    List<Model.Proveedor> proveedores = ViewBag.Proveedores;
 }
 
 
@@ -81,16 +85,14 @@
                     <div class="form-group">
                         <label for="moneda" class="control-label col-xs-4">Moneda</label>
                         <div class="col-xs-8">
+                        @foreach (Model.Moneda item in monedas)
+                        {
                             <div class="radio radio-inline">
                                 <label class="radio-label">
-                                    <input class="radio-input" type="radio" name="moneda" id="monedasol" value="sol"> S/
+                                    <input class="radio-input" type="radio" name="moneda" id="monedasol" value="@item.idMoneda"> @item.simbolo
                                 </label>
                             </div>
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    <input class="radio-input" type="radio" name="moneda" id="monedadol" value="dol"> $
-                                </label>
-                            </div>
+                        }
                         </div>
                     </div>
                 </div>
@@ -110,9 +112,10 @@
                         <div class="col-xs-8">
                             <select class="form-control" id="precio" name="precio">
                                 <option selected>Seleccione...</option>
-                                <option value="3">P1(Lista)</option>
-                                <option value="2">P2(Lista)</option>
-                                <option value="1">P3(Lista)</option>
+                                @foreach (Model.PrecioLista item in precios)
+                                {
+                                <option value="@item.idPrecioLista">@item.nombreVista</option>
+                                }
                             </select>
                         </div>
                     </div>
@@ -264,7 +267,10 @@
                                     <div class="col-xs-8">
                                         <select class="form-control" id="proveedor" name="proveedor">
                                             <option selected>Seleccione...</option>
-                                            <option value="1">KC</option>
+                                            @foreach (Model.Proveedor item in proveedores)
+                                            {
+                                                <option value="@item.idProveedor">@item.nombre</option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -273,7 +279,10 @@
                                     <div class="col-xs-8">
                                         <select class="form-control" id="categoria" name="categoria">
                                             <option selected>Seleccione...</option>
-                                            <option value="1">Limpieza Institucional</option>
+                                            @foreach (Model.Categoria item in categorias)
+                                            {
+                                                <option value="@item.idCategoria">@item.nombre</option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -327,9 +336,10 @@
                                     <div class="col-xs-8">
                                         <select class="form-control" id="precio" name="precio">
                                             <option selected>Seleccione...</option>
-                                            <option value="3">P1(Lista)</option>
-                                            <option value="2">P2(Lista)</option>
-                                            <option value="1">P3(Lista)</option>
+                                            @foreach (Model.PrecioLista item in precios)
+                                            {
+                                                <option value="@item.idPrecioLista">@item.nombreVista</option>
+                                            }
                                         </select>
                                     </div>
                                 </div>

@@ -28,5 +28,26 @@ jQuery(function($){
     
     $('.table').footable();
     
-    $( "#fecha" ).datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", new Date());
+    $("#fecha").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", new Date());
+
+    $("#categoria").change(function () {
+        //alert(1);
+        $.ajax({
+            url: "/Home/GetFamilias",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCategoria: $(this).val(),
+            },
+            success: function (res) {
+                var selects = '<option selected>Seleccione...</option>';
+
+                res.results.forEach(function (item, index, array) {
+                    selects = selects + '<option value="' + item.id + '" >' + item.text + '</option>';
+                });
+
+                $('#familia').html(selects);
+            }
+        });
+    });
 });

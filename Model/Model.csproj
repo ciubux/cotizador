@@ -39,6 +39,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auditoria.cs" />
+    <Compile Include="Familia.cs" />
+    <Compile Include="Proveedor.cs" />
+    <Compile Include="Categoria.cs" />
+    <Compile Include="Moneda.cs" />
+    <Compile Include="PrecioLista.cs" />
     <Compile Include="CotizacionDetalle.cs" />
     <Compile Include="Cotizacion.cs" />
     <Compile Include="Cliente.cs" />

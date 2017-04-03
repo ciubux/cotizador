@@ -37,6 +37,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FamiliaBL.cs" />
+    <Compile Include="ProveedorBL.cs" />
+    <Compile Include="CategoriaBL.cs" />
+    <Compile Include="MonedaBL.cs" />
     <Compile Include="PrecioBL.cs" />
     <Compile Include="CotizacionBL.cs" />
     <Compile Include="ClienteBL.cs" />
