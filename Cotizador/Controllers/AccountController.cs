@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Cotizador.Models;
+using BusinessLayer;
 
 namespace Cotizador.Controllers
 {
@@ -75,8 +76,14 @@ namespace Cotizador.Controllers
 
             // No cuenta los errores de inicio de sesión para el bloqueo de la cuenta
             // Para permitir que los errores de contraseña desencadenen el bloqueo de la cuenta, cambie a shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            //    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            UsuarioBL usuarioBL = new UsuarioBL();
+            var result = usuarioBL.getUsuarioLogin(model.Email, model.Password);
+            SignInStatus signInStatus = SignInStatus.Failure;
+            if (result)
+                signInStatus = SignInStatus.Success;
+
+            switch (signInStatus)
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
