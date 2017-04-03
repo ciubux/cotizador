@@ -1,0 +1,467 @@
+﻿@{
+    ViewBag.Title = "Inicio";
+}
+
+
+    <div class="container">
+        <div class="header">
+            <div class="left">
+                Cotización - <input class="label-input" type="text" id="fecha" name="fecha">
+            </div>
+            <div class="right">
+                Carlos Perez - Ventas
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a>Cancelar</a>
+            </div>
+        </div>
+        <form class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <label for="ciudad" class="control-label col-xs-4">Ciudad</label>
+                        <div class="col-xs-8">
+                            @Html.Action("list", "Ciudad")
+
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <label for="cliente" class="control-label col-xs-4">Señores</label>
+
+                        <div class="col-xs-8">
+                             <select class="form-control input-sm" id="idCliente" name="idCliente"><option value=""></option>
+                            </select>
+                            <!--<input class="form-control col-xs-5" type="text" value="" id="cliente" name="cliente">-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <label for="igv" class="control-label col-xs-4">Incluido IGV</label>
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    <input class="radio-input" type="radio" name="igv" id="igvsi" value="1"> Sí
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    <input class="radio-input" type="radio" name="igv" id="igvno" value="0"> No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <label for="codigoproveedor" class="control-label col-xs-4">Mostrar cod. proveedor</label>
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    <input class="radio-input" type="radio" name="codigoproveedor" id="codigoproveedorsi" value="1"> Si
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    <input class="radio-input" type="radio" name="codigoproveedor" id="codigoproveedorno" value="0"> No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <label for="moneda" class="control-label col-xs-4">Moneda</label>
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    <input class="radio-input" type="radio" name="moneda" id="monedasol" value="sol"> S/
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    <input class="radio-input" type="radio" name="moneda" id="monedadol" value="dol"> $
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <label for="tipocambio" class="control-label col-xs-4">Tipo Cambio</label>
+                        <div class="col-xs-8">
+                            <input class="form-control" type="text" value="" id="tipocambio" name="tipocambio">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <label for="precio" class="control-label col-xs-4">Precio Lista</label>
+                        <div class="col-xs-8">
+                            <select class="form-control" id="precio" name="precio">
+                                <option selected>Seleccione...</option>
+                                <option value="3">P1(Lista)</option>
+                                <option value="2">P2(Lista)</option>
+                                <option value="1">P3(Lista)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <label for="flete" class="control-label col-xs-4">Flete</label>
+                        <div class="col-xs-8">
+                            <input class="form-control" type="text" value="" id="flete" name="flete">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <div class="col-xs-10">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table" data-sorting="true" data-show-toggle="false">
+                <thead>
+                    <tr>
+                        <th data-sortable="true">Prov</th>
+                        <th data-sortable="true" data-breakpoints="xs">Code</th>
+                        <th data-sortable="false">Producto</th>
+                        <th data-sortable="true" data-breakpoints="xs">Presentación</th>
+                        <th data-sortable="false" data-breakpoints="xs sm">Imagen</th>
+                        <th data-sortable="true" data-breakpoints="xs sm">Nuevo valor Unitario</th>
+                        <th data-sortable="true" data-breakpoints="xs sm">Cantidad</th>
+                        <th data-sortable="true" data-breakpoints="xs sm">Precio Lista</th>
+                        <th data-sortable="true" data-breakpoints="xs sm">% Dscto</th>
+                        <th data-sortable="false" data-breakpoints="xs sm">Costo</th>
+                        <th data-sortable="false" data-breakpoints="xs sm">Cotización</th>
+                        <th data-sortable="false" data-breakpoints="xs sm">Margen</th>
+                        <th data-sortable="false" data-breakpoints="xs sm">Utilidad Bruta</th>
+                        <!-- <th data-breakpoints="all" data-title="DOB">Date of Birth</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-expanded="true">
+                        <td>Proveedor 1</td>
+                        <td>HD001</td>
+                        <td>Papel Higiénico</td>
+                        <td>Unidad</td>
+                        <td class="column-img"><img class="table-product-img" src="images/papelhigienico.jpg"></td>
+                        <td>15</td>
+                        <td>2</td>
+                        <td>P3</td>
+                        <td>10%</td>
+                        <td>10</td>
+                        <td>15</td>
+                        <td>33.3 %</td>
+                        <td>5</td>
+                    </tr>
+                    <tr data-expanded="true">
+                        <td>Proveedor 2</td>
+                        <td>HD002</td>
+                        <td>Jabón de tocador</td>
+                        <td>Unidad</td>
+                        <td class="column-img"><img class="table-product-img" src="images/jabon_tocador.jpg"></td>
+                        <td>15</td>
+                        <td>2</td>
+                        <td>P3</td>
+                        <td>10%</td>
+                        <td>10</td>
+                        <td>15</td>
+                        <td>33.3 %</td>
+                        <td>5</td>
+                    </tr>
+                    <tr data-expanded="true">
+                        <td>Proveedor 3</td>
+                        <td>HD003</td>
+                        <td>Lejía</td>
+                        <td>Unidad</td>
+                        <td class="column-img"><img class="table-product-img" src="images/lejia.jpg"></td>
+                        <td>15</td>
+                        <td>2</td>
+                        <td>P3</td>
+                        <td>10%</td>
+                        <td>10</td>
+                        <td>15</td>
+                        <td>33.3 %</td>
+                        <td>5</td>
+                    </tr>
+                    <tr data-expanded="true">
+                        <td>Proveedor 4</td>
+                        <td>HD004</td>
+                        <td>Pasta Dental</td>
+                        <td>Unidad</td>
+                        <td class="column-img"><img class="table-product-img" src="images/pasta_dental.png"></td>
+                        <td>15</td>
+                        <td>2</td>
+                        <td>P3</td>
+                        <td>10%</td>
+                        <td>10</td>
+                        <td>15</td>
+                        <td>33.3 %</td>
+                        <td>5</td>
+                    </tr>
+                    <tr data-expanded="true">
+                        <td>Proveedor 5</td>
+                        <td>HD005</td>
+                        <td>Jabón líquido</td>
+                        <td>Unidad</td>
+                        <td class="column-img"><img class="table-product-img" src="images/jabon_liquido.jpg"></td>
+                        <td>15</td>
+                        <td>2</td>
+                        <td>P3</td>
+                        <td>10%</td>
+                        <td>10</td>
+                        <td>15</td>
+                        <td>33.3 %</td>
+                        <td>5</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <div class="col-xs-10">
+                            <button type="button" class="btn btn-primary">Generar PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalAgregarProducto" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAgregarProductoTitle">Agregar Producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="proveedor" class="control-label col-xs-4">Proveedor</label>
+                                    <div class="col-xs-8">
+                                        <select class="form-control" id="proveedor" name="proveedor">
+                                            <option selected>Seleccione...</option>
+                                            <option value="1">KC</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="categoria" class="control-label col-xs-4">Categoría</label>
+                                    <div class="col-xs-8">
+                                        <select class="form-control" id="categoria" name="categoria">
+                                            <option selected>Seleccione...</option>
+                                            <option value="1">Limpieza Institucional</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="familia" class="control-label col-xs-4">Familia</label>
+                                    <div class="col-xs-8">
+                                        <select class="form-control" id="familia" name="familia">
+                                            <option selected>Seleccione...</option>
+                                            <option value="1">Mangos</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="producto" class="control-label col-xs-4">Producto</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="producto" name="producto">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-6 ">
+                                <div class="form-group modal-add-image">
+                                    <img src="images/papelhigienico.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="presentacion" class="control-label col-xs-4">Presentación</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="presentacion" name="presentacion">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="cantidad" class="control-label col-xs-4">Cantidad</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="cantidad" name="cantidad">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="precio" class="control-label col-xs-4">Precio Lista</label>
+                                    <div class="col-xs-8">
+                                        <select class="form-control" id="precio" name="precio">
+                                            <option selected>Seleccione...</option>
+                                            <option value="3">P1(Lista)</option>
+                                            <option value="2">P2(Lista)</option>
+                                            <option value="1">P3(Lista)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="valorunitario" class="control-label col-xs-4">Valor Unitario</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="valorunitario" name="valorunitario">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="pdescuento" class="control-label col-xs-4">% Dscto.</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="pdescuento" name="pdescuento">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="precargo" class="control-label col-xs-4">% Recargo</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="precargo" name="precargo">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="valorunitarioneto" class="control-label col-xs-4">Valor unit. neto</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="valorunitarioneto" name="valorunitarioneto">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="subtotal" class="control-label col-xs-4">Sub total</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="subtotal" name="subtotal">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="costounitario" class="control-label col-xs-4">Costo unitario</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="costounitario" name="costounitario">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="margen" class="control-label col-xs-4">Margen</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="margen" name="margen">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="utilidadbruta" class="control-label col-xs-4">Utilidad Bruta</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" value="" id="utilidadbruta" name="utilidadbruta">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--
+
+<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+            enables a clean separation of concerns and gives you full control over markup
+            for enjoyable, agile development.
+        </p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Get more libraries</h2>
+        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    </div>
+</div>
+    -->
+
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/app/cotizador/cotizador.js")
+}

@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProductoBL.cs" />
     <Compile Include="FamiliaBL.cs" />
     <Compile Include="ProveedorBL.cs" />
     <Compile Include="CategoriaBL.cs" />

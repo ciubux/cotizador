@@ -50,4 +50,60 @@ jQuery(function($){
             }
         });
     });
+
+    $("#proveedor").change(function () {
+        $.ajax({
+            url: "/Home/SetProveedor",
+            type: 'POST',
+            dataType: 'HTML',
+            data: {
+                idProveedor: $(this).val(),
+            },
+            success: function (res) {
+                var a = 0;
+            }
+        });
+    });
+
+    $("#familia").change(function () {
+        $.ajax({
+            url: "/Home/SetFamilia",
+            type: 'POST',
+            dataType: 'HTML',
+            data: {
+                idFamilia: $(this).val(),
+            },
+            success: function (res) {
+                var a = 0;
+            }
+        });
+    });
+
+    $("#producto").chosen({ placeholder_text_single: "Seleccione el producto", no_results_text: "No existen coincidencias" });
+
+    $("#producto").ajaxChosen({
+        dataType: "json",
+        type: "GET",
+        minTermLength: 3,
+        afterTypeDelay: 300,
+        cache: false,
+        url: "/Home/GetProductos"
+    }, {
+        loadingImg: "Content/chosen/images/loading.gif"
+    }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No existen coincidencias" });
+
+    $("#producto").change(function () {
+        alert(1);
+        $.ajax({
+            url: "/Home/GetProducto",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idProducto: $(this).val(),
+            },
+            success: function (res) {
+                $("#presentacion").val(res.presentacion);
+            }
+        });
+    });
 });

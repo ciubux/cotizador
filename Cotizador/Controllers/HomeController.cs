@@ -61,14 +61,18 @@ namespace Cotizador.Controllers
             List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data);
 
             String resultado = "{\"q\":\"" + data + "\",\"results\":[";
-
+            Boolean existeCliente = false;
             foreach (Cliente cliente in clienteList)
             {
                 cliente.razonSocial = cliente.codigo+  " - " +cliente.razonSocial + " - RUC: " + cliente ;
                 resultado += "{\"id\":\"" + cliente.idCliente + "\",\"text\":\"" + cliente.razonSocial + "\"},";
+                existeCliente = true;
             }
 
-            resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+            if (existeCliente)
+                resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+            else
+                resultado = resultado.Substring(0, resultado.Length) + "]}";
 
             return resultado;
         }
@@ -92,6 +96,63 @@ namespace Cotizador.Controllers
 
             return resultado;
         }
+
+        public String SetProveedor()
+        {
+            //Guid idProveedor = Guid.Parse(Request["idProveedor"].ToString());
+            this.Session["idProveedor"] = Request["idProveedor"].ToString();
+            return "";
+        }
+
+        public String SetFamilia()
+        {
+            //Guid idFamilia = Guid.Parse(Request["idFamilia"].ToString());
+            this.Session["idFamilia"] = Request["idFamilia"].ToString();
+            return "";
+        }
+
+        public String GetProductos()
+        {
+            Guid idProveedor = Guid.Parse(this.Session["idProveedor"].ToString());
+            Guid idFamilia = Guid.Parse(this.Session["idFamilia"].ToString());
+
+            String data = this.Request.Params["data[q]"];
+            
+            ProductoBL bl = new ProductoBL();
+            List<Producto> lista = bl.getProductosBusqueda(idProveedor, idFamilia, data);
+            
+            String resultado = "{\"q\":\"" + data + "\",\"results\":[";
+            Boolean existe = false;
+            foreach (Producto prod in lista)
+            {
+                resultado += "{\"id\":\"" + prod.idProducto + "\",\"text\":\"" + prod.descripcion + "(" + prod.sku.Trim() + ")" + "\"},";
+                existe = true;
+            }
+
+            if (existe)
+                resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+            else
+                resultado = resultado.Substring(0, resultado.Length) + "]}";
+
+            return resultado;
+        }
+
+        public String GetProducto()
+        {
+            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+
+            ProductoBL bl = new ProductoBL();
+            Producto obj = bl.getProducto(idProducto);
+
+            String resultado = "{" + 
+                "\"id\":\"" + obj.idProducto + "\"," + 
+                "\"nombre\":\"" + obj.descripcion + "\"," +
+                "\"presentacion\":\"" + obj.unidad.descripcion + "\"" +
+                "}";
+            
+            return resultado;
+        }
+
         public ActionResult GenerarPDF()
         {
             Cotizacion cot = new Cotizacion();

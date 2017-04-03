@@ -40,6 +40,8 @@
                             <!--<input class="form-control col-xs-5" type="text" value="" id="cliente" name="cliente">-->
                         </div>
                     </div>
+                 
+           <!--       <button onclick="alert( $('#idCliente').val())" ></button>-->  
                 </div>
             </div>
             <div class="row">
@@ -291,14 +293,15 @@
                                     <div class="col-xs-8">
                                         <select class="form-control" id="familia" name="familia">
                                             <option selected>Seleccione...</option>
-                                            <option value="1">Mangos</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="producto" class="control-label col-xs-4">Producto</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="producto" name="producto">
+                                        <select class="form-control input-sm" id="producto" name="producto">
+                                            <option value=""></option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -315,7 +318,7 @@
                                 <div class="form-group">
                                     <label for="presentacion" class="control-label col-xs-4">Presentación</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="presentacion" name="presentacion">
+                                        <input class="form-control" type="text" value="" id="presentacion" name="presentacion" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -392,7 +395,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        @*<div class="row">
                             <div class="col-sm-6 col-lg-6">
                                 <div class="form-group">
                                     <label for="costounitario" class="control-label col-xs-4">Costo unitario</label>
@@ -425,7 +428,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
 
 
 

@@ -3,3 +3,8 @@ C:\Proyectos\NETLAB\NetLab\Framework.DAL\bin\Release\Framework.DAL.pdb
 C:\Proyectos\NETLAB\NetLab\Framework.DAL\obj\Release\Framework.DAL.csprojResolveAssemblyReference.cache
 C:\Proyectos\NETLAB\NetLab\Framework.DAL\obj\Release\Framework.DAL.dll
 C:\Proyectos\NETLAB\NetLab\Framework.DAL\obj\Release\Framework.DAL.pdb
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL\bin\Release\Framework.DAL.dll
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL\bin\Release\Framework.DAL.pdb
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL\obj\Release\Framework.DAL.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL\obj\Release\Framework.DAL.dll
+C:\Users\cesar\Source\Repos\cotizador\Framework.DAL\obj\Release\Framework.DAL.pdb
