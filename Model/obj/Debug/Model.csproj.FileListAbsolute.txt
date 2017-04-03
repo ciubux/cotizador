@@ -21,10 +21,8 @@ C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\bin\Debug\M
 C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\bin\Debug\Model.pdb
 C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\bin\Debug\System.Web.Mvc.dll
 C:\Users\cesar\Documents\Visual Studio 2015\Projects\Cotizador\Model\bin\Debug\System.Web.Mvc.xml
-C:\Users\cesar\Source\Repos\cotizador\Model\bin\Debug\Model.dll
-C:\Users\cesar\Source\Repos\cotizador\Model\bin\Debug\Model.pdb
-C:\Users\cesar\Source\Repos\cotizador\Model\bin\Debug\System.Web.Mvc.dll
-C:\Users\cesar\Source\Repos\cotizador\Model\bin\Debug\System.Web.Mvc.xml
-C:\Users\cesar\Source\Repos\cotizador\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Source\Repos\cotizador\Model\obj\Debug\Model.dll
-C:\Users\cesar\Source\Repos\cotizador\Model\obj\Debug\Model.pdb
+D:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll
+D:\Repo\freelos\cotizador\Model\bin\Debug\Model.pdb
+D:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
+D:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb
+D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache

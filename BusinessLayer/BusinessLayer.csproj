@@ -37,6 +37,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PrecioBL.cs" />
+    <Compile Include="CotizacionBL.cs" />
     <Compile Include="ClienteBL.cs" />
     <Compile Include="CiudadBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
