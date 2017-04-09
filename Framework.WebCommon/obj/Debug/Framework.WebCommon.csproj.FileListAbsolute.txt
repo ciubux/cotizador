@@ -8,3 +8,8 @@ F:\CODIGO\NetLab_2404\NetLab\Framework.WebCommon\bin\Debug\Framework.WebCommon.p
 F:\CODIGO\NetLab_2404\NetLab\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
 F:\CODIGO\NetLab_2404\NetLab\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
 F:\CODIGO\NetLab_2404\NetLab\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
