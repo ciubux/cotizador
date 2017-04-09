@@ -91,7 +91,7 @@
                         {
                             <div class="radio radio-inline">
                                 <label class="radio-label">
-                                    <input class="radio-input" type="radio" name="moneda" id="monedasol" value="@item.idMoneda"> @item.simbolo
+                                    <input class="radio-input rMoneda" type="radio" name="moneda" value="@item.idMoneda"> @item.simbolo
                                 </label>
                             </div>
                         }
@@ -153,9 +153,9 @@
                         <th data-sortable="true" data-breakpoints="xs sm">Precio Lista</th>
                         <th data-sortable="true" data-breakpoints="xs sm">% Dscto</th>
                         <th data-sortable="false" data-breakpoints="xs sm">Costo</th>
-                        <th data-sortable="false" data-breakpoints="xs sm">Cotización</th>
+                        @*<th data-sortable="false" data-breakpoints="xs sm">Cotización</th>
                         <th data-sortable="false" data-breakpoints="xs sm">Margen</th>
-                        <th data-sortable="false" data-breakpoints="xs sm">Utilidad Bruta</th>
+                        <th data-sortable="false" data-breakpoints="xs sm">Utilidad Bruta</th>*@
                         <!-- <th data-breakpoints="all" data-title="DOB">Date of Birth</th> -->
                     </tr>
                 </thead>
@@ -171,9 +171,9 @@
                         <td>P3</td>
                         <td>10%</td>
                         <td>10</td>
-                        <td>15</td>
+                        @*<td>15</td>
                         <td>33.3 %</td>
-                        <td>5</td>
+                        <td>5</td>*@
                     </tr>
                     <tr data-expanded="true">
                         <td>Proveedor 2</td>
@@ -186,9 +186,9 @@
                         <td>P3</td>
                         <td>10%</td>
                         <td>10</td>
-                        <td>15</td>
+                        @*<td>15</td>
                         <td>33.3 %</td>
-                        <td>5</td>
+                        <td>5</td>*@
                     </tr>
                     <tr data-expanded="true">
                         <td>Proveedor 3</td>
@@ -201,9 +201,9 @@
                         <td>P3</td>
                         <td>10%</td>
                         <td>10</td>
-                        <td>15</td>
+                        @*<td>15</td>
                         <td>33.3 %</td>
-                        <td>5</td>
+                        <td>5</td>*@
                     </tr>
                     <tr data-expanded="true">
                         <td>Proveedor 4</td>
@@ -216,9 +216,9 @@
                         <td>P3</td>
                         <td>10%</td>
                         <td>10</td>
-                        <td>15</td>
+                        @*<td>15</td>
                         <td>33.3 %</td>
-                        <td>5</td>
+                        <td>5</td>*@
                     </tr>
                     <tr data-expanded="true">
                         <td>Proveedor 5</td>
@@ -231,9 +231,9 @@
                         <td>P3</td>
                         <td>10%</td>
                         <td>10</td>
-                        <td>15</td>
+                        @*<td>15</td>
                         <td>33.3 %</td>
-                        <td>5</td>
+                        <td>5</td>*@
                     </tr>
                 </tbody>
             </table>
@@ -307,7 +307,7 @@
                             </div>
                             <div class="col-sm-6 col-lg-6 ">
                                 <div class="form-group modal-add-image">
-                                    <img src="images/papelhigienico.jpg">
+                                    <img id="imgProducto" src="">
                                 </div>
                             </div>
                         </div>
@@ -326,7 +326,7 @@
                                 <div class="form-group">
                                     <label for="cantidad" class="control-label col-xs-4">Cantidad</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="cantidad" name="cantidad">
+                                        <input class="form-control" type="number" value="" id="cantidad" name="cantidad">
                                     </div>
                                 </div>
                             </div>
@@ -337,7 +337,7 @@
                                 <div class="form-group">
                                     <label for="precio" class="control-label col-xs-4">Precio Lista</label>
                                     <div class="col-xs-8">
-                                        <select class="form-control" id="precio" name="precio">
+                                        <select class="form-control" id="precioProducto" name="precioProducto">
                                             <option selected>Seleccione...</option>
                                             @foreach (Model.PrecioLista item in precios)
                                             {
@@ -351,7 +351,7 @@
                                 <div class="form-group">
                                     <label for="valorunitario" class="control-label col-xs-4">Valor Unitario</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="valorunitario" name="valorunitario">
+                                        <input class="form-control" type="text" value="" id="valorunitario" name="valorunitario" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -362,18 +362,18 @@
                                 <div class="form-group">
                                     <label for="pdescuento" class="control-label col-xs-4">% Dscto.</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="pdescuento" name="pdescuento">
+                                        <input class="form-control" type="number" value="" id="pdescuento" name="pdescuento">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-lg-6">
+                            @*<div class="col-sm-6 col-lg-6">
                                 <div class="form-group">
                                     <label for="precargo" class="control-label col-xs-4">% Recargo</label>
                                     <div class="col-xs-8">
                                         <input class="form-control" type="text" value="" id="precargo" name="precargo">
                                     </div>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
 
                         <div class="row">
@@ -381,7 +381,7 @@
                                 <div class="form-group">
                                     <label for="valorunitarioneto" class="control-label col-xs-4">Valor unit. neto</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="valorunitarioneto" name="valorunitarioneto">
+                                        <input class="form-control" type="text" value="" id="valorunitarioneto" name="valorunitarioneto" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -389,7 +389,7 @@
                                 <div class="form-group">
                                     <label for="subtotal" class="control-label col-xs-4">Sub total</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="subtotal" name="subtotal">
+                                        <input class="form-control" type="text" value="" id="subtotal" name="subtotal" disabled>
                                     </div>
                                 </div>
                             </div>

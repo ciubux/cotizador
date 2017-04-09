@@ -92,8 +92,21 @@ jQuery(function($){
         loadingImg: "Content/chosen/images/loading.gif"
     }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No existen coincidencias" });
 
+    $(".rMoneda").click(function () {
+        $.ajax({
+            url: "/Home/SetMoneda",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idMoneda: $(this).val(),
+            },
+            success: function (res) {
+                var a = 0;
+            }
+        });
+
+    });
     $("#producto").change(function () {
-        alert(1);
         $.ajax({
             url: "/Home/GetProducto",
             type: 'POST',
@@ -103,7 +116,32 @@ jQuery(function($){
             },
             success: function (res) {
                 $("#presentacion").val(res.presentacion);
+                $("#imgProducto").attr("src", res.image);
+                var selects = "<option selected>Seleccione...</option>";
+                res.precios.forEach(function (item, index, array) {
+                    selects = selects + '<option price="' + item.precio + '" value="' + item.id + '" >' + item.nombre + '</option>';
+                });
+                $('#precioProducto').html(selects);
             }
         });
     });
+
+    $("#precioProducto").change(function () {
+        var idPrecio = $(this).val();
+        var price = $('#precioProducto option[value="' + idPrecio + '"]').attr("price");
+
+        $("#valorunitario").val(price);
+    });
+
+    $("#pdescuento, #cantidad").change(function () {
+        var cantidad = parseInt($("#cantidad").val());
+        var pDescuento = parseFloat($("#pdescuento").val());
+        var price = parseFloat($("#valorunitario").val());
+        var priceFinal = price * (100 - pDescuento) * 0.01;
+        var subTotal = priceFinal * cantidad;
+
+        $("#valorunitarioneto").val(priceFinal);
+        $("#subtotal").val(subTotal);
+    });
+    
 });

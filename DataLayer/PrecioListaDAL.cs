@@ -35,5 +35,26 @@ namespace DataLayer
             }
             return lista;
         }
+        public List<PrecioLista> getPreciosProducto(Guid idProducto, Guid idMoneda)
+        {
+            var objCommand = GetSqlCommand("ps_getpreciosproducto");
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Guid(objCommand, "idMoneda", idMoneda);
+            DataTable dataTable = Execute(objCommand);
+            List<PrecioLista> lista = new List<PrecioLista>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                PrecioLista obj = new PrecioLista
+                {
+                    idPrecioLista = Converter.GetGuid(row, "id_precio_lista"),
+                    nombre = Converter.GetString(row, "nombre"),
+                    codigo = Converter.GetString(row, "codigo"),
+                    precio = Converter.GetDecimal(row, "monto")
+                };
+                lista.Add(obj);
+            }
+            return lista;
+        }
     }
 }
