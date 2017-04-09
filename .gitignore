@@ -5,3 +5,9 @@ Cotizador/obj/Release
 *.dll
 BusinessLayer/bin/Debug/BusinessLayer.pdb
 *.pdb
+*.pdb
+BusinessLayer/bin/Debug/BusinessLayer.pdb
+*.pdb
+BusinessLayer/bin/Debug/DataLayer.dll
+*.pdb
+*.dll
