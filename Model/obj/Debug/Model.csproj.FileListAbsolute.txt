@@ -26,3 +26,8 @@ C:\Users\cesar\Source\Repos\cotizador\Model\bin\Debug\Model.pdb
 C:\Users\cesar\Source\Repos\cotizador\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Source\Repos\cotizador\Model\obj\Debug\Model.dll
 C:\Users\cesar\Source\Repos\cotizador\Model\obj\Debug\Model.pdb
+D:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll
+D:\Repo\freelos\cotizador\Model\bin\Debug\Model.pdb
+D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
+D:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
+D:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb

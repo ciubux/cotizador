@@ -13,6 +13,8 @@ namespace Model
 
         public String nombre { get; set; }
 
+        public Decimal precio { get; set; }
+
         public String nombreVista
         {
             get { return codigo + "(" + nombre + ")"; }

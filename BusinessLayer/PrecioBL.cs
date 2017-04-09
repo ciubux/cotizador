@@ -16,7 +16,13 @@ namespace BusinessLayer
             }
         }
 
-
+        public List<PrecioLista> getPreciosProducto(Guid idProducto, Guid idMoneda)
+        {
+            using (var dal = new PrecioListaDAL())
+            {
+                return dal.getPreciosProducto(idProducto, idMoneda);
+            }
+        }
 
         /*
                 

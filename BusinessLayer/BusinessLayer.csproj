@@ -37,15 +37,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Compile Include="ProductoBL.cs" />
     <Compile Include="FamiliaBL.cs" />
     <Compile Include="ProveedorBL.cs" />
     <Compile Include="CategoriaBL.cs" />
     <Compile Include="MonedaBL.cs" />
-=======
     <Compile Include="UsuarioBL.cs" />
->>>>>>> 9b44f5b830423b8d9b8b183ec6d79827b7bb7846
     <Compile Include="PrecioBL.cs" />
     <Compile Include="CotizacionBL.cs" />
     <Compile Include="ClienteBL.cs" />
