@@ -138,8 +138,12 @@ jQuery(function($){
         calcularProducto();
     });
 
-    $("#btnAddProduct").change(function () {
+    $("#btnAddProduct").click(function () {
         addProducto();
+    });
+    
+    $("#btnCancelAddProduct").click(function () {
+        
     });
 
     function calcularProducto() {
@@ -154,6 +158,7 @@ jQuery(function($){
     };
 
     function addProducto() {
+        alert(1);
         var cantidad = parseInt($("#cantidad").val());
         var pDescuento = parseFloat($("#pdescuento").val());
         var idPrice = $("#precioProducto").val();
@@ -161,7 +166,7 @@ jQuery(function($){
         var cat = $("#categoria option:selected").text();
         var fam = $("#familia option:selected").text();
         var prod = $("#producto option:selected").text();
-        alert(1);
+        alert(2);
         $.ajax({
             url: "/Home/AddProducto",
             type: 'POST',
@@ -180,6 +185,8 @@ jQuery(function($){
                      '</td><td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td><td>' + res.moneda + " " + res.valorUnitarioFinal +
                      '</td><td>' + res.cantidad + '</td><td>' + res.nombrePrecio + '</td><td>' + res.porcentajeDescuento + '%</td><td>' + res.moneda + " " + res.subTotal + '</td></tr>');
                 $('.table').footable();
+                $('#btnCancelAddProduct').click();
+                
             }
         });
         

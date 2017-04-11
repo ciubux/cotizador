@@ -149,7 +149,7 @@ namespace Cotizador.Controllers
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
             Guid idMoneda = Guid.Parse(this.Session["idMoneda"].ToString());
 
-            this.Session["idProducto"] = Request["idProducto"].ToString();
+            this.Session["idProducto"] = idProducto.ToString();
 
             ProductoBL bl = new ProductoBL();
             Producto obj = bl.getProducto(idProducto);
@@ -249,7 +249,7 @@ namespace Cotizador.Controllers
                 "\"valorUnitario\":\"" + det.valorUnitario.ToString() + "\"," +
                 "\"valorUnitarioFinal\":\"" + det.valorUnitarioFinal.ToString() + "\"," +
                 "\"subTotal\":\"" + det.subTotal.ToString() + "\"," +
-                "\"nombrePrecio\":\"" + det.precioLista.codigo + "(" + det.precioLista.nombreVista + ")\"}";
+                "\"nombrePrecio\":\"" + det.precioLista.nombreVista + "\"}";
 
 
             return resultado;
