@@ -13,3 +13,8 @@ C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\bin\Debug\Framework.We
 C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
 C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb

@@ -224,6 +224,7 @@ C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.M
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
+D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
 D:\Repo\freelos\cotizador\Cotizador\bin\ApplicationInsights.config
 D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\csc.exe
 D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -334,6 +335,5 @@ D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Facebook.reso
 D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb

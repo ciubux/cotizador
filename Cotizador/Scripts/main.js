@@ -131,9 +131,18 @@ jQuery(function($){
         var price = $('#precioProducto option[value="' + idPrecio + '"]').attr("price");
 
         $("#valorunitario").val(price);
+        calcularProducto();
     });
 
     $("#pdescuento, #cantidad").change(function () {
+        calcularProducto();
+    });
+
+    $("#btnAddProduct").change(function () {
+        addProducto();
+    });
+
+    function calcularProducto() {
         var cantidad = parseInt($("#cantidad").val());
         var pDescuento = parseFloat($("#pdescuento").val());
         var price = parseFloat($("#valorunitario").val());
@@ -142,6 +151,37 @@ jQuery(function($){
 
         $("#valorunitarioneto").val(priceFinal);
         $("#subtotal").val(subTotal);
-    });
-    
+    };
+
+    function addProducto() {
+        var cantidad = parseInt($("#cantidad").val());
+        var pDescuento = parseFloat($("#pdescuento").val());
+        var idPrice = $("#precioProducto").val();
+        var prov = $("#proveedor option:selected").text();
+        var cat = $("#categoria option:selected").text();
+        var fam = $("#familia option:selected").text();
+        var prod = $("#producto option:selected").text();
+        alert(1);
+        $.ajax({
+            url: "/Home/AddProducto",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                cantidad: cantidad,
+                pDescuento: pDescuento,
+                idPrecioProducto: idPrice,
+                proveedor: prov,
+                categoria: cat,
+                familia: fam
+            },
+            success: function (res) {
+                alert(res.codigoProducto);
+                $(".table tr:last").after('<tr data-expanded="true"><td>' + res.proveedor + '</td><td>' + res.codigoProducto + '</td><td>' + res.nombreProducto + '</td><td>' + res.presentacion +
+                     '</td><td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td><td>' + res.moneda + " " + res.valorUnitarioFinal +
+                     '</td><td>' + res.cantidad + '</td><td>' + res.nombrePrecio + '</td><td>' + res.porcentajeDescuento + '%</td><td>' + res.moneda + " " + res.subTotal + '</td></tr>');
+                $('.table').footable();
+            }
+        });
+        
+    };
 });

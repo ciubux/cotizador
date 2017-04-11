@@ -81,6 +81,7 @@ namespace Cotizador.Controllers
         {
 
             Guid idCategoria = Guid.Parse(Request["idCategoria"].ToString());
+            this.Session["idCategoria"] = idCategoria.ToString();
 
             FamiliaBL bl = new FamiliaBL();
             List<Familia> lista = bl.getFamilias(idCategoria);
@@ -88,7 +89,7 @@ namespace Cotizador.Controllers
             String resultado = "{\"idCategoria\":\"" + idCategoria.ToString() + "\",\"results\":[";
             foreach (Familia fam in lista)
             {
-                
+
                 resultado += "{\"id\":\"" + fam.idFamilia + "\",\"text\":\"" + fam.nombre + "\"},";
             }
 
@@ -123,10 +124,10 @@ namespace Cotizador.Controllers
             Guid idFamilia = Guid.Parse(this.Session["idFamilia"].ToString());
 
             String data = this.Request.Params["data[q]"];
-            
+
             ProductoBL bl = new ProductoBL();
             List<Producto> lista = bl.getProductosBusqueda(idProveedor, idFamilia, data);
-            
+
             String resultado = "{\"q\":\"" + data + "\",\"results\":[";
             Boolean existe = false;
             foreach (Producto prod in lista)
@@ -148,6 +149,8 @@ namespace Cotizador.Controllers
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
             Guid idMoneda = Guid.Parse(this.Session["idMoneda"].ToString());
 
+            this.Session["idProducto"] = Request["idProducto"].ToString();
+
             ProductoBL bl = new ProductoBL();
             Producto obj = bl.getProducto(idProducto);
 
@@ -162,17 +165,95 @@ namespace Cotizador.Controllers
                 "\"image\":\"data:image/png;base64, " + Convert.ToBase64String(obj.image) + "\"," +
                 "\"presentacion\":\"" + obj.unidad.descripcion + "\"," +
                 "\"precios\":[";
-            foreach (PrecioLista p in lista) {
+            foreach (PrecioLista p in lista)
+            {
                 if (precios.Length > 0)
                 {
                     precios = precios + ",";
                 }
                 precios = precios + "{\"id\":\"" + p.idPrecioLista + "\", \"nombre\":\"" + p.codigo + "(" + p.nombre + ")\", \"precio\":\"" + p.precio.ToString() + "\"}";
             }
-            
+
             resultado = resultado + precios + "]}";
-            
+
             return resultado;
+        }
+
+        public String AddProducto()
+        {
+            PrecioBL precioBl = new PrecioBL();
+            if (this.Session["detalles"] != null)
+            {
+                this.Session["detalles"] = new List<CotizacionDetalle>();
+            }
+
+            List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
+
+            CotizacionDetalle det = new CotizacionDetalle();
+
+            Proveedor prov = new Proveedor();
+            prov.idProveedor = Guid.Parse(this.Session["idProveedor"].ToString());
+            prov.nombre = Request["proveedor"].ToString();
+            det.proveedor = prov;
+
+            Familia fam = new Familia();
+            fam.idFamilia = Guid.Parse(this.Session["idFamilia"].ToString());
+            fam.nombre = Request["familia"].ToString();
+            det.familia = fam;
+            
+            ProductoBL prodBl = new ProductoBL();
+            Producto prod = prodBl.getProducto(Guid.Parse(this.Session["idProducto"].ToString()));
+            det.producto = prod;
+            det.idProducto = prod.idProducto;
+
+            Categoria cat = new Categoria();
+            cat.idCategoria = Guid.Parse(this.Session["idCategoria"].ToString());
+            cat.nombre = Request["categoria"].ToString();
+            det.categoria = cat;
+
+
+            MonedaBL monedaBl = new MonedaBL();
+            List<Moneda> monedas = monedaBl.getMonedas();
+            Guid idMoneda = Guid.Parse(this.Session["idMoneda"].ToString());
+            foreach (Moneda mo in monedas)
+            {
+                if (mo.idMoneda == idMoneda)
+                {
+                    det.moneda = mo;
+                }
+            }
+            
+                
+            Guid idPrecioProducto = Guid.Parse(Request["idPrecioProducto"].ToString());
+            det.precioLista = precioBl.getPrecioProducto(prod.idProducto, idPrecioProducto);
+            det.idPrecio = det.precioLista.idPrecioLista;
+
+            det.cantidad = int.Parse(Request["cantidad"].ToString());
+            det.porcentajeDescuento = Decimal.Parse(Request["pDescuento"].ToString());
+
+            det.valorUnitario = det.precioLista.precio;
+            det.valorUnitarioFinal = det.valorUnitario * (100 - det.porcentajeDescuento) / 100;
+            det.subTotal = det.valorUnitario * det.cantidad;
+
+            
+            String resultado = "{" +
+                "\"proveedor\":\"" + det.proveedor.nombre + "\"," +
+                "\"familia\":\"" + det.familia.nombre + "\"," +
+                "\"categoria\":\"" + det.categoria.nombre + "\"," +
+                "\"codigoProducto\":\"" + det.producto.sku + "\"," +
+                "\"nombreProducto\":\"" + det.producto.descripcion + "\"," +
+                "\"presentacion\":\"" + det.producto.unidad.descripcion + "\"," +
+                "\"moneda\":\"" + det.moneda.simbolo + "\"," +
+                "\"cantidad\":\"" + det.cantidad.ToString() + "\"," +
+                "\"porcentajeDescuento\":\"" + det.porcentajeDescuento.ToString() + "\"," +
+                "\"valorUnitario\":\"" + det.valorUnitario.ToString() + "\"," +
+                "\"valorUnitarioFinal\":\"" + det.valorUnitarioFinal.ToString() + "\"," +
+                "\"subTotal\":\"" + det.subTotal.ToString() + "\"," +
+                "\"nombrePrecio\":\"" + det.precioLista.codigo + "(" + det.precioLista.nombreVista + ")\"}";
+
+
+            return resultado;
+
         }
 
         public ActionResult GenerarPDF()
