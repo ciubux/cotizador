@@ -17,7 +17,7 @@ $(document).ready(function () {
         afterTypeDelay: 300,
         cache: false,
         // url: URL_BASE + "HomeController/GetClientes"
-        url:  "Home/GetClientes"
+        url:  "/Home/GetClientes"
     }, {
         //    loadingImg: URL_BASE + "Content/images/loading.gif"
         loadingImg: "Content/chosen/images/loading.gif"

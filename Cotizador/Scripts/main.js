@@ -158,7 +158,7 @@ jQuery(function($){
     };
 
     function addProducto() {
-        alert(1);
+        //alert(1);
         var cantidad = parseInt($("#cantidad").val());
         var pDescuento = parseFloat($("#pdescuento").val());
         var idPrice = $("#precioProducto").val();
@@ -166,7 +166,7 @@ jQuery(function($){
         var cat = $("#categoria option:selected").text();
         var fam = $("#familia option:selected").text();
         var prod = $("#producto option:selected").text();
-        alert(2);
+        //alert(2);
         $.ajax({
             url: "/Home/AddProducto",
             type: 'POST',
@@ -180,8 +180,9 @@ jQuery(function($){
                 familia: fam
             },
             success: function (res) {
-                alert(res.codigoProducto);
-                $(".table tr:last").after('<tr data-expanded="true"><td>' + res.proveedor + '</td><td>' + res.codigoProducto + '</td><td>' + res.nombreProducto + '</td><td>' + res.presentacion +
+                // alert(res.codigoProducto);
+                $('.table tbody tr.footable-empty').remove();
+                $(".table tbody").append('<tr data-expanded="true"><td>' + res.proveedor + '</td><td>' + res.codigoProducto + '</td><td>' + res.nombreProducto + '</td><td>' + res.presentacion +
                      '</td><td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td><td>' + res.moneda + " " + res.valorUnitarioFinal +
                      '</td><td>' + res.cantidad + '</td><td>' + res.nombrePrecio + '</td><td>' + res.porcentajeDescuento + '%</td><td>' + res.moneda + " " + res.subTotal + '</td></tr>');
                 $('.table').footable();

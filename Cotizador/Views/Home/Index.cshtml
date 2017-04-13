@@ -8,17 +8,18 @@
 
 
     <div class="container">
-        <div class="header">
-            <div class="left">
-                Cotización - <input class="label-input" type="text" id="fecha" name="fecha">
+        <form class="form-horizontal" action="/Home/GenerarPDF" method="post">
+            <div class="header">
+                <div class="left">
+                    Cotización - <input class="label-input" type="text" id="fecha" name="fecha">
+                </div>
+                <div class="right">
+                    Carlos Perez - Ventas
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a>Cancelar</a>
+                </div>
             </div>
-            <div class="right">
-                Carlos Perez - Ventas
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a>Cancelar</a>
-            </div>
-        </div>
-        <form class="form-horizontal">
+
             <div class="row">
                 <div class="col-sm-6 col-lg-5">
                     <div class="form-group">
@@ -26,7 +27,7 @@
                         <div class="col-xs-8">
                             @Html.Action("list", "Ciudad")
 
-                           
+
                         </div>
                     </div>
                 </div>
@@ -35,13 +36,14 @@
                         <label for="cliente" class="control-label col-xs-4">Señores</label>
 
                         <div class="col-xs-8">
-                             <select class="form-control input-sm" id="idCliente" name="idCliente"><option value=""></option>
+                            <select class="form-control input-sm" id="idCliente" name="idCliente">
+                                <option value=""></option>
                             </select>
                             <!--<input class="form-control col-xs-5" type="text" value="" id="cliente" name="cliente">-->
                         </div>
                     </div>
-                 
-           <!--       <button onclick="alert( $('#idCliente').val())" ></button>-->  
+
+                    <!--       <button onclick="alert( $('#idCliente').val())" ></button>-->
                 </div>
             </div>
             <div class="row">
@@ -51,7 +53,7 @@
                         <div class="col-xs-8">
                             <div class="radio radio-inline">
                                 <label class="radio-label">
-                                    <input class="radio-input"  type="radio" name="igv" id="igvsi" value="1"> Sí
+                                    <input class="radio-input" type="radio" name="igv" id="igvsi" value="1"> Sí
                                 </label>
                             </div>
                             <div class="radio radio-inline">
@@ -87,14 +89,14 @@
                     <div class="form-group">
                         <label for="moneda" class="control-label col-xs-4">Moneda</label>
                         <div class="col-xs-8">
-                        @foreach (Model.Moneda item in monedas)
-                        {
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    <input class="radio-input rMoneda" type="radio" name="moneda" value="@item.idMoneda"> @item.simbolo
-                                </label>
-                            </div>
-                        }
+                            @foreach (Model.Moneda item in monedas)
+                            {
+                                <div class="radio radio-inline">
+                                    <label class="radio-label">
+                                        <input class="radio-input rMoneda" type="radio" name="moneda" value="@item.idMoneda"> @item.simbolo
+                                    </label>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -116,7 +118,7 @@
                                 <option selected>Seleccione...</option>
                                 @foreach (Model.PrecioLista item in precios)
                                 {
-                                <option value="@item.idPrecioLista">@item.nombreVista</option>
+                                    <option value="@item.idPrecioLista">@item.nombreVista</option>
                                 }
                             </select>
                         </div>
@@ -160,52 +162,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-expanded="true">
-                        <td>Proveedor 1</td>
-                        <td>HD001</td>
-                        <td>Papel Higiénico</td>
-                        <td>Unidad</td>
-                        <td class="column-img"><img class="table-product-img" src="images/papelhigienico.jpg"></td>
-                        <td>15</td>
-                        <td>2</td>
-                        <td>P3</td>
-                        <td>10%</td>
-                        <td>10</td>
-                        @*<td>15</td>
-                        <td>33.3 %</td>
-                        <td>5</td>*@
-                    </tr>
-                    <tr data-expanded="true">
-                        <td>Proveedor 2</td>
-                        <td>HD002</td>
-                        <td>Jabón de tocador</td>
-                        <td>Unidad</td>
-                        <td class="column-img"><img class="table-product-img" src="images/jabon_tocador.jpg"></td>
-                        <td>15</td>
-                        <td>2</td>
-                        <td>P3</td>
-                        <td>10%</td>
-                        <td>10</td>
-                        @*<td>15</td>
-                        <td>33.3 %</td>
-                        <td>5</td>*@
-                    </tr>
-                    <tr data-expanded="true">
-                        <td>Proveedor 3</td>
-                        <td>HD003</td>
-                        <td>Lejía</td>
-                        <td>Unidad</td>
-                        <td class="column-img"><img class="table-product-img" src="images/lejia.jpg"></td>
-                        <td>15</td>
-                        <td>2</td>
-                        <td>P3</td>
-                        <td>10%</td>
-                        <td>10</td>
-                        @*<td>15</td>
-                        <td>33.3 %</td>
-                        <td>5</td>*@
-                    </tr>
-                    <tr data-expanded="true">
+
+                    @*<tr data-expanded="true">
                         <td>Proveedor 4</td>
                         <td>HD004</td>
                         <td>Pasta Dental</td>
@@ -216,9 +174,9 @@
                         <td>P3</td>
                         <td>10%</td>
                         <td>10</td>
-                        @*<td>15</td>
+                        <td>15</td>
                         <td>33.3 %</td>
-                        <td>5</td>*@
+                        <td>5</td>
                     </tr>
                     <tr data-expanded="true">
                         <td>Proveedor 5</td>
@@ -231,10 +189,10 @@
                         <td>P3</td>
                         <td>10%</td>
                         <td>10</td>
-                        @*<td>15</td>
+                        <td>15</td>
                         <td>33.3 %</td>
-                        <td>5</td>*@
-                    </tr>
+                        <td>5</td>
+                    </tr>*@
                 </tbody>
             </table>
 
@@ -242,12 +200,12 @@
                 <div class="col-sm-6 col-lg-5">
                     <div class="form-group">
                         <div class="col-xs-10">
-                            <button type="button" class="btn btn-primary">Generar PDF</button>
+                            <button type="submit" class="btn btn-primary">Generar PDF</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+        </form>        
     </div>
 
     <!-- Modal -->

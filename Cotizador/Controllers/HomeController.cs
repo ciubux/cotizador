@@ -182,7 +182,7 @@ namespace Cotizador.Controllers
         public String AddProducto()
         {
             PrecioBL precioBl = new PrecioBL();
-            if (this.Session["detalles"] != null)
+            if (this.Session["detalles"] == null)
             {
                 this.Session["detalles"] = new List<CotizacionDetalle>();
             }
@@ -210,8 +210,7 @@ namespace Cotizador.Controllers
             cat.idCategoria = Guid.Parse(this.Session["idCategoria"].ToString());
             cat.nombre = Request["categoria"].ToString();
             det.categoria = cat;
-
-
+            
             MonedaBL monedaBl = new MonedaBL();
             List<Moneda> monedas = monedaBl.getMonedas();
             Guid idMoneda = Guid.Parse(this.Session["idMoneda"].ToString());
@@ -222,7 +221,6 @@ namespace Cotizador.Controllers
                     det.moneda = mo;
                 }
             }
-            
                 
             Guid idPrecioProducto = Guid.Parse(Request["idPrecioProducto"].ToString());
             det.precioLista = precioBl.getPrecioProducto(prod.idProducto, idPrecioProducto);
@@ -234,7 +232,6 @@ namespace Cotizador.Controllers
             det.valorUnitario = det.precioLista.precio;
             det.valorUnitarioFinal = det.valorUnitario * (100 - det.porcentajeDescuento) / 100;
             det.subTotal = det.valorUnitario * det.cantidad;
-
             
             String resultado = "{" +
                 "\"proveedor\":\"" + det.proveedor.nombre + "\"," +
@@ -251,28 +248,35 @@ namespace Cotizador.Controllers
                 "\"subTotal\":\"" + det.subTotal.ToString() + "\"," +
                 "\"nombrePrecio\":\"" + det.precioLista.nombreVista + "\"}";
 
+            detalles.Add(det);
+
+            this.Session["detalles"] = detalles;
 
             return resultado;
-
         }
 
         public ActionResult GenerarPDF()
         {
             Cotizacion cot = new Cotizacion();
 
-            cot.fecha = DateTime.ParseExact(Request["fecha"].ToString(), "dd/MM/YYYY", null);
+            String[] fecha = Request["fecha"].ToString().Split('/');
+            cot.fecha = new DateTime(Convert.ToInt32(fecha[2]), Convert.ToInt32(fecha[1]), Convert.ToInt32(fecha[0]));
+            
             cot.idCiudad = Guid.Parse(Request["idCiudad"].ToString());
             cot.idCliente = Guid.Parse(Request["idCliente"].ToString());
             cot.incluidoIgv = short.Parse(Request["igv"].ToString());
             cot.mostrarCodProveedor = short.Parse(Request["codigoproveedor"].ToString());
             cot.idMoneda = Guid.Parse(Request["moneda"].ToString());
-            cot.idTipoCambio = Guid.Parse(Request["tipocambio"].ToString());
+            //cot.idTipoCambio = Guid.Parse(Request["tipocambio"].ToString());
             cot.idPrecio = Guid.Parse(Request["precio"].ToString());
             cot.flete = Decimal.Parse(Request["flete"].ToString());
 
-            
-            
+            List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
+
+            cot.detalles = detalles;
+
             CotizacionBL bl = new CotizacionBL();
+            bl.InsertCotizacion(cot);
 
             return RedirectToAction("Index", "Home");
         }
