@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cotizador", "Cotizador\Cotizador.csproj", "{D238C0E5-31E7-48C8-BA17-151262DC157C}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{F93C55FA-7FF7-4AF4-AF0B-7C014B286CDE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{2E588952-5389-42E5-8ED8-C42B9E38F6D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CotizadorPDF", "CotizadorPDF\CotizadorPDF.csproj", "{9264CA59-9806-4382-93C8-67D39B2E01C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{2E588952-5389-42E5-8ED8-C42B9E38F6D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E588952-5389-42E5-8ED8-C42B9E38F6D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E588952-5389-42E5-8ED8-C42B9E38F6D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9264CA59-9806-4382-93C8-67D39B2E01C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9264CA59-9806-4382-93C8-67D39B2E01C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9264CA59-9806-4382-93C8-67D39B2E01C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9264CA59-9806-4382-93C8-67D39B2E01C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
