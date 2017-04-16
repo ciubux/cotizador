@@ -31,23 +31,37 @@ namespace Cotizador.Controllers
                    return RedirectToAction("Index", "Login");
                }*/
 
-            PrecioBL precioBl = new PrecioBL();
-            List<PrecioLista> precios = precioBl.getListas();
-            ViewBag.Precios = precios;
+            if (this.Session["usuario"] != null)
+            {
 
-            MonedaBL monedaBl = new MonedaBL();
-            List<Moneda> monedas = monedaBl.getMonedas();
-            ViewBag.Monedas = monedas;
+                PrecioBL precioBl = new PrecioBL();
+                List<PrecioLista> precios = precioBl.getListas();
+                ViewBag.Precios = precios;
 
-            CategoriaBL categoriaBl = new CategoriaBL();
-            List<Categoria> categorias = categoriaBl.getCategorias();
-            ViewBag.Categorias = categorias;
+                MonedaBL monedaBl = new MonedaBL();
+                List<Moneda> monedas = monedaBl.getMonedas();
+                ViewBag.Monedas = monedas;
 
-            ProveedorBL proveedorBl = new ProveedorBL();
-            List<Proveedor> proveedores = proveedorBl.getProveedores();
-            ViewBag.Proveedores = proveedores;
+                CategoriaBL categoriaBl = new CategoriaBL();
+                List<Categoria> categorias = categoriaBl.getCategorias();
+                ViewBag.Categorias = categorias;
 
-            return View();
+                ProveedorBL proveedorBl = new ProveedorBL();
+                List<Proveedor> proveedores = proveedorBl.getProveedores();
+                ViewBag.Proveedores = proveedores;
+
+                Usuario usuario = (Usuario)this.Session["usuario"];
+                ViewBag.nombreUsuario = usuario.apellidos + " " + usuario.nombres;
+
+               //iewBag.incluigoIgv
+
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
 

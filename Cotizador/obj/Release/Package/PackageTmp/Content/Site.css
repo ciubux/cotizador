@@ -68,6 +68,10 @@ input.label-input {
     text-align: center;
 }
 
+#producto_chosen {
+    width: 100% !important;
+}
+
 @media only screen and (max-width: 991px) {
     .table-product-img {
         height: 70px;

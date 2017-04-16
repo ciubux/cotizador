@@ -7,16 +7,18 @@ namespace BusinessLayer
 {
     public class UsuarioBL
     {
-        public Boolean getUsuarioLogin(String email, String password)
+        public Usuario getUsuarioLogin(String email, String password)
         {
+            Usuario usuario = null;
             using (var usuarioDAL = new UsuarioDAL())
             {
-                Usuario usuario = new Usuario();
+                usuario = new Usuario();
                 usuario.email = email;
                 usuario.password = password;
                 usuario = usuarioDAL.getUsuarioLogin(usuario);
-                return usuario.idUsuario != null && usuario.idUsuario != Guid.Empty;
+                //usuario.idUsuario != null && usuario.idUsuario != Guid.Empty;
             }
+            return usuario;
         }
 
         

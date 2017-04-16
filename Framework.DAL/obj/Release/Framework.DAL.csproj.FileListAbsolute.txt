@@ -8,3 +8,8 @@ C:\Users\cesar\Source\Repos\cotizador\Framework.DAL\bin\Release\Framework.DAL.pd
 C:\Users\cesar\Source\Repos\cotizador\Framework.DAL\obj\Release\Framework.DAL.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Source\Repos\cotizador\Framework.DAL\obj\Release\Framework.DAL.dll
 C:\Users\cesar\Source\Repos\cotizador\Framework.DAL\obj\Release\Framework.DAL.pdb
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL\bin\Release\Framework.DAL.dll
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL\bin\Release\Framework.DAL.pdb
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL\obj\Release\Framework.DAL.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL\obj\Release\Framework.DAL.dll
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL\obj\Release\Framework.DAL.pdb

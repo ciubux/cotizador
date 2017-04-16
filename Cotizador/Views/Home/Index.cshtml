@@ -14,9 +14,9 @@
                     Cotización - <input class="label-input" type="text" id="fecha" name="fecha">
                 </div>
                 <div class="right">
-                    Carlos Perez - Ventas
+                    @ViewBag.nombreUsuario
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a>Cancelar</a>
+                    @Html.ActionLink("Salir", "LogOff", "Account");
                 </div>
             </div>
 

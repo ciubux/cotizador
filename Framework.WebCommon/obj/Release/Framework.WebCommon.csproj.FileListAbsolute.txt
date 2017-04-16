@@ -8,3 +8,8 @@ C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\bin\Release\Framework.
 C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.dll
 C:\Users\cesar\Source\Repos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\bin\Release\Framework.WebCommon.dll
+C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\bin\Release\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.dll
+C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb
