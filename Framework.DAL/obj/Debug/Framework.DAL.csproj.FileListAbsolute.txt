@@ -25,6 +25,5 @@ C:\Users\cesar\Documents\projects\cotizador\Framework.DAL\obj\Debug\Framework.DA
 C:\Users\cesar\Documents\projects\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
 D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
 D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
-D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojResolveAssemblyReference.cache
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb

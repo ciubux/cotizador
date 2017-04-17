@@ -355,6 +355,7 @@ D:\Repo\freelos\cotizador\Cotizador\bin\Cotizador.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\Cotizador.pdb
 D:\Repo\freelos\cotizador\Cotizador\bin\Antlr3.Runtime.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\BusinessLayer.dll
+D:\Repo\freelos\cotizador\Cotizador\bin\CotizadorPDF.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\EntityFramework.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\EntityFramework.SqlServer.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.Agent.Intercept.dll
@@ -390,10 +391,14 @@ D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.Razor.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\WebGrease.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\DataLayer.dll
+D:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.Settings.dll
+D:\Repo\freelos\cotizador\Cotizador\bin\Spire.License.dll
+D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.mshtml.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\Framework.WebCommon.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\BusinessLayer.pdb
+D:\Repo\freelos\cotizador\Cotizador\bin\CotizadorPDF.pdb
 D:\Repo\freelos\cotizador\Cotizador\bin\Model.pdb
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.DependencyCollector.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.xml
@@ -450,8 +455,3 @@ D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAcco
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\CotizadorPDF.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Spire.License.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.mshtml.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\CotizadorPDF.pdb

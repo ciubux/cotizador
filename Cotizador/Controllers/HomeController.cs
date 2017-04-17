@@ -54,11 +54,43 @@ namespace Cotizador.Controllers
                 List<Proveedor> proveedores = proveedorBl.getProveedores();
                 ViewBag.Proveedores = proveedores;
 
+                TipoCambioBL tipoCambioBL = new TipoCambioBL();
+                TipoCambio tipoCambio = tipoCambioBL.getTipoCambio();
+                ViewBag.TipoCambio = tipoCambio.monto;
+
                 Usuario usuario = (Usuario)this.Session["usuario"];
                 ViewBag.nombreUsuario = usuario.apellidos + " " + usuario.nombres;
                 
                 List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
                 ViewBag.Detalles = detalles;
+       
+                Boolean incluidoIgv = true;
+                if (this.Session["incluidoIgv"] != null)
+                {
+                    incluidoIgv = (Boolean)this.Session["incluidoIgv"];
+                }
+                ViewBag.incluidoIgv = incluidoIgv;
+
+                String monedaSimbolo = "S/.";
+                if (this.Session["monedaSimbolo"] != null)
+                {
+                    monedaSimbolo = (String)this.Session["monedaSimbolo"];
+                }
+                ViewBag.monedaSimbolo = monedaSimbolo;
+
+                Boolean mostrarCodProveedor = true;
+                if (this.Session["mostrarCodProveedor"] != null)
+                {
+                    mostrarCodProveedor = (Boolean)this.Session["mostrarCodProveedor"];
+                }
+                ViewBag.mostrarCodProveedor = mostrarCodProveedor;
+
+                Decimal pFlete = 0;
+                if (this.Session["pFlete"] != null)
+                {
+                    pFlete = (Decimal)this.Session["pFlete"];
+                }
+                ViewBag.pFlete = pFlete;
                 
                 return View();
             }
@@ -151,9 +183,18 @@ namespace Cotizador.Controllers
         }
         public String GetProductos()
         {
-            Guid idProveedor = Guid.Parse(this.Session["idProveedor"].ToString());
-            Guid idFamilia = Guid.Parse(this.Session["idFamilia"].ToString());
+            Guid idProveedor = Guid.Empty;
+            if (this.Session["idProveedor"] != null && !this.Session["idProveedor"].ToString().Equals("0"))
+            {
+                idProveedor = Guid.Parse(this.Session["idProveedor"].ToString());
+            }
 
+            Guid idFamilia = Guid.Empty;
+            if (this.Session["idFamilia"] != null && !this.Session["idFamilia"].ToString().Equals("0"))
+            {
+                idFamilia = Guid.Parse(this.Session["idFamilia"].ToString());
+            }
+ 
             String data = this.Request.Params["data[q]"];
 
             ProductoBL bl = new ProductoBL();

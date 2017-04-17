@@ -4,8 +4,43 @@
  * and open the template in the editor.
  */
 
+jQuery(function ($) {
+  /*  $('#modal-content').on('shown.bs.modal', function () {
+        // $("#txtname").focus();
+        alert("asas");
+    })
 
-jQuery(function($){
+    $('#modal-content').modal({
+        show: true
+    });*/
+
+    $('#openBtn').click(function () {
+        $('#proveedor').focus();
+        $('#proveedor').val(0);
+        $('#categoria').val(0);
+        $('#familia').val(0);
+        $('#imgProducto').attr("src", "images/NoDisponible.gif");
+        
+
+        $("#producto").chosen({ placeholder_text_single: "Seleccione el producto", no_results_text: "No existen coincidencias" });
+
+        $("#producto").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 3,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Home/GetProductos"
+        }, {
+            loadingImg: "Content/chosen/images/loading.gif"
+        }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No existen coincidencias" });
+
+
+    /*    $('#modal-content').modal({
+            show: true
+        });*/
+    });
+
     $.datepicker.regional['es'] = {
         closeText: 'Cerrar',
         prevText: '< Ant',
@@ -117,11 +152,28 @@ jQuery(function($){
             success: function (res) {
                 $("#presentacion").val(res.presentacion);
                 $("#imgProducto").attr("src", res.image);
-                var selects = "<option selected>Seleccione...</option>";
+                $("#cantidad").val(1);
+                $("#pdescuento").val(0.0);
+               // alert("asas");
+                var selectstmp = "<option selected>Seleccione...</option>";
+                var selects = "";
                 res.precios.forEach(function (item, index, array) {
-                    selects = selects + '<option price="' + item.precio + '" value="' + item.id + '" >' + item.nombre + '</option>';
+                  
+                    if (item.id == $("#precio").val()) {
+                        selects = selects + '<option selected="selected" price="' + item.precio + '" value="' + item.id + '" >' + item.nombre + '</option>';
+                        selectstmp = "<option >Seleccione...</option>";
+                    }
+                    else
+                    {
+                        selects = selects + '<option price="' + item.precio + '" value="' + item.id + '" >' + item.nombre + '</option>';
+                    }
                 });
+                selects = selectstmp + selects;
+
                 $('#precioProducto').html(selects);
+                var price = $('#precioProducto option[value="0b08561c-d257-43b6-bc9f-85b4ab24ee39"]').attr("price");
+                $("#valorunitario").val(price);
+                calcularProducto();
             }
         });
     });
@@ -129,7 +181,6 @@ jQuery(function($){
     $("#precioProducto").change(function () {
         var idPrecio = $(this).val();
         var price = $('#precioProducto option[value="' + idPrecio + '"]').attr("price");
-
         $("#valorunitario").val(price);
         calcularProducto();
     });
