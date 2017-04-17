@@ -44,6 +44,17 @@ namespace Cotizador.Controllers
 
                 MonedaBL monedaBl = new MonedaBL();
                 List<Moneda> monedas = monedaBl.getMonedas();
+
+                int i = 0;
+                foreach (Moneda mo in monedas)
+                {
+                    if (i == 0)
+                    {
+                        this.Session["idMoneda"] = mo.idMoneda.ToString();
+                        this.Session["moneda"] = mo;
+                    }
+                    i++;
+                }
                 ViewBag.Monedas = monedas;
 
                 CategoriaBL categoriaBl = new CategoriaBL();
