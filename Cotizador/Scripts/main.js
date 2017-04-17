@@ -15,6 +15,7 @@ jQuery(function ($) {
     });*/
 
     $('#openBtn').click(function () {
+        $('#proveedor').focus();
         $('#proveedor').val(0);
         $('#categoria').val(0);
         $('#familia').val(0);

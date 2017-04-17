@@ -163,9 +163,18 @@ namespace Cotizador.Controllers
         }
         public String GetProductos()
         {
-            Guid idProveedor = Guid.Parse(this.Session["idProveedor"].ToString());
-            Guid idFamilia = Guid.Parse(this.Session["idFamilia"].ToString());
+            Guid idProveedor = Guid.Empty;
+            if (this.Session["idProveedor"] != null && !this.Session["idProveedor"].ToString().Equals("0"))
+            {
+                idProveedor = Guid.Parse(this.Session["idProveedor"].ToString());
+            }
 
+            Guid idFamilia = Guid.Empty;
+            if (this.Session["idFamilia"] != null && !this.Session["idFamilia"].ToString().Equals("0"))
+            {
+                idFamilia = Guid.Parse(this.Session["idFamilia"].ToString());
+            }
+ 
             String data = this.Request.Params["data[q]"];
 
             ProductoBL bl = new ProductoBL();

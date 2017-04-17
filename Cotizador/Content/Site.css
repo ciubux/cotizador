@@ -23,6 +23,19 @@ textarea {
     max-width: 280px;
 }
 
+.modal.modal-wide .modal-dialog {
+  width: 90%;
+}
+.modal-wide .modal-body {
+  overflow-y: auto;
+}
+
+
+@media screen and (min-width: 768px) {
+	
+	#modalAgregarProducto .modal-dialog  {width:900px;}
+
+}
 
 
 div.header {

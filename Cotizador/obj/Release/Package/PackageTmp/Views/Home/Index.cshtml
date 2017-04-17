@@ -127,6 +127,7 @@
                                     <label class="radio-label">
                                         @if (moneda.simbolo.Equals(ViewBag.monedaSimbolo))
                                         {
+                                            this.Session["idMoneda"] = moneda.idMoneda;
                                             <input class="radio-input rMoneda" checked="checked" type="radio" name="moneda" value="@moneda.idMoneda">
                                         }
                                         else
@@ -144,7 +145,7 @@
                     <div class="form-group">
                         <label for="tipocambio" class="control-label col-xs-4">Tipo Cambio</label>
                         <div class="col-xs-8">
-                            <input class="form-control" type="text" value="@ViewBag.TipoCambio" id="tipocambio" name="tipocambio">
+                            <input class="form-control"  type="number" min="1" max="100" step="0.1" value="@ViewBag.TipoCambio" id="tipocambio" name="tipocambio">
                         </div>
                     </div>
                 </div>
@@ -155,7 +156,7 @@
                         <label for="precio" class="control-label col-xs-4">Precio Lista</label>
                         <div class="col-xs-8">
                             <select class="form-control" id="precio" name="precio">
-                                <option selected>Seleccione...</option>
+                                <option value="@Guid.Empty" selected>Seleccione...</option>
                                 @foreach (Model.PrecioLista item in precios)
                                 {
                                     <option value="@item.idPrecioLista">@item.nombreVista</option>
@@ -168,16 +169,17 @@
                     <div class="form-group">
                         <label for="flete" class="control-label col-xs-4">Flete</label>
                         <div class="col-xs-8">
-                            <input class="form-control" type="text" value="" id="flete" name="flete">
+                            <input class="form-control" type="number" min="0" max="100" step="0.1" value="@ViewBag.pFlete" id="flete"  name="flete">
                         </div>
                     </div>
                 </div>
             </div>
+            <!--Agregar Producto Boton Header-->
             <div class="row">
                 <div class="col-sm-6 col-lg-5">
                     <div class="form-group">
                         <div class="col-xs-10">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
+                            <button type="button" id="openBtn" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
                         </div>
                     </div>
                 </div>
@@ -250,13 +252,14 @@
 
     <!-- Modal -->
     <div class="modal fade" id="modalAgregarProducto" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog"  role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalAgregarProductoTitle">Agregar Producto</h5>
+                    <h3 class="modal-title" id="modalAgregarProductoTitle">Agregar Producto</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    <br />
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal">
@@ -266,7 +269,7 @@
                                     <label for="proveedor" class="control-label col-xs-4">Proveedor</label>
                                     <div class="col-xs-8">
                                         <select class="form-control" id="proveedor" name="proveedor">
-                                            <option selected>Seleccione...</option>
+                                            <option value="0" selected>Seleccione...</option>
                                             @foreach (Model.Proveedor item in proveedores)
                                             {
                                                 <option value="@item.idProveedor">@item.nombre</option>
@@ -278,7 +281,7 @@
                                     <label for="categoria" class="control-label col-xs-4">Categoría</label>
                                     <div class="col-xs-8">
                                         <select class="form-control" id="categoria" name="categoria">
-                                            <option selected>Seleccione...</option>
+                                            <option value="0" selected>Seleccione...</option>
                                             @foreach (Model.Categoria item in categorias)
                                             {
                                                 <option value="@item.idCategoria">@item.nombre</option>
@@ -290,7 +293,7 @@
                                     <label for="familia" class="control-label col-xs-4">Familia</label>
                                     <div class="col-xs-8">
                                         <select class="form-control" id="familia" name="familia">
-                                            <option selected>Seleccione...</option>
+                                            <option value="0" selected>Seleccione...</option>
                                         </select>
                                     </div>
                                 </div>
@@ -305,7 +308,7 @@
                             </div>
                             <div class="col-sm-6 col-lg-6 ">
                                 <div class="form-group modal-add-image">
-                                    <img id="imgProducto" src="">
+                                    <img id="imgProducto" src="~/images/NoDisponible.gif">
                                 </div>
                             </div>
                         </div>
