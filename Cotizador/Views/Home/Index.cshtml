@@ -4,6 +4,9 @@
     List<Model.Moneda> monedas = ViewBag.Monedas;
     List<Model.Categoria> categorias = ViewBag.Categorias;
     List<Model.Proveedor> proveedores = ViewBag.Proveedores;
+    List<Model.CotizacionDetalle> detalles = ViewBag.Detalles;
+
+    String baseImg = "data:image/png;base64, ";
 }
 
 
@@ -162,6 +165,23 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach (Model.CotizacionDetalle item in detalles)
+                    {
+                        <tr data-expanded="true">
+                            <td>@item.proveedor.nombre</td>
+                            <td>@item.producto.sku</td>
+                            <td>@item.producto.descripcion</td>
+                            <td>@item.producto.unidad.descripcion</td>
+                            <td class="column-img">
+                                <img class="table-product-img" src="data:image/png;base64, @Convert.ToBase64String(item.producto.image)">
+                            </td>
+                            <td>@item.moneda.simbolo @item.valorUnitarioFinal</td>
+                            <td>@item.cantidad</td>
+                            <td>@item.precioLista.nombreVista</td>
+                            <td>@item.porcentajeDescuento %</td>
+                            <td>@item.moneda.simbolo @item.subTotal</td>
+                        </tr>
+                    }
 
                     @*<tr data-expanded="true">
                         <td>Proveedor 4</td>

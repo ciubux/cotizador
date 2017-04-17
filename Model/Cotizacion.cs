@@ -19,6 +19,12 @@ namespace Model
         public Decimal flete { get; set; }
         public String usuarioCreacion { get; set; }
 
+        public Decimal subtotal { get; set; }
+        public Decimal igv { get; set; }
+        public Decimal total { get; set; }
+        public Moneda moneda { get; set; }
+        public Ciudad ciudad { get; set; }
+        public Cliente cliente { get; set; }
         public List<CotizacionDetalle> detalles { get; set; }
     }
 }

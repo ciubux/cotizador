@@ -15,7 +15,14 @@ namespace BusinessLayer
                 return clienteDAL.getClientesBusqueda(textoBusqueda);
             }
         }
+        public Cliente getCliente(Guid idCliente)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                return clienteDAL.getCliente(idCliente);
+            }
+        }
 
-        
+
     }
 }

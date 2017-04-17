@@ -16,6 +16,13 @@ namespace BusinessLayer
             }
         }
 
+        public Ciudad getCiudad(Guid idCiudad)
+        {
+            using (var ciudadDAL = new CiudadDAL())
+            {
+                return ciudadDAL.getCiudad(idCiudad);
+            }
+        }
 
 
         /*

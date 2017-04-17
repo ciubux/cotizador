@@ -1,0 +1,11 @@
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\b\Spire.License.Fakes.xml
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\b\Spire.License.Fakes.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\b\Spire.License.Fakes.pdb
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\b\Microsoft.mshtml.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\b\Microsoft.QualityTools.Testing.Fakes.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\b\Spire.License.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\b\Spire.Pdf.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\b\es\Microsoft.QualityTools.Testing.Fakes.resources.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\o\f.csprojResolveAssemblyReference.cache
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\o\Spire.License.Fakes.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\Fakes\sl\o\Spire.License.Fakes.pdb

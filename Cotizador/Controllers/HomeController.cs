@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using Model;
+using cotizadorPDF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,10 +31,13 @@ namespace Cotizador.Controllers
                    else this.Session["loginFault"] = 3;
                    return RedirectToAction("Index", "Login");
                }*/
+            if (this.Session["detalles"] == null)
+            {
+                this.Session["detalles"] = new List<CotizacionDetalle>();
+            }
 
             if (this.Session["usuario"] != null)
             {
-
                 PrecioBL precioBl = new PrecioBL();
                 List<PrecioLista> precios = precioBl.getListas();
                 ViewBag.Precios = precios;
@@ -52,10 +56,10 @@ namespace Cotizador.Controllers
 
                 Usuario usuario = (Usuario)this.Session["usuario"];
                 ViewBag.nombreUsuario = usuario.apellidos + " " + usuario.nombres;
-
-               //iewBag.incluigoIgv
-
-
+                
+                List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
+                ViewBag.Detalles = detalles;
+                
                 return View();
             }
             else
@@ -130,6 +134,19 @@ namespace Cotizador.Controllers
         {
             //Guid idFamilia = Guid.Parse(Request["idFamilia"].ToString());
             this.Session["idMoneda"] = Request["idMoneda"].ToString();
+            MonedaBL monedaBl = new MonedaBL();
+            List<Moneda> monedas = monedaBl.getMonedas();
+            Guid idMoneda = Guid.Parse(this.Session["idMoneda"].ToString());
+            Moneda mon  = null;
+            foreach (Moneda mo in monedas)
+            {
+                if (mo.idMoneda == idMoneda)
+                {
+                    mon = mo;
+                }
+            }
+
+            this.Session["moneda"] = mon;
             return "";
         }
         public String GetProductos()
@@ -225,16 +242,8 @@ namespace Cotizador.Controllers
             cat.nombre = Request["categoria"].ToString();
             det.categoria = cat;
             
-            MonedaBL monedaBl = new MonedaBL();
-            List<Moneda> monedas = monedaBl.getMonedas();
-            Guid idMoneda = Guid.Parse(this.Session["idMoneda"].ToString());
-            foreach (Moneda mo in monedas)
-            {
-                if (mo.idMoneda == idMoneda)
-                {
-                    det.moneda = mo;
-                }
-            }
+            det.moneda = (Moneda) this.Session["moneda"];
+            
                 
             Guid idPrecioProducto = Guid.Parse(Request["idPrecioProducto"].ToString());
             det.precioLista = precioBl.getPrecioProducto(prod.idProducto, idPrecioProducto);
@@ -284,17 +293,53 @@ namespace Cotizador.Controllers
             //cot.idTipoCambio = Guid.Parse(Request["tipocambio"].ToString());
             cot.idPrecio = Guid.Parse(Request["precio"].ToString());
             cot.flete = Decimal.Parse(Request["flete"].ToString());
+            cot.moneda = (Moneda)this.Session["moneda"];
 
+            CiudadBL ciudadBl = new CiudadBL();
+            cot.ciudad = ciudadBl.getCiudad(cot.idCiudad);
+
+            Usuario usuario = (Usuario)this.Session["usuario"];
+            cot.usuarioCreacion = usuario.apellidos + "_" + usuario.nombres;
+
+            ClienteBL clienteBl = new ClienteBL();
+            cot.cliente = clienteBl.getCliente(cot.idCliente);
+            
             List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
 
             cot.detalles = detalles;
 
+            cot.subtotal = 0;
+            foreach (CotizacionDetalle det in cot.detalles)
+            {
+                cot.subtotal = cot.subtotal + (det.subTotal);
+            }
+
+            cot.igv = 0;
+
+            if (cot.incluidoIgv == 1)
+            {
+                cot.igv = (decimal)0.18 * cot.subtotal;
+            }
+
+            cot.total = cot.subtotal + cot.igv;
+
             CotizacionBL bl = new CotizacionBL();
             bl.InsertCotizacion(cot);
 
-            return RedirectToAction("Index", "Home");
+            GeneradorPDF gen = new GeneradorPDF();
+            gen.generarPDFExtended(cot);
+            
+
+            return Redirect("/pdfs/" + cot.usuarioCreacion + ".pdf");
         }
 
+        public String TestPDF()
+        {
+            //Guid idFamilia = Guid.Parse(Request["idFamilia"].ToString());
+            GeneradorPDF gen = new GeneradorPDF();
+            gen.generar();
+            return "";
+        }
         /*
         public ActionResult About()
         {
