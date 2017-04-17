@@ -117,11 +117,28 @@ jQuery(function($){
             success: function (res) {
                 $("#presentacion").val(res.presentacion);
                 $("#imgProducto").attr("src", res.image);
-                var selects = "<option selected>Seleccione...</option>";
+                $("#cantidad").val(1);
+                $("#pdescuento").val(0.0);
+               // alert("asas");
+                var selectstmp = "<option selected>Seleccione...</option>";
+                var selects = "";
                 res.precios.forEach(function (item, index, array) {
-                    selects = selects + '<option price="' + item.precio + '" value="' + item.id + '" >' + item.nombre + '</option>';
+                  
+                    if (item.id == $("#precio").val()) {
+                        selects = selects + '<option selected="selected" price="' + item.precio + '" value="' + item.id + '" >' + item.nombre + '</option>';
+                        selectstmp = "<option >Seleccione...</option>";
+                    }
+                    else
+                    {
+                        selects = selects + '<option price="' + item.precio + '" value="' + item.id + '" >' + item.nombre + '</option>';
+                    }
                 });
+                selects = selectstmp + selects;
+
                 $('#precioProducto').html(selects);
+                var price = $('#precioProducto option[value="0b08561c-d257-43b6-bc9f-85b4ab24ee39"]').attr("price");
+                $("#valorunitario").val(price);
+                calcularProducto();
             }
         });
     });
@@ -129,7 +146,6 @@ jQuery(function($){
     $("#precioProducto").change(function () {
         var idPrecio = $(this).val();
         var price = $('#precioProducto option[value="' + idPrecio + '"]').attr("price");
-
         $("#valorunitario").val(price);
         calcularProducto();
     });

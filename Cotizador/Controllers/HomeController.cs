@@ -50,11 +50,40 @@ namespace Cotizador.Controllers
                 List<Proveedor> proveedores = proveedorBl.getProveedores();
                 ViewBag.Proveedores = proveedores;
 
+                TipoCambioBL tipoCambioBL = new TipoCambioBL();
+                TipoCambio tipoCambio = tipoCambioBL.getTipoCambio();
+                ViewBag.TipoCambio = tipoCambio.monto;
+
                 Usuario usuario = (Usuario)this.Session["usuario"];
                 ViewBag.nombreUsuario = usuario.apellidos + " " + usuario.nombres;
 
-               //iewBag.incluigoIgv
+                Boolean incluidoIgv = true;
+                if (this.Session["incluidoIgv"] != null)
+                {
+                    incluidoIgv = (Boolean)this.Session["incluidoIgv"];
+                }
+                ViewBag.incluidoIgv = incluidoIgv;
 
+                String monedaSimbolo = "S/.";
+                if (this.Session["monedaSimbolo"] != null)
+                {
+                    monedaSimbolo = (String)this.Session["monedaSimbolo"];
+                }
+                ViewBag.monedaSimbolo = monedaSimbolo;
+
+                Boolean mostrarCodProveedor = true;
+                if (this.Session["mostrarCodProveedor"] != null)
+                {
+                    mostrarCodProveedor = (Boolean)this.Session["mostrarCodProveedor"];
+                }
+                ViewBag.mostrarCodProveedor = mostrarCodProveedor;
+
+                Decimal pFlete = 0;
+                if (this.Session["pFlete"] != null)
+                {
+                    pFlete = (Decimal)this.Session["pFlete"];
+                }
+                ViewBag.pFlete = pFlete;
 
                 return View();
             }

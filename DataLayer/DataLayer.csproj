@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anotations\Columna.cs" />
+    <Compile Include="TipoCambioDAL.cs" />
     <Compile Include="ProductoDAL.cs" />
     <Compile Include="FamiliaDAL.cs" />
     <Compile Include="CategoriaDAL.cs" />
