@@ -4,8 +4,42 @@
  * and open the template in the editor.
  */
 
+jQuery(function ($) {
+  /*  $('#modal-content').on('shown.bs.modal', function () {
+        // $("#txtname").focus();
+        alert("asas");
+    })
 
-jQuery(function($){
+    $('#modal-content').modal({
+        show: true
+    });*/
+
+    $('#openBtn').click(function () {
+        $('#proveedor').val(0);
+        $('#categoria').val(0);
+        $('#familia').val(0);
+        $('#imgProducto').attr("src", "images/NoDisponible.gif");
+        
+
+        $("#producto").chosen({ placeholder_text_single: "Seleccione el producto", no_results_text: "No existen coincidencias" });
+
+        $("#producto").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 3,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Home/GetProductos"
+        }, {
+            loadingImg: "Content/chosen/images/loading.gif"
+        }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No existen coincidencias" });
+
+
+    /*    $('#modal-content').modal({
+            show: true
+        });*/
+    });
+
     $.datepicker.regional['es'] = {
         closeText: 'Cerrar',
         prevText: '< Ant',

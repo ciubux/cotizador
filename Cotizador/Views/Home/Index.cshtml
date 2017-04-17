@@ -174,11 +174,12 @@
                     </div>
                 </div>
             </div>
+            <!--Agregar Producto Boton Header-->
             <div class="row">
                 <div class="col-sm-6 col-lg-5">
                     <div class="form-group">
                         <div class="col-xs-10">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
+                            <button type="button" id="openBtn" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
                         </div>
                     </div>
                 </div>
@@ -258,6 +259,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    <br />
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal">
@@ -267,7 +269,7 @@
                                     <label for="proveedor" class="control-label col-xs-4">Proveedor</label>
                                     <div class="col-xs-8">
                                         <select class="form-control" id="proveedor" name="proveedor">
-                                            <option selected>Seleccione...</option>
+                                            <option value="0" selected>Seleccione...</option>
                                             @foreach (Model.Proveedor item in proveedores)
                                             {
                                                 <option value="@item.idProveedor">@item.nombre</option>
@@ -279,7 +281,7 @@
                                     <label for="categoria" class="control-label col-xs-4">Categoría</label>
                                     <div class="col-xs-8">
                                         <select class="form-control" id="categoria" name="categoria">
-                                            <option selected>Seleccione...</option>
+                                            <option value="0" selected>Seleccione...</option>
                                             @foreach (Model.Categoria item in categorias)
                                             {
                                                 <option value="@item.idCategoria">@item.nombre</option>
@@ -291,7 +293,7 @@
                                     <label for="familia" class="control-label col-xs-4">Familia</label>
                                     <div class="col-xs-8">
                                         <select class="form-control" id="familia" name="familia">
-                                            <option selected>Seleccione...</option>
+                                            <option value="0" selected>Seleccione...</option>
                                         </select>
                                     </div>
                                 </div>
@@ -306,7 +308,7 @@
                             </div>
                             <div class="col-sm-6 col-lg-6 ">
                                 <div class="form-group modal-add-image">
-                                    <img id="imgProducto" src="">
+                                    <img id="imgProducto" src="~/images/NoDisponible.gif">
                                 </div>
                             </div>
                         </div>
