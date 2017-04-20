@@ -72,14 +72,14 @@ namespace cotizadorPDF
             y = y + sepLine * 2;
 
             
-            page.Canvas.DrawString("Producto", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 80, y);
-            page.Canvas.DrawString("Presentación", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 210, y);
-            page.Canvas.DrawString("Precio Unit.", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 285, y);
-            page.Canvas.DrawString("Anterior", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 290, y + sepLine - 2);
-            page.Canvas.DrawString("Nuevo", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 350, y);
-            page.Canvas.DrawString("Precio Unit.", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 335, y + sepLine - 2);
-            page.Canvas.DrawString("Cant.", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 395, y);
-            page.Canvas.DrawString("Subtotal", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 445, y);
+            page.Canvas.DrawString("Producto", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 40, y);
+            page.Canvas.DrawString("Presentación", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 150, y);
+            page.Canvas.DrawString("Precio Unit.", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 225, y);
+            page.Canvas.DrawString("Anterior", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 230, y + sepLine - 2);
+            page.Canvas.DrawString("Nuevo", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 290, y);
+            page.Canvas.DrawString("Precio Unit.", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 275, y + sepLine - 2);
+            page.Canvas.DrawString("Cant.", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 325, y);
+            page.Canvas.DrawString("Subtotal", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 385, y);
 
 
             y = y + sepLine * 2;
@@ -90,18 +90,19 @@ namespace cotizadorPDF
                 Image img = Image.FromStream(ms);
 
                 PdfImage imgProd = PdfImage.FromImage(img);
-                width = 150;
-                height = 150;
-                page.Canvas.DrawImage(imgProd, 10, y, width, height);
-                
-                page.Canvas.DrawString(det.producto.sku.Trim() + "-" + det.producto.descripcion, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 10, y + 155);
-                page.Canvas.DrawString(det.producto.unidad.descripcion, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 200, y + 70);
-                page.Canvas.DrawString(det.moneda.simbolo + " " + det.valorUnitario, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 290, y + 70);
-                page.Canvas.DrawString(det.moneda.simbolo + " " + det.valorUnitarioFinal, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 340, y + 70);
-                page.Canvas.DrawString(det.cantidad.ToString(), new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 400, y + 70);
-                page.Canvas.DrawString(det.moneda.simbolo + " " + det.subTotal, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 445, y + 70);
+                width = 40;
+                height = 40;
+                page.Canvas.DrawImage(imgProd, 455, y, width, height);
 
-                y = y + 160 + sepLine;
+                page.Canvas.DrawString(det.producto.sku.Trim() + "-" + det.producto.descripcion, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 0, y + 15);
+                page.Canvas.DrawString(det.producto.unidad.descripcion, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 160, y + 15);
+                page.Canvas.DrawString(det.moneda.simbolo + " " + det.valorUnitario, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 230, y + 15);
+                page.Canvas.DrawString(det.moneda.simbolo + " " + det.valorUnitarioFinal, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 280, y + 15);
+                page.Canvas.DrawString(det.cantidad.ToString(), new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 340, y + 15);
+                page.Canvas.DrawString(det.moneda.simbolo + " " + det.subTotal, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 385, y + 15);
+
+                
+                y = y + 50;
             }
 
             y = y + 5;
@@ -117,8 +118,8 @@ namespace cotizadorPDF
                 y = y + sepLine;
             }
 
-            page.Canvas.DrawString("Total ", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 400, y);
-            page.Canvas.DrawString(cot.moneda.simbolo + " " + cot.total, new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 445, y);
+            page.Canvas.DrawString("Total ", new PdfFont(PdfFontFamily.Helvetica, 10f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 400, y);
+            page.Canvas.DrawString(cot.moneda.simbolo + " " + cot.total, new PdfFont(PdfFontFamily.Helvetica, 10f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 445, y);
 
             y = y + sepLine * 2;
             page.Canvas.DrawString("* Los precios incluyen IGV", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
