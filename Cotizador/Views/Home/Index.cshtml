@@ -14,7 +14,7 @@
         <form class="form-horizontal" action="/Home/GenerarPDF" method="post">
             <div class="header">
                 <div class="left">
-                    Cotización - <input class="label-input" type="text" id="fecha" name="fecha">
+                    Cotización - <input class="label-input" type="text" id="fecha" name="fecha" required>
                 </div>
                 <div class="right">
                     @ViewBag.nombreUsuario
@@ -39,7 +39,7 @@
                         <label for="cliente" class="control-label col-xs-4">Señores</label>
 
                         <div class="col-xs-8">
-                            <select class="form-control input-sm" id="idCliente" name="idCliente">
+                            <select class="form-control input-sm" id="idCliente" name="idCliente" required>
                                 <option value=""></option>
                             </select>
                             <!--<input class="form-control col-xs-5" type="text" value="" id="cliente" name="cliente">-->
@@ -148,7 +148,7 @@
                     <div class="form-group">
                         <label for="tipocambio" class="control-label col-xs-4">Tipo Cambio</label>
                         <div class="col-xs-8">
-                            <input class="form-control"  type="number" min="1" max="100" step="0.01" value="@ViewBag.TipoCambio" id="tipocambio" name="tipocambio">
+                            <input class="form-control"  type="number" min="1" max="100" step="0.01" value="@ViewBag.TipoCambio" id="tipocambio" name="tipocambio" required>
                         </div>
                     </div>
                 </div>
@@ -158,8 +158,8 @@
                     <div class="form-group">
                         <label for="precio" class="control-label col-xs-4">Precio Lista</label>
                         <div class="col-xs-8">
-                            <select class="form-control" id="precio" name="precio">
-                                <option value="@Guid.Empty" selected>Seleccione...</option>
+                            <select class="form-control" id="precio" name="precio" required>
+                                <option value="" selected>Seleccione...</option>
                                 @foreach (Model.PrecioLista item in precios)
                                 {
                                     <option value="@item.idPrecioLista">@item.nombreVista</option>
@@ -172,7 +172,7 @@
                     <div class="form-group">
                         <label for="flete" class="control-label col-xs-4">Flete</label>
                         <div class="col-xs-8">
-                            <input class="form-control" type="number" min="0" max="100" step="0.1" value="@ViewBag.pFlete" id="flete"  name="flete">
+                            <input class="form-control" type="number" min="0" max="100" step="0.1" value="@ViewBag.pFlete" id="flete"  name="flete" required>
                         </div>
                     </div>
                 </div>
