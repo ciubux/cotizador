@@ -1,0 +1,8 @@
+C:\Users\cesar\Source\Repos\cotizador\cotizadorPDF\bin\Debug\cotizadorPDF.dll
+C:\Users\cesar\Source\Repos\cotizador\cotizadorPDF\bin\Debug\cotizadorPDF.pdb
+C:\Users\cesar\Source\Repos\cotizador\cotizadorPDF\bin\Debug\Spire.License.dll
+C:\Users\cesar\Source\Repos\cotizador\cotizadorPDF\bin\Debug\Spire.Pdf.dll
+C:\Users\cesar\Source\Repos\cotizador\cotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+C:\Users\cesar\Source\Repos\cotizador\cotizadorPDF\obj\Debug\cotizadorPDF.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Source\Repos\cotizador\cotizadorPDF\obj\Debug\cotizadorPDF.dll
+C:\Users\cesar\Source\Repos\cotizador\cotizadorPDF\obj\Debug\cotizadorPDF.pdb

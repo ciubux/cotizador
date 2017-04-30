@@ -337,3 +337,8 @@ D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAcco
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
+C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\cotizadorPDF.dll
+C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Spire.Pdf.dll
+C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Spire.License.dll
+C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Microsoft.mshtml.dll
+C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\cotizadorPDF.pdb

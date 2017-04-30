@@ -153,7 +153,7 @@ namespace Cotizador.Controllers
 
 
             PrecioBL precioBl = new PrecioBL();
-            List<PrecioLista> lista = precioBl.getPreciosProducto(idProducto, idMoneda);
+            List<PrecioLista> lista = new List<PrecioLista>() ;// precioBl.getPreciosProducto(idProducto, idMoneda);
 
             String precios = "";
             String resultado = "{" +
