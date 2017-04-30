@@ -1,20 +1,25 @@
 ﻿@{
     ViewBag.Title = "Inicio";
+    List<Model.PrecioLista> precios = ViewBag.Precios;
+    List<Model.Moneda> monedas = ViewBag.Monedas;
+    List<Model.Categoria> categorias = ViewBag.Categorias;
+    List<Model.Proveedor> proveedores = ViewBag.Proveedores;
 }
 
-
+    <br/>
     <div class="container">
-        <div class="header">
-            <div class="left">
-                Cotización - <input class="label-input" type="text" id="fecha" name="fecha">
+        <form class="form-horizontal" action="/Home/GenerarPDF" method="post">
+            <div class="header">
+                <div class="left">
+                    Cotización - <input class="label-input" type="text" id="fecha" name="fecha">
+                </div>
+                <div class="right">
+                    @ViewBag.nombreUsuario
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.ActionLink("Salir", "LogOff", "Account");
+                </div>
             </div>
-            <div class="right">
-                Carlos Perez - Ventas
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a>Cancelar</a>
-            </div>
-        </div>
-        <form class="form-horizontal">
+
             <div class="row">
                 <div class="col-sm-6 col-lg-5">
                     <div class="form-group">
@@ -22,7 +27,7 @@
                         <div class="col-xs-8">
                             @Html.Action("list", "Ciudad")
 
-                           
+
                         </div>
                     </div>
                 </div>
@@ -31,11 +36,14 @@
                         <label for="cliente" class="control-label col-xs-4">Señores</label>
 
                         <div class="col-xs-8">
-                             <select class="form-control input-sm" id="idCliente" name="idCliente"><option value=""></option>
+                            <select class="form-control input-sm" id="idCliente" name="idCliente">
+                                <option value=""></option>
                             </select>
                             <!--<input class="form-control col-xs-5" type="text" value="" id="cliente" name="cliente">-->
                         </div>
                     </div>
+
+                    <!--       <button onclick="alert( $('#idCliente').val())" ></button>-->
                 </div>
             </div>
             <div class="row">
@@ -45,12 +53,28 @@
                         <div class="col-xs-8">
                             <div class="radio radio-inline">
                                 <label class="radio-label">
-                                    <input class="radio-input" type="radio" name="igv" id="igvsi" value="1"> Sí
+                                    @if (ViewBag.incluidoIgv)
+                                    {
+                                        <input class="radio-input" checked="checked" type="radio" name="igv" id="igvsi" value="1"> 
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="igv" id="igvsi" value="1"> 
+                                    }       
+                                    Sí                             
                                 </label>
                             </div>
                             <div class="radio radio-inline">
                                 <label class="radio-label">
-                                    <input class="radio-input" type="radio" name="igv" id="igvno" value="0"> No
+                                    @if (!ViewBag.incluidoIgv)
+                                    {
+                                        <input class="radio-input" checked="checked" type="radio" name="igv" id="igvno" value="0">
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="igv" id="igvno" value="0">
+                                    }  
+                                     No
                                 </label>
                             </div>
                         </div>
@@ -62,12 +86,28 @@
                         <div class="col-xs-8">
                             <div class="radio radio-inline">
                                 <label class="radio-label">
-                                    <input class="radio-input" type="radio" name="codigoproveedor" id="codigoproveedorsi" value="1"> Si
+                                    @if (ViewBag.mostrarCodProveedor)
+                                    {
+                                        <input class="radio-input" type="radio" checked="checked" name="codigoproveedor" id="codigoproveedorsi" value="1">
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="codigoproveedor" id="codigoproveedorsi" value="1"> 
+                                    }
+                                    Si
                                 </label>
                             </div>
                             <div class="radio radio-inline">
                                 <label class="radio-label">
-                                    <input class="radio-input" type="radio" name="codigoproveedor" id="codigoproveedorno" value="0"> No
+                                    @if (!ViewBag.mostrarCodProveedor)
+                                    {
+                                        <input class="radio-input" type="radio" checked="checked" name="codigoproveedor" id="codigoproveedorno" value="0">
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="codigoproveedor" id="codigoproveedorno" value="0">
+                                    }
+                                    No
                                 </label>
                             </div>
                         </div>
@@ -81,16 +121,23 @@
                     <div class="form-group">
                         <label for="moneda" class="control-label col-xs-4">Moneda</label>
                         <div class="col-xs-8">
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    <input class="radio-input" type="radio" name="moneda" id="monedasol" value="sol"> S/
-                                </label>
-                            </div>
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    <input class="radio-input" type="radio" name="moneda" id="monedadol" value="dol"> $
-                                </label>
-                            </div>
+                            @foreach (Model.Moneda moneda in monedas)
+                            {
+                                <div class="radio radio-inline">
+                                    <label class="radio-label">
+                                        @if (moneda.simbolo.Equals(ViewBag.monedaSimbolo))
+                                        {
+                                            this.Session["idMoneda"] = moneda.idMoneda;
+                                            <input class="radio-input rMoneda" checked="checked" type="radio" name="moneda" value="@moneda.idMoneda">
+                                        }
+                                        else
+                                        {
+                                            <input class="radio-input rMoneda" type="radio" name="moneda" value="@moneda.idMoneda"> 
+                                        }             
+                                        @moneda.simbolo                           
+                                    </label>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -98,7 +145,7 @@
                     <div class="form-group">
                         <label for="tipocambio" class="control-label col-xs-4">Tipo Cambio</label>
                         <div class="col-xs-8">
-                            <input class="form-control" type="text" value="" id="tipocambio" name="tipocambio">
+                            <input class="form-control"  type="number" min="1" max="100" step="0.1" value="@ViewBag.TipoCambio" id="tipocambio" name="tipocambio">
                         </div>
                     </div>
                 </div>
@@ -109,10 +156,11 @@
                         <label for="precio" class="control-label col-xs-4">Precio Lista</label>
                         <div class="col-xs-8">
                             <select class="form-control" id="precio" name="precio">
-                                <option selected>Seleccione...</option>
-                                <option value="3">P1(Lista)</option>
-                                <option value="2">P2(Lista)</option>
-                                <option value="1">P3(Lista)</option>
+                                <option value="@Guid.Empty" selected>Seleccione...</option>
+                                @foreach (Model.PrecioLista item in precios)
+                                {
+                                    <option value="@item.idPrecioLista">@item.nombreVista</option>
+                                }
                             </select>
                         </div>
                     </div>
@@ -121,16 +169,17 @@
                     <div class="form-group">
                         <label for="flete" class="control-label col-xs-4">Flete</label>
                         <div class="col-xs-8">
-                            <input class="form-control" type="text" value="" id="flete" name="flete">
+                            <input class="form-control" type="number" min="0" max="100" step="0.1" value="@ViewBag.pFlete" id="flete"  name="flete">
                         </div>
                     </div>
                 </div>
             </div>
+            <!--Agregar Producto Boton Header-->
             <div class="row">
                 <div class="col-sm-6 col-lg-5">
                     <div class="form-group">
                         <div class="col-xs-10">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
+                            <button type="button" id="openBtn" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
                         </div>
                     </div>
                 </div>
@@ -148,59 +197,15 @@
                         <th data-sortable="true" data-breakpoints="xs sm">Precio Lista</th>
                         <th data-sortable="true" data-breakpoints="xs sm">% Dscto</th>
                         <th data-sortable="false" data-breakpoints="xs sm">Costo</th>
-                        <th data-sortable="false" data-breakpoints="xs sm">Cotización</th>
+                        @*<th data-sortable="false" data-breakpoints="xs sm">Cotización</th>
                         <th data-sortable="false" data-breakpoints="xs sm">Margen</th>
-                        <th data-sortable="false" data-breakpoints="xs sm">Utilidad Bruta</th>
+                        <th data-sortable="false" data-breakpoints="xs sm">Utilidad Bruta</th>*@
                         <!-- <th data-breakpoints="all" data-title="DOB">Date of Birth</th> -->
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-expanded="true">
-                        <td>Proveedor 1</td>
-                        <td>HD001</td>
-                        <td>Papel Higiénico</td>
-                        <td>Unidad</td>
-                        <td class="column-img"><img class="table-product-img" src="images/papelhigienico.jpg"></td>
-                        <td>15</td>
-                        <td>2</td>
-                        <td>P3</td>
-                        <td>10%</td>
-                        <td>10</td>
-                        <td>15</td>
-                        <td>33.3 %</td>
-                        <td>5</td>
-                    </tr>
-                    <tr data-expanded="true">
-                        <td>Proveedor 2</td>
-                        <td>HD002</td>
-                        <td>Jabón de tocador</td>
-                        <td>Unidad</td>
-                        <td class="column-img"><img class="table-product-img" src="images/jabon_tocador.jpg"></td>
-                        <td>15</td>
-                        <td>2</td>
-                        <td>P3</td>
-                        <td>10%</td>
-                        <td>10</td>
-                        <td>15</td>
-                        <td>33.3 %</td>
-                        <td>5</td>
-                    </tr>
-                    <tr data-expanded="true">
-                        <td>Proveedor 3</td>
-                        <td>HD003</td>
-                        <td>Lejía</td>
-                        <td>Unidad</td>
-                        <td class="column-img"><img class="table-product-img" src="images/lejia.jpg"></td>
-                        <td>15</td>
-                        <td>2</td>
-                        <td>P3</td>
-                        <td>10%</td>
-                        <td>10</td>
-                        <td>15</td>
-                        <td>33.3 %</td>
-                        <td>5</td>
-                    </tr>
-                    <tr data-expanded="true">
+
+                    @*<tr data-expanded="true">
                         <td>Proveedor 4</td>
                         <td>HD004</td>
                         <td>Pasta Dental</td>
@@ -229,7 +234,7 @@
                         <td>15</td>
                         <td>33.3 %</td>
                         <td>5</td>
-                    </tr>
+                    </tr>*@
                 </tbody>
             </table>
 
@@ -237,23 +242,24 @@
                 <div class="col-sm-6 col-lg-5">
                     <div class="form-group">
                         <div class="col-xs-10">
-                            <button type="button" class="btn btn-primary">Generar PDF</button>
+                            <button type="submit" class="btn btn-primary">Generar PDF</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+        </form>        
     </div>
 
     <!-- Modal -->
     <div class="modal fade" id="modalAgregarProducto" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog"  role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalAgregarProductoTitle">Agregar Producto</h5>
+                    <h3 class="modal-title" id="modalAgregarProductoTitle">Agregar Producto</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    <br />
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal">
@@ -263,8 +269,11 @@
                                     <label for="proveedor" class="control-label col-xs-4">Proveedor</label>
                                     <div class="col-xs-8">
                                         <select class="form-control" id="proveedor" name="proveedor">
-                                            <option selected>Seleccione...</option>
-                                            <option value="1">KC</option>
+                                            <option value="0" selected>Seleccione...</option>
+                                            @foreach (Model.Proveedor item in proveedores)
+                                            {
+                                                <option value="@item.idProveedor">@item.nombre</option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -272,8 +281,11 @@
                                     <label for="categoria" class="control-label col-xs-4">Categoría</label>
                                     <div class="col-xs-8">
                                         <select class="form-control" id="categoria" name="categoria">
-                                            <option selected>Seleccione...</option>
-                                            <option value="1">Limpieza Institucional</option>
+                                            <option value="0" selected>Seleccione...</option>
+                                            @foreach (Model.Categoria item in categorias)
+                                            {
+                                                <option value="@item.idCategoria">@item.nombre</option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -281,21 +293,22 @@
                                     <label for="familia" class="control-label col-xs-4">Familia</label>
                                     <div class="col-xs-8">
                                         <select class="form-control" id="familia" name="familia">
-                                            <option selected>Seleccione...</option>
-                                            <option value="1">Mangos</option>
+                                            <option value="0" selected>Seleccione...</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="producto" class="control-label col-xs-4">Producto</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="producto" name="producto">
+                                        <select class="form-control input-sm" id="producto" name="producto">
+                                            <option value=""></option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-lg-6 ">
                                 <div class="form-group modal-add-image">
-                                    <img src="images/papelhigienico.jpg">
+                                    <img id="imgProducto" src="~/images/NoDisponible.gif">
                                 </div>
                             </div>
                         </div>
@@ -306,7 +319,7 @@
                                 <div class="form-group">
                                     <label for="presentacion" class="control-label col-xs-4">Presentación</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="presentacion" name="presentacion">
+                                        <input class="form-control" type="text" value="" id="presentacion" name="presentacion" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -314,7 +327,7 @@
                                 <div class="form-group">
                                     <label for="cantidad" class="control-label col-xs-4">Cantidad</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="cantidad" name="cantidad">
+                                        <input class="form-control" type="number" value="" id="cantidad" name="cantidad">
                                     </div>
                                 </div>
                             </div>
@@ -325,11 +338,12 @@
                                 <div class="form-group">
                                     <label for="precio" class="control-label col-xs-4">Precio Lista</label>
                                     <div class="col-xs-8">
-                                        <select class="form-control" id="precio" name="precio">
+                                        <select class="form-control" id="precioProducto" name="precioProducto">
                                             <option selected>Seleccione...</option>
-                                            <option value="3">P1(Lista)</option>
-                                            <option value="2">P2(Lista)</option>
-                                            <option value="1">P3(Lista)</option>
+                                            @foreach (Model.PrecioLista item in precios)
+                                            {
+                                                <option value="@item.idPrecioLista">@item.nombreVista</option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -338,7 +352,7 @@
                                 <div class="form-group">
                                     <label for="valorunitario" class="control-label col-xs-4">Valor Unitario</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="valorunitario" name="valorunitario">
+                                        <input class="form-control" type="text" value="" id="valorunitario" name="valorunitario" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -349,18 +363,18 @@
                                 <div class="form-group">
                                     <label for="pdescuento" class="control-label col-xs-4">% Dscto.</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="pdescuento" name="pdescuento">
+                                        <input class="form-control" type="number" value="" id="pdescuento" name="pdescuento">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-lg-6">
+                            @*<div class="col-sm-6 col-lg-6">
                                 <div class="form-group">
                                     <label for="precargo" class="control-label col-xs-4">% Recargo</label>
                                     <div class="col-xs-8">
                                         <input class="form-control" type="text" value="" id="precargo" name="precargo">
                                     </div>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
 
                         <div class="row">
@@ -368,7 +382,7 @@
                                 <div class="form-group">
                                     <label for="valorunitarioneto" class="control-label col-xs-4">Valor unit. neto</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="valorunitarioneto" name="valorunitarioneto">
+                                        <input class="form-control" type="text" value="" id="valorunitarioneto" name="valorunitarioneto" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -376,13 +390,13 @@
                                 <div class="form-group">
                                     <label for="subtotal" class="control-label col-xs-4">Sub total</label>
                                     <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="subtotal" name="subtotal">
+                                        <input class="form-control" type="text" value="" id="subtotal" name="subtotal" disabled>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row">
+                        @*<div class="row">
                             <div class="col-sm-6 col-lg-6">
                                 <div class="form-group">
                                     <label for="costounitario" class="control-label col-xs-4">Costo unitario</label>
@@ -415,15 +429,15 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
 
 
 
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button id="btnCancelAddProduct"  type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button id="btnAddProduct" type="button" class="btn btn-primary">Agregar Producto</button>
                 </div>
             </div>
         </div>

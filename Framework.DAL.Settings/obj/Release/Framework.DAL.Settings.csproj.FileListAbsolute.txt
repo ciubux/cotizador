@@ -16,3 +16,12 @@ C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\bin\Release\Framewo
 C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.dll
 C:\Users\cesar\Source\Repos\cotizador\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL.Settings\bin\Release\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL.Settings\bin\Release\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL.Settings\bin\Release\Framework.DAL.dll
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL.Settings\bin\Release\Framework.WebCommon.dll
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL.Settings\bin\Release\Framework.DAL.pdb
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL.Settings\bin\Release\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\projects\cotizador\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.pdb

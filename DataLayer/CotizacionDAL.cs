@@ -21,12 +21,14 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pi_cotizacion");
 
+
+            InputParameterAdd.Varchar(objCommand, "codigo", "0000000001");
             InputParameterAdd.Guid(objCommand, "idCiudad", obj.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", obj.idCliente);
             InputParameterAdd.Guid(objCommand, "idMoneda", obj.idMoneda);
-            InputParameterAdd.Guid(objCommand, "idPrecio", obj.idPrecio);
+            InputParameterAdd.Guid(objCommand, "idPrecioLista", obj.idPrecio);
             InputParameterAdd.Guid(objCommand, "idTipoCambio", obj.idTipoCambio);
-
+            InputParameterAdd.DateTime(objCommand, "fecha", obj.fecha);
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", obj.incluidoIgv);
             InputParameterAdd.SmallInt(objCommand, "mostrarCodProveedor", obj.mostrarCodProveedor);
             InputParameterAdd.Decimal(objCommand, "flete", obj.flete);
@@ -39,11 +41,11 @@ namespace DataLayer
 
         public void InsertCotizacionDetalle(CotizacionDetalle obj)
         {
-            var objCommand = GetSqlCommand("pi_cotizacion_detalle");
-
+            var objCommand = GetSqlCommand("pi_cotizacionDetalle");
+            
             InputParameterAdd.Guid(objCommand, "idCotizacion", obj.idCotizacion);
             InputParameterAdd.Guid(objCommand, "idProducto", obj.idProducto);
-            InputParameterAdd.Guid(objCommand, "idPrecio", obj.idPrecio);
+            InputParameterAdd.Guid(objCommand, "idPrecioLista", obj.idPrecio);
 
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", obj.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "valorUnitario", obj.valorUnitario);

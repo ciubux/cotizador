@@ -1,0 +1,1925 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Spire.License.Fakes</name>
+    </assembly>
+    <members>
+        <member name="T:Global.Fakes.Shimjp3E9FF5BED7F5">
+            <summary>Tipo de correcciones de compatibilidad (shim) de jp3E9FF5BED7F5</summary>
+        </member>
+        <member name="M:Global.Fakes.Shimjp3E9FF5BED7F5.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Global.Fakes.Shimjp3E9FF5BED7F5.#ctor(jp3E9FF5BED7F5)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Global.Fakes.Shimjp3E9FF5BED7F5.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Global.Fakes.Shimjp3E9FF5BED7F5.AllInstances.a">
+            <summary>Establecer el shim de jp3E9FF5BED7F5.a()</summary>
+        </member>
+        <member name="P:Global.Fakes.Shimjp3E9FF5BED7F5.AllInstances.b">
+            <summary>Establecer el shim de jp3E9FF5BED7F5.b()</summary>
+        </member>
+        <member name="P:Global.Fakes.Shimjp3E9FF5BED7F5.AllInstances.c">
+            <summary>Establecer el shim de jp3E9FF5BED7F5.c()</summary>
+        </member>
+        <member name="M:Global.Fakes.Shimjp3E9FF5BED7F5.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Global.Fakes.Shimjp3E9FF5BED7F5.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Global.Fakes.Shimjp3E9FF5BED7F5.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Global.Fakes.Shimjp3E9FF5BED7F5.ConstructorStringInt32Boolean">
+            <summary>Establecer el shim de jp3E9FF5BED7F5.jp3E9FF5BED7F5(String a, Int32 c, Boolean b)</summary>
+        </member>
+        <member name="P:Global.Fakes.Shimjp3E9FF5BED7F5.a">
+            <summary>Establecer el shim de jp3E9FF5BED7F5.a()</summary>
+        </member>
+        <member name="P:Global.Fakes.Shimjp3E9FF5BED7F5.b">
+            <summary>Establecer el shim de jp3E9FF5BED7F5.b()</summary>
+        </member>
+        <member name="P:Global.Fakes.Shimjp3E9FF5BED7F5.c">
+            <summary>Establecer el shim de jp3E9FF5BED7F5.c()</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimBaseLicenseInfo">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.BaseLicenseInfo</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimBaseLicenseInfo.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimBaseLicenseInfo.#ctor(Spire.License.BaseLicenseInfo)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimBaseLicenseInfo.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.AllInstances.Dispose">
+            <summary>Establecer el shim de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.AllInstances.KeyGet">
+            <summary>Establecer el shim de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.AllInstances.KeySetString">
+            <summary>Establecer el shim de BaseLicenseInfo.set_Key(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.AllInstances.LicenseKeyGet">
+            <summary>Establecer el shim de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.AllInstances.VersionGet">
+            <summary>Establecer el shim de BaseLicenseInfo.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.AllInstances.VersionSetString">
+            <summary>Establecer el shim de BaseLicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimBaseLicenseInfo.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimBaseLicenseInfo.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimBaseLicenseInfo.Bind(System.IDisposable)">
+            <summary>Asocia los miembros de la interfaz a las correcciones de compatibilidad (shim).</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.Constructor">
+            <summary>Establecer el shim de BaseLicenseInfo.BaseLicenseInfo()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.Dispose">
+            <summary>Establecer el shim de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.KeyGet">
+            <summary>Establecer el shim de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.KeySetString">
+            <summary>Establecer el shim de BaseLicenseInfo.set_Key(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.LicenseKeyGet">
+            <summary>Establecer el shim de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.VersionGet">
+            <summary>Establecer el shim de BaseLicenseInfo.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimBaseLicenseInfo.VersionSetString">
+            <summary>Establecer el shim de BaseLicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimInternalLicense">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.InternalLicense</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimInternalLicense.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimInternalLicense.#ctor(Spire.License.InternalLicense)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimInternalLicense.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.AllInstances.AssemblyListGet">
+            <summary>Establecer el shim de InternalLicense.get_AssemblyList()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.AllInstances.AssemblyListSetStringArray">
+            <summary>Establecer el shim de InternalLicense.set_AssemblyList(String[] value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.AllInstances.LicenseGet">
+            <summary>Establecer el shim de InternalLicense.get_License()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.AllInstances.LicenseSetLicenseInfo">
+            <summary>Establecer el shim de InternalLicense.set_License(LicenseInfo value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.AllInstances.LicenseTypeGet">
+            <summary>Establecer el shim de InternalLicense.get_LicenseType()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.AllInstances.LicenseTypeSetLicenseType">
+            <summary>Establecer el shim de InternalLicense.set_LicenseType(LicenseType value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.AllInstances.ProductNameGet">
+            <summary>Establecer el shim de InternalLicense.get_ProductName()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.AllInstances.ProductNameSetString">
+            <summary>Establecer el shim de InternalLicense.set_ProductName(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.AssemblyListGet">
+            <summary>Establecer el shim de InternalLicense.get_AssemblyList()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.AssemblyListSetStringArray">
+            <summary>Establecer el shim de InternalLicense.set_AssemblyList(String[] value)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimInternalLicense.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimInternalLicense.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.Constructor">
+            <summary>Establecer el shim de InternalLicense.InternalLicense()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.LicenseGet">
+            <summary>Establecer el shim de InternalLicense.get_License()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.LicenseSetLicenseInfo">
+            <summary>Establecer el shim de InternalLicense.set_License(LicenseInfo value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.LicenseTypeGet">
+            <summary>Establecer el shim de InternalLicense.get_LicenseType()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.LicenseTypeSetLicenseType">
+            <summary>Establecer el shim de InternalLicense.set_LicenseType(LicenseType value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.ProductNameGet">
+            <summary>Establecer el shim de InternalLicense.get_ProductName()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimInternalLicense.ProductNameSetString">
+            <summary>Establecer el shim de InternalLicense.set_ProductName(String value)</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimIssuer">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.Issuer</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimIssuer.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimIssuer.#ctor(Spire.License.Issuer)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimIssuer.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.AllInstances.EmailGet">
+            <summary>Establecer el shim de Issuer.get_Email()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.AllInstances.EmailSetString">
+            <summary>Establecer el shim de Issuer.set_Email(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.AllInstances.NameGet">
+            <summary>Establecer el shim de Issuer.get_Name()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.AllInstances.NameSetString">
+            <summary>Establecer el shim de Issuer.set_Name(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.AllInstances.UrlGet">
+            <summary>Establecer el shim de Issuer.get_Url()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.AllInstances.UrlSetString">
+            <summary>Establecer el shim de Issuer.set_Url(String value)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimIssuer.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimIssuer.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.Constructor">
+            <summary>Establecer el shim de Issuer.Issuer()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.EmailGet">
+            <summary>Establecer el shim de Issuer.get_Email()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.EmailSetString">
+            <summary>Establecer el shim de Issuer.set_Email(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.NameGet">
+            <summary>Establecer el shim de Issuer.get_Name()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.NameSetString">
+            <summary>Establecer el shim de Issuer.set_Name(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.UrlGet">
+            <summary>Establecer el shim de Issuer.get_Url()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimIssuer.UrlSetString">
+            <summary>Establecer el shim de Issuer.set_Url(String value)</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimLicenseInfo">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.LicenseInfo</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseInfo.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseInfo.#ctor(Spire.License.LicenseInfo)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimLicenseInfo.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el shim de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.ConvertToCurrentVersion">
+            <summary>Establecer el shim de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.EmailGet">
+            <summary>Establecer el shim de LicenseInfo.get_Email()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.EmailSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Email(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.ExpiredDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_ExpiredDate()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.ExpiredDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_ExpiredDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.IsUpdateRightExpiredGet">
+            <summary>Establecer el shim de LicenseInfo.get_IsUpdateRightExpired()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.IsUpdateRightExpiredSetBoolean">
+            <summary>Establecer el shim de LicenseInfo.set_IsUpdateRightExpired(Boolean value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.IssuerGet">
+            <summary>Establecer el shim de LicenseInfo.get_Issuer()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.IssuerSetIssuer">
+            <summary>Establecer el shim de LicenseInfo.set_Issuer(Issuer value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.LicensedDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_LicensedDate()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.LicensedDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_LicensedDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.OrganizationGet">
+            <summary>Establecer el shim de LicenseInfo.get_Organization()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.OrganizationSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Organization(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.ProductsGet">
+            <summary>Establecer el shim de LicenseInfo.get_Products()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.ProductsSetProductArray">
+            <summary>Establecer el shim de LicenseInfo.set_Products(Product[] value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.TypeGet">
+            <summary>Establecer el shim de LicenseInfo.get_Type()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.TypeSetLicenseType">
+            <summary>Establecer el shim de LicenseInfo.set_Type(LicenseType value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.UsernameGet">
+            <summary>Establecer el shim de LicenseInfo.get_Username()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.UsernameSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Username(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.VersionGet">
+            <summary>Establecer el shim de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.VersionSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.b">
+            <summary>Establecer el shim de LicenseInfo.b()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.AllInstances.c">
+            <summary>Establecer el shim de LicenseInfo.c()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseInfo.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseInfo.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseInfo.Bind(System.IDisposable)">
+            <summary>Asocia los miembros de la interfaz a las correcciones de compatibilidad (shim).</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.Constructor">
+            <summary>Establecer el shim de LicenseInfo.LicenseInfo()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el shim de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.ConvertToCurrentVersion">
+            <summary>Establecer el shim de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.EmailGet">
+            <summary>Establecer el shim de LicenseInfo.get_Email()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.EmailSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Email(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.ExpiredDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_ExpiredDate()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.ExpiredDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_ExpiredDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.IsUpdateRightExpiredGet">
+            <summary>Establecer el shim de LicenseInfo.get_IsUpdateRightExpired()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.IsUpdateRightExpiredSetBoolean">
+            <summary>Establecer el shim de LicenseInfo.set_IsUpdateRightExpired(Boolean value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.IssuerGet">
+            <summary>Establecer el shim de LicenseInfo.get_Issuer()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.IssuerSetIssuer">
+            <summary>Establecer el shim de LicenseInfo.set_Issuer(Issuer value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.LicensedDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_LicensedDate()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.LicensedDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_LicensedDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.OrganizationGet">
+            <summary>Establecer el shim de LicenseInfo.get_Organization()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.OrganizationSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Organization(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.ProductsGet">
+            <summary>Establecer el shim de LicenseInfo.get_Products()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.ProductsSetProductArray">
+            <summary>Establecer el shim de LicenseInfo.set_Products(Product[] value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.TypeGet">
+            <summary>Establecer el shim de LicenseInfo.get_Type()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.TypeSetLicenseType">
+            <summary>Establecer el shim de LicenseInfo.set_Type(LicenseType value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.UsernameGet">
+            <summary>Establecer el shim de LicenseInfo.get_Username()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.UsernameSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Username(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.VersionGet">
+            <summary>Establecer el shim de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.VersionSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.b">
+            <summary>Establecer el shim de LicenseInfo.b()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfo.c">
+            <summary>Establecer el shim de LicenseInfo.c()</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimLicenseInfoAdapter">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.LicenseInfoAdapter</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseInfoAdapter.#ctor(Spire.License.LicenseInfoAdapter)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimLicenseInfoAdapter.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseInfoAdapter.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseInfoAdapter.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfoAdapter.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseInfoAdapter.Bind(System.IDisposable)">
+            <summary>Asocia los miembros de la interfaz a las correcciones de compatibilidad (shim).</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseInfoAdapter.Constructor">
+            <summary>Establecer el shim de LicenseInfoAdapter.LicenseInfoAdapter()</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimLicenseProvider">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.LicenseProvider</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseProvider.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseProvider.#ctor(Spire.License.LicenseProvider)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimLicenseProvider.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.AllInstances.GetLicenseLicenseContextTypeObjectBoolean">
+            <summary>Establecer el shim de LicenseProvider.GetLicense(LicenseContext context, Type type, Object instance, Boolean allowExceptions)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.AllInstances.aAssembly">
+            <summary>Establecer el shim de LicenseProvider.a(Assembly A_0)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.AllInstances.aLicenseContextTypeObjectBoolean">
+            <summary>Establecer el shim de LicenseProvider.a(LicenseContext A_0, Type A_1, Object A_2, Boolean A_3)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.AllInstances.aLicenseInfoTypeObject">
+            <summary>Establecer el shim de LicenseProvider.a(LicenseInfo A_0, Type A_1, Object A_2)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.AllInstances.aTypeObject">
+            <summary>Establecer el shim de LicenseProvider.a(Type A_0, Object A_1)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseProvider.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseProvider.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.ClearLicense">
+            <summary>Establecer el shim de LicenseProvider.ClearLicense()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.Constructor">
+            <summary>Establecer el shim de LicenseProvider.LicenseProvider()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.GetLicenseFileName">
+            <summary>Establecer el shim de LicenseProvider.GetLicenseFileName()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.GetLicenseLicenseContextTypeObjectBoolean">
+            <summary>Establecer el shim de LicenseProvider.GetLicense(LicenseContext context, Type type, Object instance, Boolean allowExceptions)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.LoadLicense">
+            <summary>Establecer el shim de LicenseProvider.LoadLicense()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.SetLicenseFileFileInfo">
+            <summary>Establecer el shim de LicenseProvider.SetLicenseFile(FileInfo licenseFile)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.SetLicenseFileFullPathString">
+            <summary>Establecer el shim de LicenseProvider.SetLicenseFileFullPath(String licenseFileFullPath)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.SetLicenseFileNameString">
+            <summary>Establecer el shim de LicenseProvider.SetLicenseFileName(String licenseFileName)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.SetLicenseFileStreamStream">
+            <summary>Establecer el shim de LicenseProvider.SetLicenseFileStream(Stream licenseFileStream)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.SetLicenseKeyString">
+            <summary>Establecer el shim de LicenseProvider.SetLicenseKey(String key)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.StaticConstructor">
+            <summary>Establecer el shim de LicenseProvider.LicenseProvider()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.aAssembly">
+            <summary>Establecer el shim de LicenseProvider.a(Assembly A_0)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.aLicenseContextTypeObjectBoolean">
+            <summary>Establecer el shim de LicenseProvider.a(LicenseContext A_0, Type A_1, Object A_2, Boolean A_3)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.aLicenseInfoTypeObject">
+            <summary>Establecer el shim de LicenseProvider.a(LicenseInfo A_0, Type A_1, Object A_2)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.aStream">
+            <summary>Establecer el shim de LicenseProvider.a(Stream A_0)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.aString">
+            <summary>Establecer el shim de LicenseProvider.a(String A_0)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.aType">
+            <summary>Establecer el shim de LicenseProvider.a(Type A_0)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.aTypeObject">
+            <summary>Establecer el shim de LicenseProvider.a(Type A_0, Object A_1)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseProvider.bType">
+            <summary>Establecer el shim de LicenseProvider.b(Type A_0)</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimLicenseSubscription">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.LicenseSubscription</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseSubscription.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseSubscription.#ctor(Spire.License.LicenseSubscription)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimLicenseSubscription.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseSubscription.AllInstances.NumberOfPermittedDeveloperGet">
+            <summary>Establecer el shim de LicenseSubscription.get_NumberOfPermittedDeveloper()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseSubscription.AllInstances.NumberOfPermittedDeveloperSetInt32">
+            <summary>Establecer el shim de LicenseSubscription.set_NumberOfPermittedDeveloper(Int32 value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseSubscription.AllInstances.NumberOfPermittedSiteGet">
+            <summary>Establecer el shim de LicenseSubscription.get_NumberOfPermittedSite()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseSubscription.AllInstances.NumberOfPermittedSiteSetInt32">
+            <summary>Establecer el shim de LicenseSubscription.set_NumberOfPermittedSite(Int32 value)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseSubscription.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimLicenseSubscription.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseSubscription.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseSubscription.Constructor">
+            <summary>Establecer el shim de LicenseSubscription.LicenseSubscription()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseSubscription.NumberOfPermittedDeveloperGet">
+            <summary>Establecer el shim de LicenseSubscription.get_NumberOfPermittedDeveloper()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseSubscription.NumberOfPermittedDeveloperSetInt32">
+            <summary>Establecer el shim de LicenseSubscription.set_NumberOfPermittedDeveloper(Int32 value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseSubscription.NumberOfPermittedSiteGet">
+            <summary>Establecer el shim de LicenseSubscription.get_NumberOfPermittedSite()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimLicenseSubscription.NumberOfPermittedSiteSetInt32">
+            <summary>Establecer el shim de LicenseSubscription.set_NumberOfPermittedSite(Int32 value)</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimPackageAttribute">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.PackageAttribute</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimPackageAttribute.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimPackageAttribute.#ctor(Spire.License.PackageAttribute)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimPackageAttribute.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.AllInstances.NameGet">
+            <summary>Establecer el shim de PackageAttribute.get_Name()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.AllInstances.NameSetString">
+            <summary>Establecer el shim de PackageAttribute.set_Name(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.AllInstances.VersionGet">
+            <summary>Establecer el shim de PackageAttribute.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.AllInstances.VersionSetString">
+            <summary>Establecer el shim de PackageAttribute.set_Version(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.AllInstances.a">
+            <summary>Establecer el shim de PackageAttribute.a()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.AllInstances.b">
+            <summary>Establecer el shim de PackageAttribute.b()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimPackageAttribute.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimPackageAttribute.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.ConstructorStringString">
+            <summary>Establecer el shim de PackageAttribute.PackageAttribute(String name, String version)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.GetPackageAssembly">
+            <summary>Establecer el shim de PackageAttribute.GetPackage(Assembly assembly)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.NameGet">
+            <summary>Establecer el shim de PackageAttribute.get_Name()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.NameSetString">
+            <summary>Establecer el shim de PackageAttribute.set_Name(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.VersionGet">
+            <summary>Establecer el shim de PackageAttribute.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.VersionSetString">
+            <summary>Establecer el shim de PackageAttribute.set_Version(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.a">
+            <summary>Establecer el shim de PackageAttribute.a()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimPackageAttribute.b">
+            <summary>Establecer el shim de PackageAttribute.b()</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimProduct">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.Product</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimProduct.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimProduct.#ctor(Spire.License.Product)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimProduct.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.AllInstances.NameGet">
+            <summary>Establecer el shim de Product.get_Name()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.AllInstances.NameSetString">
+            <summary>Establecer el shim de Product.set_Name(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.AllInstances.SubscriptionGet">
+            <summary>Establecer el shim de Product.get_Subscription()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.AllInstances.SubscriptionSetLicenseSubscription">
+            <summary>Establecer el shim de Product.set_Subscription(LicenseSubscription value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.AllInstances.VersionGet">
+            <summary>Establecer el shim de Product.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.AllInstances.VersionSetString">
+            <summary>Establecer el shim de Product.set_Version(String value)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimProduct.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimProduct.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.Constructor">
+            <summary>Establecer el shim de Product.Product()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.NameGet">
+            <summary>Establecer el shim de Product.get_Name()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.NameSetString">
+            <summary>Establecer el shim de Product.set_Name(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.SubscriptionGet">
+            <summary>Establecer el shim de Product.get_Subscription()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.SubscriptionSetLicenseSubscription">
+            <summary>Establecer el shim de Product.set_Subscription(LicenseSubscription value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.VersionGet">
+            <summary>Establecer el shim de Product.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimProduct.VersionSetString">
+            <summary>Establecer el shim de Product.set_Version(String value)</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimReleaseDateAttribute">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.ReleaseDateAttribute</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimReleaseDateAttribute.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimReleaseDateAttribute.#ctor(Spire.License.ReleaseDateAttribute)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.ShimReleaseDateAttribute.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimReleaseDateAttribute.AllInstances.ReleaseDateGet">
+            <summary>Establecer el shim de ReleaseDateAttribute.get_ReleaseDate()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimReleaseDateAttribute.AllInstances.ReleaseDateSetString">
+            <summary>Establecer el shim de ReleaseDateAttribute.set_ReleaseDate(String value)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimReleaseDateAttribute.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.ShimReleaseDateAttribute.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimReleaseDateAttribute.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimReleaseDateAttribute.ConstructorString">
+            <summary>Establecer el shim de ReleaseDateAttribute.ReleaseDateAttribute(String releaseDate)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimReleaseDateAttribute.GetReleaseDateAssembly">
+            <summary>Establecer el shim de ReleaseDateAttribute.GetReleaseDate(Assembly assembly)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimReleaseDateAttribute.ReleaseDateGet">
+            <summary>Establecer el shim de ReleaseDateAttribute.get_ReleaseDate()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.ShimReleaseDateAttribute.ReleaseDateSetString">
+            <summary>Establecer el shim de ReleaseDateAttribute.set_ReleaseDate(String value)</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.StubBaseLicenseInfo">
+            <summary>Tipo stub de Spire.License.BaseLicenseInfo</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubBaseLicenseInfo.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubBaseLicenseInfo.AttachBackingFieldToKey">
+            <summary>Asocia delegados para emular StubBaseLicenseInfo.Key como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubBaseLicenseInfo.AttachBackingFieldToVersion">
+            <summary>Asocia delegados para emular StubBaseLicenseInfo.Version como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubBaseLicenseInfo.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubBaseLicenseInfo.Dispose">
+            <summary>Establecer el stub de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubBaseLicenseInfo.Dispose01">
+            <summary>Establecer el stub de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubBaseLicenseInfo.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubBaseLicenseInfo</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubBaseLicenseInfo.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubBaseLicenseInfo.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubBaseLicenseInfo.Key">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubBaseLicenseInfo.KeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubBaseLicenseInfo.KeySetString">
+            <summary>Establecer el stub de BaseLicenseInfo.set_Key(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubBaseLicenseInfo.LicenseKey">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubBaseLicenseInfo.LicenseKeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubBaseLicenseInfo.Version">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubBaseLicenseInfo.VersionGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubBaseLicenseInfo.VersionSetString">
+            <summary>Establecer el stub de BaseLicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.StubInternalLicense">
+            <summary>Tipo stub de Spire.License.InternalLicense</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubInternalLicense.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubInternalLicense.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubInternalLicense.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubInternalLicense</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubInternalLicense.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubInternalLicense.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.StubIssuer">
+            <summary>Tipo stub de Spire.License.Issuer</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubIssuer.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubIssuer.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubIssuer.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubIssuer</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubIssuer.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubIssuer.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.StubLicenseInfo">
+            <summary>Tipo stub de Spire.License.LicenseInfo</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfo.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfo.AttachBackingFieldToKey">
+            <summary>Asocia delegados para emular StubLicenseInfo.Key como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfo.AttachBackingFieldToVersion">
+            <summary>Asocia delegados para emular StubLicenseInfo.Version como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfo.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfo.ConvertFromCurrentVersion(Spire.License.LicenseInfo)">
+            <summary>Establecer el stub de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfo.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el stub de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfo.ConvertToCurrentVersion">
+            <summary>Establecer el stub de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfo.ConvertToCurrentVersion01">
+            <summary>Establecer el stub de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfo.Dispose">
+            <summary>Establecer el stub de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfo.Dispose01">
+            <summary>Establecer el stub de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfo.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubLicenseInfo</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfo.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfo.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfo.Key">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfo.KeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfo.KeySetString">
+            <summary>Establecer el stub de BaseLicenseInfo.set_Key(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfo.LicenseKey">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfo.LicenseKeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfo.Version">
+            <summary>Establecer el stub de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfo.VersionGet">
+            <summary>Establecer el stub de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfo.VersionSetString">
+            <summary>Establecer el stub de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.StubLicenseInfoAdapter">
+            <summary>Tipo stub de Spire.License.LicenseInfoAdapter</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfoAdapter.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfoAdapter.AttachBackingFieldToKey">
+            <summary>Asocia delegados para emular StubLicenseInfoAdapter.Key como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfoAdapter.AttachBackingFieldToVersion">
+            <summary>Asocia delegados para emular StubLicenseInfoAdapter.Version como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfoAdapter.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfoAdapter.ConvertFromCurrentVersion(Spire.License.LicenseInfo)">
+            <summary>Establecer el stub de LicenseInfoAdapter.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfoAdapter.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el stub de LicenseInfoAdapter.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfoAdapter.ConvertToCurrentVersion">
+            <summary>Establecer el stub de LicenseInfoAdapter.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfoAdapter.ConvertToCurrentVersion01">
+            <summary>Establecer el stub de LicenseInfoAdapter.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfoAdapter.Dispose">
+            <summary>Establecer el stub de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfoAdapter.Dispose01">
+            <summary>Establecer el stub de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseInfoAdapter.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubLicenseInfoAdapter</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfoAdapter.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfoAdapter.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfoAdapter.Key">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfoAdapter.KeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfoAdapter.KeySetString">
+            <summary>Establecer el stub de BaseLicenseInfo.set_Key(String value)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfoAdapter.LicenseKey">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfoAdapter.LicenseKeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseInfoAdapter.Version">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfoAdapter.VersionGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseInfoAdapter.VersionSetString">
+            <summary>Establecer el stub de BaseLicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.StubLicenseProvider">
+            <summary>Tipo stub de Spire.License.LicenseProvider</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseProvider.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseProvider.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseProvider.GetLicense(System.ComponentModel.LicenseContext,System.Type,System.Object,System.Boolean)">
+            <summary>Establecer el stub de LicenseProvider.GetLicense(LicenseContext context, Type type, Object instance, Boolean allowExceptions)</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubLicenseProvider.GetLicenseLicenseContextTypeObjectBoolean">
+            <summary>Establecer el stub de LicenseProvider.GetLicense(LicenseContext context, Type type, Object instance, Boolean allowExceptions)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseProvider.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubLicenseProvider</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseProvider.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseProvider.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.StubLicenseSubscription">
+            <summary>Tipo stub de Spire.License.LicenseSubscription</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseSubscription.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseSubscription.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubLicenseSubscription.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubLicenseSubscription</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseSubscription.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubLicenseSubscription.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.StubPackageAttribute">
+            <summary>Tipo stub de Spire.License.PackageAttribute</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubPackageAttribute.#ctor(System.String,System.String)">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubPackageAttribute.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubPackageAttribute.Equals(System.Object)">
+            <summary>Establecer el stub de Attribute.Equals(Object obj)</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubPackageAttribute.EqualsObject">
+            <summary>Establecer el stub de Attribute.Equals(Object obj)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubPackageAttribute.GetHashCode">
+            <summary>Establecer el stub de Attribute.GetHashCode()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubPackageAttribute.GetHashCode01">
+            <summary>Establecer el stub de Attribute.GetHashCode()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubPackageAttribute.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubPackageAttribute</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubPackageAttribute.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubPackageAttribute.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubPackageAttribute.IsDefaultAttribute">
+            <summary>Establecer el stub de Attribute.IsDefaultAttribute()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubPackageAttribute.IsDefaultAttribute01">
+            <summary>Establecer el stub de Attribute.IsDefaultAttribute()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubPackageAttribute.Match(System.Object)">
+            <summary>Establecer el stub de Attribute.Match(Object obj)</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubPackageAttribute.MatchObject">
+            <summary>Establecer el stub de Attribute.Match(Object obj)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubPackageAttribute.TypeId">
+            <summary>Establecer el stub de Attribute.get_TypeId()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubPackageAttribute.TypeIdGet">
+            <summary>Establecer el stub de Attribute.get_TypeId()</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.StubProduct">
+            <summary>Tipo stub de Spire.License.Product</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubProduct.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubProduct.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubProduct.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubProduct</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubProduct.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubProduct.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="T:Spire.License.Fakes.StubReleaseDateAttribute">
+            <summary>Tipo stub de Spire.License.ReleaseDateAttribute</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubReleaseDateAttribute.#ctor(System.String)">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubReleaseDateAttribute.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubReleaseDateAttribute.Equals(System.Object)">
+            <summary>Establecer el stub de Attribute.Equals(Object obj)</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubReleaseDateAttribute.EqualsObject">
+            <summary>Establecer el stub de Attribute.Equals(Object obj)</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubReleaseDateAttribute.GetHashCode">
+            <summary>Establecer el stub de Attribute.GetHashCode()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubReleaseDateAttribute.GetHashCode01">
+            <summary>Establecer el stub de Attribute.GetHashCode()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubReleaseDateAttribute.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubReleaseDateAttribute</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubReleaseDateAttribute.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubReleaseDateAttribute.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubReleaseDateAttribute.IsDefaultAttribute">
+            <summary>Establecer el stub de Attribute.IsDefaultAttribute()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubReleaseDateAttribute.IsDefaultAttribute01">
+            <summary>Establecer el stub de Attribute.IsDefaultAttribute()</summary>
+        </member>
+        <member name="M:Spire.License.Fakes.StubReleaseDateAttribute.Match(System.Object)">
+            <summary>Establecer el stub de Attribute.Match(Object obj)</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubReleaseDateAttribute.MatchObject">
+            <summary>Establecer el stub de Attribute.Match(Object obj)</summary>
+        </member>
+        <member name="P:Spire.License.Fakes.StubReleaseDateAttribute.TypeId">
+            <summary>Establecer el stub de Attribute.get_TypeId()</summary>
+        </member>
+        <member name="F:Spire.License.Fakes.StubReleaseDateAttribute.TypeIdGet">
+            <summary>Establecer el stub de Attribute.get_TypeId()</summary>
+        </member>
+        <member name="T:Spire.License.V1_0.Fakes.ShimLicenseInfo">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.V1_0.LicenseInfo</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimLicenseInfo.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimLicenseInfo.#ctor(Spire.License.V1_0.LicenseInfo)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el shim de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.ConvertToCurrentVersion">
+            <summary>Establecer el shim de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.Dispose">
+            <summary>Establecer el shim de LicenseInfo.Dispose()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.EmailGet">
+            <summary>Establecer el shim de LicenseInfo.get_Email()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.EmailSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Email(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.IsUpdateRightExpiredGet">
+            <summary>Establecer el shim de LicenseInfo.get_IsUpdateRightExpired()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.IsUpdateRightExpiredSetBoolean">
+            <summary>Establecer el shim de LicenseInfo.set_IsUpdateRightExpired(Boolean value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.IssuerGet">
+            <summary>Establecer el shim de LicenseInfo.get_Issuer()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.IssuerSetIssuer">
+            <summary>Establecer el shim de LicenseInfo.set_Issuer(Issuer value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.LicensedDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_LicensedDate()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.LicensedDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_LicensedDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.OrganizationGet">
+            <summary>Establecer el shim de LicenseInfo.get_Organization()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.OrganizationSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Organization(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.ProductsGet">
+            <summary>Establecer el shim de LicenseInfo.get_Products()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.ProductsSetProductArray">
+            <summary>Establecer el shim de LicenseInfo.set_Products(Product[] value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.TypeGet">
+            <summary>Establecer el shim de LicenseInfo.get_Type()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.TypeSetLicenseType">
+            <summary>Establecer el shim de LicenseInfo.set_Type(LicenseType value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.UsernameGet">
+            <summary>Establecer el shim de LicenseInfo.get_Username()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.UsernameSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Username(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.VersionGet">
+            <summary>Establecer el shim de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.AllInstances.VersionSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimLicenseInfo.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimLicenseInfo.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimLicenseInfo.Bind(System.IDisposable)">
+            <summary>Asocia los miembros de la interfaz a las correcciones de compatibilidad (shim).</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.Constructor">
+            <summary>Establecer el shim de LicenseInfo.LicenseInfo()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el shim de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.ConvertToCurrentVersion">
+            <summary>Establecer el shim de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.Dispose">
+            <summary>Establecer el shim de LicenseInfo.Dispose()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.EmailGet">
+            <summary>Establecer el shim de LicenseInfo.get_Email()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.EmailSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Email(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.IsUpdateRightExpiredGet">
+            <summary>Establecer el shim de LicenseInfo.get_IsUpdateRightExpired()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.IsUpdateRightExpiredSetBoolean">
+            <summary>Establecer el shim de LicenseInfo.set_IsUpdateRightExpired(Boolean value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.IssuerGet">
+            <summary>Establecer el shim de LicenseInfo.get_Issuer()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.IssuerSetIssuer">
+            <summary>Establecer el shim de LicenseInfo.set_Issuer(Issuer value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.LicensedDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_LicensedDate()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.LicensedDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_LicensedDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.OrganizationGet">
+            <summary>Establecer el shim de LicenseInfo.get_Organization()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.OrganizationSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Organization(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.ProductsGet">
+            <summary>Establecer el shim de LicenseInfo.get_Products()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.ProductsSetProductArray">
+            <summary>Establecer el shim de LicenseInfo.set_Products(Product[] value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.TypeGet">
+            <summary>Establecer el shim de LicenseInfo.get_Type()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.TypeSetLicenseType">
+            <summary>Establecer el shim de LicenseInfo.set_Type(LicenseType value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.UsernameGet">
+            <summary>Establecer el shim de LicenseInfo.get_Username()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.UsernameSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Username(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.VersionGet">
+            <summary>Establecer el shim de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseInfo.VersionSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="T:Spire.License.V1_0.Fakes.ShimLicenseSubscription">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.V1_0.LicenseSubscription</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimLicenseSubscription.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimLicenseSubscription.#ctor(Spire.License.V1_0.LicenseSubscription)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.V1_0.Fakes.ShimLicenseSubscription.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseSubscription.AllInstances.NumberOfPermitedDeveloperGet">
+            <summary>Establecer el shim de LicenseSubscription.get_NumberOfPermitedDeveloper()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseSubscription.AllInstances.NumberOfPermitedDeveloperSetInt32">
+            <summary>Establecer el shim de LicenseSubscription.set_NumberOfPermitedDeveloper(Int32 value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseSubscription.AllInstances.NumberOfPermitedSiteGet">
+            <summary>Establecer el shim de LicenseSubscription.get_NumberOfPermitedSite()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseSubscription.AllInstances.NumberOfPermitedSiteSetInt32">
+            <summary>Establecer el shim de LicenseSubscription.set_NumberOfPermitedSite(Int32 value)</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimLicenseSubscription.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimLicenseSubscription.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseSubscription.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseSubscription.Constructor">
+            <summary>Establecer el shim de LicenseSubscription.LicenseSubscription()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseSubscription.NumberOfPermitedDeveloperGet">
+            <summary>Establecer el shim de LicenseSubscription.get_NumberOfPermitedDeveloper()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseSubscription.NumberOfPermitedDeveloperSetInt32">
+            <summary>Establecer el shim de LicenseSubscription.set_NumberOfPermitedDeveloper(Int32 value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseSubscription.NumberOfPermitedSiteGet">
+            <summary>Establecer el shim de LicenseSubscription.get_NumberOfPermitedSite()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimLicenseSubscription.NumberOfPermitedSiteSetInt32">
+            <summary>Establecer el shim de LicenseSubscription.set_NumberOfPermitedSite(Int32 value)</summary>
+        </member>
+        <member name="T:Spire.License.V1_0.Fakes.ShimProduct">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.V1_0.Product</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimProduct.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimProduct.#ctor(Spire.License.V1_0.Product)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.V1_0.Fakes.ShimProduct.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.AllInstances.NameGet">
+            <summary>Establecer el shim de Product.get_Name()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.AllInstances.NameSetString">
+            <summary>Establecer el shim de Product.set_Name(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.AllInstances.SubscriptionGet">
+            <summary>Establecer el shim de Product.get_Subscription()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.AllInstances.SubscriptionSetLicenseSubscription">
+            <summary>Establecer el shim de Product.set_Subscription(LicenseSubscription value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.AllInstances.VersionGet">
+            <summary>Establecer el shim de Product.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.AllInstances.VersionSetString">
+            <summary>Establecer el shim de Product.set_Version(String value)</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimProduct.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.ShimProduct.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.Constructor">
+            <summary>Establecer el shim de Product.Product()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.NameGet">
+            <summary>Establecer el shim de Product.get_Name()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.NameSetString">
+            <summary>Establecer el shim de Product.set_Name(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.SubscriptionGet">
+            <summary>Establecer el shim de Product.get_Subscription()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.SubscriptionSetLicenseSubscription">
+            <summary>Establecer el shim de Product.set_Subscription(LicenseSubscription value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.VersionGet">
+            <summary>Establecer el shim de Product.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.VersionSetString">
+            <summary>Establecer el shim de Product.set_Version(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.ShimProduct.bStringInt32">
+            <summary>Establecer el shim de Product.b(String A_0, Int32 A_1)</summary>
+        </member>
+        <member name="T:Spire.License.V1_0.Fakes.StubLicenseInfo">
+            <summary>Tipo stub de Spire.License.V1_0.LicenseInfo</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubLicenseInfo.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubLicenseInfo.AttachBackingFieldToKey">
+            <summary>Asocia delegados para emular StubLicenseInfo.Key como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubLicenseInfo.AttachBackingFieldToVersion">
+            <summary>Asocia delegados para emular StubLicenseInfo.Version como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubLicenseInfo.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubLicenseInfo.ConvertFromCurrentVersion(Spire.License.LicenseInfo)">
+            <summary>Establecer el stub de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="F:Spire.License.V1_0.Fakes.StubLicenseInfo.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el stub de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubLicenseInfo.ConvertToCurrentVersion">
+            <summary>Establecer el stub de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="F:Spire.License.V1_0.Fakes.StubLicenseInfo.ConvertToCurrentVersion01">
+            <summary>Establecer el stub de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubLicenseInfo.Dispose">
+            <summary>Establecer el stub de LicenseInfo.Dispose()</summary>
+        </member>
+        <member name="F:Spire.License.V1_0.Fakes.StubLicenseInfo.Dispose01">
+            <summary>Establecer el stub de LicenseInfo.Dispose()</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubLicenseInfo.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubLicenseInfo</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubLicenseInfo.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubLicenseInfo.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubLicenseInfo.Key">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.V1_0.Fakes.StubLicenseInfo.KeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.V1_0.Fakes.StubLicenseInfo.KeySetString">
+            <summary>Establecer el stub de BaseLicenseInfo.set_Key(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubLicenseInfo.LicenseKey">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="F:Spire.License.V1_0.Fakes.StubLicenseInfo.LicenseKeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubLicenseInfo.Version">
+            <summary>Establecer el stub de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.V1_0.Fakes.StubLicenseInfo.VersionGet">
+            <summary>Establecer el stub de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.V1_0.Fakes.StubLicenseInfo.VersionSetString">
+            <summary>Establecer el stub de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="T:Spire.License.V1_0.Fakes.StubLicenseSubscription">
+            <summary>Tipo stub de Spire.License.V1_0.LicenseSubscription</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubLicenseSubscription.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubLicenseSubscription.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubLicenseSubscription.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubLicenseSubscription</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubLicenseSubscription.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubLicenseSubscription.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="T:Spire.License.V1_0.Fakes.StubProduct">
+            <summary>Tipo stub de Spire.License.V1_0.Product</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubProduct.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubProduct.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.V1_0.Fakes.StubProduct.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubProduct</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubProduct.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.V1_0.Fakes.StubProduct.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="T:Spire.License.V1_1.Fakes.ShimLicenseInfo">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.V1_1.LicenseInfo</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.ShimLicenseInfo.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.ShimLicenseInfo.#ctor(Spire.License.V1_1.LicenseInfo)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el shim de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.ConvertToCurrentVersion">
+            <summary>Establecer el shim de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.EmailGet">
+            <summary>Establecer el shim de LicenseInfo.get_Email()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.EmailSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Email(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.IsUpdateRightExpiredGet">
+            <summary>Establecer el shim de LicenseInfo.get_IsUpdateRightExpired()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.IsUpdateRightExpiredSetBoolean">
+            <summary>Establecer el shim de LicenseInfo.set_IsUpdateRightExpired(Boolean value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.IssuerGet">
+            <summary>Establecer el shim de LicenseInfo.get_Issuer()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.IssuerSetIssuer">
+            <summary>Establecer el shim de LicenseInfo.set_Issuer(Issuer value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.LicensedDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_LicensedDate()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.LicensedDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_LicensedDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.OrganizationGet">
+            <summary>Establecer el shim de LicenseInfo.get_Organization()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.OrganizationSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Organization(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.ProductsGet">
+            <summary>Establecer el shim de LicenseInfo.get_Products()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.ProductsSetProductArray">
+            <summary>Establecer el shim de LicenseInfo.set_Products(Product[] value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.TypeGet">
+            <summary>Establecer el shim de LicenseInfo.get_Type()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.TypeSetLicenseType">
+            <summary>Establecer el shim de LicenseInfo.set_Type(LicenseType value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.UsernameGet">
+            <summary>Establecer el shim de LicenseInfo.get_Username()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.UsernameSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Username(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.VersionGet">
+            <summary>Establecer el shim de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.AllInstances.VersionSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.ShimLicenseInfo.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.ShimLicenseInfo.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.ShimLicenseInfo.Bind(System.IDisposable)">
+            <summary>Asocia los miembros de la interfaz a las correcciones de compatibilidad (shim).</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.Constructor">
+            <summary>Establecer el shim de LicenseInfo.LicenseInfo()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el shim de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.ConvertToCurrentVersion">
+            <summary>Establecer el shim de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.EmailGet">
+            <summary>Establecer el shim de LicenseInfo.get_Email()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.EmailSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Email(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.IsUpdateRightExpiredGet">
+            <summary>Establecer el shim de LicenseInfo.get_IsUpdateRightExpired()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.IsUpdateRightExpiredSetBoolean">
+            <summary>Establecer el shim de LicenseInfo.set_IsUpdateRightExpired(Boolean value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.IssuerGet">
+            <summary>Establecer el shim de LicenseInfo.get_Issuer()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.IssuerSetIssuer">
+            <summary>Establecer el shim de LicenseInfo.set_Issuer(Issuer value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.LicensedDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_LicensedDate()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.LicensedDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_LicensedDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.OrganizationGet">
+            <summary>Establecer el shim de LicenseInfo.get_Organization()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.OrganizationSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Organization(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.ProductsGet">
+            <summary>Establecer el shim de LicenseInfo.get_Products()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.ProductsSetProductArray">
+            <summary>Establecer el shim de LicenseInfo.set_Products(Product[] value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.TypeGet">
+            <summary>Establecer el shim de LicenseInfo.get_Type()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.TypeSetLicenseType">
+            <summary>Establecer el shim de LicenseInfo.set_Type(LicenseType value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.UsernameGet">
+            <summary>Establecer el shim de LicenseInfo.get_Username()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.UsernameSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Username(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.VersionGet">
+            <summary>Establecer el shim de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.ShimLicenseInfo.VersionSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="T:Spire.License.V1_1.Fakes.StubLicenseInfo">
+            <summary>Tipo stub de Spire.License.V1_1.LicenseInfo</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.StubLicenseInfo.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.StubLicenseInfo.AttachBackingFieldToKey">
+            <summary>Asocia delegados para emular StubLicenseInfo.Key como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.StubLicenseInfo.AttachBackingFieldToVersion">
+            <summary>Asocia delegados para emular StubLicenseInfo.Version como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.StubLicenseInfo.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.StubLicenseInfo.ConvertFromCurrentVersion(Spire.License.LicenseInfo)">
+            <summary>Establecer el stub de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="F:Spire.License.V1_1.Fakes.StubLicenseInfo.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el stub de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.StubLicenseInfo.ConvertToCurrentVersion">
+            <summary>Establecer el stub de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="F:Spire.License.V1_1.Fakes.StubLicenseInfo.ConvertToCurrentVersion01">
+            <summary>Establecer el stub de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.StubLicenseInfo.Dispose">
+            <summary>Establecer el stub de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="F:Spire.License.V1_1.Fakes.StubLicenseInfo.Dispose01">
+            <summary>Establecer el stub de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="M:Spire.License.V1_1.Fakes.StubLicenseInfo.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubLicenseInfo</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.StubLicenseInfo.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.StubLicenseInfo.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.StubLicenseInfo.Key">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.V1_1.Fakes.StubLicenseInfo.KeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.V1_1.Fakes.StubLicenseInfo.KeySetString">
+            <summary>Establecer el stub de BaseLicenseInfo.set_Key(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.StubLicenseInfo.LicenseKey">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="F:Spire.License.V1_1.Fakes.StubLicenseInfo.LicenseKeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="P:Spire.License.V1_1.Fakes.StubLicenseInfo.Version">
+            <summary>Establecer el stub de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.V1_1.Fakes.StubLicenseInfo.VersionGet">
+            <summary>Establecer el stub de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.V1_1.Fakes.StubLicenseInfo.VersionSetString">
+            <summary>Establecer el stub de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="T:Spire.License.V1_2.Fakes.ShimLicenseInfo">
+            <summary>Tipo de correcciones de compatibilidad (shim) de Spire.License.V1_2.LicenseInfo</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.ShimLicenseInfo.#ctor">
+            <summary>Inicializa una nueva instancia de correcciones de compatibilidad (shim)</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.ShimLicenseInfo.#ctor(Spire.License.V1_2.LicenseInfo)">
+            <summary>Inicializa nuevas correcciones de compatibilidad (shim) para la instancia especificada</summary>
+        </member>
+        <member name="T:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances">
+            <summary>Definir correcciones de compatibilidad (shim) para todos los miembros de instancia</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el shim de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.ConvertToCurrentVersion">
+            <summary>Establecer el shim de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.EmailGet">
+            <summary>Establecer el shim de LicenseInfo.get_Email()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.EmailSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Email(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.ExpiredDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_ExpiredDate()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.ExpiredDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_ExpiredDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.IsUpdateRightExpiredGet">
+            <summary>Establecer el shim de LicenseInfo.get_IsUpdateRightExpired()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.IsUpdateRightExpiredSetBoolean">
+            <summary>Establecer el shim de LicenseInfo.set_IsUpdateRightExpired(Boolean value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.IssuerGet">
+            <summary>Establecer el shim de LicenseInfo.get_Issuer()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.IssuerSetIssuer">
+            <summary>Establecer el shim de LicenseInfo.set_Issuer(Issuer value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.LicensedDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_LicensedDate()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.LicensedDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_LicensedDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.OrganizationGet">
+            <summary>Establecer el shim de LicenseInfo.get_Organization()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.OrganizationSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Organization(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.ProductsGet">
+            <summary>Establecer el shim de LicenseInfo.get_Products()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.ProductsSetProductArray">
+            <summary>Establecer el shim de LicenseInfo.set_Products(Product[] value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.TypeGet">
+            <summary>Establecer el shim de LicenseInfo.get_Type()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.TypeSetLicenseType">
+            <summary>Establecer el shim de LicenseInfo.set_Type(LicenseType value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.UsernameGet">
+            <summary>Establecer el shim de LicenseInfo.get_Username()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.UsernameSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Username(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.VersionGet">
+            <summary>Establecer el shim de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.AllInstances.VersionSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.ShimLicenseInfo.BehaveAsCurrent">
+            <summary>Asigna el comportamiento &apos;Current&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.ShimLicenseInfo.BehaveAsNotImplemented">
+            <summary>Asigna el comportamiento &apos;NotImplemented&apos; a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.Behavior">
+            <summary>Asigna el comportamiento a todos los métodos del tipo corregido para compatibilidad</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.ShimLicenseInfo.Bind(System.IDisposable)">
+            <summary>Asocia los miembros de la interfaz a las correcciones de compatibilidad (shim).</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.Constructor">
+            <summary>Establecer el shim de LicenseInfo.LicenseInfo()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el shim de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.ConvertToCurrentVersion">
+            <summary>Establecer el shim de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.EmailGet">
+            <summary>Establecer el shim de LicenseInfo.get_Email()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.EmailSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Email(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.ExpiredDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_ExpiredDate()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.ExpiredDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_ExpiredDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.IsUpdateRightExpiredGet">
+            <summary>Establecer el shim de LicenseInfo.get_IsUpdateRightExpired()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.IsUpdateRightExpiredSetBoolean">
+            <summary>Establecer el shim de LicenseInfo.set_IsUpdateRightExpired(Boolean value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.IssuerGet">
+            <summary>Establecer el shim de LicenseInfo.get_Issuer()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.IssuerSetIssuer">
+            <summary>Establecer el shim de LicenseInfo.set_Issuer(Issuer value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.LicensedDateGet">
+            <summary>Establecer el shim de LicenseInfo.get_LicensedDate()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.LicensedDateSetDateTime">
+            <summary>Establecer el shim de LicenseInfo.set_LicensedDate(DateTime value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.OrganizationGet">
+            <summary>Establecer el shim de LicenseInfo.get_Organization()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.OrganizationSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Organization(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.ProductsGet">
+            <summary>Establecer el shim de LicenseInfo.get_Products()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.ProductsSetProductArray">
+            <summary>Establecer el shim de LicenseInfo.set_Products(Product[] value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.TypeGet">
+            <summary>Establecer el shim de LicenseInfo.get_Type()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.TypeSetLicenseType">
+            <summary>Establecer el shim de LicenseInfo.set_Type(LicenseType value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.UsernameGet">
+            <summary>Establecer el shim de LicenseInfo.get_Username()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.UsernameSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Username(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.VersionGet">
+            <summary>Establecer el shim de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.ShimLicenseInfo.VersionSetString">
+            <summary>Establecer el shim de LicenseInfo.set_Version(String value)</summary>
+        </member>
+        <member name="T:Spire.License.V1_2.Fakes.StubLicenseInfo">
+            <summary>Tipo stub de Spire.License.V1_2.LicenseInfo</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.StubLicenseInfo.#ctor">
+            <summary>Inicializa una nueva instancia</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.StubLicenseInfo.AttachBackingFieldToKey">
+            <summary>Asocia delegados para emular StubLicenseInfo.Key como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.StubLicenseInfo.AttachBackingFieldToVersion">
+            <summary>Asocia delegados para emular StubLicenseInfo.Version como una propiedad con un campo de respaldo.</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.StubLicenseInfo.CallBase">
+            <summary>Obtiene o establece un valor que indica si debe llamarse al método base en lugar del comportamiento de reserva</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.StubLicenseInfo.ConvertFromCurrentVersion(Spire.License.LicenseInfo)">
+            <summary>Establecer el stub de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="F:Spire.License.V1_2.Fakes.StubLicenseInfo.ConvertFromCurrentVersionLicenseInfo">
+            <summary>Establecer el stub de LicenseInfo.ConvertFromCurrentVersion(LicenseInfo license)</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.StubLicenseInfo.ConvertToCurrentVersion">
+            <summary>Establecer el stub de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="F:Spire.License.V1_2.Fakes.StubLicenseInfo.ConvertToCurrentVersion01">
+            <summary>Establecer el stub de LicenseInfo.ConvertToCurrentVersion()</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.StubLicenseInfo.Dispose">
+            <summary>Establecer el stub de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="F:Spire.License.V1_2.Fakes.StubLicenseInfo.Dispose01">
+            <summary>Establecer el stub de BaseLicenseInfo.Dispose()</summary>
+        </member>
+        <member name="M:Spire.License.V1_2.Fakes.StubLicenseInfo.InitializeStub">
+            <summary>Inicializa una nueva instancia de type StubLicenseInfo</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.StubLicenseInfo.InstanceBehavior">
+            <summary>Obtiene o establece el comportamiento de instancia.</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.StubLicenseInfo.InstanceObserver">
+            <summary>Obtiene o establece el observador de la instancia.</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.StubLicenseInfo.Key">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.V1_2.Fakes.StubLicenseInfo.KeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_Key()</summary>
+        </member>
+        <member name="F:Spire.License.V1_2.Fakes.StubLicenseInfo.KeySetString">
+            <summary>Establecer el stub de BaseLicenseInfo.set_Key(String value)</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.StubLicenseInfo.LicenseKey">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="F:Spire.License.V1_2.Fakes.StubLicenseInfo.LicenseKeyGet">
+            <summary>Establecer el stub de BaseLicenseInfo.get_LicenseKey()</summary>
+        </member>
+        <member name="P:Spire.License.V1_2.Fakes.StubLicenseInfo.Version">
+            <summary>Establecer el stub de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.V1_2.Fakes.StubLicenseInfo.VersionGet">
+            <summary>Establecer el stub de LicenseInfo.get_Version()</summary>
+        </member>
+        <member name="F:Spire.License.V1_2.Fakes.StubLicenseInfo.VersionSetString">
+            <summary>Establecer el stub de LicenseInfo.set_Version(String value)</summary>
+        </member>
+    </members>
+</doc>

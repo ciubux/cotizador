@@ -25,3 +25,16 @@ C:\Users\cesar\Source\Repos\cotizador\DataLayer\bin\Release\Model.pdb
 C:\Users\cesar\Source\Repos\cotizador\DataLayer\obj\Release\DataLayer.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Source\Repos\cotizador\DataLayer\obj\Release\DataLayer.dll
 C:\Users\cesar\Source\Repos\cotizador\DataLayer\obj\Release\DataLayer.pdb
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\bin\Release\DataLayer.dll
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\bin\Release\DataLayer.pdb
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\bin\Release\Framework.DAL.dll
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\bin\Release\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\bin\Release\Framework.WebCommon.dll
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\bin\Release\Model.dll
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\bin\Release\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\bin\Release\Framework.DAL.pdb
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\bin\Release\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\bin\Release\Model.pdb
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\obj\Release\DataLayer.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\obj\Release\DataLayer.dll
+C:\Users\cesar\Documents\projects\cotizador\DataLayer\obj\Release\DataLayer.pdb

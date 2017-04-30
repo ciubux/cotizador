@@ -56,9 +56,10 @@ namespace Cotizador.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()//string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
+            //ViewBag.ReturnUrl = returnUrl;
+            ViewBag.ReturnUrl = "Home/Index";
             return View();
         }
 
@@ -78,7 +79,9 @@ namespace Cotizador.Controllers
             // Para permitir que los errores de contraseña desencadenen el bloqueo de la cuenta, cambie a shouldLockout: true
             //    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             UsuarioBL usuarioBL = new UsuarioBL();
-            var result = usuarioBL.getUsuarioLogin(model.Email, model.Password);
+            Model.Usuario usuario = usuarioBL.getUsuarioLogin(model.Email, model.Password);
+            this.Session["usuario"] = usuario;
+            var result = usuario != null && usuario.idUsuario != null && usuario.idUsuario != Guid.Empty;
             SignInStatus signInStatus = SignInStatus.Failure;
             if (result)
                 signInStatus = SignInStatus.Success;
@@ -394,10 +397,11 @@ namespace Cotizador.Controllers
 
         //
         // POST: /Account/LogOff
-        [HttpPost]
+        [HttpGet]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            this.Session["Usuario"] = null;
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }

@@ -35,5 +35,20 @@ namespace DataLayer
             }
             return ciudadList;
         }
+
+        public Ciudad getCiudad(Guid idCiudad)
+        {
+            var objCommand = GetSqlCommand("ps_getciudad");
+            InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            DataTable dataTable = Execute(objCommand);
+            Ciudad obj = new Ciudad();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                obj.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                obj.nombre = Converter.GetString(row, "nombre");
+            }
+            return obj;
+        }
     }
 }

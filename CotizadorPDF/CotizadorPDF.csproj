@@ -31,10 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Spire.License">
-      <HintPath>..\..\..\..\Desktop\Demos\CS\Web\Bin\Spire.License.dll</HintPath>
+      <HintPath>..\..\..\..\Trabajo\Freelos\Cornejo\Demos\CS\Web\Bin\Spire.License.dll</HintPath>
     </Reference>
     <Reference Include="Spire.Pdf">
-      <HintPath>..\..\..\..\Desktop\Demos\CS\Web\Bin\Spire.Pdf.dll</HintPath>
+      <HintPath>..\..\..\..\Trabajo\Freelos\Cornejo\Demos\CS\Web\Bin\Spire.Pdf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,6 +49,15 @@
   <ItemGroup>
     <Compile Include="GeneradorPDF.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Fakes Include="Fakes\Spire.License.fakes" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{2e588952-5389-42e5-8ed8-c42b9e38f6d7}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -16,6 +16,7 @@ namespace BusinessLayer
 
                 foreach (CotizacionDetalle det in obj.detalles)
                 {
+                    det.idCotizacion = obj.idCotizacion;
                     dal.InsertCotizacionDetalle(det);
                 }
             }
