@@ -8,19 +8,20 @@ namespace BusinessLayer
 {
     public class ProductoBL
     {
-        public List<Producto> getProductosBusqueda(Guid idProveedor, Guid idFamilia, String textoBusqueda)
+        public List<Producto> getProductosBusqueda(String textoBusqueda)
         {
             using (var dal = new ProductoDAL())
             {
-                return dal.getProductosBusqueda(idProveedor, idFamilia, textoBusqueda);
+                return dal.getProductosBusqueda(textoBusqueda);
             }
         }
 
-        public Producto getProducto(Guid idProducto)
+        public Producto getProducto(Guid idProducto, Boolean esProvincia)
         {
             using (var dal = new ProductoDAL())
             {
-                return dal.getProducto(idProducto);
+                Producto producto = dal.getProducto(idProducto, esProvincia);                
+                return producto;
             }
         }
     }

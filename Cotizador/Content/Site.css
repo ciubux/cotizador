@@ -7,6 +7,7 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    padding-top: 15px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -31,10 +32,22 @@ textarea {
 }
 
 
+.totales {
+    font-weight: bold;
+    font-size: medium;
+    color: brown;
+}
+
+
 @media screen and (min-width: 768px) {
 	
 	#modalAgregarProducto .modal-dialog  {width:900px;}
 
+}
+
+@media screen and (min-width: 768px) {
+
+    #modalCalculadora .modal-dialog {   width: 900px;  }
 }
 
 
@@ -95,3 +108,24 @@ input.label-input {
         padding-left: 20px;
     }
 }
+
+.bouton-image:before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.monBouton:before {
+    background-image: url(/images/calculadora3.png);
+}
+
+/*
+#modalCalculadora {
+    margin-top: 200px;
+}*/

@@ -46,6 +46,7 @@ namespace DataLayer
             foreach (DataRow row in dataTable.Rows)
             {
                 obj.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                obj.orden = Converter.GetInt(row, "orden");
                 obj.nombre = Converter.GetString(row, "nombre");
             }
             return obj;

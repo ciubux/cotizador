@@ -27,8 +27,10 @@ namespace DataLayer
             foreach (DataRow row in dataTable.Rows)
             {
                 usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
-                usuario.nombres = Converter.GetString(row, "nombres");
-                usuario.apellidos = Converter.GetString(row, "apellidos");
+                usuario.cargo = Converter.GetString(row, "cargo");
+                usuario.nombre_mostrar = Converter.GetString(row, "nombre_mostrar");
+                usuario.anexo_empresa = Converter.GetInt(row, "anexo_empresa");
+                usuario.celular = Converter.GetInt(row, "celular");
             }
             return usuario;
         }

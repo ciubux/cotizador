@@ -18,5 +18,10 @@ namespace Model
         public String contacto1 { get; set; }
 
         public String contacto2 { get; set; }
+
+        public override string ToString()
+        {
+            return  "Cod: " + this.codigo + " - R. Social: " + this.razonSocial + " - RUC: " + this.ruc;
+        }
     }
 }

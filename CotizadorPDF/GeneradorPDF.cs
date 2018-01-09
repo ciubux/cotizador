@@ -1,4 +1,6 @@
-﻿using Spire.Pdf;
+﻿using Model;
+using Spire.Pdf;
+using Spire.Pdf.Annotations;
 using Spire.Pdf.Graphics;
 using Spire.Pdf.Tables;
 using System;
@@ -6,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,129 +18,266 @@ namespace cotizadorPDF
 {
     public class GeneradorPDF
     {
-
-
-        public void generar()
+        public void generarPDFExtended(Cotizacion cot)
         {
-            String pathroot = "C:\\Users\\cesar\\Source\\Repos\\cotizador\\";
+            String formatDecimal = "{0:0.00}";
+            String simboloMonedaSol = "S/";
 
-            //Create a pdf document.
+            int sepLine = 12;
+            String pathrootsave = AppDomain.CurrentDomain.BaseDirectory + "\\pdfs\\";
             PdfDocument doc = new PdfDocument();
+            PdfPageBase page = doc.Pages.Add(PdfPageSize.A4);
 
-            //margin
-            PdfUnitConvertor unitCvtr = new PdfUnitConvertor();
-            PdfMargins margin = new PdfMargins();
-            margin.Top = unitCvtr.ConvertUnits(2.54f, PdfGraphicsUnit.Centimeter, PdfGraphicsUnit.Point);
-            margin.Bottom = margin.Top;
-            margin.Left = unitCvtr.ConvertUnits(3.17f, PdfGraphicsUnit.Centimeter, PdfGraphicsUnit.Point);
-            margin.Right = margin.Left;
+            PdfImage image = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\logo.png");
+            float width = 107 * 2.4f;
+            float height = 16 * 2.4f;
+            page.Canvas.DrawImage(image, 0, 0, width, height);
 
-            // Create one page
-            PdfPageBase page = doc.Pages.Add(PdfPageSize.A4, margin);
+            PdfImage imageCli = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\clientes.png");
+            width = 62 * 2.4f;
+            height = 70 * 2.4f;
+            page.Canvas.DrawImage(imageCli, 350, 0, width, height);
 
-            float y = 10;
+            float y = 60;
+            string mes = "";
+            switch (cot.fecha.Month)
+            {
+                case 1: mes = "Enero"; break;
+                case 2: mes = "Febrero"; break;
+                case 3: mes = "Marzo"; break;
+                case 4: mes = "Abril"; break;
+                case 5: mes = "Mayo"; break;
+                case 6: mes = "Junio"; break;
+                case 7: mes = "Julio"; break;
+                case 8: mes = "Agosto"; break;
+                case 9: mes = "Septiembre"; break;
+                case 10: mes = "Octubre"; break;
+                case 11: mes = "Noviembre"; break;
+                case 12: mes = "Diciembre"; break;
+            }
 
-            //title
+            string fecha = cot.fecha.Day + " de " + mes + " de " + cot.fecha.Year;
+            page.Canvas.DrawString(cot.ciudad.nombre + " " + fecha, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine * 2;
+            page.Canvas.DrawString("Señores: ", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine;
+            page.Canvas.DrawString(cot.cliente.razonSocial, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
+            y = y + sepLine + 2;
+            page.Canvas.DrawString("Ciudad.- " + cot.ciudad.nombre, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine * 2;
+            page.Canvas.DrawString("Atn.- " + cot.cliente.contacto1, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + 3 + sepLine * 2;
+             /*   page.Canvas.DrawString(cot.cliente.contacto1, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 40, y);
+                y = y + sepLine;*/
+             /*  page.Canvas.DrawString("Cargo ", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 40, y);
+               y = y - 3 + sepLine * 2;*/
+             page.Canvas.DrawString("De nuestra consideración:", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine * 2;
+            page.Canvas.DrawString("Por la presente, nos es grato someter a su consideración la siguiente cotización:", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine * 2;
+
             PdfBrush brush1 = PdfBrushes.Black;
-            PdfTrueTypeFont font1 = new PdfTrueTypeFont(new Font("Arial", 16f, FontStyle.Bold));
+            PdfTrueTypeFont font1 = new PdfTrueTypeFont(new Font("Helvetica", 16f, FontStyle.Bold));
             PdfStringFormat format1 = new PdfStringFormat(PdfTextAlignment.Center);
-            page.Canvas.DrawString("Country List", font1, brush1, page.Canvas.ClientSize.Width / 2, y, format1);
-            y = y + font1.MeasureString("Country List", format1).Height;
-            y = y + 5;
+   
 
-            //create data table
             PdfTable table = new PdfTable();
             table.Style.CellPadding = 2;
             table.Style.BorderPen = new PdfPen(brush1, 0.75f);
-            table.Style.DefaultStyle.BackgroundBrush = PdfBrushes.SkyBlue;
-            table.Style.DefaultStyle.Font = new PdfTrueTypeFont(new Font("Arial", 10f));
+            table.Style.DefaultStyle.BackgroundBrush = PdfBrushes.White;
+            table.Style.DefaultStyle.Font = new PdfTrueTypeFont(new Font("Helvetica", 8f));
             table.Style.AlternateStyle = new PdfCellStyle();
-            table.Style.AlternateStyle.BackgroundBrush = PdfBrushes.LightYellow;
-            table.Style.AlternateStyle.Font = new PdfTrueTypeFont(new Font("Arial", 10f));
+            table.Style.AlternateStyle.BackgroundBrush = PdfBrushes.WhiteSmoke;
+            table.Style.AlternateStyle.Font = new PdfTrueTypeFont(new Font("Helvetica", 8f));
             table.Style.HeaderSource = PdfHeaderSource.ColumnCaptions;
+            //table.Style.HeaderStyle.BackgroundBrush = PdfBrushes.CadetBlue;
             table.Style.HeaderStyle.BackgroundBrush = PdfBrushes.CadetBlue;
-            table.Style.HeaderStyle.Font = new PdfTrueTypeFont(new Font("Arial", 11f, FontStyle.Bold));
+            table.Style.HeaderStyle.Font = new PdfTrueTypeFont(new Font("Helvetica", 8f, FontStyle.Bold));
             table.Style.HeaderStyle.StringFormat = new PdfStringFormat(PdfTextAlignment.Center);
             table.Style.ShowHeader = true;
 
-            using (OleDbConnection conn = new OleDbConnection())
+           
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("Cod.");
+            dataTable.Columns.Add("Producto");
+            dataTable.Columns.Add("Presentación");
+            dataTable.Columns.Add("Imagen");
+         //   dataTable.Columns.Add("Precio Unit. Anterior");
+            dataTable.Columns.Add("Precio Unit.");
+            dataTable.Columns.Add("Cant.");
+            dataTable.Columns.Add("Subtotal");
+            dataTable.Columns.Add(new DataColumn("Temp1", typeof(Byte[])));
+            dataTable.Columns.Add(new DataColumn("Temp2", typeof(PdfImage)));
+
+            foreach (CotizacionDetalle det in cot.detalles)
             {
-                conn.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source="+ pathroot + "demo.mdb";
-                OleDbCommand command = new OleDbCommand();
-                command.CommandText
-                    = " select Name, '' as Flag, Capital, Continent, Area, Population, Flag as FlagData from country ";
-                command.Connection = conn;
-                using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(command))
-                {
-                    DataTable dataTable = new DataTable();
-                    dataAdapter.Fill(dataTable);
-                    dataTable.Columns.Add(new DataColumn("FlagImage", typeof(PdfImage)));
-                    table.DataSourceType = PdfTableDataSourceType.TableDirect;
-                    table.DataSource = dataTable;
-                }
+                String codigo = det.producto.sku.Trim();
+                String producto = det.producto.descripcion;
+                String presentacion = det.producto.unidad;
+                String imagen = "";
+                String precioUnitarioAnterior = "";
+                String precioUnitarioNuevo = simboloMonedaSol + " " + String.Format(formatDecimal, det.precio);
+                String cantidad = det.cantidad.ToString();
+                String subtotal = simboloMonedaSol + " " + String.Format(formatDecimal, det.subTotal);
+
+                dataTable.Rows.Add(new object[] { codigo, producto, presentacion, imagen,
+                    
+                    precioUnitarioNuevo, cantidad, subtotal,det.producto.image });
+
             }
-            float width
-                = page.Canvas.ClientSize.Width
-                    - (table.Columns.Count + 1) * table.Style.BorderPen.Width;
-            table.Columns[0].Width = width * 0.21f;
+
+     
+            table.DataSource = dataTable;
+
+            float width1
+              = page.Canvas.ClientSize.Width
+                  - (table.Columns.Count + 1) * table.Style.BorderPen.Width;
+            /*Cod.*/
+            table.Columns[0].Width = width1 * 0.08f;
             table.Columns[0].StringFormat
                 = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
-            table.Columns[1].Width = width * 0.10f;
+            /*Producto*/
+            table.Columns[1].Width = width1 * 0.35f;
             table.Columns[1].StringFormat
                 = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
-            table.Columns[2].Width = width * 0.19f;
+            /*Presentación*/
+            table.Columns[2].Width = width1 * 0.15f;
             table.Columns[2].StringFormat
                 = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
-            table.Columns[3].Width = width * 0.21f;
+            /*Imagen*/
+            table.Columns[3].Width = width1 * 0.12f;
             table.Columns[3].StringFormat
                 = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
-            table.Columns[4].Width = width * 0.12f;
+            /*Nuevo Valor Unit.*/
+            table.Columns[4].Width = width1 * 0.10f;
             table.Columns[4].StringFormat
                 = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
-            table.Columns[5].Width = width * 0.17f;
+            /*Cant.*/
+            table.Columns[5].Width = width1 * 0.10f;
             table.Columns[5].StringFormat
                 = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+            /*Subtotal*/
+            table.Columns[6].Width = width1 * 0.10f;
+            table.Columns[6].StringFormat
+                = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+            
 
             table.BeginRowLayout += new BeginRowLayoutEventHandler(table_BeginRowLayout);
             table.EndCellLayout += new EndCellLayoutEventHandler(table_EndCellLayout);
-
+           
             PdfTableLayoutFormat tableLayout = new PdfTableLayoutFormat();
             tableLayout.Break = PdfLayoutBreakType.FitElement;
             tableLayout.Layout = PdfLayoutType.Paginate;
-            tableLayout.EndColumnIndex = table.Columns.Count - 2 - 1;
+
+            if (cot.considerarCantidades)
+            {
+                tableLayout.EndColumnIndex = table.Columns.Count - 3; //- 1;
+            }
+            else
+            {
+                tableLayout.EndColumnIndex = table.Columns.Count - 5;
+            }
 
             PdfLayoutResult result = table.Draw(page, new PointF(0, y), tableLayout);
             y = y + result.Bounds.Height + 5;
 
-            PdfBrush brush2 = PdfBrushes.Gray;
-            PdfTrueTypeFont font2 = new PdfTrueTypeFont(new Font("Arial", 9f));
-            page.Canvas.DrawString(String.Format("* {0} countries in the list.", table.Rows.Count),
-                font2, brush2, 5, y);
+            y = y + 5;
 
-            //Save pdf file.
-            doc.SaveToFile(pathroot+"ImageTable.pdf");
+
+            if (cot.considerarCantidades)
+            {
+                page.Canvas.DrawString("Subtotal: " , new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 420, y);   
+                page.Canvas.DrawString(simboloMonedaSol + " "+String.Format(formatDecimal, cot.montoSubTotal), new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 460, y);
+                y = y + sepLine;
+                page.Canvas.DrawString("IGV 18%: ",new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 420, y);
+                page.Canvas.DrawString(simboloMonedaSol + " " + String.Format(formatDecimal, cot.montoIGV), new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 460, y);
+                y = y + sepLine;
+                page.Canvas.DrawString("Total: ", new PdfFont(PdfFontFamily.Helvetica, 10f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 420, y);
+                page.Canvas.DrawString(simboloMonedaSol + " " + String.Format(formatDecimal, cot.montoTotal), new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 460, y);
+
+
+                /*     y = y + sepLine;
+                     page.Canvas.DrawString("Flete: S/ ", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 400, y);
+                     page.Canvas.DrawString(simboloMonedaSol + String.Format(formatDecimal, cot.montoFlete), new PdfFont(PdfFontFamily.Helvetica, 9f), new PdfSolidBrush(Color.Black), 445, y);
+                     y = y + sepLine;
+                     page.Canvas.DrawString("Total más Flete: S/ ", new PdfFont(PdfFontFamily.Helvetica, 10f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 400, y);
+                     page.Canvas.DrawString(simboloMonedaSol + String.Format(formatDecimal, cot.montoTotalMasFlete), new PdfFont(PdfFontFamily.Helvetica, 10f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 445, y);
+                 */
+            }
+
+            /*    String mensajeIGV = "* Los precios NO incluyen IGV";
+                if (cot.incluidoIgv == 1)
+                { mensajeIGV = "* Los precios incluyen IGV"; }*/
+            y = y + sepLine * 2;
+
+            string[] stringSeparators = new string[] { "\n" };
+            string[] lines = cot.observaciones.Split(stringSeparators, StringSplitOptions.None);
+
+            if (cot.incluidoIgv == 1)
+            {
+                page.Canvas.DrawString("* Los precios incluyen IGV.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            }
+            else
+            {
+                page.Canvas.DrawString("* Los precios NO incluyen IGV.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            }
+            y = y + sepLine;
+
+
+            foreach (string line in lines)
+            {
+                page.Canvas.DrawString(line, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                y = y + sepLine;
+            }
+            /*
+            page.Canvas.DrawString("* Los precios NO incluyen IGV", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine;
+            page.Canvas.DrawString("* Condiciones de pago: al contado", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine;
+            page.Canvas.DrawString("* Validez de los precios: 15 días", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine;
+            page.Canvas.DrawString("* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine;
+            page.Canvas.DrawString("  (para productos no stockeables o primeras compras, consultar plazo)", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            */
+            y = y + sepLine;
+            page.Canvas.DrawString("Sin otro particular, quedamos de ustedes.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine * 2;
+            page.Canvas.DrawString("Atentamente,", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine * 2;
+            page.Canvas.DrawString("MP INSTITUCIONAL S.A.C.", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine * 2;
+
+
+            page.Canvas.DrawString(cot.usuario.nombre_mostrar, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine;
+            page.Canvas.DrawString(cot.usuario.cargo, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine;
+            page.Canvas.DrawString("Tlf. (1) 2472142 ext. " + cot.usuario.anexo_empresa + " / " +cot.usuario.celular , new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine;
+            page.Canvas.DrawString(cot.usuario.email, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            y = y + sepLine;
+            page.Canvas.DrawString("www.mpinstitucional.com", new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline), new PdfSolidBrush(Color.Blue), 0, y);
+            //page.Canvas.DrawString("www.mpinstitucional.com", new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline), new PdfSolidBrush(Color.Blue), 0, y);
+            PdfTextWebLink link2 = new PdfTextWebLink();
+            link2.Text = "www.mpinstitucional.com";
+            link2.Url = "www.mpinstitucional.com";
+            link2.Font = new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline);
+            link2.Brush = PdfBrushes.DarkSeaGreen;
+            link2.DrawTextWebLink(page.Canvas, new PointF(0, y));
+
+
+            String fechaCotizacion = DateTime.Now.Year + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day + "_" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
+
+
+            doc.SaveToFile(pathrootsave + cot.cliente.razonSocial + " " + fechaCotizacion + ".pdf");
+            PDFDocumentViewer(pathrootsave +cot.cliente.razonSocial + " " + fechaCotizacion + ".pdf");
+
+
             doc.Close();
-
-            //Launching the Pdf file.
-        //    PDFDocumentViewer("ImageTable.pdf");
+            
         }
 
-        void table_EndCellLayout(object sender, EndCellLayoutEventArgs args)
-        {
-            if (args.RowIndex < 0)
-            {
-                //header
-                return;
-            }
-            if (args.CellIndex == 1)
-            {
-                DataTable dataTable = (sender as PdfTable).DataSource as DataTable;
-                PdfImage image = dataTable.Rows[args.RowIndex][7] as PdfImage;
-                float x = (args.Bounds.Width - image.PhysicalDimension.Width) / 2 + args.Bounds.X;
-                float y = (args.Bounds.Height - image.PhysicalDimension.Height) / 2 + args.Bounds.Y;
-                args.Graphics.DrawImage(image, x, y);
-            }
-        }
 
         void table_BeginRowLayout(object sender, BeginRowLayoutEventArgs args)
         {
@@ -147,14 +287,45 @@ namespace cotizadorPDF
                 return;
             }
             DataTable dataTable = (sender as PdfTable).DataSource as DataTable;
-            byte[] imageData = dataTable.Rows[args.RowIndex][6] as byte[];
+
+            byte[] imageData = dataTable.Rows[args.RowIndex][7] as byte[];
             using (MemoryStream stream = new MemoryStream(imageData))
-            {
+            {                
                 PdfImage image = PdfImage.FromStream(stream);
-                args.MinimalHeight = 4 + image.PhysicalDimension.Height;
-                dataTable.Rows[args.RowIndex][7] = image;
+                args.MinimalHeight = 25f;//   4 + image.PhysicalDimension.Height;
+                dataTable.Rows[args.RowIndex][8] = image;
             }
         }
+
+
+        void table_EndCellLayout(object sender, EndCellLayoutEventArgs args)
+        {
+            if (args.RowIndex < 0)
+            {
+                //header
+                return;
+            }
+            if (args.CellIndex == 3)
+            {
+                DataTable dataTable = (sender as PdfTable).DataSource as DataTable;
+                PdfImage image = dataTable.Rows[args.RowIndex][8] as PdfImage;
+                //   float x = (args.Bounds.Width - image.PhysicalDimension.Width) / 2 + args.Bounds.X;
+                //   float y = (args.Bounds.Height - image.PhysicalDimension.Height) / 2 + args.Bounds.Y;
+                float x = (args.Bounds.Width - 20f) / 2 + args.Bounds.X;
+                float y = (args.Bounds.Height -20f) / 2 + args.Bounds.Y;
+                byte[] imageData = dataTable.Rows[args.RowIndex][7] as byte[];
+                using (MemoryStream stream = new MemoryStream(imageData))
+                {    
+                    image = PdfImage.FromStream(stream);
+                    float width = 20f;
+                    float height = 20f;
+                    args.Graphics.DrawImage(image, x, y, width, height);
+                }
+            }
+            
+        }
+
+     
 
         private void PDFDocumentViewer(string fileName)
         {

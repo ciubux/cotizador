@@ -17,6 +17,28 @@ namespace DataLayer
         {
         }
 
+        public void setClienteStaging(ClienteStaging clienteStaging)
+        {
+            var objCommand = GetSqlCommand("pi_clienteStaging");
+            InputParameterAdd.Varchar(objCommand, "PlazaId", clienteStaging.PlazaId);
+            InputParameterAdd.Varchar(objCommand, "Plaza", clienteStaging.Plaza);
+            InputParameterAdd.Varchar(objCommand, "Id", clienteStaging.Id);
+            InputParameterAdd.Varchar(objCommand, "nombre", clienteStaging.nombre);
+            InputParameterAdd.Varchar(objCommand, "documento", clienteStaging.documento);
+            InputParameterAdd.Varchar(objCommand, "codVe", clienteStaging.codVe);
+            InputParameterAdd.Varchar(objCommand, "nombreComercial", clienteStaging.nombreComercial);
+            InputParameterAdd.Varchar(objCommand, "domicilioLegal", clienteStaging.domicilioLegal);
+            InputParameterAdd.Varchar(objCommand, "distrito", clienteStaging.distrito);
+            InputParameterAdd.Varchar(objCommand, "direccionDespacho", clienteStaging.direccionDespacho);
+            InputParameterAdd.Varchar(objCommand, "distritoDespacho", clienteStaging.distritoDespacho);
+            InputParameterAdd.Varchar(objCommand, "rubro", clienteStaging.rubro);
+
+            ExecuteNonQuery(objCommand);
+            
+        }
+
+
+
         public List<Cliente> getClientesBusqueda(String textoBusqueda)
         {
             var objCommand = GetSqlCommand("ps_getclientes_search");

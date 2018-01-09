@@ -23,6 +23,14 @@ namespace BusinessLayer
             }
         }
 
+        public void setClienteStaging(ClienteStaging clienteStaging)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                clienteDAL.setClienteStaging(clienteStaging);
+            }
+        }
+
 
     }
 }
