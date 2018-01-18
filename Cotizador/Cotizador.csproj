@@ -243,8 +243,15 @@
     <Content Include="images\calculadora.png" />
     <Content Include="images\calculadora2.png" />
     <Content Include="images\calculadora3.png" />
+    <Content Include="images\clientes.png" />
+    <Content Include="images\down.png" />
+    <Content Include="images\logo.png" />
     <Content Include="images\logo_ind.jpg" />
+    <Content Include="images\marcas.png" />
     <Content Include="images\NoDisponible.gif" />
+    <Content Include="images\search_icon.png" />
+    <Content Include="images\tmp.png" />
+    <Content Include="images\up.png" />
     <Content Include="Scripts\app\cotizador\cotizador.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -311,9 +318,11 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Ciudad\_SelectCiudad.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="pdf\" />
     <Folder Include="Scripts\App_LocalResources\" />
     <Folder Include="Views\Login\" />
   </ItemGroup>

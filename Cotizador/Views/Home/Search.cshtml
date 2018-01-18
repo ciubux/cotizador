@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "Búsqueda Cotizaciones";
+    List<Model.Cotizacion> cotizacionList = ViewBag.cotizacionList;
+}
+
+
+<div class="container">
+
+    <form class="form-horizontal">
+        <div class="row">
+            <!--NÚMERO COTIZACION-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="numero" class="control-label col-xs-4">Número:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="number" value="@ViewBag.numero" min="0" id="numero" name="numero">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-5">
+                <!--Cliente-->
+                <div class="form-group">
+                    <label for="cliente" class="control-label col-xs-4">Cliente:</label>
+
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            @if (ViewBag.existeCliente == 1)
+                        {
+                            <option selected value="@ViewBag.idCliente">@ViewBag.cliente</option>
+                    }
+                    else
+                    {
+                        <option value=""></option>
+
+                                }
+                    </select>
+                </div>
+            </div>
+            <!-- <div class="col-xs-8">
+                <input class="form-control" type="text" value="@ViewBag.cliente" id="cliente" name="cliente">
+            </div>
+        -->
+
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <!--FECHA-->
+        <div class="col-sm-6 col-lg-5">
+            <div class="form-group">
+                <label for="fecha" class="control-label col-xs-4">Buscar a partir de:</label>
+                <div class="col-xs-8">
+                    <input type="hidden" id="fechatmp" value="@ViewBag.fecha" />
+                    <input class="form-control" type="text" id="fecha" name="fecha">
+                </div>
+            </div>
+        </div>
+        <!--CIUDAD-->
+        <div class="col-sm-6 col-lg-5">
+            <div class="form-group">
+                <label for="ciudad" class="control-label col-xs-4">Ciudad:</label>
+                <div class="col-xs-8">
+                    @Html.Action("list", "Ciudad")
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+        <button id="btnBusquedaCotizaciones" type="button" class="btn btn-primary  bouton-image searchBouton">Iniciar Búsqueda</button>
+    </div>
+
+    <table id="tablefoottable" class="table" data-editing="false"
+           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+           data-editing-allow-add="false"
+           data-editing-allow-delete="false"
+           data-editing-allow-edit="false"
+           data-sorting="true"
+           data-show-toggle="false"
+           data-editing-hide-text="Finalizar edición"
+           data-editing-add-text="Descartar cambios">
+        <thead>
+            <tr>
+                <th data-name="idCotizacion" data-visible="false"></th>
+                <th data-name="codigo" data-visible="true">Número</th>
+                <th data-name="usuario" data-visible="true">Creado por</th>
+                <th data-name="fecha" data-sortable="true">Fecha Creación</th>
+                <th data-name="razonSocial" data-sortable="true" data-breakpoints="xs">Razón Social</th>
+                <th data-name="ruc" data-sortable="false">RUC</th>
+                <th data-name="ciudad" data-sortable="false">Ciudad</th>
+                <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
+                <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>
+                <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
+                <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cotizacion in cotizacionList)
+            {
+            <tr data-expanded="true">
+                <td>  @cotizacion.idCotizacion</td>
+                <td>  @cotizacion.codigo  </td>
+                <td>  @cotizacion.usuario.nombre_mostrar  </td>
+                <td>  @cotizacion.fecha </td>
+                <td>  @cotizacion.cliente.razonSocial</td>
+                <td>  @cotizacion.cliente.ruc </td>
+                <td>  @cotizacion.ciudad.nombre  </td>
+                <td>  @cotizacion.montoSubTotal   </td>
+                <td>  @cotizacion.igv  </td>
+                <td>  @cotizacion.montoTotal  </td>
+                <td> <button type="button" class="@cotizacion.codigo btnVerCotizacion btn btn-primary  bouton-image searchBouton">Ver Cotización</button>
+                     <button type="button" class="@cotizacion.codigo btnEditarCotizacion btn btn-primary ">Editar Cotización</button></td>
+            </tr>
+            }
+
+        </tbody>
+    </table>
+
+
+    </form>
+</div>
+
+

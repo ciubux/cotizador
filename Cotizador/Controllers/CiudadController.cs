@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BusinessLayer;
+using Model;
 
 namespace Cotizador.Controllers
 {
@@ -26,7 +27,21 @@ namespace Cotizador.Controllers
         {
             CiudadBL ciudadBL = new CiudadBL();
 
-            var model = ciudadBL.getCiudades();
+            List<Ciudad> ciudadListTmp = ciudadBL.getCiudades();
+
+            List<Ciudad> ciudadList = new List<Ciudad>();
+            Ciudad ciudadDeshabiltiad = new Ciudad { idCiudad = Guid.Empty, nombre = "Seleccione Ciudad", orden = 0 };
+            ciudadList.Add(ciudadDeshabiltiad);
+
+            foreach (Ciudad ciudad in ciudadListTmp)
+            {
+                ciudadList.Add(ciudad);
+            }
+
+            List<Guid> ciudadDeshabilitadas = new List<Guid>();
+            ciudadDeshabilitadas.Add(ciudadDeshabiltiad.idCiudad);
+            ViewBag.List = ciudadDeshabilitadas;
+            var model = ciudadList;
 
                 /*new DepartamentoViewModels
             {

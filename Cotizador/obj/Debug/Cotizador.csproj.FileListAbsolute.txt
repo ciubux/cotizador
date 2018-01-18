@@ -460,8 +460,6 @@ C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Spire.Pdf.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Spire.License.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Microsoft.mshtml.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\cotizadorPDF.pdb
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\ApplicationInsights.config
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\roslyn\csc.exe
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -483,6 +481,7 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.SqlServer.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\ICSharpCode.SharpZipLib.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.Agent.Intercept.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.DependencyCollector.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.PerfCounterCollector.dll
@@ -506,6 +505,10 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.Owin.Security.Twi
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Newtonsoft.Json.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OOXML.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OpenXml4Net.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OpenXmlFormats.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Owin.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Helpers.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Mvc.dll
@@ -532,6 +535,7 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.Web.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.ApplicationInsights.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Helpers.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Mvc.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Optimization.xml
@@ -579,11 +583,7 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.pdb
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\ICSharpCode.SharpZipLib.dll
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.dll
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OOXML.dll
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OpenXml4Net.dll
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OpenXmlFormats.dll
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.xml

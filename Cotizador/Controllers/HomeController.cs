@@ -15,40 +15,133 @@ namespace Cotizador.Controllers
     public class HomeController : Controller
     {
         private static Decimal IGV = 0.18M;
+        //private static Decimal FLETE = 0M;
         private static String decimalFormat = "{0:0.00}";
+
+
+
+        public ActionResult New()
+        {
+            this.Session["cotizacion"] = null;
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Search()
+        {
+            ViewBag.fecha = DateTime.Now.AddDays(-10).ToString("dd/MM/yyyy");
+
+            if (this.Session["cotizacionList"] == null)
+            {
+                this.Session["cotizacionList"] = new List<Cotizacion>();
+            }
+
+            ViewBag.cotizacionList = this.Session["cotizacionList"];
+
+            return View();
+        }
+
+        public int SearchCotizaciones()
+        {
+            Cotizacion cotizacion = new Cotizacion();
+
+            //Se agrega Ciudad en la busqueda
+            cotizacion.ciudad = new Ciudad();
+            if (this.Request.Params["idCiudad"].ToString() == "00000000-0000-0000-0000-000000000000")
+            {
+                cotizacion.ciudad.idCiudad = Guid.Empty;
+            }
+            else
+            {
+                cotizacion.ciudad.idCiudad = Guid.Parse(this.Request.Params["idCiudad"].ToString());
+            }
+
+            //Se agrega fecha en la busqueda
+            String[] fecha = this.Request.Params["fecha"].Split('/');
+            cotizacion.fecha = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+
+            //Se agrega número/codigo en la busqueda
+            if (this.Request.Params["numero"].ToString() != "")
+            {
+                cotizacion.codigo = Int64.Parse(this.Request.Params["numero"].ToString());
+            }
+
+            //Se agrega cliente en la busqueda
+            cotizacion.cliente = new Cliente();
+            if (this.Request.Params["idCliente"].ToString().Trim() != "")
+            {
+                cotizacion.cliente.idCliente = Guid.Parse(this.Request.Params["idCliente"].ToString());
+            }
+
+
+            CotizacionBL cotizacionBL = new CotizacionBL();
+            List<Cotizacion> cotizacionList = cotizacionBL.GetCotizaciones(cotizacion);
+
+            this.Session["cotizacionList"] = cotizacionList;
+
+            return cotizacionList.Count();
+        }
+
+
 
 
         public ActionResult Index()
         {
+            /* String usuario = Request["txtUser"].ToString();
+            String clave = Request["txtClave"].ToString();
+            UsuarioDal dal = new UsuarioDal();
+            Usuario user = dal.LoginUsuario(usuario, clave);
+            if (user != null)
+            {
+                this.Session["EstablecimientoLogin"] = dal.getEstablecimientoUsuario(user.idUsuario);
+                this.Session["UsuarioLogin"] = user;
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                if (usuario.Equals("")) this.Session["loginFault"] = 1;
+                else if (clave.Equals("")) this.Session["loginFault"] = 2;
+                else this.Session["loginFault"] = 3;
+                return RedirectToAction("Index", "Login");
+            }*/
+
             ViewBag.Si = "Sí";
             ViewBag.No = "No";
             ViewBag.IGV = IGV;
 
+            //Si no se está trabajando con una cotización se crea una
 
-
-
-            /*   String usuario = Request["txtUser"].ToString();
-               String clave = Request["txtClave"].ToString();
-
-               UsuarioDal dal = new UsuarioDal();
-               Usuario user = dal.LoginUsuario(usuario, clave);
-               if (user != null)
-               {
-                   this.Session["EstablecimientoLogin"] = dal.getEstablecimientoUsuario(user.idUsuario);
-                   this.Session["UsuarioLogin"] = user;
-                   return RedirectToAction("Index", "Home");
-               }
-               else
-               {
-                   if (usuario.Equals("")) this.Session["loginFault"] = 1;
-                   else if (clave.Equals("")) this.Session["loginFault"] = 2;
-                   else this.Session["loginFault"] = 3;
-                   return RedirectToAction("Index", "Login");
-               }*/
-            if (this.Session["detalles"] == null)
+            if (this.Session["cotizacion"] == null)
             {
-                this.Session["detalles"] = new List<CotizacionDetalle>();
+
+                Cotizacion cotizacionTmp = new Cotizacion();
+                cotizacionTmp.fecha = DateTime.Now;
+                cotizacionTmp.ciudad = new Ciudad();
+                cotizacionTmp.cliente = new Cliente();
+                cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
+                cotizacionTmp.igv = IGV;
+                cotizacionTmp.flete = 0;
+                cotizacionTmp.considerarCantidades = true;
+                cotizacionTmp.observaciones = "* Condiciones de pago: al contado.\n" +
+                                       "* Validez de los precios: 15 días.\n" +
+                                       "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
+                                       "* (para productos no stockeables o primeras compras, consultar plazo).\n";
+
+
+
+                this.Session["cotizacion"] = cotizacionTmp;
             }
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+
+
+            ///Modificar
+            int existeCliente = 0;
+            if (cotizacion.cliente.idCliente != Guid.Empty)
+            {
+                existeCliente = 1;
+            }
+
+
+
 
             if (this.Session["usuario"] != null)
             {
@@ -56,139 +149,35 @@ namespace Cotizador.Controllers
                 Usuario usuario = (Usuario)this.Session["usuario"];
                 ViewBag.nombreUsuario = usuario.apellidos + " " + usuario.nombres;
 
-                List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
-                ViewBag.Detalles = detalles;
+               // List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
+                //ViewBag.Detalles = cotizacion.cotizacionDetalleList;
 
-                
+                ViewBag.numero = cotizacion.codigo;
+                ViewBag.idCiudad = cotizacion.ciudad.idCiudad;
 
-                /*Ciudad*/
-                Guid idCiudad = Guid.Empty;
-                if (this.Session["idCiudad"] != null)
-                {
-                    idCiudad = (Guid)this.Session["idCiudad"];
-                }
-                else
-                {
-                    this.Session["idCiudad"] = idCiudad;
-                    this.Session["esProvincia"] = false;
-                }
-                ViewBag.idCiudad = idCiudad;
-
-                
-                /*Cliente*/
-                /*      String cliente = "";
-                      if (this.Session["cliente"] != null)
-                      {
-                          cliente = (String)this.Session["cliente"];
-                      }
-                      ViewBag.cliente = cliente;
-                      */
-
-                String idCliente = "";
-                String descripcionCliente = "";
-                int existeCliente = 0;
-                if (this.Session["cliente"] != null)
-                {
-                    Cliente cliente = (Cliente)this.Session["cliente"];
-                    idCliente = cliente.idCliente.ToString();
-                    descripcionCliente = cliente.ToString();
-                    existeCliente = 1;
-                }
-                ViewBag.idCliente = idCliente;
+                ViewBag.idCliente = cotizacion.cliente.idCliente;
+                ViewBag.cliente = cotizacion.cliente.ToString();
                 ViewBag.existeCliente = existeCliente;
-                ViewBag.cliente = descripcionCliente;
+                /*Dirigido a*/
+                ViewBag.contacto = cotizacion.contacto;
+                ViewBag.incluidoIgv = cotizacion.incluidoIgv;
+                ViewBag.considerarCantidades = cotizacion.considerarCantidades;
 
-
-
-
-                /*Dirigiado a*/
-                String contacto = "";
-                if (this.Session["contacto"] != null)
-                {
-                    contacto = (String)this.Session["contacto"];
-                }
-                ViewBag.contacto = contacto;
-
-
-                /*IGV*/
-                Boolean incluidoIgv = false;
-                if (this.Session["incluidoIgv"] != null)
-                {
-                    incluidoIgv = (Boolean)this.Session["incluidoIgv"];
-                }
-                else
-                {
-                    this.Session["incluidoIgv"] = incluidoIgv;
-                }
-
-                ViewBag.incluidoIgv = incluidoIgv;
-
-                /*considerarCantidades*/
-                Boolean considerarCantidades = true;
-                if (this.Session["considerarCantidades"] != null)
-                {
-                    considerarCantidades = (Boolean)this.Session["considerarCantidades"];
-                }
-                else
-                {
-                    this.Session["considerarCantidades"] = considerarCantidades;
-                }
-                ViewBag.considerarCantidades = considerarCantidades;
-
-
-
-                /*Mostrar Codigo Proveedor */
-                Boolean mostrarCodProveedor = false;
-                if (this.Session["mostrarcodproveedor"] != null)
-                {
-                    mostrarCodProveedor = (Boolean)this.Session["mostrarcodproveedor"];
-                }
-                ViewBag.mostrarCodProveedor = mostrarCodProveedor;
-                ViewBag.MostrarCodProvSi = "Mostrar";
-                ViewBag.MostrarCodProvNo = "No mostrar";
-
-
+                //  ViewBag.mostrarCodProveedor = mostrarCodProveedor;
+                //  ViewBag.MostrarCodProvSi = "Mostrar";
+                //  ViewBag.MostrarCodProvNo = "No mostrar";
                 /*Flete*/
-                Decimal flete = 0;
-                if (this.Session["flete"] != null)
-                {
-                    flete = (Decimal)this.Session["flete"];
-                }
-                ViewBag.flete = flete;
 
+                ViewBag.flete = cotizacion.flete;
+                ViewBag.observaciones = cotizacion.observaciones;
+                ViewBag.fecha = cotizacion.fecha.ToString("dd/MM/yyyy");
 
-
-                String observaciones =  "* Condiciones de pago: al contado.\n" +
-                                        "* Validez de los precios: 15 días.\n" +
-                                        "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
-                                        "* (para productos no stockeables o primeras compras, consultar plazo).\n";
-                if (this.Session["observaciones"] != null)
-                {
-                    observaciones = this.Session["observaciones"].ToString();
-                }
-                ViewBag.observaciones = observaciones;
-                this.Session["observaciones"] = observaciones;
-
-
-
-
-                String fecha = DateTime.Now.ToString("dd/MM/yyyy");
-                if (this.Session["fecha"] != null)
-                {
-                    fecha = (String)this.Session["fecha"];
-                }
-                ViewBag.fecha = fecha;
-
-
-
-
-
-                Decimal total = Decimal.Parse(String.Format(decimalFormat, detalles.AsEnumerable().Sum(o => o.subTotal)));
+                Decimal total = Decimal.Parse(String.Format(decimalFormat, cotizacion.cotizacionDetalleList.AsEnumerable().Sum(o => o.subTotal)));
                 Decimal igv = 0;
                 Decimal subtotal = 0;
 
 
-                if (incluidoIgv)
+                if (cotizacion.incluidoIgv)
                 {
                     subtotal = Decimal.Parse(String.Format(decimalFormat, total / (1 + IGV)));
                     ViewBag.subtotal = subtotal;
@@ -201,11 +190,16 @@ namespace Cotizador.Controllers
                     total = Decimal.Parse(String.Format(decimalFormat, subtotal + igv));                  
                 }
 
+                cotizacion.montoSubTotal = subtotal;
+                cotizacion.montoIGV = igv;
+                cotizacion.montoTotal = total;
+
                 ViewBag.igv = igv;
                 ViewBag.total = total;
                 ViewBag.subtotal = subtotal;
-                ViewBag.montoFlete = String.Format(decimalFormat, total * flete / 100);
-                ViewBag.montoTotalMasFlete = String.Format(decimalFormat, total + (total * flete / 100));
+
+
+                ViewBag.cotizacion = cotizacion;
 
                 return View();
             }
@@ -215,273 +209,190 @@ namespace Cotizador.Controllers
             }
         }
 
-        public void updateSeleccionMostrarcodproveedor()
+     /*   public void updateSeleccionMostrarcodproveedor()
         {
             this.Session["mostrarcodproveedor"] = Int32.Parse(this.Request.Params["mostrarcodproveedor"]) == 1;
-        }
+        }*/
 
 
         public int updateSeleccionIGV()
         {
             int incluidoIGV = Int32.Parse(this.Request.Params["igv"]);
-            return actualizarCotizacionDetalles(incluidoIGV, -1);
+            return actualizarCotizacionDetalles(incluidoIGV);
         }
 
         
 
         public int updateSeleccionConsiderarCantidades()
-        {       
-            int considerarCantidades = Int32.Parse(this.Request.Params["considerarCantidades"]);            
-            return actualizarCotizacionDetalles(-1, considerarCantidades);
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            int considerarCantidades = Int32.Parse(this.Request.Params["considerarCantidades"]);
+            cotizacion.considerarCantidades = considerarCantidades == 1;
+            this.Session["cotizacion"] = cotizacion;
+            return 1;
         }
 
 
-        private int actualizarCotizacionDetalles(int incluidoIGVInt, int considerarCantidadesInt)
+        private int actualizarCotizacionDetalles(int incluidoIGVInt)//, int considerarCantidadesInt)
         {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
 
-            Boolean incluidoIGV = (Boolean)this.Session["incluidoIgv"];
-            Boolean considerarCantidades = (Boolean)this.Session["considerarCantidades"];
-            Boolean cambioIncluidoIGV = false;
-            Boolean cambioConsiderarCantidades = false;
+
+       //     Boolean cambioConsiderarCantidades = false;
             if (incluidoIGVInt > -1)
             {
-                this.Session["incluidoIgv"] = incluidoIGVInt == 1;
-                incluidoIGV = incluidoIGVInt == 1;
-                cambioIncluidoIGV = true;
+                cotizacion.incluidoIgv = incluidoIGVInt == 1;
             }
-            if (considerarCantidadesInt > -1)
+         /*   if (considerarCantidadesInt > -1)
             {
                 this.Session["considerarCantidades"] = considerarCantidadesInt == 1;
                 considerarCantidades = considerarCantidadesInt == 1;
                 cambioConsiderarCantidades = true;
-            }
+            }*/
             
-            List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
+            List<CotizacionDetalle> detalles = cotizacion.cotizacionDetalleList;
 
             foreach (CotizacionDetalle cotizacionDetalle in detalles)
             {
+                /*int cantidad = cotizacionDetalle.cantidad;
 
                 if (cambioConsiderarCantidades)
                 {
-                    if (cotizacionDetalle.cantidad == 0)
-                    {
-                        cotizacionDetalle.cantidad = 1;
-                    }
-                }
+                    //Si el cambio se da por "considerar Cantidades"
+                    //para poder realizar el calculo del precioNeto se considera 1 o 0
+                    cantidad = considerarCantidades ? 1 : 0;
+                }*/
 
-
-
-                    if (incluidoIGV)
+                //Si el precio es alternativo se considera el precio alternativo
+                if (cotizacionDetalle.esPrecioAlternativo)
                 {
-                    if (!cotizacionDetalle.esPrecioAlternativo)
-                    {
-                        cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioSinIGV + (cotizacionDetalle.precioUnitarioSinIGV * IGV));
-                    }
-                    else
-                    {
-                        cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioAlternativoSinIGV + (cotizacionDetalle.precioUnitarioAlternativoSinIGV * IGV));
-                    }
+                    cotizacionDetalle.precio = cotizacionDetalle.producto.precioAlternativoSinIgv;
+                   
                 }
                 else
                 {
-                    if (!cotizacionDetalle.esPrecioAlternativo)
-                    {
-                        cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioSinIGV);
-                    }
-                    else
-                    {
-                        cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioAlternativoSinIGV);
-                    }
+                    cotizacionDetalle.precio = cotizacionDetalle.producto.precioSinIgv;
                 }
+
+                //Se calcula el precio con Flete
+                cotizacionDetalle.precio = cotizacionDetalle.precio + (cotizacionDetalle.precio * cotizacion.flete / 100);
+
+
+                if (cotizacion.incluidoIgv)
+                {
+                    cotizacionDetalle.precio = cotizacionDetalle.precio + (cotizacionDetalle.precio * IGV);
+                }
+                //Se define el preciolista del producto como el precio calculado
+                cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(decimalFormat, cotizacionDetalle.precio));
+
+
+
                 //Se aplica descuenta al precio y se formatea a dos decimales el precio para un calculo exacto en el subtotal
-                cotizacionDetalle.precio = Decimal.Parse(String.Format(decimalFormat, cotizacionDetalle.precio * (100 - cotizacionDetalle.porcentajeDescuento) / 100));
+                cotizacionDetalle.precio = Decimal.Parse(String.Format(decimalFormat, cotizacionDetalle.producto.precioLista * (100 - cotizacionDetalle.porcentajeDescuento) / 100));
                 //Se calcula subtotal
                 cotizacionDetalle.subTotal = cotizacionDetalle.cantidad * cotizacionDetalle.precio;
-
-
-
-
-                /*
-                //Si el cambio es por cantidades
-                if (cambioConsiderarCantidades)
-                {
-                    if (considerarCantidades)
-                    {
-                      //  cotizacionDetalle.cantidad = 1;
-                      //  cotizacionDetalle.porcentajeDescuento = 0;
-
-                        if (incluidoIGV)
-                        {
-                            //Si es precio estandar
-                            if (!cotizacionDetalle.esPrecioAlternativo)
-                            {
-                                cotizacionDetalle.precio = cotizacionDetalle.precioUnitarioSinIGV + (cotizacionDetalle.precioUnitarioSinIGV * IGV);
-                            }
-                            else
-                            {
-                                cotizacionDetalle.precio = cotizacionDetalle.precioUnitarioAlternativoSinIGV + (cotizacionDetalle.precioUnitarioAlternativoSinIGV * IGV);
-                            }
-                        }
-                        else
-                        {
-                            if (!cotizacionDetalle.esPrecioAlternativo)
-                            {
-                                cotizacionDetalle.precio = cotizacionDetalle.precioUnitarioSinIGV;
-                            }
-                            else
-                            {
-                                cotizacionDetalle.precio = cotizacionDetalle.precioUnitarioAlternativoSinIGV;
-                            }                            
-                        }
-                        //Se aplica descuenta al precio
-                        cotizacionDetalle.precio = cotizacionDetalle.precio * (100 - cotizacionDetalle.porcentajeDescuento) / 100;
-                        //Se calcula subtotal
-                        cotizacionDetalle.subTotal = cotizacionDetalle.precio * cotizacionDetalle.cantidad;
-                    }
-                   else
-                    {
-                        cotizacionDetalle.cantidad = 0;
-                        cotizacionDetalle.porcentajeDescuento = 0;
-                        cotizacionDetalle.subTotal = 0;
-                    }
-                }
-                else  //Si el cambio es por IGV
-                {
-                    if (considerarCantidades)
-                    {
-                        if (incluidoIGV)
-                        {
-                            if (!cotizacionDetalle.esPrecioAlternativo)
-                            {
-                                cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioSinIGV + (cotizacionDetalle.precioUnitarioSinIGV * IGV));
-                            }
-                            else
-                            {
-                                cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioAlternativoSinIGV + (cotizacionDetalle.precioUnitarioAlternativoSinIGV * IGV));
-                            }
-                        }
-                        else
-                        {
-                            if (!cotizacionDetalle.esPrecioAlternativo)
-                            {
-                                cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioSinIGV);
-                            }
-                            else
-                            {
-                                cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioAlternativoSinIGV);
-                            }
-                        }
-                        //Se aplica descuenta al precio
-                        cotizacionDetalle.precio = cotizacionDetalle.precio * (100 - cotizacionDetalle.porcentajeDescuento) / 100;
-                        //Se calcula subtotal
-                        cotizacionDetalle.subTotal = cotizacionDetalle.cantidad * cotizacionDetalle.precio;
-                    }
-                    else
-                    {
-
-                        if (incluidoIGV)
-                        {
-                            if (!cotizacionDetalle.esPrecioAlternativo)
-                            {
-                                cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioSinIGV + (cotizacionDetalle.precioUnitarioSinIGV * IGV));
-                            }
-                            else
-                            {
-                                cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioAlternativoSinIGV + (cotizacionDetalle.precioUnitarioAlternativoSinIGV * IGV));
-                            }
-                        }
-                        else
-                        {
-                            if (!cotizacionDetalle.esPrecioAlternativo)
-                            {
-                                cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioSinIGV);
-                            }
-                            else
-                            {
-                                cotizacionDetalle.precio = (cotizacionDetalle.precioUnitarioAlternativoSinIGV);
-                            }
-                        }
-                        //Se aplica descuenta al precio
-                        cotizacionDetalle.precio = cotizacionDetalle.precio * (100 - cotizacionDetalle.porcentajeDescuento) / 100;
-                        cotizacionDetalle.subTotal = 0;
-
-                    }
-
-                }*/
-
-
-                /*cotizacionDetalle.porcentajeDescuento = Decimal.Parse(String.Format(decimalFormat, cotizacionDetalle.porcentajeDescuento));*/
-
-                cotizacionDetalle.precio = Decimal.Parse(String.Format(decimalFormat, cotizacionDetalle.precio));
-                cotizacionDetalle.subTotal = Decimal.Parse(String.Format(decimalFormat, cotizacionDetalle.subTotal));
-
+                
             }
-          
-
-
-
+            this.Session["cotizacion"] = cotizacion;
             return detalles.Count();
         }
 
         public void updateObservaciones()
         {
-            this.Session["observaciones"] = this.Request.Params["observaciones"];
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            cotizacion.observaciones = this.Request.Params["observaciones"];
+            this.Session["cotizacion"] = cotizacion;
         }
 
       
 
         public void updateFlete()
         {
-            this.Session["flete"] = Decimal.Parse(this.Request.Params["flete"]);
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            cotizacion.flete = Decimal.Parse(this.Request.Params["flete"]);
+            actualizarCotizacionDetalles(cotizacion.incluidoIgv?1:0);
+
         }
 
-    /*    public void updateCliente()
-        {
-            this.Session["cliente"] = this.Request.Params["cliente"];
-        }*/
 
         public void updateContacto()
         {
-            this.Session["contacto"] = this.Request.Params["contacto"];
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            cotizacion.contacto = this.Request.Params["contacto"];
+            this.Session["cotizacion"] = cotizacion;
         }
 
         public void updateFecha()
         {
-            this.Session["fecha"] = this.Request.Params["fecha"];
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            String[] fecha = this.Request.Params["fecha"].Split('/');
+            cotizacion.fecha = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            this.Session["cotizacion"] = cotizacion;
         }
 
         public String updateIdCiudad()
         {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
             Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);     
+
             CiudadBL ciudadBL = new CiudadBL();
             Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
 
-            
-            if (this.Session["detalles"] == null)
-            {
-                this.Session["detalles"] = new List<CotizacionDetalle>();
-            }
-
-            List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
-
 
             //Para realizar el cambio de ciudad ningun producto debe estar agregado
-            if (detalles.Count > 0)
+            if (cotizacion.cotizacionDetalleList.Count > 0)
             {
                 // throw new Exception("No se puede cambiar de ciudad");
                 return "No se puede cambiar de ciudad";
             }
             else
             {
-                this.Session["idCiudad"] = idCiudad;
-                if (ciudadNueva.orden > 1)
-                {
-                    this.Session["esProvincia"] = true;
-                }
+                cotizacion.ciudad = ciudadNueva;
+                this.Session["cotizacion"] = cotizacion;
                 return "{\"idCiudad\": \"" + idCiudad + "\"}";
             }
+            
         }
-        
+
+  
+        [HttpPost]
+        public String updateCotizacionDetalles(List<CotizacionDetalleJson> cotizacionDetalleJsonList)
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+
+            if (cotizacionDetalleJsonList != null)
+            {
+
+                List<CotizacionDetalle> detalles = cotizacion.cotizacionDetalleList;
+
+                List<Guid> idProductos = new List<Guid>();
+                foreach (CotizacionDetalleJson cotizacionDetalleJson in cotizacionDetalleJsonList)
+                {
+                    idProductos.Add(Guid.Parse(cotizacionDetalleJson.idProducto));
+                }
+
+                List<CotizacionDetalle> detallesActualizados = detalles.Where(s => idProductos.Contains(s.producto.idProducto)).ToList();
+
+                foreach (CotizacionDetalle cotizacionDetalle in detallesActualizados)
+                {
+                    CotizacionDetalleJson cotizacionDetalleJson = cotizacionDetalleJsonList.Where(s => s.idProducto == cotizacionDetalle.producto.idProducto.ToString()).FirstOrDefault();
+
+                    cotizacionDetalle.cantidad = cotizacionDetalleJson.cantidad;
+                    cotizacionDetalle.precio = cotizacionDetalleJson.precio;
+                    cotizacionDetalle.porcentajeDescuento = cotizacionDetalleJson.porcentajeDescuento;
+                    cotizacionDetalle.subTotal = cotizacionDetalleJson.subTotal;
+                }
+
+
+                cotizacion.cotizacionDetalleList = detallesActualizados;
+            }
+            else
+            {
+                cotizacion.cotizacionDetalleList = new List<CotizacionDetalle>();
+            }
+            this.Session["cotizacion"] = cotizacion;
+            return "{\"cantidad\":\""+ cotizacion.cotizacionDetalleList.Count + "\"}";
+        }
 
 
 
@@ -515,18 +426,16 @@ namespace Cotizador.Controllers
 
         public String GetCliente()
         {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
-          //  this.Session["idCliente"] = idCliente.ToString();
-
             ClienteBL clienteBl = new ClienteBL();
-            Cliente cliente = clienteBl.getCliente(idCliente);
-            this.Session["cliente"] = cliente;
-            this.Session["contacto"] = cliente.contacto1;
+            cotizacion.cliente = clienteBl.getCliente(idCliente);
+            cotizacion.contacto = cotizacion.cliente.contacto1;
 
             String resultado = "{" +
-                "\"descripcionCliente\":\"" + cliente.ToString() + "\"," +
-                "\"idCliente\":\"" + cliente.idCliente + "\"," +
-                "\"contacto\":\"" + cliente.contacto1 + "\"" +
+                "\"descripcionCliente\":\"" + cotizacion.cliente.ToString() + "\"," +
+                "\"idCliente\":\"" + cotizacion.cliente.idCliente + "\"," +
+                "\"contacto\":\"" + cotizacion.cliente.contacto1 + "\"" +
                 "}";
             return resultado;
         }
@@ -536,6 +445,7 @@ namespace Cotizador.Controllers
 
         public String GetProductos()
         {
+            
             String texto_busqueda = this.Request.Params["data[q]"];
 
             ProductoBL bl = new ProductoBL();
@@ -559,34 +469,15 @@ namespace Cotizador.Controllers
 
         public String GetProducto()
         {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            //Se recupera el producto y se guarda en Session
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
             this.Session["idProducto"] = idProducto.ToString();
 
+    
+            //Para recuperar el producto se envia si la sede seleccionada es provincia o no
             ProductoBL bl = new ProductoBL();
-            Producto producto = bl.getProducto(idProducto, Boolean.Parse(this.Session["esProvincia"].ToString()));
-
-            PrecioBL precioBl = new PrecioBL();
-            List<PrecioLista> lista = new List<PrecioLista>() ;
-
-            Decimal precioUnitarioSinIGV = producto.precio;
-            Decimal precio = producto.precio;
-            Decimal valor = producto.valor;
-
-            Decimal precioUnitarioAlternativoSinIGV = 0;
-            Decimal valorAlternativo = 0;
-            //si la equivalencia es mayor a cero entonces quiere decir que existe una unidad alternativa
-            if (producto.equivalencia > 0)
-            {
-                precioUnitarioAlternativoSinIGV = Decimal.Parse(String.Format(decimalFormat, precioUnitarioSinIGV / producto.equivalencia));
-                valorAlternativo = valor / producto.equivalencia;
-            }
-
-            //Si esta seleccionado el boton incluido igv entonces hay que realizar el calculo
-            //se calculo utilizando el precioUnitarioSinIGV, dado que el precio estandar es el que se selecciona por defecto
-            if ((Boolean)this.Session["incluidoIgv"])
-            {
-                precio = precioUnitarioSinIGV + (precioUnitarioSinIGV * IGV);               
-            }
+            Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIgv, cotizacion.flete);
 
             String resultado = "{" +
                 "\"id\":\"" + producto.idProducto + "\"," +
@@ -595,70 +486,46 @@ namespace Cotizador.Controllers
                 "\"unidad\":\"" + producto.unidad + "\"," +
                 "\"unidad_alternativa\":\"" + producto.unidad_alternativa + "\"," +
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
-                "\"precioUnitarioSinIGV\":\"" + precioUnitarioSinIGV + "\"," +
-                "\"precioUnitarioAlternativoSinIGV\":\"" + precioUnitarioAlternativoSinIGV + "\"," +
-                "\"precio\":\"" + precio+ "\","+
-                "\"valor\":\"" + valor + "\"," +
-                "\"valorAlternativo\":\"" + valorAlternativo + "\"" +
+                "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
+                "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
+                "\"precioNeto\":\"" + producto.precioLista + "\"" +
                 "}";
             return resultado;
         }
 
+
+
+
+
+
         public String AddProducto()
         {
-            PrecioBL precioBl = new PrecioBL();
-            if (this.Session["detalles"] == null)
-            {
-                this.Session["detalles"] = new List<CotizacionDetalle>();
-            }
-
-            List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
-
-    
-
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
             Guid idProducto = Guid.Parse(this.Session["idProducto"].ToString());
-            CotizacionDetalle cotizacionDetalle = detalles.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
+            CotizacionDetalle cotizacionDetalle = cotizacion.cotizacionDetalleList.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
             if (cotizacionDetalle != null)
             {
                 throw new System.Exception("Producto ya se encuentra en la lista");
             }
 
-
             CotizacionDetalle detalle = new CotizacionDetalle();
             ProductoBL productoBL = new ProductoBL();
-            Producto producto = productoBL.getProducto(idProducto, Boolean.Parse(this.Session["esProvincia"].ToString()));
+            Producto producto = productoBL.getProducto(idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIgv , cotizacion.flete);
             detalle.producto = producto;
-            //      detalle.idProducto = producto.idProducto;
+
             detalle.cantidad = Int32.Parse(Request["cantidad"].ToString());
             detalle.porcentajeDescuento = Decimal.Parse(Request["porcentajeDescuento"].ToString());
             detalle.precio = Decimal.Parse(Request["precio"].ToString());
             detalle.subTotal = Decimal.Parse(Request["subtotal"].ToString());
 
+            cotizacion.cotizacionDetalleList.Add(detalle);
 
-
-            
-
-
-
-            detalle.precioUnitarioSinIGV = Decimal.Parse(Request["precioUnitarioSinIGV"].ToString());
-
-            detalle.precioUnitarioAlternativoSinIGV = Decimal.Parse(Request["precioUnitarioAlternativoSinIGV"].ToString());
-
-
-
-
-            detalle.image = producto.image;
-
-            detalles.Add(detalle);
-
-            Decimal total = Decimal.Parse(String.Format(decimalFormat, detalles.AsEnumerable().Sum(o => o.subTotal)));
+            Decimal total = Decimal.Parse(String.Format(decimalFormat, cotizacion.cotizacionDetalleList.AsEnumerable().Sum(o => o.subTotal)));
             Decimal subtotal = 0;
             Decimal igv = 0;
 
-
-            if ((Boolean)this.Session["incluidoIgv"])
+            if (cotizacion.incluidoIgv)
             {
-
                 subtotal = Decimal.Parse(String.Format(decimalFormat, total / (1 + IGV)));
                 igv = Decimal.Parse(String.Format(decimalFormat, total - subtotal));
             }
@@ -670,41 +537,23 @@ namespace Cotizador.Controllers
             }
 
             detalle.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
-
             detalle.unidad = detalle.producto.unidad;
-            detalle.valorUnitario = Decimal.Parse(Request["valor"].ToString());
-            //si esPrecioAlternativo es verdadero se mostrará la unidad alternativa
+            //si esPrecioAlternativo  se mostrará la unidad alternativa
             if (detalle.esPrecioAlternativo)
             {
                 detalle.unidad = detalle.producto.unidad_alternativa;
-                detalle.valorUnitario = Decimal.Parse(Request["valorAlternativo"].ToString());
             }
-
-
-
-
 
             String resultado = "{" +
                 "\"idProducto\":\"" + detalle.producto.idProducto + "\"," +
-                "\"proveedor\":\"" + detalle.producto.proveedor + "\"," +
                 "\"codigoProducto\":\"" + detalle.producto.sku + "\"," +
                 "\"nombreProducto\":\"" + detalle.producto.descripcion + "\"," +
                 "\"unidad\":\"" + detalle.unidad + "\"," +
-                "\"cantidad\":\"" + detalle.cantidad.ToString() + "\"," +
-                "\"porcentajeDescuento\":\"" + detalle.porcentajeDescuento.ToString() + "\"," +
-                "\"valorUnitario\":\"" + detalle.valorUnitario.ToString() + "\"," +
-                "\"precio\":\"" + detalle.precio.ToString() + "\"," +
-                "\"precioUnitarioSinIGV\":\"" + detalle.precioUnitarioSinIGV.ToString() + "\"," +
-                "\"precioUnitarioAlternativoSinIGV\":\"" + detalle.precioUnitarioAlternativoSinIGV.ToString() + "\"," +
-                "\"esPrecioAlternativo\":\"" + (detalle.esPrecioAlternativo ? 1 : 0).ToString() + "\"," +
-                "\"subTotal\":\"" + detalle.subTotal.ToString() + "\"," +
                 "\"igv\":\"" + igv.ToString() + "\", " +
-                "\"subTotal2\":\"" + subtotal.ToString() + "\", " +
+                "\"subTotal\":\"" + subtotal.ToString() + "\", " +
                 "\"total\":\"" + total.ToString() + "\"}";
 
-            
-
-            this.Session["detalles"] = detalles;
+            this.Session["cotizacion"] = cotizacion ;
             return resultado;
             
             
@@ -712,7 +561,8 @@ namespace Cotizador.Controllers
 
         public String DelProducto()
         {
-            List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            List<CotizacionDetalle> detalles = cotizacion.cotizacionDetalleList;
             Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
             CotizacionDetalle cotizacionDetalle = detalles.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
             if(cotizacionDetalle != null)
@@ -720,12 +570,13 @@ namespace Cotizador.Controllers
                 detalles.Remove(cotizacionDetalle);
                 this.Session["detalles"] = detalles;
             }
+            this.Session["cotizacion"] = cotizacion;
             return detalles.AsEnumerable().Sum(o => o.subTotal).ToString();
         }
 
 
 
-        public void GenerarPDF2()
+        public void cargarClientes()
         {
             HSSFWorkbook hssfwb;
             using (FileStream file = new FileStream(@"C:\PENTAHO\PRODUCTOS\Clientes.xls", FileMode.Open, FileAccess.Read))
@@ -742,9 +593,6 @@ namespace Cotizador.Controllers
                     try
                     {
                         ClienteStaging clienteStaging = new ClienteStaging();
-                        //    IRow irow = sheet.GetRow(row);
-                        // Type type = sheet.GetRow(row).GetCell(2).GetType();
-
                         clienteStaging.PlazaId = sheet.GetRow(row).GetCell(0).ToString();
                         clienteStaging.Plaza = sheet.GetRow(row).GetCell(1).ToString();
                         clienteStaging.Id = sheet.GetRow(row).GetCell(2).ToString();
@@ -774,62 +622,164 @@ namespace Cotizador.Controllers
 
         }
 
-
-        public ActionResult GenerarPDF()
+        public void cargarProductos()
         {
-            Cotizacion cot = new Cotizacion();
+            HSSFWorkbook hssfwb;
+            using (FileStream file = new FileStream(@"C:\PENTAHO\PRODUCTOS\Productos3.xls", FileMode.Open, FileAccess.Read))
+            {
+                hssfwb = new HSSFWorkbook(file);
+            }
 
-            String[] fecha = Request["fecha"].ToString().Split('/');
-            cot.fecha = new DateTime(Convert.ToInt32(fecha[2]), Convert.ToInt32(fecha[1]), Convert.ToInt32(fecha[0]));
-            
-            cot.idCiudad = Guid.Parse(Request["idCiudad"].ToString());
+            ISheet sheet = hssfwb.GetSheet("Sheet1");
+            int row = 1;
+            for (row = 3; row <= 68; row++)
+            {
+                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+                    try
+                    {
+                        ProductoStaging productoStaging = new ProductoStaging();
+                        //B
+                        productoStaging.proveedor = sheet.GetRow(row).GetCell(1).ToString();
+                        //C
+                        productoStaging.codigo = sheet.GetRow(row).GetCell(2).ToString();
+                        //D
+                        productoStaging.codigoProveedor = sheet.GetRow(row).GetCell(3).ToString();
+                        //E
+                        productoStaging.unidad = sheet.GetRow(row).GetCell(4).ToString();
+                        //H
+                        productoStaging.unidadAlternativa = sheet.GetRow(row).GetCell(7).ToString();
+                        //J
+                        productoStaging.equivalencia = Int32.Parse(sheet.GetRow(row).GetCell(8).ToString());
+                        //K
+                        productoStaging.descripcion = sheet.GetRow(row).GetCell(9).ToString();
+                        //K
+                        Double? precioLima = sheet.GetRow(row).GetCell(22).NumericCellValue;
+                        productoStaging.precioLima = Convert.ToDecimal(precioLima);
+                        //K
+                        Double? precioProvincias = sheet.GetRow(row).GetCell(25).NumericCellValue;
+                        productoStaging.precioProvincias = Convert.ToDecimal(precioProvincias);
 
-            Cliente cliente = (Cliente)this.Session["cliente"];        
-            cliente.contacto1 = Request["contacto"].ToString();
+                        /*
+                        //A
+                        productoStaging.codigo = sheet.GetRow(row).GetCell(0).ToString();
+                        //B
+                        productoStaging.familia = sheet.GetRow(row).GetCell(1).ToString();
+                        //C
+                        productoStaging.clase = sheet.GetRow(row).GetCell(2).ToString();
+                        //D
+                        productoStaging.Marca = sheet.GetRow(row).GetCell(3).ToString();
+                        //F
+                        productoStaging.unidad = sheet.GetRow(row).GetCell(5).ToString();
+                        //G
+                        productoStaging.descripcion = sheet.GetRow(row).GetCell(6).ToString();
+                        //K
+                        productoStaging.codigoProveedor = sheet.GetRow(row).GetCell(10).ToString();
+                        //N
+                        productoStaging.unidadAlternativa = sheet.GetRow(row).GetCell(13).ToString();
+                        //M
+                        productoStaging.unidadAlternativa = sheet.GetRow(row).GetCell(14).ToString();
 
-            cot.considerarCantidades = (Boolean)this.Session["considerarCantidades"];
+                        Double? costo = sheet.GetRow(row).GetCell(19).NumericCellValue;
+                        //T
+                        productoStaging.costo = Convert.ToDecimal(costo);
 
-            cot.igv = IGV;
+                        Double? precio = sheet.GetRow(row).GetCell(21).NumericCellValue;
+                        //V
+                        productoStaging.precio = Convert.ToDecimal(precio);
+                        //Y
+                        productoStaging.proveedor = sheet.GetRow(row).GetCell(24).ToString();
+                        */
+                        ProductoBL productoBL = new ProductoBL();
+                        productoBL.setProductoStaging(productoStaging);
+                    }
+                    catch (Exception ee)
+                    {
+                        Console.WriteLine("An error occurred: '{0}'", ee);
 
-            cot.incluidoIgv = short.Parse(Request["igv"]);
-       //     cot.mostrarCodProveedor = short.Parse(Request["mostrarcodproveedor"]);
-       //     cot.idMoneda = Guid.Parse(Request["moneda"].ToString());
-            //cot.idTipoCambio = Guid.Parse(Request["tipocambio"].ToString());
-       //     cot.idPrecio = Guid.Parse(Request["precio"].ToString());
-            cot.flete = Decimal.Parse(Request["flete"].ToString());
-          //  cot.moneda = (Moneda)this.Session["moneda"];
 
-            CiudadBL ciudadBl = new CiudadBL();
-            cot.ciudad = ciudadBl.getCiudad(cot.idCiudad);
+                    }
+                }
+            }
+            row = row;
 
+        }
+
+        [HttpGet]
+        public ActionResult DownLoadFile(String fileName)
+        {
+            FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\"+ fileName, FileMode.Open);
+            MemoryStream storeStream = new MemoryStream();
+
+            storeStream.SetLength(inStream.Length);
+            inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+
+            storeStream.Flush();
+            inStream.Close();
+            System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\" + fileName);
+
+            FileStreamResult result = new FileStreamResult(storeStream, "application/pdf");
+            result.FileDownloadName = fileName;     
+            return result;
+        }
+
+
+        public Int64 grabarCotizacion()
+        {
+            Cotizacion cotizacion = insertarCotizacion();
+            return cotizacion.codigo;
+        }
+
+
+        public void GetCotizacion()
+        {
+            CotizacionBL cotizacionBL = new CotizacionBL();
+            Cotizacion cotizacion = new Cotizacion();
+            //Agregar Try Catch
+            cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
+            cotizacion = cotizacionBL.GetCotizacion(cotizacion);
+            this.Session["cotizacion"] = cotizacion;
+        }
+
+
+
+        public Cotizacion insertarCotizacion()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
             Usuario usuario = (Usuario)this.Session["usuario"];
-            //cot.usuarioCreacion = usuario.apellidos + "_" + usuario.nombres;
-            cot.usuario = usuario;
-            //   ClienteBL clienteBl = new ClienteBL();
-            cot.cliente = cliente; // clienteBl.getCliente(cot.idCliente);*/
-            
-            List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
-
-            cot.detalles = detalles;
-
-            cot.montoSubTotal = Decimal.Parse(Request["montoSubTotal"].ToString());
-            cot.montoIGV = Decimal.Parse(Request["montoIGV"].ToString());
-            cot.montoTotal = Decimal.Parse(Request["montoTotal"].ToString());
-            cot.montoFlete = Decimal.Parse(Request["montoFlete"].ToString());
-            cot.montoTotalMasFlete = Decimal.Parse(Request["montoTotalMasFlete"].ToString());
-
-            cot.observaciones = Request["observaciones"].ToString();
-
-
+            cotizacion.usuario = usuario;
             CotizacionBL bl = new CotizacionBL();
-            bl.InsertCotizacion(cot);
+            bl.InsertCotizacion(cotizacion);
+            return cotizacion;
+        }
+
+
+        public String GenerarPDF()
+        {
+
+            Cotizacion cotizacion = insertarCotizacion();
+            GeneradorPDF gen = new GeneradorPDF();
+            String ruta =   gen.generarPDFExtended(cotizacion);
+            return ruta;
+        }
+
+
+
+        [HttpPost]
+        public String GenerarPDFdesdeIdCotizacion()
+        {
+            Int64 codigo = Int64.Parse(this.Request.Params["codigo"].ToString());
+
+            CotizacionBL cotizacionBL = new CotizacionBL();
+            Cotizacion cotizacion = new Cotizacion();
+            cotizacion.codigo = codigo;
+            cotizacion = cotizacionBL.GetCotizacion(cotizacion);
 
             GeneradorPDF gen = new GeneradorPDF();
-            gen.generarPDFExtended(cot);
-            
-
-            return Redirect("/pdfs/" + cot.usuarioCreacion + ".pdf");
+            String ruta = gen.generarPDFExtended(cotizacion);
+            return ruta;
         }
+
 
         public String TestPDF()
         {

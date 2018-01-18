@@ -16,17 +16,21 @@ namespace Model
         public Byte[] image { get; set; }
         public String unidad { get; set; }
         public String proveedor { get; set; }
-        public Decimal precio { get; set; }
+        public Decimal precioLista { get; set; }
         public Decimal precio_provincia { get; set; }
-        public Decimal valor { get; set; }
+       // public Decimal valor { get; set; }
         public String familia { get; set; }
         public String clase { get; set; }
         public String marca { get; set; }
         public String unidad_alternativa { get; set; }
-        public Decimal equivalencia { get; set; }
+        public int equivalencia { get; set; }
+
+        public Decimal precioSinIgv { get; set; }
+
+        public Decimal precioAlternativoSinIgv { get; set; }
 
         public override string ToString()
-        {           
+        {
             return this.sku.Trim() + " - " + this.descripcion;
         }
     }

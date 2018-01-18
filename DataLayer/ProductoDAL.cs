@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Model;
+using System.IO;
 
 namespace DataLayer
 {
@@ -16,7 +17,26 @@ namespace DataLayer
         public ProductoDAL() : this(new CotizadorSettings())
         {
         }
-        
+
+        public void setProductoStaging(ProductoStaging productoStaging)
+        {
+
+            var objCommand = GetSqlCommand("pi_productoStaging");
+            InputParameterAdd.Varchar(objCommand, "codigo", productoStaging.codigo); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidad", productoStaging.unidad); //(y)
+            InputParameterAdd.Varchar(objCommand, "descripcion", productoStaging.descripcion); //(y)
+            InputParameterAdd.Varchar(objCommand, "codigoProveedor", productoStaging.codigoProveedor); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidadAlternativa", productoStaging.unidadAlternativa); //(y)
+            InputParameterAdd.Decimal(objCommand, "equivalencia", productoStaging.equivalencia); //(y)
+            InputParameterAdd.Decimal(objCommand, "precioLima", productoStaging.precioLima); //(y)
+            InputParameterAdd.Decimal(objCommand, "precioProvincias", productoStaging.precioProvincias); //(y)
+            InputParameterAdd.Varchar(objCommand, "proveedor", productoStaging.proveedor); //(y)
+            ExecuteNonQuery(objCommand);
+        }
+
+
+
+
         public List<Producto> getProductosBusqueda(String textoBusqueda)
         {
             var objCommand = GetSqlCommand("ps_getproductos_search");
@@ -37,7 +57,7 @@ namespace DataLayer
             return lista;
         }
 
-        public Producto getProducto(Guid idProducto, Boolean esProvincia)
+        public Producto getProducto(Guid idProducto)
         {
             var objCommand = GetSqlCommand("ps_getproducto");
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
@@ -48,23 +68,20 @@ namespace DataLayer
                 producto.idProducto = Converter.GetGuid(row, "id_producto");
                 producto.descripcion = Converter.GetString(row, "descripcion");
                 producto.sku = Converter.GetString(row, "sku");
-                Byte[] img = new Byte[0];
-                producto.image = (Byte[])(row["imagen"]);
-                producto.precio = Converter.GetDecimal(row, "precio");
+
+                if (row["imagen"] != DBNull.Value)
+                {
+                    producto.image = (Byte[])(row["imagen"]);
+                }
+
+                producto.precioLista = Converter.GetDecimal(row, "precio");
                 producto.precio_provincia = Converter.GetDecimal(row, "precio_provincia");
-                producto.valor = Converter.GetDecimal(row, "valor");
                 producto.familia = Converter.GetString(row, "familia");
                 producto.clase = Converter.GetString(row, "clase");
-              //  producto.marca = Converter.GetString(row, "marca");
                 producto.proveedor = Converter.GetString(row, "proveedor");
                 producto.unidad = Converter.GetString(row, "unidad");
                 producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
-                producto.equivalencia = Converter.GetDecimal(row, "equivalencia");
-                //Si se ha seleccionado una provincia el precio a considerar es el precio de provincia
-                if (esProvincia)
-                {
-                    producto.precio = producto.precio_provincia;
-                }
+                producto.equivalencia = Converter.GetInt(row, "equivalencia");
             }
             return producto;
         }

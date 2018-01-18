@@ -4,478 +4,551 @@
     List<Model.Moneda> monedas = ViewBag.Monedas;
     List<Model.Categoria> categorias = ViewBag.Categorias;
     List<Model.Proveedor> proveedores = ViewBag.Proveedores;
+    List<Model.CotizacionDetalle> detalles = ViewBag.Detalles;
 }
 
-    <br/>
-    <div class="container">
-        <form class="form-horizontal" action="/Home/GenerarPDF" method="post">
-            <div class="header">
-                <div class="left">
-                    Cotización - <input class="label-input" type="text" id="fecha" name="fecha">
-                </div>
-                <div class="right">
-                    @ViewBag.nombreUsuario
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    @Html.ActionLink("Salir", "LogOff", "Account");
+
+<div class="container">
+
+    <form class="form-horizontal">
+        <div class="row">
+            <!--FECHA-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="fecha" class="control-label col-xs-4">Fecha:</label>
+                    <div class="col-xs-8">
+                        <input type="hidden" id="fechatmp" value="@ViewBag.fecha" />
+                        <input class="form-control" type="text" id="fecha" name="fecha">
+                    </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        <label for="ciudad" class="control-label col-xs-4">Ciudad</label>
-                        <div class="col-xs-8">
-                            @Html.Action("list", "Ciudad")
-
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        <label for="cliente" class="control-label col-xs-4">Señores</label>
-
-                        <div class="col-xs-8">
-                            <select class="form-control input-sm" id="idCliente" name="idCliente">
-                                <option value=""></option>
-                            </select>
-                            <!--<input class="form-control col-xs-5" type="text" value="" id="cliente" name="cliente">-->
-                        </div>
-                    </div>
-
-                    <!--       <button onclick="alert( $('#idCliente').val())" ></button>-->
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        <label for="igv" class="control-label col-xs-4">Incluido IGV</label>
-                        <div class="col-xs-8">
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    @if (ViewBag.incluidoIgv)
-                                    {
-                                        <input class="radio-input" checked="checked" type="radio" name="igv" id="igvsi" value="1"> 
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" type="radio" name="igv" id="igvsi" value="1"> 
-                                    }       
-                                    Sí                             
-                                </label>
-                            </div>
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    @if (!ViewBag.incluidoIgv)
-                                    {
-                                        <input class="radio-input" checked="checked" type="radio" name="igv" id="igvno" value="0">
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" type="radio" name="igv" id="igvno" value="0">
-                                    }  
-                                     No
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        <label for="codigoproveedor" class="control-label col-xs-4">Mostrar cod. proveedor</label>
-                        <div class="col-xs-8">
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    @if (ViewBag.mostrarCodProveedor)
-                                    {
-                                        <input class="radio-input" type="radio" checked="checked" name="codigoproveedor" id="codigoproveedorsi" value="1">
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" type="radio" name="codigoproveedor" id="codigoproveedorsi" value="1"> 
-                                    }
-                                    Si
-                                </label>
-                            </div>
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    @if (!ViewBag.mostrarCodProveedor)
-                                    {
-                                        <input class="radio-input" type="radio" checked="checked" name="codigoproveedor" id="codigoproveedorno" value="0">
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" type="radio" name="codigoproveedor" id="codigoproveedorno" value="0">
-                                    }
-                                    No
-                                </label>
-                            </div>
-                        </div>
+            <!--CIUDAD-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="ciudad" class="control-label col-xs-4">Ciudad:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("list", "Ciudad")
                     </div>
                 </div>
             </div>
 
+        </div>
 
-            <div class="row">
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        <label for="moneda" class="control-label col-xs-4">Moneda</label>
-                        <div class="col-xs-8">
-                            @foreach (Model.Moneda moneda in monedas)
+
+
+        <div class="row">
+
+            <!--CLIENTE-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="cliente" class="control-label col-xs-4">Cliente:</label>
+
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>         
+                            @if (ViewBag.existeCliente == 1)
                             {
-                                <div class="radio radio-inline">
-                                    <label class="radio-label">
-                                        @if (moneda.simbolo.Equals(ViewBag.monedaSimbolo))
-                                        {
-                                            this.Session["idMoneda"] = moneda.idMoneda;
-                                            <input class="radio-input rMoneda" checked="checked" type="radio" name="moneda" value="@moneda.idMoneda">
-                                        }
-                                        else
-                                        {
-                                            <input class="radio-input rMoneda" type="radio" name="moneda" value="@moneda.idMoneda"> 
-                                        }             
-                                        @moneda.simbolo                           
-                                    </label>
-                                </div>
+                                    <option selected value="@ViewBag.idCliente">@ViewBag.cliente</option>
                             }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- <div class="col-xs-8">
+                            <input class="form-control" type="text" value="@ViewBag.cliente" id="cliente" name="cliente">
                         </div>
+                    -->
+
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="cliente" class="control-label col-xs-4">Dirigiado a:</label>
+
+                    <div class="col-xs-8">
+                        <input class="form-control" type="text" value="@ViewBag.contacto" id="contacto" name="contacto">
                     </div>
                 </div>
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        <label for="tipocambio" class="control-label col-xs-4">Tipo Cambio</label>
-                        <div class="col-xs-8">
-                            <input class="form-control"  type="number" min="1" max="100" step="0.1" value="@ViewBag.TipoCambio" id="tipocambio" name="tipocambio">
+            </div>
+
+
+
+        </div>
+
+
+        <div class="row">
+
+
+
+            <div class="col-sm-6 col-lg-5">
+                <!--IGV-->
+                <div class="form-group">
+                    <label for="igv" class="control-label col-xs-4">¿Precios unitarios incluyen IGV?:</label>
+                    <div class="col-xs-8">
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (ViewBag.incluidoIgv)
+                        {
+                            <input class="radio-input" checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                }
+                else
+                {
+                    <input class="radio-input" type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+        }
+
+                            </label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (!ViewBag.incluidoIgv)
+                        {
+                            <input class="radio-input" checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                }
+                else
+                {
+                    <input class="radio-input" type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+        }
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        <label for="precio" class="control-label col-xs-4">Precio Lista</label>
-                        <div class="col-xs-8">
-                            <select class="form-control" id="precio" name="precio">
-                                <option value="@Guid.Empty" selected>Seleccione...</option>
-                                @foreach (Model.PrecioLista item in precios)
-                                {
-                                    <option value="@item.idPrecioLista">@item.nombreVista</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        <label for="flete" class="control-label col-xs-4">Flete</label>
-                        <div class="col-xs-8">
-                            <input class="form-control" type="number" min="0" max="100" step="0.1" value="@ViewBag.pFlete" id="flete"  name="flete">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--Agregar Producto Boton Header-->
-            <div class="row">
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        <div class="col-xs-10">
-                            <button type="button" id="openBtn" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <table class="table" data-sorting="true" data-show-toggle="false">
-                <thead>
-                    <tr>
-                        <th data-sortable="true">Prov</th>
-                        <th data-sortable="true" data-breakpoints="xs">Code</th>
-                        <th data-sortable="false">Producto</th>
-                        <th data-sortable="true" data-breakpoints="xs">Presentación</th>
-                        <th data-sortable="false" data-breakpoints="xs sm">Imagen</th>
-                        <th data-sortable="true" data-breakpoints="xs sm">Nuevo valor Unitario</th>
-                        <th data-sortable="true" data-breakpoints="xs sm">Cantidad</th>
-                        <th data-sortable="true" data-breakpoints="xs sm">Precio Lista</th>
-                        <th data-sortable="true" data-breakpoints="xs sm">% Dscto</th>
-                        <th data-sortable="false" data-breakpoints="xs sm">Costo</th>
-                        @*<th data-sortable="false" data-breakpoints="xs sm">Cotización</th>
-                        <th data-sortable="false" data-breakpoints="xs sm">Margen</th>
-                        <th data-sortable="false" data-breakpoints="xs sm">Utilidad Bruta</th>*@
-                        <!-- <th data-breakpoints="all" data-title="DOB">Date of Birth</th> -->
-                    </tr>
-                </thead>
-                <tbody>
 
-                    @*<tr data-expanded="true">
-                        <td>Proveedor 4</td>
-                        <td>HD004</td>
-                        <td>Pasta Dental</td>
-                        <td>Unidad</td>
-                        <td class="column-img"><img class="table-product-img" src="images/pasta_dental.png"></td>
-                        <td>15</td>
-                        <td>2</td>
-                        <td>P3</td>
-                        <td>10%</td>
-                        <td>10</td>
-                        <td>15</td>
-                        <td>33.3 %</td>
-                        <td>5</td>
-                    </tr>
-                    <tr data-expanded="true">
-                        <td>Proveedor 5</td>
-                        <td>HD005</td>
-                        <td>Jabón líquido</td>
-                        <td>Unidad</td>
-                        <td class="column-img"><img class="table-product-img" src="images/jabon_liquido.jpg"></td>
-                        <td>15</td>
-                        <td>2</td>
-                        <td>P3</td>
-                        <td>10%</td>
-                        <td>10</td>
-                        <td>15</td>
-                        <td>33.3 %</td>
-                        <td>5</td>
-                    </tr>*@
-                </tbody>
-            </table>
 
-            <div class="row">
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        <div class="col-xs-10">
-                            <button type="submit" class="btn btn-primary">Generar PDF</button>
+
+
+            <!--CANTIDADES-->
+            <div class="col-sm-6 col-lg-5">
+
+                <div class="form-group">
+                    <label for="igv" class="control-label col-xs-4">¿Considerar Cantidades?:</label>
+                    <div class="col-xs-8">
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (ViewBag.considerarCantidades)
+                        {
+                            <input class="radio-input" checked type="radio" name="considerarCantidades" id="cantidadessi" value="1">@ViewBag.Si;
+                }
+                else
+                {
+                    <input class="radio-input" type="radio" name="considerarCantidades" id="cantidadessi" value="1">@ViewBag.Si;
+        }
+
+                            </label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (!ViewBag.considerarCantidades)
+                        {
+                            <input class="radio-input" checked type="radio" name="considerarCantidades" id="cantidadesno" value="0">@ViewBag.No;
+                }
+                else
+                {
+                    <input class="radio-input" type="radio" name="considerarCantidades" id="cantidadesno" value="0">@ViewBag.No;
+        }
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>        
-    </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="modalAgregarProducto" tabindex="-1" role="dialog">
-        <div class="modal-dialog"  role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="modalAgregarProductoTitle">Agregar Producto</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <br />
+
+
+
+
+
+        </div>
+
+        <div class="row">
+
+            <!--FLETE-->
+
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="flete" class="control-label col-xs-4">% Flete:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="number" min="0" max="100.00" step=".1" value="@ViewBag.flete" id="flete" name="flete">
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form class="form-horizontal">
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="proveedor" class="control-label col-xs-4">Proveedor</label>
-                                    <div class="col-xs-8">
-                                        <select class="form-control" id="proveedor" name="proveedor">
-                                            <option value="0" selected>Seleccione...</option>
-                                            @foreach (Model.Proveedor item in proveedores)
-                                            {
-                                                <option value="@item.idProveedor">@item.nombre</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="categoria" class="control-label col-xs-4">Categoría</label>
-                                    <div class="col-xs-8">
-                                        <select class="form-control" id="categoria" name="categoria">
-                                            <option value="0" selected>Seleccione...</option>
-                                            @foreach (Model.Categoria item in categorias)
-                                            {
-                                                <option value="@item.idCategoria">@item.nombre</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="familia" class="control-label col-xs-4">Familia</label>
-                                    <div class="col-xs-8">
-                                        <select class="form-control" id="familia" name="familia">
-                                            <option value="0" selected>Seleccione...</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="producto" class="control-label col-xs-4">Producto</label>
-                                    <div class="col-xs-8">
-                                        <select class="form-control input-sm" id="producto" name="producto">
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-6 ">
-                                <div class="form-group modal-add-image">
-                                    <img id="imgProducto" src="~/images/NoDisponible.gif">
-                                </div>
-                            </div>
-                        </div>
+            </div>
 
-
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="presentacion" class="control-label col-xs-4">Presentación</label>
-                                    <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="presentacion" name="presentacion" disabled>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="cantidad" class="control-label col-xs-4">Cantidad</label>
-                                    <div class="col-xs-8">
-                                        <input class="form-control" type="number" value="" id="cantidad" name="cantidad">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="precio" class="control-label col-xs-4">Precio Lista</label>
-                                    <div class="col-xs-8">
-                                        <select class="form-control" id="precioProducto" name="precioProducto">
-                                            <option selected>Seleccione...</option>
-                                            @foreach (Model.PrecioLista item in precios)
-                                            {
-                                                <option value="@item.idPrecioLista">@item.nombreVista</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="valorunitario" class="control-label col-xs-4">Valor Unitario</label>
-                                    <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="valorunitario" name="valorunitario" disabled>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="pdescuento" class="control-label col-xs-4">% Dscto.</label>
-                                    <div class="col-xs-8">
-                                        <input class="form-control" type="number" value="" id="pdescuento" name="pdescuento">
-                                    </div>
-                                </div>
-                            </div>
-                            @*<div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="precargo" class="control-label col-xs-4">% Recargo</label>
-                                    <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="precargo" name="precargo">
-                                    </div>
-                                </div>
-                            </div>*@
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="valorunitarioneto" class="control-label col-xs-4">Valor unit. neto</label>
-                                    <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="valorunitarioneto" name="valorunitarioneto" disabled>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="subtotal" class="control-label col-xs-4">Sub total</label>
-                                    <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="subtotal" name="subtotal" disabled>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        @*<div class="row">
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="costounitario" class="control-label col-xs-4">Costo unitario</label>
-                                    <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="costounitario" name="costounitario">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="margen" class="control-label col-xs-4">Margen</label>
-                                    <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="margen" name="margen">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="utilidadbruta" class="control-label col-xs-4">Utilidad Bruta</label>
-                                    <div class="col-xs-8">
-                                        <input class="form-control" type="text" value="" id="utilidadbruta" name="utilidadbruta">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>*@
-
-
-
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button id="btnCancelAddProduct"  type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button id="btnAddProduct" type="button" class="btn btn-primary">Agregar Producto</button>
+            <!--COD PROVEEDOR
+        <div class="col-sm-6 col-lg-5">
+            <div class="form-group">
+                <label for="codigoproveedor" class="control-label col-xs-4">Código Proveedor:</label>
+                <div class="col-xs-8">
+                    <div class="radio radio-inline">
+                        <label class="radio-label">
+                            @if (ViewBag.mostrarCodProveedor)
+                    {
+                        <input class="radio-input" checked type="radio" name="mostrarcodproveedor" id="codigoproveedorsi" value="1">@ViewBag.MostrarCodProvSi;
+            }
+            else
+            {
+                <input class="radio-input" type="radio" name="mostrarcodproveedor" id="codigoproveedorsi" value="1"> @ViewBag.MostrarCodProvSi;
+    }
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <label class="radio-label">
+                            @if (!ViewBag.mostrarCodProveedor)
+                    {
+                        <input class="radio-input" checked type="radio" name="mostrarcodproveedor" id="codigoproveedorno" value="0">@ViewBag.MostrarCodProvNo;
+            }
+            else
+            {
+                <input class="radio-input" type="radio" name="mostrarcodproveedor" id="codigoproveedorno" value="0">@ViewBag.MostrarCodProvNo;
+    }
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        -->
+        </div>
+
+        <div class="row pull-right">
+            <button id="openAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
+        </div>
+
+        <table id="tablefoottable" class="table" data-editing="true"
+               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar'
+               data-editing-allow-add="false"
+               data-editing-allow-delete="true"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Cancelar">
+            <thead>
+                <tr>
+                    <th data-name="idProducto" data-visible="false"></th>
+                    <th data-name="esPrecioAlternativo" data-visible="false"></th>
+                    <th data-name="proveedor" data-sortable="true">Proveedor</th>
+                    <th data-name="codigo" data-sortable="true" data-breakpoints="xs">Código</th>
+                    <th data-name="producto" data-sortable="false">Producto / Descripción</th>
+                    <th data-name="presentacion" data-sortable="true" data-breakpoints="xs">Presentación</th>
+                    <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
+                    <!--<th data-name="valorUnitario" data-sortable="true" data-breakpoints="xs sm">Costo Unitario</th>-->
+                    <th data-name="precioLista"  data-sortable="true" data-breakpoints="xs sm">Precio Lista</th>
+                    <th data-name="porcentajeDescuento" data-sortable="true" data-breakpoints="xs sm">% Dscto</th>
+                    <th data-name="precioNeto" data-sortable="true" data-breakpoints="xs sm">Precio Neto</th>
+                    @if (ViewBag.considerarCantidades)
+                    {
+                         <th data-name="cantidad" data-sortable="true" data-breakpoints="xs sm">Cantidad</th>
+                        <th data-name="subTotal" data-sortable="false" data-breakpoints="xs sm">Sub Total</th>
+                    }
+                    else
+                    {
+                         <th data-name="cantidad"  data-visible="false">Cantidad</th>
+                         <th data-name="subTotal" data-visible="false">Sub Total</th>
+                    }
 
 
-<!--
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cotizacionDetalle in detalles)
+                {
+                <tr data-expanded="true">
+                    <td>  @cotizacionDetalle.producto.idProducto  </td>
+                    <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
+                    <td>  @cotizacionDetalle.producto.proveedor  </td>
+                    <td>  @cotizacionDetalle.producto.sku  </td>
+                    <td>  @cotizacionDetalle.producto.descripcion  </td>
+                    <td>  @cotizacionDetalle.unidad  </td>
+                    <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.image)"></td>
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+                    @if (cotizacionDetalle.esPrecioAlternativo)
+                    {
+                        var precioLista = cotizacionDetalle.precioUnitarioSinIGV;
+                        if (ViewBag.incluidoIgv)
+                        {
+                            precioLista  = precioLista + (precioLista * ViewBag.IGV);
+                        }
+                        <td style="text-align:right">@precioLista</td>
+                    }
+                    else
+                    {
+                        var precioLista = cotizacionDetalle.precioUnitarioAlternativoSinIGV;
+                        if (ViewBag.incluidoIgv)
+                        {
+                            precioLista = precioLista + (precioLista * ViewBag.IGV);
+                        }
+                        <td style="text-align:right">@precioLista</td>
+                    };
+                    
+
+                    <td style="text-align:right">  @cotizacionDetalle.porcentajeDescuento  %</td>
+                    <td style="text-align:right">  @cotizacionDetalle.precio  </td>
+                    <td style="text-align:right">  @cotizacionDetalle.cantidad  </td>
+                    <td style="text-align:right">  @cotizacionDetalle.subTotal  </td>
+                </tr>
+                }
+
+
+
+            </tbody>
+        </table>
+
+
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="observaciones" class="control-label col-xs-2">Observaciones:</label>
+                    <div class="col-xs-10">
+                        <textarea rows="6" cols="300" style="min-width: 100%" id="observaciones" name="observaciones">@ViewBag.observaciones</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales" >Subtotal: S/ </span>
+                        <span class="totales" id="montoSubTotal">@ViewBag.subtotal</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales" >IGV 18%: S/ </span>
+                        <span class="totales" id="montoIGV">@ViewBag.igv</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <input type="hidden" id="total" value="@ViewBag.total" />
+                        <span class="totales">TOTAL: S/ </span>
+                        <span class="totales"  id="montoTotal">@ViewBag.total</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales" >Flete: S/ </span>
+                        <span class="totales" id="montoFlete">@ViewBag.montoFlete</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales" >Total más Flete: S/ </span>
+                        <span class="totales" id="montoTotalMasFlete">@ViewBag.montoTotalMasFlete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="pull-right">
+                <button id="generarPDF" type="button" class="btn btn-primary">Generar PDF</button>
+            </div>
+        </div>
+
+
+    </form>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+
+
+<!-- MODAL -->
+<div class="modal fade" id="modalAgregarProducto" tabindex="-1">
+    <!-- <div class="modal fade" id="modalAgregarProducto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+       -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--CABECERA-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarProductoTitle"><b>Agregar Producto</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+            <!--CUERPO-->
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+
+                            <!--PRODUCTO-->
+                            <div class="form-group">
+                                <label for="producto" class="control-label col-xs-4">Producto:</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control input-sm" id="producto" name="producto">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--proveedor-->
+                            <div class="form-group">
+                                <label for="proveedor" class="control-label col-xs-4">Proveedor:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" value="" id="proveedor" name="proveedor" disabled>
+                                </div>
+                            </div>
+
+                            <!--PRESENTACIÓN-->
+                            <div class="form-group">
+                                <label for="unidad" class="control-label col-xs-4">Presentación:</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control input-sm" id="unidad" name="unidad"></select>
+                                </div>
+                            </div>
+
+                            <!--CANTIDAD-->
+                            <div class="form-group">
+                                <label for="cantidad" class="control-label col-xs-4">Cantidad:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" value="" min="1" step="1" id="cantidad" name="cantidad">
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!--IMAGEN-->
+                        <div class="col-sm-6 col-lg-6 ">
+                            <div class="form-group modal-add-image">
+                                <img id="imgProducto" src="images/NoDisponible.gif">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <input type="hidden" id="precioUnitarioSinIGV" value="0" />
+                        <input type="hidden" id="precioUnitarioAlternativoSinIGV" value="0" />
+                        <input type="hidden" id="esPrecioAlternativo" value="0" />
+
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="precio" class="control-label col-xs-4">Precio:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" step=".1" value="" disabled id="precio" name="precio">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="valor" class="control-label col-xs-4">Costo Unitario:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" value=""  id="valor" name="valor" disabled>
+                                    <input class="form-control" type="hidden" value="" id="valorAlternativo" name="valorAlternativo" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="porcentajeDescuento" class="control-label col-xs-4">% Dscto:</label>
+                                <div class="col-xs-6">
+                                    <input class="form-control" type="number" step=".1" value="" id="porcentajeDescuento" name="porcentajeDescuento">
+
+                                    <!--    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalCalculadora" data-dismiss="modal">Close current, Launch Modal #2</button>
+                                    -->
+                                </div>
+                                <div class="col-xs-2">
+                                    <button id="btnCalcularDescuento" type="button" class="btn btn-primary bouton-image monBouton" data-toggle="modal" data-target="#modalCalculadora"></button>
+                                    <!--                         <a href="#modalCalculadora" role="button" class="btn" data-toggle="modal">Launch other modal</a>
+                                        -->
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="subtotal" class="control-label col-xs-4">Sub total:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" value="" id="subtotal" name="subtotal" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </form>
+
+                <div class="row pull-right">
+                    <span style="margin-right: 20px; color: red; font-weight: bold "  class="has-error" id="resultadoAgregarProducto"></span>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancelAddProduct" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAddProduct" class="btn btn-primary">Agregar</button>
+            </div>
+        </div>
     </div>
 </div>
-    -->
 
 
-@section Scripts {
-    @Scripts.Render("~/Scripts/app/cotizador/cotizador.js")
-}
+
+
+<!-- [ Modal #2 ] style="margin-top: 200px-->
+<div class="modal fade" id="modalCalculadora" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCalculadoraTitle"><b>Calcular Descuento</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+
+                            <!--NUEVO PRECIO-->
+                            <div class="form-group">
+                                <label for="nuevoPrecio" class="control-label col-xs-4">Nuevo Precio:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" step=".1" value="" id="nuevoPrecio" name="nuevoPrecio">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+
+                            <!--NUEVO PRECIO-->
+                            <div class="form-group">
+                                <label for="nuevoDescuento" class="control-label col-xs-4">% Dscto:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" step=".1" value="" disabled id="nuevoDescuento" name="nuevoDescuento">
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+                    <!--
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Input Placeholder..." />
+                                <span class="input-group-btn"><button class="btn btn-default" type="button">Action</button></span>
+                            </div>
+                        </div>
+                    </div>-->
+            <div class="modal-footer">
+                <button type="button" id="btnCancelCalculadora" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveDescuento" class="btn btn-primary">Guardar Descuento</button>
+            </div>
+        </div>
+    </div>
+</div>

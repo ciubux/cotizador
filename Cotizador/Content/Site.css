@@ -109,6 +109,28 @@ input.label-input {
     }
 }
 
+.up {
+    width: 32px;
+    height: 32px;
+    background: white url(/images/up.png) no-repeat;
+    background-color: transparent;
+    float: left;
+}
+
+.down {
+    width: 32px;
+    height: 32px;
+    background: white url(/images/down.png) no-repeat;
+    background-color: transparent;
+    float: left;
+}
+
+.container-img {
+    width: 70px;
+    height: 60px;
+}
+
+
 .bouton-image:before {
     content: "";
     width: 16px;
@@ -125,7 +147,115 @@ input.label-input {
     background-image: url(/images/calculadora3.png);
 }
 
+.searchBouton:before {
+    background-image: url(/images/search_icon.png);
+}
+
 /*
 #modalCalculadora {
     margin-top: 200px;
 }*/
+/*$red: #cc4e46;
+$darkred: darken($red, 0.2);*/
+.footable > thead > tr > th, .footable > thead > tr > td {
+    position: relative;
+}
+
+
+/*.footable > tfoot  > tr > td{
+  border: none;
+}*/
+.footable {
+  border-spacing: 0;
+  width: 100%;
+/*  border: solid #ccc 1px;*/
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+ /* font-family: 'trebuchet MS' , 'Lucida sans' , Arial;*/
+  font-size: 14px;
+  color: #444;
+  border-top: 1px solid #ccc;
+}
+
+.footable.breakpoint > tbody > tr > td.expand {
+  background: url('http://themergency.com/footable-demo/css/img/plus.png') no-repeat 5px center;
+  padding-left: 40px;
+}
+
+.footable.breakpoint > tbody > tr.footable-detail-show > td.expand {
+  background: url('http://themergency.com/footable-demo/css/img/minus.png') no-repeat 5px center;
+}
+
+.footable.breakpoint > tbody > tr.footable-row-detail {
+  background: #eee;
+}
+
+.footable > tbody > tr:hover {
+  background:#FFF9C4;
+}
+
+
+
+
+.footable.breakpoint > tbody > tr:hover:not(.footable-row-detail) {
+  cursor: pointer;
+}
+
+.footable > tbody > tr > td, .footable > thead > tr > th {
+ /* border-left: 1px solid #ccc;*/
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+    .footable > thead > tr > th, .footable > thead > tr > td {
+        background-color: #BDBDBD;
+        /* background-color: $red;
+  background-image: -webkit-gradient(linear, left top, left bottom, from($red), to($darkred));
+  background-image: -webkit-linear-gradient(top, $red, $darkred);
+  background-image: -moz-linear-gradient(top, $red, $darkred);
+  background-image: -ms-linear-gradient(top, $red, $darkred);
+  background-image: -o-linear-gradient(top, $red, $darkred);
+  background-image: linear-gradient(to bottom, $red, $darkred);
+  -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+  -moz-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+  box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;*/
+        /*border-top: none; */
+        border: 1px solid #ccc;
+        text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    }
+
+.footable > thead > tr > th:first-child, .footable > thead > tr > td:first-child {
+  -moz-border-radius: 6px 0 0 0;
+  -webkit-border-radius: 6px 0 0 0;
+  border-radius: 6px 0 0 0;
+}
+
+.footable > thead > tr > th:last-child, .footable > thead > tr > td:last-child {
+  -moz-border-radius: 0 6px 0 0;
+  -webkit-border-radius: 0 6px 0 0;
+  border-radius: 0 6px 0 0;
+}
+
+.footable > thead > tr > th:only-child, .footable > thead > tr > td:only-child {
+  -moz-border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
+}
+
+.footable > tbody > tr:last-child > td:first-child {
+  -moz-border-radius: 0 0 0 6px;
+  -webkit-border-radius: 0 0 0 6px;
+  border-radius: 0 0 0 6px;
+}
+
+.footable > tbody > tr:last-child > td:last-child {
+  -moz-border-radius: 0 0 6px 0;
+  -webkit-border-radius: 0 0 6px 0;
+  border-radius: 0 0 6px 0;
+}
+
+.footable > tbody img {
+  vertical-align:middle;
+}

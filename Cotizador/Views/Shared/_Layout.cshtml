@@ -28,8 +28,19 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Cotizador", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Productos", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Usuarios", "Index", "Home")</li>
+
+                    @{
+                        var routeValues = new RouteValueDictionary();
+                        routeValues.Add("Name", "Example");
+                        routeValues.Add("UserId", "5");
+                        
+                        var attributes = new Dictionary<string, object>();
+                        attributes.Add("onClick", "return nuevaCotizacion();");
+                    }
+
+                    <li>@Html.ActionLink("Nueva Cotización", "New", "Home", routeValues, htmlAttributes: new {  onclick = "return confirm('Al crear una nueva cotización se eliminarán los cambios que no hayan sido guardados. ¿Está seguro de continuar?');" })</li>
+                    <li>@Html.ActionLink("Buscar Cotización", "Search", "Home")</li>
+                    <li>@Html.ActionLink("Buscar Cliente", "Index", "Home")</li>
                 </ul>
                 <!-- @Html.Partial("_LoginPartial")-->
             </div>

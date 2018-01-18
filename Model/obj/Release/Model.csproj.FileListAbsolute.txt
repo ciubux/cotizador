@@ -20,3 +20,11 @@ C:\Users\cesar\Documents\projects\cotizador\Model\bin\Release\System.Web.Mvc.xml
 C:\Users\cesar\Documents\projects\cotizador\Model\obj\Release\Model.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Documents\projects\cotizador\Model\obj\Release\Model.dll
 C:\Users\cesar\Documents\projects\cotizador\Model\obj\Release\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Model\bin\Release\Model.dll
+C:\Users\cesar\Documents\MP2\cotizador\Model\bin\Release\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Model\bin\Release\System.Web.Mvc.dll
+C:\Users\cesar\Documents\MP2\cotizador\Model\bin\Release\System.Web.Mvc.xml
+C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Release\Model.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Release\Model.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Release\Model.dll
+C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Release\Model.pdb

@@ -13,3 +13,9 @@ C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\bin\Release\Fram
 C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.dll
 C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\bin\Release\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\bin\Release\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb

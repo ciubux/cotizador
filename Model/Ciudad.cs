@@ -9,8 +9,14 @@ namespace Model
     {
         public Guid idCiudad { get; set; }
 
-        public String nombre { get; set;  }
+        public String nombre { get; set; }
 
         public int orden { get; set; }
+
+        public bool esProvincia {
+            get {
+                return this.orden > 1; 
+                    }
+        }
     }
 }
