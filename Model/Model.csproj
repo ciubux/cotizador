@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Auditoria.cs" />
     <Compile Include="Constantes.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="ProductoJson.cs" />
     <Compile Include="ProductoStaging.cs" />
     <Compile Include="ClienteStaging.cs" />

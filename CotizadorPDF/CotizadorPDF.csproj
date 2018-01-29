@@ -31,11 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Spire.License">
-      <HintPath>..\..\Spire.License.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.pdf-fe\Bin\NET4.0\Spire.License.dll</HintPath>
     </Reference>
     <Reference Include="Spire.Pdf">
-      <HintPath>..\..\Spire.Pdf.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.pdf-fe\Bin\NET4.0\Spire.Pdf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,6 +54,10 @@
     <Fakes Include="Fakes\Spire.License.fakes" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj">
+      <Project>{f93c55fa-7ff7-4af4-af0b-7c014b286cde}</Project>
+      <Name>BusinessLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{2e588952-5389-42e5-8ed8-c42b9e38f6d7}</Project>
       <Name>Model</Name>

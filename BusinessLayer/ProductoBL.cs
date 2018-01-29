@@ -25,7 +25,7 @@ namespace BusinessLayer
                 //Si es provincia, se considera el precio de provincia
                 if (esProvincia)
                 {
-                    producto.precioLista = producto.precio_provincia;
+                    producto.precioSinIgv = producto.precioProvinciaSinIgv;
                 }
 
                 //Si no contiene imagen entonces se carga la imagen por defecto
@@ -40,26 +40,23 @@ namespace BusinessLayer
                     producto.image = storeStream.GetBuffer();
                 }
 
-                //Se calcula el precio unitario Alternativo sin IGV
-                producto.precioSinIgv = producto.precioLista;
-                //si la equivalencia es mayor a cero entonces quiere decir que existe una unidad alternativa
-                if (producto.equivalencia > 1)
-                {
-                    producto.precioAlternativoSinIgv = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.precioSinIgv / producto.equivalencia));
-                }
-                else
-                {
-                    producto.precioAlternativoSinIgv = 0;
-                }
+                //Se agrega el flete al precioLista
+                //EL PRECIO LISTA YA INCLUTE FLETE
+                producto.precioLista = producto.precioSinIgv + (producto.precioSinIgv * Flete / 100);
 
-                producto.precioLista = producto.precioLista + (producto.precioLista * Flete / 100);
-
-                //Si esta seleccionado el boton incluido igv entonces hay que realizar el calculo
-                //se calcula utilizando el precioUnitarioSinIGV, dado que el precio estandar es el que se selecciona por defecto
+                producto.costoLista = producto.costoSinIgv;
                 if (incluidoIGV)
                 {
+                    //Se agrega el IGV al costoLista
+                    producto.costoLista = producto.costoSinIgv + (producto.costoSinIgv * Constantes.IGV);
+                    //Se agrega el IGV al precioLista
                     producto.precioLista = producto.precioLista + (producto.precioLista * Constantes.IGV);
                 }
+
+                producto.costoLista = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.costoLista));
+                producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.precioLista));
+
+
                 return producto;
             }
         }

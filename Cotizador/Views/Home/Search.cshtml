@@ -97,6 +97,7 @@
                 <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
                 <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>
                 <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
+                <th data-name="estadoAprobacion" data-sortable="true" data-breakpoints="xs">Estado Aprobación</th>
                 <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
             </tr>
         </thead>
@@ -114,8 +115,19 @@
                 <td>  @cotizacion.montoSubTotal   </td>
                 <td>  @cotizacion.igv  </td>
                 <td>  @cotizacion.montoTotal  </td>
-                <td> <button type="button" class="@cotizacion.codigo btnVerCotizacion btn btn-primary  bouton-image searchBouton">Ver Cotización</button>
-                     <button type="button" class="@cotizacion.codigo btnEditarCotizacion btn btn-primary ">Editar Cotización</button></td>
+                <td>  @cotizacion.descripcionEstadoAprobacion  </td>
+                <td>
+                    <!--bouton-image searchBouton-->
+                    @if (@cotizacion.estadoAprobacion == 1)
+                    { <button type="button" class="@cotizacion.codigo btnVerCotizacion btn btn-primary  ">Ver Cotización</button>
+                    }
+                    else
+                    {<button type="button" disabled class="@cotizacion.codigo btnVerCotizacion btn btn-primary  ">Ver Cotización</button>
+                     }
+                    <button type="button" class="@cotizacion.codigo btnEditarCotizacion btn btn-primary ">Editar Cotización</button>
+                    <button type="button" class="@cotizacion.codigo btnReCotizacion btn btn-primary ">Recotizar</button>
+                </td>
+
             </tr>
             }
 

@@ -31,6 +31,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precioLima", productoStaging.precioLima); //(y)
             InputParameterAdd.Decimal(objCommand, "precioProvincias", productoStaging.precioProvincias); //(y)
             InputParameterAdd.Varchar(objCommand, "proveedor", productoStaging.proveedor); //(y)
+            InputParameterAdd.Decimal(objCommand, "costo", productoStaging.costo); //(y)
             ExecuteNonQuery(objCommand);
         }
 
@@ -74,14 +75,17 @@ namespace DataLayer
                     producto.image = (Byte[])(row["imagen"]);
                 }
 
-                producto.precioLista = Converter.GetDecimal(row, "precio");
-                producto.precio_provincia = Converter.GetDecimal(row, "precio_provincia");
+                producto.precioSinIgv = Converter.GetDecimal(row, "precio");
+                producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
                 producto.familia = Converter.GetString(row, "familia");
                 producto.clase = Converter.GetString(row, "clase");
                 producto.proveedor = Converter.GetString(row, "proveedor");
                 producto.unidad = Converter.GetString(row, "unidad");
                 producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
                 producto.equivalencia = Converter.GetInt(row, "equivalencia");
+                producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                //Costo sin IGV
+                producto.costoSinIgv = Converter.GetDecimal(row, "costo");
             }
             return producto;
         }

@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using BusinessLayer;
+using Model;
 using Spire.Pdf;
 using Spire.Pdf.Annotations;
 using Spire.Pdf.Graphics;
@@ -10,6 +11,7 @@ using System.Data.OleDb;
 using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -33,6 +35,8 @@ namespace cotizadorPDF
             {
                 String formatDecimal = "{0:0.00}";
                 String simboloMonedaSol = "S/";
+                char pad = '0';
+                int cantidadPad = 10;
 
                 int sepLine = 12;
                 SampleEventSourceWriter.Log.MessageMethod("This is a message.");
@@ -40,14 +44,14 @@ namespace cotizadorPDF
                 PdfPageBase page = doc.Pages.Add(PdfPageSize.A4);
 
                 PdfImage image = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\logo.png");
-                float width = 107 * 2.4f;
+                float width = 100 * 2.4f;
                 float height = 16 * 2.4f;
                 page.Canvas.DrawImage(image, 0, 0, width, height);
 
                 PdfImage imageCli = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\marcas.png");
                 width = 75 * 2.4f;
                 height = 70 * 2.4f;
-                page.Canvas.DrawImage(imageCli, 300, 0, width, height);
+                page.Canvas.DrawImage(imageCli, 340, 0, width, height);
 
                 float y = 60;
                 string mes = "";
@@ -67,6 +71,8 @@ namespace cotizadorPDF
                     case 12: mes = "Diciembre"; break;
                 }
 
+                page.Canvas.DrawString("Número de Cotización: "+ cot.codigo.ToString().PadLeft(cantidadPad, pad), new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                y = y + sepLine * 2;
                 string fecha = cot.fecha.Day + " de " + mes + " de " + cot.fecha.Year;
                 page.Canvas.DrawString(cot.ciudad.nombre + " " + fecha, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine * 2;
@@ -121,10 +127,10 @@ namespace cotizadorPDF
                 {
                     String codigo = det.producto.sku.Trim();
                     String producto = det.producto.descripcion;
-                    String presentacion = det.producto.unidad;
+                    String presentacion = det.unidad; //Se muestra la unidad seleccionada y que se encuentra en el detalle
                     String imagen = "";
                     String precioUnitarioAnterior = "";
-                    String precioUnitarioNuevo = simboloMonedaSol + " " + String.Format(formatDecimal, det.precio);
+                    String precioUnitarioNuevo = simboloMonedaSol + " " + String.Format(formatDecimal, det.precioNeto);
                     String cantidad = det.cantidad.ToString();
                     String subtotal = simboloMonedaSol + " " + String.Format(formatDecimal, det.subTotal);
 
@@ -191,10 +197,85 @@ namespace cotizadorPDF
 
                 y = y + 5;
 
+                PdfSolidBrush brushColorBlue = new PdfSolidBrush(Color.Blue);
 
                 if (cot.considerarCantidades)
                 {
-                    page.Canvas.DrawString("Subtotal: ", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 420, y);
+                    PdfTable tableTotales = new PdfTable();
+                    tableTotales.Style.CellPadding = 2;
+                    tableTotales.Style.BorderPen = new PdfPen(PdfBrushes.Transparent, 0f);
+                    tableTotales.Style.DefaultStyle.BorderPen = new PdfPen(PdfBrushes.Transparent, 0f);
+                    tableTotales.Style.DefaultStyle.BackgroundBrush = PdfBrushes.White;
+                    //   tableTotales.Style.DefaultStyle.Font = new PdfTrueTypeFont(new Font(new FontFamily(GenericFontFamilies.Serif), 9f, FontStyle.Bold));
+                    // tableTotales.Style.DefaultStyle.Font = new PdfTrueTypeFont(new Font("Arial", 9f, FontStyle.Bold));
+
+                    tableTotales.Style.DefaultStyle.TextBrush = brushColorBlue;
+                    tableTotales.Style.AlternateStyle = new PdfCellStyle();
+                    tableTotales.Style.AlternateStyle.BackgroundBrush = PdfBrushes.White;
+                    tableTotales.Style.AlternateStyle.BorderPen = new PdfPen(PdfBrushes.Transparent, 0f);
+                    tableTotales.Style.AlternateStyle.TextBrush = brushColorBlue;
+
+                    //  tableTotales.Style.AlternateStyle.Font = new PdfTrueTypeFont(new Font(new FontFamily(GenericFontFamilies.Serif), 9f, FontStyle.Bold));
+                    tableTotales.Style.HeaderSource = PdfHeaderSource.ColumnCaptions;
+                    //table.Style.HeaderStyle.BackgroundBrush = PdfBrushes.CadetBlue;
+                    tableTotales.Style.HeaderStyle.BackgroundBrush = PdfBrushes.White;
+                    //   table.Style.HeaderStyle.Font = new PdfTrueTypeFont(new Font("Helvetica", 8f, FontStyle.Bold));
+                    tableTotales.Style.HeaderStyle.StringFormat = new PdfStringFormat(PdfTextAlignment.Center);
+                    tableTotales.Style.ShowHeader = false;
+                  //  tableTotales.Style.DefaultStyle.Font = new PdfTrueTypeFont(new Font("Helvetica", 8f, FontStyle.Bold));
+                    //tableTotales.Style. = false;
+
+
+                    DataTable dataTable2 = new DataTable();
+                    dataTable2.Columns.Add("Descripcion");
+                    dataTable2.Columns.Add("monto");
+
+                    String subtotal = "Subtotal: " + simboloMonedaSol + ": ";
+                    String montoSubtotal = String.Format(formatDecimal, cot.montoSubTotal);
+                    dataTable2.Rows.Add(new object[] { subtotal, montoSubtotal });
+
+                    String igv = "IGV 18%: " + simboloMonedaSol + ": ";
+                    String montoIGV = String.Format(formatDecimal, cot.montoIGV);
+                    dataTable2.Rows.Add(new object[] { igv, montoIGV });
+
+                    String total = "Total: " + simboloMonedaSol + ": ";
+                    String montoTotal = String.Format(formatDecimal, cot.montoTotal);
+                    dataTable2.Rows.Add(new object[] { total, montoTotal });
+
+                    tableTotales.DataSource = dataTable2;
+
+                    float width2   = page.Canvas.ClientSize.Width
+                      - (tableTotales.Columns.Count + 1) * tableTotales.Style.BorderPen.Width;
+
+                    tableTotales.Columns[0].Width = width2 * 0.25f;
+                    tableTotales.Columns[0].StringFormat
+                        = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+
+                    tableTotales.Columns[1].Width = width2 * 0.20f;
+                    tableTotales.Columns[1].StringFormat
+                        = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+
+                   // tableTotales.BeginRowLayout += new BeginRowLayoutEventHandler(table_BeginRowLayout);
+                   // table.EndCellLayout += new EndCellLayoutEventHandler(table_EndCellLayout);
+
+                    PdfTableLayoutFormat tableLayout2 = new PdfTableLayoutFormat();
+                    tableLayout2.Break = PdfLayoutBreakType.FitElement;
+                    tableLayout2.Layout = PdfLayoutType.Paginate;
+
+
+                    tableLayout2.EndColumnIndex = tableTotales.Columns.Count-1;
+                    
+
+                    PdfLayoutResult result2 = tableTotales.Draw(page, new PointF(420, y), tableLayout2);
+                    y = y + result2.Bounds.Height + 5;
+
+                //    y = y + 5;
+
+
+
+
+
+              /*      page.Canvas.DrawString("Subtotal: ", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 420, y);
                     page.Canvas.DrawString(simboloMonedaSol + " " + String.Format(formatDecimal, cot.montoSubTotal), new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 460, y);
                     y = y + sepLine;
                     page.Canvas.DrawString("IGV 18%: ", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 420, y);
@@ -202,9 +283,16 @@ namespace cotizadorPDF
                     y = y + sepLine;
                     page.Canvas.DrawString("Total: ", new PdfFont(PdfFontFamily.Helvetica, 10f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 420, y);
                     page.Canvas.DrawString(simboloMonedaSol + " " + String.Format(formatDecimal, cot.montoTotal), new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 460, y);
+
+    */
+
+
                 }
 
-                y = y + sepLine * 2;
+
+
+
+              //  y = y + sepLine * 2;
 
                 string[] stringSeparators = new string[] { "\n" };
                 string[] lines = cot.observaciones.Split(stringSeparators, StringSplitOptions.None);
@@ -219,6 +307,14 @@ namespace cotizadorPDF
                 }
                 y = y + sepLine;
 
+                double diasd = cot.fechaVigenciaLimite.Subtract(cot.fecha).TotalDays;
+                int dias = Convert.ToInt32(diasd);
+
+                page.Canvas.DrawString("* Validez de los precios: "+ dias+" días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+            
+                y = y + sepLine;
+
+            
 
                 foreach (string line in lines)
                 {
@@ -260,10 +356,12 @@ namespace cotizadorPDF
                 doc.Close();
                 return cot.cliente.ruc + " " + fechaCotizacion + ".pdf";
             }
-            catch (Exception ee)
+            catch (Exception ex)
             {
-                SampleEventSourceWriter.Log.MessageMethod("Error"+ee.ToString());
-                return ee.ToString();
+                Log log = new Log(ex.ToString(), TipoLog.Error,cot.usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+                return ex.ToString();
             }
         }
 

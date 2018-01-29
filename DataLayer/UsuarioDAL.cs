@@ -31,6 +31,7 @@ namespace DataLayer
                 usuario.nombre_mostrar = Converter.GetString(row, "nombre_mostrar");
                 usuario.anexo_empresa = Converter.GetInt(row, "anexo_empresa");
                 usuario.celular = Converter.GetInt(row, "celular");
+                usuario.esAprobador = Converter.GetBool(row, "es_aprobador");
             }
             return usuario;
         }

@@ -13,5 +13,6 @@ namespace Model
         public Decimal porcentajeDescuento { get; set; }
         public Decimal precio { get; set; }
         public Decimal subTotal { get; set; }
+        public Decimal costo { get; set; }
     }
 }

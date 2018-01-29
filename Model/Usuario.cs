@@ -18,6 +18,7 @@ namespace Model
         public int anexo_empresa { get; set; }
         public int celular { get; set; }
 
+        public bool esAprobador { get; set; }
     }
 }
 

@@ -30,19 +30,34 @@
                     <li>@Html.ActionLink("Cotizador", "Index", "Home")</li>
 
                     @{
-                        var routeValues = new RouteValueDictionary();
-                        routeValues.Add("Name", "Example");
-                        routeValues.Add("UserId", "5");
-                        
-                        var attributes = new Dictionary<string, object>();
-                        attributes.Add("onClick", "return nuevaCotizacion();");
+        var routeValues = new RouteValueDictionary();
+        routeValues.Add("Name", "Example");
+        routeValues.Add("UserId", "5");
+
+        var attributes = new Dictionary<string, object>();
+        attributes.Add("onClick", "return nuevaCotizacion();");
                     }
 
-                    <li>@Html.ActionLink("Nueva Cotización", "New", "Home", routeValues, htmlAttributes: new {  onclick = "return confirm('Al crear una nueva cotización se eliminarán los cambios que no hayan sido guardados. ¿Está seguro de continuar?');" })</li>
+                    <li>@Html.ActionLink("Nueva Cotización", "New", "Home", routeValues, htmlAttributes: new { onclick = "return confirm('Al crear una nueva cotización se eliminarán los cambios que no hayan sido guardados. ¿Está seguro de continuar?');" })</li>
                     <li>@Html.ActionLink("Buscar Cotización", "Search", "Home")</li>
-                    <li>@Html.ActionLink("Buscar Cliente", "Index", "Home")</li>
+
+                    <li>@Html.ActionLink("Cargar Clientes", "LoadClientes", "Home")</li>
+                    <li>@Html.ActionLink("Cargar Productos", "LoadProductos", "Home")</li>
+
+
+                    <!--   <li>
+
+    <a class="dropdown-toggle" data-toggle="dropdown">
+        Presupuestos
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/Budgets">Presupuestos</a></li>
+    </ul>  </li>-->
+
                 </ul>
-                <!-- @Html.Partial("_LoginPartial")-->
+
+               @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
