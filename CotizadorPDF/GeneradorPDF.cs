@@ -33,8 +33,6 @@ namespace cotizadorPDF
         {
             try
             {
-                String formatDecimal = "{0:0.00}";
-                String simboloMonedaSol = "S/";
                 char pad = '0';
                 int cantidadPad = 10;
 
@@ -78,8 +76,21 @@ namespace cotizadorPDF
                 y = y + sepLine * 2;
                 page.Canvas.DrawString("Señores: ", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine;
-                page.Canvas.DrawString(cot.cliente.razonSocial, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
-                y = y + sepLine + 2;
+
+                if (cot.cliente.idCliente != Guid.Empty)
+                {
+                    page.Canvas.DrawString(cot.cliente.razonSocial, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
+                    y = y + sepLine;
+                    page.Canvas.DrawString("RUC: " + cot.cliente.ruc, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
+                    y = y + sepLine + 2;
+                }
+                else
+                {
+                    page.Canvas.DrawString(cot.grupo.nombre, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
+                    y = y + sepLine;
+                }
+
+
                 page.Canvas.DrawString("Ciudad.- " + cot.ciudad.nombre, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine * 2;
                 page.Canvas.DrawString("Atn.- " + cot.contacto, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
@@ -130,9 +141,9 @@ namespace cotizadorPDF
                     String presentacion = det.unidad; //Se muestra la unidad seleccionada y que se encuentra en el detalle
                     String imagen = "";
                     String precioUnitarioAnterior = "";
-                    String precioUnitarioNuevo = simboloMonedaSol + " " + String.Format(formatDecimal, det.precioNeto);
+                    String precioUnitarioNuevo = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.precioNeto);
                     String cantidad = det.cantidad.ToString();
-                    String subtotal = simboloMonedaSol + " " + String.Format(formatDecimal, det.subTotal);
+                    String subtotal = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.subTotal);
 
                     dataTable.Rows.Add(new object[] { codigo, producto, presentacion, imagen,
 
@@ -159,7 +170,7 @@ namespace cotizadorPDF
                 table.Columns[2].StringFormat
                     = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
                 //Imagen
-                table.Columns[3].Width = width1 * 0.12f;
+                table.Columns[3].Width = width1 * 0.15f;
                 table.Columns[3].StringFormat
                     = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
                 //Nuevo Valor Unit
@@ -230,16 +241,16 @@ namespace cotizadorPDF
                     dataTable2.Columns.Add("Descripcion");
                     dataTable2.Columns.Add("monto");
 
-                    String subtotal = "Subtotal: " + simboloMonedaSol + ": ";
-                    String montoSubtotal = String.Format(formatDecimal, cot.montoSubTotal);
+                    String subtotal = "Subtotal: " + Constantes.simboloMonedaSol + ": ";
+                    String montoSubtotal = String.Format(Constantes.decimalFormat, cot.montoSubTotal);
                     dataTable2.Rows.Add(new object[] { subtotal, montoSubtotal });
 
-                    String igv = "IGV 18%: " + simboloMonedaSol + ": ";
-                    String montoIGV = String.Format(formatDecimal, cot.montoIGV);
+                    String igv = "IGV 18%: " + Constantes.simboloMonedaSol + ": ";
+                    String montoIGV = String.Format(Constantes.decimalFormat, cot.montoIGV);
                     dataTable2.Rows.Add(new object[] { igv, montoIGV });
 
-                    String total = "Total: " + simboloMonedaSol + ": ";
-                    String montoTotal = String.Format(formatDecimal, cot.montoTotal);
+                    String total = "Total: " + Constantes.simboloMonedaSol + ": ";
+                    String montoTotal = String.Format(Constantes.decimalFormat, cot.montoTotal);
                     dataTable2.Rows.Add(new object[] { total, montoTotal });
 
                     tableTotales.DataSource = dataTable2;
@@ -274,25 +285,11 @@ namespace cotizadorPDF
 
 
 
-
-              /*      page.Canvas.DrawString("Subtotal: ", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 420, y);
-                    page.Canvas.DrawString(simboloMonedaSol + " " + String.Format(formatDecimal, cot.montoSubTotal), new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 460, y);
-                    y = y + sepLine;
-                    page.Canvas.DrawString("IGV 18%: ", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 420, y);
-                    page.Canvas.DrawString(simboloMonedaSol + " " + String.Format(formatDecimal, cot.montoIGV), new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 460, y);
-                    y = y + sepLine;
-                    page.Canvas.DrawString("Total: ", new PdfFont(PdfFontFamily.Helvetica, 10f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 420, y);
-                    page.Canvas.DrawString(simboloMonedaSol + " " + String.Format(formatDecimal, cot.montoTotal), new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 460, y);
-
-    */
-
-
                 }
 
 
 
-
-              //  y = y + sepLine * 2;
+                
 
                 string[] stringSeparators = new string[] { "\n" };
                 string[] lines = cot.observaciones.Split(stringSeparators, StringSplitOptions.None);
@@ -307,11 +304,18 @@ namespace cotizadorPDF
                 }
                 y = y + sepLine;
 
-                double diasd = cot.fechaVigenciaLimite.Subtract(cot.fecha).TotalDays;
-                int dias = Convert.ToInt32(diasd);
 
-                page.Canvas.DrawString("* Validez de los precios: "+ dias+" días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
-            
+                //0 días
+                if (cot.tipoVigencia == 0)
+                {
+                    page.Canvas.DrawString("* Validez de los precios por " + cot.diasVigencia + " días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                }
+                else //fecha
+                {
+                    page.Canvas.DrawString("* Validez de los precios hasta   " + cot.fechaVigenciaLimite.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                }
+
+
                 y = y + sepLine;
 
             
@@ -330,11 +334,11 @@ namespace cotizadorPDF
                 page.Canvas.DrawString("MP INSTITUCIONAL S.A.C.", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine * 2;
 
-                page.Canvas.DrawString(cot.usuario.nombre_mostrar, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                page.Canvas.DrawString(cot.usuario.nombre, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine;
                 page.Canvas.DrawString(cot.usuario.cargo, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine;
-                page.Canvas.DrawString("Tlf. (1) 2472142 ext. " + cot.usuario.anexo_empresa + " / " + cot.usuario.celular, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                page.Canvas.DrawString(cot.usuario.contacto, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine;
                 page.Canvas.DrawString(cot.usuario.email, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine;
@@ -379,7 +383,7 @@ namespace cotizadorPDF
             using (MemoryStream stream = new MemoryStream(imageData))
             {                
                 PdfImage image = PdfImage.FromStream(stream);
-                args.MinimalHeight = 25f;//   4 + image.PhysicalDimension.Height;
+                args.MinimalHeight = 50f;//   4 + image.PhysicalDimension.Height;
                 dataTable.Rows[args.RowIndex][8] = image;
             }
         }
@@ -398,14 +402,14 @@ namespace cotizadorPDF
                 PdfImage image = dataTable.Rows[args.RowIndex][8] as PdfImage;
                 //   float x = (args.Bounds.Width - image.PhysicalDimension.Width) / 2 + args.Bounds.X;
                 //   float y = (args.Bounds.Height - image.PhysicalDimension.Height) / 2 + args.Bounds.Y;
-                float x = (args.Bounds.Width - 20f) / 2 + args.Bounds.X;
-                float y = (args.Bounds.Height -20f) / 2 + args.Bounds.Y;
+                float x = (args.Bounds.Width - 45f) / 2 + args.Bounds.X;
+                float y = (args.Bounds.Height -45f) / 2 + args.Bounds.Y;
                 byte[] imageData = dataTable.Rows[args.RowIndex][7] as byte[];
                 using (MemoryStream stream = new MemoryStream(imageData))
                 {    
                     image = PdfImage.FromStream(stream);
-                    float width = 20f;
-                    float height = 20f;
+                    float width = 45f;
+                    float height = 45f;
                     args.Graphics.DrawImage(image, x, y, width, height);
                 }
             }

@@ -37,6 +37,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FacturaBL.cs" />
+    <Compile Include="GrupoBL.cs" />
     <Compile Include="LogBL.cs" />
     <Compile Include="TipoCambioBL.cs" />
     <Compile Include="ProductoBL.cs" />

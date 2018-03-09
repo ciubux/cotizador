@@ -1,6 +1,8 @@
 ﻿@{
     ViewBag.Title = "Búsqueda Cotizaciones";
     List<Model.Cotizacion> cotizacionList = ViewBag.cotizacionList;
+    Model.Usuario usuario = ViewBag.usuario;
+    Model.Cotizacion cotizacion = ViewBag.cotizacion;
 }
 
 
@@ -13,7 +15,10 @@
                 <div class="form-group">
                     <label for="numero" class="control-label col-xs-4">Número:</label>
                     <div class="col-xs-8">
+                          @if (ViewBag.numero == 0)
+                        { ViewBag.numero = ""; }
                         <input class="form-control" type="number" value="@ViewBag.numero" min="0" id="numero" name="numero">
+                        <span style="margin-right: 20px; color: red; font-weight: normal " class="has-error">* Si ingresa el número de Cotización, los demás criterios de búsqueda no serán considerados.</span>
                     </div>
                 </div>
             </div>
@@ -25,117 +30,269 @@
                     <div class="col-xs-8">
                         <select class="form-control input-sm" id="idCliente" name="idCliente" required>
                             @if (ViewBag.existeCliente == 1)
-                        {
-                            <option selected value="@ViewBag.idCliente">@ViewBag.cliente</option>
-                    }
-                    else
+                            {
+                                <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <!-- <div class="col-xs-8">
+                    <input class="form-control" type="text" value="@ViewBag.cliente" id="cliente" name="cliente">
+                </div>
+            -->
+
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <!--FECHA-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="fecha" class="control-label col-xs-4">Desde:</label>
+                    <div class="col-xs-8">
+                        <input type="hidden" id="fechatmp" value="@ViewBag.fecha" />
+                        <input class="form-control" type="text" id="fecha" name="fecha">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="fecha" class="control-label col-xs-4">Hasta:</label>
+                    <div class="col-xs-8">
+                        <input type="hidden" id="fechaVigenciatmp" value="@ViewBag.fechaHasta" />
+                        <input class="form-control" type="text" id="fechaVigencia" name="fechaVigencia">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <!--CIUDAD-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="ciudad" class="control-label col-xs-4">Ciudad:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("list", "Ciudad")
+                    </div>
+                </div>
+            </div>
+
+            <!--ESTADO-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="estado" class="control-label col-xs-4">Estado:</label>
+                    <div class="col-xs-8">
+                        <select class="form-control" id="estadoAprobacion" name="estadoAprobacion">
+                            @if (cotizacion.estadoAprobacion == -1)
+                            { <option selected value="-1">Todos</option>
+                            }
+                            else
+                            { <option value="-1">Todos</option> }
+                            @if (cotizacion.estadoAprobacion == 0)
+                            { <option selected value="0">Pendiente Aprobación</option>
+                            }
+                            else
+                            { <option value="0">Pendiente Aprobación</option> }
+                            @if (cotizacion.estadoAprobacion == 1)
+                            { <option selected value="1">Aprobada</option>
+                            }
+                            else
+                            { <option value="1">Aprobada</option> }
+                            
+                            @if (cotizacion.estadoAprobacion == 2)
+                            { <option selected value="2">Rechazada</option>
+                            }
+                            else
+                            { <option value="2">Rechazada</option> }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+            <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+                <button id="btnBusquedaCotizaciones" type="button" class="btn btn-primary  bouton-image searchBouton">Iniciar Búsqueda</button>
+            </div>
+
+            <table id="tablefoottable" class="table" data-editing="false"
+                   data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                   data-editing-allow-add="false"
+                   data-editing-allow-delete="false"
+                   data-editing-allow-edit="false"
+                   data-sorting="true"
+                   data-show-toggle="false"
+                   data-editing-hide-text="Finalizar edición"
+                   data-editing-add-text="Descartar cambios">
+                <thead>
+                    <tr>
+                        <th data-name="idCotizacion" data-visible="false"></th>
+                        <th data-name="codigo" data-visible="true">Número</th>
+                        <th data-name="usuario" data-visible="true">Creado por</th>
+                        <th data-name="fecha" data-sortable="true">Fecha Creación</th>
+                        <th data-name="razonSocial" data-sortable="true" data-breakpoints="xs">Razón Social</th>
+                        <th data-name="ruc" data-sortable="false">RUC</th>
+                        <th data-name="ciudad" data-sortable="false">Ciudad</th>
+                        <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
+                        <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>
+                        <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
+                        <th data-name="estadoAprobacion" data-sortable="true" data-breakpoints="xs">Estado Aprobación</th>
+                        <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Aprobador</th>
+                        <th data-name="motivoRechazo" data-sortable="true" data-breakpoints="xs">Motivo Rechazo</th>
+                        <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cotizacionItem in cotizacionList)
+                {
+                    <tr data-expanded="true">
+                        <td>  @cotizacionItem.idCotizacion</td>
+                        <td>  @cotizacionItem.codigo  </td>
+                        <td>  @cotizacionItem.usuario.nombre  </td>
+                        <td>  @cotizacionItem.fecha </td>
+                        <td>  @cotizacionItem.cliente.razonSocial</td>
+                        <td>  @cotizacionItem.cliente.ruc </td>
+                        <td>  @cotizacionItem.ciudad.nombre  </td>
+                        <td>  @cotizacionItem.montoSubTotal   </td>
+                        <td>  @cotizacionItem.igv  </td>
+                        <td>  @cotizacionItem.montoTotal  </td>
+                        <td>  @cotizacionItem.descripcionEstadoAprobacion  </td>
+                        <td>  @cotizacionItem.usuario_aprobador.nombre  </td>
+                        <td>  @cotizacionItem.motivoRechazo  </td>
+                        <td>
+                            <!--bouton-image searchBouton-->
+
+                            <button type="button" class="@cotizacionItem.codigo btnEditarCotizacion btn btn-primary ">Editar</button>
+
+                            @if (@cotizacionItem.estadoAprobacion == 1 || usuario.esAprobador)
                     {
-                        <option value=""></option>
-
-                                }
-                    </select>
-                </div>
-            </div>
-            <!-- <div class="col-xs-8">
-                <input class="form-control" type="text" value="@ViewBag.cliente" id="cliente" name="cliente">
-            </div>
-        -->
-
-        </div>
-    </div>
-
-
-
-    <div class="row">
-        <!--FECHA-->
-        <div class="col-sm-6 col-lg-5">
-            <div class="form-group">
-                <label for="fecha" class="control-label col-xs-4">Buscar a partir de:</label>
-                <div class="col-xs-8">
-                    <input type="hidden" id="fechatmp" value="@ViewBag.fecha" />
-                    <input class="form-control" type="text" id="fecha" name="fecha">
-                </div>
-            </div>
-        </div>
-        <!--CIUDAD-->
-        <div class="col-sm-6 col-lg-5">
-            <div class="form-group">
-                <label for="ciudad" class="control-label col-xs-4">Ciudad:</label>
-                <div class="col-xs-8">
-                    @Html.Action("list", "Ciudad")
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-
-
-    <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
-        <button id="btnBusquedaCotizaciones" type="button" class="btn btn-primary  bouton-image searchBouton">Iniciar Búsqueda</button>
-    </div>
-
-    <table id="tablefoottable" class="table" data-editing="false"
-           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
-           data-editing-allow-add="false"
-           data-editing-allow-delete="false"
-           data-editing-allow-edit="false"
-           data-sorting="true"
-           data-show-toggle="false"
-           data-editing-hide-text="Finalizar edición"
-           data-editing-add-text="Descartar cambios">
-        <thead>
-            <tr>
-                <th data-name="idCotizacion" data-visible="false"></th>
-                <th data-name="codigo" data-visible="true">Número</th>
-                <th data-name="usuario" data-visible="true">Creado por</th>
-                <th data-name="fecha" data-sortable="true">Fecha Creación</th>
-                <th data-name="razonSocial" data-sortable="true" data-breakpoints="xs">Razón Social</th>
-                <th data-name="ruc" data-sortable="false">RUC</th>
-                <th data-name="ciudad" data-sortable="false">Ciudad</th>
-                <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
-                <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>
-                <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
-                <th data-name="estadoAprobacion" data-sortable="true" data-breakpoints="xs">Estado Aprobación</th>
-                <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var cotizacion in cotizacionList)
-            {
-            <tr data-expanded="true">
-                <td>  @cotizacion.idCotizacion</td>
-                <td>  @cotizacion.codigo  </td>
-                <td>  @cotizacion.usuario.nombre_mostrar  </td>
-                <td>  @cotizacion.fecha </td>
-                <td>  @cotizacion.cliente.razonSocial</td>
-                <td>  @cotizacion.cliente.ruc </td>
-                <td>  @cotizacion.ciudad.nombre  </td>
-                <td>  @cotizacion.montoSubTotal   </td>
-                <td>  @cotizacion.igv  </td>
-                <td>  @cotizacion.montoTotal  </td>
-                <td>  @cotizacion.descripcionEstadoAprobacion  </td>
-                <td>
-                    <!--bouton-image searchBouton-->
-                    @if (@cotizacion.estadoAprobacion == 1)
-                    { <button type="button" class="@cotizacion.codigo btnVerCotizacion btn btn-primary  ">Ver Cotización</button>
-                    }
-                    else
-                    {<button type="button" disabled class="@cotizacion.codigo btnVerCotizacion btn btn-primary  ">Ver Cotización</button>
-                     }
-                    <button type="button" class="@cotizacion.codigo btnEditarCotizacion btn btn-primary ">Editar Cotización</button>
-                    <button type="button" class="@cotizacion.codigo btnReCotizacion btn btn-primary ">Recotizar</button>
-                </td>
-
-            </tr>
+                                <button type="button" class="@cotizacionItem.codigo btnVerCotizacion btn btn-primary  ">Descargar PDF</button>
             }
 
-        </tbody>
-    </table>
+
+                                        @if ((@cotizacionItem.estadoAprobacion == 0) && usuario.esAprobador)
+                    {
+                                <button type="button" class="@cotizacionItem.codigo btnAprobarCotizacion btn btn-primary"
+                                        data-toggle='modal' data-codigo="@cotizacionItem.codigo" data-monto="@cotizacionItem.montoTotal" data-target='#modalAprobacion'>
+                                    Aprobar
+                                </button>
+            }
+
+                            @if (@cotizacionItem.estadoAprobacion == 1)
+        {
+                    <button type="button" class="@cotizacionItem.codigo btnReCotizacion btn btn-primary ">Recotizar</button>
+}
+
+                        </td>
+
+                    </tr>
+            }
+
+                </tbody>
+            </table>
 
 
     </form>
 </div>
 
 
+<div class="modal fade" id="modalAprobacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCalculadoraTitle"><b>Aprobar / Rechazar Cotización</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <input type="hidden" id="idProducto" value="" />
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-5">
+                            <!--NUMERO-->
+                            <div class="form-group">
+                                <label for="nuevoPrecio" class="control-label col-xs-3">Número:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="number" disabled id="numeroAprobacion" name="numeroAprobacion">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-7">
+
+                            <!--TOTAL APROBACIÓN-->
+                            <div class="form-group">
+                                <label for="nuevoDescuento" class="control-label col-xs-3">Total:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="number" disabled id="totalAprobacion" name="totalAprobacion">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-5">
+                            <!--Accion-->
+                            <div class="form-group">
+                                <label for="accion" class="control-label col-xs-3">Acción:</label>
+                                <div class="col-xs-9">
+                                    <select class="form-control" id="accion" name="accion">
+                                        <option value="1">Aprobar</option>
+                                        <option value="2">Rechazar</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-7" id="motivoRechazoDiv">
+
+                            <!--MOTIVO RECHAZO-->
+                            <div class="form-group">
+                                <label for="motivoRechazo" class="control-label col-xs-3">Motivo Rechazo:</label>
+                                
+                                <div class="col-xs-9">
+                                    <textarea class="form-control" rows="5" id="motivoRechazo" name="motivoRechazo"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelAprobacionRechazo" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAceptarAprobacionRechazo" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>

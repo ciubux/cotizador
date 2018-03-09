@@ -26,7 +26,19 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaVigenciaLimite", cotizacion.fechaVigenciaLimite);
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIgv?1:0).ToString()));
             InputParameterAdd.SmallInt(objCommand, "consideraCantidades", short.Parse((cotizacion.considerarCantidades ? 1 : 0).ToString()));
-            InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
+
+            //Si no se cuenta con idCliente entonces se registra el grupo
+            if (cotizacion.cliente.idCliente == Guid.Empty)
+            {
+                InputParameterAdd.Guid(objCommand, "idCliente", null);
+                InputParameterAdd.Guid(objCommand, "idGrupo", cotizacion.grupo.idGrupo);
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
+                InputParameterAdd.Guid(objCommand, "idGrupo", null);
+            }
+
             InputParameterAdd.Guid(objCommand, "idCiudad", cotizacion.ciudad.idCiudad);
             //porcentajeFlete
             InputParameterAdd.Decimal(objCommand, "porcentajeFlete", cotizacion.flete);
@@ -37,6 +49,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto);
             InputParameterAdd.SmallInt(objCommand, "estadoAprobacion", cotizacion.estadoAprobacion);
             InputParameterAdd.SmallInt(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
+            InputParameterAdd.Int(objCommand, "tipoVigencia", cotizacion.tipoVigencia);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "codigo");
             ExecuteNonQuery(objCommand);
@@ -63,7 +76,20 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaVigenciaLimite", cotizacion.fechaVigenciaLimite);
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIgv ? 1 : 0).ToString()));
             InputParameterAdd.SmallInt(objCommand, "consideraCantidades", short.Parse((cotizacion.considerarCantidades ? 1 : 0).ToString()));
-            InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
+
+            //Si no se cuenta con idCliente entonces se registra el grupo
+            if (cotizacion.cliente.idCliente == Guid.Empty)
+            {
+                InputParameterAdd.Guid(objCommand, "idCliente", null);
+                InputParameterAdd.Guid(objCommand, "idGrupo", cotizacion.grupo.idGrupo);
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
+                InputParameterAdd.Guid(objCommand, "idGrupo", null);
+            }
+
+
             InputParameterAdd.Guid(objCommand, "idCiudad", cotizacion.ciudad.idCiudad);
             //porcentajeFlete
             InputParameterAdd.Decimal(objCommand, "porcentajeFlete", cotizacion.flete);
@@ -75,6 +101,8 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.SmallInt(objCommand, "estadoAprobacion", cotizacion.estadoAprobacion);
             InputParameterAdd.SmallInt(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
+            InputParameterAdd.Int(objCommand, "tipoVigencia", cotizacion.tipoVigencia);
+
             ExecuteNonQuery(objCommand);
 
             foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
@@ -103,11 +131,25 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precioNeto", cotizacionDetalle.precioNeto);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", cotizacionDetalle.esPrecioAlternativo?1:0);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacionDetalle.usuario.idUsuario);
-            
+            InputParameterAdd.Decimal(objCommand, "flete", cotizacionDetalle.flete);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             ExecuteNonQuery(objCommand);
 
             cotizacionDetalle.idCotizacionDetalle = (Guid)objCommand.Parameters["@newId"].Value;
+        }
+
+        public Cotizacion aprobarCotizacion(Cotizacion cotizacion)
+        {
+            var objCommand = GetSqlCommand("pu_aprobarCotizacion");
+
+            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
+            InputParameterAdd.SmallInt(objCommand, "estadoAprobacion", cotizacion.estadoAprobacion);
+            InputParameterAdd.Varchar(objCommand, "motivoRechazo", cotizacion.motivoRechazo);
+
+            ExecuteNonQuery(objCommand);
+            return cotizacion;
+
         }
 
         public Cotizacion SelectCotizacion(Cotizacion cotizacion)
@@ -132,28 +174,47 @@ namespace DataLayer
                 cotizacion.igv = Converter.GetDecimal(row, "igv");
                 cotizacion.montoTotal = Converter.GetDecimal(row, "total");
                 cotizacion.estadoAprobacion = Converter.GetShort(row, "estado_aprobacion");
-
+                cotizacion.tipoVigencia = Converter.GetInt(row, "tipo_vigencia");
                 ///Mover "{0:0.00}" a clase de constantes
-                cotizacion.montoSubTotal = Decimal.Parse(String.Format("{0:0.00}", cotizacion.montoTotal / (1+cotizacion.igv)));
+                cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.montoTotal / (1+cotizacion.igv)));
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
 
                 cotizacion.observaciones = Converter.GetString(row, "observaciones");
-                cotizacion.contacto = Converter.GetString(row, "contacto");
-                cotizacion.cliente = new Cliente();
-                cotizacion.cliente.codigo = Converter.GetString(row, "codigo");
-                cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
-                cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
+
+                //Si el cliente es Null
+                if (row["id_cliente"] == DBNull.Value)
+                {
+                    cotizacion.cliente = new Cliente();
+
+                    cotizacion.grupo = new Grupo();
+                    cotizacion.grupo.codigo = Converter.GetString(row, "codigo_grupo");
+                    cotizacion.grupo.idGrupo = Converter.GetGuid(row, "id_grupo");
+                    cotizacion.grupo.nombre = Converter.GetString(row, "nombre_grupo");
+                }
+                else
+                {
+                    cotizacion.cliente = new Cliente();
+                    cotizacion.cliente.codigo = Converter.GetString(row, "codigo");
+                    cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                    cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                    cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
+
+                    cotizacion.grupo = new Grupo();
+                }
+
+
+
+
+                cotizacion.contacto = Converter.GetString(row, "contacto");           
 
                 cotizacion.ciudad = new Ciudad();
                 cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 cotizacion.ciudad.nombre = Converter.GetString(row, "nombre");
 
                 cotizacion.usuario = new Usuario();
-                cotizacion.usuario.nombre_mostrar = Converter.GetString(row, "nombre_mostrar");
+                cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 cotizacion.usuario.cargo = Converter.GetString(row, "cargo");
-                cotizacion.usuario.anexo_empresa = Converter.GetInt(row, "anexo_empresa");
-                cotizacion.usuario.celular = Converter.GetInt(row, "celular");
+                cotizacion.usuario.contacto = Converter.GetString(row, "contacto_usuario");
                 cotizacion.usuario.email = Converter.GetString(row, "email");
                 cotizacion.mostrarCodigoProveedor = Converter.GetBool(row, "mostrar_codigo_proveedor");
 
@@ -173,6 +234,9 @@ namespace DataLayer
                 cotizacionDetalle.cantidad = Converter.GetInt(row, "cantidad");
                 cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+                cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
+
+
 
                 if (cotizacion.esRecotizacion)
                 {
@@ -240,6 +304,8 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "id_cliente", cotizacion.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "id_ciudad", cotizacion.ciudad.idCiudad);
             InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
+            InputParameterAdd.DateTime(objCommand, "fechaHasta", cotizacion.fechaHasta);
+            InputParameterAdd.SmallInt(objCommand, "estadoAprobacion", cotizacion.estadoAprobacion);
             DataTable dataTable = Execute(objCommand);
 
             List<Cotizacion> cotizacionList = new List<Cotizacion>();
@@ -255,9 +321,10 @@ namespace DataLayer
                 cotizacion.flete = Converter.GetDecimal(row, "porcentaje_flete");
                 cotizacion.igv = Converter.GetDecimal(row, "igv");
                 cotizacion.montoTotal = Converter.GetDecimal(row, "total");
+                cotizacion.motivoRechazo = Converter.GetString(row, "motivo_rechazo");
 
                 ///Mover "{0:0.00}" a clase de constantes
-                cotizacion.montoSubTotal = Decimal.Parse(String.Format("{0:0.00}", cotizacion.montoTotal / (1 + cotizacion.igv)));
+                cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.montoTotal / (1 + cotizacion.igv)));
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
                 cotizacion.estadoAprobacion = Converter.GetShort(row, "estado_aprobacion");
 
@@ -270,7 +337,10 @@ namespace DataLayer
                 cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
 
                 cotizacion.usuario = new Usuario();
-                cotizacion.usuario.nombre_mostrar = Converter.GetString(row, "nombre_mostrar");
+                cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+
+                cotizacion.usuario_aprobador = new Usuario();
+                cotizacion.usuario_aprobador.nombre = Converter.GetString(row, "nombre_usuario_aprobador");
 
                 cotizacion.ciudad = new Ciudad();
                 cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");

@@ -31,6 +31,20 @@ namespace BusinessLayer
             }
         }
 
+        public void truncateClienteStaging()
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                clienteDAL.truncateClienteStaging();
+            }
+        }
 
+        public void mergeClienteStaging()
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                clienteDAL.mergeClienteStaging();
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -71,7 +72,13 @@ namespace Framework.DAL
 
 
                 pCommand.ExecuteNonQuery();
+
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
             finally
             {
             }

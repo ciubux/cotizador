@@ -1,6 +1,15 @@
 
+
+
+
 jQuery(function ($) {
 
+
+
+    // A $( document ).ready() block.
+    $(document).ready(function () {
+        cambiarTipoVigencia();
+    });
     
 
     $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
@@ -16,37 +25,44 @@ jQuery(function ($) {
             loadingImg: "Content/chosen/images/loading.gif"
         }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
 
-
-
-    /*
-    if ($('.chosen-container').length > 0) {
-        $('.chosen-container').on('touchstart', function (e) {
-            e.stopPropagation(); e.preventDefault();
-            // Trigger the mousedown event.
-            $(this).trigger('mousedown');
-        });
-    }
-
-    */
-
-  
-
     
 
     $("#idCliente").change(function () {
         $("#contacto").val("");
-        var idCliente = $(this).val();
-        $.ajax({
-            url: "/Home/GetCliente",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idCliente: idCliente
-            },
-            success: function (cliente) {
-                $("#contacto").val(cliente.contacto);                
-            }
-        });
+        var idClienteGrupo = $(this).val();
+
+        var tipoCliente = idClienteGrupo.substr(0,1);
+
+        idClienteGrupo = idClienteGrupo.substr(1);
+
+        if (tipoCliente == "c") {
+            $.ajax({
+                url: "/Home/GetCliente",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idCliente: idClienteGrupo
+                },
+                success: function (cliente) {
+                    $("#contacto").val(cliente.contacto);
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                url: "/Home/GetGrupo",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idGrupo: idClienteGrupo
+                },
+                success: function (grupo) {
+                    $("#contacto").val(grupo.contacto);
+                }
+            });
+
+        }
     });
     
 
@@ -120,13 +136,6 @@ jQuery(function ($) {
 
         $("#resultadoAgregarProducto").html("");
 
-        if (Number($("#flete").val()) > 0) {
-            $("#mensajeFlete").text("El Precio Lista tiene un incremento de " + $("#flete").val() + " % por flete.");
-        }
-        else {
-            $("#mensajeFlete").text("");
-        }
-        
 
 
 
@@ -213,21 +222,8 @@ jQuery(function ($) {
     var fechaVigencia = $("#fechaVigenciatmp").val();
     $("#fechaVigencia").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaVigencia);
 
- //   $("#producto").chosen({ placeholder_text_single: "Buscar producto", no_results_text: "No se encontró Producto" });
-/*
-    $("#producto").ajaxChosen({
-        dataType: "json",
-        type: "GET",
-        minTermLength: 5,
-        afterTypeDelay: 300,
-        cache: false,
-        url: "/Home/GetProductos"
-    }, {
-            loadingImg: "Content/chosen/images/loading.gif"
-        }, { placeholder_text_single: "Buscar producto", no_results_text: "No se encontró Producto" });
-
-    */
-
+    var fechaVigenciaInicio = $("#fechaVigenciaIniciotmp").val();
+    $("#fechaVigenciaInicio").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaVigenciaInicio);
 
 
     $("#producto").change(function () {
@@ -261,13 +257,25 @@ jQuery(function ($) {
                 $('#costoSinIGV').val(producto.costoSinIGV);
                 $('#costoAlternativoSinIGV').val(producto.costoAlternativoSinIGV);
 
-
+                $('#fleteDetalle').val(producto.fleteDetalle);
+                //$('#precioUnitario').val(producto.precioUnitario);
+             
                 $("#porcentajeDescuento").val(Number(0).toFixed(4));
                 $("#cantidad").val(1);
-                calcularSubtotalProducto();
                 activarBtnAddProduct();
+                calcularSubtotalProducto();
+                
             }
         });
+    });
+
+
+    $("#fleteDetalle").change(function () {
+
+        var precioUnitario = Number($('#precio').val()) + Number($('#fleteDetalle').val());
+        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimales));
+        calcularSubtotalProducto();
+
     });
 
 
@@ -291,20 +299,37 @@ jQuery(function ($) {
             costoLista = Number($("#costoAlternativoSinIGV").val());
         }
 
+        //EL PRECIO LISTA NO DEBE INCLUIR EL FLETE
+        //precioLista = precioLista + (precioLista * Number($("#flete").val()) / 100);
+
         if ($("input[name=igv]:checked").val() == 1)
         { 
             precioLista = (precioLista + (precioLista * IGV)).toFixed(cantidadDecimales);
             costoLista = (costoLista + (costoLista * IGV)).toFixed(cantidadDecimales);
         }
 
-
-
-
         $("#precioLista").val(precioLista);
         $("#costoLista").val(costoLista);
 
 
         calcularSubtotalProducto();
+
+        var flete = Number($("#flete").val());
+        if (flete > 0) {
+            alert("Tener en cuenta que al cambiar de unidad se recalcula el monto del flete.")
+
+            var fleteDetalle = costoLista * flete /100  ;
+            $("#fleteDetalle").val(fleteDetalle.toFixed(cantidadDecimales)); 
+        }
+
+
+
+     
+
+
+
+       
+        
     });
 
 
@@ -382,12 +407,15 @@ jQuery(function ($) {
         precio = precio.toFixed(cantidadDecimales);
 
 
+        var precioUnitario = Number(precio) + Number($('#fleteDetalle').val());
+        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimales));
+
         if (considerarCantidades == "1") {
             $("#cantidadiv").show();
             $('#subtotaldiv').show();
             var cantidad = parseInt($("#cantidad").val());
-            //se calcula el subtotal
-            var subTotal = precio * cantidad;
+            //se calcula el subtotal con el precioUnitario que ya incluye el flete
+            var subTotal = precioUnitario * cantidad;
             $("#subtotal").val(subTotal.toFixed(cantidadDecimales));
 
         }
@@ -399,8 +427,10 @@ jQuery(function ($) {
         }
         $("#precio").val(precio);
 
+       
+
         //Se calcula margen
-        margen = 1 - (Number($("#costoLista").val()) / Number(precio));
+        margen = (1 - (Number($("#costoLista").val()) / Number(precio)))*100;
         $("#margen").val(margen.toFixed(cantidadDecimales)); 
 
     };
@@ -415,7 +445,10 @@ jQuery(function ($) {
         if (modalAgregarProductoIsShown) {
             $("#porcentajeDescuento").val($("#nuevoDescuento").val());
             //Revisar si se puede comentar
+
             $("#nuevoPrecio").val($("#precio").val());
+
+
             calcularSubtotalProducto();
             
         }
@@ -508,11 +541,22 @@ jQuery(function ($) {
             return false;
         }
 
-        if (Number($("#montoSubTotal").html()) == 0) {
+     /*   if (Number($("#montoSubTotal").html()) == 0) {
+            alert("Debe ingresar el detalle de la cotización.");
+            return false;
+        }*/
+
+
+        var contador = 0;
+        var $j_object = $("td.detcantidad");
+        $.each($j_object, function (key, value) {
+            contador++;
+        });
+
+        if (contador == 0) {
             alert("Debe ingresar el detalle de la cotización.");
             return false;
         }
-
         
         $.ajax({
             url: "/Home/grabarCotizacion",
@@ -522,18 +566,31 @@ jQuery(function ($) {
             error: function (detalle) { alert("Se generó un error al intentar crear/actualizar la cotización."); },
             success: function (resultado) {
                 $("#numero").val(resultado.codigo);
-                $("#grabarCotizacion").text('Actualizar Cotización');
+                
                 if (resultado.estadoAprobacion == 1) {
                     $("#generarPDF").removeAttr('disabled');
-                    alert("La cotización fue creada/actualizada correctamente.");
+                    if ($("#grabarCotizacion").text() == "Generar Cotización") {
+                        alert("La cotización número " + resultado.codigo+" fue creada correctamente.");
+                    }
+                    else {
+                        alert("La cotización número " + resultado.codigo + " fue actualizada correctamente.");
+                    }
+                    $("#generarPDF").click();
                 }
                 else
                 {
                     $("#generarPDF").attr('disabled', 'disabled');
-                    alert("La cotización fue creada/actualizada correctamente, sin embargo requiere APROBACIÓN.");
+                    if ($("#grabarCotizacion").text() == "Generar Cotización") {
+                        alert("La cotización número " + resultado.codigo +" fue creada correctamente, sin embargo requiere APROBACIÓN.");
+                    }
+                    else {
+                        alert("La cotización número " + resultado.codigo +" fue actualizada correctamente, sin embargo requiere APROBACIÓN.");
+                    }
+                   
+                   
                 }
-
-                //window.location 
+                $("#grabarCotizacion").text('Actualizar Cotización');
+               
             }
         });
     });
@@ -558,7 +615,9 @@ jQuery(function ($) {
             type: 'POST',
             error: function (detalle) { alert("Ocurrió un problema al descargar la cotización N° " + codigo+" en formato PDF.");},
             success: function (fileName) {
-                window.location = '/Home/DownLoadFile?fileName=' + fileName;
+                //Se descarga el PDF y luego se limpia el formulario
+                window.open('/Home/DownLoadFile?fileName=' + fileName);
+                window.location = '/Home/New';
             }
         });
     });
@@ -611,10 +670,14 @@ jQuery(function ($) {
             type: 'POST',
             error: function (detalle) { alert("Ocurrió un problema al descargar la cotización en formato PDF."); },
             success: function (fileName) {
+                
                 window.location = '/Home/DownLoadFile?fileName=' + fileName;
             }
         });
     });
+
+
+ 
 
 
     
@@ -776,6 +839,48 @@ jQuery(function ($) {
         });
     });
 
+
+    $("#tipoVigencia").change(function () {
+        var tipoVigencia = $("#tipoVigencia").val();
+        $.ajax({
+            url: "/Home/updateTipoVigencia",
+            type: 'POST',
+            data: {
+                tipoVigencia: tipoVigencia
+            },
+            success: function () {
+                cambiarTipoVigencia();
+            }
+        });
+       
+    });
+
+    $("#diasVigencia").change(function () {
+        var diasVigencia = $("#diasVigencia").val();
+        $.ajax({
+            url: "/Home/updateDiasVigencia",
+            type: 'POST',
+            data: {
+                diasVigencia: diasVigencia
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#fechaVigenciaInicio").change(function () {
+        var fechaVigenciaInicio = $("#fechaVigenciaInicio").val();
+        $.ajax({
+            url: "/Home/updateFechaVigenciaInicio",
+            type: 'POST',
+            data: {
+                fechaVigenciaInicio: fechaVigenciaInicio
+            },
+            success: function () {
+            }
+        });
+    });
+
     $("#fechaVigencia").change(function () {
         var fechaVigencia = $("#fechaVigencia").val();
         $.ajax({
@@ -785,8 +890,56 @@ jQuery(function ($) {
                 fechaVigencia: fechaVigencia
             },
             success: function () {
+            }
+        });
+    });
 
 
+   
+    
+
+
+    function cambiarTipoVigencia()
+    {
+        var tipoVigencia = $('#tipoVigencia').val();
+
+        if (tipoVigencia == "0")
+        {
+            $('#diasVigenciadiv').show();
+            $('#fechaVigenciadiv').hide();
+        }
+        else
+        {
+            $('#diasVigenciadiv').hide();
+            $('#fechaVigenciadiv').show();
+        }
+    }
+
+    $("#mostrarCosto").change(function () {
+        var mostrarCosto = $('#mostrarCosto').prop('checked') ;
+        $.ajax({
+            url: "/Home/updateMostrarCosto",
+            type: 'POST',
+            data: {
+                mostrarCosto: mostrarCosto
+            },
+            success: function () {
+                location.reload();
+            }
+        });
+    });
+
+
+
+    $("#considerarDescontinuados").change(function () {
+        var considerarDescontinuados = $('#considerarDescontinuados').prop('checked');
+        $.ajax({
+            url: "/Home/updateConsiderarDescontinuados",
+            type: 'POST',
+            data: {
+                considerarDescontinuados: considerarDescontinuados
+            },
+            success: function () {
             }
         });
     });
@@ -804,7 +957,7 @@ jQuery(function ($) {
         var subtotal = $("#subtotal").val();
         var incluidoIGV = $("input[name=igv]:checked").val();
         var proveedor = $("#proveedor").val();
-
+        var flete = $("#fleteDetalle").val();
 
         var costo = $("#costoLista").val();
         
@@ -819,6 +972,7 @@ jQuery(function ($) {
                 precio: precio,
                 costo: costo,
                 esPrecioAlternativo: esPrecioAlternativo,
+                flete: flete,
                 subtotal: subtotal              
             },
             success: function (detalle) {
@@ -836,7 +990,7 @@ jQuery(function ($) {
                 $(".table tbody").append('<tr data-expanded="true">' +
                     '<td>' + detalle.idProducto + '</td>' +
                     '<td>' + esPrecioAlternativo + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detcostoLista">' + costoLista + '</td>' +
+                    
                     '<td>' + proveedor + '</td>' +
                     '<td>' + detalle.codigoProducto + '</td>' +
                     '<td>' + detalle.nombreProducto + '</td>' +
@@ -844,12 +998,16 @@ jQuery(function ($) {
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
                     '<td class="' + detalle.idProducto + ' detprecioLista" style="text-align:right">' + precioLista + '</td>' +
                     '<td class="' + detalle.idProducto + ' detporcentajedescuento" style="text-align:right">' + porcentajeDescuento.toFixed(4) + ' %</td>' +
+                    '<td class="' + detalle.idProducto + ' detporcentajedescuentoMostrar" style="text-align:right">' + porcentajeDescuento.toFixed(2) + ' %</td>' +
                     '<td class="' + detalle.idProducto + ' detprecio" style="text-align:right">' + precio + '</td>' +
+                    '<td class="' + detalle.idProducto + ' detcostoLista">' + costoLista + '</td>' +
                     '<td class="' + detalle.idProducto + ' detmargen" style="text-align:right">' + detalle.margen + ' %</td>' +
-                    '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
+
+                    '<td class="' + detalle.idProducto + ' detflete" style="text-align:right">' + flete + '</td>' +
+                    '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>' +
+                      '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
                     '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
                     esRecotizacion+
-                    
 
                     '<td class="' + detalle.idProducto + ' detordenamiento"></td>'+
                     '</tr > ');
@@ -860,7 +1018,7 @@ jQuery(function ($) {
 
                     $('#montoIGV').html(detalle.igv);
                     $('#montoSubTotal').html(detalle.subTotal);
-                    var flete = Number($("#flete").val());
+                    ///var flete = Number($("#flete").val());
                     $('#montoTotal').html(detalle.total);
                     $("#total").val(detalle.total);
                     var total = Number($("#total").val())
@@ -1122,11 +1280,20 @@ jQuery(function ($) {
             var arrId = value.getAttribute("class").split(" ");
             var porcentajedescuento = value.innerText;
             porcentajedescuento = porcentajedescuento.replace("%", "").trim();
-
-        //    value.innerHTML = "<div class='form-group'  style='width: 150px'  ><div class='col-xs-8'><input class='" + arrId[0] + " detinporcentajedescuento form-control' value='" + porcentajedescuento + "' type='number'/></div><div class='col-xs-4'> <button type='button' class='" + arrId[0] + " btnCalcularDescuento btn btn-primary bouton-image monBouton' data-toggle='modal' data-target='#modalCalculadora' ></button ></div></div>";
-            value.innerHTML = "<div style='width: 150px' ><div style='float:left' ><input style='width: 100px' class='" + arrId[0] + " detinporcentajedescuento form-control' value='" + porcentajedescuento + "' type='number'/></div><div > <button type='button' class='" + arrId[0] + " btnCalcularDescuento btn btn-primary bouton-image monBouton' data-toggle='modal' data-target='#modalCalculadora' ></button ></div></div>";
+            $(".detporcentajedescuentoMostrar." + arrId[0]).html("<div style='width: 150px' ><div style='float:left' ><input style='width: 100px' class='" + arrId[0] + " detinporcentajedescuento form-control' value='" + porcentajedescuento + "' type='number'/></div><div > <button type='button' class='" + arrId[0] + " btnCalcularDescuento btn btn-primary bouton-image monBouton' data-toggle='modal' data-target='#modalCalculadora' ></button ></div></div>");
 
         });
+
+
+        var $j_objectFlete = $("td.detflete");
+        $.each($j_objectFlete, function (key, value) {
+
+            var arrId = value.getAttribute("class").split(" ");
+            var flete = value.innerText;
+            value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detinflete form-control' value='" + flete + "' type='number'/>";
+        });
+
+
 
     });
 
@@ -1167,15 +1334,14 @@ jQuery(function ($) {
             $("." + arrId[0] + ".detporcentajedescuento").text(porcentajeDescuento + " %");
 
             var margen = $("." + arrId[0] + ".detmargen").text().replace("%", "").trim();
-
             var precio = $("." + arrId[0] + ".detprecio").text();
-            var subtotal = $("." + arrId[0] + ".detsubtotal").text();
-
+          //  var subtotal = $("." + arrId[0] + ".detsubtotal").text();
+            var flete = $("." + arrId[0] + ".detinflete").val();
 
             var costo = $("." + arrId[0] + ".detcostoLista").text();
 
 
-            json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "subTotal":"' + subtotal + '",  "costo":"' + costo+'"},' 
+            json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo+'"},' 
         });
         json = json.substr(0, json.length - 1) + "]";
 
@@ -1221,36 +1387,48 @@ jQuery(function ($) {
         calcularSubtotalGrilla(idproducto);
     });
 
+
+    /*Evento que se dispara cuando se modifica un control de cantidad de la grilla*/
+    $(document).on('change', "input.detinflete", function () {
+        var idproducto = event.target.getAttribute("class").split(" ")[0];
+        calcularSubtotalGrilla(idproducto);
+    });
+
     
 
     function calcularSubtotalGrilla(idproducto)
     {
         //Se obtiene el porcentaje descuento 
         var porcentajeDescuento = Number($("." + idproducto + ".detinporcentajedescuento").val());
+        //Se obtiene el flete
+        var flete = Number($("." + idproducto + ".detinflete").val());
         //Se obtiene el precio lista
         var precioLista = Number($("." + idproducto + ".detprecioLista").html());
         //Se calculo el precio con descuento 
-        var precio = (precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadDecimales);
+        var precio = Number((precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadDecimales));
         //Se asigna el precio calculculado en la columna precio
         $("." + idproducto + ".detprecio").html(precio);
-        //se obtiene la cantidad el subtotal
+        //se obtiene la cantidad
         var cantidad = Number($("." + idproducto + ".detincantidad").val());
+        //Se define el precio Unitario 
+        var precioUnitario = flete + precio
+        $("." + idproducto + ".detprecioUnitario").html(precioUnitario.toFixed(cantidadDecimales));
         //Se calcula el subtotal
-        var subTotal = precio * cantidad;
+        var subTotal = precioUnitario * cantidad;
         //Se asigna el subtotal 
         $("." + idproducto + ".detsubtotal").html(subTotal.toFixed(cantidadDecimales));
         //Se calcula el margen
         var costo = Number($("." + idproducto + ".detcostoLista").html());
-        var margen = 1 - (Number(costo) / Number(precio));
+        var margen = (1 - (Number(costo) / Number(precio)))*100;
         //Se asigna el margen 
         $("." + idproducto + ".detmargen").text(margen.toFixed(1)+ " %");
 
         var precioNetoAnterior = Number($("." + idproducto + ".detprecioNetoAnterior").html());        
-        var varprecioNetoAnterior = precio / precioNetoAnterior - 1;
+        var varprecioNetoAnterior = (precio / precioNetoAnterior - 1)*100;
         $("." + idproducto + ".detvarprecioNetoAnterior").text(varprecioNetoAnterior.toFixed(1));
 
         var costoAnterior = Number($("." + idproducto + ".detcostoAnterior").text());       
-        var varcosto = costo / costoAnterior - 1;
+        var varcosto = (costo / costoAnterior - 1)*100;
         $("." + idproducto + ".detvarCosto").text(varcosto.toFixed(1) + " %");
 
 
@@ -1263,12 +1441,10 @@ jQuery(function ($) {
         var total = 0;
        
         $.each($j_object, function (key, value) {
-
             var arrId = value.getAttribute("class").split(" ");
-
-            var precio = Number($("." + arrId[0] + ".detprecio").text());
+            var precioUnitario = Number($("." + arrId[0] + ".detprecioUnitario").text());
             var cantidad = Number($("." + arrId[0] + ".detincantidad").val());
-            subTotal = subTotal + Number(Number((precio * cantidad)).toFixed(cantidadDecimales));
+            subTotal = subTotal + Number(Number((precioUnitario * cantidad)).toFixed(cantidadDecimales));
         });
 
         
@@ -1312,7 +1488,9 @@ jQuery(function ($) {
         var idCiudad = $("#idCiudad").val();
         var idCliente = $("#idCliente").val().trim();
         var fecha = $("#fecha").val();
+        var fechaHasta = $("#fechaVigencia").val();
         var numero = $("#numero").val();
+        var estadoAprobacion = $("#estadoAprobacion").val();
 
         $.ajax({
             url: "/Home/SearchCotizaciones",
@@ -1322,7 +1500,9 @@ jQuery(function ($) {
                 idCiudad: idCiudad,
                 idCliente: idCliente,
                 fecha: fecha,
-                numero: numero
+                fechaHasta: fechaHasta,
+                numero: numero,
+                estadoAprobacion: estadoAprobacion
             },
             success: function (resultado) {
 
@@ -1336,9 +1516,78 @@ jQuery(function ($) {
     });
 
   
+    $('#modalAprobacion').on('shown.bs.modal', function (e) {
+
+        var $trigger = $(e.relatedTarget);
+        var codigo = $trigger.data('codigo');
+        var montoTotal = $trigger.data('monto');
+
+        $("#numeroAprobacion").val(codigo);
+        $("#totalAprobacion").val(montoTotal);
+
+        mostrarMotivoRechazoDiv();
+    });
 
 
+    $("#accion").change(function () {
 
+        mostrarMotivoRechazoDiv();
+
+    });
+
+    function mostrarMotivoRechazoDiv() {
+
+        if ($("#accion").val() == "1") {
+            $("#motivoRechazoDiv").hide();
+            $("#btnAceptarAprobacionRechazo").text("Aprobar");
+        }
+        else {
+            $("#motivoRechazoDiv").show();
+            $("#btnAceptarAprobacionRechazo").text("Rechazar");
+        }
+
+    }
+
+
+    $("#btnAceptarAprobacionRechazo").click(function () {
+
+        var motivoRechazo = $("#motivoRechazo").val();
+        var codigo = $("#numeroAprobacion").val();
+        var accion = $("#accion").val();
+
+        if (accion == "2") {
+            if (motivoRechazo.trim() == "") {
+                alert("Debe ingresar Motivo de Rechazo.");
+                return false;
+            }
+        }
+
+        
+
+        
+        
+
+
+        $.ajax({
+            url: "/Home/aprobarCotizacion",
+            data: {
+                codigo: codigo,
+                accion: accion,
+                motivoRechazo: motivoRechazo
+            },
+            type: 'POST',
+            error: function () { alert("Ocurrió un problema al intentar aprobar la cotización."); },
+            success: function () {
+                if (accion == "1") {
+                    alert("La cotización se aprobó correctamente.");
+                }
+                else {
+                    alert("La cotización se rechazó correctamente.");
+                }
+                location.reload();
+            }
+        });
+    });
 
 
 });

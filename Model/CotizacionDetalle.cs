@@ -21,12 +21,19 @@ namespace Model
             set { _porcentajeDescuento = value; }
         }
 
+        public Decimal porcentajeDescuentoMostrar
+        {
+            get
+            {
+                return Decimal.Parse(String.Format(Constantes.decimalFormat, _porcentajeDescuento));
+            }
+        }
 
 
         public String unidad { get; set; }
         public Decimal subTotal { get
             {
-                return this.cantidad * this.precioNeto;
+                return this.cantidad * this.precioUnitario;
             } }      
         public Producto producto { get; set; }
 
@@ -77,7 +84,7 @@ namespace Model
         public Decimal margen {
 
             get {
-                return 1 - Decimal.Parse(String.Format(Constantes.unDecimalFormat, costoLista / precioNeto));
+                return Decimal.Parse(String.Format(Constantes.unDecimalFormat, (1 - costoLista / precioNeto)*100));
 
             } }
 
@@ -100,7 +107,7 @@ namespace Model
 
 
                 if (precioNetoAnterior != 0)
-                    _variacionPrecioAnterior = this.precioNeto / this.precioNetoAnterior - 1;
+                    _variacionPrecioAnterior = (this.precioNeto / this.precioNetoAnterior - 1)*100;
                 else
                     _variacionPrecioAnterior = 0;
 
@@ -117,12 +124,22 @@ namespace Model
             get {
 
                 if (precioNetoAnterior != 0)
-                    _variacionCosto = this.costoLista / this.costoAnterior - 1;
+                    _variacionCosto = (this.costoLista / this.costoAnterior - 1)*100;
                 else
                     _variacionCosto = 0;
 
                 return Decimal.Parse(String.Format(Constantes.unDecimalFormat, _variacionCosto)); }
             
+        }
+
+        public Decimal flete
+        {
+            get; set;
+        }
+
+        public Decimal precioUnitario
+        {
+            get { return Decimal.Parse(String.Format(Constantes.decimalFormat, flete + precioNeto)); } 
         }
     }
 }

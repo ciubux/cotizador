@@ -21,6 +21,11 @@ namespace BusinessLayer
 
                 cotizacion.estadoAprobacion = 1;
 
+                if (cotizacion.tipoVigencia == 0)
+                {
+                    cotizacion.fechaVigenciaLimite = cotizacion.fecha.AddDays(cotizacion.diasVigencia);
+                }
+
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
                     cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
@@ -32,6 +37,8 @@ namespace BusinessLayer
                         cotizacionDetalle.cantidad = 0;
                         //cotizacionDetalle.subTotal = 0;
                     }
+
+                    
 
 
                     if(!cotizacion.usuario.esAprobador)
@@ -58,6 +65,11 @@ namespace BusinessLayer
                     cotizacion.montoSubTotal = 0;
                 }
 
+                if (cotizacion.tipoVigencia == 0)
+                {
+                    cotizacion.fechaVigenciaLimite = cotizacion.fecha.AddDays(cotizacion.diasVigencia);
+                }
+
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
                     cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
@@ -82,11 +94,27 @@ namespace BusinessLayer
             }
         }
 
+        public Cotizacion aprobarCotizacion(Cotizacion cotizacion)
+        {
+            using (var dal = new CotizacionDAL())
+            {
+                cotizacion = dal.aprobarCotizacion(cotizacion);
+            }
+            return cotizacion;
+        }
+
         public Cotizacion GetCotizacion(Cotizacion cotizacion)
         {
             using (var dal = new CotizacionDAL())
             {
                 cotizacion = dal.SelectCotizacion(cotizacion);
+
+                if (cotizacion.tipoVigencia == 0)
+                {
+                    TimeSpan diferencia;
+                    diferencia = cotizacion.fechaVigenciaLimite - cotizacion.fecha;
+                    cotizacion.diasVigencia = diferencia.Days; 
+                }
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
@@ -113,11 +141,11 @@ namespace BusinessLayer
                         Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
                         Decimal costo = cotizacionDetalle.producto.costoSinIgv;
 
-                        //Se agrega el flete
-                        if (cotizacion.flete > 0)
+                        //Ya no agrega al flete al precio neto
+                      /*  if (cotizacion.flete > 0)
                         {
                             precioNeto = precioNeto + (precioNeto * cotizacion.flete / 100);
-                        }
+                        }*/
 
                         //Se agrega el igv al costo y al precio neto que se obtuvo directamente del producto
                         if (cotizacion.incluidoIgv)
@@ -183,12 +211,12 @@ namespace BusinessLayer
 
 
                         //Si la cabecera tiene flete se agrega el flete al precioLista
-                        if (cotizacion.flete > 0)
+                   /*     if (cotizacion.flete > 0)
                         {
                             decimal precioSinFlete = cotizacionDetalle.producto.precioLista;
                             decimal precioLista = precioSinFlete + (precioSinFlete * cotizacion.flete);
                             cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, precioLista));
-                        }
+                        }*/
 
                  /*       //Si se ha trabajado con el precioAlternativo, se divide el precioLista entre la equivalencia
                         if (cotizacionDetalle.esPrecioAlternativo)

@@ -10,15 +10,23 @@ namespace Model
         public Guid idCotizacion { get; set; }
         public Int64 codigo { get; set; }
         public DateTime fecha { get; set; }
+
+        /* 0 indica días, 1 indica fecha */
+        public int tipoVigencia { get; set; }
+        public int diasVigencia { get; set; }
         public DateTime fechaVigenciaLimite { get; set; }
+        public DateTime fechaVigenciaInicio { get; set; }
+        public DateTime fechaHasta { get; set; }
         public Boolean incluidoIgv { get; set; }
         public Decimal flete { get; set; }
         public String usuarioCreacion { get; set; }
         public Usuario usuario { get; set; }
+        public Usuario usuario_aprobador { get; set; }
         public Decimal igv { get; set; }
         public Moneda moneda { get; set; }
         public Ciudad ciudad { get; set; }
         public Cliente cliente { get; set; }
+        public Grupo grupo { get; set; }
         public Boolean considerarCantidades { get; set; }
         public Boolean mostrarCodigoProveedor { get; set; }
         public Decimal montoSubTotal { get; set; }
@@ -30,6 +38,12 @@ namespace Model
         public bool esRecotizacion { get; set; }
         /*0 pendiente, 1 aprobado, 2 rechazado*/
         public short estadoAprobacion { get; set; }
+
+        public bool mostrarCosto { get; set; }
+
+        public bool considerarDescontinuados { get; set; }
+
+        public String motivoRechazo { get; set; }
 
         public String descripcionEstadoAprobacion { get {
 

@@ -9,15 +9,15 @@ namespace BusinessLayer
 {
     public class ProductoBL
     {
-        public List<Producto> getProductosBusqueda(String textoBusqueda)
+        public List<Producto> getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados)
         {
             using (var dal = new ProductoDAL())
             {
-                return dal.getProductosBusqueda(textoBusqueda);
+                return dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados);
             }
         }
 
-        public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Decimal Flete)
+        public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV)
         {
             using (var dal = new ProductoDAL())
             {
@@ -41,8 +41,8 @@ namespace BusinessLayer
                 }
 
                 //Se agrega el flete al precioLista
-                //EL PRECIO LISTA YA INCLUTE FLETE
-                producto.precioLista = producto.precioSinIgv + (producto.precioSinIgv * Flete / 100);
+                //EL PRECIO LISTA NO INCLUTE FLETE
+                producto.precioLista = producto.precioSinIgv;// + (producto.precioSinIgv * Flete / 100);
 
                 producto.costoLista = producto.costoSinIgv;
                 if (incluidoIGV)
@@ -67,6 +67,22 @@ namespace BusinessLayer
             using (var productoDAL = new ProductoDAL())
             {
                 productoDAL.setProductoStaging(productoStaging);
+            }
+        }
+
+        public void truncateProductoStaging()
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                productoDAL.truncateProductoStaging();
+            }
+        }
+
+        public void mergeProductoStaging()
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                productoDAL.mergeProductoStaging();
             }
         }
     }

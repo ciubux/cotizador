@@ -12,7 +12,7 @@ namespace Model
         public int cantidad { get; set; }
         public Decimal porcentajeDescuento { get; set; }
         public Decimal precio { get; set; }
-        public Decimal subTotal { get; set; }
+        public Decimal flete { get; set; }
         public Decimal costo { get; set; }
     }
 }

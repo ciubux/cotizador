@@ -28,9 +28,8 @@ namespace DataLayer
             {
                 usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
                 usuario.cargo = Converter.GetString(row, "cargo");
-                usuario.nombre_mostrar = Converter.GetString(row, "nombre_mostrar");
-                usuario.anexo_empresa = Converter.GetInt(row, "anexo_empresa");
-                usuario.celular = Converter.GetInt(row, "celular");
+                usuario.nombre = Converter.GetString(row, "nombre");
+                usuario.contacto = Converter.GetString(row, "contacto");
                 usuario.esAprobador = Converter.GetBool(row, "es_aprobador");
             }
             return usuario;

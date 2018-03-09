@@ -35,13 +35,24 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+        public void truncateProductoStaging()
+        {
+            var objCommand = GetSqlCommand("pt_productoStaging");
+            ExecuteNonQuery(objCommand);
+        }
+
+        public void mergeProductoStaging()
+        {
+            var objCommand = GetSqlCommand("pu_productoStaging");
+            ExecuteNonQuery(objCommand);
+        }
 
 
-
-        public List<Producto> getProductosBusqueda(String textoBusqueda)
+        public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados)
         {
             var objCommand = GetSqlCommand("ps_getproductos_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
+            InputParameterAdd.Int(objCommand, "considerarDescontinuados", considerarDescontinuados ? 1 : 0);
             DataTable dataTable = Execute(objCommand);
             List<Producto> lista = new List<Producto>();
 

@@ -9,7 +9,7 @@
     <ul class="nav navbar-nav navbar-right">
         <li>
            
-            @Html.ActionLink("Hola " + usuario.nombre_mostrar, "Index", "Home")
+            @Html.ActionLink("Hola " + usuario.nombre, "Index", "Home")
            </li>
         <li>  @Html.ActionLink("Salir", "Exit", "Home")</li>
     </ul>
@@ -33,7 +33,7 @@
                     usuario = (Usuario)this.Session["usuario"];
                 }
 
-                @Html.ActionLink("Hola " + usuario.nombre_mostrar, "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                @Html.ActionLink("Hola " + usuario.nombre, "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
                 <!--@Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })-->
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a></li>

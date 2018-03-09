@@ -561,8 +561,10 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.Owin.Security.Twi
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\DataLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\DataLayer.dll.config
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Spire.Pdf.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Framework.DAL.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Spire.License.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Framework.WebCommon.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.Helpers.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.Mvc.resources.dll
@@ -587,5 +589,3 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csprojResol
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.pdb
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Spire.Pdf.xml
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Spire.License.xml

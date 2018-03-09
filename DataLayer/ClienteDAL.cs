@@ -38,6 +38,18 @@ namespace DataLayer
         }
 
 
+        public void truncateClienteStaging()
+        {
+            var objCommand = GetSqlCommand("pt_clienteStaging");
+            ExecuteNonQuery(objCommand);
+        }
+
+        public void mergeClienteStaging()
+        {
+            var objCommand = GetSqlCommand("pu_clienteStaging");
+            ExecuteNonQuery(objCommand);
+        }
+
 
         public List<Cliente> getClientesBusqueda(String textoBusqueda)
         {
@@ -51,8 +63,9 @@ namespace DataLayer
                 Cliente cliente = new Cliente
                 {
                     idCliente = Converter.GetGuid(row, "id_cliente"),
-                    codigo = Converter.GetString(row, "nombre"),
+                    codigo = Converter.GetString(row, "codigo"),
                     razonSocial = Converter.GetString(row, "razon_social"),
+                    nombreComercial = Converter.GetString(row, "nombre_comercial"),
                     ruc = Converter.GetString(row, "ruc"),
                     contacto1 = Converter.GetString(row, "contacto1"),
                     contacto2 = Converter.GetString(row, "contacto2")
