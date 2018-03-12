@@ -27,9 +27,7 @@ namespace DataLayer
             {
                 Proveedor obj = new Proveedor
                 {
-                    idProveedor = Converter.GetGuid(row, "id_proveedor"),
-                    nombre = Converter.GetString(row, "nombre"),
-                    codigo = Converter.GetString(row, "codigo")
+                    nombre = Converter.GetString(row, "proveedor")
                 };
                 lista.Add(obj);
             }

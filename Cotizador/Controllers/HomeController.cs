@@ -153,7 +153,7 @@ namespace Cotizador.Controllers
 
             Usuario usuario = (Usuario)this.Session["usuario"];
 
-            ViewBag.debug = 0;
+            ViewBag.debug = 1;
             ViewBag.Si = "Sí";
             ViewBag.No = "No";
             ViewBag.IGV = Constantes.IGV;
@@ -276,6 +276,8 @@ namespace Cotizador.Controllers
 
             foreach (CotizacionDetalle cotizacionDetalle in detalles)
             {
+                //cotizacionDetalle.incluyeIGV = cotizacion.incluidoIgv;
+
                 Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
                 Decimal costo = cotizacionDetalle.producto.costoSinIgv;
 
@@ -313,7 +315,7 @@ namespace Cotizador.Controllers
 
                 //El precio y el costo se setean al final dado que si es equivalente en cada get se hará el recalculo
 
-
+                cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, precioNeto));
                 cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.decimalFormat, costo));
                 //Se aplica descuenta al precio y se formatea a dos decimales el precio para un calculo exacto en el subtotal
                 cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.decimalFormat, precioNeto * (100 - cotizacionDetalle.porcentajeDescuento) / 100));
@@ -418,6 +420,8 @@ namespace Cotizador.Controllers
 
             CiudadBL ciudadBL = new CiudadBL();
             Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
+            cotizacion.cliente = new Cliente();
+            cotizacion.grupo = new Grupo();
 
 
             //Para realizar el cambio de ciudad ningun producto debe estar agregado
@@ -435,7 +439,18 @@ namespace Cotizador.Controllers
             
         }
 
-  
+
+        public void updateProveedor()
+        {
+            this.Session["proveedor"] = this.Request.Params["proveedor"];
+        }
+
+        public void updateFamilia()
+        {
+            this.Session["familia"] = this.Request.Params["familia"];
+        }
+
+
         [HttpPost]
         public String updateCotizacionDetalles(List<CotizacionDetalleJson> cotizacionDetalleJsonList)
         {
@@ -525,7 +540,12 @@ namespace Cotizador.Controllers
             String data = this.Request.Params["data[q]"];
 
             ClienteBL clienteBL = new ClienteBL();
-            List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data);
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+
+            List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data, cotizacion.ciudad.idCiudad);
+
+   
+            
 
 
             GrupoBL grupoBL = new GrupoBL();
@@ -602,9 +622,21 @@ namespace Cotizador.Controllers
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
             String texto_busqueda = this.Request.Params["data[q]"];
 
+            String proveedor = "Todos";
+            String familia = "Todas";
+            if (this.Session["proveedor"] != null)
+            {
+                proveedor = (String)this.Session["proveedor"];
+            }
+
+            if (this.Session["familia"] != null)
+            {
+                familia = (String)this.Session["familia"];
+            }
+
 
             ProductoBL bl = new ProductoBL();
-            List<Producto> lista = bl.getProductosBusqueda(texto_busqueda, cotizacion.considerarDescontinuados);
+            List<Producto> lista = bl.getProductosBusqueda(texto_busqueda, cotizacion.considerarDescontinuados, proveedor, familia);
 
             String resultado = "{\"q\":\"" + texto_busqueda + "\",\"results\":[";
             Boolean existe = false;
@@ -644,6 +676,7 @@ namespace Cotizador.Controllers
                 "\"unidad\":\"" + producto.unidad + "\"," +
                 "\"unidad_alternativa\":\"" + producto.unidad_alternativa + "\"," +
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
+                "\"familia\":\"" + producto.familia + "\"," +
                 "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
                 "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                 "\"precioLista\":\"" + producto.precioLista + "\"," +
@@ -772,24 +805,59 @@ namespace Cotizador.Controllers
             HSSFWorkbook hssfwb;
 
             ClienteBL clienteBL = new ClienteBL();
-            clienteBL.truncateClienteStaging();
-
+           
             hssfwb = new HSSFWorkbook(file.InputStream);
 
             ISheet sheet = hssfwb.GetSheetAt(0);
             int row = 1;
             //sheet.LastRowNum
 
-            int cantidad = Int32.Parse(Request["cantidad"].ToString());
+            int cantidad = Int32.Parse(Request["cantidadRegistros"].ToString());
+            String sede = Request["sede"].ToString();
+
+            clienteBL.truncateClienteStaging(sede);
+
             if (cantidad == 0)
                 cantidad = sheet.LastRowNum;
 
-            for ( row = 1; row <= cantidad; row++)
+            for ( row = 4; row <= cantidad; row++)
             {
                 if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                 {
+                    int paso = 0;
                     try
                     {
+                        ClienteStaging clienteStaging = new ClienteStaging();
+                        //C
+                        clienteStaging.codigo = sheet.GetRow(row).GetCell(2).ToString();
+                        //D
+                        paso = 1;
+                        clienteStaging.nombre = sheet.GetRow(row).GetCell(3).ToString();
+                        //F
+                        paso = 2;
+                        clienteStaging.documento = sheet.GetRow(row).GetCell(5).ToString();
+                        //G
+                        paso = 3;
+                        clienteStaging.domicilioLegal = sheet.GetRow(row).GetCell(6).ToString();
+                        //H
+                        paso = 4;
+                        clienteStaging.distrito = sheet.GetRow(row).GetCell(7).ToString();
+                        //J
+                        paso = 5;
+                        clienteStaging.codVe = sheet.GetRow(row).GetCell(9).ToString();
+                        //M
+                        paso = 6;
+                        clienteStaging.direccionDespacho = sheet.GetRow(row).GetCell(12).ToString();
+                        //T
+                        paso = 7;
+                        clienteStaging.nombreComercial = sheet.GetRow(row).GetCell(19).ToString();
+                        //U
+                        paso = 8;
+                        clienteStaging.rubro = sheet.GetRow(row).GetCell(20).ToString();
+
+                        clienteStaging.sede = sede;
+
+                            /*
                         ClienteStaging clienteStaging = new ClienteStaging();
                         clienteStaging.PlazaId = sheet.GetRow(row).GetCell(0).ToString();
                         clienteStaging.Plaza = sheet.GetRow(row).GetCell(1).ToString();
@@ -802,7 +870,7 @@ namespace Cotizador.Controllers
                         clienteStaging.distrito = sheet.GetRow(row).GetCell(8).ToString();
                         clienteStaging.direccionDespacho = sheet.GetRow(row).GetCell(9).ToString();
                         clienteStaging.distritoDespacho = sheet.GetRow(row).GetCell(10).ToString();
-                        clienteStaging.rubro = sheet.GetRow(row).GetCell(11).ToString();
+                        clienteStaging.rubro = sheet.GetRow(row).GetCell(11).ToString();*/
 
                         clienteBL.setClienteStaging(clienteStaging);
 
@@ -810,14 +878,135 @@ namespace Cotizador.Controllers
                     catch (Exception ex)
                     {
                         Usuario usuario = (Usuario)this.Session["usuario"];
-                        Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                        Log log = new Log(ex.ToString()+" paso: " + paso , TipoLog.Error, usuario);
                         LogBL logBL = new LogBL();
                         logBL.insertLog(log);
                     }
                 }
             }
 
-            clienteBL.mergeClienteStaging();
+           // clienteBL.mergeClienteStaging();
+            row = row;
+            return RedirectToAction("Index", "Home");
+
+        }
+
+
+        [HttpGet]
+        public ActionResult LoadPrecios()
+        {
+            if (this.Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            return View();
+
+        }
+
+
+        [HttpPost]
+        public ActionResult LoadPreciosFile(HttpPostedFileBase file)
+        {
+
+            if (file.ContentLength > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                file.SaveAs(path);
+            }
+
+
+            HSSFWorkbook hssfwb;
+
+            PrecioBL precioBL = new PrecioBL();
+
+            hssfwb = new HSSFWorkbook(file.InputStream);
+
+            ISheet sheet = hssfwb.GetSheetAt(0);
+            int row = 1;
+            //sheet.LastRowNum
+
+            int cantidad = Int32.Parse(Request["cantidadRegistros"].ToString());
+            String sede = Request["sede"].ToString();
+
+            precioBL.truncatePrecioStaging(sede);
+
+            if (cantidad == 0)
+                cantidad = sheet.LastRowNum;
+
+            for (row = 6; row <= cantidad; row++)
+            {
+                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+                    int paso = 0;
+                    try
+                    {
+                        PrecioStaging precioStaging = new PrecioStaging();
+                        //B
+                        paso = 1;
+                        precioStaging.fecha = sheet.GetRow(row).GetCell(1).DateCellValue;
+                        //C
+                        paso = 2;
+                        try
+                        {
+                            precioStaging.codigoCliente = sheet.GetRow(row).GetCell(2).StringCellValue;
+                        }
+                        catch (Exception ex)
+                        {
+                            precioStaging.codigoCliente = sheet.GetRow(row).GetCell(2).NumericCellValue.ToString();
+                        }
+                        //D
+                        paso = 3;
+                        try
+                        {
+                            precioStaging.sku = sheet.GetRow(row).GetCell(3).StringCellValue;
+                        }
+                        catch (Exception ex)
+                        {
+                            precioStaging.sku = sheet.GetRow(row).GetCell(3).NumericCellValue.ToString();
+                        }
+                        //E
+                        paso = 4;
+                        if (sheet.GetRow(row).GetCell(4) == null)
+                        {
+                            precioStaging.moneda = "S";
+                        }
+                        else
+                        { 
+                            precioStaging.moneda = sheet.GetRow(row).GetCell(4).StringCellValue;
+                        }
+                        //F
+                        paso = 5;
+                        Double? precio = sheet.GetRow(row).GetCell(5).NumericCellValue;
+                        precioStaging.precio = Convert.ToDecimal(precio);
+                        //G
+                        paso = 6;
+                        if (sheet.GetRow(row).GetCell(6) == null)
+                        {
+                            precioStaging.codigoVendedor = null;
+                        }
+                        else
+                        {
+                            precioStaging.codigoVendedor = sheet.GetRow(row).GetCell(6).StringCellValue;
+                        }
+                        
+                        paso = 7;
+                        precioStaging.sede = sede;
+
+                        precioBL.setPrecioStaging(precioStaging);
+
+                    }
+                    catch (Exception ex)
+                    {
+                          Usuario usuario = (Usuario)this.Session["usuario"];
+                        Log log = new Log(ex.ToString() + " paso: " + paso, TipoLog.Error, usuario);
+                        LogBL logBL = new LogBL();
+                        logBL.insertLog(log);
+                    }
+                }
+            }
+
+            // clienteBL.mergeClienteStaging();
             row = row;
             return RedirectToAction("Index", "Home");
 
@@ -855,80 +1044,157 @@ namespace Cotizador.Controllers
 
             hssfwb = new HSSFWorkbook(file.InputStream);
 
-            ISheet sheet = hssfwb.GetSheetAt(1);
+            ISheet sheet = hssfwb.GetSheetAt(0);
             int row = 1;
             int cantidad = Int32.Parse(Request["cantidad"].ToString());
             if (cantidad == 0)
                 cantidad = sheet.LastRowNum;
+
+            cantidad = 2008;
             //sheet.LastRowNum
-            for (row = 1; row <= cantidad; row++)
+            for (row = 2; row <= cantidad; row++)
             {
                 if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                 {
+
+                    ProductoStaging productoStaging = new ProductoStaging();
+                    int paso = 1;
                     try
                     {
-                        ProductoStaging productoStaging = new ProductoStaging();
-                        //B
-                        productoStaging.proveedor = sheet.GetRow(row).GetCell(1).ToString();
-                        //C
-                        productoStaging.codigo = sheet.GetRow(row).GetCell(2).ToString();
+                        
+
+                        if (sheet.GetRow(row).GetCell(0) == null)
+                        {
+                            productoStaging.familia = "No proporcionada";
+                        }
+                        else
+                        {
+                            //A
+                            productoStaging.familia = sheet.GetRow(row).GetCell(0).ToString();
+                        }
+
+
+                        paso = 2;
+                        if (sheet.GetRow(row).GetCell(1) == null)
+                        {
+                            productoStaging.proveedor = null;
+                        }
+                        else
+                        {
+                            //B
+                            productoStaging.proveedor = sheet.GetRow(row).GetCell(1).ToString();
+                        }
+
+
+                        paso = 3;
+                        if (sheet.GetRow(row).GetCell(2) == null)
+                        {
+                            productoStaging.codigo = null;
+                        }
+                        else
+                        {
+                            //C
+                            productoStaging.codigo = sheet.GetRow(row).GetCell(2).ToString();
+                        }
+
+                        paso = 4;
                         //D
-                        productoStaging.codigoProveedor = sheet.GetRow(row).GetCell(3).ToString();
+                        if (sheet.GetRow(row).GetCell(3) == null)
+                        {
+                            productoStaging.codigoProveedor = null;
+                        }
+                        else
+                        {
+                            productoStaging.codigoProveedor = sheet.GetRow(row).GetCell(3).ToString();
+                        }
+
+                        paso = 5;
                         //E
-                        productoStaging.unidad = sheet.GetRow(row).GetCell(4).ToString();
+                        if (sheet.GetRow(row).GetCell(4) == null)
+                        {
+                            productoStaging.unidad = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidad = sheet.GetRow(row).GetCell(4).ToString();
+                        }
+
+                        paso = 6;
                         //H
-                        productoStaging.unidadAlternativa = sheet.GetRow(row).GetCell(7).ToString();
+                        if (sheet.GetRow(row).GetCell(7) == null)
+                        {
+                            productoStaging.unidad = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidadAlternativa = sheet.GetRow(row).GetCell(7).ToString();
+                        }
+
+                        paso = 7;
                         //J
-                        productoStaging.equivalencia = Int32.Parse(sheet.GetRow(row).GetCell(8).ToString());
-                        //K
-                        productoStaging.descripcion = sheet.GetRow(row).GetCell(9).ToString();
+                        if (sheet.GetRow(row).GetCell(8) == null)
+                        {
+                            productoStaging.equivalencia = 1;
+                        }
+                        else
+                        {
+                            productoStaging.equivalencia = Int32.Parse(sheet.GetRow(row).GetCell(8).ToString());
+                        }
 
-                        Double? costo = sheet.GetRow(row).GetCell(18).NumericCellValue;
-                        productoStaging.costo = Convert.ToDecimal(costo);
+                        paso = 8;
                         //K
-                        Double? precioLima = sheet.GetRow(row).GetCell(22).NumericCellValue;
-                        productoStaging.precioLima = Convert.ToDecimal(precioLima);
-                        //K
-                        Double? precioProvincias = sheet.GetRow(row).GetCell(25).NumericCellValue;
-                        productoStaging.precioProvincias = Convert.ToDecimal(precioProvincias);
+                        if (sheet.GetRow(row).GetCell(9) == null)
+                        {
+                            productoStaging.descripcion = null;
+                        }
+                        else
+                        {
+                            productoStaging.descripcion = sheet.GetRow(row).GetCell(9).ToString();
+                        }
 
-                        /*
-                        //A
-                        productoStaging.codigo = sheet.GetRow(row).GetCell(0).ToString();
-                        //B
-                        productoStaging.familia = sheet.GetRow(row).GetCell(1).ToString();
-                        //C
-                        productoStaging.clase = sheet.GetRow(row).GetCell(2).ToString();
-                        //D
-                        productoStaging.Marca = sheet.GetRow(row).GetCell(3).ToString();
-                        //F
-                        productoStaging.unidad = sheet.GetRow(row).GetCell(5).ToString();
-                        //G
-                        productoStaging.descripcion = sheet.GetRow(row).GetCell(6).ToString();
-                        //K
-                        productoStaging.codigoProveedor = sheet.GetRow(row).GetCell(10).ToString();
-                        //N
-                        productoStaging.unidadAlternativa = sheet.GetRow(row).GetCell(13).ToString();
-                        //M
-                        productoStaging.unidadAlternativa = sheet.GetRow(row).GetCell(14).ToString();
-
-                        Double? costo = sheet.GetRow(row).GetCell(19).NumericCellValue;
+                        paso = 9;
                         //T
-                        productoStaging.costo = Convert.ToDecimal(costo);
+                        try
+                        {
+                            Double? costo = sheet.GetRow(row).GetCell(19).NumericCellValue;
+                            productoStaging.costo = Convert.ToDecimal(costo);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.costo = 0;
+                        }
 
-                        Double? precio = sheet.GetRow(row).GetCell(21).NumericCellValue;
-                        //V
-                        productoStaging.precio = Convert.ToDecimal(precio);
-                        //Y
-                        productoStaging.proveedor = sheet.GetRow(row).GetCell(24).ToString();
-                        */
-                        //ProductoBL productoBL = new ProductoBL();
+                        paso = 10;
+                        try {
+                            //Y
+                            Double? precioLima = sheet.GetRow(row).GetCell(24).NumericCellValue;
+                            productoStaging.precioLima = Convert.ToDecimal(precioLima);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.precioLima = 0;
+                        }
+
+
+                        paso = 11;
+                        try
+                        {
+                            //K
+                            Double? precioProvincias = sheet.GetRow(row).GetCell(27).NumericCellValue;
+                            productoStaging.precioProvincias = Convert.ToDecimal(precioProvincias);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.precioProvincias = 0;
+                        }
+                        
                         productoBL.setProductoStaging(productoStaging);
                     }
                     catch (Exception ex)
                     {
+                        
                         Usuario usuario = (Usuario)this.Session["usuario"];
-                        Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                        Log log = new Log(ex.ToString() + " paso:"+ paso, TipoLog.Error, usuario);
                         LogBL logBL = new LogBL();
                         logBL.insertLog(log);
 
@@ -936,7 +1202,7 @@ namespace Cotizador.Controllers
                     }
                 }
             }
-            productoBL.mergeProductoStaging();
+            //productoBL.mergeProductoStaging();
             row = row;
             return RedirectToAction("Index", "Home");
         }
@@ -1074,6 +1340,172 @@ namespace Cotizador.Controllers
         }
 
 
+        [HttpGet]
+        public ActionResult LoadPrecioLista()
+        {
+            if (this.Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            return View();
+
+        }
+
+
+        [HttpPost]
+        public ActionResult LoadPrecioListaFile(HttpPostedFileBase file)
+        {
+            if (file.ContentLength > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                file.SaveAs(path);
+            }
+
+
+            HSSFWorkbook hssfwb;
+
+            PrecioListaBL precioListaBL = new PrecioListaBL();
+            precioListaBL.truncatePrecioListaStaging();
+
+            hssfwb = new HSSFWorkbook(file.InputStream);
+
+            ISheet sheet = hssfwb.GetSheetAt(0);
+            int row = 1;
+            int cantidad = Int32.Parse(Request["cantidad"].ToString());
+            if (cantidad == 0)
+                cantidad = sheet.LastRowNum;
+
+            cantidad = 1550;
+
+            for (row = 2; row <= cantidad; row++)
+            {
+                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+
+                    PrecioListaStaging precioListaStaging = new PrecioListaStaging();
+                    int paso = 1;
+                    try
+                    {
+                        //Codigo Cliente
+                        paso = 2;
+                        try
+                        { 
+                            precioListaStaging.codigoCliente = sheet.GetRow(row).GetCell(0).StringCellValue;
+                        }
+                        catch
+                        {
+                            precioListaStaging.codigoCliente = sheet.GetRow(row).GetCell(0).ToString();
+                        }
+
+                        paso = 3;
+                        //Fecha Vigencia Inicio
+                        if (sheet.GetRow(row).GetCell(1) == null)
+                        {
+                            precioListaStaging.fechaVigenciaInicio = null;
+                        }
+                        else
+                        {
+                            precioListaStaging.fechaVigenciaInicio = sheet.GetRow(row).GetCell(1).DateCellValue;
+                        }
+
+                        //Fecha Vigencia Fin
+                        paso = 4;
+                        if (sheet.GetRow(row).GetCell(2) == null)
+                        {
+                            precioListaStaging.fechaVigenciaFin = null;
+                        }
+                        else
+                        {
+                            precioListaStaging.fechaVigenciaFin = sheet.GetRow(row).GetCell(2).DateCellValue;
+                        }
+
+                        //SKU
+                        paso = 5;
+                        precioListaStaging.sku = sheet.GetRow(row).GetCell(3).StringCellValue;
+                        //Considerar Cantidades
+                        paso = 6;
+                        precioListaStaging.consideraCantidades = sheet.GetRow(row).GetCell(4).StringCellValue;
+                        //Cantidad
+                        paso = 7;
+                        precioListaStaging.cantidad = Int32.Parse(sheet.GetRow(row).GetCell(5).ToString());
+                        //Es Unidad Alternativa
+                        paso = 8;
+                        precioListaStaging.esAlternativa = sheet.GetRow(row).GetCell(6).StringCellValue;
+                        //Unidad
+                        paso = 9;
+                        precioListaStaging.unidad = sheet.GetRow(row).GetCell(7).StringCellValue;
+                        //Precio Lista
+                        paso = 10;
+                        Double? precioLista = sheet.GetRow(row).GetCell(11).NumericCellValue;
+                        precioListaStaging.precioLista = Convert.ToDecimal(precioLista);
+                        //Moneda
+                        paso = 11;
+                        if (sheet.GetRow(row).GetCell(12) == null)
+                        {
+                            precioListaStaging.moneda = null;
+                        }
+                        else
+                        {
+                            precioListaStaging.moneda = sheet.GetRow(row).GetCell(12).StringCellValue; 
+                        }
+                        //Precio Neto
+                        paso = 12;
+                        Double? precioNeto = sheet.GetRow(row).GetCell(13).NumericCellValue;
+                        precioListaStaging.precioNeto = Convert.ToDecimal(precioNeto);
+                        //Precio costo
+                        paso = 13;
+                        Double? costo = sheet.GetRow(row).GetCell(14).NumericCellValue;
+                        precioListaStaging.costo = Convert.ToDecimal(costo);
+                        //Flete
+                        paso = 14;
+                        if (sheet.GetRow(row).GetCell(15) == null)
+                        {
+                            precioListaStaging.flete = null;
+                        }
+                        else
+                        {
+                            precioListaStaging.flete = sheet.GetRow(row).GetCell(15).StringCellValue;
+                        }
+                        //Precio porcentajeDescuento
+                        paso = 15;
+                        Double? porcentajeDescuento = sheet.GetRow(row).GetCell(16).NumericCellValue;
+                        precioListaStaging.porcentajeDescuento = Convert.ToDecimal(porcentajeDescuento);
+                        //grupo
+                        if (sheet.GetRow(row).GetCell(17) == null)
+                        {
+                            precioListaStaging.grupo = null;
+                        }
+                        else
+                        {
+                            precioListaStaging.grupo = sheet.GetRow(row).GetCell(17).StringCellValue;
+                        }
+
+                        precioListaBL.setPrecioListaStaging(precioListaStaging);
+                    }
+                    catch (Exception ex)
+                    {
+                        Usuario usuario = (Usuario)this.Session["usuario"];
+                        Log log = new Log(ex.ToString() + " paso:" + paso, TipoLog.Error, usuario);
+                        LogBL logBL = new LogBL();
+                        logBL.insertLog(log);
+                    }
+                }
+            }
+            //productoBL.mergeProductoStaging();
+            row = row;
+            return RedirectToAction("Index", "Home");
+        }
+
+
+
+
+
+
+
+
+
+
 
         [HttpGet]
         public ActionResult DownLoadFile(String fileName)
@@ -1139,6 +1571,8 @@ namespace Cotizador.Controllers
             //Se seta el codigo y estadoAprobacion en 0 porque una recotización es una nueva cotización
             cotizacion.codigo = 0;
             cotizacion.estadoAprobacion = 0;
+            cotizacion.fechaVigenciaInicio = cotizacion.fechaVigenciaLimite.AddDays(1);
+            cotizacion.fechaVigenciaLimite = cotizacion.fechaVigenciaLimite.AddDays(16);
             this.Session["cotizacion"] = cotizacion;
         }
 
@@ -1201,6 +1635,30 @@ namespace Cotizador.Controllers
             GeneradorPDF gen = new GeneradorPDF();
        //     gen.generar();
             return "";
+        }
+
+
+        public String AddCliente()
+        {
+            Cliente cliente = new Cliente();
+            Usuario usuario = (Usuario)this.Session["usuario"];
+            cliente.IdUsuarioRegistro = usuario.idUsuario;
+            cliente.razonSocial = Request["razonSocial"].ToString();
+            cliente.nombreComercial = Request["nombreComercial"].ToString();
+            cliente.ruc = Request["ruc"].ToString();
+            cliente.contacto1 = Request["contacto"].ToString();
+
+            ClienteBL clienteBL = new ClienteBL();
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            cliente.ciudad = cotizacion.ciudad;
+            cotizacion.cliente = clienteBL.insertCliente(cliente);
+            cotizacion.contacto = cotizacion.cliente.contacto1;
+
+            String resultado = "{" +
+                "\"idCLiente\":\"" + cotizacion.cliente.idCliente + "\"," +
+                "\"codigoAlterno\":\"" + cotizacion.cliente.codigoAlterno + "\"}";
+
+            return resultado;
         }
 
     }

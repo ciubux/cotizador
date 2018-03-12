@@ -4,27 +4,34 @@
 
 jQuery(function ($) {
 
-
-
-    // A $( document ).ready() block.
     $(document).ready(function () {
+
         cambiarTipoVigencia();
+        cargarChosenCliente();
     });
-    
 
-    $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
 
-    $("#idCliente").ajaxChosen({
-        dataType: "json",
-        type: "GET",
-        minTermLength: 5,
-        afterTypeDelay: 300,
-        cache: false,
-        url: "/Home/GetClientes"
-    }, {
-            loadingImg: "Content/chosen/images/loading.gif"
-        }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
+    function cargarChosenCliente() {
 
+        $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
+            if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
+                alert("Debe seleccionar una ciudad previamente.");
+                $("#idCliente").trigger('chosen:close');
+                return false;
+            }
+        });
+
+        $("#idCliente").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Home/GetClientes"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
+    }
     
 
     $("#idCliente").change(function () {
@@ -64,7 +71,19 @@ jQuery(function ($) {
 
         }
     });
-    
+
+
+   $('#modalAgregarCliente').on('shown.bs.modal', function () {
+
+        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
+            alert("Debe seleccionar una ciudad previamente.");
+            $("#idCiudad").focus();
+            $('#btnCancelCliente').click();
+            return false;
+        }
+
+
+    });
 
 
     var cantidadDecimales = 2;
@@ -95,7 +114,9 @@ jQuery(function ($) {
     }
 
     $('#modalAgregarProducto').on('shown.bs.modal', function () {
-        $('#producto').trigger('chosen:activate');
+
+        $('#familia').focus();
+        //$('#producto').trigger('chosen:activate');
     })
 
     $('#modalCalculadora').on('shown.bs.modal', function () {
@@ -140,7 +161,7 @@ jQuery(function ($) {
 
 
         desactivarBtnAddProduct();
-        $("#proveedor").val("");
+    //    $("#proveedor").val("");
         $("#unidad").html("");
         $("#imgProducto").attr("src", "images/NoDisponible.gif");
 
@@ -252,6 +273,7 @@ jQuery(function ($) {
                 $("#unidad").html(options);
                // $("#margen").val(Number(producto.margen));
                 $("#proveedor").val(producto.proveedor);
+                $("#familia").val(producto.familia);
                 $('#precioUnitarioSinIGV').val(producto.precioUnitarioSinIGV);
                 $('#precioUnitarioAlternativoSinIGV').val(producto.precioUnitarioAlternativoSinIGV);
                 $('#costoSinIGV').val(producto.costoSinIGV);
@@ -449,11 +471,15 @@ jQuery(function ($) {
             $("#nuevoPrecio").val($("#precio").val());
 
 
+       
+
             calcularSubtotalProducto();
             
         }
         else
         {
+            //REVISAR CALCULO DE MARGEN Y PRECIO UNITARIO
+
             var idproducto = $('#idProducto').val();
 
             //Se recupera el precio calculado
@@ -466,9 +492,14 @@ jQuery(function ($) {
             //Se asigna el descuento en el campo descuento
             $("." + idproducto + ".detinporcentajedescuento").val($("#nuevoDescuento").val());
 
-
+            /*
             //se obtiene la cantidad el subtotal
             var cantidad = Number($("." + idproducto + ".detincantidad").val());
+
+
+
+
+
 
             //Se calcula el subtotal
             var subTotal = precio * cantidad;
@@ -490,13 +521,10 @@ jQuery(function ($) {
             var costoAnterior = Number($("." + idproducto + ".detcostoAnterior").text());
             var varcosto = costo / costoAnterior - 1;
             $("." + idproducto + ".detvarCosto").text(varcosto.toFixed(cantidadDecimales) + " %");
+            */
 
-
-
-
-
-
-
+          
+            calcularSubtotalGrilla(idproducto);
 
         }
 
@@ -505,6 +533,67 @@ jQuery(function ($) {
         $('#btnCancelCalculadora').click();
         
     });
+
+
+
+    $("#btnSaveCliente").click(function () {
+
+        //ncRazonSocial
+
+        if ($("#ncRazonSocial").val().trim() == "" && $("#ncNombreComercial").val().trim() == "") {
+            alert("Debe ingresar la Razón Social o el Nombre Comercial.");
+            $('#ncRazonSocial').focus();
+            return false;
+        }
+
+        if ($("#ncRUC").val().trim() == "" ) {
+            alert("Debe ingresar el RUC.");
+            $('#ncRUC').focus();
+            return false;
+        }
+
+        var razonSocial = $("#ncRazonSocial").val();
+        var nombreComercial = $("#ncNombreComercial").val();
+        var ruc = $("#ncRUC").val();
+        var contacto = $("#ncContacto").val();
+
+        $.ajax({
+            url: "/Home/AddCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                razonSocial: razonSocial,
+                nombreComercial: nombreComercial,
+                ruc: ruc,
+                contacto: contacto            
+            },
+            error: function (detalle) { alert("Se generó un error al intentar crear el cliente."); },
+            success: function (resultado) {
+
+                alert("Se creó cliente con Código Temporal: " + resultado.codigoAlterno + ".");
+
+                location.reload();
+
+            }
+        });
+
+
+        $('#btnCancelCliente').click();
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
     function desactivarBtnAddProduct() {
@@ -957,7 +1046,7 @@ jQuery(function ($) {
         var subtotal = $("#subtotal").val();
         var incluidoIGV = $("input[name=igv]:checked").val();
         var proveedor = $("#proveedor").val();
-        var flete = $("#fleteDetalle").val();
+        var flete = Number($("#fleteDetalle").val());
 
         var costo = $("#costoLista").val();
         
@@ -998,12 +1087,12 @@ jQuery(function ($) {
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
                     '<td class="' + detalle.idProducto + ' detprecioLista" style="text-align:right">' + precioLista + '</td>' +
                     '<td class="' + detalle.idProducto + ' detporcentajedescuento" style="text-align:right">' + porcentajeDescuento.toFixed(4) + ' %</td>' +
-                    '<td class="' + detalle.idProducto + ' detporcentajedescuentoMostrar" style="text-align:right">' + porcentajeDescuento.toFixed(2) + ' %</td>' +
+                    '<td class="' + detalle.idProducto + ' detporcentajedescuentoMostrar" style="width:75px; text-align:right;">' + porcentajeDescuento.toFixed(2) + ' %</td>' +
                     '<td class="' + detalle.idProducto + ' detprecio" style="text-align:right">' + precio + '</td>' +
                     '<td class="' + detalle.idProducto + ' detcostoLista">' + costoLista + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detmargen" style="text-align:right">' + detalle.margen + ' %</td>' +
+                    '<td class="' + detalle.idProducto + ' detmargen" style="width:70px; text-align:right; ">' + detalle.margen + ' %</td>' +
 
-                    '<td class="' + detalle.idProducto + ' detflete" style="text-align:right">' + flete + '</td>' +
+                    '<td class="' + detalle.idProducto + ' detflete" style="text-align:right">' + flete.toFixed(2) + '</td>' +
                     '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>' +
                       '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
                     '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
@@ -1510,10 +1599,14 @@ jQuery(function ($) {
                     alert("No se encontraron Cotizaciones");
                 }
                 location.reload();
-
             }
         });
     });
+
+
+
+
+
 
   
     $('#modalAprobacion').on('shown.bs.modal', function (e) {
@@ -1579,12 +1672,12 @@ jQuery(function ($) {
             error: function () { alert("Ocurrió un problema al intentar aprobar la cotización."); },
             success: function () {
                 if (accion == "1") {
-                    alert("La cotización se aprobó correctamente.");
+                    alert("La cotización número "+codigo+" se aprobó correctamente.");
                 }
                 else {
-                    alert("La cotización se rechazó correctamente.");
+                    alert("La cotización número "+codigo+" se rechazó correctamente.");
                 }
-                location.reload();
+                $("#btnBusquedaCotizaciones").click();
             }
         });
     });

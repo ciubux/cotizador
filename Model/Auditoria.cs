@@ -9,9 +9,9 @@ namespace Model
     {
         public int Estado { get; set; }
         public DateTime FechaRegistro { get; set; }
-        public int IdUsuarioRegistro { get; set; }
+        public Guid IdUsuarioRegistro { get; set; }
         public DateTime FechaEdicion { get; set; }
-        public int IdUsuarioEdicion { get; set; }
+        public Guid IdUsuarioEdicion { get; set; }
         public Usuario UsuarioRegistro { get; set; }
 
         public string EstadoDesc => Estado == 1 ? "Activo" : "Inactivo";

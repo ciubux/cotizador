@@ -40,6 +40,7 @@
     <Compile Include="FacturaBL.cs" />
     <Compile Include="GrupoBL.cs" />
     <Compile Include="LogBL.cs" />
+    <Compile Include="PrecioListaBL.cs" />
     <Compile Include="TipoCambioBL.cs" />
     <Compile Include="ProductoBL.cs" />
     <Compile Include="FamiliaBL.cs" />

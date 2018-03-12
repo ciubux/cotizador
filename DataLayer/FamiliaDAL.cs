@@ -17,10 +17,9 @@ namespace DataLayer
         {
         }
 
-        public List<Familia> getFamilias(Guid idCategoria)
+        public List<Familia> getFamilias()
         {
             var objCommand = GetSqlCommand("ps_getfamilias");
-            InputParameterAdd.Guid(objCommand, "idCategoria", idCategoria);
             DataTable dataTable = Execute(objCommand);
             List<Familia> lista = new List<Familia>();
 
@@ -28,10 +27,7 @@ namespace DataLayer
             {
                 Familia obj = new Familia
                 {
-                    idFamilia = Converter.GetGuid(row, "id_familia"),
-                    idCategoria = Converter.GetGuid(row, "id_categoria"),
-                    nombre = Converter.GetString(row, "nombre"),
-                    codigo = Converter.GetString(row, "codigo")
+                    nombre = Converter.GetString(row, "familia")
                 };
                 lista.Add(obj);
             }

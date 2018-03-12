@@ -23,6 +23,7 @@ namespace DataLayer
 
             var objCommand = GetSqlCommand("pi_productoStaging");
             InputParameterAdd.Varchar(objCommand, "codigo", productoStaging.codigo); //(y)
+            InputParameterAdd.Varchar(objCommand, "familia", productoStaging.familia); //(y)
             InputParameterAdd.Varchar(objCommand, "unidad", productoStaging.unidad); //(y)
             InputParameterAdd.Varchar(objCommand, "descripcion", productoStaging.descripcion); //(y)
             InputParameterAdd.Varchar(objCommand, "codigoProveedor", productoStaging.codigoProveedor); //(y)
@@ -48,10 +49,12 @@ namespace DataLayer
         }
 
 
-        public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados)
+        public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia)
         {
             var objCommand = GetSqlCommand("ps_getproductos_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
+            InputParameterAdd.Varchar(objCommand, "proveedor", proveedor);
+            InputParameterAdd.Varchar(objCommand, "familia", familia);
             InputParameterAdd.Int(objCommand, "considerarDescontinuados", considerarDescontinuados ? 1 : 0);
             DataTable dataTable = Execute(objCommand);
             List<Producto> lista = new List<Producto>();

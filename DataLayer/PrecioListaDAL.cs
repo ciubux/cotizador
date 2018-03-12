@@ -17,6 +17,48 @@ namespace DataLayer
         {
         }
 
+        public void setPrecioListaStaging(PrecioListaStaging precioListaStaging)
+        {
+            var objCommand = GetSqlCommand("pi_precioListaStaging");
+            InputParameterAdd.Varchar(objCommand, "codigoCliente", precioListaStaging.codigoCliente);
+            InputParameterAdd.DateTime(objCommand, "fechaVigenciaInicio", precioListaStaging.fechaVigenciaInicio);
+            InputParameterAdd.DateTime(objCommand, "fechaVigenciaFin", precioListaStaging.fechaVigenciaFin);
+            InputParameterAdd.Varchar(objCommand, "sku", precioListaStaging.sku);
+            InputParameterAdd.Varchar(objCommand, "consideraCantidades", precioListaStaging.consideraCantidades);
+            InputParameterAdd.Int(objCommand, "cantidad", precioListaStaging.cantidad);
+            InputParameterAdd.Varchar(objCommand, "esAlternativa", precioListaStaging.esAlternativa);
+            InputParameterAdd.Varchar(objCommand, "unidad", precioListaStaging.esAlternativa);
+            InputParameterAdd.Varchar(objCommand, "moneda", precioListaStaging.esAlternativa);
+            InputParameterAdd.Decimal(objCommand, "precioLista", precioListaStaging.precioLista);
+            InputParameterAdd.Decimal(objCommand, "precioNeto", precioListaStaging.precioNeto);
+            InputParameterAdd.Decimal(objCommand, "costo", precioListaStaging.costo);
+            InputParameterAdd.Varchar(objCommand, "flete", precioListaStaging.flete);
+            InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", precioListaStaging.porcentajeDescuento);
+            InputParameterAdd.Varchar(objCommand, "grupo", precioListaStaging.grupo);
+            ExecuteNonQuery(objCommand);
+        }
+        
+        public void truncatePrecioListaStaging()
+        {
+            var objCommand = GetSqlCommand("pt_precioListaStaging");
+            ExecuteNonQuery(objCommand);
+        }
+
+        public void mergePrecioListaStaging()
+        {
+            var objCommand = GetSqlCommand("pu_precioListaStaging");
+            ExecuteNonQuery(objCommand);
+        }
+
+
+
+
+
+
+
+
+
+
         public List<PrecioLista> getListas()
         {
             var objCommand = GetSqlCommand("ps_getlistaprecios");

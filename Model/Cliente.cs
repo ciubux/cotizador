@@ -11,6 +11,8 @@ namespace Model
 
         public String codigo { get; set;  }
 
+        public int codigoAlterno { get; set; }
+
         public String razonSocial { get; set; }
 
         public String nombreComercial { get; set; }
@@ -21,10 +23,12 @@ namespace Model
 
         public String contacto2 { get; set; }
 
+        public Ciudad ciudad { get; set; }
+
         public override string ToString()
         {
-            return "Cod: " + this.codigo + "  -  R. Social: " + this.razonSocial + "  -  N. Comercial: "
-                + this.nombreComercial;// + " **** RUC: " + this.ruc;
+            return "R. Social: " + this.razonSocial + "  -  N. Comercial: "
+                + this.nombreComercial + " - Cod: " + this.codigo;// + " **** RUC: " + this.ruc;
         }
     }
 }

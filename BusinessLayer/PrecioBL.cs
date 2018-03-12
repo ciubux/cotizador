@@ -33,80 +33,30 @@ namespace BusinessLayer
 
             }
         }
-        /*
-                
-        public List<TipoMuestra> GetTiposMuestraByIdExamen(Guid idExamen)
+
+        public void setPrecioStaging(PrecioStaging precioStaging)
         {
-            using (var tipoMuestraDal = new TipoMuestraDal())
+            using (var precioDAL = new PrecioDAL())
             {
-                return tipoMuestraDal.GetTiposMuestraByIdExamen(idExamen);
+                precioDAL.setPrecioStaging(precioStaging);
             }
         }
 
-        public List<TipoMuestra> GetTiposMuestraByIdExamen(List<Guid> idExamenList)
+        public void truncatePrecioStaging(String sede)
         {
-            using (var tipoMuestraDal = new TipoMuestraDal())
+            using (var precioDAL = new PrecioDAL())
             {
-                List<TipoMuestra> tipoMuestraList = new List<TipoMuestra>();
-                foreach (Guid idExamen in idExamenList)
-                {
-                    List<TipoMuestra> tipoMuestraListTmp = tipoMuestraDal.GetTiposMuestraByIdExamen(idExamen);
-
-                    foreach (TipoMuestra tipoMuestraTmp in tipoMuestraListTmp)
-                    {
-                        bool tipoMuestraExiste = false;
-                        foreach (TipoMuestra tipoMuestra in tipoMuestraList)
-                        {
-                            if (tipoMuestraTmp.idTipoMuestra == tipoMuestra.idTipoMuestra)
-                            {
-                                tipoMuestraExiste = true;
-                                break;
-                            }
-                        }
-                        if (!tipoMuestraExiste)
-                        {
-                            tipoMuestraList.Add(tipoMuestraTmp);
-                        }
-                    }
-
-                    
-                }
-
-                return tipoMuestraList;
-            }
-            
-        }
-
-        public TipoMuestra GetTiposMuestraById(int idTipoMuestra)
-        {
-            using (var tipoMuestraDal = new TipoMuestraDal())
-            {
-                return tipoMuestraDal.GetTiposMuestraById(idTipoMuestra);
+                precioDAL.truncatePrecioStaging(sede);
             }
         }
 
-        public TipoMuestra GetTipoMuestraById(int idTipoMuestra)
+        public void mergePrecioStaging()
         {
-            using (var tipoMuestraDal = new TipoMuestraDal())
+            using (var precioDAL = new PrecioDAL())
             {
-                return tipoMuestraDal.GetTipoMuestraById(idTipoMuestra);
+                precioDAL.mergePrecioStaging();
             }
         }
 
-        public void InsertTipoMuestra(TipoMuestra tipoM)
-        {
-            using (var tipoMuestraDal = new TipoMuestraDal())
-            {
-                tipoMuestraDal.InsertTipoMuestra(tipoM);
-            }
-        }
-
-        public void UpdateTipoMuestra(TipoMuestra tipoM)
-        {
-            using (var tipoMuestraDal = new TipoMuestraDal())
-            {
-                tipoMuestraDal.UpdateTipoMuestra(tipoM);
-            }
-        }*/
     }
 }

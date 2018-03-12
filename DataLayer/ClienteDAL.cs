@@ -22,7 +22,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_clienteStaging");
             InputParameterAdd.Varchar(objCommand, "PlazaId", clienteStaging.PlazaId);
             InputParameterAdd.Varchar(objCommand, "Plaza", clienteStaging.Plaza);
-            InputParameterAdd.Varchar(objCommand, "Id", clienteStaging.Id);
+            InputParameterAdd.Varchar(objCommand, "Id", clienteStaging.codigo);
             InputParameterAdd.Varchar(objCommand, "nombre", clienteStaging.nombre);
             InputParameterAdd.Varchar(objCommand, "documento", clienteStaging.documento);
             InputParameterAdd.Varchar(objCommand, "codVe", clienteStaging.codVe);
@@ -32,15 +32,16 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "direccionDespacho", clienteStaging.direccionDespacho);
             InputParameterAdd.Varchar(objCommand, "distritoDespacho", clienteStaging.distritoDespacho);
             InputParameterAdd.Varchar(objCommand, "rubro", clienteStaging.rubro);
-
+            InputParameterAdd.Char(objCommand, "sede", clienteStaging.sede);
             ExecuteNonQuery(objCommand);
             
         }
 
 
-        public void truncateClienteStaging()
+        public void truncateClienteStaging(String sede)
         {
             var objCommand = GetSqlCommand("pt_clienteStaging");
+            InputParameterAdd.Char(objCommand, "sede", sede);
             ExecuteNonQuery(objCommand);
         }
 
@@ -51,10 +52,12 @@ namespace DataLayer
         }
 
 
-        public List<Cliente> getClientesBusqueda(String textoBusqueda)
+        public List<Cliente> getClientesBusqueda(String textoBusqueda, Guid idCiudad)
         {
             var objCommand = GetSqlCommand("ps_getclientes_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
+            InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            
             DataTable dataTable = Execute(objCommand);
             List<Cliente> clienteList = new List<Cliente>();
 
@@ -93,6 +96,28 @@ namespace DataLayer
             }
 
             return obj;
+        }
+
+        public Cliente insertCliente(Cliente cliente)
+        {
+            var objCommand = GetSqlCommand("pi_cliente");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", cliente.IdUsuarioRegistro);
+            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocial);
+            InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
+            InputParameterAdd.Varchar(objCommand, "ruc", cliente.ruc);
+            InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
+            InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
+
+            OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
+            OutputParameterAdd.Int(objCommand, "codigoAlterno");
+            ExecuteNonQuery(objCommand);
+
+            cliente.idCliente = (Guid)objCommand.Parameters["@newId"].Value;
+            cliente.codigoAlterno = (Int32)objCommand.Parameters["@codigoAlterno"].Value;
+
+            return cliente;
+
         }
     }
 }

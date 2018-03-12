@@ -11,7 +11,7 @@ namespace Model
 
         public String PlazaId { get; set; }
         public String Plaza { get; set; }
-        public String Id { get; set; }
+        public String codigo { get; set; }
         public String nombre { get; set; }
         public String documento { get; set; }
         public String codVe { get; set; }
@@ -21,6 +21,7 @@ namespace Model
         public String direccionDespacho { get; set; }
         public String distritoDespacho { get; set; }
         public String rubro { get; set; }
+        public String sede { get; set; }
 
 
     }

@@ -45,6 +45,14 @@ textarea {
 
 }
 
+
+@media screen and (min-width: 768px) {
+
+    #modalAgregarCliente .modal-dialog {
+        width: 900px;
+    }
+}
+
 @media screen and (min-width: 768px) {
 
     #modalCalculadora .modal-dialog {   width: 900px;  }
@@ -139,6 +147,18 @@ input.label-input {
 }
 
 
+.bouton-image-add:before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
 .bouton-image:before {
     content: "";
     width: 16px;
@@ -153,6 +173,11 @@ input.label-input {
 
 .monBouton:before {
     background-image: url(/images/calculadora3.png);
+}
+
+
+.addBouton:before {
+    background-image: url(/images/add.png);
 }
 
 .searchBouton:before {

@@ -12,6 +12,7 @@ namespace Model
         public int cantidad { get; set; }
        
         private Decimal _porcentajeDescuento;
+    //    public Boolean incluyeIGV { get; set; }
         public Decimal porcentajeDescuento
         {
             get
@@ -53,10 +54,22 @@ namespace Model
         {
             get
             {
+                Decimal precioListaTmp = 0;
                 if (esPrecioAlternativo)
-                    return Decimal.Parse(String.Format(Constantes.decimalFormat, producto.precioLista / producto.equivalencia));
+                    precioListaTmp = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.precioLista / producto.equivalencia));
                 else
-                    return producto.precioLista;
+                    precioListaTmp = producto.precioLista;
+
+                return precioListaTmp;
+             /*   if (incluyeIGV)
+                {
+                    return Decimal.Parse(String.Format(Constantes.decimalFormat, precioListaTmp + (precioListaTmp * Constantes.IGV)));
+                }
+                else
+                {
+                    return precioListaTmp;
+                }*/
+                
             }
             
         }
@@ -66,10 +79,14 @@ namespace Model
         {
             get
             {
+                Decimal costoListaTmp = 0;
                 if (esPrecioAlternativo)
-                    return Decimal.Parse(String.Format(Constantes.decimalFormat, producto.costoLista / producto.equivalencia));
+                    costoListaTmp = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.costoLista / producto.equivalencia));
                 else
-                    return producto.costoLista;
+                    costoListaTmp = producto.costoLista;
+
+                return costoListaTmp;
+
             }
 
         }
@@ -132,9 +149,11 @@ namespace Model
             
         }
 
+        private Decimal _flete;
         public Decimal flete
         {
-            get; set;
+            get { return Decimal.Parse(String.Format(Constantes.decimalFormat, _flete)); }
+            set { this._flete = value; }
         }
 
         public Decimal precioUnitario

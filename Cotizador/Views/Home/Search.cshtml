@@ -147,6 +147,7 @@
                         <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
                         <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>
                         <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
+                        <th data-name="maximoPorcentajeDescuento" data-sortable="true" data-breakpoints="xs">% Desc (max)</th>
                         <th data-name="estadoAprobacion" data-sortable="true" data-breakpoints="xs">Estado Aprobación</th>
                         <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Aprobador</th>
                         <th data-name="motivoRechazo" data-sortable="true" data-breakpoints="xs">Motivo Rechazo</th>
@@ -167,37 +168,33 @@
                         <td>  @cotizacionItem.montoSubTotal   </td>
                         <td>  @cotizacionItem.igv  </td>
                         <td>  @cotizacionItem.montoTotal  </td>
+                        <td>  @cotizacionItem.maximoPorcentajeDescuento  </td>
                         <td>  @cotizacionItem.descripcionEstadoAprobacion  </td>
                         <td>  @cotizacionItem.usuario_aprobador.nombre  </td>
                         <td>  @cotizacionItem.motivoRechazo  </td>
+
                         <td>
-                            <!--bouton-image searchBouton-->
-
                             <button type="button" class="@cotizacionItem.codigo btnEditarCotizacion btn btn-primary ">Editar</button>
-
                             @if (@cotizacionItem.estadoAprobacion == 1 || usuario.esAprobador)
-                    {
-                                <button type="button" class="@cotizacionItem.codigo btnVerCotizacion btn btn-primary  ">Descargar PDF</button>
-            }
-
-
-                                        @if ((@cotizacionItem.estadoAprobacion == 0) && usuario.esAprobador)
-                    {
-                                <button type="button" class="@cotizacionItem.codigo btnAprobarCotizacion btn btn-primary"
-                                        data-toggle='modal' data-codigo="@cotizacionItem.codigo" data-monto="@cotizacionItem.montoTotal" data-target='#modalAprobacion'>
-                                    Aprobar
-                                </button>
-            }
+                                    {
+                                        <button type="button" class="@cotizacionItem.codigo btnVerCotizacion btn btn-primary  ">Descargar PDF</button>
+                                    }
+                                    
+                            @if ((@cotizacionItem.estadoAprobacion == 0) && usuario.esAprobador && usuario.maximoPorcentajeDescuentoAprobacion >= cotizacionItem.maximoPorcentajeDescuento)
+                                    {
+                                    <button type="button" class="@cotizacionItem.codigo btnAprobarCotizacion btn btn-primary"
+                                            data-toggle='modal' data-codigo="@cotizacionItem.codigo" data-monto="@cotizacionItem.montoTotal" data-target='#modalAprobacion'>Aprobar</button>
+                                 }
 
                             @if (@cotizacionItem.estadoAprobacion == 1)
-        {
-                    <button type="button" class="@cotizacionItem.codigo btnReCotizacion btn btn-primary ">Recotizar</button>
-}
+                               {
+                                    <button type="button" class="@cotizacionItem.codigo btnReCotizacion btn btn-primary ">Recotizar</button>
+                                }
 
                         </td>
 
                     </tr>
-            }
+                        }
 
                 </tbody>
             </table>

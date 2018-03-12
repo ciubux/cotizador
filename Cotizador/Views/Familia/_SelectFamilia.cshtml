@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Model.Familia>
+
+@Html.DropDownList("familia",
+new SelectList(Model, "nombre", "nombre", 0, ViewBag.List as IEnumerable<Model.Familia>),
+new { @class = "form-control input-sm", onchange = @"
+$.ajax({
+url: '/Home/updateFamilia',
+type: 'POST',
+dataType: 'JSON',
+data: {
+    familia: this.value
+}
+});
+" })

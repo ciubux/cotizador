@@ -8,11 +8,11 @@ namespace BusinessLayer
 {
     public class FamiliaBL
     {
-        public List<Familia> getFamilias(Guid idCategoria)
+        public List<Familia> getFamilias()
         {
             using (var dal = new FamiliaDAL())
             {
-                return dal.getFamilias(idCategoria);
+                return dal.getFamilias();
             }
         }
     }

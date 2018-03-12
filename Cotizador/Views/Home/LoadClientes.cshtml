@@ -14,30 +14,67 @@
         </tr>
         <tr>
             <td>
-                <label class="control-label col-xs-6" for="cantidad">Cantidad Registros:</label>
+                <label class="control-label col-xs-6" for="cantidadRegistros">Cantidad Registros:</label>
             </td>
             <td>
-                <input class="form-control" type="number" value="0" name="cantidad" id="cantidad" />
+                <input class="form-control" type="number" value="0" name="cantidadRegistros" id="cantidadRegistros" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="control-label col-xs-6" for="sede">Sede:</label>
+            </td>
+            <td>
+                <select id="sede" name="sede">
+                    <option value="A">AREQUIPA</option>
+                    <option value="C">CHICLAYO</option>
+                    <option value="Q">CUSCO</option>
+                    <option value="H">HUANCAYO</option>
+                    <option value="L">LIMA</option>
+                    <option value="P">PIURA</option>
+                    <option value="O">TARAPOTO</option>
+                    <option value="T">TRUJILLO</option>
+                </select>
             </td>
         </tr>
         <tr>
             <td><label class="control-label col-xs-6" for="formato">Formato:</label></td>
-            <td><textarea class="form-control" rows="15" cols="100">
-Columna A=PlazaId
-Columna B=Plaza
-Columna C=Id
+            <td>
+                <!--
+                                       <textarea class="form-control" rows="15" cols="100">
+    Columna A=PlazaId
+    Columna B=Plaza
+    Columna C=Id
+    Columna D=Nombre / Razón Social
+    Columna E=RUC/DNI
+    Columna F=Cód. Ve.
+    Columna G=Nombre Comercial
+    Columna H=Domicilio Legal
+    Columna I=Distrito
+    Columna J=Dirección de Despacho
+    Columna K=Distrito
+    Columna L=Rubro
+
+    *Fila1 es Cabecera
+    </textarea>
+
+                        -->
+
+
+                <textarea class="form-control" rows="15" cols="100">
+Columna C=Codigo
 Columna D=Nombre / Razón Social
-Columna E=RUC/DNI
-Columna F=Cód. Ve.
-Columna G=Nombre Comercial
-Columna H=Domicilio Legal
-Columna I=Distrito
-Columna J=Dirección de Despacho
-Columna K=Distrito
-Columna L=Rubro
+Columna F=RUC/DNI
+Columna G=Domicilio Legal
+Columna H=Distrito
+Columna J=Cód. Ve.
+Columna M=Dirección de Despacho
+Columna T=Nombre Comercial
+Columna U=Rubro
             
 *Fila1 es Cabecera
-</textarea></td>
+</textarea>
+            </td>
         </tr>
         <tr>
             <td></td>

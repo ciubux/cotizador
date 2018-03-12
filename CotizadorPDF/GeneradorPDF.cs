@@ -42,14 +42,14 @@ namespace cotizadorPDF
                 PdfPageBase page = doc.Pages.Add(PdfPageSize.A4);
 
                 PdfImage image = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\logo.png");
-                float width = 100 * 2.4f;
-                float height = 16 * 2.4f;
+                float width = 80 * 2.4f;
+                float height = 20 * 2.4f;
                 page.Canvas.DrawImage(image, 0, 0, width, height);
 
-                PdfImage imageCli = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\marcas.png");
+                PdfImage imageCli = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\proveedores.png");
                 width = 75 * 2.4f;
                 height = 70 * 2.4f;
-                page.Canvas.DrawImage(imageCli, 340, 0, width, height);
+                page.Canvas.DrawImage(imageCli, 335, 0, width, height);
 
                 float y = 60;
                 string mes = "";
@@ -70,7 +70,7 @@ namespace cotizadorPDF
                 }
 
                 page.Canvas.DrawString("Número de Cotización: "+ cot.codigo.ToString().PadLeft(cantidadPad, pad), new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
-                y = y + sepLine * 2;
+                y = y + sepLine;
                 string fecha = cot.fecha.Day + " de " + mes + " de " + cot.fecha.Year;
                 page.Canvas.DrawString(cot.ciudad.nombre + " " + fecha, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine * 2;
@@ -90,6 +90,7 @@ namespace cotizadorPDF
                     y = y + sepLine;
                 }
 
+                int count = doc.Pages.Count;
 
                 page.Canvas.DrawString("Ciudad.- " + cot.ciudad.nombre, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine * 2;
@@ -97,7 +98,7 @@ namespace cotizadorPDF
                 y = y + 3 + sepLine * 2;
 
                 page.Canvas.DrawString("De nuestra consideración:", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
-                y = y + sepLine * 2;
+                y = y + sepLine;
                 page.Canvas.DrawString("Por la presente, nos es grato someter a su consideración la siguiente cotización:", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine * 2;
 
@@ -141,7 +142,7 @@ namespace cotizadorPDF
                     String presentacion = det.unidad; //Se muestra la unidad seleccionada y que se encuentra en el detalle
                     String imagen = "";
                     String precioUnitarioAnterior = "";
-                    String precioUnitarioNuevo = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.precioNeto);
+                    String precioUnitarioNuevo = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.precioUnitario);
                     String cantidad = det.cantidad.ToString();
                     String subtotal = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.subTotal);
 
@@ -210,8 +211,89 @@ namespace cotizadorPDF
 
                 PdfSolidBrush brushColorBlue = new PdfSolidBrush(Color.Blue);
 
+
+
+                int countPages = doc.Pages.Count;
+
+
+                int margenTop = 40;
+                int margenLeft = 45;
+
+                PdfPageBase sectionTotales = page;
+                PdfPageBase sectionObervaciones = page;
+                PdfPageBase sectionFirma = page;
+                int xPage2 = 0;
+                int xPage2a = 0;
+                String reiniciarY = "";
+
+                //Si son dos paginas entonces se obtiene la página y se obtiene cuantos registros
+                //mayores a 10 son
+                if (countPages == 2)
+                {
+                    y = margenTop;
+
+                    if (cot.cotizacionDetalleList.Count > 10)
+                    {
+                        y = y + (60 * (cot.cotizacionDetalleList.Count - 10));
+                    }
+
+                    sectionTotales = doc.Pages[1];
+                    sectionObervaciones = doc.Pages[1];
+                    sectionFirma = doc.Pages[1];
+                    xPage2 = margenLeft;
+                }
+                else
+                {
+                    if(cot.cotizacionDetalleList.Count > 5)
+                    { 
+
+                        SizeF size = page.Size;
+                        PdfPageBase page2 = doc.Pages.Add(size, new PdfMargins(0));
+
+                        switch (cot.cotizacionDetalleList.Count)
+                        {
+                            case 6:
+                                reiniciarY = "FIRMA";
+                                sectionTotales = page;
+                                sectionObervaciones = page;
+                                sectionFirma = page2; break;
+                            case 7:
+                                reiniciarY = "OBSERVACIONES";
+                                sectionTotales = page;
+                                sectionObervaciones = page2;
+                                sectionFirma = page2; break;
+                            case 8:
+                                reiniciarY = "OBSERVACIONES";
+                                sectionTotales = page;
+                                sectionObervaciones = page2;
+                                sectionFirma = page2; break;
+                            case 9:
+                                reiniciarY = "OBSERVACIONES";
+                                sectionTotales = page;
+                                sectionObervaciones = page2;
+                                sectionFirma = page2; break;
+                            case 10:
+                                reiniciarY = "TOTALES";
+                                sectionTotales = page2;
+                                sectionObervaciones = page2;
+                                sectionFirma = page2; break;
+
+                        }
+                    }
+                }
+
+
+
+
+
                 if (cot.considerarCantidades)
                 {
+                    if (reiniciarY.Equals("TOTALES"))
+                    {
+                        y = margenTop;
+                        xPage2 = margenLeft;
+                    }
+
                     PdfTable tableTotales = new PdfTable();
                     tableTotales.Style.CellPadding = 2;
                     tableTotales.Style.BorderPen = new PdfPen(PdfBrushes.Transparent, 0f);
@@ -255,7 +337,7 @@ namespace cotizadorPDF
 
                     tableTotales.DataSource = dataTable2;
 
-                    float width2   = page.Canvas.ClientSize.Width
+                    float width2   = sectionTotales.Canvas.ClientSize.Width
                       - (tableTotales.Columns.Count + 1) * tableTotales.Style.BorderPen.Width;
 
                     tableTotales.Columns[0].Width = width2 * 0.25f;
@@ -277,43 +359,61 @@ namespace cotizadorPDF
                     tableLayout2.EndColumnIndex = tableTotales.Columns.Count-1;
                     
 
-                    PdfLayoutResult result2 = tableTotales.Draw(page, new PointF(420, y), tableLayout2);
+                    PdfLayoutResult result2 = tableTotales.Draw(sectionTotales, new PointF(420 + xPage2a, y), tableLayout2);
                     y = y + result2.Bounds.Height + 5;
-
-                //    y = y + 5;
-
-
-
 
                 }
 
 
+                if (reiniciarY.Equals("OBSERVACIONES"))
+                {
+                    y = margenTop;
+                    xPage2 = margenLeft;
+                }
 
-                
 
                 string[] stringSeparators = new string[] { "\n" };
                 string[] lines = cot.observaciones.Split(stringSeparators, StringSplitOptions.None);
 
                 if (cot.incluidoIgv)
                 {
-                    page.Canvas.DrawString("* Los precios incluyen IGV.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                    sectionObervaciones.Canvas.DrawString("* Los precios incluyen IGV.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 }
                 else
                 {
-                    page.Canvas.DrawString("* Los precios NO incluyen IGV.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                    sectionObervaciones.Canvas.DrawString("* Los precios NO incluyen IGV.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 }
                 y = y + sepLine;
 
 
-                //0 días
-                if (cot.tipoVigencia == 0)
+
+                if (cot.fechaVigenciaInicio.ToString("dd/MM/yyyy").Equals(cot.fecha.ToString("dd/MM/yyyy")))
                 {
-                    page.Canvas.DrawString("* Validez de los precios por " + cot.diasVigencia + " días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                    //0 es días
+                    if (cot.tipoVigencia == 0)
+                    {
+                        sectionObervaciones.Canvas.DrawString("* Validez de los precios por " + cot.diasVigencia + " días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                    }
+                    else //1 es fecha
+                    {
+                        sectionObervaciones.Canvas.DrawString("* Validez de los precios hasta   " + cot.fechaVigenciaLimite.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                    }
+
                 }
-                else //fecha
+                else //Si la fecha de inicio es distinta a la fecha actual se indica en la cotización
                 {
-                    page.Canvas.DrawString("* Validez de los precios hasta   " + cot.fechaVigenciaLimite.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                    if (cot.tipoVigencia == 0)
+                    {
+                        sectionObervaciones.Canvas.DrawString("* Validez de los precios desde " + cot.fechaVigenciaLimite.ToString("dd/MM/yyyy") + " hasta por " + cot.diasVigencia + " días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                    }
+                    else //1 es fecha
+                    {
+                        sectionObervaciones.Canvas.DrawString("* Validez de los precios desde "+ cot.fechaVigenciaLimite.ToString("dd/MM/yyyy")+" hasta " + cot.fechaVigenciaLimite.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                    }
+
                 }
+
+                
 
 
                 y = y + sepLine;
@@ -322,35 +422,40 @@ namespace cotizadorPDF
 
                 foreach (string line in lines)
                 {
-                    page.Canvas.DrawString(line, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                    sectionObervaciones.Canvas.DrawString(line, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                     y = y + sepLine;
                 }
 
-                y = y + sepLine;
-                page.Canvas.DrawString("Sin otro particular, quedamos de ustedes.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                sectionObervaciones.Canvas.DrawString("Sin otro particular, quedamos de ustedes.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine * 2;
-                page.Canvas.DrawString("Atentamente,", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                sectionObervaciones.Canvas.DrawString("Atentamente,", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine * 2;
-                page.Canvas.DrawString("MP INSTITUCIONAL S.A.C.", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), 0, y);
+                sectionObervaciones.Canvas.DrawString("MP INSTITUCIONAL S.A.C.", new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine * 2;
 
-                page.Canvas.DrawString(cot.usuario.nombre, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+
+                if (reiniciarY.Equals("FIRMA"))
+                {
+                    y = margenTop;
+                    xPage2 = margenLeft;
+                }
+
+                sectionFirma.Canvas.DrawString(cot.usuario.nombre, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine;
-                page.Canvas.DrawString(cot.usuario.cargo, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                sectionFirma.Canvas.DrawString(cot.usuario.cargo, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine;
-                page.Canvas.DrawString(cot.usuario.contacto, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                sectionFirma.Canvas.DrawString(cot.usuario.contacto, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine;
-                page.Canvas.DrawString(cot.usuario.email, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
+                sectionFirma.Canvas.DrawString(cot.usuario.email, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine;
-                page.Canvas.DrawString("www.mpinstitucional.com", new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline), new PdfSolidBrush(Color.Blue), 0, y);
+                sectionFirma.Canvas.DrawString("www.mpinstitucional.com", new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline), new PdfSolidBrush(Color.Blue), xPage2, y);
                 //page.Canvas.DrawString("www.mpinstitucional.com", new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline), new PdfSolidBrush(Color.Blue), 0, y);
                 PdfTextWebLink link2 = new PdfTextWebLink();
                 link2.Text = "www.mpinstitucional.com";
                 link2.Url = "www.mpinstitucional.com";
                 link2.Font = new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline);
                 link2.Brush = PdfBrushes.DarkSeaGreen;
-                link2.DrawTextWebLink(page.Canvas, new PointF(0, y));
-
+                link2.DrawTextWebLink(sectionFirma.Canvas, new PointF(xPage2, y));
 
                 String fechaCotizacion = DateTime.Now.Year + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day + "_" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
 

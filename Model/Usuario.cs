@@ -15,6 +15,7 @@ namespace Model
         public string cargo { get; set; }
         public string contacto { get; set; }
         public bool esAprobador { get; set; }
+        public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
     }
 }
 

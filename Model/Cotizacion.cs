@@ -45,6 +45,8 @@ namespace Model
 
         public String motivoRechazo { get; set; }
 
+        public Decimal maximoPorcentajeDescuento { get; set; }
+
         public String descripcionEstadoAprobacion { get {
 
                 String estado = "";

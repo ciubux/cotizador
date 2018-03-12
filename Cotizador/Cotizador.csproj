@@ -212,6 +212,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ProveedorController.cs" />
+    <Compile Include="Controllers\FamiliaController.cs" />
     <Compile Include="Controllers\CiudadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -240,10 +242,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\add.png" />
     <Content Include="images\calculadora.png" />
     <Content Include="images\calculadora2.png" />
     <Content Include="images\calculadora3.png" />
-    <Content Include="images\clientes.png" />
+    <Content Include="images\proveedores.png" />
     <Content Include="images\down.png" />
     <Content Include="images\down2.png" />
     <Content Include="images\logo.png" />
@@ -252,6 +255,12 @@
     <Content Include="images\NoDisponible.gif" />
     <Content Include="images\search_icon.png" />
     <Content Include="images\tmp.png" />
+    <Content Include="images\ui-icons_444444_256x240.png" />
+    <Content Include="images\ui-icons_555555_256x240.png" />
+    <Content Include="images\ui-icons_777620_256x240.png" />
+    <Content Include="images\ui-icons_777777_256x240.png" />
+    <Content Include="images\ui-icons_cc0000_256x240.png" />
+    <Content Include="images\ui-icons_ffffff_256x240.png" />
     <Content Include="images\up.png" />
     <Content Include="images\up2.png" />
     <Content Include="Scripts\app\cotizador\cotizador.js" />
@@ -328,6 +337,10 @@
     <Content Include="Views\Home\LoadClientes.cshtml" />
     <Content Include="Views\Home\LoadProductos.cshtml" />
     <Content Include="Views\Home\LoadFacturas.cshtml" />
+    <Content Include="Views\Home\LoadPrecioLista.cshtml" />
+    <Content Include="Views\Familia\_SelectFamilia.cshtml" />
+    <Content Include="Views\Proveedor\_SelectProveedor.cshtml" />
+    <Content Include="Views\Home\LoadPrecios.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

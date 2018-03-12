@@ -10,6 +10,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Cotizador.Models;
 using BusinessLayer;
+using Model;
+using System.Collections.Generic;
 
 namespace Cotizador.Controllers
 {
@@ -89,6 +91,15 @@ namespace Cotizador.Controllers
             switch (signInStatus)
             {
                 case SignInStatus.Success:
+
+                    FamiliaBL familiaBL = new FamiliaBL();
+                    List<Familia> familiaList = familiaBL.getFamilias();
+                    this.Session["familiaList"] = familiaList;
+
+                    ProveedorBL proveedorBL = new ProveedorBL();
+                    List<Proveedor> proveedorList = proveedorBL.getProveedores();
+                    this.Session["proveedorList"] = proveedorList;
+
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

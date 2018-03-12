@@ -8,11 +8,11 @@ namespace BusinessLayer
 {
     public class ClienteBL
     {
-        public List<Cliente> getCLientesBusqueda(String textoBusqueda)
+        public List<Cliente> getCLientesBusqueda(String textoBusqueda,Guid idCiudad)
         {
             using (var clienteDAL = new ClienteDAL())
             {
-                return clienteDAL.getClientesBusqueda(textoBusqueda);
+                return clienteDAL.getClientesBusqueda(textoBusqueda, idCiudad);
             }
         }
         public Cliente getCliente(Guid idCliente)
@@ -20,6 +20,14 @@ namespace BusinessLayer
             using (var clienteDAL = new ClienteDAL())
             {
                 return clienteDAL.getCliente(idCliente);
+            }
+        }
+
+        public Cliente insertCliente(Cliente cliente)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                return clienteDAL.insertCliente(cliente);
             }
         }
 
@@ -31,11 +39,11 @@ namespace BusinessLayer
             }
         }
 
-        public void truncateClienteStaging()
+        public void truncateClienteStaging(String sede)
         {
             using (var clienteDAL = new ClienteDAL())
             {
-                clienteDAL.truncateClienteStaging();
+                clienteDAL.truncateClienteStaging(sede);
             }
         }
 

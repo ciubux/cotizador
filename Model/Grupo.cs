@@ -13,7 +13,7 @@ namespace Model
         public String contacto { get; set; }
         public override string ToString()
         {
-            return "Cod: " + this.codigo + "  -  Grupo: " + this.nombre;
+            return "Grupo: " + this.nombre + " - Cod: " + this.codigo;
         }
     }
 }

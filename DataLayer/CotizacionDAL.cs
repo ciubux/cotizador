@@ -23,6 +23,7 @@ namespace DataLayer
 
            // InputParameterAdd.Varchar(objCommand, "codigo", "0000000001");
             InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
+            InputParameterAdd.DateTime(objCommand, "fechaVigenciaInicio", cotizacion.fechaVigenciaInicio);
             InputParameterAdd.DateTime(objCommand, "fechaVigenciaLimite", cotizacion.fechaVigenciaLimite);
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIgv?1:0).ToString()));
             InputParameterAdd.SmallInt(objCommand, "consideraCantidades", short.Parse((cotizacion.considerarCantidades ? 1 : 0).ToString()));
@@ -73,6 +74,7 @@ namespace DataLayer
 
             // InputParameterAdd.Varchar(objCommand, "codigo", "0000000001");
             InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
+            InputParameterAdd.DateTime(objCommand, "fechaVigenciaInicio", cotizacion.fechaVigenciaInicio);
             InputParameterAdd.DateTime(objCommand, "fechaVigenciaLimite", cotizacion.fechaVigenciaLimite);
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIgv ? 1 : 0).ToString()));
             InputParameterAdd.SmallInt(objCommand, "consideraCantidades", short.Parse((cotizacion.considerarCantidades ? 1 : 0).ToString()));
@@ -167,6 +169,7 @@ namespace DataLayer
             {
                 cotizacion.idCotizacion = Converter.GetGuid(row,"id_cotizacion");
                 cotizacion.fecha = Converter.GetDateTime(row, "fecha");
+                cotizacion.fechaVigenciaInicio = Converter.GetDateTime(row, "fecha_vigencia_inicio");
                 cotizacion.fechaVigenciaLimite = Converter.GetDateTime(row, "fecha_vigencia_limite");
                 cotizacion.incluidoIgv = Converter.GetBool(row, "incluido_igv");
                 cotizacion.considerarCantidades = Converter.GetBool(row, "considera_cantidades");
@@ -322,6 +325,7 @@ namespace DataLayer
                 cotizacion.igv = Converter.GetDecimal(row, "igv");
                 cotizacion.montoTotal = Converter.GetDecimal(row, "total");
                 cotizacion.motivoRechazo = Converter.GetString(row, "motivo_rechazo");
+                cotizacion.maximoPorcentajeDescuento = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
 
                 ///Mover "{0:0.00}" a clase de constantes
                 cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.montoTotal / (1 + cotizacion.igv)));

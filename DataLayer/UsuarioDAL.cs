@@ -31,6 +31,7 @@ namespace DataLayer
                 usuario.nombre = Converter.GetString(row, "nombre");
                 usuario.contacto = Converter.GetString(row, "contacto");
                 usuario.esAprobador = Converter.GetBool(row, "es_aprobador");
+                usuario.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
             }
             return usuario;
         }

@@ -1,0 +1,46 @@
+﻿<div class="container">
+    <form action="/Home/LoadPrecioListaFile" method="post" enctype="multipart/form-data" id="form1">
+        <table>
+            <tr>
+                <td>
+                    <label class="control-label col-xs-6" for="file">Archivo Precio Lista:</label>
+                </td>
+                <td>
+                    <input class="form-control" type="file" name="file" id="file" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label col-xs-6" for="cantidad">Cantidad Registros:</label>
+                </td>
+                <td>
+                    <input class="form-control" type="number" value="0" name="cantidad" id="cantidad" />
+                </td>
+            </tr>
+            <tr>
+                <td><label class="control-label col-xs-6" for="formato">Formato:</label></td>
+                <td><textarea class="form-control" rows="15" cols="80">
+Columna B=Proveedor
+Columna C=SKU
+Columna D=SKU Proveedor
+Columna E=Unidad
+Columna H=Unidad Alternativa
+Columna J=Equivalencia (entero)
+Columna K=Descripción
+Columna S=costo
+Columna W=Precio Lima
+Columna Z=Precio Provincias
+
+*Fila1 es Cabecera
+        </textarea></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <button type="submit" class="form-control" form="form1" value="Submit">Cargar Precio Lista</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    
+</div>
