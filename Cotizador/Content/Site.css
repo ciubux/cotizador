@@ -152,7 +152,7 @@ input.label-input {
     width: 16px;
     height: 16px;
     display: inline-block;
-    margin-right: 5px;
+    margin-right: 0px;
     vertical-align: text-top;
     background-color: transparent;
     background-position: center center;
@@ -177,7 +177,7 @@ input.label-input {
 
 
 .addBouton:before {
-    background-image: url(/images/add.png);
+    background-image: url(/images/Add-Male-User-icon.png);
 }
 
 .searchBouton:before {

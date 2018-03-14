@@ -8,18 +8,16 @@ url: '/Home/updateIdCiudad',
 type: 'POST',
 dataType: 'JSON',
 data: {
-    idCiudad: this.value
+idCiudad: this.value
 },
 
 error: function (detalle) {
-    alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
-    location.reload();
+alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
+location.reload();
 },
 success: function () {
-    //cargarChosenCliente();
-    location.reload();
+//cargarChosenCliente();
+location.reload();
 }
 });
 " })
-
-

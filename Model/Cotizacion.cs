@@ -7,15 +7,23 @@ namespace Model
 {
     public class Cotizacion
     {
-        public Guid idCotizacion { get; set; }
+        public Guid idCotizacion { get; set; }       
+        
         public Int64 codigo { get; set; }
         public DateTime fecha { get; set; }
 
         /* 0 indica días, 1 indica fecha */
         public int tipoVigencia { get; set; }
+        //plazo oferta dias
         public int diasVigencia { get; set; }
+
+        public DateTime fechaOfertaFin { get; set; }
+
         public DateTime fechaVigenciaLimite { get; set; }
         public DateTime fechaVigenciaInicio { get; set; }
+
+        //Utilizado para el filtro de búsqueda
+       // public DateTime fechaDesde { get; set; }
         public DateTime fechaHasta { get; set; }
         public Boolean incluidoIgv { get; set; }
         public Decimal flete { get; set; }
@@ -50,20 +58,30 @@ namespace Model
         public String descripcionEstadoAprobacion { get {
 
                 String estado = "";
-                if (estadoAprobacion == 1)
-                {
-                    estado = "Aprobada";
-                }
-                else if(estadoAprobacion == 0)
+                if(estadoAprobacion == 0)
                 {
                     estado = "Pendiente Aprobación";
                 }
+                else if (estadoAprobacion == 1)
+                {
+                    estado = "Aprobada";
+                }
                 else if (estadoAprobacion == 2)
+                {
+                    estado = "Denegada";
+                }
+                else if (estadoAprobacion == 3)
+                {
+                    estado = "Aceptada";
+                }
+                else if (estadoAprobacion == 4)
                 {
                     estado = "Rechazada";
                 }
                 return estado;
             } }
+
+        
 
     }
 }

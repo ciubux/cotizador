@@ -15,6 +15,8 @@ namespace Cotizador.Controllers
     public class HomeController : Controller
     {
      
+
+        //Nueva Cotización
         public ActionResult New()
         {
             this.Session["cotizacion"] = null;
@@ -101,8 +103,8 @@ namespace Cotizador.Controllers
 
 
             //Se agrega fecha en la busqueda
-            String[] fecha = this.Request.Params["fecha"].Split('/');
-            cotizacion.fecha = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            String[] fechaDesde = this.Request.Params["fecha"].Split('/');
+            cotizacion.fecha = new DateTime(Int32.Parse(fechaDesde[2]), Int32.Parse(fechaDesde[1]), Int32.Parse(fechaDesde[0]));
 
             //Se agrega fechaHasta en la busqueda
             String[] fechaHasta = this.Request.Params["fechaHasta"].Split('/');
@@ -153,7 +155,7 @@ namespace Cotizador.Controllers
 
             Usuario usuario = (Usuario)this.Session["usuario"];
 
-            ViewBag.debug = 1;
+            ViewBag.debug = 0;
             ViewBag.Si = "Sí";
             ViewBag.No = "No";
             ViewBag.IGV = Constantes.IGV;
@@ -168,13 +170,14 @@ namespace Cotizador.Controllers
                 cotizacionTmp.fecha = DateTime.Now;
                 cotizacionTmp.fechaVigenciaInicio = DateTime.Now;
                 cotizacionTmp.fechaVigenciaLimite = cotizacionTmp.fecha.AddDays(15);
+                //cotizacionTmp.fechaOfertaFin = null;
                 cotizacionTmp.ciudad = new Ciudad();
                 cotizacionTmp.cliente = new Cliente();
                 cotizacionTmp.grupo = new Grupo();
                 cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
                 cotizacionTmp.igv = Constantes.IGV;
                 cotizacionTmp.flete = 0;
-                cotizacionTmp.diasVigencia = Constantes.diasVigencia;
+                cotizacionTmp.diasVigencia = Constantes.plazoOfertaDias;
                 cotizacionTmp.considerarCantidades = true;
                 cotizacionTmp.usuario = usuario;
                 cotizacionTmp.observaciones = "* Condiciones de pago: al contado.\n" +
@@ -636,7 +639,7 @@ namespace Cotizador.Controllers
 
 
             ProductoBL bl = new ProductoBL();
-            List<Producto> lista = bl.getProductosBusqueda(texto_busqueda, cotizacion.considerarDescontinuados, proveedor, familia);
+            List<Producto> lista = bl.getProductosBusqueda(texto_busqueda, cotizacion.considerarDescontinuados, proveedor, familia, cotizacion.cliente.idCliente, cotizacion.grupo.idGrupo);
 
             String resultado = "{\"q\":\"" + texto_busqueda + "\",\"results\":[";
             Boolean existe = false;

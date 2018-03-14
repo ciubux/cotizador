@@ -1346,12 +1346,20 @@ jQuery(function ($) {
         $("#generarPDF").attr('disabled', 'disabled');
         $("#grabarCotizacion").attr('disabled', 'disabled');
         $("input[name=mostrarcodproveedor]").attr('disabled', 'disabled');
-        
+
+
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            console.log('Esto es un dispositivo móvil');
+            return;
+        }
+
 
         //llama a la función que cambia el estilo de display después de que la tabla se ha redibujado
         //Si lo llama antes el redibujo reemplazará lo definido
         window.setInterval(mostrarFlechasOrdenamiento, 600);
 
+
+       
 
         /*Se agrega control input en columna cantidad*/
         var $j_object = $("td.detcantidad");

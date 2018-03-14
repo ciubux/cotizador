@@ -41,20 +41,19 @@
                     <li>@Html.ActionLink("Nueva Cotización", "New", "Home", routeValues, htmlAttributes: new { onclick = "return confirm('Si ha realizado cambios estos no se guardarán. ¿Desea continuar creando una nueva cotización?');" })</li>
                     <li>@Html.ActionLink("Buscar Cotización", "Search", "Home")</li>
 
-                    <li>@Html.ActionLink("Cargar Clientes", "LoadClientes", "Home")</li>
-                    <li>@Html.ActionLink("Cargar Productos", "LoadProductos", "Home")</li>
-                    <li>@Html.ActionLink("Cargar Precios", "LoadPrecios", "Home")</li>
+                    <li>
 
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                            Carga de Archivos
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>@Html.ActionLink("Cargar Clientes", "LoadClientes", "Home")</li>
+                            <li>@Html.ActionLink("Cargar Productos", "LoadProductos", "Home")</li>
+                            <li>@Html.ActionLink("Cargar Precios", "LoadPrecios", "Home")</li>
+                        </ul>
 
-                    <!--   <li>
-
-    <a class="dropdown-toggle" data-toggle="dropdown">
-        Presupuestos
-        <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu" role="menu">
-        <li><a href="/Budgets">Presupuestos</a></li>
-    </ul>  </li>-->
+                    </li>
 
                 </ul>
 

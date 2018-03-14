@@ -404,11 +404,11 @@ namespace cotizadorPDF
                 {
                     if (cot.tipoVigencia == 0)
                     {
-                        sectionObervaciones.Canvas.DrawString("* Validez de los precios desde " + cot.fechaVigenciaLimite.ToString("dd/MM/yyyy") + " hasta por " + cot.diasVigencia + " días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                        sectionObervaciones.Canvas.DrawString("* Validez de los precios desde " + cot.fechaVigenciaInicio.ToString("dd/MM/yyyy") + " hasta por " + cot.diasVigencia + " días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                     }
                     else //1 es fecha
                     {
-                        sectionObervaciones.Canvas.DrawString("* Validez de los precios desde "+ cot.fechaVigenciaLimite.ToString("dd/MM/yyyy")+" hasta " + cot.fechaVigenciaLimite.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                        sectionObervaciones.Canvas.DrawString("* Validez de los precios desde "+ cot.fechaVigenciaInicio.ToString("dd/MM/yyyy")+" hasta " + cot.fechaVigenciaLimite.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                     }
 
                 }

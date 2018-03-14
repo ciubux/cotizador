@@ -25,6 +25,9 @@ namespace Cotizador.Controllers
 
         public ActionResult list()
         {
+       //     ViewBag.numero = Int32.Parse(Request["numero"].ToString());
+
+
             CiudadBL ciudadBL = new CiudadBL();
 
             List<Ciudad> ciudadListTmp = ciudadBL.getCiudades();

@@ -4566,7 +4566,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .navbar-inverse .navbar-nav > .open > a:hover,
 .navbar-inverse .navbar-nav > .open > a:focus {
   color: #080808;
-  background-color: #080808;
+ /*cesarbackground-color: #080808;*/
+  background-color: #c8C8C8;
 }
 
 .navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
