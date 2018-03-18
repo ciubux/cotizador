@@ -21,7 +21,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pi_precioListaStaging");
             InputParameterAdd.Varchar(objCommand, "codigoCliente", precioListaStaging.codigoCliente);
-            InputParameterAdd.DateTime(objCommand, "fechaVigenciaInicio", precioListaStaging.fechaVigenciaInicio);
+            InputParameterAdd.DateTime(objCommand, "fechaInicioVigenciaPrecios", precioListaStaging.fechaVigenciaInicio);
             InputParameterAdd.DateTime(objCommand, "fechaVigenciaFin", precioListaStaging.fechaVigenciaFin);
             InputParameterAdd.Varchar(objCommand, "sku", precioListaStaging.sku);
             InputParameterAdd.Varchar(objCommand, "consideraCantidades", precioListaStaging.consideraCantidades);

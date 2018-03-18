@@ -23,10 +23,11 @@ namespace DataLayer
 
            // InputParameterAdd.Varchar(objCommand, "codigo", "0000000001");
             InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
-            InputParameterAdd.DateTime(objCommand, "fechaVigenciaInicio", cotizacion.fechaVigenciaInicio);
-            InputParameterAdd.DateTime(objCommand, "fechaVigenciaLimite", cotizacion.fechaVigenciaLimite);
+            InputParameterAdd.DateTime(objCommand, "fechaLimiteValidezOferta", cotizacion.fechaLimiteValidezOferta);
+            InputParameterAdd.DateTime(objCommand, "fechaInicioVigenciaPrecios", cotizacion.fechaInicioVigenciaPrecios);
+            InputParameterAdd.DateTime(objCommand, "fechaFinVigenciaPrecios", cotizacion.fechaFinVigenciaPrecios);
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIgv?1:0).ToString()));
-            InputParameterAdd.SmallInt(objCommand, "consideraCantidades", short.Parse((cotizacion.considerarCantidades ? 1 : 0).ToString()));
+            InputParameterAdd.Int(objCommand, "consideraCantidades", (int)cotizacion.considerarCantidades);
 
             //Si no se cuenta con idCliente entonces se registra el grupo
             if (cotizacion.cliente.idCliente == Guid.Empty)
@@ -48,9 +49,12 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto);
-            InputParameterAdd.SmallInt(objCommand, "estadoAprobacion", cotizacion.estadoAprobacion);
+          
             InputParameterAdd.SmallInt(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
-            InputParameterAdd.Int(objCommand, "tipoVigencia", cotizacion.tipoVigencia);
+            InputParameterAdd.Int(objCommand, "mostrarValidezOfertaDias", cotizacion.mostrarValidezOfertaEnDias);
+            InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
+
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "codigo");
             ExecuteNonQuery(objCommand);
@@ -71,13 +75,16 @@ namespace DataLayer
         public void UpdateCotizacion(Cotizacion cotizacion)
         {
             var objCommand = GetSqlCommand("pu_cotizacion");
+       
 
             // InputParameterAdd.Varchar(objCommand, "codigo", "0000000001");
             InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
-            InputParameterAdd.DateTime(objCommand, "fechaVigenciaInicio", cotizacion.fechaVigenciaInicio);
-            InputParameterAdd.DateTime(objCommand, "fechaVigenciaLimite", cotizacion.fechaVigenciaLimite);
+            InputParameterAdd.DateTime(objCommand, "fechaLimiteValidezOferta", cotizacion.fechaLimiteValidezOferta);
+            InputParameterAdd.DateTime(objCommand, "fechaInicioVigenciaPrecios", cotizacion.fechaInicioVigenciaPrecios);
+            InputParameterAdd.DateTime(objCommand, "fechaFinVigenciaPrecios", cotizacion.fechaFinVigenciaPrecios);
+            InputParameterAdd.DateTime(objCommand, "fechaModificacion", cotizacion.fechaModificacion);
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIgv ? 1 : 0).ToString()));
-            InputParameterAdd.SmallInt(objCommand, "consideraCantidades", short.Parse((cotizacion.considerarCantidades ? 1 : 0).ToString()));
+            InputParameterAdd.Int(objCommand, "consideraCantidades", (int)cotizacion.considerarCantidades);
 
             //Si no se cuenta con idCliente entonces se registra el grupo
             if (cotizacion.cliente.idCliente == Guid.Empty)
@@ -101,18 +108,39 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto);
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
-            InputParameterAdd.SmallInt(objCommand, "estadoAprobacion", cotizacion.estadoAprobacion);
-            InputParameterAdd.SmallInt(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
-            InputParameterAdd.Int(objCommand, "tipoVigencia", cotizacion.tipoVigencia);
+            InputParameterAdd.Int(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
+
+            InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
+            InputParameterAdd.Int(objCommand, "mostrarValidezOfertaDias", cotizacion.mostrarValidezOfertaEnDias);
+
+            OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
+            ExecuteNonQuery(objCommand);
+
+            DateTime fechaModifiacionActual = (DateTime)objCommand.Parameters["@fechaModificacionActual"].Value;
+
+           
 
             ExecuteNonQuery(objCommand);
 
-            foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
-            {
-                cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
-                this.InsertCotizacionDetalle(cotizacionDetalle);
-            }
+   
+            DateTime date1 = new DateTime(fechaModifiacionActual.Year, fechaModifiacionActual.Month, fechaModifiacionActual.Day, fechaModifiacionActual.Hour, fechaModifiacionActual.Minute, fechaModifiacionActual.Second);
+            DateTime date2 = new DateTime(cotizacion.fechaModificacion.Year, cotizacion.fechaModificacion.Month, cotizacion.fechaModificacion.Day, cotizacion.fechaModificacion.Hour, cotizacion.fechaModificacion.Minute, cotizacion.fechaModificacion.Second);
 
+            int result = DateTime.Compare(date1, date2);
+            if (result != 0)
+            {
+                //No se puede actualizar la cotización si las fechas son distintas
+                throw new Exception("CotizacionDesactualizada");
+            }
+            else
+            { 
+
+                foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
+                {
+                    cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
+                    this.InsertCotizacionDetalle(cotizacionDetalle);
+                }
+            }
 
         }
 
@@ -134,6 +162,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", cotizacionDetalle.esPrecioAlternativo?1:0);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacionDetalle.usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", cotizacionDetalle.flete);
+            InputParameterAdd.Varchar(objCommand, "observaciones", cotizacionDetalle.observacion);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             ExecuteNonQuery(objCommand);
 
@@ -146,8 +175,8 @@ namespace DataLayer
 
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
-            InputParameterAdd.SmallInt(objCommand, "estadoAprobacion", cotizacion.estadoAprobacion);
-            InputParameterAdd.Varchar(objCommand, "motivoRechazo", cotizacion.motivoRechazo);
+            InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion);
 
             ExecuteNonQuery(objCommand);
             return cotizacion;
@@ -169,20 +198,24 @@ namespace DataLayer
             {
                 cotizacion.idCotizacion = Converter.GetGuid(row,"id_cotizacion");
                 cotizacion.fecha = Converter.GetDateTime(row, "fecha");
-                cotizacion.fechaVigenciaInicio = Converter.GetDateTime(row, "fecha_vigencia_inicio");
-                cotizacion.fechaVigenciaLimite = Converter.GetDateTime(row, "fecha_vigencia_limite");
+                cotizacion.fechaLimiteValidezOferta = Converter.GetDateTime(row, "fecha_limite_validez_oferta");
+                cotizacion.fechaInicioVigenciaPrecios = Converter.GetDateTime(row, "fecha_inicio_vigencia_precios");
+                cotizacion.fechaFinVigenciaPrecios = Converter.GetDateTime(row, "fecha_fin_vigencia_precios");
                 cotizacion.incluidoIgv = Converter.GetBool(row, "incluido_igv");
-                cotizacion.considerarCantidades = Converter.GetBool(row, "considera_cantidades");
+                cotizacion.considerarCantidades =   (Cotizacion.OpcionesConsiderarCantidades)Converter.GetInt(row, "considera_cantidades");
+                cotizacion.mostrarValidezOfertaEnDias = Converter.GetInt(row, "mostrar_validez_oferta_dias");
                 cotizacion.flete = Converter.GetDecimal(row, "porcentaje_flete");
                 cotizacion.igv = Converter.GetDecimal(row, "igv");
                 cotizacion.montoTotal = Converter.GetDecimal(row, "total");
-                cotizacion.estadoAprobacion = Converter.GetShort(row, "estado_aprobacion");
-                cotizacion.tipoVigencia = Converter.GetInt(row, "tipo_vigencia");
+                cotizacion.observaciones = Converter.GetString(row, "observaciones");
+                cotizacion.mostrarCodigoProveedor = Converter.GetBool(row, "mostrar_codigo_proveedor");
+                cotizacion.contacto = Converter.GetString(row, "contacto");
                 ///Mover "{0:0.00}" a clase de constantes
                 cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.montoTotal / (1+cotizacion.igv)));
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
+                cotizacion.fechaModificacion = Converter.GetDateTime(row, "fecha_modificacion");
 
-                cotizacion.observaciones = Converter.GetString(row, "observaciones");
+
 
                 //Si el cliente es Null
                 if (row["id_cliente"] == DBNull.Value)
@@ -208,20 +241,26 @@ namespace DataLayer
 
 
 
-                cotizacion.contacto = Converter.GetString(row, "contacto");           
+                
 
                 cotizacion.ciudad = new Ciudad();
                 cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                cotizacion.ciudad.nombre = Converter.GetString(row, "nombre");
+                cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
 
                 cotizacion.usuario = new Usuario();
                 cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 cotizacion.usuario.cargo = Converter.GetString(row, "cargo");
                 cotizacion.usuario.contacto = Converter.GetString(row, "contacto_usuario");
                 cotizacion.usuario.email = Converter.GetString(row, "email");
-                cotizacion.mostrarCodigoProveedor = Converter.GetBool(row, "mostrar_codigo_proveedor");
+                
 
 
+
+                cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
+                cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Converter.GetInt(row, "estado_seguimiento");
+                cotizacion.seguimientoCotizacion.observacion = Converter.GetString(row, "observacion_seguimiento");
+                cotizacion.seguimientoCotizacion.usuario = new Usuario();
+                cotizacion.seguimientoCotizacion.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
 
             }
 
@@ -295,6 +334,8 @@ namespace DataLayer
                
                 cotizacionDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
 
+                cotizacionDetalle.observacion = Converter.GetString(row, "observaciones");
+
                 cotizacion.cotizacionDetalleList.Add(cotizacionDetalle);
             }
             return cotizacion;
@@ -306,9 +347,10 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "id_cliente", cotizacion.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "id_ciudad", cotizacion.ciudad.idCiudad);
-            InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
+            InputParameterAdd.DateTime(objCommand, "fechaDesde", cotizacion.fechaDesde);
             InputParameterAdd.DateTime(objCommand, "fechaHasta", cotizacion.fechaHasta);
-            InputParameterAdd.SmallInt(objCommand, "estadoAprobacion", cotizacion.estadoAprobacion);
+         //   InputParameterAdd.Guid(objCommand, "usuario", cotizacion.usuario.idUsuario);
+            InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
             DataTable dataTable = Execute(objCommand);
 
             List<Cotizacion> cotizacionList = new List<Cotizacion>();
@@ -320,19 +362,22 @@ namespace DataLayer
                 cotizacion.idCotizacion = Converter.GetGuid(row, "id_cotizacion");
                 cotizacion.fecha = Converter.GetDateTime(row, "fecha");
                 cotizacion.incluidoIgv = Converter.GetBool(row, "incluido_igv");
-                cotizacion.considerarCantidades = Converter.GetBool(row, "considera_cantidades");
+                cotizacion.considerarCantidades = (Cotizacion.OpcionesConsiderarCantidades)Converter.GetInt(row, "considera_cantidades");
                 cotizacion.flete = Converter.GetDecimal(row, "porcentaje_flete");
                 cotizacion.igv = Converter.GetDecimal(row, "igv");
                 cotizacion.montoTotal = Converter.GetDecimal(row, "total");
-                cotizacion.motivoRechazo = Converter.GetString(row, "motivo_rechazo");
-                cotizacion.maximoPorcentajeDescuento = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
+                
+                
+                cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
 
                 ///Mover "{0:0.00}" a clase de constantes
                 cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.montoTotal / (1 + cotizacion.igv)));
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
-                cotizacion.estadoAprobacion = Converter.GetShort(row, "estado_aprobacion");
+                
 
                 cotizacion.observaciones = Converter.GetString(row, "observaciones");
+
+
                 cotizacion.contacto = Converter.GetString(row, "contacto");
                 cotizacion.cliente = new Cliente();
                 cotizacion.cliente.codigo = Converter.GetString(row, "codigo");
@@ -343,12 +388,21 @@ namespace DataLayer
                 cotizacion.usuario = new Usuario();
                 cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");
 
-                cotizacion.usuario_aprobador = new Usuario();
-                cotizacion.usuario_aprobador.nombre = Converter.GetString(row, "nombre_usuario_aprobador");
+              //  cotizacion.usuario_aprobador = new Usuario();
+              //  cotizacion.usuario_aprobador.nombre = Converter.GetString(row, "nombre_usuario_aprobador");
 
                 cotizacion.ciudad = new Ciudad();
                 cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                cotizacion.ciudad.nombre = Converter.GetString(row, "nombre");
+                cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+
+                cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
+                cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Converter.GetInt(row, "estado_seguimiento");
+                cotizacion.seguimientoCotizacion.observacion = Converter.GetString(row, "observacion_seguimiento");
+                cotizacion.seguimientoCotizacion.usuario = new Usuario();
+                cotizacion.seguimientoCotizacion.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
+
+
+
                 cotizacionList.Add(cotizacion);
             }
             return cotizacionList;

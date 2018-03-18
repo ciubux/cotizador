@@ -160,5 +160,7 @@ namespace Model
         {
             get { return Decimal.Parse(String.Format(Constantes.decimalFormat, flete + precioNeto)); } 
         }
+
+        public String observacion { get; set; }
     }
 }

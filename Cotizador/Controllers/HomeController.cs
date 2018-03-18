@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using NPOI.HSSF.UserModel;
 using System.IO;
 using NPOI.SS.UserModel;
+using Newtonsoft.Json;
 
 namespace Cotizador.Controllers
 {
@@ -17,23 +18,26 @@ namespace Cotizador.Controllers
      
 
         //Nueva Cotización
-        public ActionResult New()
-        {
-            this.Session["cotizacion"] = null;
-            return RedirectToAction("Index", "Home");
-        }
+       
 
-        public ActionResult Search()
+
+
+        public ActionResult Index()
         {
+            crearCotizacion();
+
             if (this.Session["cotizacionBusqueda"] == null)
             {
                 Cotizacion cotizacionTmp = new Cotizacion();
-                cotizacionTmp.fecha = DateTime.Now.AddDays(-10);
+                cotizacionTmp.fechaDesde = DateTime.Now.AddDays(-10);
                 cotizacionTmp.fechaHasta = DateTime.Now;
                 cotizacionTmp.ciudad = new Ciudad();
                 cotizacionTmp.cliente = new Cliente();
                 cotizacionTmp.grupo = new Grupo();
-                cotizacionTmp.estadoAprobacion = -1;
+                cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
+                cotizacionTmp.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Todos;
+               // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
+                cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
                 this.Session["cotizacionBusqueda"] = cotizacionTmp;
             }
 
@@ -44,7 +48,7 @@ namespace Cotizador.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            ViewBag.fecha = cotizacionSearch.fecha.ToString("dd/MM/yyyy");
+            ViewBag.fechaDesde = cotizacionSearch.fechaDesde.ToString("dd/MM/yyyy");
             ViewBag.fechaHasta = cotizacionSearch.fechaHasta.ToString("dd/MM/yyyy");
 
 
@@ -73,18 +77,19 @@ namespace Cotizador.Controllers
             }
             */
 
-            ViewBag.cotizacionList = this.Session["cotizacionList"];
-            ViewBag.usuario = this.Session["usuario"];
+          
             ViewBag.cotizacion = cotizacion;
-            ViewBag.numero = cotizacion.codigo;
-            ViewBag.idCiudad = cotizacion.ciudad.idCiudad;
-            
-            
+
+            ViewBag.cotizacionList =  this.Session["cotizacionList"];
             ViewBag.existeCliente = existeCliente;
 
             return View();
         }
 
+
+
+
+        /*Ejecución de la búsqueda de cotizaciones*/
         public int SearchCotizaciones()
         {
             Cotizacion cotizacion = new Cotizacion();
@@ -103,14 +108,15 @@ namespace Cotizador.Controllers
 
 
             //Se agrega fecha en la busqueda
-            String[] fechaDesde = this.Request.Params["fecha"].Split('/');
-            cotizacion.fecha = new DateTime(Int32.Parse(fechaDesde[2]), Int32.Parse(fechaDesde[1]), Int32.Parse(fechaDesde[0]));
+            String[] fechaDesde = this.Request.Params["fechaDesde"].Split('/');
+            cotizacion.fechaDesde = new DateTime(Int32.Parse(fechaDesde[2]), Int32.Parse(fechaDesde[1]), Int32.Parse(fechaDesde[0]));
 
             //Se agrega fechaHasta en la busqueda
             String[] fechaHasta = this.Request.Params["fechaHasta"].Split('/');
             cotizacion.fechaHasta = new DateTime(Int32.Parse(fechaHasta[2]), Int32.Parse(fechaHasta[1]), Int32.Parse(fechaHasta[0]),23,59,59);
 
-            cotizacion.estadoAprobacion = short.Parse(this.Request.Params["estadoAprobacion"].ToString());
+            cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
+            cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Int32.Parse(this.Request.Params["estado"].ToString());
 
 
             //Se agrega número/codigo en la busqueda
@@ -145,48 +151,59 @@ namespace Cotizador.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        public ActionResult Index()
-        {
 
+
+        /*Pagina principal, muestra formulario de creación de cotización*/
+        public ActionResult New()
+        {
+            this.Session["cotizacion"] = null;
+            return RedirectToAction("Cotizador", "Home");
+        }
+
+        private void crearCotizacion()
+        {
+            Cotizacion cotizacionTmp = new Cotizacion();
+            cotizacionTmp.mostrarCodigoProveedor = true;
+            cotizacionTmp.fecha = DateTime.Now;
+            cotizacionTmp.fechaInicioVigenciaPrecios = null;
+            cotizacionTmp.fechaFinVigenciaPrecios = null;
+            cotizacionTmp.fechaLimiteValidezOferta = cotizacionTmp.fecha.AddDays(Constantes.plazoOfertaDias);
+            cotizacionTmp.ciudad = new Ciudad();
+            cotizacionTmp.cliente = new Cliente();
+            cotizacionTmp.grupo = new Grupo();
+            cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
+            cotizacionTmp.igv = Constantes.IGV;
+            cotizacionTmp.flete = 0;
+            cotizacionTmp.validezOfertaEnDias = Constantes.plazoOfertaDias;
+            cotizacionTmp.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Cantidades;
+            Usuario usuario = (Usuario)this.Session["usuario"];
+            cotizacionTmp.usuario = usuario;
+            cotizacionTmp.observaciones = Constantes.observacionesCotizacion;
+            cotizacionTmp.incluidoIgv = false;
+            cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
+
+            this.Session["cotizacion"] = cotizacionTmp;
+        }
+
+        public ActionResult Cotizador()
+        { 
             if (this.Session["usuario"] == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            Usuario usuario = (Usuario)this.Session["usuario"];
-
-            ViewBag.debug = 0;
+            ViewBag.debug = Constantes.debug;
             ViewBag.Si = "Sí";
             ViewBag.No = "No";
             ViewBag.IGV = Constantes.IGV;
 
-            //Si no se está trabajando con una cotización se crea una
+
+            //Si no se está trabajando con una cotización se crea una y se agrega a la sesion
 
             if (this.Session["cotizacion"] == null)
             {
 
-                Cotizacion cotizacionTmp = new Cotizacion();
-                cotizacionTmp.mostrarCodigoProveedor = true;
-                cotizacionTmp.fecha = DateTime.Now;
-                cotizacionTmp.fechaVigenciaInicio = DateTime.Now;
-                cotizacionTmp.fechaVigenciaLimite = cotizacionTmp.fecha.AddDays(15);
-                //cotizacionTmp.fechaOfertaFin = null;
-                cotizacionTmp.ciudad = new Ciudad();
-                cotizacionTmp.cliente = new Cliente();
-                cotizacionTmp.grupo = new Grupo();
-                cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
-                cotizacionTmp.igv = Constantes.IGV;
-                cotizacionTmp.flete = 0;
-                cotizacionTmp.diasVigencia = Constantes.plazoOfertaDias;
-                cotizacionTmp.considerarCantidades = true;
-                cotizacionTmp.usuario = usuario;
-                cotizacionTmp.observaciones = "* Condiciones de pago: al contado.\n" +
-                                       "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
-                                       "* (para productos no stockeables o primeras compras, consultar plazo).\n";
-
-
-
-                this.Session["cotizacion"] = cotizacionTmp;
+                crearCotizacion();
             }
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
 
@@ -196,6 +213,8 @@ namespace Cotizador.Controllers
             {
                 existeCliente = 1;
             }
+            ViewBag.existeCliente = existeCliente;
+
 
             if (cotizacion.cliente.idCliente != Guid.Empty)
             {
@@ -208,38 +227,15 @@ namespace Cotizador.Controllers
                 ViewBag.clienteGrupo = cotizacion.grupo.ToString();
             }
 
-            ViewBag.nombreUsuario = usuario.nombre;
 
-            // List<CotizacionDetalle> detalles = (List<CotizacionDetalle>)this.Session["detalles"];
-            //ViewBag.Detalles = cotizacion.cotizacionDetalleList;
-
-            ViewBag.numero = cotizacion.codigo;
-            ViewBag.idCiudad = cotizacion.ciudad.idCiudad;
-
-            ViewBag.idCliente = cotizacion.cliente.idCliente;
-            ViewBag.cliente = cotizacion.cliente.ToString();
-            ViewBag.existeCliente = existeCliente;
-            /*Dirigido a*/
-            ViewBag.contacto = cotizacion.contacto;
-            ViewBag.incluidoIgv = cotizacion.incluidoIgv;
-            ViewBag.considerarCantidades = cotizacion.considerarCantidades;
-
-
-            ViewBag.flete = cotizacion.flete;
-            ViewBag.observaciones = cotizacion.observaciones;
             ViewBag.fecha = cotizacion.fecha.ToString("dd/MM/yyyy");
-            ViewBag.fechaVigencia = cotizacion.fechaVigenciaLimite.ToString("dd/MM/yyyy");
-            ViewBag.fechaVigenciaInicio = cotizacion.fechaVigenciaInicio.ToString("dd/MM/yyyy");
-            ViewBag.mostrarCodigoProveedor = cotizacion.mostrarCodigoProveedor;
-            Decimal total = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.cotizacionDetalleList.AsEnumerable().Sum(o => o.subTotal)));
-         
+            ViewBag.fechaLimiteValidezOferta = cotizacion.fecha.ToString("dd/MM/yyyy");
+            ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy");
+            ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy");
 
-
-            ViewBag.igv = cotizacion.montoIGV;
-            ViewBag.total = cotizacion.montoTotal;
-            ViewBag.subtotal = cotizacion.montoSubTotal;
-
-
+            //Se agrega el viewbag numero para poder mostrar el campo vacío cuando no se está creando una cotización
+            ViewBag.numero = cotizacion.codigo;
+            
             ViewBag.cotizacion = cotizacion;
 
             return View();
@@ -259,8 +255,23 @@ namespace Cotizador.Controllers
         {
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
             int considerarCantidades = Int32.Parse(this.Request.Params["considerarCantidades"]);
-            cotizacion.considerarCantidades = considerarCantidades == 1;
+            cotizacion.considerarCantidades = (Cotizacion.OpcionesConsiderarCantidades)considerarCantidades;
+
+            if (cotizacion.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
+            {
+                List<CotizacionDetalle> detalles = cotizacion.cotizacionDetalleList;
+
+                foreach (CotizacionDetalle cotizacionDetalle in detalles)
+                {
+                    //Si el detalle de cotización tiene items con cantidad cero entonces se coloca 1 para que se recalcule el subtotal por item y por cotización
+                    if (cotizacionDetalle.cantidad == 0)
+                        cotizacionDetalle.cantidad = 1;
+                }
+
+            }
+                
             this.Session["cotizacion"] = cotizacion;
+
             return 1;
         }
 
@@ -377,6 +388,8 @@ namespace Cotizador.Controllers
         }
 
 
+        #region CONTROL DE FECHAS
+
         public void updateFecha()
         {
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
@@ -385,36 +398,64 @@ namespace Cotizador.Controllers
             this.Session["cotizacion"] = cotizacion;
         }
 
-        public void updateTipoVigencia()
+        public void updateMostrarValidezOfertaEnDias()
         {
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
-            cotizacion.tipoVigencia = int.Parse(this.Request.Params["tipoVigencia"]);
-            this.Session["cotizacion"] = cotizacion;
-        }
-
-        public void updateFechaVigenciaInicio()
-        {
-            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
-            String[] fecha = this.Request.Params["fechaVigenciaInicio"].Split('/');
-            cotizacion.fechaVigenciaInicio = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
-            this.Session["cotizacion"] = cotizacion;
-        }
-
-        public void updateFechaVigencia()
-        {
-            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
-            String[] fecha = this.Request.Params["fechaVigencia"].Split('/');
-            cotizacion.fechaVigenciaLimite = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            cotizacion.mostrarValidezOfertaEnDias = int.Parse(this.Request.Params["mostrarValidezOfertaEnDias"]);
             this.Session["cotizacion"] = cotizacion;
         }
 
 
-        public void updateDiasVigencia()
+        public void updateValidezOfertaEnDias()
         {
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
-            cotizacion.diasVigencia = int.Parse(this.Request.Params["diasVigencia"]);
+            cotizacion.validezOfertaEnDias = int.Parse(this.Request.Params["validezOfertaEnDias"]);
             this.Session["cotizacion"] = cotizacion;
         }
+
+
+        public void updateFechaLimiteValidezOferta()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            String[] fecha = this.Request.Params["fechaLimiteValidezOferta"].Split('/');
+            cotizacion.fechaLimiteValidezOferta = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            this.Session["cotizacion"] = cotizacion;
+        }
+
+
+
+        public void updateFechaInicioVigenciaPrecios()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            if (this.Request.Params["fechaInicioVigenciaPrecios"] == null || this.Request.Params["fechaInicioVigenciaPrecios"].Equals(""))
+                cotizacion.fechaInicioVigenciaPrecios = null;
+            else
+            { 
+                String[] fecha = this.Request.Params["fechaInicioVigenciaPrecios"].Split('/');
+                cotizacion.fechaInicioVigenciaPrecios = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            }
+            this.Session["cotizacion"] = cotizacion;
+        }
+
+        public void updateFechaFinVigenciaPrecios()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            if (this.Request.Params["fechaFinVigenciaPrecios"] == null || this.Request.Params["fechaFinVigenciaPrecios"].Equals(""))
+                cotizacion.fechaFinVigenciaPrecios = null;
+            else
+            {
+                String[] fecha = this.Request.Params["fechaFinVigenciaPrecios"].Split('/');
+                cotizacion.fechaFinVigenciaPrecios = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            }
+            this.Session["cotizacion"] = cotizacion;
+        }
+
+
+        #endregion
+
+
+
+
 
         public String updateIdCiudad()
         {
@@ -491,6 +532,7 @@ namespace Cotizador.Controllers
                     }
   
                     cotizacionDetalle.porcentajeDescuento = cotizacionDetalleJson.porcentajeDescuento;
+                    cotizacionDetalle.observacion = cotizacionDetalleJson.observacion;
 
                     detallesOrdenados.Add(cotizacionDetalle);
 
@@ -715,6 +757,7 @@ namespace Cotizador.Controllers
             detalle.cantidad = Int32.Parse(Request["cantidad"].ToString());
             detalle.porcentajeDescuento = Decimal.Parse(Request["porcentajeDescuento"].ToString());
             detalle.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
+            detalle.observacion = Request["observacion"].ToString();
             decimal precioNeto = Decimal.Parse(Request["precio"].ToString());
             decimal costo = Decimal.Parse(Request["costo"].ToString());
             decimal flete = Decimal.Parse(Request["flete"].ToString());
@@ -748,6 +791,11 @@ namespace Cotizador.Controllers
                 nombreProducto = detalle.producto.skuProveedor + " - " + detalle.producto.descripcion;
             }
 
+            if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos )
+            {
+                nombreProducto = nombreProducto + "\\n" + detalle.observacion;
+            }
+
             String resultado = "{" +
                 "\"idProducto\":\"" + detalle.producto.idProducto + "\"," +
                 "\"codigoProducto\":\"" + detalle.producto.sku + "\"," +
@@ -757,6 +805,7 @@ namespace Cotizador.Controllers
                 "\"subTotal\":\"" + cotizacion.montoSubTotal.ToString() + "\", " +
                 "\"margen\":\"" + detalle.margen + "\", " +
                 "\"precioUnitario\":\"" + detalle.precioUnitario + "\", " +
+                "\"observacion\":\"" + detalle.observacion + "\", " +
                 "\"total\":\"" + cotizacion.montoTotal.ToString() + "\"}";
 
             this.Session["cotizacion"] = cotizacion ;
@@ -1532,7 +1581,8 @@ namespace Cotizador.Controllers
         public String grabarCotizacion()
         {
             Cotizacion cotizacion = insertarCotizacion();
-            return "{ \"codigo\":\""+cotizacion.codigo+"\", \"estadoAprobacion\":\""+ cotizacion.estadoAprobacion+"\" }";
+
+            return "{ \"codigo\":\""+cotizacion.codigo+"\", \"estado\":\""+ (int)cotizacion.seguimientoCotizacion.estado +"\" }";
         }
 
 
@@ -1546,20 +1596,30 @@ namespace Cotizador.Controllers
             this.Session["cotizacion"] = cotizacion;
         }
 
+        public String VerCotizacion()
+        {
+            CotizacionBL cotizacionBL = new CotizacionBL();
+            Cotizacion cotizacion = new Cotizacion();
+            cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
+            cotizacion = cotizacionBL.GetCotizacion(cotizacion);
+            this.Session["cotizacion"] = cotizacion;
 
-        public void aprobarCotizacion()
+            string jsonCotizacion = JsonConvert.SerializeObject(cotizacion);
+
+            return jsonCotizacion;
+        }
+
+
+        public void updateEstadoSeguimientoCotizacion()
         {
             CotizacionBL cotizacionBL = new CotizacionBL();
 
             Cotizacion cotizacion = new Cotizacion();
             cotizacion.codigo = Int64.Parse(Request["codigo"].ToString());
-            cotizacion.estadoAprobacion = short.Parse(Request["accion"].ToString());
-            cotizacion.motivoRechazo = Request["motivoRechazo"].ToString();
+            cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Int32.Parse(Request["estado"].ToString());
+            cotizacion.seguimientoCotizacion.observacion = Request["observacion"].ToString();
             cotizacion.usuario = (Usuario)this.Session["usuario"];
             cotizacion = cotizacionBL.aprobarCotizacion(cotizacion);
-           
-
-           // this.Session["cotizacion"] = cotizacion;
         }
 
         public void recotizacion()
@@ -1573,9 +1633,29 @@ namespace Cotizador.Controllers
             cotizacion = cotizacionBL.GetCotizacion(cotizacion);
             //Se seta el codigo y estadoAprobacion en 0 porque una recotización es una nueva cotización
             cotizacion.codigo = 0;
-            cotizacion.estadoAprobacion = 0;
-            cotizacion.fechaVigenciaInicio = cotizacion.fechaVigenciaLimite.AddDays(1);
-            cotizacion.fechaVigenciaLimite = cotizacion.fechaVigenciaLimite.AddDays(16);
+         //   cotizacion.estadoAprobacion = 0;
+
+
+            //REVISAR
+            /*
+
+            ViewBag.fechaLimiteValidezOferta = cotizacion.fecha.ToString("dd/MM/yyyy");
+            ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy");
+            ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy");
+
+
+
+
+            cotizacion.fechaInicioVigenciaPrecios = null;
+            cotizacion.fechaFinVigenciaPrecios = null;
+            cotizacion.fechaLimiteValidezOferta = cotizacionTmp.fecha.AddDays(Constantes.plazoOfertaDias);
+
+
+
+
+            cotizacion.fechaInicioVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios.AddDays(1);
+            cotizacion.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios.AddDays(16);
+            */
             this.Session["cotizacion"] = cotizacion;
         }
 

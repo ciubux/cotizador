@@ -130,8 +130,22 @@ namespace cotizadorPDF
                 dataTable.Columns.Add("Imagen");
                 //   dataTable.Columns.Add("Precio Unit. Anterior");
                 dataTable.Columns.Add("Precio Unit.");
-                dataTable.Columns.Add("Cant.");
-                dataTable.Columns.Add("Subtotal");
+
+                //Si muestra solo cantidades o cantidades con observaciones
+                if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
+                {
+                    dataTable.Columns.Add("Cant.");
+                    dataTable.Columns.Add("Subtotal");
+                }
+                //Si es solo observaciones
+                else
+                {
+                    dataTable.Columns.Add("Observaciones");
+                    dataTable.Columns.Add("Subtotal");
+                }
+
+
+                
                 dataTable.Columns.Add(new DataColumn("Temp1", typeof(Byte[])));
                 dataTable.Columns.Add(new DataColumn("Temp2", typeof(PdfImage)));
 
@@ -139,12 +153,42 @@ namespace cotizadorPDF
                 {
                     String codigo = det.producto.sku.Trim();
                     String producto = det.producto.descripcion;
+                    if (cot.mostrarCodigoProveedor)
+                    {
+                        producto = det.producto.skuProveedor + "-" + producto;
+                    }
+
+
+                    
                     String presentacion = det.unidad; //Se muestra la unidad seleccionada y que se encuentra en el detalle
                     String imagen = "";
                     String precioUnitarioAnterior = "";
                     String precioUnitarioNuevo = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.precioUnitario);
-                    String cantidad = det.cantidad.ToString();
-                    String subtotal = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.subTotal);
+
+
+                    String cantidad = "";
+                    String subtotal = "";
+
+                    if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
+                    {
+                        cantidad = det.cantidad.ToString();
+                        subtotal = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.subTotal);
+
+                        if(cot.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos)
+                        {
+                            if(det.observacion!=null)
+                                producto = producto + "\n" + det.observacion;
+                        }
+
+                    }
+                    //Si es solo observaciones
+                    else
+                    {
+                        cantidad = det.observacion==null?"": det.observacion;
+                        subtotal = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.subTotal);
+                    }
+
+
 
                     dataTable.Rows.Add(new object[] { codigo, producto, presentacion, imagen,
 
@@ -178,14 +222,34 @@ namespace cotizadorPDF
                 table.Columns[4].Width = width1 * 0.10f;
                 table.Columns[4].StringFormat
                     = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
-                //Cant.
-                table.Columns[5].Width = width1 * 0.10f;
-                table.Columns[5].StringFormat
-                    = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
-                //Subtotal
-                table.Columns[6].Width = width1 * 0.10f;
-                table.Columns[6].StringFormat
-                    = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+
+                if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
+                {
+                    //Cant.
+                    table.Columns[5].Width = width1 * 0.10f;
+                    table.Columns[5].StringFormat
+                        = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+                    //Subtotal
+                    table.Columns[6].Width = width1 * 0.10f;
+                    table.Columns[6].StringFormat
+                        = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+
+                }
+                //Si es solo observaciones
+                else
+                {
+                    //OBSERVACION.
+                    table.Columns[5].Width = width1 * 0.20f;
+                    table.Columns[5].StringFormat
+                        = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+                    //Subtotal
+                    table.Columns[6].Width = width1 * 0.01f;
+                    table.Columns[6].StringFormat
+                        = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+                }
+
+
+
 
 
                 table.BeginRowLayout += new BeginRowLayoutEventHandler(table_BeginRowLayout);
@@ -195,14 +259,20 @@ namespace cotizadorPDF
                 tableLayout.Break = PdfLayoutBreakType.FitElement;
                 tableLayout.Layout = PdfLayoutType.Paginate;
 
-                if (cot.considerarCantidades)
+                //Si es solo cantidades
+
+
+                //Si muestra solo cantidades o cantidades con observaciones
+                if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                 {
-                    tableLayout.EndColumnIndex = table.Columns.Count - 3; //- 1;
+                    tableLayout.EndColumnIndex = table.Columns.Count - 3;
                 }
-                else
+                //Si es solo observaciones
+                else 
                 {
-                    tableLayout.EndColumnIndex = table.Columns.Count - 5;
+                    tableLayout.EndColumnIndex = table.Columns.Count - 4; //- 1;
                 }
+                
 
                 PdfLayoutResult result = table.Draw(page, new PointF(0, y), tableLayout);
                 y = y + result.Bounds.Height + 5;
@@ -285,8 +355,8 @@ namespace cotizadorPDF
 
 
 
-
-                if (cot.considerarCantidades)
+                //Si es distinto de solo observaciones
+                if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                 {
                     if (reiniciarY.Equals("TOTALES"))
                     {
@@ -385,39 +455,56 @@ namespace cotizadorPDF
                 }
                 y = y + sepLine;
 
-
-
-                if (cot.fechaVigenciaInicio.ToString("dd/MM/yyyy").Equals(cot.fecha.ToString("dd/MM/yyyy")))
+                //0 es días
+                if (cot.mostrarValidezOfertaEnDias == 0)
                 {
-                    //0 es días
-                    if (cot.tipoVigencia == 0)
-                    {
-                        sectionObervaciones.Canvas.DrawString("* Validez de los precios por " + cot.diasVigencia + " días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
-                    }
-                    else //1 es fecha
-                    {
-                        sectionObervaciones.Canvas.DrawString("* Validez de los precios hasta   " + cot.fechaVigenciaLimite.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
-                    }
-
+                    //REVISAR TEXTO
+                    sectionObervaciones.Canvas.DrawString("* Validez de la oferta: hasta por " + cot.validezOfertaEnDias + " días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 }
-                else //Si la fecha de inicio es distinta a la fecha actual se indica en la cotización
+                else //1 es fecha
                 {
-                    if (cot.tipoVigencia == 0)
-                    {
-                        sectionObervaciones.Canvas.DrawString("* Validez de los precios desde " + cot.fechaVigenciaInicio.ToString("dd/MM/yyyy") + " hasta por " + cot.diasVigencia + " días.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
-                    }
-                    else //1 es fecha
-                    {
-                        sectionObervaciones.Canvas.DrawString("* Validez de los precios desde "+ cot.fechaVigenciaInicio.ToString("dd/MM/yyyy")+" hasta " + cot.fechaVigenciaLimite.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
-                    }
-
+                    sectionObervaciones.Canvas.DrawString("* Validez de la oferta: hasta   " + cot.fechaLimiteValidezOferta.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 }
 
                 
+                //Si se ha registrado fecha inicio vigencia precios
+                if (cot.fechaInicioVigenciaPrecios != null)
+                {
+                
 
+                    //Si la fecha de inicio de vigencia es IGUAL a la fecha de creación NO se indica en la cotización
+                    if (cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy").Equals(cot.fecha.ToString("dd/MM/yyyy")))
+                    {
+
+                        //Si se cuenta con fecha de fin de vigencia 
+                        if (cot.fechaFinVigenciaPrecios != null)
+                        {
+                            y = y + sepLine;
+                            sectionObervaciones.Canvas.DrawString("* Validez de los precios: hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                        }
+                        //Si NO se cuenta con fecha fin de vigencia no se muestra nada 
+
+                    }
+                    //Si la fecha de inicio de vigencia es DISTINTA a la fecha de creación se indica en la cotización
+                    else
+                    {
+                        y = y + sepLine;
+                        //Si se cuenta con la fecha fin de vigencia de precios
+                        if (cot.fechaFinVigenciaPrecios != null)
+                        {
+                            sectionObervaciones.Canvas.DrawString("* Validez de los precios: desde " + cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy") + " hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                        }
+                        else //Si no se cuenta con la fecha fin de vigencia de precios
+                        {
+                            sectionObervaciones.Canvas.DrawString("* Validez de los precios: desde " + cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy")+ ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                        }
+
+                    }
+
+
+                }
 
                 y = y + sepLine;
-
             
 
                 foreach (string line in lines)

@@ -15,5 +15,9 @@ namespace Model
         public static Decimal porcentajeLimiteSinAprobacion = 3.00M;
         public static String simboloMonedaSol = "S/";
         public static int plazoOfertaDias = 15;
+        public static int debug = 0;
+        public static String observacionesCotizacion = "* Condiciones de pago: al contado.\n" +
+                                       "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
+                                       "* (para productos no stockeables o primeras compras, consultar plazo).\n";
     }
 }

@@ -14,5 +14,6 @@ namespace Model
         public Decimal precio { get; set; }
         public Decimal flete { get; set; }
         public Decimal costo { get; set; }
+        public String observacion {get;set;}
     }
 }

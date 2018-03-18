@@ -42,7 +42,7 @@ namespace ExcelLector
                        // Type type = sheet.GetRow(row).GetCell(2).GetType();
 
                         clienteStaging.PlazaId = sheet.GetRow(row).GetCell(0).ToString();
-                        clienteStaging.Id = sheet.GetRow(row).GetCell(1).ToString();
+                        clienteStaging.codigo = sheet.GetRow(row).GetCell(1).ToString();
                         clienteStaging.nombre = sheet.GetRow(row).GetCell(2).ToString();
                         clienteStaging.documento = sheet.GetRow(row).GetCell(3).ToString();
                         clienteStaging.codVe = sheet.GetRow(row).GetCell(4).ToString();

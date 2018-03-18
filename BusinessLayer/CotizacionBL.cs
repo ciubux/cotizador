@@ -14,17 +14,19 @@ namespace BusinessLayer
             using (var dal = new CotizacionDAL())
             {
                 //Si no se consideran cantidades no se debe grabar el subtotal
-                if (!cotizacion.considerarCantidades)
+                if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                 {
                     cotizacion.montoSubTotal = 0;
                 }
 
-                cotizacion.estadoAprobacion = 1;
+             
 
-                if (cotizacion.tipoVigencia == 0)
+                if (cotizacion.mostrarValidezOfertaEnDias == 0)
                 {
-                    cotizacion.fechaVigenciaLimite = cotizacion.fecha.AddDays(cotizacion.diasVigencia);
+                    cotizacion.fechaFinVigenciaPrecios = cotizacion.fecha.AddDays(cotizacion.validezOfertaEnDias);
                 }
+
+                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada;
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
@@ -32,24 +34,40 @@ namespace BusinessLayer
                     cotizacionDetalle.usuario = cotizacion.usuario;
 
                     //Si no se consideran cantidades no se debe grabar la cantidad y el subtotal
-                    if (!cotizacion.considerarCantidades)
+                    if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                     {
                         cotizacionDetalle.cantidad = 0;
                         //cotizacionDetalle.subTotal = 0;
                     }
 
-                    
 
 
-                    if(!cotizacion.usuario.esAprobador)
-                    { 
+                   
+
+                    //Si no es aprobador para que la cotización se cree como aprobada el porcentaje de descuento debe ser mayor o igual 
+                    //al porcentaje Limite sin aprobacion
+
+
+                    if (!cotizacion.usuario.esAprobador)
+                    {
                         if (cotizacionDetalle.porcentajeDescuento > Constantes.porcentajeLimiteSinAprobacion)
                         {
-                            cotizacion.estadoAprobacion = 0;
+                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Denegada;
                         }
+                    }
+                    //Si es aprobador, no debe sobrepasar su limite de aprobación asignado
+                    else
+                    {
+                        if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
+                        {
+                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Denegada;
+                            
+                        }
+
                     }
 
                 }
+               
                 dal.InsertCotizacion(cotizacion);
             }
         }
@@ -58,16 +76,16 @@ namespace BusinessLayer
         {
             using (var dal = new CotizacionDAL())
             {
-                cotizacion.estadoAprobacion = 1;
+                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada;
                 //Si no se consideran cantidades no se debe grabar el subtotal
-                if (!cotizacion.considerarCantidades)
+                if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                 {
                     cotizacion.montoSubTotal = 0;
                 }
 
-                if (cotizacion.tipoVigencia == 0)
+                if (cotizacion.mostrarValidezOfertaEnDias == 0)
                 {
-                    cotizacion.fechaVigenciaLimite = cotizacion.fecha.AddDays(cotizacion.diasVigencia);
+                    cotizacion.fechaFinVigenciaPrecios = cotizacion.fecha.AddDays(cotizacion.validezOfertaEnDias);
                 }
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
@@ -76,7 +94,7 @@ namespace BusinessLayer
                     cotizacionDetalle.usuario = cotizacion.usuario;
 
                     //Si no se consideran cantidades no se debe grabar la cantidad y el subtotal
-                    if (!cotizacion.considerarCantidades)
+                    if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                     {
                         cotizacionDetalle.cantidad = 0;
                         //cotizacionDetalle.subTotal = 0;
@@ -86,8 +104,18 @@ namespace BusinessLayer
                     {
                         if (cotizacionDetalle.porcentajeDescuento > Constantes.porcentajeLimiteSinAprobacion)
                         {
-                            cotizacion.estadoAprobacion = 0;
+                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Denegada;
                         }
+                    }
+                    //Si es aprobador, no debe sobrepasar su limite de aprobación asignado
+                    else
+                    {
+                        if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
+                        {
+                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Denegada;
+
+                        }
+
                     }
                 }
                 dal.UpdateCotizacion(cotizacion);
@@ -109,11 +137,11 @@ namespace BusinessLayer
             {
                 cotizacion = dal.SelectCotizacion(cotizacion);
 
-                if (cotizacion.tipoVigencia == 0)
+                if (cotizacion.mostrarValidezOfertaEnDias == 0)
                 {
                     TimeSpan diferencia;
-                    diferencia = cotizacion.fechaVigenciaLimite - cotizacion.fecha;
-                    cotizacion.diasVigencia = diferencia.Days; 
+                    diferencia = cotizacion.fechaLimiteValidezOferta - cotizacion.fecha;
+                    cotizacion.validezOfertaEnDias = diferencia.Days; 
                 }
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
@@ -209,31 +237,8 @@ namespace BusinessLayer
                             cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalle.producto.costoSinIgv));
                         }
 
-
-                        //Si la cabecera tiene flete se agrega el flete al precioLista
-                   /*     if (cotizacion.flete > 0)
-                        {
-                            decimal precioSinFlete = cotizacionDetalle.producto.precioLista;
-                            decimal precioLista = precioSinFlete + (precioSinFlete * cotizacion.flete);
-                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, precioLista));
-                        }*/
-
-                 /*       //Si se ha trabajado con el precioAlternativo, se divide el precioLista entre la equivalencia
-                        if (cotizacionDetalle.esPrecioAlternativo)
-                        {
-                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalle.producto.precioLista / cotizacionDetalle.producto.equivalencia));
-                            cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalle.producto.costoLista / cotizacionDetalle.producto.equivalencia));
-                        }*/
-
-                        //El precioNeto se obtuvodirectamente  cotizacionDetalle.precioNeto = 
-                       // cotizacionDetalle.costo = cotizacionDetalle.producto.costoLista;
                     }
-
-
-
-
-                    //cotizacionDetalle.subTotal = cotizacionDetalle.precioNeto * cotizacionDetalle.cantidad;
-
+                    
                 }
 
 
