@@ -139,7 +139,7 @@
                     <th data-name="maximoPorcentajeDescuento" data-sortable="true" data-breakpoints="xs">% Desc (max)</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
                     <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado por</th>
-                    <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Observación</th>
+                    <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
             </thead>
@@ -380,13 +380,70 @@
                 <button type="button" id="btnCancelarCotizacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" id="btnEditarCotizacion" class="btn btn-primary">Editar</button>
                 <button type="button" id="btnReCotizacion" class="btn btn-primary">Recotizar</button>
-                <button type="button" id="btnAprobarCotizacion" class="btn btn-primary">Aprobar</button>
-                <button type="button" id="btnDenegarCotizacion" class="btn btn-primary">Denegar</button>
-                <button type="button" id="btnAceptarCotizacion" class="btn btn-primary">Aceptar</button>
-                <button type="button" id="btnRechazarCotizacion" class="btn btn-primary">Rechazar</button>
+                <button type="button" id="btnAprobarCotizacion" class="btn btn-primary" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
+                <button type="button" id="btnDenegarCotizacion" class="btn btn-primary" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
+                <button type="button" id="btnAceptarCotizacion" class="btn btn-primary" data-toggle='modal' data-target='#modalAprobacion'>Aceptar</button>
+                <button type="button" id="btnRechazarCotizacion" class="btn btn-primary" data-toggle='modal' data-target='#modalAprobacion'>Rechazar</button>
                 <button type="button" id="btnPDFCotizacion" class="btn btn-primary">PDF</button>
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="modalAprobacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCalculadoraTitle"><b>Cambiar Estado Cotización</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <input type="hidden" id="idProducto" value="" />
+
+                
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!--Accion-->
+                            <div class="form-group">
+                                <label for="accion" class="control-label col-xs-5">Nuevo Estado:</label>
+                                <div class="col-xs-7">
+                                    <input type="hidden" id="estadoId"/>
+                                    <p class="form-control-static" id="labelNuevoEstado"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-8" id="motivoRechazoDiv">
+
+                            <!--MOTIVO RECHAZO-->
+                            <div class="form-group">
+                                <label for="motivoRechazo" class="control-label col-xs-3">Motivo:</label>
+
+                                <div class="col-xs-9">
+                                    <textarea class="form-control" rows="5" id="comentarioEstado" name="comentarioEstado"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarCambioEstado" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAceptarCambioEstado" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>

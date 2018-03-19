@@ -41,9 +41,9 @@ namespace Model
         }
 
 
+        public List<PrecioLista> precioListaList { get; set; }
 
-
-
+        public Decimal? precioNeto { get; set; }
         public Decimal costoSinIgv { get; set; }
         public Decimal costoAlternativoSinIgv {
             get

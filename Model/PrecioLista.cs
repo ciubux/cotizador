@@ -15,6 +15,8 @@ namespace Model
 
         public Decimal precio { get; set; }
 
+        public DateTime fecha { get; set; }
+
         public String nombreVista
         {
             get { return codigo + "(" + nombre + ")"; }

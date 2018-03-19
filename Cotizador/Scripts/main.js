@@ -339,7 +339,10 @@ jQuery(function ($) {
             data: {
                 idProducto: $(this).val(),
             },
-            success: function (producto) {
+            success: function (respuesta) {
+                var producto = $.parseJSON(respuesta);
+
+
                 $("#imgProducto").attr("src", producto.image);
 
                 //Se agrega el precio estandar
@@ -361,8 +364,16 @@ jQuery(function ($) {
                 $('#costoAlternativoSinIGV').val(producto.costoAlternativoSinIGV);
                 $('#observacionProducto').val("");
                 $('#fleteDetalle').val(producto.fleteDetalle);
-                $("#porcentajeDescuento").val(Number(0).toFixed(4));
+                $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(4));
                 $("#cantidad").val(1);
+
+
+                for (var i = 0; i < producto.precioListaList.length; i++) {
+
+
+                }
+
+
 
                 //Activar Botón para agregar producto a la grilla
                 activarBtnAddProduct();
@@ -418,9 +429,9 @@ jQuery(function ($) {
     $("#porcentajeDescuento, #cantidad").change(function () {
 
         var descuento = Number($("#porcentajeDescuento").val());
-        if (descuento > 100) {
+  /*      if (descuento > 100) {
             descuento = 100;
-        }
+        }*/
         $("#porcentajeDescuento").val(descuento.toFixed(4));
         $("#cantidad").val(Number($("#cantidad").val()).toFixed());
         calcularSubtotalProducto();
@@ -909,13 +920,13 @@ jQuery(function ($) {
 
 
 
-    ////////VER COTIZACIÓN
+    ////////VER COTIZACIÓN  --- CAMBIO DE ESTADO
 
     $(document).on('click', "button.btnVerCotizacion", function () {
         FooTable.init('#tableDetalleCotizacion');
         activarBotonesVer();
         var codigo = event.target.getAttribute("class").split(" ")[0];
-
+        $("#tableDetalleCotizacion > tbody").empty();
         $.ajax({
             url: "/Home/VerCotizacion",
             data: {
@@ -966,7 +977,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].producto.descripcion + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
-                        '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].precioNeto.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
@@ -977,7 +988,8 @@ jQuery(function ($) {
                         '</tr>';
 
                 }
-                $("#tableDetalleCotizacion > tbody").empty();
+              //  
+               // sleep
                 $("#tableDetalleCotizacion").append(d);
 
 
@@ -1076,6 +1088,23 @@ jQuery(function ($) {
                     $("#btnRechazarCotizacion").hide();
                 }
 
+
+                /*PDF*/
+                if (
+                    (   cotizacion.seguimientoCotizacion.estado == 1 ||
+                        cotizacion.seguimientoCotizacion.estado == 3 ||
+                        cotizacion.seguimientoCotizacion.estado == 4
+                    )
+                ) {
+
+                    $("#btnPDFCotizacion").show();
+                }
+                else {
+                    $("#btnPDFCotizacion").hide();
+                }
+                
+
+
                 $("#modalVerCotizacion").modal('show');
 
                 //  window.location = '/Home/Index';
@@ -1110,8 +1139,6 @@ jQuery(function ($) {
             }
         });
 }
-//);
-
 
 
 
@@ -1162,7 +1189,7 @@ jQuery(function ($) {
         desactivarBotonesVer();
         var numero = $("#verNumero").html();
         $.ajax({
-            url: "/Home/getCotizacion",
+            url: "/Home/editarCotizacion",
             data: {
                 numero: numero
             },
@@ -1192,11 +1219,134 @@ jQuery(function ($) {
         });
     });
 
+    function limpiarComentario()
+    {
+        $("#comentarioEstado").val("");
+        $("#comentarioEstado").focus();
+    }
+
+
+    $("#btnAprobarCotizacion").click(function () {
+
+        $("#labelNuevoEstado").html("Aprobar");
+        $("#estadoId").val("1");
+        
+        limpiarComentario();
+    });
+
+    $("#btnDenegarCotizacion").click(function () {
+
+        $("#labelNuevoEstado").html("Denegar");
+        $("#estadoId").val("2");
+        limpiarComentario();
+    });
+
+
+    $("#btnAceptarCotizacion").click(function () {
+
+        $("#labelNuevoEstado").html("Aceptar");
+        $("#estadoId").val("3");
+        limpiarComentario();
+    });
+
+    $("#btnRechazarCotizacion").click(function () {
+
+        $("#labelNuevoEstado").html("Rechazar");
+        $("#estadoId").val("4");
+        limpiarComentario();
+    });
+
+
+
+ 
+
+
+
+
+    $('#modalAprobacion').on('shown.bs.modal', function (e) {
+        limpiarComentario();
+    });
+
+
+
+    $("#btnAceptarCambioEstado").click(function () {
+
+        var estado = $("#estadoId").val();
+        var comentarioEstado = $("#comentarioEstado").val();
+
+        if ($("#labelNuevoEstado").html() == "Denegar" || $("#labelNuevoEstado").html() == "Rechazar") {
+            if (comentarioEstado.trim() == "") {
+                alert("Debe ingresar un Comentario.");
+                return false;
+            }
+        }
+        var codigo = $("#verNumero").html();
+
+        $.ajax({
+            url: "/Home/updateEstadoSeguimientoCotizacion",
+            data: {
+                codigo: codigo,
+                estado: estado,
+                observacion: comentarioEstado
+            },
+            type: 'POST',
+            error: function () { alert("Ocurrió un problema al intentar cambiar el estado de la cotización."); },
+            success: function () {
+                if (accion == "1") {
+                    alert("La cotización número: " + codigo + " se modificó correctamente.");
+                }
+                else {
+                    alert("La cotización número: " + codigo + " se modificó correctamente.");
+                }
+                $("#btnBusquedaCotizaciones").click();
+            }
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
     
     var ft = null;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1857,79 +2007,6 @@ jQuery(function ($) {
 
 
 
-  
-    $('#modalAprobacion').on('shown.bs.modal', function (e) {
-
-        var $trigger = $(e.relatedTarget);
-        var codigo = $trigger.data('codigo');
-        var montoTotal = $trigger.data('monto');
-
-        $("#numeroAprobacion").val(codigo);
-        $("#totalAprobacion").val(montoTotal);
-
-        mostrarMotivoRechazoDiv();
-    });
-
-
-    $("#accion").change(function () {
-
-        mostrarMotivoRechazoDiv();
-
-    });
-
-    function mostrarMotivoRechazoDiv() {
-
-        if ($("#accion").val() == "1") {
-            $("#motivoRechazoDiv").hide();
-            $("#btnAceptarAprobacionRechazo").text("Aprobar");
-        }
-        else {
-            $("#motivoRechazoDiv").show();
-            $("#btnAceptarAprobacionRechazo").text("Rechazar");
-        }
-
-    }
-
-
-    $("#btnAceptarAprobacionRechazo").click(function () {
-
-        var motivoRechazo = $("#motivoRechazo").val();
-        var codigo = $("#numeroAprobacion").val();
-        var accion = $("#accion").val();
-
-        if (accion == "2") {
-            if (motivoRechazo.trim() == "") {
-                alert("Debe ingresar Motivo de Rechazo.");
-                return false;
-            }
-        }
-
-        
-
-        
-        
-
-
-        $.ajax({
-            url: "/Home/updateEstadoSeguimientoCotizacion",
-            data: {
-                codigo: codigo,
-                accion: accion,
-                motivoRechazo: motivoRechazo
-            },
-            type: 'POST',
-            error: function () { alert("Ocurrió un problema al intentar aprobar la cotización."); },
-            success: function () {
-                if (accion == "1") {
-                    alert("La cotización número "+codigo+" se aprobó correctamente.");
-                }
-                else {
-                    alert("La cotización número "+codigo+" se rechazó correctamente.");
-                }
-                $("#btnBusquedaCotizaciones").click();
-            }
-        });
-    });
 
 
 });

@@ -408,5 +408,35 @@ namespace DataLayer
             return cotizacionList;
         }
 
+
+        public void insertSeguimientoCotizacion(Cotizacion cotizacion)
+        {
+            var objCommand = GetSqlCommand("pi_seguimiento_cotizacion");
+
+            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
+            InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion);
+            InputParameterAdd.DateTime(objCommand, "fechaModificacion", cotizacion.fechaModificacion);
+            OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
+            ExecuteNonQuery(objCommand);
+
+            DateTime fechaModifiacionActual = (DateTime)objCommand.Parameters["@fechaModificacionActual"].Value;
+            ExecuteNonQuery(objCommand);
+
+
+            DateTime date1 = new DateTime(fechaModifiacionActual.Year, fechaModifiacionActual.Month, fechaModifiacionActual.Day, fechaModifiacionActual.Hour, fechaModifiacionActual.Minute, fechaModifiacionActual.Second);
+            DateTime date2 = new DateTime(cotizacion.fechaModificacion.Year, cotizacion.fechaModificacion.Month, cotizacion.fechaModificacion.Day, cotizacion.fechaModificacion.Hour, cotizacion.fechaModificacion.Minute, cotizacion.fechaModificacion.Second);
+
+            int result = DateTime.Compare(date1, date2);
+            if (result != 0)
+            {
+                //No se puede actualizar la cotización si las fechas son distintas
+                throw new Exception("CotizacionDesactualizada");
+            }
+
+
+        }
+
     }
 }

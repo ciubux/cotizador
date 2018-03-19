@@ -17,11 +17,11 @@ namespace BusinessLayer
             }
         }
 
-        public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV)
+        public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente)
         {
             using (var dal = new ProductoDAL())
             {
-                Producto producto = dal.getProducto(idProducto);
+                Producto producto = dal.getProducto(idProducto, idCliente);
                 //Si es provincia, se considera el precio de provincia
                 if (esProvincia)
                 {
@@ -51,6 +51,10 @@ namespace BusinessLayer
                     producto.costoLista = producto.costoSinIgv + (producto.costoSinIgv * Constantes.IGV);
                     //Se agrega el IGV al precioLista
                     producto.precioLista = producto.precioLista + (producto.precioLista * Constantes.IGV);
+
+
+                    if (producto.precioNeto != null)
+                        producto.precioNeto = producto.precioNeto + (producto.precioNeto * Constantes.IGV);
                 }
 
                 producto.costoLista = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.costoLista));

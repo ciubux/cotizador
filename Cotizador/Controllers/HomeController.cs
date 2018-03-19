@@ -709,10 +709,23 @@ namespace Cotizador.Controllers
     
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
             ProductoBL bl = new ProductoBL();
-            Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIgv);
+            Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIgv, cotizacion.cliente.idCliente);
 
             Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.costoLista * (cotizacion.flete) / 100));
             Decimal precioUnitario = Decimal.Parse(String.Format(Constantes.decimalFormat, fleteDetalle + producto.precioLista));
+
+            Decimal porcentajeDescuento = 0;
+            if (producto.precioNeto != null)
+            {
+
+                porcentajeDescuento = 100 - (producto.precioNeto.Value * 100 / producto.precioLista);
+
+
+            }
+
+            String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
+
+
 
             String resultado = "{" +
                 "\"id\":\"" + producto.idProducto + "\"," +
@@ -729,6 +742,9 @@ namespace Cotizador.Controllers
                 "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
                 "\"fleteDetalle\":\"" + fleteDetalle + "\"," +
                 "\"precioUnitario\":\"" + precioUnitario + "\"," +
+                "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
+                "\"precioListaList\":" + jsonPrecioLista + "," +
+
                 "\"costoLista\":\"" + producto.costoLista + "\"" +
                 "}";
             return resultado;
@@ -751,7 +767,7 @@ namespace Cotizador.Controllers
 
             CotizacionDetalle detalle = new CotizacionDetalle();
             ProductoBL productoBL = new ProductoBL();
-            Producto producto = productoBL.getProducto(idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIgv );
+            Producto producto = productoBL.getProducto(idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIgv, cotizacion.cliente.idCliente);
             detalle.producto = producto;
 
             detalle.cantidad = Int32.Parse(Request["cantidad"].ToString());
@@ -1586,13 +1602,23 @@ namespace Cotizador.Controllers
         }
 
 
-        public void GetCotizacion()
+        public void editarCotizacion()
         {
+            Cotizacion cotizacionSession = (Cotizacion)this.Session["cotizacion"];
             CotizacionBL cotizacionBL = new CotizacionBL();
             Cotizacion cotizacion = new Cotizacion();
-            //Agregar Try Catch
             cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
+            cotizacion.fechaModificacion = cotizacionSession.fechaModificacion;
+            cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
+            cotizacion.usuario = (Usuario)this.Session["usuario"];
+            //Se cambia el estado de la cotizacion a Edición
+            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
+            cotizacionBL.cambiarEstadoCotizacion(cotizacion);
+
+            //Se obtiene los datos de la cotización ya modificada
             cotizacion = cotizacionBL.GetCotizacion(cotizacion);
+
+
             this.Session["cotizacion"] = cotizacion;
         }
 
@@ -1612,14 +1638,17 @@ namespace Cotizador.Controllers
 
         public void updateEstadoSeguimientoCotizacion()
         {
-            CotizacionBL cotizacionBL = new CotizacionBL();
+            Cotizacion cotizacionSession = (Cotizacion)this.Session["cotizacion"];
 
+            CotizacionBL cotizacionBL = new CotizacionBL();
             Cotizacion cotizacion = new Cotizacion();
             cotizacion.codigo = Int64.Parse(Request["codigo"].ToString());
+            cotizacion.fechaModificacion = cotizacionSession.fechaModificacion;
+            cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
             cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Int32.Parse(Request["estado"].ToString());
             cotizacion.seguimientoCotizacion.observacion = Request["observacion"].ToString();
             cotizacion.usuario = (Usuario)this.Session["usuario"];
-            cotizacion = cotizacionBL.aprobarCotizacion(cotizacion);
+            cotizacionBL.cambiarEstadoCotizacion(cotizacion);
         }
 
         public void recotizacion()

@@ -74,13 +74,19 @@ namespace DataLayer
             return lista;
         }
 
-        public Producto getProducto(Guid idProducto)
+        public Producto getProducto(Guid idProducto, Guid idCliente)
         {
             var objCommand = GetSqlCommand("ps_getproducto");
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
-            DataTable dataTable = Execute(objCommand);
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+
+            DataTable productoDataSet = dataSet.Tables[0];
+            DataTable preciosDataSet = dataSet.Tables[1];
+
+
             Producto producto = new Producto();
-            foreach (DataRow row in dataTable.Rows)
+            foreach (DataRow row in productoDataSet.Rows)
             {
                 producto.idProducto = Converter.GetGuid(row, "id_producto");
                 producto.descripcion = Converter.GetString(row, "descripcion");
@@ -102,7 +108,33 @@ namespace DataLayer
                 producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 //Costo sin IGV
                 producto.costoSinIgv = Converter.GetDecimal(row, "costo");
+
+
+                /*Obtenido a partir de precio Lista*/
+                if (row["precio_neto"] == DBNull.Value)
+                {
+                    producto.precioNeto = null;
+                }
+                else
+                { 
+                    producto.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                }
             }
+
+            List<PrecioLista> precioListaList = new List<PrecioLista>();
+            foreach (DataRow row in preciosDataSet.Rows)
+            {
+                PrecioLista precioLista = new PrecioLista();
+
+                //     producto.idProducto = Converter.GetGuid(row, "unidad");
+                precioLista.precio = Converter.GetDecimal(row, "precio_neto");
+                precioLista.fecha = Converter.GetDateTime(row, "fecha");
+                precioListaList.Add(precioLista);
+            }
+
+            producto.precioListaList = precioListaList;
+
+
             return producto;
         }
     }

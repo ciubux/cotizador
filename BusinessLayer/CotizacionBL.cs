@@ -122,13 +122,13 @@ namespace BusinessLayer
             }
         }
 
-        public Cotizacion aprobarCotizacion(Cotizacion cotizacion)
+        public void cambiarEstadoCotizacion(Cotizacion cotizacion)
         {
             using (var dal = new CotizacionDAL())
             {
-                cotizacion = dal.aprobarCotizacion(cotizacion);
+                dal.insertSeguimientoCotizacion(cotizacion);
             }
-            return cotizacion;
+             
         }
 
         public Cotizacion GetCotizacion(Cotizacion cotizacion)
