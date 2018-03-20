@@ -51,6 +51,9 @@ textarea {
     #modalVerCotizacion .modal-dialog {
         width: 1100px;
     }
+    #modalMostrarPrecios .modal-dialog {
+        width: 900px;
+    }
 }
 
 
@@ -169,6 +172,10 @@ input.label-input {
 
 .monBouton:before {
     background-image: url(/images/calculadora3.png);
+}
+
+.botonPrecios:before {
+    background-image: url(/images/etiqueta-de-precio-en-dolares.png);
 }
 
 

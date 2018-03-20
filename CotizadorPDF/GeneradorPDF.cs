@@ -543,14 +543,15 @@ namespace cotizadorPDF
                 link2.Font = new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline);
                 link2.Brush = PdfBrushes.DarkSeaGreen;
                 link2.DrawTextWebLink(sectionFirma.Canvas, new PointF(xPage2, y));
-
-                String fechaCotizacion = DateTime.Now.Year + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day + "_" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
-
                 String pathrootsave = AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\";
-                doc.SaveToFile(pathrootsave + cot.cliente.ruc + " " + fechaCotizacion + ".pdf");
-                PDFDocumentViewer(pathrootsave + cot.cliente.ruc+" " + fechaCotizacion + ".psdf");
+
+                String fechaCotizacion = cot.fecha.Day.ToString().PadLeft(2, '0') + "-" + cot.fecha.Month.ToString().PadLeft(2, '0')  + "-" + cot.fecha.Year;// + "-" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
+                String nombreArchivo = cot.cliente.razonSocial + " " + fechaCotizacion + " N° " + cot.codigo.ToString().PadLeft(10,'0') + ".pdf";
+              
+                doc.SaveToFile(pathrootsave+nombreArchivo);
+                PDFDocumentViewer(pathrootsave+nombreArchivo);
                 doc.Close();
-                return cot.cliente.ruc + " " + fechaCotizacion + ".pdf";
+                return nombreArchivo;
             }
             catch (Exception ex)
             {

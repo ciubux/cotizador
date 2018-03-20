@@ -199,8 +199,14 @@ namespace DataLayer
                 cotizacion.idCotizacion = Converter.GetGuid(row,"id_cotizacion");
                 cotizacion.fecha = Converter.GetDateTime(row, "fecha");
                 cotizacion.fechaLimiteValidezOferta = Converter.GetDateTime(row, "fecha_limite_validez_oferta");
-                cotizacion.fechaInicioVigenciaPrecios = Converter.GetDateTime(row, "fecha_inicio_vigencia_precios");
-                cotizacion.fechaFinVigenciaPrecios = Converter.GetDateTime(row, "fecha_fin_vigencia_precios");
+                if (row["fecha_inicio_vigencia_precios"] == DBNull.Value)
+                    cotizacion.fechaInicioVigenciaPrecios = null;
+                else
+                    cotizacion.fechaInicioVigenciaPrecios = Converter.GetDateTime(row, "fecha_inicio_vigencia_precios");
+                if (row["fecha_fin_vigencia_precios"] == DBNull.Value)
+                    cotizacion.fechaFinVigenciaPrecios = null;
+                else
+                    cotizacion.fechaFinVigenciaPrecios = Converter.GetDateTime(row, "fecha_fin_vigencia_precios");
                 cotizacion.incluidoIgv = Converter.GetBool(row, "incluido_igv");
                 cotizacion.considerarCantidades =   (Cotizacion.OpcionesConsiderarCantidades)Converter.GetInt(row, "considera_cantidades");
                 cotizacion.mostrarValidezOfertaEnDias = Converter.GetInt(row, "mostrar_validez_oferta_dias");

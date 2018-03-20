@@ -20,12 +20,15 @@ namespace Model
         public String fechaFin { get; set; }
         public String codigoProveedor { get; set; }
         public String unidadProveedor { get; set; }
-        public String equivalenciaProveedor { get; set; }
+        public int equivalenciaProveedor { get; set; }
+        public String descripcionProveedor { get; set; }
         public String unidadAlternativa { get; set; }
         public int equivalencia { get; set; }
         public Decimal costo { get; set; }
         public Decimal precioLima { get; set; }
         public Decimal precioProvincias { get; set; }
         public String proveedor { get; set; }
+        public String monedaMP { get; set; }
+        public String monedaProveedor { get; set; }
     }
 }

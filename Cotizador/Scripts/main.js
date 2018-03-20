@@ -4,10 +4,29 @@
 
 jQuery(function ($) {
 
+    /**
+     * 0 Busqueda
+       1 Cotización
+     */
+    var pagina = 0;
+    var mensajeCancelarEdicion = '¿Está seguro de cancelar, no se guardarán los cambios?';
+
     $(document).ready(function () {
 
         cambiarMostrarValidezOfertaEnDias();
-        cargarChosenCliente();
+
+        var title = document.title;
+        if (title == "Cotizador - Búsqueda Cotizaciones") {
+            pagina = 0;
+        }
+        else
+        {
+            pagina = 1;
+        }
+
+        cargarChosenCliente(pagina);
+        //Se construye la tabla de Detalle de Cotizacion
+        //FooTable.init('#tableDetalleCotizacion');
     });
 
 
@@ -147,7 +166,11 @@ jQuery(function ($) {
                 }
             });
         });
-    
+
+
+
+
+
     /**
      * FIN DE CONTROLES DE FECHAS
      */
@@ -157,8 +180,11 @@ jQuery(function ($) {
      * ################################ INICIO CONTROLES DE CLIENTE
      */
 
+ 
 
-    function cargarChosenCliente() {
+
+
+    function cargarChosenCliente(pantalla) {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
             if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
@@ -174,10 +200,13 @@ jQuery(function ($) {
             minTermLength: 5,
             afterTypeDelay: 300,
             cache: false,
-            url: "/Home/GetClientes"
+            url: pantalla == 1 ? "/Home/GetClientes" : "/Home/GetClientesBusqueda"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
+
+
+
     }
     
     $("#idCliente").change(function () {
@@ -188,13 +217,16 @@ jQuery(function ($) {
 
         idClienteGrupo = idClienteGrupo.substr(1);
 
+
+
         if (tipoCliente == "c") {
             $.ajax({
                 url: "/Home/GetCliente",
                 type: 'POST',
                 dataType: 'JSON',
                 data: {
-                    idCliente: idClienteGrupo
+                    idCliente: idClienteGrupo,
+                    pagina: pagina
                 },
                 success: function (cliente) {
                     $("#contacto").val(cliente.contacto);
@@ -208,7 +240,8 @@ jQuery(function ($) {
                 type: 'POST',
                 dataType: 'JSON',
                 data: {
-                    idGrupo: idClienteGrupo
+                    idGrupo: idClienteGrupo,
+                    pagina: pagina
                 },
                 success: function (grupo) {
                     $("#contacto").val(grupo.contacto);
@@ -339,8 +372,8 @@ jQuery(function ($) {
             data: {
                 idProducto: $(this).val(),
             },
-            success: function (respuesta) {
-                var producto = $.parseJSON(respuesta);
+            success: function (producto) {
+               // var producto = $.parseJSON(respuesta);
 
 
                 $("#imgProducto").attr("src", producto.image);
@@ -367,10 +400,38 @@ jQuery(function ($) {
                 $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(4));
                 $("#cantidad").val(1);
 
+                $("#tableMostrarPrecios > tbody").empty();
 
+                FooTable.init('#tableMostrarPrecios');
                 for (var i = 0; i < producto.precioListaList.length; i++) {
+                    var fechaInicioVigencia = producto.precioListaList[i].fechaInicioVigencia;
+                    var fechaFinVigencia = producto.precioListaList[i].fechaFinVigencia;
 
+                    if (fechaInicioVigencia == null)
+                        fechaInicioVigencia = "No Definida";
+                    else
+                        fechaInicioVigencia = invertirFormatoFecha(producto.precioListaList[i].fechaInicioVigencia.substr(0, 10));
 
+                    if (fechaFinVigencia == null)
+                        fechaFinVigencia = "No Definida";
+                    else
+                        fechaFinVigencia = invertirFormatoFecha(producto.precioListaList[i].fechaFinVigencia.substr(0, 10));
+
+                    var numeroCotizacion = producto.precioListaList[i].numeroCotizacion;
+                    if (numeroCotizacion == null)
+                        numeroCotizacion = "No Identificado";
+                                   
+                    $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
+
+                        '<td>' + numeroCotizacion  + '</td>' +
+                        '<td>' + fechaInicioVigencia + '</td>' +
+                        '<td>' + fechaFinVigencia + '</td>' +
+                        '<td>' + producto.precioListaList[i].unidad + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].precioNeto).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+
+                        '</tr>');
                 }
 
 
@@ -543,12 +604,15 @@ jQuery(function ($) {
     function activarBtnAddProduct() {
         $('#btnAddProduct').removeAttr('disabled');
         $('#btnCalcularDescuento').removeAttr('disabled');
+        $('#btnMostrarPrecios').removeAttr('disabled');
+        
 
     }
 
     function desactivarBtnAddProduct() {
         $("#btnAddProduct").attr('disabled', 'disabled');
         $('#btnCalcularDescuento').attr('disabled', 'disabled');
+        $('#btnMostrarPrecios').attr('disabled', 'disabled');
     }
 
 
@@ -873,7 +937,7 @@ jQuery(function ($) {
             //contentType: 'application/pdf',
             type: 'POST',
             dataType: 'JSON',
-            error: function (detalle) { alert("Se generó un error al intentar crear/actualizar la cotización."); },
+            error: function (detalle) { alert("Se generó un error al intentar crear/actualizar la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario."); },
             success: function (resultado) {
                 $("#numero").val(resultado.codigo);
 
@@ -922,20 +986,30 @@ jQuery(function ($) {
 
     ////////VER COTIZACIÓN  --- CAMBIO DE ESTADO
 
+    function invertirFormatoFecha(fecha)
+    {
+        var fechaInvertida = fecha.split("-");
+        fecha = fechaInvertida[2] + "-" + fechaInvertida[1] + "-" + fechaInvertida[0];
+        return fecha 
+    }
+
     $(document).on('click', "button.btnVerCotizacion", function () {
-        FooTable.init('#tableDetalleCotizacion');
+        
         activarBotonesVer();
         var codigo = event.target.getAttribute("class").split(" ")[0];
-        $("#tableDetalleCotizacion > tbody").empty();
+      //  $("#tableDetalleCotizacion > tbody").empty();
+     
+
         $.ajax({
             url: "/Home/VerCotizacion",
             data: {
                 numero: codigo
             },
             type: 'POST',
+            dataType: 'JSON',
             error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
-            success: function (respuesta) {
-                var cotizacion = $.parseJSON(respuesta);
+            success: function (cotizacion) {
+                //var cotizacion = $.parseJSON(respuesta);
 
 
                 $("#verNumero").html(cotizacion.codigo);
@@ -944,11 +1018,19 @@ jQuery(function ($) {
                 $("#verContacto").html(cotizacion.contacto);
 
 
-                $("#verFechaCreacion").html(cotizacion.fecha.substr(0, 10));
-                $("#verValidezOferta").html(cotizacion.fechaLimiteValidezOferta.substr(0, 10));
-                $("#verFechaInicitoVigenciaPrecios").html(cotizacion.fechaInicioVigenciaPrecios.substr(0, 10));
-                $("#verFechaFinVigenciaPrecios").html(cotizacion.fechaFinVigenciaPrecios.substr(0, 10));
+                $("#verFechaCreacion").html(invertirFormatoFecha(cotizacion.fecha.substr(0, 10)));
+                $("#verValidezOferta").html(invertirFormatoFecha(cotizacion.fechaLimiteValidezOferta.substr(0, 10)));
 
+                if (cotizacion.fechaInicioVigenciaPrecios == null)
+                    $("#verFechaInicioVigenciaPrecios").html("No Definida");
+                else
+                    $("#verFechaInicioVigenciaPrecios").html(invertirFormatoFecha(cotizacion.fechaInicioVigenciaPrecios.substr(0, 10)));
+
+                if (cotizacion.fechaFinVigenciaPrecios == null)
+                    $("#verFechaFinVigenciaPrecios").html("No Definida");
+                else
+                    $("#verFechaFinVigenciaPrecios").html(invertirFormatoFecha(cotizacion.fechaFinVigenciaPrecios.substr(0, 10)));
+                
                 $("#verEstado").html(cotizacion.seguimientoCotizacion.estadoString);
                 $("#verModificadoPor").html(cotizacion.seguimientoCotizacion.usuario.nombre);
                 $("#verObservacionEstado").html(cotizacion.seguimientoCotizacion.observacion);
@@ -963,7 +1045,13 @@ jQuery(function ($) {
                 $("#verMontoSubTotal").html(cotizacion.montoSubTotal);
                 $("#verMontoIGV").html(cotizacion.montoIGV);
                 $("#verMontoTotal").html(cotizacion.montoTotal);
-                verMontoTotal
+
+
+                $("#tableDetalleCotizacion > tbody").empty();
+
+                FooTable.init('#tableDetalleCotizacion');
+
+
 
                 var d = '';
                 var lista = cotizacion.cotizacionDetalleList;
@@ -1152,6 +1240,7 @@ jQuery(function ($) {
         $("#btnDenegarCotizacion").attr('disabled', 'disabled');
         $("#btnAceptarCotizacion").attr('disabled', 'disabled');
         $("#btnRechazarCotizacion").attr('disabled', 'disabled');
+        $("#btnPDFCotizacion").attr('disabled', 'disabled');
     }
 
     function activarBotonesVer() {
@@ -1162,6 +1251,7 @@ jQuery(function ($) {
         $("#btnDenegarCotizacion").removeAttr('disabled');
         $("#btnAceptarCotizacion").removeAttr('disabled');
         $("#btnRechazarCotizacion").removeAttr('disabled');
+        $("#btnPDFCotizacion").removeAttr('disabled');
     }
 
 
@@ -1230,7 +1320,6 @@ jQuery(function ($) {
 
         $("#labelNuevoEstado").html("Aprobar");
         $("#estadoId").val("1");
-        
         limpiarComentario();
     });
 
@@ -1531,7 +1620,7 @@ jQuery(function ($) {
             editing: {
                 enabled: true,
                 addRow: function () {
-                    if (confirm('¿Está seguro de no guardar los cambios?')) {
+                    if (confirm(mensajeCancelarEdicion)) {
                         location.reload();
                     }
                 },
@@ -1955,8 +2044,8 @@ jQuery(function ($) {
 
 
     $("#btnCancelCotizacion").click(function () {
-         if (confirm('¿Está seguro de no guardar los cambios?')) {
-             window.location = '/Home/Index';
+        if (confirm(mensajeCancelarEdicion)) {
+             window.location = '/Home/New';
                     }
 
     })
@@ -1974,7 +2063,7 @@ jQuery(function ($) {
 
     $("#btnBusquedaCotizaciones").click(function () {
         var idCiudad = $("#idCiudad").val();
-        var idCliente = $("#idCliente").val().trim();
+        var idCliente = $("#idCliente").val();
         var fechaDesde = $("#fechaDesde").val();
         var fechaHasta = $("#fechaHasta").val();
         var numero = $("#numero").val();
@@ -2002,6 +2091,62 @@ jQuery(function ($) {
         });
     });
 
+    $("#fechaDesde").change(function () {
+        var fechaDesde = $("#fechaDesde").val();
+        $.ajax({
+            url: "/Home/updateFechaDesde",
+            type: 'POST',
+            data: {
+                fechaDesde: fechaDesde
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#fechaHasta").change(function () {
+        var fechaHasta = $("#fechaHasta").val();
+        $.ajax({
+            url: "/Home/updateFechaHasta",
+            type: 'POST',
+            data: {
+                fechaHasta: fechaHasta
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#numero").change(function () {
+        var codigo = $("#numero").val();
+        $.ajax({
+            url: "/Home/updateCodigoCotizacionBusqueda",
+            type: 'POST',
+            data: {
+                codigo: codigo
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#estado").change(function () {
+        var estado = $("#estado").val();
+        $.ajax({
+            url: "/Home/updateEstadoCotizacionBusqueda",
+            type: 'POST',
+            data: {
+                estado: estado
+            },
+            success: function () {
+            }
+        });
+    });
+
+    
+
+
+    
 
 
 

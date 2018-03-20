@@ -20,7 +20,6 @@ namespace DataLayer
 
         public void setProductoStaging(ProductoStaging productoStaging)
         {
-
             var objCommand = GetSqlCommand("pi_productoStaging");
             InputParameterAdd.Varchar(objCommand, "codigo", productoStaging.codigo); //(y)
             InputParameterAdd.Varchar(objCommand, "familia", productoStaging.familia); //(y)
@@ -33,6 +32,10 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precioProvincias", productoStaging.precioProvincias); //(y)
             InputParameterAdd.Varchar(objCommand, "proveedor", productoStaging.proveedor); //(y)
             InputParameterAdd.Decimal(objCommand, "costo", productoStaging.costo); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidadProveedor", productoStaging.unidadProveedor); //(y)
+            InputParameterAdd.Int(objCommand, "equivalenciaProveedor", productoStaging.equivalenciaProveedor); //(y)
+            InputParameterAdd.Varchar(objCommand, "monedaProveedor", productoStaging.monedaProveedor); //(y)
+            InputParameterAdd.Varchar(objCommand, "monedaMP", productoStaging.monedaMP); //(y)
             ExecuteNonQuery(objCommand);
         }
 
@@ -121,14 +124,44 @@ namespace DataLayer
                 }
             }
 
-            List<PrecioLista> precioListaList = new List<PrecioLista>();
+            List<PrecioClienteProducto> precioListaList = new List<PrecioClienteProducto>();
             foreach (DataRow row in preciosDataSet.Rows)
             {
-                PrecioLista precioLista = new PrecioLista();
+                PrecioClienteProducto precioLista = new PrecioClienteProducto();
 
                 //     producto.idProducto = Converter.GetGuid(row, "unidad");
-                precioLista.precio = Converter.GetDecimal(row, "precio_neto");
-                precioLista.fecha = Converter.GetDateTime(row, "fecha");
+
+                if (row["fecha_inicio_vigencia"] == DBNull.Value)
+                {
+                    precioLista.fechaInicioVigencia = null;
+                }
+                else
+                { 
+                    precioLista.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                }
+
+                if (row["fecha_fin_vigencia"] == DBNull.Value)
+                {
+                    precioLista.fechaFinVigencia = null;
+                }
+                else
+                {
+                    precioLista.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+                }
+
+                precioLista.unidad = Converter.GetString(row, "unidad");
+                precioLista.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                precioLista.flete = Converter.GetDecimal(row, "flete");
+                precioLista.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
+                if (row["numero_cotizacion"] == DBNull.Value)
+                {
+                    precioLista.numeroCotizacion = null;
+                }
+                else
+                {
+                    precioLista.numeroCotizacion = Converter.GetInt(row, "numero_cotizacion").ToString().PadLeft(10, '0');
+                }
+              
                 precioListaList.Add(precioLista);
             }
 

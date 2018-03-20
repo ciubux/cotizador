@@ -25,9 +25,6 @@ namespace Cotizador.Controllers
 
         public ActionResult list()
         {
-       //     ViewBag.numero = Int32.Parse(Request["numero"].ToString());
-
-
             CiudadBL ciudadBL = new CiudadBL();
 
             List<Ciudad> ciudadListTmp = ciudadBL.getCiudades();
@@ -46,21 +43,36 @@ namespace Cotizador.Controllers
             ViewBag.List = ciudadDeshabilitadas;
             var model = ciudadList;
 
-                /*new DepartamentoViewModels
-            {
-                Data = _ubigeoBl.GetDepartamentos(),
-                DepartamentoSelectId = departamentoSelectId,
-                ProvinciaSelectId = provinciaSelectId,
-                DistritoSelectId = distritoSelectId,
-                ProvinciaDivId = provinciaDivId,
-                DistritoDivId = distritoDivId,
-                UrlProvinciasPorDepartamento = Url.Action("GetProvinciasPorDepartamento"),
-                UrlDistritosPorProvincia = Url.Action("GetDistritosPorProvincia"),
-                SelectedValue = selectedValue
-            };
-            */
             return PartialView("_SelectCiudad", model);
         }
+
+
+        public ActionResult listBusqueda()
+        {
+            CiudadBL ciudadBL = new CiudadBL();
+
+            List<Ciudad> ciudadListTmp = ciudadBL.getCiudades();
+
+            List<Ciudad> ciudadList = new List<Ciudad>();
+            Ciudad ciudadDeshabiltiad = new Ciudad { idCiudad = Guid.Empty, nombre = "Seleccione Ciudad", orden = 0 };
+            ciudadList.Add(ciudadDeshabiltiad);
+
+            foreach (Ciudad ciudad in ciudadListTmp)
+            {
+                ciudadList.Add(ciudad);
+            }
+
+            List<Guid> ciudadDeshabilitadas = new List<Guid>();
+            ciudadDeshabilitadas.Add(ciudadDeshabiltiad.idCiudad);
+            ViewBag.List = ciudadDeshabilitadas;
+            var model = ciudadList;
+
+            return PartialView("_SelectCiudadBusqueda", model);
+        }
+
+
+
+
 
         // GET: Ciudad/Create
         public ActionResult Create()

@@ -29,27 +29,26 @@
                 <ul class="nav navbar-nav">
 
                     @{
-                var routeValues = new RouteValueDictionary();
-                routeValues.Add("Name", "Example");
-                routeValues.Add("UserId", "5");
+        var routeValues = new RouteValueDictionary();
+        routeValues.Add("Name", "Example");
+        routeValues.Add("UserId", "5");
 
-                var attributes = new Dictionary<string, object>();
-                attributes.Add("onClick", "return nuevaCotizacion();");
+        var attributes = new Dictionary<string, object>();
+        attributes.Add("onClick", "return nuevaCotizacion();");
                     }
                     <li>@Html.ActionLink("Mis Cotizaciones", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Nueva Cotización", "New", "Home", routeValues, htmlAttributes: new { onclick = "return confirm('Si ha realizado cambios estos no se guardarán. ¿Desea continuar creando una nueva cotización?');" })</li>
-                    
-
+                    <!--   <li>@Html.ActionLink("Cotizar", "New", "Home", routeValues, htmlAttributes: new { onclick = "return confirm('Si ha realizado cambios estos no se guardarán. ¿Desea continuar creando una nueva cotización?');" })</li>-->
+                    <li>@Html.ActionLink("Cotizar", "Cotizador", "Home")</li>
                     <li>
-
                         <a class="dropdown-toggle" data-toggle="dropdown">
                             Carga de Archivos
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("Cargar Clientes", "LoadClientes", "Home")</li>
-                            <li>@Html.ActionLink("Cargar Productos", "LoadProductos", "Home")</li>
-                            <li>@Html.ActionLink("Cargar Precios", "LoadPrecios", "Home")</li>
+                            <li>@Html.ActionLink("Cargar Clientes", "Index", "Cliente")</li>
+                            <li>@Html.ActionLink("Cargar Productos", "Index", "Producto")</li>
+                            <li>@Html.ActionLink("Cargar Precios", "Index", "Precio")</li>
+                            <li>@Html.ActionLink("Cargar Facturas", "Index", "Factura")</li>
                         </ul>
 
                     </li>

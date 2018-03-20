@@ -8,7 +8,7 @@ namespace BusinessLayer
 {
     public class PrecioBL
     {
-        public List<PrecioLista> getListas()
+      /*  public List<PrecioClienteProducto> getListas()
         {
             using (var dal = new PrecioListaDAL())
             {
@@ -16,7 +16,7 @@ namespace BusinessLayer
             }
         }
 
-        public List<PrecioLista> getPreciosProducto(Guid idProducto, Guid idMoneda)
+        public List<PrecioClienteProducto> getPreciosProducto(Guid idProducto, Guid idMoneda)
         {
             using (var dal = new PrecioListaDAL())
             {
@@ -25,14 +25,14 @@ namespace BusinessLayer
             }
         }
 
-        public PrecioLista getPrecioProducto(Guid idProducto, Guid idPrecioLista)
+        public PrecioClienteProducto getPrecioProducto(Guid idProducto, Guid idPrecioLista)
         {
             using (var dal = new PrecioListaDAL())
             {
                 return dal.getPrecioProducto(idProducto, idPrecioLista);
 
             }
-        }
+        }*/
 
         public void setPrecioStaging(PrecioStaging precioStaging)
         {

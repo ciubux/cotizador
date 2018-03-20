@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,5 +20,15 @@ namespace Model
         public static String observacionesCotizacion = "* Condiciones de pago: al contado.\n" +
                                        "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
                                        "* (para productos no stockeables o primeras compras, consultar plazo).\n";
+
+        public enum paginas {
+            [Display(Name = "Mis Cotizaciones")]
+            misCotizaciones = 0,
+            [Display(Name = "Solo Observaciones")]
+            Cotizacion = 1
+        };
+
+
     }
+
 }

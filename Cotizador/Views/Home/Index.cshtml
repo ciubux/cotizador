@@ -29,26 +29,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-5">
-                <!--Cliente-->
-                <div class="form-group">
-                    <label for="cliente" class="control-label col-xs-4">Cliente:</label>
-
-                    <div class="col-xs-8">
-                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
-                            @if (ViewBag.existeCliente == 1)
-                            {
-                                <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
-                            }
-                            else
-                            {
-                                <option value=""></option>
-                            }
-                        </select>
+            
+                 <!--CIUDAD-->
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        <label for="idCiudad" class="control-label col-xs-4">Ciudad:</label>
+                        <div class="col-xs-8">
+                            @Html.Action("listBusqueda", "Ciudad")
+                        </div>
                     </div>
                 </div>
 
-            </div>
+
         </div>
 
 
@@ -79,15 +71,30 @@
         </div>
 
         <div class="row">
-            <!--CIUDAD-->
+
             <div class="col-sm-6 col-lg-5">
+                <!--Cliente-->
                 <div class="form-group">
-                    <label for="ciudad" class="control-label col-xs-4">Ciudad:</label>
+                    <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
+
                     <div class="col-xs-8">
-                        @Html.Action("list", "Ciudad")
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            @if (ViewBag.existeCliente == 1)
+                    {
+                        <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
+            }
+            else
+            {
+                <option value=""></option>
+    }
+                        </select>
                     </div>
                 </div>
+
             </div>
+
+
+           
 
             <!--ESTADO-->
             <div class="col-sm-6 col-lg-5">
@@ -95,9 +102,9 @@
                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estado",
-                              EnumHelper.GetSelectList(typeof(Model.SeguimientoCotizacion.estadosSeguimientoCotizacion), cotizacion.seguimientoCotizacion.estado),
-                              new { @class = "form-control" }
-                              )
+                           EnumHelper.GetSelectList(typeof(Model.SeguimientoCotizacion.estadosSeguimientoCotizacion), cotizacion.seguimientoCotizacion.estado),
+                           new { @class = "form-control" }
+                           )
                     </div>
                 </div>
             </div>
@@ -260,7 +267,7 @@
                             <div class="form-group">
                                 <label for="numero" class="control-label col-xs-4">Inicio Vigencia Precios:</label>
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verFechaInicitoVigenciaPrecios"></p>
+                                    <p class="form-control-static" id="verFechaInicioVigenciaPrecios"></p>
                                 </div>
                             </div>
                         </div>
@@ -288,7 +295,7 @@
                         <!--Modificado POR-->
                         <div class="col-sm-6 col-lg-3">
                             <div class="form-group">
-                                <label for="modificado" class="control-label col-xs-4">Modificado Por:</label>
+                                <label for="modificado" class="control-label col-xs-4">Modificada Por:</label>
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verModificadoPor"></p>
                                 </div>
@@ -339,7 +346,7 @@
                     </tbody>
                     </table>
 
-                    <div class="row">
+                    <div class="row" style="margin-right: 10px">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
                                 <label for="observaciones" class="control-label col-xs-2">Observaciones:</label>

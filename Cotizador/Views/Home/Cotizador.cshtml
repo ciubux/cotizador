@@ -479,9 +479,7 @@
 
         <div class="row">
             <div class="pull-right">
-                <!--
                 <button type="button" id="btnCancelCotizacion" class="btn btn-secondary">Cancelar</button>
-                    -->
                 @if (cotizacion.codigo > 0 && !cotizacion.esRecotizacion)
                 {
                     <button id="grabarCotizacion" type="button" class="btn btn-primary">Actualizar Cotización</button>
@@ -569,7 +567,7 @@
                             <div class="form-group">
                                 <label for="producto" class="control-label col-xs-3">Producto:</label>
                                 <div class="col-xs-9">
-                                    <select class="form-control input-sm" id="producto" name="producto">
+                                    <select class="form-control" id="producto" name="producto">
                                         <option value=""></option>
                                     </select>
                                     <label><input type="checkbox" id="considerarDescontinuados" />Considerar Descontinuados</label>
@@ -582,7 +580,7 @@
                             <div class="form-group">
                                 <label for="unidad" class="control-label col-xs-3">Presentación:</label>
                                 <div class="col-xs-9">
-                                    <select class="form-control input-sm" id="unidad" name="unidad"></select>
+                                    <select class="form-control" id="unidad" name="unidad"></select>
                                 </div>
                             </div>
 
@@ -629,7 +627,7 @@
                                     <button id="btnCalcularDescuento" type="button" class="btn btn-primary bouton-image monBouton" data-toggle="modal" data-target="#modalCalculadora"></button>
                                 </div>
                                 <div class="col-xs-2">
-                                    <button id="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image monBouton" data-toggle="modal" data-target="#modalCalculadora"></button>
+                                    <button id="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios" data-toggle="modal" data-target="#modalMostrarPrecios"></button>
                                 </div>
 
                             </div>
@@ -842,7 +840,7 @@
             <div class="modal-body">
                 <form class="form-horizontal">
 
-                    <table id="tablefoottable" class="table" data-editing="true"
+                    <table id="tableMostrarPrecios" class="table" data-editing="false"
                            data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                            data-editing-allow-add="true"
                            data-editing-allow-delete="true"
@@ -853,8 +851,13 @@
                            data-editing-add-text="Descartar cambios">
                         <thead>
                             <tr>
-                                <th data-name="idProducto" data-visible="true">Fecha</th>
-                                <th data-name="idProducto" data-visible="true">Precio</th>
+                                <th data-name="idProducto" data-visible="true">Número Cotización</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Unidad</th>
+                                <th data-name="idProducto" data-visible="true">Precio Neto</th>
+                                <th data-name="idProducto" data-visible="true">Flete</th>
+                                <th data-name="idProducto" data-visible="true">Precio Unitario</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -864,7 +867,7 @@
 
             <div class="modal-footer">
                 <button type="button" id="btnCancelCalculadora" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnSaveDescuento" class="btn btn-primary">Guardar Descuento</button>
+                <button type="button" id="btnSaveDescuento" class="btn btn-primary"  data-dismiss="modal">Aceptar</button>
             </div>
         </div>
     </div>

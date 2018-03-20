@@ -24,7 +24,7 @@ namespace Cotizador.Controllers
 
         public ActionResult Index()
         {
-            crearCotizacion();
+          //  crearCotizacion();
 
             if (this.Session["cotizacionBusqueda"] == null)
             {
@@ -92,62 +92,24 @@ namespace Cotizador.Controllers
         /*Ejecución de la búsqueda de cotizaciones*/
         public int SearchCotizaciones()
         {
-            Cotizacion cotizacion = new Cotizacion();
-
-            //Se agrega Ciudad en la busqueda
-            cotizacion.ciudad = new Ciudad();
-            if (this.Request.Params["idCiudad"].ToString() == "00000000-0000-0000-0000-000000000000")
-            {
-                cotizacion.ciudad.idCiudad = Guid.Empty;
-            }
-            else
-            {
-                cotizacion.ciudad.idCiudad = Guid.Parse(this.Request.Params["idCiudad"].ToString());
-            }
-
-
-
-            //Se agrega fecha en la busqueda
-            String[] fechaDesde = this.Request.Params["fechaDesde"].Split('/');
-            cotizacion.fechaDesde = new DateTime(Int32.Parse(fechaDesde[2]), Int32.Parse(fechaDesde[1]), Int32.Parse(fechaDesde[0]));
-
-            //Se agrega fechaHasta en la busqueda
-            String[] fechaHasta = this.Request.Params["fechaHasta"].Split('/');
-            cotizacion.fechaHasta = new DateTime(Int32.Parse(fechaHasta[2]), Int32.Parse(fechaHasta[1]), Int32.Parse(fechaHasta[0]),23,59,59);
-
-            cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
-            cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Int32.Parse(this.Request.Params["estado"].ToString());
-
-
-            //Se agrega número/codigo en la busqueda
-            if (this.Request.Params["numero"].ToString() != "")
-            {
-                cotizacion.codigo = Int64.Parse(this.Request.Params["numero"].ToString());
-            }
-
-            //Se agrega cliente en la busqueda
-            cotizacion.cliente = new Cliente();
-            if (this.Request.Params["idCliente"].ToString().Trim() != "")
-            {
-                cotizacion.cliente.idCliente = Guid.Parse(this.Request.Params["idCliente"].ToString());
-            }
-
-
+            //Se recupera la cotizacion de la session
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
             CotizacionBL cotizacionBL = new CotizacionBL();
             List<Cotizacion> cotizacionList = cotizacionBL.GetCotizaciones(cotizacion);
-
+            //Se coloca en session el resultado de la búsqueda
             this.Session["cotizacionList"] = cotizacionList;
-
-            this.Session["cotizacionBusqueda"] = cotizacion;
-
+            //Se retorna la cantidad de elementos encontrados
             return cotizacionList.Count();
         }
 
 
         public ActionResult Exit()
         {
+            //Se eliminan todos los datos de Session
             this.Session["usuario"] = null;
             this.Session["cotizacion"] = null;
+            this.Session["cotizacionBusqueda"] = null;
+            this.Session["cotizacionList"] = null;
             return RedirectToAction("Login", "Account");
         }
 
@@ -372,6 +334,35 @@ namespace Cotizador.Controllers
             this.Session["cotizacion"] = cotizacion;
         }
 
+        public void updateCodigoCotizacionBusqueda()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
+            try
+            {
+                cotizacion.codigo = int.Parse(this.Request.Params["codigo"]);
+            }
+            catch (Exception ex)
+            {
+                cotizacion.codigo = 0;
+            }
+            this.Session["cotizacionBusqueda"] = cotizacion;
+        }
+
+
+        public void updateEstadoCotizacionBusqueda()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
+            try
+            {
+                cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)int.Parse(this.Request.Params["estado"]);
+            }
+            catch (Exception ex)
+            {
+            }
+            this.Session["cotizacionBusqueda"] = cotizacion;
+        }
+
+
 
         public void updateMostrarCodigoProveedor()
         {
@@ -451,6 +442,22 @@ namespace Cotizador.Controllers
         }
 
 
+        public void updateFechaDesde()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
+            String[] fecha = this.Request.Params["fechaDesde"].Split('/');
+            cotizacion.fechaDesde = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            this.Session["cotizacionBusqueda"] = cotizacion;
+        }
+
+        public void updateFechaHasta()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
+            String[] fecha = this.Request.Params["fechaHasta"].Split('/');
+            cotizacion.fechaHasta = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            this.Session["cotizacionBusqueda"] = cotizacion;
+        }
+
         #endregion
 
 
@@ -483,7 +490,20 @@ namespace Cotizador.Controllers
             
         }
 
+        public String updateIdCiudadBusqueda()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
+            Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
 
+            CiudadBL ciudadBL = new CiudadBL();
+            Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
+            cotizacion.cliente = new Cliente();
+            cotizacion.grupo = new Grupo();
+            cotizacion.ciudad = ciudadNueva;
+            this.Session["cotizacionBusqueda"] = cotizacion;
+            return "{\"idCiudad\": \"" + idCiudad + "\"}";
+
+        }
         public void updateProveedor()
         {
             this.Session["proveedor"] = this.Request.Params["proveedor"];
@@ -579,6 +599,40 @@ namespace Cotizador.Controllers
 
 
 
+        public String GetClientesBusqueda()
+        {
+
+            String data = this.Request.Params["data[q]"];
+
+            ClienteBL clienteBL = new ClienteBL();
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
+
+            List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data, cotizacion.ciudad.idCiudad);
+
+            GrupoBL grupoBL = new GrupoBL();
+            List<Grupo> grupoList = grupoBL.getGruposBusqueda(data);
+
+            String resultado = "{\"q\":\"" + data + "\",\"results\":[";
+            Boolean existeClienteGrupo = false;
+            foreach (Cliente cliente in clienteList)
+            {
+                resultado += "{\"id\":\"c" + cliente.idCliente + "\",\"text\":\"" + cliente.ToString() + "\"},";
+                existeClienteGrupo = true;
+            }
+            foreach (Grupo grupo in grupoList)
+            {
+                resultado += "{\"id\":\"g" + grupo.idGrupo + "\",\"text\":\"" + grupo.ToString() + "\"},";
+                existeClienteGrupo = true;
+            }
+
+            if (existeClienteGrupo)
+                resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+            else
+                resultado = resultado.Substring(0, resultado.Length) + "]}";
+
+            return resultado;
+        }
+
         public String GetClientes()
         {
 
@@ -588,10 +642,6 @@ namespace Cotizador.Controllers
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
 
             List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data, cotizacion.ciudad.idCiudad);
-
-   
-            
-
 
             GrupoBL grupoBL = new GrupoBL();
             List<Grupo> grupoList = grupoBL.getGruposBusqueda(data);
@@ -623,7 +673,16 @@ namespace Cotizador.Controllers
 
         public String GetCliente()
         {
+            //Se identifica la pagina 
+            Constantes.paginas pagina = (Constantes.paginas)Int32.Parse((Request["pagina"].ToString()));
+
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            //Si la pagina es de busqueda se obtiene la cotización de busqueda y se trabaja con la cotización de búsqueda
+            if (pagina == Constantes.paginas.misCotizaciones)
+                cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
+           
+
+
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
             cotizacion.cliente = clienteBl.getCliente(idCliente);            
@@ -637,6 +696,14 @@ namespace Cotizador.Controllers
                 "\"idCliente\":\"" + cotizacion.cliente.idCliente + "\"," +
                 "\"contacto\":\"" + cotizacion.cliente.contacto1 + "\"" +
                 "}";
+
+
+            if (pagina == Constantes.paginas.misCotizaciones)
+                this.Session["cotizacionBusqueda"] = cotizacion;
+            else
+                this.Session["cotizacion"] = cotizacion;
+
+
             return resultado;
         }
 
@@ -1082,199 +1149,7 @@ namespace Cotizador.Controllers
 
 
 
-        [HttpGet]
-        public ActionResult LoadProductos()
-        {
-            if (this.Session["usuario"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            return View();
-
-        }
-
-
-        [HttpPost]
-        public ActionResult LoadProductosFile(HttpPostedFileBase file)
-        {
-            if (file.ContentLength > 0)
-            {
-                var fileName = Path.GetFileName(file.FileName);
-                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
-                file.SaveAs(path);
-            }
-
-
-            HSSFWorkbook hssfwb;
-
-            ProductoBL productoBL = new ProductoBL();
-            productoBL.truncateProductoStaging();
-
-            hssfwb = new HSSFWorkbook(file.InputStream);
-
-            ISheet sheet = hssfwb.GetSheetAt(0);
-            int row = 1;
-            int cantidad = Int32.Parse(Request["cantidad"].ToString());
-            if (cantidad == 0)
-                cantidad = sheet.LastRowNum;
-
-            cantidad = 2008;
-            //sheet.LastRowNum
-            for (row = 2; row <= cantidad; row++)
-            {
-                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
-                {
-
-                    ProductoStaging productoStaging = new ProductoStaging();
-                    int paso = 1;
-                    try
-                    {
-                        
-
-                        if (sheet.GetRow(row).GetCell(0) == null)
-                        {
-                            productoStaging.familia = "No proporcionada";
-                        }
-                        else
-                        {
-                            //A
-                            productoStaging.familia = sheet.GetRow(row).GetCell(0).ToString();
-                        }
-
-
-                        paso = 2;
-                        if (sheet.GetRow(row).GetCell(1) == null)
-                        {
-                            productoStaging.proveedor = null;
-                        }
-                        else
-                        {
-                            //B
-                            productoStaging.proveedor = sheet.GetRow(row).GetCell(1).ToString();
-                        }
-
-
-                        paso = 3;
-                        if (sheet.GetRow(row).GetCell(2) == null)
-                        {
-                            productoStaging.codigo = null;
-                        }
-                        else
-                        {
-                            //C
-                            productoStaging.codigo = sheet.GetRow(row).GetCell(2).ToString();
-                        }
-
-                        paso = 4;
-                        //D
-                        if (sheet.GetRow(row).GetCell(3) == null)
-                        {
-                            productoStaging.codigoProveedor = null;
-                        }
-                        else
-                        {
-                            productoStaging.codigoProveedor = sheet.GetRow(row).GetCell(3).ToString();
-                        }
-
-                        paso = 5;
-                        //E
-                        if (sheet.GetRow(row).GetCell(4) == null)
-                        {
-                            productoStaging.unidad = null;
-                        }
-                        else
-                        {
-                            productoStaging.unidad = sheet.GetRow(row).GetCell(4).ToString();
-                        }
-
-                        paso = 6;
-                        //H
-                        if (sheet.GetRow(row).GetCell(7) == null)
-                        {
-                            productoStaging.unidad = null;
-                        }
-                        else
-                        {
-                            productoStaging.unidadAlternativa = sheet.GetRow(row).GetCell(7).ToString();
-                        }
-
-                        paso = 7;
-                        //J
-                        if (sheet.GetRow(row).GetCell(8) == null)
-                        {
-                            productoStaging.equivalencia = 1;
-                        }
-                        else
-                        {
-                            productoStaging.equivalencia = Int32.Parse(sheet.GetRow(row).GetCell(8).ToString());
-                        }
-
-                        paso = 8;
-                        //K
-                        if (sheet.GetRow(row).GetCell(9) == null)
-                        {
-                            productoStaging.descripcion = null;
-                        }
-                        else
-                        {
-                            productoStaging.descripcion = sheet.GetRow(row).GetCell(9).ToString();
-                        }
-
-                        paso = 9;
-                        //T
-                        try
-                        {
-                            Double? costo = sheet.GetRow(row).GetCell(19).NumericCellValue;
-                            productoStaging.costo = Convert.ToDecimal(costo);
-                        }
-                        catch (Exception e)
-                        {
-                            productoStaging.costo = 0;
-                        }
-
-                        paso = 10;
-                        try {
-                            //Y
-                            Double? precioLima = sheet.GetRow(row).GetCell(24).NumericCellValue;
-                            productoStaging.precioLima = Convert.ToDecimal(precioLima);
-                        }
-                        catch (Exception e)
-                        {
-                            productoStaging.precioLima = 0;
-                        }
-
-
-                        paso = 11;
-                        try
-                        {
-                            //K
-                            Double? precioProvincias = sheet.GetRow(row).GetCell(27).NumericCellValue;
-                            productoStaging.precioProvincias = Convert.ToDecimal(precioProvincias);
-                        }
-                        catch (Exception e)
-                        {
-                            productoStaging.precioProvincias = 0;
-                        }
-                        
-                        productoBL.setProductoStaging(productoStaging);
-                    }
-                    catch (Exception ex)
-                    {
-                        
-                        Usuario usuario = (Usuario)this.Session["usuario"];
-                        Log log = new Log(ex.ToString() + " paso:"+ paso, TipoLog.Error, usuario);
-                        LogBL logBL = new LogBL();
-                        logBL.insertLog(log);
-
-
-                    }
-                }
-            }
-            //productoBL.mergeProductoStaging();
-            row = row;
-            return RedirectToAction("Index", "Home");
-        }
-
+    
 
 
         [HttpGet]
@@ -1578,7 +1453,8 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult DownLoadFile(String fileName)
         {
-            FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\"+ fileName, FileMode.Open);
+            String ruta = AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\" + fileName;
+            FileStream inStream = new FileStream(ruta, FileMode.Open);
             MemoryStream storeStream = new MemoryStream();
 
             storeStream.SetLength(inStream.Length);
@@ -1586,7 +1462,8 @@ namespace Cotizador.Controllers
 
             storeStream.Flush();
             inStream.Close();
-            System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\" + fileName);
+           System.IO.File.Delete(ruta);
+            //System.IO.File.Delete(fileName);
 
             FileStreamResult result = new FileStreamResult(storeStream, "application/pdf");
             result.FileDownloadName = fileName;     
