@@ -19,8 +19,6 @@ namespace BusinessLayer
                     cotizacion.montoSubTotal = 0;
                 }
 
-             
-
                 if (cotizacion.mostrarValidezOfertaEnDias == 0)
                 {
                     cotizacion.fechaFinVigenciaPrecios = cotizacion.fecha.AddDays(cotizacion.validezOfertaEnDias);
@@ -85,7 +83,7 @@ namespace BusinessLayer
 
                 if (cotizacion.mostrarValidezOfertaEnDias == 0)
                 {
-                    cotizacion.fechaFinVigenciaPrecios = cotizacion.fecha.AddDays(cotizacion.validezOfertaEnDias);
+                    cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(cotizacion.validezOfertaEnDias);
                 }
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
@@ -253,6 +251,12 @@ namespace BusinessLayer
             List<Cotizacion> cotizacionList = null;
             using (var dal = new CotizacionDAL())
             {
+                //Si el usuario no es aprobador entonces solo buscará sus cotizaciones
+                if (!cotizacion.usuario.esAprobador)
+                {
+                    cotizacion.usuarioBusqueda = cotizacion.usuario;
+                }
+  
                 cotizacionList = dal.SelectCotizaciones(cotizacion);
             }
             return cotizacionList;

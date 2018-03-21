@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Inicio";
+    ViewBag.Title = "Cotizador";
     Model.Cotizacion cotizacion = ViewBag.cotizacion;
     // Model.Cotizacion.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
     // @model Enum;
@@ -482,11 +482,11 @@
                 <button type="button" id="btnCancelCotizacion" class="btn btn-secondary">Cancelar</button>
                 @if (cotizacion.codigo > 0 && !cotizacion.esRecotizacion)
                 {
-                    <button id="grabarCotizacion" type="button" class="btn btn-primary">Actualizar Cotización</button>
+                    <button id="grabarCotizacion" type="button" class="btn btn-primary">Finalizar Edición</button>
                 }
                 else
                 {
-                    <button id="grabarCotizacion" type="button" class="btn btn-primary">Generar Cotización</button>
+                    <button id="grabarCotizacion" type="button" class="btn btn-primary">Guardar</button>
                 }
 
 

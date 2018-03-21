@@ -63,28 +63,17 @@ namespace Model
 
         public bool considerarDescontinuados { get; set; }
 
-     //   public String motivoRechazo { get; set; }
-
         public Decimal maximoPorcentajeDescuentoPermitido { get; set; }
 
 
+
+
+        /*Campos utilizados para búsqueda*/
+        public Usuario usuarioBusqueda { get; set; }
         public DateTime fechaDesde { get; set; }
         public DateTime fechaHasta { get; set; }
 
-      
-
-
-            partial class FiltroBusquedaCotizacion
-            {
-                public DateTime fechaDesde { get; set; }
-                public DateTime fechaHasta { get; set; }
-
-
-
-
-
-
-            }
+            
 
 
 

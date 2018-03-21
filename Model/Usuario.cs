@@ -16,6 +16,7 @@ namespace Model
         public string contacto { get; set; }
         public bool esAprobador { get; set; }
         public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
+        public List<Usuario> usuarioList { get; set; }
     }
 }
 

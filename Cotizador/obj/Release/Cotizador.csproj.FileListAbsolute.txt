@@ -351,3 +351,5 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Release\Cotizador.csprojRes
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Release\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Release\Cotizador.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Release\Cotizador.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Spire.Pdf.xml
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Spire.License.xml

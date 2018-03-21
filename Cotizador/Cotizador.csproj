@@ -222,6 +222,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -351,6 +352,7 @@
     <Content Include="Views\Proveedor\_SelectProveedor.cshtml" />
     <Content Include="Views\Precio\LoadPrecios.cshtml" />
     <Content Include="Views\Ciudad\_SelectCiudadBusqueda.cshtml" />
+    <Content Include="Views\Usuario\_SelectUsuario.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

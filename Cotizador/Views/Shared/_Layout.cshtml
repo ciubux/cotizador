@@ -21,24 +21,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-
-                <img src="~/images/logo_ind.jpg" height="50" width="200" />
-                <!-- @Html.ActionLink("Cotizador", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })-->
+                <img src="~/images/logo_ind.jpg" height="42" width="230" style="margin:3px; margin-right: 10px" />
             </div>
+
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-
-                    @{
-        var routeValues = new RouteValueDictionary();
-        routeValues.Add("Name", "Example");
-        routeValues.Add("UserId", "5");
-
-        var attributes = new Dictionary<string, object>();
-        attributes.Add("onClick", "return nuevaCotizacion();");
-                    }
-                    <li>@Html.ActionLink("Mis Cotizaciones", "Index", "Home")</li>
-                    <!--   <li>@Html.ActionLink("Cotizar", "New", "Home", routeValues, htmlAttributes: new { onclick = "return confirm('Si ha realizado cambios estos no se guardarán. ¿Desea continuar creando una nueva cotización?');" })</li>-->
-                    <li>@Html.ActionLink("Cotizar", "Cotizador", "Home")</li>
+                    <li id="linkMisCotizaciones">@Html.ActionLink("Mis Cotizaciones", "Index", "Home")</li>
+                    <li id="linkCotizador">@Html.ActionLink("Cotizar", "Cotizador", "Home")</li>
                     <li>
                         <a class="dropdown-toggle" data-toggle="dropdown">
                             Carga de Archivos
@@ -53,7 +42,7 @@
 
                     </li>
 
-                </ul>
+              </ul>
 
                @Html.Partial("_LoginPartial")
             </div>

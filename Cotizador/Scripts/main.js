@@ -9,7 +9,7 @@ jQuery(function ($) {
        1 Cotización
      */
     var pagina = 0;
-    var mensajeCancelarEdicion = '¿Está seguro de cancelar, no se guardarán los cambios?';
+    var mensajeCancelarEdicion = '¿Está seguro de cancelar; no se guardarán los cambios?';
 
     $(document).ready(function () {
 
@@ -18,10 +18,18 @@ jQuery(function ($) {
         var title = document.title;
         if (title == "Cotizador - Búsqueda Cotizaciones") {
             pagina = 0;
+            $("#linkMisCotizaciones").attr("class", "active");
+            $("#linkCotizador").removeAttr("class");
+        }
+        else if (title == "Cotizador - Cotizador") {
+            pagina = 1;
+            $("#linkCotizador").attr("class", "active");
+            $("#linkMisCotizaciones").removeAttr("class");
         }
         else
         {
-            pagina = 1;
+            $("#linkCotizador").removeAttr("class");
+            $("#linkMisCotizaciones").removeAttr("class");
         }
 
         cargarChosenCliente(pagina);
@@ -357,6 +365,9 @@ jQuery(function ($) {
     //EVENTO CUANDO SE ABRE VENTANA DE AGREGAR PRODUCTO
     $('#modalAgregarProducto').on('shown.bs.modal', function () {
         $('#familia').focus();
+        $('#familia').val("Todas");
+        $('#proveedor').val("Todos");
+
         //$('#producto').trigger('chosen:activate');
     })
 
@@ -1104,12 +1115,22 @@ jQuery(function ($) {
                     cotizacion.seguimientoCotizacion.estado == 2 ||
                     (cotizacion.seguimientoCotizacion.estado == 5 && cotizacion.usuario.idUsuario == cotizacion.seguimientoCotizacion.usuario.idUsuario)
                 ) {
-
                     $("#btnEditarCotizacion").show();
+                    if (cotizacion.seguimientoCotizacion.estado == 5 && cotizacion.usuario.idUsuario == cotizacion.seguimientoCotizacion.usuario.idUsuario) {
+                        $("#btnEditarCotizacion").html("Continuar Editanto");
+                    }
+                    else
+                    {
+                        $("#btnEditarCotizacion").html("Editar");
+                    }
                 }
                 else {
                     $("#btnEditarCotizacion").hide();
                 }
+
+
+
+
 
                 /*RECOTIZAR*/
                 if (
@@ -1379,7 +1400,11 @@ jQuery(function ($) {
                 observacion: comentarioEstado
             },
             type: 'POST',
-            error: function () { alert("Ocurrió un problema al intentar cambiar el estado de la cotización."); },
+            error: function () {
+                alert("Ocurrió un problema al intentar cambiar el estado de la cotización.")
+                $("#btnCancelarCambioEstado").click();
+                    ;
+            },
             success: function () {
                 if (accion == "1") {
                     alert("La cotización número: " + codigo + " se modificó correctamente.");
@@ -1387,6 +1412,7 @@ jQuery(function ($) {
                 else {
                     alert("La cotización número: " + codigo + " se modificó correctamente.");
                 }
+                $("#btnCancelarCambioEstado").click();
                 $("#btnBusquedaCotizaciones").click();
             }
         });

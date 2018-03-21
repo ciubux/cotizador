@@ -24,7 +24,13 @@ namespace Cotizador.Controllers
 
         public ActionResult Index()
         {
-          //  crearCotizacion();
+
+
+            if (this.Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            //  crearCotizacion();
 
             if (this.Session["cotizacionBusqueda"] == null)
             {
@@ -38,15 +44,12 @@ namespace Cotizador.Controllers
                 cotizacionTmp.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Todos;
                // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
                 cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
+                cotizacionTmp.usuarioBusqueda = cotizacionTmp.usuario;
                 this.Session["cotizacionBusqueda"] = cotizacionTmp;
             }
 
             Cotizacion cotizacionSearch = (Cotizacion)this.Session["cotizacionBusqueda"];
 
-            if (this.Session["usuario"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
 
             ViewBag.fechaDesde = cotizacionSearch.fechaDesde.ToString("dd/MM/yyyy");
             ViewBag.fechaHasta = cotizacionSearch.fechaHasta.ToString("dd/MM/yyyy");
@@ -455,6 +458,13 @@ namespace Cotizador.Controllers
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
             String[] fecha = this.Request.Params["fechaHasta"].Split('/');
             cotizacion.fechaHasta = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            this.Session["cotizacionBusqueda"] = cotizacion;
+        }
+
+        public void updateUsuario()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
+            cotizacion.usuarioBusqueda = new Usuario { idUsuario = Guid.Parse(this.Request.Params["usuario"]) };
             this.Session["cotizacionBusqueda"] = cotizacion;
         }
 

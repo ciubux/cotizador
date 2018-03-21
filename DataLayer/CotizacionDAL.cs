@@ -353,9 +353,9 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "id_cliente", cotizacion.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "id_ciudad", cotizacion.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", cotizacion.fechaDesde);
             InputParameterAdd.DateTime(objCommand, "fechaHasta", cotizacion.fechaHasta);
-         //   InputParameterAdd.Guid(objCommand, "usuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
             DataTable dataTable = Execute(objCommand);
 
