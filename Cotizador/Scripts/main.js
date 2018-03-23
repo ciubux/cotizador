@@ -32,6 +32,11 @@ jQuery(function ($) {
         }
 
         cargarChosenCliente(pagina);
+
+      /*  $('#tablefoottable').footable({
+            "columns": $.get('columns.json'),
+            "rows": $.get('rows.json')
+        });*/
         //Se construye la tabla de Detalle de Cotizacion
         //FooTable.init('#tableDetalleCotizacion');
     });
