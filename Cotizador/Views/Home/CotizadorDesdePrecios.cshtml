@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Cotizador";
+    Model.Cotizacion cotizacion = ViewBag.cotizacion;
+    // Model.Cotizacion.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
+    // @model Enum;
+}
+
+
+<div class="container">
+
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal">
+        <div class="row">
+            <!--CIUDAD-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="idCiudad" class="control-label col-xs-4">Ciudad:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("list", "Ciudad")
+                    </div>
+                </div>
+            </div>
+
+            <!--CLIENTE-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="cliente" class="control-label col-xs-4">Cliente / Grupo:</label>
+
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            @if (ViewBag.existeCliente == 1)
+                    {
+                        <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
+            }
+            else
+            {
+                <option value=""></option>
+    }
+                        </select>
+                    </div>
+
+                 
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div class="row">
+            <!--FECHA-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="fecha" class="control-label col-xs-4">Precios a partir de:</label>
+                    <div class="col-xs-8">
+                        <input type="hidden" id="fechatmp" value="@ViewBag.fecha" />
+                        <input class="form-control" type="text" id="fecha" name="fecha">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnCancelCotizacion" class="btn btn-secondary">Cancelar</button>
+                <button id="btnGenerarPlantillaCotizacion" type="button" class="btn btn-primary">Nueva Cotización</button>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+

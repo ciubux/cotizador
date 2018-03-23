@@ -144,7 +144,7 @@
             <thead>
                 <tr>
                     <th data-name="idCotizacion" data-visible="false"></th>
-                    <th data-name="codigo" data-visible="true">Número</th>
+                    <th data-name="codigo" data-visible="true">N°</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
                     <th data-name="fecha" data-sortable="true">Fecha Creación</th>
                     <th data-name="razonSocial" data-sortable="true" data-breakpoints="xs">Razón Social</th>
@@ -167,7 +167,7 @@
                     <td>  @cotizacionItem.idCotizacion</td>
                     <td>  @cotizacionItem.codigo  </td>
                     <td>  @cotizacionItem.usuario.nombre  </td>
-                    <td>  @cotizacionItem.fecha </td>
+                    <td>  @cotizacionItem.fecha.ToString("dd/MM/yyyy")</td>
                     <td>  @cotizacionItem.cliente.razonSocial</td>
                     <td>  @cotizacionItem.cliente.ruc </td>
                     <td>  @cotizacionItem.ciudad.nombre  </td>
@@ -175,7 +175,7 @@
                     <td>  @cotizacionItem.igv  </td>
                     <td>  @cotizacionItem.montoTotal  </td>
                     <td>  @cotizacionItem.maximoPorcentajeDescuentoPermitido  </td>
-                    <td>  @cotizacionItem.seguimientoCotizacion.estado</td>
+                    <td>  @cotizacionItem.seguimientoCotizacion.estadoString</td>
                     <td>  @cotizacionItem.seguimientoCotizacion.usuario.nombre  </td>
                     <td>  @cotizacionItem.seguimientoCotizacion.observacion  </td>
 
@@ -397,6 +397,8 @@
                 <div class="pull-left">
                     <button type="button" id="btnReCotizacion" class="btn btn-primary">Recotizar</button>
                     <button type="button" id="btnPDFCotizacion" class="btn btn-primary">PDF</button>
+                    <!-- <input type="text" value="hola\tHola" id="myInput" name="myInput" />
+     <button type="button" id="btnCopiar" class="btn btn-primary">Copiar</button>-->
                 </div>
 
 

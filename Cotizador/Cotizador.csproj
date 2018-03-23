@@ -353,6 +353,7 @@
     <Content Include="Views\Precio\LoadPrecios.cshtml" />
     <Content Include="Views\Ciudad\_SelectCiudadBusqueda.cshtml" />
     <Content Include="Views\Usuario\_SelectUsuario.cshtml" />
+    <Content Include="Views\Home\CotizadorDesdePrecios.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

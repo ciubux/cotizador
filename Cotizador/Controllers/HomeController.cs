@@ -119,11 +119,49 @@ namespace Cotizador.Controllers
 
 
         /*Pagina principal, muestra formulario de creación de cotización*/
-        public ActionResult New()
+        
+
+
+        public ActionResult NuevaCotizacionDesdePrecios()
         {
             this.Session["cotizacion"] = null;
-            return RedirectToAction("Cotizador", "Home");
+            return RedirectToAction("CotizadorDesdePrecios", "Home");
         }
+
+
+        public ActionResult CotizadorDesdePrecios()
+        {
+            if (this.Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            ViewBag.debug = Constantes.debug;
+            ViewBag.Si = "Sí";
+            ViewBag.No = "No";
+            ViewBag.IGV = Constantes.IGV;
+
+
+            //Si no se está trabajando con una cotización se crea una y se agrega a la sesion
+            if (this.Session["cotizacion"] == null)
+            {
+
+                crearCotizacion();
+            }
+
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+
+            ViewBag.cotizacion = cotizacion;
+            cotizacion.fecha = DateTime.Now.AddDays(-728);
+            ViewBag.fecha = cotizacion.fecha.ToString("dd/MM/yyyy");
+
+            this.Session["cotizacion"] = cotizacion;
+
+            return View();
+
+        }
+
+        
 
         private void crearCotizacion()
         {
@@ -149,6 +187,28 @@ namespace Cotizador.Controllers
 
             this.Session["cotizacion"] = cotizacionTmp;
         }
+
+        public ActionResult NuevaCotizacion()
+        {
+            this.Session["cotizacion"] = null;
+            return RedirectToAction("Cotizador", "Home");
+        }
+
+        public Boolean ConsultarExisteCotizacion()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            if (cotizacion == null)
+                return false;
+            else
+                return true;
+        }
+
+        public ActionResult CancelarCreacionCotizacion()
+        {
+            this.Session["cotizacion"] = null;
+            return RedirectToAction("Index", "Home");
+        }
+
 
         public ActionResult Cotizador()
         { 
@@ -457,7 +517,8 @@ namespace Cotizador.Controllers
         {
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
             String[] fecha = this.Request.Params["fechaHasta"].Split('/');
-            cotizacion.fechaHasta = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+           
+            cotizacion.fechaHasta = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), 23, 59, 59);//.AddDays(1);
             this.Session["cotizacionBusqueda"] = cotizacion;
         }
 
@@ -1486,6 +1547,18 @@ namespace Cotizador.Controllers
             Cotizacion cotizacion = insertarCotizacion();
 
             return "{ \"codigo\":\""+cotizacion.codigo+"\", \"estado\":\""+ (int)cotizacion.seguimientoCotizacion.estado +"\" }";
+        }
+
+
+        public void generarPlantillaCotizacion()
+        {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            Usuario usuario = (Usuario)this.Session["usuario"];
+            cotizacion.usuario = usuario;
+            CotizacionBL cotizacionBL = new CotizacionBL();
+            cotizacion = cotizacionBL.generarPlantillaCotizacion(cotizacion);
+            calcularMontosTotales(cotizacion);
+            this.Session["cotizacion"] = cotizacion;
         }
 
 

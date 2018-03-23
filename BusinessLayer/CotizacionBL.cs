@@ -129,6 +129,116 @@ namespace BusinessLayer
              
         }
 
+        public Cotizacion generarPlantillaCotizacion(Cotizacion cotizacion)
+        {
+            using (var dal = new CotizacionDAL())
+            {
+                cotizacion = dal.generarPlantillaCotizacion(cotizacion);
+
+                foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
+                {
+
+                    if (cotizacionDetalle.producto.image == null)
+                    {
+                        FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                        MemoryStream storeStream = new MemoryStream();
+                        storeStream.SetLength(inStream.Length);
+                        inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                        storeStream.Flush();
+                        inStream.Close();
+                        cotizacionDetalle.producto.image = storeStream.GetBuffer();
+                    }
+
+
+
+
+
+                    //Si es RECOTIZACIÓN se calcula el nuevo precioNeto a partir del precioSinIGV del producto, IGV y FLETE
+                    //dependiendo de si fue o no indicado en la cabecera
+                    if (cotizacion.esRecotizacion)
+                    {
+                        Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
+                        Decimal costo = cotizacionDetalle.producto.costoSinIgv;
+
+                        //Ya no agrega al flete al precio neto
+                        /*  if (cotizacion.flete > 0)
+                          {
+                              precioNeto = precioNeto + (precioNeto * cotizacion.flete / 100);
+                          }*/
+
+                        //Se agrega el igv al costo y al precio neto que se obtuvo directamente del producto
+                        if (cotizacion.incluidoIgv)
+                        {
+                            precioNeto = precioNeto + (precioNeto * Constantes.IGV);
+                            costo = costo + (costo * Constantes.IGV);
+
+                            cotizacionDetalle.producto.costoLista = costo;
+                            //Tambien se agrega el IGV al costo Anterior, dado que fue almacenado sin IGV
+                            cotizacionDetalle.costoAnterior = cotizacionDetalle.costoAnterior + (cotizacionDetalle.costoAnterior * Constantes.IGV);
+                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, precioNeto));
+                        }
+                        else
+                        {
+                            cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.decimalFormat, costo));
+                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, precioNeto));
+                        }
+
+
+                        //Se calcula el descuento para el nuevo precioNeto
+                        if (cotizacionDetalle.porcentajeDescuento != 0)
+                        {
+                            precioNeto = Decimal.Parse(String.Format(Constantes.decimalFormat, (precioNeto * (100 - cotizacionDetalle.porcentajeDescuento) / 100)));
+                        }
+
+
+                        cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.decimalFormat, precioNeto));
+
+
+
+
+
+
+                        if (cotizacionDetalle.esPrecioAlternativo)
+                        {
+                            cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalle.costoAnterior / cotizacionDetalle.producto.equivalencia));
+                        }
+
+
+
+                    }
+                    else
+                    {
+                        //Si NO es recotizacion
+                        if (cotizacion.incluidoIgv)
+                        {
+                            //Se agrega el IGV al precioLista
+                            decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;
+                            decimal precioLista = precioSinIgv + (precioSinIgv * cotizacion.igv);
+                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, precioLista));
+                            //Se agrega el IGV al costoLista
+                            decimal costoSinIgv = cotizacionDetalle.producto.costoSinIgv;
+                            decimal costoLista = costoSinIgv + (costoSinIgv * cotizacion.igv);
+                            cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.decimalFormat, costoLista));
+                        }
+                        else
+                        {
+                            //Se agrega el IGV al precioLista
+                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalle.producto.precioSinIgv));
+                            //Se agrega el IGV al costoLista
+                            cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalle.producto.costoSinIgv));
+                        }
+
+                    }
+
+                }
+
+
+            }
+            return cotizacion;
+        }
+
+
+
         public Cotizacion GetCotizacion(Cotizacion cotizacion)
         {
             using (var dal = new CotizacionDAL())

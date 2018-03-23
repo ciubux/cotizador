@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Model;
+using System.Linq;
 
 namespace DataLayer
 {
@@ -183,7 +184,114 @@ namespace DataLayer
 
         }
 
-        public Cotizacion SelectCotizacion(Cotizacion cotizacion)
+
+        public Cotizacion generarPlantillaCotizacion(Cotizacion cotizacion)
+        {
+            var objCommand = GetSqlCommand("ps_generarPlantillaCotizacion");
+            InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
+            InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable cotizacionDataTable = dataSet.Tables[0];
+            DataTable cotizacionDetalleDataTable = dataSet.Tables[1];
+
+            //DataTable dataTable = Execute(objCommand);
+            //Datos de la cotizacion
+            foreach (DataRow row in cotizacionDataTable.Rows)
+            {
+
+               //No se cuenta con IdCotizacion
+                cotizacion.fecha = DateTime.Now;
+                cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.plazoOfertaDias);
+                cotizacion.fechaInicioVigenciaPrecios = null;
+                cotizacion.fechaFinVigenciaPrecios = null;
+                cotizacion.incluidoIgv = false;
+                cotizacion.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Cantidades;
+                cotizacion.mostrarValidezOfertaEnDias = 1;
+                cotizacion.flete = 0;
+                cotizacion.igv = Constantes.IGV;
+                cotizacion.contacto = Converter.GetString(row, "contacto");
+                cotizacion.observaciones = Constantes.observacionesCotizacion;
+                cotizacion.mostrarCodigoProveedor = true;
+                cotizacion.fechaModificacion = DateTime.Now;
+
+
+                ///Falta agregar la búsqueda con Grupo
+                cotizacion.grupo = new Grupo();
+                Guid idCliente = cotizacion.cliente.idCliente;
+                cotizacion.cliente = new Cliente();
+                cotizacion.cliente.codigo = Converter.GetString(row, "codigo");
+                cotizacion.cliente.idCliente = idCliente;
+                cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
+
+
+                cotizacion.ciudad = new Ciudad();
+                cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+                cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
+
+            }
+
+
+            cotizacion.cotizacionDetalleList = new List<CotizacionDetalle>();
+            //Detalle de la cotizacion
+            foreach (DataRow row in cotizacionDetalleDataTable.Rows)
+            {
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle();
+                cotizacionDetalle.producto = new Producto();
+
+
+                //No se cuenta con IdCotizacionDetalle
+                cotizacionDetalle.cantidad = 1;
+                cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+                cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
+
+
+                cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
+                cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+
+
+    
+                if (cotizacionDetalle.esPrecioAlternativo)
+                {
+                    cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.producto.equivalencia;
+                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.producto.precioAlternativoSinIgv * 100 / cotizacionDetalle.precioNeto);
+                }
+                else
+                {
+                    cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.producto.precioSinIgv * 100 / cotizacionDetalle.precioNeto);
+                }
+
+
+                cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
+                cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
+                cotizacionDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                cotizacionDetalle.producto.sku = Converter.GetString(row, "sku");
+                cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                cotizacionDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
+                cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
+
+                
+                cotizacionDetalle.observacion = null; 
+
+                cotizacion.cotizacionDetalleList.Add(cotizacionDetalle);
+            }
+
+            //POR REVISAR
+            //  cotizacion.montoTotal = cotizacion.cotizacionDetalleList.AsEnumerable().Sum(o => o.subTotal);
+            //  cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.montoTotal / (1 + cotizacion.igv)));
+            //cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
+
+            return cotizacion;
+        }
+
+
+
+
+            public Cotizacion SelectCotizacion(Cotizacion cotizacion)
         {
             var objCommand = GetSqlCommand("ps_cotizacion");
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
@@ -288,14 +396,16 @@ namespace DataLayer
 
                 if (cotizacion.esRecotizacion)
                 {
-                    //Si es recotizacion entonces el precio y el costo son los tomados del producto
+                    //Si es recotizacion entonces el precio Lista y el costo  Lista son los tomados dedsde el producto
                     cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_producto");
                     cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_producto");
-                    //El precio se pudo haber almacenado con IGV o sin IGV
+
+                    //El precio neto ahora será el precio anterior
                     
                     cotizacionDetalle.precioNetoAnterior = Converter.GetDecimal(row, "precio_neto");
 
-                    //El costo anterior no contiene IGV
+                    //Si la unidad es alternativa se múltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el costo estándar
+
                     if (cotizacionDetalle.esPrecioAlternativo)
                     {
                         cotizacionDetalle.costoAnterior = Converter.GetDecimal(row, "costo_sin_igv") * cotizacionDetalle.producto.equivalencia;
@@ -311,8 +421,9 @@ namespace DataLayer
                     //Si NO es recotizacion se consideran los precios y el costo de lo guardado
                     cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                     cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
-                    
-                    //Este precio ya considera flete e igv
+
+                    //Si la unidad es alternativa se múltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el precio estándar
+
                     if (cotizacionDetalle.esPrecioAlternativo)
                     {
                         cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.producto.equivalencia;
@@ -428,7 +539,6 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
 
             DateTime fechaModifiacionActual = (DateTime)objCommand.Parameters["@fechaModificacionActual"].Value;
-            ExecuteNonQuery(objCommand);
 
 
             DateTime date1 = new DateTime(fechaModifiacionActual.Year, fechaModifiacionActual.Month, fechaModifiacionActual.Day, fechaModifiacionActual.Hour, fechaModifiacionActual.Minute, fechaModifiacionActual.Second);
