@@ -36,7 +36,7 @@ namespace Model
 
         public Decimal precioAlternativoSinIgv {
             get {
-                return  Decimal.Parse(String.Format(Constantes.decimalFormat, precioSinIgv / equivalencia));
+                return  Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioSinIgv / equivalencia));
             }
         }
 
@@ -48,7 +48,7 @@ namespace Model
         public Decimal costoAlternativoSinIgv {
             get
             {
-                return Decimal.Parse(String.Format(Constantes.decimalFormat, costoSinIgv / equivalencia));
+                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoSinIgv / equivalencia));
             }
         }
 

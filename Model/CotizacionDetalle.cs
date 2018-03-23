@@ -17,7 +17,7 @@ namespace Model
         {
             get
             {
-                return Decimal.Parse(String.Format(Constantes.cuatroDecimalFormat, _porcentajeDescuento));
+                return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, _porcentajeDescuento));
             }
             set { _porcentajeDescuento = value; }
         }
@@ -26,7 +26,7 @@ namespace Model
         {
             get
             {
-                return Decimal.Parse(String.Format(Constantes.decimalFormat, _porcentajeDescuento));
+                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, _porcentajeDescuento));
             }
         }
 
@@ -42,7 +42,7 @@ namespace Model
         private Decimal _precioNeto;
         public Decimal precioNeto {
             get { if (esPrecioAlternativo)
-                    return Decimal.Parse(String.Format(Constantes.decimalFormat, _precioNeto / producto.equivalencia));
+                    return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, _precioNeto / producto.equivalencia));
                 else
                     return _precioNeto;
             }
@@ -56,14 +56,14 @@ namespace Model
             {
                 Decimal precioListaTmp = 0;
                 if (esPrecioAlternativo)
-                    precioListaTmp = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.precioLista / producto.equivalencia));
+                    precioListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioLista / producto.equivalencia));
                 else
                     precioListaTmp = producto.precioLista;
 
                 return precioListaTmp;
              /*   if (incluyeIGV)
                 {
-                    return Decimal.Parse(String.Format(Constantes.decimalFormat, precioListaTmp + (precioListaTmp * Constantes.IGV)));
+                    return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioListaTmp + (precioListaTmp * Constantes.IGV)));
                 }
                 else
                 {
@@ -81,7 +81,7 @@ namespace Model
             {
                 Decimal costoListaTmp = 0;
                 if (esPrecioAlternativo)
-                    costoListaTmp = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.costoLista / producto.equivalencia));
+                    costoListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista / producto.equivalencia));
                 else
                     costoListaTmp = producto.costoLista;
 
@@ -101,14 +101,14 @@ namespace Model
         public Decimal margen {
 
             get {
-                return Decimal.Parse(String.Format(Constantes.unDecimalFormat, (1 - costoLista / precioNeto)*100));
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / precioNeto)*100));
 
             } }
 
         //Obtiene y define el precioAnterior para los calculos de recotizacion
         private Decimal _precioAnterior;
         public Decimal precioNetoAnterior {
-            get { return Decimal.Parse(String.Format(Constantes.decimalFormat, _precioAnterior)); }
+            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, _precioAnterior)); }
             set
             {
                 _precioAnterior = value;
@@ -128,7 +128,7 @@ namespace Model
                 else
                     _variacionPrecioAnterior = 0;
 
-                return Decimal.Parse(String.Format(Constantes.unDecimalFormat, _variacionPrecioAnterior));
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, _variacionPrecioAnterior));
 
             } 
              }
@@ -145,20 +145,20 @@ namespace Model
                 else
                     _variacionCosto = 0;
 
-                return Decimal.Parse(String.Format(Constantes.unDecimalFormat, _variacionCosto)); }
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, _variacionCosto)); }
             
         }
 
         private Decimal _flete;
         public Decimal flete
         {
-            get { return Decimal.Parse(String.Format(Constantes.decimalFormat, _flete)); }
+            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, _flete)); }
             set { this._flete = value; }
         }
 
         public Decimal precioUnitario
         {
-            get { return Decimal.Parse(String.Format(Constantes.decimalFormat, flete + precioNeto)); } 
+            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, flete + precioNeto)); } 
         }
 
         public String observacion { get; set; }

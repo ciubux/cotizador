@@ -163,7 +163,7 @@ namespace cotizadorPDF
                     String presentacion = det.unidad; //Se muestra la unidad seleccionada y que se encuentra en el detalle
                     String imagen = "";
                     String precioUnitarioAnterior = "";
-                    String precioUnitarioNuevo = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.precioUnitario);
+                    String precioUnitarioNuevo = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDosDecimales, det.precioUnitario);
 
 
                     String cantidad = "";
@@ -172,7 +172,7 @@ namespace cotizadorPDF
                     if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                     {
                         cantidad = det.cantidad.ToString();
-                        subtotal = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.subTotal);
+                        subtotal = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDosDecimales, det.subTotal);
 
                         if(cot.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos)
                         {
@@ -185,7 +185,7 @@ namespace cotizadorPDF
                     else
                     {
                         cantidad = det.observacion==null?"": det.observacion;
-                        subtotal = Constantes.simboloMonedaSol + " " + String.Format(Constantes.decimalFormat, det.subTotal);
+                        subtotal = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDosDecimales, det.subTotal);
                     }
 
 
@@ -314,35 +314,93 @@ namespace cotizadorPDF
                 }
                 else
                 {
-                    if(cot.cotizacionDetalleList.Count > 5)
-                    { 
+                    if (countPages < 2)
+                    {
+                        if (cot.cotizacionDetalleList.Count > 5)
+                        {
+
+                            SizeF size = page.Size;
+                            PdfPageBase page2 = doc.Pages.Add(size, new PdfMargins(0));
+
+                            switch (cot.cotizacionDetalleList.Count)
+                            {
+                                case 6:
+                                    reiniciarY = "FIRMA";
+                                    sectionTotales = page;
+                                    sectionObervaciones = page;
+                                    sectionFirma = page2; break;
+                                case 7:
+                                    reiniciarY = "OBSERVACIONES";
+                                    sectionTotales = page;
+                                    sectionObervaciones = page2;
+                                    sectionFirma = page2; break;
+                                case 8:
+                                    reiniciarY = "OBSERVACIONES";
+                                    sectionTotales = page;
+                                    sectionObervaciones = page2;
+                                    sectionFirma = page2; break;
+                                case 9:
+                                    reiniciarY = "OBSERVACIONES";
+                                    sectionTotales = page;
+                                    sectionObervaciones = page2;
+                                    sectionFirma = page2; break;
+                                case 10:
+                                    reiniciarY = "TOTALES";
+                                    sectionTotales = page2;
+                                    sectionObervaciones = page2;
+                                    sectionFirma = page2; break;
+
+                            }
+                        }
+                    }
+                }
+
+
+                if (countPages == 3)
+                {
+                    y = margenTop;
+
+                    if (cot.cotizacionDetalleList.Count > 24)
+                    {
+                        y = y + (60 * (cot.cotizacionDetalleList.Count - 24));
+                    }
+
+                    sectionTotales = doc.Pages[2];
+                    sectionObervaciones = doc.Pages[2];
+                    sectionFirma = doc.Pages[2];
+                    xPage2 = margenLeft;
+                }
+                else
+                {
+                    if (cot.cotizacionDetalleList.Count > 21)
+                    {
 
                         SizeF size = page.Size;
                         PdfPageBase page2 = doc.Pages.Add(size, new PdfMargins(0));
 
                         switch (cot.cotizacionDetalleList.Count)
                         {
-                            case 6:
+                            case 20:
                                 reiniciarY = "FIRMA";
                                 sectionTotales = page;
                                 sectionObervaciones = page;
                                 sectionFirma = page2; break;
-                            case 7:
+                            case 21:
                                 reiniciarY = "OBSERVACIONES";
                                 sectionTotales = page;
                                 sectionObervaciones = page2;
                                 sectionFirma = page2; break;
-                            case 8:
+                            case 22:
                                 reiniciarY = "OBSERVACIONES";
                                 sectionTotales = page;
                                 sectionObervaciones = page2;
                                 sectionFirma = page2; break;
-                            case 9:
+                            case 23:
                                 reiniciarY = "OBSERVACIONES";
                                 sectionTotales = page;
                                 sectionObervaciones = page2;
                                 sectionFirma = page2; break;
-                            case 10:
+                            case 24:
                                 reiniciarY = "TOTALES";
                                 sectionTotales = page2;
                                 sectionObervaciones = page2;
@@ -351,8 +409,6 @@ namespace cotizadorPDF
                         }
                     }
                 }
-
-
 
 
                 //Si es distinto de solo observaciones
@@ -393,16 +449,16 @@ namespace cotizadorPDF
                     dataTable2.Columns.Add("Descripcion");
                     dataTable2.Columns.Add("monto");
 
-                    String subtotal = "Subtotal: " + Constantes.simboloMonedaSol + ": ";
-                    String montoSubtotal = String.Format(Constantes.decimalFormat, cot.montoSubTotal);
+                    String subtotal = "Subtotal: " + Constantes.SIMBOLO_SOL + ": ";
+                    String montoSubtotal = String.Format(Constantes.formatoDosDecimales, cot.montoSubTotal);
                     dataTable2.Rows.Add(new object[] { subtotal, montoSubtotal });
 
-                    String igv = "IGV 18%: " + Constantes.simboloMonedaSol + ": ";
-                    String montoIGV = String.Format(Constantes.decimalFormat, cot.montoIGV);
+                    String igv = "IGV 18%: " + Constantes.SIMBOLO_SOL + ": ";
+                    String montoIGV = String.Format(Constantes.formatoDosDecimales, cot.montoIGV);
                     dataTable2.Rows.Add(new object[] { igv, montoIGV });
 
-                    String total = "Total: " + Constantes.simboloMonedaSol + ": ";
-                    String montoTotal = String.Format(Constantes.decimalFormat, cot.montoTotal);
+                    String total = "Total: " + Constantes.SIMBOLO_SOL + ": ";
+                    String montoTotal = String.Format(Constantes.formatoDosDecimales, cot.montoTotal);
                     dataTable2.Rows.Add(new object[] { total, montoTotal });
 
                     tableTotales.DataSource = dataTable2;
@@ -441,9 +497,9 @@ namespace cotizadorPDF
                     xPage2 = margenLeft;
                 }
 
-
+                String observaciones = cot.observaciones == null ? String.Empty : cot.observaciones;
                 string[] stringSeparators = new string[] { "\n" };
-                string[] lines = cot.observaciones.Split(stringSeparators, StringSplitOptions.None);
+                string[] lines = observaciones.Split(stringSeparators, StringSplitOptions.None);
 
                 if (cot.incluidoIgv)
                 {

@@ -201,7 +201,7 @@ namespace DataLayer
 
                //No se cuenta con IdCotizacion
                 cotizacion.fecha = DateTime.Now;
-                cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.plazoOfertaDias);
+                cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
                 cotizacion.fechaInicioVigenciaPrecios = null;
                 cotizacion.fechaFinVigenciaPrecios = null;
                 cotizacion.incluidoIgv = false;
@@ -210,7 +210,7 @@ namespace DataLayer
                 cotizacion.flete = 0;
                 cotizacion.igv = Constantes.IGV;
                 cotizacion.contacto = Converter.GetString(row, "contacto");
-                cotizacion.observaciones = Constantes.observacionesCotizacion;
+                cotizacion.observaciones = Constantes.OBSERVACION;
                 cotizacion.mostrarCodigoProveedor = true;
                 cotizacion.fechaModificacion = DateTime.Now;
 
@@ -282,7 +282,7 @@ namespace DataLayer
 
             //POR REVISAR
             //  cotizacion.montoTotal = cotizacion.cotizacionDetalleList.AsEnumerable().Sum(o => o.subTotal);
-            //  cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.montoTotal / (1 + cotizacion.igv)));
+            //  cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1 + cotizacion.igv)));
             //cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
 
             return cotizacion;
@@ -325,7 +325,7 @@ namespace DataLayer
                 cotizacion.mostrarCodigoProveedor = Converter.GetBool(row, "mostrar_codigo_proveedor");
                 cotizacion.contacto = Converter.GetString(row, "contacto");
                 ///Mover "{0:0.00}" a clase de constantes
-                cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.montoTotal / (1+cotizacion.igv)));
+                cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1+cotizacion.igv)));
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
                 cotizacion.fechaModificacion = Converter.GetDateTime(row, "fecha_modificacion");
 
@@ -488,7 +488,7 @@ namespace DataLayer
                 cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
 
                 ///Mover "{0:0.00}" a clase de constantes
-                cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.montoTotal / (1 + cotizacion.igv)));
+                cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1 + cotizacion.igv)));
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
                 
 

@@ -51,8 +51,8 @@ namespace Cotizador.Controllers
             Cotizacion cotizacionSearch = (Cotizacion)this.Session["cotizacionBusqueda"];
 
 
-            ViewBag.fechaDesde = cotizacionSearch.fechaDesde.ToString("dd/MM/yyyy");
-            ViewBag.fechaHasta = cotizacionSearch.fechaHasta.ToString("dd/MM/yyyy");
+            ViewBag.fechaDesde = cotizacionSearch.fechaDesde.ToString(Constantes.formatoFecha);
+            ViewBag.fechaHasta = cotizacionSearch.fechaHasta.ToString(Constantes.formatoFecha);
 
 
             if (this.Session["cotizacionList"] == null)
@@ -136,7 +136,7 @@ namespace Cotizador.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            ViewBag.debug = Constantes.debug;
+            ViewBag.debug = Constantes.DEBUG;
             ViewBag.Si = "Sí";
             ViewBag.No = "No";
             ViewBag.IGV = Constantes.IGV;
@@ -152,8 +152,8 @@ namespace Cotizador.Controllers
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
 
             ViewBag.cotizacion = cotizacion;
-            cotizacion.fecha = DateTime.Now.AddDays(-728);
-            ViewBag.fecha = cotizacion.fecha.ToString("dd/MM/yyyy");
+            cotizacion.fecha = DateTime.Now.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS);
+            ViewBag.fecha = cotizacion.fecha.ToString(Constantes.formatoFecha);
 
             this.Session["cotizacion"] = cotizacion;
 
@@ -170,18 +170,18 @@ namespace Cotizador.Controllers
             cotizacionTmp.fecha = DateTime.Now;
             cotizacionTmp.fechaInicioVigenciaPrecios = null;
             cotizacionTmp.fechaFinVigenciaPrecios = null;
-            cotizacionTmp.fechaLimiteValidezOferta = cotizacionTmp.fecha.AddDays(Constantes.plazoOfertaDias);
+            cotizacionTmp.fechaLimiteValidezOferta = cotizacionTmp.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
             cotizacionTmp.ciudad = new Ciudad();
             cotizacionTmp.cliente = new Cliente();
             cotizacionTmp.grupo = new Grupo();
             cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
             cotizacionTmp.igv = Constantes.IGV;
             cotizacionTmp.flete = 0;
-            cotizacionTmp.validezOfertaEnDias = Constantes.plazoOfertaDias;
+            cotizacionTmp.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
             cotizacionTmp.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Cantidades;
             Usuario usuario = (Usuario)this.Session["usuario"];
             cotizacionTmp.usuario = usuario;
-            cotizacionTmp.observaciones = Constantes.observacionesCotizacion;
+            cotizacionTmp.observaciones = Constantes.OBSERVACION;
             cotizacionTmp.incluidoIgv = false;
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
 
@@ -217,9 +217,9 @@ namespace Cotizador.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            ViewBag.debug = Constantes.debug;
-            ViewBag.Si = "Sí";
-            ViewBag.No = "No";
+            ViewBag.debug = Constantes.DEBUG;
+            ViewBag.Si = Constantes.MENSAJE_SI;
+            ViewBag.No = Constantes.MENSAJE_NO;
             ViewBag.IGV = Constantes.IGV;
 
 
@@ -253,10 +253,10 @@ namespace Cotizador.Controllers
             }
 
 
-            ViewBag.fecha = cotizacion.fecha.ToString("dd/MM/yyyy");
-            ViewBag.fechaLimiteValidezOferta = cotizacion.fecha.ToString("dd/MM/yyyy");
-            ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy");
-            ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy");
+            ViewBag.fecha = cotizacion.fecha.ToString(Constantes.formatoFecha);
+            ViewBag.fechaLimiteValidezOferta = cotizacion.fecha.ToString(Constantes.formatoFecha);
+            ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
+            ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
 
             //Se agrega el viewbag numero para poder mostrar el campo vacío cuando no se está creando una cotización
             ViewBag.numero = cotizacion.codigo;
@@ -331,8 +331,8 @@ namespace Cotizador.Controllers
                     //El cambio afecta el precio y el costo Anterior.
                     if (recalcularIGV)
                     {
-                        cotizacionDetalle.precioNetoAnterior = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalle.precioNetoAnterior + cotizacionDetalle.precioNetoAnterior * Constantes.IGV));
-                        cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalle.costoAnterior + cotizacionDetalle.costoAnterior * Constantes.IGV));
+                        cotizacionDetalle.precioNetoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.precioNetoAnterior + cotizacionDetalle.precioNetoAnterior * Constantes.IGV));
+                        cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior + cotizacionDetalle.costoAnterior * Constantes.IGV));
                     }
                 }
                 else
@@ -341,23 +341,23 @@ namespace Cotizador.Controllers
                     //El cambio afecta el precio y el costo Anterior.
                     if (recalcularIGV)
                     {
-                        cotizacionDetalle.precioNetoAnterior = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalle.precioNetoAnterior / (1 + Constantes.IGV)));
-                        cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalle.costoAnterior / (1 + Constantes.IGV)));
+                        cotizacionDetalle.precioNetoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.precioNetoAnterior / (1 + Constantes.IGV)));
+                        cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior / (1 + Constantes.IGV)));
                     }
                 }
 
                 
                 //El precioLista no tiene el calculo de equivalencia
                 //El flete no afecta al precioLista
-                //cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, precioNeto));
+                //cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
                 //Se define el costoLista del producto como el costo calculado
 
                 //El precio y el costo se setean al final dado que si es equivalente en cada get se hará el recalculo
 
-                cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, precioNeto));
-                cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.decimalFormat, costo));
+                cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
+                cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costo));
                 //Se aplica descuenta al precio y se formatea a dos decimales el precio para un calculo exacto en el subtotal
-                cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.decimalFormat, precioNeto * (100 - cotizacionDetalle.porcentajeDescuento) / 100));
+                cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * (100 - cotizacionDetalle.porcentajeDescuento) / 100));
               
             }
             calcularMontosTotales(cotizacion);
@@ -619,7 +619,7 @@ namespace Cotizador.Controllers
 
                     if (cotizacionDetalle.esPrecioAlternativo)
                     {
-                        cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacionDetalleJson.precio * cotizacionDetalle.producto.equivalencia));
+                        cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalleJson.precio * cotizacionDetalle.producto.equivalencia));
                     }
   
                     cotizacionDetalle.porcentajeDescuento = cotizacionDetalleJson.porcentajeDescuento;
@@ -647,20 +647,20 @@ namespace Cotizador.Controllers
 
         private void calcularMontosTotales(Cotizacion cotizacion)
         {
-            Decimal total = Decimal.Parse(String.Format(Constantes.decimalFormat, cotizacion.cotizacionDetalleList.AsEnumerable().Sum(o => o.subTotal)));
+            Decimal total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.cotizacionDetalleList.AsEnumerable().Sum(o => o.subTotal)));
             Decimal subtotal = 0;
             Decimal igv = 0;
 
             if (cotizacion.incluidoIgv)
             {
-                subtotal = Decimal.Parse(String.Format(Constantes.decimalFormat, total / (1 + Constantes.IGV)));
-                igv = Decimal.Parse(String.Format(Constantes.decimalFormat, total - subtotal));
+                subtotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total / (1 + Constantes.IGV)));
+                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total - subtotal));
             }
             else
             {
                 subtotal = total;
-                igv = Decimal.Parse(String.Format(Constantes.decimalFormat, total * Constantes.IGV));
-                total = Decimal.Parse(String.Format(Constantes.decimalFormat, subtotal + igv));
+                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total * Constantes.IGV));
+                total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, subtotal + igv));
             }
 
             cotizacion.montoTotal = total;
@@ -849,8 +849,8 @@ namespace Cotizador.Controllers
             ProductoBL bl = new ProductoBL();
             Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIgv, cotizacion.cliente.idCliente);
 
-            Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.costoLista * (cotizacion.flete) / 100));
-            Decimal precioUnitario = Decimal.Parse(String.Format(Constantes.decimalFormat, fleteDetalle + producto.precioLista));
+            Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista * (cotizacion.flete) / 100));
+            Decimal precioUnitario = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, fleteDetalle + producto.precioLista));
 
             Decimal porcentajeDescuento = 0;
             if (producto.precioNeto != null)
@@ -919,7 +919,7 @@ namespace Cotizador.Controllers
             {
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                 //dado que cuando se hace get al precioNeto se recupera diviendo entre la equivalencia
-                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.decimalFormat, precioNeto * producto.equivalencia));
+                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * producto.equivalencia));
             }
             else
             {
@@ -1628,16 +1628,16 @@ namespace Cotizador.Controllers
             //REVISAR
             /*
 
-            ViewBag.fechaLimiteValidezOferta = cotizacion.fecha.ToString("dd/MM/yyyy");
-            ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy");
-            ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy");
+            ViewBag.fechaLimiteValidezOferta = cotizacion.fecha.ToString(Constantes.formatoFecha);
+            ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
+            ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
 
 
 
 
             cotizacion.fechaInicioVigenciaPrecios = null;
             cotizacion.fechaFinVigenciaPrecios = null;
-            cotizacion.fechaLimiteValidezOferta = cotizacionTmp.fecha.AddDays(Constantes.plazoOfertaDias);
+            cotizacion.fechaLimiteValidezOferta = cotizacionTmp.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
 
 
 
@@ -1672,17 +1672,6 @@ namespace Cotizador.Controllers
             cotizacion.esRecotizacion = false;
             return cotizacion;
         }
-
-
-      /*  public String GenerarPDF()
-        {
-            Cotizacion cotizacion = insertarCotizacion();
-        //    Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
-            GeneradorPDF gen = new GeneradorPDF();
-            String ruta =   gen.generarPDFExtended(cotizacion);
-            return ruta;
-        }*/
-
 
 
         [HttpPost]
@@ -1731,6 +1720,12 @@ namespace Cotizador.Controllers
                 "\"codigoAlterno\":\"" + cotizacion.cliente.codigoAlterno + "\"}";
 
             return resultado;
+        }
+
+
+        public String getConstantes()
+        {
+            return "{ \"IGV\":\"" + Constantes.IGV + "\", \"SIMBOLO_SOL\":\"" + Constantes.SIMBOLO_SOL + "\" }";
         }
 
     }

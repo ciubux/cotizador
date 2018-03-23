@@ -4,10 +4,17 @@
 
 jQuery(function ($) {
 
+
+    //CONSTANTES:
+    var cantidadDecimales = 2;
+    var IGV = 0.18;
+    var SIMBOLO_SOL = "S/";
+
     /**
      * 0 Busqueda
        1 Cotización
      */
+
     var pagina = 0;
     var mensajeCancelarEdicion = '¿Está seguro de cancelar; no se guardarán los cambios?';
 
@@ -22,16 +29,39 @@ jQuery(function ($) {
             $("#linkCotizador").removeAttr("class");
         }
         else if (title == "Cotizador - Cotizador") {
+            $.ajax({
+                url: "/Home/getConstantes",
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (constantes) {
+                    IGV = constantes.IGV;
+                    SIMBOLO_SOL = constantes.SIMBOLO_SOL;
+                }
+            });
+
             pagina = 1;
             $("#linkCotizador").attr("class", "active");
             $("#linkMisCotizaciones").removeAttr("class");
         }
         else {
+            $.ajax({
+                url: "/Home/getConstantes",
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (constantes) {
+                    IGV = constantes.IGV;
+                    SIMBOLO_SOL = constantes.SIMBOLO_SOL;
+                }
+            });
             $("#linkCotizador").removeAttr("class");
             $("#linkMisCotizaciones").removeAttr("class");
         }
 
         cargarChosenCliente(pagina);
+
+
+   
+
 
       /*  $('#tablefoottable').footable({
             "columns": $.get('columns.json'),
@@ -290,11 +320,7 @@ jQuery(function ($) {
 
 
 
-    //POR MEJORAR:
-    //Se debe obtener estos valores de la tabla de paramétros y se debe recalcular en el servidor
 
-    var cantidadDecimales = 2;
-    var IGV = 0.18;
 
     /**
      * ################################ INICIO CONTROLES DE AGREGAR PRODUCTO
@@ -1685,8 +1711,8 @@ jQuery(function ($) {
         }
 
         var total = Number($("#total").val());
-        $('#montoFlete').html("Flete: S/ "+ (total * flete / 100).toFixed(cantidadDecimales));
-        $('#montoTotalMasFlete').html("Total más Flete: S/ " +  (total + (total * flete / 100)).toFixed(cantidadDecimales));
+        $('#montoFlete').html("Flete: " + SIMBOLO_SOL + " " + (total * flete / 100).toFixed(cantidadDecimales));
+        $('#montoTotalMasFlete').html("Total más Flete: " + SIMBOLO_SOL + " " +  (total + (total * flete / 100)).toFixed(cantidadDecimales));
 
         
 

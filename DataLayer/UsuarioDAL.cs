@@ -36,10 +36,41 @@ namespace DataLayer
                 usuario.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
             }
 
+            DataTable dataTableParametros = dataSet.Tables[1];
+
+            foreach (DataRow row in dataTableParametros.Rows)
+            {
+                String codigoParametro = Converter.GetString(row, "codigo");
+                String valorParametro = Converter.GetString(row, "valor");
+
+                switch (codigoParametro)
+                {
+                    case "IGV":
+                        Constantes.IGV = Decimal.Parse(valorParametro); break;
+                    case "SIMBOLO_SOL":
+                        Constantes.SIMBOLO_SOL = valorParametro; break;
+                    case "PLAZO_OFERTA_DIAS":
+                        Constantes.PLAZO_OFERTA_DIAS = int.Parse(valorParametro); break;
+                    case "PORCENTAJE_MAX_APROBACION":
+                        Constantes.PORCENTAJE_MAX_APROBACION = Decimal.Parse(valorParametro); break;
+                    case "DEBUG":
+                        Constantes.DEBUG = int.Parse(valorParametro); break;
+                    case "DIAS_MAX_BUSQUEDA_PRECIOS":
+                        Constantes.DIAS_MAX_BUSQUEDA_PRECIOS = int.Parse(valorParametro); break;
+                    case "OBSERVACION":
+                        Constantes.OBSERVACION = valorParametro; break;
+                }
+
+            }
+
+
+
+
+
             /*Si es usuario aprobador se recupera la lista de usuarios a los cuales puede aprobar cotizaciones*/
             if (usuario.esAprobador)
             {
-                DataTable dataTableUsuarios = dataSet.Tables[1];
+                DataTable dataTableUsuarios = dataSet.Tables[2];
                 List<Usuario> usuarioList = new List<Usuario>();
               
                 foreach (DataRow row in dataTableUsuarios.Rows)
@@ -51,6 +82,10 @@ namespace DataLayer
                 }
                 usuario.usuarioList = usuarioList;
             }
+
+
+
+
 
             return usuario;
         }

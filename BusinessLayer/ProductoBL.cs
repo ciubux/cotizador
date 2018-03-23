@@ -57,8 +57,8 @@ namespace BusinessLayer
                         producto.precioNeto = producto.precioNeto + (producto.precioNeto * Constantes.IGV);
                 }
 
-                producto.costoLista = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.costoLista));
-                producto.precioLista = Decimal.Parse(String.Format(Constantes.decimalFormat, producto.precioLista));
+                producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista));
+                producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioLista));
 
 
                 return producto;
