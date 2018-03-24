@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anotations\Columna.cs" />
+    <Compile Include="AutoGuardadoCotizacionDAL.cs" />
     <Compile Include="FacturaDAL.cs" />
     <Compile Include="GrupoDAL.cs" />
     <Compile Include="LogDAL.cs" />

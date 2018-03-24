@@ -73,7 +73,7 @@ namespace Model
         public DateTime fechaDesde { get; set; }
         public DateTime fechaHasta { get; set; }
 
-            
+        public AutoGuardadoCotizacion autoGuardadoCotizacion { get; set; }    
 
 
 

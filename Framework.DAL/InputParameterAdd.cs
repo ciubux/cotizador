@@ -210,12 +210,12 @@ namespace Framework.DAL
             }
         }
 
-        public static void Text(SqlCommand objCommand, string name, int size, string value)
+        public static void Text(SqlCommand objCommand, string name, string value)
         {
             if (!string.IsNullOrEmpty(value))
-                objCommand.Parameters.Add(Parameter.CreateParam("@" + name, SqlDbType.Text, size, ParameterDirection.Input, new SqlString(value)));
+                objCommand.Parameters.Add(Parameter.CreateParam("@" + name, SqlDbType.Text, value.Length, ParameterDirection.Input, new SqlString(value)));
             else
-                objCommand.Parameters.Add(Parameter.CreateParam("@" + name, SqlDbType.Text, size, ParameterDirection.Input, DBNull.Value));
+                objCommand.Parameters.Add(Parameter.CreateParam("@" + name, SqlDbType.Text, value.Length, ParameterDirection.Input, DBNull.Value));
 
         }
 

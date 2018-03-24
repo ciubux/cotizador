@@ -482,13 +482,14 @@
                 <button type="button" id="btnCancelCotizacion" class="btn btn-secondary">Cancelar</button>
                 @if (cotizacion.codigo > 0 && !cotizacion.esRecotizacion)
                 {
-                    <button id="grabarCotizacion" type="button" class="btn btn-primary">Finalizar Edición</button>
+                    <button id="btnEditarCotizacion" type="button" class="btn btn-primary">Finalizar Edición</button>
                 }
                 else
                 {
-                    <button id="grabarCotizacion" type="button" class="btn btn-primary">Guardar</button>
+                    <button id="btnCrearCotizacion" type="button" class="btn btn-primary">Finalizar Creación</button>
+                    
                 }
-
+                <button id="btnContinuarLuego" type="button" class="btn btn-primary">Continuar Luego</button>
 
 
             </div>

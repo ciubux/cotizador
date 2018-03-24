@@ -372,8 +372,7 @@ namespace BusinessLayer
             return cotizacionList;
         }
 
-
-
+   
 
     }
 }

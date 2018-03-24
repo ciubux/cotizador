@@ -18,6 +18,9 @@ namespace DataLayer
         {
         }
 
+
+        
+
         public void InsertCotizacion(Cotizacion cotizacion)
         {
             var objCommand = GetSqlCommand("pi_cotizacion");
@@ -553,6 +556,6 @@ namespace DataLayer
 
 
         }
-
+        
     }
 }

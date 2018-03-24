@@ -14,11 +14,18 @@ namespace Framework.DAL
         {
             objCommand.Parameters.Add(Parameter.CreateParam("@" + name, SqlDbType.UniqueIdentifier, 0, ParameterDirection.Output));
         }
+        public static void VarBinary(SqlCommand objCommand, string name, int size)
+        {
+            objCommand.Parameters.Add(Parameter.CreateParam("@" + name, SqlDbType.VarBinary, size, ParameterDirection.Output));
+        }
+
+
 
         public static void Varchar(SqlCommand objCommand, string name, int size)
         {
             objCommand.Parameters.Add(Parameter.CreateParam("@" + name, SqlDbType.VarChar, size, ParameterDirection.Output));
         }
+        
 
         public static void Bit(SqlCommand objCommand, string name)
         {

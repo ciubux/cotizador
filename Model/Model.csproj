@@ -52,6 +52,7 @@
     <Compile Include="ClienteStaging.cs" />
     <Compile Include="PrecioWS.cs" />
     <Compile Include="TipoCambio.cs" />
+    <Compile Include="AutoGuardadoCotizacion.cs" />
     <Compile Include="Unidad.cs" />
     <Compile Include="Producto.cs" />
     <Compile Include="Familia.cs" />

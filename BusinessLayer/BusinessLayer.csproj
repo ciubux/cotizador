@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoGuardadoCotizacionBL.cs" />
     <Compile Include="FacturaBL.cs" />
     <Compile Include="GrupoBL.cs" />
     <Compile Include="LogBL.cs" />

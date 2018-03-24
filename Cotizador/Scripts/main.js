@@ -5,10 +5,14 @@
 jQuery(function ($) {
 
 
+
     //CONSTANTES:
     var cantidadDecimales = 2;
     var IGV = 0.18;
     var SIMBOLO_SOL = "S/";
+    var MILISEGUNDOS_AUTOGUARDADO = 5000;
+
+
 
     /**
      * 0 Busqueda
@@ -29,6 +33,7 @@ jQuery(function ($) {
             $("#linkCotizador").removeAttr("class");
         }
         else if (title == "Cotizador - Cotizador") {
+
             $.ajax({
                 url: "/Home/getConstantes",
                 type: 'POST',
@@ -36,8 +41,24 @@ jQuery(function ($) {
                 success: function (constantes) {
                     IGV = constantes.IGV;
                     SIMBOLO_SOL = constantes.SIMBOLO_SOL;
+                    MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
                 }
             });
+
+            //Metodo recursivo para autoguardar una cotizacion
+            function autoGuardarCotizacion() {
+                $.ajax({
+                    url: "/Home/autoGuardarCotizacion",
+                    type: 'POST',
+                    error: function () {
+                        setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
+                    },
+                    success: function () {
+                        setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
+                    }
+                });
+            }
+            setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
 
             pagina = 1;
             $("#linkCotizador").attr("class", "active");
@@ -51,6 +72,7 @@ jQuery(function ($) {
                 success: function (constantes) {
                     IGV = constantes.IGV;
                     SIMBOLO_SOL = constantes.SIMBOLO_SOL;
+                    SEGUNDOS_AUTOGUARDADO = constantes.SEGUNDOS_AUTOGUARDADO;
                 }
             });
             $("#linkCotizador").removeAttr("class");
@@ -1030,8 +1052,8 @@ jQuery(function ($) {
 
     ////////GUARDAR COTIZACIÓN
 
-    $("#grabarCotizacion").click(function () {
 
+    function validarIngresoDatosObligatoriosCotizacion() {
         if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
@@ -1049,7 +1071,7 @@ jQuery(function ($) {
             $("#contacto").focus();
             return false;
         }
-        /*
+          /*
         if ($("#fechaInicioVigenciaPrecios").val().trim() == "") {
             if (confirm("¿Está seguro de no ingresar la fecha de Inicio de Vigencia?")) {
                 
@@ -1060,8 +1082,6 @@ jQuery(function ($) {
             
            
         }*/
-        
-
 
         var contador = 0;
         var $j_object = $("td.detcantidad");
@@ -1073,47 +1093,79 @@ jQuery(function ($) {
             alert("Debe ingresar el detalle de la cotización.");
             return false;
         }
-        
+
+        return true;
+    }
+
+    function crearCotizacion() {
+        if (!validarIngresoDatosObligatoriosCotizacion())
+            return false;
         $.ajax({
             url: "/Home/grabarCotizacion",
-            //contentType: 'application/pdf',
             type: 'POST',
             dataType: 'JSON',
-            error: function (detalle) { alert("Se generó un error al intentar crear/actualizar la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario."); },
+            error: function (detalle) {
+                alert("Se generó un error al intentar finalizar la creación de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+            },
             success: function (resultado) {
                 $("#numero").val(resultado.codigo);
 
                 if (resultado.estado == 1) {
-                    $("#generarPDF").removeAttr('disabled');
-                    if ($("#grabarCotizacion").text() == "Generar Cotización") {
-                        alert("La cotización número " + resultado.codigo+" fue creada correctamente.");
-                    }
-                    else {
-                        alert("La cotización número " + resultado.codigo + " fue actualizada correctamente.");
-                    }
+                    alert("La cotización número " + resultado.codigo + " fue creada correctamente.");
+                    generarPDF();
+                }
+                else {
+                    alert("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN.");
+                    window.location = '/Home/Index';
+                }
+            }
+        });
+    }
+
+
+    $("#btnContinuarLuego").click(function () {
+      
+
+    });
+
+
+
+
+
+
+
+    $("#btnEditarCotizacion").click(function () {
+        if (!validarIngresoDatosObligatoriosCotizacion())
+            return false;
+
+        $.ajax({
+            url: "/Home/grabarCotizacion",
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                alert("Se generó un error al intentar finalizar la edición de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+            },
+            success: function (resultado) {
+                $("#numero").val(resultado.codigo);
+
+                if (resultado.estado == 1) {
+                    alert("La cotización número " + resultado.codigo + " fue editada correctamente.");
                     generarPDF();
                 }
                 else
                 {
-                    $("#generarPDF").attr('disabled', 'disabled');
-                    if ($("#grabarCotizacion").text() == "Generar Cotización") {
-                        alert("La cotización número " + resultado.codigo +" fue creada correctamente, sin embargo requiere APROBACIÓN.");
-                    }
-                    else {
-                        alert("La cotización número " + resultado.codigo +" fue actualizada correctamente, sin embargo requiere APROBACIÓN.");
-                    }
-                   
+                    alert("La cotización número " + resultado.codigo +" fue editada correctamente, sin embargo requiere APROBACIÓN.");
                     window.location = '/Home/Index';
-                }
-                $("#grabarCotizacion").text('Actualizar Cotización');
-               
+                }               
             }
         });
     });
 
 
 
+    $("#btnCrearCotizacion").click(function () {
 
+    });
 
 
 

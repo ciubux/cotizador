@@ -23,6 +23,7 @@ namespace Model
         public static int PLAZO_OFERTA_DIAS = 15;
         public static int DEBUG = 0;
         public static int DIAS_MAX_BUSQUEDA_PRECIOS = 730;
+        public static int MILISEGUNDOS_AUTOGUARDADO = 5000;
         public static String OBSERVACION = "* Condiciones de pago: al contado.\n" +
                                        "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
                                        "* (para productos no stockeables o primeras compras, consultar plazo).\n";
