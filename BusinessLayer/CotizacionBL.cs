@@ -35,12 +35,14 @@ namespace BusinessLayer
                     if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                     {
                         cotizacionDetalle.cantidad = 0;
-                        //cotizacionDetalle.subTotal = 0;
+                    }
+                    else if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Cantidades)
+                    {
+                        cotizacionDetalle.observacion = null;
                     }
 
 
 
-                   
 
                     //Si no es aprobador para que la cotización se cree como aprobada el porcentaje de descuento debe ser mayor o igual 
                     //al porcentaje Limite sin aprobacion
@@ -95,7 +97,10 @@ namespace BusinessLayer
                     if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                     {
                         cotizacionDetalle.cantidad = 0;
-                        //cotizacionDetalle.subTotal = 0;
+                    }
+                    else if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Cantidades)
+                    {
+                        cotizacionDetalle.observacion = null;
                     }
 
                     if (!cotizacion.usuario.esAprobador)
@@ -129,11 +134,11 @@ namespace BusinessLayer
              
         }
 
-        public Cotizacion generarPlantillaCotizacion(Cotizacion cotizacion)
+        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion)
         {
             using (var dal = new CotizacionDAL())
             {
-                cotizacion = dal.generarPlantillaCotizacion(cotizacion);
+                cotizacion = dal.obtenerProductosAPartirdePreciosRegistrados(cotizacion);
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
@@ -155,17 +160,12 @@ namespace BusinessLayer
 
                     //Si es RECOTIZACIÓN se calcula el nuevo precioNeto a partir del precioSinIGV del producto, IGV y FLETE
                     //dependiendo de si fue o no indicado en la cabecera
-                    if (cotizacion.esRecotizacion)
+              /*      if (cotizacion.esRecotizacion)
                     {
                         Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
                         Decimal costo = cotizacionDetalle.producto.costoSinIgv;
 
-                        //Ya no agrega al flete al precio neto
-                        /*  if (cotizacion.flete > 0)
-                          {
-                              precioNeto = precioNeto + (precioNeto * cotizacion.flete / 100);
-                          }*/
-
+                    
                         //Se agrega el igv al costo y al precio neto que se obtuvo directamente del producto
                         if (cotizacion.incluidoIgv)
                         {
@@ -207,7 +207,7 @@ namespace BusinessLayer
 
                     }
                     else
-                    {
+                    {*/
                         //Si NO es recotizacion
                         if (cotizacion.incluidoIgv)
                         {
@@ -228,7 +228,7 @@ namespace BusinessLayer
                             cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
                         }
 
-                    }
+                   // }
 
                 }
 

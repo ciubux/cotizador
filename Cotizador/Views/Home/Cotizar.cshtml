@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Cotizador";
+    ViewBag.Title = "Cotizar";
     Model.Cotizacion cotizacion = ViewBag.cotizacion;
     // Model.Cotizacion.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
     // @model Enum;
@@ -202,9 +202,9 @@
                     <label for="considerarCantidades" class="control-label col-xs-4">¿Mostrar cantitades y/o observaciones?:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("considerarCantidades",
-                             EnumHelper.GetSelectList(typeof(Model.Cotizacion.OpcionesConsiderarCantidades), cotizacion.considerarCantidades),
-                             new { @class = "form-control" }
-                             )
+                                  EnumHelper.GetSelectList(typeof(Model.Cotizacion.OpcionesConsiderarCantidades), cotizacion.considerarCantidades),
+                                  new { @class = "form-control" }
+                                  )
 
                     </div>
                 </div>
@@ -279,7 +279,8 @@
                     <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
                 }
             }
-            <button id="openAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
+            <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Agregar Productos Desde Precios Registrados</button>
+            <button id="btnOpenAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
         </div>
 
         <table id="tablefoottable" class="table" data-editing="true"
@@ -336,7 +337,7 @@
                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
-                    @if ((int)cotizacion.considerarCantidades == 0 || (int)cotizacion.considerarCantidades == 2)
+                    @if ((int)cotizacion.considerarCantidades == 1 || (int)cotizacion.considerarCantidades == 2)
                     {
                         <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
                         <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
@@ -376,62 +377,62 @@
                 @foreach (var cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
                     contador++;
-                <tr data-expanded="true">
-                    <td>  @cotizacionDetalle.producto.idProducto  </td>
-                    <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
-                    <td>  @cotizacionDetalle.producto.proveedor  </td>
-                    <td>  @cotizacionDetalle.producto.sku  </td>
-                    <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
-                    @if (cotizacion.mostrarCodigoProveedor && (int)cotizacion.considerarCantidades == 2)
-                    {
-                                <td>
-                                    @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
-                                    <br />
-                                    <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
-                                </td> }
-                else if (cotizacion.mostrarCodigoProveedor)
-                {
-                                <td>  @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion   </td>}
-
-                else
-                {
-                <td>  @cotizacionDetalle.producto.descripcion   </td>}
-
-
-
-
-
-
-
-                <td>  @cotizacionDetalle.unidad  </td>
-                    <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
-                    <td class="@cotizacionDetalle.producto.idProducto detprecioLista" style="text-align:right">@cotizacionDetalle.precioLista</td>
-
-                    <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@cotizacionDetalle.porcentajeDescuento %</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@cotizacionDetalle.porcentajeDescuentoMostrar %</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoLista  </td>
-
-                    <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
-
-                    <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detcantidad" style="text-align:right">@cotizacionDetalle.cantidad</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:right">@cotizacionDetalle.observacion</td>
-                    @if (cotizacion.esRecotizacion)
+                    <tr data-expanded="true">
+                        <td>  @cotizacionDetalle.producto.idProducto  </td>
+                        <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
+                        <td>  @cotizacionDetalle.producto.proveedor  </td>
+                        <td>  @cotizacionDetalle.producto.sku  </td>
+                        <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
+                        @if (cotizacion.mostrarCodigoProveedor && (int)cotizacion.considerarCantidades == 2)
                         {
-                                    <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
-                                    <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
-                                    <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
-                                    <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
-                    }
-                    <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
+                            <td>
+                                @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
+                                <br />
+                                <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
+                            </td> }
+                        else if (cotizacion.mostrarCodigoProveedor)
+                        {
+                            <td>  @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion   </td>}
+
+                        else
+                        {
+                            <td>  @cotizacionDetalle.producto.descripcion   </td>}
 
 
 
 
-                </tr>
+
+
+
+                        <td>  @cotizacionDetalle.unidad  </td>
+                        <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioLista" style="text-align:right">@cotizacionDetalle.precioLista</td>
+
+                        <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@cotizacionDetalle.porcentajeDescuento %</td>
+                        <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@cotizacionDetalle.porcentajeDescuentoMostrar %</td>
+                        <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
+                        <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoLista  </td>
+
+                        <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
+
+                        <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario</td>
+                        <td class="@cotizacionDetalle.producto.idProducto detcantidad" style="text-align:right">@cotizacionDetalle.cantidad</td>
+                        <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
+                        <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
+                        @if (cotizacion.esRecotizacion)
+                        {
+                            <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
+                            <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
+                            <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
+                            <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
+                        }
+                        <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
+
+
+
+
+                    </tr>
                 }
 
             </tbody>
@@ -452,7 +453,7 @@
             </div>
             <div class="col-sm-6 col-lg-3">
 
-                @if ((int)cotizacion.considerarCantidades == 0 || (int)cotizacion.considerarCantidades == 2)
+                @if ((int)cotizacion.considerarCantidades == 1 || (int)cotizacion.considerarCantidades == 2)
                 {
                     <div class="form-group">
                         <div class="pull-right">
@@ -478,20 +479,28 @@
         </div>
 
         <div class="row">
-            <div class="pull-right">
-                <button type="button" id="btnCancelCotizacion" class="btn btn-secondary">Cancelar</button>
-                @if (cotizacion.codigo > 0 && !cotizacion.esRecotizacion)
+            <div class="pull-left">
+                @if (cotizacion.codigo > 0)
                 {
-                    <button id="btnEditarCotizacion" type="button" class="btn btn-primary">Finalizar Edición</button>
+                    <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar y Continuar Editando Luego</button>
                 }
                 else
                 {
-                    <button id="btnCrearCotizacion" type="button" class="btn btn-primary">Finalizar Creación</button>
-                    
+                    <button id="btnContinuarCreandoLuego" type="button" class="btn btn-primary">Guardar y Continuar Editando Luego</button>
                 }
-                <button id="btnContinuarLuego" type="button" class="btn btn-primary">Continuar Luego</button>
+            </div>
 
 
+            <div class="pull-right">
+                <button type="button" id="btnCancelCotizacion" class="btn btn-secondary">Cancelar</button>
+                @if (cotizacion.codigo > 0)
+                {
+                    <button id="btnFinalizarEdicionCotizacion" type="button" class="btn btn-primary">Finalizar Edición</button>
+                }
+                else
+                {
+                    <button id="btnFinalizarCreacionCotizacion" type="button" class="btn btn-primary">Finalizar Creación</button>
+                }
             </div>
         </div>
 
@@ -592,27 +601,27 @@
 
                                     <input class="form-control" type="text" value="" id="precioLista" name="precioLista" disabled>
                                     <!--  <span style="margin-right: 20px; color: red; font-weight: normal " class="has-error" id="mensajeFlete"></span>
-            -->
+                                    -->
                                 </div>
                             </div>
 
 
                             <!--DESCUENTO-->
-          
-                                <div class="form-group">
-                                    <label for="porcentajeDescuento" class="control-label col-xs-3">% Dscto:</label>
-                                    <div class="col-xs-4">
-                                        <input class="form-control" type="number" step=".1" value="" id="porcentajeDescuento" name="porcentajeDescuento">
-                                    </div>
-                                    <div class="col-xs-2">
-                                        <button id="btnCalcularDescuento" type="button" class="btn btn-primary bouton-image monBouton" data-toggle="modal" data-target="#modalCalculadora"></button>
-                                    </div>
-                                    <div class="col-xs-2">
-                                        <button id="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios" data-toggle="modal" data-target="#modalMostrarPrecios"></button>
-                                    </div>
 
+                            <div class="form-group">
+                                <label for="porcentajeDescuento" class="control-label col-xs-3">% Dscto:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" type="number" step=".1" value="" id="porcentajeDescuento" name="porcentajeDescuento">
                                 </div>
-                            
+                                <div class="col-xs-2">
+                                    <button id="btnCalcularDescuento" type="button" class="btn btn-primary bouton-image monBouton" data-toggle="modal" data-target="#modalCalculadora"></button>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button id="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios" data-toggle="modal" data-target="#modalMostrarPrecios"></button>
+                                </div>
+
+                            </div>
+
 
 
                         </div>
@@ -640,7 +649,7 @@
 
 
                     <div class="row">
-                 
+
 
 
 
@@ -876,7 +885,7 @@
 
             <div class="modal-footer">
                 <button type="button" id="btnCancelCalculadora" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnSaveDescuento" class="btn btn-primary"  data-dismiss="modal">Aceptar</button>
+                <button type="button" id="btnSaveDescuento" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
             </div>
         </div>
     </div>
@@ -957,6 +966,52 @@
             <div class="modal-footer">
                 <button type="button" id="btnCancelCliente" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" id="btnSaveCliente" class="btn btn-primary">Agregar Cliente</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!--MODAL BUSCAR PRECIOS REGISTRADOS-->
+<div class="modal fade" id="modalBuscarPreciosRegistrados" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalBuscarPreciosRegistrados"><b>Fecha Inicio Búsqueda de Precios Registrados</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="fechaPrecios" class="control-label col-xs-6">Buscar Precios a partir de:</label>
+                                <div class="col-xs-6">
+                                    <input type="hidden" id="fechaPreciostmp" value="@ViewBag.fechaPrecios" />
+                                    <input class="form-control" type="text" id="fechaPrecios" name="fechaPrecios">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarObtenerProductos" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnObtenerProductos" class="btn btn-primary">Continuar</button>
             </div>
         </div>
     </div>

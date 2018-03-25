@@ -12,6 +12,7 @@ using Cotizador.Models;
 using BusinessLayer;
 using Model;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Cotizador.Controllers
 {
@@ -92,14 +93,13 @@ namespace Cotizador.Controllers
             {
                 case SignInStatus.Success:
 
-                    FamiliaBL familiaBL = new FamiliaBL();
-                    List<Familia> familiaList = familiaBL.getFamilias();
-                    this.Session["familiaList"] = familiaList;
-
-                    ProveedorBL proveedorBL = new ProveedorBL();
-                    List<Proveedor> proveedorList = proveedorBL.getProveedores();
-                    this.Session["proveedorList"] = proveedorList;
-
+                    try {
+                        this.Session["cotizacion"] = JsonConvert.DeserializeObject<Cotizacion>(usuario.cotizacionSerializada);
+                    }
+                    catch (Exception e)
+                    {
+                        this.Session["cotizacion"] = null;
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

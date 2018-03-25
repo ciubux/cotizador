@@ -27,20 +27,9 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li id="linkMisCotizaciones">@Html.ActionLink("Mis Cotizaciones", "Index", "Home")</li>
-                    <li id="linkCotizador">
+                    <li id="linkCotizador">@Html.ActionLink("Cotizar", "Cotizar", "Home")</li>
                         
-                        <a class="dropdown-toggle" data-toggle="dropdown">Cotizar <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("Nueva Cotización", "NuevaCotizacion", "Home", new { @class = "btnNuevaCotizacion", onclick = "return false;" })</li>
-                            <li>@Html.ActionLink("Nueva Cotización a partir de precios registrados", "NuevaCotizacionDesdePrecios", "Home", new { @class = "btnNuevaCotizacionDesdePrecios", onclick = "return false;" })</li>
-
-                            @if (this.Session["cotizacion"] != null)
-                            {
-                            <li>@Html.ActionLink("Seguir Cotizando", "Cotizador", "Home")</li>
-                            }
-                        </ul>
-                     </li>
+                     
                     <li>
                         <a class="dropdown-toggle" data-toggle="dropdown">
                             Carga de Archivos

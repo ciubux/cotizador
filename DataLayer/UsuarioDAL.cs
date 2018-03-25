@@ -17,6 +17,14 @@ namespace DataLayer
         {
         }
 
+        public void updateCotizacionSerializada(Usuario usuario)
+        {
+            var objCommand = GetSqlCommand("pu_cotizacion_serializada");
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "cotizacionSerializada", -1, usuario.cotizacionSerializada);
+            ExecuteNonQuery(objCommand);
+        }
+
         public Usuario getUsuarioLogin(Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_getusuario_login");
@@ -34,6 +42,8 @@ namespace DataLayer
                 usuario.contacto = Converter.GetString(row, "contacto");
                 usuario.esAprobador = Converter.GetBool(row, "es_aprobador");
                 usuario.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
+                usuario.cotizacionSerializada = Converter.GetString(row, "cotizacion_serializada");
+
             }
 
             DataTable dataTableParametros = dataSet.Tables[1];

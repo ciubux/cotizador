@@ -124,7 +124,7 @@ namespace DataLayer
 
            
 
-            ExecuteNonQuery(objCommand);
+        //    ExecuteNonQuery(objCommand);
 
    
             DateTime date1 = new DateTime(fechaModifiacionActual.Year, fechaModifiacionActual.Month, fechaModifiacionActual.Day, fechaModifiacionActual.Hour, fechaModifiacionActual.Minute, fechaModifiacionActual.Second);
@@ -188,7 +188,7 @@ namespace DataLayer
         }
 
 
-        public Cotizacion generarPlantillaCotizacion(Cotizacion cotizacion)
+        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion)
         {
             var objCommand = GetSqlCommand("ps_generarPlantillaCotizacion");
             InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
@@ -203,7 +203,7 @@ namespace DataLayer
             {
 
                //No se cuenta con IdCotizacion
-                cotizacion.fecha = DateTime.Now;
+         /*       cotizacion.fecha = DateTime.Now;
                 cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
                 cotizacion.fechaInicioVigenciaPrecios = null;
                 cotizacion.fechaFinVigenciaPrecios = null;
@@ -232,7 +232,7 @@ namespace DataLayer
                 cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
                 cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
-
+                */
             }
 
 

@@ -16,11 +16,22 @@ namespace BusinessLayer
                 usuario.email = email;
                 usuario.password = password;
                 usuario = usuarioDAL.getUsuarioLogin(usuario);
+                
+
                 //usuario.idUsuario != null && usuario.idUsuario != Guid.Empty;
             }
             return usuario;
         }
 
-        
+        public void updateCotizacionSerializada(Usuario usuario)
+        {
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                 usuarioDAL.updateCotizacionSerializada(usuario);
+            }
+        }
+
+
+
     }
 }

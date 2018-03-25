@@ -17,6 +17,7 @@ namespace Model
         public bool esAprobador { get; set; }
         public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
         public List<Usuario> usuarioList { get; set; }
+        public String cotizacionSerializada { get; set; }
     }
 }
 

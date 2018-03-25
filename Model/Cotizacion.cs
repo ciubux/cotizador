@@ -10,10 +10,10 @@ namespace Model
     {
 
         public enum OpcionesConsiderarCantidades {
-            [Display(Name = "Solo Cantidades")]
-            Cantidades = 0,
             [Display(Name = "Solo Observaciones")]
-            Observaciones =1,           
+            Observaciones = 0,
+            [Display(Name = "Solo Cantidades")]
+            Cantidades = 1,
             [Display(Name = "Cantidades y Observaciones")]
             Ambos =2};
 
@@ -73,9 +73,7 @@ namespace Model
         public DateTime fechaDesde { get; set; }
         public DateTime fechaHasta { get; set; }
 
-        public AutoGuardadoCotizacion autoGuardadoCotizacion { get; set; }    
-
-
+      
 
     }
 }

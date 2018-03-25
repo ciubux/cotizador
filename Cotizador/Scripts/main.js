@@ -11,6 +11,13 @@ jQuery(function ($) {
     var IGV = 0.18;
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
+    var ESTADOS_TODOS = -1;
+    var ESTADO_PENDIENTE_APROBACION = 0;
+    var ESTADO_APROBADA = 1;
+    var ESTADO_DENEGADA = 2;
+    var ESTADO_ACEPTADA = 3;
+    var ESTADO_RECHAZADA = 4;
+    var ESTADO_EN_EDICION = 5;
 
 
 
@@ -32,7 +39,7 @@ jQuery(function ($) {
             $("#linkMisCotizaciones").attr("class", "active");
             $("#linkCotizador").removeAttr("class");
         }
-        else if (title == "Cotizador - Cotizador") {
+        else if (title == "Cotizador - Cotizar") {
 
             $.ajax({
                 url: "/Home/getConstantes",
@@ -63,6 +70,28 @@ jQuery(function ($) {
             pagina = 1;
             $("#linkCotizador").attr("class", "active");
             $("#linkMisCotizaciones").removeAttr("class");
+
+
+            //Si existen productos agregados no se puede obtener desde precios registrados
+
+            var contador = 0;
+            var $j_object = $("td.detcantidad");
+            $.each($j_object, function (key, value) {
+                contador++;
+            });
+
+            if (contador > 0) {
+                $("#btnAgregarProductosDesdePreciosRegistrados").attr('disabled', 'disabled');
+            }
+            else {
+                $("#btnAgregarProductosDesdePreciosRegistrados").removeAttr('disabled');
+            }
+
+
+
+
+
+
         }
         else {
             $.ajax({
@@ -82,13 +111,13 @@ jQuery(function ($) {
         cargarChosenCliente(pagina);
 
 
-   
 
 
-      /*  $('#tablefoottable').footable({
-            "columns": $.get('columns.json'),
-            "rows": $.get('rows.json')
-        });*/
+
+        /*  $('#tablefoottable').footable({
+              "columns": $.get('columns.json'),
+              "rows": $.get('rows.json')
+          });*/
         //Se construye la tabla de Detalle de Cotizacion
         //FooTable.init('#tableDetalleCotizacion');
     });
@@ -125,6 +154,9 @@ jQuery(function ($) {
 
     var fechaHasta = $("#fechaHastatmp").val();
     $("#fechaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaHasta);
+
+    var fechaPrecios = $("#fechaPreciostmp").val();
+    $("#fechaPrecios").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaPrecios);    
 
     var fechaLimiteValidezOferta = $("#fechaLimiteValidezOfertaTmp").val();
     $("#fechaLimiteValidezOferta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaLimiteValidezOferta);
@@ -269,8 +301,6 @@ jQuery(function ($) {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
 
-
-
     }
 
     $("#idCliente").change(function () {
@@ -280,8 +310,6 @@ jQuery(function ($) {
         var tipoCliente = idClienteGrupo.substr(0, 1);
 
         idClienteGrupo = idClienteGrupo.substr(1);
-
-
 
         if (tipoCliente == "c") {
             $.ajax({
@@ -349,7 +377,7 @@ jQuery(function ($) {
      */
 
     ////////////////ABRIR AGREGAR PRODUCTO
-    $('#openAgregarProducto').click(function () {
+    $('#btnOpenAgregarProducto').click(function () {
 
         //Para agregar un producto se debe seleccionar una ciudad
         if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
@@ -945,83 +973,52 @@ jQuery(function ($) {
     });
 
 
-    $('.btnNuevaCotizacion').click(function () {
-        $.ajax({
-            url: "/Home/ConsultarExisteCotizacion",
-            type: 'POST',
-            error: function () {
-            },
-            success: function (resultado) {
-
-                if (resultado == "False") {
-                    window.location = '/Home/Cotizador';
-                }
-                else {
-                    if (confirm("Actualmente está creando o editando una cotización, ¿está seguro que desea cancelar la edición y crear una nueva?")) {
-                        window.location = '/Home/NuevaCotizacion';
-                    }
-                    
-                }
-
-                
-
-            }
-        });
-    });  
-
-
-    $(".btnNuevaCotizacionDesdePrecios").click(function () {
-        $.ajax({
-            url: "/Home/ConsultarExisteCotizacion",
-            type: 'POST',
-            error: function () {
-            },
-            success: function (resultado) {
-                if (resultado == "False") {
-                    window.location = '/Home/NuevaCotizacionDesdePrecios';
-                }
-                else {
-                    if (confirm("Actualmente está creando o editando una cotización, ¿está seguro que desea cancelar la edición y crear una nueva?")) {
-                        window.location = '/Home/NuevaCotizacionDesdePrecios';
-                    }
-
-                }
-
-
-
-            }
-        });
-    })
-
-
 
 
     ////////////GENERAR PLANTILLA DE COTIZACIÓN
 
-    
 
 
-    $("#btnGenerarPlantillaCotizacion").click(function () {
+    $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
 
         var idCiudad = $("#idCiudad").val();
         if (idCiudad == "00000000-0000-0000-0000-000000000000") {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
+            $("#btnCancelarObtenerProductos").click();
             return false;
         }
         var idCliente = $("#idCliente").val();
         if (idCliente.trim() == "") {
             alert("Debe seleccionar un cliente.");
             $('#idCliente').trigger('chosen:activate');
+            $("#btnCancelarObtenerProductos").click();
             return false;
         }
 
-        var fecha = $("#fecha").val();
+
+        var contador = 0;
+        var $j_object = $("td.detcantidad");
+        $.each($j_object, function (key, value) {
+            contador++;
+        });
+
+        if (contador > 0) {
+            alert("No deben existir productos agregaados a la cotización.");
+            return false;
+        }
 
 
 
+    });
+
+
+    $("#btnObtenerProductos").click(function () {
+        var idCiudad = $("#idCiudad").val();
+        var idCliente = $("#idCliente").val();
+        var fecha = $("#fechaPrecios").val();
         $.ajax({
-            url: "/Home/generarPlantillaCotizacion",
+            url: "/Home/obtenerProductosAPartirdePreciosRegistrados",
             data: {
                 idCliente: idCliente,
                 idCiudad: idCiudad,
@@ -1029,28 +1026,24 @@ jQuery(function ($) {
             },
             type: 'POST',
             error: function () {
-                
+
                 alert("Ocurrió un problema al generar la cotización a partir de los precios registrados.");
-                window.location = '/Home/Cotizador';
+                //window.location = '/Home/Cotizador';
             },
             success: function () {
-                window.location = '/Home/Cotizador';
-
+                window.location = '/Home/Cotizar';
             }
         });
 
-        
-
-
     });
 
+    
 
 
-  
 
-  
 
-    ////////GUARDAR COTIZACIÓN
+
+    ////////CREAR/EDITAR COTIZACIÓN
 
 
     function validarIngresoDatosObligatoriosCotizacion() {
@@ -1071,17 +1064,15 @@ jQuery(function ($) {
             $("#contacto").focus();
             return false;
         }
-          /*
-        if ($("#fechaInicioVigenciaPrecios").val().trim() == "") {
-            if (confirm("¿Está seguro de no ingresar la fecha de Inicio de Vigencia?")) {
-                
-            }
-            else {
-                $("#fechaInicioVigenciaPrecios").focus();
-            }
-            
-           
-        }*/
+        /*
+      if ($("#fechaInicioVigenciaPrecios").val().trim() == "") {
+          if (confirm("¿Está seguro de no ingresar la fecha de Inicio de Vigencia?")) {
+              
+          }
+          else {
+              $("#fechaInicioVigenciaPrecios").focus();
+          }
+      }*/
 
         var contador = 0;
         var $j_object = $("td.detcantidad");
@@ -1097,75 +1088,100 @@ jQuery(function ($) {
         return true;
     }
 
-    function crearCotizacion() {
+    function crearCotizacion(continuarLuego) {
         if (!validarIngresoDatosObligatoriosCotizacion())
             return false;
         $.ajax({
-            url: "/Home/grabarCotizacion",
+            url: "/Home/crearCotizacion",
             type: 'POST',
             dataType: 'JSON',
+            data: {
+                continuarLuego: continuarLuego
+            },
             error: function (detalle) {
                 alert("Se generó un error al intentar finalizar la creación de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
             },
             success: function (resultado) {
                 $("#numero").val(resultado.codigo);
 
-                if (resultado.estado == 1) {
+                if (resultado.estado == ESTADO_APROBADA) {
                     alert("La cotización número " + resultado.codigo + " fue creada correctamente.");
                     generarPDF();
                 }
-                else {
+                else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     alert("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN.");
                     window.location = '/Home/Index';
                 }
+                else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
+                    alert("La cotización número " + resultado.codigo + " fue guardada correctamente para seguir editandola posteriormente.");
+                    window.location = '/Home/Index';
+                }
+                else {
+                    alert("La cotización ha tenido problemas para se procesada; Contacte con el Administrador"); }
             }
         });
     }
 
-
-    $("#btnContinuarLuego").click(function () {
-      
-
-    });
-
-
-
-
-
-
-
-    $("#btnEditarCotizacion").click(function () {
+    function editarCotizacion(continuarLuego) {
         if (!validarIngresoDatosObligatoriosCotizacion())
             return false;
 
         $.ajax({
-            url: "/Home/grabarCotizacion",
+            url: "/Home/editarCotizacion",
             type: 'POST',
             dataType: 'JSON',
+            data: {
+                continuarLuego: continuarLuego
+            },
             error: function (detalle) {
                 alert("Se generó un error al intentar finalizar la edición de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
             },
             success: function (resultado) {
                 $("#numero").val(resultado.codigo);
 
-                if (resultado.estado == 1) {
+                if (resultado.estado == ESTADO_APROBADA) {
                     alert("La cotización número " + resultado.codigo + " fue editada correctamente.");
                     generarPDF();
                 }
-                else
-                {
-                    alert("La cotización número " + resultado.codigo +" fue editada correctamente, sin embargo requiere APROBACIÓN.");
+                else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
+                    alert("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN.");
                     window.location = '/Home/Index';
-                }               
+                }
+                else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
+                    alert("La cotización número " + resultado.codigo + " fue guardada correctamente para seguir editandola posteriormente.");
+                    window.location = '/Home/Index';
+                }
+                else {
+                    alert("La cotización ha tenido problemas para se procesada; Contacte con el Administrador");
+                }
             }
         });
+    }
+
+
+
+    $("#btnFinalizarCreacionCotizacion").click(function () {
+        crearCotizacion(0);
+    });
+
+    $("#btnContinuarCreandoLuego").click(function () {
+        crearCotizacion(1);
+    });
+
+    $("#btnFinalizarEdicionCotizacion").click(function () {
+        editarCotizacion(0);
+    });
+
+    $("#btnContinuarEditandoLuego").click(function () {
+        editarCotizacion(1);
     });
 
 
 
-    $("#btnCrearCotizacion").click(function () {
 
-    });
+
+
+
 
 
 
@@ -1484,28 +1500,53 @@ jQuery(function ($) {
             type: 'POST',
             error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
             success: function (fileName) {
-                window.location = '/Home/Cotizador';
+                window.location = '/Home/Cotizar';
             }
         });
     });
-    
+
+    /*btnEditarCotizacion desde busqueda*/
+
     $("#btnEditarCotizacion").click(function () {
-        //$(document).on('click', "button.btnReCotizacion", function () {
-        // var codigo = event.target.getAttribute("class").split(" ")[0];
         desactivarBotonesVer();
-        var numero = $("#verNumero").html();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
-            url: "/Home/editarCotizacion",
-            data: {
-                numero: numero
-            },
+            url: "/Home/ConsultarSiExisteCotizacion",
             type: 'POST',
-            error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
-            success: function (fileName) {
-                window.location = '/Home/Cotizador';
+            async: false,
+            success: function (resultado) {
+                if (resultado == "False") {
+
+                    $.ajax({
+                        url: "/Home/iniciarEdicionCotizacion",
+                        type: 'POST',
+
+                        error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
+                        success: function (fileName) {
+                            window.location = '/Home/Cotizar';
+                        }
+                    });
+
+                    //window.location = '/Home/Cotizador';
+                }
+                else {
+                    alert("Existe otra cotización en curso; por favor cancele previamente esa cotización para continuar.");
+                    activarBotonesVer();
+                }
             }
         });
+
+        
+
+
     });
+
+
+
+
+
+
+
 
     $("#btnPDFCotizacion").click(function () {
         //$(document).on('click', "button.btnReCotizacion", function () {
@@ -1588,7 +1629,7 @@ jQuery(function ($) {
         var codigo = $("#verNumero").html();
 
         $.ajax({
-            url: "/Home/updateEstadoSeguimientoCotizacion",
+            url: "/Home/updateEstadoCotizacion",
             data: {
                 codigo: codigo,
                 estado: estado,
@@ -1610,47 +1651,8 @@ jQuery(function ($) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
     var ft = null;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2006,7 +2008,7 @@ jQuery(function ($) {
         $("#considerarCantidades").attr('disabled', 'disabled');
         $("input[name=igv]").attr('disabled', 'disabled');
         $("#flete").attr('disabled', 'disabled');
-        $("#openAgregarProducto").attr('disabled', 'disabled');
+        $("#btnOpenAgregarProducto").attr('disabled', 'disabled');
         $("#generarPDF").attr('disabled', 'disabled');
         $("#grabarCotizacion").attr('disabled', 'disabled');
         $("input[name=mostrarcodproveedor]").attr('disabled', 'disabled');
@@ -2095,7 +2097,7 @@ jQuery(function ($) {
         $("#considerarCantidades").removeAttr('disabled');
         $("input[name=igv]").removeAttr('disabled');
         $("#flete").removeAttr('disabled');
-        $("#openAgregarProducto").removeAttr('disabled');
+        $("#btnOpenAgregarProducto").removeAttr('disabled');
         $("#generarPDF").removeAttr('disabled');
         $("#grabarCotizacion").removeAttr('disabled');
         $("input[name=mostrarcodproveedor]").removeAttr('disabled');
