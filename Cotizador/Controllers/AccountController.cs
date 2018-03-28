@@ -106,17 +106,17 @@ namespace Cotizador.Controllers
                         Cotizacion cotizacion = JsonConvert.DeserializeObject<Cotizacion>(usuario.cotizacionSerializada);
                         usuario.cotizacionSerializada = null;
                         this.Session["usuario"] = usuario;
-               /*        foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
-                        {
-                            FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
-                            MemoryStream storeStream = new MemoryStream();
-                            storeStream.SetLength(inStream.Length);
-                            inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
-                            storeStream.Flush();
-                            inStream.Close();
-                            cotizacionDetalle.producto.image = storeStream.GetBuffer();
-                        }*/
-
+                        /*        foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
+                                 {
+                                     FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                                     MemoryStream storeStream = new MemoryStream();
+                                     storeStream.SetLength(inStream.Length);
+                                     inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                                     storeStream.Flush();
+                                     inStream.Close();
+                                     cotizacionDetalle.producto.image = storeStream.GetBuffer();
+                                 }*/
+                        this.Session["pagina"] = Constantes.BUSQUEDA_COTIZACION;
                         this.Session["cotizacion"] = cotizacion;
 
                     }

@@ -27,7 +27,16 @@ namespace Model
         public static String OBSERVACION = "* Condiciones de pago: al contado.\n" +
                                        "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
                                        "* (para productos no stockeables o primeras compras, consultar plazo).\n";
-        
+
+
+        public static int BUSQUEDA_COTIZACION = 0;
+        public static int MANTENIMIENTO_COTIZACION = 1;
+        public static int BUSQUEDA_PEDIDO = 2;
+        public static int MANTENIMIENTO_PEDIDO = 3;
+        public static int BUSQUEDA_FACTURA = 4;
+        public static int MANTENIMIENTO_FACTURA = 5;
+
+
 
         public enum paginas {
             [Display(Name = "Mis Cotizaciones")]

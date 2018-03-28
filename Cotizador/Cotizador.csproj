@@ -287,6 +287,7 @@
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
+    <Content Include="Scripts\pedido.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -297,7 +298,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\cotizacion.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />

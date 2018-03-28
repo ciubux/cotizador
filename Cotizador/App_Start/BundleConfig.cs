@@ -8,13 +8,19 @@ namespace Cotizador
         // Para obtener más información sobre Bundles, visite http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/js").Include(
-                        "~/Scripts/main.js",
-                        "~/Scripts/footable.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/cotizacion").Include(
+                        "~/Scripts/cotizacion.js"
+                        ));
+
+            bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
+                        "~/Scripts/pedido.js"
+                        ));
+
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-3.1.1.min.js",
-                        "~/Scripts/jquery-ui.min.js"
+                        "~/Scripts/jquery-ui.min.js",
+                        "~/Scripts/footable.min.js"
                         ));
             //"~/Scripts/jquery-{version}.js"
 

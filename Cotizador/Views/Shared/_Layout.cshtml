@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cotizador - @ViewBag.Title</title>
@@ -28,28 +28,30 @@
                 <ul class="nav navbar-nav">
                     <li id="linkMisCotizaciones">@Html.ActionLink("Mis Cotizaciones", "Index", "Home")</li>
                     <li id="linkCotizador">@Html.ActionLink("Cotizar", "Cotizar", "Home")</li>
-                    <!--
-                     <li id="linkMisPedidos">@Html.ActionLink("Mis Pedidos", "Index", "Pedido")</li>
-                     <li id="linkPedir">@Html.ActionLink("Pedir", "Pedir", "Pedido")</li>
-                        -->
-                    <!--
-    <li>
-        <a class="dropdown-toggle" data-toggle="dropdown">
-            Carga de Archivos
-            <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-            <li>@Html.ActionLink("Cargar Clientes", "Index", "Cliente")</li>
-            <li>@Html.ActionLink("Cargar Productos", "Index", "Producto")</li>
-            <li>@Html.ActionLink("Cargar Precios", "Index", "Precio")</li>
-            <li>@Html.ActionLink("Cargar Facturas", "Index", "Factura")</li>
-        </ul>
 
-    </li>-->
+                    <li id="linkMisPedidos">@Html.ActionLink("Mis Pedidos", "Index", "Pedido")</li>
+                    <li id="linkPedir">@Html.ActionLink("Pedir", "Pedir", "Pedido")</li>
+
+                    <li id="linkMisPedidos">@Html.ActionLink("Mis Facturas", "Index", "Factura")</li>
+                    <li id="linkPedir">@Html.ActionLink("Facturar", "Facturar", "Factura")</li>
+                    <!--
+                    <li>
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                            Carga de Archivos
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>@Html.ActionLink("Cargar Clientes", "Index", "Cliente")</li>
+                            <li>@Html.ActionLink("Cargar Productos", "Index", "Producto")</li>
+                            <li>@Html.ActionLink("Cargar Precios", "Index", "Precio")</li>
+                            <li>@Html.ActionLink("Cargar Facturas", "Index", "Factura")</li>
+                        </ul>
+
+                    </li>-->
 
                 </ul>
 
-               @Html.Partial("_LoginPartial")
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
@@ -62,11 +64,26 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-   
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/js")
+    @Scripts.Render("~/bundles/jquery")
+
     @Scripts.Render("~/bundles/jquery-chosen")
     @RenderSection("scripts", required: false)
+
+    @if (this.Session["pagina"] != null)
+    {
+
+        if ((int)this.Session["pagina"] == 1 || (int)this.Session["pagina"] == 0)
+        {
+            @Scripts.Render("~/bundles/cotizacion")
+        }
+        else if ((int)this.Session["pagina"] == 2 || (int)this.Session["pagina"] == 3)
+        {
+            @Scripts.Render("~/bundles/pedido")
+        }
+    }
+
+
+
 </body>
 </html>

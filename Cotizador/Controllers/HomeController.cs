@@ -19,7 +19,7 @@ namespace Cotizador.Controllers
         //Busqueda de Cotizacion
         public ActionResult Index()
         {
-
+            this.Session["pagina"] = Constantes.BUSQUEDA_COTIZACION;
 
             if (this.Session["usuario"] == null)
             {
@@ -161,6 +161,8 @@ namespace Cotizador.Controllers
 
         public ActionResult Cotizar()
         {
+            this.Session["pagina"] = Constantes.MANTENIMIENTO_COTIZACION;
+
             try
             {
                 //Si no hay usuario, se dirige el logueo
