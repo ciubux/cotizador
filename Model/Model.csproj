@@ -39,7 +39,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auditoria.cs" />
+    <Compile Include="PedidoDetalle.cs" />
+    <Compile Include="Pedido.cs" />
     <Compile Include="EnumHelper.cs" />
+    <Compile Include="SeguimientoPedido.cs" />
     <Compile Include="SeguimientoCotizacion.cs" />
     <Compile Include="PrecioStaging.cs" />
     <Compile Include="PrecioListaStaging.cs" />

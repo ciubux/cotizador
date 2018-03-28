@@ -160,58 +160,69 @@ namespace Cotizador.Controllers
 
 
         public ActionResult Cotizar()
-        { 
-            //Si no hay usuario, se dirige el logueo
-            if (this.Session["usuario"] == null)
+        {
+            try
             {
-                return RedirectToAction("Login", "Account");
+                //Si no hay usuario, se dirige el logueo
+                if (this.Session["usuario"] == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                ViewBag.debug = Constantes.DEBUG;
+                ViewBag.Si = Constantes.MENSAJE_SI;
+                ViewBag.No = Constantes.MENSAJE_NO;
+                ViewBag.IGV = Constantes.IGV;
+
+
+                //Si no se está trabajando con una cotización se crea una y se agrega a la sesion
+
+                if (this.Session["cotizacion"] == null)
+                {
+
+                    instanciarCotizacion();
+                }
+                Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+
+
+                int existeCliente = 0;
+                if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
+                {
+                    existeCliente = 1;
+                }
+                ViewBag.existeCliente = existeCliente;
+
+
+                if (cotizacion.cliente.idCliente != Guid.Empty)
+                {
+                    ViewBag.idClienteGrupo = cotizacion.cliente.idCliente;
+                    ViewBag.clienteGrupo = cotizacion.cliente.ToString();
+                }
+                else
+                {
+                    ViewBag.idClienteGrupo = cotizacion.grupo.idGrupo;
+                    ViewBag.clienteGrupo = cotizacion.grupo.ToString();
+                }
+
+                ViewBag.fechaPrecios = cotizacion.fechaPrecios.ToString(Constantes.formatoFecha);
+                ViewBag.fecha = cotizacion.fecha.ToString(Constantes.formatoFecha);
+                ViewBag.fechaLimiteValidezOferta = cotizacion.fechaLimiteValidezOferta.ToString(Constantes.formatoFecha);
+                ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
+                ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
+
+                //Se agrega el viewbag numero para poder mostrar el campo vacío cuando no se está creando una cotización
+                ViewBag.numero = cotizacion.codigo;
+
+                ViewBag.cotizacion = cotizacion;
+
             }
-
-            ViewBag.debug = Constantes.DEBUG;
-            ViewBag.Si = Constantes.MENSAJE_SI;
-            ViewBag.No = Constantes.MENSAJE_NO;
-            ViewBag.IGV = Constantes.IGV;
-
-
-            //Si no se está trabajando con una cotización se crea una y se agrega a la sesion
-
-            if (this.Session["cotizacion"] == null)
+            catch (Exception ex)
             {
-
-                instanciarCotizacion();
+                Usuario usuario = (Usuario)this.Session["usuario"];
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
             }
-            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
-
-
-            int existeCliente = 0;
-            if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
-            {
-                existeCliente = 1;
-            }
-            ViewBag.existeCliente = existeCliente;
-
-
-            if (cotizacion.cliente.idCliente != Guid.Empty)
-            {
-                ViewBag.idClienteGrupo = cotizacion.cliente.idCliente;
-                ViewBag.clienteGrupo = cotizacion.cliente.ToString();
-            }
-            else
-            {
-                ViewBag.idClienteGrupo = cotizacion.grupo.idGrupo;
-                ViewBag.clienteGrupo = cotizacion.grupo.ToString();
-            }
-
-            ViewBag.fechaPrecios = cotizacion.fechaPrecios.ToString(Constantes.formatoFecha);
-            ViewBag.fecha = cotizacion.fecha.ToString(Constantes.formatoFecha);
-            ViewBag.fechaLimiteValidezOferta = cotizacion.fechaLimiteValidezOferta.ToString(Constantes.formatoFecha);
-            ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
-            ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
-
-            //Se agrega el viewbag numero para poder mostrar el campo vacío cuando no se está creando una cotización
-            ViewBag.numero = cotizacion.codigo;
-            
-            ViewBag.cotizacion = cotizacion;
 
             return View();
         }
@@ -940,118 +951,7 @@ namespace Cotizador.Controllers
         }
 
 
-        [HttpGet]
-        public ActionResult LoadClientes()
-        {
-            if (this.Session["usuario"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            return View();
-
-        }
-
-
-        [HttpPost]
-        public ActionResult LoadClientesFile(HttpPostedFileBase file)
-        {
-
-            if (file.ContentLength > 0)
-            {
-                var fileName = Path.GetFileName(file.FileName);
-                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
-                file.SaveAs(path);
-            }
-
-        
-            HSSFWorkbook hssfwb;
-
-            ClienteBL clienteBL = new ClienteBL();
-           
-            hssfwb = new HSSFWorkbook(file.InputStream);
-
-            ISheet sheet = hssfwb.GetSheetAt(0);
-            int row = 1;
-            //sheet.LastRowNum
-
-            int cantidad = Int32.Parse(Request["cantidadRegistros"].ToString());
-            String sede = Request["sede"].ToString();
-
-            clienteBL.truncateClienteStaging(sede);
-
-            if (cantidad == 0)
-                cantidad = sheet.LastRowNum;
-
-            for ( row = 4; row <= cantidad; row++)
-            {
-                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
-                {
-                    int paso = 0;
-                    try
-                    {
-                        ClienteStaging clienteStaging = new ClienteStaging();
-                        //C
-                        clienteStaging.codigo = sheet.GetRow(row).GetCell(2).ToString();
-                        //D
-                        paso = 1;
-                        clienteStaging.nombre = sheet.GetRow(row).GetCell(3).ToString();
-                        //F
-                        paso = 2;
-                        clienteStaging.documento = sheet.GetRow(row).GetCell(5).ToString();
-                        //G
-                        paso = 3;
-                        clienteStaging.domicilioLegal = sheet.GetRow(row).GetCell(6).ToString();
-                        //H
-                        paso = 4;
-                        clienteStaging.distrito = sheet.GetRow(row).GetCell(7).ToString();
-                        //J
-                        paso = 5;
-                        clienteStaging.codVe = sheet.GetRow(row).GetCell(9).ToString();
-                        //M
-                        paso = 6;
-                        clienteStaging.direccionDespacho = sheet.GetRow(row).GetCell(12).ToString();
-                        //T
-                        paso = 7;
-                        clienteStaging.nombreComercial = sheet.GetRow(row).GetCell(19).ToString();
-                        //U
-                        paso = 8;
-                        clienteStaging.rubro = sheet.GetRow(row).GetCell(20).ToString();
-
-                        clienteStaging.sede = sede;
-
-                            /*
-                        ClienteStaging clienteStaging = new ClienteStaging();
-                        clienteStaging.PlazaId = sheet.GetRow(row).GetCell(0).ToString();
-                        clienteStaging.Plaza = sheet.GetRow(row).GetCell(1).ToString();
-                        clienteStaging.Id = sheet.GetRow(row).GetCell(2).ToString();
-                        clienteStaging.nombre = sheet.GetRow(row).GetCell(3).ToString();
-                        clienteStaging.documento = sheet.GetRow(row).GetCell(4).ToString();
-                        clienteStaging.codVe = sheet.GetRow(row).GetCell(5).ToString();
-                        clienteStaging.nombreComercial = sheet.GetRow(row).GetCell(6).ToString();
-                        clienteStaging.domicilioLegal = sheet.GetRow(row).GetCell(7).ToString();
-                        clienteStaging.distrito = sheet.GetRow(row).GetCell(8).ToString();
-                        clienteStaging.direccionDespacho = sheet.GetRow(row).GetCell(9).ToString();
-                        clienteStaging.distritoDespacho = sheet.GetRow(row).GetCell(10).ToString();
-                        clienteStaging.rubro = sheet.GetRow(row).GetCell(11).ToString();*/
-
-                        clienteBL.setClienteStaging(clienteStaging);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Usuario usuario = (Usuario)this.Session["usuario"];
-                        Log log = new Log(ex.ToString()+" paso: " + paso , TipoLog.Error, usuario);
-                        LogBL logBL = new LogBL();
-                        logBL.insertLog(log);
-                    }
-                }
-            }
-
-           // clienteBL.mergeClienteStaging();
-            row = row;
-            return RedirectToAction("Index", "Home");
-
-        }
+       
 
 
         [HttpGet]
@@ -1179,135 +1079,6 @@ namespace Cotizador.Controllers
     
 
 
-        [HttpGet]
-        public ActionResult LoadFacturas()
-        {
-            if (this.Session["usuario"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            return View();
-
-        }
-
-        [HttpPost]
-        public ActionResult LoadFacturasFile(HttpPostedFileBase file)
-        {
-
-            if (file.ContentLength > 0)
-            {
-                var fileName = Path.GetFileName(file.FileName);
-                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
-                file.SaveAs(path);
-            }
-
-
-            HSSFWorkbook hssfwb;
-
-            FacturaBL facturaBL = new FacturaBL();
-            facturaBL.truncateFacturaStaging();
-
-            hssfwb = new HSSFWorkbook(file.InputStream);
-
-            int numero = 0;
-
-            for (int j = 0; j < 8; j++)
-            {
-
-                ISheet sheet = hssfwb.GetSheetAt(j);
-                int row = 1;
-                //sheet.LastRowNum
-
-                int cantidad = Int32.Parse(Request["cantidad"].ToString());
-              //  if (cantidad == 0)
-                    cantidad = sheet.LastRowNum;
-
-
-            
-
-                for (row = 3; row <= cantidad; row++)
-                {
-                    if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
-                    {
-                        try
-                        {
-                            FacturaStaging facturaStaging = new FacturaStaging();
-                            //A
-                            facturaStaging.tipoDocumento = sheet.GetRow(row).GetCell(0).ToString();
-                            //B
-                            facturaStaging.numeroDocumento = Convert.ToInt32(sheet.GetRow(row).GetCell(1).NumericCellValue);
-                            //C
-                            facturaStaging.fecha = sheet.GetRow(row).GetCell(2).DateCellValue;
-                            //D
-                            facturaStaging.codigoCliente = sheet.GetRow(row).GetCell(3).ToString();
-                            //E
-                            //K
-                            facturaStaging.valorVenta = Convert.ToDecimal(sheet.GetRow(row).GetCell(8).NumericCellValue);
-                            facturaStaging.igv = Convert.ToDecimal(sheet.GetRow(row).GetCell(9).NumericCellValue);
-                            facturaStaging.total = Convert.ToDecimal(sheet.GetRow(row).GetCell(10).NumericCellValue);
-                            facturaStaging.observacion = sheet.GetRow(row).GetCell(11).ToString();
-
-                            facturaStaging.fechaVencimiento = sheet.GetRow(row).GetCell(13).DateCellValue;
-                            try
-                            {
-                                if (sheet.GetRow(row).GetCell(14) ==  null)
-                                    facturaStaging.ruc = null;
-                                else
-                                    facturaStaging.ruc = sheet.GetRow(row).GetCell(14).ToString();
-                            }
-                            catch (Exception ex)
-                            {
-                                facturaStaging.ruc = sheet.GetRow(row).GetCell(14).NumericCellValue.ToString();
-                            }
-                            
-                            //F
-                            facturaStaging.razonSocial = sheet.GetRow(row).GetCell(15).StringCellValue;
-
-
-                            switch (j)
-                            {
-                                case 0: facturaStaging.sede = "L"; break;
-                                case 1: facturaStaging.sede = "A"; break;
-                                case 2: facturaStaging.sede = "C"; break;
-                                case 3: facturaStaging.sede = "H"; break;
-                                case 4: facturaStaging.sede = "O"; break;
-                                case 5: facturaStaging.sede = "P"; break;
-                                case 6: facturaStaging.sede = "Q"; break;
-                                case 7: facturaStaging.sede = "T"; break;                          
-                            }
-
-                            if (facturaStaging.tipoDocumento.Trim().Equals("F"))
-                            {
-                                numero++;
-                                facturaStaging.numero = numero;
-                            }
-                            else
-                            {
-                                facturaStaging.numero = 0;
-                            }
-                            
-
-                            facturaBL.setFacturaStaging(facturaStaging);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            Usuario usuario = (Usuario)this.Session["usuario"];
-                            Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
-                            LogBL logBL = new LogBL();
-                            logBL.insertLog(log);
-                        }
-                    }
-                }
-
-                row = row;
-            }
-
-     //       facturaBL.mergeClienteStaging();
-            
-            return RedirectToAction("Index", "Home");
-
-        }
 
 
         [HttpGet]

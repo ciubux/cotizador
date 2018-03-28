@@ -1510,7 +1510,7 @@ jQuery(function ($) {
                     cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
                     cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
                     cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA ||
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION && cotizacion.usuario.idUsuario == cotizacion.seguimientoCotizacion.usuario.idUsuario)
+                    (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION && usuario.idUsuario == cotizacion.seguimientoCotizacion.usuario.idUsuario)
                 ) {
                     $("#btnEditarCotizacion").show();
                     if (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION) {

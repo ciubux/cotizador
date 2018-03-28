@@ -54,7 +54,7 @@ namespace BusinessLayer
                     {
                         if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
                         {
-                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitio en el detalle de la cotización";
+                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización";
                             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                         }
                     }
@@ -63,7 +63,7 @@ namespace BusinessLayer
                     {
                         if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
                         {
-                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitio en el detalle de la cotización.";
+                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización.";
                             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                             
                         }
@@ -136,7 +136,7 @@ namespace BusinessLayer
                     {
                         if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
                         {
-                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitio en el detalle de la cotización";
+                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización";
                             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                         }
                     }
@@ -145,7 +145,7 @@ namespace BusinessLayer
                     {
                         if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
                         {
-                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitio en el detalle de la cotización";
+                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización";
                             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
 
                         }
