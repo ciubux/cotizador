@@ -262,6 +262,7 @@
     <Content Include="images\etiqueta-de-precio-en-dolares.png" />
     <Content Include="images\hombre-de-negocios.png" />
     <Content Include="images\hombre-de-negocios2.png" />
+    <Content Include="images\pdf-icon.png" />
     <Content Include="images\proveedores.png" />
     <Content Include="images\down.png" />
     <Content Include="images\down2.png" />
@@ -354,6 +355,8 @@
     <Content Include="Views\Ciudad\_SelectCiudadBusqueda.cshtml" />
     <Content Include="Views\Usuario\_SelectUsuario.cshtml" />
     <Content Include="Views\Home\CotizadorDesdePrecios.cshtml" />
+    <Content Include="Views\Proveedor\_SelectProveedorBusquedaPrecios.cshtml" />
+    <Content Include="Views\Familia\_SelectFamiliaBusquedaPrecios.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

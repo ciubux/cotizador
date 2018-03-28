@@ -13,6 +13,7 @@ using BusinessLayer;
 using Model;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace Cotizador.Controllers
 {
@@ -93,8 +94,31 @@ namespace Cotizador.Controllers
             {
                 case SignInStatus.Success:
 
+                    FamiliaBL familiaBL = new FamiliaBL();
+                    List<Familia> familiaList = familiaBL.getFamilias();
+                    this.Session["familiaList"] = familiaList;
+
+                    ProveedorBL proveedorBL = new ProveedorBL();
+                    List<Proveedor> proveedorList = proveedorBL.getProveedores();
+                    this.Session["proveedorList"] = proveedorList;
+
                     try {
-                        this.Session["cotizacion"] = JsonConvert.DeserializeObject<Cotizacion>(usuario.cotizacionSerializada);
+                        Cotizacion cotizacion = JsonConvert.DeserializeObject<Cotizacion>(usuario.cotizacionSerializada);
+                        usuario.cotizacionSerializada = null;
+                        this.Session["usuario"] = usuario;
+               /*        foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
+                        {
+                            FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                            MemoryStream storeStream = new MemoryStream();
+                            storeStream.SetLength(inStream.Length);
+                            inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                            storeStream.Flush();
+                            inStream.Close();
+                            cotizacionDetalle.producto.image = storeStream.GetBuffer();
+                        }*/
+
+                        this.Session["cotizacion"] = cotizacion;
+
                     }
                     catch (Exception e)
                     {

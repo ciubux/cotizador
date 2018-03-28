@@ -26,7 +26,7 @@ namespace Model
         {
             get
             {
-                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, _porcentajeDescuento));
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, _porcentajeDescuento));
             }
         }
 

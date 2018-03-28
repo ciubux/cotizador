@@ -149,6 +149,8 @@ namespace cotizadorPDF
                 dataTable.Columns.Add(new DataColumn("Temp1", typeof(Byte[])));
                 dataTable.Columns.Add(new DataColumn("Temp2", typeof(PdfImage)));
 
+                String observacionesDetalle = String.Empty;
+
                 foreach (CotizacionDetalle det in cot.cotizacionDetalleList)
                 {
                     String codigo = det.producto.sku.Trim();
@@ -177,7 +179,7 @@ namespace cotizadorPDF
                         if(cot.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos)
                         {
                             if(det.observacion!=null)
-                                producto = producto + "\n" + det.observacion;
+                                producto = producto + "\n[" + det.observacion+"]";
                         }
 
                     }
@@ -185,6 +187,9 @@ namespace cotizadorPDF
                     else
                     {
                         cantidad = det.observacion==null?"": det.observacion;
+
+                        observacionesDetalle = observacionesDetalle + cantidad;
+
                         subtotal = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDosDecimales, det.subTotal);
                     }
 
@@ -270,7 +275,16 @@ namespace cotizadorPDF
                 //Si es solo observaciones
                 else 
                 {
-                    tableLayout.EndColumnIndex = table.Columns.Count - 4; //- 1;
+                    //Si no hay datos en observaciones detalle, no se considera la columna
+                    if (observacionesDetalle.Trim().Length == 0)
+                    {
+                        tableLayout.EndColumnIndex = table.Columns.Count - 5; //- 1;
+                    }
+                    else
+                    {
+                        tableLayout.EndColumnIndex = table.Columns.Count - 4; //- 1;
+                    }
+
                 }
                 
 
@@ -522,11 +536,11 @@ namespace cotizadorPDF
                     sectionObervaciones.Canvas.DrawString("* Validez de la oferta: hasta   " + cot.fechaLimiteValidezOferta.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 }
 
-                
+
                 //Si se ha registrado fecha inicio vigencia precios
                 if (cot.fechaInicioVigenciaPrecios != null)
                 {
-                
+
 
                     //Si la fecha de inicio de vigencia es IGUAL a la fecha de creación NO se indica en la cotización
                     if (cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy").Equals(cot.fecha.ToString("dd/MM/yyyy")))
@@ -536,7 +550,7 @@ namespace cotizadorPDF
                         if (cot.fechaFinVigenciaPrecios != null)
                         {
                             y = y + sepLine;
-                            sectionObervaciones.Canvas.DrawString("* Validez de los precios: hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                            sectionObervaciones.Canvas.DrawString("* Vigencia de los precios: hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                         }
                         //Si NO se cuenta con fecha fin de vigencia no se muestra nada 
 
@@ -548,17 +562,28 @@ namespace cotizadorPDF
                         //Si se cuenta con la fecha fin de vigencia de precios
                         if (cot.fechaFinVigenciaPrecios != null)
                         {
-                            sectionObervaciones.Canvas.DrawString("* Validez de los precios: desde " + cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy") + " hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                            sectionObervaciones.Canvas.DrawString("* Vigencia de los precios: desde " + cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy") + " hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                         }
                         else //Si no se cuenta con la fecha fin de vigencia de precios
                         {
-                            sectionObervaciones.Canvas.DrawString("* Validez de los precios: desde " + cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy")+ ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                            sectionObervaciones.Canvas.DrawString("* Validez de los precios: desde " + cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                         }
-
                     }
-
-
                 }
+                else
+                {
+                    //Si se cuenta con fecha de fin de vigencia 
+                    if (cot.fechaFinVigenciaPrecios != null)
+                    {
+                        y = y + sepLine;
+                        sectionObervaciones.Canvas.DrawString("* Vigencia de los precios: hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                    }
+                }
+
+
+
+
+
 
                 y = y + sepLine;
             
@@ -635,6 +660,7 @@ namespace cotizadorPDF
                 args.MinimalHeight = 50f;//   4 + image.PhysicalDimension.Height;
                 dataTable.Rows[args.RowIndex][8] = image;
             }
+           
         }
 
 

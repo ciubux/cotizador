@@ -58,6 +58,9 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "mostrarValidezOfertaDias", cotizacion.mostrarValidezOfertaEnDias);
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
 
+            InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada?1:0));
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion);
+
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "codigo");
@@ -116,6 +119,10 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
             InputParameterAdd.Int(objCommand, "mostrarValidezOfertaDias", cotizacion.mostrarValidezOfertaEnDias);
+
+            InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada ? 1 : 0));
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion);
+
 
             OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
             ExecuteNonQuery(objCommand);
@@ -188,11 +195,13 @@ namespace DataLayer
         }
 
 
-        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion)
+        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor)
         {
             var objCommand = GetSqlCommand("ps_generarPlantillaCotizacion");
             InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
-            InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
+            InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fechaPrecios);
+            InputParameterAdd.Varchar(objCommand, "familia", familia);
+            InputParameterAdd.Varchar(objCommand, "proveedor", proveedor);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable cotizacionDataTable = dataSet.Tables[0];
             DataTable cotizacionDetalleDataTable = dataSet.Tables[1];
@@ -256,16 +265,16 @@ namespace DataLayer
 
 
     
-                if (cotizacionDetalle.esPrecioAlternativo)
-                {
+                //if (cotizacionDetalle.esPrecioAlternativo)
+               // {
                     cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.producto.equivalencia;
-                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.producto.precioAlternativoSinIgv * 100 / cotizacionDetalle.precioNeto);
-                }
+                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
+                /*}
                 else
                 {
                     cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
                     cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.producto.precioSinIgv * 100 / cotizacionDetalle.precioNeto);
-                }
+                }*/
 
 
                 cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
@@ -331,8 +340,9 @@ namespace DataLayer
                 cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1+cotizacion.igv)));
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
                 cotizacion.fechaModificacion = Converter.GetDateTime(row, "fecha_modificacion");
+                cotizacion.fechaEsModificada = Converter.GetBool(row, "fecha_Es_Modificada");
 
-
+                cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
 
                 //Si el cliente es Null
                 if (row["id_cliente"] == DBNull.Value)
@@ -377,6 +387,7 @@ namespace DataLayer
                 cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Converter.GetInt(row, "estado_seguimiento");
                 cotizacion.seguimientoCotizacion.observacion = Converter.GetString(row, "observacion_seguimiento");
                 cotizacion.seguimientoCotizacion.usuario = new Usuario();
+                cotizacion.seguimientoCotizacion.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
                 cotizacion.seguimientoCotizacion.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
 
             }
@@ -507,9 +518,10 @@ namespace DataLayer
 
                 cotizacion.usuario = new Usuario();
                 cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                cotizacion.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
 
-              //  cotizacion.usuario_aprobador = new Usuario();
-              //  cotizacion.usuario_aprobador.nombre = Converter.GetString(row, "nombre_usuario_aprobador");
+                //  cotizacion.usuario_aprobador = new Usuario();
+                //  cotizacion.usuario_aprobador.nombre = Converter.GetString(row, "nombre_usuario_aprobador");
 
                 cotizacion.ciudad = new Ciudad();
                 cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
@@ -519,6 +531,7 @@ namespace DataLayer
                 cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Converter.GetInt(row, "estado_seguimiento");
                 cotizacion.seguimientoCotizacion.observacion = Converter.GetString(row, "observacion_seguimiento");
                 cotizacion.seguimientoCotizacion.usuario = new Usuario();
+                cotizacion.seguimientoCotizacion.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
                 cotizacion.seguimientoCotizacion.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
 
 
@@ -543,7 +556,7 @@ namespace DataLayer
 
             DateTime fechaModifiacionActual = (DateTime)objCommand.Parameters["@fechaModificacionActual"].Value;
 
-
+/*
             DateTime date1 = new DateTime(fechaModifiacionActual.Year, fechaModifiacionActual.Month, fechaModifiacionActual.Day, fechaModifiacionActual.Hour, fechaModifiacionActual.Minute, fechaModifiacionActual.Second);
             DateTime date2 = new DateTime(cotizacion.fechaModificacion.Year, cotizacion.fechaModificacion.Month, cotizacion.fechaModificacion.Day, cotizacion.fechaModificacion.Hour, cotizacion.fechaModificacion.Minute, cotizacion.fechaModificacion.Second);
 
@@ -554,7 +567,7 @@ namespace DataLayer
                 throw new Exception("CotizacionDesactualizada");
             }
 
-
+    */
         }
         
     }

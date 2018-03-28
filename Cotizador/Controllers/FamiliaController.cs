@@ -27,23 +27,47 @@ namespace Cotizador.Controllers
         {
             List<Familia> familiaListTmp = (List<Familia>)this.Session["familiaList"];
 
-
             List<Familia> familiaList = new List<Familia>();
-            Familia familiaDeshabilitada = new Familia { nombre = "Todas" };
-            familiaList.Add(familiaDeshabilitada);
+            Familia familiaTodas = new Familia { nombre = "Todas" };
 
+            if (this.Session["familia"] == null)
+            { this.Session["familia"] = "Todas"; }
+
+
+            familiaList.Add(familiaTodas);
             foreach (Familia familia in familiaListTmp)
             {
                 familiaList.Add(familia);
             }
-
-            /*     List<Guid> ciudadDeshabilitadas = new List<Guid>();
-                 ciudadDeshabilitadas.Add(ciudadDeshabiltiad.idCiudad);
-                 ViewBag.List = ciudadDeshabilitadas;*/
             var model = familiaList;
 
             return PartialView("_SelectFamilia", model);
         }
+
+        public ActionResult listBusquedaPrecios()
+        {
+            List<Familia> familiaListTmp = (List<Familia>)this.Session["familiaList"];
+
+
+            List<Familia> familiaList = new List<Familia>();
+            Familia familiaTodas = new Familia { nombre = "Todas" };
+
+            if (this.Session["familia"] == null)
+            { this.Session["familia"] = "Todas"; }
+
+            familiaList.Add(familiaTodas);
+            foreach (Familia familia in familiaListTmp)
+            {
+                familiaList.Add(familia);
+            }
+            var model = familiaList;
+
+            return PartialView("_SelectFamiliaBusquedaPrecios", model);
+        }
+
+
+
+
 
         // GET: Ciudad/Create
         public ActionResult Create()

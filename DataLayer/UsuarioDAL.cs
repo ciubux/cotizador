@@ -17,11 +17,46 @@ namespace DataLayer
         {
         }
 
-        public void updateCotizacionSerializada(Usuario usuario)
+        public void updateCotizacionSerializada(Usuario usuario,String cotizacionSerializada)
         {
             var objCommand = GetSqlCommand("pu_cotizacion_serializada");
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "cotizacionSerializada", -1, usuario.cotizacionSerializada);
+            InputParameterAdd.Varchar(objCommand, "cotizacionSerializada", -1, cotizacionSerializada);
+            
+
+        //    int lengthCotizacionSerializada = cotizacionSerializada.Length;
+            /*
+            Decimal numeroPartesDecimal = Decimal.Divide(lengthCotizacionSerializada,8000);
+            int numeroPartes = (int)Math.Ceiling(numeroPartesDecimal);
+
+        
+
+            List<String> listaCotizacionSerializada = new List<string>();
+
+            int inicio = 0;
+            int fin = 8000;
+            for (int i = 0; i <= numeroPartes; i++)
+            {
+                if (i < numeroPartes)
+                {
+                    String parteCotizacionSerializada = cotizacionSerializada.Substring(inicio, fin);
+                    listaCotizacionSerializada.Add(parteCotizacionSerializada);
+                }
+                else
+                {
+                    String parteCotizacionSerializada = cotizacionSerializada.Substring(inicio, lengthCotizacionSerializada);
+                    listaCotizacionSerializada.Add(parteCotizacionSerializada);
+                }
+
+                inicio = fin + 1;
+                fin = fin + fin;
+
+
+            }
+
+
+
+            */
             ExecuteNonQuery(objCommand);
         }
 
@@ -69,6 +104,8 @@ namespace DataLayer
                         Constantes.DIAS_MAX_BUSQUEDA_PRECIOS = int.Parse(valorParametro); break;
                     case "OBSERVACION":
                         Constantes.OBSERVACION = valorParametro; break;
+                    case "MILISEGUNDOS_AUTOGUARDADO":
+                        Constantes.MILISEGUNDOS_AUTOGUARDADO = int.Parse(valorParametro); break;
                 }
 
             }

@@ -170,8 +170,14 @@ input.label-input {
     background-repeat: no-repeat;
 }
 
+
+
 .monBouton:before {
     background-image: url(/images/calculadora3.png);
+}
+
+.pdfBoton:before {
+    background-image: url(/images/pdf-icon.png);
 }
 
 .botonPrecios:before {

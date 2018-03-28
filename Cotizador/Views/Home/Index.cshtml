@@ -132,7 +132,7 @@
             <button id="btnBusquedaCotizaciones" type="button" class="btn btn-primary  bouton-image searchBouton">Buscar</button>
         </div>
 
-        <table id="tablefoottable" class="table" data-editing="false"
+        <table id="tableCotizaciones" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                data-editing-allow-add="false"
                data-editing-allow-delete="false"
@@ -153,7 +153,7 @@
                     <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
                     <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>
                     <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
-                    <th data-name="maximoPorcentajeDescuento" data-sortable="true" data-breakpoints="xs">% Desc (max)</th>
+                    <th data-name="maximoPorcentajeDescuento" data-sortable="true" data-breakpoints="xs">Desc % (max)</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
                     <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado por</th>
                     <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>
@@ -180,11 +180,15 @@
                     <td>  @cotizacionItem.seguimientoCotizacion.observacion  </td>
 
                     <td>
-                        <button type="button" class="@cotizacionItem.codigo btnVerCotizacion btn btn-primary ">Ver</button>
+                        @if(cotizacionItem.seguimientoCotizacion.usuario.idUsuario == ((Model.Usuario)this.Session["usuario"]).idUsuario
+                        || (int)cotizacionItem.seguimientoCotizacion.estado != 5)
+                        {
+                            <button type="button" class="@cotizacionItem.codigo btnVerCotizacion btn btn-primary ">Ver</button>
+                        }
                     </td>
 
                 </tr>
-        }
+                }
 
             </tbody>
         </table>
@@ -341,14 +345,15 @@
                             <th data-name="producto" data-sortable="false">Producto / Descripción</th>
                             <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
                             <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
-                            <th data-name="porcentajeDescuentoMostrar" data-sortable="false" data-breakpoints="xs sm">% Dscto</th>
+                            <th data-name="precioLista" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+                            <th data-name="porcentajeDescuentoMostrar" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
                             <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
-                            <th data-name="margen" data-sortable="false" data-breakpoints="xs sm" style="width:60px">% Mg</th>
+                            <th data-name="margen" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
                             <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                             <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
-                            <th data-name="cantidad" data-sortable="false"  data-visible="true" data-breakpoints="xs sm">Cant.</th>
-                            <th data-name="subTotal" data-sortable="false"  data-visible="true" data-breakpoints="xs sm">Sub Total</th>
-                            <th data-name="observaciones" data-sortable="false"  data-visible="true" data-breakpoints="xs sm">Observaciones</th>
+                            <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
+                            <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
+                            <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -396,7 +401,7 @@
             <div class="modal-footer">
                 <div class="pull-left">
                     <button type="button" id="btnReCotizacion" class="btn btn-primary">Recotizar</button>
-                    <button type="button" id="btnPDFCotizacion" class="btn btn-primary">PDF</button>
+                    <button type="button" id="btnPDFCotizacion" class="btn btn-primary bouton-image pdfBoton">PDF</button>
                     <!-- <input type="text" value="hola\tHola" id="myInput" name="myInput" />
      <button type="button" id="btnCopiar" class="btn btn-primary">Copiar</button>-->
                 </div>
@@ -406,10 +411,10 @@
                 <div class="pull-right">
                     <button type="button" id="btnCancelarCotizacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="button" id="btnEditarCotizacion" class="btn btn-primary">Editar</button>
-                    <button type="button" id="btnAprobarCotizacion" class="btn btn-primary" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
-                    <button type="button" id="btnDenegarCotizacion" class="btn btn-primary" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
-                    <button type="button" id="btnAceptarCotizacion" class="btn btn-primary" data-toggle='modal' data-target='#modalAprobacion'>Aceptar</button>
-                    <button type="button" id="btnRechazarCotizacion" class="btn btn-primary" data-toggle='modal' data-target='#modalAprobacion'>Rechazar</button>
+                    <button type="button" id="btnAprobarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
+                    <button type="button" id="btnDenegarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
+                    <button type="button" id="btnAceptarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aceptar</button>
+                    <button type="button" id="btnRechazarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Rechazar</button>
                 </div>
                 </div>
             </div>

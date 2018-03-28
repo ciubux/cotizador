@@ -23,11 +23,11 @@ namespace BusinessLayer
             return usuario;
         }
 
-        public void updateCotizacionSerializada(Usuario usuario)
+        public void updateCotizacionSerializada(Usuario usuario,String cotizacionSerializada)
         {
             using (var usuarioDAL = new UsuarioDAL())
             {
-                 usuarioDAL.updateCotizacionSerializada(usuario);
+                 usuarioDAL.updateCotizacionSerializada(usuario, cotizacionSerializada);
             }
         }
 

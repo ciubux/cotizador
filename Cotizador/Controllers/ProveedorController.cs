@@ -29,20 +29,42 @@ namespace Cotizador.Controllers
 
 
             List<Proveedor> proveedorList = new List<Proveedor>();
-            Proveedor proveedorDeshabilitado = new Proveedor { nombre = "Todos" };
-            proveedorList.Add(proveedorDeshabilitado);
+            Proveedor proveedorTodos = new Proveedor { nombre = "Todos" };
+
+            if (this.Session["proveedor"] == null)
+            { this.Session["proveedor"] = "Todos"; }
+
+            proveedorList.Add(proveedorTodos);
 
             foreach (Proveedor proveedor in proveedorListTmp)
             {
                 proveedorList.Add(proveedor);
             }
-
-            /*     List<Guid> ciudadDeshabilitadas = new List<Guid>();
-                 ciudadDeshabilitadas.Add(ciudadDeshabiltiad.idCiudad);
-                 ViewBag.List = ciudadDeshabilitadas;*/
             var model = proveedorList;
 
             return PartialView("_SelectProveedor", model);
+        }
+
+        public ActionResult listBusquedaPrecios()
+        {
+            List<Proveedor> proveedorListTmp = (List<Proveedor>)this.Session["proveedorList"];
+
+
+            List<Proveedor> proveedorList = new List<Proveedor>();
+            Proveedor proveedorTodos = new Proveedor { nombre = "Todos" };
+
+            if (this.Session["proveedor"] == null)
+            { this.Session["proveedor"] = "Todos"; }
+
+            proveedorList.Add(proveedorTodos);
+
+            foreach (Proveedor proveedor in proveedorListTmp)
+            {
+                proveedorList.Add(proveedor);
+            }
+            var model = proveedorList;
+
+            return PartialView("_SelectProveedorBusquedaPrecios", model);
         }
 
         // GET: Ciudad/Create

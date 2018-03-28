@@ -19,11 +19,13 @@ namespace BusinessLayer
                     cotizacion.montoSubTotal = 0;
                 }
 
+                //0 es días
                 if (cotizacion.mostrarValidezOfertaEnDias == 0)
                 {
-                    cotizacion.fechaFinVigenciaPrecios = cotizacion.fecha.AddDays(cotizacion.validezOfertaEnDias);
+                    cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(cotizacion.validezOfertaEnDias);
                 }
 
+                cotizacion.seguimientoCotizacion.observacion = String.Empty;
                 cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada;
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
@@ -52,7 +54,8 @@ namespace BusinessLayer
                     {
                         if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
                         {
-                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Denegada;
+                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitio en el detalle de la cotización";
+                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                         }
                     }
                     //Si es aprobador, no debe sobrepasar su limite de aprobación asignado
@@ -60,14 +63,40 @@ namespace BusinessLayer
                     {
                         if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
                         {
-                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Denegada;
+                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitio en el detalle de la cotización.";
+                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                             
                         }
 
                     }
 
                 }
-               
+
+
+
+                if (cotizacion.fechaEsModificada)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de la cotización.";
+                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                }
+                else
+                {
+                    //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
+                    cotizacion.fecha = DateTime.Now;
+                }
+
+                if (cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de inicio y/o fin de vigencia de precios.";
+                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                }
+
+                if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = null;
+                }
+
+
                 dal.InsertCotizacion(cotizacion);
             }
         }
@@ -107,7 +136,8 @@ namespace BusinessLayer
                     {
                         if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
                         {
-                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Denegada;
+                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitio en el detalle de la cotización";
+                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                         }
                     }
                     //Si es aprobador, no debe sobrepasar su limite de aprobación asignado
@@ -115,12 +145,36 @@ namespace BusinessLayer
                     {
                         if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
                         {
-                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Denegada;
+                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitio en el detalle de la cotización";
+                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
 
                         }
 
                     }
                 }
+
+                if (cotizacion.fechaEsModificada)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de la cotización.";
+                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                }
+                else
+                {
+                    //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
+                    cotizacion.fecha = DateTime.Now;
+                }
+
+                if (cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de inicio y/o fin de vigencia de precios.";
+                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                }
+
+                if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = null;
+                }
+
                 dal.UpdateCotizacion(cotizacion);
             }
         }
@@ -134,11 +188,11 @@ namespace BusinessLayer
              
         }
 
-        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion)
+        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor)
         {
             using (var dal = new CotizacionDAL())
             {
-                cotizacion = dal.obtenerProductosAPartirdePreciosRegistrados(cotizacion);
+                cotizacion = dal.obtenerProductosAPartirdePreciosRegistrados(cotizacion, familia, proveedor);
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {

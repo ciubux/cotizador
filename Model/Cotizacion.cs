@@ -21,6 +21,7 @@ namespace Model
         
         public Int64 codigo { get; set; }
         public DateTime fecha { get; set; }
+        public Boolean fechaEsModificada { get; set; }
 
         /* 0 indica días, 1 indica fecha */
         public int mostrarValidezOfertaEnDias { get; set; }
@@ -65,7 +66,7 @@ namespace Model
 
         public Decimal maximoPorcentajeDescuentoPermitido { get; set; }
 
-
+        
 
 
         /*Campos utilizados para búsqueda*/
@@ -73,7 +74,8 @@ namespace Model
         public DateTime fechaDesde { get; set; }
         public DateTime fechaHasta { get; set; }
 
-      
+        public DateTime fechaPrecios { get; set; }
+        
 
     }
 }
