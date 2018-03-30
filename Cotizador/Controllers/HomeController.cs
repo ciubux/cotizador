@@ -151,6 +151,14 @@ namespace Cotizador.Controllers
 
         public ActionResult CancelarCreacionCotizacion()
         {
+            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            if (cotizacion.codigo != 0)
+            {
+                //Se requiere actualizar el estado, se debe regresar al estado anterior
+
+
+            }
+
             this.Session["cotizacion"] = null;
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session["usuario"];
