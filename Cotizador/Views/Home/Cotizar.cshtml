@@ -17,13 +17,13 @@
                     <label for="numero" class="control-label col-xs-4">Número:</label>
                     <div class="col-xs-8">
                         @if (cotizacion.codigo != 0)
-                        {
-                            <input class="form-control" disabled type="number" value="@cotizacion.codigo" min="0" id="numero" name="numero">
-                        }
-                        else
-                        {
-                            <input class="form-control" disabled type="number" value="" min="0" id="numero" name="numero">
-                        }
+                    {
+                        <input class="form-control" disabled type="number" value="@cotizacion.codigo" min="0" id="numero" name="numero">
+                }
+                else
+                {
+                    <input class="form-control" disabled type="number" value="" min="0" id="numero" name="numero">
+            }
                     </div>
                 </div>
             </div>
@@ -40,6 +40,50 @@
         </div>
 
         <div class="row">
+
+            <!--CLIENTE-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="cliente" class="control-label col-xs-4">Cliente / Grupo:</label>
+
+                    <div class="col-xs-6">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            @if (ViewBag.existeCliente == 1)
+                        {
+                            <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
+                    }
+                    else
+                    {
+                        <option value=""></option>
+                }
+                        </select>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <button id="btnAgregarCliente" type="button" class="btn btn-primary bouton-image-add addBouton" data-toggle="modal" data-target="#modalAgregarCliente"></button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="contacto" class="control-label col-xs-4">Dirigido a:</label>
+
+                    <div class="col-xs-8">
+                        <input class="form-control" type="text" value="@cotizacion.contacto" id="contacto" name="contacto">
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+
+        <div class="row">
             <!--FECHA DOCUMENTO-->
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
@@ -50,20 +94,20 @@
 
                     </div>
                     <div class="col-xs-4 form-check">
-                         @if(cotizacion.fechaEsModificada)
-                         {
-                            <input type="checkbox" checked class="form-check-input" id="chkFechaEsModificada">
-                         }
-                         else
-                         {
-                            <input type="checkbox" class="form-check-input" id="chkFechaEsModificada">
-                         }
+                        @if (cotizacion.fechaEsModificada)
+                    {
+                        <input type="checkbox" checked class="form-check-input" id="chkFechaEsModificada">
+                }
+                else
+                {
+                    <input type="checkbox" class="form-check-input" id="chkFechaEsModificada">
+            }
                         <label class="form-check-label" for="chkFechaEsModificada">Ingresar Fecha</label>
-                         
+
                     </div>
                 </div>
 
-                </div>
+            </div>
 
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
@@ -75,13 +119,13 @@
                         <select class="form-control " id="mostrarValidezOfertaEnDias" name="mostrarValidezOfertaEnDias">
                             <option value="0">Días</option>
                             @if (cotizacion.mostrarValidezOfertaEnDias == 1)
-                            {
-                                <option selected value="1">Fecha</option>
-                            }
-                            else
-                            {
-                                <option value="1">Fecha</option>
-                            }
+                        {
+                            <option selected value="1">Fecha</option>
+                    }
+                    else
+                    {
+                        <option value="1">Fecha</option>
+                }
                         </select>
                     </div>
                     <div class="col-xs-4">
@@ -127,46 +171,7 @@
             </div>
         </div>
 
-        <div class="row">
 
-            <!--CLIENTE-->
-            <div class="col-sm-6 col-lg-5">
-                <div class="form-group">
-                    <label for="cliente" class="control-label col-xs-4">Cliente / Grupo:</label>
-
-                    <div class="col-xs-6">
-                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
-                            @if (ViewBag.existeCliente == 1)
-                            {
-                                <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
-                            }
-                            else
-                            {
-                                <option value=""></option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="col-xs-2">
-                        <button id="btnAgregarCliente" type="button" class="btn btn-primary bouton-image-add addBouton" data-toggle="modal" data-target="#modalAgregarCliente"></button>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-5">
-                <div class="form-group">
-                    <label for="contacto" class="control-label col-xs-4">Dirigido a:</label>
-
-                    <div class="col-xs-8">
-                        <input class="form-control" type="text" value="@cotizacion.contacto" id="contacto" name="contacto">
-                    </div>
-                </div>
-            </div>
-
-
-
-        </div>
 
         <div class="row">
 
@@ -180,26 +185,26 @@
                         <div class="radio radio-inline">
                             <label class="radio-label">
                                 @if (cotizacion.incluidoIgv)
-                                {
-                                    <input class="radio-input" checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
-                                }
+                            {
+                                <input class="radio-input" checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                        }
+                        else
+                        {
+                            <input class="radio-input" type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                    }
 
                             </label>
                         </div>
                         <div class="radio radio-inline">
                             <label class="radio-label">
                                 @if (!cotizacion.incluidoIgv)
-                                {
-                                    <input class="radio-input" checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
-                                }
+                            {
+                                <input class="radio-input" checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                        }
+                        else
+                        {
+                            <input class="radio-input" type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                    }
                             </label>
                         </div>
                     </div>
@@ -216,9 +221,9 @@
                     <label for="considerarCantidades" class="control-label col-xs-4">¿Mostrar cantitades y/o observaciones?:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("considerarCantidades",
-                                  EnumHelper.GetSelectList(typeof(Model.Cotizacion.OpcionesConsiderarCantidades), cotizacion.considerarCantidades),
-                                  new { @class = "form-control" }
-                                  )
+                                   EnumHelper.GetSelectList(typeof(Model.Cotizacion.OpcionesConsiderarCantidades), cotizacion.considerarCantidades),
+                                   new { @class = "form-control" }
+                                   )
 
                     </div>
                 </div>
@@ -251,26 +256,26 @@
                         <div class="radio radio-inline">
                             <label class="radio-label">
                                 @if (cotizacion.mostrarCodigoProveedor)
-                                {
-                                    <input class="radio-input" checked type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorSi" value="1">@ViewBag.Si;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorSi" value="1">@ViewBag.Si;
-                                }
+                            {
+                                <input class="radio-input" checked type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorSi" value="1">@ViewBag.Si;
+                        }
+                        else
+                        {
+                            <input class="radio-input" type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorSi" value="1">@ViewBag.Si;
+                    }
 
                             </label>
                         </div>
                         <div class="radio radio-inline">
                             <label class="radio-label">
                                 @if (!cotizacion.mostrarCodigoProveedor)
-                                {
-                                    <input class="radio-input" checked type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorNo" value="0">@ViewBag.No;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorNo" value="0">@ViewBag.No;
-                                }
+                            {
+                                <input class="radio-input" checked type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorNo" value="0">@ViewBag.No;
+                        }
+                        else
+                        {
+                            <input class="radio-input" type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorNo" value="0">@ViewBag.No;
+                    }
                             </label>
                         </div>
                     </div>
@@ -288,19 +293,19 @@
         <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
 
             <div class="pull-left">
-                   @if (cotizacion.usuario.esAprobador)
-                    {
-                        <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
+                @if (cotizacion.usuario.esAprobador)
+            {
+                <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
 
-                        if (cotizacion.mostrarCosto)
-                        {
-                            <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
-                        }
-                        else
-                        {
-                            <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
-                        }
-                    }
+            if (cotizacion.mostrarCosto)
+            {
+                <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+        }
+        else
+        {
+            <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+    }
+}
             </div>
 
             <div class="pull-left">
@@ -309,14 +314,14 @@
             </div>
 
             <div class="pull-right">
-                
+
                 <button id="btnOpenAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
 
             </div>
 
-              </div>
+        </div>
 
-        <table id="tablefoottable" class="table" data-editing="true"  
+        <table id="tablefoottable" class="table" data-editing="true"
                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                data-editing-allow-add="true"
                data-editing-allow-delete="true"
@@ -330,13 +335,13 @@
                     <th data-name="idProducto" data-visible="false"></th>
 
                     @if (ViewBag.debug == 1)
-    {
-                <th data-name="esPrecioAlternativo" data-visible="true">EsPrecioAlternativo</th>
-}
-else
-{
+                {
+                    <th data-name="esPrecioAlternativo" data-visible="true">EsPrecioAlternativo</th>
+            }
+            else
+            {
                 <th data-name="esPrecioAlternativo" data-visible="false">EsPrecioAlternativo</th>
-}
+        }
                     <th data-name="proveedor" data-sortable="false">Prov.</th>
                     <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                     <th data-name="producto" data-sortable="false">Producto / Descripción</th>
@@ -346,59 +351,59 @@ else
                     <th data-name="precioLista" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
 
                     @if (ViewBag.debug == 1)
-    {
+                {
                     <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-}
-else
-{
+            }
+            else
+            {
                 <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-}
+        }
 
-                <th data-name="porcentajeDescuentoMostrar" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    <th data-name="porcentajeDescuentoMostrar" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
                     <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
 
                     @if (cotizacion.mostrarCosto || ViewBag.debug == 1)
-    {
-                <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
-}
-else
-{
+                {
+                    <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
+            }
+            else
+            {
                 <th data-name="costo" data-visible="false">Costo</th>
-}
+        }
                     <th data-name="margen" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
 
                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
                     @if ((int)cotizacion.considerarCantidades == 1 || (int)cotizacion.considerarCantidades == 2)
-    {
-                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
-                <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
-                <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
-}
-else
-{
+                {
+                    <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
+                    <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
+                    <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
+            }
+            else
+            {
                 <th data-name="cantidad" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Cant.</th>
                 <th data-name="subTotal" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Sub Total</th>
                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
-}
-                <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+        }
+                    <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
 
                     @if (cotizacion.esRecotizacion)
-    {
-                <th data-name="precioNetoAnterior" data-visible="true" style="color: #B9371B">Precio neto ant</th>
-                <th data-name="precioNeto" data-visible="true" style="color: #B9371B">Var% precio neto</th>
-                <th data-name="varCosto" data-visible="true" style="color: #B9371B">Var% costo</th>
+                {
+                    <th data-name="precioNetoAnterior" data-visible="true" style="color: #B9371B">Precio neto ant</th>
+                    <th data-name="precioNeto" data-visible="true" style="color: #B9371B">Var% precio neto</th>
+                    <th data-name="varCosto" data-visible="true" style="color: #B9371B">Var% costo</th>
 
                 if (ViewBag.debug == 1)
                 {
-                                <th data-name="costoAnterior" data-visible="true">CostoAnterior</th>
-                }
-                else
-                {
-                                <th data-name="costoAnterior" data-visible="false">CostoAnterior</th>
-                }
-                }
+                    <th data-name="costoAnterior" data-visible="true">CostoAnterior</th>
+            }
+            else
+            {
+                <th data-name="costoAnterior" data-visible="false">CostoAnterior</th>
+        }
+    }
                     <th class="ordenar" data-sortable="false" data-visible="false"></th>
 
 
@@ -408,28 +413,28 @@ else
 
                 @{int contador = 0;}
                 @foreach (var cotizacionDetalle in cotizacion.cotizacionDetalleList)
-                {
-                    contador++;
-                <tr data-expanded="true" >
+            {
+                contador++;
+                <tr data-expanded="true">
                     <td>  @cotizacionDetalle.producto.idProducto  </td>
                     <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
                     <td>  @cotizacionDetalle.producto.proveedor  </td>
                     <td>  @cotizacionDetalle.producto.sku  </td>
                     <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
                     @if (cotizacion.mostrarCodigoProveedor && (int)cotizacion.considerarCantidades == 2)
-    {
-                <td>
-                    @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
-                    <br />
-                    <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
-                </td> }
-else if (cotizacion.mostrarCodigoProveedor)
-{
+                {
+                    <td>
+                        @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
+                        <br />
+                        <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
+                    </td> }
+            else if (cotizacion.mostrarCodigoProveedor)
+            {
                 <td>  @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion   </td>}
 
-else
-{
-                <td>  @cotizacionDetalle.producto.descripcion   </td>}
+        else
+        {
+            <td>  @cotizacionDetalle.producto.descripcion   </td>}
 
 
 
@@ -456,19 +461,19 @@ else
                     <!--class="@cotizacionDetalle.producto.idProducto detobservacion"-->
                     <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
                     @if (cotizacion.esRecotizacion)
-    {
-                <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
-                <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
-                <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
-                <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
-}
+                {
+                    <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
+            }
                     <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
 
 
 
 
                 </tr>
-                }
+        }
 
             </tbody>
         </table>
@@ -489,53 +494,53 @@ else
             <div class="col-sm-6 col-lg-3">
 
                 @if ((int)cotizacion.considerarCantidades == 1 || (int)cotizacion.considerarCantidades == 2)
-                {
-                    <div class="form-group">
-                        <div class="pull-right">
-                            <span class="totales">Subtotal: S/ </span>
-                            <span class="totales" id="montoSubTotal">@cotizacion.montoSubTotal</span>
-                        </div>
+            {
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales">Subtotal: S/ </span>
+                        <span class="totales" id="montoSubTotal">@cotizacion.montoSubTotal</span>
                     </div>
-                    <div class="form-group">
-                        <div class="pull-right">
-                            <span class="totales">IGV 18%: S/ </span>
-                            <span class="totales" id="montoIGV">@cotizacion.montoIGV</span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales">IGV 18%: S/ </span>
+                        <span class="totales" id="montoIGV">@cotizacion.montoIGV</span>
                     </div>
-                    <div class="form-group">
-                        <div class="pull-right">
-                            <input type="hidden" id="total" value="@cotizacion.montoTotal" />
-                            <span class="totales">TOTAL: S/ </span>
-                            <span class="totales" id="montoTotal">@cotizacion.montoTotal</span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <input type="hidden" id="total" value="@cotizacion.montoTotal" />
+                        <span class="totales">TOTAL: S/ </span>
+                        <span class="totales" id="montoTotal">@cotizacion.montoTotal</span>
                     </div>
-                }
+                </div>
+        }
             </div>
         </div>
 
         <div class="row">
             <div class="pull-left">
                 @if (cotizacion.codigo > 0)
-                {
-                    <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar y Continuar Editando Luego</button>
-                }
-                else
-                {
-                    <button id="btnContinuarCreandoLuego" type="button" class="btn btn-primary">Guardar y Continuar Editando Luego</button>
-                }
+            {
+                <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar y Continuar Editando Luego</button>
+        }
+        else
+        {
+            <button id="btnContinuarCreandoLuego" type="button" class="btn btn-primary">Guardar y Continuar Editando Luego</button>
+    }
             </div>
 
 
             <div class="pull-right">
                 <button type="button" id="btnCancelCotizacion" class="btn btn-danger">Cancelar</button>
                 @if (cotizacion.codigo > 0)
-                {
-                    <button id="btnFinalizarEdicionCotizacion" type="button" class="btn btn-success">Finalizar Edición</button>
-                }
-                else
-                {
-                    <button id="btnFinalizarCreacionCotizacion" type="button" class="btn btn-success">Finalizar Creación</button>
-                }
+            {
+                <button id="btnFinalizarEdicionCotizacion" type="button" class="btn btn-success">Finalizar Edición</button>
+        }
+        else
+        {
+            <button id="btnFinalizarCreacionCotizacion" type="button" class="btn btn-success">Finalizar Creación</button>
+    }
             </div>
         </div>
 

@@ -21,6 +21,8 @@ namespace Cotizador.Controllers
         {
             try
             {
+                this.Session["pagina"] = Constantes.MANTENIMIENTO_PEDIDO;
+
                 //Si no hay usuario, se dirige el logueo
                 if (this.Session["usuario"] == null)
                 {
@@ -44,35 +46,26 @@ namespace Cotizador.Controllers
 
 
                 int existeCliente = 0;
-                if (pedido.cliente.idCliente != Guid.Empty || pedido.grupo.idGrupo != Guid.Empty)
+                if (pedido.cliente.idCliente != Guid.Empty)
                 {
                     existeCliente = 1;
                 }
+                    
                 ViewBag.existeCliente = existeCliente;
+                ViewBag.idClienteGrupo = pedido.cliente.idCliente;
+                ViewBag.clienteGrupo = pedido.cliente.ToString();
+                
+                ViewBag.fechaSolicitud = pedido.fechaSolicitud.ToString(Constantes.formatoFecha);
+                ViewBag.horaSolicitud = pedido.fechaSolicitud.ToString(Constantes.formatoHora);
 
+                ViewBag.fechaEntrega = pedido.fechaEntrega.ToString(Constantes.formatoFecha);
+                ViewBag.fechaMaximaEntrega = pedido.fechaMaximaEntrega.ToString(Constantes.formatoFecha);
 
-                if (pedido.cliente.idCliente != Guid.Empty)
-                {
-                    ViewBag.idClienteGrupo = pedido.cliente.idCliente;
-                    ViewBag.clienteGrupo = pedido.cliente.ToString();
-                }
-                else
-                {
-                    ViewBag.idClienteGrupo = pedido.grupo.idGrupo;
-                    ViewBag.clienteGrupo = pedido.grupo.ToString();
-                }
-
-                ViewBag.fechaPrecios = pedido.fechaPrecios.ToString(Constantes.formatoFecha);
-                ViewBag.fecha = pedido.fecha.ToString(Constantes.formatoFecha);
-                ViewBag.fechaLimiteValidezOferta = pedido.fechaLimiteValidezOferta.ToString(Constantes.formatoFecha);
-                ViewBag.fechaInicioVigenciaPrecios = pedido.fechaInicioVigenciaPrecios == null ? null : pedido.fechaInicioVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
-                ViewBag.fechaFinVigenciaPrecios = pedido.fechaFinVigenciaPrecios == null ? null : pedido.fechaFinVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
-
-                //Se agrega el viewbag numero para poder mostrar el campo vacío cuando no se está creando una cotización
-                ViewBag.numero = pedido.codigo;
 
                 ViewBag.pedido = pedido;
 
+
+                ViewBag.fechaPrecios = pedido.fechaPrecios.ToString(Constantes.formatoFecha);
             }
             catch (Exception ex)
             {
@@ -89,25 +82,31 @@ namespace Cotizador.Controllers
         {
             Pedido pedido = new Pedido();
             pedido.idPedido = Guid.Empty;
-            pedido.mostrarCodigoProveedor = true;
-            pedido.fecha = DateTime.Now;
-            pedido.fechaInicioVigenciaPrecios = null;
-            pedido.fechaFinVigenciaPrecios = null;
-            pedido.fechaLimiteValidezOferta = pedido.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
-            pedido.fechaPrecios = pedido.fecha.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
+            pedido.numeroPedido = 0;
+            pedido.numeroGrupoPedido = null;
+            pedido.cotizacion = new Cotizacion();
             pedido.ciudad = new Ciudad();
             pedido.cliente = new Cliente();
-            pedido.grupo = new Grupo();
-            pedido.PedidoDetalleList = new List<PedidoDetalle>();
-            pedido.igv = Constantes.IGV;
-            pedido.flete = 0;
-            pedido.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
-            pedido.considerarCantidades = Pedido.OpcionesConsiderarCantidades.Observaciones;
-            Usuario usuario = (Usuario)this.Session["usuario"];
-            pedido.usuario = usuario;
-            pedido.observaciones = Constantes.OBSERVACION;
+            pedido.numeroReferenciaCliente = null;
+            pedido.direccionEntrega = null;
+            pedido.contactoEntrega = null;
+            pedido.telefonoContactoEntrega = null;
+            pedido.fechaSolicitud = DateTime.Now;
+            pedido.fechaEntrega = DateTime.Now;
+            pedido.fechaMaximaEntrega = DateTime.Now;
+            pedido.contactoPedido = String.Empty;
+            pedido.telefonoContactoPedido = String.Empty;
             pedido.incluidoIgv = false;
+            pedido.tasaIGV = Constantes.IGV;
+            pedido.flete = 0;
+            pedido.mostrarCodigoProveedor = true;
+            pedido.observaciones = String.Empty;
+
+            pedido.usuario = (Usuario)this.Session["usuario"];
             pedido.seguimientoPedido = new SeguimientoPedido();
+            pedido.PedidoDetalleList = new List<PedidoDetalle>();
+            pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
+
             this.Session["pedido"] = pedido;
         }
 

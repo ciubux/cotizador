@@ -1,24 +1,22 @@
 
-
-
-
 jQuery(function ($) {
 
 
-    $("#tableCotizaciones").footable({
+    //Tabla de resultado de búsqueda de Pedidos
+    $("#tablePedidos").footable({
         "paging": {
             "enabled": true
         }
     });
 
-
-    //CONSTANTES:
+    //CONSTANTES POR DEFECTO
     var cantidadDecimales = 2;
     var IGV = 0.18;
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
-    var ESTADOS_TODOS = -1;
 
+    //Estados para búsqueda de Pedidos
+    var ESTADOS_TODOS = -1;
     var ESTADO_PENDIENTE_APROBACION = 0;
     var ESTADO_APROBADA = 1;
     var ESTADO_DENEGADA = 2;
@@ -26,6 +24,7 @@ jQuery(function ($) {
     var ESTADO_RECHAZADA = 4;
     var ESTADO_EN_EDICION = 5;
 
+    //Etiquetas de estadps para búsqueda de Pedidos
     var ESTADO_PENDIENTE_APROBACION_STR = "Pendiente de Aprobación";
     var ESTADO_APROBADA_STR = "Aprobada";
     var ESTADO_DENEGADA_STR = "Denegada";
@@ -33,31 +32,31 @@ jQuery(function ($) {
     var ESTADO_RECHAZADA_STR = "Rechazada";
     var ESTADO_EN_EDICION_STR = "En Edición";
 
-
+    //Eliminar luego 
     var CANT_SOLO_OBSERVACIONES = 0;
     var CANT_SOLO_CANTIDADES = 1;
     var CANT_CANTIDADES_Y_OBSERVACIONES = 2;
 
 
-    /**
-     * 0 Busqueda
-       1 Cotización
+    /*
+     * 2 BusquedaPedidos
+       3 CrearPedido
      */
 
-    var pagina = 0;
-    var mensajeCancelarEdicion = '¿Está seguro de cancelar; no se guardarán los cambios?';
+    var pagina = 3;
+    var mensajeCancelarEdicion = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
 
     $(document).ready(function () {
 
         cambiarMostrarValidezOfertaEnDias();
 
         var title = document.title;
-        if (title == "Cotizador - Búsqueda Cotizaciones") {
+        if (title == "Cotizador - Búsqueda Pedidos") {
             pagina = 0;
-            $("#linkMisCotizaciones").attr("class", "active");
-            $("#linkCotizador").removeAttr("class");
+            $("#linkListaPedidos").attr("class", "active");
+            $("#linkMantenimientoPedido").removeAttr("class");
         }
-        else if (title == "Cotizador - Cotizar") {
+        else if (title == "Cotizador - Pedir") {
 
             $.ajax({
                 url: "/Home/getConstantes",
@@ -169,8 +168,24 @@ jQuery(function ($) {
     $.datepicker.setDefaults($.datepicker.regional['es']);
 
 
-    var fecha = $("#fechatmp").val();
-    $("#fecha").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
+    var fechaSolicitud = $("#fechaSolicitudTmp").val();
+    $("#fechaSolicitud").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitud);
+
+    var fechaEntrega = $("#fechaEntregaTmp").val();
+    $("#fechaEntrega").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntrega);
+
+    var fechaMaximaEntrega = $("#fechaMaximaEntregaTmp").val();
+    $("#fechaMaximaEntrega").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaMaximaEntrega);
+
+
+
+
+
+
+
+
+
+
 
     var fechaDesde = $("#fechaDesdetmp").val();
     $("#fechaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaDesde);
@@ -184,11 +199,7 @@ jQuery(function ($) {
     var fechaLimiteValidezOferta = $("#fechaLimiteValidezOfertaTmp").val();
     $("#fechaLimiteValidezOferta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaLimiteValidezOferta);
 
-    var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPreciosTmp").val();
-    $("#fechaInicioVigenciaPrecios").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaInicioVigenciaPrecios);
 
-    var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPreciosTmp").val();
-    $("#fechaFinVigenciaPrecios").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaFinVigenciaPrecios);
 
     $("#fecha").change(function () {
         var fecha = $("#fecha").val();

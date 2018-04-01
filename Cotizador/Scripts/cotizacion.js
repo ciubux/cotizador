@@ -45,7 +45,7 @@ jQuery(function ($) {
      */
 
     var pagina = 0;
-    var mensajeCancelarEdicion = '¿Está seguro de cancelar; no se guardarán los cambios?';
+    var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
 
     $(document).ready(function () {
 
@@ -54,8 +54,8 @@ jQuery(function ($) {
         var title = document.title;
         if (title == "Cotizador - Búsqueda Cotizaciones") {
             pagina = 0;
-            $("#linkMisCotizaciones").attr("class", "active");
-            $("#linkCotizador").removeAttr("class");
+            $("#linkListaCotizaciones").attr("class", "active");
+            $("#linkMantenimientoCotizacion").removeAttr("class");
         }
         else if (title == "Cotizador - Cotizar") {
 
@@ -86,8 +86,8 @@ jQuery(function ($) {
             setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
 
             pagina = 1;
-            $("#linkCotizador").attr("class", "active");
-            $("#linkMisCotizaciones").removeAttr("class");
+            $("#linkMantenimientoCotizacion").attr("class", "active");
+            $("#linkListaCotizaciones").removeAttr("class");
 
 
             //Si existen productos agregados no se puede obtener desde precios registrados
@@ -122,8 +122,8 @@ jQuery(function ($) {
                     SEGUNDOS_AUTOGUARDADO = constantes.SEGUNDOS_AUTOGUARDADO;
                 }
             });
-            $("#linkCotizador").removeAttr("class");
-            $("#linkMisCotizaciones").removeAttr("class");
+            $("#linkListaCotizaciones").removeAttr("class");
+            $("#linkMantenimientoCotizacion").removeAttr("class");
         }
 
         cargarChosenCliente(pagina);
@@ -2039,7 +2039,7 @@ jQuery(function ($) {
             editing: {
                 enabled: true,
                 addRow: function () {
-                    if (confirm(mensajeCancelarEdicion)) {
+                    if (confirm(MENSAJE_CANCELAR_EDICION)) {
                         location.reload();
                     }
                 },
@@ -2489,7 +2489,7 @@ jQuery(function ($) {
 
 
     $("#btnCancelCotizacion").click(function () {
-        if (confirm(mensajeCancelarEdicion)) {
+        if (confirm(MENSAJE_CANCELAR_EDICION)) {
             window.location = '/Home/CancelarCreacionCotizacion';
         }
     })

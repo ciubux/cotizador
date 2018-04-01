@@ -17,8 +17,9 @@ namespace Model
             [Display(Name = "Cantidades y Observaciones")]
             Ambos =2};
 
-        public Guid idCotizacion { get; set; }       
-        
+        public Guid idCotizacion { get; set; }
+
+        [Display(Name = "Número Cotización:")]
         public Int64 codigo { get; set; }
         public DateTime fecha { get; set; }
         public Boolean fechaEsModificada { get; set; }
