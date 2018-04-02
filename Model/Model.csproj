@@ -39,6 +39,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auditoria.cs" />
+    <Compile Include="HelperDocumento.cs" />
+    <Compile Include="IDocumentoDetalle.cs" />
+    <Compile Include="IDocumento.cs" />
     <Compile Include="PedidoDetalle.cs" />
     <Compile Include="Pedido.cs" />
     <Compile Include="EnumHelper.cs" />
@@ -50,7 +53,7 @@
     <Compile Include="Grupo.cs" />
     <Compile Include="Constantes.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="ProductoJson.cs" />
+    <Compile Include="DocumentoDetalleJson.cs" />
     <Compile Include="ProductoStaging.cs" />
     <Compile Include="ClienteStaging.cs" />
     <Compile Include="PrecioWS.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class CotizacionDetalleJson
+    public class DocumentoDetalleJson
     {
         public String idProducto { get; set; }
         public int cantidad { get; set; }

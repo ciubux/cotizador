@@ -26,8 +26,8 @@
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li id="linkListaCotizaciones">@Html.ActionLink("Mis Cotizaciones", "Index", "Home")</li>
-                    <li id="linkMatenimientoCotizacion">@Html.ActionLink("Cotizar", "Cotizar", "Home")</li>
+                    <li id="linkListaCotizaciones">@Html.ActionLink("Mis Cotizaciones", "Index", "Cotizacion")</li>
+                    <li id="linkMantenimientoCotizacion">@Html.ActionLink("Cotizar", "Cotizar", "Cotizacion")</li>
 
                     <li id="linkListaPedidos">@Html.ActionLink("Mis Pedidos", "Index", "Pedido")</li>
                     <li id="linkMantenimientoPedido">@Html.ActionLink("Pedir", "Pedir", "Pedido")</li>
@@ -64,11 +64,12 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/bootstrap")
+
     @Scripts.Render("~/bundles/jquery")
 
-    @Scripts.Render("~/bundles/jquery-chosen")
-    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/bootstrap")
+
+
 
     @if (this.Session["pagina"] != null)
     {
@@ -84,6 +85,8 @@
     }
 
 
+    @Scripts.Render("~/bundles/jquery-chosen")
+    @RenderSection("scripts", required: false)
 
 </body>
 </html>

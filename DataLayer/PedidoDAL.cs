@@ -8,23 +8,22 @@ using System.Linq;
 
 namespace DataLayer
 {
-    public class CotizacionDAL : DaoBase
+    public class PedidoDAL : DaoBase
     {
-        public CotizacionDAL(IDalSettings settings) : base(settings)
+        public PedidoDAL(IDalSettings settings) : base(settings)
         {
         }
 
-        public CotizacionDAL() : this(new CotizadorSettings())
+        public PedidoDAL() : this(new CotizadorSettings())
         {
         }
 
-
-        
-
-        public void InsertCotizacion(Cotizacion cotizacion)
+        public void InsertPedido(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("pi_cotizacion");
+            var objCommand = GetSqlCommand("pi_pedido");
 
+            InputParameterAdd.Varchar(objCommand, "numero", "0000000001");
+            /*
            // InputParameterAdd.Varchar(objCommand, "codigo", "0000000001");
             InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
             InputParameterAdd.DateTime(objCommand, "fechaLimiteValidezOferta", cotizacion.fechaLimiteValidezOferta);
@@ -76,7 +75,7 @@ namespace DataLayer
                 this.InsertCotizacionDetalle(cotizacionDetalle);
             }
 
-
+            */
         }
 
         public void UpdateCotizacion(Cotizacion cotizacion)

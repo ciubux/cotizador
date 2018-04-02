@@ -9,12 +9,32 @@ namespace BusinessLayer
 {
     public class ProductoBL
     {
-        public List<Producto> getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Guid idCliente, Guid idGrupo)
+        public String getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia)
         {
+
+
+            List<Producto> productoList = new List<Producto>();
             using (var dal = new ProductoDAL())
             {
-                return dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados, proveedor, familia, idCliente, idGrupo);
+                productoList = dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados, proveedor, familia);
             }
+
+
+            String resultado = "{\"q\":\"" + textoBusqueda + "\",\"results\":[";
+            Boolean existe = false;
+            foreach (Producto prod in productoList)
+            {
+                resultado += "{\"id\":\"" + prod.idProducto + "\",\"text\":\"" + prod.ToString() + "\"},";
+                existe = true;
+            }
+
+            if (existe)
+                resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+            else
+                resultado = resultado.Substring(0, resultado.Length) + "]}";
+
+
+            return resultado;
         }
 
         public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente)

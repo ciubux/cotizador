@@ -47,7 +47,7 @@ namespace Cotizador.Controllers
 
             int numero = 0;
 
-            for (int j = 0; j < 1; j++)
+            for (int j = 0; j < 8; j++)
             {
 
                 ISheet sheet = hssfwb.GetSheetAt(j);
@@ -141,7 +141,7 @@ namespace Cotizador.Controllers
 
             //       facturaBL.mergeClienteStaging();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Cotizacion");
 
         }
     }

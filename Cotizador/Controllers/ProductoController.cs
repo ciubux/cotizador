@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using Model;
+using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System;
@@ -13,6 +14,18 @@ namespace Cotizador.Controllers
 {
     public class ProductoController : Controller
     {
+
+        public String Search()
+        {
+            String texto_busqueda = this.Request.Params["data[q]"];
+            ProductoBL bl = new ProductoBL();
+            String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas");
+            return resultado;
+        }
+
+
+      
+
         // GET: Producto
         [HttpGet]
         public ActionResult Index()

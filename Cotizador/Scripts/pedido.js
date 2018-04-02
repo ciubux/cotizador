@@ -43,23 +43,23 @@ jQuery(function ($) {
        3 CrearPedido
      */
 
-    var pagina = 3;
+    var pagina = 2;
     var mensajeCancelarEdicion = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
 
     $(document).ready(function () {
 
-        cambiarMostrarValidezOfertaEnDias();
+ 
 
         var title = document.title;
         if (title == "Cotizador - Búsqueda Pedidos") {
-            pagina = 0;
+            pagina = 2;
             $("#linkListaPedidos").attr("class", "active");
             $("#linkMantenimientoPedido").removeAttr("class");
         }
         else if (title == "Cotizador - Pedir") {
 
             $.ajax({
-                url: "/Home/getConstantes",
+                url: "/General/GetConstantes",
                 type: 'POST',
                 dataType: 'JSON',
                 success: function (constantes) {
@@ -72,7 +72,7 @@ jQuery(function ($) {
             //Metodo recursivo para autoguardar una cotizacion
             function autoGuardarCotizacion() {
                 $.ajax({
-                    url: "/Home/autoGuardarCotizacion",
+                    url: "/Pedido/autoGuardarPedido",
                     type: 'POST',
                     error: function () {
                         setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
@@ -84,10 +84,9 @@ jQuery(function ($) {
             }
             setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
 
-            pagina = 1;
-            $("#linkCotizador").attr("class", "active");
-            $("#linkMisCotizaciones").removeAttr("class");
-
+            pagina = 3;
+            $("#linkListaPedidos").removeAttr("class"); 
+            $("#linkMantenimientoPedido").attr("class", "active");
 
             //Si existen productos agregados no se puede obtener desde precios registrados
 
@@ -105,14 +104,10 @@ jQuery(function ($) {
             }
 
 
-
-
-
-
         }
         else {
             $.ajax({
-                url: "/Home/getConstantes",
+                url: "/General/GetConstantes",
                 type: 'POST',
                 dataType: 'JSON',
                 success: function (constantes) {
@@ -121,28 +116,149 @@ jQuery(function ($) {
                     SEGUNDOS_AUTOGUARDADO = constantes.SEGUNDOS_AUTOGUARDADO;
                 }
             });
-            $("#linkCotizador").removeAttr("class");
-            $("#linkMisCotizaciones").removeAttr("class");
+            $("#linkListaPedidos").removeAttr("class");
+            $("#linkMantenimientoPedido").removeAttr("class");
         }
 
         cargarChosenCliente(pagina);
 
+        
 
-
-        if ($('#chkFechaEsModificada').prop('checked')) {
-            $("#fecha").removeAttr("disabled");           
-        }
-        else {
-            $("#fecha").attr('disabled', 'disabled');
-        }
-
-        /*  $('#tablefoottable').footable({
-              "columns": $.get('columns.json'),
-              "rows": $.get('rows.json')
-          });*/
-        //Se construye la tabla de Detalle de Cotizacion
-        //FooTable.init('#tableDetalleCotizacion');
     });
+
+
+
+
+    /**
+     * ################################ INICIO CONTROLES DE CLIENTE
+     */
+
+    function cargarChosenCliente(pagina) {
+
+        $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
+            if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
+                alert("Debe seleccionar una ciudad previamente.");
+                $("#idCliente").trigger('chosen:close');
+                return false;
+            }
+        });
+
+        $("#idCliente").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Pedido/SearchClientes"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
+
+    }
+
+    $("#idCliente").change(function () {
+      //  $("#contacto").val("");
+        var idCliente = $(this).val();
+
+        $.ajax({
+            url: "/Pedido/GetCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCliente: idCliente
+            },
+            success: function (cliente) {
+                $("#pedido_numeroReferenciaCliente").val("");
+                $("#pedido_direccionEntrega").val("");
+                $("#pedido_contactoEntrega").val("");
+                $("#pedido_telefonoContactoEntrega").val("");
+                $("#pedido_contactoPedido").val("");
+                $("#pedido_telefonoContactoPedido").val("");
+            }
+        });
+      
+    });
+
+    $('#modalAgregarCliente').on('shown.bs.modal', function () {
+
+        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
+            alert("Debe seleccionar una ciudad previamente.");
+            $("#idCiudad").focus();
+            $('#btnCancelCliente').click();
+            return false;
+        }
+    });
+
+
+
+
+
+    $("#btnSaveCliente").click(function () {
+
+        if ($("#ncRazonSocial").val().trim() == "" && $("#ncNombreComercial").val().trim() == "") {
+            alert("Debe ingresar la Razón Social o el Nombre Comercial.");
+            $('#ncRazonSocial').focus();
+            return false;
+        }
+
+        if ($("#ncRUC").val().trim() == "") {
+            alert("Debe ingresar el RUC.");
+            $('#ncRUC').focus();
+            return false;
+        }
+
+        var razonSocial = $("#ncRazonSocial").val();
+        var nombreComercial = $("#ncNombreComercial").val();
+        var ruc = $("#ncRUC").val();
+        var contacto = $("#ncContacto").val();
+
+        $.ajax({
+            url: "/Cliente/Create",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                razonSocial: razonSocial,
+                nombreComercial: nombreComercial,
+                ruc: ruc,
+                contacto: contacto,
+                controller: "pedido"
+            },
+            error: function (detalle) { alert("Se generó un error al intentar crear el cliente."); },
+            success: function (resultado) {
+
+                alert("Se creó cliente con Código Temporal: " + resultado.codigoAlterno + ".");
+                location.reload();
+            }
+        });
+
+
+        $('#btnCancelCliente').click();
+
+    });
+
+
+    /**
+     * FIN CONTROLES DE CLIENTE
+     */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /**
@@ -179,14 +295,6 @@ jQuery(function ($) {
 
 
 
-
-
-
-
-
-
-
-
     var fechaDesde = $("#fechaDesdetmp").val();
     $("#fechaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaDesde);
 
@@ -196,134 +304,7 @@ jQuery(function ($) {
     var fechaPrecios = $("#fechaPreciostmp").val();
     $("#fechaPrecios").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaPrecios);    
 
-    var fechaLimiteValidezOferta = $("#fechaLimiteValidezOfertaTmp").val();
-    $("#fechaLimiteValidezOferta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaLimiteValidezOferta);
-
-
-
-    $("#fecha").change(function () {
-        var fecha = $("#fecha").val();
-        $.ajax({
-            url: "/Home/updateFecha",
-            type: 'POST',
-            data: {
-                fecha: fecha
-            },
-            success: function () { }
-        });
-    });
-
-    $('#chkFechaEsModificada').change(function () {
-        var fechaEsModificada = 1;
-        if ($('#chkFechaEsModificada').prop('checked')) {
-            $("#fecha").removeAttr("disabled");
-        }
-        else {
-            $("#fecha").attr('disabled', 'disabled');
-            $("#fecha").datepicker().datepicker("setDate", new Date());
-            fechaEsModificada = 0;
-        }
-        $.ajax({
-            url: "/Home/updateFechaEsModificada",
-            type: 'POST',
-            data: {
-                fechaEsModificada: fechaEsModificada
-            },
-            success: function () { }
-        });
-        
-
-
-
-    });
-
-
-
-    $("#mostrarValidezOfertaEnDias").change(function () {
-        var mostrarValidezOfertaEnDias = $("#mostrarValidezOfertaEnDias").val();
-        $.ajax({
-            url: "/Home/updateMostrarValidezOfertaEnDias",
-            type: 'POST',
-            data: {
-                mostrarValidezOfertaEnDias: mostrarValidezOfertaEnDias
-            },
-            success: function () {
-                cambiarMostrarValidezOfertaEnDias();
-            }
-        });
-
-    });
-
-    $("#validezOfertaEnDias").change(function () {
-        var validezOfertaEnDias = $("#validezOfertaEnDias").val();
-        $.ajax({
-            url: "/Home/updateValidezOfertaEnDias",
-            type: 'POST',
-            data: {
-                validezOfertaEnDias: validezOfertaEnDias
-            },
-            success: function () {
-
-            }
-        });
-
-    });
-
-    $("#fechaLimiteValidezOferta").change(function () {
-        var fechaLimiteValidezOferta = $("#fechaLimiteValidezOferta").val();
-        $.ajax({
-            url: "/Home/updateFechaLimiteValidezOferta",
-            type: 'POST',
-            data: {
-                fechaLimiteValidezOferta: fechaLimiteValidezOferta
-            },
-            success: function () {
-            }
-        });
-    });
-
-
-
-    function cambiarMostrarValidezOfertaEnDias() {
-        var mostrarValidezOfertaEnDias = $('#mostrarValidezOfertaEnDias').val();
-
-        if (mostrarValidezOfertaEnDias == "0") {
-            $('#diasVigenciadiv').show();
-            $('#fechaVigenciadiv').hide();
-        }
-        else {
-            $('#diasVigenciadiv').hide();
-            $('#fechaVigenciadiv').show();
-        }
-    }
-
-    $("#fechaInicioVigenciaPrecios").change(function () {
-        var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPrecios").val();
-        $.ajax({
-            url: "/Home/updateFechaInicioVigenciaPrecios",
-            type: 'POST',
-            data: {
-                fechaInicioVigenciaPrecios: fechaInicioVigenciaPrecios
-            },
-            success: function () {
-            }
-        });
-    });
-
-    $("#fechaFinVigenciaPrecios").change(function () {
-        var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
-        $.ajax({
-            url: "/Home/updateFechaFinVigenciaPrecios",
-            type: 'POST',
-            data: {
-                fechaFinVigenciaPrecios: fechaFinVigenciaPrecios
-            },
-            success: function () {
-            }
-        });
-    });
-
-
+ 
 
 
 
@@ -332,101 +313,132 @@ jQuery(function ($) {
      */
 
 
-    /**
-     * ################################ INICIO CONTROLES DE CLIENTE
-     */
+
+    /* ################################## INICIO CHANGE CONTROLES */
 
 
+    $("#pedido_numeroReferenciaCliente").change(function () {
+        $.ajax({
+            url: "/Pedido/ChangeNumeroReferenciaCliente",
+            type: 'POST',
+            data: {
+                numeroReferenciaCliente: $("#pedido_numeroReferenciaCliente").val()
+            },
+            success: function () { }
+        });
+    });
 
 
+    $("#pedido_direccionEntrega").change(function () {
+        $.ajax({
+            url: "/Pedido/ChangeDireccionEntrega",
+            type: 'POST',
+            data: {
+                direccionEntrega: $("#pedido_direccionEntrega").val()
+            },
+            success: function () { }
+        });
+    });
 
-    function cargarChosenCliente(pantalla) {
+    $("#pedido_contactoEntrega").change(function () {
+        $.ajax({
+            url: "/Pedido/ChangeContactoEntrega",
+            type: 'POST',
+            data: {
+                contactoEntrega: $("#pedido_contactoEntrega").val()
+            },
+            success: function () { }
+        });
+    });
+    
+    $("#pedido_telefonoContactoEntrega").change(function () {
+        $.ajax({
+            url: "/Pedido/ChangeTelefonoContactoEntrega",
+            type: 'POST',
+            data: {
+                telefonoContactoEntrega: $("#pedido_telefonoContactoEntrega").val()
+            },
+            success: function () { }
+        });
+    });
 
-        $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
-                alert("Debe seleccionar una ciudad previamente.");
-                $("#idCliente").trigger('chosen:close');
-                return false;
+
+    $(".fechaSolicitud").change(function () {
+        var fechaSolicitud = $("#fechaSolicitud").val();
+        var horaSolicitud = $("#horaSolicitud").val();
+        $.ajax({
+            url: "/Pedido/ChangeFechaSolicitud",
+            type: 'POST',
+            data: {
+                fechaSolicitud: fechaSolicitud,
+                horaSolicitud: horaSolicitud
+            },
+            success: function () {
             }
         });
-
-        $("#idCliente").ajaxChosen({
-            dataType: "json",
-            type: "GET",
-            minTermLength: 5,
-            afterTypeDelay: 300,
-            cache: false,
-            url: pantalla == 1 ? "/Home/GetClientes" : "/Home/GetClientesBusqueda"
-        }, {
-                loadingImg: "Content/chosen/images/loading.gif"
-            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
-
-    }
-
-    $("#idCliente").change(function () {
-        $("#contacto").val("");
-        var idClienteGrupo = $(this).val();
-
-        var tipoCliente = idClienteGrupo.substr(0, 1);
-
-        idClienteGrupo = idClienteGrupo.substr(1);
-
-        if (tipoCliente == "c") {
-            $.ajax({
-                url: "/Home/GetCliente",
-                type: 'POST',
-                dataType: 'JSON',
-                data: {
-                    idCliente: idClienteGrupo,
-                    pagina: pagina
-                },
-                success: function (cliente) {
-                    $("#contacto").val(cliente.contacto);
-                }
-            });
-        }
-        else {
-            $.ajax({
-                url: "/Home/GetGrupo",
-                type: 'POST',
-                dataType: 'JSON',
-                data: {
-                    idGrupo: idClienteGrupo,
-                    pagina: pagina
-                },
-                success: function (grupo) {
-                    $("#contacto").val(grupo.contacto);
-                }
-            });
-
-        }
     });
 
-    $('#modalAgregarCliente').on('shown.bs.modal', function () {
-
-        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
-            alert("Debe seleccionar una ciudad previamente.");
-            $("#idCiudad").focus();
-            $('#btnCancelCliente').click();
-            return false;
-        }
 
 
+    $("#fechaMaximaEntrega").change(function () {
+        var fechaMaximaEntrega = $("#fechaMaximaEntrega").val();
+        $.ajax({
+            url: "/Pedido/ChangeFechaMaximaEntrega",
+            type: 'POST',
+            data: {
+                fechaMaximaEntrega: fechaMaximaEntrega
+            },
+            success: function () {
+            }
+        });
     });
 
-    /**
-     * FIN CONTROLES DE CLIENTE
-     */
+    $("#fechaEntrega").change(function () {
+        var fechaEntrega = $("#fechaEntrega").val();
+        $.ajax({
+            url: "/Pedido/ChangeFechaEntrega",
+            type: 'POST',
+            data: {
+                fechaEntrega: fechaEntrega
+            },
+            success: function () {
+            }
+        });
+    });
+  
 
+    $("#pedido_contactoPedido").change(function () {
+        $.ajax({
+            url: "/Pedido/ChangeContactoPedido",
+            type: 'POST',
+            data: {
+                contactoPedido: $("#pedido_contactoPedido").val()
+            },
+            success: function () { }
+        });
+    });
 
-
-
-
-
-
-
-
-
+    $("#pedido_telefonoContactoPedido").change(function () {
+        $.ajax({
+            url: "/Pedido/ChangeTelefonoContactoPedido",
+            type: 'POST',
+            data: {
+                telefonoContactoPedido: $("#pedido_telefonoContactoPedido").val()
+            },
+            success: function () { }
+        });
+    });
+    
+    $("#pedido_observaciones").change(function () {
+        $.ajax({
+            url: "/Pedido/ChangeObservaciones",
+            type: 'POST',
+            data: {
+                observaciones: $("#pedido_observaciones").val()
+            },
+            success: function () { }
+        });
+    });
 
 
 
@@ -484,7 +496,7 @@ jQuery(function ($) {
             minTermLength: 5,
             afterTypeDelay: 300,
             cache: false,
-            url: "/Home/GetProductos"
+            url: "/Producto/Search"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
@@ -495,7 +507,6 @@ jQuery(function ($) {
         $('#producto')
             .find('option:first-child').prop('selected', true)
             .end().trigger('chosen:updated');
-
 
         calcularSubtotalProducto();
 
@@ -516,7 +527,7 @@ jQuery(function ($) {
         $("#resultadoAgregarProducto").html("");
         desactivarBtnAddProduct();
         $.ajax({
-            url: "/Home/GetProducto",
+            url: "/Pedido/GetProducto",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -598,6 +609,10 @@ jQuery(function ($) {
             }
         });
     });
+
+
+
+
 
 
     ///////////////////CAMPO PRESENTACIÓN
@@ -774,12 +789,13 @@ jQuery(function ($) {
             return false;
         }
         $.ajax({
-            url: "/Home/GetPreciosRegistrados",
+            url: "/Precio/GetPreciosRegistrados",
             type: 'POST',
             dataType: 'JSON',
             data: {
                 idProducto: idProducto,
-                idCliente: idCliente
+                idCliente: idCliente,
+                controller: "pedido"
             },
             success: function (producto) {
 
@@ -832,7 +848,7 @@ jQuery(function ($) {
     $("#considerarDescontinuados").change(function () {
         var considerarDescontinuados = $('#considerarDescontinuados').prop('checked');
         $.ajax({
-            url: "/Home/updateConsiderarDescontinuados",
+            url: "/Pedido/updateConsiderarDescontinuados",
             type: 'POST',
             data: {
                 considerarDescontinuados: considerarDescontinuados
@@ -861,7 +877,7 @@ jQuery(function ($) {
 
 
         $.ajax({
-            url: "/Home/AddProducto",
+            url: "/Pedido/AddProducto",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1044,58 +1060,6 @@ jQuery(function ($) {
 
 
 
-    /**
-    * INTERFACE PARA CREAR CLIENTE
-    */
-
-    $("#btnSaveCliente").click(function () {
-
-        //ncRazonSocial
-
-        if ($("#ncRazonSocial").val().trim() == "" && $("#ncNombreComercial").val().trim() == "") {
-            alert("Debe ingresar la Razón Social o el Nombre Comercial.");
-            $('#ncRazonSocial').focus();
-            return false;
-        }
-
-        if ($("#ncRUC").val().trim() == "") {
-            alert("Debe ingresar el RUC.");
-            $('#ncRUC').focus();
-            return false;
-        }
-
-        var razonSocial = $("#ncRazonSocial").val();
-        var nombreComercial = $("#ncNombreComercial").val();
-        var ruc = $("#ncRUC").val();
-        var contacto = $("#ncContacto").val();
-
-        $.ajax({
-            url: "/Home/AddCliente",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                razonSocial: razonSocial,
-                nombreComercial: nombreComercial,
-                ruc: ruc,
-                contacto: contacto
-            },
-            error: function (detalle) { alert("Se generó un error al intentar crear el cliente."); },
-            success: function (resultado) {
-
-                alert("Se creó cliente con Código Temporal: " + resultado.codigoAlterno + ".");
-
-                location.reload();
-
-            }
-        });
-
-
-        $('#btnCancelCliente').click();
-
-    });
-
-
-
 
     ////////////GENERAR PLANTILLA DE COTIZACIÓN
 
@@ -1144,7 +1108,7 @@ jQuery(function ($) {
 
 
         $.ajax({
-            url: "/Home/obtenerProductosAPartirdePreciosRegistrados",
+            url: "/Pedido/obtenerProductosAPartirdePreciosRegistrados",
             data: {
                 idCliente: idCliente,
                 idCiudad: idCiudad,
@@ -1156,10 +1120,10 @@ jQuery(function ($) {
             error: function () {
 
                 alert("Ocurrió un problema al generar la cotización a partir de los precios registrados.");
-                //window.location = '/Home/Cotizador';
+                //window.location = '/Pedido/Cotizador';
             },
             success: function () {
-                window.location = '/Home/Cotizar';
+                window.location = '/Pedido/Cotizar';
             }
         });
 
@@ -1174,7 +1138,7 @@ jQuery(function ($) {
     ////////CREAR/EDITAR COTIZACIÓN
 
 
-    function validarIngresoDatosObligatoriosCotizacion() {
+    function validarIngresoDatosObligator() {
         if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
@@ -1187,7 +1151,7 @@ jQuery(function ($) {
             return false;
         }
 
-        if ($("#contacto").val().trim() == "") {
+      /*  if ($("#contacto").val().trim() == "") {
             alert("Debe ingresar un contacto.");
             $("#contacto").focus();
             return false;
@@ -1281,18 +1245,18 @@ jQuery(function ($) {
         });
 
         if (contador == 0) {
-            alert("Debe ingresar el detalle de la cotización.");
+            alert("Debe ingresar el detalle del pedido.");
             return false;
         }
 
         return true;
     }
 
-    function crearCotizacion(continuarLuego) {
-        if (!validarIngresoDatosObligatoriosCotizacion())
+    function crearPedido(continuarLuego) {
+        if (!validarIngresoDatosObligatoriosPedido())
             return false;
         $.ajax({
-            url: "/Home/crearCotizacion",
+            url: "/Pedido/Create",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1310,27 +1274,27 @@ jQuery(function ($) {
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     alert("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN.");
-                    window.location = '/Home/Index';
+                    window.location = '/Pedido/Index';
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
                     alert("La cotización número " + resultado.codigo + " fue guardada correctamente para seguir editandola posteriormente.");
-                    window.location = '/Home/Index';
+                    window.location = '/Pedido/Index';
                 }
                 else {
                     alert("La cotización ha tenido problemas para se procesada; Contacte con el Administrador");
-                    window.location = '/Home/Index';
+                    window.location = '/Pedido/Index';
                 }
 
             }
         });
     }
 
-    function editarCotizacion(continuarLuego) {
-        if (!validarIngresoDatosObligatoriosCotizacion())
+    function editarPedido(continuarLuego) {
+        if (!validarIngresoDatosObligatoriosPedido())
             return false;
 
         $.ajax({
-            url: "/Home/editarCotizacion",
+            url: "/Pedido/Update",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1348,15 +1312,15 @@ jQuery(function ($) {
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     alert("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN.");
-                    window.location = '/Home/Index';
+                    window.location = '/Pedido/Index';
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
                     alert("La cotización número " + resultado.codigo + " fue guardada correctamente para seguir editandola posteriormente.");
-                    window.location = '/Home/Index';
+                    window.location = '/Pedido/Index';
                 }
                 else {
                     alert("La cotización ha tenido problemas para se procesada; Contacte con el Administrador");
-                     window.location = '/Home/Index';
+                     window.location = '/Pedido/Index';
                 }
             }
         });
@@ -1364,7 +1328,7 @@ jQuery(function ($) {
 
 
 
-    $("#btnFinalizarCreacionCotizacion").click(function () {
+    $("#btnFinalizarCreacionPedido").click(function () {
         crearCotizacion(0);
     });
 
@@ -1372,7 +1336,7 @@ jQuery(function ($) {
         crearCotizacion(1);
     });
 
-    $("#btnFinalizarEdicionCotizacion").click(function () {
+    $("#btnFinalizarEdicionPedido").click(function () {
         editarCotizacion(0);
     });
 
@@ -1433,7 +1397,7 @@ jQuery(function ($) {
      
 
         $.ajax({
-            url: "/Home/VerCotizacion",
+            url: "/Pedido/VerCotizacion",
             data: {
                 numero: codigo
             },
@@ -1630,7 +1594,7 @@ jQuery(function ($) {
 
                 $("#modalVerCotizacion").modal('show');
 
-                //  window.location = '/Home/Index';
+                //  window.location = '/Pedido/Index';
             }
         });
     });
@@ -1649,7 +1613,7 @@ jQuery(function ($) {
         }
 
           $.ajax({
-            url: "/Home/GenerarPDFdesdeIdCotizacion",
+            url: "/Pedido/GenerarPDFdesdeIdCotizacion",
             data: {
                 codigo: codigo
             },
@@ -1657,8 +1621,8 @@ jQuery(function ($) {
             error: function (detalle) { alert("Ocurrió un problema al descargar la cotización N° " + codigo+" en formato PDF.");},
             success: function (fileName) {
                 //Se descarga el PDF y luego se limpia el formulario
-                window.open('/Home/DownLoadFile?fileName=' + fileName);
-                window.location = '/Home/Index';
+                window.open('/Pedido/DownLoadFile?fileName=' + fileName);
+                window.location = '/Pedido/Index';
             }
         });
 }
@@ -1693,7 +1657,7 @@ jQuery(function ($) {
     $("#btnReCotizacion").click(function () {
         desactivarBotonesVer();
         $.ajax({
-            url: "/Home/ConsultarSiExisteCotizacion",
+            url: "/Pedido/ConsultarSiExisteCotizacion",
             type: 'POST',
             async: false,
             success: function (resultado) {
@@ -1701,14 +1665,14 @@ jQuery(function ($) {
 
                     var numero = $("#verNumero").html();
                     $.ajax({
-                        url: "/Home/recotizacion",
+                        url: "/Pedido/recotizacion",
                         data: {
                             numero: numero
                         },
                         type: 'POST',
                         error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
                         success: function (fileName) {
-                            window.location = '/Home/Cotizar';
+                            window.location = '/Pedido/Cotizar';
                         }
                     });
                 }
@@ -1726,23 +1690,23 @@ jQuery(function ($) {
         desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
-            url: "/Home/ConsultarSiExisteCotizacion",
+            url: "/Pedido/ConsultarSiExisteCotizacion",
             type: 'POST',
             async: false,
             success: function (resultado) {
                 if (resultado == "False") {
 
                     $.ajax({
-                        url: "/Home/iniciarEdicionCotizacion",
+                        url: "/Pedido/iniciarEdicionCotizacion",
                         type: 'POST',
 
                         error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
                         success: function (fileName) {
-                            window.location = '/Home/Cotizar';
+                            window.location = '/Pedido/Cotizar';
                         }
                     });
 
-                    //window.location = '/Home/Cotizador';
+                    //window.location = '/Pedido/Cotizador';
                 }
                 else {
                     alert("Existe otra cotización en curso; por favor cancele previamente esa cotización para continuar.");
@@ -1769,14 +1733,14 @@ jQuery(function ($) {
      //   desactivarBotonesVer();
         var numero = $("#verNumero").html();
         $.ajax({
-            url: "/Home/GenerarPDFdesdeIdCotizacion",
+            url: "/Pedido/GenerarPDFdesdeIdCotizacion",
             data: {
                 codigo: numero
             },
             type: 'POST',
             error: function (detalle) { alert("Ocurrió un problema al descargar la cotización en formato PDF."); },         
             success: function (fileName) {
-                window.location = '/Home/DownLoadFile?fileName=' + fileName;
+                window.location = '/Pedido/DownLoadFile?fileName=' + fileName;
             }
         });
     });
@@ -1842,7 +1806,7 @@ jQuery(function ($) {
         var codigo = $("#verNumero").html();
 
         $.ajax({
-            url: "/Home/updateEstadoCotizacion",
+            url: "/Pedido/updateEstadoCotizacion",
             data: {
                 codigo: codigo,
                 estado: estado,
@@ -1873,7 +1837,7 @@ jQuery(function ($) {
     $("input[name=igv]").on("click", function () {
         var igv = $("input[name=igv]:checked").val();
         $.ajax({
-            url: "/Home/updateSeleccionIGV",
+            url: "/Pedido/updateSeleccionIGV",
             type: 'POST',
             data: {
                 igv: igv
@@ -1890,7 +1854,7 @@ jQuery(function ($) {
     $("#considerarCantidades").change( function () {
         var considerarCantidades = $("#considerarCantidades").val();
         $.ajax({
-            url: "/Home/updateSeleccionConsiderarCantidades",
+            url: "/Pedido/updateSeleccionConsiderarCantidades",
             type: 'POST',
             data: {
                 considerarCantidades: considerarCantidades
@@ -1908,17 +1872,6 @@ jQuery(function ($) {
     });
 
 
-    $("#observaciones").change(function () {
-
-        $.ajax({
-            url: "/Home/updateObservaciones",
-            type: 'POST',
-            data: {
-                observaciones: $("#observaciones").val()
-            },
-            success: function () { }
-        });
-    });
 
     
 
@@ -1926,7 +1879,7 @@ jQuery(function ($) {
     $("input[name=mostrarcodproveedor]").on("click", function () {
         var mostrarcodproveedor = $("input[name=mostrarcodproveedor]:checked").val();
         $.ajax({
-            url: "/Home/updateMostrarCodigoProveedor",
+            url: "/Pedido/updateMostrarCodigoProveedor",
             type: 'POST',
             data: {
                 mostrarcodproveedor: mostrarcodproveedor
@@ -1941,7 +1894,7 @@ jQuery(function ($) {
     $("#cliente").change(function () {
 
         $.ajax({
-            url: "/Home/updateCliente",
+            url: "/Pedido/updateCliente",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1957,7 +1910,7 @@ jQuery(function ($) {
     $("#contacto").change(function () {
 
         $.ajax({
-            url: "/Home/updateContacto",
+            url: "/Pedido/updateContacto",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1985,7 +1938,7 @@ jQuery(function ($) {
 
 
         $.ajax({
-            url: "/Home/updateFlete",
+            url: "/Pedido/updateFlete",
             type: 'POST',
             data: {
                 flete: flete
@@ -2001,7 +1954,7 @@ jQuery(function ($) {
     $("#mostrarCosto").change(function () {
         var mostrarCosto = $('#mostrarCosto').prop('checked') ;
         $.ajax({
-            url: "/Home/updateMostrarCosto",
+            url: "/Pedido/updateMostrarCosto",
             type: 'POST',
             data: {
                 mostrarCosto: mostrarCosto
@@ -2065,7 +2018,7 @@ jQuery(function ($) {
                     var idProducto = values.idProducto;
                     /*
                                                 $.ajax({
-                                                    url: "/Home/DelProducto",
+                                                    url: "/Pedido/DelProducto",
                                                     type: 'POST',
                                                     data: {
                                                         idProducto: idProducto
@@ -2226,13 +2179,13 @@ jQuery(function ($) {
         var codigo = $("#numero").val();
         if (codigo == "") {
             $("#btnContinuarCreandoLuego").attr('disabled', 'disabled');
-            $("#btnFinalizarCreacionCotizacion").attr('disabled', 'disabled');
-            $("#btnCancelCotizacion").attr('disabled', 'disabled');
+            $("#btnFinalizarCreacionPedido").attr('disabled', 'disabled');
+            $("#btnCancelPedido").attr('disabled', 'disabled');
         }
         else {
             $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
-            $("#btnFinalizarEdicionCotizacion").attr('disabled', 'disabled');
-            $("#btnCancelCotizacion").attr('disabled', 'disabled');
+            $("#btnFinalizarEdicionPedido").attr('disabled', 'disabled');
+            $("#btnCancelPedido").attr('disabled', 'disabled');
         }
 
         
@@ -2323,8 +2276,6 @@ jQuery(function ($) {
         $("input[name=igv]").removeAttr('disabled');
         $("#flete").removeAttr('disabled');
         $("#btnOpenAgregarProducto").removeAttr('disabled');
-        $("#generarPDF").removeAttr('disabled');
-        $("#grabarCotizacion").removeAttr('disabled');
         $("input[name=mostrarcodproveedor]").removeAttr('disabled');
 
         //  $(".ordenar").attr('data-visible', 'false');
@@ -2369,7 +2320,7 @@ jQuery(function ($) {
 
         
         $.ajax({
-            url: "/Home/updateCotizacionDetalles",
+            url: "/Pedido/ChangeDetalle",
             type: 'POST',
             data: json,
             dataType: 'json',
@@ -2501,7 +2452,7 @@ jQuery(function ($) {
 
     $("#btnCancelCotizacion").click(function () {
         if (confirm(mensajeCancelarEdicion)) {
-            window.location = '/Home/CancelarCreacionCotizacion';
+            window.location = '/Pedido/CancelarCreacionCotizacion';
         }
     })
 
@@ -2528,7 +2479,7 @@ jQuery(function ($) {
         var estado = $("#estado").val();
 
         $.ajax({
-            url: "/Home/SearchCotizaciones",
+            url: "/Pedido/SearchCotizaciones",
             type: 'POST',
             //   dataType: 'JSON',
             data: {
@@ -2552,7 +2503,7 @@ jQuery(function ($) {
     $("#fechaDesde").change(function () {
         var fechaDesde = $("#fechaDesde").val();
         $.ajax({
-            url: "/Home/updateFechaDesde",
+            url: "/Pedido/updateFechaDesde",
             type: 'POST',
             data: {
                 fechaDesde: fechaDesde
@@ -2565,7 +2516,7 @@ jQuery(function ($) {
     $("#fechaHasta").change(function () {
         var fechaHasta = $("#fechaHasta").val();
         $.ajax({
-            url: "/Home/updateFechaHasta",
+            url: "/Pedido/updateFechaHasta",
             type: 'POST',
             data: {
                 fechaHasta: fechaHasta
@@ -2578,7 +2529,7 @@ jQuery(function ($) {
     $("#numero").change(function () {
         var codigo = $("#numero").val();
         $.ajax({
-            url: "/Home/updateCodigoCotizacionBusqueda",
+            url: "/Pedido/updateCodigoCotizacionBusqueda",
             type: 'POST',
             data: {
                 codigo: codigo
@@ -2591,7 +2542,7 @@ jQuery(function ($) {
     $("#estado").change(function () {
         var estado = $("#estado").val();
         $.ajax({
-            url: "/Home/updateEstadoCotizacionBusqueda",
+            url: "/Pedido/updateEstadoCotizacionBusqueda",
             type: 'POST',
             data: {
                 estado: estado

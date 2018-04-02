@@ -263,7 +263,7 @@ namespace BusinessLayer
                     else
                     {*/
                         //Si NO es recotizacion
-                        if (cotizacion.incluidoIgv)
+                        if (cotizacion.incluidoIGV)
                         {
                             //Se agrega el IGV al precioLista
                             decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;
@@ -338,7 +338,7 @@ namespace BusinessLayer
                         }*/
 
                         //Se agrega el igv al costo y al precio neto que se obtuvo directamente del producto
-                        if (cotizacion.incluidoIgv)
+                        if (cotizacion.incluidoIGV)
                         {
                             precioNeto = precioNeto + (precioNeto * Constantes.IGV);
                             costo = costo + (costo * Constantes.IGV);
@@ -380,7 +380,7 @@ namespace BusinessLayer
                     else
                     {
                         //Si NO es recotizacion
-                        if (cotizacion.incluidoIgv)
+                        if (cotizacion.incluidoIGV)
                         {
                             //Se agrega el IGV al precioLista
                             decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;

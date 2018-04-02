@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Model.Ciudad>
+@Html.DropDownList("idCiudad",
+new SelectList(Model, "idCiudad", "nombre", ((Model.Cotizacion)this.Session["cotizacion"]).ciudad.idCiudad, ViewBag.List as IEnumerable<Model.Ciudad>),
+new { @class = "form-control", onchange = @"
+$.ajax({
+url: '/Cotizacion/UpdateIdCiudad',
+type: 'POST',
+dataType: 'JSON',
+data: {
+idCiudad: this.value
+},
+
+error: function (detalle) {
+alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
+location.reload();
+},
+success: function () {
+//cargarChosenCliente();
+location.reload();
+}
+});
+" })

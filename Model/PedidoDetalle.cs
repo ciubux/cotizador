@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Model
 {
-    public class PedidoDetalle
+    public class PedidoDetalle : IDocumentoDetalle
     {
         public Guid idPedidoDetalle { get; set; }
         public Guid idPedido { get; set; }
@@ -162,5 +162,7 @@ namespace Model
         }
 
         public String observacion { get; set; }
+
+        public Decimal getSubTotal() { return this.subTotal; }
     }
 }

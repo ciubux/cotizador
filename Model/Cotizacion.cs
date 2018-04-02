@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Model
 {
-    public class Cotizacion
+    public class Cotizacion : IDocumento
     {
 
         public enum OpcionesConsiderarCantidades {
@@ -38,7 +38,7 @@ namespace Model
 
         public Usuario usuario { get; set; }
 
-        public Boolean incluidoIgv { get; set; }
+        public Boolean incluidoIGV { get; set; }
         public Decimal flete { get; set; }
         public String usuarioCreacion { get; set; }
       //  public Usuario usuario_aprobador { get; set; }
@@ -76,7 +76,29 @@ namespace Model
         public DateTime fechaHasta { get; set; }
 
         public DateTime fechaPrecios { get; set; }
-        
+
+        public List<IDocumentoDetalle> documentoDetalle
+        {
+            get {
+                List<IDocumentoDetalle> documentoDetalle = new List<IDocumentoDetalle>();
+                foreach (CotizacionDetalle cotizacionDetalle in cotizacionDetalleList)
+                {
+                    documentoDetalle.Add(cotizacionDetalle);
+                }
+                return documentoDetalle;
+                }
+            set {
+                this.cotizacionDetalleList = new List<CotizacionDetalle>();
+                foreach (IDocumentoDetalle documentoDetalle in value)
+                {
+                    cotizacionDetalleList.Add((CotizacionDetalle)documentoDetalle);
+                }
+
+
+            }
+        }
+
+
 
     }
 }

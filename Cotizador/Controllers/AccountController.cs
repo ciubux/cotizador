@@ -208,7 +208,7 @@ namespace Cotizador.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirmar cuenta", "Para confirmar la cuenta, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Cotizador");
                 }
                 AddErrors(result);
             }
@@ -438,7 +438,7 @@ namespace Cotizador.Controllers
         {
             this.Session["Usuario"] = null;
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "General");
         }
 
         //
@@ -495,7 +495,7 @@ namespace Cotizador.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Cotizacion");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

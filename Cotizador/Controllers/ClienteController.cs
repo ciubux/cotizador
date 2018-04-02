@@ -26,6 +26,45 @@ namespace Cotizador.Controllers
         }
 
 
+        public String Create()
+        {
+            String controller = Request["controller"].ToString();
+            IDocumento documento = (IDocumento)this.Session[controller];
+            Cliente cliente = new Cliente();
+            Usuario usuario = (Usuario)this.Session["usuario"];
+            cliente.IdUsuarioRegistro = usuario.idUsuario;
+            cliente.razonSocial = Request["razonSocial"].ToString();
+            cliente.nombreComercial = Request["nombreComercial"].ToString();
+            cliente.ruc = Request["ruc"].ToString();
+            cliente.contacto1 = Request["contacto"].ToString();
+
+            ClienteBL clienteBL = new ClienteBL();
+            cliente.ciudad = documento.ciudad;
+            documento.cliente = clienteBL.insertCliente(cliente);
+
+            if (controller.Equals("cotizacion"))
+            {
+                Cotizacion cotizacion = (Cotizacion)documento;
+                cotizacion.contacto = cotizacion.cliente.contacto1;
+            }
+            else
+            {
+
+
+            }
+
+
+            this.Session[controller] = documento;
+
+
+            String resultado = "{" +
+                "\"idCLiente\":\"" + documento.cliente.idCliente + "\"," +
+                "\"codigoAlterno\":\"" + documento.cliente.codigoAlterno + "\"}";
+
+            return resultado;
+        }
+
+
         [HttpPost]
         public ActionResult Load(HttpPostedFileBase file)
         {
@@ -123,7 +162,7 @@ namespace Cotizador.Controllers
 
             // clienteBL.mergeClienteStaging();
             row = row;
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Cotizacion");
 
         }
     }

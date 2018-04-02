@@ -214,13 +214,14 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\FacturaController.cs" />
+    <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\PrecioController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ProveedorController.cs" />
     <Compile Include="Controllers\FamiliaController.cs" />
     <Compile Include="Controllers\CiudadController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\CotizacionController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
@@ -324,7 +325,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Cotizar.cshtml" />
+    <Content Include="Views\Cotizacion\Cotizar.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -346,26 +347,27 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Ciudad\_SelectCiudad.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Cotizacion\Index.cshtml" />
     <Content Include="Views\Cliente\Index.cshtml" />
     <Content Include="Views\Producto\Index.cshtml" />
     <Content Include="Views\Factura\Index.cshtml" />
     <Content Include="Views\Precio\LoadPrecioLista.cshtml" />
     <Content Include="Views\Familia\_SelectFamilia.cshtml" />
     <Content Include="Views\Proveedor\_SelectProveedor.cshtml" />
-    <Content Include="Views\Precio\LoadPrecios.cshtml" />
+    <Content Include="Views\Precio\Index.cshtml" />
     <Content Include="Views\Ciudad\_SelectCiudadBusqueda.cshtml" />
     <Content Include="Views\Usuario\_SelectUsuario.cshtml" />
-    <Content Include="Views\Home\CotizadorDesdePrecios.cshtml" />
     <Content Include="Views\Proveedor\_SelectProveedorBusquedaPrecios.cshtml" />
     <Content Include="Views\Familia\_SelectFamiliaBusquedaPrecios.cshtml" />
     <Content Include="Views\Pedido\Pedir.cshtml" />
     <Content Include="Views\Pedido\Index.cshtml" />
+    <Content Include="Views\Ciudad\_SelectCiudadCotizacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
     <Folder Include="pdf\" />
     <Folder Include="Scripts\App_LocalResources\" />
+    <Folder Include="Views\General\" />
     <Folder Include="Views\Login\" />
   </ItemGroup>
   <ItemGroup>

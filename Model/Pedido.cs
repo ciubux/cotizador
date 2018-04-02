@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Model
 {
-    public class Pedido
+    public class Pedido : IDocumento
     {
         public Guid idPedido { get; set; }
         [Display(Name = "Número Pedido:")]
@@ -43,27 +43,27 @@ namespace Model
 
 
         public Usuario usuario { get; set; }
-        public Boolean incluidoIgv { get; set; }
-        public Decimal flete { get; set; }
+        public Boolean incluidoIGV { get; set; }
+     //   public Decimal flete { get; set; }
         public String usuarioCreacion { get; set; }
 
-        
-        
-        
+
+
+
 
         public DateTime fechaModificacion { get; set; }
 
 
-      //  public Usuario usuario_aprobador { get; set; }
+        //  public Usuario usuario_aprobador { get; set; }
         public Decimal tasaIGV { get; set; }
-        
-        public Boolean mostrarCodigoProveedor { get; set; }
+
+       // public Boolean mostrarCodigoProveedor { get; set; }
         public Decimal montoSubTotal { get; set; }
         public Decimal montoIGV { get; set; }
         public Decimal montoTotal { get; set; }
-       
 
-        public List<PedidoDetalle> PedidoDetalleList { get; set; }
+
+        public List<PedidoDetalle> pedidoDetalleList { get; set; }
         public bool esRePedido { get; set; }
         /*0 pendiente, 1 aprobado, 2 rechazado*/
         public SeguimientoPedido seguimientoPedido { get; set; }
@@ -74,7 +74,7 @@ namespace Model
 
         public bool considerarDescontinuados { get; set; }
 
-        
+
 
 
 
@@ -87,7 +87,27 @@ namespace Model
         public DateTime fechaHasta { get; set; }
 
         public DateTime fechaPrecios { get; set; }
-        
-        
+
+        /*Implementación Interface*/
+        public List<IDocumentoDetalle> documentoDetalle
+        {
+            get
+            {
+                List<IDocumentoDetalle> documentoDetalle = new List<IDocumentoDetalle>();
+                foreach (PedidoDetalle pedidoDetalle in pedidoDetalleList)
+                {
+                    documentoDetalle.Add(pedidoDetalle);
+                }
+                return documentoDetalle;
+            }
+            set
+            {
+                this.pedidoDetalleList = new List<PedidoDetalle>();
+                foreach (IDocumentoDetalle documentoDetalle in value)
+                {
+                    pedidoDetalleList.Add((PedidoDetalle)documentoDetalle);
+                }
+            }
+        }
     }
 }

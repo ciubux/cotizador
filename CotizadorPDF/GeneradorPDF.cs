@@ -515,7 +515,7 @@ namespace cotizadorPDF
                 string[] stringSeparators = new string[] { "\n" };
                 string[] lines = observaciones.Split(stringSeparators, StringSplitOptions.None);
 
-                if (cot.incluidoIgv)
+                if (cot.incluidoIGV)
                 {
                     sectionObervaciones.Canvas.DrawString("* Los precios incluyen IGV.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 }
