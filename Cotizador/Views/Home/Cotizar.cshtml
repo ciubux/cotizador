@@ -181,11 +181,11 @@
                             <label class="radio-label">
                                 @if (cotizacion.incluidoIgv)
                                 {
-                                    <input class="radio-input" checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                                    <input class="radio-input" disabled checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
                                 }
                                 else
                                 {
-                                    <input class="radio-input" type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                                    <input class="radio-input" disabled type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
                                 }
 
                             </label>
@@ -194,11 +194,11 @@
                             <label class="radio-label">
                                 @if (!cotizacion.incluidoIgv)
                                 {
-                                    <input class="radio-input" checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                                    <input class="radio-input" disabled checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
                                 }
                                 else
                                 {
-                                    <input class="radio-input" type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                                    <input class="radio-input" disabled type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
                                 }
                             </label>
                         </div>

@@ -1190,15 +1190,16 @@ jQuery(function ($) {
             return false;
         }
 
+        /*Si la validez es días, se valida que no sea menor que uno*/
         if ($("#mostrarValidezOfertaEnDias").val() == 0) {
             if ($("#validezOfertaEnDias").val() < 1) {
                 alert("La cantidad de días de validez de oferta debe ser mayor o igual a uno.");
                 $("#validezOfertaEnDias").focus();
                 return false;
             }
-        }
+        } /*Si la validez es fecha, se valida que no se encuentre vacío*/
         else {
-            if ($("#fechaLimiteValidezOferta").val().trim() != "") {
+            if ($("#fechaLimiteValidezOferta").val().trim() == "") {
                 alert("Debe ingresar la fecha de Validez Oferta.");
                 $("#fechaLimiteValidezOferta").focus();
                 return false;
