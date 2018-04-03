@@ -111,3 +111,4 @@ C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csp
 C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll.config

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" />
+  <xs:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Commons" />
+  <xs:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA" />
+  <xs:element name="callProcessOnline">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="oUser" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oPass" nillable="true" type="xs:string" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="oCabecera" nillable="true" type="q1:CPE_CABECERA_BE" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listDetalle" nillable="true" type="q2:ArrayOfCPE_DETALLE_BE" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listAdicionales" nillable="true" type="q3:ArrayOfCPE_DAT_ADIC_BE" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listReferenciados" nillable="true" type="q4:ArrayOfCPE_DOC_REF_BE" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listAnticipos" nillable="true" type="q5:ArrayOfCPE_ANTICIPO_BE" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listFacGuia" nillable="true" type="q6:ArrayOfCPE_FAC_GUIA_BE" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listRelacionado" nillable="true" type="q7:ArrayOfCPE_DOC_ASOC_BE" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/TT.EOL.Commons" minOccurs="0" name="oTipoOnline" type="q8:GlobalEnum.TipoOnline" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="callProcessOnlineResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="callProcessOnlineResult" nillable="true" type="q9:CPE_RESPUESTA_BE" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="callStateCPE">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="oUser" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oPass" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oNroIde" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oTipCpe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oSerCpe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oNroCpe" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="callStateCPEResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA" minOccurs="0" name="callStateCPEResult" nillable="true" type="q10:RPTA_BE" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="callExtractCPE">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="oUser" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oPass" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oNroIde" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oTipCpe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oSerCpe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oNroCpe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oFlgXml" type="xs:boolean" />
+        <xs:element minOccurs="0" name="oFlgPdf" type="xs:boolean" />
+        <xs:element minOccurs="0" name="oFlgCdr" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="callExtractCPEResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA" minOccurs="0" name="callExtractCPEResult" nillable="true" type="q11:RPTA_DOC_TRIB_BE" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

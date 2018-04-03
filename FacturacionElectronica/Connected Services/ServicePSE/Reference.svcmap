@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="8a3cd0f4-4d3f-403a-a777-1a5272d588fe" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?wsdl" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="wsOnlineToCPE.xsd" MetadataType="Schema" ID="04ae25a3-1162-406e-86ad-59ce9cecc144" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd4" />
+    <MetadataFile FileName="wsOnlineToCPE.wsdl" MetadataType="Wsdl" ID="d7dd8d88-ea24-4255-b686-a42660f78c44" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?wsdl" />
+    <MetadataFile FileName="wsOnlineToCPE1.xsd" MetadataType="Schema" ID="c513b3cb-bf6e-4f9b-b023-3b8fd47fbd7c" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd2" />
+    <MetadataFile FileName="wsOnlineToCPE2.xsd" MetadataType="Schema" ID="43ecddf8-b538-4526-b069-452f504668ab" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd3" />
+    <MetadataFile FileName="wsOnlineToCPE3.xsd" MetadataType="Schema" ID="3844d564-5861-48ff-8ebf-981b05211dca" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd0" />
+    <MetadataFile FileName="wsOnlineToCPE4.xsd" MetadataType="Schema" ID="fb28eb64-4a46-4d1c-9155-8426447918bd" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

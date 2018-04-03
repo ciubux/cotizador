@@ -18,13 +18,26 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+         
             if (this.Session["usuario"] == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+
+
+
+       
+
+            FacturaBL facturaBL = new FacturaBL();
+            facturaBL.testFacturaElectronica();
+
+
+
             return View();
 
         }
+
+
 
         [HttpPost]
         public ActionResult Load(HttpPostedFileBase file)

@@ -16,6 +16,21 @@ namespace Model
         public static String formatoHora = "HH:mm";
         public static String MENSAJE_SI = "Sí";
         public static String MENSAJE_NO = "No";
+        public static Char PAD = '0';
+        public static int LONGITUD_NUMERO = 10;
+
+
+        public static String VAR_SESSION_COTIZACION = "cotizacion";
+        public static String VAR_SESSION_COTIZACION_BUSQUEDA = "cotizacionBusqueda";
+        public static String VAR_SESSION_COTIZACION_LISTA = "cotizacionList";
+        public static String VAR_SESSION_COTIZACION_VER = "cotizacionoVer";
+        public static String VAR_SESSION_PEDIDO = "pedido";
+        public static String VAR_SESSION_PEDIDO_BUSQUEDA = "pedidoBusqueda";
+        public static String VAR_SESSION_PEDIDO_LISTA = "pedidoList";
+        public static String VAR_SESSION_PEDIDO_VER = "pedidoVer";
+        public static String VAR_SESSION_PAGINA = "pagina";
+        public static String VAR_SESSION_USUARIO = "usuario";
+
 
 
         public static Decimal IGV = 0.18M;
@@ -42,8 +57,12 @@ namespace Model
         public enum paginas {
             [Display(Name = "Mis Cotizaciones")]
             misCotizaciones = 0,
-            [Display(Name = "Solo Observaciones")]
-            Cotizacion = 1
+            [Display(Name = "Cotizacion")]
+            Cotizacion = 1,
+            [Display(Name = "Mis Pedidos")]
+            misPedidos = 2,
+            [Display(Name = "Pedido")]
+            Pedido = 3
         };
 
 

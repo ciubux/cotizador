@@ -14,14 +14,14 @@ namespace Cotizador.Controllers
         // GET: Pedido
         public ActionResult Index()
         {
-            this.Session["pagina"] = Constantes.BUSQUEDA_PEDIDO;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.BUSQUEDA_PEDIDO;
 
-            if (this.Session["usuario"] == null)
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            if (this.Session["pedidoBusqueda"] == null)
+            if (this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] == null)
             {
                 Pedido pedidoTmp = new Pedido();
                 pedidoTmp.fechaSolicitudDesde = DateTime.Now.AddDays(-10);
@@ -36,14 +36,14 @@ namespace Cotizador.Controllers
                 pedidoTmp.seguimientoPedido = new SeguimientoPedido();
                 pedidoTmp.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Todos;
                 // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
-                pedidoTmp.usuario = (Usuario)this.Session["usuario"];
+                pedidoTmp.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 pedidoTmp.usuarioBusqueda = pedidoTmp.usuario;
-                this.Session["pedidoBusqueda"] = pedidoTmp;
+                this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedidoTmp;
 
 
             }
 
-            Pedido pedidoSearch = (Pedido)this.Session["pedidoBusqueda"];
+            Pedido pedidoSearch = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
 
 
             ViewBag.fechaSolicitudDesde = pedidoSearch.fechaSolicitudDesde.ToString(Constantes.formatoFecha);
@@ -51,12 +51,12 @@ namespace Cotizador.Controllers
             ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.ToString(Constantes.formatoFecha);
             ViewBag.fechaEntregaHasta = pedidoSearch.fechaEntregaHasta.ToString(Constantes.formatoFecha);
 
-            if (this.Session["pedidoList"] == null)
+            if (this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] == null)
             {
-                this.Session["pedidoList"] = new List<Pedido>();
+                this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = new List<Pedido>();
             }
 
-            Pedido pedido = (Pedido)this.Session["pedidoBusqueda"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
             int existeCliente = 0;
             //  if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
             if (pedido.cliente.idCliente != Guid.Empty)
@@ -64,14 +64,11 @@ namespace Cotizador.Controllers
                 existeCliente = 1;
             }
 
-            if (pedido.cliente.idCliente != Guid.Empty)
-            {
-                ViewBag.idCliente = pedido.cliente.idCliente;
-            }
+     
 
             ViewBag.pedido = pedido;
 
-            ViewBag.pedidoList = this.Session["pedidoList"];
+            ViewBag.pedidoList = this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA];
             ViewBag.existeCliente = existeCliente;
 
             return View();
@@ -82,10 +79,10 @@ namespace Cotizador.Controllers
         {
             try
             {
-                this.Session["pagina"] = Constantes.MANTENIMIENTO_PEDIDO;
+                this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.MANTENIMIENTO_PEDIDO;
 
                 //Si no hay usuario, se dirige el logueo
-                if (this.Session["usuario"] == null)
+                if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
                 {
                     return RedirectToAction("Login", "Account");
                 }
@@ -98,12 +95,12 @@ namespace Cotizador.Controllers
 
                 //Si no se está trabajando con una cotización se crea una y se agrega a la sesion
 
-                if (this.Session["pedido"] == null)
+                if (this.Session[Constantes.VAR_SESSION_PEDIDO] == null)
                 {
 
                     instanciarPedido();
                 }
-                Pedido pedido = (Pedido)this.Session["pedido"];
+                Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
 
 
                 int existeCliente = 0;
@@ -130,7 +127,7 @@ namespace Cotizador.Controllers
             }
             catch (Exception ex)
             {
-                Usuario usuario = (Usuario)this.Session["usuario"];
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
@@ -164,12 +161,12 @@ namespace Cotizador.Controllers
            // pedido.mostrarCodigoProveedor = true;
             pedido.observaciones = String.Empty;
 
-            pedido.usuario = (Usuario)this.Session["usuario"];
+            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             pedido.seguimientoPedido = new SeguimientoPedido();
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
             pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
 
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
 
@@ -181,7 +178,11 @@ namespace Cotizador.Controllers
         {
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
+                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+
             List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad);
             String resultado = "{\"q\":\"" + data + "\",\"results\":[";
             Boolean existeCliente = false;
@@ -199,7 +200,9 @@ namespace Cotizador.Controllers
 
         public String GetCliente()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
+                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
 
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
@@ -210,7 +213,11 @@ namespace Cotizador.Controllers
                 "\"idCliente\":\"" + pedido.cliente.idCliente + "\"," +
                 "\"contacto\":\"" + pedido.cliente.contacto1 + "\"" +
                 "}";
-            this.Session["pedido"] = pedido;
+
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
+                this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+            else
+                this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
             return resultado;
         }
 
@@ -224,7 +231,7 @@ namespace Cotizador.Controllers
 
         public String GetProducto()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             //Se recupera el producto y se guarda en Session
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
             this.Session["idProducto"] = idProducto.ToString();
@@ -239,10 +246,7 @@ namespace Cotizador.Controllers
             Decimal porcentajeDescuento = 0;
             if (producto.precioNeto != null)
             {
-
                 porcentajeDescuento = 100 - (producto.precioNeto.Value * 100 / producto.precioLista);
-
-
             }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
@@ -275,7 +279,7 @@ namespace Cotizador.Controllers
 
         public String AddProducto()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             Guid idProducto = Guid.Parse(this.Session["idProducto"].ToString());
             PedidoDetalle pedidoDetalle = pedido.pedidoDetalleList.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
             if (pedidoDetalle != null)
@@ -342,7 +346,7 @@ namespace Cotizador.Controllers
                 "\"observacion\":\"" + detalle.observacion + "\", " +
                 "\"total\":\"" + pedido.montoTotal.ToString() + "\"}";
 
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
             return resultado;
 
 
@@ -360,7 +364,7 @@ namespace Cotizador.Controllers
 
         public String ChangeIdCiudad()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
 
             CiudadBL ciudadBL = new CiudadBL();
@@ -375,7 +379,7 @@ namespace Cotizador.Controllers
             else
             {
                 pedido.ciudad = ciudadNueva;
-                this.Session["pedido"] = pedido;
+                this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
                 return "{\"idCiudad\": \"" + idCiudad + "\"}";
             }
 
@@ -383,7 +387,7 @@ namespace Cotizador.Controllers
 
         public String ChangeIdCiudadBusqueda()
         {
-            Pedido pedido = (Pedido)this.Session["pedidoBusqueda"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
             Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
 
             CiudadBL ciudadBL = new CiudadBL();
@@ -391,102 +395,97 @@ namespace Cotizador.Controllers
             pedido.cliente = new Cliente();
             //Para realizar el cambio de ciudad ningun producto debe estar agregado
             pedido.ciudad = ciudadNueva;
-            this.Session["pedidoBusqueda"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
             return "{\"idCiudad\": \"" + idCiudad + "\"}";
 
 
         }
-        
-
-
-
-
 
         public void ChangeNumeroReferenciaCliente()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
         public void ChangeDireccionEntrega()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.direccionEntrega = this.Request.Params["direccionEntrega"];
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
         public void ChangeContactoEntrega()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.contactoEntrega = this.Request.Params["contactoEntrega"];
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
         public void ChangeTelefonoContactoEntrega()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.telefonoContactoEntrega = this.Request.Params["telefonoContactoEntrega"];
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
 
         public void ChangeFechaSolicitud()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             String[] fechaSolicitud = this.Request.Params["fechaSolicitud"].Split('/');
             String[] horaSolicitud = this.Request.Params["horaSolicitud"].Split(':');
             pedido.fechaSolicitud = new DateTime(Int32.Parse(fechaSolicitud[2]), Int32.Parse(fechaSolicitud[1]), Int32.Parse(fechaSolicitud[0]), Int32.Parse(horaSolicitud[0]), Int32.Parse(horaSolicitud[1]), 0);
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
         public void ChangeFechaEntrega()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             String[] fechaEntrega = this.Request.Params["fechaEntrega"].Split('/');
             pedido.fechaEntrega = new DateTime(Int32.Parse(fechaEntrega[2]), Int32.Parse(fechaEntrega[1]), Int32.Parse(fechaEntrega[0]));
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
         public void ChangeFechaMaximaEntrega()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             String[] fechaMaximaEntrega = this.Request.Params["fechaMaximaEntrega"].Split('/');
             pedido.fechaMaximaEntrega = new DateTime(Int32.Parse(fechaMaximaEntrega[2]), Int32.Parse(fechaMaximaEntrega[1]), Int32.Parse(fechaMaximaEntrega[0]));
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
         public void ChangeContactoPedido()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.contactoPedido = this.Request.Params["contactoPedido"];
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
         public void ChangeTelefonoContactoPedido()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.telefonoContactoPedido = this.Request.Params["telefonoContactoPedido"];
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
 
         public void ChangeObservaciones()
         {
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.observaciones = this.Request.Params["observaciones"];
-            this.Session["pedido"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
 
         [HttpPost]
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
         {
-            IDocumento documento = (Pedido)this.Session["pedido"];
+            IDocumento documento = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             List<IDocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
             documento.documentoDetalle = documentoDetalle;
             HelperDocumento.calcularMontosTotales(documento);
-            this.Session["pedido"] = documento;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = documento;
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
 
@@ -498,9 +497,9 @@ namespace Cotizador.Controllers
         public String Create()
         {
             UsuarioBL usuarioBL = new UsuarioBL();
-            Usuario usuario = (Usuario)this.Session["usuario"];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.usuario = usuario;
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.InsertPedido(pedido);
@@ -515,7 +514,7 @@ namespace Cotizador.Controllers
                 //   updateEstadoSeguimientoPedido(numeroPedido, estadosSeguimientoPedido, observacion);
             }
             pedido = null;
-            this.Session["pedido"] = null;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
 
 
             usuarioBL.updatePedidoSerializado(usuario, null);
@@ -530,10 +529,10 @@ namespace Cotizador.Controllers
         public String Update()
         {
             UsuarioBL usuarioBL = new UsuarioBL();
-            Usuario usuario = (Usuario)this.Session["usuario"];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
-            Pedido pedido = (Pedido)this.Session["pedido"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.usuario = usuario;
             PedidoBL bl = new PedidoBL();
             bl.UpdatePedido(pedido);
@@ -549,7 +548,7 @@ namespace Cotizador.Controllers
                 //updateEstadoSeguimientoPedido(codigo, estadosSeguimientoPedido, observacion);
             }
             pedido = null;
-            this.Session["pedido"] = null;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
 
 
             usuarioBL.updateCotizacionSerializada(usuario, null);
@@ -561,7 +560,7 @@ namespace Cotizador.Controllers
 
         private void updateEstadoSeguimientoPedido(Int64 codigo, SeguimientoPedido.estadosSeguimientoPedido estado, String observacion)
         {
-            Pedido cotizacionSession = (Pedido)this.Session["pedido"];
+            Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             PedidoBL pedidoBL = new PedidoBL();
             Pedido pedido = new Pedido();
             pedido.numeroPedido = codigo;
@@ -570,7 +569,7 @@ namespace Cotizador.Controllers
             pedido.seguimientoPedido = new SeguimientoPedido();
             pedido.seguimientoPedido.estado = estado;
             pedido.seguimientoPedido.observacion = observacion;
-            pedido.usuario = (Usuario)this.Session["usuario"];
+            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
            //FALTA
             //pedidoBL.cambiarEstadoCotizacion(pedido);
         }
@@ -579,19 +578,19 @@ namespace Cotizador.Controllers
         public int Search()
         {
             //Se recupera el pedido Búsqueda de la session
-            Pedido pedido = (Pedido)this.Session["pedidoBusqueda"];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
 
             String[] solDesde = this.Request.Params["fechaSolicitudDesde"].Split('/');
             pedido.fechaSolicitudDesde = new DateTime(Int32.Parse(solDesde[2]), Int32.Parse(solDesde[1]), Int32.Parse(solDesde[0]));
 
             String[] solHasta = this.Request.Params["fechaSolicitudHasta"].Split('/');
-            pedido.fechaSolicitudHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]));
+            pedido.fechaSolicitudHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]),23,59,59);
 
             String[] entregaDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
             pedido.fechaEntregaDesde = new DateTime(Int32.Parse(entregaDesde[2]), Int32.Parse(entregaDesde[1]), Int32.Parse(entregaDesde[0]));
 
             String[] entregaHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
-            pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]));
+            pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]), 23, 59, 59);
 
 
             if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
@@ -618,11 +617,37 @@ namespace Cotizador.Controllers
             PedidoBL pedidoBL = new PedidoBL();
             List<Pedido> pedidoList = pedidoBL.GetPedidos(pedido);
             //Se coloca en session el resultado de la búsqueda
-            this.Session["pedidoList"] = pedidoList;
-            this.Session["pedidoBusqueda"] = pedido;
+            this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = pedidoList;
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
             //Se retorna la cantidad de elementos encontrados
             return pedidoList.Count();
         }
+
+
+        public Boolean ConsultarSiExistePedido()
+        {
+            Pedido pedido = (Pedido)this.Session["pedido"];
+            if (pedido == null)
+                return false;
+            else
+                return true;
+        }
+
+        public String Show()
+        {
+            PedidoBL pedidoBL = new PedidoBL();
+            Pedido pedido = new Pedido();
+            pedido.idPedido = Guid.Parse(Request["idPedido"].ToString());
+            pedido = pedidoBL.GetPedido(pedido);
+            this.Session[Constantes.VAR_SESSION_PEDIDO_VER] = pedido;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            string jsonUsuario = JsonConvert.SerializeObject(usuario);
+            string jsonPedido = JsonConvert.SerializeObject(pedido);
+            String json = "{\"usuario\":" + jsonUsuario + ", \"pedido\":" + jsonPedido + "}";
+            return json;
+        }
+
+
 
 
     }

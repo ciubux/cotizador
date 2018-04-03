@@ -1487,27 +1487,34 @@ jQuery(function ($) {
         return Number(fecha)
     }
 
-    $(document).on('click', "button.btnVerCotizacion", function () {
+
+    /*VER PEDIDO*/
+    $(document).on('click', "button.btnVerPedido", function () {
         
         activarBotonesVer();
-        var codigo = event.target.getAttribute("class").split(" ")[0];
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idPedido = arrrayClass[0];
+        var numeroPedido = arrrayClass[1];
       //  $("#tableDetalleCotizacion > tbody").empty();
      
 
         $.ajax({
-            url: "/Pedido/VerCotizacion",
+            url: "/Pedido/Show",
             data: {
-                numero: codigo
+                idPedido: idPedido
             },
             type: 'POST',
             dataType: 'JSON',
-            error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
+            error: function (detalle) { alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + "."); },
             success: function (resultado) {
                 //var cotizacion = $.parseJSON(respuesta);
-                var cotizacion = resultado.cotizacion;
+                var pedido = resultado.pedido;
                 var usuario = resultado.usuario;
 
-                $("#verNumero").html(cotizacion.codigo);
+                $("#verNumero").html(pedido.numeroPedido);
+                $("#verNumeroGrupo").html(pedido.numeroGrupoPedido);
+
+/*
                 $("#verCiudad").html(cotizacion.ciudad.nombre);
                 $("#verCliente").html(cotizacion.cliente.razonSocial);
                 $("#verContacto").html(cotizacion.contacto);
@@ -1541,10 +1548,10 @@ jQuery(function ($) {
                 $("#verMontoIGV").html(cotizacion.montoIGV);
                 $("#verMontoTotal").html(cotizacion.montoTotal);
 
+                */
+                $("#tableDetallePedido > tbody").empty();
 
-                $("#tableDetalleCotizacion > tbody").empty();
-
-                FooTable.init('#tableDetalleCotizacion');
+                FooTable.init('#tableDetallePedido');
 
 
 
@@ -1574,35 +1581,35 @@ jQuery(function ($) {
                 }
               //  
                // sleep
-                $("#tableDetalleCotizacion").append(d);
+                $("#tableDetallePedido").append(d);
 
 
 
                 /*EDITAR COTIZACIÓN*/
-                if (
+           /*     if (
                     cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
                     cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
                     cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA ||
                     (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION && usuario.idUsuario == cotizacion.seguimientoCotizacion.usuario.idUsuario)
                 ) {
-                    $("#btnEditarCotizacion").show();
+                    $("#btnEditarCotizacion").show();*/
                     if (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION) {
-                        $("#btnEditarCotizacion").html("Continuar Editanto");
+                        $("#btnEditarPedido").html("Continuar Editanto");
                     }
                     else
                     {
-                        $("#btnEditarCotizacion").html("Editar");
+                        $("#btnEditarPedido").html("Editar");
                     }
-                }
+             /*   }
                 else {
                     $("#btnEditarCotizacion").hide();
                 }
+                */
 
 
 
 
-
-                /*RECOTIZAR*/
+                /*RECOTIZAR
                 if (
                     cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
                     cotizacion.seguimientoCotizacion.estado == ESTADO_ACEPTADA ||
@@ -1614,11 +1621,11 @@ jQuery(function ($) {
                 else {
                     $("#btnReCotizacion").hide();
                 }
+                */
 
 
 
-
-                /*APROBAR COTIZACIÓN*/
+                /*APROBAR COTIZACIÓN
                 if (
                     (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
                         cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
@@ -1632,10 +1639,10 @@ jQuery(function ($) {
                 else {
                     $("#btnAprobarCotizacion").hide();
                 }
+                */
 
 
-
-                /*DENEGAR COTIZACIÓN*/
+                /*DENEGAR COTIZACIÓN
                 if (
                     (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
                     (
@@ -1647,9 +1654,9 @@ jQuery(function ($) {
                 }
                 else {
                     $("#btnDenegarCotizacion").hide();
-                }
+                }*/
 
-                /*ACEPTAR COTIZACIÓN*/
+                /*ACEPTAR COTIZACIÓN
                 if (
                     cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
                         cotizacion.seguimientoCotizacion.estado == ESTADO_RECHAZADA
@@ -1659,10 +1666,10 @@ jQuery(function ($) {
                 }
                 else {
                     $("#btnAceptarCotizacion").hide();
-                }
+                }*/
 
 
-                /*RECHAZAR COTIZACIÓN*/
+                /*RECHAZAR COTIZACIÓN
                 if (
                     (cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA)
                 ) {
@@ -1672,9 +1679,9 @@ jQuery(function ($) {
                 else {
                     $("#btnRechazarCotizacion").hide();
                 }
+                */
 
-
-                /*PDF*/
+                /*PDF
                 if (
                     (cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
                         cotizacion.seguimientoCotizacion.estado == ESTADO_ACEPTADA ||
@@ -1687,10 +1694,10 @@ jQuery(function ($) {
                 else {
                     $("#btnPDFCotizacion").hide();
                 }
-                
+                */
 
 
-                $("#modalVerCotizacion").modal('show');
+                $("#modalVerPedido").modal('show');
 
                 //  window.location = '/Pedido/Index';
             }
@@ -1730,28 +1737,28 @@ jQuery(function ($) {
 
     function desactivarBotonesVer()
     {
-        $("#btnCancelarCotizacion").attr('disabled', 'disabled');
+      /*  $("#btnCancelarCotizacion").attr('disabled', 'disabled');
         $("#btnEditarCotizacion").attr('disabled', 'disabled');
         $("#btnReCotizacion").attr('disabled', 'disabled');
         $("#btnAprobarCotizacion").attr('disabled', 'disabled');
         $("#btnDenegarCotizacion").attr('disabled', 'disabled');
         $("#btnAceptarCotizacion").attr('disabled', 'disabled');
         $("#btnRechazarCotizacion").attr('disabled', 'disabled');
-        $("#btnPDFCotizacion").attr('disabled', 'disabled');
+        $("#btnPDFCotizacion").attr('disabled', 'disabled');*/
     }
 
     function activarBotonesVer() {
-        $("#btnCancelarCotizacion").removeAttr('disabled');
+  /*      $("#btnCancelarCotizacion").removeAttr('disabled');
         $("#btnEditarCotizacion").removeAttr('disabled');
         $("#btnReCotizacion").removeAttr('disabled');
         $("#btnAprobarCotizacion").removeAttr('disabled');
         $("#btnDenegarCotizacion").removeAttr('disabled');
         $("#btnAceptarCotizacion").removeAttr('disabled');
         $("#btnRechazarCotizacion").removeAttr('disabled');
-        $("#btnPDFCotizacion").removeAttr('disabled');
+        $("#btnPDFCotizacion").removeAttr('disabled');*/
     }
 
-
+    /*
     $("#btnReCotizacion").click(function () {
         desactivarBotonesVer();
         $.ajax({
@@ -1781,21 +1788,21 @@ jQuery(function ($) {
             }
         })
     });
-
+    */
     /*btnEditarCotizacion desde busqueda*/
 
-    $("#btnEditarCotizacion").click(function () {
+    $("#btnEditarPedido").click(function () {
         desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
-            url: "/Pedido/ConsultarSiExisteCotizacion",
+            url: "/Pedido/ConsultarSiExistePedido",
             type: 'POST',
             async: false,
             success: function (resultado) {
                 if (resultado == "False") {
 
                     $.ajax({
-                        url: "/Pedido/iniciarEdicionCotizacion",
+                        url: "/Pedido/iniciarEdicionPedido",
                         type: 'POST',
 
                         error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
@@ -1824,7 +1831,7 @@ jQuery(function ($) {
 
 
 
-
+    /*
     $("#btnPDFCotizacion").click(function () {
         //$(document).on('click', "button.btnReCotizacion", function () {
         // var codigo = event.target.getAttribute("class").split(" ")[0];
@@ -1841,7 +1848,7 @@ jQuery(function ($) {
                 window.location = '/Pedido/DownLoadFile?fileName=' + fileName;
             }
         });
-    });
+    });*/
 
     function limpiarComentario()
     {

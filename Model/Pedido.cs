@@ -41,6 +41,39 @@ namespace Model
         public String observaciones { get; set; }
 
 
+        public String rangoFechasEntrega {
+            get
+            {
+
+                String rangoFechasEntrega = String.Empty;
+                String entregaDesde = this.fechaEntrega.ToString(Constantes.formatoFecha);
+                String entregaHasta = this.fechaMaximaEntrega.ToString(Constantes.formatoFecha);
+
+                if (entregaDesde.Equals(entregaHasta))
+                {
+                    return entregaDesde;
+                }
+                else
+                {
+                    return "Desde: " + entregaDesde + " Hasta:" + entregaHasta;
+                }
+            }
+        }
+
+        public String fechaHoraSolicitud
+        {
+            get { return this.fechaSolicitud.ToString("dd/MM/yyyy hh:mm"); }
+        }
+
+        public String numeroGrupoPedidoString
+        {
+            get { return this.numeroGrupoPedido == 0 ? "" : this.numeroGrupoPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
+        }
+
+        public String numeroPedidoString
+        {
+            get { return this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
+        }
 
         public Usuario usuario { get; set; }
         public Boolean incluidoIGV { get; set; }
