@@ -1199,7 +1199,7 @@ jQuery(function ($) {
             }
         }
         else {
-            if ($("#fechaLimiteValidezOferta").val().trim() != "") {
+            if ($("#fechaLimiteValidezOferta").val().trim() == "") {
                 alert("Debe ingresar la fecha de Validez Oferta.");
                 $("#fechaLimiteValidezOferta").focus();
                 return false;

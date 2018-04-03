@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Model
 {
-    public class Pedido : IDocumento
+    public class Pedido : Auditoria , IDocumento 
     {
         public Guid idPedido { get; set; }
         [Display(Name = "Número Pedido:")]
@@ -55,9 +55,7 @@ namespace Model
 
 
         //  public Usuario usuario_aprobador { get; set; }
-        public Decimal tasaIGV { get; set; }
-
-       // public Boolean mostrarCodigoProveedor { get; set; }
+        // public Boolean mostrarCodigoProveedor { get; set; }
         public Decimal montoSubTotal { get; set; }
         public Decimal montoIGV { get; set; }
         public Decimal montoTotal { get; set; }
@@ -83,9 +81,10 @@ namespace Model
 
         /*Campos utilizados para búsqueda*/
         public Usuario usuarioBusqueda { get; set; }
-        public DateTime fechaDesde { get; set; }
-        public DateTime fechaHasta { get; set; }
-
+        public DateTime fechaSolicitudDesde { get; set; }
+        public DateTime fechaSolicitudHasta { get; set; }
+        public DateTime fechaEntregaDesde { get; set; }
+        public DateTime fechaEntregaHasta { get; set; }
         public DateTime fechaPrecios { get; set; }
 
         /*Implementación Interface*/

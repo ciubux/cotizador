@@ -496,7 +496,7 @@ namespace Cotizador.Controllers
 
 
 
-        public String updateIdCiudad()
+        public String ChangeIdCiudad()
         {
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
             Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);     
@@ -522,7 +522,7 @@ namespace Cotizador.Controllers
             
         }
 
-        public String updateIdCiudadBusqueda()
+        public String ChangeIdCiudadBusqueda()
         {
             Cotizacion cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
             Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);

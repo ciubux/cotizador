@@ -21,162 +21,114 @@ namespace DataLayer
         public void InsertPedido(Pedido pedido)
         {
             var objCommand = GetSqlCommand("pi_pedido");
+            
+            InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido); //puede ser null
 
-            InputParameterAdd.Varchar(objCommand, "numero", "0000000001");
-            /*
-           // InputParameterAdd.Varchar(objCommand, "codigo", "0000000001");
-            InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
-            InputParameterAdd.DateTime(objCommand, "fechaLimiteValidezOferta", cotizacion.fechaLimiteValidezOferta);
-            InputParameterAdd.DateTime(objCommand, "fechaInicioVigenciaPrecios", cotizacion.fechaInicioVigenciaPrecios);
-            InputParameterAdd.DateTime(objCommand, "fechaFinVigenciaPrecios", cotizacion.fechaFinVigenciaPrecios);
-            InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIGV?1:0).ToString()));
-            InputParameterAdd.Int(objCommand, "consideraCantidades", (int)cotizacion.considerarCantidades);
-
-            //Si no se cuenta con idCliente entonces se registra el grupo
-            if (cotizacion.cliente.idCliente == Guid.Empty)
-            {
-                InputParameterAdd.Guid(objCommand, "idCliente", null);
-                InputParameterAdd.Guid(objCommand, "idGrupo", cotizacion.grupo.idGrupo);
-            }
+            if (pedido.cotizacion.idCotizacion == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idCotizacion", null); //puede ser null
             else
-            {
-                InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
-                InputParameterAdd.Guid(objCommand, "idGrupo", null);
-            }
+                InputParameterAdd.Guid(objCommand, "idCotizacion", pedido.cotizacion.idCotizacion); //puede ser null
 
-            InputParameterAdd.Guid(objCommand, "idCiudad", cotizacion.ciudad.idCiudad);
-            //porcentajeFlete
-            InputParameterAdd.Decimal(objCommand, "porcentajeFlete", cotizacion.flete);
-            InputParameterAdd.Decimal(objCommand, "igv", cotizacion.igv);
-            InputParameterAdd.Decimal(objCommand, "total", cotizacion.montoTotal);
-            InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones);
-            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto);
-          
-            InputParameterAdd.SmallInt(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
-            InputParameterAdd.Int(objCommand, "mostrarValidezOfertaDias", cotizacion.mostrarValidezOfertaEnDias);
-            InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
-
-            InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada?1:0));
-            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion);
-
+            InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
+            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.contactoEntrega); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.telefonoContactoEntrega); //puede ser null
+            InputParameterAdd.DateTime(objCommand, "fechaSolicitud", pedido.fechaSolicitud);
+            InputParameterAdd.DateTime(objCommand, "fechaEntrega", pedido.fechaEntrega);
+            InputParameterAdd.DateTime(objCommand, "fechaMaximaEntrega", pedido.fechaMaximaEntrega);
+            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.contactoPedido);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.telefonoContactoPedido);  //puede ser null
+            InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV?1:0));
+            InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
+            InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
+            InputParameterAdd.Decimal(objCommand, "total", pedido.montoTotal);
+            InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);  //puede ser null
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
-            OutputParameterAdd.BigInt(objCommand, "codigo");
+            OutputParameterAdd.BigInt(objCommand, "numero");
             ExecuteNonQuery(objCommand);
 
-            cotizacion.idCotizacion = (Guid)objCommand.Parameters["@newId"].Value;
-            cotizacion.codigo = (Int64)objCommand.Parameters["@codigo"].Value;
+            pedido.idPedido = (Guid)objCommand.Parameters["@newId"].Value;
+            pedido.numeroPedido = (Int64)objCommand.Parameters["@numero"].Value;
 
 
-            foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
+            foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
-                cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
-                this.InsertCotizacionDetalle(cotizacionDetalle);
+                pedidoDetalle.idPedido = pedido.idPedido;
+                this.InsertPedidoDetalle(pedidoDetalle);
             }
 
-            */
+        
         }
 
-        public void UpdateCotizacion(Cotizacion cotizacion)
+        public void UpdatePedido(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("pu_cotizacion");
-       
+            var objCommand = GetSqlCommand("pu_pedido");
 
-            // InputParameterAdd.Varchar(objCommand, "codigo", "0000000001");
-            InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fecha);
-            InputParameterAdd.DateTime(objCommand, "fechaLimiteValidezOferta", cotizacion.fechaLimiteValidezOferta);
-            InputParameterAdd.DateTime(objCommand, "fechaInicioVigenciaPrecios", cotizacion.fechaInicioVigenciaPrecios);
-            InputParameterAdd.DateTime(objCommand, "fechaFinVigenciaPrecios", cotizacion.fechaFinVigenciaPrecios);
-            InputParameterAdd.DateTime(objCommand, "fechaModificacion", cotizacion.fechaModificacion);
-            InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIGV ? 1 : 0).ToString()));
-            InputParameterAdd.Int(objCommand, "consideraCantidades", (int)cotizacion.considerarCantidades);
+            InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido); //puede ser null
 
-            //Si no se cuenta con idCliente entonces se registra el grupo
-            if (cotizacion.cliente.idCliente == Guid.Empty)
-            {
-                InputParameterAdd.Guid(objCommand, "idCliente", null);
-                InputParameterAdd.Guid(objCommand, "idGrupo", cotizacion.grupo.idGrupo);
-            }
+            if (pedido.cotizacion.idCotizacion == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idCotizacion", null); //puede ser null
             else
-            {
-                InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
-                InputParameterAdd.Guid(objCommand, "idGrupo", null);
-            }
+                InputParameterAdd.Guid(objCommand, "idCotizacion", pedido.cotizacion.idCotizacion); //puede ser null
 
-
-            InputParameterAdd.Guid(objCommand, "idCiudad", cotizacion.ciudad.idCiudad);
-            //porcentajeFlete
-            InputParameterAdd.Decimal(objCommand, "porcentajeFlete", cotizacion.flete);
-            InputParameterAdd.Decimal(objCommand, "igv", cotizacion.igv);
-            InputParameterAdd.Decimal(objCommand, "total", cotizacion.montoTotal);
-            InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones);
-            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto);
-            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
-            InputParameterAdd.Int(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
-
-            InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
-            InputParameterAdd.Int(objCommand, "mostrarValidezOfertaDias", cotizacion.mostrarValidezOfertaEnDias);
-
-            InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada ? 1 : 0));
-            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion);
-
-
-            OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
+            InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
+            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.contactoEntrega); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.telefonoContactoEntrega); //puede ser null
+            InputParameterAdd.DateTime(objCommand, "fechaSolicitud", pedido.fechaSolicitud);
+            InputParameterAdd.DateTime(objCommand, "fechaEntrega", pedido.fechaEntrega);
+            InputParameterAdd.DateTime(objCommand, "fechaMaximaEntrega", pedido.fechaMaximaEntrega);
+            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.contactoPedido);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.telefonoContactoPedido);  //puede ser null
+            InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV ? 1 : 0));
+            InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
+            InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
+            InputParameterAdd.Decimal(objCommand, "total", pedido.montoTotal);
+            InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);  //puede ser null
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
             ExecuteNonQuery(objCommand);
 
-            DateTime fechaModifiacionActual = (DateTime)objCommand.Parameters["@fechaModificacionActual"].Value;
 
-           
-
-        //    ExecuteNonQuery(objCommand);
-
-   
-            DateTime date1 = new DateTime(fechaModifiacionActual.Year, fechaModifiacionActual.Month, fechaModifiacionActual.Day, fechaModifiacionActual.Hour, fechaModifiacionActual.Minute, fechaModifiacionActual.Second);
-            DateTime date2 = new DateTime(cotizacion.fechaModificacion.Year, cotizacion.fechaModificacion.Month, cotizacion.fechaModificacion.Day, cotizacion.fechaModificacion.Hour, cotizacion.fechaModificacion.Minute, cotizacion.fechaModificacion.Second);
-
-            int result = DateTime.Compare(date1, date2);
-            if (result != 0)
+            foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
-                //No se puede actualizar la cotización si las fechas son distintas
-                throw new Exception("CotizacionDesactualizada");
+                pedidoDetalle.idPedido = pedido.idPedido;
+                this.InsertPedidoDetalle(pedidoDetalle);
             }
-            else
-            { 
-
-                foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
-                {
-                    cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
-                    this.InsertCotizacionDetalle(cotizacionDetalle);
-                }
-            }
-
         }
+    
 
-
-        public void InsertCotizacionDetalle(CotizacionDetalle cotizacionDetalle)
+        public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle)
         {
-            var objCommand = GetSqlCommand("pi_cotizacionDetalle");
-            InputParameterAdd.Guid(objCommand, "idCotizacion", cotizacionDetalle.idCotizacion);
-            InputParameterAdd.Guid(objCommand, "idProducto", cotizacionDetalle.producto.idProducto);
-            InputParameterAdd.Int(objCommand, "cantidad", cotizacionDetalle.cantidad);
+            var objCommand = GetSqlCommand("pi_pedidoDetalle");
+            InputParameterAdd.Guid(objCommand, "idPedido", pedidoDetalle.idPedido);
+            InputParameterAdd.Guid(objCommand, "idProducto", pedidoDetalle.producto.idProducto);
+            InputParameterAdd.Int(objCommand, "cantidad", pedidoDetalle.cantidad);
             //Siempre se almacena el precio sin igv de la unidad estandar
-            InputParameterAdd.Decimal(objCommand, "precioSinIGV", cotizacionDetalle.producto.precioSinIgv);
+            InputParameterAdd.Decimal(objCommand, "precioSinIGV", pedidoDetalle.producto.precioSinIgv);
             //Siempre se almacena el costo sin igv de la unidad estandar
-            InputParameterAdd.Decimal(objCommand, "costoSinIGV", cotizacionDetalle.producto.costoSinIgv);
-            InputParameterAdd.Decimal(objCommand, "equivalencia", cotizacionDetalle.producto.equivalencia);
-            InputParameterAdd.Varchar(objCommand, "unidad", cotizacionDetalle.unidad);
-            InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", cotizacionDetalle.porcentajeDescuento);
-            InputParameterAdd.Decimal(objCommand, "precioNeto", cotizacionDetalle.precioNeto);
-            InputParameterAdd.Int(objCommand, "esPrecioAlternativo", cotizacionDetalle.esPrecioAlternativo?1:0);
-            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacionDetalle.usuario.idUsuario);
-            InputParameterAdd.Decimal(objCommand, "flete", cotizacionDetalle.flete);
-            InputParameterAdd.Varchar(objCommand, "observaciones", cotizacionDetalle.observacion);
+            InputParameterAdd.Decimal(objCommand, "costoSinIGV", pedidoDetalle.producto.costoSinIgv);
+            InputParameterAdd.Decimal(objCommand, "equivalencia", pedidoDetalle.producto.equivalencia);
+            InputParameterAdd.Varchar(objCommand, "unidad", pedidoDetalle.unidad);
+            InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", pedidoDetalle.porcentajeDescuento);
+            InputParameterAdd.Decimal(objCommand, "precioNeto", pedidoDetalle.precioNeto);
+            InputParameterAdd.Int(objCommand, "esPrecioAlternativo", pedidoDetalle.esPrecioAlternativo?1:0);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedidoDetalle.usuario.idUsuario);
+            InputParameterAdd.Decimal(objCommand, "flete", pedidoDetalle.flete);
+            InputParameterAdd.Varchar(objCommand, "observaciones", pedidoDetalle.observacion);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             ExecuteNonQuery(objCommand);
-
-            cotizacionDetalle.idCotizacionDetalle = (Guid)objCommand.Parameters["@newId"].Value;
+          
+            pedidoDetalle.idPedidoDetalle = (Guid)objCommand.Parameters["@newId"].Value;
         }
 
         public Cotizacion aprobarCotizacion(Cotizacion cotizacion)
@@ -471,73 +423,69 @@ namespace DataLayer
             return cotizacion;
         }
 
-        public List<Cotizacion> SelectCotizaciones(Cotizacion cotizacion)
+        public List<Pedido> SelectPedidos(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("ps_cotizaciones");
-            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
-            InputParameterAdd.Guid(objCommand, "id_cliente", cotizacion.cliente.idCliente);
-            InputParameterAdd.Guid(objCommand, "id_ciudad", cotizacion.ciudad.idCiudad);
-            InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
-            InputParameterAdd.DateTime(objCommand, "fechaDesde", cotizacion.fechaDesde);
-            InputParameterAdd.DateTime(objCommand, "fechaHasta", cotizacion.fechaHasta);
-            InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
+            var objCommand = GetSqlCommand("ps_pedidos");
+            InputParameterAdd.BigInt(objCommand, "numero", pedido.numeroPedido);
+            InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido);
+            InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
+            InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuarioBusqueda.idUsuario);
+            /*Fecha Solicitud Desde Hasta*/
+            InputParameterAdd.DateTime(objCommand, "fechaSolicitudDesde", pedido.fechaSolicitudDesde);
+            InputParameterAdd.DateTime(objCommand, "fechaSolicitudHasta", pedido.fechaSolicitudHasta);
+            /*Fecha Entrega Desde Hasta*/
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta);
+
+
+            InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             DataTable dataTable = Execute(objCommand);
 
-            List<Cotizacion> cotizacionList = new List<Cotizacion>();
+            List<Pedido> pedidoList = new List<Pedido>();
 
             foreach (DataRow row in dataTable.Rows)
             {
-                cotizacion = new Cotizacion();
-                cotizacion.codigo = Converter.GetLong(row, "cod_cotizacion");
-                cotizacion.idCotizacion = Converter.GetGuid(row, "id_cotizacion");
-                cotizacion.fecha = Converter.GetDateTime(row, "fecha");
-                cotizacion.incluidoIGV = Converter.GetBool(row, "incluido_igv");
-                cotizacion.considerarCantidades = (Cotizacion.OpcionesConsiderarCantidades)Converter.GetInt(row, "considera_cantidades");
-                cotizacion.flete = Converter.GetDecimal(row, "porcentaje_flete");
-                cotizacion.igv = Converter.GetDecimal(row, "igv");
-                cotizacion.montoTotal = Converter.GetDecimal(row, "total");
-                
-                
-                cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
+                pedido = new Pedido();
+                pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
+                pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
+                pedido.idPedido = Converter.GetGuid(row, "id_pedido");
+                pedido.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
+                pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
 
-                ///Mover "{0:0.00}" a clase de constantes
-                cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1 + cotizacion.igv)));
-                cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
-                
+                pedido.montoIGV = Converter.GetDecimal(row, "igv");
+                pedido.montoTotal = Converter.GetDecimal(row, "total");
+                pedido.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.montoTotal - pedido.montoIGV));
 
-                cotizacion.observaciones = Converter.GetString(row, "observaciones");
+                pedido.observaciones = Converter.GetString(row, "observaciones");
 
+                pedido.cliente = new Cliente();
+                pedido.cliente.codigo = Converter.GetString(row, "codigo");
+                pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                pedido.cliente.ruc = Converter.GetString(row, "ruc");
 
-                cotizacion.contacto = Converter.GetString(row, "contacto");
-                cotizacion.cliente = new Cliente();
-                cotizacion.cliente.codigo = Converter.GetString(row, "codigo");
-                cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
-                cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
-
-                cotizacion.usuario = new Usuario();
-                cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");
-                cotizacion.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                pedido.usuario = new Usuario();
+                pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
 
                 //  cotizacion.usuario_aprobador = new Usuario();
                 //  cotizacion.usuario_aprobador.nombre = Converter.GetString(row, "nombre_usuario_aprobador");
 
-                cotizacion.ciudad = new Ciudad();
-                cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+                pedido.ciudad = new Ciudad();
+                pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
 
-                cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
-                cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Converter.GetInt(row, "estado_seguimiento");
-                cotizacion.seguimientoCotizacion.observacion = Converter.GetString(row, "observacion_seguimiento");
-                cotizacion.seguimientoCotizacion.usuario = new Usuario();
-                cotizacion.seguimientoCotizacion.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
-                cotizacion.seguimientoCotizacion.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
+                pedido.seguimientoPedido = new SeguimientoPedido();
+                pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_seguimiento");
+                pedido.seguimientoPedido.observacion = Converter.GetString(row, "observacion_seguimiento");
+                pedido.seguimientoPedido.usuario = new Usuario();
+                pedido.seguimientoPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
+                pedido.seguimientoPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
 
-
-
-                cotizacionList.Add(cotizacion);
+                pedidoList.Add(pedido);
             }
-            return cotizacionList;
+            return pedidoList;
         }
 
 

@@ -295,11 +295,18 @@ jQuery(function ($) {
 
 
 
-    var fechaDesde = $("#fechaDesdetmp").val();
-    $("#fechaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaDesde);
+    var fechaSolicitudDesde = $("#fechaSolicitudDesdetmp").val();
+    $("#fechaSolicitudDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudDesde);
 
-    var fechaHasta = $("#fechaHastatmp").val();
-    $("#fechaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaHasta);
+    var fechaSolicitudHasta = $("#fechaSolicitudHastatmp").val();
+    $("#fechaSolicitudHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudHasta);
+
+    var fechaEntregaDesde = $("#fechaEntregaDesdetmp").val();
+    $("#fechaEntregaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
+
+    var fechaEntregaHasta = $("#fechaEntregaHastaTmp").val();
+    $("#fechaEntregaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
+
 
     var fechaPrecios = $("#fechaPreciostmp").val();
     $("#fechaPrecios").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaPrecios);    
@@ -1263,25 +1270,26 @@ jQuery(function ($) {
                 continuarLuego: continuarLuego
             },
             error: function (detalle) {
-                alert("Se generó un error al intentar finalizar la creación de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                alert("Se generó un error al intentar finalizar la creación del pedido. Si estuvo actualizando, vuelva a buscar el pedido, es posible que este siendo modificado por otro usuario.");
             },
             success: function (resultado) {
                 $("#numero").val(resultado.codigo);
 
                 if (resultado.estado == ESTADO_APROBADA) {
-                    alert("La cotización número " + resultado.codigo + " fue creada correctamente.");
-                    generarPDF();
+                    alert("El pedido número " + resultado.codigo + " fue creado correctamente.");
+                    window.location = '/Pedido/Index';
+                    //generarPDF();
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN.");
+                    alert("El pedido número " + resultado.codigo + " fue creado correctamente, sin embargo requiere APROBACIÓN.");
                     window.location = '/Pedido/Index';
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
-                    alert("La cotización número " + resultado.codigo + " fue guardada correctamente para seguir editandola posteriormente.");
+                    alert("El pedido número " + resultado.codigo + " fue guardado correctamente para seguir editandolo posteriormente.");
                     window.location = '/Pedido/Index';
                 }
                 else {
-                    alert("La cotización ha tenido problemas para se procesada; Contacte con el Administrador");
+                    alert("La cotización ha tenido problemas para se procesada; Contacte con el Administrador.");
                     window.location = '/Pedido/Index';
                 }
 
@@ -1301,25 +1309,25 @@ jQuery(function ($) {
                 continuarLuego: continuarLuego
             },
             error: function (detalle) {
-                alert("Se generó un error al intentar finalizar la edición de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                alert("Se generó un error al intentar finalizar la edición del pedido. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
             },
             success: function (resultado) {
                 $("#numero").val(resultado.codigo);
 
                 if (resultado.estado == ESTADO_APROBADA) {
-                    alert("La cotización número " + resultado.codigo + " fue editada correctamente.");
-                    generarPDF();
+                    alert("El pedido número " + resultado.codigo + " fue editado correctamente.");
+                    window.location = '/Pedido/Index';
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN.");
+                    alert("El pedido número " + resultado.codigo + " fue editado correctamente, sin embargo requiere APROBACIÓN.");
                     window.location = '/Pedido/Index';
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
-                    alert("La cotización número " + resultado.codigo + " fue guardada correctamente para seguir editandola posteriormente.");
+                    alert("El pedido número " + resultado.codigo + " fue guardado correctamente para seguir editandola posteriormente.");
                     window.location = '/Pedido/Index';
                 }
                 else {
-                    alert("La cotización ha tenido problemas para se procesada; Contacte con el Administrador");
+                    alert("El pedido ha tenido problemas para se procesado; Contacte con el Administrador.");
                      window.location = '/Pedido/Index';
                 }
             }
@@ -1329,24 +1337,114 @@ jQuery(function ($) {
 
 
     $("#btnFinalizarCreacionPedido").click(function () {
-        crearCotizacion(0);
+        crearPedido(0);
     });
 
     $("#btnContinuarCreandoLuego").click(function () {
-        crearCotizacion(1);
+        crearPedido(1);
     });
 
     $("#btnFinalizarEdicionPedido").click(function () {
-        editarCotizacion(0);
+        crearPedido(0);
     });
 
     $("#btnContinuarEditandoLuego").click(function () {
-        editarCotizacion(1);
+        crearPedido(1);
     });
 
 
 
+    function validarIngresoDatosObligatoriosPedido() {
+        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
+            alert("Debe seleccionar una ciudad previamente.");
+            $("#idCiudad").focus();
+            return false;
+        }
 
+        if ($("#idCliente").val().trim() == "") {
+            alert("Debe seleccionar un cliente.");
+            $('#idCliente').trigger('chosen:activate');
+            return false;
+        }
+        /*
+        if ($("#contacto").val().trim() == "") {
+            alert("Debe ingresar un contacto.");
+            $("#contacto").focus();
+            return false;
+        }
+
+        var fecha = $("#fecha").val();
+        if ($("#fecha").val().trim() == "") {
+            alert("Debe ingresar la fecha de la cotización.");
+            $("#fecha").focus();
+            return false;
+        }
+
+        if ($("#mostrarValidezOfertaEnDias").val() == 0) {
+            if ($("#validezOfertaEnDias").val() < 1) {
+                alert("La cantidad de días de validez de oferta debe ser mayor o igual a uno.");
+                $("#validezOfertaEnDias").focus();
+                return false;
+            }
+        }
+        else {
+            if ($("#fechaLimiteValidezOferta").val().trim() != "") {
+                alert("Debe ingresar la fecha de Validez Oferta.");
+                $("#fechaLimiteValidezOferta").focus();
+                return false;
+            }
+
+        }
+
+
+
+        if (convertirFechaNumero(fechaLimiteValidezOferta) <= convertirFechaNumero(fecha)) {
+            alert("EL fin de Validez de Oferta debe ser mayor o igual a la fecha de la cotización.");
+            $("#fechaLimiteValidezOferta").focus();
+            return false;
+        }
+
+        var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPrecios").val();
+        if (fechaInicioVigenciaPrecios.trim() != "") {
+            if (convertirFechaNumero(fechaInicioVigenciaPrecios) <= convertirFechaNumero(fecha)) {
+                alert("El inicio de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
+                $("#fechaInicioVigenciaPrecios").focus();
+                return false;
+            }
+        }
+
+        var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
+        if (fechaFinVigenciaPrecios.trim() != "") {
+
+            if (fechaInicioVigenciaPrecios.trim() != "") {
+                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fechaInicioVigenciaPrecios)) {
+                    alert("El fin de vigencia de precios debe ser mayor o igual al inicio de vigencia de precios.");
+                    $("#fechaFinVigenciaPrecios").focus();
+                    return false;
+                }
+            }
+            else {
+                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fecha)) {
+                    alert("El fin de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
+                    $("#fechaFinVigenciaPrecios").focus();
+                    return false;
+                }
+            }
+        }*/
+
+        var contador = 0;
+        var $j_object = $("td.detcantidad");
+        $.each($j_object, function (key, value) {
+            contador++;
+        });
+
+        if (contador == 0) {
+            alert("Debe ingresar el detalle del pedido.");
+            return false;
+        }
+
+        return true;
+    }
 
 
 

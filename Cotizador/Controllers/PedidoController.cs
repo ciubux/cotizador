@@ -14,6 +14,66 @@ namespace Cotizador.Controllers
         // GET: Pedido
         public ActionResult Index()
         {
+            this.Session["pagina"] = Constantes.BUSQUEDA_PEDIDO;
+
+            if (this.Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (this.Session["pedidoBusqueda"] == null)
+            {
+                Pedido pedidoTmp = new Pedido();
+                pedidoTmp.fechaSolicitudDesde = DateTime.Now.AddDays(-10);
+                DateTime fechaHasta = DateTime.Now;
+                pedidoTmp.fechaSolicitudHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
+                pedidoTmp.fechaEntregaDesde = DateTime.Now.AddDays(-10);
+                DateTime fechaEntregaHasta = DateTime.Now;
+                pedidoTmp.fechaEntregaHasta = new DateTime(fechaEntregaHasta.Year, fechaEntregaHasta.Month, fechaEntregaHasta.Day, 23, 59, 59);
+
+                pedidoTmp.ciudad = new Ciudad();
+                pedidoTmp.cliente = new Cliente();
+                pedidoTmp.seguimientoPedido = new SeguimientoPedido();
+                pedidoTmp.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Todos;
+                // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
+                pedidoTmp.usuario = (Usuario)this.Session["usuario"];
+                pedidoTmp.usuarioBusqueda = pedidoTmp.usuario;
+                this.Session["pedidoBusqueda"] = pedidoTmp;
+
+
+            }
+
+            Pedido pedidoSearch = (Pedido)this.Session["pedidoBusqueda"];
+
+
+            ViewBag.fechaSolicitudDesde = pedidoSearch.fechaSolicitudDesde.ToString(Constantes.formatoFecha);
+            ViewBag.fechaSolicitudHasta = pedidoSearch.fechaSolicitudHasta.ToString(Constantes.formatoFecha);
+            ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.ToString(Constantes.formatoFecha);
+            ViewBag.fechaEntregaHasta = pedidoSearch.fechaEntregaHasta.ToString(Constantes.formatoFecha);
+
+            if (this.Session["pedidoList"] == null)
+            {
+                this.Session["pedidoList"] = new List<Pedido>();
+            }
+
+            Pedido pedido = (Pedido)this.Session["pedidoBusqueda"];
+            int existeCliente = 0;
+            //  if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
+            if (pedido.cliente.idCliente != Guid.Empty)
+            {
+                existeCliente = 1;
+            }
+
+            if (pedido.cliente.idCliente != Guid.Empty)
+            {
+                ViewBag.idCliente = pedido.cliente.idCliente;
+            }
+
+            ViewBag.pedido = pedido;
+
+            ViewBag.pedidoList = this.Session["pedidoList"];
+            ViewBag.existeCliente = existeCliente;
+
             return View();
         }
 
@@ -99,7 +159,7 @@ namespace Cotizador.Controllers
             pedido.contactoPedido = String.Empty;
             pedido.telefonoContactoPedido = String.Empty;
             pedido.incluidoIGV = false;
-            pedido.tasaIGV = Constantes.IGV;
+          //  pedido.tasaIGV = Constantes.IGV;
             //pedido.flete = 0;
            // pedido.mostrarCodigoProveedor = true;
             pedido.observaciones = String.Empty;
@@ -321,6 +381,27 @@ namespace Cotizador.Controllers
 
         }
 
+        public String ChangeIdCiudadBusqueda()
+        {
+            Pedido pedido = (Pedido)this.Session["pedidoBusqueda"];
+            Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+
+            CiudadBL ciudadBL = new CiudadBL();
+            Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
+            pedido.cliente = new Cliente();
+            //Para realizar el cambio de ciudad ningun producto debe estar agregado
+            pedido.ciudad = ciudadNueva;
+            this.Session["pedidoBusqueda"] = pedido;
+            return "{\"idCiudad\": \"" + idCiudad + "\"}";
+
+
+        }
+        
+
+
+
+
+
         public void ChangeNumeroReferenciaCliente()
         {
             Pedido pedido = (Pedido)this.Session["pedido"];
@@ -427,16 +508,17 @@ namespace Cotizador.Controllers
             int estado = (int)pedido.seguimientoPedido.estado;
             if (continuarLuego == 1)
             {
-                SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoCotizacion = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
-                estado = (int)estadosSeguimientoCotizacion;
+                SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
+                estado = (int)estadosSeguimientoPedido;
                 String observacion = "Se continuará editando luego";
-                //updateEstadoSeguimientoCotizacion(numeroPedido, estadosSeguimientoCotizacion, observacion);
+                //Falta modificar
+                //   updateEstadoSeguimientoPedido(numeroPedido, estadosSeguimientoPedido, observacion);
             }
             pedido = null;
             this.Session["pedido"] = null;
 
 
-            usuarioBL.updateCotizacionSerializada(usuario, null);
+            usuarioBL.updatePedidoSerializado(usuario, null);
             String resultado = "{ \"codigo\":\"" + numeroPedido + "\", \"estado\":\"" + estado + "\" }";
             return resultado;
         }
@@ -451,21 +533,23 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session["usuario"];
 
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
-            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
-            cotizacion.usuario = usuario;
-            CotizacionBL bl = new CotizacionBL();
-            bl.UpdateCotizacion(cotizacion);
-            long codigo = cotizacion.codigo;
-            int estado = (int)cotizacion.seguimientoCotizacion.estado;
+            Pedido pedido = (Pedido)this.Session["pedido"];
+            pedido.usuario = usuario;
+            PedidoBL bl = new PedidoBL();
+            bl.UpdatePedido(pedido);
+            long codigo = pedido.numeroPedido;
+            int estado = (int)pedido.seguimientoPedido.estado;
             if (continuarLuego == 1)
             {
-                SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
-                estado = (int)estadosSeguimientoCotizacion;
+                SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
+                estado = (int)estadosSeguimientoPedido;
                 String observacion = "Se continuará editando luego";
-                updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
+
+                //Falta modificar
+                //updateEstadoSeguimientoPedido(codigo, estadosSeguimientoPedido, observacion);
             }
-            cotizacion = null;
-            this.Session["cotizacion"] = null;
+            pedido = null;
+            this.Session["pedido"] = null;
 
 
             usuarioBL.updateCotizacionSerializada(usuario, null);
@@ -475,21 +559,34 @@ namespace Cotizador.Controllers
 
 
 
-        private void updateEstadoSeguimientoCotizacion(Int64 codigo, SeguimientoCotizacion.estadosSeguimientoCotizacion estado, String observacion)
+        private void updateEstadoSeguimientoPedido(Int64 codigo, SeguimientoPedido.estadosSeguimientoPedido estado, String observacion)
         {
-            Cotizacion cotizacionSession = (Cotizacion)this.Session["cotizacion"];
-            CotizacionBL cotizacionBL = new CotizacionBL();
-            Cotizacion cotizacion = new Cotizacion();
-            cotizacion.codigo = codigo;
+            Pedido cotizacionSession = (Pedido)this.Session["pedido"];
+            PedidoBL pedidoBL = new PedidoBL();
+            Pedido pedido = new Pedido();
+            pedido.numeroPedido = codigo;
             //REVISAR
-            cotizacion.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
-            cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
-            cotizacion.seguimientoCotizacion.estado = estado;
-            cotizacion.seguimientoCotizacion.observacion = observacion;
-            cotizacion.usuario = (Usuario)this.Session["usuario"];
-            cotizacionBL.cambiarEstadoCotizacion(cotizacion);
+            pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
+            pedido.seguimientoPedido = new SeguimientoPedido();
+            pedido.seguimientoPedido.estado = estado;
+            pedido.seguimientoPedido.observacion = observacion;
+            pedido.usuario = (Usuario)this.Session["usuario"];
+           //FALTA
+            //pedidoBL.cambiarEstadoCotizacion(pedido);
         }
         #endregion
+
+        public int Search()
+        {
+            //Se recupera el pedido de la session
+            Pedido pedido = (Pedido)this.Session["pedidoBusqueda"];
+            PedidoBL pedidoBL = new PedidoBL();
+            List<Pedido> pedidoList = pedidoBL.GetPedidos(pedido);
+            //Se coloca en session el resultado de la búsqueda
+            this.Session["pedidoList"] = pedidoList;
+            //Se retorna la cantidad de elementos encontrados
+            return pedidoList.Count();
+        }
 
 
     }

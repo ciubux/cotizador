@@ -31,7 +31,13 @@ namespace BusinessLayer
             }
         }
 
-
+        public void updatePedidoSerializado(Usuario usuario, String pedidoSerializado)
+        {
+        /*    using (var usuarioDAL = new UsuarioDAL())
+            {
+                usuarioDAL.updateCotizacionSerializada(usuario, pedidoSerializado);
+            }*/
+        }
 
     }
 }
