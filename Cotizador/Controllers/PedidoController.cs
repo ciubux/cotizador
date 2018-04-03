@@ -578,12 +578,48 @@ namespace Cotizador.Controllers
 
         public int Search()
         {
-            //Se recupera el pedido de la session
+            //Se recupera el pedido Búsqueda de la session
             Pedido pedido = (Pedido)this.Session["pedidoBusqueda"];
+
+            String[] solDesde = this.Request.Params["fechaSolicitudDesde"].Split('/');
+            pedido.fechaSolicitudDesde = new DateTime(Int32.Parse(solDesde[2]), Int32.Parse(solDesde[1]), Int32.Parse(solDesde[0]));
+
+            String[] solHasta = this.Request.Params["fechaSolicitudHasta"].Split('/');
+            pedido.fechaSolicitudHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]));
+
+            String[] entregaDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
+            pedido.fechaEntregaDesde = new DateTime(Int32.Parse(entregaDesde[2]), Int32.Parse(entregaDesde[1]), Int32.Parse(entregaDesde[0]));
+
+            String[] entregaHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
+            pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]));
+
+
+            if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
+            {
+                pedido.numeroPedido = 0;
+            }
+            else
+            {
+                pedido.numeroPedido = long.Parse(this.Request.Params["numero"]);
+            }
+
+            if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
+            {
+                pedido.numeroGrupoPedido = 0;
+            }
+            else
+            {
+                pedido.numeroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
+            }
+
+
+            pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido) Int32.Parse(this.Request.Params["estado"]);
+
             PedidoBL pedidoBL = new PedidoBL();
             List<Pedido> pedidoList = pedidoBL.GetPedidos(pedido);
             //Se coloca en session el resultado de la búsqueda
             this.Session["pedidoList"] = pedidoList;
+            this.Session["pedidoBusqueda"] = pedido;
             //Se retorna la cantidad de elementos encontrados
             return pedidoList.Count();
         }

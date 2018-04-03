@@ -81,9 +81,13 @@ namespace Model
 
         /*Campos utilizados para búsqueda*/
         public Usuario usuarioBusqueda { get; set; }
+        [Display(Name = "Solicitado Desde:")]
         public DateTime fechaSolicitudDesde { get; set; }
+        [Display(Name = "Solicitado Hasta:")]
         public DateTime fechaSolicitudHasta { get; set; }
+        [Display(Name = "Entrega Desde:")]
         public DateTime fechaEntregaDesde { get; set; }
+        [Display(Name = "Entrega Hasta:")]
         public DateTime fechaEntregaHasta { get; set; }
         public DateTime fechaPrecios { get; set; }
 

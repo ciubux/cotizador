@@ -296,16 +296,16 @@ jQuery(function ($) {
 
 
     var fechaSolicitudDesde = $("#fechaSolicitudDesdetmp").val();
-    $("#fechaSolicitudDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudDesde);
+    $("#pedido_fechaSolicitudDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudDesde);
 
     var fechaSolicitudHasta = $("#fechaSolicitudHastatmp").val();
-    $("#fechaSolicitudHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudHasta);
+    $("#pedido_fechaSolicitudHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudHasta);
 
     var fechaEntregaDesde = $("#fechaEntregaDesdetmp").val();
-    $("#fechaEntregaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
+    $("#pedido_fechaEntregaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
 
     var fechaEntregaHasta = $("#fechaEntregaHastaTmp").val();
-    $("#fechaEntregaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
+    $("#pedido_fechaEntregaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
 
 
     var fechaPrecios = $("#fechaPreciostmp").val();
@@ -2568,35 +2568,46 @@ jQuery(function ($) {
 
 
 
-    $("#btnBusquedaCotizaciones").click(function () {
+    $("#btnBusquedaPedidos").click(function () {
         var idCiudad = $("#idCiudad").val();
         var idCliente = $("#idCliente").val();
-        var fechaDesde = $("#fechaDesde").val();
-        var fechaHasta = $("#fechaHasta").val();
-        var numero = $("#numero").val();
+        var fechaSolicitudDesde = $("#pedido_fechaSolicitudDesde").val();
+        var fechaSolicitudHasta = $("#pedido_fechaSolicitudHasta").val();
+        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
+        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
+        var pedido_numeroPedido = $("#pedido_numeroPedido").val();
+        var pedido_numeroGrupoPedido = $("#pedido_numeroGrupoPedido").val();
         var estado = $("#estado").val();
 
         $.ajax({
-            url: "/Pedido/SearchCotizaciones",
+            url: "/Pedido/Search",
             type: 'POST',
             //   dataType: 'JSON',
             data: {
                 idCiudad: idCiudad,
                 idCliente: idCliente,
-                fechaDesde: fechaDesde,
-                fechaHasta: fechaHasta,
-                numero: numero,
+                fechaSolicitudDesde: fechaSolicitudDesde,
+                fechaSolicitudHasta: fechaSolicitudHasta,
+                fechaEntregaDesde: fechaEntregaDesde,
+                fechaEntregaHasta: fechaEntregaHasta,
+                numero: pedido_numeroPedido,
+                numeroGrupo: pedido_numeroGrupoPedido,
                 estado: estado
             },
             success: function (resultado) {
 
                 if (resultado == "0") {
-                    alert("No se encontraron Cotizaciones");
+                    alert("No se encontraron Pedidos");
                 }
                 location.reload();
             }
         });
     });
+
+
+
+
+
 
     $("#fechaDesde").change(function () {
         var fechaDesde = $("#fechaDesde").val();
