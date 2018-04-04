@@ -11,7 +11,7 @@ namespace Cotizador.Controllers
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(List<IDocumentoDetalle>));
+            return (objectType == typeof(List<DocumentoDetalle>));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

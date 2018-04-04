@@ -29,7 +29,7 @@ namespace Model
             get;
             set;
         }
-        List<IDocumentoDetalle> documentoDetalle
+        List<DocumentoDetalle> documentoDetalle
         {
             get;
             set;

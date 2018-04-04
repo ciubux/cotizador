@@ -161,5 +161,14 @@ namespace BusinessLayer
             }
             return pedido;
         }
+
+        public void cambiarEstadoPedido(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                dal.insertSeguimientoPedido(pedido);
+            }
+
+        }
     }
 }

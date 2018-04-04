@@ -169,6 +169,33 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
+        public void iniciarEdicionPedido()
+        {
+            Pedido pedidoVer = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+            PedidoBL pedidoBL = new PedidoBL();
+            Pedido pedido = new Pedido();
+            pedido.idPedido = pedidoVer.idPedido;
+            //    pedido.fechaModificacion = cotizacionVer.fechaModificacion;
+            pedido.seguimientoPedido = new SeguimientoPedido();
+            pedido.usuario = (Usuario)this.Session["usuario"];
+            //Se cambia el estado de la cotizacion a Edición
+            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
+            pedidoBL.cambiarEstadoPedido(pedido);
+            //Se obtiene los datos de la cotización ya modificada
+            pedido = pedidoBL.GetPedido(pedido);
+
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+        }
+
+
+        public ActionResult CancelarCreacionPedido()
+        {
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
+            UsuarioBL usuarioBL = new UsuarioBL();
+            Usuario usuario = (Usuario)this.Session["usuario"];
+         //   usuarioBL.updateCotizacionSerializada(usuario, null);
+            return RedirectToAction("Index", "Pedido");
+        }
 
 
 
@@ -312,6 +339,8 @@ namespace Cotizador.Controllers
             detalle.flete = flete;
             pedido.pedidoDetalleList.Add(detalle);
 
+            //CotizacionDetalle cotizacionDetalle = (CotizacionDetalle)Convert.ChangeType(pedido, typeof(CotizacionDetalle));
+
             //Calcula los montos totales de la cabecera de la cotizacion
             HelperDocumento.calcularMontosTotales(pedido);
 
@@ -331,7 +360,7 @@ namespace Cotizador.Controllers
 
           /*  if (pedido.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos)
             {*/
-                nombreProducto = nombreProducto + "\\n" + detalle.observacion;
+          //      nombreProducto = nombreProducto + "\\n" + detalle.observacion;
             //}
 
             String resultado = "{" +
@@ -482,7 +511,7 @@ namespace Cotizador.Controllers
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
         {
             IDocumento documento = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            List<IDocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
+            List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
             documento.documentoDetalle = documentoDetalle;
             HelperDocumento.calcularMontosTotales(documento);
             this.Session[Constantes.VAR_SESSION_PEDIDO] = documento;
@@ -490,6 +519,82 @@ namespace Cotizador.Controllers
         }
 
         #endregion
+
+
+        #region CAMBIOS CAMPOS DE FORMULARIO BUSQUEDA
+
+        public void ChangeFechaSolicitudDesde()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            String[] solDesde = this.Request.Params["fechaSolicitudDesde"].Split('/');
+            pedido.fechaSolicitudDesde = new DateTime(Int32.Parse(solDesde[2]), Int32.Parse(solDesde[1]), Int32.Parse(solDesde[0]));
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
+
+        public void ChangeFechaSolicitudHasta()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            String[] solHasta = this.Request.Params["fechaSolicitudHasta"].Split('/');
+            pedido.fechaSolicitudHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]), 23, 59, 59);
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
+
+        public void ChangeFechaEntregaDesde()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            String[] entregaDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
+            pedido.fechaEntregaDesde = new DateTime(Int32.Parse(entregaDesde[2]), Int32.Parse(entregaDesde[1]), Int32.Parse(entregaDesde[0]));
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
+
+        public void ChangeFechaEntregaHasta()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            String[] entregaHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
+            pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]), 23, 59, 59);
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
+
+        public void ChangeNumero()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
+            {
+                pedido.numeroPedido = 0;
+            }
+            else
+            {
+                pedido.numeroPedido = long.Parse(this.Request.Params["numero"]);
+            }
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
+
+        public void ChangeNumeroGrupo()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
+            {
+                pedido.numeroGrupoPedido = 0;
+            }
+            else
+            {
+                pedido.numeroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
+            }
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
+
+
+        public void ChangeEstado()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Int32.Parse(this.Request.Params["estado"]);
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
+        
+
+        #endregion
+
+
 
 
         #region CREAR/ACTUALIZAR PEDIDO
@@ -504,14 +609,14 @@ namespace Cotizador.Controllers
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.InsertPedido(pedido);
             long numeroPedido = pedido.numeroPedido;
+            Guid idPedido = pedido.idPedido;
             int estado = (int)pedido.seguimientoPedido.estado;
             if (continuarLuego == 1)
             {
                 SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
                 estado = (int)estadosSeguimientoPedido;
                 String observacion = "Se continuará editando luego";
-                //Falta modificar
-                //   updateEstadoSeguimientoPedido(numeroPedido, estadosSeguimientoPedido, observacion);
+                updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
             }
             pedido = null;
             this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
@@ -537,15 +642,14 @@ namespace Cotizador.Controllers
             PedidoBL bl = new PedidoBL();
             bl.UpdatePedido(pedido);
             long codigo = pedido.numeroPedido;
+            Guid idPedido = pedido.idPedido;
             int estado = (int)pedido.seguimientoPedido.estado;
             if (continuarLuego == 1)
             {
                 SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
                 estado = (int)estadosSeguimientoPedido;
                 String observacion = "Se continuará editando luego";
-
-                //Falta modificar
-                //updateEstadoSeguimientoPedido(codigo, estadosSeguimientoPedido, observacion);
+                updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
             }
             pedido = null;
             this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
@@ -558,12 +662,12 @@ namespace Cotizador.Controllers
 
 
 
-        private void updateEstadoSeguimientoPedido(Int64 codigo, SeguimientoPedido.estadosSeguimientoPedido estado, String observacion)
+        private void updateEstadoSeguimientoPedido(Guid idPedido, SeguimientoPedido.estadosSeguimientoPedido estado, String observacion)
         {
             Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             PedidoBL pedidoBL = new PedidoBL();
             Pedido pedido = new Pedido();
-            pedido.numeroPedido = codigo;
+            pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
             pedido.seguimientoPedido = new SeguimientoPedido();
@@ -571,7 +675,7 @@ namespace Cotizador.Controllers
             pedido.seguimientoPedido.observacion = observacion;
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
            //FALTA
-            //pedidoBL.cambiarEstadoCotizacion(pedido);
+            pedidoBL.cambiarEstadoPedido(pedido);
         }
         #endregion
 
@@ -647,7 +751,20 @@ namespace Cotizador.Controllers
             return json;
         }
 
+        public void autoGuardarCotizacion()
+        {
+            if (this.Session[Constantes.VAR_SESSION_PEDIDO] != null)
+            {
+                Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+                UsuarioBL usuarioBL = new UsuarioBL();
+                Usuario usuario = (Usuario)this.Session["usuario"];
 
+                String cotizacionSerializada = JsonConvert.SerializeObject(pedido);
+
+                usuarioBL.updateCotizacionSerializada(usuario, cotizacionSerializada);
+            }
+
+        }
 
 
     }

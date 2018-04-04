@@ -301,9 +301,13 @@ namespace BusinessLayer
 
                 if (cotizacion.mostrarValidezOfertaEnDias == 0)
                 {
+                    DateTime dt = cotizacion.fechaLimiteValidezOferta;
+                    DateTime dt2 = cotizacion.fecha;
+                    cotizacion.fechaLimiteValidezOferta = new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
+                    cotizacion.fecha = new DateTime(dt2.Year, dt2.Month, dt2.Day, 0, 0, 0);
                     TimeSpan diferencia;
                     diferencia = cotizacion.fechaLimiteValidezOferta - cotizacion.fecha;
-                    cotizacion.validezOfertaEnDias = diferencia.Days; 
+                    cotizacion.validezOfertaEnDias = diferencia.Days;
                 }
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)

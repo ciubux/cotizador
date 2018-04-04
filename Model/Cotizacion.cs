@@ -77,10 +77,10 @@ namespace Model
 
         public DateTime fechaPrecios { get; set; }
 
-        public List<IDocumentoDetalle> documentoDetalle
+        public List<DocumentoDetalle> documentoDetalle
         {
             get {
-                List<IDocumentoDetalle> documentoDetalle = new List<IDocumentoDetalle>();
+                List<DocumentoDetalle> documentoDetalle = new List<DocumentoDetalle>();
                 if (this.cotizacionDetalleList == null)
                     this.cotizacionDetalleList = new List<CotizacionDetalle>();
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacionDetalleList)
@@ -91,7 +91,7 @@ namespace Model
                 }
             set {
                 this.cotizacionDetalleList = new List<CotizacionDetalle>();
-                foreach (IDocumentoDetalle documentoDetalle in value)
+                foreach (DocumentoDetalle documentoDetalle in value)
                 {
                     cotizacionDetalleList.Add((CotizacionDetalle)documentoDetalle);
                 }

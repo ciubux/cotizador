@@ -22,41 +22,14 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_cotizacion_serializada");
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "cotizacionSerializada", -1, cotizacionSerializada);
-            
+            ExecuteNonQuery(objCommand);
+        }
 
-        //    int lengthCotizacionSerializada = cotizacionSerializada.Length;
-            /*
-            Decimal numeroPartesDecimal = Decimal.Divide(lengthCotizacionSerializada,8000);
-            int numeroPartes = (int)Math.Ceiling(numeroPartesDecimal);
-
-        
-
-            List<String> listaCotizacionSerializada = new List<string>();
-
-            int inicio = 0;
-            int fin = 8000;
-            for (int i = 0; i <= numeroPartes; i++)
-            {
-                if (i < numeroPartes)
-                {
-                    String parteCotizacionSerializada = cotizacionSerializada.Substring(inicio, fin);
-                    listaCotizacionSerializada.Add(parteCotizacionSerializada);
-                }
-                else
-                {
-                    String parteCotizacionSerializada = cotizacionSerializada.Substring(inicio, lengthCotizacionSerializada);
-                    listaCotizacionSerializada.Add(parteCotizacionSerializada);
-                }
-
-                inicio = fin + 1;
-                fin = fin + fin;
-
-
-            }
-
-
-
-            */
+        public void updatePedidoSerializado(Usuario usuario, String pedidoSerializado)
+        {
+            var objCommand = GetSqlCommand("pu_pedidoSerializado");
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "pedidoSerializado", -1, pedidoSerializado);
             ExecuteNonQuery(objCommand);
         }
 

@@ -39,8 +39,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auditoria.cs" />
+    <Compile Include="DocumentoDetalle.cs" />
     <Compile Include="HelperDocumento.cs" />
-    <Compile Include="IDocumentoDetalle.cs" />
     <Compile Include="IDocumento.cs" />
     <Compile Include="PedidoDetalle.cs" />
     <Compile Include="Pedido.cs" />

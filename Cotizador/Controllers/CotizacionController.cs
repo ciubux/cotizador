@@ -147,7 +147,7 @@ namespace Cotizador.Controllers
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session["usuario"];
             usuarioBL.updateCotizacionSerializada(usuario, null);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Cotizacion");
         }
 
 
@@ -551,7 +551,7 @@ namespace Cotizador.Controllers
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
         {
             IDocumento documento = (Cotizacion)this.Session["cotizacion"];
-            List<IDocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
+            List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
             documento.documentoDetalle = documentoDetalle;
             HelperDocumento.calcularMontosTotales(documento);
             this.Session["cotizacion"] = documento;
@@ -798,10 +798,10 @@ namespace Cotizador.Controllers
                 nombreProducto = detalle.producto.skuProveedor + " - " + detalle.producto.descripcion;
             }
 
-            if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos )
+     /*       if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos )
             {
                 nombreProducto = nombreProducto + "\\n" + detalle.observacion;
-            }
+            }*/
 
             String resultado = "{" +
                 "\"idProducto\":\"" + detalle.producto.idProducto + "\"," +
@@ -1072,37 +1072,9 @@ namespace Cotizador.Controllers
                 UsuarioBL usuarioBL = new UsuarioBL();
                 Usuario usuario = (Usuario)this.Session["usuario"];
 
-         //       Dictionary<string, Byte[]> imagenList = new Dictionary<string, Byte[]>();
-
-             
-                //Se eliminan las imagenes del detalle de cotizacion
-            /*    foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
-                {
-             //       Byte[] image = cotizacionDetalle.producto.image;
-                 //   cotizacionDetalle.producto.image = null;
-            //        imagenList.Add(cotizacionDetalle.producto.sku,image);
-                }*/
-
-                //Se serializa la cotizacion sin imagenes
-
-
 
                 String cotizacionSerializada = JsonConvert.SerializeObject(cotizacion);
 
-                //Se agregan nuevamente las imagenes a la cotizacion
-       /*       int i = 0;
-                foreach (KeyValuePair<string, Byte[]> entry in imagenList)
-                {
-
-                    foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
-                    {
-                        if (cotizacionDetalle.producto.sku.Equals(entry.Key))
-                        {
-                            cotizacionDetalle.producto.image = entry.Value ;
-                            break;
-                        }
-                    }
-                }*/
 
                 usuarioBL.updateCotizacionSerializada(usuario, cotizacionSerializada);
             }

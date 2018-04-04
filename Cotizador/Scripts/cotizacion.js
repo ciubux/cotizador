@@ -865,7 +865,7 @@ jQuery(function ($) {
                 observacion: observacion
             },
             success: function (detalle) {
-
+                var considerarCantidades = $("#considerarCantidades").val();
                 var esRecotizacion = "";
                 if ($("#esRecotizacion").val() == "1") {
                     esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">0.00</td>' +
@@ -874,15 +874,19 @@ jQuery(function ($) {
                         '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
                 }
 
-
+                var observacionesEnDescripcion = "";
+                if (considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES)
+                {
+                    observacionesEnDescripcion = "<br /><span class='" + detalle.idProducto + " detproductoObservacion'  style='color: darkred'>" + detalle.observacion + "</span>";
+                }
+            
                 $('.table tbody tr.footable-empty').remove();
                 $(".table tbody").append('<tr data-expanded="true">' +
                     '<td>' + detalle.idProducto + '</td>' +
                     '<td>' + esPrecioAlternativo + '</td>' +
-
                     '<td>' + proveedor + '</td>' +
                     '<td>' + detalle.codigoProducto + '</td>' +
-                    '<td>' + detalle.nombreProducto + '</td>' +
+                    '<td>' + detalle.nombreProducto + observacionesEnDescripcion +'</td>' +
                     '<td>' + detalle.unidad + '</td>' +
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
                     '<td class="' + detalle.idProducto + ' detprecioLista" style="text-align:right">' + precioLista + '</td>' +
@@ -1190,8 +1194,9 @@ jQuery(function ($) {
             $("#fecha").focus();
             return false;
         }
-
+        /*Si la validez de oferta se expresa en días*/
         if ($("#mostrarValidezOfertaEnDias").val() == 0) {
+            //No puede ser menor a uno
             if ($("#validezOfertaEnDias").val() < 1) {
                 alert("La cantidad de días de validez de oferta debe ser mayor o igual a uno.");
                 $("#validezOfertaEnDias").focus();
@@ -1199,25 +1204,24 @@ jQuery(function ($) {
             }
         }
         else {
-            if ($("#fechaLimiteValidezOferta").val().trim() == "") {
+            //la fecha de validez de oferta no debe estar vacía
+            var fechaLimiteValidezOferta = $("#fechaLimiteValidezOferta").val();
+            if (fechaLimiteValidezOferta.trim() == "") {
                 alert("Debe ingresar la fecha de Validez Oferta.");
                 $("#fechaLimiteValidezOferta").focus();
                 return false;
-            }
-
+            } //Si no está vacía no puede ser menor a la fecha
+            else if (convertirFechaNumero(fechaLimiteValidezOferta) < convertirFechaNumero(fecha)) {
+                alert("EL fin de Validez de Oferta debe ser mayor o igual a la fecha de la cotización.");
+                $("#fechaLimiteValidezOferta").focus();
+                return false;
+            }   
         }
-
-  
-
-        if (convertirFechaNumero(fechaLimiteValidezOferta) <= convertirFechaNumero(fecha)) {
-            alert("EL fin de Validez de Oferta debe ser mayor o igual a la fecha de la cotización.");
-            $("#fechaLimiteValidezOferta").focus();
-            return false;
-        }       
 
         var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPrecios").val();
         if (fechaInicioVigenciaPrecios.trim() != "") {
-            if (convertirFechaNumero(fechaInicioVigenciaPrecios) <= convertirFechaNumero(fecha))
+            //Si no está vacía no puede ser menor a la fecha
+            if (convertirFechaNumero(fechaInicioVigenciaPrecios) < convertirFechaNumero(fecha))
             {
                 alert("El inicio de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
                 $("#fechaInicioVigenciaPrecios").focus();
@@ -1227,42 +1231,25 @@ jQuery(function ($) {
 
         var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
         if (fechaFinVigenciaPrecios.trim() != "") {
-
+            //Si la fecha de inicio de vigencia no es vacío se compara con la fecha de inicio de vigencia
             if (fechaInicioVigenciaPrecios.trim() != "") {
-                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fechaInicioVigenciaPrecios)) {
+                   //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
+                if (convertirFechaNumero(fechaFinVigenciaPrecios) < convertirFechaNumero(fechaInicioVigenciaPrecios)) {
                     alert("El fin de vigencia de precios debe ser mayor o igual al inicio de vigencia de precios.");
                     $("#fechaFinVigenciaPrecios").focus();
                     return false;
                 }
             }
             else
-            {
-                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fecha)) {
+            {  //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
+                if (convertirFechaNumero(fechaFinVigenciaPrecios) < convertirFechaNumero(fecha)) {
                     alert("El fin de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
                     $("#fechaFinVigenciaPrecios").focus();
                     return false;
                 }
             }
         }
-
-     
-
-      //  fecha  fechaLimiteValidezOferta  fechaInicioVigenciaPrecios  fechaFinVigenciaPrecios
-
-
-
-
-
-
-        /*
-      if ($("#fechaInicioVigenciaPrecios").val().trim() == "") {
-          if (confirm("¿Está seguro de no ingresar la fecha de Inicio de Vigencia?")) {
-              
-          }
-          else {
-              $("#fechaInicioVigenciaPrecios").focus();
-          }
-      }*/
+        
 
         var contador = 0;
         var $j_object = $("td.detcantidad");
@@ -1703,7 +1690,7 @@ jQuery(function ($) {
                     });
                 }
                 else {
-                    alert("Existe otra cotización en curso; por favor cancele previamente esa cotización para continuar.");
+                    alert("Existe otra cotización en curso; por favor vaya a la pantala Pedir, haga clic en cancelar y vuelva a intentarlo.");
                     activarBotonesVer();
                 }
             }

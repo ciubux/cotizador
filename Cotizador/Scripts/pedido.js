@@ -44,7 +44,8 @@ jQuery(function ($) {
      */
 
     var pagina = 2;
-    var mensajeCancelarEdicion = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
+    var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
+    
 
     $(document).ready(function () {
 
@@ -70,19 +71,19 @@ jQuery(function ($) {
             });
 
             //Metodo recursivo para autoguardar una cotizacion
-            function autoGuardarCotizacion() {
+            function autoSavePedido() {
                 $.ajax({
-                    url: "/Pedido/autoGuardarPedido",
+                    url: "/Pedido/autoSavePedido",
                     type: 'POST',
                     error: function () {
-                        setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
+                        setTimeout(autoSavePedido, MILISEGUNDOS_AUTOGUARDADO);
                     },
                     success: function () {
-                        setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
+                        setTimeout(autoSavePedido, MILISEGUNDOS_AUTOGUARDADO);
                     }
                 });
             }
-            setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
+            setTimeout(autoSavePedido, MILISEGUNDOS_AUTOGUARDADO);
 
             pagina = 3;
             $("#linkListaPedidos").removeAttr("class"); 
@@ -907,6 +908,7 @@ jQuery(function ($) {
                         '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
                 }
 
+                var observacionesEnDescripcion = "<br /><span class='" + detalle.idProducto + " detproductoObservacion'  style='color: darkred'>" + detalle.observacion + "</span>";
 
                 $('.table tbody tr.footable-empty').remove();
                 $(".table tbody").append('<tr data-expanded="true">' +
@@ -915,7 +917,7 @@ jQuery(function ($) {
 
                     '<td>' + proveedor + '</td>' +
                     '<td>' + detalle.codigoProducto + '</td>' +
-                    '<td>' + detalle.nombreProducto + '</td>' +
+                    '<td>' + detalle.nombreProducto + observacionesEnDescripcion + '</td>' +
                     '<td>' + detalle.unidad + '</td>' +
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
                     '<td class="' + detalle.idProducto + ' detprecioLista" style="text-align:right">' + precioLista + '</td>' +
@@ -950,7 +952,7 @@ jQuery(function ($) {
                 $('#montoFlete').html((total * flete / 100).toFixed(cantidadDecimales));
                 $('#montoTotalMasFlete').html((total + (total * flete / 100)).toFixed(cantidadDecimales));
 
-                cargarTablaDetalle()
+                cargarTablaDetalle();
                 // $('#tablefoottable').footable();
                 $('#btnCancelAddProduct').click();
 
@@ -1158,92 +1160,72 @@ jQuery(function ($) {
             return false;
         }
 
-      /*  if ($("#contacto").val().trim() == "") {
-            alert("Debe ingresar un contacto.");
-            $("#contacto").focus();
+        if ($("#pedido_direccionEntrega").val().trim() == "") {
+            alert("Debe ingresar una dirección de entrega.");
+            $('#pedido_direccionEntrega').trigger('chosen:activate');
             return false;
         }
 
-        var fecha = $("#fecha").val();
-        if ($("#fecha").val().trim() == "")
-        {
-            alert("Debe ingresar la fecha de la cotización.");
-            $("#fecha").focus();
+        if ($("#pedido_contactoEntrega").val().trim() == "") {
+            alert("Debe ingresar una contacto de entrega.");
+            $('#pedido_contactoEntrega').focus();
             return false;
         }
 
-        if ($("#mostrarValidezOfertaEnDias").val() == 0) {
-            if ($("#validezOfertaEnDias").val() < 1) {
-                alert("La cantidad de días de validez de oferta debe ser mayor o igual a uno.");
-                $("#validezOfertaEnDias").focus();
-                return false;
-            }
-        }
-        else {
-            if ($("#fechaLimiteValidezOferta").val().trim() != "") {
-                alert("Debe ingresar la fecha de Validez Oferta.");
-                $("#fechaLimiteValidezOferta").focus();
-                return false;
-            }
-
-        }
-
-  
-
-        if (convertirFechaNumero(fechaLimiteValidezOferta) <= convertirFechaNumero(fecha)) {
-            alert("EL fin de Validez de Oferta debe ser mayor o igual a la fecha de la cotización.");
-            $("#fechaLimiteValidezOferta").focus();
+        if ($("#pedido_telefonoContactoEntrega").val().trim() == "") {
+            alert("Debe ingresar una telefono de contacto de entrega.");
+            $('#pedido_telefonoContactoEntrega').focus();
             return false;
-        }       
-
-        var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPrecios").val();
-        if (fechaInicioVigenciaPrecios.trim() != "") {
-            if (convertirFechaNumero(fechaInicioVigenciaPrecios) <= convertirFechaNumero(fecha))
-            {
-                alert("El inicio de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
-                $("#fechaInicioVigenciaPrecios").focus();
-                return false;
-            }
         }
 
-        var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
-        if (fechaFinVigenciaPrecios.trim() != "") {
-
-            if (fechaInicioVigenciaPrecios.trim() != "") {
-                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fechaInicioVigenciaPrecios)) {
-                    alert("El fin de vigencia de precios debe ser mayor o igual al inicio de vigencia de precios.");
-                    $("#fechaFinVigenciaPrecios").focus();
-                    return false;
-                }
-            }
-            else
-            {
-                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fecha)) {
-                    alert("El fin de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
-                    $("#fechaFinVigenciaPrecios").focus();
-                    return false;
-                }
-            }
+        var fechaSolicitud = $("#fechaSolicitud").val();
+        if (fechaSolicitud.trim() == "") {
+            alert("Debe ingresar la fecha de la solicitud.");
+            $("#fechaSolicitud").focus();
+            return false;
         }
 
-     
+        var horaSolicitud = $("#horaSolicitud").val();
+        if (horaSolicitud.trim() == "") {
+            alert("Debe ingresar la hora de la solicitud.");
+            $("#horaSolicitud").focus();
+            return false;
+        }
 
-      //  fecha  fechaLimiteValidezOferta  fechaInicioVigenciaPrecios  fechaFinVigenciaPrecios
 
+        var fechaEntrega = $("#fechaEntrega").val();
+        if (fechaEntrega.trim() == "") {
+            alert("Debe ingresar la fecha de entrega.");
+            $("#fechaEntrega").focus();
+            return false;
+        }
 
+        var fechaMaximaEntrega = $("#fechaMaximaEntrega").val();
+        if (fechaMaximaEntrega.trim() == "") {
+            alert("Debe ingresar la fecha Máxima de entrega.");
+            $("#fechaMaximaEntrega").focus();
+            return false;
+        }
+        
+        //la fecha máxima de entrega no puede ser inferior a la fecha de entrega
+        if (convertirFechaNumero(fechaMaximaEntrega) < convertirFechaNumero(fechaEntrega)) {
+            alert("La fecha máxima de entrega debe ser mayor o igual a la fechha de entrega.");
+            $("#fechaMaximaEntrega").focus();
+            return false;
+        }
+        
 
+        if ($("#pedido_contactoPedido").val().trim() == "") {
+            alert("Debe ingresar una telefono de contacto de entrega.");
+            $('#pedido_contactoPedido').focus();
+            return false;
+        }
 
-
-
-        /*
-      if ($("#fechaInicioVigenciaPrecios").val().trim() == "") {
-          if (confirm("¿Está seguro de no ingresar la fecha de Inicio de Vigencia?")) {
-              
-          }
-          else {
-              $("#fechaInicioVigenciaPrecios").focus();
-          }
-      }*/
+        if ($("#pedido_telefonoContactoPedido").val().trim() == "") {
+            alert("Debe ingresar una telefono de contacto de entrega.");
+            $('#pedido_telefonoContactoPedido').focus();
+            return false;
+        }
 
         var contador = 0;
         var $j_object = $("td.detcantidad");
@@ -1345,11 +1327,11 @@ jQuery(function ($) {
     });
 
     $("#btnFinalizarEdicionPedido").click(function () {
-        crearPedido(0);
+        editarPedido(0);
     });
 
     $("#btnContinuarEditandoLuego").click(function () {
-        crearPedido(1);
+        editarPedido(1);
     });
 
 
@@ -1721,6 +1703,11 @@ jQuery(function ($) {
         });
 }
 
+    $("#btnCancelarPedido").click(function () {
+        if (confirm(MENSAJE_CANCELAR_EDICION)) {
+            window.location = '/Pedido/CancelarCreacionPedido';
+        }
+    })
 
 
 
@@ -1794,16 +1781,16 @@ jQuery(function ($) {
                         url: "/Pedido/iniciarEdicionPedido",
                         type: 'POST',
 
-                        error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
+                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del pedido."); },
                         success: function (fileName) {
-                            window.location = '/Pedido/Cotizar';
+                            window.location = '/Pedido/Pedir';
                         }
                     });
 
                     //window.location = '/Pedido/Cotizador';
                 }
                 else {
-                    alert("Existe otra cotización en curso; por favor cancele previamente esa cotización para continuar.");
+                    alert("Existe otro pedido en curso; por favor vaya a la pantala Pedir, haga clic en cancelar y vuelva a intentarlo.");
                     activarBotonesVer();
                 }
             }
@@ -2059,21 +2046,7 @@ jQuery(function ($) {
         });
     });
 
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -2097,7 +2070,7 @@ jQuery(function ($) {
             editing: {
                 enabled: true,
                 addRow: function () {
-                    if (confirm(mensajeCancelarEdicion)) {
+                    if (confirm(MENSAJE_CANCELAR_EDICION)) {
                         location.reload();
                     }
                 },
@@ -2544,14 +2517,6 @@ jQuery(function ($) {
 
 
 
-    $("#btnCancelCotizacion").click(function () {
-        if (confirm(mensajeCancelarEdicion)) {
-            window.location = '/Pedido/CancelarCreacionCotizacion';
-        }
-    })
-
-
-    
 
 
 
@@ -2601,53 +2566,90 @@ jQuery(function ($) {
     });
 
 
-
-
-
-
-    $("#fechaDesde").change(function () {
-        var fechaDesde = $("#fechaDesde").val();
+    $("#pedido_fechaSolicitudDesde").change(function () {
+        var fechaSolicitudDesde = $("#pedido_fechaSolicitudDesde").val();
         $.ajax({
-            url: "/Pedido/updateFechaDesde",
+            url: "/Pedido/ChangeFechaSolicitudDesde",
             type: 'POST',
             data: {
-                fechaDesde: fechaDesde
+                fechaSolicitudDesde: fechaSolicitudDesde
             },
             success: function () {
             }
         });
     });
 
-    $("#fechaHasta").change(function () {
-        var fechaHasta = $("#fechaHasta").val();
+    $("#pedido_fechaSolicitudHasta").change(function () {
+        var fechaSolicitudHasta = $("#pedido_fechaSolicitudHasta").val();
         $.ajax({
-            url: "/Pedido/updateFechaHasta",
+            url: "/Pedido/ChangeFechaSolicitudHasta",
             type: 'POST',
             data: {
-                fechaHasta: fechaHasta
+                fechaSolicitudHasta: fechaSolicitudHasta
+            },
+            success: function () {
+            }
+        });
+    });
+    
+    $("#pedido_fechaEntregaDesde").change(function () {
+        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
+        $.ajax({
+            url: "/Pedido/ChangeFechaEntregaDesde",
+            type: 'POST',
+            data: {
+                fechaEntregaDesde: fechaEntregaDesde
             },
             success: function () {
             }
         });
     });
 
-    $("#numero").change(function () {
-        var codigo = $("#numero").val();
+    $("#pedido_fechaEntregaHasta").change(function () {
+        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
         $.ajax({
-            url: "/Pedido/updateCodigoCotizacionBusqueda",
+            url: "/Pedido/ChangeFechaEntregaHasta",
             type: 'POST',
             data: {
-                codigo: codigo
+                fechaEntregaHasta: fechaEntregaHasta
             },
             success: function () {
             }
         });
     });
+
+
+    $("#pedido_numeroPedido").change(function () {
+        var numero = $("#pedido_numeroPedido").val();
+        $.ajax({
+            url: "/Pedido/changeNumero",
+            type: 'POST',
+            data: {
+                numero: numero
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#pedido_numeroGrupoPedido").change(function () {
+        var numeroGrupo = $("#pedido_numeroGrupoPedido").val();
+        $.ajax({
+            url: "/Pedido/changeNumeroGrupo",
+            type: 'POST',
+            data: {
+                numeroGrupo: numeroGrupo
+            },
+            success: function () {
+            }
+        });
+    });
+
 
     $("#estado").change(function () {
         var estado = $("#estado").val();
         $.ajax({
-            url: "/Pedido/updateEstadoCotizacionBusqueda",
+            url: "/Pedido/changeEstado",
             type: 'POST',
             data: {
                 estado: estado

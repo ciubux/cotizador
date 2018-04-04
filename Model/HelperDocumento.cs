@@ -32,23 +32,23 @@ namespace Model
             iDocumento.montoIGV = igv ;
         }
 
-        static public List<IDocumentoDetalle> updateDocumentoDetalle(IDocumento documento, List<DocumentoDetalleJson> cotizacionDetalleJsonList)
+        static public List<DocumentoDetalle> updateDocumentoDetalle(IDocumento documento, List<DocumentoDetalleJson> cotizacionDetalleJsonList)
         {
             if (cotizacionDetalleJsonList != null)
             {
-                List<IDocumentoDetalle> detalles = documento.documentoDetalle;
+                List<DocumentoDetalle> detalles = documento.documentoDetalle;
                 List<Guid> idProductos = new List<Guid>();
                 foreach (DocumentoDetalleJson cotizacionDetalleJson in cotizacionDetalleJsonList)
                 {
                     idProductos.Add(Guid.Parse(cotizacionDetalleJson.idProducto));
                 }
-                List<IDocumentoDetalle> detallesActualizados = detalles.Where(s => idProductos.Contains(s.producto.idProducto)).ToList();
-                List<IDocumentoDetalle> detallesOrdenados = new List<IDocumentoDetalle>();
+                List<DocumentoDetalle> detallesActualizados = detalles.Where(s => idProductos.Contains(s.producto.idProducto)).ToList();
+                List<DocumentoDetalle> detallesOrdenados = new List<DocumentoDetalle>();
                 //Se realiza este foreach para considerar el ordenamiento
                 foreach (Guid idProducto in idProductos)
                 {
                     DocumentoDetalleJson cotizacionDetalleJson = cotizacionDetalleJsonList.Where(s => s.idProducto == idProducto.ToString()).FirstOrDefault();
-                    IDocumentoDetalle documentoDetalle = detallesActualizados.Where(s => s.producto.idProducto == idProducto).FirstOrDefault();
+                    DocumentoDetalle documentoDetalle = detallesActualizados.Where(s => s.producto.idProducto == idProducto).FirstOrDefault();
 
                     documentoDetalle.cantidad = cotizacionDetalleJson.cantidad;
 
@@ -69,7 +69,7 @@ namespace Model
             }
             else
             {
-                return new List<IDocumentoDetalle>();
+                return new List<DocumentoDetalle>();
             }
         }
 

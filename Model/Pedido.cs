@@ -125,11 +125,11 @@ namespace Model
         public DateTime fechaPrecios { get; set; }
 
         /*Implementación Interface*/
-        public List<IDocumentoDetalle> documentoDetalle
+        public List<DocumentoDetalle> documentoDetalle
         {
             get
             {
-                List<IDocumentoDetalle> documentoDetalle = new List<IDocumentoDetalle>();
+                List<DocumentoDetalle> documentoDetalle = new List<DocumentoDetalle>();
                 if (this.pedidoDetalleList == null)
                     this.pedidoDetalleList = new List<PedidoDetalle>();
                 foreach (PedidoDetalle pedidoDetalle in pedidoDetalleList)
@@ -141,7 +141,7 @@ namespace Model
             set
             {
                 this.pedidoDetalleList = new List<PedidoDetalle>();
-                foreach (IDocumentoDetalle documentoDetalle in value)
+                foreach (DocumentoDetalle documentoDetalle in value)
                 {
                     pedidoDetalleList.Add((PedidoDetalle)documentoDetalle);
                 }

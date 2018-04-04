@@ -70,6 +70,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pu_pedido");
 
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido); //puede ser null
 
             if (pedido.cotizacion.idCotizacion == Guid.Empty)
@@ -96,6 +97,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
+
             ExecuteNonQuery(objCommand);
 
 
@@ -431,19 +433,19 @@ namespace DataLayer
         }
 
 
-        public void insertSeguimientoCotizacion(Cotizacion cotizacion)
+        public void insertSeguimientoPedido(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("pi_seguimiento_cotizacion");
+            var objCommand = GetSqlCommand("pi_seguimiento_pedido");
 
-            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
-            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
-            InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
-            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion);
-            InputParameterAdd.DateTime(objCommand, "fechaModificacion", cotizacion.fechaModificacion);
-            OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
+            InputParameterAdd.Varchar(objCommand, "observacion", pedido.seguimientoPedido.observacion);
+            InputParameterAdd.DateTime(objCommand, "fechaModificacion", pedido.fechaModificacion);
+         //   OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
             ExecuteNonQuery(objCommand);
 
-            DateTime fechaModifiacionActual = (DateTime)objCommand.Parameters["@fechaModificacionActual"].Value;
+         //   DateTime fechaModifiacionActual = (DateTime)objCommand.Parameters["@fechaModificacionActual"].Value;
 
 /*
             DateTime date1 = new DateTime(fechaModifiacionActual.Year, fechaModifiacionActual.Month, fechaModifiacionActual.Day, fechaModifiacionActual.Hour, fechaModifiacionActual.Minute, fechaModifiacionActual.Second);

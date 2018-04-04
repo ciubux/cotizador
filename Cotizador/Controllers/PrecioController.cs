@@ -28,7 +28,7 @@ namespace Cotizador.Controllers
             PrecioClienteProductoBL precioClienteProductoBL = new PrecioClienteProductoBL();
             List<PrecioClienteProducto> precioClienteProductoList = precioClienteProductoBL.getPreciosRegistrados(idProducto, idCliente);
             String nombreProducto = String.Empty;
-            foreach (IDocumentoDetalle documentoDetalle in documento.documentoDetalle)
+            foreach (DocumentoDetalle documentoDetalle in documento.documentoDetalle)
             {
                 if (documentoDetalle.producto.idProducto == idProducto)
                 {
