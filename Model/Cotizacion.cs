@@ -81,6 +81,8 @@ namespace Model
         {
             get {
                 List<IDocumentoDetalle> documentoDetalle = new List<IDocumentoDetalle>();
+                if (this.cotizacionDetalleList == null)
+                    this.cotizacionDetalleList = new List<CotizacionDetalle>();
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacionDetalleList)
                 {
                     documentoDetalle.Add(cotizacionDetalle);
@@ -98,7 +100,11 @@ namespace Model
             }
         }
 
-
+        public String numeroCotizacionString
+        {
+            get { return this.codigo == 0 ? "" : this.codigo.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
+        }
+    
 
     }
 }

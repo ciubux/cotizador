@@ -130,6 +130,8 @@ namespace Model
             get
             {
                 List<IDocumentoDetalle> documentoDetalle = new List<IDocumentoDetalle>();
+                if (this.pedidoDetalleList == null)
+                    this.pedidoDetalleList = new List<PedidoDetalle>();
                 foreach (PedidoDetalle pedidoDetalle in pedidoDetalleList)
                 {
                     documentoDetalle.Add(pedidoDetalle);

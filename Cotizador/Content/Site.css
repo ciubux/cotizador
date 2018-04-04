@@ -54,6 +54,9 @@ textarea {
     #modalMostrarPrecios .modal-dialog {
         width: 900px;
     }
+    #modalVerPedido .modal-dialog {
+        width: 1100px;
+    }
 }
 
 

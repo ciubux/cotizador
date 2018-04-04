@@ -233,7 +233,7 @@
 
                     <td>
                         <!--fatla definir interacción con estados-->
-                        <button type="button" class="@pedidoItem.idPedido btnVerPedido btn btn-primary ">Ver</button>
+                        <button type="button" class="@pedidoItem.idPedido @pedidoItem.numeroPedido btnVerPedido btn btn-primary ">Ver</button>
                     </td>
                 </tr>
         }
@@ -252,7 +252,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalVerCotizacion"><b>Información de Cotización</b></h4>
+                <h4 class="modal-title" id="modalVerPedido"><b>Información de Pedido</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -280,7 +280,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verCiudad"></p>
+                                    <p class="form-control-static" id="verNumeroGrupo"></p>
                                 </div>
                             </div>
                         </div>
