@@ -13,6 +13,7 @@ namespace Model
         public Int64 numeroPedido { get; set; }
         [Display(Name = "Número Grupo Pedido:")]
         public Int64? numeroGrupoPedido { get; set; }
+
         public Cotizacion cotizacion { get; set; }
         [Display(Name = "Ciudad:")]
         public Ciudad ciudad { get; set; }

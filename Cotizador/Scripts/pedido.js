@@ -1802,7 +1802,21 @@ jQuery(function ($) {
     });
 
 
+    $("#btnAtenderPedido").click(function () {
+        desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
 
+        $.ajax({
+            url: "/Pedido/iniciarAtencionPedido",
+            type: 'POST',
+            error: function (detalle) { alert("Ocurrió un problema al iniciar la atención del pedido."); },
+            success: function (fileName) {
+                window.location = '/Pedido/Pedir';
+            }
+        });
+
+
+    });
 
 
 
