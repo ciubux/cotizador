@@ -39,8 +39,6 @@ namespace Cotizador.Controllers
                 pedidoTmp.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 pedidoTmp.usuarioBusqueda = pedidoTmp.usuario;
                 this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedidoTmp;
-
-
             }
 
             Pedido pedidoSearch = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
@@ -430,81 +428,6 @@ namespace Cotizador.Controllers
 
         }
 
-        public void ChangeNumeroReferenciaCliente()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-        }
-
-        public void ChangeDireccionEntrega()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            pedido.direccionEntrega = this.Request.Params["direccionEntrega"];
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-        }
-
-        public void ChangeContactoEntrega()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            pedido.contactoEntrega = this.Request.Params["contactoEntrega"];
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-        }
-
-        public void ChangeTelefonoContactoEntrega()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            pedido.telefonoContactoEntrega = this.Request.Params["telefonoContactoEntrega"];
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-        }
-
-
-        public void ChangeFechaSolicitud()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            String[] fechaSolicitud = this.Request.Params["fechaSolicitud"].Split('/');
-            String[] horaSolicitud = this.Request.Params["horaSolicitud"].Split(':');
-            pedido.fechaSolicitud = new DateTime(Int32.Parse(fechaSolicitud[2]), Int32.Parse(fechaSolicitud[1]), Int32.Parse(fechaSolicitud[0]), Int32.Parse(horaSolicitud[0]), Int32.Parse(horaSolicitud[1]), 0);
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-        }
-
-        public void ChangeFechaEntrega()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            String[] fechaEntrega = this.Request.Params["fechaEntrega"].Split('/');
-            pedido.fechaEntrega = new DateTime(Int32.Parse(fechaEntrega[2]), Int32.Parse(fechaEntrega[1]), Int32.Parse(fechaEntrega[0]));
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-        }
-
-        public void ChangeFechaMaximaEntrega()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            String[] fechaMaximaEntrega = this.Request.Params["fechaMaximaEntrega"].Split('/');
-            pedido.fechaMaximaEntrega = new DateTime(Int32.Parse(fechaMaximaEntrega[2]), Int32.Parse(fechaMaximaEntrega[1]), Int32.Parse(fechaMaximaEntrega[0]));
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-        }
-
-        public void ChangeContactoPedido()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            pedido.contactoPedido = this.Request.Params["contactoPedido"];
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-        }
-
-        public void ChangeTelefonoContactoPedido()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            pedido.telefonoContactoPedido = this.Request.Params["telefonoContactoPedido"];
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-        }
-
-
-        public void ChangeObservaciones()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            pedido.observaciones = this.Request.Params["observaciones"];
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-        }
 
 
         [HttpPost]
@@ -523,66 +446,7 @@ namespace Cotizador.Controllers
 
         #region CAMBIOS CAMPOS DE FORMULARIO BUSQUEDA
 
-        public void ChangeFechaSolicitudDesde()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            String[] solDesde = this.Request.Params["fechaSolicitudDesde"].Split('/');
-            pedido.fechaSolicitudDesde = new DateTime(Int32.Parse(solDesde[2]), Int32.Parse(solDesde[1]), Int32.Parse(solDesde[0]));
-            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-        }
-
-        public void ChangeFechaSolicitudHasta()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            String[] solHasta = this.Request.Params["fechaSolicitudHasta"].Split('/');
-            pedido.fechaSolicitudHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]), 23, 59, 59);
-            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-        }
-
-        public void ChangeFechaEntregaDesde()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            String[] entregaDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
-            pedido.fechaEntregaDesde = new DateTime(Int32.Parse(entregaDesde[2]), Int32.Parse(entregaDesde[1]), Int32.Parse(entregaDesde[0]));
-            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-        }
-
-        public void ChangeFechaEntregaHasta()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            String[] entregaHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
-            pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]), 23, 59, 59);
-            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-        }
-
-        public void ChangeNumero()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
-            {
-                pedido.numeroPedido = 0;
-            }
-            else
-            {
-                pedido.numeroPedido = long.Parse(this.Request.Params["numero"]);
-            }
-            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-        }
-
-        public void ChangeNumeroGrupo()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
-            {
-                pedido.numeroGrupoPedido = 0;
-            }
-            else
-            {
-                pedido.numeroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
-            }
-            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-        }
-
+    
 
         public void ChangeEstado()
         {

@@ -54,5 +54,20 @@ namespace Cotizador.Controllers
         }
 
 
+        public void ChangeField()
+        {
+            String VAR_SESION =  this.Request.Params["numeroReferenciaCliente"];
+
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+        }
+
+        public void ChangeFieldDate()
+        {
+
+        }
+
+
     }
 }
