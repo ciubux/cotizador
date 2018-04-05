@@ -1183,42 +1183,39 @@ jQuery(function ($) {
         }
 
         var fecha = $("#fecha").val();
-        if ($("#fecha").val().trim() == "")
-        {
+        if ($("#fecha").val().trim() == "") {
             alert("Debe ingresar la fecha de la cotización.");
             $("#fecha").focus();
             return false;
         }
-
-        /*Si la validez es días, se valida que no sea menor que uno*/
+        /*Si la validez de oferta se expresa en días*/
         if ($("#mostrarValidezOfertaEnDias").val() == 0) {
+            //No puede ser menor a uno
             if ($("#validezOfertaEnDias").val() < 1) {
                 alert("La cantidad de días de validez de oferta debe ser mayor o igual a uno.");
                 $("#validezOfertaEnDias").focus();
                 return false;
             }
-        } /*Si la validez es fecha, se valida que no se encuentre vacío*/
+        }
         else {
-            if ($("#fechaLimiteValidezOferta").val().trim() == "") {
+            //la fecha de validez de oferta no debe estar vacía
+            var fechaLimiteValidezOferta = $("#fechaLimiteValidezOferta").val();
+            if (fechaLimiteValidezOferta.trim() == "") {
                 alert("Debe ingresar la fecha de Validez Oferta.");
                 $("#fechaLimiteValidezOferta").focus();
                 return false;
+            } //Si no está vacía no puede ser menor a la fecha
+            else if (convertirFechaNumero(fechaLimiteValidezOferta) < convertirFechaNumero(fecha)) {
+                alert("EL fin de Validez de Oferta debe ser mayor o igual a la fecha de la cotización.");
+                $("#fechaLimiteValidezOferta").focus();
+                return false;
             }
-
         }
-
-  
-
-        if (convertirFechaNumero(fechaLimiteValidezOferta) <= convertirFechaNumero(fecha)) {
-            alert("EL fin de Validez de Oferta debe ser mayor o igual a la fecha de la cotización.");
-            $("#fechaLimiteValidezOferta").focus();
-            return false;
-        }       
 
         var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPrecios").val();
         if (fechaInicioVigenciaPrecios.trim() != "") {
-            if (convertirFechaNumero(fechaInicioVigenciaPrecios) <= convertirFechaNumero(fecha))
-            {
+            //Si no está vacía no puede ser menor a la fecha
+            if (convertirFechaNumero(fechaInicioVigenciaPrecios) < convertirFechaNumero(fecha)) {
                 alert("El inicio de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
                 $("#fechaInicioVigenciaPrecios").focus();
                 return false;
@@ -1227,17 +1224,17 @@ jQuery(function ($) {
 
         var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
         if (fechaFinVigenciaPrecios.trim() != "") {
-
+            //Si la fecha de inicio de vigencia no es vacío se compara con la fecha de inicio de vigencia
             if (fechaInicioVigenciaPrecios.trim() != "") {
-                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fechaInicioVigenciaPrecios)) {
+                //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
+                if (convertirFechaNumero(fechaFinVigenciaPrecios) < convertirFechaNumero(fechaInicioVigenciaPrecios)) {
                     alert("El fin de vigencia de precios debe ser mayor o igual al inicio de vigencia de precios.");
                     $("#fechaFinVigenciaPrecios").focus();
                     return false;
                 }
             }
-            else
-            {
-                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fecha)) {
+            else {  //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
+                if (convertirFechaNumero(fechaFinVigenciaPrecios) < convertirFechaNumero(fecha)) {
                     alert("El fin de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
                     $("#fechaFinVigenciaPrecios").focus();
                     return false;
@@ -1246,23 +1243,7 @@ jQuery(function ($) {
         }
 
      
-
-      //  fecha  fechaLimiteValidezOferta  fechaInicioVigenciaPrecios  fechaFinVigenciaPrecios
-
-
-
-
-
-
-        /*
-      if ($("#fechaInicioVigenciaPrecios").val().trim() == "") {
-          if (confirm("¿Está seguro de no ingresar la fecha de Inicio de Vigencia?")) {
-              
-          }
-          else {
-              $("#fechaInicioVigenciaPrecios").focus();
-          }
-      }*/
+        
 
         var contador = 0;
         var $j_object = $("td.detcantidad");
