@@ -465,13 +465,15 @@ jQuery(function ($) {
 
 
         //Se agrega chosen al campo PRODUCTO
-        $("#producto").chosen({ placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
+        $("#producto").chosen({ placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto", enable_split_word_search: true, search_contains: true});
 
         $("#producto").ajaxChosen({
             dataType: "json",
             type: "GET",
             minTermLength: 5,
             afterTypeDelay: 300,
+            search_contains: true,
+            enable_split_word_search: true,
             cache: false,
             url: "/Home/GetProductos"
         }, {
