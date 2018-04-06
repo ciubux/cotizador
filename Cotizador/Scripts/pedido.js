@@ -37,6 +37,7 @@ jQuery(function ($) {
     var CANT_SOLO_CANTIDADES = 1;
     var CANT_CANTIDADES_Y_OBSERVACIONES = 2;
 
+    var GUID_EMPTY = "00000000-0000-0000-0000-000000000000";
 
     /*
      * 2 BusquedaPedidos
@@ -137,7 +138,7 @@ jQuery(function ($) {
     function cargarChosenCliente(pagina) {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
+            if ($("#idCiudad").val() == GUID_EMPTY) {
                 alert("Debe seleccionar una ciudad previamente.");
                 $("#idCliente").trigger('chosen:close');
                 return false;
@@ -182,7 +183,7 @@ jQuery(function ($) {
 
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
 
-        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
+        if ($("#idCiudad").val() == GUID_EMPTY) {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
             $('#btnCancelCliente').click();
@@ -460,7 +461,7 @@ jQuery(function ($) {
     $('#btnOpenAgregarProducto').click(function () {
 
         //Para agregar un producto se debe seleccionar una ciudad
-        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
+        if ($("#idCiudad").val() == GUID_EMPTY) {
             alert("Debe seleccionar previamente una ciudad.");
             return false;
         }
@@ -1077,7 +1078,7 @@ jQuery(function ($) {
     $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
 
         var idCiudad = $("#idCiudad").val();
-        if (idCiudad == "00000000-0000-0000-0000-000000000000") {
+        if (idCiudad == GUID_EMPTY) {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
             $("#btnCancelarObtenerProductos").click();
@@ -1148,7 +1149,7 @@ jQuery(function ($) {
 
 
     function validarIngresoDatosObligator() {
-        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
+        if ($("#idCiudad").val() == GUID_EMPTY) {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
             return false;
@@ -1337,7 +1338,7 @@ jQuery(function ($) {
 
 
     function validarIngresoDatosObligatoriosPedido() {
-        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
+        if ($("#idCiudad").val() == GUID_EMPTY) {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
             return false;
@@ -1492,6 +1493,9 @@ jQuery(function ($) {
                 //var cotizacion = $.parseJSON(respuesta);
                 var pedido = resultado.pedido;
                 var usuario = resultado.usuario;
+
+                idPedido
+                $("#idPedido").val(pedido.idPedido);
 
                 $("#verNumero").html(pedido.numeroPedidoString);
                 $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
@@ -1781,6 +1785,7 @@ jQuery(function ($) {
                         url: "/Pedido/iniciarEdicionPedido",
                         type: 'POST',
 
+
                         error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del pedido."); },
                         success: function (fileName) {
                             window.location = '/Pedido/Pedir';
@@ -1802,12 +1807,73 @@ jQuery(function ($) {
     });
 
 
+
     $("#btnAtenderPedido").click(function () {
+        var idPedido = $("#idPedido").val();
+        //desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+        $.ajax({
+            url: "/GuiaRemision/IniciarAtencion",
+            data: {
+                idPedido: idPedido
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function () {
+                alert("Ocurrió un problema al iniciar la atención del pedido.");
+                //Si se genera error se cierra la ventana modal
+                $("#btnCancelarAtencion").click();
+            },
+            success: function (resultado) {
+
+                var transportistaList = resultado.transportistaList;
+                var guiaRemision = resultado.guiaRemision;
+
+                $("#guiaRemision_fechaMovimiento").val(guiaRemision.fechaMovimiento);
+                $("#guiaRemision_pedido_numeroPedido").val(guiaRemision.pedido.numeroPedidoString);
+                $("#guiaRemision_ciudadOrigen_nombre").val(guiaRemision.ciudadOrigen.nombre);
+
+                $('#mySelect')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .val(GUID_EMPTY)
+                    ;
+                   // .append('<option value="' + GUID_EMPTY+'">Seleccione Transportista</option>')
+                   
+
+                $('#guiaRemision_transportista').append($('<option>', {
+                    value: GUID_EMPTY,
+                    text: "Nuevo Transportista",
+                }));
+
+                for (var i = 0; i < transportistaList.length; i++) {
+                    $('#guiaRemision_transportista').append($('<option>', {
+                        value: transportistaList[i].idTransportista,
+                        text: transportistaList[i].descripcion,
+                    }));
+
+                }
+
+
+
+
+                $('#motivoTraslado').val(guiaRemision.motivoTraslado);
+
+               // window.location = '/Pedido/Pedir';
+            }
+        });
+
+    });
+
+
+
+    $("#btnAceptarAtencion").click(function () {
         desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
 
         $.ajax({
-            url: "/Pedido/iniciarAtencionPedido",
+            url: "/GuiaRemision/Create",
             type: 'POST',
             error: function (detalle) { alert("Ocurrió un problema al iniciar la atención del pedido."); },
             success: function (fileName) {
@@ -1815,30 +1881,10 @@ jQuery(function ($) {
             }
         });
 
-
     });
 
 
-
-
-    /*
-    $("#btnPDFCotizacion").click(function () {
-        //$(document).on('click', "button.btnReCotizacion", function () {
-        // var codigo = event.target.getAttribute("class").split(" ")[0];
-     //   desactivarBotonesVer();
-        var numero = $("#verNumero").html();
-        $.ajax({
-            url: "/Pedido/GenerarPDFdesdeIdCotizacion",
-            data: {
-                codigo: numero
-            },
-            type: 'POST',
-            error: function (detalle) { alert("Ocurrió un problema al descargar la cotización en formato PDF."); },         
-            success: function (fileName) {
-                window.location = '/Pedido/DownLoadFile?fileName=' + fileName;
-            }
-        });
-    });*/
+    
 
     function limpiarComentario()
     {

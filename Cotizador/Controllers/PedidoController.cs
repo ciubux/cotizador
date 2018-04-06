@@ -62,7 +62,10 @@ namespace Cotizador.Controllers
                 existeCliente = 1;
             }
 
-     
+            GuiaRemision guiaRemision = new GuiaRemision();
+            guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.Venta;
+
+            ViewBag.guiaRemision = guiaRemision;
 
             ViewBag.pedido = pedido;
 

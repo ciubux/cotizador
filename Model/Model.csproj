@@ -40,8 +40,14 @@
   <ItemGroup>
     <Compile Include="Auditoria.cs" />
     <Compile Include="DocumentoDetalle.cs" />
+    <Compile Include="GuiaRemision.cs" />
     <Compile Include="HelperDocumento.cs" />
     <Compile Include="IDocumento.cs" />
+    <Compile Include="MovimientoAlmacen.cs" />
+    <Compile Include="Transportista.cs" />
+    <Compile Include="Venta.cs" />
+    <Compile Include="VentaDetalle.cs" />
+    <Compile Include="MovimientoDetalle.cs" />
     <Compile Include="PedidoDetalle.cs" />
     <Compile Include="Pedido.cs" />
     <Compile Include="EnumHelper.cs" />
