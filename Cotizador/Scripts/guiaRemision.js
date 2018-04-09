@@ -3,7 +3,7 @@ jQuery(function ($) {
 
 
     //Tabla de resultado de búsqueda de Pedidos
-    $("#tablePedidos").footable({
+    $("#tableGuiasRemision").footable({
         "paging": {
             "enabled": true
         }
@@ -194,50 +194,7 @@ jQuery(function ($) {
 
 
 
-
-    $("#btnSaveCliente").click(function () {
-
-        if ($("#ncRazonSocial").val().trim() == "" && $("#ncNombreComercial").val().trim() == "") {
-            alert("Debe ingresar la Razón Social o el Nombre Comercial.");
-            $('#ncRazonSocial').focus();
-            return false;
-        }
-
-        if ($("#ncRUC").val().trim() == "") {
-            alert("Debe ingresar el RUC.");
-            $('#ncRUC').focus();
-            return false;
-        }
-
-        var razonSocial = $("#ncRazonSocial").val();
-        var nombreComercial = $("#ncNombreComercial").val();
-        var ruc = $("#ncRUC").val();
-        var contacto = $("#ncContacto").val();
-
-        $.ajax({
-            url: "/Cliente/Create",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                razonSocial: razonSocial,
-                nombreComercial: nombreComercial,
-                ruc: ruc,
-                contacto: contacto,
-                controller: "pedido"
-            },
-            error: function (detalle) { alert("Se generó un error al intentar crear el cliente."); },
-            success: function (resultado) {
-
-                alert("Se creó cliente con Código Temporal: " + resultado.codigoAlterno + ".");
-                location.reload();
-            }
-        });
-
-
-        $('#btnCancelCliente').click();
-
-    });
-
+    
 
     /**
      * FIN CONTROLES DE CLIENTE
@@ -286,9 +243,10 @@ jQuery(function ($) {
     $.datepicker.setDefaults($.datepicker.regional['es']);
 
 
-    var fechaSolicitud = $("#fechaSolicitudTmp").val();
-    $("#fechaSolicitud").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitud);
+    var fechaMovimiento = $("#fechaMovimientotmp").val();
+    $("#guiaRemision_fechaMovimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaMovimiento);
 
+    /*
     var fechaEntrega = $("#fechaEntregaTmp").val();
     $("#fechaEntrega").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntrega);
 
@@ -313,7 +271,7 @@ jQuery(function ($) {
     var fechaPrecios = $("#fechaPreciostmp").val();
     $("#fechaPrecios").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaPrecios);    
 
- 
+ */
 
 
 
@@ -324,6 +282,27 @@ jQuery(function ($) {
 
 
     /* ################################## INICIO CHANGE CONTROLES */
+
+    $("#transportista").change(function () {
+
+        var idTransportista = $("#transportista").val();
+
+        $.ajax({
+            url: "/GuiaRemision/ChangeTransportista",
+            type: 'POST',
+            dataType: "JSON",
+            data: {
+                idTransportista: idTransportista
+            },
+            success: function (transportista) {
+
+                $("#guiaRemision_transportista_descripcion").val(transportista.descripcion);
+                $("#guiaRemision_transportista_ruc").val(transportista.ruc);
+                $("#guiaRemision_transportista_direccion").val(transportista.direccion);
+                $("#guiaRemision_transportista_brevete").val(transportista.brevete);
+            }
+        });
+    });
 
 
     $("#pedido_numeroReferenciaCliente").change(function () {
@@ -1148,7 +1127,7 @@ jQuery(function ($) {
     ////////CREAR/EDITAR COTIZACIÓN
 
 
-    function validarIngresoDatosObligatoriosPedido() {
+    function validarIngresoDatosObligator() {
         if ($("#idCiudad").val() == GUID_EMPTY) {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
@@ -1162,8 +1141,8 @@ jQuery(function ($) {
         }
 
         if ($("#pedido_direccionEntrega").val().trim() == "") {
-            alert("Debe ingresar la dirección de despacho.");
-            $('#pedido_direccionEntrega').focus();
+            alert("Debe ingresar una dirección de entrega.");
+            $('#pedido_direccionEntrega').trigger('chosen:activate');
             return false;
         }
 
@@ -1264,7 +1243,7 @@ jQuery(function ($) {
                     //generarPDF();
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("El pedido número " + resultado.codigo + " fue creado correctamente.");
+                    alert("El pedido número " + resultado.codigo + " fue creado correctamente, sin embargo requiere APROBACIÓN.");
                     window.location = '/Pedido/Index';
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
@@ -1336,7 +1315,98 @@ jQuery(function ($) {
     });
 
 
-    
+
+    function validarIngresoDatosObligatoriosPedido() {
+        if ($("#idCiudad").val() == GUID_EMPTY) {
+            alert("Debe seleccionar una ciudad previamente.");
+            $("#idCiudad").focus();
+            return false;
+        }
+
+        if ($("#idCliente").val().trim() == "") {
+            alert("Debe seleccionar un cliente.");
+            $('#idCliente').trigger('chosen:activate');
+            return false;
+        }
+        /*
+        if ($("#contacto").val().trim() == "") {
+            alert("Debe ingresar un contacto.");
+            $("#contacto").focus();
+            return false;
+        }
+
+        var fecha = $("#fecha").val();
+        if ($("#fecha").val().trim() == "") {
+            alert("Debe ingresar la fecha de la cotización.");
+            $("#fecha").focus();
+            return false;
+        }
+
+        if ($("#mostrarValidezOfertaEnDias").val() == 0) {
+            if ($("#validezOfertaEnDias").val() < 1) {
+                alert("La cantidad de días de validez de oferta debe ser mayor o igual a uno.");
+                $("#validezOfertaEnDias").focus();
+                return false;
+            }
+        }
+        else {
+            if ($("#fechaLimiteValidezOferta").val().trim() != "") {
+                alert("Debe ingresar la fecha de Validez Oferta.");
+                $("#fechaLimiteValidezOferta").focus();
+                return false;
+            }
+
+        }
+
+
+
+        if (convertirFechaNumero(fechaLimiteValidezOferta) <= convertirFechaNumero(fecha)) {
+            alert("EL fin de Validez de Oferta debe ser mayor o igual a la fecha de la cotización.");
+            $("#fechaLimiteValidezOferta").focus();
+            return false;
+        }
+
+        var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPrecios").val();
+        if (fechaInicioVigenciaPrecios.trim() != "") {
+            if (convertirFechaNumero(fechaInicioVigenciaPrecios) <= convertirFechaNumero(fecha)) {
+                alert("El inicio de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
+                $("#fechaInicioVigenciaPrecios").focus();
+                return false;
+            }
+        }
+
+        var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
+        if (fechaFinVigenciaPrecios.trim() != "") {
+
+            if (fechaInicioVigenciaPrecios.trim() != "") {
+                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fechaInicioVigenciaPrecios)) {
+                    alert("El fin de vigencia de precios debe ser mayor o igual al inicio de vigencia de precios.");
+                    $("#fechaFinVigenciaPrecios").focus();
+                    return false;
+                }
+            }
+            else {
+                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fecha)) {
+                    alert("El fin de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
+                    $("#fechaFinVigenciaPrecios").focus();
+                    return false;
+                }
+            }
+        }*/
+
+        var contador = 0;
+        var $j_object = $("td.detcantidad");
+        $.each($j_object, function (key, value) {
+            contador++;
+        });
+
+        if (contador == 0) {
+            alert("Debe ingresar el detalle del pedido.");
+            return false;
+        }
+
+        return true;
+    }
 
 
 
@@ -1626,27 +1696,59 @@ jQuery(function ($) {
 
     function desactivarBotonesVer()
     {
-        $("#btnCancelarCotizacion").attr('disabled', 'disabled');
+      /*  $("#btnCancelarCotizacion").attr('disabled', 'disabled');
         $("#btnEditarCotizacion").attr('disabled', 'disabled');
         $("#btnReCotizacion").attr('disabled', 'disabled');
         $("#btnAprobarCotizacion").attr('disabled', 'disabled');
         $("#btnDenegarCotizacion").attr('disabled', 'disabled');
         $("#btnAceptarCotizacion").attr('disabled', 'disabled');
         $("#btnRechazarCotizacion").attr('disabled', 'disabled');
-        $("#btnPDFCotizacion").attr('disabled', 'disabled');
+        $("#btnPDFCotizacion").attr('disabled', 'disabled');*/
     }
 
     function activarBotonesVer() {
-        $("#btnCancelarCotizacion").removeAttr('disabled');
+  /*      $("#btnCancelarCotizacion").removeAttr('disabled');
         $("#btnEditarCotizacion").removeAttr('disabled');
         $("#btnReCotizacion").removeAttr('disabled');
         $("#btnAprobarCotizacion").removeAttr('disabled');
         $("#btnDenegarCotizacion").removeAttr('disabled');
         $("#btnAceptarCotizacion").removeAttr('disabled');
         $("#btnRechazarCotizacion").removeAttr('disabled');
-        $("#btnPDFCotizacion").removeAttr('disabled');
+        $("#btnPDFCotizacion").removeAttr('disabled');*/
     }
-    
+
+    /*
+    $("#btnReCotizacion").click(function () {
+        desactivarBotonesVer();
+        $.ajax({
+            url: "/Pedido/ConsultarSiExisteCotizacion",
+            type: 'POST',
+            async: false,
+            success: function (resultado) {
+                if (resultado == "False") {
+
+                    var numero = $("#verNumero").html();
+                    $.ajax({
+                        url: "/Pedido/recotizacion",
+                        data: {
+                            numero: numero
+                        },
+                        type: 'POST',
+                        error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
+                        success: function (fileName) {
+                            window.location = '/Pedido/Cotizar';
+                        }
+                    });
+                }
+                else {
+                    alert("Existe otra cotización en curso; por favor cancele previamente esa cotización para continuar.");
+                    activarBotonesVer();
+                }
+            }
+        })
+    });
+    */
+    /*btnEditarCotizacion desde busqueda*/
 
     $("#btnEditarPedido").click(function () {
         desactivarBotonesVer();
@@ -1672,7 +1774,7 @@ jQuery(function ($) {
                     //window.location = '/Pedido/Cotizador';
                 }
                 else {
-                    alert("Existe un pedido abierto; por favor vaya a la pantala Pedir, haga clic en cancelar y vuelva a intentarlo.");
+                    alert("Existe otro pedido en curso; por favor vaya a la pantala Pedir, haga clic en cancelar y vuelva a intentarlo.");
                     activarBotonesVer();
                 }
             }
@@ -1687,33 +1789,81 @@ jQuery(function ($) {
 
     $("#btnAtenderPedido").click(function () {
         var idPedido = $("#idPedido").val();
-
+        //desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
-            url: "/GuiaRemision/ConsultarSiExisteGuiaRemision",
+            url: "/GuiaRemision/IniciarAtencion",
+            data: {
+                idPedido: idPedido
+            },
             type: 'POST',
-            async: false,
+            dataType: 'JSON',
+            error: function () {
+                alert("Ocurrió un problema al iniciar la atención del pedido.");
+                //Si se genera error se cierra la ventana modal
+                $("#btnCancelarAtencion").click();
+            },
             success: function (resultado) {
-                if (resultado == "False") {
-                    $.ajax({
-                        url: "/GuiaRemision/iniciarAtencionDesdePedido",
-                        type: 'POST',
-                        error: function (detalle) { alert("Ocurrió un problema al iniciar la atención del pedido."); },
-                        success: function (fileName) {
-                            window.location = '/GuiaRemision/Guiar';
-                        }
-                    });
+
+                var transportistaList = resultado.transportistaList;
+                var guiaRemision = resultado.guiaRemision;
+
+                $("#guiaRemision_fechaMovimiento").val(guiaRemision.fechaMovimiento);
+                $("#guiaRemision_pedido_numeroPedido").val(guiaRemision.pedido.numeroPedidoString);
+                $("#guiaRemision_ciudadOrigen_nombre").val(guiaRemision.ciudadOrigen.nombre);
+
+                $('#mySelect')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .val(GUID_EMPTY)
+                    ;
+                   // .append('<option value="' + GUID_EMPTY+'">Seleccione Transportista</option>')
+                   
+
+                $('#guiaRemision_transportista').append($('<option>', {
+                    value: GUID_EMPTY,
+                    text: "Nuevo Transportista",
+                }));
+
+                for (var i = 0; i < transportistaList.length; i++) {
+                    $('#guiaRemision_transportista').append($('<option>', {
+                        value: transportistaList[i].idTransportista,
+                        text: transportistaList[i].descripcion,
+                    }));
+
                 }
-                else {
-                    alert("Existe una Guia de Remisión abierta; por favor vaya a la pantala Guia Remisión, haga clic en cancelar y vuelva a intentarlo.");
-                    activarBotonesVer();
-                }
+
+
+
+
+                $('#motivoTraslado').val(guiaRemision.motivoTraslado);
+
+               // window.location = '/Pedido/Pedir';
             }
         });
 
+    });
 
-   
+
+
+    $("#btnAceptarAtencion").click(function () {
+        desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+
+        $.ajax({
+            url: "/GuiaRemision/Create",
+            type: 'POST',
+            error: function (detalle) { alert("Ocurrió un problema al iniciar la atención del pedido."); },
+            success: function (fileName) {
+                window.location = '/Pedido/Pedir';
+            }
+        });
 
     });
+
+
+    
 
     function limpiarComentario()
     {
@@ -1969,55 +2119,20 @@ jQuery(function ($) {
                     alert(idProducto);
                 },
                 deleteRow: function (row) {
-                    //  if (confirm('¿Esta seguro de eliminar el producto?')) {
                     var values = row.val();
                     var idProducto = values.idProducto;
-                    /*
-                                                $.ajax({
-                                                    url: "/Pedido/DelProducto",
-                                                    type: 'POST',
-                                                    data: {
-                                                        idProducto: idProducto
-                                                    },
-                                                    success: function (total) {
-                                                */
                     row.delete();
                 }
             }
         });
         
-        /*.bind({
-            'footable_sorted': function (e) {
-                /*    var rows = $('#details tbody tr.data');
-        
-                    rows.each(function () {
-                        var personid = $(this).data('row-person');
-        
-                        var detail = $('#details tbody tr.descriptions[data-detail-person="' + personid + '"]');
-                        $(detail).insertAfter($(this));
-                    });
-                alert("asas");
-            }
-        });*/
     }
     cargarTablaDetalle();
 
 
  
 
-
- //   $('#tablefoottable').footable()
-
-   /* $("#tablefoottable").onSort(function () {
-        alert("Asas");
-
-        /* onSort
-
-    sort.bs.table
-
-        }
-    );*/
-   
+    
 
 
     function mostrarFlechasOrdenamiento() {

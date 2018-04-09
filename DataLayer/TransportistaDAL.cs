@@ -34,7 +34,8 @@ namespace DataLayer
                     ruc = Converter.GetString(row, "ruc"),
                     direccion = Converter.GetString(row, "direccion"),
                     telefono = Converter.GetString(row, "telefono"),
-                    observaciones = Converter.GetString(row, "observaciones")
+                    observaciones = Converter.GetString(row, "observaciones"),
+                    brevete = Converter.GetString(row, "brevete")
                 };
                 lista.Add(obj);
             }

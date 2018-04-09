@@ -27,10 +27,10 @@ namespace DataLayer
 
         public void updatePedidoSerializado(Usuario usuario, String pedidoSerializado)
         {
-            var objCommand = GetSqlCommand("pu_pedidoSerializado");
+          /*  var objCommand = GetSqlCommand("pu_pedidoSerializado");
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "pedidoSerializado", -1, pedidoSerializado);
-            ExecuteNonQuery(objCommand);
+            ExecuteNonQuery(objCommand);*/
         }
 
         public Usuario getUsuarioLogin(Usuario usuario)

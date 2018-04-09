@@ -30,7 +30,7 @@
                         var linkMantenimientoCotizacion = "";
                         var linkListaPedidos = "";
                         var linkMantenimientoPedido = "";
-                        }
+                    }
                     @if ((int)this.Session["pagina"] == 0)
                     {
                         linkListaCotizaciones = "ative";
@@ -60,19 +60,19 @@
                     <li id="linkMisPedidos">@Html.ActionLink("Mis Facturas", "Index", "Factura")</li>
                     <li id="linkPedir">@Html.ActionLink("Facturar", "Facturar", "Factura")</li>
                     <!--
-    <li>
-        <a class="dropdown-toggle" data-toggle="dropdown">
-            Carga de Archivos
-            <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-            <li>@Html.ActionLink("Cargar Clientes", "Index", "Cliente")</li>
-            <li>@Html.ActionLink("Cargar Productos", "Index", "Producto")</li>
-            <li>@Html.ActionLink("Cargar Precios", "Index", "Precio")</li>
-            <li>@Html.ActionLink("Cargar Facturas", "Index", "Factura")</li>
-        </ul>
+                    <li>
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                            Carga de Archivos
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>@Html.ActionLink("Cargar Clientes", "Index", "Cliente")</li>
+                            <li>@Html.ActionLink("Cargar Productos", "Index", "Producto")</li>
+                            <li>@Html.ActionLink("Cargar Precios", "Index", "Precio")</li>
+                            <li>@Html.ActionLink("Cargar Facturas", "Index", "Factura")</li>
+                        </ul>
 
-    </li>-->
+                    </li>-->
 
                 </ul>
 
@@ -106,6 +106,10 @@
         else if ((int)this.Session["pagina"] == 2 || (int)this.Session["pagina"] == 3)
         {
             @Scripts.Render("~/bundles/pedido")
+        }
+        else if ((int)this.Session["pagina"] == 4 || (int)this.Session["pagina"] == 5)
+        {
+            @Scripts.Render("~/bundles/guiaRemision")
         }
     }
 

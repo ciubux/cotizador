@@ -52,7 +52,7 @@ namespace Model
             DevolucionVenta = 'D',
             [Display(Name = "Devolución de Préstamo")]
             DevolucionPrestamo = 'E',
-            [Display(Name = "M")]
+            [Display(Name = "Comodato")]
             Comodato = 'M',
             [Display(Name = "Devolución de Comodato")]
             DevolucionComodato = 'F',
@@ -81,6 +81,9 @@ namespace Model
 
         public List<DocumentoDetalle> documentoDetalle { get; set; }
 
+        [Display(Name = "Transportista:")]
         public Transportista transportista { get; set; }
+
+        public Boolean transportistaEsModificado { get; set; }
     }
 }

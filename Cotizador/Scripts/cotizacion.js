@@ -1602,7 +1602,18 @@ jQuery(function ($) {
                 else {
                     $("#btnPDFCotizacion").hide();
                 }
+
+                if (
+                    cotizacion.seguimientoCotizacion.estado == ESTADO_ACEPTADA 
+                ) {
+
+                    $("#btnGenerarPedido").show();
+                }
+                else {
+                    $("#btnGenerarPedido").hide();
+                }
                 
+
 
 
                 $("#modalVerCotizacion").modal('show');
@@ -1653,6 +1664,7 @@ jQuery(function ($) {
         $("#btnAceptarCotizacion").attr('disabled', 'disabled');
         $("#btnRechazarCotizacion").attr('disabled', 'disabled');
         $("#btnPDFCotizacion").attr('disabled', 'disabled');
+        $("btnGenerarPedido").attr('disabled', 'disabled');
     }
 
     function activarBotonesVer() {
@@ -1664,6 +1676,7 @@ jQuery(function ($) {
         $("#btnAceptarCotizacion").removeAttr('disabled');
         $("#btnRechazarCotizacion").removeAttr('disabled');
         $("#btnPDFCotizacion").removeAttr('disabled');
+        $("btnGenerarPedido").removeAttr('disabled');
     }
 
 
@@ -1728,10 +1741,38 @@ jQuery(function ($) {
             }
         });
 
-        
+    });
 
+    $("#btnGenerarPedido").click(function () {
+        desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+        $.ajax({
+            url: "/Pedido/ConsultarSiExistePedido",
+            type: 'POST',
+            async: false,
+            success: function (resultado) {
+                if (resultado == "False") {
+
+                    $.ajax({
+                        url: "/Pedido/iniciarEdicionPedidoDesdeCotizacion",
+                        type: 'POST',
+                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del pedido."); },
+                        success: function (fileName) {
+                            window.location = '/Pedido/Pedir';
+                        }
+                    });
+
+                    //window.location = '/Cotizacion/Cotizador';
+                }
+                else {
+                    alert("Existe otra cotización en curso; por favor cancele previamente esa cotización para continuar.");
+                    activarBotonesVer();
+                }
+            }
+        });
 
     });
+    
 
 
 

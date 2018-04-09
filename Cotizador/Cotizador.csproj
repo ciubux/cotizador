@@ -291,6 +291,7 @@
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
+    <Content Include="Scripts\guiaRemision.js" />
     <Content Include="Scripts\pedido.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -365,13 +366,14 @@
     <Content Include="Views\Pedido\Pedir.cshtml" />
     <Content Include="Views\Pedido\Index.cshtml" />
     <Content Include="Views\Ciudad\_SelectCiudadCotizacion.cshtml" />
+    <Content Include="Views\GuiaRemision\Index.cshtml" />
+    <Content Include="Views\GuiaRemision\Guiar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
     <Folder Include="pdf\" />
     <Folder Include="Scripts\App_LocalResources\" />
     <Folder Include="Views\General\" />
-    <Folder Include="Views\GuiaRemision\" />
     <Folder Include="Views\Login\" />
   </ItemGroup>
   <ItemGroup>

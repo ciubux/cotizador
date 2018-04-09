@@ -19,17 +19,35 @@ namespace Model
         public static Char PAD = '0';
         public static int LONGITUD_NUMERO = 10;
 
-
         public static String VAR_SESSION_COTIZACION = "cotizacion";
         public static String VAR_SESSION_COTIZACION_BUSQUEDA = "cotizacionBusqueda";
         public static String VAR_SESSION_COTIZACION_LISTA = "cotizacionList";
-        public static String VAR_SESSION_COTIZACION_VER = "cotizacionoVer";
+        public static String VAR_SESSION_COTIZACION_VER = "cotizacionVer";
+
         public static String VAR_SESSION_PEDIDO = "pedido";
         public static String VAR_SESSION_PEDIDO_BUSQUEDA = "pedidoBusqueda";
         public static String VAR_SESSION_PEDIDO_LISTA = "pedidoList";
         public static String VAR_SESSION_PEDIDO_VER = "pedidoVer";
+
+        public static String VAR_SESSION_GUIA = "guiaRemision";
+        public static String VAR_SESSION_GUIA_BUSQUEDA = "guiaRemisionBusqueda";
+        public static String VAR_SESSION_GUIA_LISTA = "guiaRemisionList";
+        public static String VAR_SESSION_GUIA_VER = "guiaRemisionVer";
+
+        public static String VAR_SESSION_VENTA = "venta";
+        public static String VAR_SESSION_VENTA_BUSQUEDA = "ventaBusqueda";
+        public static String VAR_SESSION_VENTA_LISTA = "ventaList";
+        public static String VAR_SESSION_VENTA_VER = "ventaVer";
+
+        public static String VAR_SESSION_DOC_VENTA = "documentoVenta";
+        public static String VAR_SESSION_DOC_VENTA_BUSQUEDA = "documentoVentaBusqueda";
+        public static String VAR_SESSION_DOC_VENTA_LISTA = "documentoVentaList";
+        public static String VAR_SESSION_DOC_VENTA_VER = "documentoVentaVer";
+
         public static String VAR_SESSION_PAGINA = "pagina";
         public static String VAR_SESSION_USUARIO = "usuario";
+
+        public static String VAR_SESSION_TRANSPORTISTAS = "transportistas";
 
 
 
@@ -49,8 +67,8 @@ namespace Model
         public static int MANTENIMIENTO_COTIZACION = 1;
         public static int BUSQUEDA_PEDIDO = 2;
         public static int MANTENIMIENTO_PEDIDO = 3;
-        public static int BUSQUEDA_FACTURA = 4;
-        public static int MANTENIMIENTO_FACTURA = 5;
+        public static int BUSQUEDA_GUIA_REMISION = 4;
+        public static int MANTENIMIENTO_GUIA_REMISION = 5;
 
 
 

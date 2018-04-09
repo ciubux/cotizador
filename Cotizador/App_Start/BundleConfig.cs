@@ -16,6 +16,9 @@ namespace Cotizador
                         "~/Scripts/pedido.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
+                        "~/Scripts/guiaRemision.js"
+                        ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-3.1.1.min.js",

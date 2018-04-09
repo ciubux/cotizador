@@ -48,12 +48,12 @@ namespace Cotizador.Controllers
                 Pedido pedido = new Pedido();
                 if (accion.Equals("Mantenimiento"))
                 {
-                    pedido = (Pedido)this.Session["pedido"];
+                    pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
                     ViewBag.accion = String.Empty;
                 }
                 else if (accion.Equals("Busqueda"))
                 {
-                    pedido = (Pedido)this.Session["pedidoBusqueda"];
+                    pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
                     ViewBag.accion = accion;
                 }
                 ViewBag.ciudadSeleccionada = pedido.ciudad.idCiudad;
@@ -63,14 +63,28 @@ namespace Cotizador.Controllers
                 Cotizacion cotizacion = new Cotizacion();
                 if (accion.Equals("Mantenimiento"))
                 {
-                    cotizacion = (Cotizacion)this.Session["cotizacion"];
+                    cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION];
                 }
                 else if (accion.Equals("Busqueda"))
                 {
-                    cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
+                    cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA];
                     ViewBag.accion = accion;
                 }
                 ViewBag.ciudadSeleccionada = cotizacion.ciudad.idCiudad;
+            }
+            else if (parentController.Equals("GuiaRemision"))
+            {
+                GuiaRemision guiaRemision = new GuiaRemision();
+                if (accion.Equals("Mantenimiento"))
+                {
+                    guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+                }
+                else if (accion.Equals("Busqueda"))
+                {
+                    guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA];
+                    ViewBag.accion = accion;
+                }
+                ViewBag.ciudadSeleccionada = guiaRemision.ciudadOrigen.idCiudad;
             }
 
             var model = ciudadList;
