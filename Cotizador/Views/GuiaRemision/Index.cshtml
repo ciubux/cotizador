@@ -10,7 +10,7 @@
     <h3>@ViewBag.Title</h3>
 </div>
 <div class="container">
-
+    <input type="hidden" id="pagina" value="4" />
     <form class="form-horizontal">
 
         <div class="row">
@@ -152,9 +152,9 @@
                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estado",
-                             EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
-                             new { @class = "form-control" }
-                             )
+                                  EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
+                                  new { @class = "form-control" }
+                                  )
                     </div>
                 </div>
             </div>

@@ -10,6 +10,7 @@
 </div>
 <div class="container">
 
+    <input type="hidden" id="pagina" value="1"/>
     <input type="hidden" value="@ViewBag.debug" />
     <form class="form-horizontal">
         <div class="row">
@@ -34,7 +35,12 @@
                 <div class="form-group">
                     @Html.LabelFor(p => cotizacion.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
-                        @Html.Action("list", "Ciudad", new { parentController = @ViewContext.RouteData.Values["controller"].ToString(), accion = "Mantenimiento" })
+                         @Html.Action("GetCiudades", "Ciudad",
+                        new
+                        {
+                            ciudadSelectId = "idCiudad",
+                            selectedValue = cotizacion.ciudad.idCiudad
+                        })
                     </div>
                 </div>
             </div>

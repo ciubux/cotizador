@@ -4,12 +4,15 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BusinessLayer;
+using Cotizador.Models;
 using Model;
 
 namespace Cotizador.Controllers
 {
     public class CiudadController : Controller
     {
+
+        CiudadBL ciudadBL = new CiudadBL();
         // GET: Ciudad
         public ActionResult Index()
         {
@@ -23,78 +26,20 @@ namespace Cotizador.Controllers
         }
 
 
-        public ActionResult list(String parentController, String accion)
+        public ActionResult GetCiudades(string ciudadSelectId, string selectedValue = null)
         {
-            CiudadBL ciudadBL = new CiudadBL();
-
-            List<Ciudad> ciudadListTmp = ciudadBL.getCiudades();
-
-            List<Ciudad> ciudadList = new List<Ciudad>();
-            Ciudad ciudadDeshabiltiad = new Ciudad { idCiudad = Guid.Empty, nombre = "Seleccione Ciudad", orden = 0 };
-            ciudadList.Add(ciudadDeshabiltiad);
-
-            foreach (Ciudad ciudad in ciudadListTmp)
+            var model = new CiudadViewModels
             {
-                ciudadList.Add(ciudad);
-            }
+                Data = ciudadBL.getCiudades(),
+                CiudadSelectId = ciudadSelectId,
+                SelectedValue = selectedValue
+            };
 
-            List<Guid> ciudadDeshabilitadas = new List<Guid>();
-            ciudadDeshabilitadas.Add(ciudadDeshabiltiad.idCiudad);
-         //   ViewBag.List = ciudadDeshabilitadas;
-            ViewBag.parentController = parentController;
-
-            if (parentController.Equals("Pedido") )
-            {
-                Pedido pedido = new Pedido();
-                if (accion.Equals("Mantenimiento"))
-                {
-                    pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-                    ViewBag.accion = String.Empty;
-                }
-                else if (accion.Equals("Busqueda"))
-                {
-                    pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-                    ViewBag.accion = accion;
-                }
-                ViewBag.ciudadSeleccionada = pedido.ciudad.idCiudad;
-            }
-            else if (parentController.Equals("Cotizacion"))
-            {
-                Cotizacion cotizacion = new Cotizacion();
-                if (accion.Equals("Mantenimiento"))
-                {
-                    cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION];
-                }
-                else if (accion.Equals("Busqueda"))
-                {
-                    cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA];
-                    ViewBag.accion = accion;
-                }
-                ViewBag.ciudadSeleccionada = cotizacion.ciudad.idCiudad;
-            }
-            else if (parentController.Equals("GuiaRemision"))
-            {
-                GuiaRemision guiaRemision = new GuiaRemision();
-                if (accion.Equals("Mantenimiento"))
-                {
-                    guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
-                }
-                else if (accion.Equals("Busqueda"))
-                {
-                    guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA];
-                    ViewBag.accion = accion;
-                }
-                ViewBag.ciudadSeleccionada = guiaRemision.ciudadOrigen.idCiudad;
-            }
-
-            var model = ciudadList;
-
-            return PartialView("_SelectCiudad", model);
+            return PartialView("_Ciudad", model);
         }
 
+        
 
-        
-        
         // GET: Ciudad/Create
         public ActionResult Create()
         {

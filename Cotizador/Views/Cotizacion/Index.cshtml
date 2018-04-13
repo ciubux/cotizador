@@ -9,7 +9,7 @@
     <h3>@ViewBag.Title</h3>
 </div>
 <div class="container">
-
+    <input type="hidden" id="pagina" value="0" />
     <form class="form-horizontal">
 
         <div class="row">
@@ -38,7 +38,12 @@
                 <div class="form-group">
                     <label for="idCiudad" class="control-label col-xs-4">Ciudad:</label>
                     <div class="col-xs-8">
-                        @Html.Action("list", "Ciudad", new { parentController = @ViewContext.RouteData.Values["controller"].ToString(), accion = "Busqueda" })
+                        @Html.Action("GetCiudades", "Ciudad",
+                             new
+                             {
+                                 ciudadSelectId = "idCiudad",
+                                 selectedValue = cotizacion.ciudad.idCiudad
+                             })
                     </div>
                 </div>
             </div>
@@ -105,9 +110,9 @@
                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estado",
-                                     EnumHelper.GetSelectList(typeof(Model.SeguimientoCotizacion.estadosSeguimientoCotizacion), cotizacion.seguimientoCotizacion.estado),
-                                     new { @class = "form-control" }
-                                     )
+                                          EnumHelper.GetSelectList(typeof(Model.SeguimientoCotizacion.estadosSeguimientoCotizacion), cotizacion.seguimientoCotizacion.estado),
+                                          new { @class = "form-control" }
+                                          )
                     </div>
                 </div>
             </div>

@@ -12,6 +12,27 @@ namespace Cotizador.Controllers
 {
     public class PedidoController : Controller
     {
+
+        private Pedido PedidoSession {
+            get {
+
+                Pedido pedido = null;
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.misPedidos: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA]; break;
+                    case Constantes.paginas.Pedido: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO]; break;
+                }
+                return pedido;
+            }
+            set {
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.misPedidos: this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = value; break;
+                    case Constantes.paginas.Pedido: this.Session[Constantes.VAR_SESSION_PEDIDO] = value; break;
+                }
+            }
+        }
+        
         // GET: Pedido
         public ActionResult Index()
         {
@@ -293,10 +314,9 @@ namespace Cotizador.Controllers
 
         public String GetCliente()
         {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
-                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
 
+
+            Pedido pedido = this.PedidoSession; 
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
             pedido.cliente = clienteBl.getCliente(idCliente);
@@ -324,10 +344,7 @@ namespace Cotizador.Controllers
 
             String resultado = JsonConvert.SerializeObject(pedido.cliente);
 
-            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
-                this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-            else
-                this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            this.PedidoSession = pedido;
             return resultado;
         }
 
@@ -550,45 +567,18 @@ namespace Cotizador.Controllers
 
         public void ChangeFechaEntregaDesde()
         {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
-            {
-                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            }
-            
+            Pedido pedido = this.PedidoSession;
             String[] ftmp = this.Request.Params["fechaEntregaDesde"].Split('/');
             pedido.fechaEntregaDesde = new DateTime(Int32.Parse(ftmp[2]), Int32.Parse(ftmp[1]), Int32.Parse(ftmp[0]));
-
-            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
-            {
-                this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-            }
-            else
-            {
-                this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-            }
-            
+            this.PedidoSession = pedido;
         }
 
         public void ChangeFechaEntregaHasta()
         {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
-            {
-                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            }
-
+            Pedido pedido = this.PedidoSession;
             String[] ftmp = this.Request.Params["fechaEntregaHasta"].Split('/');
             pedido.fechaEntregaHasta = new DateTime(Int32.Parse(ftmp[2]), Int32.Parse(ftmp[1]), Int32.Parse(ftmp[0]));
-
-            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
-            {
-                this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-            }
-            else
-            {
-                this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-            }
+            this.PedidoSession = pedido;
         }
 
         public void ChangeContactoPedido()
@@ -666,43 +656,28 @@ namespace Cotizador.Controllers
 
         public String ChangeIdCiudad()
         {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
-
-            CiudadBL ciudadBL = new CiudadBL();
-            Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
+            Pedido pedido = this.PedidoSession;
             pedido.cliente = new Cliente();
+            Guid idCiudad = Guid.Empty;
+            if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
+            {
+                idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+            }
             //Para realizar el cambio de ciudad ningun producto debe estar agregado
-            if (pedido.pedidoDetalleList.Count > 0)
+            if (pedido.pedidoDetalleList != null && pedido.pedidoDetalleList.Count > 0)
             {
                 // throw new Exception("No se puede cambiar de ciudad");
                 return "No se puede cambiar de ciudad";
             }
             else
             {
+                CiudadBL ciudadBL = new CiudadBL();
+                Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
                 pedido.ciudad = ciudadNueva;
-                this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+                this.PedidoSession = pedido;
                 return "{\"idCiudad\": \"" + idCiudad + "\"}";
             }
-
         }
-
-        public String ChangeIdCiudadBusqueda()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
-
-            CiudadBL ciudadBL = new CiudadBL();
-            Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
-            pedido.cliente = new Cliente();
-            //Para realizar el cambio de ciudad ningun producto debe estar agregado
-            pedido.ciudad = ciudadNueva;
-            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-            return "{\"idCiudad\": \"" + idCiudad + "\"}";
-
-
-        }
-
 
 
         [HttpPost]

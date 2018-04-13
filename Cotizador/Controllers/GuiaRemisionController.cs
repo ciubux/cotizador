@@ -11,6 +11,31 @@ namespace Cotizador.Controllers
 {
     public class GuiaRemisionController : Controller
     {
+
+        private Cotizacion CotizacionSession
+        {
+            get
+            {
+
+                Cotizacion cotizacion = null;
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.misCotizaciones: cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA]; break;
+                    case Constantes.paginas.Cotizacion: cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION]; break;
+                }
+                return cotizacion;
+            }
+            set
+            {
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.misCotizaciones: this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA] = value; break;
+                    case Constantes.paginas.Cotizacion: this.Session[Constantes.VAR_SESSION_COTIZACION] = value; break;
+                }
+            }
+        }
+
+
         // GET: GuiaRemision
         public ActionResult Index()
         {
@@ -33,38 +58,17 @@ namespace Cotizador.Controllers
         {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
             Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
-
             CiudadBL ciudadBL = new CiudadBL();
-            Ciudad ciudadEncontrada = ciudadBL.getCiudad(idCiudad);
+            Ciudad ciudadOrigen = ciudadBL.getCiudad(idCiudad);
             guiaRemision.transportista = new Transportista();
-
-            List<Transportista> transportistaList = this.crearListaTransportistas(ciudadEncontrada.idCiudad);
-
-            this.Session[Constantes.VAR_SESSION_TRANSPORTISTAS] = transportistaList;
-
-            guiaRemision.ciudadOrigen = ciudadEncontrada;
+            TransportistaBL transportistaBL = new TransportistaBL();
+            ciudadOrigen.transportistaList = transportistaBL.getTransportistas(idCiudad);
+            guiaRemision.ciudadOrigen = ciudadOrigen;
             this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
-            return "{\"idCiudad\": \"" + idCiudad + "\"}";
+            return JsonConvert.SerializeObject(guiaRemision.ciudadOrigen);
         }
 
-
-
-        public String ChangeIdCiudadBusqueda()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA];
-            Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
-
-            CiudadBL ciudadBL = new CiudadBL();
-            Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
-            pedido.cliente = new Cliente();
-            //Para realizar el cambio de ciudad ningun producto debe estar agregado
-            pedido.ciudad = ciudadNueva;
-            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-            return "{\"idCiudad\": \"" + idCiudad + "\"}";
-
-
-        }
-
+        
         private void instanciarGuiaRemision()
         {
             GuiaRemision guiaRemision = new GuiaRemision();
@@ -73,6 +77,12 @@ namespace Cotizador.Controllers
             guiaRemision.transportista = new Transportista();
             guiaRemision.ciudadOrigen = new Ciudad();
             guiaRemision.ciudadOrigen.idCiudad = Guid.Empty;
+            guiaRemision.pedido = new Pedido();
+            guiaRemision.pedido.pedidoDetalleList = new List<PedidoDetalle>();
+            guiaRemision.pedido.ciudad = new Ciudad();
+            guiaRemision.pedido.ubigeoEntrega = new Ubigeo();
+            guiaRemision.ciudadOrigen.transportistaList = new List<Transportista>();
+
             this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
             
        }
@@ -93,12 +103,9 @@ namespace Cotizador.Controllers
                 guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.Venta;
                 guiaRemision.transportista = new Transportista();
                 guiaRemision.ciudadOrigen = pedido.ciudad;
-                guiaRemision.documentoDetalle = pedido.documentoDetalle;
 
-                List<Transportista> transportistaList  = this.crearListaTransportistas(guiaRemision.ciudadOrigen.idCiudad);
-
-                this.Session[Constantes.VAR_SESSION_TRANSPORTISTAS] = transportistaList;
-
+                TransportistaBL transportistaBL = new TransportistaBL();
+                guiaRemision.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
 
             }
             catch (Exception ex)
@@ -110,30 +117,7 @@ namespace Cotizador.Controllers
             }
             
         }
-
-
-        private List<Transportista> crearListaTransportistas(Guid idCiudad)
-        {
-            List<Transportista> transportistaList = new List<Transportista>();
-            Transportista transportista = new Transportista();
-            transportista.idTransportista = Guid.Empty;
-            transportista.descripcion = "Nuevo Transportista";
-
-            if (idCiudad != Guid.Empty)
-            {
-                TransportistaBL transportistaBL = new TransportistaBL();
-                List<Transportista> transportistaListTmp = transportistaBL.getTransportistas(idCiudad);
-
-                transportistaList.Add(transportista);
-                foreach (Transportista transportistaTmp in transportistaListTmp)
-                {
-                    transportistaList.Add(transportistaTmp);
-                }
-            }
-            return transportistaList;
-
-        }
-
+        
 
         public ActionResult Guiar()
         {
@@ -147,10 +131,7 @@ namespace Cotizador.Controllers
                 GuiaRemision guiaRemision = (GuiaRemision) this.Session[Constantes.VAR_SESSION_GUIA];
                 
                 ViewBag.fechaMovimientotmp = guiaRemision.fechaMovimiento.ToString(Constantes.formatoFecha);
-
-
                 ViewBag.guiaRemision = guiaRemision;
-                ViewBag.transportistaList = (List<Transportista>)this.Session[Constantes.VAR_SESSION_TRANSPORTISTAS];
             }
             catch (Exception ex)
             {
@@ -167,25 +148,19 @@ namespace Cotizador.Controllers
         {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
             Guid idTransportista = Guid.Parse(this.Request.Params["idTransportista"]);
-            //Se recupera la lista de transportistas
-            List<Transportista> transportistaList = (List<Transportista>)this.Session[Constantes.VAR_SESSION_TRANSPORTISTAS];
-
-            //se busca en la lista de transportistas
-            foreach (Transportista transportistaTmp in transportistaList)
-            {
-                if (transportistaTmp.idTransportista == idTransportista)
-                {
-                    guiaRemision.transportista = transportistaTmp;
-                    break;
-                }
-            }
-
-
+            guiaRemision.transportista  = guiaRemision.ciudadOrigen.transportistaList.Where(t => t.idTransportista == idTransportista).FirstOrDefault();
             this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
-
             String jsonTransportista = JsonConvert.SerializeObject(guiaRemision.transportista);
-
             return jsonTransportista;
+        }
+
+        public ActionResult CancelarCreacionGuiaRemision()
+        {
+            this.Session[Constantes.VAR_SESSION_GUIA] = null;
+            UsuarioBL usuarioBL = new UsuarioBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            //   usuarioBL.updateCotizacionSerializada(usuario, null);
+            return RedirectToAction("Index");
         }
     }
 }

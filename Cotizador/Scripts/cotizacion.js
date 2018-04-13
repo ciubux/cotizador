@@ -43,8 +43,14 @@ jQuery(function ($) {
         cargarChosenCliente();
         verificarSiExisteDetalle();
         verificiarSiFechaEsModificada();
+        verificarSiExisteCliente();
     });
 
+
+    function verificarSiExisteCliente() {
+        if ($("#idCliente").val().trim() != "" && $("#pagina").val() == 1)
+            $("#idCiudad").attr("disabled", "disabled");
+    }
 
     function obtenerConstantes() {
         $.ajax({
@@ -286,8 +292,8 @@ jQuery(function ($) {
     function cargarChosenCliente() {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
-                alert("Debe seleccionar una ciudad previamente.");
+            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+                alert("Debe seleccionar la sede MP previamente.");
                 $("#idCliente").trigger('chosen:close');
                 return false;
             }
@@ -323,6 +329,10 @@ jQuery(function ($) {
                     idCliente: idClienteGrupo
                 },
                 success: function (cliente) {
+
+                    if ($("#pagina").val() == 1)
+                        $("#idCiudad").attr("disabled", "disabled");
+
                     $("#contacto").val(cliente.contacto);
                 }
             });
@@ -336,6 +346,7 @@ jQuery(function ($) {
                     idGrupo: idClienteGrupo
                 },
                 success: function (grupo) {
+                    $("#idCiudad").attr("disabled", "disabled");
                     $("#contacto").val(grupo.contacto);
                 }
             });
@@ -345,8 +356,8 @@ jQuery(function ($) {
 
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
 
-        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
-            alert("Debe seleccionar una ciudad previamente.");
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
             $("#idCiudad").focus();
             $('#btnCancelCliente').click();
             return false;
@@ -381,8 +392,8 @@ jQuery(function ($) {
     $('#btnOpenAgregarProducto').click(function () {
 
         //Para agregar un producto se debe seleccionar una ciudad
-        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
-            alert("Debe seleccionar previamente una ciudad.");
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
             return false;
         }
 
@@ -1050,8 +1061,8 @@ jQuery(function ($) {
     $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
 
         var idCiudad = $("#idCiudad").val();
-        if (idCiudad == "00000000-0000-0000-0000-000000000000") {
-            alert("Debe seleccionar una ciudad previamente.");
+        if (idCiudad == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
             $("#idCiudad").focus();
             $("#btnCancelarObtenerProductos").click();
             return false;
@@ -1115,8 +1126,8 @@ jQuery(function ($) {
 
 
     function validarIngresoDatosObligatoriosCotizacion() {
-        if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
-            alert("Debe seleccionar una ciudad previamente.");
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
             $("#idCiudad").focus();
             return false;
         }
@@ -2564,8 +2575,24 @@ jQuery(function ($) {
     });
 
     
+    $("#idCiudad").change(function () {
+        var idCiudad = $("#idCiudad").val();
 
-
+        $.ajax({
+            url: "/Cotizacion/ChangeIdCiudad",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad
+            },
+            error: function (detalle) {
+                alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
+                location.reload();
+            },
+            success: function (ciudad) {
+            }
+        });
+    });  
 
 
 

@@ -9,22 +9,25 @@ namespace Model
 {
     public class GuiaRemision : MovimientoAlmacen
     {
+
+
         public Guid idGuiaRemision { get; set; }
 
         [Display(Name = "Pedido:")]
         public Pedido pedido { get; set; }
 
-        [Display(Name = "Ciudad Origen:")]
+        [Display(Name = "SEDE MP:")]
         public Ciudad ciudadOrigen { get; set; }
 
+      
         [Display(Name = "Punto Partida:")]
         public String direccionOrigen { get; set; }
-
+        /*
         [Display(Name = "Ciudad Destino:")]
         public Ciudad ciudadDestino { get; set; }
 
         [Display(Name = "Dirección Entrega:")]
-        public String direccionDestino { get; set; }
+        public String direccionDestino { get; set; }*/
 
 
         [Display(Name = "Placa Vehículo:")]
@@ -85,5 +88,7 @@ namespace Model
         public Transportista transportista { get; set; }
 
         public Boolean transportistaEsModificado { get; set; }
+
+        public Boolean existeCambioTransportista { get; set; }
     }
 }

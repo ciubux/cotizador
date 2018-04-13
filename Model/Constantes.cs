@@ -51,8 +51,7 @@ namespace Model
         public static String VAR_SESSION_PAGINA = "pagina";
         public static String VAR_SESSION_USUARIO = "usuario";
 
-        public static String VAR_SESSION_TRANSPORTISTAS = "transportistas";
-
+      
 
         public static Decimal VARIACION_PRECIO_ITEM_PEDIDO = 0.01M;
 

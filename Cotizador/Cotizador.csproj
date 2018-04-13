@@ -234,6 +234,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CiudadViewModels.cs" />
     <Compile Include="Models\DepartamentoViewModels.cs" />
     <Compile Include="Models\DistritoViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -357,7 +358,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Ciudad\_SelectCiudad.cshtml" />
     <Content Include="Views\Cotizacion\Index.cshtml" />
     <Content Include="Views\Cliente\Index.cshtml" />
     <Content Include="Views\Producto\Index.cshtml" />
@@ -366,23 +366,23 @@
     <Content Include="Views\Familia\_SelectFamilia.cshtml" />
     <Content Include="Views\Proveedor\_SelectProveedor.cshtml" />
     <Content Include="Views\Precio\Index.cshtml" />
-    <Content Include="Views\Ciudad\_SelectCiudadBusqueda.cshtml" />
     <Content Include="Views\Usuario\_SelectUsuario.cshtml" />
     <Content Include="Views\Proveedor\_SelectProveedorBusquedaPrecios.cshtml" />
     <Content Include="Views\Familia\_SelectFamiliaBusquedaPrecios.cshtml" />
     <Content Include="Views\Pedido\Pedir.cshtml" />
     <Content Include="Views\Pedido\Index.cshtml" />
-    <Content Include="Views\Ciudad\_SelectCiudadCotizacion.cshtml" />
     <Content Include="Views\GuiaRemision\Index.cshtml" />
     <Content Include="Views\GuiaRemision\Guiar.cshtml" />
     <Content Include="Views\Shared\_Departamento.cshtml" />
     <Content Include="Views\Shared\_Distrito.cshtml" />
     <Content Include="Views\Shared\_Provincia.cshtml" />
+    <Content Include="Views\Shared\_Ciudad.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
     <Folder Include="pdf\" />
     <Folder Include="Scripts\App_LocalResources\" />
+    <Folder Include="Views\Ciudad\" />
     <Folder Include="Views\DireccionEntrega\" />
     <Folder Include="Views\General\" />
     <Folder Include="Views\Login\" />

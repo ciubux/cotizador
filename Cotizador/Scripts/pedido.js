@@ -67,7 +67,14 @@ jQuery(function ($) {
         toggleControlesUbigeo();
         verificarSiExisteNuevaDireccionEntrega();
         verificarSiExisteDetalle();
+        verificarSiExisteCliente();
     });
+
+    function verificarSiExisteCliente() {
+        if ($("#idCliente").val().trim() != "" && $("#pagina").val() == 1)
+            $("#idCiudad").attr("disabled", "disabled");
+    }
+   
 
     function obtenerConstantes() {
         $.ajax({
@@ -130,7 +137,7 @@ jQuery(function ($) {
     function cargarChosenCliente(pagina) {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == GUID_EMPTY) {
+            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
                 alert("Debe seleccionar una ciudad previamente.");
                 $("#idCliente").trigger('chosen:close');
                 return false;
@@ -173,6 +180,8 @@ jQuery(function ($) {
     }
 
 
+
+
     function toggleControlesDireccionEntrega() {
         var idDireccionEntrega = $('#pedido_direccionEntrega').val();
         if (idDireccionEntrega == "") {
@@ -205,6 +214,10 @@ jQuery(function ($) {
             },
             success: function (cliente)
             {
+                if ($("#pagina").val() == 3)
+                    $("#idCiudad").attr("disabled", "disabled");
+
+                $("#idCiudad").attr("disabled", "disabled");
                 var direccionEntregaListTmp = cliente.direccionEntregaList;
 
                 $('#pedido_direccionEntrega')
@@ -249,7 +262,7 @@ jQuery(function ($) {
 
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
 
-        if ($("#idCiudad").val() == GUID_EMPTY) {
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
             $('#btnCancelCliente').click();
@@ -610,8 +623,8 @@ jQuery(function ($) {
     $('#btnOpenAgregarProducto').click(function () {
 
         //Para agregar un producto se debe seleccionar una ciudad
-        if ($("#idCiudad").val() == GUID_EMPTY) {
-            alert("Debe seleccionar previamente una ciudad.");
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
             return false;
         }
 
@@ -1256,7 +1269,7 @@ jQuery(function ($) {
     $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
 
         var idCiudad = $("#idCiudad").val();
-        if (idCiudad == GUID_EMPTY) {
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
             $("#btnCancelarObtenerProductos").click();
@@ -1277,6 +1290,8 @@ jQuery(function ($) {
         }
 
     });
+
+ 
 
 
     $("#btnObtenerProductos").click(function () {
@@ -1319,7 +1334,7 @@ jQuery(function ($) {
 
 
     function validarIngresoDatosObligatoriosPedido() {
-        if ($("#idCiudad").val() == GUID_EMPTY) {
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
             return false;
@@ -2866,7 +2881,23 @@ jQuery(function ($) {
         });
     }*/
 
-
+    function onChangeCiudad(parentController) {
+        $.ajax({
+            url: "/" + parentController + "/ChangeIdCiudad",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: this.value
+            },
+            error: function (detalle) {
+                alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
+                location.reload();
+            },
+            success: function (ciudad) {
+                alert(ciudad)
+            }
+        });
+    }  
 
 
 

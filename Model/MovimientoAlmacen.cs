@@ -29,13 +29,13 @@ namespace Model
 
         public estadosMovimiento estadoMovimiento { get; set; }
 
-        [Display(Name = "Fecha Documento:")]
+        [Display(Name = "Fecha:")]
         public DateTime fechaMovimiento { get; set; }
 
-        [Display(Name = "Serie Documento:")]
+        [Display(Name = "Serie:")]
         public int serieDocumento { get; set; }
 
-        [Display(Name = "Número Documento:")]
+        [Display(Name = "Número:")]
         public int numeroDocumento { get; set; }
 
     }

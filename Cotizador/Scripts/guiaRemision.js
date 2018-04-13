@@ -49,85 +49,61 @@ jQuery(function ($) {
     
 
     $(document).ready(function () {
-
- 
-
-        var title = document.title;
-        if (title == "Cotizador - Búsqueda Pedidos") {
-            pagina = 2;
-            $("#linkListaPedidos").attr("class", "active");
-            $("#linkMantenimientoPedido").removeAttr("class");
-        }
-        else if (title == "Cotizador - Pedir") {
-
-            $.ajax({
-                url: "/General/GetConstantes",
-                type: 'POST',
-                dataType: 'JSON',
-                success: function (constantes) {
-                    IGV = constantes.IGV;
-                    SIMBOLO_SOL = constantes.SIMBOLO_SOL;
-                    MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
-                }
-            });
-
-            //Metodo recursivo para autoguardar una cotizacion
-            function autoSavePedido() {
-                $.ajax({
-                    url: "/Pedido/autoSavePedido",
-                    type: 'POST',
-                    error: function () {
-                        setTimeout(autoSavePedido, MILISEGUNDOS_AUTOGUARDADO);
-                    },
-                    success: function () {
-                        setTimeout(autoSavePedido, MILISEGUNDOS_AUTOGUARDADO);
-                    }
-                });
-            }
-            setTimeout(autoSavePedido, MILISEGUNDOS_AUTOGUARDADO);
-
-            pagina = 3;
-            $("#linkListaPedidos").removeAttr("class"); 
-            $("#linkMantenimientoPedido").attr("class", "active");
-
-            //Si existen productos agregados no se puede obtener desde precios registrados
-
-            var contador = 0;
-            var $j_object = $("td.detcantidad");
-            $.each($j_object, function (key, value) {
-                contador++;
-            });
-
-            if (contador > 0) {
-                $("#btnAgregarProductosDesdePreciosRegistrados").attr('disabled', 'disabled');
-            }
-            else {
-                $("#btnAgregarProductosDesdePreciosRegistrados").removeAttr('disabled');
-            }
-
-
-        }
-        else {
-            $.ajax({
-                url: "/General/GetConstantes",
-                type: 'POST',
-                dataType: 'JSON',
-                success: function (constantes) {
-                    IGV = constantes.IGV;
-                    SIMBOLO_SOL = constantes.SIMBOLO_SOL;
-                    SEGUNDOS_AUTOGUARDADO = constantes.SEGUNDOS_AUTOGUARDADO;
-                }
-            });
-            $("#linkListaPedidos").removeAttr("class");
-            $("#linkMantenimientoPedido").removeAttr("class");
-        }
-
-        cargarChosenCliente(pagina);
-
-        
+        obtenerConstantes();
+        setTimeout(autoGuardarGuiaRemision, MILISEGUNDOS_AUTOGUARDADO);
+        cargarChosenCliente(pagina);       
 
     });
 
+
+    function obtenerConstantes() {
+        $.ajax({
+            url: "/General/GetConstantes",
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (constantes) {
+                IGV = constantes.IGV;
+                SIMBOLO_SOL = constantes.SIMBOLO_SOL;
+                MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
+            }
+        });
+    }
+
+    function autoGuardarGuiaRemision() {
+        $.ajax({
+            url: "/Pedido/autoSavePedido",
+            type: 'POST',
+            error: function () {
+                setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
+            },
+            success: function () {
+                setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
+            }
+        });
+    }
+
+
+    /**
+    *################################## INICIO CONTROLES CIUDAD
+    */
+
+    function onChangeCiudad(parentController) {
+        $.ajax({
+            url: "/" + parentController + "/ChangeIdCiudad",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+            idCiudad: this.value
+            }, 
+            error: function (detalle) {
+                alert('Debe eliminar los productos agregados antes de cambiar de Sede.'); 
+                location.reload(); 
+            },
+            success: function (ciudad) {
+                alert(ciudad)
+            }
+        }); 
+    }  
 
 
 
@@ -138,8 +114,8 @@ jQuery(function ($) {
     function cargarChosenCliente(pagina) {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == GUID_EMPTY) {
-                alert("Debe seleccionar una ciudad previamente.");
+            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+                alert("Debe seleccionar la sede MP previamente.");
                 $("#idCliente").trigger('chosen:close');
                 return false;
             }
@@ -183,8 +159,8 @@ jQuery(function ($) {
 
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
 
-        if ($("#idCiudad").val() == GUID_EMPTY) {
-            alert("Debe seleccionar una ciudad previamente.");
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
             $("#idCiudad").focus();
             $('#btnCancelCliente').click();
             return false;
@@ -440,8 +416,8 @@ jQuery(function ($) {
     $('#btnOpenAgregarProducto').click(function () {
 
         //Para agregar un producto se debe seleccionar una ciudad
-        if ($("#idCiudad").val() == GUID_EMPTY) {
-            alert("Debe seleccionar previamente una ciudad.");
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
             return false;
         }
 
@@ -1057,8 +1033,8 @@ jQuery(function ($) {
     $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
 
         var idCiudad = $("#idCiudad").val();
-        if (idCiudad == GUID_EMPTY) {
-            alert("Debe seleccionar una ciudad previamente.");
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
             $("#idCiudad").focus();
             $("#btnCancelarObtenerProductos").click();
             return false;
@@ -1128,8 +1104,8 @@ jQuery(function ($) {
 
 
     function validarIngresoDatosObligator() {
-        if ($("#idCiudad").val() == GUID_EMPTY) {
-            alert("Debe seleccionar una ciudad previamente.");
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
             $("#idCiudad").focus();
             return false;
         }
@@ -1317,8 +1293,8 @@ jQuery(function ($) {
 
 
     function validarIngresoDatosObligatoriosPedido() {
-        if ($("#idCiudad").val() == GUID_EMPTY) {
-            alert("Debe seleccionar una ciudad previamente.");
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
             $("#idCiudad").focus();
             return false;
         }
@@ -1686,9 +1662,9 @@ jQuery(function ($) {
         });
 }
 
-    $("#btnCancelarPedido").click(function () {
+    $("#btnCancelarGuiaRemision").click(function () {
         if (confirm(MENSAJE_CANCELAR_EDICION)) {
-            window.location = '/Pedido/CancelarCreacionPedido';
+            window.location = '/GuiaRemision/CancelarCreacionGuiaRemision';
         }
     })
 

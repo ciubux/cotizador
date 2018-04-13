@@ -13,22 +13,22 @@ namespace Model
 
         public Guid idCiudad { get; set; }
 
-        [Display(Name = "Transportista Descripción:")]
+        [Display(Name = "Nombre:")]
         public String descripcion { get; set; }
 
-        [Display(Name = "Transportista RUC:")]
+        [Display(Name = "RUC:")]
         public String ruc { get; set; }
 
-        [Display(Name = "Transportista Dirección:")]
+        [Display(Name = "Dirección:")]
         public String direccion { get; set; }
 
-        [Display(Name = "Transportista Teléfono:")]
+        [Display(Name = "Teléfono:")]
         public String telefono { get; set; }
 
-        [Display(Name = "Transportista Observaciones:")]
+        [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }
 
-        [Display(Name = "Transportista Brevete:")]
+        [Display(Name = "Brevete:")]
         public String brevete { get; set; }
 
     }
