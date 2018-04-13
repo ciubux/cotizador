@@ -50,7 +50,7 @@ namespace Cotizador.Controllers
 
         public String GetConstantes()
         {
-            return "{ \"IGV\":\"" + Constantes.IGV + "\", \"SIMBOLO_SOL\":\"" + Constantes.SIMBOLO_SOL + "\", \"MILISEGUNDOS_AUTOGUARDADO\":\"" + Constantes.MILISEGUNDOS_AUTOGUARDADO + "\" }";
+            return "{ \"IGV\":\"" + Constantes.IGV + "\", \"SIMBOLO_SOL\":\"" + Constantes.SIMBOLO_SOL + "\", \"MILISEGUNDOS_AUTOGUARDADO\":\"" + Constantes.MILISEGUNDOS_AUTOGUARDADO + "\", \"VARIACION_PRECIO_ITEM_PEDIDO\":\"" + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + "\" }";
         }
 
 

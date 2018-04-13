@@ -6,7 +6,9 @@
 
 }
 
-
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
 <div class="container">
 
     <form class="form-horizontal">
@@ -133,7 +135,7 @@
                 <div class="form-group">
                     @Html.LabelFor(p => pedido.fechaEntregaHasta, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input type="hidden" id="fechaEntregaHastaTmp" value="@ViewBag.fechaEntregaHasta" />
+                        <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHasta" />
                         <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta">
                     </div>
                 </div>
@@ -150,9 +152,9 @@
                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estado",
-                             EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
-                             new { @class = "form-control" }
-                             )
+                                  EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
+                                  new { @class = "form-control" }
+                                  )
                     </div>
                 </div>
             </div>
@@ -197,7 +199,8 @@
 
                     <!--  <th data-name="fecha" data-sortable="true">Fecha Creación</th>-->
                     <th data-name="fechaSolicitud" data-sortable="true" data-breakpoints="xs">Fecha y Hora Solicitud</th>
-                    <th data-name="rangoEntrega" data-sortable="true" data-breakpoints="xs">Rango Fecha Entrega</th>
+                    <th data-name="rangoFechaEntrega" data-sortable="true" data-breakpoints="xs">Rango Fecha Entrega</th>
+
 
                     <th data-name="razonSocial" data-sortable="true">Razón Social</th>
                     <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
@@ -266,6 +269,7 @@
                 <form class="form-horizontal">
 
                     <input type="hidden" id="idPedido" value="" />
+                    <!--NUMEROS PEDIDO-->
                     <div class="row">
                         <!--NÚMERO PEDIDO-->
                         <div class="col-sm-6 col-lg-3">
@@ -300,6 +304,7 @@
                         </div>
                     </div>
 
+                    <!--DATOS DEL CLIENTE-->
                     <div class="row">
                         <!--CIUDAD-->
                         <div class="col-sm-6 col-lg-3">
@@ -329,118 +334,181 @@
                             </div>
                         </div>
 
-                        <!--NUMERO REFERENCIA CLIENTE-->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.direccionEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verDireccionEntrega"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <!--CONTACTO ENTREGA-->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.contactoEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verContactoEntrega"></p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--TELEFONO CONTACTO ENTREGA-->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.telefonoContactoEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verTelefonoContactoEntrega"></p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--CONTACTO PEDIDO-->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.contactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verContactoPedido"></p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--TELEFONO CONTACTO PEDIDO-->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.telefonoContactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verTelefonoContactoPedido"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <!--FECHA HORA SOLICITUD-->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="form-group">
-                                <label for="fechaSolicitud" class="control-label col-xs-4">Fecha Hora Solicitud:</label>
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verFechaHoraSolicitud"></p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--FECHA ENTREGA-->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.fechaEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verFechaEntrega"></p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--FECHA MAXIMA ENTREGA-->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.fechaMaximaEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verFechaMaximaEntrega"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <!--Estado-->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="form-group">
-                                <label for="estado" class="control-label col-xs-4">Estado:</label>
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verEstado"></p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Modificado POR-->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="form-group">
-                                <label for="modificado" class="control-label col-xs-4">Modificada Por:</label>
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verModificadoPor"></p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Observación Estado-->
-                        <div class="col-sm-6 col-lg-6">
-                            <div class="form-group">
-                                <label for="modificado" class="control-label col-xs-2">Observación Estado:</label>
-                                <div class="col-xs-10">
-                                    <p class="form-control-static" id="verObservacionEstado">
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
 
+
+
+                    <fieldset>
+                        <legend id="divpedido_direccionEntrega">Datos de Entrega:</legend>
+
+                        <!--DIRECCION ENTREGA-->
+                        <div class="row">
+
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.ubigeoEntrega.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verDepartamentoEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.ubigeoEntrega.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verProvinciaEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.ubigeoEntrega.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verDistritoEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--DIRECCION ENTREGA -->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verDireccionEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!--CONTACTO y FECHAS ENTREGA -->
+                        <div class="row">
+                            <!--CONTACTO ENTREGA-->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verContactoEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--TELEFONO CONTACTO ENTREGA-->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.direccionEntrega.telefono, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verTelefonoContactoEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--FECHAS ENTREGA-->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.rangoFechasEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="varRangoFechasEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--HORARIO ENTREGA-->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.rangoHoraEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="varRangoHoraEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+
+                    <fieldset>
+                        <legend id="divpedido_direccionEntrega">Datos de Solicitud:</legend>
+
+                        <div class="row">
+                            <!--CONTACTO PEDIDO-->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.contactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verContactoPedido"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--TELEFONO CONTACTO PEDIDO-->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.telefonoContactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verTelefonoContactoPedido"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--CORREO CONTACTO PEDIDO-->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.correoContactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verCorreoContactoPedido"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--FECHA HORA SOLICITUD-->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    <label for="fechaSolicitud" class="control-label col-xs-4">Fecha Hora Solicitud:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verFechaHoraSolicitud"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </fieldset>
+
+
+                    <!--Otros datos -->
+                    <fieldset>
+                        <legend id="divpedido_direccionEntrega">Estado Pedido:</legend>
+                        <div class="row">
+                            <!--Estado-->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    <label for="estado" class="control-label col-xs-4">Estado:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verEstado"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Modificado POR-->
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group">
+                                    <label for="modificado" class="control-label col-xs-4">Modificada Por:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verModificadoPor"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Observación Estado-->
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="modificado" class="control-label col-xs-2">Observación Estado:</label>
+                                    <div class="col-xs-10">
+                                        <p class="form-control-static" id="verObservacionEstado">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
 
                     <table id="tableDetallePedido" class="table" data-editing="false"
                            data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
@@ -520,14 +588,9 @@
                 <div class="pull-right">
                     <button type="button" id="btnCancelarVerPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="button" id="btnEditarPedido" class="btn btn-primary">Editar</button>
-                    <button type="button" id="btnAtenderPedido" class="btn btn-success">Atender</button>
-                    <!---    <button type="button" id="btnAprobarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
-                    <button type="button" id="btnDenegarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
-                    <button type="button" id="btnAceptarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aceptar</button>
-                    <button type="button" id="btnRechazarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Rechazar</button>
-                    -->
-
+                    <button type="button" id="btnAtenderPedido" class="btn btn-success">Generar Guía Remisión</button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -590,3 +653,9 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/pedido")
+    @Scripts.Render("~/Scripts/App/ubigeo.js")
+}

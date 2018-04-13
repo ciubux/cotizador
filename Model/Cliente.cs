@@ -7,6 +7,17 @@ namespace Model
 {
     public class Cliente : Auditoria
     {
+        public Cliente()
+        {
+            //Cada vez que se instancia un cliente se instancia con al menos una dirección de entrega
+            this.direccionEntregaList = new List<DireccionEntrega>();
+           /* DireccionEntrega seleccioneDireccionEntrega = new DireccionEntrega();
+            seleccioneDireccionEntrega.descripcion = Constantes.LABEL_DIRECCION_ENTREGA_VACIO;
+            seleccioneDireccionEntrega.idDireccionEntrega = Guid.Empty;*/
+          //  this.direccionEntregaList.Add(seleccioneDireccionEntrega);
+        }
+
+
         public Guid idCliente { get; set; }
 
         public String codigo { get; set;  }
@@ -24,6 +35,8 @@ namespace Model
         public String contacto2 { get; set; }
 
         public Ciudad ciudad { get; set; }
+
+        public List<DireccionEntrega> direccionEntregaList { get; set; }
 
         public override string ToString()
         {

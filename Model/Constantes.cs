@@ -18,6 +18,10 @@ namespace Model
         public static String MENSAJE_NO = "No";
         public static Char PAD = '0';
         public static int LONGITUD_NUMERO = 10;
+        public static String UBIGEO_VACIO = "000000";
+
+        public static String LABEL_DIRECCION_ENTREGA_VACIO = "Seleccione Dirección de Entrega";
+
 
         public static String VAR_SESSION_COTIZACION = "cotizacion";
         public static String VAR_SESSION_COTIZACION_BUSQUEDA = "cotizacionBusqueda";
@@ -48,6 +52,9 @@ namespace Model
         public static String VAR_SESSION_USUARIO = "usuario";
 
         public static String VAR_SESSION_TRANSPORTISTAS = "transportistas";
+
+
+        public static Decimal VARIACION_PRECIO_ITEM_PEDIDO = 0.01M;
 
 
 

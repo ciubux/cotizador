@@ -44,6 +44,8 @@ namespace Model
       //  public Usuario usuario_aprobador { get; set; }
         public Decimal igv { get; set; }
         public Moneda moneda { get; set; }
+
+        [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }
         public Cliente cliente { get; set; }
         public Grupo grupo { get; set; }

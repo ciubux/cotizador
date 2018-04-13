@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -46,8 +47,8 @@ namespace Cotizador.Controllers
 
             ViewBag.fechaSolicitudDesde = pedidoSearch.fechaSolicitudDesde.ToString(Constantes.formatoFecha);
             ViewBag.fechaSolicitudHasta = pedidoSearch.fechaSolicitudHasta.ToString(Constantes.formatoFecha);
-            ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.ToString(Constantes.formatoFecha);
-            ViewBag.fechaEntregaHasta = pedidoSearch.fechaEntregaHasta.ToString(Constantes.formatoFecha);
+            ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
+            ViewBag.fechaEntregaHasta = pedidoSearch.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
 
             if (this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] == null)
             {
@@ -117,9 +118,10 @@ namespace Cotizador.Controllers
                 ViewBag.fechaSolicitud = pedido.fechaSolicitud.ToString(Constantes.formatoFecha);
                 ViewBag.horaSolicitud = pedido.fechaSolicitud.ToString(Constantes.formatoHora);
 
-                ViewBag.fechaEntrega = pedido.fechaEntrega.ToString(Constantes.formatoFecha);
-                ViewBag.fechaMaximaEntrega = pedido.fechaMaximaEntrega.ToString(Constantes.formatoFecha);
+                ViewBag.fechaEntregaDesde = pedido.fechaEntregaDesde ==null?"": pedido.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
+                ViewBag.fechaEntregaHasta = pedido.fechaEntregaHasta == null?"": pedido.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
 
+       
 
                 ViewBag.pedido = pedido;
 
@@ -155,12 +157,10 @@ namespace Cotizador.Controllers
             pedido.ciudad = cotizacion.ciudad;
             pedido.cliente = cotizacion.cliente;
             pedido.numeroReferenciaCliente = null;
-            pedido.direccionEntrega = null;
-            pedido.contactoEntrega = null;
-            pedido.telefonoContactoEntrega = null;
+            pedido.direccionEntrega = new DireccionEntrega();
             pedido.fechaSolicitud = DateTime.Now;
-            pedido.fechaEntrega = DateTime.Now;
-            pedido.fechaMaximaEntrega = DateTime.Now;
+            pedido.fechaEntregaDesde = DateTime.Now;
+            pedido.fechaEntregaHasta = DateTime.Now;
             pedido.contactoPedido = String.Empty;
             pedido.telefonoContactoPedido = String.Empty;
             pedido.incluidoIGV = false;
@@ -204,16 +204,19 @@ namespace Cotizador.Controllers
             pedido.numeroPedido = 0;
             pedido.numeroGrupoPedido = null;
             pedido.cotizacion = new Cotizacion();
-
+            pedido.ubigeoEntrega = new Ubigeo();
+            pedido.ubigeoEntrega.Id = "000000";
             pedido.ciudad = new Ciudad();
             pedido.cliente = new Cliente();
+           
+
             pedido.numeroReferenciaCliente = null;
-            pedido.direccionEntrega = null;
-            pedido.contactoEntrega = null;
-            pedido.telefonoContactoEntrega = null;
+            pedido.direccionEntrega = new DireccionEntrega(); 
             pedido.fechaSolicitud = DateTime.Now;
-            pedido.fechaEntrega = DateTime.Now;
-            pedido.fechaMaximaEntrega = DateTime.Now;
+            pedido.fechaEntregaDesde = null;
+            pedido.fechaEntregaHasta = null;
+            pedido.horaEntregaDesde = "09:00";
+            pedido.horaEntregaHasta = "18:00";
             pedido.contactoPedido = String.Empty;
             pedido.telefonoContactoPedido = String.Empty;
             pedido.incluidoIGV = false;
@@ -286,6 +289,8 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+
+
         public String GetCliente()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
@@ -296,11 +301,28 @@ namespace Cotizador.Controllers
             ClienteBL clienteBl = new ClienteBL();
             pedido.cliente = clienteBl.getCliente(idCliente);
 
-            String resultado = "{" +
-                "\"descripcionCliente\":\"" + pedido.cliente.ToString() + "\"," +
-                "\"idCliente\":\"" + pedido.cliente.idCliente + "\"," +
-                "\"contacto\":\"" + pedido.cliente.contacto1 + "\"" +
-                "}";
+            //Se obtiene la lista de direccioines de entrega registradas para el cliente
+            DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
+        /*    pedido.cliente.direccionEntregaList = new List<DireccionEntrega>();
+            DireccionEntrega seleccioneDireccionEntrega = new DireccionEntrega();
+            seleccioneDireccionEntrega.descripcion = Constantes.LABEL_DIRECCION_ENTREGA_VACIO;
+            seleccioneDireccionEntrega.idDireccionEntrega = Guid.Empty;
+
+            pedido.cliente.direccionEntregaList.Add(seleccioneDireccionEntrega);
+            List<DireccionEntrega> direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
+            foreach (DireccionEntrega direccionEntrega in direccionEntregaList)
+            {
+                pedido.cliente.direccionEntregaList.Add(direccionEntrega);
+            }*/
+
+            pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
+            pedido.direccionEntrega = new DireccionEntrega();
+
+
+            //Se limpia el ubigeo de entrega
+            pedido.ubigeoEntrega.Id = Constantes.UBIGEO_VACIO;
+
+            String resultado = JsonConvert.SerializeObject(pedido.cliente);
 
             if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
                 this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
@@ -308,7 +330,6 @@ namespace Cotizador.Controllers
                 this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
             return resultado;
         }
-
 
         #endregion
 
@@ -451,7 +472,21 @@ namespace Cotizador.Controllers
         /*Actualización de Campos*/
         #region ACTUALIZACION DE CAMPOS FORMULARIO
 
+        public void ChangeInputString()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            PropertyInfo propertyInfo = pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(pedido, this.Request.Params["valor"]);
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+        }
 
+        public void ChangeUbigeoEntrega()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            pedido.ubigeoEntrega.Id = this.Request.Params["ubigeoEntregaId"];
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+        }
+      
 
         public void ChangeNumeroReferenciaCliente()
         {
@@ -460,24 +495,46 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
-        public void ChangeDireccionEntrega()
+        public string ChangeDireccionEntrega()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            pedido.direccionEntrega = this.Request.Params["direccionEntrega"];
+
+            if (this.Request.Params["idDireccionEntrega"] == null || this.Request.Params["idDireccionEntrega"].Equals(String.Empty))
+            {
+                pedido.direccionEntrega = new DireccionEntrega();
+            }
+            else
+            { 
+                Guid idDireccionEntrega = Guid.Parse(this.Request.Params["idDireccionEntrega"]);
+                pedido.direccionEntrega = pedido.cliente.direccionEntregaList.Where(d => d.idDireccionEntrega == idDireccionEntrega).FirstOrDefault();
+            }
+
+            pedido.existeCambioDireccionEntrega = false;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            return JsonConvert.SerializeObject(pedido.direccionEntrega);
+        }
+
+        public void ChangeDireccionEntregaDescripcion()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            pedido.direccionEntrega.descripcion = this.Request.Params["direccionEntregaDescripcion"];
+            pedido.existeCambioDireccionEntrega = true;
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
-        public void ChangeContactoEntrega()
+        public void ChangeDireccionEntregaContacto()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            pedido.contactoEntrega = this.Request.Params["contactoEntrega"];
+            pedido.direccionEntrega.contacto = this.Request.Params["direccionEntregaContacto"];
+            pedido.existeCambioDireccionEntrega = true;
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
-        public void ChangeTelefonoContactoEntrega()
+        public void ChangeDireccionEntregaTelefono()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            pedido.telefonoContactoEntrega = this.Request.Params["telefonoContactoEntrega"];
+            pedido.direccionEntrega.telefono = this.Request.Params["direccionEntregaTelefono"];
+            pedido.existeCambioDireccionEntrega = true;
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
@@ -491,20 +548,47 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
-        public void ChangeFechaEntrega()
+        public void ChangeFechaEntregaDesde()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            String[] fechaEntrega = this.Request.Params["fechaEntrega"].Split('/');
-            pedido.fechaEntrega = new DateTime(Int32.Parse(fechaEntrega[2]), Int32.Parse(fechaEntrega[1]), Int32.Parse(fechaEntrega[0]));
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
+            {
+                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            }
+            
+            String[] ftmp = this.Request.Params["fechaEntregaDesde"].Split('/');
+            pedido.fechaEntregaDesde = new DateTime(Int32.Parse(ftmp[2]), Int32.Parse(ftmp[1]), Int32.Parse(ftmp[0]));
+
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
+            {
+                this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+            }
+            else
+            {
+                this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            }
+            
         }
 
-        public void ChangeFechaMaximaEntrega()
+        public void ChangeFechaEntregaHasta()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-            String[] fechaMaximaEntrega = this.Request.Params["fechaMaximaEntrega"].Split('/');
-            pedido.fechaMaximaEntrega = new DateTime(Int32.Parse(fechaMaximaEntrega[2]), Int32.Parse(fechaMaximaEntrega[1]), Int32.Parse(fechaMaximaEntrega[0]));
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
+            {
+                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            }
+
+            String[] ftmp = this.Request.Params["fechaEntregaHasta"].Split('/');
+            pedido.fechaEntregaHasta = new DateTime(Int32.Parse(ftmp[2]), Int32.Parse(ftmp[1]), Int32.Parse(ftmp[0]));
+
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
+            {
+                this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+            }
+            else
+            {
+                this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            }
         }
 
         public void ChangeContactoPedido()
@@ -545,22 +629,6 @@ namespace Cotizador.Controllers
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
             String[] solHasta = this.Request.Params["fechaSolicitudHasta"].Split('/');
             pedido.fechaSolicitudHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]), 23, 59, 59);
-            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-        }
-
-        public void ChangeFechaEntregaDesde()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            String[] entregaDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
-            pedido.fechaEntregaDesde = new DateTime(Int32.Parse(entregaDesde[2]), Int32.Parse(entregaDesde[1]), Int32.Parse(entregaDesde[0]));
-            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-        }
-
-        public void ChangeFechaEntregaHasta()
-        {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
-            String[] entregaHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
-            pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]), 23, 59, 59);
             this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
         }
 
@@ -835,6 +903,20 @@ namespace Cotizador.Controllers
                 usuarioBL.updateCotizacionSerializada(usuario, cotizacionSerializada);
             }
 
+        }
+
+        public String CreateDireccionTemporal()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            DireccionEntrega direccionEntrega = new DireccionEntrega();
+            direccionEntrega.descripcion = Request["direccion"];
+            direccionEntrega.contacto = Request["contacto"];
+            direccionEntrega.telefono = Request["telefono"];
+            direccionEntrega.idDireccionEntrega = Guid.Empty;
+            pedido.cliente.direccionEntregaList.Add(direccionEntrega);
+            pedido.direccionEntrega = direccionEntrega;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            return JsonConvert.SerializeObject(direccionEntrega);
         }
 
 

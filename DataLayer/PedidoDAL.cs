@@ -32,14 +32,24 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.contactoEntrega); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.telefonoContactoEntrega); //puede ser null
+            InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono); //puede ser null
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", pedido.fechaSolicitud);
-            InputParameterAdd.DateTime(objCommand, "fechaEntrega", pedido.fechaEntrega);
-            InputParameterAdd.DateTime(objCommand, "fechaMaximaEntrega", pedido.fechaMaximaEntrega);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde.Value);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
+
+            DateTime dtTmp = DateTime.Now;
+            String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');
+            DateTime horaEntregaDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaDesdeArray[0]), Int32.Parse(horaEntregaDesdeArray[1]),0);
+            String[] horaEntregaHastaArray = pedido.horaEntregaHasta.Split(':');
+            DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]),0);
+            InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
+            InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
             InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.contactoPedido);  //puede ser null
             InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.telefonoContactoPedido);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.correoContactoPedido);  //puede ser null
             InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV?1:0));
             InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
             InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
@@ -48,6 +58,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
+            InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "numero");
@@ -81,14 +92,24 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.contactoEntrega); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.telefonoContactoEntrega); //puede ser null
+            InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono); //puede ser null
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", pedido.fechaSolicitud);
-            InputParameterAdd.DateTime(objCommand, "fechaEntrega", pedido.fechaEntrega);
-            InputParameterAdd.DateTime(objCommand, "fechaMaximaEntrega", pedido.fechaMaximaEntrega);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde.Value);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
+
+            DateTime dtTmp = DateTime.Now;
+            String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');
+            DateTime horaEntregaDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaDesdeArray[0]), Int32.Parse(horaEntregaDesdeArray[1]), 0);
+            String[] horaEntregaHastaArray = pedido.horaEntregaHasta.Split(':');
+            DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]), 0);
+            InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
+            InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
             InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.contactoPedido);  //puede ser null
             InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.telefonoContactoPedido);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.correoContactoPedido);  //puede ser null
             InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV ? 1 : 0));
             InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
             InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
@@ -97,6 +118,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
+            InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
 
             ExecuteNonQuery(objCommand);
 
@@ -263,17 +285,20 @@ namespace DataLayer
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable pedidoDataTable = dataSet.Tables[0];
             DataTable pedidoDetalleDataTable = dataSet.Tables[1];
+            DataTable direccionEntregaDataTable = dataSet.Tables[2];
 
-      
-         //   DataTable dataTable = Execute(objCommand);
+
+            //   DataTable dataTable = Execute(objCommand);
             //Datos de la cotizacion
             foreach (DataRow row in pedidoDataTable.Rows)
             {
                 pedido.numeroPedido = Converter.GetLong(row,"numero");
                 pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo");
                 pedido.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
-                pedido.fechaEntrega = Converter.GetDateTime(row, "fecha_entrega");
-                pedido.fechaMaximaEntrega = Converter.GetDateTime(row, "fecha_maxima_entrega");
+                pedido.fechaEntregaDesde = Converter.GetDateTime(row, "fecha_entrega_desde");
+                pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
+                pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
+                pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
                 pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
                 pedido.montoIGV = Converter.GetDecimal(row, "igv");
                 pedido.montoTotal = Converter.GetDecimal(row, "total");
@@ -281,11 +306,20 @@ namespace DataLayer
                 pedido.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.montoTotal - pedido.montoIGV));
                 pedido.fechaModificacion = Converter.GetDateTime(row, "fecha_modificacion");
                 pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
-                pedido.direccionEntrega = Converter.GetString(row, "direccion_entrega");
-                pedido.contactoEntrega = Converter.GetString(row, "contacto_entrega");
-                pedido.telefonoContactoEntrega = Converter.GetString(row, "telefono_contacto_entrega");
+                pedido.direccionEntrega = new DireccionEntrega();
+                pedido.direccionEntrega.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega");
+                pedido.direccionEntrega.descripcion = Converter.GetString(row, "direccion_entrega");
+                pedido.direccionEntrega.contacto = Converter.GetString(row, "contacto_entrega");
+                pedido.direccionEntrega.telefono = Converter.GetString(row, "telefono_contacto_entrega");
                 pedido.contactoPedido = Converter.GetString(row, "contacto_pedido");
                 pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
+                pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
+
+                pedido.ubigeoEntrega = new Ubigeo();
+                pedido.ubigeoEntrega.Id = Converter.GetString(row, "ubigeo_entrega");
+                pedido.ubigeoEntrega.Departamento = Converter.GetString(row, "departamento");
+                pedido.ubigeoEntrega.Provincia = Converter.GetString(row, "provincia");
+                pedido.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
 
                 pedido.cotizacion = new Cotizacion();
                 pedido.cotizacion.codigo = Converter.GetLong(row, "cotizacion_codigo");  
@@ -362,6 +396,25 @@ namespace DataLayer
 
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
             }
+
+            List<DireccionEntrega> direccionEntregaList = new List<DireccionEntrega>();
+
+            foreach (DataRow row in direccionEntregaDataTable.Rows)
+            {
+                DireccionEntrega obj = new DireccionEntrega
+                {
+                    idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega"),
+                    descripcion = Converter.GetString(row, "descripcion"),
+                    contacto = Converter.GetString(row, "contacto"),
+                    telefono = Converter.GetString(row, "telefono"),
+                };
+
+
+                direccionEntregaList.Add(obj);
+            }
+
+            pedido.cliente.direccionEntregaList = direccionEntregaList;
+
             return pedido;
         }
 
@@ -393,8 +446,10 @@ namespace DataLayer
                 pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
                 pedido.idPedido = Converter.GetGuid(row, "id_pedido");
                 pedido.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
-                pedido.fechaEntrega = Converter.GetDateTime(row, "fecha_entrega");
-                pedido.fechaMaximaEntrega = Converter.GetDateTime(row, "fecha_maxima_entrega");
+                pedido.fechaEntregaDesde = Converter.GetDateTime(row, "fecha_entrega_desde");
+                pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
+                pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
+                pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
                 pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
 
                 pedido.montoIGV = Converter.GetDecimal(row, "igv");

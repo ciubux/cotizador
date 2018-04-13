@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 10px;
     padding-bottom: 20px;
 }
 
@@ -18,11 +18,11 @@
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
-input,
+/*input,
 select,
 textarea {
     max-width: 280px;
-}
+}*/
 
 .modal.modal-wide .modal-dialog {
   width: 90%;
@@ -42,6 +42,9 @@ textarea {
 @media screen and (min-width: 768px) {
 	
 	#modalAgregarProducto .modal-dialog  {width:900px;}
+    #modalAgregarDireccion .modal-dialog {
+        width: 900px;
+    }
     #modalAgregarCliente .modal-dialog {
         width: 900px;
     }
@@ -195,6 +198,10 @@ input.label-input {
 
 .addBouton:before {
     background-image: url(/images/Add-Male-User-icon.png);
+}
+
+.addDireccion:before {
+    background-image: url(/images/map.png);
 }
 
 .searchBouton:before {

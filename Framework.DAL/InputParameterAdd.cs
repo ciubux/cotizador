@@ -68,7 +68,7 @@ namespace Framework.DAL
 
         public static void Date(SqlCommand objCommand, string name, DateTime value)
         {
-            objCommand.Parameters.Add(Parameter.CreateParam("@" + name, SqlDbType.Date, 0, ParameterDirection.Input, new SqlDateTime(value.Year, value.Month, value.Day)));
+            objCommand.Parameters.Add(Parameter.CreateParam("@" + name, SqlDbType.Date, 0, ParameterDirection.Input, new SqlDateTime (value.Year, value.Month, value.Day)));
         }
 
         public static void SmallDateTime(SqlCommand objCommand, string name, DateTime value)

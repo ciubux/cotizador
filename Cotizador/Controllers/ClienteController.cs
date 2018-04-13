@@ -104,7 +104,14 @@ namespace Cotizador.Controllers
                     {
                         ClienteStaging clienteStaging = new ClienteStaging();
                         //C
-                        clienteStaging.codigo = sheet.GetRow(row).GetCell(2).ToString();
+                        try
+                        {
+                            clienteStaging.codigo = sheet.GetRow(row).GetCell(2).StringCellValue;
+                        }
+                        catch (Exception ex)
+                        {
+                            clienteStaging.codigo = sheet.GetRow(row).GetCell(2).NumericCellValue.ToString();
+                        }
                         //D
                         paso = 1;
                         clienteStaging.nombre = sheet.GetRow(row).GetCell(3).ToString();

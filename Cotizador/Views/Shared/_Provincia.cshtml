@@ -1,0 +1,12 @@
+﻿@model Cotizador.Models.ProvinciaViewModels
+
+@Html.DropDownList(
+    Model.ProvinciaSelectId,
+    Model.Provincias, "Seleccione la provincia",
+    new
+    {
+        id = Model.ProvinciaSelectId,
+        @class = "form-control",
+        onchange = $"onChangeProvincia('{Model.DepartamentoSelectId}','{Model.ProvinciaSelectId}','{Model.DistritoSelectId}','" +
+                   $"{Model.DistritoDivId}','{Model.UrlDistritosPorProvincia}');"
+    })

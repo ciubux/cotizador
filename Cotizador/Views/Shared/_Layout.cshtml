@@ -26,54 +26,52 @@
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @{ var linkListaCotizaciones = "";
+                    @{ 
+                        var linkCotizaciones = "";
+                        var linkBusquedaCotizaciones = "";
                         var linkMantenimientoCotizacion = "";
-                        var linkListaPedidos = "";
+
+                        var linkPedidosYGuiasDeRemision = "";
+                        var linkBusquedaPedidos = "";
                         var linkMantenimientoPedido = "";
+                        var linkBusquedaGuiasRemision = "";
+                        var linkMantenimientoGuiaRemision = "";
                     }
-                    @if ((int)this.Session["pagina"] == 0)
+                    @switch ((int)this.Session["pagina"])
                     {
-                        linkListaCotizaciones = "ative";
-                    }
-                    else if ((int)this.Session["pagina"] == 1)
-                    {
-                        linkMantenimientoCotizacion = "ative";
-                    }
-                    else if ((int)this.Session["pagina"] == 2)
-                    {
-                        linkListaPedidos = "ative";
-                    }
-                    else if ((int)this.Session["pagina"] == 3)
-                    {
-                        linkMantenimientoPedido = "ative";
+                        case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
+                        case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active";  break;
+                        case 2: linkBusquedaPedidos = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
+                        case 3: linkMantenimientoPedido = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
+                        case 4: linkBusquedaGuiasRemision = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
+                        case 5: linkMantenimientoGuiaRemision = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
                     }
 
-
-
-
-                    <li id="linkListaCotizaciones" class="@linkListaCotizaciones">@Html.ActionLink("Mis Cotizaciones", "Index", "Cotizacion")</li>
-                    <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Cotizar", "Cotizar", "Cotizacion")</li>
-
-                    <li id="linkListaPedidos" class="@linkListaPedidos">@Html.ActionLink("Mis Pedidos", "Index", "Pedido")</li>
-                    <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedir", "Pedir", "Pedido")</li>
-
-                    <li id="linkMisPedidos">@Html.ActionLink("Mis Facturas", "Index", "Factura")</li>
-                    <li id="linkPedir">@Html.ActionLink("Facturar", "Facturar", "Factura")</li>
-                    <!--
-                    <li>
+                    
+                    <li class="@linkCotizaciones">
                         <a class="dropdown-toggle" data-toggle="dropdown">
-                            Carga de Archivos
+                            Cotizaciones
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("Cargar Clientes", "Index", "Cliente")</li>
-                            <li>@Html.ActionLink("Cargar Productos", "Index", "Producto")</li>
-                            <li>@Html.ActionLink("Cargar Precios", "Index", "Precio")</li>
-                            <li>@Html.ActionLink("Cargar Facturas", "Index", "Factura")</li>
+                            <li id="linkBusquedaCotizaciones" class="@linkBusquedaCotizaciones">@Html.ActionLink("Búsqueda Cotizaciones", "Index", "Cotizacion")</li>
+                            <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Crear/Modificar Cotización", "Cotizar", "Cotizacion")</li>
                         </ul>
+                    </li>
 
-                    </li>-->
 
+                    <li class="@linkPedidosYGuiasDeRemision">
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                            Pedidos y Guías de Remisión
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Mis Pedidos", "Index", "Pedido")</li>
+                            <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedir", "Pedir", "Pedido")</li>
+                            <li id="linkBusquedaGuiasRemision" class="@linkBusquedaGuiasRemision">@Html.ActionLink("Mis Guias de Remisión", "Index", "GuiaRemision")</li>
+                            <li id="linkMantenimientoGuiaRemision" class="@linkMantenimientoGuiaRemision">@Html.ActionLink("Guiar", "Guiar", "GuiaRemision")</li>
+                        </ul>
+                    </li>
                 </ul>
 
                 @Html.Partial("_LoginPartial")
@@ -93,26 +91,6 @@
     @Scripts.Render("~/bundles/jquery")
 
     @Scripts.Render("~/bundles/bootstrap")
-
-
-
-    @if (this.Session["pagina"] != null)
-    {
-
-        if ((int)this.Session["pagina"] == 1 || (int)this.Session["pagina"] == 0)
-        {
-            @Scripts.Render("~/bundles/cotizacion")
-        }
-        else if ((int)this.Session["pagina"] == 2 || (int)this.Session["pagina"] == 3)
-        {
-            @Scripts.Render("~/bundles/pedido")
-        }
-        else if ((int)this.Session["pagina"] == 4 || (int)this.Session["pagina"] == 5)
-        {
-            @Scripts.Render("~/bundles/guiaRemision")
-        }
-    }
-
 
     @Scripts.Render("~/bundles/jquery-chosen")
     @RenderSection("scripts", required: false)

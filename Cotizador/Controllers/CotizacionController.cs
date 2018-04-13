@@ -558,7 +558,7 @@ namespace Cotizador.Controllers
             return "{\"cantidad\":\""+ documento.documentoDetalle.Count + "\"}";
         }
 
-
+        /*
         public String GetClientesBusqueda()
         {
 
@@ -591,15 +591,18 @@ namespace Cotizador.Controllers
                 resultado = resultado.Substring(0, resultado.Length) + "]}";
 
             return resultado;
-        }
+        }*/
 
-        public String GetClientes()
+        public String SearchClientes()
         {
 
             String data = this.Request.Params["data[q]"];
 
             ClienteBL clienteBL = new ClienteBL();
-            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION];
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misCotizaciones)
+                cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA];
+
 
             List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data, cotizacion.ciudad.idCiudad);
 
@@ -633,14 +636,9 @@ namespace Cotizador.Controllers
 
         public String GetCliente()
         {
-            //Se identifica la pagina 
-            Constantes.paginas pagina = (Constantes.paginas)Int32.Parse((Request["pagina"].ToString()));
-
-            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
-            //Si la pagina es de busqueda se obtiene la cotización de busqueda y se trabaja con la cotización de búsqueda
-            if (pagina == Constantes.paginas.misCotizaciones)
-                cotizacion = (Cotizacion)this.Session["cotizacionBusqueda"];
-           
+            Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION];
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misCotizaciones)
+                cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA];
 
 
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
@@ -657,19 +655,21 @@ namespace Cotizador.Controllers
                 "\"contacto\":\"" + cotizacion.cliente.contacto1 + "\"" +
                 "}";
 
-
-            if (pagina == Constantes.paginas.misCotizaciones)
-                this.Session["cotizacionBusqueda"] = cotizacion;
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misCotizaciones)
+                this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA] = cotizacion;
             else
-                this.Session["cotizacion"] = cotizacion;
-
+                this.Session[Constantes.VAR_SESSION_COTIZACION] = cotizacion;
 
             return resultado;
         }
 
         public String GetGrupo()
         {
-            Cotizacion cotizacion = (Cotizacion)this.Session["cotizacion"];
+            Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION];
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misCotizaciones)
+                cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA];
+
+
             Guid idGrupo = Guid.Parse(Request["idGrupo"].ToString());
             GrupoBL grupoBl = new GrupoBL();
             cotizacion.grupo = grupoBl.getGrupo(idGrupo);            

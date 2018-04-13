@@ -1,7 +1,3 @@
-
-
-
-
 jQuery(function ($) {
 
 
@@ -38,113 +34,71 @@ jQuery(function ($) {
     var CANT_SOLO_CANTIDADES = 1;
     var CANT_CANTIDADES_Y_OBSERVACIONES = 2;
 
-
-    /**
-     * 0 Busqueda
-       1 Cotización
-     */
-
-    var pagina = 0;
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
 
     $(document).ready(function () {
-
         cambiarMostrarValidezOfertaEnDias();
+        setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
+        obtenerConstantes();
+        cargarChosenCliente();
+        verificarSiExisteDetalle();
+        verificiarSiFechaEsModificada();
+    });
 
-        var title = document.title;
-        if (title == "Cotizador - Búsqueda Cotizaciones") {
-            pagina = 0;
-            $("#linkListaCotizaciones").attr("class", "active");
-            $("#linkMantenimientoCotizacion").removeAttr("class");
-        }
-        else if (title == "Cotizador - Cotizar") {
 
-            $.ajax({
-                url: "/General/GetConstantes",
-                type: 'POST',
-                dataType: 'JSON',
-                success: function (constantes) {
-                    IGV = constantes.IGV;
-                    SIMBOLO_SOL = constantes.SIMBOLO_SOL;
-                    MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
-                }
-            });
-
-            //Metodo recursivo para autoguardar una cotizacion
-            function autoGuardarCotizacion() {
-                $.ajax({
-                    url: "/Cotizacion/autoGuardarCotizacion",
-                    type: 'POST',
-                    error: function () {
-                        setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
-                    },
-                    success: function () {
-                        setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
-                    }
-                });
+    function obtenerConstantes() {
+        $.ajax({
+            url: "/General/GetConstantes",
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (constantes) {
+                IGV = constantes.IGV;
+                SIMBOLO_SOL = constantes.SIMBOLO_SOL;
+                MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
             }
-            setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
+        });
+    }
 
-            pagina = 1;
-            $("#linkMantenimientoCotizacion").attr("class", "active");
-            $("#linkListaCotizaciones").removeAttr("class");
-
-
-            //Si existen productos agregados no se puede obtener desde precios registrados
-
-            var contador = 0;
-            var $j_object = $("td.detcantidad");
-            $.each($j_object, function (key, value) {
-                contador++;
-            });
-
-            if (contador > 0) {
-                $("#btnAgregarProductosDesdePreciosRegistrados").attr('disabled', 'disabled');
+    function autoGuardarCotizacion() {
+        $.ajax({
+            url: "/Cotizacion/autoGuardarCotizacion",
+            type: 'POST',
+            error: function () {
+                setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
+            },
+            success: function () {
+                setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
             }
-            else {
-                $("#btnAgregarProductosDesdePreciosRegistrados").removeAttr('disabled');
-            }
+        });
+    }
 
 
-
-
-
-
-        }
-        else {
-            $.ajax({
-                url: "/General/GetConstantes",
-                type: 'POST',
-                dataType: 'JSON',
-                success: function (constantes) {
-                    IGV = constantes.IGV;
-                    SIMBOLO_SOL = constantes.SIMBOLO_SOL;
-                    SEGUNDOS_AUTOGUARDADO = constantes.SEGUNDOS_AUTOGUARDADO;
-                }
-            });
-            $("#linkListaCotizaciones").removeAttr("class");
-            $("#linkMantenimientoCotizacion").removeAttr("class");
-        }
-
-        cargarChosenCliente(pagina);
-
-
-
+    function verificiarSiFechaEsModificada() {
         if ($('#chkFechaEsModificada').prop('checked')) {
-            $("#fecha").removeAttr("disabled");           
+            $("#fecha").removeAttr("disabled");
         }
         else {
             $("#fecha").attr('disabled', 'disabled');
         }
+    }
 
-        /*  $('#tablefoottable').footable({
-              "columns": $.get('columns.json'),
-              "rows": $.get('rows.json')
-          });*/
-        //Se construye la tabla de Detalle de Cotizacion
-        //FooTable.init('#tableDetalleCotizacion');
-    });
+    function verificarSiExisteDetalle() {
+        //Si existen productos agregados no se puede obtener desde precios registrados
+        var contador = 0;
+        var $j_object = $("td.detcantidad");
+        $.each($j_object, function (key, value) {
+            contador++;
+        });
 
+        if (contador > 0) {
+            $("#btnAgregarProductosDesdePreciosRegistrados").attr('disabled', 'disabled');
+            return true;
+        }
+        else {
+            $("#btnAgregarProductosDesdePreciosRegistrados").removeAttr('disabled');
+            return false;
+        }
+    }
 
     /**
      * ######################## INICIO CONTROLES DE FECHAS
@@ -329,7 +283,7 @@ jQuery(function ($) {
 
 
 
-    function cargarChosenCliente(pagina) {
+    function cargarChosenCliente() {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
             if ($("#idCiudad").val() == "00000000-0000-0000-0000-000000000000") {
@@ -345,7 +299,7 @@ jQuery(function ($) {
             minTermLength: 5,
             afterTypeDelay: 300,
             cache: false,
-            url: pagina == 1 ? "/Cotizacion/GetClientes" : "/Cotizacion/GetClientesBusqueda"
+            url: "/Cotizacion/SearchClientes"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
@@ -366,8 +320,7 @@ jQuery(function ($) {
                 type: 'POST',
                 dataType: 'JSON',
                 data: {
-                    idCliente: idClienteGrupo,
-                    pagina: pagina
+                    idCliente: idClienteGrupo
                 },
                 success: function (cliente) {
                     $("#contacto").val(cliente.contacto);
@@ -380,8 +333,7 @@ jQuery(function ($) {
                 type: 'POST',
                 dataType: 'JSON',
                 data: {
-                    idGrupo: idClienteGrupo,
-                    pagina: pagina
+                    idGrupo: idClienteGrupo
                 },
                 success: function (grupo) {
                     $("#contacto").val(grupo.contacto);
@@ -1113,14 +1065,8 @@ jQuery(function ($) {
         }
 
 
-        var contador = 0;
-        var $j_object = $("td.detcantidad");
-        $.each($j_object, function (key, value) {
-            contador++;
-        });
-
-        if (contador > 0) {
-            alert("No deben existir productos agregaados a la cotización.");
+        if (!verificarSiExisteDetalle()) {
+            alert("No deben existir productos agregados a la cotización.");
             return false;
         }
 

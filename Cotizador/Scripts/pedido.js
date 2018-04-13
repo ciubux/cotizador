@@ -1,6 +1,17 @@
 
 jQuery(function ($) {
 
+    /*
+    $(function () {
+        $('.dropdown-menu a').click(function () {
+            console.log($(this).attr('data-value'));
+            $(this).closest('.dropdown').find('input.countrycode')
+                .val('(' + $(this).attr('data-value') + ')');
+        });
+    });*/
+
+
+
 
     //Tabla de resultado de búsqueda de Pedidos
     $("#tablePedidos").footable({
@@ -14,7 +25,8 @@ jQuery(function ($) {
     var IGV = 0.18;
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
-
+    var VARIACION_PRECIO_ITEM_PEDIDO = 0.01;
+    
     //Estados para búsqueda de Pedidos
     var ESTADOS_TODOS = -1;
     var ESTADO_PENDIENTE_APROBACION = 0;
@@ -49,87 +61,67 @@ jQuery(function ($) {
     
 
     $(document).ready(function () {
-
- 
-
-        var title = document.title;
-        if (title == "Cotizador - Búsqueda Pedidos") {
-            pagina = 2;
-            $("#linkListaPedidos").attr("class", "active");
-            $("#linkMantenimientoPedido").removeAttr("class");
-        }
-        else if (title == "Cotizador - Pedir") {
-
-            $.ajax({
-                url: "/General/GetConstantes",
-                type: 'POST',
-                dataType: 'JSON',
-                success: function (constantes) {
-                    IGV = constantes.IGV;
-                    SIMBOLO_SOL = constantes.SIMBOLO_SOL;
-                    MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
-                }
-            });
-
-            //Metodo recursivo para autoguardar una cotizacion
-            function autoSavePedido() {
-                $.ajax({
-                    url: "/Pedido/autoSavePedido",
-                    type: 'POST',
-                    error: function () {
-                        setTimeout(autoSavePedido, MILISEGUNDOS_AUTOGUARDADO);
-                    },
-                    success: function () {
-                        setTimeout(autoSavePedido, MILISEGUNDOS_AUTOGUARDADO);
-                    }
-                });
-            }
-            setTimeout(autoSavePedido, MILISEGUNDOS_AUTOGUARDADO);
-
-            pagina = 3;
-            $("#linkListaPedidos").removeAttr("class"); 
-            $("#linkMantenimientoPedido").attr("class", "active");
-
-            //Si existen productos agregados no se puede obtener desde precios registrados
-
-            var contador = 0;
-            var $j_object = $("td.detcantidad");
-            $.each($j_object, function (key, value) {
-                contador++;
-            });
-
-            if (contador > 0) {
-                $("#btnAgregarProductosDesdePreciosRegistrados").attr('disabled', 'disabled');
-            }
-            else {
-                $("#btnAgregarProductosDesdePreciosRegistrados").removeAttr('disabled');
-            }
-
-
-        }
-        else {
-            $.ajax({
-                url: "/General/GetConstantes",
-                type: 'POST',
-                dataType: 'JSON',
-                success: function (constantes) {
-                    IGV = constantes.IGV;
-                    SIMBOLO_SOL = constantes.SIMBOLO_SOL;
-                    SEGUNDOS_AUTOGUARDADO = constantes.SEGUNDOS_AUTOGUARDADO;
-                }
-            });
-            $("#linkListaPedidos").removeAttr("class");
-            $("#linkMantenimientoPedido").removeAttr("class");
-        }
-
+        obtenerConstantes();
+        setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
         cargarChosenCliente(pagina);
-
-        
-
+        toggleControlesUbigeo();
+        verificarSiExisteNuevaDireccionEntrega();
+        verificarSiExisteDetalle();
     });
 
+    function obtenerConstantes() {
+        $.ajax({
+            url: "/General/GetConstantes",
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (constantes) {
+                IGV = constantes.IGV;
+                SIMBOLO_SOL = constantes.SIMBOLO_SOL;
+                MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
+            }
+        });
+    }
+
+    function autoGuardarPedido() {
+        $.ajax({
+            url: "/Pedido/autoSavePedido",
+            type: 'POST',
+            error: function () {
+                setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
+            },
+            success: function () {
+                setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
+            }
+        });
+    }
+   
+
+    function verificarSiExisteDetalle() {
+        //Si existen productos agregados no se puede obtener desde precios registrados
+        var contador = 0;
+        var $j_object = $("td.detcantidad");
+        $.each($j_object, function (key, value) {
+            contador++;
+        });
+
+        if (contador > 0) {
+            $("#btnAgregarProductosDesdePreciosRegistrados").attr('disabled', 'disabled');
+            return true;
+        }
+        else {
+            $("#btnAgregarProductosDesdePreciosRegistrados").removeAttr('disabled');
+            return false;
+        }
+    }
 
 
+    function verificarSiExisteNuevaDireccionEntrega() {
+        $('#pedido_direccionEntrega option').each(function () {
+            if ($(this).val() == GUID_EMPTY) {
+                $("#btnAgregarDireccion").attr("disabled", "disabled");
+            }
+        });
+    }
 
     /**
      * ################################ INICIO CONTROLES DE CLIENTE
@@ -155,11 +147,53 @@ jQuery(function ($) {
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
-
     }
 
+
+
+
+
+    function toggleControlesUbigeo() {
+        //Si cliente esta Seleccionado se habilitan la seleccion para la direccion de entrega
+        if ($("#idCliente").val().trim() == "") {
+            $("#ActualDepartamento").attr('disabled', 'disabled');
+            $('#ActualProvincia').attr('disabled', 'disabled');
+            $('#ActualDistrito').attr('disabled', 'disabled');
+            $("#pedido_direccionEntrega").attr('disabled', 'disabled');
+            $("#btnAgregarDireccion").attr("disabled", "disabled");
+        }
+        else {
+            $('#ActualDepartamento').removeAttr('disabled');
+            $('#ActualProvincia').removeAttr('disabled');
+            $('#ActualDistrito').removeAttr('disabled');
+            $("#pedido_direccionEntrega").removeAttr('disabled');
+            $("#btnAgregarDireccion").removeAttr('disabled');
+        }
+        toggleControlesDireccionEntrega();
+    }
+
+
+    function toggleControlesDireccionEntrega() {
+        var idDireccionEntrega = $('#pedido_direccionEntrega').val();
+        if (idDireccionEntrega == "") {
+            $("#pedido_direccionEntrega_descripcion").attr('disabled', 'disabled');
+            $("#pedido_direccionEntrega_contacto").attr('disabled', 'disabled');
+            $("#pedido_direccionEntrega_telefono").attr('disabled', 'disabled');
+
+        }
+        else {
+            /*  $("#pedido_direccionEntrega_telefono").val($('#pedido_direccionEntrega').find(":selected").attr("telefono"));*/
+            $("#pedido_direccionEntrega_descripcion").removeAttr("disabled");
+            $("#pedido_direccionEntrega_contacto").removeAttr("disabled");
+            $("#pedido_direccionEntrega_telefono").removeAttr("disabled");
+        }
+    }
+    
+
+
+
     $("#idCliente").change(function () {
-      //  $("#contacto").val("");
+
         var idCliente = $(this).val();
 
         $.ajax({
@@ -169,17 +203,49 @@ jQuery(function ($) {
             data: {
                 idCliente: idCliente
             },
-            success: function (cliente) {
-                $("#pedido_numeroReferenciaCliente").val("");
-                $("#pedido_direccionEntrega").val("");
-                $("#pedido_contactoEntrega").val("");
-                $("#pedido_telefonoContactoEntrega").val("");
-                $("#pedido_contactoPedido").val("");
-                $("#pedido_telefonoContactoPedido").val("");
+            success: function (cliente)
+            {
+                var direccionEntregaListTmp = cliente.direccionEntregaList;
+
+                $('#pedido_direccionEntrega')
+                    .find('option')
+                    .remove()
+                    .end()
+                    ;
+              
+                $('#pedido_direccionEntrega').append($('<option>', {
+                    value: "",
+                    text: "Seleccione Dirección de Entrega"
+                }));
+              
+
+                for (var i = 0; i < direccionEntregaListTmp.length; i++) {
+                    $('#pedido_direccionEntrega').append($('<option>', {
+                        value: direccionEntregaListTmp[i].idDireccionEntrega,
+                        text: direccionEntregaListTmp[i].descripcion
+                        /*,
+                        direccion: direccionEntregaListTmp[i].descripcion,
+                        contacto: direccionEntregaListTmp[i].contacto,
+                        telefono: direccionEntregaListTmp[i].telefono*/
+                    }));
+                }
+
+                //Se limpia controles de Ubigeo
+                $("#ActualDepartamento").val("");
+                $("#ActualProvincia").val("");
+                $("#ActualDistrito").val("");
+
+
+                toggleControlesUbigeo();
             }
         });
       
     });
+
+ 
+
+
+    
 
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
 
@@ -191,6 +257,20 @@ jQuery(function ($) {
         }
     });
 
+
+    $('#modalAgregarDireccion').on('shown.bs.modal', function () {
+        $('#direccionEntrega_descripcion').focus();
+   /*     $('#pedido_direccionEntrega option').each(function () {
+
+            if ($(this).val() == GUID_EMPTY) {
+                alert("");
+            }
+            alert();
+
+            return true;
+        });*/
+    });
+  
 
 
 
@@ -244,7 +324,60 @@ jQuery(function ($) {
      */
 
 
+    $("#btnSaveDireccion").click(function () {
 
+        if ($("#direccionEntrega_descripcion").val().trim() == "") {
+            alert("Debe ingresar la dirección de entrega.");
+            $('#direccionEntrega_descripcion').focus();
+            return false;
+        }
+
+        if ($("#direccionEntrega_contacto").val().trim() == "") {
+            alert("Debe ingresar el nombre del contacto de entrega.");
+            $('#direccionEntrega_contacto').focus();
+            return false;
+        }
+
+        if ($("#direccionEntrega_telefono").val().trim() == "") {
+            alert("Debe ingresar el telefono del contacto de entrega.");
+            $('#direccionEntrega_telefono').focus();
+            return false;
+        }
+
+        var direccion = $("#direccionEntrega_descripcion").val();
+        var contacto = $("#direccionEntrega_contacto").val();
+        var telefono = $("#direccionEntrega_telefono").val();
+
+        $.ajax({
+            url: "/Pedido/CreateDireccionTemporal",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                direccion: direccion,
+                contacto: contacto,
+                telefono: telefono
+            },
+            error: function (detalle) { alert("Se generó un error al intentar crear la dirección."); },
+            success: function (direccion) {
+
+                $('#pedido_direccionEntrega').append($('<option>', {
+                    value: direccion.idDireccionEntrega,
+                    text: direccion.descripcion
+                }));
+                $('#pedido_direccionEntrega').val(direccion.idDireccionEntrega);
+
+                $('#pedido_direccionEntrega_descripcion').val(direccion.descripcion);
+                $('#pedido_direccionEntrega_contacto').val(direccion.contacto);
+                $('#pedido_direccionEntrega_telefono').val(direccion.telefono);
+                verificarSiExisteNuevaDireccionEntrega();
+                toggleControlesDireccionEntrega();
+            }
+        });
+
+
+        $('#btnCancelDireccion').click();
+
+    });
 
 
 
@@ -289,14 +422,6 @@ jQuery(function ($) {
     var fechaSolicitud = $("#fechaSolicitudTmp").val();
     $("#fechaSolicitud").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitud);
 
-    var fechaEntrega = $("#fechaEntregaTmp").val();
-    $("#fechaEntrega").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntrega);
-
-    var fechaMaximaEntrega = $("#fechaMaximaEntregaTmp").val();
-    $("#fechaMaximaEntrega").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaMaximaEntrega);
-
-
-
     var fechaSolicitudDesde = $("#fechaSolicitudDesdetmp").val();
     $("#pedido_fechaSolicitudDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudDesde);
 
@@ -306,7 +431,7 @@ jQuery(function ($) {
     var fechaEntregaDesde = $("#fechaEntregaDesdetmp").val();
     $("#pedido_fechaEntregaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
 
-    var fechaEntregaHasta = $("#fechaEntregaHastaTmp").val();
+    var fechaEntregaHasta = $("#fechaEntregaHastatmp").val();
     $("#pedido_fechaEntregaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
 
 
@@ -337,35 +462,55 @@ jQuery(function ($) {
         });
     });
 
-
-    $("#pedido_direccionEntrega").change(function () {
+    $('#pedido_direccionEntrega').change(function () {
+        toggleControlesDireccionEntrega();
+        var idDireccionEntrega = $('#pedido_direccionEntrega').val();
         $.ajax({
             url: "/Pedido/ChangeDireccionEntrega",
             type: 'POST',
+            dataType: 'JSON',
             data: {
-                direccionEntrega: $("#pedido_direccionEntrega").val()
+                idDireccionEntrega: idDireccionEntrega
+            },
+            success: function (direccionEntrega) {
+                
+                $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);    
+                $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
+                $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
+                
+            }
+        })
+    });
+
+
+    $("#pedido_direccionEntrega_descripcion").change(function () {
+        $.ajax({
+            url: "/Pedido/ChangeDireccionEntregaDescripcion",
+            type: 'POST',
+            data: {
+                direccionEntregaDescripcion: $("#pedido_direccionEntrega_descripcion").val()
             },
             success: function () { }
         });
     });
 
-    $("#pedido_contactoEntrega").change(function () {
+    $("#pedido_direccionEntrega_contacto").change(function () {
         $.ajax({
-            url: "/Pedido/ChangeContactoEntrega",
+            url: "/Pedido/ChangeDireccionEntregaContacto",
             type: 'POST',
             data: {
-                contactoEntrega: $("#pedido_contactoEntrega").val()
+                direccionEntregaContacto: $("#pedido_direccionEntrega_contacto").val()
             },
             success: function () { }
         });
     });
     
-    $("#pedido_telefonoContactoEntrega").change(function () {
+    $("#pedido_direccionEntrega_telefono").change(function () {
         $.ajax({
-            url: "/Pedido/ChangeTelefonoContactoEntrega",
+            url: "/Pedido/ChangeDireccionEntregaTelefono",
             type: 'POST',
             data: {
-                telefonoContactoEntrega: $("#pedido_telefonoContactoEntrega").val()
+                direccionEntregaTelefono: $("#pedido_direccionEntrega_telefono").val()
             },
             success: function () { }
         });
@@ -388,70 +533,74 @@ jQuery(function ($) {
     });
 
 
+    
 
-    $("#fechaMaximaEntrega").change(function () {
-        var fechaMaximaEntrega = $("#fechaMaximaEntrega").val();
+
+
+
+
+
+    function changeInputString(propiedad, valor) {
         $.ajax({
-            url: "/Pedido/ChangeFechaMaximaEntrega",
+            url: "/Pedido/ChangeInputString",
             type: 'POST',
             data: {
-                fechaMaximaEntrega: fechaMaximaEntrega
-            },
-            success: function () {
-            }
-        });
-    });
-
-    $("#fechaEntrega").change(function () {
-        var fechaEntrega = $("#fechaEntrega").val();
-        $.ajax({
-            url: "/Pedido/ChangeFechaEntrega",
-            type: 'POST',
-            data: {
-                fechaEntrega: fechaEntrega
-            },
-            success: function () {
-            }
-        });
-    });
-  
-
-    $("#pedido_contactoPedido").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeContactoPedido",
-            type: 'POST',
-            data: {
-                contactoPedido: $("#pedido_contactoPedido").val()
+                propiedad: propiedad,
+                valor: valor
             },
             success: function () { }
         });
+    }
+
+    $("#pedido_horaEntregaDesde").change(function () {
+
+        var horaEntregaDesde = $("#pedido_horaEntregaDesde").val();
+        var horaEntregaHasta = $("#pedido_horaEntregaHasta").val();
+
+        //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
+        //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
+        if (convertirHoraToNumero(horaEntregaDesde) + 2 > convertirHoraToNumero(horaEntregaHasta)) {
+            $("#pedido_horaEntregaHasta").val(sumarHoras($("#pedido_horaEntregaDesde").val(),2));
+            $("#pedido_horaEntregaHasta").change();
+        }
+       
+        changeInputString("horaEntregaDesde", $("#pedido_horaEntregaDesde").val())
+    });
+
+    $("#pedido_horaEntregaHasta").change(function () {
+        var horaEntregaDesde = $("#pedido_horaEntregaDesde").val();
+        var horaEntregaHasta = $("#pedido_horaEntregaHasta").val();
+
+        //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
+        //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
+        if (convertirHoraToNumero(horaEntregaDesde) + 2 > convertirHoraToNumero(horaEntregaHasta)) {
+            $("#pedido_horaEntregaDesde").val(sumarHoras($("#pedido_horaEntregaHasta").val(), -2));
+            $("#pedido_horaEntregaDesde").change();
+        }
+        changeInputString("horaEntregaHasta", $("#pedido_horaEntregaHasta").val())
+
+    });
+
+    $("#pedido_numeroReferenciaCliente").change(function () {
+        changeInputString("numeroReferenciaCliente", $("#pedido_numeroReferenciaCliente").val())
+    });
+    
+
+    $("#pedido_contactoPedido").change(function () {
+        changeInputString("contactoPedido", $("#pedido_contactoPedido").val())
     });
 
     $("#pedido_telefonoContactoPedido").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeTelefonoContactoPedido",
-            type: 'POST',
-            data: {
-                telefonoContactoPedido: $("#pedido_telefonoContactoPedido").val()
-            },
-            success: function () { }
-        });
+        changeInputString("telefonoContactoPedido", $("#pedido_telefonoContactoPedido").val())
     });
-    
+
+    $("#pedido_correoContactoPedido").change(function () {
+        changeInputString("correoContactoPedido", $("#pedido_correoContactoPedido").val())
+    });
+
     $("#pedido_observaciones").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeObservaciones",
-            type: 'POST',
-            data: {
-                observaciones: $("#pedido_observaciones").val()
-            },
-            success: function () { }
-        });
+        changeInputString("observaciones", $("#pedido_observaciones").val())
     });
-
-
-
-
 
     /**
      * ################################ INICIO CONTROLES DE AGREGAR PRODUCTO
@@ -615,6 +764,11 @@ jQuery(function ($) {
 
                 //Se calcula el subtotal del producto
                 calcularSubtotalProducto();
+
+                $('#precioRegistrado').val($('#precio').val());
+
+
+
             }
         });
     });
@@ -663,6 +817,30 @@ jQuery(function ($) {
         }
     });
 
+    /*
+    $("#porcentajeDescuento").change(function () {
+        
+        var descuento = Number($("#porcentajeDescuento").val());
+        $("#porcentajeDescuento").val(descuento.toFixed(4));
+
+        var precioLista = Number($("#precioLista").val());
+
+        var porcentajeDescuento = parseFloat($("#porcentajeDescuento").val());
+
+
+
+        var precio = $("#precio").val();
+
+        var precio = precioLista * (100 - porcentajeDescuento) * 0.01;
+        precio = precio.toFixed(cantidadDecimales);
+
+    //    precioLista * (100 - porcentajeDescuento) * 0.01;
+     //   precio = precio.toFixed(cantidadDecimales);
+
+
+        calcularSubtotalProducto();
+    });*/
+
 
     /////////////////////////CAMPOS PORCENTAJE DESCUENTO y CANTIDAD 
     $("#porcentajeDescuento, #cantidad").change(function () {
@@ -704,7 +882,7 @@ jQuery(function ($) {
 
         var porcentajeDescuento = parseFloat($("#porcentajeDescuento").val());
 
-        precio = precioLista * (100 - porcentajeDescuento) * 0.01;
+        var precio = precioLista * (100 - porcentajeDescuento) * 0.01;
         precio = precio.toFixed(cantidadDecimales);
 
 
@@ -1093,18 +1271,10 @@ jQuery(function ($) {
         }
 
 
-        var contador = 0;
-        var $j_object = $("td.detcantidad");
-        $.each($j_object, function (key, value) {
-            contador++;
-        });
-
-        if (contador > 0) {
-            alert("No deben existir productos agregaados a la cotización.");
+        if (!verificarSiExisteDetalle()) {
+            alert("No deben existir productos agregados al pedido.");
             return false;
         }
-
-
 
     });
 
@@ -1161,21 +1331,34 @@ jQuery(function ($) {
             return false;
         }
 
+        if ($("#pedido_numeroReferenciaCliente").val().trim() == "") {
+            alert('Debe ingresar el número de orden de compra o pedido en el campo "Referencia Doc Cliente".');
+            $('#pedido_numeroReferenciaCliente').focus();
+            return false;
+        }
+        
+
         if ($("#pedido_direccionEntrega").val().trim() == "") {
-            alert("Debe ingresar la dirección de despacho.");
+            alert("Debe seleccionar la dirección de entrega.");
             $('#pedido_direccionEntrega').focus();
             return false;
         }
 
-        if ($("#pedido_contactoEntrega").val().trim() == "") {
-            alert("Debe ingresar una contacto de entrega.");
-            $('#pedido_contactoEntrega').focus();
+        if ($("#pedido_direccionEntrega_descripcion").val().trim() == "") {
+            alert("Debe ingresar la dirección de entrega.");
+            $('#pedido_direccionEntrega_descripcion').focus();
             return false;
         }
 
-        if ($("#pedido_telefonoContactoEntrega").val().trim() == "") {
-            alert("Debe ingresar una telefono de contacto de entrega.");
-            $('#pedido_telefonoContactoEntrega').focus();
+        if ($("#pedido_direccionEntrega_contacto").val().trim() == "") {
+            alert("Debe ingresar el contacto de entrega.");
+            $('#pedido_direccionEntrega_contacto').focus();
+            return false;
+        }
+
+        if ($("#pedido_direccionEntrega_telefono").val().trim() == "") {
+            alert("Debe ingresar una el telefono del contacto de entrega.");
+            $('#pedido_direccionEntrega_telefono').focus();
             return false;
         }
 
@@ -1187,46 +1370,47 @@ jQuery(function ($) {
         }
 
         var horaSolicitud = $("#horaSolicitud").val();
-        if (horaSolicitud.trim() == "") {
+        if (horaSolicitud == null || horaSolicitud.trim() == "") {
             alert("Debe ingresar la hora de la solicitud.");
             $("#horaSolicitud").focus();
             return false;
         }
 
 
-        var fechaEntrega = $("#fechaEntrega").val();
-        if (fechaEntrega.trim() == "") {
-            alert("Debe ingresar la fecha de entrega.");
-            $("#fechaEntrega").focus();
+        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
+        if (fechaEntregaDesde.trim() == "") {
+            alert("Debe ingresar la fecha desde cuando se puede realizar la entrega .");
+            $("#pedido_fechaEntregaDesde").focus();
             return false;
         }
 
-        var fechaMaximaEntrega = $("#fechaMaximaEntrega").val();
-        if (fechaMaximaEntrega.trim() == "") {
-            alert("Debe ingresar la fecha Máxima de entrega.");
-            $("#fechaMaximaEntrega").focus();
+        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
+        if (fechaEntregaHasta.trim() == "") {
+            alert("Debe ingresar la fecha hasta cuando se puede realizar la entrega .");
+            $("#pedido_fechaEntregaHasta").focus();
             return false;
         }
+
         
         //la fecha máxima de entrega no puede ser inferior a la fecha de entrega
-        if (convertirFechaNumero(fechaMaximaEntrega) < convertirFechaNumero(fechaEntrega)) {
-            alert("La fecha máxima de entrega debe ser mayor o igual a la fechha de entrega.");
-            $("#fechaMaximaEntrega").focus();
+        if (convertirFechaNumero(fechaEntregaHasta) < convertirFechaNumero(fechaEntregaDesde)) {
+            alert("La fecha entrega hasta debe ser mayor o igual a la fecha de entrega desde.");
+            $("#fechaEntregaHasta").focus();
             return false;
         }
         
 
         if ($("#pedido_contactoPedido").val().trim() == "") {
-            alert("Debe ingresar una telefono de contacto de entrega.");
+            alert("Debe ingresar el nombre de la persona que realizó la solicitud.");
             $('#pedido_contactoPedido').focus();
             return false;
         }
-
+        /*
         if ($("#pedido_telefonoContactoPedido").val().trim() == "") {
             alert("Debe ingresar una telefono de contacto de entrega.");
             $('#pedido_telefonoContactoPedido').focus();
             return false;
-        }
+        }*/
 
         var contador = 0;
         var $j_object = $("td.detcantidad");
@@ -1379,6 +1563,35 @@ jQuery(function ($) {
         return Number(fecha)
     }
 
+    function convertirHoraToNumero(hora) {
+        var hora = hora.split(":");
+        hora = hora[0] +"."+ hora[1];
+        return Number(hora)
+    }
+
+    function sumarHoras(hora, cantidad) {
+        var hora = hora.split(":");
+
+        var horaNumero = Number(hora[0]) + cantidad;
+
+
+        if (horaNumero < 0)
+            hora = "00:00";
+        else if (horaNumero > 23)
+            hora = "23:59";
+
+        if (horaNumero < 10) {
+            hora = "0" + horaNumero + ":" + hora[1];
+            // hora = horaNumero + ":" + hora[1];
+        }
+        else {
+            hora = horaNumero + ":" + hora[1];
+        }
+
+        return hora
+    }
+
+
 
     /*VER PEDIDO*/
     $(document).on('click', "button.btnVerPedido", function () {
@@ -1410,17 +1623,25 @@ jQuery(function ($) {
                 $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
                 $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
 
-                $("#verFechaEntrega").html(invertirFormatoFecha(pedido.fechaEntrega.substr(0, 10)));
-                $("#verFechaMaximaEntrega").html(invertirFormatoFecha(pedido.fechaMaximaEntrega.substr(0, 10)));
+                $("#varRangoFechasEntrega").html(pedido.rangoFechasEntrega);
+                $("#varRangoHoraEntrega").html(pedido.rangoHoraEntrega);
 
                 $("#verCiudad").html(pedido.ciudad.nombre);
                 $("#verCliente").html(pedido.cliente.razonSocial);
                 $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
-                $("#verDireccionEntrega").html(pedido.direccionEntrega);
-                $("#verTelefonoContactoEntrega").html(pedido.telefonoContactoEntrega);
-                $("#verContactoEntrega").html(pedido.contactoEntrega);
+                $("#verDireccionEntrega").html(pedido.direccionEntrega.descripcion);
+                $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
+                $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
+
+                $("#verDepartamentoEntrega").html(pedido.ubigeoEntrega.Departamento);
+                $("#verProvinciaEntrega").html(pedido.ubigeoEntrega.Provincia);
+                $("#verDistritoEntrega").html(pedido.ubigeoEntrega.Distrito); 
+
                 $("#verContactoPedido").html(pedido.contactoPedido);
                 $("#verTelefonoContactoPedido").html(pedido.telefonoContactoPedido);
+                $("#verCorreoContactoPedido").html(pedido.correoContactoPedido);
+
+
                 $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
 
                 $("#verEstado").html(pedido.seguimientoPedido.estadoString);
@@ -2404,14 +2625,6 @@ jQuery(function ($) {
 
     };
 
-
-
-
-
-
-
-
-
     /*####################################################
     EVENTOS BUSQUEDA COTIZACIONES
     #####################################################*/
@@ -2454,7 +2667,6 @@ jQuery(function ($) {
         });
     });
 
-
     $("#pedido_fechaSolicitudDesde").change(function () {
         var fechaSolicitudDesde = $("#pedido_fechaSolicitudDesde").val();
         $.ajax({
@@ -2483,6 +2695,16 @@ jQuery(function ($) {
     
     $("#pedido_fechaEntregaDesde").change(function () {
         var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
+        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
+
+        //Si fecha de entrega hasta es superior a fecha de entrega desde o la fecha de entrega hasta es vacío
+        //se reemplaza el valor por la fecha de entrega desde
+        if (convertirFechaNumero(fechaEntregaHasta) < convertirFechaNumero(fechaEntregaDesde)
+            || fechaEntregaHasta.trim() == "" ) {
+            $("#pedido_fechaEntregaHasta").val(fechaEntregaDesde);
+            $("#pedido_fechaEntregaHasta").change();
+        }
+
         $.ajax({
             url: "/Pedido/ChangeFechaEntregaDesde",
             type: 'POST',
@@ -2506,6 +2728,7 @@ jQuery(function ($) {
             }
         });
     });
+
 
 
     $("#pedido_numeroPedido").change(function () {
@@ -2548,9 +2771,100 @@ jQuery(function ($) {
         });
     });
 
-    
+    $("#ActualDepartamento").change(function () {
+        var ubigeoEntregaId = "000000";
+        if ($("#ActualDepartamento").val().trim().length > 0) {
+            ubigeoEntregaId = $("#ActualDepartamento").val() + "0000";
+        }
+        $.ajax({
+            url: "/Pedido/ChangeUbigeoEntrega",
+            type: 'POST',
+            data: {
+                ubigeoEntregaId: ubigeoEntregaId
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#ActualProvincia").change(function () {
+        var ubigeoEntregaId = $("#ActualDepartamento").val()+"0000";
+        if ($("#ActualProvincia").val().trim().length > 0) {
+            ubigeoEntregaId = $("#ActualProvincia").val()+"00";
+        }
+        $.ajax({
+            url: "/Pedido/ChangeUbigeoEntrega",
+            type: 'POST',
+            data: {
+                ubigeoEntregaId: ubigeoEntregaId
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#ActualDistrito").change(function () {
+        var ubigeoEntregaId = $("#ActualDepartamento").val() + $("#ActualProvincia").val() + "00";
+        if ($("#ActualDistrito").val().trim().length > 0) {
+            ubigeoEntregaId = $("#ActualDistrito").val();
+        }
+        $.ajax({
+            url: "/Pedido/ChangeUbigeoEntrega",
+            type: 'POST',
+            data: {
+                ubigeoEntregaId: ubigeoEntregaId
+            },
+            success: function () {
+            }
+        });
+        /*obtenerDireccionesEntrega
+        */
+    });
+
+    /*
+    function obtenerDireccionesEntrega() {
+    $.ajax({
+        url: "/DireccionEntrega/GetDireccionesEntrega",
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+            ubigeo: ubigeo
+        },
+        success: function (direccionEntregaListTmp) {
+
+            $('#pedido_direccionEntrega')
+                .find('option')
+                .remove()
+                .end()
+                ;
+
+            $('#pedido_direccionEntrega').append($('<option>', {
+                value: GUID_EMPTY,
+                text: "Seleccione Dirección Entrega",
+                direccion: "",
+                contacto: "",
+                telefono: ""
+            }));
 
 
+            for (var i = 0; i < direccionEntregaListTmp.length; i++) {
+                $('#pedido_direccionEntrega').append($('<option>', {
+                    value: direccionEntregaListTmp[i].idDireccionEntrega,
+                    text: direccionEntregaListTmp[i].descripcion,
+                    direccion: direccionEntregaListTmp[i].descripcion,
+                    contacto: direccionEntregaListTmp[i].contacto,
+                    telefono: direccionEntregaListTmp[i].telefono
+                }));
+
+            }
+
+            deshabilitarEdicionDireccionEntrega();
+            $('#btnNuevaDireccion').show();
+            $('#btnModificarDireccion').hide();
+            $('#btnCancelarDireccion').hide();
+        }
+        });
+    }*/
 
 
 

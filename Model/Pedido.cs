@@ -15,40 +15,54 @@ namespace Model
         public Int64? numeroGrupoPedido { get; set; }
 
         public Cotizacion cotizacion { get; set; }
-        [Display(Name = "Ciudad:")]
+        [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }
         [Display(Name = "Cliente:")]
         public Cliente cliente { get; set; }
-        [Display(Name = "Número Documento Cliente (OC):")]
+        [Display(Name = "Referencia Doc Cliente:")]
         public String numeroReferenciaCliente { get; set; }
-        [Display(Name = "Dirección de Despacho:")]
-        public String direccionEntrega { get; set; }
-        [Display(Name = "Contacto de Entrega:")]
-        public String contactoEntrega { get; set; }
-        [Display(Name = "Telefono Contacto de Entrega:")]
-        public String telefonoContactoEntrega { get; set; }
+
+        public DireccionEntrega direccionEntrega { get; set; }
+
+        [Display(Name = "Fecha de Entrega:")]
+        public DateTime? fechaEntregaDesde { get; set; }
+
+        [Display(Name = "Fecha Máxima de Entrega:")]
+        public DateTime? fechaEntregaHasta { get; set; }
+
+        [Display(Name = "Hora de Entrega:")]
+        public String horaEntregaDesde { get; set; }
+
+        [Display(Name = "Fecha Máxima de Entrega:")]
+        public String horaEntregaHasta { get; set; }
+
+
+
         [Display(Name = "Fecha Solicitud:")]
         public DateTime fechaSolicitud { get; set; }
         [Required(ErrorMessage = "Ingrese la Fecha de Entrega.")]
-        [Display(Name = "Fecha de Entrega:")]
-        public DateTime fechaMaximaEntrega { get; set; }
-        [Display(Name = "Fecha Máxima de Entrega:")]
-        public DateTime fechaEntrega { get; set; }
-        [Display(Name = "Pedido Por:")]
+        
+        [Display(Name = "Solicitado Por:")]
         public String contactoPedido { get; set; }
-        [Display(Name = "Telefono Pedido Por:")]
+        [Display(Name = "Telefono Solicitante:")]
         public String telefonoContactoPedido { get; set; }
+        [Display(Name = "Correo Solicitante:")]
+        public String correoContactoPedido { get; set; }
+
         [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }
 
+        public Ubigeo ubigeoEntrega { get; set; }
 
+
+
+        [Display(Name = "Fechas de Entrega:")]
         public String rangoFechasEntrega {
             get
             {
-
                 String rangoFechasEntrega = String.Empty;
-                String entregaDesde = this.fechaEntrega.ToString(Constantes.formatoFecha);
-                String entregaHasta = this.fechaMaximaEntrega.ToString(Constantes.formatoFecha);
+                String entregaDesde = this.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
+                String entregaHasta = this.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
 
                 if (entregaDesde.Equals(entregaHasta))
                 {
@@ -56,10 +70,22 @@ namespace Model
                 }
                 else
                 {
-                    return "Desde: " + entregaDesde + " Hasta:" + entregaHasta;
+                    return "Desde: " + entregaDesde + " Hasta: " + entregaHasta;
                 }
             }
         }
+
+        [Display(Name = "Horario de Entrega:")]
+        public String rangoHoraEntrega
+        {
+            get
+            {
+                return "Desde: " + this.horaEntregaDesde + " Hasta: " + this.horaEntregaHasta;
+            }
+        }
+
+        public Boolean existeCambioDireccionEntrega { get; set; }
+
 
         public String fechaHoraSolicitud
         {
@@ -119,10 +145,7 @@ namespace Model
         public DateTime fechaSolicitudDesde { get; set; }
         [Display(Name = "Solicitado Hasta:")]
         public DateTime fechaSolicitudHasta { get; set; }
-        [Display(Name = "Entrega Desde:")]
-        public DateTime fechaEntregaDesde { get; set; }
-        [Display(Name = "Entrega Hasta:")]
-        public DateTime fechaEntregaHasta { get; set; }
+
         public DateTime fechaPrecios { get; set; }
 
         /*Implementación Interface*/
