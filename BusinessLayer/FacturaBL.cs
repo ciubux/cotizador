@@ -28,12 +28,12 @@ namespace BusinessLayer
             CPE_CABECERA_BE cPE_CABECERA_BE = new CPE_CABECERA_BE();
 
             cPE_CABECERA_BE.ID = "98789764677MRTYU";
-            cPE_CABECERA_BE.COD_GPO = "4";
-            cPE_CABECERA_BE.TIP_CPE = "01";
-            cPE_CABECERA_BE.FEC_EMI = "2018-04-02";
-            cPE_CABECERA_BE.HOR_EMI = "08:56:14";
-            cPE_CABECERA_BE.SERIE = "F002";
-            cPE_CABECERA_BE.CORRELATIVO = "00100005";
+            cPE_CABECERA_BE.COD_GPO = "4"; //OK FIJO
+            cPE_CABECERA_BE.TIP_CPE = "01"; //OK Factura 
+            cPE_CABECERA_BE.FEC_EMI = "2018-04-02"; //OK
+            cPE_CABECERA_BE.HOR_EMI = "08:56:14";  //OK
+            cPE_CABECERA_BE.SERIE = "F002";  //OK
+            cPE_CABECERA_BE.CORRELATIVO = "00100005";  //OK
             cPE_CABECERA_BE.MONEDA = "PEN";
             cPE_CABECERA_BE.COD_TIP_OPE = "0101";
             cPE_CABECERA_BE.TIP_DOC_EMI = "6";

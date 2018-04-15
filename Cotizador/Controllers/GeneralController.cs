@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using BusinessLayer;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,6 +67,13 @@ namespace Cotizador.Controllers
         public void ChangeFieldDate()
         {
 
+        }
+
+        public String EjecutarJob()
+        {
+            CotizacionBL cotizacionBL = new CotizacionBL();
+            cotizacionBL.RechazarCotizaciones();
+            return "Job Ejecutado, time:" + DateTime.Now;
         }
 
 

@@ -9,7 +9,7 @@ namespace Model
 {
     public class MovimientoAlmacen : Auditoria
     {
-        public int numero { get; set; }
+        public long numero { get; set; }
 
         public enum tiposMovimiento {
             [Display(Name = "Ingreso")]
@@ -38,5 +38,11 @@ namespace Model
         [Display(Name = "Número:")]
         public int numeroDocumento { get; set; }
 
+        
+        [Display(Name = "Fecha Desde:")]
+        public DateTime fechaMovimientoDesde { get; set; }
+
+        [Display(Name = "Fecha Hasta:")]
+        public DateTime fechaMovimientoHasta { get; set; }
     }
 }

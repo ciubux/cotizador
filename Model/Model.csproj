@@ -46,8 +46,10 @@
     <Compile Include="HelperDocumento.cs" />
     <Compile Include="IDocumento.cs" />
     <Compile Include="MovimientoAlmacen.cs" />
+    <Compile Include="SeguimientoGuiaRemision.cs" />
     <Compile Include="Transportista.cs" />
     <Compile Include="Ubigeo.cs" />
+    <Compile Include="DocumentoVenta.cs" />
     <Compile Include="Venta.cs" />
     <Compile Include="VentaDetalle.cs" />
     <Compile Include="MovimientoDetalle.cs" />

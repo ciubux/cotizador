@@ -569,6 +569,13 @@ namespace DataLayer
 
     */
         }
-        
+
+
+        public void RechazarCotizaciones()
+        {
+            var objCommand = GetSqlCommand("pu_rechazarCotizaciones");
+            ExecuteNonQuery(objCommand);
+        }
+
     }
 }

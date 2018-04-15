@@ -9,48 +9,74 @@ namespace BusinessLayer
 {
     public class CotizacionBL
     {
-        public void InsertCotizacion(Cotizacion cotizacion)
+
+        private void validarCotizacion(Cotizacion cotizacion)
         {
-            using (var dal = new CotizacionDAL())
+            //Si no se consideran cantidades no se debe grabar el subtotal
+            if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
             {
-                //Si no se consideran cantidades no se debe grabar el subtotal
+                cotizacion.montoSubTotal = 0;
+                cotizacion.montoTotal = 0;
+                cotizacion.montoIGV = 0;
+            }
+
+            //0 es días
+            if (cotizacion.mostrarValidezOfertaEnDias == 0)
+            {
+                cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(cotizacion.validezOfertaEnDias);
+            }
+
+            cotizacion.seguimientoCotizacion.observacion = String.Empty;
+            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada;
+
+            foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
+            {
+                cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
+                cotizacionDetalle.usuario = cotizacion.usuario;
+
+                //Si no se consideran cantidades no se debe grabar la cantidad y el subtotal
                 if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                 {
-                    cotizacion.montoSubTotal = 0;
+                    cotizacionDetalle.cantidad = 0;
+                }
+                else if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Cantidades)
+                {
+                    cotizacionDetalle.observacion = null;
                 }
 
-                //0 es días
-                if (cotizacion.mostrarValidezOfertaEnDias == 0)
+                //Si no es aprobador para que la cotización se cree como aprobada el porcentaje de descuento debe ser mayor o igual 
+                //al porcentaje Limite sin aprobacion
+
+                if (!cotizacion.usuario.esAprobador || cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
                 {
-                    cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(cotizacion.validezOfertaEnDias);
-                }
+                    PrecioClienteProducto precioClienteProducto = cotizacionDetalle.producto.precioClienteProducto;
 
-                cotizacion.seguimientoCotizacion.observacion = String.Empty;
-                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada;
 
-                foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
-                {
-                    cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
-                    cotizacionDetalle.usuario = cotizacion.usuario;
-
-                    //Si no se consideran cantidades no se debe grabar la cantidad y el subtotal
-                    if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
+                    bool evaluarDescuento = false;
+                    //¿Tiene precio registrado para facturación?
+                    if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
                     {
-                        cotizacionDetalle.cantidad = 0;
+                        //Si el precio unitario registrado es distinto del precio registrado para facturacion
+                        //Se envia a evaluar Descuento
+                        if (cotizacionDetalle.precioUnitario != precioClienteProducto.precioUnitario)
+                        {
+                            evaluarDescuento = true;
+                        }
+                        //Si el precio es igual pero la fecha de fin de vigencia es indefinida
+                        //Se envia a evaluar Descuento
+                        else if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION) )
+                        {
+                            evaluarDescuento = true;
+                        }
+
+
                     }
-                    else if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Cantidades)
+                    else
                     {
-                        cotizacionDetalle.observacion = null;
+                        evaluarDescuento = true;
                     }
 
-
-
-
-                    //Si no es aprobador para que la cotización se cree como aprobada el porcentaje de descuento debe ser mayor o igual 
-                    //al porcentaje Limite sin aprobacion
-
-
-                    if (!cotizacion.usuario.esAprobador)
+                    if (evaluarDescuento)
                     {
                         if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
                         {
@@ -58,45 +84,56 @@ namespace BusinessLayer
                             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                         }
                     }
-                    //Si es aprobador, no debe sobrepasar su limite de aprobación asignado
-                    else
-                    {
-                        if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
-                        {
-                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización.";
-                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                            
-                        }
 
-                    }
 
+
+
+
+
+                   
                 }
 
+               
 
 
-                if (cotizacion.fechaEsModificada)
-                {
-                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de la cotización.";
-                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                }
-                else
-                {
-                    //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
-                    cotizacion.fecha = DateTime.Now;
-                }
-
-                if (cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null)
-                {
-                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de inicio y/o fin de vigencia de precios.";
-                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                }
-
-                if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
-                {
-                    cotizacion.seguimientoCotizacion.observacion = null;
-                }
 
 
+
+            }
+
+
+
+            if (cotizacion.fechaEsModificada && !cotizacion.usuario.esAprobador)
+            {
+                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de la cotización.";
+                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+            }
+            else
+            {
+                //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
+                cotizacion.fecha = DateTime.Now;
+            }
+
+            if ((cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null) && !cotizacion.usuario.esAprobador)
+            {
+                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de inicio y/o fin de vigencia de precios.";
+                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+            }
+
+            if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
+            {
+                cotizacion.seguimientoCotizacion.observacion = null;
+            }
+
+
+        }
+
+
+        public void InsertCotizacion(Cotizacion cotizacion)
+        {
+            using (var dal = new CotizacionDAL())
+            {
+                validarCotizacion(cotizacion);
                 dal.InsertCotizacion(cotizacion);
             }
         }
@@ -105,79 +142,19 @@ namespace BusinessLayer
         {
             using (var dal = new CotizacionDAL())
             {
-                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada;
-                //Si no se consideran cantidades no se debe grabar el subtotal
-                if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
-                {
-                    cotizacion.montoSubTotal = 0;
-                }
-
-                if (cotizacion.mostrarValidezOfertaEnDias == 0)
-                {
-                    cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(cotizacion.validezOfertaEnDias);
-                }
-
-                foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
-                {
-                    cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
-                    cotizacionDetalle.usuario = cotizacion.usuario;
-
-                    //Si no se consideran cantidades no se debe grabar la cantidad y el subtotal
-                    if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
-                    {
-                        cotizacionDetalle.cantidad = 0;
-                    }
-                    else if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Cantidades)
-                    {
-                        cotizacionDetalle.observacion = null;
-                    }
-
-                    if (!cotizacion.usuario.esAprobador)
-                    {
-                        if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
-                        {
-                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización";
-                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                        }
-                    }
-                    //Si es aprobador, no debe sobrepasar su limite de aprobación asignado
-                    else
-                    {
-                        if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
-                        {
-                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización";
-                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-
-                        }
-
-                    }
-                }
-
-                if (cotizacion.fechaEsModificada)
-                {
-                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de la cotización.";
-                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                }
-                else
-                {
-                    //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
-                    cotizacion.fecha = DateTime.Now;
-                }
-
-                if (cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null)
-                {
-                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de inicio y/o fin de vigencia de precios.";
-                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                }
-
-                if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
-                {
-                    cotizacion.seguimientoCotizacion.observacion = null;
-                }
-
+                validarCotizacion(cotizacion);
                 dal.UpdateCotizacion(cotizacion);
             }
         }
+
+        public void RechazarCotizaciones()
+        {
+            using (var dal = new CotizacionDAL())
+            {
+                dal.RechazarCotizaciones();
+            }
+        }
+
 
         public void cambiarEstadoCotizacion(Cotizacion cotizacion)
         {

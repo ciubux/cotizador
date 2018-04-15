@@ -110,6 +110,10 @@ namespace DataLayer
                 //Costo sin IGV
                 producto.costoSinIgv = Converter.GetDecimal(row, "costo");
 
+                
+                producto.precioClienteProducto = new PrecioClienteProducto();
+                producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
+
 
                 /*Obtenido a partir de precio Lista*/
                 if (row["precio_neto"] == DBNull.Value)
@@ -117,7 +121,13 @@ namespace DataLayer
                     producto.precioNeto = null;
                 }
                 else
-                { 
+                {
+                    producto.precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                    producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
+                    producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
+                    producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                    producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+
                     producto.precioNeto = Converter.GetDecimal(row, "precio_neto");
                 }
             }
@@ -128,6 +138,9 @@ namespace DataLayer
                 PrecioClienteProducto precioLista = new PrecioClienteProducto();
 
                 //     producto.idProducto = Converter.GetGuid(row, "unidad");
+
+                precioLista.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
+
 
                 if (row["fecha_inicio_vigencia"] == DBNull.Value)
                 {

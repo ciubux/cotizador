@@ -843,8 +843,10 @@ jQuery(function ($) {
                     observacionesEnDescripcion = "<br /><span class='" + detalle.idProducto + " detproductoObservacion'  style='color: darkred'>" + detalle.observacion + "</span>";
                 }
             
-                $('.table tbody tr.footable-empty').remove();
-                $(".table tbody").append('<tr data-expanded="true">' +
+                $('#tableDetalleCotizacion tbody tr.footable-empty').remove();
+
+
+                $("#tableDetalleCotizacion tbody").append('<tr data-expanded="true">' +
                     '<td>' + detalle.idProducto + '</td>' +
                     '<td>' + esPrecioAlternativo + '</td>' +
                     '<td>' + proveedor + '</td>' +
@@ -871,8 +873,8 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detordenamiento"></td>' +
                     '</tr > ');
 
-                $('.table thead tr th.footable-editing').remove();
-                $('.table tbody tr td.footable-editing').remove();
+                $('#tableDetalleCotizacion thead tr th.footable-editing').remove();
+                $('#tableDetalleCotizacion tbody tr td.footable-editing').remove();
 
 
                 $('#montoIGV').html(detalle.igv);
@@ -1076,7 +1078,7 @@ jQuery(function ($) {
         }
 
 
-        if (!verificarSiExisteDetalle()) {
+        if (verificarSiExisteDetalle()) {
             alert("No deben existir productos agregados a la cotización.");
             return false;
         }
@@ -2016,12 +2018,12 @@ jQuery(function ($) {
      * Se definen los eventos de la grilla
      */
     function cargarTablaDetalle() {
-        var $modal = $('#tablefoottable'),
-            $editor = $('#tablefoottable'),
-            $editorTitle = $('#tablefoottable');
+        var $modal = $('#tableDetalleCotizacion'),
+            $editor = $('#tableDetalleCotizacion'),
+            $editorTitle = $('#tableDetalleCotizacion');
 
      
-        ft = FooTable.init('#tablefoottable', {
+        ft = FooTable.init('#tableDetalleCotizacion', {
             editing: {
                 enabled: true,
                 addRow: function () {
@@ -2428,7 +2430,7 @@ jQuery(function ($) {
         var varprecioNetoAnterior = (precio / precioNetoAnterior - 1)*100;
         $("." + idproducto + ".detvarprecioNetoAnterior").text(varprecioNetoAnterior.toFixed(1));
 
-        var costoAnterior = Number($("." + idproducto + ".detcostoAnterior").text());       
+        var costoAnterior = Number($("." + idproducto + ".detcostoAnterior").html());       
         var varcosto = (costo / costoAnterior - 1)*100;
         $("." + idproducto + ".detvarCosto").text(varcosto.toFixed(1) + " %");
 
@@ -2443,7 +2445,7 @@ jQuery(function ($) {
        
         $.each($j_object, function (key, value) {
             var arrId = value.getAttribute("class").split(" ");
-            var precioUnitario = Number($("." + arrId[0] + ".detprecioUnitario").text());
+            var precioUnitario = Number($("." + arrId[0] + ".detprecioUnitario").html());
             var cantidad = Number($("." + arrId[0] + ".detincantidad").val());
             subTotal = subTotal + Number(Number((precioUnitario * cantidad)).toFixed(cantidadDecimales));
         });

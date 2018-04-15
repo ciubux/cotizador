@@ -51,9 +51,18 @@ jQuery(function ($) {
     $(document).ready(function () {
         obtenerConstantes();
         setTimeout(autoGuardarGuiaRemision, MILISEGUNDOS_AUTOGUARDADO);
-        cargarChosenCliente(pagina);       
+        cargarChosenCliente(pagina);      
+        verificarSiExisteNuevoTransportista();
 
     });
+
+    function verificarSiExisteNuevoTransportista() {
+        $('#guiaRemision_transportista option').each(function () {
+            if ($(this).val() == GUID_EMPTY) {
+                $("#btnAgregarTransportista").attr("disabled", "disabled");
+            }
+        });
+    }
 
 
     function obtenerConstantes() {
@@ -259,9 +268,27 @@ jQuery(function ($) {
 
     /* ################################## INICIO CHANGE CONTROLES */
 
-    $("#transportista").change(function () {
+    function toggleControlesTransportista() {
+        var idTransportista = $("#guiaRemision_transportista").val();
+        if (idTransportista == "") {
+            $("#guiaRemision_transportista_descripcion").attr('disabled', 'disabled');
+            $("#guiaRemision_transportista_ruc").attr('disabled', 'disabled');
+            $("#guiaRemision_transportista_direccion").attr('disabled', 'disabled');
+            $("#guiaRemision_transportista_brevete").attr('disabled', 'disabled');
+            
+        }
+        else {
+            /*  $("#pedido_direccionEntrega_telefono").val($('#pedido_direccionEntrega').find(":selected").attr("telefono"));*/
+            $("#guiaRemision_transportista_descripcion").removeAttr("disabled");
+            $("#guiaRemision_transportista_ruc").removeAttr("disabled");
+            $("#guiaRemision_transportista_direccion").removeAttr("disabled");
+            $("#guiaRemision_transportista_brevete").removeAttr("disabled");
+        }
+    }
 
-        var idTransportista = $("#transportista").val();
+    $("#guiaRemision_transportista").change(function () {
+        toggleControlesTransportista();
+        var idTransportista = $("#guiaRemision_transportista").val();
 
         $.ajax({
             url: "/GuiaRemision/ChangeTransportista",
@@ -1101,114 +1128,20 @@ jQuery(function ($) {
 
 
     ////////CREAR/EDITAR COTIZACIÓN
+    
 
-
-    function validarIngresoDatosObligator() {
-        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar la sede MP previamente.");
-            $("#idCiudad").focus();
-            return false;
-        }
-
-        if ($("#idCliente").val().trim() == "") {
-            alert("Debe seleccionar un cliente.");
-            $('#idCliente').trigger('chosen:activate');
-            return false;
-        }
-
-        if ($("#pedido_direccionEntrega").val().trim() == "") {
-            alert("Debe ingresar una dirección de entrega.");
-            $('#pedido_direccionEntrega').trigger('chosen:activate');
-            return false;
-        }
-
-        if ($("#pedido_contactoEntrega").val().trim() == "") {
-            alert("Debe ingresar una contacto de entrega.");
-            $('#pedido_contactoEntrega').focus();
-            return false;
-        }
-
-        if ($("#pedido_telefonoContactoEntrega").val().trim() == "") {
-            alert("Debe ingresar una telefono de contacto de entrega.");
-            $('#pedido_telefonoContactoEntrega').focus();
-            return false;
-        }
-
-        var fechaSolicitud = $("#fechaSolicitud").val();
-        if (fechaSolicitud.trim() == "") {
-            alert("Debe ingresar la fecha de la solicitud.");
-            $("#fechaSolicitud").focus();
-            return false;
-        }
-
-        var horaSolicitud = $("#horaSolicitud").val();
-        if (horaSolicitud.trim() == "") {
-            alert("Debe ingresar la hora de la solicitud.");
-            $("#horaSolicitud").focus();
-            return false;
-        }
-
-
-        var fechaEntrega = $("#fechaEntrega").val();
-        if (fechaEntrega.trim() == "") {
-            alert("Debe ingresar la fecha de entrega.");
-            $("#fechaEntrega").focus();
-            return false;
-        }
-
-        var fechaMaximaEntrega = $("#fechaMaximaEntrega").val();
-        if (fechaMaximaEntrega.trim() == "") {
-            alert("Debe ingresar la fecha Máxima de entrega.");
-            $("#fechaMaximaEntrega").focus();
-            return false;
-        }
-        
-        //la fecha máxima de entrega no puede ser inferior a la fecha de entrega
-        if (convertirFechaNumero(fechaMaximaEntrega) < convertirFechaNumero(fechaEntrega)) {
-            alert("La fecha máxima de entrega debe ser mayor o igual a la fechha de entrega.");
-            $("#fechaMaximaEntrega").focus();
-            return false;
-        }
-        
-
-        if ($("#pedido_contactoPedido").val().trim() == "") {
-            alert("Debe ingresar una telefono de contacto de entrega.");
-            $('#pedido_contactoPedido').focus();
-            return false;
-        }
-
-        if ($("#pedido_telefonoContactoPedido").val().trim() == "") {
-            alert("Debe ingresar una telefono de contacto de entrega.");
-            $('#pedido_telefonoContactoPedido').focus();
-            return false;
-        }
-
-        var contador = 0;
-        var $j_object = $("td.detcantidad");
-        $.each($j_object, function (key, value) {
-            contador++;
-        });
-
-        if (contador == 0) {
-            alert("Debe ingresar el detalle del pedido.");
-            return false;
-        }
-
-        return true;
-    }
-
-    function crearPedido(continuarLuego) {
-        if (!validarIngresoDatosObligatoriosPedido())
+    function crearGuiaRemision(continuarLuego) {
+        if (!validarIngresoDatosObligatoriosGuiaRemision())
             return false;
         $.ajax({
-            url: "/Pedido/Create",
+            url: "/GuiaRemision/Create",
             type: 'POST',
             dataType: 'JSON',
             data: {
                 continuarLuego: continuarLuego
             },
             error: function (detalle) {
-                alert("Se generó un error al intentar finalizar la creación del pedido. Si estuvo actualizando, vuelva a buscar el pedido, es posible que este siendo modificado por otro usuario.");
+                alert("Se generó un error al intentar finalizar la creación de la Guía de Remisión. Si estuvo actualizando, vuelva a buscar el pedido, es posible que este siendo modificado por otro usuario.");
             },
             success: function (resultado) {
                 $("#numero").val(resultado.codigo);
@@ -1274,112 +1207,26 @@ jQuery(function ($) {
 
 
 
-    $("#btnFinalizarCreacionPedido").click(function () {
-        crearPedido(0);
+    $("#btnFinalizarCreacionGuiaRemision").click(function () {
+        crearGuiaRemision(0);
     });
 
     $("#btnContinuarCreandoLuego").click(function () {
-        crearPedido(1);
+        crearGuiaRemision(1);
     });
 
-    $("#btnFinalizarEdicionPedido").click(function () {
-        editarPedido(0);
+    $("#btnFinalizarEdicionGuiaRemision").click(function () {
+        editarGuiaRemision(0);
     });
 
     $("#btnContinuarEditandoLuego").click(function () {
-        editarPedido(1);
+        editarGuiaRemision(1);
     });
 
 
 
-    function validarIngresoDatosObligatoriosPedido() {
-        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar la sede MP previamente.");
-            $("#idCiudad").focus();
-            return false;
-        }
-
-        if ($("#idCliente").val().trim() == "") {
-            alert("Debe seleccionar un cliente.");
-            $('#idCliente').trigger('chosen:activate');
-            return false;
-        }
-        /*
-        if ($("#contacto").val().trim() == "") {
-            alert("Debe ingresar un contacto.");
-            $("#contacto").focus();
-            return false;
-        }
-
-        var fecha = $("#fecha").val();
-        if ($("#fecha").val().trim() == "") {
-            alert("Debe ingresar la fecha de la cotización.");
-            $("#fecha").focus();
-            return false;
-        }
-
-        if ($("#mostrarValidezOfertaEnDias").val() == 0) {
-            if ($("#validezOfertaEnDias").val() < 1) {
-                alert("La cantidad de días de validez de oferta debe ser mayor o igual a uno.");
-                $("#validezOfertaEnDias").focus();
-                return false;
-            }
-        }
-        else {
-            if ($("#fechaLimiteValidezOferta").val().trim() != "") {
-                alert("Debe ingresar la fecha de Validez Oferta.");
-                $("#fechaLimiteValidezOferta").focus();
-                return false;
-            }
-
-        }
-
-
-
-        if (convertirFechaNumero(fechaLimiteValidezOferta) <= convertirFechaNumero(fecha)) {
-            alert("EL fin de Validez de Oferta debe ser mayor o igual a la fecha de la cotización.");
-            $("#fechaLimiteValidezOferta").focus();
-            return false;
-        }
-
-        var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPrecios").val();
-        if (fechaInicioVigenciaPrecios.trim() != "") {
-            if (convertirFechaNumero(fechaInicioVigenciaPrecios) <= convertirFechaNumero(fecha)) {
-                alert("El inicio de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
-                $("#fechaInicioVigenciaPrecios").focus();
-                return false;
-            }
-        }
-
-        var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
-        if (fechaFinVigenciaPrecios.trim() != "") {
-
-            if (fechaInicioVigenciaPrecios.trim() != "") {
-                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fechaInicioVigenciaPrecios)) {
-                    alert("El fin de vigencia de precios debe ser mayor o igual al inicio de vigencia de precios.");
-                    $("#fechaFinVigenciaPrecios").focus();
-                    return false;
-                }
-            }
-            else {
-                if (convertirFechaNumero(fechaFinVigenciaPrecios) <= convertirFechaNumero(fecha)) {
-                    alert("El fin de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
-                    $("#fechaFinVigenciaPrecios").focus();
-                    return false;
-                }
-            }
-        }*/
-
-        var contador = 0;
-        var $j_object = $("td.detcantidad");
-        $.each($j_object, function (key, value) {
-            contador++;
-        });
-
-        if (contador == 0) {
-            alert("Debe ingresar el detalle del pedido.");
-            return false;
-        }
+    function validarIngresoDatosObligatoriosGuiaRemision() {
+     
 
         return true;
     }
@@ -2640,10 +2487,96 @@ jQuery(function ($) {
     });
 
     
+    $("#idCiudad").change(function () {
+        var idCiudad = $("#idCiudad").val();
+
+        $.ajax({
+            url: "/GuiaRemision/ChangeIdCiudad",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad
+            },
+            error: function (detalle) {
+                alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
+                location.reload();
+            },
+            success: function (ciudad) {
+
+                $("#guiaRemision_ciudadOrigen_direccionPuntoPartida").val(ciudad.direccionPuntoPartida);
+
+            }
+        });
+    });  
 
 
 
+    $("#btnSaveTransportista").click(function () {
 
+        if ($("#transportista_descripcion").val().trim() == "") {
+            alert("Debe ingresar la descripción del transportista.");
+            $('#transportista_descripcion').focus();
+            return false;
+        }
+
+        if ($("#transportista_direccion").val().trim() == "") {
+            alert("Debe ingresar la dirección del transportista.");
+            $('#transportista_direccion').focus();
+            return false;
+        }
+
+        if ($("#transportista_ruc").val().trim() == "") {
+            alert("Debe ingresar el RUC del transportista.");
+            $('#transportista_ruc').focus();
+            return false;
+        }
+
+        if ($("#transportista_telefono").val().trim() == "") {
+            alert("Debe ingresar el telefono del transportista.");
+            $('#transportista_telefono').focus();
+            return false;
+        }
+
+
+        
+
+        var descripcion = $("#transportista_descripcion").val();
+        var direccion = $("#transportista_direccion").val();
+        var ruc = $("#transportista_ruc").val();
+        var telefono = $("#transportista_telefono").val();
+
+        $.ajax({
+            url: "/GuiaRemision/CreateTransportistaTemporal",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                descripcion: descripcion,
+                direccion: direccion,
+                ruc: ruc,
+                telefono: telefono
+            },
+            error: function (detalle) { alert("Se generó un error al intentar crear el transportista."); },
+            success: function (transportista) {
+
+                $('#guiaRemision_transportista').append($('<option>', {
+                    value: transportista.idTransportista,
+                    text: transportista.descripcion
+                }));
+                $('#guiaRemision_transportista').val(transportista.idTransportista);
+
+                $('#guiaRemision_transportista_descripcion').val(transportista.descripcion);
+                $('#guiaRemision_transportista_direccion').val(transportista.direccion);
+                $('#guiaRemision_transportista_ruc').val(transportista.ruc);
+                $('#guiaRemision_transportista_telefono').val(transportista.telefono);
+                verificarSiExisteNuevoTransportista();
+                toggleControlesTransportista();
+            }
+        });
+
+
+        $('#btnCancelTransportista').click();
+
+    });
 
 
 

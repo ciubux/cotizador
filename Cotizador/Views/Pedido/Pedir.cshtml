@@ -208,8 +208,6 @@
                                       new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "descripcion", pedido.direccionEntrega.idDireccionEntrega, null),
                                       "Seleccione Dirección de Entrega",
                                       new { @class = "form-control" })
-
-
                         </div>
                         <div class="col-xs-2 col-lg-1">
                             <button id="btnAgregarDireccion" type="button" class="btn btn-primary bouton-image-add addDireccion" data-toggle="modal" data-target="#modalAgregarDireccion"></button>
@@ -461,7 +459,7 @@
 
         </div>
 
-        <table id="tablefoottable" class="table" data-editing="true"
+        <table id="tableDetallePedido" class="table" data-editing="true"
                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                data-editing-allow-add="true"
                data-editing-allow-delete="true"
@@ -1145,7 +1143,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalAgregarDireccionTitle"><b>Agregar Dirección</b></h4>
+                <h4 class="modal-title" id="modalAgregarDireccionTitle"><b>Nueva Dirección</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1204,7 +1202,7 @@
 
             <div class="modal-footer">
                 <button type="button" id="btnCancelDireccion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnSaveDireccion" class="btn btn-primary">Agregar Dirección</button>
+                <button type="button" id="btnSaveDireccion" class="btn btn-primary">Aceptar</button>
             </div>
         </div>
     </div>

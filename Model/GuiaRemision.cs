@@ -19,7 +19,7 @@ namespace Model
         [Display(Name = "SEDE MP:")]
         public Ciudad ciudadOrigen { get; set; }
 
-      
+
         [Display(Name = "Punto Partida:")]
         public String direccionOrigen { get; set; }
         /*
@@ -40,6 +40,7 @@ namespace Model
         public String certificadoInscripcion { get; set; }
 
 
+        public String serieNumeroGuia { get { return this.serieDocumento + "- " + this.numeroDocumento; } }
 
         public enum motivosTraslado
         {
@@ -90,5 +91,11 @@ namespace Model
         public Boolean transportistaEsModificado { get; set; }
 
         public Boolean existeCambioTransportista { get; set; }
+
+        public Usuario usuario { get; set; }
+
+        public SeguimientoMovimientoAlmacenSalida seguimientoMovimientoAlmacenSalida { get; set; }
+
+
     }
 }

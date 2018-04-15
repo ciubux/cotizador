@@ -1,8 +1,7 @@
 ﻿@{
     ViewBag.Title = "Búsqueda Guías Remisión";
-    Model.Pedido pedido = ViewBag.pedido;
     Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
-    List<Model.Pedido> pedidoList = ViewBag.pedidoList;
+    List<Model.GuiaRemision> guiaRemisionList = ViewBag.guiaRemisionList;
 
 }
 
@@ -14,19 +13,19 @@
     <form class="form-horizontal">
 
         <div class="row">
-            <!--NÚMERO PEDIDO-->
+            <!--NÚMERO MOVIMIENTO -->
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
-                    @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(p => guiaRemision.numero, htmlAttributes: new { @class = "control-label col-xs-4" })
 
                     <div class="col-xs-8">
-                        @if (pedido.numeroPedido > 0)
+                        @if (guiaRemision.numero > 0)
                         {
-                            @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                            @Html.TextBoxFor(p => guiaRemision.numero, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
                         }
                         else
                         {
-                            @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                            @Html.TextBoxFor(p => guiaRemision.numero, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
                         }
                         <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los demás criterios no serán considerados al realizar la búsqueda.</span>
                     </div>
@@ -36,19 +35,19 @@
             </div>
 
 
-            <!--NÚMERO GRUPO PEDIDO-->
+            <!--NÚMERO/SERIE GUIA-->
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
-                    @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(p => guiaRemision.numeroDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
 
                     <div class="col-xs-8">
-                        @if (pedido.numeroGrupoPedido > 0)
+                        @if (guiaRemision.numeroDocumento > 0)
                         {
-                            @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                            @Html.TextBoxFor(p => guiaRemision.numeroDocumento, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
                         }
                         else
                         {
-                            @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                            @Html.TextBoxFor(p => guiaRemision.numeroDocumento, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
                         }
                     </div>
 
@@ -65,7 +64,12 @@
                 <div class="form-group">
                     <label for="idCiudad" class="control-label col-xs-4">Ciudad:</label>
                     <div class="col-xs-8">
-                        @Html.Action("list", "Ciudad", new { parentController = @ViewContext.RouteData.Values["controller"].ToString(), accion = "Busqueda" })
+                        @Html.Action("GetCiudades", "Ciudad",
+                        new
+                        {
+                            ciudadSelectId = "idCiudad",
+                            selectedValue = guiaRemision.ciudadOrigen.idCiudad
+                        })
                     </div>
                 </div>
             </div>
@@ -78,7 +82,7 @@
                         <select class="form-control input-sm" id="idCliente" name="idCliente" required>
                             @if (ViewBag.existeCliente == 1)
                             {
-                                <option selected value="@pedido.cliente.idCliente">@pedido.cliente</option>
+                                <option selected value="@guiaRemision.pedido.cliente.idCliente">@guiaRemision.pedido.cliente</option>
                             }
                             else
                             {
@@ -100,48 +104,24 @@
             <!--FECHA-->
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
-                    @Html.LabelFor(p => pedido.fechaSolicitudDesde, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(p => guiaRemision.fechaMovimientoDesde, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input type="hidden" id="fechaSolicitudDesdetmp" value="@ViewBag.fechaSolicitudDesde" />
-                        <input class="form-control" type="text" id="pedido_fechaSolicitudDesde" name="pedido_fechaSolicitudDesde">
+                        <input type="hidden" id="fechaMovimientoDesdetmp" value="@ViewBag.fechaSolicitudDesde" />
+                        <input class="form-control" type="text" id="pedido_fechaMovimientoDesde" name="pedido_fechaMovimientoDesde">
                     </div>
                 </div>
             </div>
 
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
-                    @Html.LabelFor(p => pedido.fechaSolicitudHasta, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(p => guiaRemision.fechaMovimientoHasta, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input type="hidden" id="fechaSolicitudHastatmp" value="@ViewBag.fechaSolicitudHasta" />
-                        <input class="form-control" type="text" id="pedido_fechaSolicitudHasta" name="pedido_fechaSolicitudHasta">
+                        <input type="hidden" id="fechaMovimientoHastatmp" value="@ViewBag.fechaSolicitudHasta" />
+                        <input class="form-control" type="text" id="pedido_fechaMovimientoHasta" name="pedido_fechaMovimientoHasta">
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <!--FECHA ENTREGA-->
-            <div class="col-sm-6 col-lg-5">
-                <div class="form-group">
-                    @Html.LabelFor(p => pedido.fechaEntregaDesde, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesde" />
-                        <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde">
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-5">
-                <div class="form-group">
-                    @Html.LabelFor(p => pedido.fechaEntregaHasta, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        <input type="hidden" id="fechaEntregaHastaTmp" value="@ViewBag.fechaEntregaHasta" />
-                        <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta">
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
 
         <div class="row">
@@ -152,15 +132,15 @@
                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estado",
-                                  EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
-                                  new { @class = "form-control" }
-                                  )
+                    EnumHelper.GetSelectList(typeof(Model.SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida), guiaRemision.seguimientoMovimientoAlmacenSalida.estado),
+                    new { @class = "form-control" }
+                    )
                     </div>
                 </div>
             </div>
         </div>
 
-        @if (pedido.usuario.esAprobador)
+        @if (guiaRemision.usuario.esAprobador)
         {
             <div class="row">
 
@@ -192,21 +172,19 @@
                data-editing-add-text="Descartar cambios">
             <thead>
                 <tr>
-                    <th data-name="idPedido" data-visible="false"></th>
-                    <th data-name="numero" data-visible="true">N°</th>
-                    <th data-name="numeroGrupo" data-visible="true">N° Grupo</th>
+                    <th data-name="idGuiaRemision" data-visible="false"></th>
+                    <th data-name="numero" data-visible="true">N° Mov.</th>
+                    <th data-name="numeroGuia" data-visible="true">N° Guía</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
 
                     <!--  <th data-name="fecha" data-sortable="true">Fecha Creación</th>-->
-                    <th data-name="fechaSolicitud" data-sortable="true" data-breakpoints="xs">Fecha y Hora Solicitud</th>
-                    <th data-name="rangoEntrega" data-sortable="true" data-breakpoints="xs">Rango Fecha Entrega</th>
+                    <th data-name="fechaCreacion" data-sortable="true" data-breakpoints="xs">Fecha Creación</th>
 
                     <th data-name="razonSocial" data-sortable="true">Razón Social</th>
                     <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
                     <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Ciudad</th>
                     <!--  <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
                     <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>-->
-                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
 
                     <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
@@ -215,28 +193,24 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var pedidoItem in pedidoList)
+                @foreach (var guiaRemisionItem in guiaRemisionList)
                 {
                     <tr data-expanded="true">
-                        <td>  @pedidoItem.idPedido</td>
-                        <td>  @pedidoItem.numeroPedidoString  </td>
-                        <td>  @pedidoItem.numeroGrupoPedidoString  </td>
-                        <td>  @pedidoItem.usuario.nombre  </td>
-                        <td>  @pedidoItem.fechaHoraSolicitud</td>
-                        <td>  @pedidoItem.rangoFechasEntrega</td>
-                        <td>  @pedidoItem.cliente.razonSocial</td>
-                        <td>  @pedidoItem.cliente.ruc </td>
-                        <td>  @pedidoItem.ciudad.nombre  </td>
-                        <!-- <td>  @pedidoItem.montoSubTotal   </td>
-                         <td>  @pedidoItem.montoIGV  </td>-->
-                        <td>  @pedidoItem.montoTotal  </td>
-                        <td>  @pedidoItem.seguimientoPedido.estadoString</td>
-                        <td>  @pedidoItem.seguimientoPedido.usuario.nombre  </td>
-                        <td>  @pedidoItem.seguimientoPedido.observacion  </td>
+                        <td>  @guiaRemisionItem.idGuiaRemision</td>
+                        <td>  @guiaRemisionItem.numero  </td>
+                        <td>  @guiaRemisionItem.serieNumeroGuia  </td>
+                        <td>  @guiaRemisionItem.usuario.nombre  </td>
+                        <td>  @guiaRemisionItem.fechaMovimiento</td>
+                        <td>  @guiaRemisionItem.pedido.cliente.razonSocial</td>
+                        <td>  @guiaRemisionItem.pedido.cliente.ruc </td>
+                        <td>  @guiaRemisionItem.ciudadOrigen.nombre  </td>
+                        <td>  @guiaRemisionItem.seguimientoMovimientoAlmacenSalida.estadoString</td>
+                        <td>  @guiaRemisionItem.seguimientoMovimientoAlmacenSalida.usuario.nombre  </td>
+                        <td>  @guiaRemisionItem.seguimientoMovimientoAlmacenSalida.observacion  </td>
 
                         <td>
                             <!--fatla definir interacción con estados-->
-                            <button type="button" class="@pedidoItem.idPedido @pedidoItem.numeroPedido btnVerPedido btn btn-primary ">Ver</button>
+                            <button type="button" class="@guiaRemisionItem.idGuiaRemision @guiaRemisionItem.numero btnVerGuiaRemision btn btn-primary ">Ver</button>
                         </td>
                     </tr>
                 }
@@ -272,7 +246,7 @@
                         <!--NÚMERO PEDIDO-->
                         <div class="col-sm-6 col-lg-3">
                             <div class="form-group">
-                                @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                @Html.LabelFor(p => guiaRemision.numero, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verNumero"></p>
                                 </div>
@@ -281,7 +255,7 @@
                         <!--NUMERO PEDIDO GRUPO-->
                         <div class="col-sm-6 col-lg-3">
                             <div class="form-group">
-                                @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                @Html.LabelFor(p => guiaRemision.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verNumeroGrupo"></p>
                                 </div>

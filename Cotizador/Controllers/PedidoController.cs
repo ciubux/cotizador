@@ -19,16 +19,16 @@ namespace Cotizador.Controllers
                 Pedido pedido = null;
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
-                    case Constantes.paginas.misPedidos: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA]; break;
-                    case Constantes.paginas.Pedido: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO]; break;
+                    case Constantes.paginas.BusquedaPedidos: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA]; break;
+                    case Constantes.paginas.MantenimientoPedido: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO]; break;
                 }
                 return pedido;
             }
             set {
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
-                    case Constantes.paginas.misPedidos: this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = value; break;
-                    case Constantes.paginas.Pedido: this.Session[Constantes.VAR_SESSION_PEDIDO] = value; break;
+                    case Constantes.paginas.BusquedaPedidos: this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = value; break;
+                    case Constantes.paginas.MantenimientoPedido: this.Session[Constantes.VAR_SESSION_PEDIDO] = value; break;
                 }
             }
         }
@@ -290,10 +290,7 @@ namespace Cotizador.Controllers
         {
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-
-            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.misPedidos)
-                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            Pedido pedido = this.PedidoSession;
 
             List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad);
             String resultado = "{\"q\":\"" + data + "\",\"results\":[";

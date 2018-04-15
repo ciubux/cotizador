@@ -59,5 +59,7 @@ namespace Model
         {
             return this.sku.Trim() + " - " + this.descripcion;
         }
+
+        public PrecioClienteProducto precioClienteProducto { get; set; }
     }
 }

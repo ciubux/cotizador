@@ -6,19 +6,30 @@ using System.Web;
 
 namespace Model
 {
-    public class Venta : Auditoria 
+    public class DocumentoVenta : Auditoria
     {
-        public Guid idVenta { get; set; }
+        public Guid idDocumentoVenta { get; set; }
 
-        [Display(Name = "Número Venta:")]
-        public Int64 numero { get; set; }
+        [Display(Name = "Número:")]
+        public String numero { get; set; }
 
-        [Display(Name = "Serie Venta:")]
-        public Int64 serie { get; set; }
+        [Display(Name = "Serie:")]
+        public String serie { get; set; }
 
-        [Display(Name = "Documento Venta:")]
-        public DocumentoVenta documentoVenta { get; set; }
-
+        public enum tipoDocumento
+        {
+            [Display(Name = "Todos")]
+            Todos = -1,
+            [Display(Name = "Factura")]
+            Factura = 0,
+            [Display(Name = "Boleta de Venta")]
+            BoletaVenta = 1,
+            [Display(Name = "Nota de Crédito")]
+            NotaCrédito = 2,
+            [Display(Name = "Nota de Débito")]
+            NotaDébito = 3
+        };        
+        /*
         [Display(Name = "Pedido:")]
         public Pedido pedido { get; set; }
 
@@ -26,7 +37,7 @@ namespace Model
         public GuiaRemision guiaRemision { get; set; }
 
         [Display(Name = "Cotización:")]
-        public Cotizacion cotizacion { get; set; }
+        public Cotizacion cotizacion { get; set; }*/
 
         [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }
@@ -51,7 +62,7 @@ namespace Model
 
         [Display(Name = "Usuario:")]
         public Usuario usuario { get; set; }
-       
+
         public List<VentaDetalle> ventaDetalleList { get; set; }
     }
 }

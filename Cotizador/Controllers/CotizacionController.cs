@@ -24,8 +24,8 @@ namespace Cotizador.Controllers
                 Cotizacion cotizacion = null;
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
-                    case Constantes.paginas.misCotizaciones: cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA]; break;
-                    case Constantes.paginas.Cotizacion: cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION]; break;
+                    case Constantes.paginas.BusquedaCotizaciones: cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA]; break;
+                    case Constantes.paginas.MantenimientoCotizacion: cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION]; break;
                 }
                 return cotizacion;
             }
@@ -33,8 +33,8 @@ namespace Cotizador.Controllers
             {
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
-                    case Constantes.paginas.misCotizaciones: this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA] = value; break;
-                    case Constantes.paginas.Cotizacion: this.Session[Constantes.VAR_SESSION_COTIZACION] = value; break;
+                    case Constantes.paginas.BusquedaCotizaciones: this.Session[Constantes.VAR_SESSION_COTIZACION_BUSQUEDA] = value; break;
+                    case Constantes.paginas.MantenimientoCotizacion: this.Session[Constantes.VAR_SESSION_COTIZACION] = value; break;
                 }
             }
         }
@@ -149,7 +149,7 @@ namespace Cotizador.Controllers
 
         public Boolean ConsultarSiExisteCotizacion()
         {
-            Cotizacion cotizacion = this.CotizacionSession;
+            Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION];
             if (cotizacion == null)
                 return false;
             else
@@ -902,7 +902,7 @@ namespace Cotizador.Controllers
             cotizacion = cotizacionBL.GetCotizacion(cotizacion);
 
 
-            this.Session[Constantes.VAR_SESSION_COTIZACION_VER] = cotizacion;
+            this.Session[Constantes.VAR_SESSION_COTIZACION] = cotizacion;
         }
 
         public String VerCotizacion()
@@ -1039,7 +1039,5 @@ namespace Cotizador.Controllers
             }
 
         }
-
-
     }
 }

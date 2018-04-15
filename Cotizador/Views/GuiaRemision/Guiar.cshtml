@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Crear/Modificar Guía Remisión";
     Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
+    Model.Transportista transportista = ViewBag.transportista;
 }
 
 <div class="page-header">
@@ -185,10 +186,14 @@
                     <!--TRANSPORTISTA-->
                     <div class="form-group">
                         @Html.LabelFor(g => guiaRemision.transportista, htmlAttributes: new { @class = "control-label col-xs-2" })
-                        <div class="col-xs-10">
-                            @Html.DropDownList("transportista",
-                            new SelectList(guiaRemision.ciudadOrigen.transportistaList, "idTransportista", "descripcion", guiaRemision.transportista.idTransportista),
-                            new { @class = "form-control " })
+                        <div class="col-xs-9">
+                            @Html.DropDownList("guiaRemision_transportista",
+                       new SelectList(guiaRemision.ciudadOrigen.transportistaList as IEnumerable<Model.Transportista>, "idTransportista", "descripcion", guiaRemision.transportista.idTransportista, null),
+                       "Seleccione Transportista",
+                       new { @class = "form-control" })
+                        </div>
+                        <div class="col-xs-2 col-lg-1">
+                            <button id="btnAgregarTransportista" type="button" class="btn btn-primary bouton-image-add addTransportista" data-toggle="modal" data-target="#modalAgregarTransportista"></button>
                         </div>
                     </div>
                 </div>
@@ -328,12 +333,97 @@
         <div class="row">
             <div class="pull-right">
                 <button type="button" id="btnCancelarGuiaRemision" class="btn btn-danger">Cancelar</button>
-                <button id="btnFinalizarCreaciónGuia" type="button" class="btn btn-success">Generar Guía Remisión</button>
+                <button id="btnFinalizarCreacionGuiaRemision" type="button" class="btn btn-success">Generar Guía Remisión</button>
             </div>
         </div>
 
 
     </form>
+</div>
+
+
+<div class="modal fade" id="modalAgregarTransportista" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarTransportistaTitle"><b>Nuevo Transportista</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+                            <!--Nombre / Descripcion-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => transportista.descripcion, htmlAttributes: new { @class = "control-label  col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(d => transportista.descripcion, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+                            <!--Dirección-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => transportista.direccion, htmlAttributes: new { @class = "control-label  col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(d => transportista.direccion, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--CONTACTO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => transportista.ruc, htmlAttributes: new { @class = "control-label  col-xs-4" })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(d => transportista.ruc, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--TELEFONO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => transportista.telefono, htmlAttributes: new { @class = "control-label  col-xs-4" })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(d => transportista.telefono, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelTransportista" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveTransportista" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 

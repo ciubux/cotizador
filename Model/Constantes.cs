@@ -64,29 +64,54 @@ namespace Model
         public static int DEBUG = 0;
         public static int DIAS_MAX_BUSQUEDA_PRECIOS = 730;
         public static int MILISEGUNDOS_AUTOGUARDADO = 5000;
+        public static int DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION = 180;
+        public static int DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO = 365;
         public static String OBSERVACION = "* Condiciones de pago: al contado.\n" +
                                        "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
                                        "* (para productos no stockeables o primeras compras, consultar plazo).\n";
 
-
+        
+        
+        //Numero de Página
         public static int BUSQUEDA_COTIZACION = 0;
         public static int MANTENIMIENTO_COTIZACION = 1;
         public static int BUSQUEDA_PEDIDO = 2;
         public static int MANTENIMIENTO_PEDIDO = 3;
         public static int BUSQUEDA_GUIA_REMISION = 4;
         public static int MANTENIMIENTO_GUIA_REMISION = 5;
+        
 
 
 
         public enum paginas {
             [Display(Name = "Mis Cotizaciones")]
-            misCotizaciones = 0,
+            BusquedaCotizaciones = 0,
             [Display(Name = "Cotizacion")]
-            Cotizacion = 1,
+            MantenimientoCotizacion = 1,
             [Display(Name = "Mis Pedidos")]
-            misPedidos = 2,
+            BusquedaPedidos = 2,
             [Display(Name = "Pedido")]
-            Pedido = 3
+            MantenimientoPedido = 3,
+            [Display(Name = "Mis Guías Remisión")]
+            BusquedaGuiasRemision = 4,
+            [Display(Name = "Guia Remisión")]
+            MantenimientoGuiaRemision = 5,
+            [Display(Name = "Mis Facturas")]
+            BusquedaFacturas = 6,
+            [Display(Name = "Factura")]
+            MantenimientoFactura = 7,
+            [Display(Name = "Mis Ventas")]
+            BusquedaVentas = 8,
+            [Display(Name = "Venta")]
+            MantenimientoVenta = 9,
+            [Display(Name = "Mis Boletas")]
+            BusquedaBoletas = 10,
+            [Display(Name = "Boletas")]
+            MantenimientoBoleta = 11,
+            [Display(Name = "Mis Notas de Crédito")]
+            BusquedaNotasCredito = 12,
+            [Display(Name = "Notas de Crédito")]
+            MantenimientoNotaCredito = 13,
         };
 
 

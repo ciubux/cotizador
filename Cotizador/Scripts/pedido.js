@@ -1092,18 +1092,18 @@ jQuery(function ($) {
             },
             success: function (detalle) {
 
-                var esRecotizacion = "";
+             /*   var esRecotizacion = "";
                 if ($("#esRecotizacion").val() == "1") {
                     esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">0.00</td>' +
                         '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">0.0 %</td>' +
                         '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
                         '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
-                }
+                }*/
 
                 var observacionesEnDescripcion = "<br /><span class='" + detalle.idProducto + " detproductoObservacion'  style='color: darkred'>" + detalle.observacion + "</span>";
 
-                $('.table tbody tr.footable-empty').remove();
-                $(".table tbody").append('<tr data-expanded="true">' +
+                $('#tableDetallePedido tbody tr.footable-empty').remove();
+                $("#tableDetallePedido tbody").append('<tr data-expanded="true">' +
                     '<td>' + detalle.idProducto + '</td>' +
                     '<td>' + esPrecioAlternativo + '</td>' +
 
@@ -1126,13 +1126,13 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
                     '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button name="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios"></button></td>'+
 
-                    esRecotizacion +
+                 //   esRecotizacion +
 
                     '<td class="' + detalle.idProducto + ' detordenamiento"></td>' +
                     '</tr > ');
 
-                $('.table thead tr th.footable-editing').remove();
-                $('.table tbody tr td.footable-editing').remove();
+                $('#tableDetallePedido thead tr th.footable-editing').remove();
+                $('#tableDetallePedido tbody tr td.footable-editing').remove();
 
 
                 $('#montoIGV').html(detalle.igv);
@@ -2186,12 +2186,12 @@ jQuery(function ($) {
      * Se definen los eventos de la grilla
      */
     function cargarTablaDetalle() {
-        var $modal = $('#tablefoottable'),
-            $editor = $('#tablefoottable'),
-            $editorTitle = $('#tablefoottable');
+        var $modal = $('#tableDetallePedido'),
+            $editor = $('#tableDetallePedido'),
+            $editorTitle = $('#tableDetallePedido');
 
      
-        ft = FooTable.init('#tablefoottable', {
+        ft = FooTable.init('#tableDetallePedido', {
             editing: {
                 enabled: true,
                 addRow: function () {
@@ -2598,7 +2598,7 @@ jQuery(function ($) {
         var varprecioNetoAnterior = (precio / precioNetoAnterior - 1)*100;
         $("." + idproducto + ".detvarprecioNetoAnterior").text(varprecioNetoAnterior.toFixed(1));
 
-        var costoAnterior = Number($("." + idproducto + ".detcostoAnterior").text());       
+        var costoAnterior = Number($("." + idproducto + ".detcostoAnterior").html());       
         var varcosto = (costo / costoAnterior - 1)*100;
         $("." + idproducto + ".detvarCosto").text(varcosto.toFixed(1) + " %");
 
@@ -2613,7 +2613,7 @@ jQuery(function ($) {
        
         $.each($j_object, function (key, value) {
             var arrId = value.getAttribute("class").split(" ");
-            var precioUnitario = Number($("." + arrId[0] + ".detprecioUnitario").text());
+            var precioUnitario = Number($("." + arrId[0] + ".detprecioUnitario").html());
             var cantidad = Number($("." + arrId[0] + ".detincantidad").val());
             subTotal = subTotal + Number(Number((precioUnitario * cantidad)).toFixed(cantidadDecimales));
         });
@@ -2881,23 +2881,24 @@ jQuery(function ($) {
         });
     }*/
 
-    function onChangeCiudad(parentController) {
+    $("#idCiudad").change(function () {
+        var idCiudad = $("#idCiudad").val();
+
         $.ajax({
-            url: "/" + parentController + "/ChangeIdCiudad",
+            url: "/Pedido/ChangeIdCiudad",
             type: 'POST',
             dataType: 'JSON',
             data: {
-                idCiudad: this.value
+                idCiudad: idCiudad
             },
             error: function (detalle) {
                 alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
                 location.reload();
             },
             success: function (ciudad) {
-                alert(ciudad)
             }
         });
-    }  
+    });  
 
 
 

@@ -49,6 +49,7 @@ namespace DataLayer
                 obj.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 obj.orden = Converter.GetInt(row, "orden");
                 obj.nombre = Converter.GetString(row, "nombre");
+                obj.direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida");
             }
             return obj;
         }

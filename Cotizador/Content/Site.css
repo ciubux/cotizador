@@ -204,8 +204,8 @@ input.label-input {
     background-image: url(/images/map.png);
 }
 
-.searchBouton:before {
-    background-image: url(/images/search_icon.png);
+.addTransportista:before {
+    background-image: url(/images/addTransportista.png);
 }
 
 /*

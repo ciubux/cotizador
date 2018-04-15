@@ -284,6 +284,7 @@
     <Content Include="images\NoDisponible.gif" />
     <Content Include="images\search_icon.png" />
     <Content Include="images\tmp.png" />
+    <Content Include="images\addTransportista.png" />
     <Content Include="images\up.png" />
     <Content Include="images\up2.png" />
     <Content Include="Scripts\app\cotizador\cotizador.js" />
