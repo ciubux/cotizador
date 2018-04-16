@@ -26,7 +26,7 @@ namespace BusinessLayer
                     //al porcentaje Limite sin aprobacion
 
 
-                 /*   if (!pedido.usuario.esAprobador)
+                 /*   if (!pedido.usuario.apruebaCotizaciones)
                     {
                         if (pedido.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
                         {
@@ -70,7 +70,7 @@ namespace BusinessLayer
                     //al porcentaje Limite sin aprobacion
 
 
-                    /*   if (!pedido.usuario.esAprobador)
+                    /*   if (!pedido.usuario.apruebaCotizaciones)
                        {
                            if (pedido.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
                            {
@@ -101,7 +101,7 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 //Si el usuario no es aprobador entonces solo buscará sus cotizaciones
-                if (!pedido.usuario.esAprobador)
+                if (!pedido.usuario.apruebaCotizaciones)
                 {
                     pedido.usuarioBusqueda = pedido.usuario;
                 }

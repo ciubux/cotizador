@@ -93,9 +93,7 @@ namespace DataLayer
                 producto.descripcion = Converter.GetString(row, "descripcion");
                 producto.sku = Converter.GetString(row, "sku");
 
-                if (row["imagen"] != DBNull.Value)
-                {
-                    producto.image = (Byte[])(row["imagen"]);
+                if (row["imagen"] != DBNull.Value){producto.image = (Byte[])(row["imagen"]);
                 }
 
                 producto.precioSinIgv = Converter.GetDecimal(row, "precio");
@@ -109,26 +107,21 @@ namespace DataLayer
                 producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 //Costo sin IGV
                 producto.costoSinIgv = Converter.GetDecimal(row, "costo");
-
-                
                 producto.precioClienteProducto = new PrecioClienteProducto();
                 producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
 
-
                 /*Obtenido a partir de precio Lista*/
-                if (row["precio_neto"] == DBNull.Value)
-                {
-                    producto.precioNeto = null;
-                }
-                else
+                if (row["precio_neto"] != DBNull.Value)
                 {
                     producto.precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                    producto.precioClienteProducto.flete = Converter.GetDecimal(row, "flete");
+                    producto.precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia");
                     producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                     producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                     producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
                     producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
-
-                    producto.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                    producto.precioClienteProducto.cliente = new Cliente();
+                    producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 }
             }
 

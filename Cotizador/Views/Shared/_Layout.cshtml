@@ -40,14 +40,15 @@
                     @switch ((int)this.Session["pagina"])
                     {
                         case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
-                        case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active";  break;
+                        case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active"; break;
                         case 2: linkBusquedaPedidos = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
                         case 3: linkMantenimientoPedido = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
                         case 4: linkBusquedaGuiasRemision = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
                         case 5: linkMantenimientoGuiaRemision = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
                     }
-
-                    
+                    @{                         var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];}
+                    @if (usuario.creaCotizaciones)
+                    { 
                     <li class="@linkCotizaciones">
                         <a class="dropdown-toggle" data-toggle="dropdown">
                             Cotizaciones
@@ -58,7 +59,10 @@
                             <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Crear/Modificar Cotización", "Cotizar", "Cotizacion")</li>
                         </ul>
                     </li>
+                    }
 
+                    @if (usuario.tomaPedidos || usuario.creaGuias || usuario.apruebaPedidos)
+                    {
 
                     <li class="@linkPedidosYGuiasDeRemision">
                         <a class="dropdown-toggle" data-toggle="dropdown">
@@ -66,12 +70,20 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Mis Pedidos", "Index", "Pedido")</li>
-                            <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedir", "Pedir", "Pedido")</li>
-                            <li id="linkBusquedaGuiasRemision" class="@linkBusquedaGuiasRemision">@Html.ActionLink("Mis Guias de Remisión", "Index", "GuiaRemision")</li>
-                            <li id="linkMantenimientoGuiaRemision" class="@linkMantenimientoGuiaRemision">@Html.ActionLink("Guiar", "Guiar", "GuiaRemision")</li>
+                            @if (usuario.tomaPedidos || usuario.apruebaPedidos)
+                            { <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Mis Pedidos", "Index", "Pedido")</li> }
+                            @if (usuario.tomaPedidos)
+                            { 
+                                <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedir", "Pedir", "Pedido")</li>
+                            }
+                            @if (usuario.creaGuias)
+                            { 
+                                <li id="linkBusquedaGuiasRemision" class="@linkBusquedaGuiasRemision">@Html.ActionLink("Mis Guias de Remisión", "Index", "GuiaRemision")</li>
+                                <li id="linkMantenimientoGuiaRemision" class="@linkMantenimientoGuiaRemision">@Html.ActionLink("Guiar", "Guiar", "GuiaRemision")</li>
+                            }
                         </ul>
                     </li>
+                    }
                 </ul>
 
                 @Html.Partial("_LoginPartial")

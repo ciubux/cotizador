@@ -30,6 +30,7 @@ namespace DataLayer
                     idCiudad = Converter.GetGuid(row, "id_ciudad"),
                     nombre = Converter.GetString(row, "nombre"),
                     orden = Converter.GetInt(row, "orden"),
+                    esProvincia = Converter.GetBool(row, "es_provincia"),
                     direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida")
                 };
                 ciudadList.Add(ciudad);
@@ -49,6 +50,7 @@ namespace DataLayer
                 obj.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 obj.orden = Converter.GetInt(row, "orden");
                 obj.nombre = Converter.GetString(row, "nombre");
+                obj.esProvincia = Converter.GetBool(row, "es_provincia");
                 obj.direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida");
             }
             return obj;

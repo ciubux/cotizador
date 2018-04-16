@@ -17,11 +17,7 @@ namespace Model
         [Display(Name = "Punto Partida:")]
         public String direccionPuntoPartida { get; set; }
 
-        public bool esProvincia {
-            get {
-                return this.orden > 1; 
-                    }
-        }
+        public bool esProvincia { get; set; }  
 
         public List<Transportista> transportistaList { get; set; }
     }

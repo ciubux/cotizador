@@ -42,7 +42,7 @@ namespace BusinessLayer
             using (var dal = new ProductoDAL())
             {
                 Producto producto = dal.getProducto(idProducto, idCliente);
-                //Si es provincia, se considera el precio de provincia
+                //Si es Provincia automaticamente se considera el precioProvincia como precioSinIGV
                 if (esProvincia)
                 {
                     producto.precioSinIgv = producto.precioProvinciaSinIgv;
@@ -60,11 +60,12 @@ namespace BusinessLayer
                     producto.image = storeStream.GetBuffer();
                 }
 
-                //Se agrega el flete al precioLista
-                //EL PRECIO LISTA NO INCLUTE FLETE
-                producto.precioLista = producto.precioSinIgv;// + (producto.precioSinIgv * Flete / 100);
-
+                //El precioSinIGV se convierte en precioLista
+                producto.precioLista = producto.precioSinIgv;
+                //El costoLista es el costo sin IGV
                 producto.costoLista = producto.costoSinIgv;
+
+                //En caso que se requiera hacer calculo incluido IGV entonces se agrega el IGV al precioSinGIV y al costoSinIGV/
                 if (incluidoIGV)
                 {
                     //Se agrega el IGV al costoLista
@@ -72,15 +73,23 @@ namespace BusinessLayer
                     //Se agrega el IGV al precioLista
                     producto.precioLista = producto.precioLista + (producto.precioLista * Constantes.IGV);
 
-
-                    if (producto.precioNeto != null)
-                        producto.precioNeto = producto.precioNeto + (producto.precioNeto * Constantes.IGV);
+                    //Si el precioNetoEquivalente es distinto de null 
+                    //es null cuando se obtiene de un precioRegistrado
+                    if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                    {
+                        producto.precioClienteProducto.precioNeto = producto.precioClienteProducto.precioNeto + (producto.precioClienteProducto.precioNeto * Constantes.IGV);
+                        producto.precioClienteProducto.precioUnitario = producto.precioClienteProducto.precioUnitario + (producto.precioClienteProducto.precioUnitario * Constantes.IGV);
+                    }
                 }
 
+                //Se aplica formato al costo de Lista y al precio Lista a dos decimales
                 producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista));
                 producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioLista));
-
-
+                //Se aplica formato al precioUnitario obtenido desde precioRegistrados
+                if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                {
+                    producto.precioClienteProducto.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioClienteProducto.precioNeto));
+                }
                 return producto;
             }
         }

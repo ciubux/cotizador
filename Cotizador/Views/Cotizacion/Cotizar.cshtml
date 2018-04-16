@@ -9,8 +9,9 @@
     <h3>@ViewBag.Title</h3>
 </div>
 <div class="container">
-
-    <input type="hidden" id="pagina" value="1"/>
+    <input type="hidden" id="codigoCotizacion" value="" />
+    <input type="hidden" id="idProducto" value="" />
+    <input type="hidden" id="pagina" value="1" />
     <input type="hidden" value="@ViewBag.debug" />
     <form class="form-horizontal">
         <div class="row">
@@ -35,12 +36,12 @@
                 <div class="form-group">
                     @Html.LabelFor(p => cotizacion.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
-                         @Html.Action("GetCiudades", "Ciudad",
-                        new
-                        {
-                            ciudadSelectId = "idCiudad",
-                            selectedValue = cotizacion.ciudad.idCiudad
-                        })
+                        @Html.Action("GetCiudades", "Ciudad",
+                                      new
+                                      {
+                                          ciudadSelectId = "idCiudad",
+                                          selectedValue = cotizacion.ciudad.idCiudad
+                                      })
                     </div>
                 </div>
             </div>
@@ -228,9 +229,9 @@
                     <label for="considerarCantidades" class="control-label col-xs-4">¿Mostrar cantitades y/o observaciones?:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("considerarCantidades",
-                                        EnumHelper.GetSelectList(typeof(Model.Cotizacion.OpcionesConsiderarCantidades), cotizacion.considerarCantidades),
-                                        new { @class = "form-control" }
-                                        )
+                                                       EnumHelper.GetSelectList(typeof(Model.Cotizacion.OpcionesConsiderarCantidades), cotizacion.considerarCantidades),
+                                                       new { @class = "form-control" }
+                                                       )
 
                     </div>
                 </div>
@@ -300,7 +301,7 @@
         <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
 
             <div class="pull-left">
-                @if (cotizacion.usuario.esAprobador)
+                @if (cotizacion.usuario.apruebaCotizaciones)
                 {
                     <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
 
@@ -455,7 +456,7 @@
 
                         <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@cotizacionDetalle.porcentajeDescuento %</td>
                         <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@cotizacionDetalle.porcentajeDescuentoMostrar %</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
+                        <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNetoEquivalente</td>
                         <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoLista  </td>
 
                         <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
@@ -494,7 +495,7 @@
                 <div class="form-group">
                     <label for="observaciones" class="control-label col-xs-2">Observaciones:</label>
                     <div class="col-xs-10">
-                        <textarea rows="6" cols="300" style="min-width: 100%" id="observaciones" name="observaciones">@cotizacion.observaciones</textarea>
+                        <textarea rows="6" cols="100" style="min-width: 100%" id="observaciones" name="observaciones">@cotizacion.observaciones</textarea>
                     </div>
                 </div>
             </div>
@@ -840,7 +841,7 @@
             <div class="modal-body">
                 <form class="form-horizontal">
 
-                    <input type="hidden" id="idProducto" value="" />
+                    
 
                     <div class="row">
 
@@ -884,6 +885,7 @@
         </div>
     </div>
 </div>
+
 
 
 
@@ -1087,6 +1089,51 @@
             <div class="modal-footer">
                 <button type="button" id="btnCancelarObtenerProductos" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" id="btnObtenerProductos" class="btn btn-primary">Continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!--MODAL AGREGAR MENSAJE PARA APROBADOR-->
+<div class="modal fade" id="modalComentarioPendienteAprobacion" tabindex="-1">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMensajePendienteAprobacionTitle"><b>Modificar Comentario Estado Pendiente Aprobación</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12" id="motivoRechazoDiv">
+
+                            <!--MOTIVO RECHAZO-->
+                            <div class="form-group">
+                                <!--<label for="comentarioPendienteAprobacion" class="control-label col-xs-4">Comentario:</label>-->
+                                <div class="col-xs-12">
+                                    <textarea class="form-control" rows="5" id="comentarioPendienteAprobacion" name="comentarioPendienteAprobacion"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarComentario" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAceptarComentario" class="btn btn-primary">Aceptar</button>
             </div>
         </div>
     </div>

@@ -215,7 +215,6 @@ namespace Cotizador.Controllers
                             productoStaging.costo = 0;
                         }
 
-
                         paso = 13;
                         try
                         {
@@ -238,7 +237,6 @@ namespace Cotizador.Controllers
                         {
                             productoStaging.precioLima = 0;
                         }
-
 
                         paso = 15;
                         try

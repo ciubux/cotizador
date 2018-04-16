@@ -140,22 +140,7 @@
             </div>
         </div>
 
-        @if (guiaRemision.usuario.esAprobador)
-        {
-            <div class="row">
-
-                <div class="col-sm-6 col-lg-5">
-                    <!--USUARIO-->
-                    <div class="form-group">
-                        <label for="idCliente" class="control-label col-xs-4">Usuario:</label>
-                        <div class="col-xs-8">
-                            @Html.Action("list", "Usuario")
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        }
+      
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnBusquedaPedidos" type="button" class="btn btn-primary  bouton-image searchBouton">Buscar</button>

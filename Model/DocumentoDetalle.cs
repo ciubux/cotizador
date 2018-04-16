@@ -11,6 +11,8 @@ namespace Model
         public int cantidad { get; set; }
         public Producto producto { get; set; }
         public String unidad { get; set; }
+
+
         public Boolean esPrecioAlternativo { get; set; }
         public Usuario usuario { get; set; }
         public String observacion { get; set; }
@@ -46,14 +48,16 @@ namespace Model
       
 
         //Es el precio definido por el usuario
-        private Decimal _precioNeto;
-        public Decimal precioNeto {
+    //    private Decimal _precioNeto;
+
+        public Decimal precioNeto { get; set; }
+
+        public Decimal precioNetoEquivalente {
             get { if (esPrecioAlternativo)
-                    return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, _precioNeto / producto.equivalencia));
+                    return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto / producto.equivalencia));
                 else
-                    return _precioNeto;
+                    return precioNeto;
             }
-            set { this._precioNeto = value; }
         }
 
         //Se obtiene del producto
@@ -94,7 +98,7 @@ namespace Model
         public Decimal margen {
 
             get {
-                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / precioNeto)*100));
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / precioNetoEquivalente)*100));
 
             } }
 
@@ -117,7 +121,7 @@ namespace Model
 
 
                 if (precioNetoAnterior != 0)
-                    _variacionPrecioAnterior = (this.precioNeto / this.precioNetoAnterior - 1)*100;
+                    _variacionPrecioAnterior = (this.precioNetoEquivalente / this.precioNetoAnterior - 1)*100;
                 else
                     _variacionPrecioAnterior = 0;
 
@@ -151,7 +155,7 @@ namespace Model
 
         public Decimal precioUnitario
         {
-            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, flete + precioNeto)); } 
+            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, flete + precioNetoEquivalente)); } 
         }
 
         

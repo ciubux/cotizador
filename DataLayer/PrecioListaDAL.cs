@@ -30,7 +30,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "unidad", precioListaStaging.esAlternativa);
             InputParameterAdd.Varchar(objCommand, "moneda", precioListaStaging.esAlternativa);
             InputParameterAdd.Decimal(objCommand, "precioLista", precioListaStaging.precioLista);
-            InputParameterAdd.Decimal(objCommand, "precioNeto", precioListaStaging.precioNeto);
+            InputParameterAdd.Decimal(objCommand, "precioNetoEquivalente", precioListaStaging.precioNeto);
             InputParameterAdd.Decimal(objCommand, "costo", precioListaStaging.costo);
             InputParameterAdd.Varchar(objCommand, "flete", precioListaStaging.flete);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", precioListaStaging.porcentajeDescuento);

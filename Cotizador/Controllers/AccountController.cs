@@ -105,17 +105,7 @@ namespace Cotizador.Controllers
                     try {
                         Cotizacion cotizacion = JsonConvert.DeserializeObject<Cotizacion>(usuario.cotizacionSerializada);
                         usuario.cotizacionSerializada = null;
-                        this.Session["usuario"] = usuario;
-                        /*        foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
-                                 {
-                                     FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
-                                     MemoryStream storeStream = new MemoryStream();
-                                     storeStream.SetLength(inStream.Length);
-                                     inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
-                                     storeStream.Flush();
-                                     inStream.Close();
-                                     cotizacionDetalle.producto.image = storeStream.GetBuffer();
-                                 }*/
+                        this.Session["usuario"] = usuario; 
                         this.Session["pagina"] = Constantes.BUSQUEDA_COTIZACION;
                         this.Session["cotizacion"] = cotizacion;
 
@@ -201,14 +191,13 @@ namespace Cotizador.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // Para obtener más información sobre cómo habilitar la confirmación de cuenta y el restablecimiento de contraseña, visite http://go.microsoft.com/fwlink/?LinkID=320771
                     // Enviar correo electrónico con este vínculo
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirmar cuenta", "Para confirmar la cuenta, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
-
-                    return RedirectToAction("Index", "Cotizador");
+                   
                 }
                 AddErrors(result);
             }
@@ -495,6 +484,20 @@ namespace Cotizador.Controllers
             {
                 return Redirect(returnUrl);
             }
+
+            Usuario usuario = (Model.Usuario)this.Session["usuario"];
+            if (usuario != null)
+            {
+                if(usuario.creaCotizaciones)
+                    return RedirectToAction("Index", "Cotizacion");
+                if(usuario.tomaPedidos)
+                    return RedirectToAction("Pedir", "Pedido");
+                if(usuario.apruebaPedidos)
+                    return RedirectToAction("Index", "Pedido");
+                if (usuario.creaGuias)
+                    return RedirectToAction("Index", "GuiaRemision");
+            }
+
             return RedirectToAction("Index", "Cotizacion");
         }
 

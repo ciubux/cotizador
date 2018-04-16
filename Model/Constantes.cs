@@ -61,7 +61,7 @@ namespace Model
         public static Decimal PORCENTAJE_MAX_APROBACION = 3.00M;
         public static String SIMBOLO_SOL = "S/";
         public static int PLAZO_OFERTA_DIAS = 15;
-        public static int DEBUG = 0;
+        public static int DEBUG = 1;
         public static int DIAS_MAX_BUSQUEDA_PRECIOS = 730;
         public static int MILISEGUNDOS_AUTOGUARDADO = 5000;
         public static int DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION = 180;

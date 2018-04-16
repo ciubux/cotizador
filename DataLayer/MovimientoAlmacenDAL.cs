@@ -115,7 +115,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "equivalencia", pedidoDetalle.producto.equivalencia);
             InputParameterAdd.Varchar(objCommand, "unidad", pedidoDetalle.unidad);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", pedidoDetalle.porcentajeDescuento);
-            InputParameterAdd.Decimal(objCommand, "precioNeto", pedidoDetalle.precioNeto);
+            InputParameterAdd.Decimal(objCommand, "precioNetoEquivalente", pedidoDetalle.precioNetoEquivalente);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", pedidoDetalle.esPrecioAlternativo?1:0);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedidoDetalle.usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", pedidoDetalle.flete);
@@ -214,12 +214,12 @@ namespace DataLayer
                 //if (cotizacionDetalle.esPrecioAlternativo)
                // {
                     cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.producto.equivalencia;
-                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
+                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNetoEquivalente * 100 / cotizacionDetalle.producto.precioSinIgv);
                 /*}
                 else
                 {
-                    cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
-                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.producto.precioSinIgv * 100 / cotizacionDetalle.precioNeto);
+                    cotizacionDetalle.precioNetoEquivalente = Converter.GetDecimal(row, "precio_neto");
+                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.producto.precioSinIgv * 100 / cotizacionDetalle.precioNetoEquivalente);
                 }*/
 
 

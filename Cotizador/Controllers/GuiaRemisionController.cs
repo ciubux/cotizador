@@ -132,6 +132,23 @@ namespace Cotizador.Controllers
 
         public ActionResult Guiar()
         {
+
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.creaGuias)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
+
+
+
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.MANTENIMIENTO_GUIA_REMISION;
             try
             {

@@ -50,6 +50,16 @@ namespace Cotizador.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+            else
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.creaCotizaciones)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
+            
+
             //  crearCotizacion();
 
             if (this.CotizacionSession == null)
@@ -177,6 +187,14 @@ namespace Cotizador.Controllers
                 {
                     return RedirectToAction("Login", "Account");
                 }
+                else
+                {
+                    Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                    if (!usuario.creaCotizaciones)
+                    {
+                        return RedirectToAction("Login", "Account");
+                    }
+                }
 
                 ViewBag.debug = Constantes.DEBUG;
                 ViewBag.Si = Constantes.MENSAJE_SI;
@@ -263,6 +281,7 @@ namespace Cotizador.Controllers
                 }
 
             }
+            HelperDocumento.calcularMontosTotales(cotizacion);
 
             this.CotizacionSession = cotizacion;
 
@@ -290,7 +309,7 @@ namespace Cotizador.Controllers
                 Decimal costo = cotizacionDetalle.producto.costoSinIgv;
 
                 //Se calcula el precio con Flete
-             //   precioNeto = precioNeto + (precioNeto * cotizacion.flete / 100);
+             //   precioNetoEquivalente = precioNetoEquivalente + (precioNetoEquivalente * cotizacion.flete / 100);
 
                 if (cotizacion.incluidoIGV)
                 {
@@ -318,7 +337,7 @@ namespace Cotizador.Controllers
                 
                 //El precioLista no tiene el calculo de equivalencia
                 //El flete no afecta al precioLista
-                //cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
+                //cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNetoEquivalente));
                 //Se define el costoLista del producto como el costo calculado
 
                 //El precio y el costo se setean al final dado que si es equivalente en cada get se hará el recalculo
@@ -661,21 +680,22 @@ namespace Cotizador.Controllers
             ProductoBL bl = new ProductoBL();
             Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIGV, cotizacion.cliente.idCliente);
 
+            //Se calcula el flete
             Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista * (cotizacion.flete) / 100));
+            //Se calcula el precio Unitario
             Decimal precioUnitario = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, fleteDetalle + producto.precioLista));
 
+
+            //Se calcula el porcentaje de descuento
             Decimal porcentajeDescuento = 0;
-            if (producto.precioNeto != null)
+            if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
             {
-
-                porcentajeDescuento = 100 - (producto.precioNeto.Value * 100 / producto.precioLista);
-
-
+                //Solo en caso de que el precioNetoEquivalente sea distinto a 0 se calcula el porcentaje de descuento
+                //si no se obtiene precioNetoEquivalente quiere decir que no hay precioRegistrado
+                porcentajeDescuento = 100 - (producto.precioClienteProducto.precioNeto * 100 / producto.precioLista);
             }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
-
-
 
             String resultado = "{" +
                 "\"id\":\"" + producto.idProducto + "\"," +
@@ -694,7 +714,6 @@ namespace Cotizador.Controllers
                 "\"precioUnitario\":\"" + precioUnitario + "\"," +
                 "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
                 "\"precioListaList\":" + jsonPrecioLista + "," +
-
                 "\"costoLista\":\"" + producto.costoLista + "\"" +
                 "}";
             return resultado;
@@ -730,7 +749,7 @@ namespace Cotizador.Controllers
             if (detalle.esPrecioAlternativo)
             {
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
-                //dado que cuando se hace get al precioNeto se recupera diviendo entre la equivalencia
+                //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
                 detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * producto.equivalencia));
             }
             else
@@ -810,11 +829,12 @@ namespace Cotizador.Controllers
             bl.InsertCotizacion(cotizacion);
             long codigo = cotizacion.codigo;
             int estado = (int)cotizacion.seguimientoCotizacion.estado;
+            String observacion = cotizacion.seguimientoCotizacion.observacion;
             if (continuarLuego == 1)
             {
                 SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                 estado = (int)estadosSeguimientoCotizacion;
-                String observacion = "Se continuará editando luego";
+                observacion = "Se continuará editando luego";
                 updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
             }
             cotizacion = null;
@@ -822,7 +842,7 @@ namespace Cotizador.Controllers
 
 
             usuarioBL.updateCotizacionSerializada(usuario, null);
-            String resultado = "{ \"codigo\":\"" + codigo + "\", \"estado\":\"" + estado + "\" }";
+            String resultado = "{ \"codigo\":\"" + codigo + "\", \"estado\":\"" + estado + "\", \"observacion\":\""+ observacion +"\" }";
             return resultado;
         }
 
@@ -1037,7 +1057,13 @@ namespace Cotizador.Controllers
 
                 usuarioBL.updateCotizacionSerializada(usuario, cotizacionSerializada);
             }
-
         }
+
+
+      
+
+        
+
+
     }
 }

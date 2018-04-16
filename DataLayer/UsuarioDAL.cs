@@ -48,9 +48,14 @@ namespace DataLayer
                 usuario.cargo = Converter.GetString(row, "cargo");
                 usuario.nombre = Converter.GetString(row, "nombre");
                 usuario.contacto = Converter.GetString(row, "contacto");
-                usuario.esAprobador = Converter.GetBool(row, "es_aprobador");
                 usuario.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
                 usuario.cotizacionSerializada = Converter.GetString(row, "cotizacion_serializada");
+                usuario.apruebaCotizaciones = Converter.GetBool(row, "aprueba_cotizaciones");
+                usuario.creaCotizaciones = Converter.GetBool(row, "crea_cotizaciones");
+                usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
+                usuario.apruebaPedidos = Converter.GetBool(row, "aprueba_pedidos");
+                usuario.creaGuias = Converter.GetBool(row, "crea_guias");
+                usuario.creaDocumentosVenta = Converter.GetBool(row, "crea_documentos_venta");
 
             }
 
@@ -79,6 +84,13 @@ namespace DataLayer
                         Constantes.OBSERVACION = valorParametro; break;
                     case "MILISEGUNDOS_AUTOGUARDADO":
                         Constantes.MILISEGUNDOS_AUTOGUARDADO = int.Parse(valorParametro); break;
+                    case "DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION":
+                        Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION = int.Parse(valorParametro); break;
+                    case "DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO":
+                        Constantes.DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO = int.Parse(valorParametro); break;
+                    case "VARIACION_PRECIO_ITEM_PEDIDO":
+                        Constantes.VARIACION_PRECIO_ITEM_PEDIDO = Decimal.Parse(valorParametro); break;
+
                 }
 
             }
@@ -88,21 +100,35 @@ namespace DataLayer
 
 
             /*Si es usuario aprobador se recupera la lista de usuarios a los cuales puede aprobar cotizaciones*/
-            if (usuario.esAprobador)
+            if (usuario.apruebaCotizaciones)
             {
-                DataTable dataTableUsuarios = dataSet.Tables[2];
+                DataTable dataTableUsuariosCreaCotizacion = dataSet.Tables[2];
                 List<Usuario> usuarioList = new List<Usuario>();
               
-                foreach (DataRow row in dataTableUsuarios.Rows)
+                foreach (DataRow row in dataTableUsuariosCreaCotizacion.Rows)
                 {
                     Usuario usuarioTmp = new Usuario();
                     usuarioTmp.idUsuario = Converter.GetGuid(row, "id_usuario");
                     usuarioTmp.nombre = Converter.GetString(row, "nombre");
                     usuarioList.Add(usuarioTmp);
                 }
-                usuario.usuarioList = usuarioList;
+                usuario.usuarioCreaCotizacionList = usuarioList;
             }
 
+            if (usuario.apruebaPedidos)
+            {
+                DataTable dataTableUsuariosTomaPedido = dataSet.Tables[3];
+                List<Usuario> usuarioList = new List<Usuario>();
+
+                foreach (DataRow row in dataTableUsuariosTomaPedido.Rows)
+                {
+                    Usuario usuarioTmp = new Usuario();
+                    usuarioTmp.idUsuario = Converter.GetGuid(row, "id_usuario");
+                    usuarioTmp.nombre = Converter.GetString(row, "nombre");
+                    usuarioList.Add(usuarioTmp);
+                }
+                usuario.usuarioTomaPedidoList = usuarioList;
+            }
 
 
 

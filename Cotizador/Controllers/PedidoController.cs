@@ -42,6 +42,14 @@ namespace Cotizador.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+            else
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.tomaPedidos && !usuario.apruebaPedidos)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
 
             if (this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] == null)
             {
@@ -109,6 +117,14 @@ namespace Cotizador.Controllers
                 {
                     return RedirectToAction("Login", "Account");
                 }
+                else
+                {
+                    Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                    if (!usuario.tomaPedidos)
+                    {
+                        return RedirectToAction("Login", "Account");
+                    }
+                }
 
                 ViewBag.debug = Constantes.DEBUG;
                 ViewBag.Si = Constantes.MENSAJE_SI;
@@ -145,6 +161,7 @@ namespace Cotizador.Controllers
        
 
                 ViewBag.pedido = pedido;
+                ViewBag.VARIACION_PRECIO_ITEM_PEDIDO = Constantes.VARIACION_PRECIO_ITEM_PEDIDO;
 
 
                 ViewBag.fechaPrecios = pedido.fechaPrecios.ToString(Constantes.formatoFecha);
@@ -171,23 +188,31 @@ namespace Cotizador.Controllers
             pedido.cotizacion.idCotizacion = cotizacion.idCotizacion;
             pedido.cotizacion.codigo = cotizacion.codigo;
 
-          /*  pedido.montoIGV = cotizacion.montoIGV;
-            pedido.montoSubTotal = cotizacion.montoSubTotal;
-            pedido.montoTotal = cotizacion.montoTotal;
-            pedido.montoIGV = cotizacion.montoIGV;*/
+            /*  pedido.montoIGV = cotizacion.montoIGV;
+              pedido.montoSubTotal = cotizacion.montoSubTotal;
+              pedido.montoTotal = cotizacion.montoTotal;
+              pedido.montoIGV = cotizacion.montoIGV;*/
+            pedido.ubigeoEntrega = new Ubigeo();
             pedido.ciudad = cotizacion.ciudad;
             pedido.cliente = cotizacion.cliente;
             pedido.numeroReferenciaCliente = null;
             pedido.direccionEntrega = new DireccionEntrega();
             pedido.fechaSolicitud = DateTime.Now;
-            pedido.fechaEntregaDesde = DateTime.Now;
-            pedido.fechaEntregaHasta = DateTime.Now;
+            pedido.fechaEntregaDesde = null;
+            pedido.fechaEntregaHasta = null;
             pedido.contactoPedido = String.Empty;
             pedido.telefonoContactoPedido = String.Empty;
             pedido.incluidoIGV = false;
-            //  pedido.tasaIGV = Constantes.IGV;
-            //pedido.flete = 0;
-            // pedido.mostrarCodigoProveedor = true;
+
+            //ClienteBL clienteBl = new ClienteBL();
+            //pedido.cliente = clienteBl.getCliente(cotizacion.cliente.idCliente);
+
+            
+            DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
+            pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(cotizacion.cliente.idCliente);
+            pedido.direccionEntrega = new DireccionEntrega();
+            pedido.ubigeoEntrega.Id = Constantes.UBIGEO_VACIO;
+
             pedido.observaciones = String.Empty;
 
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -366,10 +391,13 @@ namespace Cotizador.Controllers
             Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista * (0) / 100));
             Decimal precioUnitario = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, fleteDetalle + producto.precioLista));
 
+            //Se calcula el porcentaje de descuento
             Decimal porcentajeDescuento = 0;
-            if (producto.precioNeto != null)
+            if (producto.precioClienteProducto.idPrecioClienteProducto != null)
             {
-                porcentajeDescuento = 100 - (producto.precioNeto.Value * 100 / producto.precioLista);
+                //Solo en caso de que el precioNetoEquivalente sea distinto a 0 se calcula el porcentaje de descuento
+                //si no se obtiene precioNetoEquivalente quiere decir que no hay precioRegistrado
+                porcentajeDescuento = 100 - (producto.precioClienteProducto.precioNeto * 100 / producto.precioLista);
             }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
@@ -425,7 +453,7 @@ namespace Cotizador.Controllers
             if (detalle.esPrecioAlternativo)
             {
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
-                //dado que cuando se hace get al precioNeto se recupera diviendo entre la equivalencia
+                //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
                 detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * producto.equivalencia));
             }
             else

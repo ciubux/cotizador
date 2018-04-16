@@ -14,9 +14,15 @@ namespace Model
         public string nombre { get; set; }
         public string cargo { get; set; }
         public string contacto { get; set; }
-        public bool esAprobador { get; set; }
+        public bool apruebaCotizaciones { get; set; }
+        public bool creaCotizaciones { get; set; }
+        public bool tomaPedidos { get; set; }
+        public bool apruebaPedidos { get; set; }
+        public bool creaGuias { get; set; }
+        public bool creaDocumentosVenta { get; set; }
         public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
-        public List<Usuario> usuarioList { get; set; }
+        public List<Usuario> usuarioCreaCotizacionList { get; set; }
+        public List<Usuario> usuarioTomaPedidoList { get; set; }
         public String cotizacionSerializada { get; set; }
     }
 }

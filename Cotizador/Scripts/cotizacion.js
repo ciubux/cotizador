@@ -399,7 +399,7 @@ jQuery(function ($) {
 
         //para agregar un producto se debe seleccionar un cliente
         if ($("#idCliente").val().trim() == "") {
-            alert("Debe seleccionar previamente un cliente.");
+            alert("Debe seleccionar un cliente previamente.");
             $('#idCliente').trigger('chosen:activate');
             return false;
         }
@@ -416,6 +416,8 @@ jQuery(function ($) {
         $("#imgProducto").attr("src", "images/NoDisponible.gif");
         $("#precioUnitarioSinIGV").val(0);
         $("#precioUnitarioAlternativoSinIGV").val(0);
+        $('#costoSinIGV').val(0);
+        $('#costoAlternativoSinIGV').val(0);
         $("#subtotal").val(0);
         $("#porcentajeDescuento").val(Number(0).toFixed(4));
         $('#valor').val(0);
@@ -425,6 +427,13 @@ jQuery(function ($) {
         $('#valorAlternativo').attr('type', 'hidden');
         $('#precio').val(0);
         $('#cantidad').val(1);
+
+       // $("#proveedor").val(producto.proveedor);
+       // $("#familia").val(producto.familia);
+        $('#fleteDetalle').val(0);
+        $("#costoLista").val(0);
+        $("#precioLista").val(0);
+        $("#tableMostrarPrecios > tbody").empty();
 
 
         //Se agrega chosen al campo PRODUCTO
@@ -1245,8 +1254,15 @@ jQuery(function ($) {
                     generarPDF();
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN.");
-                    window.location = '/Cotizacion/Index';
+                    if (confirm("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN, ¿desea agregar un comentario?")) {
+                        $("#codigoCotizacion").val(resultado.codigo);
+                        $("#comentarioPendienteAprobacion").val(resultado.observacion);
+                        $("#modalComentarioPendienteAprobacion").modal('show');
+                    }
+                    else {
+                        window.location = '/Cotizacion/Index';
+                    }
+                   
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
                     alert("La cotización número " + resultado.codigo + " fue guardada correctamente para seguir editandola posteriormente.");
@@ -1283,8 +1299,14 @@ jQuery(function ($) {
                     generarPDF();
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN.");
-                    window.location = '/Cotizacion/Index';
+                    if (confirm("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN, ¿desea agregar un comentario?")) {
+                        $("#codigoCotizacion").val(resultado.codigo);
+                        $("#comentarioPendienteAprobacion").val(resultado.observacion);
+                        $("#modalComentarioPendienteAprobacion").modal('show');
+                    }
+                    else {
+                        window.location = '/Cotizacion/Index';
+                    }
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
                     alert("La cotización número " + resultado.codigo + " fue guardada correctamente para seguir editandola posteriormente.");
@@ -1497,7 +1519,7 @@ jQuery(function ($) {
                     (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
                         cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
                     (
-                        usuario.esAprobador && 
+                        usuario.apruebaCotizaciones && 
                         usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
                 ) {
 
@@ -1513,7 +1535,7 @@ jQuery(function ($) {
                 if (
                     (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
                     (
-                        usuario.esAprobador && 
+                        usuario.apruebaCotizaciones && 
                         usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
                 ) {
 
@@ -2598,8 +2620,64 @@ jQuery(function ($) {
 
 
 
+    $("#btnCancelarComentario").click(function()
+    {
+        window.location = '/Cotizacion/Index';
+    });
 
 
+    $("#btnAceptarComentario").click(function () {
+        var codigoCotizacion = $("#codigoCotizacion").val();
+        var observacion = $("#comentarioPendienteAprobacion").val();
+        $.ajax({
+            url: "/Cotizacion/updateEstadoCotizacion",
+            data: {
+                codigo: codigoCotizacion,
+                estado: ESTADO_PENDIENTE_APROBACION,
+                observacion: observacion
+            },
+            type: 'POST',
+            error: function () {
+                alert("Ocurrió un problema al intentar agregar un comentario a la cotización.")
+                $("#btnCancelarComentario").click();
+            },
+            success: function () {
+                alert("El comentario del estado de la cotización número: " + codigoCotizacion + " se cambió correctamente.");
+                $("#btnCancelarComentario").click();
+            }
+        });
+
+    });
+
+
+
+    $(document).on('click', "a.verMas", function () {
+        var idCotizacion = event.target.getAttribute("class").split(" ")[0];
+        divCorto = document.getElementById(idCotizacion + "corto");
+        divLargo = document.getElementById(idCotizacion + "largo");
+        divVerMas = document.getElementById(idCotizacion + "verMas");
+        divVerMenos = document.getElementById(idCotizacion + "verMenos");
+
+        divCorto.style.display = 'none';
+        divLargo.style.display = 'block';
+
+        divVerMas.style.display = 'none';
+        divVerMenos.style.display = 'block';
+    });
+
+    $(document).on('click', "a.verMenos", function () {
+        var idCotizacion = event.target.getAttribute("class").split(" ")[0];
+        divCorto = document.getElementById(idCotizacion + "corto");
+        divLargo = document.getElementById(idCotizacion + "largo");
+        divVerMas = document.getElementById(idCotizacion + "verMas");
+        divVerMenos = document.getElementById(idCotizacion + "verMenos");
+
+        divCorto.style.display = 'block';
+        divLargo.style.display = 'none';
+
+        divVerMas.style.display = 'block';
+        divVerMenos.style.display = 'none';
+    });
 
 
 });

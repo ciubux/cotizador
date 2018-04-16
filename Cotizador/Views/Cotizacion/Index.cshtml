@@ -19,13 +19,13 @@
                     <label for="numero" class="control-label col-xs-4">Número:</label>
                     <div class="col-xs-8">
                         @if (cotizacion.codigo > 0)
-                        {
-                            <input class="form-control" type="number" value="@cotizacion.codigo" min="0" id="numero" name="numero">
-                        }
-                        else
-                        {
-                            <input class="form-control" type="number" value="" min="0" id="numero" name="numero">
-                        }
+                    {
+                        <input class="form-control" type="number" value="@cotizacion.codigo" min="0" id="numero" name="numero">
+                }
+                else
+                {
+                    <input class="form-control" type="number" value="" min="0" id="numero" name="numero">
+            }
                         <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los demás criterios no serán considerados al realizar la búsqueda.</span>
                     </div>
 
@@ -36,14 +36,14 @@
             <!--CIUDAD-->
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
-                    <label for="idCiudad" class="control-label col-xs-4">Ciudad:</label>
+                    @Html.LabelFor(p => cotizacion.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                             new
-                             {
-                                 ciudadSelectId = "idCiudad",
-                                 selectedValue = cotizacion.ciudad.idCiudad
-                             })
+                   new
+                   {
+                       ciudadSelectId = "idCiudad",
+                       selectedValue = cotizacion.ciudad.idCiudad
+                   })
                     </div>
                 </div>
             </div>
@@ -88,13 +88,13 @@
                     <div class="col-xs-8">
                         <select class="form-control input-sm" id="idCliente" name="idCliente" required>
                             @if (ViewBag.existeCliente == 1)
-                            {
-                                <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
-                            }
-                            else
-                            {
-                                <option value=""></option>
-                            }
+                        {
+                            <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
+                    }
+                    else
+                    {
+                        <option value=""></option>
+                }
                         </select>
                     </div>
                 </div>
@@ -110,34 +110,35 @@
                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estado",
-                                          EnumHelper.GetSelectList(typeof(Model.SeguimientoCotizacion.estadosSeguimientoCotizacion), cotizacion.seguimientoCotizacion.estado),
-                                          new { @class = "form-control" }
-                                          )
+                                           EnumHelper.GetSelectList(typeof(Model.SeguimientoCotizacion.estadosSeguimientoCotizacion), cotizacion.seguimientoCotizacion.estado),
+                                           new { @class = "form-control" }
+                                           )
                     </div>
                 </div>
             </div>
         </div>
 
-        @if (cotizacion.usuario.esAprobador)
+        @if (cotizacion.usuario.apruebaCotizaciones)
         {
-            <div class="row">
+        <div class="row">
 
-                <div class="col-sm-6 col-lg-5">
-                    <!--USUARIO-->
-                    <div class="form-group">
-                        <label for="Usuario" class="control-label col-xs-4">Usuario:</label>
-                        <div class="col-xs-8">
-                            @Html.Action("list", "Usuario")
-                        </div>
+            <div class="col-sm-6 col-lg-5">
+                <!--USUARIO-->
+                <div class="form-group">
+                    <label for="Usuario" class="control-label col-xs-4">Usuario:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("list", "Usuario")
                     </div>
-
                 </div>
+
             </div>
-        }
+        </div>
+}
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnBusquedaCotizaciones" type="button" class="btn btn-primary  bouton-image searchBouton">Buscar</button>
         </div>
+        
 
         <table id="tableCotizaciones" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
@@ -169,33 +170,56 @@
             </thead>
             <tbody>
                 @foreach (var cotizacionItem in cotizacionList)
-                {
-                    <tr data-expanded="true">
-                        <td>  @cotizacionItem.idCotizacion</td>
-                        <td>  @cotizacionItem.codigo  </td>
-                        <td>  @cotizacionItem.usuario.nombre  </td>
-                        <td>  @cotizacionItem.fecha.ToString("dd/MM/yyyy")</td>
-                        <td>  @cotizacionItem.cliente.razonSocial</td>
-                        <td>  @cotizacionItem.cliente.ruc </td>
-                        <td>  @cotizacionItem.ciudad.nombre  </td>
-                        <td>  @cotizacionItem.montoSubTotal   </td>
-                        <td>  @cotizacionItem.igv  </td>
-                        <td>  @cotizacionItem.montoTotal  </td>
-                        <td>  @cotizacionItem.maximoPorcentajeDescuentoPermitido  </td>
-                        <td>  @cotizacionItem.seguimientoCotizacion.estadoString</td>
-                        <td>  @cotizacionItem.seguimientoCotizacion.usuario.nombre  </td>
-                        <td>  @cotizacionItem.seguimientoCotizacion.observacion  </td>
+            {
+                <tr data-expanded="true">
+                    <td>  @cotizacionItem.idCotizacion</td>
+                    <td>  @cotizacionItem.codigo  </td>
+                    <td>  @cotizacionItem.usuario.nombre  </td>
+                    <td>  @cotizacionItem.fecha.ToString("dd/MM/yyyy")</td>
+                    <td>  @cotizacionItem.cliente.razonSocial</td>
+                    <td>  @cotizacionItem.cliente.ruc </td>
+                    <td>  @cotizacionItem.ciudad.nombre  </td>
+                    <td>  @cotizacionItem.montoSubTotal   </td>
+                    <td>  @cotizacionItem.montoIGV  </td>
+                    <td>  @cotizacionItem.montoTotal  </td>
+                    <td>  @cotizacionItem.maximoPorcentajeDescuentoPermitido  </td>
+                    <td>  @cotizacionItem.seguimientoCotizacion.estadoString</td>
+                    <td>  @cotizacionItem.seguimientoCotizacion.usuario.nombre  </td>
+                    <td>
+                        @if (cotizacionItem.seguimientoCotizacion.observacion != null && cotizacionItem.seguimientoCotizacion.observacion.Length > 20)
+                        {
+                            var idComentarioCorto = @cotizacionItem.idCotizacion + "corto";
+                            var idComentarioLargo = @cotizacionItem.idCotizacion + "largo";
+                            var idVerMas = @cotizacionItem.idCotizacion + "verMas";
+                            var idVermenos = @cotizacionItem.idCotizacion + "verMenos";
+                            var comentario = @cotizacionItem.seguimientoCotizacion.observacion.Substring(0, 20) + "...";
 
-                        <td>
-                            @if (cotizacionItem.seguimientoCotizacion.usuario.idUsuario == ((Model.Usuario)this.Session["usuario"]).idUsuario
-                            || (int)cotizacionItem.seguimientoCotizacion.estado != 5)
-                            {
-                                <button type="button" class="@cotizacionItem.codigo btnVerCotizacion btn btn-primary ">Ver</button>
-                            }
-                        </td>
+                            <div id="@idComentarioCorto" style="display:block;">@comentario</div>
+                            <div id="@idComentarioLargo" style="display:none;">@cotizacionItem.seguimientoCotizacion.observacion</div>
 
-                    </tr>
+                            <p><a id="@idVerMas" class="@cotizacionItem.idCotizacion verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>
+                            <p><a id="@idVermenos" class="@cotizacionItem.idCotizacion verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>
+                        }
+                        else
+                        {
+                             @cotizacionItem.seguimientoCotizacion.observacion
+                        }
+                    </td>
+
+
+
+
+
+                    <td>
+                        @if (cotizacionItem.seguimientoCotizacion.usuario.idUsuario == ((Model.Usuario)this.Session["usuario"]).idUsuario
+                    || (int)cotizacionItem.seguimientoCotizacion.estado != 5)
+                    {
+                        <button type="button" class="@cotizacionItem.codigo btnVerCotizacion btn btn-primary ">Ver</button>
                 }
+                    </td>
+
+                </tr>
+        }
 
             </tbody>
         </table>
