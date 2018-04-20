@@ -19,7 +19,7 @@ namespace Model
         public Ciudad ciudad { get; set; }
         [Display(Name = "Cliente:")]
         public Cliente cliente { get; set; }
-        [Display(Name = "Referencia Doc Cliente:")]
+        [Display(Name = "Ref. Doc. Cliente:")]
         public String numeroReferenciaCliente { get; set; }
 
         public DireccionEntrega direccionEntrega { get; set; }
@@ -49,9 +49,19 @@ namespace Model
         [Display(Name = "Correo Solicitante:")]
         public String correoContactoPedido { get; set; }
 
+        [Display(Name = "Telefono y Correo Solicitante:")]
+        public String telefonoCorreoContactoPedido
+        {
+            get { return "Tef: "+telefonoContactoPedido + " Correo: " + correoContactoPedido;  }
+
+        }
+
+
+
         [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }
 
+        [Display(Name = "Ciudad Entrega:")]
         public Ubigeo ubigeoEntrega { get; set; }
 
 
@@ -81,6 +91,15 @@ namespace Model
             get
             {
                 return "Desde: " + this.horaEntregaDesde + " Hasta: " + this.horaEntregaHasta;
+            }
+        }
+
+        [Display(Name = "Fecha y Horario Entrega:")]
+        public String fechaHorarioEntrega
+        {
+
+            get {
+                return rangoFechasEntrega + " " + rangoHoraEntrega;
             }
         }
 
@@ -128,6 +147,9 @@ namespace Model
 
         public List<SeguimientoPedido> seguimientoPedidoList { get; set; }
 
+        public SeguimientoCrediticioPedido seguimientoCrediticioPedido { get; set; }
+
+        public List<SeguimientoCrediticioPedido> seguimientoCrediticioPedidoList { get; set; }
         public bool mostrarCosto { get; set; }
 
         public bool considerarDescontinuados { get; set; }
@@ -145,6 +167,13 @@ namespace Model
         public DateTime fechaSolicitudDesde { get; set; }
         [Display(Name = "Solicitado Hasta:")]
         public DateTime fechaSolicitudHasta { get; set; }
+
+
+        [Display(Name = "Fecha Programación:")]
+        public DateTime fechaProgramacion { get; set; }
+
+        [Display(Name = "Comentario Programación:")]
+        public String comentarioProgramacion { get; set; }
 
         public DateTime fechaPrecios { get; set; }
 

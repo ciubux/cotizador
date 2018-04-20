@@ -22,9 +22,22 @@ namespace Cotizador
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-3.1.1.min.js",
-                        "~/Scripts/jquery-ui.min.js",
+                        
                         "~/Scripts/footable.min.js"
                         ));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
+                     "~/Scripts/jquery-ui.min.js"
+                     ));
+
+            bundles.Add(new ScriptBundle("~/bundles/footable").Include(
+                     "~/Scripts/footable.min.js"
+                     ));
+
+            
+
+            
+
             //"~/Scripts/jquery-{version}.js"
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

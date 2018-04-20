@@ -4,13 +4,11 @@
 
 @{
     var usuario = (Usuario)this.Session["usuario"];
-    if(usuario != null)
-    { 
+    if (usuario != null)
+    {
     <ul class="nav navbar-nav navbar-right">
-        <li>
-           
-            @Html.ActionLink("Hola " + usuario.nombre, "Index", "Home")
-           </li>
+        <li><a href="#">Hola @usuario.nombre</a>
+        </li>
         <li>  @Html.ActionLink("Salir", "Exit", "General")</li>
     </ul>
     }

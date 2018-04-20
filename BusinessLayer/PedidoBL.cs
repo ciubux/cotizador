@@ -9,44 +9,48 @@ namespace BusinessLayer
 {
     public class PedidoBL
     {
+        private void validarPedido(Pedido pedido)
+        {
+            pedido.seguimientoPedido.observacion = String.Empty;
+            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
+            pedido.seguimientoCrediticioPedido.observacion = String.Empty;
+            pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
+
+            foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
+            {
+                pedidoDetalle.usuario = pedido.usuario;
+                pedidoDetalle.idPedido = pedido.idPedido;
+                if (!pedido.usuario.apruebaPedidos)
+                {
+                    //Validación precio unitario
+                    if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioClienteProducto.precioUnitario + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
+                    pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioClienteProducto.precioUnitario - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                    {
+                        pedido.seguimientoPedido.observacion = "El precio untario indicado varía por más de: "+ Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio unitario registrado en facturación.";
+                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                    }
+                }
+            }
+
+            /*
+
+            if (!pedido.usuario.apruebaPedidos)
+            {
+
+                pedido.seguimientoPedido.observacion = "La fecha de la solicitud es inferior a la fecha actual.";
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Pendiente;
+            }*/
+                
+        }
+
+
+
+
         public void InsertPedido(Pedido pedido)
         {
             using (var dal = new PedidoDAL())
             {
-
-                pedido.seguimientoPedido.observacion = String.Empty;
-                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteEnvio;
-
-                foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
-                {
-                    //pedidoDetalle.idPedido = pedido.idPedido;
-                    pedidoDetalle.usuario = pedido.usuario;
-
-                    //Si no es aprobador para que la cotización se cree como aprobada el porcentaje de descuento debe ser mayor o igual 
-                    //al porcentaje Limite sin aprobacion
-
-
-                 /*   if (!pedido.usuario.apruebaCotizaciones)
-                    {
-                        if (pedido.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
-                        {
-                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización";
-                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                        }
-                    }
-                    //Si es aprobador, no debe sobrepasar su limite de aprobación asignado
-                    else
-                    {
-                        if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
-                        {
-                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización.";
-                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                            
-                        }
-
-                    }*/
-
-                }
+                validarPedido(pedido);
                 dal.InsertPedido(pedido);
             }
         }
@@ -57,43 +61,23 @@ namespace BusinessLayer
         {
             using (var dal = new PedidoDAL())
             {
-
-                pedido.seguimientoPedido.observacion = String.Empty;
-                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteEnvio;
-
-                foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
-                {
-                    pedidoDetalle.idPedido = pedido.idPedido;
-                    pedidoDetalle.usuario = pedido.usuario;
-
-                    //Si no es aprobador para que la cotización se cree como aprobada el porcentaje de descuento debe ser mayor o igual 
-                    //al porcentaje Limite sin aprobacion
-
-
-                    /*   if (!pedido.usuario.apruebaCotizaciones)
-                       {
-                           if (pedido.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
-                           {
-                               cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización";
-                               cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                           }
-                       }
-                       //Si es aprobador, no debe sobrepasar su limite de aprobación asignado
-                       else
-                       {
-                           if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
-                           {
-                               cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización.";
-                               cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-
-                           }
-
-                       }*/
-
-                }
+                validarPedido(pedido);
                 dal.UpdatePedido(pedido);
             }
         }
+
+
+        public void ProgramarPedido(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                dal.ProgramarPedido(pedido);
+            }
+        }
+        
+
+
+
 
         public List<Pedido> GetPedidos(Pedido pedido)
         {
@@ -167,6 +151,15 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 dal.insertSeguimientoPedido(pedido);
+            }
+
+        }
+
+        public void cambiarEstadoCrediticioPedido(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                dal.insertSeguimientoCrediticioPedido(pedido);
             }
 
         }

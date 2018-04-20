@@ -10,32 +10,27 @@ namespace Model
     {
         public SeguimientoPedido()
         {
-            this.estado = estadosSeguimientoPedido.PendienteEnvio;
+            this.estado = estadosSeguimientoPedido.Ingresado;
         }
-
 
         public enum estadosSeguimientoPedido
         {
             [Display(Name = "Todos")]
             Todos = -1,
-            [Display(Name = "Pendiente Envío")]
-            PendienteEnvio = 0,
-            [Display(Name = "Envío Denegado")]
-            Denegado = 1,
-            [Display(Name = "Pedido Enviado")]
-            Enviado = 2,
-            [Display(Name = "Pedido Enviado Parcialmente")]
-            EnvioParcial = 3,
-            [Display(Name = "Pedido Entregado")]
+            [Display(Name = "Pendiente Aprobación de Ingreso")]
+            PendienteAprobacion = 0,
+            [Display(Name = "Ingresado")]
+            Ingresado = 1,
+            [Display(Name = "Denegado")]
+            Denegado = 2,
+            [Display(Name = "Programado")]
+            Programado = 3,
+            [Display(Name = "Atendido")]
             Entregado = 4,
-            [Display(Name = "Pedido Entregado Parcialmente")]
-            EntregaParcial = 5,
-            [Display(Name = "Pedido Rechazado")]
-            Rechazado = 6,
+            [Display(Name = "Atendido Parcialmente")]
+            Rechazado = 5,
             [Display(Name = "En Edición")]
-            Edicion = 7,
-            [Display(Name = "Anulado")]
-            Anulado = 8
+            Edicion = 6,
         };
 
         public estadosSeguimientoPedido estado { get; set; }

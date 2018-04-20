@@ -39,14 +39,21 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "certificadoInscripcion", guiaRemision.certificadoInscripcion);
             InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)guiaRemision.seguimientoMovimientoAlmacenSalida.estado);
-            InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", guiaRemision.seguimientoMovimientoAlmacenSalida.observacion);          
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", guiaRemision.seguimientoMovimientoAlmacenSalida.observacion);
 
-            OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
-            OutputParameterAdd.BigInt(objCommand, "numero");
+
+
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");
+            OutputParameterAdd.BigInt(objCommand, "numeroMovimientoAlmacen");
+            OutputParameterAdd.BigInt(objCommand, "numeroVenta");
             ExecuteNonQuery(objCommand);
 
-            guiaRemision.idGuiaRemision = (Guid)objCommand.Parameters["@newId"].Value;
-            guiaRemision.numero = (Int64)objCommand.Parameters["@numero"].Value;
+            guiaRemision.idGuiaRemision = (Guid)objCommand.Parameters["@idMovimientoAlmacen"].Value;
+            guiaRemision.numero = (Int64)objCommand.Parameters["@numeroMovimientoAlmacen"].Value;
+
+
+
         }
 
 

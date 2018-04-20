@@ -26,5 +26,17 @@ namespace Model
         public string Distrito { get; set; }
 
 
+        public new string ToString
+        {
+            get
+            {
+                String deptartamento = Departamento == null ? "" : Departamento;
+                String provincia = Provincia == null ? "" : Provincia;
+                String distrito = Distrito == null ? "" : Distrito;
+
+                return deptartamento + " - " + provincia + " - " + distrito;
+            }
+        }
+
     }
 }

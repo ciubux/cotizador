@@ -29,6 +29,24 @@ namespace BusinessLayer
             cotizacion.seguimientoCotizacion.observacion = String.Empty;
             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada;
 
+            if (cotizacion.fechaEsModificada && !cotizacion.usuario.apruebaCotizaciones)
+            {
+                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de la cotización.";
+                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+            }
+            else
+            {
+                //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
+                cotizacion.fecha = DateTime.Now;
+            }
+
+            if ((cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null) && !cotizacion.usuario.apruebaCotizaciones)
+            {
+                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de inicio y/o fin de vigencia de precios.";
+                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+            }
+
+
             foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
             {
                 cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
@@ -52,62 +70,59 @@ namespace BusinessLayer
                     PrecioClienteProducto precioClienteProducto = cotizacionDetalle.producto.precioClienteProducto;
 
 
-                    bool evaluarDescuento = false;
+                    int evaluarDescuento = 0;
                     //¿Tiene precio registrado para facturación? y eliente es el mismo?
-                    if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty && precioClienteProducto.cliente.idCliente == cotizacion.cliente.idCliente )
+                    if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty && precioClienteProducto.cliente.idCliente == cotizacion.cliente.idCliente)
                     {
-                        //Si el precio unitario registrado es distinto del precio registrado para facturacion
-                        //Se envia a evaluar Descuento
-                        if (cotizacionDetalle.precioUnitario != precioClienteProducto.precioUnitario)
-                        {
-                            evaluarDescuento = true;
-                        }
-                        //Si el precio es igual pero la fecha de fin de vigencia es indefinida
-                        //Se envia a evaluar Descuento
-                        else if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION) )
-                        {
-                            evaluarDescuento = true;
-                        }
 
+                        //Si el precio es igual pero la fecha de fin de vigencia es indefinida y se ha superado los dias de vigencia general.
+                        //Se envia a evaluar Descuento
+                        if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
+                        {
+                            evaluarDescuento = 1;
+                        }
+                        else
+                        {
+                            //Si el precio unitario registrado es distinto del precio registrado para facturacion
+                            //Se envia a evaluar Descuento
+                            if (cotizacionDetalle.precioUnitario != precioClienteProducto.precioUnitario)
+                            {
+                                evaluarDescuento = 2;
+                            }
+                        }
 
                     }
                     else
                     {
-                        evaluarDescuento = true;
+                        evaluarDescuento = 3;
                     }
 
-                    if (evaluarDescuento)
+                    if (evaluarDescuento > 0)
                     {
                         if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
                         {
-                            cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización (es posible que los precios del detalle no coincidan con los precios registrados para facturación).";
+                            //Se evalua de donde proviene para indicar el mensaje exacto
+                            switch (evaluarDescuento)
+                            {
+                                case 1:
+                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ". El precio unitario registrado en facturación es muy antiguo.";
+                                    break;
+                                case 2:
+                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ". El precio unitario es distinto al precio registrado en facturación.";
+                                    break;
+                                case 3:
+                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ".  No se encontró precio unitario en precios registrados en facturación.";
+                                    break;
+                            }
                             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                         }
-                    }                   
+                        
+                    }               
                 }
 
 
             }
-
-
-
-            if (cotizacion.fechaEsModificada && !cotizacion.usuario.apruebaCotizaciones)
-            {
-                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de la cotización.";
-                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-            }
-            else
-            {
-                //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
-                cotizacion.fecha = DateTime.Now;
-            }
-
-            if ((cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null) && !cotizacion.usuario.apruebaCotizaciones)
-            {
-                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nSe modificó la fecha de inicio y/o fin de vigencia de precios.";
-                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-            }
-
+           
             if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
             {
                 cotizacion.seguimientoCotizacion.observacion = null;

@@ -270,6 +270,7 @@
     <Content Include="images\calculadora.png" />
     <Content Include="images\calculadora2.png" />
     <Content Include="images\calculadora3.png" />
+    <Content Include="images\clean.png" />
     <Content Include="images\etiqueta-de-precio-en-dolares.png" />
     <Content Include="images\hombre-de-negocios.png" />
     <Content Include="images\hombre-de-negocios2.png" />
@@ -367,7 +368,7 @@
     <Content Include="Views\Familia\_SelectFamilia.cshtml" />
     <Content Include="Views\Proveedor\_SelectProveedor.cshtml" />
     <Content Include="Views\Precio\Index.cshtml" />
-    <Content Include="Views\Usuario\_SelectUsuario.cshtml" />
+    <Content Include="Views\Usuario\_SelectUsuarioPedido.cshtml" />
     <Content Include="Views\Proveedor\_SelectProveedorBusquedaPrecios.cshtml" />
     <Content Include="Views\Familia\_SelectFamiliaBusquedaPrecios.cshtml" />
     <Content Include="Views\Pedido\Pedir.cshtml" />
@@ -378,6 +379,7 @@
     <Content Include="Views\Shared\_Distrito.cshtml" />
     <Content Include="Views\Shared\_Provincia.cshtml" />
     <Content Include="Views\Shared\_Ciudad.cshtml" />
+    <Content Include="Views\Usuario\_SelectUsuarioCotizacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

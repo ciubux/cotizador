@@ -141,7 +141,7 @@ namespace DataLayer
             if (result != 0)
             {
                 //No se puede actualizar la cotización si las fechas son distintas
-                throw new Exception("CotizacionDesactualizada");
+                //throw new Exception("CotizacionDesactualizada");
             }
             else
             { 
@@ -240,7 +240,13 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
-                cotizacionDetalle.producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+
+
+                if (row["fecha_fin_vigencia"] == DBNull.Value)
+                    cotizacionDetalle.producto.precioClienteProducto.fechaFinVigencia = null;
+                else
+                    cotizacionDetalle.producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+
                 cotizacionDetalle.producto.precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia");
                 cotizacionDetalle.producto.precioClienteProducto.cliente = new Cliente();
                 cotizacionDetalle.producto.precioClienteProducto.cliente.idCliente= Converter.GetGuid(row, "id_cliente");
@@ -426,7 +432,11 @@ namespace DataLayer
                 
                 precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
-                precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+
+                if (row["fecha_fin_vigencia"] == DBNull.Value)
+                    precioClienteProducto.fechaFinVigencia = null;
+                else
+                    precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
                 precioClienteProducto.cliente = new Cliente();
                 precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 cotizacionDetalle.producto.precioClienteProducto = precioClienteProducto;
@@ -458,7 +468,15 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "id_cliente", cotizacion.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "id_ciudad", cotizacion.ciudad.idCiudad);
-            InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
+            //Si se busca por codigo y el usuario es aprobador de cotizaciones no se considera el usuario
+            if (cotizacion.usuario.apruebaCotizaciones && cotizacion.codigo > 0)
+            {
+                InputParameterAdd.Guid(objCommand, "id_usuario", Guid.Empty);
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
+            }
             InputParameterAdd.DateTime(objCommand, "fechaDesde", cotizacion.fechaDesde);
             InputParameterAdd.DateTime(objCommand, "fechaHasta", cotizacion.fechaHasta);
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
@@ -513,8 +531,6 @@ namespace DataLayer
                 cotizacion.seguimientoCotizacion.usuario = new Usuario();
                 cotizacion.seguimientoCotizacion.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
                 cotizacion.seguimientoCotizacion.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
-
-
 
                 cotizacionList.Add(cotizacion);
             }

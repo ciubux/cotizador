@@ -12,13 +12,13 @@ jQuery(function ($) {
 
 
 
-
+    /*
     //Tabla de resultado de búsqueda de Pedidos
     $("#tablePedidos").footable({
         "paging": {
             "enabled": true
         }
-    });
+    });*/
 
     //CONSTANTES POR DEFECTO
     var cantidadDecimales = 2;
@@ -26,23 +26,42 @@ jQuery(function ($) {
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
     var VARIACION_PRECIO_ITEM_PEDIDO = 0.01;
-    
+       
+
     //Estados para búsqueda de Pedidos
-    var ESTADOS_TODOS = -1;
+  
+
     var ESTADO_PENDIENTE_APROBACION = 0;
-    var ESTADO_APROBADA = 1;
-    var ESTADO_DENEGADA = 2;
-    var ESTADO_ACEPTADA = 3;
-    var ESTADO_RECHAZADA = 4;
-    var ESTADO_EN_EDICION = 7;
+    var ESTADO_INGRESADO = 1;
+    var ESTADO_DENEGADO = 2;
+    var ESTADO_PROGRAMADO = 3;
+    var ESTADO_ATENDIDO = 4;
+    var ESTADO_ATENDIDO_PARCIALMENTE = 5;
+    var ESTADO_EN_EDICION = 6;
+   
+    
 
     //Etiquetas de estadps para búsqueda de Pedidos
-    var ESTADO_PENDIENTE_APROBACION_STR = "Pendiente de Aprobación";
-    var ESTADO_APROBADA_STR = "Aprobada";
-    var ESTADO_DENEGADA_STR = "Denegada";
-    var ESTADO_ACEPTADA_STR = "Aceptada";
-    var ESTADO_RECHAZADA_STR = "Rechazada";
-    var ESTADO_EN_EDICION_STR = "En Edición";
+    var ESTADO_PENDIENTE_APROBACION_STR = "Pendiente de Aprobación de Ingreso";
+    var ESTADO_INGRESADO_STR = "Pedido Ingresado";
+    var ESTADO_DENEGADO_STR = "Pedido Denegado";
+    var ESTADO_PROGRAMADO = "Pedido Programado"
+    var ESTADO_ATENDIDO_STR = "Pedido Atendido"
+    var ESTADO_ATENDIDO_PARCIALMENTE_STR = "Pedido Atendido Parcialmente"
+    var ESTADO_EN_EDICION_STR = "Pedido En Edicion";
+
+
+    //Estados Crediticios
+    var ESTADO_PENDIENTE_LIBERACION = 0;
+    var ESTADO_LIBERADO = 1;
+    var ESTADO_BLOQUEADO = 2;
+
+    var ESTADO_PENDIENTE_LIBERACION_STR = "Pedido Pendiente de Liberación";
+    var ESTADO_LIBERADO_STR = "Pedido Liberado";
+    var ESTADO_BLOQUEADO_STR = "Pedido Bloqueado";
+
+
+
 
     //Eliminar luego 
     var CANT_SOLO_OBSERVACIONES = 0;
@@ -68,7 +87,57 @@ jQuery(function ($) {
         verificarSiExisteNuevaDireccionEntrega();
         verificarSiExisteDetalle();
         verificarSiExisteCliente();
+        $("#btnBusquedaPedidos").click();
+        
     });
+
+    function ConfirmDialogReload(message) {
+        $('<div></div>').appendTo('body')
+            .html('<div><h6>' + message + '</h6></div>')
+            .dialog({
+                modal: true, title: 'Confirmación', zIndex: 10000, autoOpen: true,
+                width: 'auto', resizable: false,
+                buttons: {
+                    Si: function () {
+                        location.reload();
+                        $(this).dialog("close");
+                    },
+                    No: function () {
+                        $(this).dialog("close");
+                    }
+                },
+                close: function (event, ui) {
+                    $(this).remove();
+                }
+            });
+        document.body.scrollTop = default_scrollTop;
+    };
+
+    function ConfirmDialog(message, redireccionSI, redireccionNO) {
+        $('<div></div>').appendTo('body')
+            .html('<div><h6>' + message + '</h6></div>')
+            .dialog({
+                modal: true, title: 'Confirmación', zIndex: 10000, autoOpen: true,
+                width: 'auto', resizable: false,
+                buttons: {
+                    Si: function () {
+                        if (redireccionSI != null)
+                            window.location = redireccionSI;
+                        $(this).dialog("close");
+
+                    },
+                    No: function () {
+                        if (redireccionNO != null)
+                            window.location = redireccionNO;
+                        $(this).dialog("close");
+                    }
+                },
+                close: function (event, ui) {
+                    $(this).remove();
+                }
+            });
+        document.body.scrollTop = default_scrollTop;
+    };
 
     function verificarSiExisteCliente() {
         if ($("#idCliente").val().trim() != "" && $("#pagina").val() == 1)
@@ -138,8 +207,9 @@ jQuery(function ($) {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
             if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-                alert("Debe seleccionar una ciudad previamente.");
+                alert("Debe seleccionar la sede MP previamente.");
                 $("#idCliente").trigger('chosen:close');
+                $("#idCiudad").focus();
                 return false;
             }
         });
@@ -451,8 +521,10 @@ jQuery(function ($) {
     var fechaPrecios = $("#fechaPreciostmp").val();
     $("#fechaPrecios").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaPrecios);    
 
- 
+    //var fechaProgramacion = $("#fechaProgramaciontmp").val();
+    $("#fechaProgramacion").datepicker({ dateFormat: "dd/mm/yy" });//.datepicker("setDate", fechaProgramacion);    
 
+    
 
 
     /**
@@ -1452,26 +1524,26 @@ jQuery(function ($) {
                 continuarLuego: continuarLuego
             },
             error: function (detalle) {
-                alert("Se generó un error al intentar finalizar la creación del pedido. Si estuvo actualizando, vuelva a buscar el pedido, es posible que este siendo modificado por otro usuario.");
+                alert("Se generó un error al intentar finalizar la edición del pedido. Si estuvo actualizando, vuelva a buscar el pedido, es posible que este siendo modificado por otro usuario.");
             },
             success: function (resultado) {
-                $("#numero").val(resultado.codigo);
+                $("#pedido_numeroPedido").val(resultado.numeroPedido);
+                $("#idPedido").val(resultado.idPedido);
 
-                if (resultado.estado == ESTADO_APROBADA) {
-                    alert("El pedido número " + resultado.codigo + " fue creado correctamente.");
-                    window.location = '/Pedido/Index';
-                    //generarPDF();
+                if (resultado.estado == ESTADO_INGRESADO) {
+                    alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente.");
+                    window.location = '/Pedido/Index';  
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("El pedido número " + resultado.codigo + " fue creado correctamente.");
-                    window.location = '/Pedido/Index';
+                    alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN")
+                    $("#comentarioPendienteIngreso").val(resultado.observacion);
+                    $("#modalComentarioPendienteIngreso").modal('show');
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
-                    alert("El pedido número " + resultado.codigo + " fue guardado correctamente para seguir editandolo posteriormente.");
-                    window.location = '/Pedido/Index';
+                    ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
                 }
                 else {
-                    alert("La cotización ha tenido problemas para se procesada; Contacte con el Administrador.");
+                    alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     window.location = '/Pedido/Index';
                 }
 
@@ -1491,30 +1563,77 @@ jQuery(function ($) {
                 continuarLuego: continuarLuego
             },
             error: function (detalle) {
-                alert("Se generó un error al intentar finalizar la edición del pedido. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                alert("Se generó un error al intentar finalizar la edición del pedido. Si estuvo actualizando, vuelva a buscar el pedido, es posible que este siendo modificado por otro usuario.");
             },
             success: function (resultado) {
-                $("#numero").val(resultado.codigo);
+                $("#pedido_numeroPedido").val(resultado.numeroPedido);
+                $("#idPedido").val(resultado.idPedido);
 
-                if (resultado.estado == ESTADO_APROBADA) {
-                    alert("El pedido número " + resultado.codigo + " fue editado correctamente.");
+                if (resultado.estado == ESTADO_INGRESADO) {
+                    alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente.");
                     window.location = '/Pedido/Index';
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("El pedido número " + resultado.codigo + " fue editado correctamente, sin embargo requiere APROBACIÓN.");
-                    window.location = '/Pedido/Index';
+                    alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN")
+                    $("#comentarioPendienteIngreso").val(resultado.observacion);
+                    $("#modalComentarioPendienteIngreso").modal('show');
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
-                    alert("El pedido número " + resultado.codigo + " fue guardado correctamente para seguir editandola posteriormente.");
-                    window.location = '/Pedido/Index';
+                    ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
                 }
                 else {
-                    alert("El pedido ha tenido problemas para se procesado; Contacte con el Administrador.");
-                     window.location = '/Pedido/Index';
+                    alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
+                    window.location = '/Pedido/Index';
                 }
             }
         });
     }
+
+        $("#btnAceptarComentario").click(function () {
+        var idPedido = $("#idPedido").val();
+        var observacion = $("#comentarioPendienteIngreso").val();
+        $.ajax({
+            url: "/Cotizacion/updateEstadoPedido",
+            data: {
+                idPedido: idPedido,
+                estado: ESTADO_PENDIENTE_APROBACION,
+                observacion: observacion
+            },
+            type: 'POST',
+            error: function () {
+                alert("Ocurrió un problema al intentar agregar un comentario al pedido.")
+                $("#btnCancelarComentario").click();
+            },
+            success: function () {
+                alert("El comentario del estado del pedido número: " + codigoPedido + " se cambió correctamente.");
+                $("#btnCancelarComentario").click();
+            }
+        });
+
+    });
+    /*
+        $("#btnAceptarComentarioCrediticio").click(function () {
+            var codigoPedido = $("#pedido_numeroPedido").val();
+            var observacion = $("#comentarioPendienteIngreso").val();
+            $.ajax({
+                url: "/Cotizacion/updateEstadoPedidoCrediticio",
+                data: {
+                    codigo: codigoPedido,
+                    estado: ESTADO_PENDIENTE_APROBACION,
+                    observacion: observacion
+                },
+                type: 'POST',
+                error: function () {
+                    alert("Ocurrió un problema al intentar agregar un comentario al pedido.")
+                    $("#btnCancelarComentario").click();
+                },
+                success: function () {
+                    alert("El comentario del estado del pedido número: " + codigoPedido + " se cambió correctamente.");
+                    $("#btnCancelarComentario").click();
+                }
+            });
+
+        });*/
 
 
 
@@ -1631,15 +1750,19 @@ jQuery(function ($) {
                 var pedido = resultado.pedido;
                 var usuario = resultado.usuario;
 
-                idPedido
+
+                $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+                $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
+                $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+                 //Important
+
                 $("#idPedido").val(pedido.idPedido);
 
                 $("#verNumero").html(pedido.numeroPedidoString);
                 $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
                 $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
 
-                $("#varRangoFechasEntrega").html(pedido.rangoFechasEntrega);
-                $("#varRangoHoraEntrega").html(pedido.rangoHoraEntrega);
+                $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
 
                 $("#verCiudad").html(pedido.ciudad.nombre);
                 $("#verCliente").html(pedido.cliente.razonSocial);
@@ -1648,13 +1771,10 @@ jQuery(function ($) {
                 $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
                 $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
 
-                $("#verDepartamentoEntrega").html(pedido.ubigeoEntrega.Departamento);
-                $("#verProvinciaEntrega").html(pedido.ubigeoEntrega.Provincia);
-                $("#verDistritoEntrega").html(pedido.ubigeoEntrega.Distrito); 
+                $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
 
                 $("#verContactoPedido").html(pedido.contactoPedido);
-                $("#verTelefonoContactoPedido").html(pedido.telefonoContactoPedido);
-                $("#verCorreoContactoPedido").html(pedido.correoContactoPedido);
+                $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
 
 
                 $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
@@ -1662,6 +1782,11 @@ jQuery(function ($) {
                 $("#verEstado").html(pedido.seguimientoPedido.estadoString);
                 $("#verModificadoPor").html(pedido.seguimientoPedido.usuario.nombre);
                 $("#verObservacionEstado").html(pedido.seguimientoPedido.observacion);
+
+                $("#verEstadoCrediticio").html(pedido.seguimientoCrediticioPedido.estadoString);
+                $("#verModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido.usuario.nombre);
+                $("#verObservacionEstadoCreiditicio").html(pedido.seguimientoCrediticioPedido.observacion);
+                
           
                 $("#verObservaciones").html(pedido.observaciones);
                 $("#verMontoSubTotal").html(pedido.montoSubTotal);
@@ -1704,102 +1829,94 @@ jQuery(function ($) {
                 $("#tableDetallePedido").append(d);
 
 
-
-                /*EDITAR COTIZACIÓN*/
-           /*     if (
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA ||
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION && usuario.idUsuario == cotizacion.seguimientoCotizacion.usuario.idUsuario)
-                ) {
-                    $("#btnEditarCotizacion").show();*/
-                    if (pedido.seguimientoPedido.estado == ESTADO_EN_EDICION) {
-                        $("#btnEditarPedido").html("Continuar Editanto");
-                    }
-                    else
-                    {
-                        $("#btnEditarPedido").html("Editar");
-                    }
-             /*   }
-                else {
-                    $("#btnEditarCotizacion").hide();
+                if (pedido.seguimientoPedido.estado == ESTADO_EN_EDICION) {
+                    $("#btnEditarPedido").html("Continuar Editanto");
                 }
-                */
+                else
+                {
+                    $("#btnEditarPedido").html("Editar");
+                }
 
 
-
-
-                /*RECOTIZAR
+                //APROBAR PEDIDO
                 if (
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_ACEPTADA ||
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_RECHAZADA
+                    (pedido.seguimientoPedido.estado == ESTADO_PENDIENTE_APROBACION ||
+                        pedido.seguimientoPedido.estado == ESTADO_DENEGADO) &&
+                    (usuario.apruebaPedidos)
                 ) {
 
-                    $("#btnReCotizacion").show();
+                    $("#btnAprobarIngresoPedido").show();
                 }
                 else {
-                    $("#btnReCotizacion").hide();
+                    $("#btnAprobarIngresoPedido").hide();
                 }
-                */
 
 
+                //DENEGAR PEDIDO
+                if (pedido.seguimientoPedido.estado == ESTADO_PENDIENTE_APROBACION)
+                {
 
-                /*APROBAR COTIZACIÓN
+                    $("#btnDenegarIngresoPedido").show();
+                }
+                else {
+                    $("#btnDenegarIngresoPedido").hide();
+                }
+
+                //LIBERAR PEDIDO
                 if (
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
-                        cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
-                    (
-                        usuario.esAprobador && 
-                        usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                    pedido.seguimientoCrediticioPedido.estado == ESTADO_PENDIENTE_LIBERACION ||
+                    pedido.seguimientoCrediticioPedido.estado == ESTADO_BLOQUEADO
                 ) {
 
-                    $("#btnAprobarCotizacion").show();
+                    $("#btnLiberarPedido").show();
                 }
                 else {
-                    $("#btnAprobarCotizacion").hide();
+                    $("#btnLiberarPedido").hide();
                 }
-                */
 
-
-                /*DENEGAR COTIZACIÓN
+                //BLOQUEAR PEDIDO
                 if (
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
-                    (
-                        usuario.esAprobador && 
-                        usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                    pedido.seguimientoCrediticioPedido.estado == ESTADO_PENDIENTE_LIBERACION ||
+                    pedido.seguimientoCrediticioPedido.estado == ESTADO_LIBERADO
                 ) {
 
-                    $("#btnDenegarCotizacion").show();
+                    $("#btnBloquearPedido").show();
                 }
                 else {
-                    $("#btnDenegarCotizacion").hide();
-                }*/
+                    $("#btnBloquearPedido").hide();
+                }
 
-                /*ACEPTAR COTIZACIÓN
-                if (
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
-                        cotizacion.seguimientoCotizacion.estado == ESTADO_RECHAZADA
-                ) {
 
-                    $("#btnAceptarCotizacion").show();
+                //PROGRAMAR PEDIDO
+                if (pedido.seguimientoPedido.estado == ESTADO_INGRESADO) {
+
+                    $("#btnProgramarPedido").show();
                 }
                 else {
-                    $("#btnAceptarCotizacion").hide();
-                }*/
+                    $("#btnProgramarPedido").hide();
+                }
 
+                //ATENDER PEDIDO
+                if ((pedido.seguimientoPedido.estado == ESTADO_INGRESADO ||
+                    pedido.seguimientoPedido.estado == ESTADO_PROGRAMADO
+                    )&&
+                    pedido.seguimientoCrediticioPedido.estado == ESTADO_LIBERADO) {
 
-                /*RECHAZAR COTIZACIÓN
-                if (
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA)
-                ) {
-
-                    $("#btnRechazarCotizacion").show();
+                    $("#btnAtenderPedido").show();
                 }
                 else {
-                    $("#btnRechazarCotizacion").hide();
+                    $("#btnAtenderPedido").hide();
                 }
-                */
+
+                //ATENDER PEDIDO
+                if (pedido.seguimientoPedido.estado == ESTADO_PROGRAMADO)
+                {
+                    $("#btnCancelarProgramacionPedido").show();
+                }
+                else {
+                    $("#btnCancelarProgramacionPedido").hide();
+                }
+                
 
                 /*PDF
                 if (
@@ -1853,36 +1970,38 @@ jQuery(function ($) {
 }
 
     $("#btnCancelarPedido").click(function () {
-        if (confirm(MENSAJE_CANCELAR_EDICION)) {
-            window.location = '/Pedido/CancelarCreacionPedido';
-        }
+        ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Pedido/CancelarCreacionPedido', null)
     })
 
 
 
     function desactivarBotonesVer()
     {
-        $("#btnCancelarCotizacion").attr('disabled', 'disabled');
-        $("#btnEditarCotizacion").attr('disabled', 'disabled');
-        $("#btnReCotizacion").attr('disabled', 'disabled');
-        $("#btnAprobarCotizacion").attr('disabled', 'disabled');
-        $("#btnDenegarCotizacion").attr('disabled', 'disabled');
-        $("#btnAceptarCotizacion").attr('disabled', 'disabled');
-        $("#btnRechazarCotizacion").attr('disabled', 'disabled');
-        $("#btnPDFCotizacion").attr('disabled', 'disabled');
+        $("#btnCancelarVerPedido").attr('disabled', 'disabled');
+        $("#btnEditarPedido").attr('disabled', 'disabled');
+        $("#btnAprobarIngresoPedido").attr('disabled', 'disabled');
+        $("#btnDenegarIngresoPedido").attr('disabled', 'disabled');
+        $("#btnProgramarPedido").attr('disabled', 'disabled');
+        $("#btnAtenderPedido").attr('disabled', 'disabled');
+        $("#btnCancelarProgramacionPedido").attr('disabled', 'disabled');
+        $("#btnLiberarPedido").attr('disabled', 'disabled');
+        $("#btnBloquearPedido").attr('disabled', 'disabled');
     }
 
     function activarBotonesVer() {
-        $("#btnCancelarCotizacion").removeAttr('disabled');
-        $("#btnEditarCotizacion").removeAttr('disabled');
-        $("#btnReCotizacion").removeAttr('disabled');
-        $("#btnAprobarCotizacion").removeAttr('disabled');
-        $("#btnDenegarCotizacion").removeAttr('disabled');
-        $("#btnAceptarCotizacion").removeAttr('disabled');
-        $("#btnRechazarCotizacion").removeAttr('disabled');
-        $("#btnPDFCotizacion").removeAttr('disabled');
+        $("#btnCancelarVerPedido").removeAttr('disabled');
+        $("#btnEditarPedido").removeAttr('disabled');
+        $("#btnAprobarIngresoPedido").removeAttr('disabled');
+        $("#btnDenegarIngresoPedido").removeAttr('disabled');
+        $("#btnAtenderPedido").removeAttr('disabled');
+        $("#btnProgramarPedido").removeAttr('disabled');
+        $("#btnCancelarProgramacionPedido").removeAttr('disabled');
+        $("#btnLiberarPedido").removeAttr('disabled');
+        $("#btnBloquearPedido").removeAttr('disabled');
     }
-    
+
+  
+
 
     $("#btnEditarPedido").click(function () {
         desactivarBotonesVer();
@@ -1891,32 +2010,34 @@ jQuery(function ($) {
             url: "/Pedido/ConsultarSiExistePedido",
             type: 'POST',
             async: false,
+            dataType: 'JSON',
             success: function (resultado) {
-                if (resultado == "False") {
+                if (resultado.existe == "false") {
 
                     $.ajax({
                         url: "/Pedido/iniciarEdicionPedido",
                         type: 'POST',
-
-
                         error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del pedido."); },
                         success: function (fileName) {
                             window.location = '/Pedido/Pedir';
                         }
                     });
 
-                    //window.location = '/Pedido/Cotizador';
                 }
                 else {
-                    alert("Existe un pedido abierto; por favor vaya a la pantala Pedir, haga clic en cancelar y vuelva a intentarlo.");
+                    if(resultado.numero == 0) {
+                        alert('Está creando un nuevo pedido; para continuar por favor diríjase a la página "Crear/Modificar Pedido" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar y Continuar Editando Luego.');
+                    }
+                        else {
+                        if(resultado.numero == $("#verNumero").html())
+                                alert('Ya se encuentra editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización".');
+                            else
+                                alert('Está editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Pedido" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar y Continuar Editando Luego.');
+                    }
                     activarBotonesVer();
                 }
             }
         });
-
-        
-
-
     });
 
 
@@ -1945,10 +2066,6 @@ jQuery(function ($) {
                 }
             }
         });
-
-
-   
-
     });
 
     function limpiarComentario()
@@ -1971,25 +2088,44 @@ jQuery(function ($) {
     });
 
 
-    $("#btnAceptarCotizacion").click(function () {
+    $("#btnLiberarPedido").click(function () {
 
-        $("#labelNuevoEstado").html(ESTADO_ACEPTADA_STR);
+        $("#labelNuevoEstadoCrediticio").html(ESTADO_LIBERADO_STR);
+        $("#estadoCrediticioId").val(ESTADO_LIBERADO);
+        limpiarComentario();
+    });
+
+    $("#btnBloquearPedido").click(function () {
+
+        $("#labelNuevoEstadoCrediticio").html(ESTADO_BLOQUEADO_STR);
+        $("#estadoCrediticioId").val(ESTADO_BLOQUEADO);
+        limpiarComentario();
+    });
+
+    $("#btnAprobarIngresoPedido").click(function () {
+
+        $("#labelNuevoEstado").html(ESTADO_APROBADA_STR);
         $("#estadoId").val(ESTADO_ACEPTADA);
         limpiarComentario();
     });
 
-    $("#btnRechazarCotizacion").click(function () {
+    $("#btnDenegarIngresoPedido").click(function () {
 
-        $("#labelNuevoEstado").html(ESTADO_RECHAZADA_STR);
-        $("#estadoId").val(ESTADO_RECHAZADA);
+        $("#labelNuevoEstado").html(ESTADO_DENEGADO_STR);
+        $("#estadoId").val(ESTADO_DENEGADO);
         limpiarComentario();
     });
 
-
+    /*
+    $("#btnAprobarCotizacion").click(function () {
+        $("#labelNuevoEstado").html(ESTADO_APROBADA_STR);
+        $("#estadoId").val(ESTADO_APROBADA);
+        limpiarComentario();
+    });
 
  
 
-
+    */
 
 
     $('#modalAprobacion').on('shown.bs.modal', function (e) {
@@ -1998,35 +2134,71 @@ jQuery(function ($) {
 
 
 
-    $("#btnAceptarCambioEstado").click(function () {
 
-        var estado = $("#estadoId").val();
-        var comentarioEstado = $("#comentarioEstado").val();
+    $("#btnAceptarCambioEstadoCrediticio").click(function () {
 
-        if ($("#labelNuevoEstado").html() == ESTADO_DENEGADA_STR || $("#labelNuevoEstado").html() == ESTADO_RECHAZADA_STR) {
+        var estado = $("#estadoCrediticioId").val();
+        var comentarioEstado = $("#comentarioEstadoCrediticio").val();
+
+        if ($("#labelNuevoEstadoCrediticio").html() == ESTADO_BLOQUEADO_STR) {
             if (comentarioEstado.trim() == "") {
-                alert("Cuando Deniega o Rechaza una cotización debe ingresar un Comentario.");
+                alert("Cuando Bloquea un pedido debe ingresar un Comentario.");
                 return false;
             }
         }
         var codigo = $("#verNumero").html();
+        var idPedido = $("#idPedido").val();
 
         $.ajax({
-            url: "/Pedido/updateEstadoCotizacion",
+            url: "/Pedido/updateEstadoPedidoCrediticio",
             data: {
-                codigo: codigo,
+                idPedido: idPedido,
                 estado: estado,
                 observacion: comentarioEstado
             },
             type: 'POST',
             error: function () {
-                alert("Ocurrió un problema al intentar cambiar el estado de la cotización.")
+                alert("Ocurrió un problema al intentar cambiar el estado del pedido.")
+                $("#btnCancelarCambioEstadoCrediticio").click();
+            },
+            success: function () {
+                alert("El estado crediticio del pedido número: " + codigo + " se cambió correctamente.");
+                location.reload();
+            }
+        });
+    });
+
+
+    $("#btnAceptarCambioEstado").click(function () {
+
+        var estado = $("#estadoId").val();
+        var comentarioEstado = $("#comentarioEstado").val();
+
+        if ($("#labelNuevoEstado").html() == ESTADO_DENEGADO_STR) {
+            if (comentarioEstado.trim() == "") {
+                alert("Cuando Deniega un pedido debe ingresar un Comentario.");
+                return false;
+            }
+        }
+        var codigo = $("#verNumero").html();
+        var idPedido = $("#idPedido").val();
+        
+
+        $.ajax({
+            url: "/Pedido/updateEstadoPedido",
+            data: {
+                idPedido: idPedido,
+                estado: estado,
+                observacion: comentarioEstado
+            },
+            type: 'POST',
+            error: function () {
+                alert("Ocurrió un problema al intentar cambiar el estado del pedido.")
                 $("#btnCancelarCambioEstado").click();
             },
             success: function () {
-                alert("El estado de la cotización número: " + codigo + " se cambió correctamente.");
-                //$("#btnCancelarCambioEstado").click();
-                $("#btnBusquedaCotizaciones").click();
+                alert("El estado del pedido número: " + codigo + " se cambió correctamente.");
+                location.reload();
             }
         });
     });
@@ -2195,9 +2367,7 @@ jQuery(function ($) {
             editing: {
                 enabled: true,
                 addRow: function () {
-                    if (confirm(MENSAJE_CANCELAR_EDICION)) {
-                        location.reload();
-                    }
+                    ConfirmDialogReload(MENSAJE_CANCELAR_EDICION);
                 },
                 editRow: function (row) {
                     var values = row.val();
@@ -2645,6 +2815,16 @@ jQuery(function ($) {
     #####################################################*/
 
 
+    $("#btnLimpiarBusquedaPedidos").click(function () {
+        $.ajax({
+            url: "/Pedido/CleanBusquedaPedidos",
+            type: 'POST',
+            success: function () {
+                location.reload();
+            }
+        });
+    });
+
 
     $("#btnBusquedaPedidos").click(function () {
         var idCiudad = $("#idCiudad").val();
@@ -2656,11 +2836,12 @@ jQuery(function ($) {
         var pedido_numeroPedido = $("#pedido_numeroPedido").val();
         var pedido_numeroGrupoPedido = $("#pedido_numeroGrupoPedido").val();
         var estado = $("#estado").val();
+        var estadoCrediticio = $("#estadoCrediticio").val();
 
         $.ajax({
             url: "/Pedido/Search",
             type: 'POST',
-            //   dataType: 'JSON',
+            dataType: 'JSON',
             data: {
                 idCiudad: idCiudad,
                 idCliente: idCliente,
@@ -2670,14 +2851,65 @@ jQuery(function ($) {
                 fechaEntregaHasta: fechaEntregaHasta,
                 numero: pedido_numeroPedido,
                 numeroGrupo: pedido_numeroGrupoPedido,
-                estado: estado
+                estado: estado,
+                estadoCrediticio: estadoCrediticio
             },
-            success: function (resultado) {
+            success: function (pedidoList) {
 
-                if (resultado == "0") {
-                    alert("No se encontraron Pedidos");
+
+                $("#tablePedidos > tbody").empty();
+                //FooTable.init('#tableCotizaciones');
+                $("#tablePedidos").footable({
+                    "paging": {
+                        "enabled": true
+                    }
+                });
+
+                for (var i = 0; i < pedidoList.length; i++) {
+
+                    var observacion = pedidoList[i].seguimientoPedido.observacion == null ? "" : pedidoList[i].seguimientoPedido.observacion;
+
+                    if (pedidoList[i].seguimientoPedido.observacion != null && pedidoList[i].seguimientoPedido.observacion.length > 20) {
+                        var idComentarioCorto = pedidoList[i].idPedido + "corto";
+                        var idComentarioLargo = pedidoList[i].idPedido + "largo";
+                        var idVerMas = pedidoList[i].idPedido + "verMas";
+                        var idVermenos = pedidoList[i].idPedido + "verMenos";
+
+                        var comentario = pedidoList[i].seguimientoPedido.observacion.substr(0, 20) + "...";
+                        observacion = '<div id="' + idComentarioCorto + '" style="display:block;">' + comentario + '</div>' +
+                            '<div id="' + idComentarioLargo + '" style="display:none;">' + pedidoList[i].seguimientoPedido.observacion + '</div>' +
+                            '<p><a id="' + idVerMas + '" class="' + pedidoList[i].idCotizacion + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
+                            '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idCotizacion + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
+                    }
+
+                    var pedido = '<tr data-expanded="true">' +
+                        '<td>  ' + pedidoList[i].idPedido+'</td>' +
+                        '<td>  ' + pedidoList[i].numeroPedidoString+'  </td>' +
+                        '<td>  ' + pedidoList[i].numeroGrupoPedidoString+'  </td>' +
+                        '<td>  ' + pedidoList[i].cliente.razonSocial+'</td>' +
+                        '<td>  ' + pedidoList[i].cliente.ruc+' </td>' +
+                        '<td>  ' + pedidoList[i].ciudad.nombre+'  </td>' +
+                        '<td>  ' + pedidoList[i].usuario.nombre+'  </td>' +
+                        '<td>  ' + pedidoList[i].fechaHoraSolicitud+'</td>' +
+                        '<td>  ' + pedidoList[i].rangoFechasEntrega+'</td>' +
+                        '<td>  ' + pedidoList[i].montoTotal+'  </td>' +
+                        '<td>  ' + pedidoList[i].seguimientoPedido.estadoString+'</td>' +
+                        '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
+                        '<td>  ' + observacion+'  </td>' +
+                        '<td>  ' + pedidoList[i].seguimientoCrediticioPedido.estadoString+'</td>' +
+                        '<td>' +
+                        '<button type="button" class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numeroPedido + ' btnVerPedido btn btn-primary ">Ver</button>' +
+                        '</td>' +
+                        '</tr>';
+
+                    $("#tablePedidos").append(pedido);
+                 
                 }
-                location.reload();
+
+                if (pedidoList.length > 0)
+                    $("#msgSeEncontraronPedidos").hide();
+                else
+                    $("#msgSeEncontraronPedidos").show();
             }
         });
     });
@@ -2786,7 +3018,20 @@ jQuery(function ($) {
         });
     });
 
-    $("#ActualDepartamento").change(function () {
+    $("#estadoCrediticio").change(function () {
+        var estado = $("#estadoCrediticio").val();
+        $.ajax({
+            url: "/Pedido/changeEstadoCrediticio",
+            type: 'POST',
+            data: {
+                estadoCrediticio: estado
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $(document).on('change', "#ActualDepartamento", function () {
         var ubigeoEntregaId = "000000";
         if ($("#ActualDepartamento").val().trim().length > 0) {
             ubigeoEntregaId = $("#ActualDepartamento").val() + "0000";
@@ -2802,7 +3047,7 @@ jQuery(function ($) {
         });
     });
 
-    $("#ActualProvincia").change(function () {
+    $(document).on('change', "#ActualProvincia",function () {
         var ubigeoEntregaId = $("#ActualDepartamento").val()+"0000";
         if ($("#ActualProvincia").val().trim().length > 0) {
             ubigeoEntregaId = $("#ActualProvincia").val()+"00";
@@ -2818,7 +3063,7 @@ jQuery(function ($) {
         });
     });
 
-    $("#ActualDistrito").change(function () {
+    $(document).on('change', "#ActualDistrito",function () {
         var ubigeoEntregaId = $("#ActualDepartamento").val() + $("#ActualProvincia").val() + "00";
         if ($("#ActualDistrito").val().trim().length > 0) {
             ubigeoEntregaId = $("#ActualDistrito").val();
@@ -2902,6 +3147,78 @@ jQuery(function ($) {
 
 
 
+    $(document).on('click', "a.verMas", function () {
+        var idCotizacion = event.target.getAttribute("class").split(" ")[0];
+        divCorto = document.getElementById(idCotizacion + "corto");
+        divLargo = document.getElementById(idCotizacion + "largo");
+        divVerMas = document.getElementById(idCotizacion + "verMas");
+        divVerMenos = document.getElementById(idCotizacion + "verMenos");
 
+        divCorto.style.display = 'none';
+        divLargo.style.display = 'block';
 
+        divVerMas.style.display = 'none';
+        divVerMenos.style.display = 'block';
+    });
+
+    $(document).on('click', "a.verMenos", function () {
+        var idCotizacion = event.target.getAttribute("class").split(" ")[0];
+        divCorto = document.getElementById(idCotizacion + "corto");
+        divLargo = document.getElementById(idCotizacion + "largo");
+        divVerMas = document.getElementById(idCotizacion + "verMas");
+        divVerMenos = document.getElementById(idCotizacion + "verMenos");
+
+        divCorto.style.display = 'block';
+        divLargo.style.display = 'none';
+
+        divVerMas.style.display = 'block';
+        divVerMenos.style.display = 'none';
+    });
+
+    /****************** PROGRAMACION PEDIDO****************************/
+
+    $('#modalProgramacion').on('shown.bs.modal', function () {
+        var fechaProgramacion = $("#fechaProgramaciontmp").val();
+        $("#fechaProgramacion").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacion);    
+    })
+
+    $("#btnAceptarProgramarPedido").click(function () {
+
+        if ($("#fechaProgramacion").val() == "" || $("#fechaProgramacion").val() == null) {
+            alert("Debe ingresar la fecha de programación.");
+            $("#fechaProgramacion").focus();
+            return false;
+        }
+        var fechaProgramacion = $('#fechaProgramacion').val();
+        var comentarioProgramacion = $('#comentarioProgramacion').val();
+        var fechaEntregaDesdeProgramacion = $("#fechaEntregaDesdeProgramacion").val();
+        var fechaEntregaHastaProgramacion = $("#fechaEntregaHastaProgramacion").val();
+
+        if (convertirFechaNumero(fechaProgramacion) < convertirFechaNumero(fechaEntregaDesdeProgramacion)
+            || convertirFechaNumero(fechaProgramacion) > convertirFechaNumero(fechaEntregaHastaProgramacion)
+        ) {
+            var respuesta = confirm("¡ATENCIÓN! Está programando la atención del pedido en una fecha fuera del rango solicitado por el cliente.");
+            if (!respuesta) {
+                $("#fechaProgramacion").focus();
+                return false;
+            }
+        }      
+
+        $.ajax({
+            url: "/Pedido/Programar",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                fechaProgramacion: fechaProgramacion,
+                comentarioProgramacion: comentarioProgramacion
+            },
+            success: function () {
+                alert('Se programó correctamente el pedido para su atención.');
+            }
+        });
+        $("btnCancelarProgramarPedido").click();
+    });
+    
+
+    /****************** FIN PROGRAMACION PEDIDO****************************/
 });

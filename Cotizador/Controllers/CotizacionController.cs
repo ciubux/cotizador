@@ -40,6 +40,24 @@ namespace Cotizador.Controllers
         }
 
 
+        private void instanciarCotizacionBusqueda()
+        {
+            Cotizacion cotizacionTmp = new Cotizacion();
+            cotizacionTmp.fechaDesde = DateTime.Now.AddDays(-10);
+            DateTime fechaHasta = DateTime.Now;
+            cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
+            cotizacionTmp.ciudad = new Ciudad();
+            cotizacionTmp.cliente = new Cliente();
+            cotizacionTmp.grupo = new Grupo();
+            cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
+            cotizacionTmp.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Todos;
+            // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
+            cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
+            cotizacionTmp.usuarioBusqueda = cotizacionTmp.usuario;
+            this.CotizacionSession = cotizacionTmp;
+            this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA] = new List<Cotizacion>();
+        }
+
 
         //Busqueda de Cotizacion
         public ActionResult Index()
@@ -64,19 +82,7 @@ namespace Cotizador.Controllers
 
             if (this.CotizacionSession == null)
             {
-                Cotizacion cotizacionTmp = new Cotizacion();
-                cotizacionTmp.fechaDesde = DateTime.Now.AddDays(-10);
-                DateTime fechaHasta = DateTime.Now;
-                cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day,23,59,59);
-                cotizacionTmp.ciudad = new Ciudad();
-                cotizacionTmp.cliente = new Cliente();
-                cotizacionTmp.grupo = new Grupo();
-                cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
-                cotizacionTmp.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Todos;
-               // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
-                cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
-                cotizacionTmp.usuarioBusqueda = cotizacionTmp.usuario;
-                this.CotizacionSession = cotizacionTmp;
+                instanciarCotizacionBusqueda();
             }
 
             Cotizacion cotizacionSearch = this.CotizacionSession;
@@ -117,7 +123,7 @@ namespace Cotizador.Controllers
 
 
         /*Ejecución de la búsqueda de cotizaciones*/
-        public int SearchCotizaciones()
+        public String SearchCotizaciones()
         {
             //Se recupera la cotizacion de la session
             Cotizacion cotizacion = this.CotizacionSession;
@@ -126,10 +132,22 @@ namespace Cotizador.Controllers
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA] = cotizacionList;
             //Se retorna la cantidad de elementos encontrados
-            return cotizacionList.Count();
+
+            String cotizacionListJson = JsonConvert.SerializeObject(cotizacionList);
+            return cotizacionListJson;
+            
         }
 
-        
+
+        public void CleanBusquedaCotizaciones()
+        {
+            instanciarCotizacionBusqueda();
+            //Se retorna la cantidad de elementos encontrados
+            //List<Cotizacion> cotizacionList = (List<Cotizacion>)this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA];
+            //return cotizacionList.Count();
+        }
+
+
 
         private void instanciarCotizacion()
         {
@@ -157,13 +175,13 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacionTmp;
         }
 
-        public Boolean ConsultarSiExisteCotizacion()
+        public String ConsultarSiExisteCotizacion()
         {
             Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION];
             if (cotizacion == null)
-                return false;
+                return "{\"existe\":\"false\",\"numero\":\"0\"}";
             else
-                return true;
+                return "{\"existe\":\"true\",\"numero\":\""+ cotizacion.codigo+ "\"}";
         }
 
         public ActionResult CancelarCreacionCotizacion()
@@ -558,15 +576,8 @@ namespace Cotizador.Controllers
         }
 
 
-        public void updateProveedor()
-        {
-            this.Session["proveedor"] = this.Request.Params["proveedor"];
-        }
 
-        public void updateFamilia()
-        {
-            this.Session["familia"] = this.Request.Params["familia"];
-        }
+
 
 
         [HttpPost]
@@ -716,6 +727,11 @@ namespace Cotizador.Controllers
                 "\"precioListaList\":" + jsonPrecioLista + "," +
                 "\"costoLista\":\"" + producto.costoLista + "\"" +
                 "}";
+
+
+
+
+
             return resultado;
         }
 
@@ -780,7 +796,7 @@ namespace Cotizador.Controllers
             {
                 nombreProducto = nombreProducto + "\\n" + detalle.observacion;
             }*/
-
+            /*
             String resultado = "{" +
                 "\"idProducto\":\"" + detalle.producto.idProducto + "\"," +
                 "\"codigoProducto\":\"" + detalle.producto.sku + "\"," +
@@ -792,8 +808,28 @@ namespace Cotizador.Controllers
                 "\"precioUnitario\":\"" + detalle.precioUnitario + "\", " +
                 "\"observacion\":\"" + detalle.observacion + "\", " +
                 "\"total\":\"" + cotizacion.montoTotal.ToString() + "\"}";
+            */
+
+            var v = new
+            {
+                idProducto = detalle.producto.idProducto,
+                codigoProducto = detalle.producto.sku,
+                nombreProducto = nombreProducto,
+                unidad = detalle.unidad,
+                igv = cotizacion.montoIGV.ToString(),
+                subTotal = cotizacion.montoSubTotal.ToString(),
+                margen = detalle.margen,
+                precioUnitario = detalle.precioUnitario,
+                observacion = detalle.observacion,
+                total = cotizacion.montoTotal.ToString()
+            };
+
+
+
 
             this.CotizacionSession = cotizacion ;
+
+            String resultado = JsonConvert.SerializeObject(v);
             return resultado;
             
             
@@ -837,12 +873,11 @@ namespace Cotizador.Controllers
                 observacion = "Se continuará editando luego";
                 updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
             }
-            cotizacion = null;
-            this.CotizacionSession = null;
-
-
-            usuarioBL.updateCotizacionSerializada(usuario, null);
-            String resultado = "{ \"codigo\":\"" + codigo + "\", \"estado\":\"" + estado + "\", \"observacion\":\""+ observacion +"\" }";
+            // cotizacion = null;
+            // this.CotizacionSession = null;
+            //usuarioBL.updateCotizacionSerializada(usuario, null);
+            var v = new { codigo = codigo, estado = estado, observacion = observacion };
+            String resultado = JsonConvert.SerializeObject(v);
             return resultado;
         }
 
@@ -859,19 +894,21 @@ namespace Cotizador.Controllers
             bl.UpdateCotizacion(cotizacion);
             long codigo = cotizacion.codigo;
             int estado = (int)cotizacion.seguimientoCotizacion.estado; 
+            String observacion = cotizacion.seguimientoCotizacion.observacion;
             if (continuarLuego == 1)
             {
                 SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                 estado = (int)estadosSeguimientoCotizacion;
-                String observacion = "Se continuará editando luego";
+                observacion = "Se continuará editando luego";
                 updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
             }
-            cotizacion = null;
-            this.CotizacionSession = null;
 
+            //cotizacion = null;
+            //this.CotizacionSession = null;
+            //usuarioBL.updateCotizacionSerializada(usuario, null);
 
-            usuarioBL.updateCotizacionSerializada(usuario, null);
-            String resultado = "{ \"codigo\":\"" + codigo + "\", \"estado\":\"" + estado + "\" }";
+            var v = new { codigo = codigo, estado = estado, observacion = observacion };
+            String resultado = JsonConvert.SerializeObject(v);
             return resultado;
         }
 
@@ -991,7 +1028,11 @@ namespace Cotizador.Controllers
             cotizacion.usuario = (Usuario)this.Session["usuario"];
             //Se seta el codigo y estadoAprobacion en 0 porque una recotización es una nueva cotización
             cotizacion.codigo = 0;
-         //   cotizacion.estadoAprobacion = 0;
+            cotizacion.fecha = DateTime.Now;
+            cotizacion.fechaInicioVigenciaPrecios = null;
+            cotizacion.fechaFinVigenciaPrecios = null;
+            cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
+            //   cotizacion.estadoAprobacion = 0;
 
 
             //REVISAR

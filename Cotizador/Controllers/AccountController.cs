@@ -63,7 +63,7 @@ namespace Cotizador.Controllers
         public ActionResult Login()//string returnUrl)
         {
             //ViewBag.ReturnUrl = returnUrl;
-            ViewBag.ReturnUrl = "Home/Index";
+            ViewBag.ReturnUrl = "Account/Login";
             return View();
         }
 

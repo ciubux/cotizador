@@ -301,9 +301,10 @@
         <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
 
             <div class="pull-left">
+
+                <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
                 @if (cotizacion.usuario.apruebaCotizaciones)
                 {
-                    <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
 
                     if (cotizacion.mostrarCosto)
                     {
@@ -313,12 +314,10 @@
                     {
                         <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
                     }
+                    <label for="mostrarCosto" class=" form-check-label"> Mostrar Costo:</label>
+                   
+
                 }
-            </div>
-
-            <div class="pull-left">
-
-                <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
             </div>
 
             <div class="pull-right">
@@ -423,8 +422,8 @@
                 @foreach (var cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
                     contador++;
-                    <tr data-expanded="true">
-                        <td>  @cotizacionDetalle.producto.idProducto  </td>
+                    <tr data-expanded="false">
+                        <td class="detalleCotizacion">  @cotizacionDetalle.producto.idProducto  </td>
                         <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
                         <td>  @cotizacionDetalle.producto.proveedor  </td>
                         <td>  @cotizacionDetalle.producto.sku  </td>
@@ -471,8 +470,26 @@
                         @if (cotizacion.esRecotizacion)
                         {
                             <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
-                            <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
-                            <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
+
+                            if (cotizacionDetalle.variacionPrecioAnterior != 0)
+                            {
+                                <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.variacionPrecioAnterior %</td>
+                            }
+                            else
+                            {
+                                <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
+                            }
+
+                            if (cotizacionDetalle.variacionCosto != 0)
+                            {
+                                <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.variacionCosto %</td>
+                            }
+                            else
+                            {
+                                <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
+                            }
+
+                            <!--font-weight:bold"-->
                             <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
                         }
                         <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
@@ -530,11 +547,11 @@
             <div class="pull-left">
                 @if (cotizacion.codigo > 0)
                 {
-                    <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar y Continuar Editando Luego</button>
+                    <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar</button>
                 }
                 else
                 {
-                    <button id="btnContinuarCreandoLuego" type="button" class="btn btn-primary">Guardar y Continuar Editando Luego</button>
+                    <button id="btnContinuarCreandoLuego" type="button" class="btn btn-primary">Guardar</button>
                 }
             </div>
 

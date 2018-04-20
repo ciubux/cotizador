@@ -26,7 +26,7 @@
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @{ 
+                    @{
                         var linkCotizaciones = "";
                         var linkBusquedaCotizaciones = "";
                         var linkMantenimientoCotizacion = "";
@@ -46,43 +46,44 @@
                         case 4: linkBusquedaGuiasRemision = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
                         case 5: linkMantenimientoGuiaRemision = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
                     }
-                    @{                         var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];}
+                    @{ var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];}
                     @if (usuario.creaCotizaciones)
-                    { 
-                    <li class="@linkCotizaciones">
-                        <a class="dropdown-toggle" data-toggle="dropdown">
-                            Cotizaciones
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li id="linkBusquedaCotizaciones" class="@linkBusquedaCotizaciones">@Html.ActionLink("Búsqueda Cotizaciones", "Index", "Cotizacion")</li>
-                            <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Crear/Modificar Cotización", "Cotizar", "Cotizacion")</li>
-                        </ul>
-                    </li>
+                    {
+                        <li class="@linkCotizaciones">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                Cotizaciones
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li id="linkBusquedaCotizaciones" class="@linkBusquedaCotizaciones">@Html.ActionLink("Búsqueda Cotizaciones", "Index", "Cotizacion")</li>
+                                <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Crear/Modificar Cotización", "Cotizar", "Cotizacion")</li>
+                            </ul>
+                        </li>
                     }
 
                     @if (usuario.tomaPedidos || usuario.creaGuias || usuario.apruebaPedidos)
                     {
 
-                    <li class="@linkPedidosYGuiasDeRemision">
-                        <a class="dropdown-toggle" data-toggle="dropdown">
-                            Pedidos y Guías de Remisión
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            @if (usuario.tomaPedidos || usuario.apruebaPedidos)
-                            { <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Mis Pedidos", "Index", "Pedido")</li> }
-                            @if (usuario.tomaPedidos)
-                            { 
-                                <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedir", "Pedir", "Pedido")</li>
-                            }
-                            @if (usuario.creaGuias)
-                            { 
-                                <li id="linkBusquedaGuiasRemision" class="@linkBusquedaGuiasRemision">@Html.ActionLink("Mis Guias de Remisión", "Index", "GuiaRemision")</li>
-                                <li id="linkMantenimientoGuiaRemision" class="@linkMantenimientoGuiaRemision">@Html.ActionLink("Guiar", "Guiar", "GuiaRemision")</li>
-                            }
-                        </ul>
-                    </li>
+                        <li class="@linkPedidosYGuiasDeRemision">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                Pedidos y Guías de Remisión
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                @if (usuario.tomaPedidos || usuario.apruebaPedidos)
+                                {
+                                    <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Búsqueda Pedidos", "Index", "Pedido")</li>}
+                                @if (usuario.tomaPedidos)
+                                {
+                                    <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Pedido", "Pedir", "Pedido")</li>
+                                }
+                                @if (usuario.creaGuias)
+                                {
+                                    <li id="linkBusquedaGuiasRemision" class="@linkBusquedaGuiasRemision">@Html.ActionLink("Búsqueda Guias de Remisión", "Index", "GuiaRemision")</li>
+                                    <li id="linkMantenimientoGuiaRemision" class="@linkMantenimientoGuiaRemision">@Html.ActionLink("Crear/Modificar Guía Remisión", "Guiar", "GuiaRemision")</li>
+                                }
+                            </ul>
+                        </li>
                     }
                 </ul>
 
@@ -101,9 +102,9 @@
 
 
     @Scripts.Render("~/bundles/jquery")
-
     @Scripts.Render("~/bundles/bootstrap")
-
+    @Scripts.Render("~/bundles/jquery-ui")    
+    @Scripts.Render("~/bundles/footable")
     @Scripts.Render("~/bundles/jquery-chosen")
     @RenderSection("scripts", required: false)
 

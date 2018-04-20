@@ -41,6 +41,13 @@ namespace Cotizador.Controllers
         public ActionResult Index()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.BUSQUEDA_GUIA_REMISION;
+            GuiaRemision guiaRemision = new GuiaRemision();
+            guiaRemision.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
+            guiaRemision.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
+
+            ViewBag.guiaRemision = guiaRemision;
+
+
             return View();
         }
 

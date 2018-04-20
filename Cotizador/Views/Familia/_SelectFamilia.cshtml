@@ -4,7 +4,7 @@
 new SelectList(Model, "nombre", "nombre", 0),
 new { @class = "form-control ", onchange = @"
 $.ajax({
-url: '/Home/updateFamilia',
+url: '/Familia/ChangeFamilia',
 type: 'POST',
 dataType: 'JSON',
 data: {

@@ -22,6 +22,12 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        public void ChangeProveedor()
+        {
+            this.Session["proveedor"] = this.Request.Params["proveedor"];
+        }
+
+
 
         public ActionResult list()
         {

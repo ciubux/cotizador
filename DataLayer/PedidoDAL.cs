@@ -57,7 +57,9 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);  //puede ser null
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
+            InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCrediticioPedido", pedido.seguimientoCrediticioPedido.observacion);
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
@@ -126,6 +128,7 @@ namespace DataLayer
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 pedidoDetalle.idPedido = pedido.idPedido;
+                pedidoDetalle.usuario = pedido.usuario;
                 this.InsertPedidoDetalle(pedidoDetalle);
             }
         }
@@ -144,7 +147,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "equivalencia", pedidoDetalle.producto.equivalencia);
             InputParameterAdd.Varchar(objCommand, "unidad", pedidoDetalle.unidad);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", pedidoDetalle.porcentajeDescuento);
-            InputParameterAdd.Decimal(objCommand, "precioNetoEquivalente", pedidoDetalle.precioNetoEquivalente);
+            InputParameterAdd.Decimal(objCommand, "precioNeto", pedidoDetalle.precioNetoEquivalente);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", pedidoDetalle.esPrecioAlternativo?1:0);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedidoDetalle.usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", pedidoDetalle.flete);
@@ -155,18 +158,31 @@ namespace DataLayer
             pedidoDetalle.idPedidoDetalle = (Guid)objCommand.Parameters["@newId"].Value;
         }
 
-        public Cotizacion aprobarCotizacion(Cotizacion cotizacion)
+        /*
+        public Pedido aprobarPedido(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("pu_aprobarCotizacion");
+            var objCommand = GetSqlCommand("pu_aprobarPedido");
 
-            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
-            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
-            InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
-            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion);
+            InputParameterAdd.BigInt(objCommand, "codigo", pedido.codigo);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoCotizacion.estado);
+            InputParameterAdd.Varchar(objCommand, "observacion", pedido.seguimientoCotizacion.observacion);
 
             ExecuteNonQuery(objCommand);
-            return cotizacion;
+            return pedido;
 
+        }*/
+
+        public Pedido ProgramarPedido(Pedido pedido)
+        {
+            var objCommand = GetSqlCommand("pu_programarPedido");
+
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            InputParameterAdd.DateTime(objCommand, "fechaProgramacion", pedido.fechaProgramacion);
+            InputParameterAdd.Varchar(objCommand, "comentarioProgramacion", pedido.comentarioProgramacion);
+            ExecuteNonQuery(objCommand);
+            return pedido;
         }
 
 
@@ -314,6 +330,7 @@ namespace DataLayer
                 pedido.contactoPedido = Converter.GetString(row, "contacto_pedido");
                 pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
                 pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
+                pedido.fechaProgramacion = Converter.GetDateTime(row, "fecha_programacion");
 
                 pedido.ubigeoEntrega = new Ubigeo();
                 pedido.ubigeoEntrega.Id = Converter.GetString(row, "ubigeo_entrega");
@@ -347,6 +364,13 @@ namespace DataLayer
                 pedido.seguimientoPedido.usuario = new Usuario();
                 pedido.seguimientoPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
                 pedido.seguimientoPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
+
+                pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
+                pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Converter.GetInt(row, "estado_seguimiento_crediticio");
+                pedido.seguimientoCrediticioPedido.observacion = Converter.GetString(row, "observacion_seguimiento_crediticio");
+                pedido.seguimientoCrediticioPedido.usuario = new Usuario();
+                pedido.seguimientoCrediticioPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento_crediticio");
+                pedido.seguimientoCrediticioPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento_crediticio");
 
             }
 
@@ -394,6 +418,23 @@ namespace DataLayer
 
                 pedidoDetalle.observacion = Converter.GetString(row, "observaciones");
 
+
+                PrecioClienteProducto precioClienteProducto = new PrecioClienteProducto();
+
+                precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto_vigente");
+                precioClienteProducto.flete = Converter.GetDecimal(row, "flete_vigente");
+                precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario_vigente");
+                precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia_vigente");
+
+                precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
+                precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+                precioClienteProducto.cliente = new Cliente();
+                precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                pedidoDetalle.producto.precioClienteProducto = precioClienteProducto;
+
+
+
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
             }
 
@@ -435,6 +476,7 @@ namespace DataLayer
 
 
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
+            InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoPedido.estado);
             DataTable dataTable = Execute(objCommand);
 
             List<Pedido> pedidoList = new List<Pedido>();
@@ -482,6 +524,12 @@ namespace DataLayer
                 pedido.seguimientoPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
                 pedido.seguimientoPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
 
+                pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
+                pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Converter.GetInt(row, "estado_seguimiento_crediticio");
+                pedido.seguimientoCrediticioPedido.observacion = Converter.GetString(row, "observacion_seguimiento_crediticio");
+                pedido.seguimientoCrediticioPedido.usuario = new Usuario();
+                pedido.seguimientoCrediticioPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento_crediticio");
+                pedido.seguimientoCrediticioPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento_Crediticio");
                 pedidoList.Add(pedido);
             }
             return pedidoList;
@@ -497,24 +545,28 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Varchar(objCommand, "observacion", pedido.seguimientoPedido.observacion);
             InputParameterAdd.DateTime(objCommand, "fechaModificacion", pedido.fechaModificacion);
-         //   OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
+
             ExecuteNonQuery(objCommand);
 
-         //   DateTime fechaModifiacionActual = (DateTime)objCommand.Parameters["@fechaModificacionActual"].Value;
 
-/*
-            DateTime date1 = new DateTime(fechaModifiacionActual.Year, fechaModifiacionActual.Month, fechaModifiacionActual.Day, fechaModifiacionActual.Hour, fechaModifiacionActual.Minute, fechaModifiacionActual.Second);
-            DateTime date2 = new DateTime(cotizacion.fechaModificacion.Year, cotizacion.fechaModificacion.Month, cotizacion.fechaModificacion.Day, cotizacion.fechaModificacion.Hour, cotizacion.fechaModificacion.Minute, cotizacion.fechaModificacion.Second);
-
-            int result = DateTime.Compare(date1, date2);
-            if (result != 0)
-            {
-                //No se puede actualizar la cotización si las fechas son distintas
-                throw new Exception("CotizacionDesactualizada");
-            }
-
-    */
         }
+
+        public void insertSeguimientoCrediticioPedido(Pedido pedido)
+        {
+            var objCommand = GetSqlCommand("pi_seguimiento_crediticio_pedido");
+
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoCrediticioPedido.estado);
+            InputParameterAdd.Varchar(objCommand, "observacion", pedido.seguimientoCrediticioPedido.observacion);
+            InputParameterAdd.DateTime(objCommand, "fechaModificacion", pedido.fechaModificacion);
+
+            ExecuteNonQuery(objCommand);
+
+
+        }
+
         
+
     }
 }

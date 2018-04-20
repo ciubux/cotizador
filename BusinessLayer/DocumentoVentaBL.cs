@@ -15,7 +15,7 @@ namespace BusinessLayer
             {
 
                 pedido.seguimientoPedido.observacion = String.Empty;
-                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteEnvio;
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
 
                 foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
                 {
@@ -59,7 +59,7 @@ namespace BusinessLayer
             {
 
                 pedido.seguimientoPedido.observacion = String.Empty;
-                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteEnvio;
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
 
                 foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
                 {

@@ -1,4 +1,5 @@
-﻿body {
+﻿
+body {
     padding-top: 10px;
     padding-bottom: 20px;
 }
@@ -181,7 +182,14 @@ input.label-input {
     background-repeat: no-repeat;
 }
 
+.botonClean:before {
+    background-image: url(/images/clean.png);
+}
 
+
+.botonSearch:before {
+    background-image: url(/images/search_icon.png);
+}
 
 .monBouton:before {
     background-image: url(/images/calculadora3.png);
