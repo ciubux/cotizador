@@ -113,7 +113,7 @@ namespace Cotizador.Controllers
 
             ViewBag.pedidoList = this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA];
             ViewBag.existeCliente = existeCliente;
-
+            ViewBag.pagina = Constantes.BUSQUEDA_PEDIDO;
             return View();
         }
 
@@ -177,6 +177,7 @@ namespace Cotizador.Controllers
 
 
                 ViewBag.fechaPrecios = pedido.fechaPrecios.ToString(Constantes.formatoFecha);
+                
             }
             catch (Exception ex)
             {
@@ -186,6 +187,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
+            ViewBag.pagina = Constantes.MANTENIMIENTO_PEDIDO;
             return View();
         }
 
@@ -297,6 +299,33 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
+        public void obtenerProductosAPartirdePreciosRegistrados()
+        {
+            Pedido pedido = this.PedidoSession;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            pedido.usuario = usuario;
+            PedidoBL pedidoBL = new PedidoBL();
+
+            String[] fechaPrecios = this.Request.Params["fecha"].Split('/');
+            pedido.fechaPrecios = new DateTime(Int32.Parse(fechaPrecios[2]), Int32.Parse(fechaPrecios[1]), Int32.Parse(fechaPrecios[0]), 0, 0, 0);
+
+            String proveedor = "Todos";
+            String familia = "Todas";
+            if (this.Session["proveedor"] != null)
+            {
+                proveedor = (String)this.Session["proveedor"];
+            }
+
+            if (this.Session["familia"] != null)
+            {
+                familia = (String)this.Session["familia"];
+            }
+
+            pedido = pedidoBL.obtenerProductosAPartirdePreciosRegistrados(pedido, familia, proveedor);
+            HelperDocumento.calcularMontosTotales(pedido);
+            this.PedidoSession = pedido;
+        }
+
 
         public ActionResult CancelarCreacionPedido()
         {
@@ -362,6 +391,7 @@ namespace Cotizador.Controllers
 
 
             //Se limpia el ubigeo de entrega
+            pedido.ubigeoEntrega = new Ubigeo();
             pedido.ubigeoEntrega.Id = Constantes.UBIGEO_VACIO;
 
             String resultado = JsonConvert.SerializeObject(pedido.cliente);
@@ -393,7 +423,7 @@ namespace Cotizador.Controllers
 
             //Se calcula el porcentaje de descuento
             Decimal porcentajeDescuento = 0;
-            if (producto.precioClienteProducto.idPrecioClienteProducto != null)
+            if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
             {
                 //Solo en caso de que el precioNetoEquivalente sea distinto a 0 se calcula el porcentaje de descuento
                 //si no se obtiene precioNetoEquivalente quiere decir que no hay precioRegistrado
@@ -851,19 +881,19 @@ namespace Cotizador.Controllers
             updateEstadoSeguimientoCrediticioPedido(idPedido, estadosSeguimientoCrediticioPedido, observacion);
         }
 
+
         public String Programar()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
-
             String[] fechaProgramacion = this.Request.Params["fechaProgramacion"].Split('/');
-            pedido.fechaSolicitudDesde = new DateTime(Int32.Parse(fechaProgramacion[2]), Int32.Parse(fechaProgramacion[1]), Int32.Parse(fechaProgramacion[0]));
+            pedido.fechaProgramacion = new DateTime(Int32.Parse(fechaProgramacion[2]), Int32.Parse(fechaProgramacion[1]), Int32.Parse(fechaProgramacion[0]));
 
             pedido.comentarioProgramacion = this.Request.Params["comentarioProgramacion"];
-
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             PedidoBL pedidoBL = new PedidoBL();
-            pedidoBL.ProgramarPedido(pedido);
+            pedidoBL.ProgramarPedido(pedido, usuario);
 
-            String resultado = "";
+            String resultado = pedido.numeroPedido.ToString();
             return resultado;
         }
 

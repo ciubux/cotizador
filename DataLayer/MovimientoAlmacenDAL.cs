@@ -25,6 +25,8 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "serieDocumento", guiaRemision.serieDocumento); //puede ser null
             InputParameterAdd.Int(objCommand, "numeroDocumento", guiaRemision.numeroDocumento); //puede ser null
             InputParameterAdd.Guid(objCommand, "idPedido", guiaRemision.pedido.idPedido);
+            InputParameterAdd.Int(objCommand, "atencionParcial", guiaRemision.atencionParcial ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "ultimaAtencionParcial", guiaRemision.ultimaAtencionParcial ? 1 : 0);
             InputParameterAdd.Guid(objCommand, "idSedeOrigen", guiaRemision.ciudadOrigen.idCiudad);
             InputParameterAdd.Char(objCommand, "ubigeoEntrega", guiaRemision.pedido.ubigeoEntrega.Id);
             InputParameterAdd.Varchar(objCommand, "direccionEntrega", guiaRemision.pedido.direccionEntrega.descripcion);
@@ -52,9 +54,64 @@ namespace DataLayer
             guiaRemision.idGuiaRemision = (Guid)objCommand.Parameters["@idMovimientoAlmacen"].Value;
             guiaRemision.numero = (Int64)objCommand.Parameters["@numeroMovimientoAlmacen"].Value;
 
+            guiaRemision.venta = new Venta();
+            guiaRemision.venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
+            guiaRemision.venta.numero = (Int64)objCommand.Parameters["@numeroVenta"].Value;
 
 
+            this.InsertMovimientoAlmacenDetalle(guiaRemision);
         }
+
+
+        public void InsertMovimientoAlmacenDetalle(GuiaRemision guiaRemision)
+        {
+
+            foreach (DocumentoDetalle documentoDetalle in guiaRemision.pedido.documentoDetalle)
+            {
+                var objCommand = GetSqlCommand("pi_movimientoAlmacenDetalleSalida");
+                InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", guiaRemision.idGuiaRemision);
+                InputParameterAdd.Guid(objCommand, "idVenta", guiaRemision.venta.idVenta);
+                InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
+                InputParameterAdd.Guid(objCommand, "idPedido", guiaRemision.pedido.idPedido);
+                InputParameterAdd.Guid(objCommand, "idProducto", documentoDetalle.producto.idProducto);
+                InputParameterAdd.Int(objCommand, "cantidad", documentoDetalle.cantidad);
+                InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion);
+                OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacenDetalle");
+                ExecuteNonQuery(objCommand);
+                Guid idMovimientoAlmacenDetalle = (Guid)objCommand.Parameters["@idMovimientoAlmacenDetalle"].Value;
+            }
+        
+            //Siempre se almacena el precio sin igv de la unidad estandar
+            /*
+
+@cantidad int, 
+@observaciones varchar(200), 
+@idMovimientoAlmacenDetalle uniqueidentifier OUTPUT*/
+
+            /*    
+                InputParameterAdd.Decimal(objCommand, "precioSinIGV", cotizacionDetalle.producto.precioSinIgv);
+                //Siempre se almacena el costo sin igv de la unidad estandar
+                InputParameterAdd.Decimal(objCommand, "costoSinIGV", cotizacionDetalle.producto.costoSinIgv);
+                InputParameterAdd.Decimal(objCommand, "equivalencia", cotizacionDetalle.producto.equivalencia);
+                InputParameterAdd.Varchar(objCommand, "unidad", cotizacionDetalle.unidad);
+                InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", cotizacionDetalle.porcentajeDescuento);
+                InputParameterAdd.Decimal(objCommand, "precioNeto", cotizacionDetalle.precioNetoEquivalente);
+                InputParameterAdd.Int(objCommand, "esPrecioAlternativo", cotizacionDetalle.esPrecioAlternativo ? 1 : 0);
+                InputParameterAdd.Guid(objCommand, "idUsuario", cotizacionDetalle.usuario.idUsuario);
+                InputParameterAdd.Decimal(objCommand, "flete", cotizacionDetalle.flete);
+                InputParameterAdd.Varchar(objCommand, "observaciones", cotizacionDetalle.observacion);
+                OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
+                ExecuteNonQuery(objCommand);
+                */
+            // cotizacionDetalle.idCotizacionDetalle = (Guid)objCommand.Parameters["@newId"].Value;
+        }
+
+
+
+
+
+
+
 
 
 
@@ -256,8 +313,9 @@ namespace DataLayer
 
 
 
-        public Pedido SelectPedido(Pedido pedido)
+        public GuiaRemision SelectGuiaRemision(GuiaRemision guiaRemision)
         {
+            /*
             var objCommand = GetSqlCommand("ps_pedido");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             DataSet dataSet = ExecuteDataSet(objCommand);
@@ -392,22 +450,24 @@ namespace DataLayer
             }
 
             pedido.cliente.direccionEntregaList = direccionEntregaList;
-
-            return pedido;
+            */
+            return guiaRemision;
         }
 
-        public List<Pedido> SelectPedidos(Pedido pedido)
+        public List<GuiaRemision> SelectPedidos(GuiaRemision guiaRemision)
         {
+            List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
+            /*
             var objCommand = GetSqlCommand("ps_pedidos");
             InputParameterAdd.BigInt(objCommand, "numero", pedido.numeroPedido);
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuarioBusqueda.idUsuario);
-            /*Fecha Solicitud Desde Hasta*/
+           
             InputParameterAdd.DateTime(objCommand, "fechaSolicitudDesde", pedido.fechaSolicitudDesde);
             InputParameterAdd.DateTime(objCommand, "fechaSolicitudHasta", pedido.fechaSolicitudHasta);
-            /*Fecha Entrega Desde Hasta*/
+       
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta);
 
@@ -415,7 +475,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             DataTable dataTable = Execute(objCommand);
 
-            List<Pedido> pedidoList = new List<Pedido>();
+           
 
             foreach (DataRow row in dataTable.Rows)
             {
@@ -461,8 +521,8 @@ namespace DataLayer
                 pedido.seguimientoPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
 
                 pedidoList.Add(pedido);
-            }
-            return pedidoList;
+            }*/
+            return guiaRemisionList;
         }
 
 

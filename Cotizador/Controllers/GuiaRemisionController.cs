@@ -34,21 +34,101 @@ namespace Cotizador.Controllers
                 }
             }
         }
-        
 
+        private void instanciarGuiaRemisionBusqueda()
+        {
+            GuiaRemision guiaRemision = new GuiaRemision();
+            guiaRemision.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
+            guiaRemision.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
+            guiaRemision.ciudadOrigen = new Ciudad();
+
+            guiaRemision.pedido = new Pedido();
+            guiaRemision.pedido.cliente = new Cliente();
+
+            guiaRemision.fechaMovimientoDesde = DateTime.Now.AddDays(-10);
+            guiaRemision.fechaMovimientoHasta = DateTime.Now.AddDays(10);
+
+            
+
+            this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] = guiaRemision;
+        }
 
         // GET: GuiaRemision
         public ActionResult Index()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.BUSQUEDA_GUIA_REMISION;
-            GuiaRemision guiaRemision = new GuiaRemision();
-            guiaRemision.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
-            guiaRemision.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
 
-            ViewBag.guiaRemision = guiaRemision;
 
+            if (this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] == null)
+            {
+                instanciarGuiaRemisionBusqueda();
+            }
+
+            if (this.Session[Constantes.VAR_SESSION_GUIA_LISTA] == null)
+            {
+                this.Session[Constantes.VAR_SESSION_GUIA_LISTA] = new List<GuiaRemision>();
+            }
+
+            GuiaRemision guiaRemisionSearch = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA];
+
+            ViewBag.guiaRemision = guiaRemisionSearch;
+            ViewBag.guiaRemisionList = this.Session[Constantes.VAR_SESSION_GUIA_LISTA];
+            ViewBag.pagina = Constantes.BUSQUEDA_GUIA_REMISION;
+
+            ViewBag.fechaMovimientoDesde = guiaRemisionSearch.fechaMovimientoDesde.ToString(Constantes.formatoFecha);
+            ViewBag.fechaMovimientoHasta = guiaRemisionSearch.fechaMovimientoHasta.ToString(Constantes.formatoFecha);
 
             return View();
+        }
+
+        public String Search()
+        {
+            //Se recupera el pedido Búsqueda de la session
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA];
+
+            /*   String[] solDesde = this.Request.Params["fechaSolicitudDesde"].Split('/');
+               pedido.fechaSolicitudDesde = new DateTime(Int32.Parse(solDesde[2]), Int32.Parse(solDesde[1]), Int32.Parse(solDesde[0]));
+
+               String[] solHasta = this.Request.Params["fechaSolicitudHasta"].Split('/');
+               pedido.fechaSolicitudHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]), 23, 59, 59);
+
+               String[] entregaDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
+               pedido.fechaEntregaDesde = new DateTime(Int32.Parse(entregaDesde[2]), Int32.Parse(entregaDesde[1]), Int32.Parse(entregaDesde[0]));
+
+               String[] entregaHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
+               pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]), 23, 59, 59);
+
+
+               if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
+               {
+                   pedido.numeroPedido = 0;
+               }
+               else
+               {
+                   pedido.numeroPedido = long.Parse(this.Request.Params["numero"]);
+               }
+
+               if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
+               {
+                   pedido.numeroGrupoPedido = 0;
+               }
+               else
+               {
+                   pedido.numeroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
+               }
+
+
+               pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Int32.Parse(this.Request.Params["estado"]);
+               pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Int32.Parse(this.Request.Params["estadoCrediticio"]);
+               */
+            PedidoBL pedidoBL = new PedidoBL();
+            List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>(); //;pedidoBL.GetPedidos(pedido);
+            //Se coloca en session el resultado de la búsqueda
+            this.Session[Constantes.VAR_SESSION_GUIA_LISTA] = guiaRemisionList;
+            this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] = guiaRemision;
+            //Se retorna la cantidad de elementos encontrados
+            return JsonConvert.SerializeObject(guiaRemisionList);
+            //return pedidoList.Count();
         }
 
         public Boolean ConsultarSiExisteGuiaRemision()
@@ -121,7 +201,8 @@ namespace Cotizador.Controllers
                 guiaRemision.ciudadOrigen = ciudadOrigen;
 
                 guiaRemision.transportista = new Transportista();
-
+                guiaRemision.serieDocumento = Int32.Parse(ciudadOrigen.serieGuiaRemision);
+                guiaRemision.numeroDocumento = ciudadOrigen.ultimoNumeroGuiaRemision;
                 TransportistaBL transportistaBL = new TransportistaBL();
                 guiaRemision.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
 
@@ -140,6 +221,7 @@ namespace Cotizador.Controllers
         public ActionResult Guiar()
         {
 
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.MANTENIMIENTO_GUIA_REMISION;
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -161,7 +243,8 @@ namespace Cotizador.Controllers
             {
                 if (this.Session[Constantes.VAR_SESSION_GUIA] == null)
                 {
-                    instanciarGuiaRemision();
+                    return View("GuiarVacia");
+                    //instanciarGuiaRemision();
                 }
                 GuiaRemision guiaRemision = (GuiaRemision) this.Session[Constantes.VAR_SESSION_GUIA];
                 
@@ -176,8 +259,27 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
+            ViewBag.pagina = Constantes.MANTENIMIENTO_GUIA_REMISION;
             return View();
         }
+
+        public void ChangeAtencionParcial()
+        {
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+            guiaRemision.atencionParcial = Int32.Parse( this.Request.Params["atencionParcial"])==1;
+            this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+        }
+
+
+        public void ChangeUltimaAtencionParcial()
+        {
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+            guiaRemision.ultimaAtencionParcial = Int32.Parse(this.Request.Params["ultimaAtencionParcial"]) == 1;
+            this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+        }
+
+        
+
 
         public String ChangeTransportista()
         {
@@ -251,6 +353,21 @@ namespace Cotizador.Controllers
             GuiaRemisionSession.transportista = transportista;
             this.GuiaRemisionSession = guiaRemision;
             return JsonConvert.SerializeObject(transportista);
+        }
+
+
+        [HttpPost]
+        public String ChangeDetalle(List<DocumentoDetalleJson> documentoDetalleList)
+        {
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+
+            foreach (DocumentoDetalleJson documentoDetalleJson in documentoDetalleList)
+            {
+                DocumentoDetalle documentoDetalle = guiaRemision.pedido.documentoDetalle.Where(d => d.producto.idProducto == Guid.Parse(documentoDetalleJson.idProducto)).FirstOrDefault();
+                documentoDetalle.cantidad = documentoDetalleJson.cantidad;
+            }
+            this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+            return "{\"cantidad\":\"" + guiaRemision.pedido.documentoDetalle.Count + "\"}";
         }
     }
 }

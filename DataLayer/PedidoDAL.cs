@@ -173,12 +173,12 @@ namespace DataLayer
 
         }*/
 
-        public Pedido ProgramarPedido(Pedido pedido)
+        public Pedido ProgramarPedido(Pedido pedido,Usuario usuario)
         {
             var objCommand = GetSqlCommand("pu_programarPedido");
 
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
-            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaProgramacion", pedido.fechaProgramacion);
             InputParameterAdd.Varchar(objCommand, "comentarioProgramacion", pedido.comentarioProgramacion);
             ExecuteNonQuery(objCommand);
@@ -566,7 +566,7 @@ namespace DataLayer
 
         }
 
-        
+    
 
     }
 }

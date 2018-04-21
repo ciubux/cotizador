@@ -20,5 +20,10 @@ namespace Model
         public bool esProvincia { get; set; }  
 
         public List<Transportista> transportistaList { get; set; }
+
+        public String serieGuiaRemision { get; set; }
+
+        public int ultimoNumeroGuiaRemision { get; set; }
+
     }
 }

@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Guía Remisión";
+    Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
+    Model.Transportista transportista = ViewBag.transportista;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+
+    <input type="hidden" id="respuestaConfirmacion" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal">
+        <div class="col-lg-12">
+            <p class="pagination-centered" style=" font-size: medium" align="center">
+                No tiene abierta ninguna guía, ingrese a "Búsqueda Pedidos" y proceda a buscar los pedidos ingrasados o programados para poder atenderlos.
+            </p>
+        </div>
+
+    </form>
+</div>
+
+
+
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/guiaRemision")
+}
+
+
+

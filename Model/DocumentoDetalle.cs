@@ -157,7 +157,6 @@ namespace Model
         {
             get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, flete + precioNetoEquivalente)); } 
         }
-
         
 
     }

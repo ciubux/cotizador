@@ -34,7 +34,7 @@ jQuery(function ($) {
     var CANT_SOLO_CANTIDADES = 1;
     var CANT_CANTIDADES_Y_OBSERVACIONES = 2;
 
-    var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
+    var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
 
     $(document).ready(function () {
         cambiarMostrarValidezOfertaEnDias();
@@ -1234,7 +1234,7 @@ jQuery(function ($) {
             type: 'POST',
             error: function () {
 
-                alert("Ocurrió un problema al generar la cotización a partir de los precios registrados.");
+                alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
                 //window.location = '/Cotizacion/Cotizador';
             },
             success: function () {
@@ -2784,9 +2784,9 @@ jQuery(function ($) {
                     }
 
                 if (cotizacionList.length > 0)
-                    $("#msgSeEncontraronCotizaciones").hide();
+                    $("#msgBusquedaSinResultados").hide();
                 else
-                    $("#msgSeEncontraronCotizaciones").show();
+                    $("#msgBusquedaSinResultados").show();
                
               //  location.reload();
             }

@@ -380,6 +380,7 @@
     <Content Include="Views\Shared\_Provincia.cshtml" />
     <Content Include="Views\Shared\_Ciudad.cshtml" />
     <Content Include="Views\Usuario\_SelectUsuarioCotizacion.cshtml" />
+    <Content Include="Views\GuiaRemision\GuiarVacia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

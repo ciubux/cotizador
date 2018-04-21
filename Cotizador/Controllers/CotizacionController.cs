@@ -115,7 +115,7 @@ namespace Cotizador.Controllers
 
             ViewBag.cotizacionList =  this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA];
             ViewBag.existeCliente = existeCliente;
-
+            ViewBag.pagina = Constantes.BUSQUEDA_COTIZACION;
             return View();
         }
 
@@ -268,7 +268,7 @@ namespace Cotizador.Controllers
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
             }
-
+            ViewBag.pagina = Constantes.MANTENIMIENTO_COTIZACION;
             return View();
         }
 

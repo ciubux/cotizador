@@ -67,14 +67,38 @@ namespace BusinessLayer
         }
 
 
-        public void ProgramarPedido(Pedido pedido)
+        public void ProgramarPedido(Pedido pedido,Usuario usuario)
         {
             using (var dal = new PedidoDAL())
             {
-                dal.ProgramarPedido(pedido);
+                dal.ProgramarPedido(pedido,usuario);
             }
         }
-        
+
+        public Pedido obtenerProductosAPartirdePreciosRegistrados(Pedido pedido, String familia, String proveedor)
+        {
+
+            ProductoBL productoBL = new ProductoBL();
+            List<DocumentoDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistrados(pedido.cliente.idCliente, pedido.fechaPrecios, pedido.ciudad.esProvincia, pedido.incluidoIGV, familia, proveedor);
+
+            pedido.pedidoDetalleList = new List<PedidoDetalle>();
+            //Detalle de la cotizacion
+            foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
+            {
+                PedidoDetalle pedidoDetalle = new PedidoDetalle();
+                pedidoDetalle.producto = new Producto();
+                pedidoDetalle.cantidad = 1;
+                pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
+                pedidoDetalle.unidad = documentoDetalle.unidad;
+                pedidoDetalle.producto = documentoDetalle.producto;
+                pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
+                pedidoDetalle.flete = documentoDetalle.flete;
+                pedidoDetalle.observacion = documentoDetalle.observacion;
+                pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
+                pedido.pedidoDetalleList.Add(pedidoDetalle);
+            }
+            return pedido;
+        }
 
 
 

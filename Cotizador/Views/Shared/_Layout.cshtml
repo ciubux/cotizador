@@ -31,20 +31,27 @@
                         var linkBusquedaCotizaciones = "";
                         var linkMantenimientoCotizacion = "";
 
-                        var linkPedidosYGuiasDeRemision = "";
+                        var linkPedidos = "";
                         var linkBusquedaPedidos = "";
                         var linkMantenimientoPedido = "";
+
+                        var linkMovimientosAlmacen = "";
                         var linkBusquedaGuiasRemision = "";
                         var linkMantenimientoGuiaRemision = "";
+
+                        var linkDocumentosVenta = "";
+                        var linkBusquedaDocumentoVenta = "";
+                        var linkMantenimientoDocumentoVenta = "";
+
                     }
                     @switch ((int)this.Session["pagina"])
                     {
                         case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
                         case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active"; break;
-                        case 2: linkBusquedaPedidos = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
-                        case 3: linkMantenimientoPedido = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
-                        case 4: linkBusquedaGuiasRemision = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
-                        case 5: linkMantenimientoGuiaRemision = "ative"; linkPedidosYGuiasDeRemision = "active"; break;
+                        case 2: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
+                        case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
+                        case 4: linkBusquedaGuiasRemision = "ative"; linkMovimientosAlmacen = "active"; break;
+                        case 5: linkMantenimientoGuiaRemision = "ative"; linkMovimientosAlmacen = "active"; break;
                     }
                     @{ var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];}
                     @if (usuario.creaCotizaciones)
@@ -61,12 +68,12 @@
                         </li>
                     }
 
-                    @if (usuario.tomaPedidos || usuario.creaGuias || usuario.apruebaPedidos)
+                    @if (usuario.tomaPedidos || usuario.apruebaPedidos)
                     {
 
-                        <li class="@linkPedidosYGuiasDeRemision">
+                        <li class="@linkPedidos">
                             <a class="dropdown-toggle" data-toggle="dropdown">
-                                Pedidos y Guías de Remisión
+                                Pedidos
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -77,6 +84,19 @@
                                 {
                                     <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Pedido", "Pedir", "Pedido")</li>
                                 }
+                            </ul>
+                        </li>
+                    }
+
+                    @if (usuario.creaGuias)
+                    {
+
+                        <li class="@linkMovimientosAlmacen">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                Guías de Remisión
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
                                 @if (usuario.creaGuias)
                                 {
                                     <li id="linkBusquedaGuiasRemision" class="@linkBusquedaGuiasRemision">@Html.ActionLink("Búsqueda Guias de Remisión", "Index", "GuiaRemision")</li>

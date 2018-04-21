@@ -13,21 +13,30 @@ namespace Model
 
         public Guid idGuiaRemision { get; set; }
 
+        [Display(Name = "Venta:")]
+        public Venta venta { get; set; }
+
         [Display(Name = "Pedido:")]
         public Pedido pedido { get; set; }
 
-        [Display(Name = "SEDE MP:")]
+        [Display(Name = "Sede MP:")]
         public Ciudad ciudadOrigen { get; set; }
 
+        [Display(Name = "Serie  Guía Remisión:")]
+        public new int serieDocumento { get; set; }
+
+        [Display(Name = "Número Guía Remisión:")]
+        public new int numeroDocumento { get; set; }
 
         [Display(Name = "Punto Partida:")]
         public String direccionOrigen { get; set; }
-        /*
-        [Display(Name = "Ciudad Destino:")]
-        public Ciudad ciudadDestino { get; set; }
 
-        [Display(Name = "Dirección Entrega:")]
-        public String direccionDestino { get; set; }*/
+
+        [Display(Name = "Atención Parcial:")]
+        public Boolean atencionParcial { get; set; }
+
+        public Boolean ultimaAtencionParcial { get; set; }
+
 
 
         [Display(Name = "Placa Vehículo:")]

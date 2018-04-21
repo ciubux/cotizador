@@ -31,7 +31,7 @@ namespace BusinessLayer
 
             if (cotizacion.fechaEsModificada && !cotizacion.usuario.apruebaCotizaciones)
             {
-                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de la cotización.";
+                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de la cotización.\n";
                 cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
             }
             else
@@ -42,7 +42,7 @@ namespace BusinessLayer
 
             if ((cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null) && !cotizacion.usuario.apruebaCotizaciones)
             {
-                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de inicio y/o fin de vigencia de precios.";
+                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de inicio y/o fin de vigencia de precios.\n";
                 cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
             }
 
@@ -105,13 +105,13 @@ namespace BusinessLayer
                             switch (evaluarDescuento)
                             {
                                 case 1:
-                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ". El precio unitario registrado en facturación es muy antiguo.";
+                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ". El precio unitario registrado en facturación se registro hace más de "+ Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION+ " días.\n";
                                     break;
                                 case 2:
-                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ". El precio unitario es distinto al precio registrado en facturación.";
+                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ". El precio unitario es distinto al precio registrado en facturación.\n";
                                     break;
                                 case 3:
-                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ".  No se encontró precio unitario en precios registrados en facturación.";
+                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ".  No se encontró precio unitario en precios registrados en facturación.\n";
                                     break;
                             }
                             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
@@ -170,62 +170,25 @@ namespace BusinessLayer
 
         public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor)
         {
-            using (var dal = new CotizacionDAL())
+
+            ProductoBL productoBL = new ProductoBL();
+            List<DocumentoDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistrados(cotizacion.cliente.idCliente, cotizacion.fechaPrecios, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, familia, proveedor);
+
+            cotizacion.cotizacionDetalleList = new List<CotizacionDetalle>();
+            //Detalle de la cotizacion
+            foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
             {
-                cotizacion = dal.obtenerProductosAPartirdePreciosRegistrados(cotizacion, familia, proveedor);
-
-                foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
-                {
-
-                    if (cotizacionDetalle.producto.image == null)
-                    {
-                        FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
-                        MemoryStream storeStream = new MemoryStream();
-                        storeStream.SetLength(inStream.Length);
-                        inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
-                        storeStream.Flush();
-                        inStream.Close();
-                        cotizacionDetalle.producto.image = storeStream.GetBuffer();
-                    }
-                    //Si es provincia se considera el precioProvincia
-                    if (cotizacion.ciudad.esProvincia)
-                    {
-                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNetoEquivalente * 100 / cotizacionDetalle.producto.precioSinIgv);
-                        cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
-                    }
-                    else
-                    {
-                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNetoEquivalente * 100 / cotizacionDetalle.producto.precioSinIgv);
-                    }
-
-
-
-
-
-
-                    if (cotizacion.incluidoIGV)
-                    {
-                        //Se agrega el IGV al precioLista
-                        decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;
-                        decimal precioLista = precioSinIgv + (precioSinIgv * cotizacion.igv);
-                        cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioLista));
-                        //Se agrega el IGV al costoLista
-                        decimal costoSinIgv = cotizacionDetalle.producto.costoSinIgv;
-                        decimal costoLista = costoSinIgv + (costoSinIgv * cotizacion.igv);
-                        cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoLista));
-                    }
-                    else
-                    {
-                        //Se agrega el IGV al precioLista
-                        cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioSinIgv));
-                        //Se agrega el IGV al costoLista
-                        cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
-                    }
-                    
-
-                }
-
-
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle();
+                cotizacionDetalle.producto = new Producto();
+                cotizacionDetalle.cantidad = 1;
+                cotizacionDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
+                cotizacionDetalle.unidad = documentoDetalle.unidad;
+                cotizacionDetalle.producto = documentoDetalle.producto;
+                cotizacionDetalle.precioNeto = documentoDetalle.precioNeto;
+                cotizacionDetalle.flete = documentoDetalle.flete;
+                cotizacionDetalle.observacion = documentoDetalle.observacion;
+                cotizacionDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
+                cotizacion.cotizacionDetalleList.Add(cotizacionDetalle);
             }
             return cotizacion;
         }

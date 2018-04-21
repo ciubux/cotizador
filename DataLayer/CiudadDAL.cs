@@ -31,7 +31,8 @@ namespace DataLayer
                     nombre = Converter.GetString(row, "nombre"),
                     orden = Converter.GetInt(row, "orden"),
                     esProvincia = Converter.GetBool(row, "es_provincia"),
-                    direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida")
+                    direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida"),
+                    serieGuiaRemision = Converter.GetString(row, "serie_guia_remision"),
                 };
                 ciudadList.Add(ciudad);
             }
@@ -43,17 +44,19 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_getciudad");
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
             DataTable dataTable = Execute(objCommand);
-            Ciudad obj = new Ciudad();
+            Ciudad ciudad = new Ciudad();
 
             foreach (DataRow row in dataTable.Rows)
             {
-                obj.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                obj.orden = Converter.GetInt(row, "orden");
-                obj.nombre = Converter.GetString(row, "nombre");
-                obj.esProvincia = Converter.GetBool(row, "es_provincia");
-                obj.direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida");
+                ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                ciudad.orden = Converter.GetInt(row, "orden");
+                ciudad.nombre = Converter.GetString(row, "nombre");
+                ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
+                ciudad.direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida");
+                ciudad.serieGuiaRemision = Converter.GetString(row, "serie_guia_remision");
+                ciudad.ultimoNumeroGuiaRemision = Converter.GetInt(row, "ultimo_numero_guia_remision");
             }
-            return obj;
+            return ciudad;
         }
     }
 }

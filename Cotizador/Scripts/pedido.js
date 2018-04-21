@@ -1,24 +1,7 @@
 
 jQuery(function ($) {
 
-    /*
-    $(function () {
-        $('.dropdown-menu a').click(function () {
-            console.log($(this).attr('data-value'));
-            $(this).closest('.dropdown').find('input.countrycode')
-                .val('(' + $(this).attr('data-value') + ')');
-        });
-    });*/
 
-
-
-    /*
-    //Tabla de resultado de búsqueda de Pedidos
-    $("#tablePedidos").footable({
-        "paging": {
-            "enabled": true
-        }
-    });*/
 
     //CONSTANTES POR DEFECTO
     var cantidadDecimales = 2;
@@ -45,11 +28,14 @@ jQuery(function ($) {
     var ESTADO_PENDIENTE_APROBACION_STR = "Pendiente de Aprobación de Ingreso";
     var ESTADO_INGRESADO_STR = "Pedido Ingresado";
     var ESTADO_DENEGADO_STR = "Pedido Denegado";
-    var ESTADO_PROGRAMADO = "Pedido Programado"
+    var ESTADO_PROGRAMADO_STR = "Pedido Programado"
     var ESTADO_ATENDIDO_STR = "Pedido Atendido"
     var ESTADO_ATENDIDO_PARCIALMENTE_STR = "Pedido Atendido Parcialmente"
     var ESTADO_EN_EDICION_STR = "Pedido En Edicion";
 
+    var TITULO_CANCELAR_PROGRAMACION = "Cancelar Programación de Pedido";
+    var TITULO_DENEGAR_INGRESO = "Denegar Ingreso de Pedido";
+    var TITULO_APROBAR_INGRESO = "Aprobar Ingreso de Pedido";
 
     //Estados Crediticios
     var ESTADO_PENDIENTE_LIBERACION = 0;
@@ -76,7 +62,7 @@ jQuery(function ($) {
      */
 
     var pagina = 2;
-    var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
+    var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
     
 
     $(document).ready(function () {
@@ -1225,7 +1211,7 @@ jQuery(function ($) {
 
             }, error: function (detalle) {
 
-                $("#resultadoAgregarProducto").html("Producto ya se encuentra en el detalle de la cotización.");
+                $("#resultadoAgregarProducto").html("Producto ya se encuentra en el detalle del pedido.");
 
                 // alert($("#resultadoAgregarProducto").html(detalle.responseText).closest("title"));
 
@@ -1356,7 +1342,7 @@ jQuery(function ($) {
         }
 
 
-        if (!verificarSiExisteDetalle()) {
+        if (verificarSiExisteDetalle()) {
             alert("No deben existir productos agregados al pedido.");
             return false;
         }
@@ -1386,11 +1372,11 @@ jQuery(function ($) {
             type: 'POST',
             error: function () {
 
-                alert("Ocurrió un problema al generar la cotización a partir de los precios registrados.");
+                alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
                 //window.location = '/Pedido/Cotizador';
             },
             success: function () {
-                window.location = '/Pedido/Cotizar';
+                window.location = '/Pedido/Pedir';
             }
         });
 
@@ -1423,7 +1409,23 @@ jQuery(function ($) {
             $('#pedido_numeroReferenciaCliente').focus();
             return false;
         }
-        
+
+        if ($("#ActualDepartamento").val().trim().length == 0) {
+            alert('Debe ingresar el departamento.');
+            $("#ActualDepartamento").focus();
+            return false;
+        }
+        if ($("#ActualProvincia").val().trim().length == 0) {
+            alert('Debe ingresar la provincia.');
+            $("#ActualProvincia").focus();
+            return false;
+        }
+        if ($("#ActualDistrito").val().trim().length == 0) {
+            alert('Debe ingresar el distrito.');
+            $("#ActualDistrito").focus();
+            return false;
+        }
+
 
         if ($("#pedido_direccionEntrega").val().trim() == "") {
             alert("Debe seleccionar la dirección de entrega.");
@@ -1589,11 +1591,16 @@ jQuery(function ($) {
         });
     }
 
-        $("#btnAceptarComentario").click(function () {
+    $("#btnCancelarComentario").click(function () {
+        window.location = '/Pedido/CancelarCreacionPedido';
+    });
+
+    $("#btnAceptarComentario").click(function () {
+        var codigoPedido = $("#pedido_numeroPedido").val();
         var idPedido = $("#idPedido").val();
         var observacion = $("#comentarioPendienteIngreso").val();
         $.ajax({
-            url: "/Cotizacion/updateEstadoPedido",
+            url: "/Pedido/updateEstadoPedido",
             data: {
                 idPedido: idPedido,
                 estado: ESTADO_PENDIENTE_APROBACION,
@@ -1601,11 +1608,11 @@ jQuery(function ($) {
             },
             type: 'POST',
             error: function () {
-                alert("Ocurrió un problema al intentar agregar un comentario al pedido.")
+                alert("Ocurrió un problema al intentar agregar un comentario al pedido.");
                 $("#btnCancelarComentario").click();
             },
             success: function () {
-                alert("El comentario del estado del pedido número: " + codigoPedido + " se cambió correctamente.");
+                alert("El comentario del estado del pedido número: " + codigoPedido + " se cambió correctamente.");;
                 $("#btnCancelarComentario").click();
             }
         });
@@ -1828,13 +1835,13 @@ jQuery(function ($) {
                // sleep
                 $("#tableDetallePedido").append(d);
 
-
-                if (pedido.seguimientoPedido.estado == ESTADO_EN_EDICION) {
-                    $("#btnEditarPedido").html("Continuar Editanto");
-                }
-                else
-                {
-                    $("#btnEditarPedido").html("Editar");
+                if (pedido.seguimientoPedido.estado != ESTADO_PROGRAMADO) {
+                    if (pedido.seguimientoPedido.estado == ESTADO_EN_EDICION) {
+                        $("#btnEditarPedido").html("Continuar Editanto");
+                    }
+                    else {
+                        $("#btnEditarPedido").html("Editar");
+                    }
                 }
 
 
@@ -1853,7 +1860,8 @@ jQuery(function ($) {
 
 
                 //DENEGAR PEDIDO
-                if (pedido.seguimientoPedido.estado == ESTADO_PENDIENTE_APROBACION)
+                if (pedido.seguimientoPedido.estado == ESTADO_PENDIENTE_APROBACION
+                && usuario.apruebaPedidos)
                 {
 
                     $("#btnDenegarIngresoPedido").show();
@@ -1908,7 +1916,7 @@ jQuery(function ($) {
                     $("#btnAtenderPedido").hide();
                 }
 
-                //ATENDER PEDIDO
+                //CANCELAR PROGRAMACION
                 if (pedido.seguimientoPedido.estado == ESTADO_PROGRAMADO)
                 {
                     $("#btnCancelarProgramacionPedido").show();
@@ -2043,6 +2051,7 @@ jQuery(function ($) {
 
 
     $("#btnAtenderPedido").click(function () {
+        desactivarBotonesVer();
         var idPedido = $("#idPedido").val();
 
         $.ajax({
@@ -2050,6 +2059,12 @@ jQuery(function ($) {
             type: 'POST',
             async: false,
             success: function (resultado) {
+                activarBotonesVer();
+
+
+
+
+
                 if (resultado == "False") {
                     $.ajax({
                         url: "/GuiaRemision/iniciarAtencionDesdePedido",
@@ -2068,24 +2083,16 @@ jQuery(function ($) {
         });
     });
 
+
+
+
+
     function limpiarComentario()
     {
         $("#comentarioEstado").val("");
         $("#comentarioEstado").focus();
     }
 
-
-    $("#btnAprobarCotizacion").click(function () {
-        $("#labelNuevoEstado").html(ESTADO_APROBADA_STR);
-        $("#estadoId").val(ESTADO_APROBADA);
-        limpiarComentario();
-    });
-
-    $("#btnDenegarCotizacion").click(function () {
-        $("#labelNuevoEstado").html(ESTADO_DENEGADA_STR);
-        $("#estadoId").val(ESTADO_DENEGADA);
-        limpiarComentario();
-    });
 
 
     $("#btnLiberarPedido").click(function () {
@@ -2103,29 +2110,30 @@ jQuery(function ($) {
     });
 
     $("#btnAprobarIngresoPedido").click(function () {
-
-        $("#labelNuevoEstado").html(ESTADO_APROBADA_STR);
+        $("#modalAprobacionTitle").html(TITULO_APROBAR_INGRESO);
+        $("#labelNuevoEstado").html(ESTADO_INGRESADO_STR);
         $("#estadoId").val(ESTADO_ACEPTADA);
         limpiarComentario();
     });
 
     $("#btnDenegarIngresoPedido").click(function () {
-
+        $("#modalAprobacionTitle").html(TITULO_DENEGAR_INGRESO);
         $("#labelNuevoEstado").html(ESTADO_DENEGADO_STR);
         $("#estadoId").val(ESTADO_DENEGADO);
         limpiarComentario();
     });
 
-    /*
-    $("#btnAprobarCotizacion").click(function () {
-        $("#labelNuevoEstado").html(ESTADO_APROBADA_STR);
-        $("#estadoId").val(ESTADO_APROBADA);
+
+
+    $("#btnCancelarProgramacionPedido").click(function () {
+        $("#modalAprobacionTitle").html(TITULO_CANCELAR_PROGRAMACION);
+        $("#labelNuevoEstado").html(ESTADO_INGRESADO_STR);
+        $("#estadoId").val(ESTADO_INGRESADO);
         limpiarComentario();
     });
 
- 
 
-    */
+
 
 
     $('#modalAprobacion').on('shown.bs.modal', function (e) {
@@ -2174,15 +2182,16 @@ jQuery(function ($) {
         var estado = $("#estadoId").val();
         var comentarioEstado = $("#comentarioEstado").val();
 
-        if ($("#labelNuevoEstado").html() == ESTADO_DENEGADO_STR) {
+        if ($("#labelNuevoEstado").html() == ESTADO_DENEGADO_STR
+            || $("#modalAprobacionTitle").html() == TITULO_CANCELAR_PROGRAMACION)
+        {
             if (comentarioEstado.trim() == "") {
-                alert("Cuando Deniega un pedido debe ingresar un Comentario.");
+                alert("Debe ingresar un Comentario.");
                 return false;
             }
         }
         var codigo = $("#verNumero").html();
-        var idPedido = $("#idPedido").val();
-        
+        var idPedido = $("#idPedido").val();        
 
         $.ajax({
             url: "/Pedido/updateEstadoPedido",
@@ -2691,7 +2700,6 @@ jQuery(function ($) {
                 location.reload();
             }
         });
-
     });
 
     /*Evento que se dispara cuando se hace clic en el boton calcular descuento de la grilla*/
@@ -2907,9 +2915,9 @@ jQuery(function ($) {
                 }
 
                 if (pedidoList.length > 0)
-                    $("#msgSeEncontraronPedidos").hide();
+                    $("#msgBusquedaSinResultados").hide();
                 else
-                    $("#msgSeEncontraronPedidos").show();
+                    $("#msgBusquedaSinResultados").show();
             }
         });
     });
@@ -3207,13 +3215,14 @@ jQuery(function ($) {
         $.ajax({
             url: "/Pedido/Programar",
             type: 'POST',
-            dataType: 'JSON',
+           // dataType: 'JSON',
             data: {
                 fechaProgramacion: fechaProgramacion,
                 comentarioProgramacion: comentarioProgramacion
             },
-            success: function () {
-                alert('Se programó correctamente el pedido para su atención.');
+            success: function (resultado) {
+                alert('El pedido número ' + $("#verNumero").html() + ' se programó para ser atendido.');
+                location.reload();
             }
         });
         $("btnCancelarProgramarPedido").click();
