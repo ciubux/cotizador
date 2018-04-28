@@ -67,4 +67,49 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="callProcessUpd">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="oUser" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oPass" nillable="true" type="xs:string" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="oCabecera" nillable="true" type="q12:CPE_CABECERA_BE" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listDetalle" nillable="true" type="q13:ArrayOfCPE_DETALLE_BE" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listAdicionales" nillable="true" type="q14:ArrayOfCPE_DAT_ADIC_BE" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listReferenciados" nillable="true" type="q15:ArrayOfCPE_DOC_REF_BE" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listAnticipos" nillable="true" type="q16:ArrayOfCPE_ANTICIPO_BE" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listFacGuia" nillable="true" type="q17:ArrayOfCPE_FAC_GUIA_BE" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listRelacionado" nillable="true" type="q18:ArrayOfCPE_DOC_ASOC_BE" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/TT.EOL.Commons" minOccurs="0" name="oTipoOnline" type="q19:GlobalEnum.TipoOnline" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="callProcessUpdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="callProcessUpdResult" nillable="true" type="q20:CPE_RESPUESTA_BE" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="callPreview">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="oUser" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oPass" nillable="true" type="xs:string" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="oCabecera" nillable="true" type="q21:CPE_CABECERA_BE" />
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listDetalle" nillable="true" type="q22:ArrayOfCPE_DETALLE_BE" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listAdicionales" nillable="true" type="q23:ArrayOfCPE_DAT_ADIC_BE" />
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listReferenciados" nillable="true" type="q24:ArrayOfCPE_DOC_REF_BE" />
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listAnticipos" nillable="true" type="q25:ArrayOfCPE_ANTICIPO_BE" />
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listFacGuia" nillable="true" type="q26:ArrayOfCPE_FAC_GUIA_BE" />
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="listRelacionado" nillable="true" type="q27:ArrayOfCPE_DOC_ASOC_BE" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="callPreviewResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="callPreviewResult" nillable="true" type="q28:CPE_DOC_TRIBUTARO_BE" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

@@ -1161,7 +1161,8 @@ jQuery(function ($) {
                 razonSocial: razonSocial,
                 nombreComercial: nombreComercial,
                 ruc: ruc,
-                contacto: contacto
+                contacto: contacto,
+                controller: "cotizacion"
             },
             error: function (detalle) { alert("Se generó un error al intentar crear el cliente."); },
             success: function (resultado) {
@@ -1305,13 +1306,21 @@ jQuery(function ($) {
 
         var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPrecios").val();
         if (fechaInicioVigenciaPrecios.trim() != "") {
-            //Si no está vacía no puede ser menor a la fecha
-            if (convertirFechaNumero(fechaInicioVigenciaPrecios) < convertirFechaNumero(fecha))
-            {
-                alert("El inicio de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
-                $("#fechaInicioVigenciaPrecios").focus();
-                return false;
-            }
+
+            if (convertirFechaNumero(fechaInicioVigenciaPrecios) < convertirFechaNumero(fecha)) {
+                //Si no está vacía no puede ser menor a la fecha
+                var anioInicioVigencia = convertirFechaNumero(fechaInicioVigenciaPrecios).toString().substr(0, 4);
+                //var anioCotizacion = convertirFechaNumero(fecha).toString().substr(0, 4);
+                var fechatmp = new Date();
+                var anioCotizacion = fechatmp.getFullYear();
+
+                if (Number(anioInicioVigencia) != anioCotizacion) {
+                    alert("El año del inicio de vigencia de precios no puede ser menor al año actual.");
+                    $("#fechaInicioVigenciaPrecios").focus();
+                    return false;
+                }
+            }   
+
         }
 
         var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
@@ -1391,8 +1400,9 @@ jQuery(function ($) {
                 $("#numero").val(resultado.codigo);
 
                 if (resultado.estado == ESTADO_APROBADA) {
-                    alert("La cotización número " + resultado.codigo + " fue creada correctamente; se APROBÓ automáticamente, no requiere aprobación.");
-                    generarPDF();
+                    alert("La cotización número " + resultado.codigo + " fue creada correctamente; se APROBÓ automáticamente, no requiere aprobación, ingrese un comentario si lo cree conveniente.");
+                    $("#comentarioAprobacion").val(resultado.observacion);
+                    $("#modalComentarioAprobacion").modal('show');                    
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     alert("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN, ingrese un comentario si lo cree conveniente.");
@@ -1433,7 +1443,8 @@ jQuery(function ($) {
 
                 if (resultado.estado == ESTADO_APROBADA) {
                     alert("La cotización número " + resultado.codigo + " fue editada correctamente; se APROBÓ automáticamente, no requiere aprobación.");
-                    generarPDF();
+                    $("#comentarioAprobacion").val(resultado.observacion);
+                    $("#modalComentarioAprobacion").modal('show');  
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                    /* if (confirm("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN, ¿desea agregar un comentario?")) {
@@ -1605,6 +1616,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].precioNeto.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + lista[i].producto.costoLista.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
@@ -2870,6 +2882,35 @@ jQuery(function ($) {
     $("#btnCancelarComentario").click(function()
     {
         window.location = '/Cotizacion/CancelarCreacionCotizacion';
+    });
+
+    $("#btnCancelarComentarioAprobacion").click(function () {
+        generarPDF();
+    });
+
+
+    $("#btnAceptarComentarioAprobacion").click(function () {
+        var codigoCotizacion = $("#numero").val();
+        var observacion = $("#comentarioAprobacion").val();
+        $.ajax({
+            url: "/Cotizacion/updateEstadoCotizacion",
+            data: {
+                codigo: codigoCotizacion,
+                estado: ESTADO_APROBADA,
+                observacion: observacion
+            },
+            type: 'POST',
+            error: function () {
+                alert("Ocurrió un problema al intentar agregar un comentario a la cotización.")
+                $("#btnCancelarComentarioAprobacion").click();
+            },
+            success: function () {
+                alert("El comentario del estado de la cotización número: " + codigoCotizacion + " se cambió correctamente.");
+                $("#btnCancelarComentarioAprobacion").click();
+                
+            }
+        });
+
     });
 
 

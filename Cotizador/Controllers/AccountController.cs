@@ -102,11 +102,104 @@ namespace Cotizador.Controllers
                     List<Proveedor> proveedorList = proveedorBL.getProveedores();
                     this.Session["proveedorList"] = proveedorList;
 
-                    try {
+                    CiudadBL ciudadBL = new CiudadBL();
+                    List<Ciudad> ciudadList = ciudadBL.getCiudades();
+                    usuario.sedesMP = ciudadList;
+
+                    /*Ciudades para guias de remision*/
+                    usuario.sedesMPGuiasRemision = new List<Ciudad>();
+                    if (usuario.administraGuiasLima)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if(!ciudad.esProvincia)
+                            { 
+                                usuario.sedesMPGuiasRemision.Add(ciudad);
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (usuario.administraGuiasProvincia)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.esProvincia)
+                            {
+                                usuario.sedesMPGuiasRemision.Add(ciudad);
+                            }
+                        }
+                    }
+
+                    if (!usuario.administraGuiasLima && !usuario.administraGuiasLima)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                            {
+                                usuario.sedesMPGuiasRemision.Add(ciudad);
+                                break;
+                            }
+                        }
+                    }
+
+
+
+
+
+
+
+
+
+
+                    /*Ciudades para documentos de venta*/
+                    usuario.sedesMPDocumentosVenta = new List<Ciudad>();
+                    if (usuario.administraDocumentosVentaLima)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (!ciudad.esProvincia)
+                            {
+                                usuario.sedesMPDocumentosVenta.Add(ciudad);
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (usuario.administraDocumentosVentaProvincia)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.esProvincia)
+                            {
+                                usuario.sedesMPDocumentosVenta.Add(ciudad);
+                            }
+                        }
+                    }
+
+                    if (!usuario.administraDocumentosVentaLima && !usuario.administraDocumentosVentaProvincia)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                            {
+                                usuario.sedesMPDocumentosVenta.Add(ciudad);
+                                break;
+                            }
+                        }
+                    }
+
+
+
+
+
+
+                    try
+                    {
                         Cotizacion cotizacion = JsonConvert.DeserializeObject<Cotizacion>(usuario.cotizacionSerializada);
                         usuario.cotizacionSerializada = null;
                         this.Session["usuario"] = usuario; 
-                        this.Session["pagina"] = Constantes.BUSQUEDA_COTIZACION;
+                        this.Session["pagina"] = (int)Constantes.paginas.BusquedaCotizaciones;
                         this.Session["cotizacion"] = cotizacion;
 
                     }

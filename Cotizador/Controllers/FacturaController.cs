@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using Model;
+using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System;
@@ -14,9 +15,203 @@ namespace Cotizador.Controllers
     public class FacturaController : Controller
     {
         // GET: Factura
+        private DocumentoVenta FacturaSession
+        {
+            get
+            {
+                DocumentoVenta factura = null;
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.BusquedaFacturas: factura = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_BUSQUEDA]; break;
+                    case Constantes.paginas.MantenimientoFactura: factura = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA]; break;
+                }
+                return factura;
+            }
+            set
+            {
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.BusquedaFacturas: this.Session[Constantes.VAR_SESSION_FACTURA_BUSQUEDA] = value; break;
+                    case Constantes.paginas.MantenimientoFactura: this.Session[Constantes.VAR_SESSION_FACTURA] = value; break;
+                }
+            }
+        }
+
 
         [HttpGet]
         public ActionResult Index()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaFacturas;
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                /*
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.tomaPedidos && !usuario.apruebaPedidos)
+                {
+                    return RedirectToAction("Login", "Account");
+                }*/
+            }
+
+            if (this.FacturaSession == null)
+            {
+                instanciarfacturaBusqueda();
+            }
+
+            
+           
+             int existeCliente = 0;
+            //  if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
+            if (this.FacturaSession.cliente.idCliente != Guid.Empty)
+            {
+                existeCliente = 1;
+            }
+
+            GuiaRemision guiaRemision = new GuiaRemision();
+            guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.Venta;
+
+            ViewBag.documentoVenta = this.FacturaSession;
+            ViewBag.fechaEmisionDesde = this.FacturaSession.fechaEmisionDesde.ToString(Constantes.formatoFecha);
+            ViewBag.fechaEmisionHasta = this.FacturaSession.fechaEmisionHasta.ToString(Constantes.formatoFecha);
+            ViewBag.documentoVentaList = this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+            ViewBag.existeCliente = existeCliente;
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaFacturas;
+
+            return View();
+
+        }
+
+
+        public String SearchClientes()
+        {
+            String data = this.Request.Params["data[q]"];
+            ClienteBL clienteBL = new ClienteBL();
+            DocumentoVenta factura = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_BUSQUEDA];
+            return clienteBL.getCLientesBusqueda(data, factura.ciudad.idCiudad);
+        }
+
+
+        public String Search()
+        {
+          
+            String[] desde = this.Request.Params["fechaEmisionDesde"].Split('/');
+            this.FacturaSession.fechaEmisionDesde = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
+
+            String[] hasta = this.Request.Params["fechaEmisionHasta"].Split('/');
+            this.FacturaSession.fechaEmisionHasta = new DateTime(Int32.Parse(hasta[2]), Int32.Parse(hasta[1]), Int32.Parse(hasta[0]));
+            
+
+            if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
+            {
+                this.FacturaSession.numero = "0";
+            }
+            else
+            {
+                this.FacturaSession.numero = this.Request.Params["numero"];
+            }
+         
+
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+
+            List<DocumentoVenta> documentoVentaList = documentoVentaBL.GetFacturas(this.FacturaSession);
+
+            //Se coloca en session el resultado de la búsqueda
+            this.Session[Constantes.VAR_SESSION_FACTURA_LISTA] = documentoVentaList;
+            //Se retorna la cantidad de elementos encontrados
+            return JsonConvert.SerializeObject(documentoVentaList);
+            //return pedidoList.Count();
+        }
+
+
+        private void instanciarfacturaBusqueda()
+        {
+            DocumentoVenta documentoVenta = new DocumentoVenta();
+            DateTime fechaDesde = DateTime.Now.AddDays(-10);
+            DateTime fechaHasta = DateTime.Now.AddDays(10);
+            documentoVenta.fechaEmisionDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
+            documentoVenta.fechaEmisionHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
+
+            documentoVenta.serie = "0";
+            documentoVenta.numero = "0";
+
+            documentoVenta.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            documentoVenta.cliente = new Cliente();
+            documentoVenta.cliente.idCliente = Guid.Empty;
+
+            documentoVenta.ciudad = new Ciudad();
+            documentoVenta.ciudad.idCiudad = Guid.Empty;
+
+            //pedidoTmp.usuarioBusqueda = pedidoTmp.usuario;
+            this.Session[Constantes.VAR_SESSION_FACTURA_BUSQUEDA] = documentoVenta;
+            this.Session[Constantes.VAR_SESSION_FACTURA_LISTA] = new List<DocumentoVenta>();
+
+            /*
+            documentoVenta.tipoPago = DocumentoVenta.TipoPago.Contado;
+            documentoVenta.formaPago = DocumentoVenta.FormaPago.NoAsignado;
+            documentoVenta.fechaEmision = DateTime.Now;
+            */
+
+
+        }
+
+       
+
+        public String GetCliente()
+        {
+            DocumentoVenta factura = this.FacturaSession;
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+            ClienteBL clienteBl = new ClienteBL();
+            factura.cliente = clienteBl.getCliente(idCliente);
+            String resultado = JsonConvert.SerializeObject(factura.cliente);
+            this.FacturaSession = factura;
+            return resultado;
+        }
+
+        public String ChangeIdCiudad()
+        {
+            Guid idCiudad = Guid.Empty;
+            if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
+            {
+                idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+            }
+            CiudadBL ciudadBL = new CiudadBL();
+            Ciudad ciudad = ciudadBL.getCiudad(idCiudad);
+            this.FacturaSession.ciudad = ciudad;
+            return JsonConvert.SerializeObject(ciudad);
+        }
+
+        public void ChangeFechaEmisionDesde()
+        {
+            String[] desde = this.Request.Params["fechaEmisionDesde"].Split('/');
+            this.FacturaSession.fechaEmisionDesde = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
+        }
+
+        public void ChangeFechaEmisionHasta()
+        {
+            String[] desde = this.Request.Params["fechaEmisionHasta"].Split('/');
+            this.FacturaSession.fechaEmisionHasta = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
+        }
+
+        public void ChangeEstaAnulado()
+        {
+            this.FacturaSession.estaAnulado = Int32.Parse(this.Request.Params["estaAnulado"]) == 1;
+        }
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        public ActionResult PreLoad()
         {
          
             if (this.Session["usuario"] == null)

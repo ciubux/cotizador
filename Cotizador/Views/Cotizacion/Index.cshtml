@@ -293,6 +293,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <!--Modificado POR-->
                         <div class="col-sm-6 col-lg-3">
                             <div class="form-group">
@@ -335,6 +336,14 @@
                                 <th data-name="precioLista" data-sortable="false" data-breakpoints="xs">Precio Lista</th>
                                 <th data-name="porcentajeDescuentoMostrar" data-sortable="false" data-breakpoints="xs">Dscto % al P. Lista</th>
                                 <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs">Precio Neto</th>
+                                @if (cotizacion.usuario.apruebaCotizaciones)
+                                {
+                                    <th data-name="costo" data-sortable="false" data-breakpoints="xs" style="width:60px">Costo</th>
+                                }
+                                else
+                                {
+                                    <th data-name="costo" data-visible="false" data-breakpoints="xs" style="width:60px">Costo</th>
+                                }
                                 <th data-name="margen" data-sortable="false" data-breakpoints="xs" style="width:60px">Mg %</th>
                                 <th data-name="flete" data-sortable="false" data-breakpoints="xs">Flete</th>
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs">Precio Unit.</th>

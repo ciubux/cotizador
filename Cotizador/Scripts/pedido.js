@@ -510,7 +510,11 @@ jQuery(function ($) {
     //var fechaProgramacion = $("#fechaProgramaciontmp").val();
     $("#fechaProgramacion").datepicker({ dateFormat: "dd/mm/yy" });//.datepicker("setDate", fechaProgramacion);    
 
-    
+    var documentoVenta_fechaEmision = $("#documentoVenta_fechaEmisiontmp").val();
+    $("#documentoVenta_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaEmision);
+
+    var documentoVenta_fechaVencimiento = $("#documentoVenta_fechaVencimientotmp").val();
+    $("#documentoVenta_fechaVencimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaVencimiento);
 
 
     /**
@@ -1535,6 +1539,8 @@ jQuery(function ($) {
                 if (resultado.estado == ESTADO_INGRESADO) {
                     alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente.");
                     window.location = '/Pedido/Index';  
+
+
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN")
@@ -1924,6 +1930,18 @@ jQuery(function ($) {
                 else {
                     $("#btnCancelarProgramacionPedido").hide();
                 }
+
+
+                //PROGRAMAR PEDIDO
+                if (pedido.seguimientoPedido.estado == ESTADO_ATENDIDO
+                    || pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE
+                    ) {
+
+                    $("#btnFacturarPedido").show();
+                }
+                else {
+                    $("#btnFacturarPedido").hide();
+                }
                 
 
                 /*PDF
@@ -1990,6 +2008,7 @@ jQuery(function ($) {
         $("#btnAprobarIngresoPedido").attr('disabled', 'disabled');
         $("#btnDenegarIngresoPedido").attr('disabled', 'disabled');
         $("#btnProgramarPedido").attr('disabled', 'disabled');
+        $("#btnFacturarPedido").attr('disabled', 'disabled');
         $("#btnAtenderPedido").attr('disabled', 'disabled');
         $("#btnCancelarProgramacionPedido").attr('disabled', 'disabled');
         $("#btnLiberarPedido").attr('disabled', 'disabled');
@@ -2003,6 +2022,7 @@ jQuery(function ($) {
         $("#btnDenegarIngresoPedido").removeAttr('disabled');
         $("#btnAtenderPedido").removeAttr('disabled');
         $("#btnProgramarPedido").removeAttr('disabled');
+        $("#btnFacturarPedido").removeAttr('disabled');
         $("#btnCancelarProgramacionPedido").removeAttr('disabled');
         $("#btnLiberarPedido").removeAttr('disabled');
         $("#btnBloquearPedido").removeAttr('disabled');
@@ -3227,7 +3247,65 @@ jQuery(function ($) {
         });
         $("btnCancelarProgramarPedido").click();
     });
-    
+
+
+
+    $("#btnAceptarFacturarPedido").click(function () {
+
+        var fechaEmision = $("#documentoVenta_fechaEmision").val();
+        var horaEmision = $("#documentoVenta_horaEmision").val();
+        var fechaVencimiento = $("#documentoVenta_fechaVencimiento").val();
+        
+        var tipoPago = $("#tipoPago").val();
+        var formaPago = $("#formaPago").val();
+        var correoEnvio = $("#documentoVenta_correoEnvio").val();
+        var correoCopia = $("#documentoVenta_correoCopia").val();
+        var correoOculto = $("#documentoVenta_correoOculto").val();
+
+        /*
+        if ($("#fechaProgramacion").val() == "" || $("#fechaProgramacion").val() == null) {
+            alert("Debe ingresar la fecha de programación.");
+            $("#fechaProgramacion").focus();
+            return false;
+        }
+        var fechaProgramacion = $('#fechaProgramacion').val();
+        var comentarioProgramacion = $('#comentarioProgramacion').val();
+        var fechaEntregaDesdeProgramacion = $("#fechaEntregaDesdeProgramacion").val();
+        var fechaEntregaHastaProgramacion = $("#fechaEntregaHastaProgramacion").val();
+
+        if (convertirFechaNumero(fechaProgramacion) < convertirFechaNumero(fechaEntregaDesdeProgramacion)
+            || convertirFechaNumero(fechaProgramacion) > convertirFechaNumero(fechaEntregaHastaProgramacion)
+        ) {
+            var respuesta = confirm("¡ATENCIÓN! Está programando la atención del pedido en una fecha fuera del rango solicitado por el cliente.");
+            if (!respuesta) {
+                $("#fechaProgramacion").focus();
+                return false;
+            }
+        }*/
+
+     //   var fechaProgramacion = $('#fechaProgramacion').val();
+
+        $.ajax({
+            url: "/DocumentoVenta/Facturar",
+            type: 'POST',
+            data: {
+                fechaEmision: fechaEmision,
+                horaEmision: horaEmision,
+                fechaVencimiento: fechaVencimiento,
+                tipoPago: tipoPago,
+                formaPago: formaPago,
+                correoEnvio: correoEnvio,
+                correoCopia: correoCopia,
+                correoOculto: correoOculto
+            },
+            success: function (resultado) {
+
+                //alert('El pedido número ' + $("#verNumero").html() + ' se programó para ser atendido.');
+                //location.reload();
+            }
+        });
+        $("btnCancelarFacturarPedido").click();
+    });
 
     /****************** FIN PROGRAMACION PEDIDO****************************/
 });

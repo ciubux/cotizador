@@ -28,9 +28,34 @@ namespace Cotizador.Controllers
 
         public ActionResult GetCiudades(string ciudadSelectId, string selectedValue = null)
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            List<Ciudad> ciudades = usuario.sedesMP;
+
+            if ((int)(Constantes.paginas.BusquedaGuiasRemision) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoGuiaRemision) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]
+                )
+            {
+                ciudades = usuario.sedesMPGuiasRemision;
+            }
+            else if ((int)(Constantes.paginas.BusquedaFacturas) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoFactura) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.BusquedaBoletas) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoBoleta) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.BusquedaFacturas) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoFactura) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]||
+                (int)(Constantes.paginas.BusquedaFacturas) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoFactura) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]
+                )
+            {
+                ciudades = usuario.sedesMPDocumentosVenta;
+            }
+
+
+
             var model = new CiudadViewModels
             {
-                Data = ciudadBL.getCiudades(),
+                Data = ciudades,
                 CiudadSelectId = ciudadSelectId,
                 SelectedValue = selectedValue
             };

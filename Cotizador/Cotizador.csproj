@@ -214,6 +214,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\DireccionEntregaController.cs" />
+    <Compile Include="Controllers\DocumentoVentaController.cs" />
     <Compile Include="Controllers\FacturaController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\GuiaRemisionController.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\UbigeoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -261,6 +263,7 @@
     <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\printGuiaRemision.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -300,7 +303,9 @@
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
+    <Content Include="Scripts\factura.js" />
     <Content Include="Scripts\guiaRemision.js" />
+    <Content Include="Scripts\venta.js" />
     <Content Include="Scripts\pedido.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -363,7 +368,6 @@
     <Content Include="Views\Cotizacion\Index.cshtml" />
     <Content Include="Views\Cliente\Index.cshtml" />
     <Content Include="Views\Producto\Index.cshtml" />
-    <Content Include="Views\Factura\Index.cshtml" />
     <Content Include="Views\Precio\LoadPrecioLista.cshtml" />
     <Content Include="Views\Familia\_SelectFamilia.cshtml" />
     <Content Include="Views\Proveedor\_SelectProveedor.cshtml" />
@@ -380,7 +384,10 @@
     <Content Include="Views\Shared\_Provincia.cshtml" />
     <Content Include="Views\Shared\_Ciudad.cshtml" />
     <Content Include="Views\Usuario\_SelectUsuarioCotizacion.cshtml" />
-    <Content Include="Views\GuiaRemision\GuiarVacia.cshtml" />
+    <Content Include="Views\GuiaRemision\GuiarEmpty.cshtml" />
+    <Content Include="Views\GuiaRemision\Print.cshtml" />
+    <Content Include="Views\Factura\PreLoad.cshtml" />
+    <Content Include="Views\Factura\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
@@ -388,9 +395,11 @@
     <Folder Include="Scripts\App_LocalResources\" />
     <Folder Include="Views\Ciudad\" />
     <Folder Include="Views\DireccionEntrega\" />
+    <Folder Include="Views\DocumentoVenta\" />
     <Folder Include="Views\General\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Ubigeo\" />
+    <Folder Include="Views\Venta\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -39,9 +39,19 @@
                         var linkBusquedaGuiasRemision = "";
                         var linkMantenimientoGuiaRemision = "";
 
+
                         var linkDocumentosVenta = "";
-                        var linkBusquedaDocumentoVenta = "";
-                        var linkMantenimientoDocumentoVenta = "";
+                        var linkBusquedaFactura = "";
+                        var linkMantenimientoFactura = "";
+
+                        var linkBusquedaBoleta = "";
+                        var linkMantenimientoBoleta = "";
+
+                        var linkBusquedaNotaCredito = "";
+                        var linkMantenimientoNotaCredito = "";
+
+                        var linkBusquedaNotaDebito = "";
+                        var linkMantenimientoNotaDebito = "";
 
                     }
                     @switch ((int)this.Session["pagina"])
@@ -52,6 +62,14 @@
                         case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
                         case 4: linkBusquedaGuiasRemision = "ative"; linkMovimientosAlmacen = "active"; break;
                         case 5: linkMantenimientoGuiaRemision = "ative"; linkMovimientosAlmacen = "active"; break;
+                        case 7: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
+                        case 8: linkMantenimientoFactura = "ative"; linkDocumentosVenta = "active"; break;
+                        case 9: linkBusquedaBoleta = "ative"; linkDocumentosVenta = "active"; break;
+                        case 10: linkMantenimientoBoleta = "ative"; linkDocumentosVenta = "active"; break;
+                        case 11: linkBusquedaNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
+                        case 12: linkMantenimientoNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
+                        case 13: linkBusquedaNotaDebito = "ative"; linkBusquedaNotaDebito = "active"; break;
+                        case 14: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
                     }
                     @{ var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];}
                     @if (usuario.creaCotizaciones)
@@ -88,7 +106,7 @@
                         </li>
                     }
 
-                    @if (usuario.creaGuias)
+                    @if (usuario.creaGuias || usuario.administraGuiasLima || usuario.administraGuiasProvincia)
                     {
 
                         <li class="@linkMovimientosAlmacen">
@@ -105,6 +123,25 @@
                             </ul>
                         </li>
                     }
+
+                    @if (usuario.creaDocumentosVenta || usuario.administraDocumentosVentaLima || usuario.administraDocumentosVentaProvincia)
+                    {
+
+                        <li class="@linkDocumentosVenta">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                               Documentos de Venta
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li id="linkBusquedaFactura" class="@linkBusquedaFactura">@Html.ActionLink("Búsqueda Facturas", "Index", "Factura")</li>
+                                <li id="linkBusquedaBoleta" class="@linkBusquedaBoleta">@Html.ActionLink("Búsqueda Boletas", "Index", "Boleta")</li>
+                                <li id="linkBusquedaNotaCredito" class="@linkBusquedaNotaCredito">@Html.ActionLink("Búsqueda Notas de Crédito", "Index", "NotaCredito")</li>
+                                <li id="linkBusquedaNotaDebito" class="@linkBusquedaNotaDebito">@Html.ActionLink("Búsqueda Notas de Débito", "Index", "NotaDebito")</li>
+                            </ul>
+                        </li>
+                    }
+
+
                 </ul>
 
                 @Html.Partial("_LoginPartial")

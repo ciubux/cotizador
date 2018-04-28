@@ -23,7 +23,7 @@ namespace Model
 
         public String serieGuiaRemision { get; set; }
 
-        public int ultimoNumeroGuiaRemision { get; set; }
+        public int siguienteNumeroGuiaRemision { get; set; }
 
     }
 }

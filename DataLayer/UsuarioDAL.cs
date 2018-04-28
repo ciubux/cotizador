@@ -48,14 +48,28 @@ namespace DataLayer
                 usuario.cargo = Converter.GetString(row, "cargo");
                 usuario.nombre = Converter.GetString(row, "nombre");
                 usuario.contacto = Converter.GetString(row, "contacto");
+                //Cotizaciones
                 usuario.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
                 usuario.cotizacionSerializada = Converter.GetString(row, "cotizacion_serializada");
                 usuario.apruebaCotizaciones = Converter.GetBool(row, "aprueba_cotizaciones");
                 usuario.creaCotizaciones = Converter.GetBool(row, "crea_cotizaciones");
+                //Pedidos
                 usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
                 usuario.apruebaPedidos = Converter.GetBool(row, "aprueba_pedidos");
+                //Guia
                 usuario.creaGuias = Converter.GetBool(row, "crea_guias");
+                usuario.administraGuiasLima = Converter.GetBool(row, "administra_guias_lima");
+                usuario.administraGuiasProvincia = Converter.GetBool(row, "administra_guias_provincia");
+
+                //DOCUMENTOS VENTA
                 usuario.creaDocumentosVenta = Converter.GetBool(row, "crea_documentos_venta");
+                usuario.administraDocumentosVentaLima = Converter.GetBool(row, "administra_documentos_venta_lima");
+                usuario.administraDocumentosVentaProvincia = Converter.GetBool(row, "administra_documentos_venta_provincia");
+
+                usuario.sedeMP = new Ciudad();
+                usuario.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
+
+
 
             }
 

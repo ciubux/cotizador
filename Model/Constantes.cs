@@ -43,19 +43,30 @@ namespace Model
         public static String VAR_SESSION_VENTA_LISTA = "ventaList";
         public static String VAR_SESSION_VENTA_VER = "ventaVer";
 
-        public static String VAR_SESSION_DOC_VENTA = "documentoVenta";
-        public static String VAR_SESSION_DOC_VENTA_BUSQUEDA = "documentoVentaBusqueda";
-        public static String VAR_SESSION_DOC_VENTA_LISTA = "documentoVentaList";
-        public static String VAR_SESSION_DOC_VENTA_VER = "documentoVentaVer";
+        public static String VAR_SESSION_FACTURA = "factura";
+        public static String VAR_SESSION_FACTURA_BUSQUEDA = "facturaBusqueda";
+        public static String VAR_SESSION_FACTURA_LISTA = "facturaList";
+        public static String VAR_SESSION_FACTURA_VER = "facturaVer";
+
+        public static String VAR_SESSION_BOLETA = "boleta";
+        public static String VAR_SESSION_BOLETA_BUSQUEDA = "boletaBusqueda";
+        public static String VAR_SESSION_BOLETA_LISTA = "boletaList";
+        public static String VAR_SESSION_BOLETA_VER = "boletaVer";
+
+        public static String VAR_SESSION_NOTA_CREDITO = "notaCredito";
+        public static String VAR_SESSION_NOTA_CREDITO_BUSQUEDA = "notaCreditoBusqueda";
+        public static String VAR_SESSION_NOTA_CREDITO_LISTA = "notaCreditoList";
+        public static String VAR_SESSION_NOTA_CREDITO_VER = "notaCreditoVer";
+
+        public static String VAR_SESSION_NOTA_DEBITO = "notaDebito";
+        public static String VAR_SESSION_NOTA_DEBITO_BUSQUEDA = "notaDebitoBusqueda";
+        public static String VAR_SESSION_NOTA_DEBITO_LISTA = "notaDebitoList";
+        public static String VAR_SESSION_NOTA_DEBITO_VER = "notaDebitoVer";
 
         public static String VAR_SESSION_PAGINA = "pagina";
         public static String VAR_SESSION_USUARIO = "usuario";
 
-      
-
         public static Decimal VARIACION_PRECIO_ITEM_PEDIDO = 0.01M;
-
-
 
         public static Decimal IGV = 0.18M;
         public static Decimal PORCENTAJE_MAX_APROBACION = 3.00M;
@@ -73,45 +84,63 @@ namespace Model
         
         
         //Numero de Página
+        
         public static int BUSQUEDA_COTIZACION = 0;
         public static int MANTENIMIENTO_COTIZACION = 1;
         public static int BUSQUEDA_PEDIDO = 2;
         public static int MANTENIMIENTO_PEDIDO = 3;
         public static int BUSQUEDA_GUIA_REMISION = 4;
         public static int MANTENIMIENTO_GUIA_REMISION = 5;
-        
 
 
 
         public enum paginas {
-            [Display(Name = "Mis Cotizaciones")]
+            [Display(Name = "BUSQUEDA COTIZACION")]
             BusquedaCotizaciones = 0,
-            [Display(Name = "Cotizacion")]
+            [Display(Name = "MANTENIMIENTO COTIZACION")]
             MantenimientoCotizacion = 1,
-            [Display(Name = "Mis Pedidos")]
+            [Display(Name = "BUSQUEDA PEDIDO")]
             BusquedaPedidos = 2,
-            [Display(Name = "Pedido")]
+            [Display(Name = "MANTENIMIENTO PEDIDO")]
             MantenimientoPedido = 3,
-            [Display(Name = "Mis Guías Remisión")]
+            [Display(Name = "BUSQUEDA GUIA REMISION")]
             BusquedaGuiasRemision = 4,
-            [Display(Name = "Guia Remisión")]
+            [Display(Name = "MANTENIMIENTO GUIA REMISION")]
             MantenimientoGuiaRemision = 5,
-            [Display(Name = "Mis Facturas")]
+
+            [Display(Name = "BUSQUEDA FACTURAS")]
             BusquedaFacturas = 6,
-            [Display(Name = "Factura")]
-            MantenimientoFactura = 7,
-            [Display(Name = "Mis Ventas")]
-            BusquedaVentas = 8,
-            [Display(Name = "Venta")]
-            MantenimientoVenta = 9,
-            [Display(Name = "Mis Boletas")]
-            BusquedaBoletas = 10,
-            [Display(Name = "Boletas")]
-            MantenimientoBoleta = 11,
-            [Display(Name = "Mis Notas de Crédito")]
-            BusquedaNotasCredito = 12,
-            [Display(Name = "Notas de Crédito")]
-            MantenimientoNotaCredito = 13,
+            [Display(Name = "MANTENIMIENTO FACTURA")]
+            MantenimientoFactura = 7,   
+            
+            [Display(Name = "BUSQUEDA BOLETAS")]
+            BusquedaBoletas = 8,
+            [Display(Name = "MANTENIMIENTO BOLETA")]
+            MantenimientoBoleta = 9,
+
+            [Display(Name = "BUSQUEDA NOTAS DE CRÉDITO")]
+            BusquedaNotasCredito = 10,
+            [Display(Name = "MANTENIMIENTO NOTA DE CRÉDITO")]
+            MantenimientoNotaCredito = 11,
+
+            [Display(Name = "BUSQUEDA NOTAS DE DÉBITO")]
+            BusquedaNotasDebito = 12,
+            [Display(Name = "MANTENIMIENTO NOTA DE DÉBITO")]
+            MantenimientoNotaDebito = 13,
+
+
+
+            [Display(Name = "Imprimir Guia Remisión")]
+            ImprimirGuiaRemision = 14,
+
+
+            [Display(Name = "BUSQUEDA VENTAS")]
+            BusquedaVentas = 15,
+            [Display(Name = "MANTENIMIENTO VENTAS")]
+            MantenimientoVenta = 16,
+
+
+
         };
 
 

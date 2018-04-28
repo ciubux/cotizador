@@ -1156,6 +1156,47 @@
     </div>
 </div>
 
+
+
+<div class="modal fade" id="modalComentarioAprobacion" tabindex="-1">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMensajePendienteAprobacionTitle"><b>Modificar Comentario Estado Aprobación</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+
+                            <!--MOTIVO RECHAZO-->
+                            <div class="form-group">
+                                <!--<label for="comentarioPendienteAprobacion" class="control-label col-xs-4">Comentario:</label>-->
+                                <div class="col-xs-12">
+                                    <textarea class="form-control" rows="5" id="comentarioAprobacion" name="comentarioAprobacion"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarComentarioAprobacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAceptarComentarioAprobacion" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     @Scripts.Render("~/bundles/cotizacion")
 }

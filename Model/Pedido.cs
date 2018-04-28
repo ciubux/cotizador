@@ -71,17 +71,25 @@ namespace Model
             get
             {
                 String rangoFechasEntrega = String.Empty;
-                String entregaDesde = this.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
-                String entregaHasta = this.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
-
-                if (entregaDesde.Equals(entregaHasta))
+                if (this.fechaEntregaDesde != null && this.fechaEntregaHasta != null)
                 {
-                    return entregaDesde;
+                    String entregaDesde = this.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
+                    String entregaHasta = this.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
+
+                    if (entregaDesde.Equals(entregaHasta))
+                    {
+                        return entregaDesde;
+                    }
+                    else
+                    {
+                        return "Desde: " + entregaDesde + " Hasta: " + entregaHasta;
+                    }
                 }
                 else
                 {
-                    return "Desde: " + entregaDesde + " Hasta: " + entregaHasta;
+                    return "";
                 }
+                
             }
         }
 

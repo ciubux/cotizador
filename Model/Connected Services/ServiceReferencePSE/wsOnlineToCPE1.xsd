@@ -330,4 +330,14 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_RESPUESTA_BE" nillable="true" type="tns:CPE_RESPUESTA_BE" />
+  <xs:complexType name="CPE_DOC_TRIBUTARO_BE">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DOC_TRIB_PDF" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="DOC_TRIB_XML_ENVIO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DOC_TRIB_XML_RPTA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NUM_CPE" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="NUM_RESUM" nillable="true" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CPE_DOC_TRIBUTARO_BE" nillable="true" type="tns:CPE_DOC_TRIBUTARO_BE" />
 </xs:schema>

@@ -43,3 +43,4 @@ C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Debug\Model.csproj.CoreCompileI
 C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Debug\Model.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador\Model\bin\Debug\Model.dll.config

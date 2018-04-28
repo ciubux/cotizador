@@ -23,10 +23,10 @@ namespace Model
         public Ciudad ciudadOrigen { get; set; }
 
         [Display(Name = "Serie  Guía Remisión:")]
-        public new int serieDocumento { get; set; }
+        public new String serieDocumento { get; set; }
 
         [Display(Name = "Número Guía Remisión:")]
-        public new int numeroDocumento { get; set; }
+        public new long numeroDocumento { get; set; }
 
         [Display(Name = "Punto Partida:")]
         public String direccionOrigen { get; set; }
@@ -48,8 +48,8 @@ namespace Model
         [Display(Name = "Certificado Inscripción:")]
         public String certificadoInscripcion { get; set; }
 
-
-        public String serieNumeroGuia { get { return this.serieDocumento + "- " + this.numeroDocumento; } }
+        [Display(Name = "Número Guía:")]
+        public String serieNumeroGuia { get { return  this.serieDocumento + "-" + this.numeroDocumento; } }
 
         public enum motivosTraslado
         {
@@ -105,6 +105,8 @@ namespace Model
 
         public SeguimientoMovimientoAlmacenSalida seguimientoMovimientoAlmacenSalida { get; set; }
 
+        public Boolean estaAnulado { get; set; }
 
+        public String estaAnuladoDescripcion { get { return this.estaAnulado ? "Anulada" : "Emitida"; } }
     }
 }

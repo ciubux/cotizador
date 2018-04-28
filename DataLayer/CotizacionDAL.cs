@@ -136,7 +136,7 @@ namespace DataLayer
    
             DateTime date1 = new DateTime(fechaModifiacionActual.Year, fechaModifiacionActual.Month, fechaModifiacionActual.Day, fechaModifiacionActual.Hour, fechaModifiacionActual.Minute, fechaModifiacionActual.Second);
             DateTime date2 = new DateTime(cotizacion.fechaModificacion.Year, cotizacion.fechaModificacion.Month, cotizacion.fechaModificacion.Day, cotizacion.fechaModificacion.Hour, cotizacion.fechaModificacion.Minute, cotizacion.fechaModificacion.Second);
-
+            /*
             int result = DateTime.Compare(date1, date2);
             if (result != 0)
             {
@@ -145,13 +145,13 @@ namespace DataLayer
             }
             else
             { 
-
+            */
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
                     cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
                     this.InsertCotizacionDetalle(cotizacionDetalle);
                 }
-            }
+            //}
 
         }
 

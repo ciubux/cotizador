@@ -42,3 +42,4 @@ C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.cspro
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Model.dll.config

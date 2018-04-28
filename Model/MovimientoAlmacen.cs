@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,8 +33,16 @@ namespace Model
         [Display(Name = "Fecha:")]
         public DateTime fechaMovimiento { get; set; }
 
+        [Display(Name = "Fecha:")]
+        public String fechaMovimientoFormatoImpresion {
+            get { return fechaMovimiento.ToString("dd-MMM-yy", CultureInfo.CreateSpecificCulture("es-ES")); }
+
+        }
+
+       
+
         [Display(Name = "Serie:")]
-        public int serieDocumento { get; set; }
+        public String serieDocumento { get; set; }
 
         [Display(Name = "Número:")]
         public int numeroDocumento { get; set; }
@@ -44,5 +53,7 @@ namespace Model
 
         [Display(Name = "Fecha Hasta:")]
         public DateTime fechaMovimientoHasta { get; set; }
+
+        
     }
 }

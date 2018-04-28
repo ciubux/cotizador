@@ -27,6 +27,18 @@
   <wsdl:message name="IwsOnlineToCPE_callExtractCPE_OutputMessage">
     <wsdl:part name="parameters" element="tns:callExtractCPEResponse" />
   </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callProcessUpd_InputMessage">
+    <wsdl:part name="parameters" element="tns:callProcessUpd" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callProcessUpd_OutputMessage">
+    <wsdl:part name="parameters" element="tns:callProcessUpdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callPreview_InputMessage">
+    <wsdl:part name="parameters" element="tns:callPreview" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callPreview_OutputMessage">
+    <wsdl:part name="parameters" element="tns:callPreviewResponse" />
+  </wsdl:message>
   <wsdl:portType name="IwsOnlineToCPE">
     <wsdl:operation name="callProcessOnline">
       <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callProcessOnline" message="tns:IwsOnlineToCPE_callProcessOnline_InputMessage" />
@@ -39,6 +51,14 @@
     <wsdl:operation name="callExtractCPE">
       <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callExtractCPE" message="tns:IwsOnlineToCPE_callExtractCPE_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callExtractCPEResponse" message="tns:IwsOnlineToCPE_callExtractCPE_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="callProcessUpd">
+      <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callProcessUpd" message="tns:IwsOnlineToCPE_callProcessUpd_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callProcessUpdResponse" message="tns:IwsOnlineToCPE_callProcessUpd_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="callPreview">
+      <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callPreview" message="tns:IwsOnlineToCPE_callPreview_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callPreviewResponse" message="tns:IwsOnlineToCPE_callPreview_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IwsOnlineToCPE" type="tns:IwsOnlineToCPE">
@@ -63,6 +83,24 @@
     </wsdl:operation>
     <wsdl:operation name="callExtractCPE">
       <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/callExtractCPE" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="callProcessUpd">
+      <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/callProcessUpd" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="callPreview">
+      <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/callPreview" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

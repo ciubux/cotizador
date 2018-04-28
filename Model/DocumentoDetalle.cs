@@ -8,6 +8,7 @@ namespace Model
     public class DocumentoDetalle 
     {
       
+        public Guid idDocumentoDetalle { get; set; }
         public int cantidad { get; set; }
         public Producto producto { get; set; }
         public String unidad { get; set; }
@@ -98,7 +99,7 @@ namespace Model
         public Decimal margen {
 
             get {
-                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / precioNetoEquivalente)*100));
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / ( precioNetoEquivalente==0?1:precioNetoEquivalente))*100));
 
             } }
 

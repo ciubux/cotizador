@@ -4,136 +4,53 @@ using System.Collections.Generic;
 using System;
 using Model;
 using System.IO;
+using Model.EXCEPTION;
 
 namespace BusinessLayer
 {
     public class MovimientoAlmacenBL
     {
-        public void InsertMovimientoAlmacenSalida(GuiaRemision guiaRemision)
+        public void InsertMovimientoAlmacenSalida(GuiaRemision guiaRemision) 
         {
             using (var dal = new MovimientoALmacenDAL())
             {
                 
                 guiaRemision.seguimientoMovimientoAlmacenSalida.observacion = String.Empty;
                 guiaRemision.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
-                /*
-                foreach (DocumentoDetalle documentoDetalle in guiaRemision.documentoDetalle)
+                try
                 {
-                    documentoDetalle.usuario = guiaRemision.usuario;
-                }*/
-                dal.InsertMovimientoAlmacenSalida(guiaRemision);
-            }
-        }
-
-
-
-        public void UpdatePedido(Pedido pedido)
-        {
-            using (var dal = new PedidoDAL())
-            {
-
-                pedido.seguimientoPedido.observacion = String.Empty;
-                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
-
-                foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
-                {
-                    pedidoDetalle.idPedido = pedido.idPedido;
-                    pedidoDetalle.usuario = pedido.usuario;
-
-                    //Si no es aprobador para que la cotización se cree como aprobada el porcentaje de descuento debe ser mayor o igual 
-                    //al porcentaje Limite sin aprobacion
-
-
-                    /*   if (!pedido.usuario.apruebaCotizaciones)
-                       {
-                           if (pedido.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
-                           {
-                               cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización";
-                               cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                           }
-                       }
-                       //Si es aprobador, no debe sobrepasar su limite de aprobación asignado
-                       else
-                       {
-                           if (cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
-                           {
-                               cotizacion.seguimientoCotizacion.observacion = "Se aplicó un descuento superior al permitido en el detalle de la cotización.";
-                               cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-
-                           }
-
-                       }*/
-
+                    dal.InsertMovimientoAlmacenSalida(guiaRemision);
                 }
-                dal.UpdatePedido(pedido);
+                catch (DuplicateNumberDocumentException ex)
+                {
+                    throw ex;
+                }
             }
         }
 
-        public List<Pedido> GetPedidos(Pedido pedido)
+        public List<GuiaRemision> GetGuiasRemision(GuiaRemision guiaRemision)
         {
-            List<Pedido> pedidoList = null;
-            using (var dal = new PedidoDAL())
+            List<GuiaRemision> guiaRemisionList = null;
+            using (var dal = new MovimientoALmacenDAL())
             {
                 //Si el usuario no es aprobador entonces solo buscará sus cotizaciones
-                if (!pedido.usuario.apruebaCotizaciones)
-                {
-                    pedido.usuarioBusqueda = pedido.usuario;
-                }
+                /*   if (!pedido.usuario.apruebaCotizaciones)
+                   {
+                       pedido.usuarioBusqueda = pedido.usuario;
+                   }*/
 
-                pedidoList = dal.SelectPedidos(pedido);
+                guiaRemisionList = dal.SelectGuiasRemision(guiaRemision);
             }
-            return pedidoList;
+            return guiaRemisionList;
         }
 
-        public Pedido GetPedido(Pedido pedido)
+        public GuiaRemision GetGuiaRemision(GuiaRemision guiaRemision)
         {
-            using (var dal = new PedidoDAL())
+            using (var dal = new MovimientoALmacenDAL())
             {
-                pedido = dal.SelectPedido(pedido);
-
-            /*    if (pedido.mostrarValidezOfertaEnDias == 0)
-                {
-                    TimeSpan diferencia;
-                    diferencia = cotizacion.fechaLimiteValidezOferta - cotizacion.fecha;
-                    cotizacion.validezOfertaEnDias = diferencia.Days;
-                }
-                */
-                foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
-                {
-
-                    if (pedidoDetalle.producto.image == null)
-                    {
-                        FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
-                        MemoryStream storeStream = new MemoryStream();
-                        storeStream.SetLength(inStream.Length);
-                        inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
-                        storeStream.Flush();
-                        inStream.Close();
-                        pedidoDetalle.producto.image = storeStream.GetBuffer();
-                    }
-
-                    //Si NO es recotizacion
-                    if (pedido.incluidoIGV)
-                    {
-                        //Se agrega el IGV al precioLista
-                        decimal precioSinIgv = pedidoDetalle.producto.precioSinIgv;
-                        decimal precioLista = precioSinIgv + (precioSinIgv * pedido.montoIGV);
-                        pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioLista));
-                        //Se agrega el IGV al costoLista
-                        decimal costoSinIgv = pedidoDetalle.producto.costoSinIgv;
-                        decimal costoLista = costoSinIgv + (costoSinIgv * pedido.montoIGV);
-                        pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoLista));
-                    }
-                    else
-                    {
-                        //Se agrega el IGV al precioLista
-                        pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.precioSinIgv));
-                        //Se agrega el IGV al costoLista
-                        pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.costoSinIgv));
-                    }
-                }
+                guiaRemision = dal.SelectGuiaRemision(guiaRemision);
             }
-            return pedido;
+            return guiaRemision;
         }
 
         public void cambiarEstadoPedido(Pedido pedido)

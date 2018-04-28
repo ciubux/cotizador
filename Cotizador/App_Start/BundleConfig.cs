@@ -8,6 +8,27 @@ namespace Cotizador
         // Para obtener más información sobre Bundles, visite http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.Add(new ScriptBundle("~/bundles/venta").Include(
+                         "~/Scripts/venta.js"
+                         ));
+
+            bundles.Add(new ScriptBundle("~/bundles/factura").Include(
+                        "~/Scripts/factura.js"
+                        ));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/boleta").Include(
+                        "~/Scripts/boleta.js"
+                        ));
+
+            bundles.Add(new ScriptBundle("~/bundles/notaCredito").Include(
+                        "~/Scripts/notaCredito.js"
+                        ));
+
+            bundles.Add(new ScriptBundle("~/bundles/notaDebito").Include(
+                        "~/Scripts/notaDebito.js"
+                        ));
+
             bundles.Add(new ScriptBundle("~/bundles/cotizacion").Include(
                         "~/Scripts/cotizacion.js"
                         ));
@@ -58,6 +79,11 @@ namespace Cotizador
                       "~/Content/jquery-ui.min.css",
                       "~/Content/site.css",
                       "~/Content/chosen/chosen.css"));
+
+            bundles.Add(new StyleBundle("~/Content/printGuiaRemision").Include(
+                       "~/Content/printGuiaRemision.css"
+                       ));
+
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-chosen").Include(
                        "~/Scripts/chosen/chosen.jquery.min.js", "~/Scripts/chosen/chosen.ajaxaddition.jquery.js", "~/Scripts/chosen/PrintArea.js"));

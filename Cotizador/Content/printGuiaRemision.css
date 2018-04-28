@@ -1,0 +1,9 @@
+﻿@media print {
+    page-header nav, footer {
+        display: none;
+    }
+
+    @page :top {
+        margin: 10cm;
+    }
+}

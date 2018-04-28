@@ -1,5 +1,5 @@
 ﻿
-using BusinessLayer.ServiceReferencePSE;
+using Model.ServiceReferencePSE;
 using DataLayer;
 using Model;
 using System;
@@ -22,26 +22,32 @@ namespace BusinessLayer
         {
             IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
 
-            var oUser = "ADMTAXTECH";
-            var oPass = "T@xTech2018";
+            /*  var oUser = "ADMTAXTECH";
+              var oPass = "T@xTech2018";*/
+
+            var oUser = "demo@mp.eol.pe";
+            var oPass = "00144f91";
 
             CPE_CABECERA_BE cPE_CABECERA_BE = new CPE_CABECERA_BE();
 
-            cPE_CABECERA_BE.ID = "98789764677MRTYU";
-            cPE_CABECERA_BE.COD_GPO = "4"; //OK FIJO
+            /*cPE_CABECERA_BE.ID = "98789764677MRTYU";
+            cPE_CABECERA_BE.COD_GPO = "4"; //OK FIJO*/
+            cPE_CABECERA_BE.ID = "876178c8fc875c949a0b7df5f716985d8338fa33e5a4017ebffb623ba8451d02";
+            cPE_CABECERA_BE.COD_GPO = "14";
+
             cPE_CABECERA_BE.TIP_CPE = "01"; //OK Factura 
-            cPE_CABECERA_BE.FEC_EMI = "2018-04-02"; //OK
+            cPE_CABECERA_BE.FEC_EMI = "2018-04-21"; //OK
             cPE_CABECERA_BE.HOR_EMI = "08:56:14";  //OK
             cPE_CABECERA_BE.SERIE = "F002";  //OK
-            cPE_CABECERA_BE.CORRELATIVO = "00100005";  //OK
+            cPE_CABECERA_BE.CORRELATIVO = "00100013";  //OK
             cPE_CABECERA_BE.MONEDA = "PEN";
             cPE_CABECERA_BE.COD_TIP_OPE = "0101";
             cPE_CABECERA_BE.TIP_DOC_EMI = "6";
-            cPE_CABECERA_BE.NRO_DOC_EMI = "20601890659";
+            cPE_CABECERA_BE.NRO_DOC_EMI = "20509411671";
             // cPE_CABECERA_BE.NOM_EMI = "<![CDATA[TAX TECHNOLOGY PRUEBA SAC]]>";
-            cPE_CABECERA_BE.NOM_EMI = "TAX TECHNOLOGY PRUEBA SAC";
+            cPE_CABECERA_BE.NOM_EMI = "MP INSTITUCIONAL SOCIEDAD ANONIMA CERRRADA";
             //  cPE_CABECERA_BE.NOM_COM_EMI = "<![CDATA[TAXTECH SAC]]>";
-            cPE_CABECERA_BE.NOM_COM_EMI = "TAXTECH SAC";
+            cPE_CABECERA_BE.NOM_COM_EMI = "MP INSTITUCIONAL SOCIEDAD ANONIMA CERRRADA";
             cPE_CABECERA_BE.COD_LOC_EMI = "0000";
             cPE_CABECERA_BE.TIP_DOC_RCT = "6";
             cPE_CABECERA_BE.NRO_DOC_RCT = "20601890000";
@@ -132,46 +138,55 @@ namespace BusinessLayer
             cPE_DETALLE_BE.COD_UND_ITM = "NIU";
             cPE_DETALLE_BE.CANT_UND_ITM = "1.00";
             cPE_DETALLE_BE.VAL_VTA_ITM = "15.00";
+
             cPE_DETALLE_BE.PRC_VTA_UND_ITM = "17.70";
             cPE_DETALLE_BE.VAL_UNIT_ITM = "15.00";
             cPE_DETALLE_BE.MNT_IGV_ITM = "2.70";
             cPE_DETALLE_BE.POR_IGV_ITM = "";
+
             cPE_DETALLE_BE.PRC_VTA_ITEM = "0.00";
             cPE_DETALLE_BE.VAL_VTA_BRT_ITEM = "0.00";
             cPE_DETALLE_BE.COD_TIP_AFECT_IGV_ITM = "10";
             cPE_DETALLE_BE.MNT_ISC_ITM = "";
+
             cPE_DETALLE_BE.POR_ISC_ITM = "";
             cPE_DETALLE_BE.COD_TIP_SIST_ISC = "";
             cPE_DETALLE_BE.PRECIO_SUGERIDO_ISC = "";
             cPE_DETALLE_BE.MNT_DCTO_ITM = "";
+
             cPE_DETALLE_BE.FAC_DCTO_ITM = "";
             cPE_DETALLE_BE.MNT_CARG_ITM = "";
             cPE_DETALLE_BE.FAC_CARG_ITM = "";
             cPE_DETALLE_BE.TIP_CARG_ITM = "";
+
             cPE_DETALLE_BE.MNT_TOT_PER_ITM = "";
             cPE_DETALLE_BE.FAC_PER_ITM = "";
             cPE_DETALLE_BE.TIP_PER_ITM = "";
             cPE_DETALLE_BE.TXT_DES_ITM = "Pruebas";
+
             cPE_DETALLE_BE.TXT_DES_ADIC_ITM = "";
             cPE_DETALLE_BE.COD_ITM = "03077";
             cPE_DETALLE_BE.COD_ITM_SUNAT = "SUNAT001";
             cPE_DETALLE_BE.DET_VAL_ADIC01 = "";
+
             cPE_DETALLE_BE.DET_VAL_ADIC02 = "";
             cPE_DETALLE_BE.DET_VAL_ADIC03 = "";
             cPE_DETALLE_BE.DET_VAL_ADIC04 = "";
             cPE_DETALLE_BE.DET_VAL_ADIC05 = "";
+
             cPE_DETALLE_BE.DET_VAL_ADIC06 = "";
             cPE_DETALLE_BE.DET_VAL_ADIC07 = "";
             cPE_DETALLE_BE.DET_VAL_ADIC08 = "";
             cPE_DETALLE_BE.DET_VAL_ADIC09 = "";
+
             cPE_DETALLE_BE.DET_VAL_ADIC10 = "";
             cPE_DETALLE_BE.DES_COMP = new CPE_DETALLE_COMPTA_BE[0];
 
 
             cPE_DETALLE_BEList[0] = cPE_DETALLE_BE;
 
-            CPE_DAT_ADIC_BE[] cPE_DAT_ADIC_BE = new CPE_DAT_ADIC_BE[6];
-
+            CPE_DAT_ADIC_BE[] cPE_DAT_ADIC_BE = new CPE_DAT_ADIC_BE[0];
+            /*
             CPE_DAT_ADIC_BE cPE_DAT_ADIC_BE1 = new CPE_DAT_ADIC_BE();
             cPE_DAT_ADIC_BE1.COD_TIP_ADIC_SUNAT = "1000";
             cPE_DAT_ADIC_BE1.NUM_LIN_ADIC_SUNAT = "01";
@@ -215,7 +230,7 @@ namespace BusinessLayer
             cPE_DAT_ADIC_BE6.NUM_LIN_ADIC_SUNAT = "06";
             //cPE_DAT_ADIC_BE6.TXT_DESC_ADIC_SUNAT = "<![CDATA[0666-000-120]]>";
             cPE_DAT_ADIC_BE6.TXT_DESC_ADIC_SUNAT = "0666-000-120";
-            cPE_DAT_ADIC_BE[5] = cPE_DAT_ADIC_BE6;
+            cPE_DAT_ADIC_BE[5] = cPE_DAT_ADIC_BE6;*/
 
             CPE_DOC_REF_BE[] cPE_DOC_REF_BE = new CPE_DOC_REF_BE[0];
             CPE_ANTICIPO_BE[] cPE_ANTICIPO_BE = new CPE_ANTICIPO_BE[0];
@@ -231,22 +246,27 @@ namespace BusinessLayer
             var DESCRIPCION = cPE_RESPUESTA_BE.DESCRIPCION;
             var DETALLE = cPE_RESPUESTA_BE.DETALLE;
             var NUM_CPE = cPE_RESPUESTA_BE.NUM_CPE;
-
+
+            callStateCPE(cPE_CABECERA_BE.SERIE, cPE_CABECERA_BE.CORRELATIVO);
+            callExtractCPE(cPE_CABECERA_BE.SERIE, cPE_CABECERA_BE.CORRELATIVO);
         }
 
 
 
-        public void callStateCPE()
+        public void callStateCPE(String SERIE, String CORRELATIVO)
         {
             IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
             //102 103 codigos de estado aceptado SUNAT
 
-            var oUser = "ADMTAXTECH";
-            var oPass = "T@xTech2018";
-            var oNroIde = "20601890659";
+            var oUser = "demo@mp.eol.pe";
+            var oPass = "00144f91";
+
+          //  var oUser = "ADMTAXTECH";
+        //    var oPass = "T@xTech2018";
+            var oNroIde = "20509411671";
             var oTipCpe = "01";
-            var oSerCpe = "F001";
-            var oNroCpe = "00000003";
+            var oSerCpe = SERIE;
+            var oNroCpe = CORRELATIVO;
 
             RPTA_BE rpta_be = client.callStateCPE(oUser, oPass, oNroIde, oTipCpe, oSerCpe, oNroCpe);
 
@@ -258,17 +278,17 @@ namespace BusinessLayer
         }
 
 
-        public void callExtractCPE()
+        public void callExtractCPE(String SERIE, String CORRELATIVO)
         {
             IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
             //102 103 codigos de estado aceptado SUNAT
 
-            var oUser = "ADMTAXTECH";
-            var oPass = "T@xTech2018";
-            var oNroIde = "20601890659";
+            var oUser = "demo@mp.eol.pe";
+            var oPass = "00144f91";
+            var oNroIde = "20509411671";
             var oTipCpe = "01";
-            var oSerCpe = "F001";
-            var oNroCpe = "00000014";
+            var oSerCpe = SERIE;
+            var oNroCpe = CORRELATIVO;
             var oFlgXml = true;
             var oFlgPdf = true;
             var oFlgCdr = true;

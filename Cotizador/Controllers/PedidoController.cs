@@ -110,7 +110,13 @@ namespace Cotizador.Controllers
             ViewBag.guiaRemision = guiaRemision;
 
             ViewBag.pedido = pedido;
-
+            DocumentoVenta documentoVenta = new DocumentoVenta();
+            documentoVenta.tipoPago = DocumentoVenta.TipoPago.Contado;
+            documentoVenta.formaPago = DocumentoVenta.FormaPago.NoAsignado;
+            documentoVenta.fechaEmision = DateTime.Now;
+            ViewBag.documentoVenta = documentoVenta;
+            ViewBag.fechaEmision = documentoVenta.fechaEmision.ToString(Constantes.formatoFecha);
+            ViewBag.horaEmision = documentoVenta.fechaEmision.ToString(Constantes.formatoHora);
             ViewBag.pedidoList = this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA];
             ViewBag.existeCliente = existeCliente;
             ViewBag.pagina = Constantes.BUSQUEDA_PEDIDO;
@@ -345,20 +351,7 @@ namespace Cotizador.Controllers
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
             Pedido pedido = this.PedidoSession;
-
-            List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad);
-            String resultado = "{\"q\":\"" + data + "\",\"results\":[";
-            Boolean existeCliente = false;
-            foreach (Cliente cliente in clienteList)
-            {
-                resultado += "{\"id\":\"" + cliente.idCliente + "\",\"text\":\"" + cliente.ToString() + "\"},";
-                existeCliente = true;
-            }
-            if (existeCliente)
-                resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
-            else
-                resultado = resultado.Substring(0, resultado.Length) + "]}";
-            return resultado;
+           return clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad);
         }
 
 
@@ -811,7 +804,7 @@ namespace Cotizador.Controllers
                 updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
             }
             // pedido = null;
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;// null;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = null;// pedido;// null;
 
 
             usuarioBL.updatePedidoSerializado(usuario, null);
@@ -848,8 +841,8 @@ namespace Cotizador.Controllers
                 observacion = "Se continuará editando luego";
                 updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
             }
-           // pedido = null;
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            // pedido = null;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = null;// pedido;
 
             usuarioBL.updatePedidoSerializado(usuario, null);
 

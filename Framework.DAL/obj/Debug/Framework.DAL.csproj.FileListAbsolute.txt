@@ -35,3 +35,4 @@ C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csp
 C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\bin\Debug\Model.dll.config

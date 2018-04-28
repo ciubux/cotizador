@@ -47,7 +47,7 @@ namespace Model
         {
             get
             {
-                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioSinIgv / equivalencia));
+                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioSinIgv / (equivalencia==0?1:equivalencia )));
             }
         }
 
@@ -59,7 +59,7 @@ namespace Model
         {
             get
             {
-                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoSinIgv / equivalencia));
+                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoSinIgv / (equivalencia == 0 ? 1 : equivalencia)));
             }
         }
 

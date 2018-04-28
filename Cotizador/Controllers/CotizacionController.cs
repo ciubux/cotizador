@@ -53,7 +53,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Todos;
             // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
             cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
-            cotizacionTmp.usuarioBusqueda = cotizacionTmp.usuario;
+            cotizacionTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
             this.CotizacionSession = cotizacionTmp;
             this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA] = new List<Cotizacion>();
         }
@@ -62,7 +62,7 @@ namespace Cotizador.Controllers
         //Busqueda de Cotizacion
         public ActionResult Index()
         {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.BUSQUEDA_COTIZACION;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaCotizaciones;
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -115,7 +115,7 @@ namespace Cotizador.Controllers
 
             ViewBag.cotizacionList =  this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA];
             ViewBag.existeCliente = existeCliente;
-            ViewBag.pagina = Constantes.BUSQUEDA_COTIZACION;
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaCotizaciones;
             return View();
         }
 
@@ -600,7 +600,7 @@ namespace Cotizador.Controllers
             ClienteBL clienteBL = new ClienteBL();
             Cotizacion cotizacion = this.CotizacionSession;
 
-            List<Cliente> clienteList = clienteBL.getCLientesBusqueda(data, cotizacion.ciudad.idCiudad);
+            List<Cliente> clienteList = clienteBL.getCLientesBusquedaCotizacion(data, cotizacion.ciudad.idCiudad);
 
             GrupoBL grupoBL = new GrupoBL();
             List<Grupo> grupoList = grupoBL.getGruposBusqueda(data);

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BusinessLayer.ServiceReferencePSE {
+namespace Model.ServiceReferencePSE {
     using System.Runtime.Serialization;
     using System;
     
@@ -1878,7 +1878,7 @@ namespace BusinessLayer.ServiceReferencePSE {
         private string DET_VAL_ADIC10Field;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private BusinessLayer.ServiceReferencePSE.CPE_DETALLE_COMPTA_BE[] DES_COMPField;
+        private Model.ServiceReferencePSE.CPE_DETALLE_COMPTA_BE[] DES_COMPField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -3009,7 +3009,7 @@ namespace BusinessLayer.ServiceReferencePSE {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(Order=86)]
-        public BusinessLayer.ServiceReferencePSE.CPE_DETALLE_COMPTA_BE[] DES_COMP {
+        public Model.ServiceReferencePSE.CPE_DETALLE_COMPTA_BE[] DES_COMP {
             get {
                 return this.DES_COMPField;
             }
@@ -4432,36 +4432,157 @@ namespace BusinessLayer.ServiceReferencePSE {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CPE_DOC_TRIBUTARO_BE", Namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE")]
+    [System.SerializableAttribute()]
+    public partial class CPE_DOC_TRIBUTARO_BE : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte[] DOC_TRIB_PDFField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DOC_TRIB_XML_ENVIOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DOC_TRIB_XML_RPTAField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<long> NUM_CPEField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<long> NUM_RESUMField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public byte[] DOC_TRIB_PDF {
+            get {
+                return this.DOC_TRIB_PDFField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DOC_TRIB_PDFField, value) != true)) {
+                    this.DOC_TRIB_PDFField = value;
+                    this.RaisePropertyChanged("DOC_TRIB_PDF");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DOC_TRIB_XML_ENVIO {
+            get {
+                return this.DOC_TRIB_XML_ENVIOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DOC_TRIB_XML_ENVIOField, value) != true)) {
+                    this.DOC_TRIB_XML_ENVIOField = value;
+                    this.RaisePropertyChanged("DOC_TRIB_XML_ENVIO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DOC_TRIB_XML_RPTA {
+            get {
+                return this.DOC_TRIB_XML_RPTAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DOC_TRIB_XML_RPTAField, value) != true)) {
+                    this.DOC_TRIB_XML_RPTAField = value;
+                    this.RaisePropertyChanged("DOC_TRIB_XML_RPTA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<long> NUM_CPE {
+            get {
+                return this.NUM_CPEField;
+            }
+            set {
+                if ((this.NUM_CPEField.Equals(value) != true)) {
+                    this.NUM_CPEField = value;
+                    this.RaisePropertyChanged("NUM_CPE");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<long> NUM_RESUM {
+            get {
+                return this.NUM_RESUMField;
+            }
+            set {
+                if ((this.NUM_RESUMField.Equals(value) != true)) {
+                    this.NUM_RESUMField = value;
+                    this.RaisePropertyChanged("NUM_RESUM");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReferencePSE.IwsOnlineToCPE")]
     public interface IwsOnlineToCPE {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callProcessOnline", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callProcessOnlineResponse")]
-        BusinessLayer.ServiceReferencePSE.CPE_RESPUESTA_BE callProcessOnline(string oUser, string oPass, BusinessLayer.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, BusinessLayer.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, BusinessLayer.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, BusinessLayer.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, BusinessLayer.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, BusinessLayer.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, BusinessLayer.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, BusinessLayer.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline);
+        Model.ServiceReferencePSE.CPE_RESPUESTA_BE callProcessOnline(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callProcessOnline", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callProcessOnlineResponse")]
-        System.Threading.Tasks.Task<BusinessLayer.ServiceReferencePSE.CPE_RESPUESTA_BE> callProcessOnlineAsync(string oUser, string oPass, BusinessLayer.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, BusinessLayer.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, BusinessLayer.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, BusinessLayer.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, BusinessLayer.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, BusinessLayer.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, BusinessLayer.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, BusinessLayer.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline);
+        System.Threading.Tasks.Task<Model.ServiceReferencePSE.CPE_RESPUESTA_BE> callProcessOnlineAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callStateCPE", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callStateCPEResponse")]
-        BusinessLayer.ServiceReferencePSE.RPTA_BE callStateCPE(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe);
+        Model.ServiceReferencePSE.RPTA_BE callStateCPE(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callStateCPE", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callStateCPEResponse")]
-        System.Threading.Tasks.Task<BusinessLayer.ServiceReferencePSE.RPTA_BE> callStateCPEAsync(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe);
+        System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_BE> callStateCPEAsync(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callExtractCPE", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callExtractCPEResponse")]
-        BusinessLayer.ServiceReferencePSE.RPTA_DOC_TRIB_BE callExtractCPE(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe, bool oFlgXml, bool oFlgPdf, bool oFlgCdr);
+        Model.ServiceReferencePSE.RPTA_DOC_TRIB_BE callExtractCPE(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe, bool oFlgXml, bool oFlgPdf, bool oFlgCdr);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callExtractCPE", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callExtractCPEResponse")]
-        System.Threading.Tasks.Task<BusinessLayer.ServiceReferencePSE.RPTA_DOC_TRIB_BE> callExtractCPEAsync(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe, bool oFlgXml, bool oFlgPdf, bool oFlgCdr);
+        System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_DOC_TRIB_BE> callExtractCPEAsync(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe, bool oFlgXml, bool oFlgPdf, bool oFlgCdr);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callProcessUpd", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callProcessUpdResponse")]
+        Model.ServiceReferencePSE.CPE_RESPUESTA_BE callProcessUpd(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callProcessUpd", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callProcessUpdResponse")]
+        System.Threading.Tasks.Task<Model.ServiceReferencePSE.CPE_RESPUESTA_BE> callProcessUpdAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callPreview", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callPreviewResponse")]
+        Model.ServiceReferencePSE.CPE_DOC_TRIBUTARO_BE callPreview(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callPreview", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callPreviewResponse")]
+        System.Threading.Tasks.Task<Model.ServiceReferencePSE.CPE_DOC_TRIBUTARO_BE> callPreviewAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IwsOnlineToCPEChannel : BusinessLayer.ServiceReferencePSE.IwsOnlineToCPE, System.ServiceModel.IClientChannel {
+    public interface IwsOnlineToCPEChannel : Model.ServiceReferencePSE.IwsOnlineToCPE, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class IwsOnlineToCPEClient : System.ServiceModel.ClientBase<BusinessLayer.ServiceReferencePSE.IwsOnlineToCPE>, BusinessLayer.ServiceReferencePSE.IwsOnlineToCPE {
+    public partial class IwsOnlineToCPEClient : System.ServiceModel.ClientBase<Model.ServiceReferencePSE.IwsOnlineToCPE>, Model.ServiceReferencePSE.IwsOnlineToCPE {
         
         public IwsOnlineToCPEClient() {
         }
@@ -4482,28 +4603,44 @@ namespace BusinessLayer.ServiceReferencePSE {
                 base(binding, remoteAddress) {
         }
         
-        public BusinessLayer.ServiceReferencePSE.CPE_RESPUESTA_BE callProcessOnline(string oUser, string oPass, BusinessLayer.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, BusinessLayer.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, BusinessLayer.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, BusinessLayer.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, BusinessLayer.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, BusinessLayer.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, BusinessLayer.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, BusinessLayer.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline) {
+        public Model.ServiceReferencePSE.CPE_RESPUESTA_BE callProcessOnline(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline) {
             return base.Channel.callProcessOnline(oUser, oPass, oCabecera, listDetalle, listAdicionales, listReferenciados, listAnticipos, listFacGuia, listRelacionado, oTipoOnline);
         }
         
-        public System.Threading.Tasks.Task<BusinessLayer.ServiceReferencePSE.CPE_RESPUESTA_BE> callProcessOnlineAsync(string oUser, string oPass, BusinessLayer.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, BusinessLayer.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, BusinessLayer.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, BusinessLayer.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, BusinessLayer.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, BusinessLayer.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, BusinessLayer.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, BusinessLayer.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline) {
+        public System.Threading.Tasks.Task<Model.ServiceReferencePSE.CPE_RESPUESTA_BE> callProcessOnlineAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline) {
             return base.Channel.callProcessOnlineAsync(oUser, oPass, oCabecera, listDetalle, listAdicionales, listReferenciados, listAnticipos, listFacGuia, listRelacionado, oTipoOnline);
         }
         
-        public BusinessLayer.ServiceReferencePSE.RPTA_BE callStateCPE(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe) {
+        public Model.ServiceReferencePSE.RPTA_BE callStateCPE(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe) {
             return base.Channel.callStateCPE(oUser, oPass, oNroIde, oTipCpe, oSerCpe, oNroCpe);
         }
         
-        public System.Threading.Tasks.Task<BusinessLayer.ServiceReferencePSE.RPTA_BE> callStateCPEAsync(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe) {
+        public System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_BE> callStateCPEAsync(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe) {
             return base.Channel.callStateCPEAsync(oUser, oPass, oNroIde, oTipCpe, oSerCpe, oNroCpe);
         }
         
-        public BusinessLayer.ServiceReferencePSE.RPTA_DOC_TRIB_BE callExtractCPE(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe, bool oFlgXml, bool oFlgPdf, bool oFlgCdr) {
+        public Model.ServiceReferencePSE.RPTA_DOC_TRIB_BE callExtractCPE(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe, bool oFlgXml, bool oFlgPdf, bool oFlgCdr) {
             return base.Channel.callExtractCPE(oUser, oPass, oNroIde, oTipCpe, oSerCpe, oNroCpe, oFlgXml, oFlgPdf, oFlgCdr);
         }
         
-        public System.Threading.Tasks.Task<BusinessLayer.ServiceReferencePSE.RPTA_DOC_TRIB_BE> callExtractCPEAsync(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe, bool oFlgXml, bool oFlgPdf, bool oFlgCdr) {
+        public System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_DOC_TRIB_BE> callExtractCPEAsync(string oUser, string oPass, string oNroIde, string oTipCpe, string oSerCpe, string oNroCpe, bool oFlgXml, bool oFlgPdf, bool oFlgCdr) {
             return base.Channel.callExtractCPEAsync(oUser, oPass, oNroIde, oTipCpe, oSerCpe, oNroCpe, oFlgXml, oFlgPdf, oFlgCdr);
+        }
+        
+        public Model.ServiceReferencePSE.CPE_RESPUESTA_BE callProcessUpd(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline) {
+            return base.Channel.callProcessUpd(oUser, oPass, oCabecera, listDetalle, listAdicionales, listReferenciados, listAnticipos, listFacGuia, listRelacionado, oTipoOnline);
+        }
+        
+        public System.Threading.Tasks.Task<Model.ServiceReferencePSE.CPE_RESPUESTA_BE> callProcessUpdAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline) {
+            return base.Channel.callProcessUpdAsync(oUser, oPass, oCabecera, listDetalle, listAdicionales, listReferenciados, listAnticipos, listFacGuia, listRelacionado, oTipoOnline);
+        }
+        
+        public Model.ServiceReferencePSE.CPE_DOC_TRIBUTARO_BE callPreview(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado) {
+            return base.Channel.callPreview(oUser, oPass, oCabecera, listDetalle, listAdicionales, listReferenciados, listAnticipos, listFacGuia, listRelacionado);
+        }
+        
+        public System.Threading.Tasks.Task<Model.ServiceReferencePSE.CPE_DOC_TRIBUTARO_BE> callPreviewAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado) {
+            return base.Channel.callPreviewAsync(oUser, oPass, oCabecera, listDetalle, listAdicionales, listReferenciados, listAnticipos, listFacGuia, listRelacionado);
         }
     }
 }

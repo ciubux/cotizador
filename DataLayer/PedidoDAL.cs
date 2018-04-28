@@ -476,7 +476,7 @@ namespace DataLayer
 
 
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
-            InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoPedido.estado);
+            InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
             DataTable dataTable = Execute(objCommand);
 
             List<Pedido> pedidoList = new List<Pedido>();
