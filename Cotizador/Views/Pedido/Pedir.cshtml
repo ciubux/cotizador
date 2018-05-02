@@ -543,68 +543,86 @@
                 @foreach (var cotizacionDetalle in pedido.pedidoDetalleList)
                 {
                     contador++;
-                    <tr data-expanded="true">
-                        <td>  @cotizacionDetalle.producto.idProducto  </td>
-                        <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
-                        <td>  @cotizacionDetalle.producto.proveedor  </td>
-                        <td>  @cotizacionDetalle.producto.sku  </td>
-                        <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
+                <tr data-expanded="true">
+                    <td>  @cotizacionDetalle.producto.idProducto  </td>
+                    <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
+                    <td>  @cotizacionDetalle.producto.proveedor  </td>
+                    <td>  @cotizacionDetalle.producto.sku  </td>
+                    <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
 
-                        <td>
-                            @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
-                            <br />
-                            <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
-                        </td>
-
-
+                    <td>
+                        @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
+                        <br />
+                        <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
+                    </td>
 
 
-                        <td>  @cotizacionDetalle.unidad  </td>
-                        <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
-                        <td class="@cotizacionDetalle.producto.idProducto detprecioLista" style="text-align:right">@cotizacionDetalle.precioLista</td>
-
-                        <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@cotizacionDetalle.porcentajeDescuento %</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@cotizacionDetalle.porcentajeDescuentoMostrar %</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoLista  </td>
-
-                        <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
-
-                        <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
 
 
-                        @if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
-                                && cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                    <td>  @cotizacionDetalle.unidad  </td>
+                    <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
+                    <td class="@cotizacionDetalle.producto.idProducto detprecioLista" style="text-align:right">@cotizacionDetalle.precioLista</td>
+
+                    <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@cotizacionDetalle.porcentajeDescuento %</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@cotizacionDetalle.porcentajeDescuentoMostrar %</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoLista  </td>
+
+                    <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
+
+                    <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
+
+
+
+
+                    @if (cotizacionDetalle.producto.precioClienteProducto.precioUnitario == 0)
+                    {
+                        if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioLista - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+                  && cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioLista + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
                         {
-                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
-                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
+
                         }
                         else
                         {
-                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
-                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
                         }
 
-
-
-
-                        <td class="@cotizacionDetalle.producto.idProducto detcantidad" style="text-align:right">@cotizacionDetalle.cantidad</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
-                        @if (pedido.esRePedido)
+                    }
+                    else
+                    {
+                        if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+                  && cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
                         {
-                            <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
-                            <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
-                            <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
-                            <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
+
                         }
-                        <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
+                        else
+                        {
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
+                        }
+                    }
+                    <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
+
+
+
+                    <td class="@cotizacionDetalle.producto.idProducto detcantidad" style="text-align:right">@cotizacionDetalle.cantidad</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+                    @if (pedido.esRePedido)
+                    {
+                                <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
+                                <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
+                                <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
+                                <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
+                }
+                    <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
 
 
 
 
-                    </tr>
+                </tr>
                 }
 
             </tbody>
@@ -652,14 +670,7 @@
 
         <div class="row">
             <div class="pull-left">
-                @if (pedido.numeroPedido > 0)
-                {
-                    <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar</button>
-                }
-                else
-                {
                     <button id="btnContinuarCreandoLuego" type="button" class="btn btn-primary">Guardar</button>
-                }
             </div>
 
 
@@ -1095,23 +1106,38 @@
 
                     <div class="row">
 
-                        <div class="col-sm-6 col-lg-6">
+                        <div class="col-sm-6 col-lg-8">
                             <!--RAZON SOCIAL-->
                             <div class="form-group">
-                                <label for="nuevoPrecio" class="control-label col-xs-4">Razón Social:</label>
-                                <div class="col-xs-8">
-                                    <input class="form-control" type="text" value="" id="ncRazonSocial" name="ncRazonSocial">
+                                <label for="nuevoPrecio" class="control-label col-xs-2">Razón Social:</label>
+                                <div class="col-xs-10">
+                                    <input class="form-control" disabled type="text" value="" id="ncRazonSocial" name="ncRazonSocial">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-6 col-lg-6">
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!--RUC-->
+                            <div class="form-group">
+                                <label for="nuevoPrecio" class="control-label col-xs-4">RUC:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" disabled type="text" value="" id="ncRUC" name="ncRUC">
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
 
                             <!--NOMBRE COMERCIAL-->
                             <div class="form-group">
-                                <label for="nuevoDescuento" class="control-label col-xs-4">Nombre Comercial:</label>
-                                <div class="col-xs-8">
-                                    <input class="form-control" type="text" value="" id="ncNombreComercial" name="ncNombreComercial">
+                                <label for="nuevoDescuento" class="control-label col-xs-2">Nombre Comercial:</label>
+                                <div class="col-xs-10">
+                                    <input class="form-control" disabled type="text" value="" id="ncNombreComercial" name="ncNombreComercial">
                                 </div>
                             </div>
                         </div>
@@ -1120,17 +1146,36 @@
 
                     <div class="row">
 
-                        <div class="col-sm-6 col-lg-6">
-                            <!--RUC-->
+                        <div class="col-sm-6 col-lg-8">
+
+                            <!--DIRECCION-->
                             <div class="form-group">
-                                <label for="nuevoPrecio" class="control-label col-xs-4">RUC:</label>
+                                <label for="nuevoDescuento" class="control-label col-xs-2">Dirección Legal:</label>
+                                <div class="col-xs-10">
+                                    <input class="form-control" disabled type="text" value="" id="ncDireccion" name="ncDireccion">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+
+                            <!--TELEFONO-->
+                            <div class="form-group">
+                                <label for="nuevoDescuento" class="control-label col-xs-4">Teléfono:</label>
                                 <div class="col-xs-8">
-                                    <input class="form-control" type="text" value="" id="ncRUC" name="ncRUC">
+                                    <input class="form-control" type="text" value="" id="ncTelefono" name="ncTelefono">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-6 col-lg-6">
+
+                        <div class="col-sm-6 col-lg-4">
 
                             <!--CONTACTO-->
                             <div class="form-group">
@@ -1140,6 +1185,18 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!--CORREO-->
+                            <div class="form-group">
+                                <label for="nuevoPrecio" class="control-label col-xs-4">Correo:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" value="" id="ncCorreo" name="ncCorreo">
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
 
                 </form>

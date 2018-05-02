@@ -9,7 +9,16 @@ namespace Model
     {
       
         public Guid idDocumentoDetalle { get; set; }
+
+
         public int cantidad { get; set; }
+
+        public int cantidadPorAtender { get; set; }
+
+        public int cantidadPendienteAtencion { get; set; }
+
+        public int cantidadSolicitada { get { return cantidad; } }
+
         public Producto producto { get; set; }
         public String unidad { get; set; }
 

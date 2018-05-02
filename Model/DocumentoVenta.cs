@@ -82,7 +82,7 @@ namespace Model
 
         public TipoDocumento tipoDocumento { get; set; }
 
-        
+
         public Venta venta { get; set; }
 
         public Guid idDocumentoVenta { get; set; }
@@ -92,6 +92,10 @@ namespace Model
 
         [Display(Name = "Serie:")]
         public String serie { get; set; }
+
+
+        public String serieNumero { get { return this.serie + "-" + this.numero; } }
+
 
         public enum TipoDocumento
         {
@@ -125,7 +129,22 @@ namespace Model
         public List<CPE_DOC_ASOC_BE> cPE_DOC_ASOC_BEList;
 
 
+        public CPE_RESPUESTA_BE cPE_RESPUESTA_BE { get; set; }
+
+
+        public RPTA_DOC_TRIB_BE rPTA_DOC_TRIB_BE { get; set; }
+
+
+        public RPTA_BE rPTA_BE { get; set; }
+
+        
+
+
         public GlobalEnumTipoOnline globalEnumTipoOnline;
+
+        public String descripcionEstadoSunat { get; set; }
+
+
 
 
 

@@ -32,7 +32,19 @@ namespace Cotizador.Controllers
 
             List<Ciudad> ciudades = usuario.sedesMP;
 
-            if ((int)(Constantes.paginas.BusquedaGuiasRemision) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+            if ((int)(Constantes.paginas.BusquedaCotizaciones) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoCotizacion) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]
+                )
+            {
+                ciudades = usuario.sedesMPCotizaciones;
+            }
+            else if ((int)(Constantes.paginas.BusquedaPedidos) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoPedido) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]
+                )
+            {
+                ciudades = usuario.sedesMPPedidos;
+            }
+            else if ((int)(Constantes.paginas.BusquedaGuiasRemision) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
                 (int)(Constantes.paginas.MantenimientoGuiaRemision) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]
                 )
             {
@@ -51,7 +63,10 @@ namespace Cotizador.Controllers
                 ciudades = usuario.sedesMPDocumentosVenta;
             }
 
-
+            if (ciudades.Count == 1)
+            {
+                selectedValue = ciudades[0].idCiudad.ToString();
+            }
 
             var model = new CiudadViewModels
             {

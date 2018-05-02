@@ -10,6 +10,19 @@ namespace BusinessLayer
 {
     public class MovimientoAlmacenBL
     {
+
+        public void AnularMovimientoAlmacen(MovimientoAlmacen movimientoAlmacen)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                dal.AnularMovimientoAlmacen(movimientoAlmacen);
+            }
+
+
+
+        }
+
+
         public void InsertMovimientoAlmacenSalida(GuiaRemision guiaRemision) 
         {
             using (var dal = new MovimientoALmacenDAL())

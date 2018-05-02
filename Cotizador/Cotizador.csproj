@@ -263,7 +263,8 @@
     <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jquery-ui.min.css" />
-    <Content Include="Content\printGuiaRemision.css" />
+    <Content Include="Content\PrintGuiaLima.css" />
+    <Content Include="Content\PrintGuiaProvincias.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -388,6 +389,7 @@
     <Content Include="Views\GuiaRemision\Print.cshtml" />
     <Content Include="Views\Factura\PreLoad.cshtml" />
     <Content Include="Views\Factura\Index.cshtml" />
+    <Content Include="Views\GuiaRemision\PrintProvincias.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

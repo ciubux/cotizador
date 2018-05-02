@@ -106,21 +106,160 @@ namespace Cotizador.Controllers
                     List<Ciudad> ciudadList = ciudadBL.getCiudades();
                     usuario.sedesMP = ciudadList;
 
-                    /*Ciudades para guias de remision*/
-                    usuario.sedesMPGuiasRemision = new List<Ciudad>();
-                    if (usuario.administraGuiasLima)
+                    #region SedesCotizacion
+                    /*Sedes para guias de remision*/
+                    usuario.sedesMPCotizaciones = new List<Ciudad>();
+                    /*Usuarios a su cargo*/
+                    List<Usuario> usuarioCreaCotizacionList = new List<Usuario>();
+
+                    if (usuario.apruebaCotizacionesLima)
                     {
                         foreach (Ciudad ciudad in ciudadList)
                         {
-                            if(!ciudad.esProvincia)
-                            { 
-                                usuario.sedesMPGuiasRemision.Add(ciudad);
+                            if (!ciudad.esProvincia)
+                            {
+                                usuario.sedesMPCotizaciones.Add(ciudad);
+                                break;
+                            }
+                        }
+                        foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
+                        {
+                            if (!usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaCotizacionList.Add(usuarioTmp);
+                            }
+                        }
+
+                    }
+
+                    if (usuario.apruebaCotizacionesProvincias)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.esProvincia)
+                            {
+                                usuario.sedesMPCotizaciones.Add(ciudad);
+                            }
+                        }
+                        foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
+                        {
+                            if (usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaCotizacionList.Add(usuarioTmp);
+                            }
+                        }
+                    }
+
+                    if (!usuario.apruebaCotizaciones)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                            {
+                                usuario.sedesMPCotizaciones.Add(ciudad);
                                 break;
                             }
                         }
                     }
-                    
-                    if (usuario.administraGuiasProvincia)
+                    else
+                    {
+                        usuario.usuarioCreaCotizacionList = usuarioCreaCotizacionList;
+                    }
+
+                    #endregion
+
+
+                    #region SedesPedido
+
+                    usuario.sedesMPPedidos = new List<Ciudad>();
+                    /*Usuarios a su cargo*/
+                    List<Usuario> usuarioTomaPedidoList = new List<Usuario>();
+
+                    if (usuario.apruebaPedidosLima)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (!ciudad.esProvincia)
+                            {
+                                usuario.sedesMPPedidos.Add(ciudad);
+                                break;
+                            }
+                        }
+                        foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
+                        {
+                            if (!usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaCotizacionList.Add(usuarioTmp);
+                            }
+                        }
+
+                    }
+
+                    if (usuario.apruebaPedidosProvincias)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.esProvincia)
+                            {
+                                usuario.sedesMPPedidos.Add(ciudad);
+                            }
+                        }
+                        foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
+                        {
+                            if (usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioTomaPedidoList.Add(usuarioTmp);
+                            }
+                        }
+                    }
+
+                    if (!usuario.apruebaPedidos)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                            {
+                                usuario.sedesMPPedidos.Add(ciudad);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        usuario.usuarioTomaPedidoList = usuarioTomaPedidoList;
+                    }
+
+                    #endregion
+
+
+              
+                    #region SedesGuias
+
+                    usuario.sedesMPGuiasRemision = new List<Ciudad>();
+                    /*Usuarios a su cargo*/
+                    List<Usuario> usuarioCreaGuiaList = new List<Usuario>();
+
+                    if (usuario.administraGuiasLima)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (!ciudad.esProvincia)
+                            {
+                                usuario.sedesMPGuiasRemision.Add(ciudad);
+                                break;
+                            }
+                        }
+                        foreach (Usuario usuarioTmp in usuario.usuarioCreaGuiaList)
+                        {
+                            if (!usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaGuiaList.Add(usuarioTmp);
+                            }
+                        }
+
+                    }
+
+                    if (usuario.administraGuiasProvincias)
                     {
                         foreach (Ciudad ciudad in ciudadList)
                         {
@@ -129,9 +268,16 @@ namespace Cotizador.Controllers
                                 usuario.sedesMPGuiasRemision.Add(ciudad);
                             }
                         }
+                        foreach (Usuario usuarioTmp in usuario.usuarioCreaGuiaList)
+                        {
+                            if (usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaGuiaList.Add(usuarioTmp);
+                            }
+                        }
                     }
 
-                    if (!usuario.administraGuiasLima && !usuario.administraGuiasLima)
+                    if (!usuario.administraGuias)
                     {
                         foreach (Ciudad ciudad in ciudadList)
                         {
@@ -142,18 +288,20 @@ namespace Cotizador.Controllers
                             }
                         }
                     }
+                    else
+                    {
+                        usuario.usuarioCreaGuiaList = usuarioCreaGuiaList;
+                    }
+
+                    #endregion
 
 
+                    #region SedesDocumentosVenta
 
-
-
-
-
-
-
-
-                    /*Ciudades para documentos de venta*/
                     usuario.sedesMPDocumentosVenta = new List<Ciudad>();
+                    /*Usuarios a su cargo*/
+                    List<Usuario> usuarioCreaDocumentoVentaList = new List<Usuario>();
+
                     if (usuario.administraDocumentosVentaLima)
                     {
                         foreach (Ciudad ciudad in ciudadList)
@@ -164,9 +312,17 @@ namespace Cotizador.Controllers
                                 break;
                             }
                         }
+                        foreach (Usuario usuarioTmp in usuario.usuarioCreaDocumentoVentaList)
+                        {
+                            if (!usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaDocumentoVentaList.Add(usuarioTmp);
+                            }
+                        }
+
                     }
-                    
-                    if (usuario.administraDocumentosVentaProvincia)
+
+                    if (usuario.administraDocumentosVentaProvincias)
                     {
                         foreach (Ciudad ciudad in ciudadList)
                         {
@@ -175,9 +331,16 @@ namespace Cotizador.Controllers
                                 usuario.sedesMPDocumentosVenta.Add(ciudad);
                             }
                         }
+                        foreach (Usuario usuarioTmp in usuario.usuarioCreaDocumentoVentaList)
+                        {
+                            if (usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaDocumentoVentaList.Add(usuarioTmp);
+                            }
+                        }
                     }
 
-                    if (!usuario.administraDocumentosVentaLima && !usuario.administraDocumentosVentaProvincia)
+                    if (!usuario.administraDocumentosVenta)
                     {
                         foreach (Ciudad ciudad in ciudadList)
                         {
@@ -188,11 +351,12 @@ namespace Cotizador.Controllers
                             }
                         }
                     }
+                    else
+                    {
+                        usuario.usuarioCreaDocumentoVentaList = usuarioCreaDocumentoVentaList;
+                    }
 
-
-
-
-
+                    #endregion
 
                     try
                     {

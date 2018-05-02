@@ -93,6 +93,7 @@ namespace DataLayer
                 obj.ruc = Converter.GetString(row, "ruc");
                 obj.contacto1 = Converter.GetString(row, "contacto1");
                 obj.contacto2 = Converter.GetString(row, "contacto2");
+                obj.domicilioLegal = Converter.GetString(row, "domicilio_legal");
 
             }
 

@@ -38,6 +38,40 @@ namespace Cotizador.Controllers
         }
 
 
+        public String Create()
+        {
+
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+            DocumentoVenta documentoVenta = new DocumentoVenta();
+
+            String[] fecha = this.Request.Params["fechaEmision"].Split('/');
+            String[] hora = this.Request.Params["horaEmision"].Split(':');
+
+
+            documentoVenta.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
+
+            fecha = this.Request.Params["fechaVencimiento"].Split('/');
+            documentoVenta.fechaVencimiento = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+
+
+            documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPago"]);
+            documentoVenta.formaPago = (DocumentoVenta.FormaPago)Int32.Parse(this.Request.Params["formaPago"]);
+            documentoVenta.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            documentoVenta.correoEnvio = this.Request.Params["correoEnvio"];
+            documentoVenta.correoCopia = this.Request.Params["correoCopia"];
+            documentoVenta.correoOculto = this.Request.Params["correoOculto"];
+
+            documentoVenta.venta = new Venta();
+            documentoVenta.venta.pedido = pedido;
+
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            documentoVentaBL.InsertarFactura(documentoVenta);
+
+            var otmp = new { serieNumero = documentoVenta.serieNumero};
+            
+            return JsonConvert.SerializeObject(otmp);
+        }
+
         [HttpGet]
         public ActionResult Index()
         {
@@ -127,6 +161,49 @@ namespace Cotizador.Controllers
         }
 
 
+        public void consultarEstadoDocumentoVenta()
+        {
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            List<DocumentoVenta> documentoVentaList = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+            Guid idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+
+            foreach (DocumentoVenta documentoVenta in documentoVentaList)
+            {
+                if (documentoVenta.idDocumentoVenta == idDocumentoVenta)
+                {
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+                    documentoVentaBL.consultarEstadoDocumentoVenta(documentoVenta);
+                    break;
+                }              
+            }          
+        }
+
+
+        public String descargarArchivoDocumentoVenta()
+        {
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            List<DocumentoVenta> documentoVentaList = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+            Guid idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+
+            String ruta = String.Empty;
+
+            foreach (DocumentoVenta documentoVenta in documentoVentaList)
+            {
+                if (documentoVenta.idDocumentoVenta == idDocumentoVenta)
+                {
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+                    ruta = documentoVentaBL.descargarArchivoDocumentoVenta(documentoVenta);
+
+                   
+                    break;
+                }
+            }
+
+            return ruta;
+
+        }
+
+
         private void instanciarfacturaBusqueda()
         {
             DocumentoVenta documentoVenta = new DocumentoVenta();
@@ -143,8 +220,24 @@ namespace Cotizador.Controllers
             documentoVenta.cliente = new Cliente();
             documentoVenta.cliente.idCliente = Guid.Empty;
 
-            documentoVenta.ciudad = new Ciudad();
-            documentoVenta.ciudad.idCiudad = Guid.Empty;
+            if (documentoVenta.usuario.sedesMPDocumentosVenta.Count == 1)
+            {
+                documentoVenta.ciudad = documentoVenta.usuario.sedesMPDocumentosVenta[0];
+                //documentoVenta.ciudad.idCiudad = Guid.Empty;
+            }
+            else
+            {
+                documentoVenta.ciudad = new Ciudad();
+                documentoVenta.ciudad.idCiudad = Guid.Empty;
+            }
+
+
+            
+
+            
+
+
+
 
             //pedidoTmp.usuarioBusqueda = pedidoTmp.usuario;
             this.Session[Constantes.VAR_SESSION_FACTURA_BUSQUEDA] = documentoVenta;

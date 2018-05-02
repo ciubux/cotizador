@@ -1483,16 +1483,18 @@ jQuery(function ($) {
         crearCotizacion(0);
     });
 
-    $("#btnContinuarCreandoLuego").click(function () {
-        crearCotizacion(1);
-    });
-
     $("#btnFinalizarEdicionCotizacion").click(function () {
         editarCotizacion(0);
     });
 
     $("#btnContinuarEditandoLuego").click(function () {
-        editarCotizacion(1);
+        if ($("#numero") == "") {
+            crearCotizacion(1);
+        }
+        else
+        {
+            editarCotizacion(1);
+        }        
     });
 
 

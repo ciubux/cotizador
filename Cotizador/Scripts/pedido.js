@@ -63,7 +63,7 @@ jQuery(function ($) {
 
     var pagina = 2;
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
-    
+    var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
 
     $(document).ready(function () {
         obtenerConstantes();
@@ -140,6 +140,7 @@ jQuery(function ($) {
                 IGV = constantes.IGV;
                 SIMBOLO_SOL = constantes.SIMBOLO_SOL;
                 MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
+                VARIACION_PRECIO_ITEM_PEDIDO = constantes.VARIACION_PRECIO_ITEM_PEDIDO;
             }
         });
     }
@@ -318,12 +319,23 @@ jQuery(function ($) {
 
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
 
+
+
+        $("#ncRazonSocial").val("");
+        $("#ncRUC").val("");
+        $("#ncNombreComercial").val("");
+        $("#ncDireccion").val("");
+        $("#ncTelefono").val("");
+
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             alert("Debe seleccionar una ciudad previamente.");
             $("#idCiudad").focus();
             $('#btnCancelCliente').click();
             return false;
         }
+
+
+
     });
 
 
@@ -341,6 +353,26 @@ jQuery(function ($) {
     });
   
 
+
+    $(window).on("paste", function (e) {
+        var modalAgregarClienteIsShown = ($("#modalAgregarCliente").data('bs.modal') || { isShown: false }).isShown;
+        if (modalAgregarClienteIsShown) {
+            $.each(e.originalEvent.clipboardData.items, function () {
+                this.getAsString(function (str) {
+                   // alert(str);
+                    var lineas = str.split("\t");
+
+                    $("#ncRazonSocial").val(lineas[0]);
+                    $("#ncRUC").val(lineas[1]);
+                    $("#ncNombreComercial").val(lineas[2]);
+                    $("#ncDireccion").val(lineas[3]);
+                    $("#ncTelefono").val(lineas[4]);
+                });
+            });
+
+        }
+       
+    });
 
 
 
@@ -502,6 +534,14 @@ jQuery(function ($) {
 
     var fechaEntregaHasta = $("#fechaEntregaHastatmp").val();
     $("#pedido_fechaEntregaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
+
+
+
+    var fechaProgramacionDesde = $("#fechaProgramacionDesdetmp").val();
+    $("#pedido_fechaProgramacionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacionDesde);
+
+    var fechaProgramacionHasta = $("#fechaProgramacionHastatmp").val();
+    $("#pedido_fechaProgramacionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacionHasta);
 
 
     var fechaPrecios = $("#fechaPreciostmp").val();
@@ -1164,6 +1204,42 @@ jQuery(function ($) {
 
                 var observacionesEnDescripcion = "<br /><span class='" + detalle.idProducto + " detproductoObservacion'  style='color: darkred'>" + detalle.observacion + "</span>";
 
+
+                var precios = "";
+
+                if (detalle.precioUnitarioRegistrado == 0) {
+
+                    if (detalle.precioUnitario >= Number(precioLista) - Number(VARIACION_PRECIO_ITEM_PEDIDO)
+                        && detalle.precioUnitario <= Number(precioLista) + Number(VARIACION_PRECIO_ITEM_PEDIDO))
+                    {
+                        precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>';
+                        
+                    }
+                    else
+                    {
+                        precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">' + detalle.precioUnitario + '</td>';
+
+                    }
+
+
+                }
+                else {
+                    
+
+                    if (detalle.precioUnitario >= detalle.precioUnitarioRegistrado - NUMBER(VARIACION_PRECIO_ITEM_PEDIDO)
+                        && detalle.precioUnitario <= detalle.precioUnitarioRegistrado + NUMBER(VARIACION_PRECIO_ITEM_PEDIDO))
+                    {
+                        precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>';
+                        
+                    }
+                    else
+                    {
+                    precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">' + detalle.precioUnitario + '</td>';
+
+                    }
+                }
+
+
                 $('#tableDetallePedido tbody tr.footable-empty').remove();
                 $("#tableDetallePedido tbody").append('<tr data-expanded="true">' +
                     '<td>' + detalle.idProducto + '</td>' +
@@ -1182,11 +1258,13 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detmargen" style="width:70px; text-align:right; ">' + detalle.margen + ' %</td>' +
 
                     '<td class="' + detalle.idProducto + ' detflete" style="text-align:right">' + flete.toFixed(2) + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>' +
+                    precios +
+                    '<td class="' + detalle.idProducto + ' detprecioUnitarioRegistrado" style="text-align:right">' + detalle.precioUnitarioRegistrado + '</td>' +
                     '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
                     '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button name="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios"></button></td>'+
+                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button name="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios"></button></td>' +
+
 
                  //   esRecotizacion +
 
@@ -1654,18 +1732,24 @@ jQuery(function ($) {
         crearPedido(0);
     });
 
-    $("#btnContinuarCreandoLuego").click(function () {
-        crearPedido(1);
-    });
 
     $("#btnFinalizarEdicionPedido").click(function () {
         editarPedido(0);
     });
 
+    
     $("#btnContinuarEditandoLuego").click(function () {
-        editarPedido(1);
+        if ($("#pedido_numeroPedido") == "") {
+            crearPedido(1);
+        }
+        else {
+            editarPedido(1);
+        }
     });
 
+
+
+    
 
     
 
@@ -1811,7 +1895,7 @@ jQuery(function ($) {
 
                 FooTable.init('#tableDetallePedido');
 
-
+           //     $("#formVerGuiasRemision").html("");
 
                 var d = '';
                 var lista = pedido.pedidoDetalleList;
@@ -1832,22 +1916,66 @@ jQuery(function ($) {
                         '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].cantidad + '</td>' +
+                        '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
                         '</tr>';
+
+             /*       var guiaRemisionList = pedido.guiaRemisionList;
+                    for (var j = 0; j < guiaRemisionList.length; j++) {
+
+                        
+                       $("#tableDetalleGuia > tbody").empty();
+
+                        FooTable.init('#tableDetalleGuia');
+
+                        var dGuia = '';
+                        var documentoDetalleList = guiaRemisionList[j].documentoDetalle;
+                        for (var k = 0; k < documentoDetalleList.length; k++) {
+
+                            dGuia += '<tr>' +
+                                '<td>' + documentoDetalleList[k].producto.sku+ '</td>' +
+                                '<td>' + documentoDetalleList[k].cantidad + '</td>' +
+                                '<td>' + documentoDetalleList[k].unidad + '</td>' +
+                                '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
+                                '</tr>';
+                        }
+
+                        $("#tableDetalleGuia").append(dGuia);
+
+                        var plantilla = $("#plantillaVerGuiasRemision").html();
+
+                        plantilla = plantilla.replace("#serieNumero", guiaRemisionList[j].serieNumeroGuia);
+                        plantilla = plantilla.replace("#fecha", invertirFormatoFecha(guiaRemisionList[j].fechaMovimiento.substr(0, 10)));
+
+                        plantilla = plantilla.replace("#serieNumeroFactura", guiaRemisionList[j].documentoVenta.serieNumero);
+                        plantilla = plantilla.replace("#fechaEmision", invertirFormatoFecha(guiaRemisionList[j].documentoVenta.fechaEmision.substr(0, 10)));
+
+                        plantilla = plantilla.replace("#tableDetalleGuia", "#tableDetalleGuia"+j);
+                  
+
+                        $("#formVerGuiasRemision").append(plantilla);
+                    }*/
 
                 }
               //  
                // sleep
                 $("#tableDetallePedido").append(d);
 
-                if (pedido.seguimientoPedido.estado != ESTADO_PROGRAMADO) {
+                if (pedido.seguimientoPedido.estado != ESTADO_PROGRAMADO
+                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO
+                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO_PARCIALMENTE) {
+                    $("#btnEditarPedido").show();
                     if (pedido.seguimientoPedido.estado == ESTADO_EN_EDICION) {
                         $("#btnEditarPedido").html("Continuar Editanto");
                     }
                     else {
                         $("#btnEditarPedido").html("Editar");
                     }
+                    $("#btnEditarPedido").show();
+                }
+                else {
+                    $("#btnEditarPedido").hide();
                 }
 
 
@@ -1882,7 +2010,7 @@ jQuery(function ($) {
                     pedido.seguimientoCrediticioPedido.estado == ESTADO_BLOQUEADO
                 ) {
 
-                    $("#btnLiberarPedido").show();
+                    $("#btnLiberarPedido").hide();
                 }
                 else {
                     $("#btnLiberarPedido").hide();
@@ -1890,11 +2018,14 @@ jQuery(function ($) {
 
                 //BLOQUEAR PEDIDO
                 if (
-                    pedido.seguimientoCrediticioPedido.estado == ESTADO_PENDIENTE_LIBERACION ||
-                    pedido.seguimientoCrediticioPedido.estado == ESTADO_LIBERADO
+                    (pedido.seguimientoCrediticioPedido.estado == ESTADO_PENDIENTE_LIBERACION ||
+                        pedido.seguimientoCrediticioPedido.estado == ESTADO_LIBERADO)
+                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO
+                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO_PARCIALMENTE
+
                 ) {
 
-                    $("#btnBloquearPedido").show();
+                    $("#btnBloquearPedido").hide();
                 }
                 else {
                     $("#btnBloquearPedido").hide();
@@ -1912,7 +2043,8 @@ jQuery(function ($) {
 
                 //ATENDER PEDIDO
                 if ((pedido.seguimientoPedido.estado == ESTADO_INGRESADO ||
-                    pedido.seguimientoPedido.estado == ESTADO_PROGRAMADO
+                    pedido.seguimientoPedido.estado == ESTADO_PROGRAMADO ||
+                    pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE
                     )&&
                     pedido.seguimientoCrediticioPedido.estado == ESTADO_LIBERADO) {
 
@@ -1923,7 +2055,9 @@ jQuery(function ($) {
                 }
 
                 //CANCELAR PROGRAMACION
-                if (pedido.seguimientoPedido.estado == ESTADO_PROGRAMADO)
+                if (pedido.seguimientoPedido.estado == ESTADO_PROGRAMADO &&
+                    !pedido.seguimientoPedido.estado == ESTADO_ATENDIDO &&
+                    !pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE)
                 {
                     $("#btnCancelarProgramacionPedido").show();
                 }
@@ -1937,11 +2071,25 @@ jQuery(function ($) {
                     || pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE
                     ) {
 
-                    $("#btnFacturarPedido").show();
+                    $("#btnFacturarPedido").hide();
                 }
                 else {
                     $("#btnFacturarPedido").hide();
                 }
+
+
+                if (pedido.seguimientoPedido.estado == ESTADO_ATENDIDO
+                    || pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE
+                ) {
+
+                    $("#btnVerAtenciones").show();
+                }
+                else {
+                    $("#btnVerAtenciones").hide();
+                }
+
+
+                
                 
 
                 /*PDF
@@ -2013,6 +2161,8 @@ jQuery(function ($) {
         $("#btnCancelarProgramacionPedido").attr('disabled', 'disabled');
         $("#btnLiberarPedido").attr('disabled', 'disabled');
         $("#btnBloquearPedido").attr('disabled', 'disabled');
+        $("#btnVerAtenciones").attr('disabled', 'disabled');
+        
     }
 
     function activarBotonesVer() {
@@ -2026,6 +2176,7 @@ jQuery(function ($) {
         $("#btnCancelarProgramacionPedido").removeAttr('disabled');
         $("#btnLiberarPedido").removeAttr('disabled');
         $("#btnBloquearPedido").removeAttr('disabled');
+        $("#btnVerAtenciones").removeAttr('disabled');
     }
 
   
@@ -2861,6 +3012,9 @@ jQuery(function ($) {
         var fechaSolicitudHasta = $("#pedido_fechaSolicitudHasta").val();
         var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
         var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
+        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
+        var fechaProgramacionDesde = $("#pedido_fechaProgramacionDesde").val();
+        var fechaProgramacionHasta = $("#pedido_fechaProgramacionHasta").val();
         var pedido_numeroPedido = $("#pedido_numeroPedido").val();
         var pedido_numeroGrupoPedido = $("#pedido_numeroGrupoPedido").val();
         var estado = $("#estado").val();
@@ -2877,6 +3031,8 @@ jQuery(function ($) {
                 fechaSolicitudHasta: fechaSolicitudHasta,
                 fechaEntregaDesde: fechaEntregaDesde,
                 fechaEntregaHasta: fechaEntregaHasta,
+                fechaProgramacionDesde: fechaProgramacionDesde,
+                fechaProgramacionHasta: fechaProgramacionHasta,
                 numero: pedido_numeroPedido,
                 numeroGrupo: pedido_numeroGrupoPedido,
                 estado: estado,
@@ -2910,6 +3066,12 @@ jQuery(function ($) {
                             '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idCotizacion + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                     }
 
+                    var fechaProgramacion = "No Programado";
+                    if (pedidoList[i].fechaProgramacion != null && pedidoList[i].fechaProgramacion != "")
+                    {
+                        fechaProgramacion = invertirFormatoFecha(pedidoList[i].fechaProgramacion.substr(0, 10));
+                    }
+
                     var pedido = '<tr data-expanded="true">' +
                         '<td>  ' + pedidoList[i].idPedido+'</td>' +
                         '<td>  ' + pedidoList[i].numeroPedidoString+'  </td>' +
@@ -2919,11 +3081,12 @@ jQuery(function ($) {
                         '<td>  ' + pedidoList[i].ciudad.nombre+'  </td>' +
                         '<td>  ' + pedidoList[i].usuario.nombre+'  </td>' +
                         '<td>  ' + pedidoList[i].fechaHoraSolicitud+'</td>' +
-                        '<td>  ' + pedidoList[i].rangoFechasEntrega+'</td>' +
+                        '<td>  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
+                        '<td>  ' + fechaProgramacion+ '</td>' +
                         '<td>  ' + pedidoList[i].montoTotal+'  </td>' +
                         '<td>  ' + pedidoList[i].seguimientoPedido.estadoString+'</td>' +
-                        '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
-                        '<td>  ' + observacion+'  </td>' +
+                      //  '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
+                      //  '<td>  ' + observacion+'  </td>' +
                         '<td>  ' + pedidoList[i].seguimientoCrediticioPedido.estadoString+'</td>' +
                         '<td>' +
                         '<button type="button" class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numeroPedido + ' btnVerPedido btn btn-primary ">Ver</button>' +
@@ -3252,6 +3415,48 @@ jQuery(function ($) {
 
     $("#btnAceptarFacturarPedido").click(function () {
 
+        if ($("#documentoVenta_fechaEmision").val() == "" || $("#documentoVenta_fechaEmision").val() == null) {
+            alert("Debe ingresar la fecha de emisión.");
+            $("#documentoVenta_fechaEmision").focus();
+            return false;
+        }
+
+        if ($("#documentoVenta_horaEmision").val() == "" || $("#documentoVenta_horaEmision").val() == null) {
+            alert("Debe ingresar la hora de emisión.");
+            $("#documentoVenta_horaEmision").focus();
+            return false;
+        }
+
+        if ($("#documentoVenta_fechaVencimiento").val() == "" || $("#documentoVenta_fechaVencimiento").val() == null) {
+            alert("Debe ingresar la fecha de vencimiento.");
+            $("#documentoVenta_fechaVencimiento").focus();
+            return false;
+        }
+
+        if (convertirFechaNumero($("#documentoVenta_fechaEmision").val()) > convertirFechaNumero($("#documentoVenta_fechaVencimiento").val())) {
+            alert("La fecha de vencimiento debe ser mayor o igual a la fecha de emisión.");
+            $("#documentoVenta_fechaVencimiento").focus();
+            return false;
+        }
+
+        if ($("#documentoVenta_correoEnvio").val() == "" || $("#documentoVenta_correoEnvio").val() == null) {
+            alert("Debe ingresar el correo de envío.");
+            $("#documentoVenta_correoEnvio").focus();
+            return false;
+        }
+        else
+        {
+            if (!$("#documentoVenta_correoEnvio").val().match(/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/)) 
+            {
+                alert("Debe ingresar un correo de envío válido.");
+                $("#documentoVenta_correoEnvio").focus();
+                return false;
+            }
+        }
+
+
+           
+
         var fechaEmision = $("#documentoVenta_fechaEmision").val();
         var horaEmision = $("#documentoVenta_horaEmision").val();
         var fechaVencimiento = $("#documentoVenta_fechaVencimiento").val();
@@ -3259,8 +3464,8 @@ jQuery(function ($) {
         var tipoPago = $("#tipoPago").val();
         var formaPago = $("#formaPago").val();
         var correoEnvio = $("#documentoVenta_correoEnvio").val();
-        var correoCopia = $("#documentoVenta_correoCopia").val();
-        var correoOculto = $("#documentoVenta_correoOculto").val();
+        /*var correoCopia = $("#documentoVenta_correoCopia").val();
+        var correoOculto = $("#documentoVenta_correoOculto").val();*/
 
         /*
         if ($("#fechaProgramacion").val() == "" || $("#fechaProgramacion").val() == null) {
@@ -3286,22 +3491,25 @@ jQuery(function ($) {
      //   var fechaProgramacion = $('#fechaProgramacion').val();
 
         $.ajax({
-            url: "/DocumentoVenta/Facturar",
+            url: "/Factura/Create",
             type: 'POST',
+            dataType: 'JSON',
             data: {
                 fechaEmision: fechaEmision,
                 horaEmision: horaEmision,
                 fechaVencimiento: fechaVencimiento,
                 tipoPago: tipoPago,
                 formaPago: formaPago,
-                correoEnvio: correoEnvio,
-                correoCopia: correoCopia,
-                correoOculto: correoOculto
+                correoEnvio: correoEnvio
+                /*correoCopia: correoCopia,
+                correoOculto: correoOculto*/
+            },
+            error: function (resultado) {
+                alert(MENSAJE_ERROR);
             },
             success: function (resultado) {
-
-                //alert('El pedido número ' + $("#verNumero").html() + ' se programó para ser atendido.');
-                //location.reload();
+                alert('Se generó la factura ' + resultado.serieNumero + '.');
+                location.reload();
             }
         });
         $("btnCancelarFacturarPedido").click();

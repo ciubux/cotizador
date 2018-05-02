@@ -1076,8 +1076,8 @@ namespace Cotizador.Controllers
             cotizacion = cotizacionBL.GetCotizacion(cotizacion);
 
             GeneradorPDF gen = new GeneradorPDF();
-            String ruta = gen.generarPDFExtended(cotizacion);
-            return ruta;
+            String nombreArchivo = gen.generarPDFExtended(cotizacion);
+            return nombreArchivo;
         }
        
 

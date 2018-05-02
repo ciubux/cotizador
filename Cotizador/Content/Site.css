@@ -47,7 +47,7 @@ textarea {
         width: 900px;
     }
     #modalAgregarCliente .modal-dialog {
-        width: 900px;
+        width: 1100px;
     }
     #modalCalculadora .modal-dialog {
         width: 900px;
@@ -66,6 +66,10 @@ textarea {
         width: 1200px;
     }
 
+    #modalVerGuiasRemision .modal-dialog {
+        width: 1200px;
+    }
+
     #modalAtencion .modal-dialog {
         width: 1100px;
     }
@@ -76,192 +80,6 @@ textarea {
 
 
 }
-
-@media print {
-    header, nav, footer, hr {
-        display: none;
-    }
-
-    .page-header {
-        display: none;
-    }
-
-  
-
-
-  
-
-    /*ROW UNO*/
-
-    .row_uno > .col_uno {
-        float: left;
-        width: 2cm;
-    }
-    .row_uno > .col_dos{
-        float: left;
-        width: 6cm;
-    }
-    .row_uno > .col_tres {
-        float: left;
-        width: 3cm;
-    }
-    .row_uno > .col_cuatro {
-        float: left;
-        width: 2cm;
-    }
-
-    /*ROW DOS*/
-    .row_dos > .col_uno {
-        float: left;
-        width: 2cm;
-    }
-
-    .row_dos > .col_dos {
-        float: left;
-        width: 6cm;
-    }
-
-    .row_dos > .col_tres {
-        float: left;
-        width: 3cm;
-    }
-
-    /*ROW TRES*/
-    .row_tres > .col_uno {
-        float: left;
-        width: 3cm;
-    }
-
-    .row_tres > .col_dos {
-        float: left;
-        width: 8cm;
-    }
-
-    .row_tres > .col_tres {
-        float: left;
-        width: 3cm;
-    }
-
-    /*ROW CUATRO*/
-    .row_cuatro > .col_uno {
-        float: left;
-        width: 3cm;
-    }
-
-    .row_cuatro > .col_dos {
-        float: left;
-        width: 11cm;
-    }
-
-
-    /*ROW CINCO*/
-    .row_cinco > .col_uno {
-        float: left;
-        width: 2.5cm;
-    }
-
-    .row_tres > .col_dos {
-        float: left;
-        width: 8cm;
-    }
-
-    /*ROW SEIS*/
-    .row_seis > .col_uno {
-        float: left;
-        width: 3cm;
-    }
-
-    .row_seis > .col_dos {
-        float: left;
-        width: 11cm;
-    }
-
-    /*ROW SIETE*/
-    .row_siete > .col_uno {
-        float: left;
-        width: 3cm;
-    }
-
-    .row_siete > .col_dos {
-        float: left;
-        width: 11cm;
-    }
-
-    /*ROW OCHO*/
-    .row_ocho > .col_uno {
-        float: left;
-        width: 2cm;
-    }
-
-    .row_ocho > .col_dos {
-        float: left;
-        width: 9cm;
-    }
-
-    .row_ocho > .col_tres {
-        float: left;
-        width: 2cm;
-    }
-
-    .row_ocho > .col_cuatro {
-        float: left;
-        width: 2cm;
-    }
-
-    .detalle {
-        margin-top: 1cm;
-        margin-left: 2cm;
-    }
-
-    /*ROW DETALLE*/
-    .row_detalle > .col_uno {
-        float: left;
-        width: 2cm;
-    }
-
-    .row_detalle > .col_dos {
-        float: left;
-        width: 2cm;
-    }
-
-    .row_detalle > .col_tres {
-        float: left;
-        width: 3cm;
-    }
-
-    .row_detalle > .col_cuatro {
-        float: left;
-        width: 8cm;
-    }
-
-
-
-
-    @page {
-        size: auto;
-        margin: 0mm;
-        /*size: A4 landscape;*/
-    }
-
-    body {
-        /*background-color: black;*/
-     /*   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
-        font-size: 1em;
-        color: #333333;
-        margin-top: 4cm;
-        margin-right: 1cm;
-        margin-bottom: 15cm;
-        margin-left: 0.1cm /*Trujillo*/
-    }
-
-
-    .serieNumeroGuia {
-        margin-right: 0cm
-    }
-
-}
-
-
 
 
 div.header {

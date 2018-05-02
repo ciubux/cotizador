@@ -9,6 +9,49 @@
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" id="idGuiaRemision" value="" />
 
+
+    <div>
+        <div class="row row_uno">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.pedido.cliente.codigo</div>
+            <div class="col_tres">@guiaRemision.fechaEmisionFormatoImpresion</div>
+            <div class="col_cuatro">@guiaRemision.fechaTrasladoFormatoImpresion</div>
+        </div>
+        <div class="row row_dos">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.pedido.cliente.razonSocial</div>
+            <div class="col_tres">@guiaRemision.pedido.cliente.ruc</div>
+        </div>
+        <div class="row row_tres">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.ciudadOrigen.direccionPuntoPartida</div>
+            <div class="col_tres">@guiaRemision.serieNumeroGuia</div>
+        </div>
+        <div class="row row_cuatro">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.pedido.direccionEntrega.descripcion</div>
+            <div class="col_tres">&nbsp;</div>
+        </div>
+        <div class="row row_seis">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.observaciones</div>
+        </div>
+        <div class="row row_siete">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.transportista.descripcion</div>
+            <div class="col_tres">@guiaRemision.transportista.ruc</div>
+            <div class="col_cuatro">@guiaRemision.certificadoInscripcion</div>
+        </div>
+        <div class="row row_ocho">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.transportista.direccion</div>
+            <div class="col_tres">&nbsp;</div>
+            <div class="col_cuatro">@guiaRemision.placaVehiculo</div>
+            <div class="col_cinco">@guiaRemision.transportista.brevete</div>
+        </div>
+    </div>
+
+
     <div>
         <div class="row row_uno">
             <div class="col_uno">&nbsp;</div>
@@ -69,7 +112,7 @@
             </div>
 
         }
-     
+
 
 
     </div>
@@ -98,19 +141,15 @@
             <div class="col_tres">@guiaRemision.transportista.brevete</div>
         </div>
 
-        
+
     </div>
 
 
-    </div>
+</div>
 
 
 
     @section Scripts {
         @Scripts.Render("~/bundles/guiaRemision")
-        @Styles.Render("~/Content/PrintGuiaLima")
+        @Styles.Render("~/Content/PrintGuiaProvincias")
     }
-
-
-
-

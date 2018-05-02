@@ -22,7 +22,7 @@ namespace DataLayer
 
         public void InsertarDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pi_documento_venta");
+            var objCommand = GetSqlCommand("pi_documentoVenta");
 
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idPedido", documentoVenta.venta.pedido.idPedido);
@@ -32,14 +32,40 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "tipoPago", (int)documentoVenta.tipoPago);
             InputParameterAdd.Int(objCommand, "formaPago", (int)documentoVenta.formaPago);
             InputParameterAdd.Varchar(objCommand, "correoEnvio", documentoVenta.correoEnvio);
-            InputParameterAdd.Varchar(objCommand, "correoCopia", documentoVenta.correoCopia);
-            InputParameterAdd.Varchar(objCommand, "correoOculto", documentoVenta.correoOculto);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
             InputParameterAdd.Guid(objCommand, "idDocumentoVentaReferencia", Guid.Empty);
             OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
             ExecuteNonQuery(objCommand);
 
             documentoVenta.idDocumentoVenta = (Guid)objCommand.Parameters["@idDocumentoVenta"].Value;
 
+        }
+
+
+        public void UpdateRespuestaDocumentoVenta(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pu_documentoVenta");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "CODIGO", documentoVenta.cPE_RESPUESTA_BE.CODIGO);
+            InputParameterAdd.Varchar(objCommand, "COD_ESTD_SUNAT", documentoVenta.cPE_RESPUESTA_BE.COD_ESTD_SUNAT);
+            InputParameterAdd.Varchar(objCommand, "DESCRIPCION", documentoVenta.cPE_RESPUESTA_BE.DESCRIPCION);
+            InputParameterAdd.Varchar(objCommand, "DETALLE", documentoVenta.cPE_RESPUESTA_BE.DETALLE);
+            InputParameterAdd.Varchar(objCommand, "NUM_CPE", documentoVenta.cPE_RESPUESTA_BE.NUM_CPE);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+
+
+        public void insertEstadoDocumentoVenta(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pi_documentoVentaEstado");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "CODIGO", documentoVenta.rPTA_BE.CODIGO);
+            InputParameterAdd.Varchar(objCommand, "DESCRIPCION", documentoVenta.rPTA_BE.DESCRIPCION);
+            InputParameterAdd.Varchar(objCommand, "DETALLE", documentoVenta.rPTA_BE.DETALLE);
+            InputParameterAdd.Varchar(objCommand, "ESTADO", documentoVenta.rPTA_BE.ESTADO);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
         }
 
         public void UpdatePedido(Pedido pedido)
@@ -269,7 +295,19 @@ namespace DataLayer
             {
                 foreach (String column in columnasCabecera)
                 {
-                    if (!column.Equals("id_cpe_cabecera_be") && !column.Equals("estado"))
+                    if (!column.Equals("id_cpe_cabecera_be") && 
+                        !column.Equals("estado") &&
+                        !column.Equals("usuario_creacion") &&
+                        !column.Equals("usuario_modificacion") &&
+                        !column.Equals("fecha_creacion") &&
+                        !column.Equals("fecha_modificacion") &&
+                        !column.Equals("ESTADO_SUNAT") &&
+                        !column.Equals("CODIGO") &&
+                        !column.Equals("COD_ESTD_SUNAT") &&
+                        !column.Equals("DESCRIPCION") &&
+                        !column.Equals("DETALLE") &&
+                        !column.Equals("NUM_CPE") 
+                        )
                     {
                         documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));
                     }
@@ -298,70 +336,55 @@ namespace DataLayer
             List<DocumentoVenta> facturaList = new List<DocumentoVenta>();
 
             var objCommand = GetSqlCommand("ps_documentosVenta");
-            /*   InputParameterAdd.BigInt(objCommand, "numero", documentoVenta.numero);
-               InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido);
-               InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
-               InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
-               InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuarioBusqueda.idUsuario);
+            if (!documentoVenta.numero.Equals("0"))
+            {
+                InputParameterAdd.Varchar(objCommand, "numero", documentoVenta.numero.PadLeft(8, '0'));
+            }
+            else
+            {
+                InputParameterAdd.Varchar(objCommand, "numero", String.Empty);
+            }
 
-               InputParameterAdd.DateTime(objCommand, "fechaSolicitudDesde", pedido.fechaSolicitudDesde);
-               InputParameterAdd.DateTime(objCommand, "fechaSolicitudHasta", pedido.fechaSolicitudHasta);
+            InputParameterAdd.Guid(objCommand, "idCliente", documentoVenta.cliente.idCliente);
+            InputParameterAdd.Guid(objCommand, "idCiudad", documentoVenta.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            InputParameterAdd.DateTime(objCommand, "fechaDesde", documentoVenta.fechaEmisionDesde);
+            InputParameterAdd.DateTime(objCommand, "fechaHasta", documentoVenta.fechaEmisionHasta);
+            
+            //   InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
+            DataTable dataTable = Execute(objCommand);
 
-               InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde);
-               InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta);
+            List<Pedido> pedidoList = new List<Pedido>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                documentoVenta = new DocumentoVenta();
+                documentoVenta.idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta");
+                //documentoVenta.cPE_CABECERA_BE = new CPE_CABECERA_BE();
+                documentoVenta.serie = Converter.GetString(row, "SERIE");
+                documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
+                documentoVenta.total = Converter.GetDecimal(row, "MNT_TOT_PRC_VTA");
+                documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                documentoVenta.descripcionEstadoSunat = Converter.GetString(row, "estado");
 
 
-               InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
-               DataTable dataTable = Execute(objCommand);
+                documentoVenta.usuario = new Usuario();
+                documentoVenta.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                documentoVenta.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
 
-               List<Pedido> pedidoList = new List<Pedido>();
+                documentoVenta.cliente = new Cliente();
+                documentoVenta.cliente.codigo = Converter.GetString(row, "codigo");
+                documentoVenta.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                documentoVenta.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                documentoVenta.cliente.ruc = Converter.GetString(row, "ruc");
 
-               foreach (DataRow row in dataTable.Rows)
-               {
-                   pedido = new Pedido();
-                   pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
-                   pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
-                   pedido.idPedido = Converter.GetGuid(row, "id_pedido");
-                   pedido.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
-                   pedido.fechaEntregaDesde = Converter.GetDateTime(row, "fecha_entrega_desde");
-                   pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
-                   pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
-                   pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
-                   pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
+                documentoVenta.ciudad = new Ciudad();
+                documentoVenta.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                documentoVenta.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
 
-                   pedido.montoIGV = Converter.GetDecimal(row, "igv");
-                   pedido.montoTotal = Converter.GetDecimal(row, "total");
-                   pedido.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.montoTotal - pedido.montoIGV));
 
-                   pedido.observaciones = Converter.GetString(row, "observaciones");
-
-                   pedido.cliente = new Cliente();
-                   pedido.cliente.codigo = Converter.GetString(row, "codigo");
-                   pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                   pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
-                   pedido.cliente.ruc = Converter.GetString(row, "ruc");
-
-                   pedido.usuario = new Usuario();
-                   pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
-                   pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
-
-                   //  cotizacion.usuario_aprobador = new Usuario();
-                   //  cotizacion.usuario_aprobador.nombre = Converter.GetString(row, "nombre_usuario_aprobador");
-
-                   pedido.ciudad = new Ciudad();
-                   pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                   pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
-
-                   pedido.seguimientoPedido = new SeguimientoPedido();
-                   pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_seguimiento");
-                   pedido.seguimientoPedido.observacion = Converter.GetString(row, "observacion_seguimiento");
-                   pedido.seguimientoPedido.usuario = new Usuario();
-                   pedido.seguimientoPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
-                   pedido.seguimientoPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
-
-                   pedidoList.Add(pedido);
-               }
-               return pedidoList;*/
+                facturaList.Add(documentoVenta);
+            }
             return facturaList;
         }
 

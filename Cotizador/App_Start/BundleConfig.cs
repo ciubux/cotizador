@@ -80,9 +80,13 @@ namespace Cotizador
                       "~/Content/site.css",
                       "~/Content/chosen/chosen.css"));
 
-            bundles.Add(new StyleBundle("~/Content/printGuiaRemision").Include(
-                       "~/Content/printGuiaRemision.css"
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaLima").Include(
+                       "~/Content/PrintGuiaLima.css"
                        ));
+
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaProvincias").Include(
+                      "~/Content/PrintGuiaProvincias.css"
+                      ));
 
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-chosen").Include(

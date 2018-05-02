@@ -14,7 +14,8 @@ namespace BusinessLayer
             pedido.seguimientoPedido.observacion = String.Empty;
             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
             pedido.seguimientoCrediticioPedido.observacion = String.Empty;
-            pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
+            //Cambio Temporal
+            pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
 
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
@@ -23,11 +24,24 @@ namespace BusinessLayer
                 if (!pedido.usuario.apruebaPedidos)
                 {
                     //Validación precio unitario
-                    if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioClienteProducto.precioUnitario + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
-                    pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioClienteProducto.precioUnitario - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                    if (pedidoDetalle.producto.precioClienteProducto.precioUnitario == 0)
                     {
-                        pedido.seguimientoPedido.observacion = "El precio untario indicado varía por más de: "+ Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio unitario registrado en facturación.";
-                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                        if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioLista + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
+                    pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioLista - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                        {
+                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista.\n";
+                            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                        }
+
+                    }
+                    else
+                    {
+                        if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioClienteProducto.precioUnitario + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
+                    pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioClienteProducto.precioUnitario - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                        {
+                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio unitario registrado en facturación.\n";
+                            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                        }
                     }
                 }
             }

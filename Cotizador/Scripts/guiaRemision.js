@@ -237,14 +237,19 @@ jQuery(function ($) {
     $.datepicker.setDefaults($.datepicker.regional['es']);
 
 
-    var fechaMovimiento = $("#fechaMovimientotmp").val();
-    $("#guiaRemision_fechaMovimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaMovimiento);
+    var fechaTraslado = $("#fechaTrasladotmp").val();
+    $("#guiaRemision_fechaTraslado").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTraslado);
 
-    var fechaMovimientoDesde = $("#fechaMovimientoDesdetmp").val();
-    $("#guiaRemision_fechaMovimientoDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaMovimientoDesde);
+    var fechaEmision = $("#fechaEmisiontmp").val();
+    $("#guiaRemision_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmision);
 
-    var fechaMovimientoHasta = $("#fechaMovimientoHastatmp").val();
-    $("#guiaRemision_fechaMovimientoHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaMovimientoHasta);
+
+    var fechaTrasladoDesde = $("#fechaTrasladoDesdetmp").val();
+    $("#guiaRemision_fechaTrasladoDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTrasladoDesde);
+
+    var fechaTrasladoHasta = $("#fechaTrasladoHastatmp").val();
+    $("#guiaRemision_fechaTrasladoHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTrasladoHasta);
+
 
 
 
@@ -335,6 +340,8 @@ jQuery(function ($) {
     function crearGuiaRemision(continuarLuego) {
         if (!validarIngresoDatosObligatoriosGuiaRemision())
             return false;
+
+        desactivarBotonesCreacionModificacion();
         $.ajax({
             url: "/GuiaRemision/Create",
             type: 'POST',
@@ -343,9 +350,11 @@ jQuery(function ($) {
                 continuarLuego: continuarLuego
             },
             error: function (detalle) {
+                activarBotonesCreacionModificacion();
                 alert(MENSAJE_ERROR);
             },
             success: function (resultado) {
+                activarBotonesCreacionModificacion();
                 $("#numero").val(resultado.codigo);
 
                 if (resultado.error == "DuplicateNumberDocumentException")
@@ -373,7 +382,21 @@ jQuery(function ($) {
         });
     }
 
-   
+
+    function desactivarBotonesCreacionModificacion() {
+        $("#btnFinalizarCreacionGuiaRemision").attr('disabled', 'disabled');
+        $("#btnFinalizarEdicionGuiaRemision").attr('disabled', 'disabled');
+        $("#btnContinuarCreandoLuego").attr('disabled', 'disabled');
+        $("#btnCancelarGuiaRemision").attr('disabled', 'disabled');
+    }
+
+    function activarBotonesCreacionModificacion() {
+        $("#btnFinalizarCreacionGuiaRemision").removeAttr('disabled');
+        $("#btnFinalizarEdicionGuiaRemision").removeAttr('disabled');
+        $("#btnContinuarCreandoLuego").removeAttr('disabled');
+        $("#btnCancelarGuiaRemision").removeAttr('disabled');
+    }
+
 
     $("#btnFinalizarCreacionGuiaRemision").click(function () {
         crearGuiaRemision(0);
@@ -394,7 +417,62 @@ jQuery(function ($) {
 
 
     function validarIngresoDatosObligatoriosGuiaRemision() {
-     
+             
+        if ($("#guiaRemision_transportista").val() == null || $("#guiaRemision_transportista").val().trim() == "") {
+            alert('Debe seleccionar el transportista.');
+            $('#guiaRemision_transportista').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_transportista_descripcion").val() == null || $("#guiaRemision_transportista_descripcion").val().trim() == "") {
+            alert('Debe ingresar el nombre del transportista.');
+            $('#guiaRemision_transportista_descripcion').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_transportista_ruc").val() == null || $("#guiaRemision_transportista_ruc").val().trim() == "") {
+            alert('Debe ingresar el ruc del transportista.');
+            $('#guiaRemision_transportista_ruc').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_transportista_brevete").val() == null || $("#guiaRemision_transportista_brevete").val().trim() == "") {
+            alert('Debe ingresar el brevete del transportista.');
+            $('#guiaRemision_transportista_brevete').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_transportista_direccion").val() == null || $("#guiaRemision_transportista_direccion").val().trim() == "") {
+            alert('Debe ingresar la dirección del transportista.');
+            $('#guiaRemision_transportista_direccion').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_placaVehiculo").val() == null || $("#guiaRemision_placaVehiculo").val().trim() == "") {
+            alert('Debe ingresar la placa del vehículo.');
+            $('#guiaRemision_placaVehiculo').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_certificadoInscripcion").val() == null || $("#guiaRemision_certificadoInscripcion").val().trim() == "") {
+            alert('Debe ingresar el certificado de inscripción.');
+            $('#guiaRemision_certificadoInscripcion').focus();
+            return false;
+        }
+
+        var contador = 0;
+        var $j_object = $("td.detcantidad");
+        $.each($j_object, function (key, value) {
+
+            if (Number(value.innerHTML) > 0)  
+                contador++;
+        });
+
+        if (contador > 10) {
+            alert('La guía de remisión debe contener 10 productos como máximo, por favor marque el check de "Atención Parcial", indique que NO es la última atención y modifique la "Cantidad por Atender" a 0 a algunos productos (los productos que tengan 0 no se considerarán en la guía).');
+            return false;
+        }
+
 
         return true;
     }
@@ -424,13 +502,13 @@ jQuery(function ($) {
         
         activarBotonesVer();
         var arrrayClass = event.target.getAttribute("class").split(" ");
-        var idGuiaRemision = arrrayClass[0];
+        var idMovimientoAlmacen = arrrayClass[0];
         var numeroDocumento = arrrayClass[1];     
 
         $.ajax({
             url: "/GuiaRemision/Show",
             data: {
-                idGuiaRemision: idGuiaRemision
+                idMovimientoAlmacen: idMovimientoAlmacen
             },
             type: 'POST',
             dataType: 'JSON',
@@ -438,21 +516,23 @@ jQuery(function ($) {
                 alert(MENSAJE_ERROR);
             },
             success: function (resultado) {
+                $("#comentarioAnulado").val("");
                 //var cotizacion = $.parseJSON(respuesta);
                 var guiaRemision = resultado.guiaRemision;
                 var usuario = resultado.usuario;
                 
-                $("#idGuiaRemision").val(guiaRemision.idGuiaRemision);
+                $("#idMovimientoAlmacen").val(guiaRemision.idMovimientoAlmacen);
                 $("#ver_guiaRemision_ciudadOrigen_nombre").html(guiaRemision.ciudadOrigen.nombre);
                 $("#ver_guiaRemision_ciudadOrigen_direccionPuntoPartida").html(guiaRemision.ciudadOrigen.direccionPuntoPartida);
                 
-                $("#ver_guiaRemision_fechaMovimiento").html(invertirFormatoFecha(guiaRemision.fechaMovimiento.substr(0, 10))); 
-                $("#ver_guiaRemision_serieDocumento").html(guiaRemision.serieDocumento);
-                $("#ver_guiaRemision_numeroDocumento").html(guiaRemision.numeroDocumento);
-                $("#ver_guiaRemision_pedido_numeroPedido").html(guiaRemision.pedido.numeroPedido);
+                $("#ver_guiaRemision_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10))); 
+                $("#ver_guiaRemision_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10))); 
+                $("#ver_guiaRemision_serieNumeroDocumento").html(guiaRemision.serieNumeroGuia);
+             //   $("#ver_guiaRemision_numeroDocumento").html(guiaRemision.numeroDocumentoString);
+                $("#ver_guiaRemision_pedido_numeroPedido").html(guiaRemision.pedido.numeroPedidoString);
                 $("#ver_guiaRemision_pedido_cliente").html(guiaRemision.pedido.cliente.razonSocial);
                 $("#ver_guiaRemision_pedido_numeroReferenciaCliente").html(guiaRemision.pedido.numeroReferenciaCliente);
-                $("#ver_guiaRemision_motivoTraslado").html(guiaRemision.motivoTraslado);
+                $("#ver_guiaRemision_motivoTraslado").html(guiaRemision.motivoTrasladoString);
                 $("#ver_guiaRemision_atencionParcial").html(guiaRemision.atencionParcial);
                 $("#ver_guiaRemision_pedido_ubigeoEntrega").html(guiaRemision.pedido.ubigeoEntrega.ToString);
                 $("#ver_guiaRemision_pedido_direccionEntrega").html(guiaRemision.pedido.direccionEntrega.descripcion);
@@ -463,6 +543,36 @@ jQuery(function ($) {
                 $("#ver_guiaRemision_placaVehiculo").html(guiaRemision.placaVehiculo);
                 $("#ver_guiaRemision_certificadoInscripcion").html(guiaRemision.certificadoInscripcion);
                 $("#ver_guiaRemision_observaciones").html(guiaRemision.observaciones);
+
+                $("#ver_guiaRemision_estadoAnulada").html(guiaRemision.estaAnuladoDescripcion);
+                if (guiaRemision.estaAnulado == 1) {
+                    $("#ver_guiaRemision_estadoAnulada").attr("style", "color:red")
+                    $("#btnAnularGuiaRemision").hide();
+                    $("#btnImprimirGuiaRemision").hide();
+                }
+                else {
+                    $("#ver_guiaRemision_estadoAnulada").attr("style", "color:black")
+                    $("#btnAnularGuiaRemision").show();
+                    $("#btnImprimirGuiaRemision").show();
+                }
+
+
+
+
+                if (guiaRemision.atencionParcial) {
+
+                    if (guiaRemision.ultimaAtencionParcial) {
+                        $("#ver_guiaRemision_atencionParcial").html("Atención Parcial");
+                    }
+                    else {
+                        $("#ver_guiaRemision_atencionParcial").html("Última Atención Parcial");
+                    }
+                }
+                else
+                {
+                    $("#ver_guiaRemision_atencionParcial").html("Atención Total");
+                }
+                    
 
                 //invertirFormatoFecha(pedido.fechaMaximaEntrega.substr(0, 10)));
 
@@ -483,7 +593,8 @@ jQuery(function ($) {
                     d += '<tr>' +
                         '<td>' + lista[i].producto.idProducto + '</td>' +
                         '<td>' + lista[i].producto.sku + '</td>' +
-                        '<td>' + lista[i].cantidad + '</td>' +
+                        '<td class="' + lista[i].producto.idProducto + ' detcantidad" style="text-align:right">' + lista[i].cantidad + '</td>' +
+                        '<td class="' + lista[i].producto.idProducto + ' detcantidadSaldo">' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +
                         '</tr>';
@@ -555,24 +666,31 @@ jQuery(function ($) {
         window.open("GuiaRemision/Print");
     });
 
-    
 
+    $("#btnAceptarAnulacion").click(function () {
 
-    $("#btnAceptarAtencion").click(function () {
-        desactivarBotonesVer();
-        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+        var comentarioAnulado = $("#comentarioAnulado").val();
 
         $.ajax({
-            url: "/GuiaRemision/Create",
+            url: "/GuiaRemision/Anular",
             type: 'POST',
-            error: function (detalle) { alert("Ocurrió un problema al iniciar la atención del pedido."); },
-            success: function (fileName) {
-                window.location = '/Pedido/Pedir';
+            dataType: 'JSON',
+            data: {
+                comentarioAnulado: comentarioAnulado
+            },
+            error: function () { alert(MENSAJE_ERROR); },
+            success: function (resultado) {
+                alert("La guía de remisión número " + resultado.serieNumeroGuia + " fue anulada correctamente.");
+                window.location = '/GuiaRemision/Index';
             }
         });
 
+       // window.open("GuiaRemision/Print");
     });
 
+
+
+   
 
     
 
@@ -632,138 +750,15 @@ jQuery(function ($) {
     var ft = null;
 
 
-
-    //Mantener en Session cambio de Seleccion de IGV
-    $("input[name=igv]").on("click", function () {
-        var igv = $("input[name=igv]:checked").val();
-        $.ajax({
-            url: "/Pedido/updateSeleccionIGV",
-            type: 'POST',
-            data: {
-                igv: igv
-            },
-            success: function (cantidad) {
-                if (cantidad > 0) {
-                    location.reload();
-                }
-            }
-        });
-    });
-
-    //Mantener en Session cambio de Seleccion de IGV
-    $("#considerarCantidades").change( function () {
-        var considerarCantidades = $("#considerarCantidades").val();
-        $.ajax({
-            url: "/Pedido/updateSeleccionConsiderarCantidades",
-            type: 'POST',
-            data: {
-                considerarCantidades: considerarCantidades
-            },
-            success: function (cantidad)
-            {
-                if (cantidad > 0)
-                {
-                    location.reload();
-                }
-            }
-        });
-
-
-    });
-
+    
+    
 
 
     
-
-    //Mantener en Session cambio de Seleccion de Mostrar Proveedor
-    $("input[name=mostrarcodproveedor]").on("click", function () {
-        var mostrarcodproveedor = $("input[name=mostrarcodproveedor]:checked").val();
-        $.ajax({
-            url: "/Pedido/updateMostrarCodigoProveedor",
-            type: 'POST',
-            data: {
-                mostrarcodproveedor: mostrarcodproveedor
-            },
-            success: function () {
-                location.reload();
-            }
-        });
-    });
-
-    //Mantener en Session cambio de Cliente
-    $("#cliente").change(function () {
-
-        $.ajax({
-            url: "/Pedido/updateCliente",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                cliente: $("#cliente").val()
-            },
-            success: function () { }
-        });
-    });
-
-
-
-
-    $("#contacto").change(function () {
-
-        $.ajax({
-            url: "/Pedido/updateContacto",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                contacto: $("#contacto").val()
-            },
-            success: function () { }
-        });
-    });
-
-    $("#flete").change(function () {
-
-        $("#flete").val(Number($("#flete").val()).toFixed(cantidadDecimales))
-        var flete = $("#flete").val(); 
-        if (flete > 100)
-        {
-            $("#flete").val("100.00");
-            flete = 100;
-        }
-
-        var total = Number($("#total").val());
-        $('#montoFlete').html("Flete: " + SIMBOLO_SOL + " " + (total * flete / 100).toFixed(cantidadDecimales));
-        $('#montoTotalMasFlete').html("Total más Flete: " + SIMBOLO_SOL + " " +  (total + (total * flete / 100)).toFixed(cantidadDecimales));
-
-        
-
-
-        $.ajax({
-            url: "/Pedido/updateFlete",
-            type: 'POST',
-            data: {
-                flete: flete
-            },
-            success: function () {
-                location.reload();
-            }
-        });
-    });
-
     
 
-    $("#mostrarCosto").change(function () {
-        var mostrarCosto = $('#mostrarCosto').prop('checked') ;
-        $.ajax({
-            url: "/Pedido/updateMostrarCosto",
-            type: 'POST',
-            data: {
-                mostrarCosto: mostrarCosto
-            },
-            success: function () {
-                location.reload();
-            }
-        });
-    });
+    
+    
 
     
 
@@ -916,26 +911,23 @@ jQuery(function ($) {
     /*Evento que se dispara cuando se hace clic en el boton EDITAR en la edición de la grilla*/
     $(document).on('click', "button.footable-show", function () {
 
+        /*Si no es una atención parcial no se debe poder editar*/
+        if (!$('#guiaRemision_atencionParcial').prop('checked'))
+        {
+
+
+            return false;
+
+        }
+
+       
+
+
+
+
         //Cambiar estilos a los botones
         $("button.footable-add").attr("class", "btn btn-default footable-add");
-        $("button.footable-hide").attr("class", "btn btn-primary footable-hide");
-
-        
-        /*
-        var codigo = $("#numero").val();
-        if (codigo == "") {
-            $("#btnContinuarCreandoLuego").attr('disabled', 'disabled');
-            $("#btnFinalizarCreacionGuiaRemision").attr('disabled', 'disabled');
-            $("#btnCancelPedido").attr('disabled', 'disabled');
-        }
-        else {
-            $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
-            $("#btnFinalizarEdicionGuiaRemision").attr('disabled', 'disabled');
-            $("#btnCancelPedido").attr('disabled', 'disabled');
-        }
-        */
-        
-      //  $("input[name=mostrarcodproveedor]").attr('disabled', 'disabled');
+        $("button.footable-hide").attr("class", "btn btn-primary footable-hide");    
 
 
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -1005,57 +997,29 @@ jQuery(function ($) {
 
     });
 
-    /*Evento que se dispara cuando se hace clic en el boton calcular descuento de la grilla*/
-    $(document).on('click', "button.btnCalcularDescuento", function () {
-        var idProducto = event.target.getAttribute("class").split(" ")[0];
-        $("#idProducto").val(idProducto);
-    });
-
-
-
-    /*Evento que se dispara cuando se modifica un control de descuento de la grilla*/
-    $(document).on('change', "input.detinporcentajedescuento", function () {
-        var idproducto = event.target.getAttribute("class").split(" ")[0];
-        calcularSubtotalGrilla(idproducto);
-    });
+    
 
     /*Evento que se dispara cuando se modifica un control de cantidad de la grilla*/
     $(document).on('change', "input.detincantidad", function () {
         var idproducto = event.target.getAttribute("class").split(" ")[0];
-        calcularSubtotalGrilla(idproducto);
+        calcularCantidades(idproducto);
     });
-
-
-    /*Evento que se dispara cuando se modifica un control de cantidad de la grilla*/
-    $(document).on('change', "input.detinflete", function () {
-        var idproducto = event.target.getAttribute("class").split(" ")[0];
-        calcularSubtotalGrilla(idproducto);
-    });
-
-    /*Evento que se dispara cuando se modifica el color en la grilla*/
-/*    $(document).on('change', "input.detobservacioncolor", function () {
-        var idproducto = event.target.getAttribute("class").split(" ")[0];
-
-        alert(event.target.value);
-
-        /*
-
-
-        class="@cotizacionDetalle.producto.idProducto fila"
-
-        #00ff40*/
-    //});
 
     
 
-    function calcularSubtotalGrilla(idproducto)
+    function calcularCantidades(idproducto)
     {
-        //Se obtiene el porcentaje descuento 
-        var porcentajeDescuento = Number($("." + idproducto + ".detinporcentajedescuento").val());
-        //Se obtiene el flete
-        var flete = Number($("." + idproducto + ".detinflete").val());
-        //Se obtiene el precio lista
-        var precioLista = Number($("." + idproducto + ".detprecioLista").html());
+        //Se obtiene cantidad total de pedido
+        var cantidadPedido = Number($("." + idproducto + ".detcantidadSaldo").html());
+        var cantidad = Number($("." + idproducto + ".detincantidad").val());
+
+        if (cantidad > cantidadPedido) {
+            $("." + idproducto + ".detincantidad").val(cantidadPedido);
+        }
+        /*
+
+
+
         //Se calculo el precio con descuento 
         var precio = Number((precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadDecimales));
         //Se asigna el precio calculculado en la columna precio
@@ -1118,7 +1082,7 @@ jQuery(function ($) {
         $('#montoSubTotal').html(subTotal.toFixed(cantidadDecimales));
         $('#montoIGV').html(igv.toFixed(cantidadDecimales));
         $('#montoTotal').html(total.toFixed(cantidadDecimales));
-
+        */
     };
 
 
@@ -1141,8 +1105,8 @@ jQuery(function ($) {
         var idCliente = $("#idCliente").val(); 
 
         var numeroDocumento = $("#guiaRemision_numeroDocumento").val();
-        var fechaMovimientoDesde = $("#guiaRemision_fechaMovimientoDesde").val();
-        var fechaMovimientoHasta = $("#guiaRemision_fechaMovimientoHasta").val();
+        var fechaTrasladoDesde = $("#guiaRemision_fechaTrasladoDesde").val();
+        var fechaTrasladoHasta = $("#guiaRemision_fechaTrasladoHasta").val();
         //var estado = $("#estado").val();
 
         $.ajax({
@@ -1153,8 +1117,8 @@ jQuery(function ($) {
                 idCiudad: idCiudad,
                 idCliente: idCliente,
                 numeroDocumento: numeroDocumento,
-                fechaMovimientoDesde: fechaMovimientoDesde,
-                fechaMovimientoHasta: fechaMovimientoHasta//,
+                fechaTrasladoDesde: fechaTrasladoDesde,
+                fechaTrasladoHasta: fechaTrasladoHasta//,
           //      estado: estado
             },
             success: function (guiaRemisionList) {
@@ -1187,16 +1151,29 @@ jQuery(function ($) {
                             '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idCotizacion + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                     }
   */
+
+                    var style = "";
+                    if (guiaRemisionList[i].estaAnulado == 1) {
+                        style = "style='color: red'";
+                    }
+                    else {
+                        style = "style='color: black'";
+                    }
+
                      var guiaRemision = '<tr data-expanded="false">'+
-                     '<td>  ' + guiaRemisionList[i].idGuiaRemision + '</td>' +
+                         '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
                          '<td>  ' + guiaRemisionList[i].serieNumeroGuia + '</td>' +
                          '<td>  ' + guiaRemisionList[i].usuario.nombre + '</td>' +
-                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaMovimiento.substr(0, 10)) + '</td>' +
+                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
                          '<td>  ' + guiaRemisionList[i].pedido.cliente.razonSocial + '</td>' +
                          '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
                          '<td>  ' + guiaRemisionList[i].ciudadOrigen.nombre + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].estaAnuladoDescripcion + '</td>' +
-                         '<td> <button type="button" class="' + guiaRemisionList[i].idGuiaRemision + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerGuiaRemision btn btn-primary ">Ver</button></td > ' +
+                         '<td ' + style+'>  ' + guiaRemisionList[i].estaAnuladoDescripcion + '</td>' +
+
+
+
+                         '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerGuiaRemision btn btn-primary ">Ver</button></td > ' +
                          '</tr>';
                 
                     
@@ -1228,26 +1205,54 @@ jQuery(function ($) {
     });
 
 
-    $("#guiaRemision_fechaMovimientoDesde").change(function () {
-        var fechaMovimientoDesde = $("#guiaRemision_fechaMovimientoDesde").val();
+    $("#guiaRemision_fechaTraslado").change(function () {
+        var fechaTraslado = $("#guiaRemision_fechaTraslado").val();
         $.ajax({
-            url: "/GuiaRemision/ChangeFechaMovimientoDesde",
+            url: "/GuiaRemision/ChangefechaTraslado",
             type: 'POST',
             data: {
-                fechaMovimientoDesde: fechaMovimientoDesde
+                fechaTraslado: fechaTraslado
             },
             success: function () {
             }
         });
     });
 
-    $("#guiaRemision_fechaMovimientoHasta").change(function () {
-        var fechaMovimientoHasta = $("#guiaRemision_fechaMovimientoHasta").val();
+    $("#guiaRemision_fechaEmision").change(function () {
+        var fechaEmision = $("#guiaRemision_fechaEmision").val();
         $.ajax({
-            url: "/GuiaRemision/ChangeFechaMovimientoHasta",
+            url: "/GuiaRemision/ChangefechaEmision",
             type: 'POST',
             data: {
-                fechaMovimientoHasta: fechaMovimientoHasta
+                fechaEmision: fechaEmision
+            },
+            success: function () {
+            }
+        });
+    });
+
+
+
+    $("#guiaRemision_fechaTrasladoDesde").change(function () {
+        var fechaTrasladoDesde = $("#guiaRemision_fechaTrasladoDesde").val();
+        $.ajax({
+            url: "/GuiaRemision/ChangefechaTrasladoDesde",
+            type: 'POST',
+            data: {
+                fechaTrasladoDesde: fechaTrasladoDesde
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#guiaRemision_fechaTrasladoHasta").change(function () {
+        var fechaTrasladoHasta = $("#guiaRemision_fechaTrasladoHasta").val();
+        $.ajax({
+            url: "/GuiaRemision/ChangefechaTrasladoHasta",
+            type: 'POST',
+            data: {
+                fechaTrasladoHasta: fechaTrasladoHasta
             },
             success: function () {
             }
@@ -1287,6 +1292,7 @@ jQuery(function ($) {
                 buttons: {
                     Si: function () {
                         changeUltimaAtencionParcial(1);
+                        
                         $(this).dialog("close");
 
                     },
@@ -1316,22 +1322,26 @@ jQuery(function ($) {
             data: {
                 ultimaAtencionParcial: ultimaAtencionParcial
             },
-            success: function () { }
+            success: function () {
+                location.reload(); 
+            }
         });
     }
 
 
 
     $("#guiaRemision_atencionParcial").change(function () {
-
+        
         var atencionParcial = 1;
 
         if (!$('#guiaRemision_atencionParcial').prop('checked')) {
             $("#descripcionUltimaAtencionParcial").html("");
             atencionParcial = 0;
+            changeUltimaAtencionParcial(0);
         }
 
-
+   
+        
         var estado = $("#guiaRemision_atencionParcial").val();
         $.ajax({
             url: "/GuiaRemision/ChangeAtencionParcial",
@@ -1339,7 +1349,12 @@ jQuery(function ($) {
             data: {
                 atencionParcial: atencionParcial
             },
-            success: function () { }
+            success: function () {
+                if (!$('#guiaRemision_atencionParcial').prop('checked')) {
+                    location.reload();
+                }
+
+            }
         });
 
 
@@ -1347,6 +1362,7 @@ jQuery(function ($) {
         if ($('#guiaRemision_atencionParcial').prop('checked')) {
             ConfirmDialogAtencionParcial("¿Está atención parcial finaliza la atención del pedido?")
         }
+       
         
 
     });

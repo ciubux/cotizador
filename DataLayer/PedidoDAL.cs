@@ -302,6 +302,7 @@ namespace DataLayer
             DataTable pedidoDataTable = dataSet.Tables[0];
             DataTable pedidoDetalleDataTable = dataSet.Tables[1];
             DataTable direccionEntregaDataTable = dataSet.Tables[2];
+            DataTable movimientoAlmacenDataTable = dataSet.Tables[3];
 
 
             //   DataTable dataTable = Execute(objCommand);
@@ -384,6 +385,8 @@ namespace DataLayer
 
                 pedidoDetalle.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");
                 pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
+                pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
                 pedidoDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
                 pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                 pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
@@ -456,6 +459,61 @@ namespace DataLayer
 
             pedido.cliente.direccionEntregaList = direccionEntregaList;
 
+
+            pedido.guiaRemisionList = new List<GuiaRemision>();
+
+            GuiaRemision movimientoAlmacen = new GuiaRemision();
+            movimientoAlmacen.idMovimientoAlmacen = Guid.Empty;
+
+            foreach (DataRow row in movimientoAlmacenDataTable.Rows)
+            {
+                Guid idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                if (movimientoAlmacen.idMovimientoAlmacen != idMovimientoAlmacen)
+                {
+                    //Si no coincide con el anterior se crea un nuevo movimiento Almacen
+                    movimientoAlmacen = new GuiaRemision();
+                    movimientoAlmacen.idMovimientoAlmacen = idMovimientoAlmacen;
+                    movimientoAlmacen.fechaTraslado = Converter.GetDateTime(row, "fechaEmision");
+                    movimientoAlmacen.fechaTraslado = Converter.GetDateTime(row, "fechaTraslado");
+                    movimientoAlmacen.numeroDocumento = Converter.GetInt(row, "numero_documento");
+                    movimientoAlmacen.serieDocumento = Converter.GetString(row, "serie_documento");
+                    movimientoAlmacen.documentoDetalle = new List<DocumentoDetalle>();
+
+                    movimientoAlmacen.documentoVenta = new DocumentoVenta();
+                    movimientoAlmacen.documentoVenta.idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta");
+                    movimientoAlmacen.documentoVenta.serie = Converter.GetString(row, "SERIE");
+                    movimientoAlmacen.documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
+                    movimientoAlmacen.documentoVenta.descripcionEstadoSunat = Converter.GetString(row, "estado");
+
+
+                    //Debe sert la fecha de emision
+                    movimientoAlmacen.documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+
+
+
+                    pedido.guiaRemisionList.Add(movimientoAlmacen);
+                }
+
+                DocumentoDetalle documentoDetalle = new DocumentoDetalle();
+                documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.producto = new Producto();
+                documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                documentoDetalle.producto.sku = Converter.GetString(row, "sku");
+                documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                documentoDetalle.unidad = Converter.GetString(row, "unidad");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+
+                movimientoAlmacen.documentoDetalle.Add(documentoDetalle);
+            }
+
+
+            /*mad.id_movimiento_almacen_detalle, mad.cantidad, 
+mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
+
+
+
             return pedido;
         }
 
@@ -467,13 +525,12 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuarioBusqueda.idUsuario);
-            /*Fecha Solicitud Desde Hasta*/
             InputParameterAdd.DateTime(objCommand, "fechaSolicitudDesde", pedido.fechaSolicitudDesde);
             InputParameterAdd.DateTime(objCommand, "fechaSolicitudHasta", pedido.fechaSolicitudHasta);
-            /*Fecha Entrega Desde Hasta*/
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta);
-
+            InputParameterAdd.DateTime(objCommand, "fechaProgramacionDesde", pedido.fechaProgramacionDesde);
+            InputParameterAdd.DateTime(objCommand, "fechaProgramacionHasta", pedido.fechaProgramacionHasta);
 
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
@@ -492,6 +549,11 @@ namespace DataLayer
                 pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
                 pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
                 pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
+
+                if (row["fecha_programacion"] == DBNull.Value)
+                    pedido.fechaProgramacion = null;
+                else
+                    pedido.fechaProgramacion = Converter.GetDateTime(row, "fecha_programacion");
                 pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
 
                 pedido.montoIGV = Converter.GetDecimal(row, "igv");

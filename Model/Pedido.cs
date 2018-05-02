@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Model
 {
-    public class Pedido : Auditoria , IDocumento 
+    public class Pedido : Auditoria, IDocumento
     {
         public Guid idPedido { get; set; }
         [Display(Name = "Número Pedido:")]
@@ -41,7 +41,7 @@ namespace Model
         [Display(Name = "Fecha Solicitud:")]
         public DateTime fechaSolicitud { get; set; }
         [Required(ErrorMessage = "Ingrese la Fecha de Entrega.")]
-        
+
         [Display(Name = "Solicitado Por:")]
         public String contactoPedido { get; set; }
         [Display(Name = "Telefono Solicitante:")]
@@ -52,7 +52,7 @@ namespace Model
         [Display(Name = "Telefono y Correo Solicitante:")]
         public String telefonoCorreoContactoPedido
         {
-            get { return "Tef: "+telefonoContactoPedido + " Correo: " + correoContactoPedido;  }
+            get { return "Tef: " + telefonoContactoPedido + " Correo: " + correoContactoPedido; }
 
         }
 
@@ -89,7 +89,7 @@ namespace Model
                 {
                     return "";
                 }
-                
+
             }
         }
 
@@ -131,7 +131,7 @@ namespace Model
 
         public Usuario usuario { get; set; }
         public Boolean incluidoIGV { get; set; }
-     //   public Decimal flete { get; set; }
+        //   public Decimal flete { get; set; }
         public String usuarioCreacion { get; set; }
 
 
@@ -178,12 +178,20 @@ namespace Model
 
 
         [Display(Name = "Fecha Programación:")]
-        public DateTime fechaProgramacion { get; set; }
+        public DateTime? fechaProgramacion { get; set; }
 
         [Display(Name = "Comentario Programación:")]
         public String comentarioProgramacion { get; set; }
 
+        public DateTime? fechaProgramacionDesde { get; set; }
+
+        public DateTime? fechaProgramacionHasta { get; set; }
+
         public DateTime fechaPrecios { get; set; }
+
+
+        public List<GuiaRemision> guiaRemisionList { get; set; }
+    
 
         /*Implementación Interface*/
         public List<DocumentoDetalle> documentoDetalle

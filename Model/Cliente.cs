@@ -36,6 +36,8 @@ namespace Model
 
         public Ciudad ciudad { get; set; }
 
+        public String domicilioLegal { get; set; }
+
         public List<DireccionEntrega> direccionEntregaList { get; set; }
 
         public override string ToString()

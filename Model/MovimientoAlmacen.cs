@@ -10,6 +10,63 @@ namespace Model
 {
     public class MovimientoAlmacen : Auditoria
     {
+        public Guid idMovimientoAlmacen { get; set; }
+
+
+        [Display(Name = "Motivo Traslado:")]
+        public motivosTraslado motivoTraslado { get; set; }
+        public enum motivosTraslado
+        {
+            [Display(Name = "Otros")]
+            Otros = 'O',
+            [Display(Name = "Abastecimiento de máq. expendedoras (ingreso/salida)")]
+            AbastecimientoMaqExpendedoras = 'A',
+            [Display(Name = "Compra")]
+            Compra = 'C',
+            [Display(Name = "Devolución de Compra")]
+            DevolucionCompra = 'B',
+            [Display(Name = "Devolución de Compra")]
+            DevolucionVenta = 'D',
+            [Display(Name = "Devolución de Préstamo")]
+            DevolucionPrestamo = 'E',
+            [Display(Name = "Comodato")]
+            Comodato = 'M',
+            [Display(Name = "Devolución de Comodato")]
+            DevolucionComodato = 'F',
+            [Display(Name = "Transferencia Gratuita")]
+            TransferenciaGratuita = 'G',
+            [Display(Name = "Devolución de Transferencia Gratuita")]
+            DevolucionTransferenciaGratuita = 'H',
+            [Display(Name = "Cambio de mercadería (entrega/retorno)")]
+            CambioMercaderia = 'I',
+            [Display(Name = "Consignación")]
+            Consignacion = 'N',
+            [Display(Name = "Préstamo")]
+            Prestamo = 'P',
+            [Display(Name = "Devolución de consignación")]
+            DevoluciónConsignacion = 'Q',
+            [Display(Name = "Traslado interno (misma emp.)")]
+            TrasladoInterno = 'T',
+            [Display(Name = "Recojo")]
+            Recojo = 'T',
+            [Display(Name = "Venta")]
+            Venta = 'V'
+        }
+
+        public String motivoTrasladoString
+        {
+            get
+            {
+                return EnumHelper<motivosTraslado>.GetDisplayValue(this.motivoTraslado);
+            }
+        }
+
+        public Boolean estaAnulado { get; set; }
+
+        public String estaAnuladoDescripcion { get { return this.estaAnulado ? "Anulada" : "Emitida"; } }
+
+        public String comentarioAnulado { get; set; }
+
         public long numero { get; set; }
 
         public enum tiposMovimiento {
@@ -21,6 +78,11 @@ namespace Model
 
         public tiposMovimiento tipoMovimiento { get; set; }
 
+        public Usuario usuario { get; set; }
+
+        public SeguimientoMovimientoAlmacenSalida seguimientoMovimientoAlmacenSalida { get; set; }
+
+
         public enum estadosMovimiento {
             [Display(Name = "Anulado")]
             Anulado = 0,
@@ -30,15 +92,24 @@ namespace Model
 
         public estadosMovimiento estadoMovimiento { get; set; }
 
-        [Display(Name = "Fecha:")]
-        public DateTime fechaMovimiento { get; set; }
+        [Display(Name = "Fecha Emisión:")]
+        public DateTime fechaEmision { get; set; }
 
-        [Display(Name = "Fecha:")]
-        public String fechaMovimientoFormatoImpresion {
-            get { return fechaMovimiento.ToString("dd-MMM-yy", CultureInfo.CreateSpecificCulture("es-ES")); }
+        [Display(Name = "Fecha Emisión:")]
+        public String fechaEmisionFormatoImpresion
+        {
+            get { return fechaEmision.ToString("dd-MMM-yy", CultureInfo.CreateSpecificCulture("es-ES")); }
+        }
+        
+        [Display(Name = "Fecha Traslado:")]
+        public DateTime fechaTraslado { get; set; }
 
+        [Display(Name = "Fecha Traslado:")]
+        public String fechaTrasladoFormatoImpresion {
+            get { return fechaTraslado.ToString("dd-MMM-yy", CultureInfo.CreateSpecificCulture("es-ES")); }
         }
 
+        
        
 
         [Display(Name = "Serie:")]
@@ -48,11 +119,11 @@ namespace Model
         public int numeroDocumento { get; set; }
 
         
-        [Display(Name = "Fecha Desde:")]
-        public DateTime fechaMovimientoDesde { get; set; }
+        [Display(Name = "Fecha Traslado Desde:")]
+        public DateTime fechaTrasladoDesde { get; set; }
 
-        [Display(Name = "Fecha Hasta:")]
-        public DateTime fechaMovimientoHasta { get; set; }
+        [Display(Name = "Fecha Traslado Hasta:")]
+        public DateTime fechaTrasladoHasta { get; set; }
 
         
     }

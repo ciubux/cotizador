@@ -35,7 +35,7 @@ namespace DataLayer
 
         public Usuario getUsuarioLogin(Usuario usuario)
         {
-            var objCommand = GetSqlCommand("ps_getusuario_login");
+            var objCommand = GetSqlCommand("ps_usuario");
             InputParameterAdd.Varchar(objCommand, "email", usuario.email);
             InputParameterAdd.Varchar(objCommand, "password", usuario.password);
             DataSet dataSet = ExecuteDataSet(objCommand);
@@ -51,20 +51,21 @@ namespace DataLayer
                 //Cotizaciones
                 usuario.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
                 usuario.cotizacionSerializada = Converter.GetString(row, "cotizacion_serializada");
-                usuario.apruebaCotizaciones = Converter.GetBool(row, "aprueba_cotizaciones");
+                usuario.apruebaCotizacionesLima = Converter.GetBool(row, "aprueba_cotizaciones_lima");
+                usuario.apruebaCotizacionesProvincias = Converter.GetBool(row, "aprueba_cotizaciones_provincias");
                 usuario.creaCotizaciones = Converter.GetBool(row, "crea_cotizaciones");
                 //Pedidos
                 usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
-                usuario.apruebaPedidos = Converter.GetBool(row, "aprueba_pedidos");
+                usuario.apruebaPedidosLima = Converter.GetBool(row, "aprueba_pedidos_lima");
+                usuario.apruebaPedidosProvincias = Converter.GetBool(row, "aprueba_pedidos_provincias");
                 //Guia
                 usuario.creaGuias = Converter.GetBool(row, "crea_guias");
                 usuario.administraGuiasLima = Converter.GetBool(row, "administra_guias_lima");
-                usuario.administraGuiasProvincia = Converter.GetBool(row, "administra_guias_provincia");
-
+                usuario.administraGuiasProvincias = Converter.GetBool(row, "administra_guias_provincias");
                 //DOCUMENTOS VENTA
                 usuario.creaDocumentosVenta = Converter.GetBool(row, "crea_documentos_venta");
                 usuario.administraDocumentosVentaLima = Converter.GetBool(row, "administra_documentos_venta_lima");
-                usuario.administraDocumentosVentaProvincia = Converter.GetBool(row, "administra_documentos_venta_provincia");
+                usuario.administraDocumentosVentaProvincias = Converter.GetBool(row, "administra_documentos_venta_provincias");
 
                 usuario.sedeMP = new Ciudad();
                 usuario.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
@@ -124,6 +125,8 @@ namespace DataLayer
                     Usuario usuarioTmp = new Usuario();
                     usuarioTmp.idUsuario = Converter.GetGuid(row, "id_usuario");
                     usuarioTmp.nombre = Converter.GetString(row, "nombre");
+                    usuarioTmp.sedeMP = new Ciudad();
+                    usuarioTmp.sedeMP.esProvincia = Converter.GetBool(row, "es_provincia");
                     usuarioList.Add(usuarioTmp);
                 }
                 usuario.usuarioCreaCotizacionList = usuarioList;
@@ -139,12 +142,46 @@ namespace DataLayer
                     Usuario usuarioTmp = new Usuario();
                     usuarioTmp.idUsuario = Converter.GetGuid(row, "id_usuario");
                     usuarioTmp.nombre = Converter.GetString(row, "nombre");
+                    usuarioTmp.sedeMP = new Ciudad();
+                    usuarioTmp.sedeMP.esProvincia = Converter.GetBool(row, "es_provincia");
                     usuarioList.Add(usuarioTmp);
                 }
                 usuario.usuarioTomaPedidoList = usuarioList;
             }
 
+            if (usuario.administraGuias)
+            {
+                DataTable dataTableUsuariosAdministraGuias = dataSet.Tables[4];
+                List<Usuario> usuarioList = new List<Usuario>();
 
+                foreach (DataRow row in dataTableUsuariosAdministraGuias.Rows)
+                {
+                    Usuario usuarioTmp = new Usuario();
+                    usuarioTmp.idUsuario = Converter.GetGuid(row, "id_usuario");
+                    usuarioTmp.nombre = Converter.GetString(row, "nombre");
+                    usuarioTmp.sedeMP = new Ciudad();
+                    usuarioTmp.sedeMP.esProvincia = Converter.GetBool(row, "es_provincia");
+                    usuarioList.Add(usuarioTmp);
+                }
+                usuario.usuarioCreaGuiaList = usuarioList;
+            }
+
+            if (usuario.administraDocumentosVenta)
+            {
+                DataTable dataTableUsuariosAdministraDocumentosVenta = dataSet.Tables[5];
+                List<Usuario> usuarioList = new List<Usuario>();
+
+                foreach (DataRow row in dataTableUsuariosAdministraDocumentosVenta.Rows)
+                {
+                    Usuario usuarioTmp = new Usuario();
+                    usuarioTmp.idUsuario = Converter.GetGuid(row, "id_usuario");
+                    usuarioTmp.nombre = Converter.GetString(row, "nombre");
+                    usuarioTmp.sedeMP = new Ciudad();
+                    usuarioTmp.sedeMP.esProvincia = Converter.GetBool(row, "es_provincia");
+                    usuarioList.Add(usuarioTmp);
+                }
+                usuario.usuarioCreaDocumentoVentaList = usuarioList;
+            }
 
 
             return usuario;

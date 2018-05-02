@@ -47,6 +47,9 @@ namespace Cotizador.Controllers
             pedidoTmp.fechaEntregaDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
             pedidoTmp.fechaEntregaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
 
+            pedidoTmp.fechaProgramacionDesde = null;// new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            pedidoTmp.fechaProgramacionHasta = null;// new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
+
             pedidoTmp.ciudad = new Ciudad();
             pedidoTmp.cliente = new Cliente();
             pedidoTmp.seguimientoPedido = new SeguimientoPedido();
@@ -90,6 +93,16 @@ namespace Cotizador.Controllers
             ViewBag.fechaSolicitudHasta = pedidoSearch.fechaSolicitudHasta.ToString(Constantes.formatoFecha);
             ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
             ViewBag.fechaEntregaHasta = pedidoSearch.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
+
+            if (pedidoSearch.fechaProgramacionDesde != null)
+                ViewBag.fechaProgramacionDesde = pedidoSearch.fechaProgramacionDesde.Value.ToString(Constantes.formatoFecha);
+            else
+                ViewBag.fechaProgramacionDesde = null;
+
+            if (pedidoSearch.fechaProgramacionHasta != null)
+                ViewBag.fechaProgramacionHasta = pedidoSearch.fechaProgramacionHasta.Value.ToString(Constantes.formatoFecha);
+            else
+                ViewBag.fechaProgramacionHasta = null;
 
             if (this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] == null)
             {
@@ -503,24 +516,31 @@ namespace Cotizador.Controllers
            /* if (pedido.mostrarCodigoProveedor)
             {*/
                 nombreProducto = detalle.producto.skuProveedor + " - " + detalle.producto.descripcion;
-        //    }
+            //    }
 
-          /*  if (pedido.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos)
-            {*/
-          //      nombreProducto = nombreProducto + "\\n" + detalle.observacion;
+            /*  if (pedido.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos)
+              {*/
+            //      nombreProducto = nombreProducto + "\\n" + detalle.observacion;
             //}
 
-           /* String resultado = "{" +
-                "\"idProducto\":\"" + detalle.producto.idProducto + "\"," +
-                "\"codigoProducto\":\"" + detalle.producto.sku + "\"," +
-                "\"nombreProducto\":\"" + nombreProducto + "\"," +
-                "\"unidad\":\"" + detalle.unidad + "\"," +
-                "\"igv\":\"" + pedido.montoIGV.ToString() + "\", " +
-                "\"subTotal\":\"" + pedido.montoSubTotal.ToString() + "\", " +
-                "\"margen\":\"" + detalle.margen + "\", " +
-                "\"precioUnitario\":\"" + detalle.precioUnitario + "\", " +
-                "\"observacion\":\"" + detalle.observacion + "\", " +
-                "\"total\":\"" + pedido.montoTotal.ToString() + "\"}";*/
+            /* String resultado = "{" +
+                 "\"idProducto\":\"" + detalle.producto.idProducto + "\"," +
+                 "\"codigoProducto\":\"" + detalle.producto.sku + "\"," +
+                 "\"nombreProducto\":\"" + nombreProducto + "\"," +
+                 "\"unidad\":\"" + detalle.unidad + "\"," +
+                 "\"igv\":\"" + pedido.montoIGV.ToString() + "\", " +
+                 "\"subTotal\":\"" + pedido.montoSubTotal.ToString() + "\", " +
+                 "\"margen\":\"" + detalle.margen + "\", " +
+                 "\"precioUnitario\":\"" + detalle.precioUnitario + "\", " +
+                 "\"observacion\":\"" + detalle.observacion + "\", " +
+                 "\"total\":\"" + pedido.montoTotal.ToString() + "\"}";*/
+
+            Decimal precioUnitarioRegistrado = detalle.producto.precioClienteProducto.precioUnitario;
+        /*    if (precioUnitarioRegistrado == 0)
+            {
+                precioUnitarioRegistrado = detalle.producto.precioLista;
+            }*/
+
 
             var v = new
             {
@@ -533,7 +553,9 @@ namespace Cotizador.Controllers
                 margen = detalle.margen,
                 precioUnitario = detalle.precioUnitario,
                 observacion = detalle.observacion,
-                total = pedido.montoTotal.ToString()
+                total = pedido.montoTotal.ToString(),
+                precioUnitarioRegistrado = precioUnitarioRegistrado
+
             };
 
             this.PedidoSession = pedido;
@@ -793,6 +815,7 @@ namespace Cotizador.Controllers
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.InsertPedido(pedido);
             long numeroPedido = pedido.numeroPedido;
+            String numeroPedidoString = pedido.numeroPedidoString;
             Guid idPedido = pedido.idPedido;
             int estado = (int)pedido.seguimientoPedido.estado;
             String observacion = pedido.seguimientoPedido.observacion;
@@ -809,7 +832,7 @@ namespace Cotizador.Controllers
 
             usuarioBL.updatePedidoSerializado(usuario, null);
 
-            var v = new { numeroPedido = numeroPedido, estado = estado, observacion = observacion, idPedido = idPedido };
+            var v = new { numeroPedido = numeroPedidoString, estado = estado, observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(v);
 
            // String resultado = "{ \"codigo\":\"" + numeroPedido + "\", \"estado\":\"" + estado + "\", \"observacion\":\"" + observacion + "\" }";
@@ -831,6 +854,7 @@ namespace Cotizador.Controllers
             PedidoBL bl = new PedidoBL();
             bl.UpdatePedido(pedido);
             long numeroPedido = pedido.numeroPedido;
+            String numeroPedidoString = pedido.numeroPedidoString;
             Guid idPedido = pedido.idPedido;
             int estado = (int)pedido.seguimientoPedido.estado;
             String observacion = pedido.seguimientoPedido.observacion;
@@ -846,7 +870,7 @@ namespace Cotizador.Controllers
 
             usuarioBL.updatePedidoSerializado(usuario, null);
 
-            var v = new { numeroPedido = numeroPedido, estado = estado, observacion = observacion, idPedido = idPedido };
+            var v = new { numeroPedido = numeroPedidoString, estado = estado, observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(v);
             
             //String resultado = "{ \"codigo\":\"" + numeroPedido + "\", \"estado\":\"" + estado + "\", \"observacion\":\"" + observacion + "\" }";
@@ -951,6 +975,12 @@ namespace Cotizador.Controllers
 
             String[] entregaHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
             pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]), 23, 59, 59);
+
+            String[] programacionDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
+            pedido.fechaEntregaDesde = new DateTime(Int32.Parse(programacionDesde[2]), Int32.Parse(programacionDesde[1]), Int32.Parse(programacionDesde[0]));
+
+            String[] programacionHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
+            pedido.fechaEntregaHasta = new DateTime(Int32.Parse(programacionHasta[2]), Int32.Parse(programacionHasta[1]), Int32.Parse(programacionHasta[0]), 23, 59, 59);
 
 
             if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
