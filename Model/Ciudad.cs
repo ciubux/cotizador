@@ -24,6 +24,7 @@ namespace Model
         public String serieGuiaRemision { get; set; }
 
         public int siguienteNumeroGuiaRemision { get; set; }
+        public String sede { get; set; }
 
     }
 }

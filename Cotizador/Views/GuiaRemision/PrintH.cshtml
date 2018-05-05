@@ -52,53 +52,6 @@
     </div>
 
 
-    <div>
-        <div class="row row_uno">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.fechaEmisionFormatoImpresion</div>
-            <div class="col_tres">@guiaRemision.fechaTrasladoFormatoImpresion</div>
-        </div>
-
-        <div class="row row_dos">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.pedido.cliente.razonSocial</div>
-            <div class="col_tres">@guiaRemision.pedido.cliente.codigo</div>
-            <div class="col_cuato">@guiaRemision.serieNumeroGuia</div>
-        </div>
-
-        <div class="row row_tres">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.pedido.cliente.domicilioLegal</div>
-        </div>
-
-        <div class="row row_cuatro">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.pedido.cliente.ruc</div>
-            <div class="col_tres"></div>
-            <div class="col_cuatro"></div>
-        </div>
-
-        <div class="row row_cinco">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.observaciones</div>
-        </div>
-
-
-        <div class="row row_seis">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.ciudadOrigen.direccionPuntoPartida</div>
-        </div>
-
-        <div class="row row_siete">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.pedido.direccionEntrega.descripcion</div>
-        </div>
-
-
-
-
-    </div>
-
 
     <div class="detalle">
 
@@ -118,31 +71,6 @@
     </div>
 
 
-    <div>
-        <div class="row row_ocho">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.transportista.descripcion</div>
-        </div>
-
-        <div class="row row_nueve">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.transportista.direccion</div>
-        </div>
-
-        <div class="row row_diez">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.transportista.ruc</div>
-            <div class="col_tres">@guiaRemision.certificadoInscripcion</div>
-        </div>
-
-        <div class="row row_once">
-            <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.placaVehiculo</div>
-            <div class="col_tres">@guiaRemision.transportista.brevete</div>
-        </div>
-
-
-    </div>
 
 
 </div>
@@ -151,5 +79,7 @@
 
     @section Scripts {
         @Scripts.Render("~/bundles/guiaRemision")
-        @Styles.Render("~/Content/PrintGuiaProvincias")
     }
+
+
+<link rel="stylesheet" href="http://mpinstitucional.com/css/PrintGuiaH.css">

@@ -57,6 +57,11 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] = guiaRemision;
         }
 
+        public void CleanBusqueda()
+        {
+            instanciarGuiaRemisionBusqueda();
+        }
+
         // GET: GuiaRemision
         public ActionResult Index()
         {
@@ -260,11 +265,15 @@ namespace Cotizador.Controllers
                 guiaRemision.transportista = new Transportista();
                 // guiaRemision.ciudadOrigen = pedido.ciudad;
 
-              /*  foreach (DocumentoDetalle documentoDetalle in guiaRemision.pedido.documentoDetalle)
+                /*  foreach (DocumentoDetalle documentoDetalle in guiaRemision.pedido.documentoDetalle)
+                  {
+                      documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidad;
+                      documentoDetalle.cantidadPorAtender = documentoDetalle.cantidad;
+                  }*/
+                if (pedido.numeroReferenciaCliente != null && !pedido.numeroReferenciaCliente.Trim().Equals(String.Empty))
                 {
-                    documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidad;
-                    documentoDetalle.cantidadPorAtender = documentoDetalle.cantidad;
-                }*/
+                    guiaRemision.observaciones = "O/C: "+pedido.numeroReferenciaCliente.Trim();
+                }
 
 
                 CiudadBL ciudadBL = new CiudadBL();
@@ -362,14 +371,8 @@ namespace Cotizador.Controllers
 
             ViewBag.guiaRemision = guiaRemision;
             ViewBag.pagina = this.Session[Constantes.VAR_SESSION_PAGINA];
-            if (guiaRemision.ciudadOrigen.esProvincia)
-            {
-                return View("PrintProvincias");
-            }
-            else
-            {
-                return View();
-            }
+            
+            return View("Print"+ guiaRemision.ciudadOrigen.sede.ToUpper().Substring(0,1));
             
         }
 
@@ -385,6 +388,14 @@ namespace Cotizador.Controllers
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
             PropertyInfo propertyInfo = guiaRemision.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(guiaRemision, this.Request.Params["valor"]);
+            this.GuiaRemisionSession = guiaRemision;
+        }
+
+        public void ChangeInputStringTransportista()
+        {
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            PropertyInfo propertyInfo = guiaRemision.transportista.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(guiaRemision.transportista, this.Request.Params["valor"]);
             this.GuiaRemisionSession = guiaRemision;
         }
 

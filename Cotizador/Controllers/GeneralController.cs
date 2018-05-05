@@ -18,12 +18,19 @@ namespace Cotizador.Controllers
         }
 
         public ActionResult Exit()
-        {
-            //Se eliminan todos los datos de Session
+        {  //Se eliminan todos los datos de Session
+            Session.Contents.RemoveAll();
+          /*
             this.Session["usuario"] = null;
             this.Session["cotizacion"] = null;
             this.Session["cotizacionBusqueda"] = null;
             this.Session["cotizacionList"] = null;
+            this.Session["cotizacionBusqueda"] = null;
+            this.Session["cotizacionList"] = null;
+            this.Session["cotizacionBusqueda"] = null;
+            this.Session["cotizacionList"] = null;
+            this.Session["cotizacionBusqueda"] = null;
+            this.Session["cotizacionList"] = null;*/
             return RedirectToAction("Login", "Account");
         }
 

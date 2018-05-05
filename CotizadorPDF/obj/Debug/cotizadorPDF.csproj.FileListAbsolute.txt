@@ -31,6 +31,7 @@ C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommo
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Model.dll.config
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Spire.License.xml
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Spire.Pdf.xml
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\DataLayer.pdb
@@ -42,4 +43,3 @@ C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.cspro
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
-C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Model.dll.config

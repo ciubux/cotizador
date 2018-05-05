@@ -119,7 +119,6 @@ namespace Cotizador.Controllers
                             if (!ciudad.esProvincia)
                             {
                                 usuario.sedesMPCotizaciones.Add(ciudad);
-                                break;
                             }
                         }
                         foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
@@ -182,14 +181,14 @@ namespace Cotizador.Controllers
                             if (!ciudad.esProvincia)
                             {
                                 usuario.sedesMPPedidos.Add(ciudad);
-                                break;
+    
                             }
                         }
                         foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
                         {
                             if (!usuarioTmp.sedeMP.esProvincia)
                             {
-                                usuarioCreaCotizacionList.Add(usuarioTmp);
+                                usuarioTomaPedidoList.Add(usuarioTmp);
                             }
                         }
 
@@ -246,7 +245,6 @@ namespace Cotizador.Controllers
                             if (!ciudad.esProvincia)
                             {
                                 usuario.sedesMPGuiasRemision.Add(ciudad);
-                                break;
                             }
                         }
                         foreach (Usuario usuarioTmp in usuario.usuarioCreaGuiaList)
@@ -309,7 +307,6 @@ namespace Cotizador.Controllers
                             if (!ciudad.esProvincia)
                             {
                                 usuario.sedesMPDocumentosVenta.Add(ciudad);
-                                break;
                             }
                         }
                         foreach (Usuario usuarioTmp in usuario.usuarioCreaDocumentoVentaList)
@@ -360,16 +357,33 @@ namespace Cotizador.Controllers
 
                     try
                     {
-                        Cotizacion cotizacion = JsonConvert.DeserializeObject<Cotizacion>(usuario.cotizacionSerializada);
-                        usuario.cotizacionSerializada = null;
-                        this.Session["usuario"] = usuario; 
-                        this.Session["pagina"] = (int)Constantes.paginas.BusquedaCotizaciones;
-                        this.Session["cotizacion"] = cotizacion;
-
+                        if (usuario.cotizacionSerializada != null)
+                        {
+                            Cotizacion cotizacion = JsonConvert.DeserializeObject<Cotizacion>(usuario.cotizacionSerializada);
+                            //usuario.cotizacionSerializada = null;
+                            this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
+                            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCotizacion;
+                            this.Session[Constantes.VAR_SESSION_COTIZACION] = cotizacion;
+                        }
                     }
                     catch (Exception e)
                     {
-                        this.Session["cotizacion"] = null;
+                        this.Session[Constantes.VAR_SESSION_COTIZACION] = null;
+                    }
+
+                    try
+                    {   if (usuario.pedidoSerializado != null)
+                        {
+                            Pedido pedido = JsonConvert.DeserializeObject<Pedido>(usuario.pedidoSerializado);
+                            //usuario.pedidoSerializado = null;
+                            this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
+                            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoPedido;
+                            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
@@ -737,10 +751,24 @@ namespace Cotizador.Controllers
 
         private ActionResult RedirectToLocal(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
+            /*  if (Url.IsLocalUrl(returnUrl))
+              {
+                  return Redirect(returnUrl);
+              }*/
+
+            if (this.Session[Constantes.VAR_SESSION_PAGINA] != null)
             {
-                return Redirect(returnUrl);
+                int pagina = (int)this.Session[Constantes.VAR_SESSION_PAGINA];
+                if (pagina == (int)Constantes.paginas.MantenimientoCotizacion)
+                {
+                    return RedirectToAction("Cotizar", "Cotizacion");
+                }
+                else if (pagina == (int)Constantes.paginas.MantenimientoPedido)
+                {
+                    return RedirectToAction("Pedir", "Pedido");
+                }
             }
+
 
             Usuario usuario = (Model.Usuario)this.Session["usuario"];
             if (usuario != null)

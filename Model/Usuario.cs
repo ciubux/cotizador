@@ -74,6 +74,7 @@ namespace Model
         public List<Usuario> usuarioCreaGuiaList { get; set; }
         public List<Usuario> usuarioCreaDocumentoVentaList { get; set; }
         public String cotizacionSerializada { get; set; }
+        public String pedidoSerializado { get; set; }
     }
 }
 

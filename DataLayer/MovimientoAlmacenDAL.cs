@@ -104,6 +104,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_anularMovimientoAlmacen");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
             InputParameterAdd.Varchar(objCommand, "comentarioAnulado", movimientoAlmacen.comentarioAnulado);
+            InputParameterAdd.Guid(objCommand, "idUsuario", movimientoAlmacen.usuario.idUsuario);
             ExecuteNonQuery(objCommand);
 
         }
@@ -179,7 +180,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "equivalencia", pedidoDetalle.producto.equivalencia);
             InputParameterAdd.Varchar(objCommand, "unidad", pedidoDetalle.unidad);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", pedidoDetalle.porcentajeDescuento);
-            InputParameterAdd.Decimal(objCommand, "precioNetoEquivalente", pedidoDetalle.precioNetoEquivalente);
+            InputParameterAdd.Decimal(objCommand, "precioNetoEquivalente", pedidoDetalle.precioNeto);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", pedidoDetalle.esPrecioAlternativo?1:0);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedidoDetalle.usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", pedidoDetalle.flete);
@@ -278,7 +279,7 @@ namespace DataLayer
                 //if (cotizacionDetalle.esPrecioAlternativo)
                // {
                     cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.producto.equivalencia;
-                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNetoEquivalente * 100 / cotizacionDetalle.producto.precioSinIgv);
+                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                 /*}
                 else
                 {
@@ -358,7 +359,7 @@ namespace DataLayer
                 guiaRemision.pedido.cliente.codigo = Converter.GetString(row, "codigo");
                 guiaRemision.pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 guiaRemision.pedido.cliente.ruc = Converter.GetString(row, "ruc");
-                guiaRemision.pedido.cliente.domicilioLegal = Converter.GetString(row, "domicilioLegal");
+                guiaRemision.pedido.cliente.domicilioLegal = Converter.GetString(row, "domicilio_legal");
                 //USUARIO
                 guiaRemision.usuario = new Usuario();
                 guiaRemision.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
@@ -369,6 +370,7 @@ namespace DataLayer
                 guiaRemision.ciudadOrigen.nombre = Converter.GetString(row, "nombre_ciudad");
                 guiaRemision.ciudadOrigen.direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida");
                 guiaRemision.ciudadOrigen.esProvincia = Converter.GetBool(row, "es_provincia");
+                guiaRemision.ciudadOrigen.sede = Converter.GetString(row, "sede");
                 //TRANSPORTISTA
                 guiaRemision.transportista = new Transportista();
                 guiaRemision.transportista.brevete = Converter.GetString(row, "brevete_transportista");

@@ -52,12 +52,16 @@ namespace Model
 
                     documentoDetalle.cantidad = cotizacionDetalleJson.cantidad;
 
-                    documentoDetalle.precioNeto = cotizacionDetalleJson.precio;
+                    
                     documentoDetalle.flete = cotizacionDetalleJson.flete;
 
                     if (documentoDetalle.esPrecioAlternativo)
                     {
-                        documentoDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalleJson.precio * documentoDetalle.producto.equivalencia));
+                        documentoDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, cotizacionDetalleJson.precio * documentoDetalle.producto.equivalencia));
+                    }
+                    else
+                    {
+                        documentoDetalle.precioNeto = cotizacionDetalleJson.precio;
                     }
 
                     documentoDetalle.porcentajeDescuento = cotizacionDetalleJson.porcentajeDescuento;

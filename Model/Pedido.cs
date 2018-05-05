@@ -19,7 +19,7 @@ namespace Model
         public Ciudad ciudad { get; set; }
         [Display(Name = "Cliente:")]
         public Cliente cliente { get; set; }
-        [Display(Name = "Ref. Doc. Cliente:")]
+        [Display(Name = "Número OC Cliente:")]
         public String numeroReferenciaCliente { get; set; }
 
         public DireccionEntrega direccionEntrega { get; set; }

@@ -159,7 +159,7 @@
 
     .detalle {
         margin-top: 0.7cm;
-        margin-left: 1.5cm;
+        margin-left: 1.2cm;
     }
 
     /*ROW DETALLE*/
@@ -181,7 +181,7 @@
 
     .row_detalle > .col_cuatro {
         float: left;
-        width: 8cm;
+        width: 9cm;
     }
 
 
@@ -201,7 +201,7 @@
         margin-top: 2.87cm;
         margin-right: 1cm;
         margin-bottom: 15cm;
-        margin-left: 0cm /*Trujillo*/
+        margin-left: 1cm /*Trujillo*/
     }
 
 

@@ -169,7 +169,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "equivalencia", cotizacionDetalle.producto.equivalencia);
             InputParameterAdd.Varchar(objCommand, "unidad", cotizacionDetalle.unidad);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", cotizacionDetalle.porcentajeDescuento);
-            InputParameterAdd.Decimal(objCommand, "precioNeto", cotizacionDetalle.precioNetoEquivalente);
+            InputParameterAdd.Decimal(objCommand, "precioNeto", cotizacionDetalle.precioNeto);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", cotizacionDetalle.esPrecioAlternativo?1:0);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacionDetalle.usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", cotizacionDetalle.flete);

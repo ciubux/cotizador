@@ -90,7 +90,8 @@ namespace Cotizador.Controllers
             int cantidad = Int32.Parse(Request["cantidadRegistros"].ToString());
             String sede = Request["sede"].ToString();
 
-            clienteBL.truncateClienteStaging(sede);
+          //  clienteBL.truncateClienteStaging(sede);
+
 
             if (cantidad == 0)
                 cantidad = sheet.LastRowNum;
@@ -103,6 +104,31 @@ namespace Cotizador.Controllers
                     try
                     {
                         ClienteStaging clienteStaging = new ClienteStaging();
+                        //A
+                        try
+                        {
+                            clienteStaging.sede = sheet.GetRow(row).GetCell(0).StringCellValue.Substring(2,1);
+                        }
+                        catch (Exception ex)
+                        {
+                            clienteStaging.sede = sheet.GetRow(row).GetCell(0).ToString().Substring(2, 1);
+                        }
+
+                        //B
+                        try
+                        {
+                            if (sheet.GetRow(row).GetCell(1).NumericCellValue == 0)
+                                continue;
+                        }
+                        catch (Exception ex)
+                        {
+                            continue;
+                        }
+
+
+
+
+
                         //C
                         try
                         {
@@ -137,7 +163,7 @@ namespace Cotizador.Controllers
                         paso = 8;
                         clienteStaging.rubro = sheet.GetRow(row).GetCell(20).ToString();
 
-                        clienteStaging.sede = sede;
+                      //  clienteStaging.sede = sede;
 
                         /*
                     ClienteStaging clienteStaging = new ClienteStaging();

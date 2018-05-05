@@ -87,6 +87,17 @@ namespace Cotizador.Controllers
 
             Cotizacion cotizacionSearch = this.CotizacionSession;
 
+            //Si existe cotizacion se debe verificar si no existe cliente
+            if (this.Session[Constantes.VAR_SESSION_COTIZACION] != null)
+            {
+                Cotizacion cotizacionEdicion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION];
+                if (cotizacionEdicion.ciudad == null || cotizacionEdicion.ciudad.idCiudad == null
+                    || cotizacionEdicion.ciudad.idCiudad == Guid.Empty)
+                {
+                    this.Session[Constantes.VAR_SESSION_COTIZACION] = null;
+                }
+
+            }
 
             ViewBag.fechaDesde = cotizacionSearch.fechaDesde.ToString(Constantes.formatoFecha);
             ViewBag.fechaHasta = cotizacionSearch.fechaHasta.ToString(Constantes.formatoFecha);

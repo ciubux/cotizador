@@ -13,6 +13,30 @@ namespace Cotizador.Controllers
     public class PedidoController : Controller
     {
 
+
+        private void calcularMontosTotales(Pedido pedido)
+        {
+            Decimal total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.pedidoDetalleList.AsEnumerable().Sum(o => o.subTotal)));
+            Decimal subtotal = 0;
+            Decimal igv = 0;
+
+            if (pedido.incluidoIGV)
+            {
+                subtotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total / (1 + Constantes.IGV)));
+                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total - subtotal));
+            }
+            else
+            {
+                subtotal = total;
+                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total * Constantes.IGV));
+                total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, subtotal + igv));
+            }
+
+            pedido.montoTotal = total;
+            pedido.montoSubTotal = subtotal;
+            pedido.montoIGV = igv;
+        }
+
         private Pedido PedidoSession {
             get {
 
@@ -59,11 +83,13 @@ namespace Cotizador.Controllers
 
             pedidoTmp.pedidoDetalleList = new List<PedidoDetalle>();
             pedidoTmp.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            pedidoTmp.usuarioBusqueda = pedidoTmp.usuario;
+            pedidoTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
+
             this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedidoTmp;
             this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = new List<Pedido>();
         }
 
+      
         public ActionResult Index()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.BUSQUEDA_PEDIDO;
@@ -88,6 +114,17 @@ namespace Cotizador.Controllers
 
             Pedido pedidoSearch = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
 
+            //Si existe cotizacion se debe verificar si no existe cliente
+            if (this.Session[Constantes.VAR_SESSION_PEDIDO] != null)
+            {
+                Pedido pedidoEdicion = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+                if (pedidoEdicion.ciudad == null || pedidoEdicion.ciudad.idCiudad == null
+                    || pedidoEdicion.ciudad.idCiudad == Guid.Empty)
+                {
+                    this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
+                }
+
+            }
 
             ViewBag.fechaSolicitudDesde = pedidoSearch.fechaSolicitudDesde.ToString(Constantes.formatoFecha);
             ViewBag.fechaSolicitudHasta = pedidoSearch.fechaSolicitudHasta.ToString(Constantes.formatoFecha);
@@ -109,10 +146,10 @@ namespace Cotizador.Controllers
                 this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = new List<Pedido>();
             }
 
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+        
             int existeCliente = 0;
             //  if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
-            if (pedido.cliente.idCliente != Guid.Empty)
+            if (pedidoSearch.cliente.idCliente != Guid.Empty)
             {
                 existeCliente = 1;
             }
@@ -122,14 +159,14 @@ namespace Cotizador.Controllers
 
             ViewBag.guiaRemision = guiaRemision;
 
-            ViewBag.pedido = pedido;
+            ViewBag.pedido = pedidoSearch;
             DocumentoVenta documentoVenta = new DocumentoVenta();
             documentoVenta.tipoPago = DocumentoVenta.TipoPago.Contado;
             documentoVenta.formaPago = DocumentoVenta.FormaPago.NoAsignado;
             documentoVenta.fechaEmision = DateTime.Now;
             ViewBag.documentoVenta = documentoVenta;
-            ViewBag.fechaEmision = documentoVenta.fechaEmision.ToString(Constantes.formatoFecha);
-            ViewBag.horaEmision = documentoVenta.fechaEmision.ToString(Constantes.formatoHora);
+            ViewBag.fechaEmision = documentoVenta.fechaEmision.Value.ToString(Constantes.formatoFecha);
+            ViewBag.horaEmision = documentoVenta.fechaEmision.Value.ToString(Constantes.formatoHora);
             ViewBag.pedidoList = this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA];
             ViewBag.existeCliente = existeCliente;
             ViewBag.pagina = Constantes.BUSQUEDA_PEDIDO;
@@ -257,7 +294,7 @@ namespace Cotizador.Controllers
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
             }
             pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
-            HelperDocumento.calcularMontosTotales(pedido);
+            calcularMontosTotales(pedido);
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
 
 
@@ -341,7 +378,7 @@ namespace Cotizador.Controllers
             }
 
             pedido = pedidoBL.obtenerProductosAPartirdePreciosRegistrados(pedido, familia, proveedor);
-            HelperDocumento.calcularMontosTotales(pedido);
+            calcularMontosTotales(pedido);
             this.PedidoSession = pedido;
         }
 
@@ -490,7 +527,7 @@ namespace Cotizador.Controllers
             {
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                 //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * producto.equivalencia));
+                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * producto.equivalencia));
             }
             else
             {
@@ -502,7 +539,7 @@ namespace Cotizador.Controllers
             //CotizacionDetalle cotizacionDetalle = (CotizacionDetalle)Convert.ChangeType(pedido, typeof(CotizacionDetalle));
 
             //Calcula los montos totales de la cabecera de la cotizacion
-            HelperDocumento.calcularMontosTotales(pedido);
+            calcularMontosTotales(pedido);
 
 
             detalle.unidad = detalle.producto.unidad;
@@ -771,7 +808,7 @@ namespace Cotizador.Controllers
             IDocumento documento = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
             documento.documentoDetalle = documentoDetalle;
-            HelperDocumento.calcularMontosTotales(documento);
+            calcularMontosTotales((Pedido)documento);
             this.Session[Constantes.VAR_SESSION_PEDIDO] = documento;
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
@@ -951,7 +988,7 @@ namespace Cotizador.Controllers
         }
         #endregion
 
-        public void CleanBusquedaCotizaciones()
+        public void CleanBusqueda()
         {
             instanciarPedidoBusqueda();
             //Se retorna la cantidad de elementos encontrados
@@ -1039,7 +1076,7 @@ namespace Cotizador.Controllers
             return json;
         }
 
-        public void autoGuardarCotizacion()
+        public void autoGuardarPedido()
         {
             if (this.Session[Constantes.VAR_SESSION_PEDIDO] != null)
             {
@@ -1047,9 +1084,9 @@ namespace Cotizador.Controllers
                 UsuarioBL usuarioBL = new UsuarioBL();
                 Usuario usuario = (Usuario)this.Session["usuario"];
 
-                String cotizacionSerializada = JsonConvert.SerializeObject(pedido);
+                String pedidoSerializado = JsonConvert.SerializeObject(pedido);
 
-                usuarioBL.updateCotizacionSerializada(usuario, cotizacionSerializada);
+                usuarioBL.updatePedidoSerializado(usuario, pedidoSerializado);
             }
 
         }

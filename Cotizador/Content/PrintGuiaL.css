@@ -1,0 +1,285 @@
+﻿
+@media print {
+    header, nav, footer, hr {
+        display: none;
+    }
+
+    .page-header {
+        display: none;
+    }
+
+
+
+
+
+
+    /*ROW UNO*/
+
+    .row_uno {
+        /*'Arial Narrow', */
+        font-family: 'Arial Narrow',Arial, sans-serif, Helvetica, sans-serif;
+        font-size: 1.2em;
+    }
+
+        .row_uno > .col_uno {
+            float: left;
+            width: 2cm;
+        }
+
+        .row_uno > .col_dos {
+            float: left;
+            width: 5.5cm;
+        }
+
+        .row_uno > .col_tres {
+            float: left;
+            width: 3cm;
+        }
+
+
+
+
+
+    /*ROW DOS*/
+    .row_dos {
+        margin-top: 0.08cm;
+        font-family: 'Arial Narrow',Arial, Helvetica, sans-serif;
+        font-size: 1.2em;
+    }
+
+        .row_dos > .col_uno {
+            float: left;
+            width: 1.3cm;
+        }
+
+        .row_dos > .col_dos {
+            float: left;
+            width: 9.6cm;
+        }
+
+        .row_dos > .col_tres {
+            float: left;
+            width: 3cm;
+        }
+
+        .row_dos > .col_cuatro {
+            float: left;
+            width: 3cm;
+        }
+
+
+    .row_tres {
+        margin-top: 0.02cm;
+        font-family: 'Arial Narrow',Arial, Helvetica, sans-serif;
+        font-size: 1.2em;
+    }
+
+
+        /*ROW TRES*/
+        .row_tres > .col_uno {
+            float: left;
+            width: 1.4cm;
+        }
+
+        .row_tres > .col_dos {
+            float: left;
+            width: 11cm;
+        }
+
+    .row_cuatro {
+        margin-top: 0cm;
+    }
+
+
+        /*ROW CUATRO*/
+        .row_cuatro > .col_uno {
+            float: left;
+            width: 1.6cm;
+        }
+
+        .row_cuatro > .col_dos {
+            float: left;
+            width: 5.8cm;
+        }
+
+        .row_cuatro > .col_tres {
+            float: left;
+            width: 3.5cm;
+        }
+
+        .row_cuatro > .col_cuatro {
+            float: left;
+            width: 3cm;
+        }
+
+
+
+    .row_cinco {
+        margin-top: 0cm;
+        font-family: 'Arial Narrow',Arial, Helvetica, sans-serif;
+        font-size: 1.1em;
+    }
+        /*ROW CINCO*/
+        .row_cinco > .col_uno {
+            float: left;
+            width: 1.7cm;
+        }
+
+    .row_tres > .col_dos {
+        float: left;
+        width: 10cm;
+    }
+
+
+    .row_seis {
+        margin-top: 0cm;
+        font-family: 'Arial Narrow',Arial, Helvetica, sans-serif;
+        font-size: 1.1em;
+    }
+        /*ROW SEIS*/
+        .row_seis > .col_uno {
+            float: left;
+            width: 2.3cm;
+        }
+
+        .row_seis > .col_dos {
+            float: left;
+            width: 11cm;
+        }
+
+
+    .row_siete {
+        margin-top: 0.05cm;
+        font-family: 'Arial Narrow',Arial, Helvetica, sans-serif;
+        font-size: 1.1em;
+    }
+        /*ROW SIETE*/
+        .row_siete > .col_uno {
+            float: left;
+            width: 2.3cm;
+        }
+
+        .row_siete > .col_dos {
+            float: left;
+            width: 14cm;
+        }
+
+
+
+    .detalle {
+        margin-top: 1cm;
+        margin-left: 0.5cm;
+        height: 5.2cm;
+    }
+
+    /*ROW DETALLE*/
+    .row_detalle > .col_uno {
+        float: left;
+        width: 1.8cm;
+    }
+
+    .row_detalle > .col_dos {
+        float: left;
+        width: 2cm;
+    }
+
+    .row_detalle > .col_tres {
+        float: left;
+        width: 3cm;
+    }
+
+    .row_detalle > .col_cuatro {
+        float: left;
+        width: 11cm;
+    }
+
+
+
+    /*ROW OCHO*/
+    .row_ocho > .col_uno {
+        float: left;
+        width: 2.5cm;
+    }
+
+    .row_ocho > .col_dos {
+        float: left;
+        width: 9cm;
+    }
+
+
+    /*ROW NUEVE*/
+    .row_nueve {
+        margin-top: 0.12cm;
+    }
+
+        .row_nueve > .col_uno {
+            float: left;
+            width: 2.5cm;
+        }
+
+        .row_nueve > .col_dos {
+            float: left;
+            width: 9cm;
+        }
+
+    .row_diez {
+        margin-top: 0.12cm;
+    }
+
+        .row_diez > .col_uno {
+            float: left;
+            width: 2.5cm;
+        }
+
+        .row_diez > .col_dos {
+            float: left;
+            width: 6cm;
+        }
+
+        .row_diez > .col_tres {
+            float: left;
+            width: 3cm;
+        }
+
+
+    .row_once {
+        margin-top: 0.12cm;
+    }
+
+        .row_once > .col_uno {
+            float: left;
+            width: 2.5cm;
+        }
+
+        .row_once > .col_dos {
+            float: left;
+            width: 6cm;
+        }
+
+        .row_once > .col_tres {
+            float: left;
+            width: 3cm;
+        }
+
+    @page {
+        size: auto;
+        margin: 0mm;
+        /*size: A4 landscape;*/
+    }
+
+    body {
+        /*background-color: black;*/
+        font-family: 'Arial Narrow', Helvetica, sans-serif;
+        font-size: 1.1em;
+        color: #333333;
+        margin-top: 3.0cm;
+        margin-right: 1cm;
+        margin-bottom: 1cm;
+        margin-left: 0.0cm
+    }
+
+
+    .serieNumeroGuia {
+        margin-right: 0cm
+    }
+}

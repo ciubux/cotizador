@@ -36,6 +36,8 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", productoStaging.equivalenciaProveedor); //(y)
             InputParameterAdd.Varchar(objCommand, "monedaProveedor", productoStaging.monedaProveedor); //(y)
             InputParameterAdd.Varchar(objCommand, "monedaMP", productoStaging.monedaMP); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidadSunat", productoStaging.unidadSunat); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidadAlternativaSunat", productoStaging.unidadAlternativaSunat); //(y)
             ExecuteNonQuery(objCommand);
         }
 

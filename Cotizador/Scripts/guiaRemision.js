@@ -62,10 +62,31 @@ jQuery(function ($) {
         }
     }
 
+    $("#btnLimpiarBusqueda").click(function () {
+        $.ajax({
+            url: "/GuiaRemision/CleanBusqueda",
+            type: 'POST',
+            success: function () {
+                location.reload();
+            }
+        });
+    });
+
     function verificarSiExisteNuevoTransportista() {
         $('#guiaRemision_transportista option').each(function () {
             if ($(this).val() == GUID_EMPTY) {
                 $("#btnAgregarTransportista").attr("disabled", "disabled");
+                $("#guiaRemision_transportista_descripcion").attr('disabled', 'disabled');
+                $("#guiaRemision_transportista_ruc").attr("disabled", "disabled");
+                $("#guiaRemision_transportista_direccion").attr("disabled", "disabled");
+                $("#guiaRemision_transportista_brevete").attr("disabled", "disabled");
+            }
+            else {
+                $("#btnAgregarTransportista").removeAttr("disabled");
+                $("#guiaRemision_transportista_descripcion").removeAttr('disabled');
+                $("#guiaRemision_transportista_ruc").removeAttr("disabled");
+                $("#guiaRemision_transportista_direccion").removeAttr("disabled");
+                $("#guiaRemision_transportista_brevete").removeAttr("disabled");
             }
         });
     }
@@ -260,6 +281,9 @@ jQuery(function ($) {
 
 
 
+
+
+
     /* ################################## INICIO CHANGE CONTROLES */
 
     function toggleControlesTransportista() {
@@ -329,6 +353,30 @@ jQuery(function ($) {
         changeInputString("observaciones", $("#guiaRemision_observaciones").val())
     });
 
+    function changeInputStringTransportista(propiedad, valor) {
+        $.ajax({
+            url: "/GuiaRemision/ChangeInputStringTransportista",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+    $("#guiaRemision_transportista_ruc").change(function () {
+        changeInputStringTransportista("ruc", $("#guiaRemision_transportista_ruc").val())
+    });
+
+    $("#guiaRemision_transportista_direccion").change(function () {
+        changeInputStringTransportista("direccion", $("#guiaRemision_transportista_direccion").val())
+    });
+
+    $("#guiaRemision_transportista_brevete").change(function () {
+        changeInputStringTransportista("brevete", $("#guiaRemision_transportista_brevete").val())
+    });
+    
 
    /* ################################## FIN CHANGE CONTROLES */
 
@@ -663,7 +711,7 @@ jQuery(function ($) {
 
 
     $("#btnImprimirGuiaRemision").click(function () {
-        window.open("GuiaRemision/Print");
+        window.open("/GuiaRemision/Print");
     });
 
 
@@ -1163,6 +1211,7 @@ jQuery(function ($) {
                      var guiaRemision = '<tr data-expanded="false">'+
                          '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
                          '<td>  ' + guiaRemisionList[i].serieNumeroGuia + '</td>' +
+                         '<td>  ' + guiaRemisionList[i].pedido.numeroPedidoString + '</td>' +
                          '<td>  ' + guiaRemisionList[i].usuario.nombre + '</td>' +
                          '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
                          '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +

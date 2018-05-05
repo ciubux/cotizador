@@ -5,6 +5,7 @@ jQuery(function ($) {
 
     //CONSTANTES POR DEFECTO
     var cantidadDecimales = 2;
+    var cantidadCuatroDecimales = 4;
     var IGV = 0.18;
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
@@ -21,6 +22,7 @@ jQuery(function ($) {
     var ESTADO_ATENDIDO = 4;
     var ESTADO_ATENDIDO_PARCIALMENTE = 5;
     var ESTADO_EN_EDICION = 6;
+    var ESTADO_ELIMINADO = 7;
    
     
 
@@ -32,10 +34,12 @@ jQuery(function ($) {
     var ESTADO_ATENDIDO_STR = "Pedido Atendido"
     var ESTADO_ATENDIDO_PARCIALMENTE_STR = "Pedido Atendido Parcialmente"
     var ESTADO_EN_EDICION_STR = "Pedido En Edicion";
+    var ESTADO_ELIMINADO_STR = "Pedido Eliminado";
 
     var TITULO_CANCELAR_PROGRAMACION = "Cancelar Programación de Pedido";
     var TITULO_DENEGAR_INGRESO = "Denegar Ingreso de Pedido";
     var TITULO_APROBAR_INGRESO = "Aprobar Ingreso de Pedido";
+    var TITULO_ELIMINAR = "Eliminar Pedido";
 
     //Estados Crediticios
     var ESTADO_PENDIENTE_LIBERACION = 0;
@@ -147,7 +151,7 @@ jQuery(function ($) {
 
     function autoGuardarPedido() {
         $.ajax({
-            url: "/Pedido/autoSavePedido",
+            url: "/Pedido/autoGuardarPedido",
             type: 'POST',
             error: function () {
                 setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
@@ -353,7 +357,7 @@ jQuery(function ($) {
     });
   
 
-
+    /*
     $(window).on("paste", function (e) {
         var modalAgregarClienteIsShown = ($("#modalAgregarCliente").data('bs.modal') || { isShown: false }).isShown;
         if (modalAgregarClienteIsShown) {
@@ -372,7 +376,7 @@ jQuery(function ($) {
 
         }
        
-    });
+    });*/
 
 
 
@@ -750,7 +754,7 @@ jQuery(function ($) {
         $("#precioUnitarioSinIGV").val(0);
         $("#precioUnitarioAlternativoSinIGV").val(0);
         $("#subtotal").val(0);
-        $("#porcentajeDescuento").val(Number(0).toFixed(4));
+        $("#porcentajeDescuento").val(Number(0).toFixed(10));
         $('#valor').val(0);
         $('#valorAlternativo').val(0);
         $('#observacionProducto').val("");
@@ -831,7 +835,7 @@ jQuery(function ($) {
                 $('#costoAlternativoSinIGV').val(producto.costoAlternativoSinIGV);
                 $('#observacionProducto').val("");
                 $('#fleteDetalle').val(producto.fleteDetalle);
-                $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(4));
+                $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(10));
                 $("#cantidad").val(1);
 
                 $("#tableMostrarPrecios > tbody").empty();
@@ -865,9 +869,9 @@ jQuery(function ($) {
                         '<td>' + fechaInicioVigencia + '</td>' +
                         '<td>' + fechaFinVigencia + '</td>' +
                         '<td>' + producto.precioListaList[i].unidad + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].precioNeto).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].precioNeto).toFixed(cantidadCuatroDecimales) + '</td>' +
                         '<td>' + Number(producto.precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].precioUnitario).toFixed(cantidadCuatroDecimales) + '</td>' +
 
                         '</tr>');
                 }
@@ -964,7 +968,7 @@ jQuery(function ($) {
         /*      if (descuento > 100) {
                   descuento = 100;
               }*/
-        $("#porcentajeDescuento").val(descuento.toFixed(4));
+        $("#porcentajeDescuento").val(descuento.toFixed(10));
         $("#cantidad").val(Number($("#cantidad").val()).toFixed());
         calcularSubtotalProducto();
     });
@@ -998,11 +1002,11 @@ jQuery(function ($) {
         var porcentajeDescuento = parseFloat($("#porcentajeDescuento").val());
 
         var precio = precioLista * (100 - porcentajeDescuento) * 0.01;
-        precio = precio.toFixed(cantidadDecimales);
+        precio = precio.toFixed(cantidadCuatroDecimales);
 
 
         var precioUnitario = Number(precio) + Number($('#fleteDetalle').val());
-        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimales));
+        $('#precioUnitario').val(precioUnitario.toFixed(cantidadCuatroDecimales));
 
 
         var considerarCantidades = $("#considerarCantidades").val();
@@ -1133,9 +1137,9 @@ jQuery(function ($) {
                         '<td>' + fechaInicioVigencia + '</td>' +
                         '<td>' + fechaFinVigencia + '</td>' +
                         '<td>' + precioListaList[i].unidad + '</td>' +
-                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadCuatroDecimales) + '</td>' +
                         '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadCuatroDecimales) + '</td>' +
 
                         '</tr>');
                 }
@@ -1226,8 +1230,8 @@ jQuery(function ($) {
                 else {
                     
 
-                    if (detalle.precioUnitario >= detalle.precioUnitarioRegistrado - NUMBER(VARIACION_PRECIO_ITEM_PEDIDO)
-                        && detalle.precioUnitario <= detalle.precioUnitarioRegistrado + NUMBER(VARIACION_PRECIO_ITEM_PEDIDO))
+                    if (Number(detalle.precioUnitario) >= (Number(detalle.precioUnitarioRegistrado) - Number(VARIACION_PRECIO_ITEM_PEDIDO))
+                        && Number(detalle.precioUnitario) <= (Number(detalle.precioUnitarioRegistrado) + Number(VARIACION_PRECIO_ITEM_PEDIDO)))
                     {
                         precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>';
                         
@@ -1251,7 +1255,7 @@ jQuery(function ($) {
                     '<td>' + detalle.unidad + '</td>' +
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
                     '<td class="' + detalle.idProducto + ' detprecioLista" style="text-align:right">' + precioLista + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detporcentajedescuento" style="text-align:right">' + porcentajeDescuento.toFixed(4) + ' %</td>' +
+                    '<td class="' + detalle.idProducto + ' detporcentajedescuento" style="text-align:right">' + porcentajeDescuento.toFixed(10) + ' %</td>' +
                     '<td class="' + detalle.idProducto + ' detporcentajedescuentoMostrar" style="width:75px; text-align:right;">' + porcentajeDescuento.toFixed(1) + ' %</td>' +
                     '<td class="' + detalle.idProducto + ' detprecio" style="text-align:right">' + precio + '</td>' +
                     '<td class="' + detalle.idProducto + ' detcostoLista">' + costoLista + '</td>' +
@@ -1340,11 +1344,11 @@ jQuery(function ($) {
 
             var esPrecioAlternativo = Number($("#unidad").val());
             //Si es el precio estandar
-            nuevoPrecioInicial = Number(Number($("#precioUnitarioSinIGV").val()).toFixed(cantidadDecimales));
+            nuevoPrecioInicial = Number(Number($("#precioUnitarioSinIGV").val()).toFixed(cantidadCuatroDecimales));
 
             //Si NO es el precio estandar (si es el precio alternativo)
             if (esPrecioAlternativo == 1) {
-                var nuevoPrecioInicial = Number(Number($("#precioUnitarioAlternativoSinIGV").val()).toFixed(cantidadDecimales));
+                var nuevoPrecioInicial = Number(Number($("#precioUnitarioAlternativoSinIGV").val()).toFixed(cantidadCuatroDecimales));
             }
         }
         //En caso el calculo se realice al momento de editar un producto en la grilla
@@ -1355,13 +1359,9 @@ jQuery(function ($) {
         }
 
         var nuevoDescuento = 100 - (nuevoPrecioModificado * 100 / nuevoPrecioInicial);
-        $('#nuevoPrecio').val(nuevoPrecioModificado.toFixed(cantidadDecimales));
-        $('#nuevoDescuento').val(nuevoDescuento.toFixed(4));
+        $('#nuevoPrecio').val(nuevoPrecioModificado.toFixed(cantidadCuatroDecimales));
+        $('#nuevoDescuento').val(nuevoDescuento.toFixed(10));
     });
-
-
-
-
 
 
     $("#btnSaveDescuento").click(function () {
@@ -1486,11 +1486,11 @@ jQuery(function ($) {
             return false;
         }
 
-        if ($("#pedido_numeroReferenciaCliente").val().trim() == "") {
+   /*     if ($("#pedido_numeroReferenciaCliente").val().trim() == "") {
             alert('Debe ingresar el número de orden de compra o pedido en el campo "Referencia Doc Cliente".');
             $('#pedido_numeroReferenciaCliente').focus();
             return false;
-        }
+        }*/
 
         if ($("#ActualDepartamento").val().trim().length == 0) {
             alert('Debe ingresar el departamento.');
@@ -1532,6 +1532,12 @@ jQuery(function ($) {
             $('#pedido_direccionEntrega_telefono').focus();
             return false;
         }
+        /*
+        if (!$("#documentoVenta_correoEnvio").val().match(/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/)) {
+            alert("Debe ingresar un correo de envío válido.");
+            $("#documentoVenta_correoEnvio").focus();
+            return false;
+        }*/
 
         var fechaSolicitud = $("#fechaSolicitud").val();
         if (fechaSolicitud.trim() == "") {
@@ -1569,6 +1575,7 @@ jQuery(function ($) {
             $("#fechaEntregaHasta").focus();
             return false;
         }
+
         
 
         if ($("#pedido_contactoPedido").val().trim() == "") {
@@ -1576,13 +1583,24 @@ jQuery(function ($) {
             $('#pedido_contactoPedido').focus();
             return false;
         }
-        /*
-        if ($("#pedido_telefonoContactoPedido").val().trim() == "") {
-            alert("Debe ingresar una telefono de contacto de entrega.");
+        
+
+        
+        if ($("#pedido_telefonoContactoPedido").val().trim() == "" && $("#pedido_correoContactoPedido").val().trim() == "" ) {
+            alert("Debe ingresar un telefono y/o correo de contacto de entrega.");
             $('#pedido_telefonoContactoPedido').focus();
             return false;
-        }*/
+        }
+      
+        /*
+        if ($("#pedido_correoContactoPedido").val().trim() != "" && !$("#pedido_correoContactoPedido").val().match(/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/)) {
+            alert("Debe ingresar un correo válido.");
+            $("#pedido_correoContactoPedido").focus();
+            return false;
+        }
 
+
+        */
         var contador = 0;
         var $j_object = $("td.detcantidad");
         $.each($j_object, function (key, value) {
@@ -1895,7 +1913,7 @@ jQuery(function ($) {
 
                 FooTable.init('#tableDetallePedido');
 
-           //     $("#formVerGuiasRemision").html("");
+               $("#formVerGuiasRemision").html("");
 
                 var d = '';
                 var lista = pedido.pedidoDetalleList;
@@ -1911,53 +1929,61 @@ jQuery(function ($) {
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
-                        '<td>' + lista[i].precioNeto.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + lista[i].precioNeto.toFixed(cantidadCuatroDecimales) + '</td>' +
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
                         '<td>' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
                         '</tr>';
 
-             /*       var guiaRemisionList = pedido.guiaRemisionList;
-                    for (var j = 0; j < guiaRemisionList.length; j++) {
-
-                        
-                       $("#tableDetalleGuia > tbody").empty();
-
-                        FooTable.init('#tableDetalleGuia');
-
-                        var dGuia = '';
-                        var documentoDetalleList = guiaRemisionList[j].documentoDetalle;
-                        for (var k = 0; k < documentoDetalleList.length; k++) {
-
-                            dGuia += '<tr>' +
-                                '<td>' + documentoDetalleList[k].producto.sku+ '</td>' +
-                                '<td>' + documentoDetalleList[k].cantidad + '</td>' +
-                                '<td>' + documentoDetalleList[k].unidad + '</td>' +
-                                '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
-                                '</tr>';
-                        }
-
-                        $("#tableDetalleGuia").append(dGuia);
-
-                        var plantilla = $("#plantillaVerGuiasRemision").html();
-
-                        plantilla = plantilla.replace("#serieNumero", guiaRemisionList[j].serieNumeroGuia);
-                        plantilla = plantilla.replace("#fecha", invertirFormatoFecha(guiaRemisionList[j].fechaMovimiento.substr(0, 10)));
-
-                        plantilla = plantilla.replace("#serieNumeroFactura", guiaRemisionList[j].documentoVenta.serieNumero);
-                        plantilla = plantilla.replace("#fechaEmision", invertirFormatoFecha(guiaRemisionList[j].documentoVenta.fechaEmision.substr(0, 10)));
-
-                        plantilla = plantilla.replace("#tableDetalleGuia", "#tableDetalleGuia"+j);
-                  
-
-                        $("#formVerGuiasRemision").append(plantilla);
-                    }*/
+                   
 
                 }
+
+                var guiaRemisionList = pedido.guiaRemisionList;
+                for (var j = 0; j < guiaRemisionList.length; j++) {
+
+
+                    $("#tableDetalleGuia > tbody").empty();
+
+                    FooTable.init('#tableDetalleGuia');
+
+                    var dGuia = '';
+                    var documentoDetalleList = guiaRemisionList[j].documentoDetalle;
+                    for (var k = 0; k < documentoDetalleList.length; k++) {
+
+                        dGuia += '<tr>' +
+                            '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
+                            '<td>' + documentoDetalleList[k].cantidad + '</td>' +
+                            '<td>' + documentoDetalleList[k].unidad + '</td>' +
+                            '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
+                            '</tr>';
+                    }
+
+                    $("#tableDetalleGuia tbody").append(dGuia);
+
+                    var plantilla = $("#plantillaVerGuiasRemision").html();
+
+                    plantilla = plantilla.replace("#serieNumero", guiaRemisionList[j].serieNumeroGuia);
+                    plantilla = plantilla.replace("#fechaEmisionGuia", invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
+
+                    plantilla = plantilla.replace("#serieNumeroFactura", guiaRemisionList[j].documentoVenta.serieNumero);
+                    if (guiaRemisionList[j].documentoVenta.fechaEmision != null) {
+                        plantilla = plantilla.replace("#fechaEmisionFactura", invertirFormatoFecha(guiaRemisionList[j].documentoVenta.fechaEmision.substr(0, 10)));
+                    }
+                    else
+                        plantilla = plantilla.replace("#fechaEmisionFactura", "");
+                    
+
+                    plantilla = plantilla.replace("#tableDetalleGuia", "#tableDetalleGuia" + j);
+
+
+                    $("#formVerGuiasRemision").append(plantilla);
+                }
+
               //  
                // sleep
                 $("#tableDetallePedido").append(d);
@@ -2071,7 +2097,7 @@ jQuery(function ($) {
                     || pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE
                     ) {
 
-                    $("#btnFacturarPedido").hide();
+                    $("#btnFacturarPedido").show();
                 }
                 else {
                     $("#btnFacturarPedido").hide();
@@ -2087,6 +2113,18 @@ jQuery(function ($) {
                 else {
                     $("#btnVerAtenciones").hide();
                 }
+
+                if (pedido.seguimientoPedido.estado != ESTADO_ATENDIDO
+                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO_PARCIALMENTE
+                    && pedido.seguimientoPedido.estado != ESTADO_ELIMINADO
+                ) {
+
+                    $("#btnEliminarPedido").show();
+                }
+                else {
+                    $("#btnEliminarPedido").hide();
+                }
+
 
 
                 
@@ -2162,6 +2200,7 @@ jQuery(function ($) {
         $("#btnLiberarPedido").attr('disabled', 'disabled');
         $("#btnBloquearPedido").attr('disabled', 'disabled');
         $("#btnVerAtenciones").attr('disabled', 'disabled');
+        $("#btnEliminarPedido").attr('disabled', 'disabled');
         
     }
 
@@ -2177,6 +2216,7 @@ jQuery(function ($) {
         $("#btnLiberarPedido").removeAttr('disabled');
         $("#btnBloquearPedido").removeAttr('disabled');
         $("#btnVerAtenciones").removeAttr('disabled');
+        $("#btnEliminarPedido").removeAttr('disabled');
     }
 
   
@@ -2231,11 +2271,6 @@ jQuery(function ($) {
             async: false,
             success: function (resultado) {
                 activarBotonesVer();
-
-
-
-
-
                 if (resultado == "False") {
                     $.ajax({
                         url: "/GuiaRemision/iniciarAtencionDesdePedido",
@@ -2283,7 +2318,14 @@ jQuery(function ($) {
     $("#btnAprobarIngresoPedido").click(function () {
         $("#modalAprobacionTitle").html(TITULO_APROBAR_INGRESO);
         $("#labelNuevoEstado").html(ESTADO_INGRESADO_STR);
-        $("#estadoId").val(ESTADO_ACEPTADA);
+        $("#estadoId").val(ESTADO_INGRESADO);
+        limpiarComentario();
+    });
+
+    $("#btnEliminarPedido").click(function () {
+        $("#modalAprobacionTitle").html(TITULO_ELIMINAR);
+        $("#labelNuevoEstado").html(ESTADO_ELIMINADO_STR);
+        $("#estadoId").val(ESTADO_ELIMINADO);
         limpiarComentario();
     });
 
@@ -2720,7 +2762,7 @@ jQuery(function ($) {
 
         var codigo = $("#numero").val();
         if (codigo == "") {
-            $("#btnContinuarCreandoLuego").attr('disabled', 'disabled');
+            $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
             $("#btnFinalizarCreacionPedido").attr('disabled', 'disabled');
             $("#btnCancelPedido").attr('disabled', 'disabled');
         }
@@ -2925,14 +2967,14 @@ jQuery(function ($) {
         //Se obtiene el precio lista
         var precioLista = Number($("." + idproducto + ".detprecioLista").html());
         //Se calculo el precio con descuento 
-        var precio = Number((precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadDecimales));
+        var precio = Number((precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadCuatroDecimales));
         //Se asigna el precio calculculado en la columna precio
         $("." + idproducto + ".detprecio").html(precio);
         //se obtiene la cantidad
         var cantidad = Number($("." + idproducto + ".detincantidad").val());
         //Se define el precio Unitario 
         var precioUnitario = flete + precio
-        $("." + idproducto + ".detprecioUnitario").html(precioUnitario.toFixed(cantidadDecimales));
+        $("." + idproducto + ".detprecioUnitario").html(precioUnitario.toFixed(cantidadCuatroDecimales));
         //Se calcula el subtotal
         var subTotal = precioUnitario * cantidad;
         //Se asigna el subtotal 
@@ -2996,7 +3038,7 @@ jQuery(function ($) {
 
     $("#btnLimpiarBusquedaPedidos").click(function () {
         $.ajax({
-            url: "/Pedido/CleanBusquedaPedidos",
+            url: "/Pedido/CleanBusqueda",
             type: 'POST',
             success: function () {
                 location.reload();

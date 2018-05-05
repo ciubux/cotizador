@@ -88,7 +88,7 @@ namespace BusinessLayer
                 //Se aplica formato al precioUnitario obtenido desde precioRegistrados
                 if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
                 {
-                    producto.precioClienteProducto.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioClienteProducto.precioNeto));
+                    producto.precioClienteProducto.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.precioClienteProducto.precioNeto));
                 }
                 return producto;
             }
@@ -117,12 +117,12 @@ namespace BusinessLayer
                     //cotizacion.ciudad.
                     if (esProvincia)
                     {
-                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNetoEquivalente * 100 / cotizacionDetalle.producto.precioSinIgv);
+                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                         cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
                     }
                     else
                     {
-                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNetoEquivalente * 100 / cotizacionDetalle.producto.precioSinIgv);
+                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                     }
 
 

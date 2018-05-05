@@ -529,6 +529,9 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\BusinessLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\BusinessLayer.dll.config
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\CotizadorPDF.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.xml
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.SqlServer.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.DependencyCollector.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.Web.xml
@@ -545,8 +548,6 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.WebPages.Deploym
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.WebPages.Razor.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Antlr3.Runtime.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Newtonsoft.Json.xml
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.xml
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.SqlServer.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.Core.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.Owin.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.xml
@@ -566,6 +567,8 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Framework.DAL.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Framework.DAL.Settings.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Spire.License.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\EntityFramework.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\EntityFramework.SqlServer.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.Helpers.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.Mvc.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.Optimization.resources.dll
@@ -573,8 +576,6 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.Razor.resourc
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.WebPages.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.WebPages.Deployment.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.WebPages.Razor.resources.dll
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\EntityFramework.resources.dll
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\EntityFramework.SqlServer.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
@@ -589,4 +590,3 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csprojResol
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.pdb
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Model.dll.config

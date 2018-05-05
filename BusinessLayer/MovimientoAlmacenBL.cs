@@ -51,7 +51,7 @@ namespace BusinessLayer
                    {
                        pedido.usuarioBusqueda = pedido.usuario;
                    }*/
-
+                guiaRemision.usuario = guiaRemision.usuario;
                 guiaRemisionList = dal.SelectGuiasRemision(guiaRemision);
             }
             return guiaRemisionList;

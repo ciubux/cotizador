@@ -21,11 +21,13 @@ jQuery(function ($) {
     var ESTADO_ACEPTADA = 3;
     var ESTADO_RECHAZADA = 4;
     var ESTADO_EN_EDICION = 5;
+    var ESTADO_ELIMINADA = 6;
 
     var ESTADO_PENDIENTE_APROBACION_STR = "Pendiente de Aprobación";
     var ESTADO_APROBADA_STR = "Aprobada";
     var ESTADO_DENEGADA_STR = "Denegada";
     var ESTADO_ACEPTADA_STR = "Aceptada";
+    var ESTADO_ELIMINADA_STR = "Eliminada";
     var ESTADO_RECHAZADA_STR = "Rechazada";
     var ESTADO_EN_EDICION_STR = "En Edición";
 
@@ -1753,7 +1755,19 @@ jQuery(function ($) {
                 else {
                     $("#btnGenerarPedido").hide();
                 }
-                
+
+                /*Eliminar Cotizacion*/
+                if (
+                    cotizacion.seguimientoCotizacion.estado != ESTADO_ACEPTADA &&
+                    cotizacion.seguimientoCotizacion.estado != ESTADO_RECHAZADA &&
+                    cotizacion.seguimientoCotizacion.estado != ESTADO_ELIMINADA
+                ) {
+
+                    $("#btnEliminarCotizacion").show();
+                }
+                else {
+                    $("#btnEliminarCotizacion").hide();
+                }
 
 
 
@@ -1804,6 +1818,7 @@ jQuery(function ($) {
         $("#btnDenegarCotizacion").attr('disabled', 'disabled');
         $("#btnAceptarCotizacion").attr('disabled', 'disabled');
         $("#btnRechazarCotizacion").attr('disabled', 'disabled');
+        $("#btnEliminarCotizacion").attr('disabled', 'disabled');
         $("#btnPDFCotizacion").attr('disabled', 'disabled');
         $("btnGenerarPedido").attr('disabled', 'disabled');
     }
@@ -1817,6 +1832,7 @@ jQuery(function ($) {
         $("#btnAceptarCotizacion").removeAttr('disabled');
         $("#btnRechazarCotizacion").removeAttr('disabled');
         $("#btnPDFCotizacion").removeAttr('disabled');
+        $("#btnEliminarCotizacion").removeAttr('disabled');
         $("btnGenerarPedido").removeAttr('disabled');
     }
 
@@ -1988,6 +2004,13 @@ jQuery(function ($) {
 
         $("#labelNuevoEstado").html(ESTADO_ACEPTADA_STR);
         $("#estadoId").val(ESTADO_ACEPTADA);
+        limpiarComentario();
+    });
+
+    $("#btnEliminarCotizacion").click(function () {
+
+        $("#labelNuevoEstado").html(ESTADO_ELIMINADA_STR);
+        $("#estadoId").val(ESTADO_ELIMINADA);
         limpiarComentario();
     });
 

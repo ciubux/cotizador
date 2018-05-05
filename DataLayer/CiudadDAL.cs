@@ -33,6 +33,7 @@ namespace DataLayer
                     esProvincia = Converter.GetBool(row, "es_provincia"),
                     direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida"),
                     serieGuiaRemision = Converter.GetString(row, "serie_guia_remision"),
+                    sede = Converter.GetString(row, "sede")
                 };
                 ciudadList.Add(ciudad);
             }
@@ -55,6 +56,7 @@ namespace DataLayer
                 ciudad.direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida");
                 ciudad.serieGuiaRemision = Converter.GetString(row, "serie_guia_remision");
                 ciudad.siguienteNumeroGuiaRemision = Converter.GetInt(row, "siguiente_numero_guia_remision");
+                ciudad.sede = Converter.GetString(row, "sede");
             }
             return ciudad;
         }

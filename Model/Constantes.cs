@@ -12,6 +12,8 @@ namespace Model
         public static String formatoDosDecimales = "{0:0.00}";
         public static String formatoUnDecimal = "{0:0.0}";
         public static String formatoCuatroDecimales = "{0:0.0000}";
+        public static String formatoSeisDecimales = "{0:0.000000}";
+        public static String formatoOchoDecimales = "{0:0.00000000}";
         public static String formatoFecha = "dd/MM/yyyy";
         public static String formatoHora = "HH:mm";
         public static String MENSAJE_SI = "Sí";

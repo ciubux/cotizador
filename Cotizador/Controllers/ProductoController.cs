@@ -241,13 +241,36 @@ namespace Cotizador.Controllers
                         paso = 15;
                         try
                         {
-                            //K
+                            //AB
                             Double? precioProvincias = sheet.GetRow(row).GetCell(27).NumericCellValue;
                             productoStaging.precioProvincias = Convert.ToDecimal(precioProvincias);
                         }
                         catch (Exception e)
                         {
                             productoStaging.precioProvincias = 0;
+                        }
+
+
+                        paso = 16;
+                        //AC
+                        if (sheet.GetRow(row).GetCell(28) == null)
+                        {
+                            productoStaging.unidadSunat = "NIU";
+                        }
+                        else
+                        {
+                            productoStaging.unidadSunat = sheet.GetRow(row).GetCell(28).ToString();
+                        }
+
+                        paso = 17;
+                        //AD
+                        if (sheet.GetRow(row).GetCell(29) == null)
+                        {
+                            productoStaging.unidadAlternativaSunat = "NIU";
+                        }
+                        else
+                        {
+                            productoStaging.unidadAlternativaSunat = sheet.GetRow(row).GetCell(29).ToString();
                         }
 
                         productoBL.setProductoStaging(productoStaging);

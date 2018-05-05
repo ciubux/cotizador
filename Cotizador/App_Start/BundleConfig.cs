@@ -30,11 +30,11 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cotizacion").Include(
-                        "~/Scripts/cotizacion.js"
+                        "~/Scripts/cotizacion1.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
-                        "~/Scripts/pedido.js"
+                        "~/Scripts/pedido1.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
@@ -80,12 +80,36 @@ namespace Cotizador
                       "~/Content/site.css",
                       "~/Content/chosen/chosen.css"));
 
-            bundles.Add(new StyleBundle("~/Content/PrintGuiaLima").Include(
-                       "~/Content/PrintGuiaLima.css"
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaL").Include(
+                       "~/Content/PrintGuiaL.css"
                        ));
 
-            bundles.Add(new StyleBundle("~/Content/PrintGuiaProvincias").Include(
-                      "~/Content/PrintGuiaProvincias.css"
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaT").Include(
+                      "~/Content/PrintGuiaT.css"
+                      ));
+
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaH").Include(
+                      "~/Content/PrintGuiaH.css"
+                      ));
+
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaO").Include(
+                      "~/Content/PrintGuiaO.css"
+                      ));
+
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaQ").Include(
+                      "~/Content/PrintGuiaQ.css"
+                      ));
+
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaA").Include(
+                      "~/Content/PrintGuiaA.css"
+                      ));
+
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaC").Include(
+                      "~/Content/PrintGuiaC.css"
+                      ));
+
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaP").Include(
+                      "~/Content/PrintGuiaT.css"
                       ));
 
 

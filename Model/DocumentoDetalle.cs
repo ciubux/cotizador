@@ -28,7 +28,7 @@ namespace Model
         public String observacion { get; set; }
         public Decimal subTotal
         {
-            get {  return this.cantidad * this.precioUnitario;  }
+            get {  return this.cantidad * precioUnitario;  }
         }
 
 
@@ -41,7 +41,7 @@ namespace Model
         {
             get
             {
-                return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, _porcentajeDescuento));
+                return Decimal.Parse(String.Format(Constantes.formatoOchoDecimales, _porcentajeDescuento));
             }
             set { _porcentajeDescuento = value; }
         }
@@ -58,15 +58,21 @@ namespace Model
       
 
         //Es el precio definido por el usuario
-    //    private Decimal _precioNeto;
+        protected Decimal _precioNeto;
 
-        public Decimal precioNeto { get; set; }
+     //   public Decimal precioNeto { get; set; }
 
-        public Decimal precioNetoEquivalente {
+
+        public Decimal precioNeto
+        {
             get { if (esPrecioAlternativo)
-                    return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto / producto.equivalencia));
+                    return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, _precioNeto / producto.equivalencia));
                 else
-                    return precioNeto;
+                    return _precioNeto;
+            }
+
+            set {
+                this._precioNeto = value;
             }
         }
 
@@ -108,7 +114,7 @@ namespace Model
         public Decimal margen {
 
             get {
-                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / ( precioNetoEquivalente==0?1:precioNetoEquivalente))*100));
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / ( precioNeto==0?1: precioNeto))*100));
 
             } }
 
@@ -131,7 +137,7 @@ namespace Model
 
 
                 if (precioNetoAnterior != 0)
-                    _variacionPrecioAnterior = (this.precioNetoEquivalente / this.precioNetoAnterior - 1)*100;
+                    _variacionPrecioAnterior = (this.precioNeto / this.precioNetoAnterior - 1)*100;
                 else
                     _variacionPrecioAnterior = 0;
 
@@ -165,7 +171,7 @@ namespace Model
 
         public Decimal precioUnitario
         {
-            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, flete + precioNetoEquivalente)); } 
+            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, flete + precioNeto)); } 
         }
         
 

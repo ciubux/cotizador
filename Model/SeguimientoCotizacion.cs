@@ -29,7 +29,9 @@ namespace Model
             [Display(Name = "Rechazada por Cliente")]
             Rechazada = 4,
             [Display(Name = "En Edición")]
-            Edicion = 5
+            Edicion = 5,
+            [Display(Name = "Eliminada")]
+            Eliminada = 6
         };
 
         public estadosSeguimientoCotizacion estado { get; set; }

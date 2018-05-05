@@ -63,10 +63,10 @@ namespace Cotizador.Controllers
                 ciudades = usuario.sedesMPDocumentosVenta;
             }
 
-            if (ciudades.Count == 1)
+           /* if (ciudades.Count == 1)
             {
                 selectedValue = ciudades[0].idCiudad.ToString();
-            }
+            }*/
 
             var model = new CiudadViewModels
             {

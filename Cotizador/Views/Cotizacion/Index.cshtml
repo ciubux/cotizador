@@ -159,8 +159,8 @@
                     <th data-name="razonSocial" data-sortable="true">Razón Social</th>
                     <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
                     <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Ciudad</th>
-                    <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
-                    <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>
+                    <th data-name="subtotal" data-visible="false" data-sortable="true" data-breakpoints="xs">Sub Total</th>
+                    <th data-name="igv" data-visible="false" data-sortable="true" data-breakpoints="xs">IGV</th>
                     <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
                     <th data-name="maximoPorcentajeDescuento" data-sortable="true" data-breakpoints="xs">Desc % (max)</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
@@ -409,7 +409,11 @@
                     <button type="button" id="btnDenegarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
                     <button type="button" id="btnAceptarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Cliente Aceptó</button>
                     <button type="button" id="btnRechazarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Cliente Rechazó</button>
-                    <button type="button" id="btnGenerarPedido" class="btn btn-success">Generar Pedido</button>
+                    @if (cotizacion.usuario.tomaPedidos)
+                    {
+                        <button type="button" id="btnGenerarPedido" class="btn btn-success">Generar Pedido</button>
+                    }
+                    <button type="button" id="btnEliminarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Eliminar</button>
                 </div>
 
             </div>

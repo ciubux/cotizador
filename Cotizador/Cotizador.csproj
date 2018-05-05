@@ -263,8 +263,16 @@
     <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jquery-ui.min.css" />
-    <Content Include="Content\PrintGuiaLima.css" />
-    <Content Include="Content\PrintGuiaProvincias.css" />
+    <Content Include="Content\PrintGuiaC.css" />
+    <Content Include="Content\PrintGuiaQ.css" />
+    <Content Include="Content\PrintGuiaP.css" />
+    <Content Include="Content\PrintGuiaH.css" />
+    <Content Include="Content\PrintGuiaLimaCesar.css" />
+    <Content Include="Content\PrintGuiaL.css" />
+    <Content Include="Content\PrintGuiaA.css" />
+    <Content Include="Content\PrintGuiaO.css" />
+    <Content Include="Content\PrintGuiaT.css" />
+    <Content Include="Content\Site - Copia.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -307,7 +315,7 @@
     <Content Include="Scripts\factura.js" />
     <Content Include="Scripts\guiaRemision.js" />
     <Content Include="Scripts\venta.js" />
-    <Content Include="Scripts\pedido.js" />
+    <Content Include="Scripts\pedido1.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -318,7 +326,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\cotizacion.js" />
+    <Content Include="Scripts\cotizacion1.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
@@ -386,10 +394,16 @@
     <Content Include="Views\Shared\_Ciudad.cshtml" />
     <Content Include="Views\Usuario\_SelectUsuarioCotizacion.cshtml" />
     <Content Include="Views\GuiaRemision\GuiarEmpty.cshtml" />
-    <Content Include="Views\GuiaRemision\Print.cshtml" />
+    <Content Include="Views\GuiaRemision\PrintL.cshtml" />
     <Content Include="Views\Factura\PreLoad.cshtml" />
     <Content Include="Views\Factura\Index.cshtml" />
-    <Content Include="Views\GuiaRemision\PrintProvincias.cshtml" />
+    <Content Include="Views\GuiaRemision\PrintT.cshtml" />
+    <Content Include="Views\GuiaRemision\PrintH.cshtml" />
+    <Content Include="Views\GuiaRemision\PrintA.cshtml" />
+    <Content Include="Views\GuiaRemision\PrintC.cshtml" />
+    <Content Include="Views\GuiaRemision\PrintP.cshtml" />
+    <Content Include="Views\GuiaRemision\PrintQ.cshtml" />
+    <Content Include="Views\GuiaRemision\PrintO.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

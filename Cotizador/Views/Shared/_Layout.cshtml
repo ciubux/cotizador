@@ -54,25 +54,27 @@
                         var linkMantenimientoNotaDebito = "";
 
                     }
-                    @switch ((int)this.Session["pagina"])
+                    @if (this.Session["pagina"] != null)
                     {
-                        case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
-                        case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active"; break;
-                        case 2: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
-                        case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
-                        case 4: linkBusquedaGuiasRemision = "ative"; linkMovimientosAlmacen = "active"; break;
-                        case 5: linkMantenimientoGuiaRemision = "ative"; linkMovimientosAlmacen = "active"; break;
-                        case 7: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
-                        case 8: linkMantenimientoFactura = "ative"; linkDocumentosVenta = "active"; break;
-                        case 9: linkBusquedaBoleta = "ative"; linkDocumentosVenta = "active"; break;
-                        case 10: linkMantenimientoBoleta = "ative"; linkDocumentosVenta = "active"; break;
-                        case 11: linkBusquedaNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
-                        case 12: linkMantenimientoNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
-                        case 13: linkBusquedaNotaDebito = "ative"; linkBusquedaNotaDebito = "active"; break;
-                        case 14: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
-                    }
-                    @{ var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];}
-                    @if (usuario.creaCotizaciones)
+                        switch ((int)this.Session["pagina"])
+                        {
+                            case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
+                            case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active"; break;
+                            case 2: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
+                            case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
+                            case 4: linkBusquedaGuiasRemision = "ative"; linkMovimientosAlmacen = "active"; break;
+                            case 5: linkMantenimientoGuiaRemision = "ative"; linkMovimientosAlmacen = "active"; break;
+                            case 7: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
+                            case 8: linkMantenimientoFactura = "ative"; linkDocumentosVenta = "active"; break;
+                            case 9: linkBusquedaBoleta = "ative"; linkDocumentosVenta = "active"; break;
+                            case 10: linkMantenimientoBoleta = "ative"; linkDocumentosVenta = "active"; break;
+                            case 11: linkBusquedaNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
+                            case 12: linkMantenimientoNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
+                            case 13: linkBusquedaNotaDebito = "ative"; linkBusquedaNotaDebito = "active"; break;
+                            case 14: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
+                        }
+                    var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
+                    if (usuario.creaCotizaciones)
                     {
                         <li class="@linkCotizaciones">
                             <a class="dropdown-toggle" data-toggle="dropdown">
@@ -86,7 +88,7 @@
                         </li>
                     }
 
-                    @if (usuario.tomaPedidos || usuario.apruebaPedidos)
+                    if (usuario.tomaPedidos || usuario.apruebaPedidos)
                     {
 
                         <li class="@linkPedidos">
@@ -106,7 +108,7 @@
                         </li>
                     }
 
-                    @if (usuario.creaGuias || usuario.administraGuias)
+                    if (usuario.creaGuias || usuario.administraGuias)
                     {
 
                         <li class="@linkMovimientosAlmacen">
@@ -124,7 +126,7 @@
                         </li>
                     }
 
-                    @if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta)
+                    if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta)
                     {
 
                         <li class="@linkDocumentosVenta">
@@ -140,7 +142,7 @@
                             </ul>
                         </li>
                     }
-
+                        }
 
                 </ul>
 

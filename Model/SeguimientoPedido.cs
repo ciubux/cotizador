@@ -31,6 +31,8 @@ namespace Model
             Rechazado = 5,
             [Display(Name = "En Edición")]
             Edicion = 6,
+            [Display(Name = "Eliminada")]
+            Eliminada = 7
         };
 
         public estadosSeguimientoPedido estado { get; set; }

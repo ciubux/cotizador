@@ -229,8 +229,8 @@
                     <th data-name="idPedido" data-visible="false"></th>
                     <th data-name="numero" data-visible="true">N°</th>
                     <th data-name="numeroGrupo" data-visible="false">N° Grupo</th>
-                    <th data-name="razonSocial" data-visible="false" data-sortable="true">Razón Social</th>
-                    <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
+                    <th data-name="razonSocial" data-visible="true" data-sortable="true">Razón Social</th>
+                    <th data-name="ruc" data-visible="false" data-sortable="false" data-breakpoints="xs">RUC</th>
                     <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Ciudad</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
                     <th data-name="fechaSolicitud" data-sortable="true" data-breakpoints="xs">Fecha y Hora Solicitud</th>
@@ -601,14 +601,23 @@
                 <div class="pull-right">
                     <button type="button" id="btnCancelarVerPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="button" id="btnEditarPedido" class="btn btn-primary ">Editar</button>
-                    <button type="button" id="btnAprobarIngresoPedido" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
-                    <button type="button" id="btnDenegarIngresoPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
 
-                    <button type="button" id="btnProgramarPedido" class="btn btn-success" data-toggle='modal' data-target='#modalProgramacion'>Programar</button>
+                    @if (pedido.usuario.apruebaPedidos)
+    {
+                <button type="button" id="btnAprobarIngresoPedido" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
+                <button type="button" id="btnDenegarIngresoPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
+}
+
                     <button type="button" id="btnFacturarPedido" class="btn btn-success" data-toggle='modal' data-target='#modalFacturar'>Facturar</button>
-                    <button type="button" id="btnAtenderPedido" class="btn btn-success">Generar Guía Remisión</button>
-                    <button type="button" id="btnCancelarProgramacionPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Cancelar Programación</button>
+                    @if (pedido.usuario.creaGuias)
+    {
+                <button type="button" id="btnProgramarPedido" class="btn btn-success" data-toggle='modal' data-target='#modalProgramacion'>Programar</button>
+                <button type="button" id="btnCancelarProgramacionPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Cancelar Programación</button>
+                <button type="button" id="btnAtenderPedido" class="btn btn-success">Generar Guía Remisión</button>
+}
+
                     <button type="button" id="btnVerAtenciones" class="btn btn-primary" data-toggle='modal' data-target='#modalVerGuiasRemision'>Ver Guías Remisión</button>
+                    <button type="button" id="btnEliminarPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Eliminar</button>
                 </div>
 
             </div>
@@ -914,7 +923,7 @@
 
 
 
-<div id="plantillaVerGuiasRemision" style="display:none;">
+<div id="plantillaVerGuiasRemision" style="display:none;" >
     <div class="row">
         <div class="col-sm-6 col-lg-4">
             <div class="form-group">
@@ -926,9 +935,9 @@
         </div>
         <div class="col-sm-6 col-lg-4">
             <div class="form-group">
-                <label for="verFechaGuia" class="control-label col-xs-4">Fecha Emisión Guía:</label>
+                <label for="verFechaGuia" class="control-label col-xs-4">Fecha Emisión Guía Remisión:</label>
                 <div class="col-xs-8">
-                    <p class="form-control-static" name="verFechaGuia">#fecha</p>
+                    <p class="form-control-static" name="verFechaGuia">#fechaEmisionGuia</p>
                 </div>
             </div>
         </div>
@@ -947,7 +956,7 @@
             <div class="form-group">
                 <label for="verFechaGuia" class="control-label col-xs-4">Fecha Emisión Factura:</label>
                 <div class="col-xs-8">
-                    <p class="form-control-static" name="verFechaGuia">#fechaEmision</p>
+                    <p class="form-control-static" name="verFechaGuia">#fechaEmisionFactura</p>
                 </div>
             </div>
         </div>
@@ -963,6 +972,9 @@
                 <th data-name="producto" data-sortable="false">Producto</th>
             </tr>
         </thead>
+        <tbody>
+
+        </tbody>
 
     </table>
 

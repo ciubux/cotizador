@@ -19,7 +19,7 @@ namespace DataLayer
 
         public void updateCotizacionSerializada(Usuario usuario,String cotizacionSerializada)
         {
-            var objCommand = GetSqlCommand("pu_cotizacion_serializada");
+            var objCommand = GetSqlCommand("pu_cotizacionSerializada");
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "cotizacionSerializada", -1, cotizacionSerializada);
             ExecuteNonQuery(objCommand);
@@ -27,10 +27,10 @@ namespace DataLayer
 
         public void updatePedidoSerializado(Usuario usuario, String pedidoSerializado)
         {
-          /*  var objCommand = GetSqlCommand("pu_pedidoSerializado");
+            var objCommand = GetSqlCommand("pu_pedidoSerializado");
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "pedidoSerializado", -1, pedidoSerializado);
-            ExecuteNonQuery(objCommand);*/
+            ExecuteNonQuery(objCommand);
         }
 
         public Usuario getUsuarioLogin(Usuario usuario)
@@ -58,6 +58,7 @@ namespace DataLayer
                 usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
                 usuario.apruebaPedidosLima = Converter.GetBool(row, "aprueba_pedidos_lima");
                 usuario.apruebaPedidosProvincias = Converter.GetBool(row, "aprueba_pedidos_provincias");
+                usuario.pedidoSerializado = Converter.GetString(row, "pedido_serializado");
                 //Guia
                 usuario.creaGuias = Converter.GetBool(row, "crea_guias");
                 usuario.administraGuiasLima = Converter.GetBool(row, "administra_guias_lima");

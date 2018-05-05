@@ -147,7 +147,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "equivalencia", pedidoDetalle.producto.equivalencia);
             InputParameterAdd.Varchar(objCommand, "unidad", pedidoDetalle.unidad);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", pedidoDetalle.porcentajeDescuento);
-            InputParameterAdd.Decimal(objCommand, "precioNeto", pedidoDetalle.precioNetoEquivalente);
+            InputParameterAdd.Decimal(objCommand, "precioNeto", pedidoDetalle.precioNeto);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", pedidoDetalle.esPrecioAlternativo?1:0);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedidoDetalle.usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", pedidoDetalle.flete);
@@ -259,7 +259,7 @@ namespace DataLayer
                 //if (cotizacionDetalle.esPrecioAlternativo)
                // {
                     cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.producto.equivalencia;
-                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNetoEquivalente * 100 / cotizacionDetalle.producto.precioSinIgv);
+                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                 /*}
                 else
                 {
@@ -473,8 +473,8 @@ namespace DataLayer
                     //Si no coincide con el anterior se crea un nuevo movimiento Almacen
                     movimientoAlmacen = new GuiaRemision();
                     movimientoAlmacen.idMovimientoAlmacen = idMovimientoAlmacen;
-                    movimientoAlmacen.fechaTraslado = Converter.GetDateTime(row, "fechaEmision");
-                    movimientoAlmacen.fechaTraslado = Converter.GetDateTime(row, "fechaTraslado");
+                    movimientoAlmacen.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                    movimientoAlmacen.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
                     movimientoAlmacen.numeroDocumento = Converter.GetInt(row, "numero_documento");
                     movimientoAlmacen.serieDocumento = Converter.GetString(row, "serie_documento");
                     movimientoAlmacen.documentoDetalle = new List<DocumentoDetalle>();
@@ -486,8 +486,11 @@ namespace DataLayer
                     movimientoAlmacen.documentoVenta.descripcionEstadoSunat = Converter.GetString(row, "estado");
 
 
-                    //Debe sert la fecha de emision
-                    movimientoAlmacen.documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+     
+                    if (row["fecha_emision_factura"] == DBNull.Value)
+                        movimientoAlmacen.documentoVenta.fechaEmision = null;
+                    else
+                        movimientoAlmacen.documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision_factura");
 
 
 

@@ -34,8 +34,8 @@ namespace BusinessLayer
 
                 documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
 
-                var oUser = "demo@mp.eol.pe";
-                var oPass = "00144f91";
+                var oUser = "admin@mp.eol.pe";
+                var oPass = "7f2a87fb";
 
 
                 IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
@@ -66,8 +66,8 @@ namespace BusinessLayer
             IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
             //102 103 codigos de estado aceptado SUNAT
 
-            var oUser = "demo@mp.eol.pe";
-            var oPass = "00144f91";
+            var oUser = "admin@mp.eol.pe";
+            var oPass = "7f2a87fb";
 
             var oNroIde = "20509411671";
             var oTipCpe =  "0"+(int)documentoVenta.tipoDocumento;
@@ -90,8 +90,8 @@ namespace BusinessLayer
             IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
             //102 103 codigos de estado aceptado SUNAT
 
-            var oUser = "demo@mp.eol.pe";
-            var oPass = "00144f91";
+            var oUser = "admin@mp.eol.pe";
+            var oPass = "7f2a87fb";
             var oNroIde = "20509411671";
             var oTipCpe = "0" + (int)documentoVenta.tipoDocumento;
             var oSerCpe = documentoVenta.serie;

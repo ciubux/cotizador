@@ -25,8 +25,8 @@ namespace BusinessLayer
             /*  var oUser = "ADMTAXTECH";
               var oPass = "T@xTech2018";*/
 
-            var oUser = "demo@mp.eol.pe";
-            var oPass = "00144f91";
+            var oUser = "admin@mp.eol.pe";
+            var oPass = "7f2a87fb";
 
             CPE_CABECERA_BE cPE_CABECERA_BE = new CPE_CABECERA_BE();
 

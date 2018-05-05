@@ -11,7 +11,7 @@ namespace Model
     {
 
         [Display(Name = "Fecha Emisión:")]
-        public DateTime fechaEmision { get; set; }
+        public DateTime? fechaEmision { get; set; }
 
         [Display(Name = "Hora Emisión:")]
         public DateTime horaEmision { get; set; }
