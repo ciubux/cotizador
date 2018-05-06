@@ -78,6 +78,8 @@ jQuery(function ($) {
         verificarSiExisteDetalle();
         verificarSiExisteCliente();
         $("#btnBusquedaPedidos").click();
+        var tipoPedido = $("#pedido_tipoPedido").val();
+        validarTipoPedido(tipoPedido);
         
     });
 
@@ -569,6 +571,54 @@ jQuery(function ($) {
 
     /* ################################## INICIO CHANGE CONTROLES */
 
+    function validarTipoPedido(tipoPedido) {
+        //Si el tipo de pedido es traslado interno (84->'T')
+        if (tipoPedido == "84") {
+            $("#divReferenciaCliente").hide();
+            $("#divCiudadASolicitar").show();
+        }
+        else {
+            $("#divReferenciaCliente").show();
+            $("#divCiudadASolicitar").hide();
+        }
+
+    }
+
+    $("#pedido_tipoPedido").change(function () { 
+        var tipoPedido = $("#pedido_tipoPedido").val();
+        validarTipoPedido(tipoPedido);
+        
+
+        $.ajax({
+            url: "/Pedido/ChangeTipoPedido",
+            type: 'POST',
+            data: {
+                tipoPedido: tipoPedido
+            },
+            success: function () { }
+        });
+    });
+
+    $("#idCiudadASolicitar").change(function () {
+        var idCiudadASolicitar = $("#idCiudadASolicitar").val();
+
+        $.ajax({
+            url: "/Pedido/ChangeIdCiudadASolicitar",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudadASolicitar: idCiudadASolicitar
+            },
+            error: function (detalle) {
+                alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
+                location.reload();
+            },
+            success: function (ciudad) {
+            }
+        });
+    });  
+
+    
 
     $("#pedido_numeroReferenciaCliente").change(function () {
         $.ajax({
@@ -703,6 +753,16 @@ jQuery(function ($) {
     $("#pedido_numeroReferenciaCliente").change(function () {
         changeInputString("numeroReferenciaCliente", $("#pedido_numeroReferenciaCliente").val())
     });
+
+    $("#pedido_observacionesFactura").change(function () {
+        changeInputString("observacionesFactura", $("#pedido_observacionesFactura").val())
+    });
+
+    $("#pedido_observacionesGuiaRemision").change(function () {
+        changeInputString("observacionesGuiaRemision", $("#pedido_observacionesGuiaRemision").val())
+    });
+
+
     
 
     $("#pedido_contactoPedido").change(function () {
@@ -1479,6 +1539,16 @@ jQuery(function ($) {
             $("#idCiudad").focus();
             return false;
         }
+        var tipoPedido = $("#pedido_tipoPedido").val();
+        //Si el tipo de pedido es traslado interno (84->'T')
+        if (tipoPedido == "84") {
+            if ($("#idCiudadASolicitar").val() == "" || $("#idCiudadASolicitar").val() == null) {
+                alert("Debe seleccionar a que ciudad se solicita el traslado interno.");
+                $("#idCiudadAsolicitar").focus();
+                return false;
+            }
+        }
+
 
         if ($("#idCliente").val().trim() == "") {
             alert("Debe seleccionar un cliente.");
@@ -1876,7 +1946,19 @@ jQuery(function ($) {
                 $("#verNumero").html(pedido.numeroPedidoString);
                 $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
                 $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
+                $("#verTipoPedido").html(pedido.tiposPedidoString);
 
+                if (pedido.tipoPedido == "84") {
+                    $("#divReferenciaCliente").hide();
+                    $("#divCiudadSolicitante").show();
+                    $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+                }
+                else {
+                    $("#divReferenciaCliente").show();
+                    $("#divCiudadSolicitante").hide();
+                }
+
+                
                 $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
 
                 $("#verCiudad").html(pedido.ciudad.nombre);

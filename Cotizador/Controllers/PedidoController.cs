@@ -62,7 +62,7 @@ namespace Cotizador.Controllers
         private void instanciarPedidoBusqueda()
         {
             Pedido pedidoTmp = new Pedido();
-            DateTime fechaDesde = DateTime.Now.AddDays(-10);
+            DateTime fechaDesde = DateTime.Now.AddDays(-1);
             DateTime fechaHasta = DateTime.Now.AddDays(10);
 
             pedidoTmp.fechaSolicitudDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
@@ -311,7 +311,9 @@ namespace Cotizador.Controllers
             pedido.ubigeoEntrega.Id = "000000";
             pedido.ciudad = new Ciudad();
             pedido.cliente = new Cliente();
-           
+
+            pedido.tipoPedido = Pedido.tiposPedido.Venta;
+            pedido.ciudadASolicitar = new Ciudad();
 
             pedido.numeroReferenciaCliente = null;
             pedido.direccionEntrega = new DireccionEntrega(); 
@@ -351,6 +353,17 @@ namespace Cotizador.Controllers
             pedidoBL.cambiarEstadoPedido(pedido);
             //Se obtiene los datos de la cotización ya modificada
             pedido = pedidoBL.GetPedido(pedido);
+            //Temporal
+            pedido.ciudadASolicitar = new Ciudad();
+           
+            if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
+            {
+                pedido.ciudadASolicitar = new Ciudad { idCiudad = pedido.ciudad.idCiudad,
+                                                        nombre = pedido.ciudad.nombre,
+                                                        esProvincia = pedido.ciudad.esProvincia };
+
+                pedido.ciudad = pedido.cliente.ciudad;
+            }
 
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
@@ -801,6 +814,37 @@ namespace Cotizador.Controllers
             }
         }
 
+        public void ChangeTipoPedido()
+        {
+            Char tipoPedido = Convert.ToChar(Int32.Parse(this.Request.Params["tipoPedido"]));
+            this.PedidoSession.tipoPedido = (Pedido.tiposPedido)tipoPedido;
+        }
+
+
+        public String ChangeIdCiudadASolicitar()
+        {
+            Pedido pedido = this.PedidoSession;
+            pedido.cliente = new Cliente();
+            Guid idCiudad = Guid.Empty;
+            if (this.Request.Params["idCiudadASolicitar"] != null && !this.Request.Params["idCiudadASolicitar"].Equals(""))
+            {
+                idCiudad = Guid.Parse(this.Request.Params["idCiudadASolicitar"]);
+            }
+            //Para realizar el cambio de ciudad ningun producto debe estar agregado
+            if (pedido.pedidoDetalleList != null && pedido.pedidoDetalleList.Count > 0)
+            {
+                // throw new Exception("No se puede cambiar de ciudad");
+                return "No se puede cambiar de ciudad";
+            }
+            else
+            {
+                CiudadBL ciudadBL = new CiudadBL();
+                Ciudad ciudadASolicitar = ciudadBL.getCiudad(idCiudad);
+                pedido.ciudadASolicitar = ciudadASolicitar;
+                this.PedidoSession = pedido;
+                return "{\"idCiudad\": \"" + idCiudad + "\"}";
+            }
+        }
 
         [HttpPost]
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
@@ -812,6 +856,8 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO] = documento;
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
+
+
 
         #endregion
 
@@ -844,6 +890,8 @@ namespace Cotizador.Controllers
 
         public String Create()
         {
+            //RUC_MP
+
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());

@@ -62,6 +62,10 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCrediticioPedido", pedido.seguimientoCrediticioPedido.observacion);
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
 
+            InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedido).ToString());
+            InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
+            InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "numero");
             ExecuteNonQuery(objCommand);
@@ -121,6 +125,11 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
+
+            InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedido).ToString());
+            InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
+            InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
+
 
             ExecuteNonQuery(objCommand);
 
@@ -332,6 +341,9 @@ namespace DataLayer
                 pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
                 pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
                 pedido.fechaProgramacion = Converter.GetDateTime(row, "fecha_programacion");
+                pedido.observacionesFactura = Converter.GetString(row, "observaciones_factura");
+                pedido.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
+                pedido.tipoPedido = (Pedido.tiposPedido)Char.Parse( Converter.GetString(row, "tipo_pedido"));
 
                 pedido.ubigeoEntrega = new Ubigeo();
                 pedido.ubigeoEntrega.Id = Converter.GetString(row, "ubigeo_entrega");
@@ -347,7 +359,10 @@ namespace DataLayer
                 pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 pedido.cliente.ruc = Converter.GetString(row, "ruc");
-                
+                pedido.cliente.ciudad = new Ciudad();
+                pedido.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad_cliente");
+                pedido.cliente.ciudad.nombre = Converter.GetString(row, "nombre_ciudad_cliente");
+
 
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");

@@ -17,15 +17,19 @@ namespace BusinessLayer
             using (var dal = new DocumentoVentaDAL())
             {
                 documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
-
-
                 dal.InsertarDocumentoVenta(documentoVenta);
-                this.getDocumentoVenta(documentoVenta);
+                this.procesarFactura(documentoVenta);
+
+                //Si es OK consultamos a Sunat por el estado
+                if (documentoVenta.cPE_RESPUESTA_BE.CODIGO.Equals(Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK))
+                {
+                    consultarEstadoDocumentoVenta(documentoVenta);
+                }         
             }
         }
 
 
-        public void getDocumentoVenta(DocumentoVenta documentoVenta)
+        public void procesarFactura(DocumentoVenta documentoVenta)
         {
             using (var dal = new DocumentoVentaDAL())
             {
@@ -33,13 +37,8 @@ namespace BusinessLayer
                 documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
 
                 documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
-
-                var oUser = "admin@mp.eol.pe";
-                var oPass = "7f2a87fb";
-
-
                 IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-                documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(oUser, oPass,
+                documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                     documentoVenta.cPE_CABECERA_BE,
                     documentoVenta.cPE_DETALLE_BEList.ToArray(),
                     documentoVenta.cPE_DAT_ADIC_BEList.ToArray(),
@@ -48,14 +47,10 @@ namespace BusinessLayer
                     documentoVenta.cPE_FAC_GUIA_BEList.ToArray(),
                     documentoVenta.cPE_DOC_ASOC_BEList.ToArray(),
                     documentoVenta.globalEnumTipoOnline);
-
-
-
-                dal.UpdateRespuestaDocumentoVenta(documentoVenta);
                 documentoVenta.serie = documentoVenta.cPE_CABECERA_BE.SERIE;
                 documentoVenta.numero = documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
-
-                consultarEstadoDocumentoVenta(documentoVenta);
+                //Se inserta el resultado en Base de Datos
+                dal.UpdateRespuestaDocumentoVenta(documentoVenta);
             }
 
         }
@@ -64,60 +59,27 @@ namespace BusinessLayer
         public void consultarEstadoDocumentoVenta(DocumentoVenta documentoVenta)
         {
             IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-            //102 103 codigos de estado aceptado SUNAT
+            documentoVenta.rPTA_BE = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
 
-            var oUser = "admin@mp.eol.pe";
-            var oPass = "7f2a87fb";
-
-            var oNroIde = "20509411671";
-            var oTipCpe =  "0"+(int)documentoVenta.tipoDocumento;
-            var oSerCpe = documentoVenta.serie;
-            var oNroCpe = documentoVenta.numero;
-
-            documentoVenta.rPTA_BE = client.callStateCPE(oUser, oPass, oNroIde, oTipCpe, oSerCpe, oNroCpe);
-
+            //El resultado se inserta a BD
             using (var dal = new DocumentoVentaDAL())
             {
                 dal.insertEstadoDocumentoVenta(documentoVenta);
             }
-                    
-
         }
 
 
         public String descargarArchivoDocumentoVenta(DocumentoVenta documentoVenta)
         {
             IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-            //102 103 codigos de estado aceptado SUNAT
 
-            var oUser = "admin@mp.eol.pe";
-            var oPass = "7f2a87fb";
-            var oNroIde = "20509411671";
-            var oTipCpe = "0" + (int)documentoVenta.tipoDocumento;
-            var oSerCpe = documentoVenta.serie;
-            var oNroCpe = documentoVenta.numero;
-            var oFlgXml = true;
-            var oFlgPdf = true;
-            var oFlgCdr = true;
-
-
-            documentoVenta.rPTA_DOC_TRIB_BE = client.callExtractCPE(oUser, oPass, oNroIde, oTipCpe, oSerCpe, oNroCpe, oFlgXml, oFlgPdf, oFlgCdr);
-
-            /*
-        var cod_rpta = rpta_doc_trib_be.COD_RPTA;
-        var descripcion = rpta_doc_trib_be.DESCRIPCION;
-        var detalle = rpta_doc_trib_be.DETALLE;
-        byte[] doc_trib_pdf = rpta_doc_trib_be.DOC_TRIB_PDF;
-        var doc_trib_rpta = rpta_doc_trib_be.DOC_TRIB_RPTA;
-        var doc_trib_xml = rpta_doc_trib_be.DOC_TRIB_XML;
-        var num_ope = rpta_doc_trib_be.NUM_OPE;*/
+            documentoVenta.rPTA_DOC_TRIB_BE = client.callExtractCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero, true, true, true); 
 
             String pathrootsave = System.AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\";
             String nombreArchivo = "FACTURA " + documentoVenta.serie + "-" + documentoVenta.numero + ".pdf";
             File.WriteAllBytes(pathrootsave + nombreArchivo, documentoVenta.rPTA_DOC_TRIB_BE.DOC_TRIB_PDF);
 
             return nombreArchivo;
-
         }
 
 

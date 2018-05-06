@@ -26,9 +26,9 @@ namespace Model
             [Display(Name = "Programado")]
             Programado = 3,
             [Display(Name = "Atendido")]
-            Entregado = 4,
+            Atendido = 4,
             [Display(Name = "Atendido Parcialmente")]
-            Rechazado = 5,
+            AtendidoParcialmente = 5,
             [Display(Name = "En Edición")]
             Edicion = 6,
             [Display(Name = "Eliminada")]

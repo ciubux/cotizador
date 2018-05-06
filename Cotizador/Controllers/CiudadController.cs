@@ -78,10 +78,24 @@ namespace Cotizador.Controllers
             return PartialView("_Ciudad", model);
         }
 
-        
+        public ActionResult GetCiudadesASolicitar(string ciudadSelectId, string selectedValue = null)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-        // GET: Ciudad/Create
-        public ActionResult Create()
+            List<Ciudad> ciudades = usuario.sedesMP;
+            var model = new CiudadViewModels
+            {
+                Data = ciudades,
+                CiudadSelectId = ciudadSelectId,
+                SelectedValue = selectedValue
+            };
+
+            return PartialView("_Ciudad", model);
+        }
+
+
+            // GET: Ciudad/Create
+            public ActionResult Create()
         {
             return View();
         }

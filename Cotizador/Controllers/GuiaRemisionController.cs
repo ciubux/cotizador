@@ -261,7 +261,8 @@ namespace Cotizador.Controllers
                 }
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
                 guiaRemision.pedido = pedido;
-                guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.Venta;
+
+                guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedido;
                 guiaRemision.transportista = new Transportista();
                 // guiaRemision.ciudadOrigen = pedido.ciudad;
 
@@ -272,7 +273,7 @@ namespace Cotizador.Controllers
                   }*/
                 if (pedido.numeroReferenciaCliente != null && !pedido.numeroReferenciaCliente.Trim().Equals(String.Empty))
                 {
-                    guiaRemision.observaciones = "O/C: "+pedido.numeroReferenciaCliente.Trim();
+                    guiaRemision.observaciones = "O/C: N°"+pedido.numeroReferenciaCliente.Trim();
                 }
 
 

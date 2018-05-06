@@ -8,6 +8,11 @@ namespace Model
 {
     public class Pedido : Auditoria, IDocumento
     {
+        public Pedido()
+        {
+            this.tipoPedido = tiposPedido.Venta;
+        }
+
         public Guid idPedido { get; set; }
         [Display(Name = "Número Pedido:")]
         public Int64 numeroPedido { get; set; }
@@ -17,6 +22,10 @@ namespace Model
         public Cotizacion cotizacion { get; set; }
         [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }
+
+        [Display(Name = "Solicitar A:")]
+        public Ciudad ciudadASolicitar { get; set; }
+
         [Display(Name = "Cliente:")]
         public Cliente cliente { get; set; }
         [Display(Name = "Número OC Cliente:")]
@@ -53,13 +62,16 @@ namespace Model
         public String telefonoCorreoContactoPedido
         {
             get { return "Tef: " + telefonoContactoPedido + " Correo: " + correoContactoPedido; }
-
         }
-
-
 
         [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }
+
+        [Display(Name = "Observaciones Guía Remisión:")]
+        public String observacionesGuiaRemision { get; set; }
+
+        [Display(Name = "Observaciones Factura:")]
+        public String observacionesFactura { get; set; }
 
         [Display(Name = "Ciudad Entrega:")]
         public Ubigeo ubigeoEntrega { get; set; }
@@ -216,5 +228,33 @@ namespace Model
                 }
             }
         }
+
+        //VENTA, TRASLADO INTERNO, COMODATO,  TRANSFERENCIA GRATUITA, PRESTAMO
+
+        [Display(Name = "Tipo Pedido:")]
+        public tiposPedido tipoPedido { get; set; }
+        public enum tiposPedido
+        {
+            [Display(Name = "Venta")]
+            Venta = 'V',
+            [Display(Name = "Traslado Interno")]
+            TrasladoInterno = 'T',
+            [Display(Name = "Comodato")]
+            Comodato = 'M',
+            [Display(Name = "Transferencia Gratuita")]
+            TransferenciaGratuita = 'G',
+            [Display(Name = "Préstamo")]
+            Prestamo = 'P'            
+        }
+
+        public String tiposPedidoString
+        {
+            get
+            {
+                return EnumHelper<tiposPedido>.GetDisplayValue(this.tipoPedido);
+            }
+        }
+
+
     }
 }

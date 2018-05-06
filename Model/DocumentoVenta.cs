@@ -25,6 +25,7 @@ namespace Model
         [Display(Name = "Forma de Pago:")]
         public FormaPago formaPago { get; set; }
 
+        
 
 
         public enum TipoPago

@@ -70,6 +70,24 @@ namespace Model
 
         public static Decimal VARIACION_PRECIO_ITEM_PEDIDO = 0.01M;
 
+        public static String USER_EOL_TEST = "";
+        public static String PASSWORD_EOL_TEST = "";
+        public static String USER_EOL_PROD = "";
+        public static String PASSWORD_EOL_PROD = "";
+        public static string RUC_MP = "20509411671";
+        public static String AMBIENTE_EOL = "";
+
+        public static String USER_EOL {
+            get { return AMBIENTE_EOL.Equals("TEST") ? USER_EOL_TEST : USER_EOL_PROD; }
+        }
+
+        public static String PASSWORD_EOL
+        {
+            get { return AMBIENTE_EOL.Equals("TEST") ? PASSWORD_EOL_TEST : PASSWORD_EOL_PROD; }
+        }
+
+
+
         public static Decimal IGV = 0.18M;
         public static Decimal PORCENTAJE_MAX_APROBACION = 3.00M;
         public static String SIMBOLO_SOL = "S/";
@@ -83,10 +101,38 @@ namespace Model
                                        "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
                                        "* (para productos no stockeables o primeras compras, consultar plazo).\n";
 
-        
-        
+
+
+        public static String EOL_CPE_RESPUESTA_BE_CODIGO_OK = "001";
+        public static String EOL_CPE_RESPUESTA_BE_CODIGO_ERROR_DATA = "002";
+        public static String EOL_CPE_RESPUESTA_BE_CODIGO_ERROR_TECNICO = "003";
+
+        public static String EOL_RPTA_BE_CODIGO_CONSULTA_EXITOSA = "001";
+        public static String EOL_RPTA_BE_CODIGO_ERROR_USUARIO_INVALIDO = "002";
+        public static String EOL_RPTA_BE_CODIGO_ERROR_NO_EXISTE_COMPROBANTE = "003";
+        public static String EOL_RPTA_BE_CODIGO_ERROR_CONSULTA = "004";
+        public static String EOL_RPTA_BE_CODIGO_FALLO_CONEXION_EOL = "005";
+
+        public static String EOL_RPTA_BE_CODIGO_CONSULTA_EXITOSA_STR = "Consulta Exitosa.";
+        public static String EOL_RPTA_BE_CODIGO_ERROR_USUARIO_INVALIDO_STR = "Usuario y/o password inválidos.";
+        public static String EOL_RPTA_BE_CODIGO_ERROR_NO_EXISTE_COMPROBANTE_STR = "No se encontró el Comprobante electrónico en el sistema.";
+        public static String EOL_RPTA_BE_CODIGO_ERROR_CONSULTA_STR = "Error en el Proceso de Consulta.";
+        public static String EOL_RPTA_BE_CODIGO_FALLO_CONEXION_EOL_STR = "Fallo conexión a EOL.";
+
+      
+
+
+
+
+
+
+
+
+
+
+
         //Numero de Página
-        
+
         public static int BUSQUEDA_COTIZACION = 0;
         public static int MANTENIMIENTO_COTIZACION = 1;
         public static int BUSQUEDA_PEDIDO = 2;

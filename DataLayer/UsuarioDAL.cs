@@ -106,7 +106,17 @@ namespace DataLayer
                         Constantes.DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO = int.Parse(valorParametro); break;
                     case "VARIACION_PRECIO_ITEM_PEDIDO":
                         Constantes.VARIACION_PRECIO_ITEM_PEDIDO = Decimal.Parse(valorParametro); break;
-
+                    case "USER_EOL_TEST":
+                        Constantes.USER_EOL_TEST = valorParametro; break;
+                    case "PASSWORD_EOL_TEST":
+                        Constantes.PASSWORD_EOL_TEST = valorParametro; break;
+                    case "USER_EOL_PROD":
+                        Constantes.USER_EOL_PROD = valorParametro; break;
+                    case "PASSWORD_EOL_PROD":
+                        Constantes.PASSWORD_EOL_PROD = valorParametro; break;
+                    case "AMBIENTE_EOL":
+                        Constantes.AMBIENTE_EOL = valorParametro; break;
+           
                 }
 
             }

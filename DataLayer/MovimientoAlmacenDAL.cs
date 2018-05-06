@@ -85,6 +85,7 @@ namespace DataLayer
                     InputParameterAdd.Guid(objCommand, "idVenta", guiaRemision.venta.idVenta);
                     InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
                     InputParameterAdd.Guid(objCommand, "idPedido", guiaRemision.pedido.idPedido);
+                    InputParameterAdd.Char(objCommand, "tipoPedido", ((char)guiaRemision.pedido.tipoPedido).ToString());
                     InputParameterAdd.Guid(objCommand, "idProducto", documentoDetalle.producto.idProducto);
                     InputParameterAdd.Int(objCommand, "cantidad", documentoDetalle.cantidadPorAtender);
                     InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion);

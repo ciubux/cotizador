@@ -17,8 +17,29 @@ namespace BusinessLayer
             //Cambio Temporal
             pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
 
+            if (pedido.tipoPedido != Pedido.tiposPedido.Venta)
+            {
+                pedido.montoIGV = 0;
+                pedido.montoTotal = 0;
+                pedido.montoSubTotal = 0;
+
+                if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
+                {
+                    pedido.ciudad = pedido.ciudadASolicitar;
+                }
+            }
+            
+
+
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
+                if (pedido.tipoPedido != Pedido.tiposPedido.Venta)
+                {
+                    pedidoDetalle.precioNeto = 0;
+                }
+
+
+
                 pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
                 if (!pedido.usuario.apruebaPedidos)
