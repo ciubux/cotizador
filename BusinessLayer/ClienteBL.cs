@@ -52,6 +52,23 @@ namespace BusinessLayer
             }
         }
 
+
+        public Cliente insertClienteSunat(Cliente cliente)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                return clienteDAL.insertClienteSunat(cliente);
+            }
+        }
+
+        public Cliente updateClienteSunat(Cliente cliente)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                return clienteDAL.updateClienteSunat(cliente);
+            }
+        }
+
         public void setClienteStaging(ClienteStaging clienteStaging)
         {
             using (var clienteDAL = new ClienteDAL())

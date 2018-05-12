@@ -130,6 +130,8 @@ namespace Cotizador.Controllers
 
         public String Search()
         {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaGuiasRemision;
+
             //Se recupera el pedido Búsqueda de la session
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
 
@@ -271,11 +273,12 @@ namespace Cotizador.Controllers
                       documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidad;
                       documentoDetalle.cantidadPorAtender = documentoDetalle.cantidad;
                   }*/
+                guiaRemision.observaciones = String.Empty;
                 if (pedido.numeroReferenciaCliente != null && !pedido.numeroReferenciaCliente.Trim().Equals(String.Empty))
                 {
-                    guiaRemision.observaciones = "O/C: N°"+pedido.numeroReferenciaCliente.Trim();
+                    guiaRemision.observaciones = "O/C: N°"+pedido.numeroReferenciaCliente.Trim()+ " ";
                 }
-
+                guiaRemision.observaciones = guiaRemision.observaciones + pedido.observacionesGuiaRemision;
 
                 CiudadBL ciudadBL = new CiudadBL();
                 Ciudad ciudadOrigen = ciudadBL.getCiudad(pedido.ciudad.idCiudad);

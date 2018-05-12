@@ -1,11 +1,13 @@
 ﻿using BusinessLayer;
 using Model;
+using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,6 +15,33 @@ namespace Cotizador.Controllers
 {
     public class ClienteController : Controller
     {
+        private Cliente ClienteSession
+        {
+            get
+            {
+
+             /*   Cliente cliente = null;
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    //case Constantes.paginas.BusquedaCli: cliente = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA]; break;
+                    case Constantes.paginas.MantenimientoCliente: cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE]; break;
+                }
+                return cliente;*/
+
+                return (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            }
+            set
+            {/*
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    //case Constantes.paginas.BusquedaPedidos: this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = value; break;
+                    case Constantes.paginas.MantenimientoCliente: this.Session[Constantes.VAR_SESSION_CLIENTE] = value; break;
+                }*/
+
+                this.Session[Constantes.VAR_SESSION_CLIENTE] = value;
+            }
+        }
+
         // GET: Cliente
         [HttpGet]
         public ActionResult Index()
@@ -23,6 +52,170 @@ namespace Cotizador.Controllers
             }
             return View();
 
+        }
+
+        public void ChangeInputString()
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(cliente, this.Request.Params["valor"]);
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+        }
+
+
+        public void ChangeFormaPagoFactura()
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Int32.Parse(this.Request.Params["formaPagoFactura"]);
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+        }
+
+        public void ChangeTipoPagoFactura()
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPagoFactura"]);
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+        }
+
+        private void instanciarCliente()
+        {
+            Cliente cliente = new Cliente();
+            cliente.idCliente = Guid.Empty;
+            cliente.ciudad = new Ciudad();
+            cliente.codigo = String.Empty;
+            Usuario usuario = (Usuario)this.Session["usuario"];
+            cliente.IdUsuarioRegistro = usuario.idUsuario;
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+        }
+
+        public ActionResult CancelarCreacionCliente()
+        {
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+            UsuarioBL usuarioBL = new UsuarioBL();
+            Usuario usuario = (Usuario)this.Session["usuario"];
+
+            //   usuarioBL.updateCotizacionSerializada(usuario, null);
+            return RedirectToAction("Editar", "Cliente");
+        }
+
+        public ActionResult Editar()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCliente;
+
+            if (this.Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_CLIENTE] == null)
+            {
+
+                instanciarCliente();
+            }
+
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+
+            if (cliente.idCliente == Guid.Empty)
+            {
+                ViewBag.existeCliente = 0;
+            }
+            else {
+                ViewBag.existeCliente = 1;
+            }
+
+            ViewBag.cliente = cliente;
+
+            return View();
+
+        }
+
+        public String SearchClientes()
+        {
+            String data = this.Request.Params["data[q]"];
+            ClienteBL clienteBL = new ClienteBL();
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            return clienteBL.getCLientesBusqueda(data, cliente.ciudad.idCiudad);
+        }
+
+
+        public String GetCliente()
+        {
+
+
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE]; 
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+            ClienteBL clienteBl = new ClienteBL();
+            Ciudad ciudad = cliente.ciudad;
+            cliente = clienteBl.getCliente(idCliente);
+            cliente.ciudad = ciudad;
+            String resultado = JsonConvert.SerializeObject(cliente);
+            this.ClienteSession = cliente;
+            return resultado;
+        }
+
+
+        public String ChangeDireccionDomicilioLegalSunat()
+        {
+            String direccionDomicilioLegalSunat = Request["direccionDomicilioLegalSunat"].ToString();
+
+            String[] dirArray = direccionDomicilioLegalSunat.Split('-');
+
+            int cantidad = dirArray.Length;
+
+            String distrito = dirArray[cantidad - 1].Trim();
+            String provincia = dirArray[cantidad - 2].Trim();
+            direccionDomicilioLegalSunat = String.Empty;
+            for (int i = 0; i < cantidad; i++)
+            {
+                if (i == cantidad - 1 || i == cantidad - 2)
+                {
+                    break;
+
+                }
+                else {
+                    direccionDomicilioLegalSunat = direccionDomicilioLegalSunat + (dirArray[i]).Trim() + " - ";
+
+                }
+            }
+
+            direccionDomicilioLegalSunat = direccionDomicilioLegalSunat.Trim()+ " " + provincia+ " - "+distrito;
+
+            UbigeoBL ubigeoBL = new UbigeoBL();
+
+            this.ClienteSession.ubigeo = ubigeoBL.getUbigeoPorDistritoProvincia(distrito,provincia);
+            this.ClienteSession.direccionDomicilioLegalSunat = direccionDomicilioLegalSunat;
+
+            var obj = new 
+            {
+                ubigeo = this.ClienteSession.ubigeo,
+                direccionDomicilioLegalSunat = direccionDomicilioLegalSunat
+            };
+
+            String resultado = JsonConvert.SerializeObject(obj);
+            return resultado;
+        }
+
+
+
+        public String ChangeIdCiudad()
+        {
+            Cliente cliente = this.ClienteSession;
+            cliente = new Cliente();
+            Guid idCiudad = Guid.Empty;
+            if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
+            {
+                idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+            }
+           
+            CiudadBL ciudadBL = new CiudadBL();
+            Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
+            cliente.ciudad = ciudadNueva;
+            this.ClienteSession = cliente;
+            return "{\"idCiudad\": \"" + idCiudad + "\"}";
+          
         }
 
 
@@ -47,7 +240,7 @@ namespace Cotizador.Controllers
                 Cotizacion cotizacion = (Cotizacion)documento;
                 cotizacion.contacto = cotizacion.cliente.contacto1;
             }
-            else
+            else 
             {
 
 
@@ -61,6 +254,24 @@ namespace Cotizador.Controllers
                 "\"idCLiente\":\"" + documento.cliente.idCliente + "\"," +
                 "\"codigoAlterno\":\"" + documento.cliente.codigoAlterno + "\"}";
 
+            return resultado;
+        }
+
+
+        public String Update()
+        {
+            ClienteBL clienteBL = new ClienteBL();
+            Cliente cliente = this.ClienteSession;
+            if (cliente.idCliente == Guid.Empty)
+            {
+                cliente = clienteBL.insertClienteSunat(cliente);
+            }
+            else
+            {
+                cliente = clienteBL.updateClienteSunat(cliente);
+            }
+            String resultado = JsonConvert.SerializeObject(cliente);
+            this.ClienteSession = null;
             return resultado;
         }
 
@@ -150,6 +361,16 @@ namespace Cotizador.Controllers
                         //H
                         paso = 4;
                         clienteStaging.distrito = sheet.GetRow(row).GetCell(7).ToString();
+                        //I
+                        paso = 41;
+                        try
+                        {
+                            clienteStaging.plazo = sheet.GetRow(row).GetCell(8).StringCellValue;
+                        }
+                        catch (Exception ex)
+                        {
+                            clienteStaging.plazo = sheet.GetRow(row).GetCell(8).NumericCellValue.ToString();
+                        }
                         //J
                         paso = 5;
                         clienteStaging.codVe = sheet.GetRow(row).GetCell(9).ToString();

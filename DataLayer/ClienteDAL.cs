@@ -33,6 +33,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "distritoDespacho", clienteStaging.distritoDespacho);
             InputParameterAdd.Varchar(objCommand, "rubro", clienteStaging.rubro);
             InputParameterAdd.Char(objCommand, "sede", clienteStaging.sede);
+            InputParameterAdd.Varchar(objCommand, "plazo", clienteStaging.plazo);
             ExecuteNonQuery(objCommand);
             
         }
@@ -94,6 +95,21 @@ namespace DataLayer
                 obj.contacto1 = Converter.GetString(row, "contacto1");
                 obj.contacto2 = Converter.GetString(row, "contacto2");
                 obj.domicilioLegal = Converter.GetString(row, "domicilio_legal");
+                obj.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
+                obj.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                obj.nombreComercialSunat = Converter.GetString(row, "nombre_comercial_sunat");
+                obj.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
+                obj.estadoContribuyente = Converter.GetString(row, "estado_contribuyente_sunat");
+                obj.condicionContribuyente = Converter.GetString(row, "condicion_contribuyente_sunat");
+
+                obj.ubigeo = new Ubigeo();
+                obj.ubigeo.Id = Converter.GetString(row, "codigo_ubigeo");
+                obj.ubigeo.Departamento = Converter.GetString(row, "departamento");
+                obj.ubigeo.Provincia = Converter.GetString(row, "provincia");
+                obj.ubigeo.Distrito = Converter.GetString(row, "distrito");
+                obj.plazoCredito = Converter.GetString(row, "plazo_credito");
+                obj.tipoPagoFactura = (DocumentoVenta.TipoPago) Converter.GetInt(row, "tipo_pago_factura");
+                obj.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
 
             }
 
@@ -121,5 +137,71 @@ namespace DataLayer
             return cliente;
 
         }
+
+
+
+        public Cliente insertClienteSunat(Cliente cliente)
+        {
+            var objCommand = GetSqlCommand("pi_clienteSunat");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", cliente.IdUsuarioRegistro);
+            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocial);
+            InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
+            InputParameterAdd.Varchar(objCommand, "ruc", cliente.ruc);
+            InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
+            InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
+            InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura);
+            InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat);
+            InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercialSunat);
+            InputParameterAdd.Varchar(objCommand, "direccionDomicilioLegalSunat", cliente.direccionDomicilioLegalSunat);
+            InputParameterAdd.Varchar(objCommand, "estadoContribuyente", cliente.estadoContribuyente);
+            InputParameterAdd.Varchar(objCommand, "condicionContribuyente", cliente.condicionContribuyente);
+            InputParameterAdd.Varchar(objCommand, "ubigeo", cliente.ubigeo.Id);
+            InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
+            InputParameterAdd.Int(objCommand, "formaPagoFactura", (int)cliente.formaPagoFactura);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
+            OutputParameterAdd.Int(objCommand, "codigoAlterno");
+
+
+            ExecuteNonQuery(objCommand);
+
+            cliente.idCliente = (Guid)objCommand.Parameters["@newId"].Value;
+            cliente.codigoAlterno = (Int32)objCommand.Parameters["@codigoAlterno"].Value;
+
+            return cliente;
+
+        }
+
+
+
+        public Cliente updateClienteSunat(Cliente cliente)
+        {
+            var objCommand = GetSqlCommand("pu_clienteSunat");
+            //cliente.idCliente = (Guid)objCommand.Parameters["@newId"].Value;
+            InputParameterAdd.Guid(objCommand, "idCliente", cliente.idCliente);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cliente.IdUsuarioRegistro);
+            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocial);
+            InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
+
+            InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
+            InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
+            
+            InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura);
+            InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat);
+            InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercialSunat);
+            InputParameterAdd.Varchar(objCommand, "direccionDomicilioLegalSunat", cliente.direccionDomicilioLegalSunat);
+            InputParameterAdd.Varchar(objCommand, "estadoContribuyente", cliente.estadoContribuyente);
+            InputParameterAdd.Varchar(objCommand, "condicionContribuyente", cliente.condicionContribuyente);
+            InputParameterAdd.Varchar(objCommand, "ubigeo", cliente.ubigeo.Id);
+            InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
+            InputParameterAdd.Int(objCommand, "formaPagoFactura", (int)cliente.formaPagoFactura);
+            ExecuteNonQuery(objCommand);            
+        //    cliente.codigoAlterno = (Int32)objCommand.Parameters["@codigoAlterno"].Value;
+
+            return cliente;
+
+        }
+
+
     }
 }

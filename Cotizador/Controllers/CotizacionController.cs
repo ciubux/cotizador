@@ -136,6 +136,7 @@ namespace Cotizador.Controllers
         /*Ejecución de la búsqueda de cotizaciones*/
         public String SearchCotizaciones()
         {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaCotizaciones;
             //Se recupera la cotizacion de la session
             Cotizacion cotizacion = this.CotizacionSession;
             CotizacionBL cotizacionBL = new CotizacionBL();
@@ -873,6 +874,12 @@ namespace Cotizador.Controllers
             Cotizacion cotizacion = this.CotizacionSession;
             cotizacion.usuario = usuario;
             CotizacionBL bl = new CotizacionBL();
+
+            if (cotizacion.idCotizacion != Guid.Empty || cotizacion.codigo > 0)
+            {
+                throw new System.Exception("Cotización ya se encuentra creada");
+            }
+
             bl.InsertCotizacion(cotizacion);
             long codigo = cotizacion.codigo;
             int estado = (int)cotizacion.seguimientoCotizacion.estado;

@@ -43,6 +43,10 @@ namespace Model
         [Display(Name = "Total:")]
         public Decimal total { get; set; }
 
+
+        [Display(Name = "IGV:")]
+        public Decimal igv { get; set; }
+
         [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }
 

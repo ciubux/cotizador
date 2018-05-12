@@ -35,6 +35,8 @@ namespace Model
         public static String VAR_SESSION_PEDIDO_LISTA = "pedidoList";
         public static String VAR_SESSION_PEDIDO_VER = "pedidoVer";
 
+        public static String VAR_SESSION_CLIENTE = "cliente";
+
         public static String VAR_SESSION_GUIA = "guiaRemision";
         public static String VAR_SESSION_GUIA_BUSQUEDA = "guiaRemisionBusqueda";
         public static String VAR_SESSION_GUIA_LISTA = "guiaRemisionList";
@@ -84,6 +86,11 @@ namespace Model
         public static String PASSWORD_EOL
         {
             get { return AMBIENTE_EOL.Equals("TEST") ? PASSWORD_EOL_TEST : PASSWORD_EOL_PROD; }
+        }
+
+        public static bool ES_EOL_PRODUCCION
+        {
+            get { return AMBIENTE_EOL.Equals("PROD"); }
         }
 
 
@@ -187,6 +194,11 @@ namespace Model
             [Display(Name = "MANTENIMIENTO VENTAS")]
             MantenimientoVenta = 16,
 
+
+            [Display(Name = "BUSQUEDA CLIENTES")]
+            BusquedaClientes = 17,
+            [Display(Name = "MANTENIMIENTO CLIENTE")]
+            MantenimientoCliente = 18
 
 
         };

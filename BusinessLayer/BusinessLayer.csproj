@@ -42,6 +42,7 @@
     <Compile Include="DireccionEntregaBL.cs" />
     <Compile Include="DocumentoVentaBL.cs" />
     <Compile Include="MovimientoAlmacenBL.cs" />
+    <Compile Include="VentaBL.cs" />
     <Compile Include="TransportistaBL.cs" />
     <Compile Include="PedidoBL.cs" />
     <Compile Include="FacturaBL.cs" />

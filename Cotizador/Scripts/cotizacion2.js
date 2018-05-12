@@ -1154,7 +1154,7 @@ jQuery(function ($) {
         var nombreComercial = $("#ncNombreComercial").val();
         var ruc = $("#ncRUC").val();
         var contacto = $("#ncContacto").val();
-
+        
         $.ajax({
             url: "/Cliente/Create",
             type: 'POST',
@@ -1166,9 +1166,10 @@ jQuery(function ($) {
                 contacto: contacto,
                 controller: "cotizacion"
             },
-            error: function (detalle) { alert("Se generó un error al intentar crear el cliente."); },
+            error: function (detalle) {
+                alert("Se generó un error al intentar crear el cliente.");
+            },
             success: function (resultado) {
-
                 alert("Se creó cliente con Código Temporal: " + resultado.codigoAlterno + ".");
 
                 location.reload();
@@ -1386,6 +1387,9 @@ jQuery(function ($) {
     function crearCotizacion(continuarLuego) {
         if (!validarIngresoDatosObligatoriosCotizacion())
             return false;
+        $('body').loadingModal({
+            text: 'Creando Cotización...'
+        });
         $.ajax({
             url: "/Cotizacion/Create",
             type: 'POST',
@@ -1394,10 +1398,12 @@ jQuery(function ($) {
                 continuarLuego: continuarLuego
             },
             error: function (detalle) {
+                $('body').loadingModal('hide')
                 activarBotonesFinalizarCreacion();
                 alert("Se generó un error al intentar finalizar la creación de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
             },
             success: function (resultado) {
+                $('body').loadingModal('hide')
                 activarBotonesFinalizarCreacion();
                 $("#numero").val(resultado.codigo);
 
@@ -1427,7 +1433,9 @@ jQuery(function ($) {
     function editarCotizacion(continuarLuego) {
         if (!validarIngresoDatosObligatoriosCotizacion())
             return false;
-
+        $('body').loadingModal({
+            text: 'Editando Cotización...'
+        });
         $.ajax({
             url: "/Cotizacion/Update",
             type: 'POST',
@@ -1436,10 +1444,12 @@ jQuery(function ($) {
                 continuarLuego: continuarLuego
             },
             error: function (detalle) {
+                $('body').loadingModal('hide')
                 activarBotonesFinalizarCreacion();
                 alert("Se generó un error al intentar finalizar la edición de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
             },
             success: function (resultado) {
+                $('body').loadingModal('hide')
                 activarBotonesFinalizarCreacion();
                 $("#numero").val(resultado.codigo);
 
@@ -1490,7 +1500,7 @@ jQuery(function ($) {
     });
 
     $("#btnContinuarEditandoLuego").click(function () {
-        if ($("#numero") == "") {
+        if ($("#numero").val() == "" || $("#numero").val() == null) {
             crearCotizacion(1);
         }
         else

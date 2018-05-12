@@ -480,6 +480,8 @@ jQuery(function ($) {
                     var factura = '<tr data-expanded="false">'+
                         '<td>  ' + facturaList[i].idDocumentoVenta + '</td>' +
                         '<td>  ' + facturaList[i].serieNumero + '</td>' +
+                        '<td>  ' + facturaList[i].pedido.numeroPedidoString + '</td>' +
+                        '<td>  ' + facturaList[i].guiaRemision.serieNumeroGuia + '</td>' +
                         '<td>  ' + facturaList[i].usuario.nombre + '</td>' +
                         '<td>  ' + invertirFormatoFecha(facturaList[i].fechaEmision.substr(0, 10)) + '</td>' +
                         '<td>  ' + facturaList[i].cliente.razonSocial + '</td>' +

@@ -26,6 +26,10 @@ namespace Model
             }
         }
 
+        public Decimal precioUnitarioVenta { get; set; }
+
+        public Guid idVentaDetalle { get; set; }
+
         public new Decimal precioUnitario
         {
             get { return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, flete + precioNeto)); }

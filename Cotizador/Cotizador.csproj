@@ -263,6 +263,8 @@
     <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\jquery.loadingModal.css" />
+    <Content Include="Content\jquery.loadingModal.min.css" />
     <Content Include="Content\PrintGuiaC.css" />
     <Content Include="Content\PrintGuiaQ.css" />
     <Content Include="Content\PrintGuiaP.css" />
@@ -313,9 +315,12 @@
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
     <Content Include="Scripts\factura.js" />
-    <Content Include="Scripts\guiaRemision.js" />
+    <Content Include="Scripts\guiaRemision2.js" />
+    <Content Include="Scripts\cliente2.js" />
+    <Content Include="Scripts\jquery.loadingModal.js" />
+    <Content Include="Scripts\jquery.loadingModal.min.js" />
     <Content Include="Scripts\venta.js" />
-    <Content Include="Scripts\pedido1.js" />
+    <Content Include="Scripts\pedido3.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -326,7 +331,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\cotizacion1.js" />
+    <Content Include="Scripts\cotizacion2.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
@@ -404,6 +409,8 @@
     <Content Include="Views\GuiaRemision\PrintP.cshtml" />
     <Content Include="Views\GuiaRemision\PrintQ.cshtml" />
     <Content Include="Views\GuiaRemision\PrintO.cshtml" />
+    <Content Include="Views\Cliente\Editar.cshtml" />
+    <Content Include="Views\Venta\Vender.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
@@ -415,7 +422,6 @@
     <Folder Include="Views\General\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Ubigeo\" />
-    <Folder Include="Views\Venta\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

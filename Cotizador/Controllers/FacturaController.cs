@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using Model;
+using Model.ServiceReferencePSE;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -46,28 +47,30 @@ namespace Cotizador.Controllers
 
             String[] fecha = this.Request.Params["fechaEmision"].Split('/');
             String[] hora = this.Request.Params["horaEmision"].Split(':');
-
-
+            documentoVenta.cliente = pedido.cliente;
+            documentoVenta.observaciones = this.Request.Params["observaciones"];
             documentoVenta.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
 
             fecha = this.Request.Params["fechaVencimiento"].Split('/');
             documentoVenta.fechaVencimiento = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
-
-
+            
             documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPago"]);
             documentoVenta.formaPago = (DocumentoVenta.FormaPago)Int32.Parse(this.Request.Params["formaPago"]);
             documentoVenta.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            documentoVenta.correoEnvio = this.Request.Params["correoEnvio"];
-            documentoVenta.correoCopia = this.Request.Params["correoCopia"];
-            documentoVenta.correoOculto = this.Request.Params["correoOculto"];
+           
+            
 
             documentoVenta.venta = new Venta();
             documentoVenta.venta.pedido = pedido;
 
             DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-            documentoVentaBL.InsertarFactura(documentoVenta);
+            CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.InsertarFactura(documentoVenta);
 
-            var otmp = new { serieNumero = documentoVenta.serieNumero};
+
+
+            var otmp = new {
+                CPE_RESPUESTA_BE = cPE_RESPUESTA_BE,
+                serieNumero = documentoVenta.serieNumero};
             
             return JsonConvert.SerializeObject(otmp);
         }
@@ -131,7 +134,8 @@ namespace Cotizador.Controllers
 
         public String Search()
         {
-          
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaFacturas;
+
             String[] desde = this.Request.Params["fechaEmisionDesde"].Split('/');
             this.FacturaSession.fechaEmisionDesde = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
 
@@ -316,9 +320,9 @@ namespace Cotizador.Controllers
 
        
 
-            FacturaBL facturaBL = new FacturaBL();
+          /*  FacturaBL facturaBL = new FacturaBL();
             facturaBL.testFacturaElectronica();
-
+*/
 
 
             return View();
@@ -342,7 +346,7 @@ namespace Cotizador.Controllers
             HSSFWorkbook hssfwb;
 
             FacturaBL facturaBL = new FacturaBL();
-            facturaBL.truncateFacturaStaging();
+       //     facturaBL.truncateFacturaStaging();
 
             hssfwb = new HSSFWorkbook(file.InputStream);
 

@@ -12,19 +12,25 @@ namespace BusinessLayer
     public class DocumentoVentaBL
     {
 
-        public void InsertarFactura(DocumentoVenta documentoVenta)
+        public CPE_RESPUESTA_BE InsertarFactura(DocumentoVenta documentoVenta)
         {
             using (var dal = new DocumentoVentaDAL())
             {
                 documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
                 dal.InsertarDocumentoVenta(documentoVenta);
-                this.procesarFactura(documentoVenta);
+                  this.procesarFactura(documentoVenta);
 
                 //Si es OK consultamos a Sunat por el estado
+
+                /*documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
+                documentoVenta.cPE_RESPUESTA_BE.CODIGO = "002";
+                */
                 if (documentoVenta.cPE_RESPUESTA_BE.CODIGO.Equals(Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK))
                 {
+                    dal.UpdateSiguienteNumeroFactura(documentoVenta);
                     consultarEstadoDocumentoVenta(documentoVenta);
-                }         
+                }
+                return documentoVenta.cPE_RESPUESTA_BE;
             }
         }
 
@@ -38,6 +44,24 @@ namespace BusinessLayer
 
                 documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
                 IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
+
+                documentoVenta.cPE_DAT_ADIC_BEList = new List<CPE_DAT_ADIC_BE>();
+
+                CPE_DAT_ADIC_BE observaciones = new CPE_DAT_ADIC_BE();
+                observaciones.COD_TIP_ADIC_SUNAT = "159";
+                observaciones.NUM_LIN_ADIC_SUNAT = "159";
+                observaciones.TXT_DESC_ADIC_SUNAT = documentoVenta.observaciones;
+
+                CPE_DAT_ADIC_BE codigoCliente = new CPE_DAT_ADIC_BE();
+                codigoCliente.COD_TIP_ADIC_SUNAT = "21";
+                codigoCliente.NUM_LIN_ADIC_SUNAT = "21";
+                codigoCliente.TXT_DESC_ADIC_SUNAT = documentoVenta.cliente.codigo;
+
+                documentoVenta.cPE_DAT_ADIC_BEList.Add(codigoCliente);
+                documentoVenta.cPE_DAT_ADIC_BEList.Add(observaciones);
+
+                //documentoVenta.cPE_DETALLE_BEList = documentoVenta.cPE_DETALLE_BEList.or
+
                 documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                     documentoVenta.cPE_CABECERA_BE,
                     documentoVenta.cPE_DETALLE_BEList.ToArray(),

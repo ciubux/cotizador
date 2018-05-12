@@ -70,17 +70,17 @@ jQuery(function ($) {
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
 
     $(document).ready(function () {
-        obtenerConstantes();
-        setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
+   //     obtenerConstantes();
+  //      setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
         cargarChosenCliente(pagina);
-        toggleControlesUbigeo();
+  /*      toggleControlesUbigeo();
         verificarSiExisteNuevaDireccionEntrega();
         verificarSiExisteDetalle();
         verificarSiExisteCliente();
         $("#btnBusquedaPedidos").click();
         var tipoPedido = $("#pedido_tipoPedido").val();
         validarTipoPedido(tipoPedido);
-        
+        */
     });
 
     function ConfirmDialogReload(message) {
@@ -213,7 +213,7 @@ jQuery(function ($) {
             minTermLength: 5,
             afterTypeDelay: 300,
             cache: false,
-            url: "/Pedido/SearchClientes"
+            url: "/Cliente/SearchClientes"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
@@ -268,51 +268,49 @@ jQuery(function ($) {
 
         var idCliente = $(this).val();
 
+         $('body').loadingModal({
+            text: 'Recuperando Datos del Cliente...'
+        });
+
         $.ajax({
-            url: "/Pedido/GetCliente",
+            url: "/Cliente/GetCliente",
             type: 'POST',
             dataType: 'JSON',
             data: {
                 idCliente: idCliente
             },
-            success: function (cliente)
-            {
-                if ($("#pagina").val() == 3)
-                    $("#idCiudad").attr("disabled", "disabled");
+            success: function (cliente) {
 
+                $('body').loadingModal('hide')
                 $("#idCiudad").attr("disabled", "disabled");
-                var direccionEntregaListTmp = cliente.direccionEntregaList;
-
-                $('#pedido_direccionEntrega')
-                    .find('option')
-                    .remove()
-                    .end()
-                    ;
-              
-                $('#pedido_direccionEntrega').append($('<option>', {
-                    value: "",
-                    text: "Seleccione Dirección de Entrega"
-                }));
-              
-
-                for (var i = 0; i < direccionEntregaListTmp.length; i++) {
-                    $('#pedido_direccionEntrega').append($('<option>', {
-                        value: direccionEntregaListTmp[i].idDireccionEntrega,
-                        text: direccionEntregaListTmp[i].descripcion
-                        /*,
-                        direccion: direccionEntregaListTmp[i].descripcion,
-                        contacto: direccionEntregaListTmp[i].contacto,
-                        telefono: direccionEntregaListTmp[i].telefono*/
-                    }));
-                }
 
                 //Se limpia controles de Ubigeo
-                $("#ActualDepartamento").val("");
-                $("#ActualProvincia").val("");
-                $("#ActualDistrito").val("");
+                $("#cliente_codigo").val(cliente.codigo);
+                $("#cliente_ruc").val(cliente.ruc);
+                $("#cliente_razonSocial").val(cliente.razonSocial);
+                $("#cliente_nombreComercial").val(cliente.nombreComercial);
+                $("#cliente_domicilioLegal").val(cliente.domicilioLegal);
+                $("#cliente_correoEnvioFactura").val(cliente.correoEnvioFactura);
+                $("#cliente_razonSocialSunat").val(cliente.razonSocialSunat);
+                $("#cliente_nombreComercialSunat").val(cliente.nombreComercialSunat);
+                $("#cliente_direccionDomicilioLegalSunat").val(cliente.direccionDomicilioLegalSunat);
+                $("#cliente_estadoContribuyente").val(cliente.estadoContribuyente);
+                $("#cliente_condicionContribuyente").val(cliente.condicionContribuyente);
 
+                $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);
+                $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
+                $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);
 
-                toggleControlesUbigeo();
+                $("#cliente_plazoCredito").val(cliente.plazoCredito);
+                $("#tipoPago").val(cliente.tipoPagoFactura);
+                $("#formaPago").val(cliente.formaPagoFactura);
+
+            /*    $("#direccionDomicilioLegalSunat").val(resultado.direccionDomicilioLegalSunat);
+                $("#cliente_ubigeo_Departamento").val(resultado.ubigeo.Departamento);
+                $("#cliente_ubigeo_Provincia").val(resultado.ubigeo.Provincia);
+                $("#cliente_ubigeo_Distrito").val(resultado.ubigeo.Distrito);
+                */
+               // toggleControlesUbigeo();
             }
         });
       
@@ -359,36 +357,72 @@ jQuery(function ($) {
     });
   
 
-    /*
+ 
     $(window).on("paste", function (e) {
-        var modalAgregarClienteIsShown = ($("#modalAgregarCliente").data('bs.modal') || { isShown: false }).isShown;
-        if (modalAgregarClienteIsShown) {
+        
             $.each(e.originalEvent.clipboardData.items, function () {
                 this.getAsString(function (str) {
                    // alert(str);
-                    var lineas = str.split("\t");
+                    var lineas = str.split("\t");           
 
-                    $("#ncRazonSocial").val(lineas[0]);
-                    $("#ncRUC").val(lineas[1]);
-                    $("#ncNombreComercial").val(lineas[2]);
-                    $("#ncDireccion").val(lineas[3]);
-                    $("#ncTelefono").val(lineas[4]);
+                    if (lineas.length <= 1)
+                        return false;
+                    if (lineas[1] == $("#cliente_ruc").val()) {
+                        $("#ncRUC").val(lineas[1]);
+
+                        $("#cliente_razonSocialSunat").val(lineas[0]);
+                        //$("#ncRUC").val(lineas[1]);
+                        $("#cliente_nombreComercialSunat").val(lineas[2]);
+                        $("#cliente_direccionDomicilioLegalSunat").val(lineas[3]);
+                        $("#cliente_estadoContribuyente").val(lineas[5]);
+                        $("#cliente_condicionContribuyente").val(lineas[6]);
+
+
+                        changeInputString("razonSocialSunat", $("#cliente_razonSocialSunat").val())
+                        changeInputString("nombreComercialSunat", $("#cliente_nombreComercialSunat").val())
+
+                        var direccionDomicilioLegalSunat = $("#cliente_direccionDomicilioLegalSunat").val();
+
+                          $('body').loadingModal({
+                                text: 'Recuperando Ubicación Geográfica...'
+                            });
+                        $.ajax({
+                            url: "/Cliente/ChangeDireccionDomicilioLegalSunat",
+                            type: 'POST',
+                            dataType: 'JSON',
+                            data: {
+                                direccionDomicilioLegalSunat: direccionDomicilioLegalSunat
+                            },
+                            success: function (resultado) {
+                                $('body').loadingModal('hide')
+                                $("#cliente_direccionDomicilioLegalSunat").val(resultado.direccionDomicilioLegalSunat);
+                                $("#cliente_ubigeo_Departamento").val(resultado.ubigeo.Departamento);
+                                $("#cliente_ubigeo_Provincia").val(resultado.ubigeo.Provincia);
+                                $("#cliente_ubigeo_Distrito").val(resultado.ubigeo.Distrito);
+                            }
+                        });
+
+                        changeInputString("estadoContribuyente", $("#cliente_estadoContribuyente").val())
+                        changeInputString("condicionContribuyente", $("#cliente_condicionContribuyente").val())
+                    }
                 });
             });
 
-        }
-       
-    });*/
+            
+    });
 
+    
 
+    function editarCliente(continuarLuego) {
 
-    $("#btnSaveCliente").click(function () {
-
-        if ($("#ncRazonSocial").val().trim() == "" && $("#ncNombreComercial").val().trim() == "") {
-            alert("Debe ingresar la Razón Social o el Nombre Comercial.");
-            $('#ncRazonSocial').focus();
+        if ($("#cliente_direccionDomicilioLegalSunat").val().length > 120) {
+            alert("La dirección del domicilio legal obtenido de Sunat debe contener solo 120 caracteres.");
+            $('#cliente_direccionDomicilioLegalSunat').focus();
             return false;
         }
+
+        /*
+        
 
         if ($("#ncRUC").val().trim() == "") {
             alert("Debe ingresar el RUC.");
@@ -400,30 +434,31 @@ jQuery(function ($) {
         var nombreComercial = $("#ncNombreComercial").val();
         var ruc = $("#ncRUC").val();
         var contacto = $("#ncContacto").val();
-
+        */
+        $('body').loadingModal({
+            text: 'Editando Cliente...'
+        });
         $.ajax({
-            url: "/Cliente/Create",
+            url: "/Cliente/Update",
             type: 'POST',
             dataType: 'JSON',
-            data: {
-                razonSocial: razonSocial,
-                nombreComercial: nombreComercial,
-                ruc: ruc,
-                contacto: contacto,
-                controller: "pedido"
+            error: function (detalle) {
+                $('body').loadingModal('hide')
+                alert("Se generó un error al intentar editar el cliente.");
             },
-            error: function (detalle) { alert("Se generó un error al intentar crear el cliente."); },
             success: function (resultado) {
-
-                alert("Se creó cliente con Código Temporal: " + resultado.codigoAlterno + ".");
+                $('body').loadingModal('hide');
+                alert("El cliente se editó correctamente.");
                 location.reload();
             }
         });
 
 
-        $('#btnCancelCliente').click();
+        // $('#btnCancelCliente').click();
 
-    });
+    };
+
+    
 
 
     /**
@@ -711,7 +746,7 @@ jQuery(function ($) {
 
     function changeInputString(propiedad, valor) {
         $.ajax({
-            url: "/Pedido/ChangeInputString",
+            url: "/Cliente/ChangeInputString",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -720,66 +755,81 @@ jQuery(function ($) {
             success: function () { }
         });
     }
-
-    $("#pedido_horaEntregaDesde").change(function () {
-
-        var horaEntregaDesde = $("#pedido_horaEntregaDesde").val();
-        var horaEntregaHasta = $("#pedido_horaEntregaHasta").val();
-
-        //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
-        //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
-        if (convertirHoraToNumero(horaEntregaDesde) + 2 > convertirHoraToNumero(horaEntregaHasta)) {
-            $("#pedido_horaEntregaHasta").val(sumarHoras($("#pedido_horaEntregaDesde").val(),2));
-            $("#pedido_horaEntregaHasta").change();
-        }
-       
-        changeInputString("horaEntregaDesde", $("#pedido_horaEntregaDesde").val())
+    
+    $("#cliente_codigo").change(function () {
+        changeInputString("codigo", $("#cliente_codigo").val())
     });
 
-    $("#pedido_horaEntregaHasta").change(function () {
-        var horaEntregaDesde = $("#pedido_horaEntregaDesde").val();
-        var horaEntregaHasta = $("#pedido_horaEntregaHasta").val();
-
-        //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
-        //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
-        if (convertirHoraToNumero(horaEntregaDesde) + 2 > convertirHoraToNumero(horaEntregaHasta)) {
-            $("#pedido_horaEntregaDesde").val(sumarHoras($("#pedido_horaEntregaHasta").val(), -2));
-            $("#pedido_horaEntregaDesde").change();
-        }
-        changeInputString("horaEntregaHasta", $("#pedido_horaEntregaHasta").val())
-
+    $("#cliente_ruc").change(function () {
+        changeInputString("ruc", $("#cliente_ruc").val())
     });
 
-    $("#pedido_numeroReferenciaCliente").change(function () {
-        changeInputString("numeroReferenciaCliente", $("#pedido_numeroReferenciaCliente").val())
+    $("#cliente_razonSocial").change(function () {
+        changeInputString("razonSocial", $("#cliente_razonSocial").val())
     });
 
-    $("#pedido_observacionesFactura").change(function () {
-        changeInputString("observacionesFactura", $("#pedido_observacionesFactura").val())
+    $("#cliente_domicilioLegal").change(function () {
+        changeInputString("domicilioLegal", $("#cliente_domicilioLegal").val())
     });
 
-    $("#pedido_observacionesGuiaRemision").change(function () {
-        changeInputString("observacionesGuiaRemision", $("#pedido_observacionesGuiaRemision").val())
+    $("#cliente_nombreComercial").change(function () {
+        changeInputString("nombreComercial", $("#cliente_nombreComercial").val())
     });
 
+    $("#cliente_correoEnvioFactura").change(function () {
+        changeInputString("correoEnvioFactura", $("#cliente_correoEnvioFactura").val())
+    });
+    
+    $("#cliente_razonSocialSunat").change(function () {
+        changeInputString("razonSocialSunat", $("#cliente_razonSocialSunat").val())
+    });
+
+    $("#cliente_nombreComercialSunat").change(function () {
+        changeInputString("nombreComercialSunat", $("#cliente_nombreComercialSunat").val())
+    });
+
+    $("#cliente_direccionDomicilioLegalSunat").change(function () {
+        changeInputString("direccionDomicilioLegalSunat", $("#cliente_direccionDomicilioLegalSunat").val())
+    });
+
+    $("#cliente_estadoContribuyente").change(function () {
+        changeInputString("estadoContribuyente", $("#cliente_direccliente_estadoContribuyentecionDomicilioLegalSunat").val())
+    });
+
+    $("#cliente_condicionContribuyente").change(function () {
+        changeInputString("condicionContribuyente", $("#cliente_direcclientecliente_condicionContribuyente_estadoContribuyentecionDomicilioLegalSunat").val())
+    });
+
+    $("#formaPago").change(function () {
+        var formaPagoFactura = $("#formaPago").val();
+        $.ajax({
+            url: "/Cliente/ChangeFormaPagoFactura",
+            type: 'POST',
+            data: {
+                formaPagoFactura: formaPagoFactura
+            },
+            success: function () { }
+        });
+    });
+
+    $("#tipoPago").change(function () {
+        var tipoPagoFactura = $("#tipoPago").val();
+        $.ajax({
+            url: "/Cliente/ChangeTipoPagoFactura",
+            type: 'POST',
+            data: {
+                tipoPagoFactura: tipoPagoFactura
+            },
+            success: function () { }
+        });
+    });
 
     
 
-    $("#pedido_contactoPedido").change(function () {
-        changeInputString("contactoPedido", $("#pedido_contactoPedido").val())
-    });
 
-    $("#pedido_telefonoContactoPedido").change(function () {
-        changeInputString("telefonoContactoPedido", $("#pedido_telefonoContactoPedido").val())
-    });
 
-    $("#pedido_correoContactoPedido").change(function () {
-        changeInputString("correoContactoPedido", $("#pedido_correoContactoPedido").val())
-    });
 
-    $("#pedido_observaciones").change(function () {
-        changeInputString("observaciones", $("#pedido_observaciones").val())
-    });
+
 
     /**
      * ################################ INICIO CONTROLES DE AGREGAR PRODUCTO
@@ -1685,83 +1735,6 @@ jQuery(function ($) {
         return true;
     }
 
-    function crearPedido(continuarLuego) {
-        if (!validarIngresoDatosObligatoriosPedido())
-            return false;
-        $.ajax({
-            url: "/Pedido/Create",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                continuarLuego: continuarLuego
-            },
-            error: function (detalle) {
-                alert("Se generó un error al intentar finalizar la edición del pedido. Si estuvo actualizando, vuelva a buscar el pedido, es posible que este siendo modificado por otro usuario.");
-            },
-            success: function (resultado) {
-                $("#pedido_numeroPedido").val(resultado.numeroPedido);
-                $("#idPedido").val(resultado.idPedido);
-
-                if (resultado.estado == ESTADO_INGRESADO) {
-                    alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente.");
-                    window.location = '/Pedido/Index';  
-
-
-                }
-                else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN")
-                    $("#comentarioPendienteIngreso").val(resultado.observacion);
-                    $("#modalComentarioPendienteIngreso").modal('show');
-                }
-                else if (resultado.estado == ESTADO_EN_EDICION) {
-                    ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
-                }
-                else {
-                    alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    window.location = '/Pedido/Index';
-                }
-
-            }
-        });
-    }
-
-    function editarPedido(continuarLuego) {
-        if (!validarIngresoDatosObligatoriosPedido())
-            return false;
-
-        $.ajax({
-            url: "/Pedido/Update",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                continuarLuego: continuarLuego
-            },
-            error: function (detalle) {
-                alert("Se generó un error al intentar finalizar la edición del pedido. Si estuvo actualizando, vuelva a buscar el pedido, es posible que este siendo modificado por otro usuario.");
-            },
-            success: function (resultado) {
-                $("#pedido_numeroPedido").val(resultado.numeroPedido);
-                $("#idPedido").val(resultado.idPedido);
-
-                if (resultado.estado == ESTADO_INGRESADO) {
-                    alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente.");
-                    window.location = '/Pedido/Index';
-                }
-                else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN")
-                    $("#comentarioPendienteIngreso").val(resultado.observacion);
-                    $("#modalComentarioPendienteIngreso").modal('show');
-                }
-                else if (resultado.estado == ESTADO_EN_EDICION) {
-                    ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
-                }
-                else {
-                    alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    window.location = '/Pedido/Index';
-                }
-            }
-        });
-    }
 
     $("#btnCancelarComentario").click(function () {
         window.location = '/Pedido/CancelarCreacionPedido';
@@ -1816,13 +1789,13 @@ jQuery(function ($) {
 
 
 
-    $("#btnFinalizarCreacionPedido").click(function () {
-        crearPedido(0);
+    $("#btnFinalizarCreacionCliente").click(function () {
+        editarCliente(0);
     });
 
 
-    $("#btnFinalizarEdicionPedido").click(function () {
-        editarPedido(0);
+    $("#btnFinalizarEdicionCliente").click(function () {
+        editarCliente(0);
     });
 
     
@@ -2263,8 +2236,8 @@ jQuery(function ($) {
         });
 }
 
-    $("#btnCancelarPedido").click(function () {
-        ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Pedido/CancelarCreacionPedido', null)
+    $("#btnCancelarCliente").click(function () {
+        ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Cliente/CancelarCreacionCliente', null)
     })
 
 
@@ -3445,14 +3418,14 @@ jQuery(function ($) {
         var idCiudad = $("#idCiudad").val();
 
         $.ajax({
-            url: "/Pedido/ChangeIdCiudad",
+            url: "/Cliente/ChangeIdCiudad",
             type: 'POST',
             dataType: 'JSON',
             data: {
                 idCiudad: idCiudad
             },
             error: function (detalle) {
-                alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
+               // alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
                 location.reload();
             },
             success: function (ciudad) {

@@ -30,15 +30,19 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cotizacion").Include(
-                        "~/Scripts/cotizacion1.js"
+                        "~/Scripts/cotizacion2.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
-                        "~/Scripts/pedido1.js"
+                        "~/Scripts/pedido3.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
+                     "~/Scripts/cliente2.js"
+                     ));
+
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
-                        "~/Scripts/guiaRemision.js"
+                        "~/Scripts/guiaRemision2.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -55,9 +59,11 @@ namespace Cotizador
                      "~/Scripts/footable.min.js"
                      ));
 
-            
+            bundles.Add(new ScriptBundle("~/bundles/loadingModal").Include(
+                    "~/Scripts/jquery.loadingModal.js"
+                    ));
 
-            
+
 
             //"~/Scripts/jquery-{version}.js"
 
@@ -73,12 +79,16 @@ namespace Cotizador
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+
+
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/footable.bootstrap.min.css",
                       "~/Content/jquery-ui.min.css",
                       "~/Content/site.css",
-                      "~/Content/chosen/chosen.css"));
+                      "~/Content/chosen/chosen.css",
+                      "~/Content/jquery.loadingModal.css"));
 
             bundles.Add(new StyleBundle("~/Content/PrintGuiaL").Include(
                        "~/Content/PrintGuiaL.css"

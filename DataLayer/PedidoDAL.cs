@@ -65,7 +65,7 @@ namespace DataLayer
             InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedido).ToString());
             InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
-
+            InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "numero");
             ExecuteNonQuery(objCommand);
@@ -125,7 +125,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
-
+            InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
             InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedido).ToString());
             InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
@@ -305,7 +305,7 @@ namespace DataLayer
 
         public Pedido SelectPedido(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("ps_pedido");
+            var objCommand = GetSqlCommand("ps_pedidoVenta");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable pedidoDataTable = dataSet.Tables[0];
@@ -344,12 +344,24 @@ namespace DataLayer
                 pedido.observacionesFactura = Converter.GetString(row, "observaciones_factura");
                 pedido.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
                 pedido.tipoPedido = (Pedido.tiposPedido)Char.Parse( Converter.GetString(row, "tipo_pedido"));
+                pedido.otrosCargos = Converter.GetDecimal(row, "otros_cargos");
+
+                pedido.venta = new Venta();
+                pedido.venta.igv = Converter.GetDecimal(row, "igv_venta");
+                pedido.venta.subTotal = Converter.GetDecimal(row, "sub_total_venta");
+                pedido.venta.total = Converter.GetDecimal(row, "total_venta");
+                pedido.venta.idVenta = Converter.GetGuid(row, "id_Venta");
+
 
                 pedido.ubigeoEntrega = new Ubigeo();
                 pedido.ubigeoEntrega.Id = Converter.GetString(row, "ubigeo_entrega");
                 pedido.ubigeoEntrega.Departamento = Converter.GetString(row, "departamento");
                 pedido.ubigeoEntrega.Provincia = Converter.GetString(row, "provincia");
                 pedido.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
+
+                pedido.documentoVenta = new DocumentoVenta();
+                pedido.documentoVenta.serie = Converter.GetString(row, "serie_factura");
+                pedido.documentoVenta.numero = Converter.GetString(row, "numero_factura");
 
                 pedido.cotizacion = new Cotizacion();
                 pedido.cotizacion.codigo = Converter.GetLong(row, "cotizacion_codigo");  
@@ -362,6 +374,13 @@ namespace DataLayer
                 pedido.cliente.ciudad = new Ciudad();
                 pedido.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad_cliente");
                 pedido.cliente.ciudad.nombre = Converter.GetString(row, "nombre_ciudad_cliente");
+                pedido.cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                pedido.cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
+                pedido.cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
+                pedido.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
+                pedido.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                pedido.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
+
 
 
                 pedido.ciudad = new Ciudad();
@@ -452,6 +471,8 @@ namespace DataLayer
                 pedidoDetalle.producto.precioClienteProducto = precioClienteProducto;
 
 
+                pedidoDetalle.precioUnitarioVenta = Converter.GetDecimal(row, "precio_unitario_venta");
+                pedidoDetalle.idVentaDetalle = Converter.GetGuid(row, "id_venta_detalle");
 
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
             }

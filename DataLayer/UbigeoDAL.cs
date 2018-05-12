@@ -22,6 +22,27 @@ namespace DataLayer
         {
         }
 
+        public Ubigeo getUbigeoPorDistritoProvincia(String distrito, String provincia)
+        {
+
+            var objCommand = GetSqlCommand("ps_ubigeoPorDistritoYProvincia");
+            InputParameterAdd.Varchar(objCommand, "distrito", distrito);
+            InputParameterAdd.Varchar(objCommand, "provincia", provincia);
+            DataTable dataTable = Execute(objCommand);
+            Ubigeo obj = new Ubigeo();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                obj.Id = Converter.GetString(row, "codigo");
+                obj.Provincia = Converter.GetString(row, "provincia");
+                obj.Departamento = Converter.GetString(row, "departamento");
+                obj.Distrito = Converter.GetString(row, "distrito");
+            }
+
+            return obj;
+
+        }
+
         public List<UbigeoDTO> ObtenerUbigeos()
         {
             var objCommand = GetSqlCommand("ps_Ubigeo");

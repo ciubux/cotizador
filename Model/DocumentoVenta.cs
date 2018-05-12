@@ -155,8 +155,9 @@ namespace Model
         [Display(Name = "Fecha Emisión Hasta:")]
         public DateTime fechaEmisionHasta { get; set; }
 
+        public Pedido pedido { get; set; }
 
-
+        public GuiaRemision guiaRemision { get; set; }
 
 
 

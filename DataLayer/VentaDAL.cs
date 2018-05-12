@@ -22,14 +22,33 @@ namespace DataLayer
         {
         }
 
-        public void UpdateVenta(Venta venta)
-        {        
-        }
-    
 
-        public void InsertVentaDetalle(Venta venta)
-        {         
+
+
+        public void UpdateVenta(Venta venta)
+        {
+            foreach (PedidoDetalle ventaDetalle in venta.pedido.pedidoDetalleList)
+            {
+                this.UpdateVentaDetalle(ventaDetalle);
+            }
+
+            //Actualiza los totales de la venta
+            var objCommand = GetSqlCommand("pu_venta");
+            InputParameterAdd.Guid(objCommand, "idVenta", venta.idVenta);
+            InputParameterAdd.Varchar(objCommand, "observaciones", venta.observaciones);
+            ExecuteNonQuery(objCommand);
+
         }
+
+
+        public void UpdateVentaDetalle(PedidoDetalle ventaDetalle)
+        {
+            var objCommand = GetSqlCommand("pu_ventaDetalle");
+            InputParameterAdd.Guid(objCommand, "idVentaDetalle", ventaDetalle.idVentaDetalle);
+            InputParameterAdd.Decimal(objCommand, "precioUnitario", ventaDetalle.precioUnitario);
+            ExecuteNonQuery(objCommand);
+        }
+
 
 
         public Venta SelectVenta(Venta venta)

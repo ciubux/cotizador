@@ -390,6 +390,10 @@ jQuery(function ($) {
             return false;
 
         desactivarBotonesCreacionModificacion();
+
+        $('body').loadingModal({
+            text: 'Creando Guía Remisión...'
+        });
         $.ajax({
             url: "/GuiaRemision/Create",
             type: 'POST',
@@ -398,10 +402,16 @@ jQuery(function ($) {
                 continuarLuego: continuarLuego
             },
             error: function (detalle) {
+                $('body').loadingModal({
+                    text: 'Editando Pedido...'
+                });
                 activarBotonesCreacionModificacion();
                 alert(MENSAJE_ERROR);
             },
             success: function (resultado) {
+                $('body').loadingModal({
+                    text: 'Editando Pedido...'
+                });
                 activarBotonesCreacionModificacion();
                 $("#numero").val(resultado.codigo);
 

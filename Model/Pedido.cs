@@ -31,6 +31,12 @@ namespace Model
         [Display(Name = "Número OC Cliente:")]
         public String numeroReferenciaCliente { get; set; }
 
+
+        [Display(Name = "Otros Cargos (Flete):")]
+        public Decimal otrosCargos { get; set; }
+
+
+
         public DireccionEntrega direccionEntrega { get; set; }
 
         [Display(Name = "Fecha de Entrega:")]
@@ -255,6 +261,9 @@ namespace Model
             }
         }
 
+        public DocumentoVenta documentoVenta { get; set; }
+
+        public Venta venta { get; set; }
 
     }
 }

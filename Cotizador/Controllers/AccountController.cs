@@ -131,7 +131,7 @@ namespace Cotizador.Controllers
 
                     }
 
-                    if (usuario.apruebaCotizacionesProvincias)
+                    if (usuario.apruebaCotizacionesProvincias || usuario.creaCotizacionesProvincias)
                     {
                         foreach (Ciudad ciudad in ciudadList)
                         {
@@ -140,23 +140,34 @@ namespace Cotizador.Controllers
                                 usuario.sedesMPCotizaciones.Add(ciudad);
                             }
                         }
-                        foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
+                        if (usuario.apruebaCotizacionesProvincias)
                         {
-                            if (usuarioTmp.sedeMP.esProvincia)
+                            foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
                             {
-                                usuarioCreaCotizacionList.Add(usuarioTmp);
+                                if (usuarioTmp.sedeMP.esProvincia)
+                                {
+                                    usuarioCreaCotizacionList.Add(usuarioTmp);
+                                }
                             }
                         }
                     }
 
+                    
+
+
+                    
+
                     if (!usuario.apruebaCotizaciones)
                     {
-                        foreach (Ciudad ciudad in ciudadList)
+                        if (usuario.sedesMPCotizaciones.Where(s => s.idCiudad == usuario.sedeMP.idCiudad).FirstOrDefault() == null)
                         {
-                            if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                            foreach (Ciudad ciudad in ciudadList)
                             {
-                                usuario.sedesMPCotizaciones.Add(ciudad);
-                                break;
+                                if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                                {
+                                    usuario.sedesMPCotizaciones.Add(ciudad);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -194,7 +205,7 @@ namespace Cotizador.Controllers
 
                     }
 
-                    if (usuario.apruebaPedidosProvincias)
+                    if (usuario.apruebaPedidosProvincias || usuario.tomaPedidosProvincias)
                     {
                         foreach (Ciudad ciudad in ciudadList)
                         {
@@ -203,23 +214,31 @@ namespace Cotizador.Controllers
                                 usuario.sedesMPPedidos.Add(ciudad);
                             }
                         }
-                        foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
+                        if (usuario.apruebaPedidosProvincias)
                         {
-                            if (usuarioTmp.sedeMP.esProvincia)
+                            foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
                             {
-                                usuarioTomaPedidoList.Add(usuarioTmp);
+                                if (usuarioTmp.sedeMP.esProvincia)
+                                {
+                                    usuarioTomaPedidoList.Add(usuarioTmp);
+                                }
                             }
                         }
                     }
 
+
+
                     if (!usuario.apruebaPedidos)
                     {
-                        foreach (Ciudad ciudad in ciudadList)
+                        if (usuario.sedesMPPedidos.Where(s => s.idCiudad == usuario.sedeMP.idCiudad).FirstOrDefault() == null)
                         {
-                            if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                            foreach (Ciudad ciudad in ciudadList)
                             {
-                                usuario.sedesMPPedidos.Add(ciudad);
-                                break;
+                                if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                                {
+                                    usuario.sedesMPPedidos.Add(ciudad);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -227,6 +246,8 @@ namespace Cotizador.Controllers
                     {
                         usuario.usuarioTomaPedidoList = usuarioTomaPedidoList;
                     }
+
+
 
                     #endregion
 
@@ -375,6 +396,7 @@ namespace Cotizador.Controllers
                     {   if (usuario.pedidoSerializado != null)
                         {
                             Pedido pedido = JsonConvert.DeserializeObject<Pedido>(usuario.pedidoSerializado);
+                           
                             //usuario.pedidoSerializado = null;
                             this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
                             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoPedido;

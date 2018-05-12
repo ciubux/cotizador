@@ -161,7 +161,7 @@ namespace Cotizador.Controllers
 
             ViewBag.pedido = pedidoSearch;
             DocumentoVenta documentoVenta = new DocumentoVenta();
-            documentoVenta.tipoPago = DocumentoVenta.TipoPago.Contado;
+            documentoVenta.tipoPago = DocumentoVenta.TipoPago.NoAsignado;
             documentoVenta.formaPago = DocumentoVenta.FormaPago.NoAsignado;
             documentoVenta.fechaEmision = DateTime.Now;
             ViewBag.documentoVenta = documentoVenta;
@@ -647,6 +647,14 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
+        public void ChangeOtrosCargos()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            pedido.otrosCargos = Decimal.Parse(this.Request.Params["otrosCargos"]);
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+        }
+        
+
         public string ChangeDireccionEntrega()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
@@ -824,26 +832,25 @@ namespace Cotizador.Controllers
         public String ChangeIdCiudadASolicitar()
         {
             Pedido pedido = this.PedidoSession;
-            pedido.cliente = new Cliente();
             Guid idCiudad = Guid.Empty;
             if (this.Request.Params["idCiudadASolicitar"] != null && !this.Request.Params["idCiudadASolicitar"].Equals(""))
             {
                 idCiudad = Guid.Parse(this.Request.Params["idCiudadASolicitar"]);
             }
             //Para realizar el cambio de ciudad ningun producto debe estar agregado
-            if (pedido.pedidoDetalleList != null && pedido.pedidoDetalleList.Count > 0)
+        /*    if (pedido.pedidoDetalleList != null && pedido.pedidoDetalleList.Count > 0)
             {
                 // throw new Exception("No se puede cambiar de ciudad");
                 return "No se puede cambiar de ciudad";
             }
             else
-            {
-                CiudadBL ciudadBL = new CiudadBL();
-                Ciudad ciudadASolicitar = ciudadBL.getCiudad(idCiudad);
-                pedido.ciudadASolicitar = ciudadASolicitar;
-                this.PedidoSession = pedido;
-                return "{\"idCiudad\": \"" + idCiudad + "\"}";
-            }
+            {*/
+            CiudadBL ciudadBL = new CiudadBL();
+            Ciudad ciudadASolicitar = ciudadBL.getCiudad(idCiudad);
+            pedido.ciudadASolicitar = ciudadASolicitar;
+            this.PedidoSession = pedido;
+            return "{\"idCiudad\": \"" + idCiudad + "\"}";
+          //  }
         }
 
         [HttpPost]
@@ -898,6 +905,12 @@ namespace Cotizador.Controllers
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.usuario = usuario;
             PedidoBL pedidoBL = new PedidoBL();
+
+            if (pedido.idPedido != Guid.Empty || pedido.numeroPedido > 0)
+            {
+                throw new System.Exception("Pedido ya se encuentra creado");
+            }
+
             pedidoBL.InsertPedido(pedido);
             long numeroPedido = pedido.numeroPedido;
             String numeroPedidoString = pedido.numeroPedidoString;
@@ -961,6 +974,18 @@ namespace Cotizador.Controllers
             //String resultado = "{ \"codigo\":\"" + numeroPedido + "\", \"estado\":\"" + estado + "\", \"observacion\":\"" + observacion + "\" }";
             return resultado;
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         public void updateEstadoPedido()
@@ -1046,6 +1071,7 @@ namespace Cotizador.Controllers
 
         public String Search()
         {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
             //Se recupera el pedido Búsqueda de la session
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
 

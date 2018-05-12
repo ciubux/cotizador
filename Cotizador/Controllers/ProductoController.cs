@@ -53,7 +53,7 @@ namespace Cotizador.Controllers
             HSSFWorkbook hssfwb;
 
             ProductoBL productoBL = new ProductoBL();
-            productoBL.truncateProductoStaging();
+        //    productoBL.truncateProductoStaging();
 
             hssfwb = new HSSFWorkbook(file.InputStream);
 
@@ -255,7 +255,7 @@ namespace Cotizador.Controllers
                         //AC
                         if (sheet.GetRow(row).GetCell(28) == null)
                         {
-                            productoStaging.unidadSunat = "NIU";
+                            productoStaging.unidadSunat = "";
                         }
                         else
                         {
@@ -266,7 +266,7 @@ namespace Cotizador.Controllers
                         //AD
                         if (sheet.GetRow(row).GetCell(29) == null)
                         {
-                            productoStaging.unidadAlternativaSunat = "NIU";
+                            productoStaging.unidadAlternativaSunat = "";
                         }
                         else
                         {

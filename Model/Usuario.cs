@@ -75,6 +75,13 @@ namespace Model
         public List<Usuario> usuarioCreaDocumentoVentaList { get; set; }
         public String cotizacionSerializada { get; set; }
         public String pedidoSerializado { get; set; }
+
+
+        public bool creaCotizacionesProvincias { get; set; }
+        public bool tomaPedidosProvincias { get; set; }
+        public bool programaPedidos { get; set; }
+        public bool modificaMaestroClientes { get; set; }
+        public bool modificaMaestroProductos { get; set; }
     }
 }
 

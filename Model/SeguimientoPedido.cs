@@ -31,8 +31,10 @@ namespace Model
             AtendidoParcialmente = 5,
             [Display(Name = "En Edición")]
             Edicion = 6,
-            [Display(Name = "Eliminada")]
-            Eliminada = 7
+            [Display(Name = "Eliminado")]
+            Eliminada = 7,
+            [Display(Name = "Facturado")]
+            Facturado = 8
         };
 
         public estadosSeguimientoPedido estado { get; set; }

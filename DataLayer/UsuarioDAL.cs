@@ -54,11 +54,15 @@ namespace DataLayer
                 usuario.apruebaCotizacionesLima = Converter.GetBool(row, "aprueba_cotizaciones_lima");
                 usuario.apruebaCotizacionesProvincias = Converter.GetBool(row, "aprueba_cotizaciones_provincias");
                 usuario.creaCotizaciones = Converter.GetBool(row, "crea_cotizaciones");
+                usuario.creaCotizacionesProvincias = Converter.GetBool(row, "crea_cotizaciones_provincias");
+
                 //Pedidos
                 usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
                 usuario.apruebaPedidosLima = Converter.GetBool(row, "aprueba_pedidos_lima");
                 usuario.apruebaPedidosProvincias = Converter.GetBool(row, "aprueba_pedidos_provincias");
                 usuario.pedidoSerializado = Converter.GetString(row, "pedido_serializado");
+                usuario.tomaPedidosProvincias = Converter.GetBool(row, "toma_pedidos_provincias");
+                usuario.programaPedidos = Converter.GetBool(row, "programa_pedidos");
                 //Guia
                 usuario.creaGuias = Converter.GetBool(row, "crea_guias");
                 usuario.administraGuiasLima = Converter.GetBool(row, "administra_guias_lima");
@@ -71,7 +75,11 @@ namespace DataLayer
                 usuario.sedeMP = new Ciudad();
                 usuario.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
 
+                usuario.modificaMaestroClientes = Converter.GetBool(row, "modifica_maestro_clientes");
+                usuario.modificaMaestroProductos = Converter.GetBool(row, "modifica_maestro_productos");
 
+               
+        
 
             }
 

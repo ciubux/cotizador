@@ -23,6 +23,8 @@ namespace DataLayer
         public void InsertarDocumentoVenta(DocumentoVenta documentoVenta)
         {
             var objCommand = GetSqlCommand("pi_documentoVenta");
+            if(!Constantes.ES_EOL_PRODUCCION)
+                objCommand = GetSqlCommand("pi_documentoVentaDesarrollo");
 
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idPedido", documentoVenta.venta.pedido.idPedido);
@@ -31,14 +33,29 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoVenta.fechaVencimiento);
             InputParameterAdd.Int(objCommand, "tipoPago", (int)documentoVenta.tipoPago);
             InputParameterAdd.Int(objCommand, "formaPago", (int)documentoVenta.formaPago);
-            InputParameterAdd.Varchar(objCommand, "correoEnvio", documentoVenta.correoEnvio);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+
             InputParameterAdd.Guid(objCommand, "idDocumentoVentaReferencia", Guid.Empty);
             OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaSalida");
             ExecuteNonQuery(objCommand);
 
             documentoVenta.idDocumentoVenta = (Guid)objCommand.Parameters["@idDocumentoVenta"].Value;
 
+            documentoVenta.venta = new Venta();
+            documentoVenta.venta.idVenta = (Guid)objCommand.Parameters["@idVentaSalida"].Value;
+        }
+
+
+        public void UpdateSiguienteNumeroFactura(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pu_siguienteNumeroFactura");
+            if (!Constantes.ES_EOL_PRODUCCION)
+                objCommand = GetSqlCommand("pu_siguienteNumeroFacturaDesarrollo");
+
+            InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            ExecuteNonQuery(objCommand);
         }
 
 
@@ -306,7 +323,11 @@ namespace DataLayer
                         !column.Equals("COD_ESTD_SUNAT") &&
                         !column.Equals("DESCRIPCION") &&
                         !column.Equals("DETALLE") &&
-                        !column.Equals("NUM_CPE") 
+                        !column.Equals("NUM_CPE") &&
+                        !column.Equals("ANULADO") &&
+                        !column.Equals("ENVIADO_A_EOL") &&
+                        !column.Equals("AMBIENTE_PRODUCCION") &&
+                        !column.Equals("id_venta")
                         )
                     {
                         documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));
@@ -364,6 +385,18 @@ namespace DataLayer
                 documentoVenta.serie = Converter.GetString(row, "SERIE");
                 documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
                 documentoVenta.total = Converter.GetDecimal(row, "MNT_TOT_PRC_VTA");
+
+                documentoVenta.pedido = new Pedido();
+                documentoVenta.pedido.numeroPedido = Converter.GetLong(row, "numero");
+                
+                documentoVenta.guiaRemision = new GuiaRemision();
+                documentoVenta.guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
+                documentoVenta.guiaRemision.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                
+
+
+
+
                 documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
                 documentoVenta.descripcionEstadoSunat = Converter.GetString(row, "estado");
 
