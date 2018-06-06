@@ -19,8 +19,54 @@ namespace DataLayer
         {
         }
 
+        public DocumentoVenta obtenerVentaConsolidarFactura(String idMovimientoAlmacenList)
+        {
+            
+
+            var objCommand = GetSqlCommand("ps_consolidarFacturaDesdeVentas");
+            InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable documentoVentaDataTable = dataSet.Tables[0];
+        //    DataTable documentoVentaDetalleDataTable = dataSet.Tables[1];
+
+            DocumentoVenta documentoVenta = new DocumentoVenta();
+            documentoVenta.ventaDetalleList = new List<VentaDetalle>();
+
+            foreach (DataRow row in documentoVentaDataTable.Rows)
+            {
+                VentaDetalle ventaDetalle = new VentaDetalle();
+                ventaDetalle.producto = new Producto();
+                ventaDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                ventaDetalle.producto.sku = Converter.GetString(row, "sku");
+                ventaDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                ventaDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                ventaDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+
+               
+
+
+                ventaDetalle.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+
+                //  ventaDetalle.sumCantidad =  Converter.GetDecimal(row, "sum_cantidad");
+                ventaDetalle.sumCantidadUnidadAlternativa = Converter.GetDecimal(row, "sum_cantidad_unidad_alternativa");
+                ventaDetalle.producto.unidad = Converter.GetString(row, "unidad");
+                ventaDetalle.sumCantidadUnidadEstandar = Converter.GetDecimal(row, "sum_cantidad_unidad_estandar");
+                ventaDetalle.sumPrecioNeto = Converter.GetDecimal(row, "sum_precio_neto");
+                ventaDetalle.sumPrecioUnitario = Converter.GetDecimal(row, "sum_precio_unitario");
+
+                documentoVenta.ventaDetalleList.Add(ventaDetalle);
+            }
+
+            return documentoVenta;
+        }
+
         public void InsertMovimientoAlmacenSalida(GuiaRemision guiaRemision)
         {
+
+
+
+
+            this.BeginTransaction(IsolationLevel.ReadCommitted);
             var objCommand = GetSqlCommand("pi_movimientoAlmacenSalida");
             InputParameterAdd.DateTime(objCommand, "fechaEmision", guiaRemision.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", guiaRemision.fechaTraslado);
@@ -52,6 +98,8 @@ namespace DataLayer
             OutputParameterAdd.BigInt(objCommand, "numeroMovimientoAlmacen");
             OutputParameterAdd.BigInt(objCommand, "numeroVenta");
             OutputParameterAdd.Int(objCommand, "siguienteNumeroGuiaRemision");
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
             ExecuteNonQuery(objCommand);
 
             guiaRemision.idMovimientoAlmacen = (Guid)objCommand.Parameters["@idMovimientoAlmacen"].Value;
@@ -62,13 +110,29 @@ namespace DataLayer
             guiaRemision.venta = new Venta();
             guiaRemision.venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
             guiaRemision.venta.numero = (Int64)objCommand.Parameters["@numeroVenta"].Value;
-            this.InsertMovimientoAlmacenDetalle(guiaRemision);
 
-            if (guiaRemision.numeroDocumento != siguienteNumeroGuiaRemision)
-            {
-                throw new DuplicateNumberDocumentException();
+            guiaRemision.guiaRemisionValidacion = new GuiaRemisionValidacion();
+
+            guiaRemision.guiaRemisionValidacion.tipoErrorValidacion = (GuiaRemisionValidacion.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
+            guiaRemision.guiaRemisionValidacion.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+
+            if(guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
+            { 
+                this.InsertMovimientoAlmacenDetalle(guiaRemision);
+
+                if (guiaRemision.numeroDocumento != siguienteNumeroGuiaRemision)
+                {
+                    throw new DuplicateNumberDocumentException();
+                }
             }
 
+
+            objCommand = GetSqlCommand("pu_venta");
+            InputParameterAdd.Guid(objCommand, "idVenta", guiaRemision.venta.idVenta);
+            InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Venta");
+            ExecuteNonQuery(objCommand);
+
+            this.Commit();
 
         }
 
@@ -78,6 +142,7 @@ namespace DataLayer
 
             foreach (DocumentoDetalle documentoDetalle in guiaRemision.pedido.documentoDetalle)
             {
+                
                 if(documentoDetalle.cantidadPorAtender > 0)
                 { 
                     var objCommand = GetSqlCommand("pi_movimientoAlmacenDetalleSalida");
@@ -337,6 +402,7 @@ namespace DataLayer
                 guiaRemision.ultimaAtencionParcial = Converter.GetBool(row, "ultima_atencion_parcial");
                 guiaRemision.observaciones  = Converter.GetString(row, "observaciones");
                 guiaRemision.estaAnulado = Converter.GetBool(row, "anulado");
+                guiaRemision.estaFacturado = Converter.GetBool(row, "facturado");
                 guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado) Char.Parse(Converter.GetString(row, "motivo_traslado"));
 
               
@@ -416,6 +482,8 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", guiaRemision.fechaTrasladoDesde);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", guiaRemision.fechaTrasladoHasta);
             InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado?1:0);
+            InputParameterAdd.Int(objCommand, "facturado", guiaRemision.estaFacturado ? 1 : 0);
+            InputParameterAdd.BigInt(objCommand, "numeroPedido", guiaRemision.pedido.numeroPedido);
             DataTable dataTable = Execute(objCommand);
 
            
@@ -432,6 +500,7 @@ namespace DataLayer
                 guiaRemision.atencionParcial = Converter.GetBool(row, "atencion_parcial");
                 guiaRemision.ultimaAtencionParcial = Converter.GetBool(row, "ultima_atencion_parcial");
                 guiaRemision.estaAnulado = Converter.GetBool(row, "anulado");
+                guiaRemision.estaFacturado = Converter.GetBool(row, "facturado");
 
                 //PEDIDO
                 guiaRemision.pedido = new Pedido();
@@ -464,6 +533,72 @@ namespace DataLayer
             }
             return guiaRemisionList;
         }
+
+
+        public List<GuiaRemision> SelectGuiasRemisionGrupoCliente(GuiaRemision guiaRemision)
+        {
+            List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
+
+            var objCommand = GetSqlCommand("ps_guiasRemisionGrupoCliente");
+            //InputParameterAdd.BigInt(objCommand, "numeroDocumento", guiaRemision.numeroDocumento);
+            //InputParameterAdd.Guid(objCommand, "idCiudad", guiaRemision.ciudadOrigen.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idCliente", guiaRemision.pedido.cliente.idCliente);
+            //InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
+            InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", guiaRemision.fechaTrasladoDesde);
+            InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", guiaRemision.fechaTrasladoHasta);
+            InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "facturado", guiaRemision.estaFacturado ? 1 : 0);
+            //InputParameterAdd.BigInt(objCommand, "numeroPedido", guiaRemision.pedido.numeroPedido);
+            DataTable dataTable = Execute(objCommand);
+
+
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                //GUIA
+                guiaRemision = new GuiaRemision();
+                guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
+                guiaRemision.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                guiaRemision.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                guiaRemision.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
+                guiaRemision.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                guiaRemision.atencionParcial = Converter.GetBool(row, "atencion_parcial");
+                guiaRemision.ultimaAtencionParcial = Converter.GetBool(row, "ultima_atencion_parcial");
+                guiaRemision.estaAnulado = Converter.GetBool(row, "anulado");
+                guiaRemision.estaFacturado = Converter.GetBool(row, "facturado");
+
+                //PEDIDO
+                guiaRemision.pedido = new Pedido();
+                guiaRemision.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
+                guiaRemision.pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
+                //CLIENTE
+                guiaRemision.pedido.cliente = new Cliente();
+                guiaRemision.pedido.cliente.codigo = Converter.GetString(row, "codigo");
+                guiaRemision.pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                guiaRemision.pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                guiaRemision.pedido.cliente.ruc = Converter.GetString(row, "ruc");
+                //USUARIO
+                guiaRemision.usuario = new Usuario();
+                guiaRemision.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                guiaRemision.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                //SEDE
+                guiaRemision.ciudadOrigen = new Ciudad();
+                guiaRemision.ciudadOrigen.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                guiaRemision.ciudadOrigen.nombre = Converter.GetString(row, "nombre_ciudad");
+                //ESTADO
+                guiaRemision.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
+                guiaRemision.seguimientoMovimientoAlmacenSalida.estado = (SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida)Converter.GetInt(row, "estado_movimiento_almacen");
+                guiaRemision.seguimientoMovimientoAlmacenSalida.observacion = Converter.GetString(row, "observacion_seguimiento");
+                guiaRemision.seguimientoMovimientoAlmacenSalida.usuario = new Usuario();
+                guiaRemision.seguimientoMovimientoAlmacenSalida.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
+                guiaRemision.seguimientoMovimientoAlmacenSalida.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
+
+
+                guiaRemisionList.Add(guiaRemision);
+            }
+            return guiaRemisionList;
+        }
+
 
 
         public void insertSeguimientoPedido(Pedido pedido)

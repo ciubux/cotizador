@@ -13,7 +13,7 @@
     <input type="hidden" id="idPedido" />
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" value="@ViewBag.debug" />
-    <form class="form-horizontal">
+    <form class="form-horizontal" enctype="multipart/form-data" id="formularioConArchivos" method="post">
         <input type="hidden" id="considerarCantidades" name="considerarCantidades" value="2" />
 
         <div class="row">
@@ -71,9 +71,9 @@
                     @Html.LabelFor(p => pedido.tipoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.DropDownList("pedido_tipoPedido",
-                               EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedido), pedido.tipoPedido),
-                               new { @class = "form-control" }
-                               )
+                                    EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedido), pedido.tipoPedido),
+                                    new { @class = "form-control" }
+                                    )
                     </div>
                 </div>
             </div>
@@ -94,11 +94,11 @@
                     @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                                           new
-                                           {
-                                               ciudadSelectId = "idCiudad",
-                                               selectedValue = pedido.ciudad.idCiudad
-                                           })
+                                                new
+                                                {
+                                                    ciudadSelectId = "idCiudad",
+                                                    selectedValue = pedido.ciudad.idCiudad
+                                                })
                     </div>
                 </div>
             </div>
@@ -143,11 +143,11 @@
                     @Html.LabelFor(p => pedido.ciudadASolicitar, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudadASolicitar" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudadesASolicitar", "Ciudad",
-                                           new
-                                           {
-                                               ciudadSelectId = "idCiudadASolicitar",
-                                               selectedValue = pedido.ciudadASolicitar.idCiudad
-                                           })
+                                                new
+                                                {
+                                                    ciudadSelectId = "idCiudadASolicitar",
+                                                    selectedValue = pedido.ciudadASolicitar.idCiudad
+                                                })
                     </div>
                 </div>
             </div>
@@ -169,15 +169,15 @@
                         <div class="col-xs-8">
                             <!--class="control-departamento-width" style="display:flex">-->
                             @Html.Action("GetDepartamentos", "Ubigeo",
-                                                               new
-                                                               {
-                                                                   departamentoSelectId = "ActualDepartamento",
-                                                                   provinciaSelectId = "ActualProvincia",
-                                                                   distritoSelectId = "ActualDistrito",
-                                                                   provinciaDivId = "dvProvincias",
-                                                                   distritoDivId = "dvDistritos",
-                                                                   selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2)
-                                                               })
+                                                                    new
+                                                                    {
+                                                                        departamentoSelectId = "ActualDepartamento",
+                                                                        provinciaSelectId = "ActualProvincia",
+                                                                        distritoSelectId = "ActualDistrito",
+                                                                        provinciaDivId = "dvProvincias",
+                                                                        distritoDivId = "dvDistritos",
+                                                                        selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2)
+                                                                    })
 
                         </div>
                     </div>
@@ -189,15 +189,15 @@
                         <div id="dvProvincias" class="col-xs-8">
                             <!-- class="control-provincia-width" style="display:flex">-->
                             @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
-                                                           new
-                                                           {
-                                                               departamentoSelectId = "ActualDepartamento",
-                                                               provinciaSelectId = "ActualProvincia",
-                                                               distritoSelectId = "ActualDistrito",
-                                                               distritoDivId = "dvDistritos",
-                                                               codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                                               selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4)
-                                                           })
+                                                                new
+                                                                {
+                                                                    departamentoSelectId = "ActualDepartamento",
+                                                                    provinciaSelectId = "ActualProvincia",
+                                                                    distritoSelectId = "ActualDistrito",
+                                                                    distritoDivId = "dvDistritos",
+                                                                    codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                                                    selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4)
+                                                                })
                         </div>
                     </div>
                 </div>
@@ -233,9 +233,9 @@
                         @Html.LabelFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
                         <div class="col-xs-8 col-lg-9">
                             @Html.DropDownList("pedido_direccionEntrega",
-                                                        new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "descripcion", pedido.direccionEntrega.idDireccionEntrega, null),
-                                                        "Seleccione Dirección de Entrega",
-                                                        new { @class = "form-control" })
+                                                             new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "descripcion", pedido.direccionEntrega.idDireccionEntrega, null),
+                                                             "Seleccione Dirección de Entrega",
+                                                             new { @class = "form-control" })
                         </div>
                         <div class="col-xs-2 col-lg-1">
                             <button id="btnAgregarDireccion" type="button" class="btn btn-primary bouton-image-add addDireccion" data-toggle="modal" data-target="#modalAgregarDireccion"></button>
@@ -454,13 +454,13 @@
 
                 <!--FLETE-->
                 <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
-                <div class="form-group">
-                    @Html.LabelFor(p => pedido.otrosCargos, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        @Html.TextBoxFor(p => pedido.otrosCargos, htmlAttributes: new { @class = "form-control", type = "number", step = ".1" })
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.otrosCargos, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(p => pedido.otrosCargos, htmlAttributes: new { @class = "form-control", type = "number", step = ".1" })
+                        </div>
                     </div>
                 </div>
-            </div>
 
 
             </div>
@@ -545,7 +545,7 @@
             {
                 <th data-name="costo" data-visible="false">Costo</th>
         }
-                    <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Reg. Fact.</th>
@@ -675,9 +675,11 @@
                     @Html.LabelFor(p => pedido.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
                     <div class="col-xs-8">
                         @Html.TextAreaFor(p => pedido.observaciones, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
-
                     </div>
                 </div>
+
+
+
             </div>
             <div class="col-sm-6 col-lg-3">
 
@@ -705,6 +707,8 @@
             </div>
         </div>
 
+
+
         <div class="row">
             <!--OBSERVACIONES-->
             <div class="col-sm-6 col-lg-9">
@@ -726,6 +730,39 @@
                     <div class="col-xs-8">
                         @Html.TextBoxFor(p => pedido.observacionesFactura, htmlAttributes: new { @class = "form-control" })
                         <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
+                    <div class="col-xs-3">
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2"></label>
+                    <div class="col-xs-8">
+                        <ul id="nombreArchivos">
+                            @foreach (Model.PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
+                        {
+                            <li>
+                                <a href="javascript:mostrar();" class="descargar">@pedidoAdjunto.nombre</a>
+                                <a href="javascript:mostrar();"><img src="~/images/icon-close.png" id="@pedidoAdjunto.nombre" class="btnDeleteArchivo" /></a>
+                            </li>
+                    }
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -797,7 +834,7 @@
 
 
 
-                <form class="form-horizontal">
+                <form class="form-horizontal" >
                     <div class="row">
 
                         <div class="col-sm-6 col-lg-6">
@@ -1108,13 +1145,22 @@
             <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="row">
-
-                        <label for="numero" class="control-label col-xs-1">Producto:</label>
-                        <div class="col-xs-10">
-                            <p class="form-control-static" id="verProducto"></p>
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProducto"></p>
+                                </div>
+                            </div>
                         </div>
-
-
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <table id="tableMostrarPrecios" class="table" data-editing="false"
@@ -1143,8 +1189,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" id="btnCancelCalculadora" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnSaveDescuento" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
             </div>
         </div>
     </div>

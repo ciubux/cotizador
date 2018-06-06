@@ -121,7 +121,16 @@ namespace DataLayer
                     producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                     producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                     producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
-                    producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+
+                    if (row["fecha_fin_vigencia"] == DBNull.Value)
+                    {
+                        producto.precioClienteProducto.fechaFinVigencia = null;
+                    }
+                    else
+                    {
+                        producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+                    }
+                //    producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
                     producto.precioClienteProducto.cliente = new Cliente();
                     producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 }
@@ -210,6 +219,8 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
                 cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
 
+                //El Precio sin igv es el precio lista
+                cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
 
 
                 cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
@@ -234,10 +245,30 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
 
 
+                //   cotizacionDetalle.porcentajeDescuento = Decimal.Parse(Request["porcentajeDescuento"].ToString());
+                ///   detalle.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
+
+                //cotizacionDetalle.porcentajeDescuento = cotizacionDetalle.producto.precioClienteProducto.precioNeto
+                //    75×25 / 100 = 18,75
+
+               // cotizacionDetalle
+
+                if (cotizacionDetalle.esPrecioAlternativo)
+                {
+                    
+
+                    //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
+                    //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
+                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.equivalencia));
+                }
+                else
+                {
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioClienteProducto.precioNeto;
+                }
 
 
                 //Se multiplica por la equivalente para que cuando se haga el recalculo a la hora de obtener el precioneto se recupere correctamente
-                cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.precioClienteProducto.equivalencia;
+           //     cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.precioClienteProducto.equivalencia;
                 cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
 
                 cotizacionDetalle.observacion = null;

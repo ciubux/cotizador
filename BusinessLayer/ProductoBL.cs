@@ -113,16 +113,26 @@ namespace BusinessLayer
                         inStream.Close();
                         cotizacionDetalle.producto.image = storeStream.GetBuffer();
                     }
+
+
+                  
+
                     //Si es provincia se considera el precioProvincia
                     //cotizacion.ciudad.
                     if (esProvincia)
                     {
-                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                         cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
                     }
-                    else
+
+                    if (cotizacionDetalle.esPrecioAlternativo)
                     {
-                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
+                        cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia;
+                        cotizacionDetalle.porcentajeDescuento = 100 - ((cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia) * 100 / cotizacionDetalle.producto.precioSinIgv);
+                    }
+                    else
+                    { 
+                        cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
+                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto  * 100 / cotizacionDetalle.producto.precioSinIgv);
                     }
 
 

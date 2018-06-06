@@ -8,12 +8,17 @@ namespace Cotizador
         // Para obtener más información sobre Bundles, visite http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+
+            bundles.Add(new ScriptBundle("~/bundles/utiles").Include(
+                         "~/Scripts/utiles.js"
+                         ));
+
             bundles.Add(new ScriptBundle("~/bundles/venta").Include(
-                         "~/Scripts/venta.js"
+                         "~/Scripts/venta8.js"
                          ));
 
             bundles.Add(new ScriptBundle("~/bundles/factura").Include(
-                        "~/Scripts/factura.js"
+                        "~/Scripts/factura9.js"
                         ));
 
 
@@ -30,24 +35,23 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cotizacion").Include(
-                        "~/Scripts/cotizacion2.js"
+                        "~/Scripts/cotizacion8.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
-                        "~/Scripts/pedido3.js"
+                        "~/Scripts/pedido8.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
-                     "~/Scripts/cliente2.js"
+                     "~/Scripts/cliente8.js"
                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
-                        "~/Scripts/guiaRemision2.js"
+                        "~/Scripts/guiaRemision8.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-3.1.1.min.js",
-                        
                         "~/Scripts/footable.min.js"
                         ));
 
@@ -62,6 +66,11 @@ namespace Cotizador
             bundles.Add(new ScriptBundle("~/bundles/loadingModal").Include(
                     "~/Scripts/jquery.loadingModal.js"
                     ));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/confirm").Include(
+                    "~/Scripts/jquery-confirm.js"
+                    ));          
 
 
 
@@ -88,7 +97,8 @@ namespace Cotizador
                       "~/Content/jquery-ui.min.css",
                       "~/Content/site.css",
                       "~/Content/chosen/chosen.css",
-                      "~/Content/jquery.loadingModal.css"));
+                      "~/Content/jquery.loadingModal.css",
+                      "~/Content/jquery-confirm.css"));
 
             bundles.Add(new StyleBundle("~/Content/PrintGuiaL").Include(
                        "~/Content/PrintGuiaL.css"
@@ -118,8 +128,8 @@ namespace Cotizador
                       "~/Content/PrintGuiaC.css"
                       ));
 
-            bundles.Add(new StyleBundle("~/Content/PrintGuiaP").Include(
-                      "~/Content/PrintGuiaT.css"
+            bundles.Add(new StyleBundle("~/Content/PrintGuiaZ").Include(
+                      "~/Content/PrintGuiaZ.css"
                       ));
 
 

@@ -28,22 +28,92 @@ namespace Cotizador.Controllers
             PrecioClienteProductoBL precioClienteProductoBL = new PrecioClienteProductoBL();
             List<PrecioClienteProducto> precioClienteProductoList = precioClienteProductoBL.getPreciosRegistrados(idProducto, idCliente);
             String nombreProducto = String.Empty;
+            String skuProducto = String.Empty;
             foreach (DocumentoDetalle documentoDetalle in documento.documentoDetalle)
             {
                 if (documentoDetalle.producto.idProducto == idProducto)
                 {
                     nombreProducto = documentoDetalle.producto.descripcion;
+                    skuProducto = documentoDetalle.producto.sku;
                     break;
                 }
             }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
-            String json = "{\"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
+            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
 
+
+        public String GetPreciosRegistradosVenta()
+        {
+            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
+        
+
+
+            IDocumento documento = (IDocumento)venta.pedido;
+
+            //Para recuperar el producto se envia si la sede seleccionada es provincia o no
+            PrecioClienteProductoBL precioClienteProductoBL = new PrecioClienteProductoBL();
+            List<PrecioClienteProducto> precioClienteProductoList = precioClienteProductoBL.getPreciosRegistrados(idProducto, idCliente);
+            String nombreProducto = String.Empty;
+            String skuProducto = String.Empty;
+            foreach (DocumentoDetalle documentoDetalle in documento.documentoDetalle)
+            {
+                if (documentoDetalle.producto.idProducto == idProducto)
+                {
+                    nombreProducto = documentoDetalle.producto.descripcion;
+                    skuProducto = documentoDetalle.producto.sku;
+                    break;
+                }
+            }
+
+            String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
+
+            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
+
+            return json;
+        }
+
+        public String GetPreciosRegistradosVentaVer()
+        {
+            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+
+
+
+            IDocumento documento = (IDocumento)venta.pedido;
+
+            //Para recuperar el producto se envia si la sede seleccionada es provincia o no
+            PrecioClienteProductoBL precioClienteProductoBL = new PrecioClienteProductoBL();
+            List<PrecioClienteProducto> precioClienteProductoList = precioClienteProductoBL.getPreciosRegistrados(idProducto, idCliente);
+            String nombreProducto = String.Empty;
+            String skuProducto = String.Empty;
+            foreach (DocumentoDetalle documentoDetalle in documento.documentoDetalle)
+            {
+                if (documentoDetalle.producto.idProducto == idProducto)
+                {
+                    nombreProducto = documentoDetalle.producto.descripcion;
+                    skuProducto = documentoDetalle.producto.sku;
+                    break;
+                }
+            }
+
+            String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
+
+            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
+
+            return json;
+        }
+
+        
 
 
 

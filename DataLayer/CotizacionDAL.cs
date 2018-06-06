@@ -429,6 +429,9 @@ namespace DataLayer
                 
                 
                 cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
+                cotizacion.minimoMargen = Converter.GetDecimal(row, "minimo_margen");
+
+                
 
                 ///Mover "{0:0.00}" a clase de constantes
                 cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1 + cotizacion.igv)));

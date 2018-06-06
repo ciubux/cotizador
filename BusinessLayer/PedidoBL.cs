@@ -38,45 +38,100 @@ namespace BusinessLayer
                     pedidoDetalle.precioNeto = 0;
                 }
 
-
+                
 
                 pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
-                if (!pedido.usuario.apruebaPedidos)
+
+                /*Si es distinto de traslado se interno se valida los precios de lo contrario pasa directamente sin aprobacion*/
+                if (pedido.tipoPedido != Pedido.tiposPedido.TrasladoInterno)
                 {
-                    //Validación precio unitario
-                    if (pedidoDetalle.producto.precioClienteProducto.precioUnitario == 0)
+
+                    if (!pedido.usuario.apruebaPedidos)
                     {
-                        if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioLista + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
-                    pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioLista - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                        PrecioClienteProducto precioClienteProducto = pedidoDetalle.producto.precioClienteProducto;
+
+                        int evaluarVariacion = 0;
+                        //¿Tiene precio registrado para facturación? y eliente es el mismo?
+                        if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty && precioClienteProducto.cliente.idCliente == pedido.cliente.idCliente)
                         {
-                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista.\n";
-                            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                            if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
+                            {
+                                evaluarVariacion = 1;
+                            }
+                            else
+                            {
+                                //Si el precio unitario de referencia es válido se envía a evaluar el precio de referencia
+                                evaluarVariacion = 2;
+                            }
+
+                        }
+                        else
+                        {
+                            evaluarVariacion = 3;
                         }
 
-                    }
-                    else
-                    {
-                        if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioClienteProducto.precioUnitario + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
-                    pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioClienteProducto.precioUnitario - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                        if (evaluarVariacion > 0)
                         {
-                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio unitario registrado en facturación.\n";
-                            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+
+
+                            if (evaluarVariacion == 2)
+                            {
+                                if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioClienteProducto.precioUnitario + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
+                        pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioClienteProducto.precioUnitario - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                                {
+                                    pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio unitario registrado en facturación.\n";
+                                    pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                                }
+                            }
+                            else {
+                                if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioLista + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
+                       pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioLista - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                                {
+                                    if(evaluarVariacion == 1)
+                                    { 
+                                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio unitario registrado en facturación se registro hace más de " + Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION + " días.\n";
+                                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                                    }
+                                    else
+                                    {
+                                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. No se encontró precio unitario en precios registrados en facturación.\n";
+                                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                                    }
+
+
+
+
+                                }
+
+
+                            }
+
                         }
                     }
+
+
+                  
                 }
             }
 
-            /*
 
-            if (!pedido.usuario.apruebaPedidos)
+            foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
+                pedidoAdjunto.usuario = pedido.usuario;
+                pedidoAdjunto.idCliente = pedido.cliente.idCliente;
+            }
 
-                pedido.seguimientoPedido.observacion = "La fecha de la solicitud es inferior a la fecha actual.";
-                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Pendiente;
-            }*/
-                
-        }
+                /*
+
+                if (!pedido.usuario.apruebaPedidos)
+                {
+
+                    pedido.seguimientoPedido.observacion = "La fecha de la solicitud es inferior a la fecha actual.";
+                    pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Pendiente;
+                }*/
+
+            }
 
 
 
@@ -102,6 +157,14 @@ namespace BusinessLayer
         }
 
 
+        public void ActualizarPedido(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                dal.ActualizarPedido(pedido);
+            }
+        }
+
         public void ProgramarPedido(Pedido pedido,Usuario usuario)
         {
             using (var dal = new PedidoDAL())
@@ -126,7 +189,10 @@ namespace BusinessLayer
                 pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
                 pedidoDetalle.unidad = documentoDetalle.unidad;
                 pedidoDetalle.producto = documentoDetalle.producto;
-                pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
+                if (pedidoDetalle.esPrecioAlternativo)
+                    pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+                else
+                    pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
                 pedidoDetalle.flete = documentoDetalle.flete;
                 pedidoDetalle.observacion = documentoDetalle.observacion;
                 pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;

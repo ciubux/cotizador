@@ -383,9 +383,9 @@ jQuery(function ($) {
 
                         var direccionDomicilioLegalSunat = $("#cliente_direccionDomicilioLegalSunat").val();
 
-                          $('body').loadingModal({
-                                text: 'Recuperando Ubicación Geográfica...'
-                            });
+                        $('body').loadingModal({
+                            text: 'Recuperando Ubicación Geográfica...'
+                        });
                         $.ajax({
                             url: "/Cliente/ChangeDireccionDomicilioLegalSunat",
                             type: 'POST',
@@ -393,6 +393,10 @@ jQuery(function ($) {
                             data: {
                                 direccionDomicilioLegalSunat: direccionDomicilioLegalSunat
                             },
+                            erro: function () {
+                                $('body').loadingModal('hide')
+                            },
+
                             success: function (resultado) {
                                 $('body').loadingModal('hide')
                                 $("#cliente_direccionDomicilioLegalSunat").val(resultado.direccionDomicilioLegalSunat);
@@ -404,6 +408,9 @@ jQuery(function ($) {
 
                         changeInputString("estadoContribuyente", $("#cliente_estadoContribuyente").val())
                         changeInputString("condicionContribuyente", $("#cliente_condicionContribuyente").val())
+                    }
+                    else {
+                        alert("El RUC que acaba de pegar no coincide con el RUC del cliente.");
                     }
                 });
             });
@@ -449,7 +456,7 @@ jQuery(function ($) {
             success: function (resultado) {
                 $('body').loadingModal('hide');
                 alert("El cliente se editó correctamente.");
-                location.reload();
+                window.location = '/Cliente/Editar';
             }
         });
 

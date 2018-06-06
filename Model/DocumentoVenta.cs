@@ -22,6 +22,19 @@ namespace Model
         [Display(Name = "Tipo Pago:")]
         public TipoPago tipoPago { get; set; }
 
+
+
+
+
+        public String tipoPagoString
+        {
+            get
+            {
+                return EnumHelper<TipoPago>.GetDisplayValue(this.tipoPago);
+            }
+        }
+
+
         [Display(Name = "Forma de Pago:")]
         public FormaPago formaPago { get; set; }
 
@@ -38,18 +51,22 @@ namespace Model
             Crédito7 = 2,
             [Display(Name = "CRÉDITO A 15 DÍAS")]
             Crédito15 = 3,
+            [Display(Name = "CRÉDITO A 20 DÍAS")]
+            Crédito20 = 8,
+            [Display(Name = "CRÉDITO A 21 DÍAS")]
+            Crédito21 = 10,
+            [Display(Name = "CRÉDITO A 25 DÍAS")]
+            Crédito25 = 11,
             [Display(Name = "CRÉDITO A 30 DÍAS")]
             Crédito30 = 4,
+            [Display(Name = "CRÉDITO A 45 DÍAS")]
+            Crédito45 = 9,
             [Display(Name = "CRÉDITO A 60 DÍAS")]
             Crédito60 = 5,
             [Display(Name = "CRÉDITO A 90 DÍAS")]
             Crédito90 = 6,
             [Display(Name = "CRÉDITO A 120 DÍAS")]
-            Crédito120 = 7,
-            [Display(Name = "CRÉDITO A 20 DÍAS")]
-            Crédito20 = 8,
-            [Display(Name = "CRÉDITO A 45 DÍAS")]
-            Crédito45 = 9
+            Crédito120 = 7                   
         };
 
         public enum FormaPago
@@ -81,6 +98,17 @@ namespace Model
         [Display(Name = "Correo Oculato:")]
         public String correoOculto { get; set; }
 
+
+        public String tipoDocumentoString
+        {
+            get
+            {
+                return EnumHelper<TipoDocumento>.GetDisplayValue(this.tipoDocumento);
+            }
+        }
+
+
+        [Display(Name = "Tipo Documento:")]
         public TipoDocumento tipoDocumento { get; set; }
 
 
@@ -98,6 +126,29 @@ namespace Model
         public String serieNumero { get { return this.serie + "-" + this.numero; } }
 
 
+        public String descripcionError { get; set;  }
+
+        public TiposErrorValidacion tiposErrorValidacion { get; set; }
+        public String tiposErrorValidacionString
+        {
+            get
+            {
+                return EnumHelper<TiposErrorValidacion>.GetDisplayValue(this.tiposErrorValidacion);
+            }
+        }
+
+        public enum TiposErrorValidacion
+        {
+            [Display(Name = "Ninguno")]
+            NoExisteError = 0,
+            [Display(Name = "Existen Documentos con Fecha Posterior")]
+            ExisteDocumentoFechaPosterior = 1,
+            [Display(Name = "Guía de Remisión ya se encuentra facturada")]
+            ExisteGuiaRemision = 2,
+            [Display(Name = "Usario no tiene permisos para crear facturas")]
+            UsuarioNoAutorizado = 3
+        }
+
         public enum TipoDocumento
         {
             [Display(Name = "Todos")]
@@ -112,9 +163,7 @@ namespace Model
             NotaDébito = 8
         };
 
-        public bool estaAnulado { get; set; }
-
-
+       
         public CPE_CABECERA_BE cPE_CABECERA_BE;
 
         public List<CPE_DETALLE_BE> cPE_DETALLE_BEList;
@@ -142,11 +191,7 @@ namespace Model
 
 
         public GlobalEnumTipoOnline globalEnumTipoOnline;
-
-        public String descripcionEstadoSunat { get; set; }
-
-
-
+        
 
 
         [Display(Name = "Fecha Emisión Desde:")]
@@ -159,21 +204,79 @@ namespace Model
 
         public GuiaRemision guiaRemision { get; set; }
 
+        public String estadoDocumentoSunatString
+        {
+            get
+            {
+                return EnumHelper<EstadosDocumentoSunat>.GetDisplayValue(this.estadoDocumentoSunat);
+            }
+        }
+
+        public EstadosDocumentoSunat estadoDocumentoSunat { get; set; }
+
+        public enum EstadosDocumentoSunat
+        {
+            [Display(Name = "EN PROCESO")]
+            EnProceso = 101,
+            [Display(Name = "ACEPTADO")]
+            Aceptado = 102,
+            [Display(Name = "ACEPTADO CON OBS.")]
+            AceptadoConObs = 103,
+            [Display(Name = "RECHAZADO")]
+            Rechazado = 104,
+            [Display(Name = "ANULADO")]
+            Anulado = 105,
+            [Display(Name = "EXCPETION")]
+            Exception = 106,
+            [Display(Name = "EN PROCESO ANULACIÓN")]
+            EnProcesoAnulacion = 108,
+            [Display(Name = "NO IDENTIFICADO")]
+            NoIdentificado = 0
+        };
+
+
+        public String estadoDocumentoSunatBusquedaString
+        {
+            get
+            {
+                return EnumHelper<EstadosDocumentoSunatBusqueda>.GetDisplayValue(this.estadoDocumentoSunatBusqueda);
+            }
+        }
+
+        [Display(Name = "Estado:")]
+        public EstadosDocumentoSunatBusqueda estadoDocumentoSunatBusqueda { get; set; }
+        public enum EstadosDocumentoSunatBusqueda
+        {
+            [Display(Name = "TODOS")]
+            Todos = 0,
+            [Display(Name = "EN PROCESO")]
+            EnProceso = 101,
+            [Display(Name = "ACEPTADO Y ACEPTADO CON OBS.")]
+            TodosAceptados = 205,
+            [Display(Name = "RECHAZADO")]
+            Rechazado = 104,
+            [Display(Name = "EN PROCESO ANULACIÓN")]
+            EnProcesoAnulacion = 108,
+            [Display(Name = "ANULADO")]
+            Anulado = 105,
+            [Display(Name = "OTROS")]
+            Otros = 1
+        };
 
 
 
 
 
+        
+        public String comentarioAnulado { get; set; }
 
 
 
 
 
-
-
-
-
-
+        public bool solicitadoAnulacion { get; set; }
+        public String comentarioSolicitudAnulacion { get; set; }
+        public String comentarioAprobacionAnulacion { get; set; }
 
 
 
@@ -202,7 +305,7 @@ namespace Model
         [Display(Name = "Total:")]
         public Decimal total { get; set; }
 
-        [Display(Name = "Observaciones:")]
+        [Display(Name = "Observaciones Factura:")]
         public String observaciones { get; set; }
 
         [Display(Name = "Está Anulado:")]
@@ -211,6 +314,18 @@ namespace Model
         [Display(Name = "Usuario:")]
         public Usuario usuario { get; set; }
 
+        public MovimientoAlmacen movimientoAlmacen { get; set; }
+
         public List<VentaDetalle> ventaDetalleList { get; set; }
+
+        [Display(Name = "N° Doc Referencia Adicional:")]
+        public String documentoReferenciaAdicional { get; set; }
+
+
+
+        public byte[] cpeFile { get; set; }
+
+        public byte[] cdrFile { get; set; }
+
     }
 }

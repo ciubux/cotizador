@@ -846,12 +846,21 @@ jQuery(function ($) {
     $(document).on('click', "button.btnMostrarPrecios", function () {
 
         var idProducto = event.target.getAttribute("class").split(" ")[0];
-        var idCliente = $("#idCliente").val();
-        if (idCliente.trim() == "") {
-            alert("Debe seleccionar un cliente.");
-            $('#idCliente').trigger('chosen:activate');
-            return false;
+
+        var sessionCotizacion = "cotizacion"
+        if ($("#pagina").val() == "0") {
+            idCliente = $("#verIdCliente").val();
+            sessionCotizacion = "cotizacionVer";
         }
+        else {
+            idCliente = $("#idCliente").val();
+            if (idCliente.trim() == "") {
+                alert("Debe seleccionar un cliente.");
+                $('#idCliente').trigger('chosen:activate');
+                return false;
+            }
+        }
+
         $.ajax({
             url: "/Precio/GetPreciosRegistrados",
             type: 'POST',
@@ -859,11 +868,12 @@ jQuery(function ($) {
             data: {
                 idProducto: idProducto,
                 idCliente: idCliente,
-                controller: "cotizacion"
+                controller: sessionCotizacion
             },
             success: function (producto) {
 
                 $("#verProducto").html(producto.nombre);
+                $("#verCodigoProducto").html(producto.sku);
 
                 var precioListaList = producto.precioLista;
 
@@ -993,7 +1003,7 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
                     '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button name="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios"></button></td>'+
+                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + detalle.idProducto+' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>'+
 
                     esRecotizacion +
 
@@ -1573,6 +1583,8 @@ jQuery(function ($) {
                 //var cotizacion = $.parseJSON(respuesta);
                 var cotizacion = resultado.cotizacion;
                 var usuario = resultado.usuario;
+                
+                $("#verIdCliente").val(cotizacion.cliente.idCliente);
 
                 $("#verNumero").html(cotizacion.codigo);
                 $("#verCiudad").html(cotizacion.ciudad.nombre);
@@ -1637,6 +1649,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
+                        '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
                         '</tr>';
 
                 }
@@ -1655,7 +1668,7 @@ jQuery(function ($) {
                 ) {
                     $("#btnEditarCotizacion").show();
                     if (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION) {
-                        $("#btnEditarCotizacion").html("Continuar Editanto");
+                        $("#btnEditarCotizacion").html("Continuar Editando");
                     }
                     else
                     {
@@ -2566,6 +2579,8 @@ jQuery(function ($) {
             var costo = $("." + arrId[0] + ".detcostoLista").text();
 
             var observacion = $("." + arrId[0] + ".detobservacionarea").val(); 
+            if (observacion == null)
+                observacion = "";
 
             json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo + '", "observacion":"' + observacion+'"},' 
         });
@@ -2748,6 +2763,8 @@ jQuery(function ($) {
         var numero = $("#numero").val();
         var estado = $("#estado").val();
 
+
+        $("#btnBusquedaCotizaciones").attr("disabled","disabled");
         $.ajax({
             url: "/Cotizacion/SearchCotizaciones",
             type: 'POST',
@@ -2760,8 +2777,11 @@ jQuery(function ($) {
                 numero: numero,
                 estado: estado
             },
+            error: function () {
+                $("#btnBusquedaCotizaciones").removeAttr("disabled");
+            },
             success: function (cotizacionList) {
-
+                $("#btnBusquedaCotizaciones").removeAttr("disabled");
               
                 $("#tableCotizaciones > tbody").empty();
                 //FooTable.init('#tableCotizaciones');
@@ -2804,6 +2824,7 @@ jQuery(function ($) {
                         '<td>' + Number(cotizacionList[i].montoIGV).toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + Number(cotizacionList[i].montoTotal).toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + Number(cotizacionList[i].maximoPorcentajeDescuentoPermitido).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(cotizacionList[i].minimoMargen).toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + cotizacionList[i].seguimientoCotizacion.estadoString + '</td>' +
                         '<td>' + cotizacionList[i].seguimientoCotizacion.usuario.nombre + '</td>' +
                         '<td>' + observacion + '</td>' +

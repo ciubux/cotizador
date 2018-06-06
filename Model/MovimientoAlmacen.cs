@@ -25,7 +25,7 @@ namespace Model
             Compra = 'C',
             [Display(Name = "Devolución de Compra")]
             DevolucionCompra = 'B',
-            [Display(Name = "Devolución de Compra")]
+            [Display(Name = "Devolución de Venta")]
             DevolucionVenta = 'D',
             [Display(Name = "Devolución de Préstamo")]
             DevolucionPrestamo = 'E',
@@ -63,7 +63,16 @@ namespace Model
 
         public Boolean estaAnulado { get; set; }
 
-        public String estaAnuladoDescripcion { get { return this.estaAnulado ? "Anulada" : "Emitida"; } }
+        public Boolean estaFacturado { get; set; }
+
+        public String estadoDescripcion { get {
+
+                return this.estaAnulado ? "Anulada" : 
+                    (this.estaFacturado ? "Facturada" :   "Emitida");
+
+            }
+
+        }
 
         public String comentarioAnulado { get; set; }
 

@@ -3,6 +3,7 @@ using Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -62,8 +63,8 @@ namespace Cotizador.Controllers
         private void instanciarPedidoBusqueda()
         {
             Pedido pedidoTmp = new Pedido();
-            DateTime fechaDesde = DateTime.Now.AddDays(-1);
-            DateTime fechaHasta = DateTime.Now.AddDays(10);
+            DateTime fechaDesde = DateTime.Now.AddDays(Constantes.diasDesdeBusquedaPedido);
+            DateTime fechaHasta = DateTime.Now.AddDays(1);
 
             pedidoTmp.fechaSolicitudDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
             pedidoTmp.fechaSolicitudHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
@@ -101,7 +102,7 @@ namespace Cotizador.Controllers
             else
             {
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.tomaPedidos && !usuario.apruebaPedidos)
+                if (!usuario.tomaPedidos && !usuario.apruebaPedidos && !usuario.visualizaPedidos)
                 {
                     return RedirectToAction("Login", "Account");
                 }
@@ -231,8 +232,8 @@ namespace Cotizador.Controllers
                 ViewBag.pedido = pedido;
                 ViewBag.VARIACION_PRECIO_ITEM_PEDIDO = Constantes.VARIACION_PRECIO_ITEM_PEDIDO;
 
-
-                ViewBag.fechaPrecios = pedido.fechaPrecios.ToString(Constantes.formatoFecha);
+                ViewBag.fechaPrecios = DateTime.Now.AddDays(-Constantes.DIAS_MAX_BUSQUEDA_PRECIOS).ToString(Constantes.formatoFecha);
+             //   ViewBag.fechaPrecios = pedido.fechaPrecios.ToString(Constantes.formatoFecha);
                 
             }
             catch (Exception ex)
@@ -286,8 +287,11 @@ namespace Cotizador.Controllers
                 pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
                 pedidoDetalle.flete = documentoDetalle.flete;
                 pedidoDetalle.observacion = documentoDetalle.observacion;
-                pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;             
-                pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
+                pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
+                if(documentoDetalle.esPrecioAlternativo)
+                    pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+                else
+                    pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
                 pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
                 pedidoDetalle.producto = documentoDetalle.producto;
                 pedidoDetalle.unidad = documentoDetalle.unidad;
@@ -334,6 +338,7 @@ namespace Cotizador.Controllers
             pedido.seguimientoPedido = new SeguimientoPedido();
             pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
+            pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
             pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
 
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
@@ -541,6 +546,13 @@ namespace Cotizador.Controllers
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                 //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
                 detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * producto.equivalencia));
+
+                //Si es el precio Alternativo se debe modificar el precio_cliente_producto para que compare con el precio
+                //de la unidad alternativa en lugar del precio de la unidad estandar
+                detalle.producto.precioClienteProducto.precioUnitario =
+                    detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
+
+
             }
             else
             {
@@ -895,10 +907,128 @@ namespace Cotizador.Controllers
 
         #region CREAR/ACTUALIZAR PEDIDO
 
+        public String UpdatePost()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];           
+            
+            //pedido.
+            PedidoBL pedidoBL = new PedidoBL();
+            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            pedido.numeroReferenciaAdicional = this.Request.Params["numeroReferenciaAdicional"];
+            pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
+            pedido.observaciones = this.Request.Params["observaciones"];
+            pedido.observacionesFactura = this.Request.Params["observacionesFactura"];
+
+
+
+
+            pedidoBL.ActualizarPedido(pedido);
+            long numeroPedido = pedido.numeroPedido;
+            String numeroPedidoString = pedido.numeroPedidoString;
+            Guid idPedido = pedido.idPedido;
+            int estado = (int)pedido.seguimientoPedido.estado;
+
+
+
+
+
+
+
+          
+            var v = new { numeroPedido = numeroPedidoString, estado = estado, idPedido = idPedido };
+            String resultado = JsonConvert.SerializeObject(v);
+            return resultado;
+        }
+
+        public void ChangeFiles(List<HttpPostedFileBase> files)
+        {
+           
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+
+            if((int)this.Session[Constantes.VAR_SESSION_PAGINA] == (int)Constantes.paginas.BusquedaPedidos )
+                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+
+
+            foreach (var file in files)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    if (pedido.pedidoAdjuntoList.Where(p => p.nombre.Equals(file.FileName) ).FirstOrDefault() != null)
+                    {
+                        continue;
+                    }
+                    
+
+                    PedidoAdjunto pedidoAdjunto = new PedidoAdjunto();
+                    using (Stream inputStream = file.InputStream)
+                    {
+                        MemoryStream memoryStream = inputStream as MemoryStream;
+                        if (memoryStream == null)
+                        {
+                            memoryStream = new MemoryStream();
+                            inputStream.CopyTo(memoryStream);
+                        }
+                        pedidoAdjunto.nombre = file.FileName;
+                        pedidoAdjunto.adjunto = memoryStream.ToArray();
+                    }
+                    pedido.pedidoAdjuntoList.Add(pedidoAdjunto);
+                }
+            }
+
+        }
+
+
+        public String DescartarArchivos()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            if ((int)this.Session[Constantes.VAR_SESSION_PAGINA] == (int)Constantes.paginas.BusquedaPedidos)
+                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+
+
+            String nombreArchivo = Request["nombreArchivo"].ToString();
+
+            List<PedidoAdjunto> pedidoAdjuntoList = new List<PedidoAdjunto>();
+            foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList )
+            {
+                if(!pedidoAdjunto.nombre.Equals(nombreArchivo))
+                    pedidoAdjuntoList.Add(pedidoAdjunto);
+            }
+
+            pedido.pedidoAdjuntoList = pedidoAdjuntoList;
+
+            return JsonConvert.SerializeObject(pedido.pedidoAdjuntoList);
+        }
+
+        public String Descargar()
+        {
+            String nombreArchivo = Request["nombreArchivo"].ToString();
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+
+            if(pedido == null)
+                pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+
+            //      pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            PedidoAdjunto pedidoAdjunto  = pedido.pedidoAdjuntoList.Where(p => p.nombre.Equals(nombreArchivo)).FirstOrDefault();
+
+            if (pedidoAdjunto != null)
+            {
+                return JsonConvert.SerializeObject(pedidoAdjunto);
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
+
+
+
+
         public String Create()
         {
-            //RUC_MP
 
+            //RUC_MP
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
@@ -906,6 +1036,28 @@ namespace Cotizador.Controllers
             pedido.usuario = usuario;
             PedidoBL pedidoBL = new PedidoBL();
 
+    /*        pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            foreach (var file in files)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    PedidoAdjunto pedidoAdjunto = new PedidoAdjunto();
+                    using (Stream inputStream = file.InputStream)
+                    {
+                        MemoryStream memoryStream = inputStream as MemoryStream;
+                        if (memoryStream == null)
+                        {
+                            memoryStream = new MemoryStream();
+                            inputStream.CopyTo(memoryStream);
+                        }
+                        pedidoAdjunto.nombre = file.FileName;
+                        pedidoAdjunto.adjunto =memoryStream.ToArray();
+                    }
+                    pedido.pedidoAdjuntoList.Add(pedidoAdjunto);
+                }
+            }
+
+            */
             if (pedido.idPedido != Guid.Empty || pedido.numeroPedido > 0)
             {
                 throw new System.Exception("Pedido ya se encuentra creado");
@@ -1146,7 +1298,34 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonPedido = JsonConvert.SerializeObject(pedido);
-            String json = "{\"usuario\":" + jsonUsuario + ", \"pedido\":" + jsonPedido + "}";
+
+  
+
+            Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == pedido.ciudad.idCiudad).FirstOrDefault();
+            /*
+
+                        var seriesDocumentosElectronicosTmp = from s in ciudad.serieDocumentoElectronicoList
+                                                              group s.tipoDocumento by new { s.serie, s.esPrincipal }  into g
+                        select new { serie = g.Key, tiposDocumento = g.ToList() };
+
+                        List<SerieDocumentoElectronico> serieDocumentoElectronicoList = new List<SerieDocumentoElectronico>();
+                        foreach (var serieDocumentosElectronicoTmp  in seriesDocumentosElectronicosTmp)
+                        {
+                            SerieDocumentoElectronico serieDocumentosElectronico = new SerieDocumentoElectronico { serie = serieDocumentosElectronicoTmp.serie.serie, esPrincipal = serieDocumentosElectronicoTmp.serie.esPrincipal };
+                            serieDocumentoElectronicoList.Add(serieDocumentosElectronico);
+                        }
+
+                */
+            string jsonSeries = "[]";
+            if (ciudad != null)
+            {
+                var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
+                jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
+
+            }
+
+          
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + "}";
             return json;
         }
 

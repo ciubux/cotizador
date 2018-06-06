@@ -20,41 +20,123 @@ namespace DataLayer
         {
         }
 
+
+        public List<DocumentoVenta> SelectDocumentosVentaPorProcesar()
+        {
+            List<DocumentoVenta> documentoVentaList = new List<DocumentoVenta>();
+
+            var objCommand = GetSqlCommand("ps_documentosVentaPorProcesar");
+            DataTable dataTable = Execute(objCommand);
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                DocumentoVenta documentoVenta = new DocumentoVenta();
+                documentoVenta.idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta"); 
+                documentoVenta.serie = Converter.GetString(row, "SERIE");
+                documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
+                documentoVenta.estadoDocumentoSunat = (DocumentoVenta.EstadosDocumentoSunat)Converter.GetInt(row, "estado");
+                documentoVenta.tipoDocumento = (DocumentoVenta.TipoDocumento) Converter.GetInt(row, "tipo_documento");
+                
+                documentoVentaList.Add(documentoVenta); 
+            }
+            return documentoVentaList;
+        }
+
+
+        public void anularDocumentoVenta(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pu_anularFactura");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "comentarioAnulado", documentoVenta.comentarioAnulado);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+
+        public void aprobarAnulacionDocumentoVenta(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pu_aprobarAnulacionFactura");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "comentarioAprobacionAnulacion", documentoVenta.comentarioAprobacionAnulacion);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+
+        
+
+        public void aprobarAnularDocumentoVenta(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pu_aprobarAnularFactura");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "comentarioAnulado", documentoVenta.comentarioAnulado);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+
+
         public void InsertarDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pi_documentoVenta");
-            if(!Constantes.ES_EOL_PRODUCCION)
-                objCommand = GetSqlCommand("pi_documentoVentaDesarrollo");
+            var objCommand = GetSqlCommand("pi_documentoVenta");     
 
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
-            InputParameterAdd.Guid(objCommand, "idPedido", documentoVenta.venta.pedido.idPedido);
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", documentoVenta.venta.guiaRemision.idMovimientoAlmacen);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoVenta.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoVenta.fechaVencimiento);
             InputParameterAdd.Int(objCommand, "tipoPago", (int)documentoVenta.tipoPago);
             InputParameterAdd.Int(objCommand, "formaPago", (int)documentoVenta.formaPago);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie);
 
+
+            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", documentoVenta.venta.pedido.numeroReferenciaCliente);
+            
             InputParameterAdd.Guid(objCommand, "idDocumentoVentaReferencia", Guid.Empty);
+
+
+            InputParameterAdd.Varchar(objCommand, "observaciones", documentoVenta.observaciones);
+            /*CPE_DAT_ADIC_BE observaciones = new CPE_DAT_ADIC_BE();
+            observaciones.COD_TIP_ADIC_SUNAT = "159";
+            observaciones.NUM_LIN_ADIC_SUNAT = "159";
+            observaciones.TXT_DESC_ADIC_SUNAT = documentoVenta.observaciones;*/
+            InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoVenta.cliente.codigo);
+            /*
+            CPE_DAT_ADIC_BE codigoCliente = new CPE_DAT_ADIC_BE();
+            codigoCliente.COD_TIP_ADIC_SUNAT = "21";
+            codigoCliente.NUM_LIN_ADIC_SUNAT = "21";
+            codigoCliente.TXT_DESC_ADIC_SUNAT = documentoVenta.cliente.codigo;*/
+
+
+
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaSalida");
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError",500);
+            
+
+
+
             ExecuteNonQuery(objCommand);
 
             documentoVenta.idDocumentoVenta = (Guid)objCommand.Parameters["@idDocumentoVenta"].Value;
-
-            documentoVenta.venta = new Venta();
+            
             documentoVenta.venta.idVenta = (Guid)objCommand.Parameters["@idVentaSalida"].Value;
+
+            documentoVenta.tiposErrorValidacion =  (DocumentoVenta.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
+            documentoVenta.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
 
 
         public void UpdateSiguienteNumeroFactura(DocumentoVenta documentoVenta)
         {
             var objCommand = GetSqlCommand("pu_siguienteNumeroFactura");
-            if (!Constantes.ES_EOL_PRODUCCION)
-                objCommand = GetSqlCommand("pu_siguienteNumeroFacturaDesarrollo");
 
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie.Substring(1,3));
+            InputParameterAdd.Guid(objCommand, "idPedido", documentoVenta.venta.pedido.idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+
             ExecuteNonQuery(objCommand);
         }
 
@@ -294,10 +376,15 @@ namespace DataLayer
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable cpeCabeceraBETable = dataSet.Tables[0];
             DataTable cpeDetalleBETable = dataSet.Tables[1];
+            DataTable cpeDatAdicBETable = dataSet.Tables[2];
+            DataTable cpeDocRefBETable = dataSet.Tables[3];
+
 
             //Se obtienen todas las columnas de la tabla 
             var columnasCabecera = cpeCabeceraBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
             var columnnasDetalle = cpeDetalleBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+            var columnnasDatAdic = cpeDatAdicBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+            var columnnasDocRef = cpeDocRefBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
 
             documentoVenta.cPE_CABECERA_BE = new CPE_CABECERA_BE();
             documentoVenta.cPE_DETALLE_BEList = new List<CPE_DETALLE_BE>();
@@ -324,10 +411,12 @@ namespace DataLayer
                         !column.Equals("DESCRIPCION") &&
                         !column.Equals("DETALLE") &&
                         !column.Equals("NUM_CPE") &&
-                        !column.Equals("ANULADO") &&
+                        !column.Equals("SOLICITUD_ANULACION") &&
                         !column.Equals("ENVIADO_A_EOL") &&
                         !column.Equals("AMBIENTE_PRODUCCION") &&
-                        !column.Equals("id_venta")
+                        !column.Equals("id_venta") &&
+                        !column.Equals("COMENTARIO_SOLICITUD_ANULACION") &&
+                        !column.Equals("COMENTARIO_APROBACION_ANULACION") 
                         )
                     {
                         documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));
@@ -348,6 +437,38 @@ namespace DataLayer
                 documentoVenta.cPE_DETALLE_BEList.Add(cPE_DETALLE_BE);
 
             }
+
+
+            foreach (DataRow row in cpeDatAdicBETable.Rows)
+            {
+                CPE_DAT_ADIC_BE cPE_DAT_ADIC_BE = new CPE_DAT_ADIC_BE();
+                foreach (String column in columnnasDatAdic)
+                {
+                    if (!column.Equals("id_cpe_dat_adic_be") && !column.Equals("id_cpe_cabecera_be") )
+                    {
+                        cPE_DAT_ADIC_BE.GetType().GetProperty(column).SetValue(cPE_DAT_ADIC_BE, Converter.GetString(row, column));
+                    }
+                }
+                documentoVenta.cPE_DAT_ADIC_BEList.Add(cPE_DAT_ADIC_BE);
+
+            }
+
+            foreach (DataRow row in cpeDocRefBETable.Rows)
+            {
+                CPE_DOC_REF_BE cPE_DOC_REF_BE = new CPE_DOC_REF_BE();
+                foreach (String column in columnnasDocRef)
+                {
+                    if (!column.Equals("id_cpe_doc_ref_be") && !column.Equals("id_cpe_cabecera_be"))
+                    {
+                        cPE_DOC_REF_BE.GetType().GetProperty(column).SetValue(cPE_DOC_REF_BE, Converter.GetString(row, column));
+                    }
+                }
+                documentoVenta.cPE_DOC_REF_BEList.Add(cPE_DOC_REF_BE);
+
+            }
+            
+
+
             return documentoVenta;
         }
 
@@ -356,7 +477,7 @@ namespace DataLayer
 
             List<DocumentoVenta> facturaList = new List<DocumentoVenta>();
 
-            var objCommand = GetSqlCommand("ps_documentosVenta");
+            var objCommand = GetSqlCommand("ps_facturas");
             if (!documentoVenta.numero.Equals("0"))
             {
                 InputParameterAdd.Varchar(objCommand, "numero", documentoVenta.numero.PadLeft(8, '0'));
@@ -371,7 +492,12 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", documentoVenta.fechaEmisionDesde);
             InputParameterAdd.DateTime(objCommand, "fechaHasta", documentoVenta.fechaEmisionHasta);
-            
+            InputParameterAdd.Int(objCommand, "soloSolicitudAnulacion", documentoVenta.solicitadoAnulacion?1:0);
+            InputParameterAdd.Int(objCommand, "estado", (int)documentoVenta.estadoDocumentoSunatBusqueda);
+            InputParameterAdd.BigInt(objCommand, "numeroPedido", documentoVenta.pedido.numeroPedido);
+            InputParameterAdd.BigInt(objCommand, "numeroGuiaRemision", documentoVenta.guiaRemision.numeroDocumento);
+
+
             //   InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             DataTable dataTable = Execute(objCommand);
 
@@ -398,7 +524,11 @@ namespace DataLayer
 
 
                 documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
-                documentoVenta.descripcionEstadoSunat = Converter.GetString(row, "estado");
+                documentoVenta.estadoDocumentoSunat = (DocumentoVenta.EstadosDocumentoSunat)Converter.GetInt(row, "estado");
+                
+
+
+
 
 
                 documentoVenta.usuario = new Usuario();
@@ -414,6 +544,13 @@ namespace DataLayer
                 documentoVenta.ciudad = new Ciudad();
                 documentoVenta.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 documentoVenta.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+
+                documentoVenta.solicitadoAnulacion = Converter.GetBool(row, "solicitud_anulacion");
+                documentoVenta.comentarioSolicitudAnulacion = Converter.GetString(row, "comentario_solicitud_anulacion");
+                documentoVenta.comentarioSolicitudAnulacion = documentoVenta.comentarioSolicitudAnulacion == null ? String.Empty : documentoVenta.comentarioSolicitudAnulacion;
+                documentoVenta.comentarioAprobacionAnulacion = Converter.GetString(row, "comentario_aprobacion_anulacion");
+                documentoVenta.comentarioAprobacionAnulacion = documentoVenta.comentarioAprobacionAnulacion == null ? String.Empty : documentoVenta.comentarioAprobacionAnulacion;
+
 
 
                 facturaList.Add(documentoVenta);

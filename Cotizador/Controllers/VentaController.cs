@@ -20,17 +20,14 @@ namespace Cotizador.Controllers
 
         public void iniciarEdicionVenta()
         {
-            Pedido pedidoVer = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
-            PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido();
-            /*      pedido.idPedido = pedidoVer.idPedido;
-                 //    pedido.fechaModificacion = cotizacionVer.fechaModificacion;
-                 pedido.seguimientoPedido = new SeguimientoPedido();
-                 pedido.usuario = (Usuario)this.Session["usuario"];*/
-
-            //Se obtiene los datos del pedido ya modificada
-            pedido = pedidoBL.GetPedido(pedidoVer);
+            Venta ventaVer = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+            VentaBL ventaBL = new VentaBL();
+            Venta venta = new Venta();
+       
+            
+            venta = ventaBL.GetVenta(ventaVer);
             //Temporal
+            Pedido pedido = venta.pedido;
             pedido.ciudadASolicitar = new Ciudad();
 
             if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
@@ -45,11 +42,59 @@ namespace Cotizador.Controllers
                 pedido.ciudad = pedido.cliente.ciudad;
             }
 
-            Venta venta = new Venta();
-            venta.pedido = pedido;
-            venta.idVenta = pedido.venta.idVenta;
-
             this.Session[Constantes.VAR_SESSION_VENTA] = venta;
+        }
+
+
+        public String Show()
+        {
+            VentaBL ventaBL = new VentaBL();
+            Venta venta = new Venta();
+            venta.guiaRemision = new GuiaRemision();
+            venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
+            venta = ventaBL.GetVenta(venta);
+            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            string jsonUsuario = JsonConvert.SerializeObject(usuario);
+            string jsonVenta = JsonConvert.SerializeObject(venta);
+
+            Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == venta.pedido.ciudad.idCiudad).FirstOrDefault();
+
+            string jsonSeries = "[]";
+            if (ciudad != null)
+            {
+                var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
+                jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
+
+            }
+
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
+            return json;
+        }
+
+
+
+        public String Descargar()
+        {
+            String nombreArchivo = Request["nombreArchivo"].ToString();
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
+            if (venta == null)
+                venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+
+            Pedido pedido = venta.pedido; ;
+
+            //      pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            PedidoAdjunto pedidoAdjunto = pedido.pedidoAdjuntoList.Where(p => p.nombre.Equals(nombreArchivo)).FirstOrDefault();
+
+            if (pedidoAdjunto != null)
+            {
+                return JsonConvert.SerializeObject(pedidoAdjunto);
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
         public ActionResult Vender()
@@ -66,7 +111,7 @@ namespace Cotizador.Controllers
                 else
                 {
                     Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                    if (!usuario.tomaPedidos)
+                    if (!usuario.creaDocumentosVenta)
                     {
                         return RedirectToAction("Login", "Account");
                     }

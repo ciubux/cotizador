@@ -46,7 +46,7 @@ namespace Model
         [Display(Name = "Placa Vehículo:")]
         public String placaVehiculo { get; set; }
 
-        [Display(Name = "Observaciones:")]
+        [Display(Name = "Observaciones Guía Remisión:")]
         public String observaciones { get; set; }
 
         [Display(Name = "Certificado Inscripción:")]
@@ -71,7 +71,7 @@ namespace Model
 
         public Boolean existeCambioTransportista { get; set; }
 
-      
-       
+        public GuiaRemisionValidacion guiaRemisionValidacion { get; set; }
+
     }
 }

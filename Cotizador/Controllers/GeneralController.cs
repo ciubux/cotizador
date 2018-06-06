@@ -58,7 +58,7 @@ namespace Cotizador.Controllers
 
         public String GetConstantes()
         {
-            return "{ \"IGV\":\"" + Constantes.IGV + "\", \"SIMBOLO_SOL\":\"" + Constantes.SIMBOLO_SOL + "\", \"MILISEGUNDOS_AUTOGUARDADO\":\"" + Constantes.MILISEGUNDOS_AUTOGUARDADO + "\", \"VARIACION_PRECIO_ITEM_PEDIDO\":\"" + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + "\" }";
+            return "{ \"IGV\":\"" + Constantes.IGV + "\", \"SIMBOLO_SOL\":\"" + Constantes.SIMBOLO_SOL + "\", \"MILISEGUNDOS_AUTOGUARDADO\":\"" + Constantes.MILISEGUNDOS_AUTOGUARDADO + "\", \"VARIACION_PRECIO_ITEM_PEDIDO\":\"" + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + "\", \"DESCARGAR_XML\":\"" + Constantes.DESCARGAR_XML + "\" }";
         }
 
 
@@ -81,6 +81,18 @@ namespace Cotizador.Controllers
             CotizacionBL cotizacionBL = new CotizacionBL();
             cotizacionBL.RechazarCotizaciones();
             return "Job Ejecutado, time:" + DateTime.Now;
+        }
+
+
+        public String ActualizarEstadoDocumentosElectronicos()
+        {
+            UsuarioBL usuarioBL = new UsuarioBL();
+            Usuario usuario = usuarioBL.getUsuarioLogin("automatico", "123");
+
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            documentoVentaBL.ActualizarEstadoDocumentosElectronicos(usuario);
+
+            return "ActualizarEstadoDocumentosElectronicos Ejecutando, time:" + DateTime.Now;
         }
 
 

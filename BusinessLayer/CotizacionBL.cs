@@ -184,7 +184,10 @@ namespace BusinessLayer
                 cotizacionDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
                 cotizacionDetalle.unidad = documentoDetalle.unidad;
                 cotizacionDetalle.producto = documentoDetalle.producto;
-                cotizacionDetalle.precioNeto = documentoDetalle.precioNeto;
+                if(cotizacionDetalle.esPrecioAlternativo)
+                    cotizacionDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+                else
+                    cotizacionDetalle.precioNeto = documentoDetalle.precioNeto;
                 cotizacionDetalle.flete = documentoDetalle.flete;
                 cotizacionDetalle.observacion = documentoDetalle.observacion;
                 cotizacionDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;

@@ -55,6 +55,7 @@ namespace DataLayer
                 usuario.apruebaCotizacionesProvincias = Converter.GetBool(row, "aprueba_cotizaciones_provincias");
                 usuario.creaCotizaciones = Converter.GetBool(row, "crea_cotizaciones");
                 usuario.creaCotizacionesProvincias = Converter.GetBool(row, "crea_cotizaciones_provincias");
+                usuario.visualizaCotizaciones = Converter.GetBool(row, "visualiza_cotizaciones");
 
                 //Pedidos
                 usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
@@ -63,14 +64,24 @@ namespace DataLayer
                 usuario.pedidoSerializado = Converter.GetString(row, "pedido_serializado");
                 usuario.tomaPedidosProvincias = Converter.GetBool(row, "toma_pedidos_provincias");
                 usuario.programaPedidos = Converter.GetBool(row, "programa_pedidos");
+                usuario.visualizaPedidos = Converter.GetBool(row, "visualiza_pedidos");
+                usuario.bloqueaPedidos = Converter.GetBool(row, "bloquea_pedidos");
+                usuario.liberaPedidos = Converter.GetBool(row, "libera_pedidos");
+
                 //Guia
                 usuario.creaGuias = Converter.GetBool(row, "crea_guias");
                 usuario.administraGuiasLima = Converter.GetBool(row, "administra_guias_lima");
                 usuario.administraGuiasProvincias = Converter.GetBool(row, "administra_guias_provincias");
+                usuario.visualizaGuias = Converter.GetBool(row, "visualiza_guias_remision");
+
                 //DOCUMENTOS VENTA
                 usuario.creaDocumentosVenta = Converter.GetBool(row, "crea_documentos_venta");
                 usuario.administraDocumentosVentaLima = Converter.GetBool(row, "administra_documentos_venta_lima");
                 usuario.administraDocumentosVentaProvincias = Converter.GetBool(row, "administra_documentos_venta_provincias");
+                usuario.visualizaDocumentosVenta = Converter.GetBool(row, "visualiza_documentos_venta");
+                usuario.apruebaAnulaciones = Converter.GetBool(row, "aprueba_anulaciones");
+                
+
 
                 usuario.sedeMP = new Ciudad();
                 usuario.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
@@ -118,13 +129,28 @@ namespace DataLayer
                         Constantes.USER_EOL_TEST = valorParametro; break;
                     case "PASSWORD_EOL_TEST":
                         Constantes.PASSWORD_EOL_TEST = valorParametro; break;
+                    case "ENDPOINT_ADDRESS_EOL_TEST":
+                        Constantes.ENDPOINT_ADDRESS_EOL_TEST = valorParametro; break;
+
                     case "USER_EOL_PROD":
                         Constantes.USER_EOL_PROD = valorParametro; break;
                     case "PASSWORD_EOL_PROD":
                         Constantes.PASSWORD_EOL_PROD = valorParametro; break;
+                    case "ENDPOINT_ADDRESS_EOL_PROD":
+                        Constantes.ENDPOINT_ADDRESS_EOL_PROD = valorParametro; break;
+                    case "DESCARGAR_XML":
+                        Constantes.DESCARGAR_XML = int.Parse(valorParametro); break;
+
+
+
                     case "AMBIENTE_EOL":
-                        Constantes.AMBIENTE_EOL = valorParametro; break;
-           
+                        { 
+                            Constantes.AMBIENTE_EOL = valorParametro;
+                          //  Constantes.AMBIENTE_EOL = "TEST";
+                        }
+                        break; //
+
+
                 }
 
             }

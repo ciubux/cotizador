@@ -98,17 +98,23 @@ namespace Cotizador.Controllers
             return RedirectToAction("Editar", "Cliente");
         }
 
-        public ActionResult Editar()
+        public ActionResult Editar(Guid? idCliente = null )
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCliente;
-
-            if (this.Session["usuario"] == null)
+            Usuario usuario = null;
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+            else
+            {
+                usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.modificaMaestroClientes)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
 
-
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             if (this.Session[Constantes.VAR_SESSION_CLIENTE] == null)
             {
@@ -117,6 +123,17 @@ namespace Cotizador.Controllers
             }
 
             Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+
+
+
+            if (idCliente != null)
+            {
+                ClienteBL clienteBL = new ClienteBL();
+                cliente = clienteBL.getCliente(idCliente.Value);
+                cliente.IdUsuarioRegistro = usuario.idUsuario;
+                this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+            }
+                
 
             if (cliente.idCliente == Guid.Empty)
             {

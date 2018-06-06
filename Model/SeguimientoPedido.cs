@@ -17,6 +17,8 @@ namespace Model
         {
             [Display(Name = "Todos")]
             Todos = -1,
+            [Display(Name = "En Edición")]
+            Edicion = 6,
             [Display(Name = "Pendiente Aprobación de Ingreso")]
             PendienteAprobacion = 0,
             [Display(Name = "Ingresado")]
@@ -29,12 +31,12 @@ namespace Model
             Atendido = 4,
             [Display(Name = "Atendido Parcialmente")]
             AtendidoParcialmente = 5,
-            [Display(Name = "En Edición")]
-            Edicion = 6,
-            [Display(Name = "Eliminado")]
-            Eliminada = 7,
             [Display(Name = "Facturado")]
-            Facturado = 8
+            Facturado = 8,
+            [Display(Name = "Facturado Parcialmente")]
+            FacturadoParcialmente = 9,
+            [Display(Name = "Eliminado")]
+            Eliminada = 7
         };
 
         public estadosSeguimientoPedido estado { get; set; }

@@ -69,7 +69,9 @@ namespace Model
 
         public Decimal maximoPorcentajeDescuentoPermitido { get; set; }
 
-        
+        public Decimal minimoMargen { get; set; }
+
+
 
 
         /*Campos utilizados para búsqueda*/

@@ -32,7 +32,8 @@ namespace Model
         private String _unidad_alternativa;
         public String unidad_alternativa
         {
-            get { return equivalencia == 1?String.Empty:_unidad_alternativa; }
+            //        get { return equivalencia == 1?String.Empty:_unidad_alternativa; }
+            get { return _unidad_alternativa; }
             set { _unidad_alternativa = value; }
         }
 

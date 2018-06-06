@@ -71,7 +71,7 @@ namespace Cotizador.Controllers
             else
             {
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.creaCotizaciones)
+                if (!usuario.creaCotizaciones && !usuario.visualizaCotizaciones)
                 {
                     return RedirectToAction("Login", "Account");
                 }
@@ -261,7 +261,7 @@ namespace Cotizador.Controllers
                     ViewBag.clienteGrupo = cotizacion.grupo.ToString();
                 }
 
-                ViewBag.fechaPrecios = cotizacion.fechaPrecios.ToString(Constantes.formatoFecha);
+                ViewBag.fechaPrecios =DateTime.Now.AddDays(-Constantes.DIAS_MAX_BUSQUEDA_PRECIOS).ToString(Constantes.formatoFecha);
                 ViewBag.fecha = cotizacion.fecha.ToString(Constantes.formatoFecha);
                 ViewBag.fechaLimiteValidezOferta = cotizacion.fechaLimiteValidezOferta.ToString(Constantes.formatoFecha);
                 ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
@@ -1039,40 +1039,18 @@ namespace Cotizador.Controllers
             CotizacionBL cotizacionBL = new CotizacionBL();
             Cotizacion cotizacion = new Cotizacion();
             cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
-            //
             cotizacion.esRecotizacion = true;
             
             cotizacion = cotizacionBL.GetCotizacion(cotizacion);
             cotizacion.usuario = (Usuario)this.Session["usuario"];
             //Se seta el codigo y estadoAprobacion en 0 porque una recotización es una nueva cotización
             cotizacion.codigo = 0;
+            cotizacion.idCotizacion = Guid.Empty;
             cotizacion.fecha = DateTime.Now;
             cotizacion.fechaInicioVigenciaPrecios = null;
             cotizacion.fechaFinVigenciaPrecios = null;
             cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
-            //   cotizacion.estadoAprobacion = 0;
-
-
-            //REVISAR
-            /*
-
-            ViewBag.fechaLimiteValidezOferta = cotizacion.fecha.ToString(Constantes.formatoFecha);
-            ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
-            ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
-
-
-
-
-            cotizacion.fechaInicioVigenciaPrecios = null;
-            cotizacion.fechaFinVigenciaPrecios = null;
-            cotizacion.fechaLimiteValidezOferta = cotizacionTmp.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
-
-
-
-
-            cotizacion.fechaInicioVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios.AddDays(1);
-            cotizacion.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios.AddDays(16);
-            */
+            
             this.Session["cotizacion"] = cotizacion;
         }
 

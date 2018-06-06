@@ -58,6 +58,8 @@
                         var linkMantenimientoCliente = "";
                         var linkMantenimientoProducto = "";
 
+                        var linkBusquedaGuiasRemisionConsolidarFactura = "";
+
                     }
                     @if (this.Session["pagina"] != null)
                     {
@@ -69,6 +71,7 @@
                             case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
                             case 4: linkBusquedaGuiasRemision = "ative"; linkMovimientosAlmacen = "active"; break;
                             case 5: linkMantenimientoGuiaRemision = "ative"; linkMovimientosAlmacen = "active"; break;
+                            case 19: linkBusquedaGuiasRemisionConsolidarFactura = "ative"; linkMovimientosAlmacen = "active"; break;
 
                             case 6: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
                             case 7: linkMantenimientoFactura = "ative"; linkDocumentosVenta = "active"; break;
@@ -85,7 +88,7 @@
 
                         }
                         var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
-                        if (usuario.creaCotizaciones)
+                        if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
                         {
                             <li class="@linkCotizaciones">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -93,13 +96,19 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li id="linkBusquedaCotizaciones" class="@linkBusquedaCotizaciones">@Html.ActionLink("Búsqueda Cotizaciones", "Index", "Cotizacion")</li>
-                                    <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Crear/Modificar Cotización", "Cotizar", "Cotizacion")</li>
+                                    @if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
+                                    {
+                                        <li id="linkBusquedaCotizaciones" class="@linkBusquedaCotizaciones">@Html.ActionLink("Búsqueda Cotizaciones", "Index", "Cotizacion")</li>
+                                    }
+                                    @if (usuario.creaCotizaciones)
+                                    {
+                                        <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Crear/Modificar Cotización", "Cotizar", "Cotizacion")</li>
+                                    }
                                 </ul>
                             </li>
                         }
 
-                        if (usuario.tomaPedidos || usuario.apruebaPedidos)
+                        if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                         {
 
                             <li class="@linkPedidos">
@@ -108,7 +117,7 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    @if (usuario.tomaPedidos || usuario.apruebaPedidos)
+                                    @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                                     {
                                         <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Búsqueda Pedidos", "Index", "Pedido")</li>}
                                     @if (usuario.tomaPedidos)
@@ -119,7 +128,7 @@
                             </li>
                         }
 
-                        if (usuario.creaGuias || usuario.administraGuias)
+                        if (usuario.creaGuias || usuario.administraGuias || usuario.visualizaGuias)
                         {
 
                             <li class="@linkMovimientosAlmacen">
@@ -128,16 +137,20 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    @if (usuario.creaGuias)
+                                    @if (usuario.administraGuias || usuario.creaGuias || usuario.visualizaGuias)
                                     {
                                         <li id="linkBusquedaGuiasRemision" class="@linkBusquedaGuiasRemision">@Html.ActionLink("Búsqueda Guias de Remisión", "Index", "GuiaRemision")</li>
-                                        <li id="linkMantenimientoGuiaRemision" class="@linkMantenimientoGuiaRemision">@Html.ActionLink("Crear/Modificar Guía Remisión", "Guiar", "GuiaRemision")</li>
+                                    }
+
+                                    @if (usuario.creaGuias)
+                                    {
+                                        <li id="linkMantenimientoGuiaRemision" class="@linkMantenimientoGuiaRemision">@Html.ActionLink("Crear/Modificar Guía de Remisión", "Guiar", "GuiaRemision")</li>
                                     }
                                 </ul>
                             </li>
                         }
 
-                        if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta)
+                        if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta)
                         {
 
                             <li class="@linkDocumentosVenta">
@@ -146,10 +159,14 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li id="linkBusquedaFactura" class="@linkBusquedaFactura">@Html.ActionLink("Búsqueda Facturas", "Index", "Factura")</li>
-                                    <li id="linkBusquedaBoleta" class="@linkBusquedaBoleta">@Html.ActionLink("Búsqueda Boletas", "Index", "Boleta")</li>
+
+                                    @if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta)
+                                    {
+                                        <li id="linkBusquedaFactura" class="@linkBusquedaFactura">@Html.ActionLink("Búsqueda Facturas", "Index", "Factura")</li>
+                                    }
+                                    <!-- <li id="linkBusquedaBoleta" class="@linkBusquedaBoleta">@Html.ActionLink("Búsqueda Boletas", "Index", "Boleta")</li>
                                     <li id="linkBusquedaNotaCredito" class="@linkBusquedaNotaCredito">@Html.ActionLink("Búsqueda Notas de Crédito", "Index", "NotaCredito")</li>
-                                    <li id="linkBusquedaNotaDebito" class="@linkBusquedaNotaDebito">@Html.ActionLink("Búsqueda Notas de Débito", "Index", "NotaDebito")</li>
+                                    <li id="linkBusquedaNotaDebito" class="@linkBusquedaNotaDebito">@Html.ActionLink("Búsqueda Notas de Débito", "Index", "NotaDebito")</li>-->
                                 </ul>
                             </li>
                         }
@@ -162,8 +179,14 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Mantenimiento Cliente", "Editar", "Cliente")</li>
-                                    <li id="linkMantenimientoProducto" class="@linkMantenimientoProducto">@Html.ActionLink("Mantenimiento Producto", "Load", "Producto")</li>
+                                    @if (usuario.modificaMaestroClientes)
+                                    {
+                                        <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Mantenimiento Cliente", "Editar", "Cliente")</li>
+                                    }
+                                    @if (usuario.modificaMaestroProductos)
+                                    {
+                                        <li id="linkMantenimientoProducto" class="@linkMantenimientoProducto">@Html.ActionLink("Mantenimiento Producto", "Index", "Producto")</li>
+                                    }
                                 </ul>
                             </li>
                         }
@@ -193,5 +216,7 @@
     @Scripts.Render("~/bundles/jquery-chosen")
     @RenderSection("scripts", required: false)
     @Scripts.Render("~/bundles/loadingModal")
+    @Scripts.Render("~/bundles/confirm")
+    @Scripts.Render("~/bundles/utiles")
 </body>
 </html>

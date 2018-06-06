@@ -26,6 +26,16 @@ namespace Model
             }
         }
 
+
+        public Decimal precioNetoAlterno
+        {
+            set
+            {
+                Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, this._precioNeto = value * producto.equivalencia));
+            }
+
+        }
+
         public Decimal precioUnitarioVenta { get; set; }
 
         public Guid idVentaDetalle { get; set; }
@@ -38,6 +48,11 @@ namespace Model
         public new Decimal subTotal
         {
             get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, this.cantidad * this.precioUnitario)); }
+        }
+
+        public Decimal precioUnitarioOriginal
+        {
+            get;set;
         }
     }
 }

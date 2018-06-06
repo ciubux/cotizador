@@ -627,7 +627,7 @@ namespace cotizadorPDF
                 String pathrootsave = AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\";
 
                 String fechaCotizacion = cot.fecha.Day.ToString().PadLeft(2, '0') + "-" + cot.fecha.Month.ToString().PadLeft(2, '0')  + "-" + cot.fecha.Year;// + "-" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
-                String nombreArchivo = cot.cliente.razonSocial.Substring(0,10) + " " + fechaCotizacion + " N° " + cot.codigo.ToString().PadLeft(10,'0') + ".pdf";
+                String nombreArchivo = cot.cliente.razonSocial + " " + fechaCotizacion + " N° " + cot.codigo.ToString().PadLeft(10,'0') + ".pdf";
 
                 nombreArchivo = nombreArchivo.Replace('&', 'Y');
 

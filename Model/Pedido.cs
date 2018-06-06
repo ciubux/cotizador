@@ -28,9 +28,12 @@ namespace Model
 
         [Display(Name = "Cliente:")]
         public Cliente cliente { get; set; }
-        [Display(Name = "Número OC Cliente:")]
+        [Display(Name = "Orden de Compra N°:")]
         public String numeroReferenciaCliente { get; set; }
 
+
+        [Display(Name = "Referencia Adicional Cliente:")]
+        public String numeroReferenciaAdicional { get; set; }
 
         [Display(Name = "Otros Cargos (Flete):")]
         public Decimal otrosCargos { get; set; }
@@ -70,7 +73,7 @@ namespace Model
             get { return "Tef: " + telefonoContactoPedido + " Correo: " + correoContactoPedido; }
         }
 
-        [Display(Name = "Observaciones:")]
+        [Display(Name = "Observaciones para uso interno:")]
         public String observaciones { get; set; }
 
         [Display(Name = "Observaciones Guía Remisión:")]
@@ -167,6 +170,8 @@ namespace Model
 
 
         public List<PedidoDetalle> pedidoDetalleList { get; set; }
+
+        public List<PedidoAdjunto> pedidoAdjuntoList { get; set; }
         public bool esRePedido { get; set; }
         /*0 pendiente, 1 aprobado, 2 rechazado*/
         public SeguimientoPedido seguimientoPedido { get; set; }
@@ -250,7 +255,11 @@ namespace Model
             [Display(Name = "Transferencia Gratuita")]
             TransferenciaGratuita = 'G',
             [Display(Name = "Préstamo")]
-            Prestamo = 'P'            
+            Prestamo = 'P',
+            [Display(Name = "Devolución de Compra")]
+            DevolucionCompra = 'B',
+            [Display(Name = "Devolución de Venta")]
+            DevolucionVenta = 'D'
         }
 
         public String tiposPedidoString
@@ -263,7 +272,7 @@ namespace Model
 
         public DocumentoVenta documentoVenta { get; set; }
 
-        public Venta venta { get; set; }
+      
 
     }
 }

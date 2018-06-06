@@ -22,6 +22,10 @@ namespace Model
         public static int LONGITUD_NUMERO = 10;
         public static String UBIGEO_VACIO = "000000";
 
+        public static int diasDesdeBusquedaPedido = 10;
+           
+
+
         public static String LABEL_DIRECCION_ENTREGA_VACIO = "Seleccione Dirección de Entrega";
 
 
@@ -39,7 +43,10 @@ namespace Model
 
         public static String VAR_SESSION_GUIA = "guiaRemision";
         public static String VAR_SESSION_GUIA_BUSQUEDA = "guiaRemisionBusqueda";
+        public static String VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA = "guiaRemisionBusquedaFacturaConsolidada";
+        public static String VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS = "guiaRemisionBusquedaFacturaConsolidadaIDs";
         public static String VAR_SESSION_GUIA_LISTA = "guiaRemisionList";
+        public static String VAR_SESSION_GUIA_LISTA_FACTURA_CONSOLIDADA = "guiaRemisionListFacturaConsolidada";
         public static String VAR_SESSION_GUIA_VER = "guiaRemisionVer";
 
         public static String VAR_SESSION_VENTA = "venta";
@@ -74,13 +81,22 @@ namespace Model
 
         public static String USER_EOL_TEST = "";
         public static String PASSWORD_EOL_TEST = "";
+        public static String ENDPOINT_ADDRESS_EOL_TEST = "";
+        
         public static String USER_EOL_PROD = "";
         public static String PASSWORD_EOL_PROD = "";
+        public static String ENDPOINT_ADDRESS_EOL_PROD = "";
         public static string RUC_MP = "20509411671";
         public static String AMBIENTE_EOL = "";
+        
 
         public static String USER_EOL {
             get { return AMBIENTE_EOL.Equals("TEST") ? USER_EOL_TEST : USER_EOL_PROD; }
+        }
+
+        public static String ENDPOINT_ADDRESS_EOL
+        {
+            get { return AMBIENTE_EOL.Equals("TEST") ? ENDPOINT_ADDRESS_EOL_TEST : ENDPOINT_ADDRESS_EOL_PROD; }
         }
 
         public static String PASSWORD_EOL
@@ -93,6 +109,8 @@ namespace Model
             get { return AMBIENTE_EOL.Equals("PROD"); }
         }
 
+
+        
 
 
         public static Decimal IGV = 0.18M;
@@ -107,7 +125,7 @@ namespace Model
         public static String OBSERVACION = "* Condiciones de pago: al contado.\n" +
                                        "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
                                        "* (para productos no stockeables o primeras compras, consultar plazo).\n";
-
+        public static int DESCARGAR_XML = 1;
 
 
         public static String EOL_CPE_RESPUESTA_BE_CODIGO_OK = "001";
@@ -198,7 +216,10 @@ namespace Model
             [Display(Name = "BUSQUEDA CLIENTES")]
             BusquedaClientes = 17,
             [Display(Name = "MANTENIMIENTO CLIENTE")]
-            MantenimientoCliente = 18
+            MantenimientoCliente = 18,
+
+            [Display(Name = "BUSQUEDA GUIAS REMISION CONSOLIDAR FACTURA")]
+            BusquedaGuiasRemisionConsolidarFactura = 19,
 
 
         };

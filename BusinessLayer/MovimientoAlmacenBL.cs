@@ -17,10 +17,17 @@ namespace BusinessLayer
             {
                 dal.AnularMovimientoAlmacen(movimientoAlmacen);
             }
-
-
-
         }
+
+
+        public DocumentoVenta obtenerVentaConsolidarFactura(String idMovimientoAlmacenList)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                return dal.obtenerVentaConsolidarFactura(idMovimientoAlmacenList);
+            }
+        }
+        
 
 
         public void InsertMovimientoAlmacenSalida(GuiaRemision guiaRemision) 
@@ -28,11 +35,31 @@ namespace BusinessLayer
             using (var dal = new MovimientoALmacenDAL())
             {
                 
+
                 guiaRemision.seguimientoMovimientoAlmacenSalida.observacion = String.Empty;
                 guiaRemision.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
+
+                Boolean existeCantidadPendienteAtencion = false;
+                foreach (DocumentoDetalle documentoDetalle in guiaRemision.pedido.documentoDetalle)
+                {
+                    if (documentoDetalle.cantidadPendienteAtencion != documentoDetalle.cantidadPorAtender)
+                    { 
+                        existeCantidadPendienteAtencion = true;
+                        break;
+                    }
+
+                }
+
+
+                if (!existeCantidadPendienteAtencion)
+                {
+                    guiaRemision.atencionParcial = false;
+                    guiaRemision.ultimaAtencionParcial = true;
+                }                
+
                 try
                 {
-                    dal.InsertMovimientoAlmacenSalida(guiaRemision);
+                dal.InsertMovimientoAlmacenSalida(guiaRemision);
                 }
                 catch (DuplicateNumberDocumentException ex)
                 {
@@ -56,6 +83,24 @@ namespace BusinessLayer
             }
             return guiaRemisionList;
         }
+
+        public List<GuiaRemision> GetGuiasRemisionGrupoCliente(GuiaRemision guiaRemision)
+        {
+            List<GuiaRemision> guiaRemisionList = null;
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                //Si el usuario no es aprobador entonces solo buscará sus cotizaciones
+                /*   if (!pedido.usuario.apruebaCotizaciones)
+                   {
+                       pedido.usuarioBusqueda = pedido.usuario;
+                   }*/
+                guiaRemision.usuario = guiaRemision.usuario;
+                guiaRemisionList = dal.SelectGuiasRemisionGrupoCliente(guiaRemision);
+            }
+            return guiaRemisionList;
+        }
+
+        
 
         public GuiaRemision GetGuiaRemision(GuiaRemision guiaRemision)
         {

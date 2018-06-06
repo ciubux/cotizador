@@ -96,7 +96,7 @@
             <!--FECHA DOCUMENTO-->
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
-                    <label for="fecha" class="control-label col-xs-4">Fecha Cotización:</label>
+                    <label for="fecha" class="control-label col-xs-4">Fecha Última Edición:</label>
                     <div class="col-xs-4">
                         <input type="hidden" id="fechatmp" value="@ViewBag.fecha" />
                         <input class="form-control" type="text" id="fecha" name="fecha">
@@ -917,12 +917,22 @@
             <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="row">
-
-                        <label for="numero" class="control-label col-xs-1">Producto:</label>
-                        <div class="col-xs-10">
-                            <p class="form-control-static" id="verProducto"></p>
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProducto"></p>
+                                </div>
+                            </div>
                         </div>
-
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -952,8 +962,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" id="btnCancelCalculadora" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnSaveDescuento" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
             </div>
         </div>
     </div>
@@ -1189,6 +1199,8 @@
         </div>
     </div>
 </div>
+
+<link href="http://allfont.es/allfont.css?fonts=dot-matrix" rel="stylesheet" type="text/css" />
 
 @section Scripts {
     @Scripts.Render("~/bundles/cotizacion")

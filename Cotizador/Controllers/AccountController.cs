@@ -778,7 +778,7 @@ namespace Cotizador.Controllers
                   return Redirect(returnUrl);
               }*/
 
-            if (this.Session[Constantes.VAR_SESSION_PAGINA] != null)
+        /*    if (this.Session[Constantes.VAR_SESSION_PAGINA] != null)
             {
                 int pagina = (int)this.Session[Constantes.VAR_SESSION_PAGINA];
                 if (pagina == (int)Constantes.paginas.MantenimientoCotizacion)
@@ -789,20 +789,30 @@ namespace Cotizador.Controllers
                 {
                     return RedirectToAction("Pedir", "Pedido");
                 }
-            }
+            }*/
 
 
             Usuario usuario = (Model.Usuario)this.Session["usuario"];
             if (usuario != null)
             {
-                if(usuario.creaCotizaciones)
-                    return RedirectToAction("Index", "Cotizacion");
-                if(usuario.tomaPedidos)
-                    return RedirectToAction("Pedir", "Pedido");
-                if(usuario.apruebaPedidos)
+
+                /*    if (usuario.tomaPedidos)
+                    return RedirectToAction("Pedir", "Pedido");*/
+                if (usuario.apruebaPedidos || usuario.tomaPedidos || usuario.visualizaPedidos)
                     return RedirectToAction("Index", "Pedido");
-                if (usuario.creaGuias)
+                /*   if(usuario.creaCotizaciones)
+                       return RedirectToAction("Cotizar", "Cotizacion");*/
+                if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
+                    return RedirectToAction("Index", "Cotizacion");            
+
+                if (usuario.creaGuias || usuario.visualizaGuias)
                     return RedirectToAction("Index", "GuiaRemision");
+
+                if (usuario.creaDocumentosVenta || usuario.visualizaDocumentosVenta)
+                    return RedirectToAction("Index", "Factura");
+
+                if (usuario.modificaMaestroClientes)
+                    return RedirectToAction("Edita", "Cliente");
             }
 
             return RedirectToAction("Index", "Cotizacion");

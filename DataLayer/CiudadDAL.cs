@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Model;
+using System.Linq;
 
 namespace DataLayer
 {
@@ -20,10 +21,14 @@ namespace DataLayer
         public List<Ciudad> getCiudades()
         {
             var objCommand = GetSqlCommand("ps_getCiudades");
-            DataTable dataTable = Execute(objCommand);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+
+            DataTable dataTableCiudad = dataSet.Tables[0];
+            DataTable dataTableSerie = dataSet.Tables[1];
+
             List<Ciudad> ciudadList = new List<Ciudad>();
 
-            foreach (DataRow row in dataTable.Rows)
+            foreach (DataRow row in dataTableCiudad.Rows)
             {
                 Ciudad ciudad = new Ciudad
                 {
@@ -37,6 +42,24 @@ namespace DataLayer
                 };
                 ciudadList.Add(ciudad);
             }
+
+            List<SerieDocumentoElectronico> serieDocumentoElectronicoList = new List<SerieDocumentoElectronico>();
+
+            foreach (DataRow row in dataTableSerie.Rows)
+            {
+                SerieDocumentoElectronico serieDocumentoElectronico = new SerieDocumentoElectronico();
+                serieDocumentoElectronico.sedeMP = new Ciudad();
+                serieDocumentoElectronico.sedeMP.idCiudad = Converter.GetGuid(row, "id_sede_mp");
+                serieDocumentoElectronico.serie = Converter.GetString(row, "serie");
+                serieDocumentoElectronico.esPrincipal = Converter.GetBool(row, "es_principal");
+                serieDocumentoElectronicoList.Add(serieDocumentoElectronico);
+            }
+
+            foreach (Ciudad ciudad in ciudadList)
+            {
+                ciudad.serieDocumentoElectronicoList = serieDocumentoElectronicoList.Where(s => s.sedeMP.idCiudad == ciudad.idCiudad).ToList();
+            }
+
             return ciudadList;
         }
 

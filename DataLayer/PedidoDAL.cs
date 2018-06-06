@@ -80,7 +80,35 @@ namespace DataLayer
                 this.InsertPedidoDetalle(pedidoDetalle);
             }
 
-        
+            foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
+            {
+                pedidoAdjunto.idPedido = pedido.idPedido;
+                this.InsertPedidoAdjunto(pedidoAdjunto);
+            }
+            
+
+
+
+        }
+
+        public void ActualizarPedido(Pedido pedido)
+        {
+            var objCommand = GetSqlCommand("pu_actualizarPedido");
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
+            InputParameterAdd.Varchar(objCommand, "numeroReferenciaAdicional", pedido.numeroReferenciaAdicional);
+            InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
+
+            ExecuteNonQuery(objCommand);
+
+            foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
+            {
+                pedidoAdjunto.usuario = pedido.usuario;
+                pedidoAdjunto.idPedido = pedido.idPedido;
+                this.InsertPedidoAdjunto(pedidoAdjunto);
+            }
+
         }
 
         public void UpdatePedido(Pedido pedido)
@@ -140,6 +168,12 @@ namespace DataLayer
                 pedidoDetalle.usuario = pedido.usuario;
                 this.InsertPedidoDetalle(pedidoDetalle);
             }
+
+            foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
+            {
+                pedidoAdjunto.idPedido = pedido.idPedido;
+                this.InsertPedidoAdjunto(pedidoAdjunto);
+            }
         }
     
 
@@ -165,6 +199,21 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
           
             pedidoDetalle.idPedidoDetalle = (Guid)objCommand.Parameters["@newId"].Value;
+        }
+
+        public void InsertPedidoAdjunto(PedidoAdjunto pedidoAdjunto)
+        {
+            var objCommand = GetSqlCommand("pi_pedidoAdjunto");
+            InputParameterAdd.Guid(objCommand, "idPedido", pedidoAdjunto.idPedido);
+            InputParameterAdd.Guid(objCommand, "idCliente", pedidoAdjunto.idCliente);
+            InputParameterAdd.Varchar(objCommand, "nombre", pedidoAdjunto.nombre);
+            InputParameterAdd.VarBinary(objCommand, "adjunto", pedidoAdjunto.adjunto);
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedidoAdjunto.usuario.idUsuario);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
+            ExecuteNonQuery(objCommand);
+
+            pedidoAdjunto.idPedidoAdjunto = (Guid)objCommand.Parameters["@newId"].Value;
         }
 
         /*
@@ -305,13 +354,14 @@ namespace DataLayer
 
         public Pedido SelectPedido(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("ps_pedidoVenta");
+            var objCommand = GetSqlCommand("ps_pedido");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable pedidoDataTable = dataSet.Tables[0];
             DataTable pedidoDetalleDataTable = dataSet.Tables[1];
             DataTable direccionEntregaDataTable = dataSet.Tables[2];
             DataTable movimientoAlmacenDataTable = dataSet.Tables[3];
+            DataTable pedidoAdjuntoDataTable = dataSet.Tables[4];
 
 
             //   DataTable dataTable = Execute(objCommand);
@@ -345,13 +395,13 @@ namespace DataLayer
                 pedido.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
                 pedido.tipoPedido = (Pedido.tiposPedido)Char.Parse( Converter.GetString(row, "tipo_pedido"));
                 pedido.otrosCargos = Converter.GetDecimal(row, "otros_cargos");
+                pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
 
-                pedido.venta = new Venta();
+             /* pedido.venta = new Venta();
                 pedido.venta.igv = Converter.GetDecimal(row, "igv_venta");
                 pedido.venta.subTotal = Converter.GetDecimal(row, "sub_total_venta");
                 pedido.venta.total = Converter.GetDecimal(row, "total_venta");
-                pedido.venta.idVenta = Converter.GetGuid(row, "id_Venta");
-
+                pedido.venta.idVenta = Converter.GetGuid(row, "id_Venta");*/
 
                 pedido.ubigeoEntrega = new Ubigeo();
                 pedido.ubigeoEntrega.Id = Converter.GetString(row, "ubigeo_entrega");
@@ -364,6 +414,7 @@ namespace DataLayer
                 pedido.documentoVenta.numero = Converter.GetString(row, "numero_factura");
 
                 pedido.cotizacion = new Cotizacion();
+                pedido.cotizacion.idCotizacion = Converter.GetGuid(row, "id_cotizacion");
                 pedido.cotizacion.codigo = Converter.GetLong(row, "cotizacion_codigo");  
 
                 pedido.cliente = new Cliente();
@@ -464,8 +515,19 @@ namespace DataLayer
                 precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia_vigente");
 
                 precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
+
                 precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
-                precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+
+                if (row["fecha_fin_vigencia"] == DBNull.Value)
+                {
+                    precioClienteProducto.fechaFinVigencia = null;
+                }
+                else
+                {
+                    precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+                }
+
+              //  precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
                 precioClienteProducto.cliente = new Cliente();
                 precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 pedidoDetalle.producto.precioClienteProducto = precioClienteProducto;
@@ -519,7 +581,6 @@ namespace DataLayer
                     movimientoAlmacen.documentoVenta.idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta");
                     movimientoAlmacen.documentoVenta.serie = Converter.GetString(row, "SERIE");
                     movimientoAlmacen.documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
-                    movimientoAlmacen.documentoVenta.descripcionEstadoSunat = Converter.GetString(row, "estado");
 
 
      
@@ -551,7 +612,16 @@ namespace DataLayer
             /*mad.id_movimiento_almacen_detalle, mad.cantidad, 
 mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
-
+            pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            //Detalle de la cotizacion
+            foreach (DataRow row in pedidoAdjuntoDataTable.Rows)
+            {
+                PedidoAdjunto pedidoAdjunto = new PedidoAdjunto();
+                pedidoAdjunto.idPedidoAdjunto = Converter.GetGuid(row, "id_pedido_adjunto");
+                pedidoAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
+                pedidoAdjunto.nombre = Converter.GetString(row, "nombre");
+                pedido.pedidoAdjuntoList.Add(pedidoAdjunto);
+            }
 
             return pedido;
         }
@@ -563,7 +633,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
-            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuarioBusqueda.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaSolicitudDesde", pedido.fechaSolicitudDesde);
             InputParameterAdd.DateTime(objCommand, "fechaSolicitudHasta", pedido.fechaSolicitudHasta);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde);

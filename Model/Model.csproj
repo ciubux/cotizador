@@ -42,6 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auditoria.cs" />
+    <Compile Include="GuiaRemisionValidacion.cs" />
+    <Compile Include="MovimientoAlmacenJson.cs" />
+    <Compile Include="PedidoAdjunto.cs" />
+    <Compile Include="SerieDocumentoElectronico.cs" />
     <Compile Include="Connected Services\ServiceReferencePSE\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

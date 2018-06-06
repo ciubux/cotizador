@@ -7,6 +7,7 @@ jQuery(function ($) {
     var IGV = 0.18;
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
+    var DESCARGAR_XML = 0;
 
     //Estados para búsqueda de Pedidos
     /*var ESTADOS_TODOS = -1;
@@ -32,6 +33,8 @@ jQuery(function ($) {
     
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
+    var TITLE_MENSAJE_BUSQUEDA = "Ingresar datos solicitados";
+    var TITLE_EXITO = 'Operación Realizada';
 
     $(document).ready(function () {
         obtenerConstantes();
@@ -45,6 +48,17 @@ jQuery(function ($) {
         }
     };
 
+
+    $("#btnLimpiarBusqueda").click(function () {
+        $.ajax({
+            url: "/Factura/CleanBusqueda",
+            type: 'POST',
+            success: function () {
+                location.reload();
+            }
+        });
+    });
+
     function obtenerConstantes() {
         $.ajax({
             url: "/General/GetConstantes",
@@ -54,6 +68,7 @@ jQuery(function ($) {
                 IGV = constantes.IGV;
                 SIMBOLO_SOL = constantes.SIMBOLO_SOL;
                 MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
+                DESCARGAR_XML = constantes.DESCARGAR_XML;
             }
         });
     }
@@ -305,15 +320,45 @@ jQuery(function ($) {
                 idDocumentoVenta: idDocumentoVenta
             },
             error: function (detalle) {
-                alert(MENSAJE_ERROR);
+                mostrarMensajeErrorProceso();
                 location.reload();
             },
-            success: function (ciudad) {
-                alert("El estado de la factura " + serieNumero + " fue actualizado correctamente.");
-                location.reload();
+            success: function () {
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "El estado de la factura " + serieNumero + " fue actualizado correctamente.",
+                    buttons: {
+                        OK: function () { location.reload();}
+                    }
+                });
+                
             }
         });
     });
+
+
+
+    function base64ToArrayBuffer(base64) {
+        var binaryString = window.atob(base64);
+        var binaryLen = binaryString.length;
+        var bytes = new Uint8Array(binaryLen);
+        for (var i = 0; i < binaryLen; i++) {
+            var ascii = binaryString.charCodeAt(i);
+            bytes[i] = ascii;
+        }
+        return bytes;
+    }
+
+    function saveByteArray(fileName, byte) {
+        var blob = new Blob([byte]);
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+       // var fileName = reportName + ".pdf";
+        link.download = fileName;
+        link.click();
+    };
+
 
     $(document).on('click', "button.btnDescargarPDF", function () {
 
@@ -328,10 +373,27 @@ jQuery(function ($) {
                 idDocumentoVenta: idDocumentoVenta
             },
             type: 'POST',
-            error: function (detalle) { alert("Ocurrió un problema al descargar la factura " + serieNumero + " en formato PDF."); },
-            success: function (fileName) {
+            dataType: 'JSON',
+            error: function (detalle) {
+                alert("Ocurrió un problema al descargar la factura " + serieNumero + " en formato PDF.");
+            },
+            success: function (documentos) {
+
+
+                var filePDF = base64ToArrayBuffer(documentos.pdf);
+                saveByteArray(serieNumero + ".pdf", filePDF);
+
+                if (DESCARGAR_XML == 1) {
+                    var fileCPE = base64ToArrayBuffer(documentos.cpe);
+                    var fileCDR = base64ToArrayBuffer(documentos.cdr);
+                    saveByteArray(serieNumero + ".xml", fileCPE);
+                    saveByteArray('R-' + serieNumero + ".xml", fileCDR);
+                }
+
+
+
                 //Se descarga el PDF y luego se limpia el formulario
-                window.open('/General/DownLoadFile?fileName=' + fileName);
+        //        window.open('/General/DownLoadFile?fileName=' + fileName);
                // window.location = '/Cotizacion/CancelarCreacionCotizacion';
             }
         });
@@ -375,6 +437,100 @@ jQuery(function ($) {
     });
 
 
+    
+
+    $(document).on('click', "button.btnAnular", function () {
+
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        $("#idDocumentoVenta").val(arrrayClass[0]);
+        $("#serieNumero").val(arrrayClass[1]);
+
+
+    //    modalAnulacion.modal();
+    });
+
+
+    $(document).on('click', "button.btnAprobarAnulacion", function () {
+
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        $("#idDocumentoVenta").val(arrrayClass[0]);
+        $("#serieNumeroAprobacionAnulacion").val(arrrayClass[1]);
+
+
+     //   modalAnulacion.modal();
+    });
+
+
+
+    $(document).on('click', "#btnAceptarAnulacion", function () {
+
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idDocumentoVenta = $("#idDocumentoVenta").val();
+        var serieNumero = $("#serieNumero").val();
+        var comentarioAnulado = $("#comentarioAnulado").val();
+        $("#btnAceptarAnulacion").attr("disabled", "disabled");
+        $.ajax({
+            url: "/Factura/Anular",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                comentarioAnulado: comentarioAnulado,
+                idDocumentoVenta: idDocumentoVenta
+            },
+            error: function () {
+                $("#btnAceptarAnulacion").removeAttr("disabled");
+                mostrarMensajeErrorProceso();
+            },
+            success: function (documentoVenta) {
+                $("#btnAceptarAnulacion").removeAttr("disabled");
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "La factura: " + serieNumero + " se encuentra pendiente de aprobación para anulación.",
+                    buttons: {
+                        OK: function () { location.reload(); }
+                    }
+                })
+            }
+        });
+    });
+
+    $(document).on('click', "#btnAprobarAnulacion", function () {
+
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idDocumentoVenta = $("#idDocumentoVenta").val();
+        var serieNumero = $("#serieNumero").val();
+        var comentarioAprobacionAnulacion = $("#comentarioAprobacionAnulacion").val();
+        $("#btnAprobarAnulacion").attr("disabled", "disabled");
+        $.ajax({
+            url: "/Factura/AprobarAnulacion",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                comentarioAprobacionAnulacion: comentarioAprobacionAnulacion,
+                idDocumentoVenta: idDocumentoVenta
+            },
+            error: function () {
+                $("#btnAprobarAnulacion").removeAttr("disabled");
+                mostrarMensajeErrorProceso();
+            },
+            success: function (documentoVenta) {
+                $("#btnAprobarAnulacion").removeAttr("disabled");
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "La factura: " + serieNumero + " se encuentra en proceso de anulación.",
+                    buttons: {
+                        OK: function () { location.reload(); }
+                    }
+                })
+            }
+        });
+    });
+
+
+
+
 
     $("#btnAceptarCambioEstado").click(function () {
 
@@ -416,14 +572,45 @@ jQuery(function ($) {
     EVENTOS BUSQUEDA FACTURA
     #####################################################*/
 
+    function mostrarMensajeErrorProceso() {
+        $.alert({
+            //icon: 'fa fa-warning',
+            title: 'Error',
+            content: MENSAJE_ERROR,
+            type: 'red',
+            buttons: {
+                OK: function () { }
+            }
+        });
+    }
+
+
+    $("input[name=documentoVenta_solicitadoAnulacion]").on("click", function () {
+        var solicitadoAnulacion = $("input[name=documentoVenta_solicitadoAnulacion]:checked").val();
+        $.ajax({
+            url: "/Factura/ChangeSolicitadoAnulacion",
+            type: 'POST',
+            data: {
+                solicitadoAnulacion: solicitadoAnulacion
+            },
+            success: function () {
+            }
+        });
+    });
 
 
     $("#btnBusqueda").click(function () {
 
         var idCiudad = $("#idCiudad").val();
-        var numero = $("#documentoVenta_numero").val();
-        if (numero.trim().length == 0 && (idCiudad == "" || idCiudad == GUID_EMPTY)) {
-            alert("Para realizar una búsqueda por número de factura debe indicar la sede MP.");
+        if ((idCiudad == "" || idCiudad == GUID_EMPTY)  && $("#documentoVenta_numero").val() != "") {
+            $("#idCiudad").focus();
+            $.alert({
+                title: TITLE_MENSAJE_BUSQUEDA,
+                content: 'Para realizar una búsqueda con número de Factura debe indicar la sede MP.',
+                buttons: {
+                    OK: function () { }
+                }
+            });  
             return false;
         }
 
@@ -431,11 +618,20 @@ jQuery(function ($) {
 
         //sede MP
         
-        var idCliente = $("#idCliente").val();         
+        var idCliente = $("#idCliente").val();   
+        var numero = $("#documentoVenta_numero").val();
+
+        var numeroPedido = $("#documentoVenta_pedido_numeroPedido").val(); 
+        var numeroGuiaRemision = $("#documentoVenta_guiaRemision_numeroDocumento").val(); 
+
         var fechaEmisionDesde = $("#documentoVenta_fechaEmisionDesde").val();
         var fechaEmisionHasta = $("#documentoVenta_fechaEmisionHasta").val();
         //var estado = $("#estado").val();
 
+        var estadoDocumentoSunatBusqueda = $("#documentoVenta_estadoDocumentoSunatBusqueda").val();
+
+
+        $("#btnBusqueda").attr("disabled", "disabled");
         $.ajax({
             url: "/Factura/Search",
             type: 'POST',
@@ -444,11 +640,18 @@ jQuery(function ($) {
                 idCiudad: idCiudad,
                 idCliente: idCliente,
                 numero: numero,
+                numeroPedido: numeroPedido,
+                numeroGuiaRemision: numeroGuiaRemision,
                 fechaEmisionDesde: fechaEmisionDesde,
-                fechaEmisionHasta: fechaEmisionHasta
+                fechaEmisionHasta: fechaEmisionHasta,
+                estadoDocumentoSunatBusqueda: estadoDocumentoSunatBusqueda
+            },
+            error: function () {
+                $("#btnBusqueda").removeAttr("disabled");
+                mostrarMensajeErrorProceso();
             },
             success: function (facturaList) {
-
+                $("#btnBusqueda").removeAttr("disabled");
                 $("#tableFacturas > tbody").empty();
                 //FooTable.init('#tableCotizaciones');
                 $("#tableFacturas").footable({
@@ -459,24 +662,37 @@ jQuery(function ($) {
 
                 for (var i = 0; i < facturaList.length; i++) {
 
-                    var factura = "";
+                    var styleEstado = "";
+                    var botonAnular = "";
+                    
+                    switch (facturaList[i].estadoDocumentoSunat) {
+                        case 105: case 104: styleEstado = "style='color: red;font-weight: normal;'";
 
-               /*   
-                    var observacion = pedidoList[i].seguimientoPedido.observacion == null ? "" : pedidoList[i].seguimientoPedido.observacion;
+                            break;
+                        case 102: styleEstado = "style='color: green;font-weight: normal;'";
+                            botonAnular = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnAnular  btn btn-danger" data-toggle="modal" data-target="#modalAnulacion">Anular</button >';
+                            break;
+                        case 103: styleEstado = "style='color: orange;font-weight: normal;'";
+                            botonAnular = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnAnular  btn btn-danger" data-toggle="modal" data-target="#modalAnulacion">Anular</button >';
+                            break;
+                        case 0: styleEstado = "style='color: orange;font-weight: normal;'";
 
-                    if (pedidoList[i].seguimientoPedido.observacion != null && pedidoList[i].seguimientoPedido.observacion.length > 20) {
-                        var idComentarioCorto = pedidoList[i].idPedido + "corto";
-                        var idComentarioLargo = pedidoList[i].idPedido + "largo";
-                        var idVerMas = pedidoList[i].idPedido + "verMas";
-                        var idVermenos = pedidoList[i].idPedido + "verMenos";
-
-                        var comentario = pedidoList[i].seguimientoPedido.observacion.substr(0, 20) + "...";
-                        observacion = '<div id="' + idComentarioCorto + '" style="display:block;">' + comentario + '</div>' +
-                            '<div id="' + idComentarioLargo + '" style="display:none;">' + pedidoList[i].seguimientoPedido.observacion + '</div>' +
-                            '<p><a id="' + idVerMas + '" class="' + pedidoList[i].idCotizacion + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
-                            '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idCotizacion + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
+                            break;
+                        default: styleEstado = "style='color: black'"; break;
                     }
-  */
+
+                    if (facturaList[i].usuario.apruebaAnulaciones == 1 && facturaList[i].solicitadoAnulacion
+                        && (facturaList[i].estadoDocumentoSunat == 102 ||  facturaList[i].estadoDocumentoSunat == 103)
+                    ) {
+                        botonAnular = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnAprobarAnulacion  btn btn-danger" data-toggle="modal" data-target="#modalAprobacionAnulacion">Aprobar Anulación</button >';
+                    }
+                    else if  (facturaList[i].solicitadoAnulacion) {
+                        botonAnular = '';
+                    }
+                    
+
+
+
                     var factura = '<tr data-expanded="false">'+
                         '<td>  ' + facturaList[i].idDocumentoVenta + '</td>' +
                         '<td>  ' + facturaList[i].serieNumero + '</td>' +
@@ -488,9 +704,12 @@ jQuery(function ($) {
                         '<td>  ' + facturaList[i].cliente.ruc + '</td>' +
                         '<td>  ' + facturaList[i].ciudad.nombre + '</td>' +
                         '<td>  ' + facturaList[i].total + '</td>' +
-                        '<td> ' + facturaList[i].descripcionEstadoSunat+'</td>' +
+                        '<td ' + styleEstado + ' > ' + facturaList[i].estadoDocumentoSunatString + '</td>' +
+                        '<td>  ' + facturaList[i].comentarioSolicitudAnulacion + '</td>' +
+
                         '<td> <button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarPDF btn btn-primary">Descargar</button>'+
-                        '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnActualizarEstado  btn btn-primary">Act. Estado</button >'+
+                        '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnActualizarEstado  btn btn-primary">Act. Estado</button >' +
+                        botonAnular +
                         '</td> ' +
                          '</tr>';                
                     

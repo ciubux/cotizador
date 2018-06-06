@@ -26,5 +26,7 @@ namespace Model
         public int siguienteNumeroGuiaRemision { get; set; }
         public String sede { get; set; }
 
+        public List<SerieDocumentoElectronico> serieDocumentoElectronicoList { get; set; }
+
     }
 }

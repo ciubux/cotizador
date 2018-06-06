@@ -13,6 +13,8 @@ namespace Model
         /*DATOS*/
         public string email { get; set; }
         public string password { get; set; }
+
+        [Display(Name = "Nombre:")]
         public string nombre { get; set; }
         public string cargo { get; set; }
         public string contacto { get; set; }
@@ -22,35 +24,42 @@ namespace Model
 
 
 
-        /*ROLES COTIZACION*/
+        /*PERMISOS COTIZACION*/
         public bool apruebaCotizaciones { get { return apruebaCotizacionesLima || apruebaCotizacionesProvincias;  } }
         public bool apruebaCotizacionesLima { get; set; }
         public bool apruebaCotizacionesProvincias { get; set; }
         public bool creaCotizaciones { get; set; }
         public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
+        public bool visualizaCotizaciones { get; set; }
 
-        /*ROLES PEDIDO*/
+        /*PERMISOS PEDIDO*/
         public bool tomaPedidos { get; set; }
         public bool apruebaPedidos { get { return apruebaPedidosLima || apruebaPedidosProvincias; } }
         public bool apruebaPedidosLima { get; set; }
         public bool apruebaPedidosProvincias { get; set; }
+        public bool visualizaPedidos { get; set; }
+        public bool bloqueaPedidos { get; set; }
+        public bool liberaPedidos { get; set; }
 
-        /*ROLES GUIA REMISION*/
+
+
+        /*PERMISOS GUIA REMISION*/
         public bool creaGuias { get; set; }
-
         public bool administraGuias { get { return administraGuiasLima || administraGuiasProvincias; } }
         public bool administraGuiasLima { get; set; }
         public bool administraGuiasProvincias { get; set; }
+        public bool visualizaGuias { get; set; }
 
-        /*ROLES FACTURA ELECTRONICA*/
+        /*PERMISOS FACTURA ELECTRONICA*/
         public bool creaDocumentosVenta { get; set; }
 
         public bool administraDocumentosVenta { get { return administraDocumentosVentaLima || administraDocumentosVentaProvincias; } }
 
+        public bool apruebaAnulaciones { get; set; }
+
         public bool administraDocumentosVentaLima { get; set; }
         public bool administraDocumentosVentaProvincias { get; set; }
-
-
+        public bool visualizaDocumentosVenta { get; set; }
 
 
         public Ciudad sedeMP { get; set; }

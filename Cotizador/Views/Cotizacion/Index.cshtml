@@ -39,11 +39,11 @@
                     @Html.LabelFor(p => cotizacion.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                        new
-                        {
-                            ciudadSelectId = "idCiudad",
-                            selectedValue = cotizacion.ciudad.idCiudad
-                        })
+                             new
+                             {
+                                 ciudadSelectId = "idCiudad",
+                                 selectedValue = cotizacion.ciudad.idCiudad
+                             })
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
             <!--FECHA-->
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
-                    <label for="fechaDesde" class="control-label col-xs-4">Creado Desde:</label>
+                    <label for="fechaDesde" class="control-label col-xs-4" ¨>Última Edición Desde:</label>
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaDesdetmp" value="@ViewBag.fechaDesde" />
                         <input class="form-control" type="text" id="fechaDesde" name="fechaDesde">
@@ -67,7 +67,7 @@
 
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
-                    <label for="fechaHasta" class="control-label col-xs-4">Creado Hasta:</label>
+                    <label for="fechaHasta" class="control-label col-xs-4">Última Edición Hasta:</label>
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaHastatmp" value="@ViewBag.fechaHasta" />
                         <input class="form-control" type="text" id="fechaHasta" name="fechaHasta">
@@ -110,9 +110,9 @@
                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estado",
-                                                EnumHelper.GetSelectList(typeof(Model.SeguimientoCotizacion.estadosSeguimientoCotizacion), cotizacion.seguimientoCotizacion.estado),
-                                                new { @class = "form-control" }
-                                                )
+                                                     EnumHelper.GetSelectList(typeof(Model.SeguimientoCotizacion.estadosSeguimientoCotizacion), cotizacion.seguimientoCotizacion.estado),
+                                                     new { @class = "form-control" }
+                                                     )
                     </div>
                 </div>
             </div>
@@ -155,7 +155,7 @@
                     <th data-name="idCotizacion" data-visible="false"></th>
                     <th data-name="codigo" data-visible="true">N°</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
-                    <th data-name="fecha" data-sortable="true">Fecha Creación</th>
+                    <th data-name="fecha" data-sortable="true">Fecha Última Edición</th>
                     <th data-name="razonSocial" data-sortable="true">Razón Social</th>
                     <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
                     <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Ciudad</th>
@@ -163,16 +163,17 @@
                     <th data-name="igv" data-visible="false" data-sortable="true" data-breakpoints="xs">IGV</th>
                     <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
                     <th data-name="maximoPorcentajeDescuento" data-sortable="true" data-breakpoints="xs">Desc % (max)</th>
+                    <th data-name="minimoMargen" data-visible="false" data-sortable="true" data-breakpoints="xs">Mg % (min)</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
                     <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
                     <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>
-                    <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                    <th data-name="historialPrecios" data-sortable="true" data-breakpoints="xs">Historial Precios</th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
 
-         @if (cotizacionList.Count == 0)
+        @if (cotizacionList.Count == 0)
         {
             <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
                 <p class="pagination-centered" style=" font-size: medium" align="center">
@@ -201,8 +202,8 @@
 
 
             <div class="modal-body">
-                <form class="form-horizontal">
-
+                <form class="form-horizontal">                    
+                    <input type="hidden" id="verIdCliente" value="" />
                     <input type="hidden" id="idProducto" value="" />
                     <div class="row">
                         <!--NÚMERO COTIZACION-->
@@ -248,7 +249,7 @@
                         <!--FECHA CREACION-->
                         <div class="col-sm-6 col-lg-3">
                             <div class="form-group">
-                                <label for="verFechaCreacion" class="control-label col-xs-4">Fecha Creación:</label>
+                                <label for="verFechaCreacion" class="control-label col-xs-4">Fecha Última Edición:</label>
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verFechaCreacion"></p>
                                 </div>
@@ -293,7 +294,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!--Modificado POR-->
                         <div class="col-sm-6 col-lg-3">
                             <div class="form-group">
@@ -337,19 +338,20 @@
                                 <th data-name="porcentajeDescuentoMostrar" data-sortable="false" data-breakpoints="xs">Dscto % al P. Lista</th>
                                 <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs">Precio Neto</th>
                                 @if (cotizacion.usuario.apruebaCotizaciones)
-                                {
-                                    <th data-name="costo" data-sortable="false" data-breakpoints="xs" style="width:60px">Costo</th>
-                                }
-                                else
-                                {
-                                    <th data-name="costo" data-visible="false" data-breakpoints="xs" style="width:60px">Costo</th>
-                                }
+    {
+                            <th data-name="costo" data-sortable="false" data-breakpoints="xs" style="width:60px">Costo</th>
+}
+else
+{
+                            <th data-name="costo" data-visible="false" data-breakpoints="xs" style="width:60px">Costo</th>
+}
                                 <th data-name="margen" data-sortable="false" data-breakpoints="xs" style="width:60px">Mg %</th>
                                 <th data-name="flete" data-sortable="false" data-breakpoints="xs">Flete</th>
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs">Precio Unit.</th>
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs">Cant.</th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs">Sub Total</th>
                                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
+                                <th data-name="opciones" data-sortable="false" data-visible="true" data-breakpoints="xs"></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -394,26 +396,48 @@
 
             <div class="modal-footer">
                 <div class="pull-left">
-                    <button type="button" id="btnReCotizacion" class="btn btn-primary">Recotizar</button>
-                    <button type="button" id="btnPDFCotizacion" class="btn btn-primary bouton-image pdfBoton">PDF</button>
-                    <!-- <input type="text" value="hola\tHola" id="myInput" name="myInput" />
-        <button type="button" id="btnCopiar" class="btn btn-primary">Copiar</button>-->
+                    @if (cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        <button type="button" id="btnReCotizacion" class="btn btn-primary">Recotizar</button>
+                    }
+                    @if (cotizacion.usuario.visualizaCotizaciones || cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        <button type="button" id="btnPDFCotizacion" class="btn btn-primary bouton-image pdfBoton">PDF</button>
+                    }
                 </div>
 
 
 
                 <div class="pull-right">
                     <button type="button" id="btnCancelarCotizacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btnEditarCotizacion" class="btn btn-primary">Editar</button>
-                    <button type="button" id="btnAprobarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
-                    <button type="button" id="btnDenegarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
-                    <button type="button" id="btnAceptarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Cliente Aceptó</button>
-                    <button type="button" id="btnRechazarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Cliente Rechazó</button>
+                    @if (cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        <button type="button" id="btnEditarCotizacion" class="btn btn-primary">Editar</button>
+                    }
+                    @if (cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        <button type="button" id="btnAprobarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
+                    }
+                    @if (cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        <button type="button" id="btnDenegarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
+                    }
+                    @if (cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        <button type="button" id="btnAceptarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Cliente Aceptó</button>
+                    }
+                    @if (cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        <button type="button" id="btnRechazarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Cliente Rechazó</button>
+                    }
                     @if (cotizacion.usuario.tomaPedidos)
                     {
                         <button type="button" id="btnGenerarPedido" class="btn btn-success">Generar Pedido</button>
                     }
-                    <button type="button" id="btnEliminarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Eliminar</button>
+                    @if (cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        <button type="button" id="btnEliminarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Eliminar</button>
+                    }
                 </div>
 
             </div>
@@ -474,6 +498,76 @@
             <div class="modal-footer">
                 <button type="button" id="btnCancelarCambioEstado" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" id="btnAceptarCambioEstado" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--MODAL MOSTRAR PRECIOS-->
+<div class="modal fade" id="modalMostrarPrecios" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación </b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <table id="tableMostrarPrecios" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar edición"
+                           data-editing-add-text="Descartar cambios">
+                        <thead>
+                            <tr>
+                                <th data-name="numero" data-visible="true">Número Cotización</th>
+                                <th data-name="fechaInicioVigencia" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="fechaFinVigencia" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="Unidad" data-visible="true">Unidad</th>
+                                <th data-name="precioNeto" data-visible="true">Precio Neto</th>
+                                <th data-name="flete" data-visible="true">Flete</th>
+                                <th data-name="precioUnitario" data-visible="true">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
             </div>
         </div>
     </div>

@@ -262,10 +262,13 @@
     <Content Include="Content\images\ui-icons_777777_256x240.png" />
     <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\jquery-confirm.css" />
+    <Content Include="Content\jquery-editable-select.css" />
     <Content Include="Content\jquery-ui.min.css" />
     <Content Include="Content\jquery.loadingModal.css" />
     <Content Include="Content\jquery.loadingModal.min.css" />
     <Content Include="Content\PrintGuiaC.css" />
+    <Content Include="Content\PrintGuiaZ.css" />
     <Content Include="Content\PrintGuiaQ.css" />
     <Content Include="Content\PrintGuiaP.css" />
     <Content Include="Content\PrintGuiaH.css" />
@@ -288,6 +291,7 @@
     <Content Include="images\etiqueta-de-precio-en-dolares.png" />
     <Content Include="images\hombre-de-negocios.png" />
     <Content Include="images\hombre-de-negocios2.png" />
+    <Content Include="images\icon-close.png" />
     <Content Include="images\map.png" />
     <Content Include="images\pdf-icon.png" />
     <Content Include="images\proveedores.png" />
@@ -308,19 +312,23 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\jquery-confirm.less" />
     <None Include="Properties\PublishProfiles\cotizadormp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen\chosen.ajaxaddition.jquery.js" />
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
-    <Content Include="Scripts\factura.js" />
-    <Content Include="Scripts\guiaRemision2.js" />
-    <Content Include="Scripts\cliente2.js" />
+    <Content Include="Scripts\factura9.js" />
+    <Content Include="Scripts\guiaRemision8.js" />
+    <Content Include="Scripts\cliente8.js" />
+    <Content Include="Scripts\jquery-confirm.js" />
+    <Content Include="Scripts\jquery-editable-select.js" />
     <Content Include="Scripts\jquery.loadingModal.js" />
     <Content Include="Scripts\jquery.loadingModal.min.js" />
-    <Content Include="Scripts\venta.js" />
-    <Content Include="Scripts\pedido3.js" />
+    <Content Include="Scripts\utiles.js" />
+    <Content Include="Scripts\venta8.js" />
+    <Content Include="Scripts\pedido8.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -331,7 +339,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\cotizacion2.js" />
+    <Content Include="Scripts\cotizacion8.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
@@ -411,6 +419,10 @@
     <Content Include="Views\GuiaRemision\PrintO.cshtml" />
     <Content Include="Views\Cliente\Editar.cshtml" />
     <Content Include="Views\Venta\Vender.cshtml" />
+    <Content Include="Views\GuiaRemision\ConsolidarFactura.cshtml" />
+    <Content Include="Views\GuiaRemision\PrintZ.cshtml" />
+    <Content Include="Views\Producto\CargaCorrecta.cshtml" />
+    <Content Include="Views\Producto\CargaIncorrecta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
