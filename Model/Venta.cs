@@ -6,8 +6,13 @@ using System.Web;
 
 namespace Model
 {
-    public class Venta : Auditoria 
+    public class Venta : Auditoria
     {
+
+        public Venta() {
+            this.tipoNotaCredito = DocumentoVenta.TiposNotaCredito.AnulacionOperacion;
+        }
+       
         public Guid idVenta { get; set; }
 
         [Display(Name = "Número Venta:")]
@@ -55,7 +60,63 @@ namespace Model
 
         [Display(Name = "Usuario:")]
         public Usuario usuario { get; set; }
-       
+
         public List<VentaDetalle> ventaDetalleList { get; set; }
+
+        [Display(Name = "Sustento:")]
+        public String sustento { get; set; }
+
+
+        public String tipoDocumentoVentaString
+        {
+            get
+            {
+                return EnumHelper<DocumentoVenta.TipoDocumento>.GetDisplayValue(this.tipoDocumentoVenta);
+            }
+        }
+
+
+        public DocumentoVenta.TipoDocumento tipoDocumentoVenta { get; set; }
+
+
+
+        [Display(Name = "Tipo Nota Crédito:")]
+        public String tipoNotaCreditoString
+        {
+            get
+            {
+                return EnumHelper<DocumentoVenta.TiposNotaCredito>.GetDisplayValue(this.tipoNotaCredito);
+            }
+        }
+
+        public DocumentoVenta.TiposNotaCredito tipoNotaCredito { get; set; }
+
+        public DocumentoReferencia  documentoReferencia { get; set; }
+
+        public Boolean permiteEliminarLineas { get {
+                return this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.DescuentoItem
+                   || this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.DevolucionItem
+                   || this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.DisminucionValor;
+            } }
+
+        public Boolean permiteEditarCantidades
+        {
+            get
+            {
+                return this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.DevolucionItem;
+            }
+        }
+
+        public Boolean permiteEditarPrecios
+        {
+            get
+            {
+                return this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.DescuentoItem
+                   || this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.DisminucionValor
+                   || this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.DescuentoGlobal;
+            }
+        }
+    
+
     }
 }

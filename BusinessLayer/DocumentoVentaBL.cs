@@ -27,9 +27,6 @@ namespace BusinessLayer
                     documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
                     documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
                     documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK;
-
-                    
-
                 }
                 else
                 {
@@ -40,6 +37,98 @@ namespace BusinessLayer
                 return documentoVenta;
             }
         }
+
+        public DocumentoVenta InsertarBoleta(DocumentoVenta documentoVenta)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
+                dal.InsertarDocumentoVenta(documentoVenta);
+
+                if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
+                {
+                    //Se recupera el documento de venta creado para poder visualizarlo
+                    documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
+                    documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
+                    documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
+                    documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK;
+                }
+                else
+                {
+                    documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
+                    documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_ERROR_DATA;
+                    documentoVenta.cPE_RESPUESTA_BE.DETALLE = documentoVenta.tiposErrorValidacionString + ". " + documentoVenta.descripcionError;
+                }
+                return documentoVenta;
+            }
+        }
+
+
+
+        public DocumentoVenta InsertarNotaCredito(DocumentoVenta documentoVenta)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
+
+            //    documentoVenta.movimientoAlmacen = new MovimientoAlmacen();
+                //Se define el idMovimientoAlmacen como vacío para que tome el idventa
+             //   documentoVenta.movimientoAlmacen.idMovimientoAlmacen = Guid.Empty;
+
+                dal.InsertarDocumentoVentaNotaCredito(documentoVenta);
+
+                if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
+                {
+                    //Se recupera el documento de venta creado para poder visualizarlo
+                    documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
+                    documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
+                    documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
+                    documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK;
+                }
+                else
+                {
+                    documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
+                    documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_ERROR_DATA;
+                    documentoVenta.cPE_RESPUESTA_BE.DETALLE = documentoVenta.tiposErrorValidacionString + ". " + documentoVenta.descripcionError;
+                }
+                return documentoVenta;
+            }
+        }
+
+
+        public DocumentoVenta InsertarNotaDebito(DocumentoVenta documentoVenta)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaDébito;
+                dal.InsertarDocumentoVenta(documentoVenta);
+
+                if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
+                {
+                    //Se recupera el documento de venta creado para poder visualizarlo
+                    documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
+                    documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
+                    documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
+                    documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK;
+                }
+                else
+                {
+                    documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
+                    documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_ERROR_DATA;
+                    documentoVenta.cPE_RESPUESTA_BE.DETALLE = documentoVenta.tiposErrorValidacionString + ". " + documentoVenta.descripcionError;
+                }
+                return documentoVenta;
+            }
+        }
+
+        public DocumentoVenta GetDocumentoVenta(DocumentoVenta documentoVenta)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.SelectDocumentoVenta(documentoVenta);
+            }
+        }
+
 
 
         public void ActualizarEstadoDocumentosElectronicos(Usuario usuario)
@@ -111,15 +200,67 @@ namespace BusinessLayer
 
 
 
-        public CPE_RESPUESTA_BE procesarFactura(DocumentoVenta documentoVenta)
+        public CPE_RESPUESTA_BE procesarBoletaVenta(DocumentoVenta documentoVenta)
         {
             using (var dal = new DocumentoVentaDAL())
             {
                 try
                 {
-                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
+                    documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
+                    IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
+                    Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
+                    client.Endpoint.Address = new EndpointAddress(uri);
 
+
+                    documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
+                        documentoVenta.cPE_CABECERA_BE,
+                        documentoVenta.cPE_DETALLE_BEList.ToArray(),
+                        documentoVenta.cPE_DAT_ADIC_BEList.ToArray(),
+                        documentoVenta.cPE_DOC_REF_BEList.ToArray(),
+                        documentoVenta.cPE_ANTICIPO_BEList.ToArray(),
+                        documentoVenta.cPE_FAC_GUIA_BEList.ToArray(),
+                        documentoVenta.cPE_DOC_ASOC_BEList.ToArray(),
+                        documentoVenta.globalEnumTipoOnline);
+                    documentoVenta.serie = documentoVenta.cPE_CABECERA_BE.SERIE;
+                    documentoVenta.numero = documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
+
+
+                    dal.UpdateRespuestaDocumentoVenta(documentoVenta);
+
+                    //Si se procesa correctamente se actualiza el correlativo y los documentos internos y 
+                    //Se consulta el estado del documento en SUNAT
+                    if (documentoVenta.cPE_RESPUESTA_BE.CODIGO.Equals(Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK))
+                    {
+                        dal.UpdateSiguienteNumeroFactura(documentoVenta);
+                        documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
+                        consultarEstadoDocumentoVenta(documentoVenta);
+                    }
+
+                    return documentoVenta.cPE_RESPUESTA_BE;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+
+                }
+            }
+        }
+
+
+
+
+
+
+        public CPE_RESPUESTA_BE procesarCPE(DocumentoVenta documentoVenta)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                try
+                {
+                    documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
                     //Se recupera el tipo de pago registrado
                     documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
 
@@ -127,23 +268,6 @@ namespace BusinessLayer
                     IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
                     Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
                     client.Endpoint.Address = new EndpointAddress(uri);
-
-                //    documentoVenta.cPE_DAT_ADIC_BEList = new List<CPE_DAT_ADIC_BE>();
-
-              /*      CPE_DAT_ADIC_BE observaciones = new CPE_DAT_ADIC_BE();
-                    observaciones.COD_TIP_ADIC_SUNAT = "159";
-                    observaciones.NUM_LIN_ADIC_SUNAT = "159";
-                    observaciones.TXT_DESC_ADIC_SUNAT = documentoVenta.observaciones;
-
-                    CPE_DAT_ADIC_BE codigoCliente = new CPE_DAT_ADIC_BE();
-                    codigoCliente.COD_TIP_ADIC_SUNAT = "21";
-                    codigoCliente.NUM_LIN_ADIC_SUNAT = "21";
-                    codigoCliente.TXT_DESC_ADIC_SUNAT = documentoVenta.cliente.codigo;*/
-
-              /*      documentoVenta.cPE_DAT_ADIC_BEList.Add(codigoCliente);
-                    documentoVenta.cPE_DAT_ADIC_BEList.Add(observaciones);*/
-
-                    //documentoVenta.cPE_DETALLE_BEList = documentoVenta.cPE_DETALLE_BEList.or
 
                     documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                         documentoVenta.cPE_CABECERA_BE,
@@ -163,8 +287,7 @@ namespace BusinessLayer
                     //Se consulta el estado del documento en SUNAT
                     if (documentoVenta.cPE_RESPUESTA_BE.CODIGO.Equals(Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK))
                     {
-                        dal.UpdateSiguienteNumeroFactura(documentoVenta);
-                        documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+                        dal.UpdateSiguienteNumeroNotaCredito(documentoVenta);;
                         consultarEstadoDocumentoVenta(documentoVenta);
                     }
 
@@ -219,8 +342,22 @@ namespace BusinessLayer
             Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
             client.Endpoint.Address = new EndpointAddress(uri);
 
+            List<CPE_DOC_BAJA> CPE_DOC_BAJAList = new List<CPE_DOC_BAJA>();
+            CPE_DOC_BAJA CPE_DOC_BAJA = new CPE_DOC_BAJA();
+            CPE_DOC_BAJA.NRO_DOC = Constantes.RUC_MP;
+            CPE_DOC_BAJA.TIP_DOC = "6";
+            CPE_DOC_BAJA.TIP_CPE = "01";
+            CPE_DOC_BAJA.FEC_EMI = documentoVenta.fechaEmision.Value.ToString(Constantes.formatoFechaCPE);
+            CPE_DOC_BAJA.SERIE = documentoVenta.serie;
+            CPE_DOC_BAJA.CORRELATIVO = documentoVenta.numero;
+            CPE_DOC_BAJA.MTVO_BAJA = documentoVenta.comentarioAprobacionAnulacion;
+            CPE_DOC_BAJAList.Add(CPE_DOC_BAJA);
 
-            //  documentoVenta.rPTA_BE = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
+
+    //       RPTA_BE[] rPTA_BEArray = client.CallRequestLow(Constantes.USER_EOL, Constantes.PASSWORD_EOL, CPE_DOC_BAJAList.ToArray());
+
+     //       documentoVenta.rPTA_BE = rPTA_BEArray[0];
+            //   = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
 
             //El resultado se inserta a BD
             using (var dal = new DocumentoVentaDAL())
@@ -236,7 +373,7 @@ namespace BusinessLayer
             Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
             client.Endpoint.Address = new EndpointAddress(uri);
 
-            documentoVenta.rPTA_DOC_TRIB_BE = client.callExtractCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero, true, true, true); 
+            documentoVenta.rPTA_DOC_TRIB_BE = client.callExtractCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, documentoVenta.cPE_CABECERA_BE.TIP_CPE, documentoVenta.cPE_CABECERA_BE.SERIE, documentoVenta.cPE_CABECERA_BE.CORRELATIVO, true, true, true); 
             /*
             String pathrootsave = System.AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\";
             String nombreArchivo = "FACTURA " + documentoVenta.serie + "-" + documentoVenta.numero + ".pdf";

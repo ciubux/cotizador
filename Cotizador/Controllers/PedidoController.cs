@@ -63,14 +63,17 @@ namespace Cotizador.Controllers
         private void instanciarPedidoBusqueda()
         {
             Pedido pedidoTmp = new Pedido();
-            DateTime fechaDesde = DateTime.Now.AddDays(Constantes.diasDesdeBusquedaPedido);
+            DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now.AddDays(1);
+            pedidoTmp.cotizacion = new Cotizacion();
+            pedidoTmp.solicitante = new Solicitante();
+            pedidoTmp.direccionEntrega = new DireccionEntrega();
 
             pedidoTmp.fechaSolicitudDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
-            pedidoTmp.fechaSolicitudHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
+            pedidoTmp.fechaSolicitudHasta = fechaHasta;
                
             pedidoTmp.fechaEntregaDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
-            pedidoTmp.fechaEntregaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
+            pedidoTmp.fechaEntregaHasta = DateTime.Now.AddDays(Constantes.DIAS_DESDE_BUSQUEDA);
 
             pedidoTmp.fechaProgramacionDesde = null;// new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             pedidoTmp.fechaProgramacionHasta = null;// new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
@@ -171,6 +174,79 @@ namespace Cotizador.Controllers
             ViewBag.pedidoList = this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA];
             ViewBag.existeCliente = existeCliente;
             ViewBag.pagina = Constantes.BUSQUEDA_PEDIDO;
+            return View();
+        }
+
+        public ActionResult CargarPedidos()
+        {
+            try
+            {
+                this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.MANTENIMIENTO_PEDIDO;
+
+                //Si no hay usuario, se dirige el logueo
+                if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+                else
+                {
+                    Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                    if (!usuario.esCliente)
+                    {
+                        return RedirectToAction("Login", "Account");
+                    }
+                }
+
+                ViewBag.debug = Constantes.DEBUG;
+                ViewBag.Si = Constantes.MENSAJE_SI;
+                ViewBag.No = Constantes.MENSAJE_NO;
+                ViewBag.IGV = Constantes.IGV;
+
+
+                //Si no se está trabajando con una cotización se crea una y se agrega a la sesion
+
+                if (this.Session[Constantes.VAR_SESSION_PEDIDO] == null)
+                {
+
+                    instanciarPedido();
+                }
+                Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+
+
+                int existeCliente = 0;
+                if (pedido.cliente.idCliente != Guid.Empty)
+                {
+                    existeCliente = 1;
+                }
+
+                ViewBag.existeCliente = existeCliente;
+                ViewBag.idClienteGrupo = pedido.cliente.idCliente;
+                ViewBag.clienteGrupo = pedido.cliente.ToString();
+
+                ViewBag.fechaSolicitud = pedido.fechaSolicitud.ToString(Constantes.formatoFecha);
+                ViewBag.horaSolicitud = pedido.fechaSolicitud.ToString(Constantes.formatoHora);
+
+                ViewBag.fechaEntregaDesde = pedido.fechaEntregaDesde == null ? "" : pedido.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
+                ViewBag.fechaEntregaHasta = pedido.fechaEntregaHasta == null ? "" : pedido.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
+
+
+
+                ViewBag.pedido = pedido;
+                ViewBag.VARIACION_PRECIO_ITEM_PEDIDO = Constantes.VARIACION_PRECIO_ITEM_PEDIDO;
+
+                ViewBag.fechaPrecios = DateTime.Now.AddDays(-Constantes.DIAS_MAX_BUSQUEDA_PRECIOS).ToString(Constantes.formatoFecha);
+                //   ViewBag.fechaPrecios = pedido.fechaPrecios.ToString(Constantes.formatoFecha);
+
+            }
+            catch (Exception ex)
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+            }
+
+            ViewBag.pagina = Constantes.MANTENIMIENTO_PEDIDO;
             return View();
         }
 
@@ -283,6 +359,7 @@ namespace Cotizador.Controllers
                 pedidoDetalle.cantidad = documentoDetalle.cantidad;
                 if (documentoDetalle.cantidad == 0)
                     pedidoDetalle.cantidad = 1;
+
                 pedidoDetalle.costoAnterior = documentoDetalle.costoAnterior;
                 pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
                 pedidoDetalle.flete = documentoDetalle.flete;
@@ -320,7 +397,8 @@ namespace Cotizador.Controllers
             pedido.ciudadASolicitar = new Ciudad();
 
             pedido.numeroReferenciaCliente = null;
-            pedido.direccionEntrega = new DireccionEntrega(); 
+            pedido.direccionEntrega = new DireccionEntrega();
+            pedido.solicitante = new Solicitante();
             pedido.fechaSolicitud = DateTime.Now;
             pedido.fechaEntregaDesde = null;
             pedido.fechaEntregaHasta = null;
@@ -435,21 +513,12 @@ namespace Cotizador.Controllers
 
             //Se obtiene la lista de direccioines de entrega registradas para el cliente
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
-        /*    pedido.cliente.direccionEntregaList = new List<DireccionEntrega>();
-            DireccionEntrega seleccioneDireccionEntrega = new DireccionEntrega();
-            seleccioneDireccionEntrega.descripcion = Constantes.LABEL_DIRECCION_ENTREGA_VACIO;
-            seleccioneDireccionEntrega.idDireccionEntrega = Guid.Empty;
-
-            pedido.cliente.direccionEntregaList.Add(seleccioneDireccionEntrega);
-            List<DireccionEntrega> direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
-            foreach (DireccionEntrega direccionEntrega in direccionEntregaList)
-            {
-                pedido.cliente.direccionEntregaList.Add(direccionEntrega);
-            }*/
-
             pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
-            pedido.direccionEntrega = new DireccionEntrega();
 
+            SolicitanteBL solicitanteBL = new SolicitanteBL();
+            pedido.cliente.solicitanteList = solicitanteBL.getSolicitantes(idCliente);
+
+            pedido.direccionEntrega = new DireccionEntrega();
 
             //Se limpia el ubigeo de entrega
             pedido.ubigeoEntrega = new Ubigeo();
@@ -638,7 +707,7 @@ namespace Cotizador.Controllers
 
         public void ChangeInputString()
         {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            Pedido pedido = this.PedidoSession;
             PropertyInfo propertyInfo = pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(pedido, this.Request.Params["valor"]);
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
@@ -654,7 +723,7 @@ namespace Cotizador.Controllers
 
         public void ChangeNumeroReferenciaCliente()
         {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            Pedido pedido = this.PedidoSession;
             pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
@@ -679,6 +748,8 @@ namespace Cotizador.Controllers
             { 
                 Guid idDireccionEntrega = Guid.Parse(this.Request.Params["idDireccionEntrega"]);
                 pedido.direccionEntrega = pedido.cliente.direccionEntregaList.Where(d => d.idDireccionEntrega == idDireccionEntrega).FirstOrDefault();
+                pedido.ubigeoEntrega = pedido.direccionEntrega.ubigeo;
+
             }
 
             pedido.existeCambioDireccionEntrega = false;
@@ -707,6 +778,51 @@ namespace Cotizador.Controllers
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.direccionEntrega.telefono = this.Request.Params["direccionEntregaTelefono"];
             pedido.existeCambioDireccionEntrega = true;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+        }
+
+
+
+        public string ChangeSolicitante()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+
+            if (this.Request.Params["idSolicitante"] == null || this.Request.Params["idSolicitante"].Equals(String.Empty))
+            {
+                pedido.solicitante = new Solicitante();
+            }
+            else
+            {
+                Guid idSolicitante = Guid.Parse(this.Request.Params["idSolicitante"]);
+                pedido.solicitante = pedido.cliente.solicitanteList.Where(d => d.idSolicitante == idSolicitante).FirstOrDefault();
+            }
+
+            pedido.existeCambioSolicitante = false;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            return JsonConvert.SerializeObject(pedido.solicitante);
+        }
+
+        public void ChangeSolicitanteNombre()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            pedido.solicitante.nombre = this.Request.Params["solicitanteNombre"];
+            pedido.existeCambioSolicitante = true;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+        }
+
+        public void ChangeSolicitanteTelefono()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            pedido.solicitante.telefono = this.Request.Params["solicitanteTelefono"];
+            pedido.existeCambioSolicitante = true;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+        }
+
+        public void ChangeSolicitanteCorreo()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            pedido.solicitante.correo = this.Request.Params["solicitanteCorreo"];
+            pedido.existeCambioSolicitante = true;
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
 
@@ -1005,14 +1121,19 @@ namespace Cotizador.Controllers
             String nombreArchivo = Request["nombreArchivo"].ToString();
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
 
-            if(pedido == null)
+            if ((int)this.Session[Constantes.VAR_SESSION_PAGINA] == (int)Constantes.paginas.BusquedaPedidos)
+            {
                 pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
 
-            //      pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            }
+
             PedidoAdjunto pedidoAdjunto  = pedido.pedidoAdjuntoList.Where(p => p.nombre.Equals(nombreArchivo)).FirstOrDefault();
 
+            
             if (pedidoAdjunto != null)
             {
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoAdjunto = pedidoBL.GetArchivoAdjunto(pedidoAdjunto);         
                 return JsonConvert.SerializeObject(pedidoAdjunto);
             }
             else
@@ -1036,28 +1157,6 @@ namespace Cotizador.Controllers
             pedido.usuario = usuario;
             PedidoBL pedidoBL = new PedidoBL();
 
-    /*        pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
-            foreach (var file in files)
-            {
-                if (file != null && file.ContentLength > 0)
-                {
-                    PedidoAdjunto pedidoAdjunto = new PedidoAdjunto();
-                    using (Stream inputStream = file.InputStream)
-                    {
-                        MemoryStream memoryStream = inputStream as MemoryStream;
-                        if (memoryStream == null)
-                        {
-                            memoryStream = new MemoryStream();
-                            inputStream.CopyTo(memoryStream);
-                        }
-                        pedidoAdjunto.nombre = file.FileName;
-                        pedidoAdjunto.adjunto =memoryStream.ToArray();
-                    }
-                    pedido.pedidoAdjuntoList.Add(pedidoAdjunto);
-                }
-            }
-
-            */
             if (pedido.idPedido != Guid.Empty || pedido.numeroPedido > 0)
             {
                 throw new System.Exception("Pedido ya se encuentra creado");
@@ -1363,6 +1462,20 @@ namespace Cotizador.Controllers
             pedido.direccionEntrega = direccionEntrega;
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
             return JsonConvert.SerializeObject(direccionEntrega);
+        }
+
+        public String CreateSolicitanteTemporal()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            Solicitante solicitante = new Solicitante();
+            solicitante.nombre = Request["nombre"];
+            solicitante.telefono = Request["telefono"];
+            solicitante.correo = Request["correo"];
+            solicitante.idSolicitante = Guid.Empty;
+            pedido.cliente.solicitanteList.Add(solicitante);
+            pedido.solicitante = solicitante;
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            return JsonConvert.SerializeObject(solicitante);
         }
 
 

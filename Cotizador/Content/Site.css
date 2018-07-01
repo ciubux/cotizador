@@ -12,6 +12,7 @@ body {
 }
 
 
+
 .upload-btn-wrapper {
     position: relative;
     overflow: hidden;
@@ -84,6 +85,8 @@ textarea {
     #modalVerVentaConsolidada .modal-dialog {
         width: 1200px;
     }
+
+
     #modalVerCotizacion .modal-dialog {
         width: 1200px;
     }
@@ -113,6 +116,19 @@ textarea {
     #modalVistaPreviaFactura .modal-dialog {
         width: 1100px;
     }
+
+    #modalVistaPreviaCPE .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalVerFactura .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalGenerarNotaCredito .modal-dialog {
+        width: 1100px;
+    }
+
 
 
 }
@@ -383,4 +399,10 @@ $darkred: darken($red, 0.2);*/
 
 .atenuarDetalleFactura {
     background-color: cadetblue;
+}
+
+
+.list-group,
+.list-group-item {
+    display: block;
 }

@@ -4541,6 +4541,147 @@ namespace Model.ServiceReferencePSE {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CPE_DOC_BAJA", Namespace="http://schemas.datacontract.org/2004/07/")]
+    [System.SerializableAttribute()]
+    public partial class CPE_DOC_BAJA : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NRO_DOCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TIP_DOCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TIP_CPEField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FEC_EMIField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SERIEField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CORRELATIVOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MTVO_BAJAField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NRO_DOC {
+            get {
+                return this.NRO_DOCField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NRO_DOCField, value) != true)) {
+                    this.NRO_DOCField = value;
+                    this.RaisePropertyChanged("NRO_DOC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TIP_DOC {
+            get {
+                return this.TIP_DOCField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TIP_DOCField, value) != true)) {
+                    this.TIP_DOCField = value;
+                    this.RaisePropertyChanged("TIP_DOC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+        public string TIP_CPE {
+            get {
+                return this.TIP_CPEField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TIP_CPEField, value) != true)) {
+                    this.TIP_CPEField = value;
+                    this.RaisePropertyChanged("TIP_CPE");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+        public string FEC_EMI {
+            get {
+                return this.FEC_EMIField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FEC_EMIField, value) != true)) {
+                    this.FEC_EMIField = value;
+                    this.RaisePropertyChanged("FEC_EMI");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+        public string SERIE {
+            get {
+                return this.SERIEField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SERIEField, value) != true)) {
+                    this.SERIEField = value;
+                    this.RaisePropertyChanged("SERIE");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+        public string CORRELATIVO {
+            get {
+                return this.CORRELATIVOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CORRELATIVOField, value) != true)) {
+                    this.CORRELATIVOField = value;
+                    this.RaisePropertyChanged("CORRELATIVO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+        public string MTVO_BAJA {
+            get {
+                return this.MTVO_BAJAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MTVO_BAJAField, value) != true)) {
+                    this.MTVO_BAJAField = value;
+                    this.RaisePropertyChanged("MTVO_BAJA");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReferencePSE.IwsOnlineToCPE")]
     public interface IwsOnlineToCPE {
@@ -4574,6 +4715,12 @@ namespace Model.ServiceReferencePSE {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callPreview", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callPreviewResponse")]
         System.Threading.Tasks.Task<Model.ServiceReferencePSE.CPE_DOC_TRIBUTARO_BE> callPreviewAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/CallRequestLow", ReplyAction="http://tempuri.org/IwsOnlineToCPE/CallRequestLowResponse")]
+        Model.ServiceReferencePSE.RPTA_BE[] CallRequestLow(string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/CallRequestLow", ReplyAction="http://tempuri.org/IwsOnlineToCPE/CallRequestLowResponse")]
+        System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_BE[]> CallRequestLowAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -4641,6 +4788,14 @@ namespace Model.ServiceReferencePSE {
         
         public System.Threading.Tasks.Task<Model.ServiceReferencePSE.CPE_DOC_TRIBUTARO_BE> callPreviewAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado) {
             return base.Channel.callPreviewAsync(oUser, oPass, oCabecera, listDetalle, listAdicionales, listReferenciados, listAnticipos, listFacGuia, listRelacionado);
+        }
+        
+        public Model.ServiceReferencePSE.RPTA_BE[] CallRequestLow(string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc) {
+            return base.Channel.CallRequestLow(oUser, oPass, oDoc);
+        }
+        
+        public System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_BE[]> CallRequestLowAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc) {
+            return base.Channel.CallRequestLowAsync(oUser, oPass, oDoc);
         }
     }
 }

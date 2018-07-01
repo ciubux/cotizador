@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SolicitanteBL.cs" />
     <Compile Include="DireccionEntregaBL.cs" />
     <Compile Include="DocumentoVentaBL.cs" />
     <Compile Include="MovimientoAlmacenBL.cs" />

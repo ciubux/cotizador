@@ -303,7 +303,7 @@
             <div class="pull-left">
 
                 <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
-                @if (cotizacion.usuario.apruebaCotizaciones)
+                @if (cotizacion.usuario.apruebaCotizaciones || cotizacion.usuario.visualizaCostos)
                 {
 
                     if (cotizacion.mostrarCosto)

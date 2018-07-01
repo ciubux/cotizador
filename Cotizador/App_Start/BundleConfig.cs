@@ -39,7 +39,7 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
-                        "~/Scripts/pedido8.js"
+                        "~/Scripts/pedido9.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
@@ -48,6 +48,10 @@ namespace Cotizador
 
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
                         "~/Scripts/guiaRemision8.js"
+                        ));
+
+            bundles.Add(new ScriptBundle("~/bundles/notaIngreso").Include(
+                        "~/Scripts/notaIngreso.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(

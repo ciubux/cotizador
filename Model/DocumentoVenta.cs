@@ -10,6 +10,13 @@ namespace Model
     public class DocumentoVenta : Auditoria
     {
 
+        public DocumentoVenta()
+        {
+            this.tipoNotaCredito = TiposNotaCredito.AnulacionOperacion;
+        }
+
+
+
         [Display(Name = "Fecha Emisión:")]
         public DateTime? fechaEmision { get; set; }
 
@@ -123,6 +130,7 @@ namespace Model
         public String serie { get; set; }
 
 
+        [Display(Name = "Número Doc.:")]
         public String serieNumero { get { return this.serie + "-" + this.numero; } }
 
 
@@ -251,7 +259,7 @@ namespace Model
             Todos = 0,
             [Display(Name = "EN PROCESO")]
             EnProceso = 101,
-            [Display(Name = "ACEPTADO Y ACEPTADO CON OBS.")]
+            [Display(Name = "ACEPTADO")]
             TodosAceptados = 205,
             [Display(Name = "RECHAZADO")]
             Rechazado = 104,
@@ -267,7 +275,46 @@ namespace Model
 
 
 
-        
+
+        public String tipoNotaCreditoString
+        {
+            get
+            {
+                return EnumHelper<TiposNotaCredito>.GetDisplayValue(this.tipoNotaCredito);
+            }
+        }
+
+        [Display(Name = "Motivo Nota Crédito:")]
+        public TiposNotaCredito tipoNotaCredito { get; set; }
+        public enum TiposNotaCredito
+        {
+            [Display(Name = "ANULACIÓN DE LA OPERACIÓN")]
+            AnulacionOperacion = 1,
+            [Display(Name = "ANULACIÓN POR ERROR EN EL RUC")]
+            AnulacionErrorRUC = 2,
+            [Display(Name = "CORRECCIÓN POR ERROR EN LA DESCRIPCIÓN")]
+            CorreccionErrorDescripcion = 3,
+            [Display(Name = "DESCUENTO GLOBAL")]
+            DescuentoGlobal = 4,
+            [Display(Name = "DESCUENTO POR ITEM")]
+            DescuentoItem = 5,
+            [Display(Name = "DEVOLUCIÓN TOTAL")]
+            DevolucionTotal = 6,
+            [Display(Name = "DEVOLUCIÓN POR ITEM")]
+            DevolucionItem = 7,
+                /*,
+            [Display(Name = "BONIFICACIÓN")]
+            Bonificacion = 8,*/
+            [Display(Name = "DISMINUCIÓN EN EL VALOR")]
+            DisminucionValor = 9
+                /*,
+            [Display(Name = "OTROS CONCEPTOS")]
+            OtrosConceptos = 10,*/
+        };
+
+
+
+
         public String comentarioAnulado { get; set; }
 
 

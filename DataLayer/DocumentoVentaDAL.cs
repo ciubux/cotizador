@@ -76,9 +76,8 @@ namespace DataLayer
         public void InsertarDocumentoVenta(DocumentoVenta documentoVenta)
         {
             var objCommand = GetSqlCommand("pi_documentoVenta");     
-
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
-            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", documentoVenta.venta.guiaRemision.idMovimientoAlmacen);
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", documentoVenta.movimientoAlmacen.idMovimientoAlmacen);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoVenta.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoVenta.fechaVencimiento);
@@ -86,35 +85,15 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "formaPago", (int)documentoVenta.formaPago);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie);
-
-
-            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", documentoVenta.venta.pedido.numeroReferenciaCliente);
-            
+            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", null);
             InputParameterAdd.Guid(objCommand, "idDocumentoVentaReferencia", Guid.Empty);
-
-
             InputParameterAdd.Varchar(objCommand, "observaciones", documentoVenta.observaciones);
-            /*CPE_DAT_ADIC_BE observaciones = new CPE_DAT_ADIC_BE();
-            observaciones.COD_TIP_ADIC_SUNAT = "159";
-            observaciones.NUM_LIN_ADIC_SUNAT = "159";
-            observaciones.TXT_DESC_ADIC_SUNAT = documentoVenta.observaciones;*/
             InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoVenta.cliente.codigo);
-            /*
-            CPE_DAT_ADIC_BE codigoCliente = new CPE_DAT_ADIC_BE();
-            codigoCliente.COD_TIP_ADIC_SUNAT = "21";
-            codigoCliente.NUM_LIN_ADIC_SUNAT = "21";
-            codigoCliente.TXT_DESC_ADIC_SUNAT = documentoVenta.cliente.codigo;*/
-
-
-
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaSalida");
             OutputParameterAdd.Int(objCommand, "tipoError");
-            OutputParameterAdd.Varchar(objCommand, "descripcionError",500);
-            
-
-
+            OutputParameterAdd.Varchar(objCommand, "descripcionError",500);       
 
             ExecuteNonQuery(objCommand);
 
@@ -123,6 +102,32 @@ namespace DataLayer
             documentoVenta.venta.idVenta = (Guid)objCommand.Parameters["@idVentaSalida"].Value;
 
             documentoVenta.tiposErrorValidacion =  (DocumentoVenta.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
+            documentoVenta.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+        }
+
+        public void InsertarDocumentoVentaNotaCredito(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pi_documentoVentaNotaCreditoDebito");
+            InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
+            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
+            InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoVenta.fechaEmision);
+            InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoVenta.fechaVencimiento);
+            InputParameterAdd.Int(objCommand, "tipoPago", (int)documentoVenta.tipoPago);
+            InputParameterAdd.Int(objCommand, "formaPago", (int)documentoVenta.formaPago);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie);
+            InputParameterAdd.Guid(objCommand, "idDocumentoReferenciaVenta", documentoVenta.venta.documentoReferencia.idDocumentoReferenciaVenta);
+            InputParameterAdd.Varchar(objCommand, "observaciones", documentoVenta.observaciones);
+            InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoVenta.cliente.codigo);
+
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+
+            ExecuteNonQuery(objCommand);
+
+            documentoVenta.idDocumentoVenta = (Guid)objCommand.Parameters["@idDocumentoVenta"].Value;
+            documentoVenta.tiposErrorValidacion = (DocumentoVenta.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
             documentoVenta.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
 
@@ -137,6 +142,18 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idPedido", documentoVenta.venta.pedido.idPedido);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
 
+            ExecuteNonQuery(objCommand);
+        }
+
+
+        public void UpdateSiguienteNumeroNotaCredito(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pu_siguienteNumeroNotaCredito");
+
+            InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie.Substring(2, 2));
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
             ExecuteNonQuery(objCommand);
         }
 
@@ -397,8 +414,14 @@ namespace DataLayer
 
             foreach (DataRow row in cpeCabeceraBETable.Rows)
             {
+
+                documentoVenta.solicitadoAnulacion = Converter.GetBool(row, "SOLICITUD_ANULACION");
+
+
                 foreach (String column in columnasCabecera)
                 {
+                   
+
                     if (!column.Equals("id_cpe_cabecera_be") && 
                         !column.Equals("estado") &&
                         !column.Equals("usuario_creacion") &&
@@ -490,8 +513,8 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", documentoVenta.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "idCiudad", documentoVenta.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
-            InputParameterAdd.DateTime(objCommand, "fechaDesde", documentoVenta.fechaEmisionDesde);
-            InputParameterAdd.DateTime(objCommand, "fechaHasta", documentoVenta.fechaEmisionHasta);
+            InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(documentoVenta.fechaEmisionDesde.Year, documentoVenta.fechaEmisionDesde.Month, documentoVenta.fechaEmisionDesde.Day, 0, 0, 0));
+            InputParameterAdd.DateTime(objCommand, "fechaHasta", new DateTime(documentoVenta.fechaEmisionHasta.Year, documentoVenta.fechaEmisionHasta.Month, documentoVenta.fechaEmisionHasta.Day, 23, 59, 59)); 
             InputParameterAdd.Int(objCommand, "soloSolicitudAnulacion", documentoVenta.solicitadoAnulacion?1:0);
             InputParameterAdd.Int(objCommand, "estado", (int)documentoVenta.estadoDocumentoSunatBusqueda);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", documentoVenta.pedido.numeroPedido);

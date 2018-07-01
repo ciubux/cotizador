@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auditoria.cs" />
+    <Compile Include="NotaIngreso.cs" />
+    <Compile Include="SeguimientoNotaIngreso.cs" />
+    <Compile Include="Solicitante.cs" />
     <Compile Include="GuiaRemisionValidacion.cs" />
     <Compile Include="MovimientoAlmacenJson.cs" />
     <Compile Include="PedidoAdjunto.cs" />
@@ -64,6 +67,7 @@
     <Compile Include="Transportista.cs" />
     <Compile Include="Ubigeo.cs" />
     <Compile Include="DocumentoVenta.cs" />
+    <Compile Include="DocumentoReferencia.cs" />
     <Compile Include="Venta.cs" />
     <Compile Include="VentaDetalle.cs" />
     <Compile Include="MovimientoDetalle.cs" />
@@ -126,6 +130,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE5.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

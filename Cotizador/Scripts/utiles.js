@@ -17,3 +17,18 @@ function saveByteArray(reportName, byte) {
     link.download = fileName;
     link.click();
 };
+
+var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
+var TITLE_EXITO = 'Operación Realizada';
+
+function mostrarMensajeErrorProceso() {
+    $.alert({
+        //icon: 'fa fa-warning',
+        title: 'Error',
+        content: MENSAJE_ERROR,
+        type: 'red',
+        buttons: {
+            OK: function () { }
+        }
+    });
+}

@@ -181,35 +181,15 @@ namespace Cotizador.Controllers
             IDocumento documento = (Pedido)venta.pedido;
             List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
             documento.documentoDetalle = documentoDetalle;
-            calcularMontosTotales((Pedido)documento);
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.calcularMontosTotales((Pedido)documento);
             venta.pedido = (Pedido)documento;
 
             this.Session[Constantes.VAR_SESSION_VENTA] = venta;
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
 
-        private void calcularMontosTotales(Pedido pedido)
-        {
-            Decimal total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.pedidoDetalleList.AsEnumerable().Sum(o => o.subTotal)));
-            Decimal subtotal = 0;
-            Decimal igv = 0;
-
-            if (pedido.incluidoIGV)
-            {
-                subtotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total / (1 + Constantes.IGV)));
-                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total - subtotal));
-            }
-            else
-            {
-                subtotal = total;
-                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total * Constantes.IGV));
-                total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, subtotal + igv));
-            }
-
-            pedido.montoTotal = total;
-            pedido.montoSubTotal = subtotal;
-            pedido.montoIGV = igv;
-        }
+       
 
 
         public String Update()

@@ -3,6 +3,7 @@
   <xs:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" />
   <xs:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Commons" />
   <xs:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA" />
+  <xs:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/" />
   <xs:element name="callProcessOnline">
     <xs:complexType>
       <xs:sequence>
@@ -109,6 +110,22 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" minOccurs="0" name="callPreviewResult" nillable="true" type="q28:CPE_DOC_TRIBUTARO_BE" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CallRequestLow">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="oUser" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oPass" nillable="true" type="xs:string" />
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="oDoc" nillable="true" type="q29:ArrayOfCPE_DOC_BAJA" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CallRequestLowResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA" minOccurs="0" name="CallRequestLowResult" nillable="true" type="q30:ArrayOfRPTA_BE" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

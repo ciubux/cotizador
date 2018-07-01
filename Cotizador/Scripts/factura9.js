@@ -360,13 +360,24 @@ jQuery(function ($) {
     };
 
 
-    $(document).on('click', "button.btnDescargarPDF", function () {
 
+    $(document).on('click', "button.btnDescargarPDF", function () {
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idDocumentoVenta = arrrayClass[0];
-        var serieNumero = arrrayClass[1];   
+        var serieNumero = arrrayClass[1];
+        descargarPDF(idDocumentoVenta, serieNumero);
+    });
+
+      $("#btnDescargarPDF").click(function () {
+
+        //var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idDocumentoVenta = $("#idDocumentoVenta").val();
+        var serieNumero = $("#vpSERIE_CORRELATIVO").html();
+        descargarPDF(idDocumentoVenta, serieNumero);
+    });
 
 
+    function descargarPDF(idDocumentoVenta, serieNumero) {
         $.ajax({
             url: "/Factura/descargarArchivoDocumentoVenta",
             data: {
@@ -381,25 +392,67 @@ jQuery(function ($) {
 
 
                 var filePDF = base64ToArrayBuffer(documentos.pdf);
-                saveByteArray(serieNumero + ".pdf", filePDF);
+                saveByteArray(documentos.nombreArchivo + ".pdf", filePDF);
 
-                if (DESCARGAR_XML == 1) {
-                    var fileCPE = base64ToArrayBuffer(documentos.cpe);
-                    var fileCDR = base64ToArrayBuffer(documentos.cdr);
-                    saveByteArray(serieNumero + ".xml", fileCPE);
-                    saveByteArray('R-' + serieNumero + ".xml", fileCDR);
-                }
-
-
+                /*     if (DESCARGAR_XML == 1) {
+                         var fileCPE = base64ToArrayBuffer(documentos.cpe);
+                         var fileCDR = base64ToArrayBuffer(documentos.cdr);
+                         saveByteArray(serieNumero + ".xml", fileCPE);
+                         saveByteArray('R-' + serieNumero + ".xml", fileCDR);
+                     }*/
 
                 //Se descarga el PDF y luego se limpia el formulario
-        //        window.open('/General/DownLoadFile?fileName=' + fileName);
-               // window.location = '/Cotizacion/CancelarCreacionCotizacion';
+                //        window.open('/General/DownLoadFile?fileName=' + fileName);
+                // window.location = '/Cotizacion/CancelarCreacionCotizacion';
             }
         });
 
 
-        
+
+
+    }
+
+
+    $("#btnDescargarXML").click(function () {
+
+        var idDocumentoVenta = $("#idDocumentoVenta").val();
+        var serieNumero = $("#vpSERIE_CORRELATIVO").html();
+
+
+
+        $.ajax({
+            url: "/Factura/descargarArchivoDocumentoVenta",
+            data: {
+                idDocumentoVenta: idDocumentoVenta
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                alert("Ocurrió un problema al descargar los archivos XML de la factura " + serieNumero + ".");
+            },
+            success: function (documentos) {
+
+
+             //   var filePDF = base64ToArrayBuffer(documentos.pdf);
+            //    saveByteArray(serieNumero + ".pdf", filePDF);
+
+              //  if (DESCARGAR_XML == 1) {
+                    var fileCPE = base64ToArrayBuffer(documentos.cpe);
+                    var fileCDR = base64ToArrayBuffer(documentos.cdr);
+                    saveByteArray(documentos.nombreArchivo + ".xml", fileCPE);
+                    saveByteArray('R-' + documentos.nombreArchivo + ".xml", fileCDR);
+           //     }
+
+
+
+                //Se descarga el PDF y luego se limpia el formulario
+                //        window.open('/General/DownLoadFile?fileName=' + fileName);
+                // window.location = '/Cotizacion/CancelarCreacionCotizacion';
+            }
+        });
+
+
+
     });
 
    
@@ -439,23 +492,38 @@ jQuery(function ($) {
 
     
 
-    $(document).on('click', "button.btnAnular", function () {
+    $('#btnSolicitarAnulacion').click(function () {
 
-        var arrrayClass = event.target.getAttribute("class").split(" ");
-        $("#idDocumentoVenta").val(arrrayClass[0]);
-        $("#serieNumero").val(arrrayClass[1]);
-
-
-    //    modalAnulacion.modal();
+        //var arrrayClass = event.target.getAttribute("class").split(" ");
+        //$("#idDocumentoVenta").val(arrrayClass[0]);
+        $("#serieNumero").val($("#vpSERIE_CORRELATIVO").html());
+        $("#modalAnulacion").modal();
+        //modalAnulacion.modal();
     });
+
+    $('#btnIniciarNotaCredito').click(function () {
+
+        //var arrrayClass = event.target.getAttribute("class").split(" ");
+        //$("#idDocumentoVenta").val(arrrayClass[0]);
+        $("#serieNumeroFacturaParaNotaCredito").val($("#vpSERIE_CORRELATIVO").html());
+        $("#modalGenerarNotaCredito").modal();
+        //modalAnulacion.modal();
+    });
+    
+
+    $('#btnIniciarAprobacion').click(function () {
+        $("#serieNumeroAprobacionAnulacion").val($("#vpSERIE_CORRELATIVO").html());
+        $("#modalAprobacionAnulacion").modal();
+    });
+    
 
 
     $(document).on('click', "button.btnAprobarAnulacion", function () {
 
-        var arrrayClass = event.target.getAttribute("class").split(" ");
+    /*    var arrrayClass = event.target.getAttribute("class").split(" ");
         $("#idDocumentoVenta").val(arrrayClass[0]);
         $("#serieNumeroAprobacionAnulacion").val(arrrayClass[1]);
-
+        */
 
      //   modalAnulacion.modal();
     });
@@ -664,6 +732,7 @@ jQuery(function ($) {
 
                     var styleEstado = "";
                     var botonAnular = "";
+                    var botonGenerarNotaCredito = "";
                     
                     switch (facturaList[i].estadoDocumentoSunat) {
                         case 105: case 104: styleEstado = "style='color: red;font-weight: normal;'";
@@ -681,7 +750,7 @@ jQuery(function ($) {
                         default: styleEstado = "style='color: black'"; break;
                     }
 
-                    if (facturaList[i].usuario.apruebaAnulaciones == 1 && facturaList[i].solicitadoAnulacion
+                    if (facturaList[i].usuario.apruebaAnulaciones && facturaList[i].solicitadoAnulacion
                         && (facturaList[i].estadoDocumentoSunat == 102 ||  facturaList[i].estadoDocumentoSunat == 103)
                     ) {
                         botonAnular = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnAprobarAnulacion  btn btn-danger" data-toggle="modal" data-target="#modalAprobacionAnulacion">Aprobar Anulación</button >';
@@ -689,8 +758,18 @@ jQuery(function ($) {
                     else if  (facturaList[i].solicitadoAnulacion) {
                         botonAnular = '';
                     }
+
+                    if (facturaList[i].usuario.creaNotasCredito &&
+                        (facturaList[i].estadoDocumentoSunat == 102 || facturaList[i].estadoDocumentoSunat == 103)
+                    ) {
+                        botonGenerarNotaCredito = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnGenerarNotaCredito  btn btn-danger" data-toggle="modal" data-target="#modalGenerarNotaCredito">Generar Nota Crédito</button >';
+                    }
+
                     
 
+                    var botonDescargarXML = '';
+                    if (DESCARGAR_XML == 1)
+                        botonDescargarXML = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarXML btn btn- primary">Descargar XML</button>';
 
 
                     var factura = '<tr data-expanded="false">'+
@@ -707,10 +786,16 @@ jQuery(function ($) {
                         '<td ' + styleEstado + ' > ' + facturaList[i].estadoDocumentoSunatString + '</td>' +
                         '<td>  ' + facturaList[i].comentarioSolicitudAnulacion + '</td>' +
 
-                        '<td> <button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarPDF btn btn-primary">Descargar</button>'+
+                        
+                        '<td> <button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnVerDocumentoVenta btn btn-primary">Ver</button>' +
+                        '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarPDF btn btn-primary bouton-image pdfBoton">PDF</button>' +
+                        '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnActualizarEstado  btn btn-success">Act. Estado</button >' +
+                  /*      '<td> <button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarPDF btn btn-primary">Descargar PDF</button>' +
+                        botonDescargarXML +
                         '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnActualizarEstado  btn btn-primary">Act. Estado</button >' +
                         botonAnular +
-                        '</td> ' +
+                        botonGenerarNotaCredito +
+                        '</td> ' +*/
                          '</tr>';                
                     
                     $("#tableFacturas").append(factura);
@@ -792,7 +877,153 @@ jQuery(function ($) {
         });
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $(document).on('click', "button.btnVerDocumentoVenta", function () {
+
+        activarBotonesVer();
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idDocumentoVenta = arrrayClass[0];
+ 
+
+     /*   $('body').loadingModal({
+            text: 'Creando Factura...'
+        });
+        */
+
+       
+        $.ajax({
+            url: "/Factura/Show",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idDocumentoVenta: idDocumentoVenta
+            },
+            error: function (resultado) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                activarBotonesFacturar();
+            },
+            success: function (documentoVenta) {
+
+                
+                if (documentoVenta.solicitadoAnulacion == true) {
+                    $('#btnSolicitarAnulacion').hide();
+                    $('#btnIniciarAprobacion').show();
+                }
+                else {
+                    $('#btnSolicitarAnulacion').show();
+                    $('#btnIniciarAprobacion').hide();
+                }
+
+           
+                $("#idDocumentoVenta").val(documentoVenta.idDocumentoVenta);
+                /*FECHA HORA EMISIÓN -  SERIE CORRELATIVO*/
+                $("#vpFEC_EMI_HOR_EMI").html(documentoVenta.cPE_CABECERA_BE.FEC_EMI + ' ' + documentoVenta.cPE_CABECERA_BE.HOR_EMI)
+                $("#vpSERIE_CORRELATIVO").html(documentoVenta.cPE_CABECERA_BE.SERIE + ' ' + documentoVenta.cPE_CABECERA_BE.CORRELATIVO);
+
+                /*NOMBRE COMERCIAL CLIENTE*/
+                $("#vpNOM_RCT").html(documentoVenta.cPE_CABECERA_BE.NOM_RCT);
+
+                /*DIRECCION - ORDEN DE COMPRA*/
+                $("#vpDIR_DES_RCT").html(documentoVenta.cPE_CABECERA_BE.DIR_DES_RCT);
+                $("#vpNRO_ORD_COM").html(documentoVenta.cPE_CABECERA_BE.NRO_ORD_COM);
+
+                /*RUC - NRO GUIA*/
+                $("#vpNRO_DOC_RCT").html(documentoVenta.cPE_CABECERA_BE.NRO_DOC_RCT);
+                $("#vpNRO_GRE").html(documentoVenta.cPE_CABECERA_BE.NRO_GRE);
+
+                /*OBSERVACIONES*/ /*CODIGO CLIENTE*/
+                if (documentoVenta.cPE_DAT_ADIC_BEList.length > 0) {
+                    $("#vpCODIGO_CLIENTE").html(documentoVenta.cPE_DAT_ADIC_BEList[0].TXT_DESC_ADIC_SUNAT);
+                    $("#vpOBSERVACIONES").html(documentoVenta.cPE_DAT_ADIC_BEList[1].TXT_DESC_ADIC_SUNAT);  
+                }
+                else {
+                    $("#vpCODIGO_CLIENTE").html("");
+                    $("#vpOBSERVACIONES").html("");  
+                }           
+                $("#vpCORREO").html(documentoVenta.cPE_CABECERA_BE.CORREO_ENVIO);
+                $("#vpCOND_PAGO").html(documentoVenta.tipoPagoString);
+                $("#vpFEC_VCTO").html(documentoVenta.cPE_CABECERA_BE.FEC_VCTO);
+
+                $("#vpMNT_TOT_GRV").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRV);
+                $("#vpMNT_TOT_GRV_NAC").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRV_NAC);
+                $("#vpMNT_TOT_INF").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_INF);
+                $("#vpMNT_TOT_EXR").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_EXR);
+                $("#vpMNT_TOT_GRT").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRT);
+                $("#vpMNT_TOT_VAL_VTA").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_VAL_VTA);
+                $("#vpMNT_TOT_TRB_IGV").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_TRB_IGV);
+                $("#pvMNT_TOT_PRC_VTA").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_PRC_VTA);
+
+                $("#modalVerFactura").modal();
+
+              
+                $("#tableDetalleFacturaVistaPrevia > tbody").empty();
+                //FooTable.init('#tableCotizaciones');
+                $("#tableDetalleFacturaVistaPrevia").footable();
+                var lineasFactura = documentoVenta.cPE_DETALLE_BEList;
+
+                for (var i = 0; i < lineasFactura.length; i++) {
+
+                    var lineaFactura = "";
+
+               
+
+                    var lineaFactura = '<tr data-expanded="false">' +
+                        '<td>  ' + lineasFactura[i].LIN_ITM + '</td>' +
+                        '<td>  ' + lineasFactura[i].COD_ITM + '</td>' +
+                        '<td>  ' + lineasFactura[i].CANT_UND_ITM + '</td>' +
+                        '<td>  ' + lineasFactura[i].COD_UND_ITM + '</td>' +
+                        '<td>  ' + lineasFactura[i].TXT_DES_ITM + '</td>' +
+                        '<td>  ' + lineasFactura[i].VAL_UNIT_ITM + '</td>' +
+                        '<td>  ' + lineasFactura[i].VAL_VTA_ITM + '</td>' +
+                        '<td class="atenuarDetalleFactura">  ' + lineasFactura[i].MNT_IGV_ITM + '</td>' +
+                        '<td class="atenuarDetalleFactura">  ' + lineasFactura[i].PRC_VTA_UND_ITM + '</td>' +
+                        '<td class="atenuarDetalleFactura">  ' + lineasFactura[i].PRC_VTA_ITEM + '</td>' +
+                        '<td class="atenuarDetalleFactura">  ' + lineasFactura[i].POR_IGV_ITM + '</td>' +
+                        '<td class="atenuarDetalleFactura">  ' + lineasFactura[i].COD_TIP_AFECT_IGV_ITM + '</td>' +
+                        '</tr>';
+
+                    $("#tableDetalleFacturaVistaPrevia").append(lineaFactura);
+                }
+
+            }
+        });
+    });
+
+
+  
+    $("#btnContinuarGenerandoNotaCredito").click(function () {
+        $("#btnCancelarNotaCredito").click();
+
+        var tipoNotaCredito = $('input:radio[name=tipoNotaCredito]:checked').val();
+
+        var idDocumentoVenta =  $("#idDocumentoVenta").val();
+
+        var yourWindow;
+        $.ajax({
+            url: "/NotaCredito/iniciarCreacionNotaCredito",
+            type: 'POST',
+            data: {
+                idDocumentoVenta: idDocumentoVenta,
+                tipoNotaCredito: tipoNotaCredito
+            },
+            error: function (detalle) { alert("Ocurrió un problema al iniciar la edición de la nota de crédito."); },
+            success: function (fileName) {
+                window.location = '/NotaCredito/Crear';
+            }
+        });
+
+    });
     
-
-
 });

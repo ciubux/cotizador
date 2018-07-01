@@ -43,7 +43,7 @@ namespace Cotizador.Controllers
         private void instanciarCotizacionBusqueda()
         {
             Cotizacion cotizacionTmp = new Cotizacion();
-            cotizacionTmp.fechaDesde = DateTime.Now.AddDays(-5);
+            cotizacionTmp.fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now;
             cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
             cotizacionTmp.ciudad = new Ciudad();

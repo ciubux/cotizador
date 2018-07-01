@@ -37,7 +37,14 @@ namespace Model
         public bool apruebaPedidos { get { return apruebaPedidosLima || apruebaPedidosProvincias; } }
         public bool apruebaPedidosLima { get; set; }
         public bool apruebaPedidosProvincias { get; set; }
-        public bool visualizaPedidos { get; set; }
+        public bool visualizaPedidosLima { get; set; }
+
+        public bool visualizaPedidosProvincias { get; set; }
+
+        public bool visualizaCostos { get; set; }
+
+        public bool visualizaPedidos { get { return visualizaPedidosLima || visualizaPedidosProvincias; } }
+
         public bool bloqueaPedidos { get; set; }
         public bool liberaPedidos { get; set; }
 
@@ -74,7 +81,7 @@ namespace Model
         public List<Ciudad> sedesMPPedidos { get; set; }
 
 
-
+        public List<Cliente> clienteList { get; set; }
 
 
         public List<Usuario> usuarioCreaCotizacionList { get; set; }
@@ -91,6 +98,8 @@ namespace Model
         public bool programaPedidos { get; set; }
         public bool modificaMaestroClientes { get; set; }
         public bool modificaMaestroProductos { get; set; }
+        public bool creaNotasCredito { get; set; }
+        public bool esCliente { get; set; }
     }
 }
 

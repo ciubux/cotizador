@@ -213,11 +213,14 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
+    <Compile Include="Controllers\NotaIngresoController.cs" />
+    <Compile Include="Controllers\SolicitanteController.cs" />
     <Compile Include="Controllers\DireccionEntregaController.cs" />
     <Compile Include="Controllers\DocumentoVentaController.cs" />
     <Compile Include="Controllers\FacturaController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\GuiaRemisionController.cs" />
+    <Compile Include="Controllers\NotaCreditoController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\PedidoDetalleConverter.cs" />
     <Compile Include="Controllers\PedidoConverter.cs" />
@@ -320,6 +323,7 @@
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
     <Content Include="Scripts\factura9.js" />
+    <Content Include="Scripts\notaIngreso.js" />
     <Content Include="Scripts\guiaRemision8.js" />
     <Content Include="Scripts\cliente8.js" />
     <Content Include="Scripts\jquery-confirm.js" />
@@ -327,8 +331,9 @@
     <Content Include="Scripts\jquery.loadingModal.js" />
     <Content Include="Scripts\jquery.loadingModal.min.js" />
     <Content Include="Scripts\utiles.js" />
+    <Content Include="Scripts\notaCredito.js" />
     <Content Include="Scripts\venta8.js" />
-    <Content Include="Scripts\pedido8.js" />
+    <Content Include="Scripts\pedido9.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -423,6 +428,12 @@
     <Content Include="Views\GuiaRemision\PrintZ.cshtml" />
     <Content Include="Views\Producto\CargaCorrecta.cshtml" />
     <Content Include="Views\Producto\CargaIncorrecta.cshtml" />
+    <Content Include="Views\NotaCredito\Crear.cshtml" />
+    <Content Include="Views\Cliente\_SelectCliente.cshtml" />
+    <Content Include="Views\Pedido\CargarPedidos.cshtml" />
+    <Content Include="Views\NotaIngreso\Ingresar.cshtml" />
+    <Content Include="Views\NotaIngreso\IngresarEmpty.cshtml" />
+    <Content Include="Views\NotaIngreso\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

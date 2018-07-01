@@ -60,6 +60,9 @@
 
                         var linkBusquedaGuiasRemisionConsolidarFactura = "";
 
+                        var linkBusquedaNotasIngreso = "";
+                        var linkMantenimientoNotaIngreso = "";
+
                     }
                     @if (this.Session["pagina"] != null)
                     {
@@ -85,6 +88,11 @@
                             case 15: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
                             case 16: linkMantenimientoCliente = "ative"; linkMaestros = "active"; break;
                             case 17: linkMantenimientoProducto = "ative"; linkMaestros = "active"; break;
+
+
+
+                            case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
+                            case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
 
                         }
                         var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
@@ -133,9 +141,10 @@
 
                             <li class="@linkMovimientosAlmacen">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
-                                    Guías de Remisión
+                                    Movimientos Almacen
                                     <span class="caret"></span>
                                 </a>
+
                                 <ul class="dropdown-menu" role="menu">
                                     @if (usuario.administraGuias || usuario.creaGuias || usuario.visualizaGuias)
                                     {
@@ -145,6 +154,16 @@
                                     @if (usuario.creaGuias)
                                     {
                                         <li id="linkMantenimientoGuiaRemision" class="@linkMantenimientoGuiaRemision">@Html.ActionLink("Crear/Modificar Guía de Remisión", "Guiar", "GuiaRemision")</li>
+                                    }
+
+                                    @if (usuario.administraGuias || usuario.creaGuias || usuario.visualizaGuias)
+                                    {
+                                        <li id="linkBusquedaNotasIngreso" class="@linkBusquedaNotasIngreso">@Html.ActionLink("Búsqueda Notas de Ingreso", "Index", "NotaIngreso")</li>
+                                    }
+
+                                    @if (usuario.creaGuias)
+                                    {
+                                        <li id="linkMantenimientoNotaIngreso" class="@linkMantenimientoNotaIngreso">@Html.ActionLink("Crear/Modificar Nota de Ingreso", "Ingresar", "NotaIngreso")</li>
                                     }
                                 </ul>
                             </li>

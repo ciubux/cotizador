@@ -436,5 +436,43 @@ namespace Cotizador.Controllers
             return RedirectToAction("Index", "Cotizacion");
 
         }
+
+        public ActionResult clientesPedidoList()
+        {
+            Usuario usuarioSession = ((Usuario)this.Session["usuario"]);
+            List<Cliente> clienteList = new List<Cliente>();
+            List<Cliente> clienteListTmp = usuarioSession.clienteList;
+
+            Cliente clienteTodos = new Cliente { razonSocial = "Todos", idCliente = Guid.Empty };
+            clienteList.Add(clienteTodos);
+            foreach (Cliente cliente in clienteListTmp)
+            {
+                clienteList.Add(cliente);
+            }
+            var model = clienteList;
+
+            return PartialView("_SelectCliente", model);
+        }
+
+
+        
+        public ActionResult clientesCargarPedidoList()
+        {
+            Usuario usuarioSession = ((Usuario)this.Session["usuario"]);
+            List<Cliente> clienteList = new List<Cliente>();
+            List<Cliente> clienteListTmp = usuarioSession.clienteList;
+
+            Cliente clienteTodos = new Cliente { razonSocial = "-Seleccione Cliente-", idCliente = Guid.Empty };
+            clienteList.Add(clienteTodos);
+            foreach (Cliente cliente in clienteListTmp)
+            {
+                clienteList.Add(cliente);
+            }
+            var model = clienteList;
+
+            return PartialView("_SelectCliente", model);
+        }
+
+
     }
 }

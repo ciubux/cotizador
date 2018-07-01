@@ -74,7 +74,7 @@ namespace Cotizador.Controllers
             guiaRemision.pedido.cliente = new Cliente();
             guiaRemision.pedido.cliente.idCliente = Guid.Empty;
 
-            guiaRemision.fechaTrasladoDesde = DateTime.Now.AddDays(-10);
+            guiaRemision.fechaTrasladoDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             guiaRemision.fechaTrasladoHasta = DateTime.Now.AddDays(0);
             guiaRemision.estaFacturado = true;
 
@@ -146,6 +146,17 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        public void UpdateMarcaNoEntregado()
+        {
+            GuiaRemision guiaRemision = new GuiaRemision();
+            guiaRemision.idMovimientoAlmacen = Guid.Parse(this.Request.Params["idMovimientoAlmacen"]);
+            guiaRemision.estaNoEntregado = Int32.Parse(this.Request.Params["noEntregado"])==1;
+            guiaRemision.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+            movimientoAlmacenBL.UpdateMarcaNoEntregado(guiaRemision);
+        }
+
         public String Search()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaGuiasRemision;
@@ -208,7 +219,7 @@ namespace Cotizador.Controllers
             guiaRemision.pedido.cliente.idCliente = Guid.Empty;
             //Busca hasta 45 días atrás
             guiaRemision.fechaTrasladoDesde = DateTime.Now.AddDays(-45);
-            guiaRemision.fechaTrasladoHasta = DateTime.Now.AddDays(0);
+            guiaRemision.fechaTrasladoHasta = DateTime.Now.AddDays(1);
             this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA] = guiaRemision;
         }     
 

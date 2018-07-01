@@ -24,6 +24,10 @@ namespace Model
         public String serieGuiaRemision { get; set; }
 
         public int siguienteNumeroGuiaRemision { get; set; }
+
+        public String serieNotaIngreso { get; set; }
+
+        public int siguienteNumeroNotaIngreso { get; set; }
         public String sede { get; set; }
 
         public List<SerieDocumentoElectronico> serieDocumentoElectronicoList { get; set; }

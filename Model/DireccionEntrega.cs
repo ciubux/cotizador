@@ -18,5 +18,6 @@ namespace Model
 
         [Display(Name = "Telefono Contacto de Entrega:")]
         public String telefono { get; set; }
+        public Ubigeo ubigeo { get; set; }
     }
 }

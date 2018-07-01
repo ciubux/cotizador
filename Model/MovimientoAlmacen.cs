@@ -12,6 +12,10 @@ namespace Model
     {
         public Guid idMovimientoAlmacen { get; set; }
 
+        public Pedido pedido { get; set; }
+
+        public Venta venta { get; set; }
+
 
         [Display(Name = "Motivo Traslado:")]
         public motivosTraslado motivoTraslado { get; set; }
@@ -65,10 +69,12 @@ namespace Model
 
         public Boolean estaFacturado { get; set; }
 
+        public Boolean estaNoEntregado { get; set; }
+        
         public String estadoDescripcion { get {
 
-                return this.estaAnulado ? "Anulada" : 
-                    (this.estaFacturado ? "Facturada" :   "Emitida");
+                return this.estaAnulado ? "Guía Anulada" : 
+                    (this.estaFacturado ? "Guía Emitida y Facturada" :   "Guía Emitida");
 
             }
 
@@ -90,6 +96,8 @@ namespace Model
         public Usuario usuario { get; set; }
 
         public SeguimientoMovimientoAlmacenSalida seguimientoMovimientoAlmacenSalida { get; set; }
+
+        public SeguimientoMovimientoAlmacenEntrada seguimientoMovimientoAlmacenEntrada { get; set; }
 
 
         public enum estadosMovimiento {

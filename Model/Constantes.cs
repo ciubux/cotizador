@@ -15,6 +15,7 @@ namespace Model
         public static String formatoSeisDecimales = "{0:0.000000}";
         public static String formatoOchoDecimales = "{0:0.00000000}";
         public static String formatoFecha = "dd/MM/yyyy";
+        public static String formatoFechaCPE = "yyyy-MM-dd";
         public static String formatoHora = "HH:mm";
         public static String MENSAJE_SI = "Sí";
         public static String MENSAJE_NO = "No";
@@ -22,7 +23,7 @@ namespace Model
         public static int LONGITUD_NUMERO = 10;
         public static String UBIGEO_VACIO = "000000";
 
-        public static int diasDesdeBusquedaPedido = 10;
+        public static int DIAS_DESDE_BUSQUEDA = 15;
            
 
 
@@ -48,6 +49,11 @@ namespace Model
         public static String VAR_SESSION_GUIA_LISTA = "guiaRemisionList";
         public static String VAR_SESSION_GUIA_LISTA_FACTURA_CONSOLIDADA = "guiaRemisionListFacturaConsolidada";
         public static String VAR_SESSION_GUIA_VER = "guiaRemisionVer";
+
+        public static String VAR_SESSION_NOTA_INGRESO = "notaIngreso";
+        public static String VAR_SESSION_NOTA_INGRESO_BUSQUEDA = "notaIngresoBusqueda";
+        public static String VAR_SESSION_NOTA_INGRESO_LISTA = "notaIngresoLista";
+        public static String VAR_SESSION_NOTA_INGRESO_VER = "notaIngresoVer";
 
         public static String VAR_SESSION_VENTA = "venta";
         public static String VAR_SESSION_VENTA_BUSQUEDA = "ventaBusqueda";
@@ -82,7 +88,8 @@ namespace Model
         public static String USER_EOL_TEST = "";
         public static String PASSWORD_EOL_TEST = "";
         public static String ENDPOINT_ADDRESS_EOL_TEST = "";
-        
+        public static DateTime HORA_CORTE_CREDITOS_LIMA = DateTime.Now;
+
         public static String USER_EOL_PROD = "";
         public static String PASSWORD_EOL_PROD = "";
         public static String ENDPOINT_ADDRESS_EOL_PROD = "";
@@ -221,6 +228,10 @@ namespace Model
             [Display(Name = "BUSQUEDA GUIAS REMISION CONSOLIDAR FACTURA")]
             BusquedaGuiasRemisionConsolidarFactura = 19,
 
+            [Display(Name = "BUSQUEDA NOTA INGRESO")]
+            BusquedaNotasIngreso = 20,
+            [Display(Name = "MANTENIMIENTO NOTA INGRESO")]
+            MantenimientoNotaIngreso = 21,
 
         };
 

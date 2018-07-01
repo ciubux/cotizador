@@ -64,9 +64,11 @@ namespace DataLayer
                 usuario.pedidoSerializado = Converter.GetString(row, "pedido_serializado");
                 usuario.tomaPedidosProvincias = Converter.GetBool(row, "toma_pedidos_provincias");
                 usuario.programaPedidos = Converter.GetBool(row, "programa_pedidos");
-                usuario.visualizaPedidos = Converter.GetBool(row, "visualiza_pedidos");
+                usuario.visualizaPedidosLima = Converter.GetBool(row, "visualiza_pedidos_lima");
+                usuario.visualizaPedidosProvincias = Converter.GetBool(row, "visualiza_pedidos_provincias");
                 usuario.bloqueaPedidos = Converter.GetBool(row, "bloquea_pedidos");
                 usuario.liberaPedidos = Converter.GetBool(row, "libera_pedidos");
+                usuario.visualizaCostos = Converter.GetBool(row, "visualiza_costos");
 
                 //Guia
                 usuario.creaGuias = Converter.GetBool(row, "crea_guias");
@@ -88,9 +90,11 @@ namespace DataLayer
 
                 usuario.modificaMaestroClientes = Converter.GetBool(row, "modifica_maestro_clientes");
                 usuario.modificaMaestroProductos = Converter.GetBool(row, "modifica_maestro_productos");
-
+                
                
-        
+                usuario.creaNotasCredito = Converter.GetBool(row, "crea_notas_credito");
+
+                usuario.esCliente = Converter.GetBool(row, "es_cliente");
 
             }
 
@@ -131,6 +135,19 @@ namespace DataLayer
                         Constantes.PASSWORD_EOL_TEST = valorParametro; break;
                     case "ENDPOINT_ADDRESS_EOL_TEST":
                         Constantes.ENDPOINT_ADDRESS_EOL_TEST = valorParametro; break;
+                    case "HORA_CORTE_CREDITOS_LIMA":
+                        {
+
+                            DateTime horaCorte = new DateTime();
+                            String[] horaArray =  valorParametro.Split(':');
+                            horaCorte = new DateTime(horaCorte.Year, horaCorte.Month, horaCorte.Day,
+                                Int32.Parse( horaArray[0]),
+                                Int32.Parse(horaArray[1]),
+                                Int32.Parse(horaArray[2])
+                            );
+
+                            Constantes.HORA_CORTE_CREDITOS_LIMA = horaCorte; break;
+                        }
 
                     case "USER_EOL_PROD":
                         Constantes.USER_EOL_PROD = valorParametro; break;
@@ -177,7 +194,7 @@ namespace DataLayer
                 usuario.usuarioCreaCotizacionList = usuarioList;
             }
 
-            if (usuario.apruebaPedidos)
+            if (usuario.apruebaPedidos || ( usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)) 
             {
                 DataTable dataTableUsuariosTomaPedido = dataSet.Tables[3];
                 List<Usuario> usuarioList = new List<Usuario>();
@@ -228,7 +245,23 @@ namespace DataLayer
                 usuario.usuarioCreaDocumentoVentaList = usuarioList;
             }
 
+            if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
+            {
+                DataTable dataTableClientes = dataSet.Tables[6];
+                List<Cliente> clienteList = new List<Cliente>();
 
+                foreach (DataRow row in dataTableClientes.Rows)
+                {
+                    Cliente cliente = new Cliente();
+                    cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                    cliente.razonSocial = Converter.GetString(row, "razon_social");
+                    cliente.codigo = Converter.GetString(row, "codigo");
+                    cliente.ruc = Converter.GetString(row, "ruc");
+                    cliente.nombreComercial = Converter.GetString(row, "nombre_comercial");
+                    clienteList.Add(cliente);
+                }
+                usuario.clienteList = clienteList;
+            }
             return usuario;
         }
     }

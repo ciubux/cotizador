@@ -246,10 +246,20 @@
                     <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
                     <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Sede MP</th>
                     <!--  <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
-                    <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>-->
+    <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>-->
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
                     <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
+                    @if(guiaRemision.usuario.creaGuias)
+                    {
+                        <th data-name="noEntregado" data-visible="true">No Entregado</th>
+                        <th data-name="noEntregado" data-visible="false">No Entregado</th>
+                    }
+                    @if (!guiaRemision.usuario.creaGuias)
+                    {
+                         <th data-name="noEntregado" data-visible="false">No Entregado</th>
+                        <th data-name="noEntregado" data-visible="true">No Entregado</th>
+                    }
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
             </thead>
@@ -1003,9 +1013,9 @@
                                     @Html.LabelFor(dv => documentoVenta.tipoPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-8">
                                         @Html.DropDownList("tipoPago",
-EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
-new { @class = "form-control" }
-)
+                                    EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
+                                    new { @class = "form-control" }
+                                    )
                                     </div>
                                 </div>
                             </div>
@@ -1014,9 +1024,9 @@ new { @class = "form-control" }
                                     @Html.LabelFor(dv => documentoVenta.formaPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-8">
                                         @Html.DropDownList("formaPago",
-EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
-new { @class = "form-control" }
-)
+                                    EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
+                                    new { @class = "form-control" }
+                                    )
                                     </div>
                                 </div>
                             </div>

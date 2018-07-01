@@ -47,6 +47,7 @@ namespace DataLayer
             DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]),0);
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
+            InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
             InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.contactoPedido);  //puede ser null
             InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.telefonoContactoPedido);  //puede ser null
             InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.correoContactoPedido);  //puede ser null
@@ -141,6 +142,7 @@ namespace DataLayer
             DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]), 0);
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
+            InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
             InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.contactoPedido);  //puede ser null
             InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.telefonoContactoPedido);  //puede ser null
             InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.correoContactoPedido);  //puede ser null
@@ -151,7 +153,9 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);  //puede ser null
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
+            InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCrediticioPedido", pedido.seguimientoCrediticioPedido.observacion);
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
             InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
             InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedido).ToString());
@@ -626,6 +630,25 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             return pedido;
         }
 
+
+
+
+        public PedidoAdjunto SelectArchivoAdjunto(PedidoAdjunto pedidoAdjunto)
+        {
+            var objCommand = GetSqlCommand("ps_archivoAdjunto");
+            InputParameterAdd.Guid(objCommand, "idArchivoAdjunto", pedidoAdjunto.idPedidoAdjunto);
+            DataTable dataTable = Execute(objCommand);
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                pedidoAdjunto.nombre = Converter.GetString(row, "nombre");
+                pedidoAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
+            }
+
+            return pedidoAdjunto;
+        }
+
+
         public List<Pedido> SelectPedidos(Pedido pedido)
         {
             var objCommand = GetSqlCommand("ps_pedidos");
@@ -634,12 +657,16 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
-            InputParameterAdd.DateTime(objCommand, "fechaSolicitudDesde", pedido.fechaSolicitudDesde);
-            InputParameterAdd.DateTime(objCommand, "fechaSolicitudHasta", pedido.fechaSolicitudHasta);
-            InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde);
-            InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta);
+            InputParameterAdd.Guid(objCommand, "idUsuarioBusqueda", pedido.usuarioBusqueda.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
+            InputParameterAdd.DateTime(objCommand, "fechaSolicitudDesde", new DateTime(pedido.fechaSolicitudDesde.Year, pedido.fechaSolicitudDesde.Month, pedido.fechaSolicitudDesde.Day, 0, 0, 0));
+            InputParameterAdd.DateTime(objCommand, "fechaSolicitudHasta", new DateTime(pedido.fechaSolicitudHasta.Year, pedido.fechaSolicitudHasta.Month, pedido.fechaSolicitudHasta.Day, 23, 59, 59));
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", new DateTime(pedido.fechaEntregaDesde.Value.Year, pedido.fechaEntregaDesde.Value.Month, pedido.fechaEntregaDesde.Value.Day, 0, 0, 0));
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", new DateTime(pedido.fechaEntregaHasta.Value.Year, pedido.fechaEntregaHasta.Value.Month, pedido.fechaEntregaHasta.Value.Day, 23, 59, 59)); 
             InputParameterAdd.DateTime(objCommand, "fechaProgramacionDesde", pedido.fechaProgramacionDesde);
             InputParameterAdd.DateTime(objCommand, "fechaProgramacionHasta", pedido.fechaProgramacionHasta);
+            
+            
 
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
@@ -658,6 +685,10 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
                 pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
                 pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
+                pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+
+                pedido.FechaRegistro  = Converter.GetDateTime(row, "fecha_registro");
+                pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
 
                 if (row["fecha_programacion"] == DBNull.Value)
                     pedido.fechaProgramacion = null;

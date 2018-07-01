@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using Model;
 using System.IO;
+using System.Linq;
 
 namespace BusinessLayer
 {
@@ -19,6 +20,11 @@ namespace BusinessLayer
 
             if (pedido.tipoPedido != Pedido.tiposPedido.Venta)
             {
+
+
+
+
+
                 pedido.montoIGV = 0;
                 pedido.montoTotal = 0;
                 pedido.montoSubTotal = 0;
@@ -26,6 +32,16 @@ namespace BusinessLayer
                 if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
                 {
                     pedido.ciudad = pedido.ciudadASolicitar;
+                }
+            }
+            else {
+                DateTime horaActual = DateTime.Now;
+                DateTime horaLimite = new DateTime(horaActual.Year, horaActual.Month, horaActual.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Hour, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second);
+                if (horaActual >= horaLimite && pedido.ciudad.idCiudad == Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581"))
+                {
+                    pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
+                    /*Constantes.HORA_CORTE_CREDITOS_LIMA.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second*/
+                    pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
                 }
             }
             
@@ -210,15 +226,28 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 //Si el usuario no es aprobador entonces solo buscará sus cotizaciones
-                if (!pedido.usuario.apruebaCotizaciones)
+           /*     if (!pedido.usuario.apruebaCotizaciones)
                 {
                     pedido.usuarioBusqueda = pedido.usuario;
                 }
 
+                pedido.usuarioBusqueda = pedido.usuario;
+                */
                 pedidoList = dal.SelectPedidos(pedido);
             }
             return pedidoList;
         }
+
+
+        public PedidoAdjunto GetArchivoAdjunto(PedidoAdjunto pedidoAdjunto)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                pedidoAdjunto = dal.SelectArchivoAdjunto(pedidoAdjunto);
+            }
+            return pedidoAdjunto;
+        }
+
 
         public Pedido GetPedido(Pedido pedido)
         {
@@ -287,6 +316,29 @@ namespace BusinessLayer
                 dal.insertSeguimientoCrediticioPedido(pedido);
             }
 
+        }
+
+        public void calcularMontosTotales(Pedido pedido)
+        {
+            Decimal total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.pedidoDetalleList.AsEnumerable().Sum(o => o.subTotal)));
+            Decimal subtotal = 0;
+            Decimal igv = 0;
+
+            if (pedido.incluidoIGV)
+            {
+                subtotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total / (1 + Constantes.IGV)));
+                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total - subtotal));
+            }
+            else
+            {
+                subtotal = total;
+                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total * Constantes.IGV));
+                total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, subtotal + igv));
+            }
+
+            pedido.montoTotal = total;
+            pedido.montoSubTotal = subtotal;
+            pedido.montoIGV = igv;
         }
     }
 }

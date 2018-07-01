@@ -185,7 +185,7 @@ namespace Cotizador.Controllers
                     /*Usuarios a su cargo*/
                     List<Usuario> usuarioTomaPedidoList = new List<Usuario>();
 
-                    if (usuario.apruebaPedidosLima)
+                    if (usuario.apruebaPedidosLima || usuario.visualizaPedidosLima)
                     {
                         foreach (Ciudad ciudad in ciudadList)
                         {
@@ -195,17 +195,20 @@ namespace Cotizador.Controllers
     
                             }
                         }
-                        foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
+                   //     if (usuario.apruebaPedidosLima)
                         {
-                            if (!usuarioTmp.sedeMP.esProvincia)
+                            foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
                             {
-                                usuarioTomaPedidoList.Add(usuarioTmp);
+                                if (!usuarioTmp.sedeMP.esProvincia)
+                                {
+                                    usuarioTomaPedidoList.Add(usuarioTmp);
+                                }
                             }
                         }
 
                     }
 
-                    if (usuario.apruebaPedidosProvincias || usuario.tomaPedidosProvincias)
+                    if (usuario.apruebaPedidosProvincias || usuario.tomaPedidosProvincias || usuario.visualizaPedidosProvincias)
                     {
                         foreach (Ciudad ciudad in ciudadList)
                         {
@@ -242,7 +245,7 @@ namespace Cotizador.Controllers
                             }
                         }
                     }
-                    else
+            //        else
                     {
                         usuario.usuarioTomaPedidoList = usuarioTomaPedidoList;
                     }

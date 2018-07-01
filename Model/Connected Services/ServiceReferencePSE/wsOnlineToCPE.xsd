@@ -22,4 +22,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="RPTA_DOC_TRIB_BE" nillable="true" type="tns:RPTA_DOC_TRIB_BE" />
+  <xs:complexType name="ArrayOfRPTA_BE">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RPTA_BE" nillable="true" type="tns:RPTA_BE" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfRPTA_BE" nillable="true" type="tns:ArrayOfRPTA_BE" />
 </xs:schema>

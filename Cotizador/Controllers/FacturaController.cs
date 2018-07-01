@@ -105,7 +105,30 @@ namespace Cotizador.Controllers
             }
         }
 
+        public String Show()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            try
+            {
+                DocumentoVenta documentoVenta = new DocumentoVenta();
+                documentoVenta.idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
 
+
+                DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+                documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
+
+                this.Session[Constantes.VAR_SESSION_FACTURA_VER] = documentoVenta;
+                return JsonConvert.SerializeObject(documentoVenta);
+            }
+            catch (Exception ex)
+            {
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+                return ex.ToString();
+            }
+
+        }
 
 
         
@@ -128,7 +151,8 @@ namespace Cotizador.Controllers
                 documentoVenta.usuario = usuario;
 
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-                CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.procesarFactura(documentoVenta);
+                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+                CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.procesarCPE(documentoVenta);
 
                 var otmp = new
                 {
@@ -274,12 +298,14 @@ namespace Cotizador.Controllers
             foreach (DocumentoVenta documentoVenta in documentoVentaList)
             {
                 documentoVenta.usuario.apruebaAnulaciones = usuario.apruebaAnulaciones;
+                documentoVenta.usuario.creaNotasCredito = usuario.creaNotasCredito;
             }
 
 
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_FACTURA_LISTA] = documentoVentaList;
             //Se retorna la cantidad de elementos encontrados
+
             return JsonConvert.SerializeObject(documentoVentaList);
             //return pedidoList.Count();
         }
@@ -350,7 +376,8 @@ namespace Cotizador.Controllers
 
 
             DocumentoVenta documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).FirstOrDefault();
-            documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+            //documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+            documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
             documentoVenta = documentoVentaBL.descargarArchivoDocumentoVenta(documentoVenta);
 
             try {
@@ -367,7 +394,12 @@ namespace Cotizador.Controllers
             {
                 pdf = documentoVenta.rPTA_DOC_TRIB_BE.DOC_TRIB_PDF,
                 cpe = documentoVenta.cpeFile,
-                cdr = documentoVenta.cdrFile
+                cdr = documentoVenta.cdrFile,
+                nombreArchivo = 
+                        documentoVenta.cPE_CABECERA_BE.NRO_DOC_EMI+"-"+ 
+                        documentoVenta.cPE_CABECERA_BE.TIP_CPE+"-"+
+                        documentoVenta.cPE_CABECERA_BE.SERIE + "-" +
+                        documentoVenta.cPE_CABECERA_BE.CORRELATIVO
             };
 
             return JsonConvert.SerializeObject(documentos);
@@ -378,11 +410,13 @@ namespace Cotizador.Controllers
         private void instanciarfacturaBusqueda()
         {
             DocumentoVenta documentoVenta = new DocumentoVenta();
-            DateTime fechaDesde = DateTime.Now.AddDays(-10);
-            DateTime fechaHasta = DateTime.Now.AddDays(10);
+            DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
+            DateTime fechaHasta = DateTime.Now.AddDays(1);
             documentoVenta.fechaEmisionDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
             documentoVenta.fechaEmisionHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
 
+
+            documentoVenta.tipoNotaCredito = DocumentoVenta.TiposNotaCredito.AnulacionOperacion;
 
             documentoVenta.estadoDocumentoSunatBusqueda = DocumentoVenta.EstadosDocumentoSunatBusqueda.TodosAceptados;
 

@@ -12,6 +12,7 @@ namespace Model
         {
             //Cada vez que se instancia un cliente se instancia con al menos una dirección de entrega
             this.direccionEntregaList = new List<DireccionEntrega>();
+            this.solicitanteList = new List<Solicitante>();
             this.ubigeo = new Ubigeo();
            /* DireccionEntrega seleccioneDireccionEntrega = new DireccionEntrega();
             seleccioneDireccionEntrega.descripcion = Constantes.LABEL_DIRECCION_ENTREGA_VACIO;
@@ -49,6 +50,7 @@ namespace Model
 
         public List<DireccionEntrega> direccionEntregaList { get; set; }
 
+        public List<Solicitante> solicitanteList { get; set; }
 
         [Display(Name = "Razón Social:")]
         public String razonSocialSunat { get; set; }

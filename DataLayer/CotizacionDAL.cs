@@ -408,8 +408,8 @@ namespace DataLayer
             {
                 InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
             }
-            InputParameterAdd.DateTime(objCommand, "fechaDesde", cotizacion.fechaDesde);
-            InputParameterAdd.DateTime(objCommand, "fechaHasta", cotizacion.fechaHasta);
+            InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(cotizacion.fechaDesde.Year, cotizacion.fechaDesde.Month, cotizacion.fechaDesde.Day, 0, 0, 0));
+            InputParameterAdd.DateTime(objCommand, "fechaHasta", new DateTime(cotizacion.fechaHasta.Year, cotizacion.fechaHasta.Month, cotizacion.fechaHasta.Day, 23, 59, 59));
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
             DataTable dataTable = Execute(objCommand);
 
