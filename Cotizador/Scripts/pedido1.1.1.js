@@ -851,6 +851,17 @@ jQuery(function ($) {
         })
     });
 
+    $("#pedido_solicitante_nombre").change(function () {
+        $.ajax({
+            url: "/Pedido/ChangeSolicitanteNombre",
+            type: 'POST',
+            data: {
+                solicitanteNombre: $("#pedido_solicitante_nombre").val()
+            },
+            success: function () { }
+        });
+    });
+
 
     $("#pedido_solicitante_telefono").change(function () {
         $.ajax({
@@ -1975,8 +1986,8 @@ jQuery(function ($) {
 
         
 
-        if ($("#pedido_contactoPedido").val().trim() == "") {
-            $('#pedido_contactoPedido').focus();
+        if ($("#pedido_solicitante_nombre").val().trim() == "") {
+            $('#pedido_solicitante_nombre').focus();
             $.alert({
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe ingresar el nombre de la persona que realizó la solicitud.',
@@ -1989,8 +2000,8 @@ jQuery(function ($) {
         
 
         
-        if ($("#pedido_telefonoContactoPedido").val().trim() == "" && $("#pedido_correoContactoPedido").val().trim() == "" ) {
-            $('#pedido_telefonoContactoPedido').focus();
+        if ($("#pedido_solicitante_telefono").val().trim() == "" && $("#pedido_solicitante_correo").val().trim() == "" ) {
+            $('#pedido_solicitante_telefono').focus();
             $.alert({
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe ingresar un telefono y/o correo de contacto de entrega.',
@@ -2050,6 +2061,7 @@ jQuery(function ($) {
                     OK: function () { }
                 }
             });
+            return false;
         }
 
         return true;

@@ -77,7 +77,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pi_documentoVenta");     
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
-            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", documentoVenta.movimientoAlmacen.idMovimientoAlmacen);
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", documentoVenta.venta.guiaRemision.idMovimientoAlmacen);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoVenta.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoVenta.fechaVencimiento);

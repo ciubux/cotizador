@@ -141,7 +141,7 @@
 
                             <li class="@linkMovimientosAlmacen">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
-                                    Movimientos Almacen
+                                    Guías de Remisión
                                     <span class="caret"></span>
                                 </a>
 
@@ -156,7 +156,7 @@
                                         <li id="linkMantenimientoGuiaRemision" class="@linkMantenimientoGuiaRemision">@Html.ActionLink("Crear/Modificar Guía de Remisión", "Guiar", "GuiaRemision")</li>
                                     }
 
-                                    @if (usuario.administraGuias || usuario.creaGuias || usuario.visualizaGuias)
+                              <!--      @if (usuario.administraGuias || usuario.creaGuias || usuario.visualizaGuias)
                                     {
                                         <li id="linkBusquedaNotasIngreso" class="@linkBusquedaNotasIngreso">@Html.ActionLink("Búsqueda Notas de Ingreso", "Index", "NotaIngreso")</li>
                                     }
@@ -164,7 +164,7 @@
                                     @if (usuario.creaGuias)
                                     {
                                         <li id="linkMantenimientoNotaIngreso" class="@linkMantenimientoNotaIngreso">@Html.ActionLink("Crear/Modificar Nota de Ingreso", "Ingresar", "NotaIngreso")</li>
-                                    }
+                                    }-->
                                 </ul>
                             </li>
                         }

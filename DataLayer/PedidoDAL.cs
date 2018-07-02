@@ -48,9 +48,9 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
             InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
-            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.contactoPedido);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.telefonoContactoPedido);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.correoContactoPedido);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
             InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV?1:0));
             InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
             InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
@@ -143,9 +143,9 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
             InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
-            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.contactoPedido);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.telefonoContactoPedido);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.correoContactoPedido);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
             InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV ? 1 : 0));
             InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
             InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
@@ -366,7 +366,7 @@ namespace DataLayer
             DataTable direccionEntregaDataTable = dataSet.Tables[2];
             DataTable movimientoAlmacenDataTable = dataSet.Tables[3];
             DataTable pedidoAdjuntoDataTable = dataSet.Tables[4];
-
+            DataTable solicitanteDataTable = dataSet.Tables[5];
 
             //   DataTable dataTable = Execute(objCommand);
             //Datos de la cotizacion
@@ -391,9 +391,18 @@ namespace DataLayer
                 pedido.direccionEntrega.descripcion = Converter.GetString(row, "direccion_entrega");
                 pedido.direccionEntrega.contacto = Converter.GetString(row, "contacto_entrega");
                 pedido.direccionEntrega.telefono = Converter.GetString(row, "telefono_contacto_entrega");
+
+                pedido.solicitante = new Solicitante();
+                pedido.solicitante.idSolicitante = Converter.GetGuid(row, "id_solicitante");
+
                 pedido.contactoPedido = Converter.GetString(row, "contacto_pedido");
                 pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
                 pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
+
+                pedido.solicitante.nombre = pedido.contactoPedido;
+                pedido.solicitante.telefono = pedido.telefonoContactoPedido;
+                pedido.solicitante.correo = pedido.correoContactoPedido;
+
                 pedido.fechaProgramacion = Converter.GetDateTime(row, "fecha_programacion");
                 pedido.observacionesFactura = Converter.GetString(row, "observaciones_factura");
                 pedido.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
@@ -553,13 +562,29 @@ namespace DataLayer
                     descripcion = Converter.GetString(row, "descripcion"),
                     contacto = Converter.GetString(row, "contacto"),
                     telefono = Converter.GetString(row, "telefono"),
+                    ubigeo = new Ubigeo { Id = Converter.GetString(row, "ubigeo")  }
                 };
-
-
                 direccionEntregaList.Add(obj);
             }
 
             pedido.cliente.direccionEntregaList = direccionEntregaList;
+
+
+            List<Solicitante> solicitanteList = new List<Solicitante>();
+
+            foreach (DataRow row in solicitanteDataTable.Rows)
+            {
+                Solicitante obj = new Solicitante
+                {
+                    idSolicitante = Converter.GetGuid(row, "id_solicitante"),
+                    nombre = Converter.GetString(row, "nombre"),
+                    telefono = Converter.GetString(row, "telefono"),
+                    correo = Converter.GetString(row, "correo")
+                };
+                solicitanteList.Add(obj);
+            }
+
+            pedido.cliente.solicitanteList = solicitanteList;
 
 
             pedido.guiaRemisionList = new List<GuiaRemision>();

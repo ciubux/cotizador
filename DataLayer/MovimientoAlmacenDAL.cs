@@ -199,7 +199,7 @@ namespace DataLayer
 
             if (notaIngreso.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
             {
-                this.InsertMovimientoAlmacenDetalle(notaIngreso);
+           //     this.InsertMovimientoAlmacenDetalle(notaIngreso);
 
                 if (notaIngreso.numeroDocumento != siguienteNumeroGuiaRemision)
                 {
@@ -218,7 +218,7 @@ namespace DataLayer
         }
 
 
-        public void InsertMovimientoAlmacenDetalle(MovimientoAlmacen guiaRemision)
+        public void InsertMovimientoAlmacenDetalle(GuiaRemision guiaRemision)
         {
 
             foreach (DocumentoDetalle documentoDetalle in guiaRemision.pedido.documentoDetalle)

@@ -14,11 +14,11 @@ namespace Cotizador
                          ));
 
             bundles.Add(new ScriptBundle("~/bundles/venta").Include(
-                         "~/Scripts/venta8.js"
+                         "~/Scripts/venta1.1.1.js"
                          ));
 
             bundles.Add(new ScriptBundle("~/bundles/factura").Include(
-                        "~/Scripts/factura9.js"
+                        "~/Scripts/factura1.1.1.js"
                         ));
 
 
@@ -35,19 +35,19 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cotizacion").Include(
-                        "~/Scripts/cotizacion8.js"
+                        "~/Scripts/cotizacion1.1.1.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
-                        "~/Scripts/pedido9.js"
+                        "~/Scripts/pedido1.1.1.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
-                     "~/Scripts/cliente8.js"
+                     "~/Scripts/cliente1.1.1.js"
                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
-                        "~/Scripts/guiaRemision8.js"
+                        "~/Scripts/guiaRemision1.1.1.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/notaIngreso").Include(

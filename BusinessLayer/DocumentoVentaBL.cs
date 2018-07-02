@@ -287,7 +287,7 @@ namespace BusinessLayer
                     //Se consulta el estado del documento en SUNAT
                     if (documentoVenta.cPE_RESPUESTA_BE.CODIGO.Equals(Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK))
                     {
-                        dal.UpdateSiguienteNumeroNotaCredito(documentoVenta);;
+                        dal.UpdateSiguienteNumeroFactura(documentoVenta);;
                         consultarEstadoDocumentoVenta(documentoVenta);
                     }
 
