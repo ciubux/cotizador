@@ -111,11 +111,23 @@ namespace Cotizador.Controllers
             try
             {
                 DocumentoVenta documentoVenta = new DocumentoVenta();
-                documentoVenta.idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
-
-
+                List<DocumentoVenta> documentoVentaList = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+                Guid idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+                documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).First();
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+                
+                
                 documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
+
+                if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.NotaCrédito)
+                {
+                    documentoVenta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(documentoVenta.cPE_CABECERA_BE.COD_TIP_NC);
+                }
+                /*else if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.NotaDébito)
+                {
+                    documentoVenta.tipo = (DocumentoVenta.TiposNotaCredito)Int32.Parse(documentoVenta.cPE_CABECERA_BE.COD_TIP_NC);
+                }*/
+
 
                 this.Session[Constantes.VAR_SESSION_FACTURA_VER] = documentoVenta;
                 return JsonConvert.SerializeObject(documentoVenta);
@@ -316,21 +328,18 @@ namespace Cotizador.Controllers
             DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
             List<DocumentoVenta> documentoVentaList = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
             Guid idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+
+            DocumentoVenta documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).First();
+
+           // documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
            
 
-            foreach (DocumentoVenta documentoVenta in documentoVentaList)
-            {
-                if (documentoVenta.idDocumentoVenta == idDocumentoVenta)
-                {
-                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
-                    documentoVentaBL.consultarEstadoDocumentoVenta(documentoVenta);
-                    break;
-                }              
-            }          
+            documentoVentaBL.consultarEstadoDocumentoVenta(documentoVenta);
+   
         }
 
 
-        public String Anular()
+        public String SolicitarAnulacion()
         {
             DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
             List<DocumentoVenta> documentoVentaList = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
@@ -340,7 +349,7 @@ namespace Cotizador.Controllers
             DocumentoVenta documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).FirstOrDefault();
             documentoVenta.comentarioAnulado = this.Request.Params["comentarioAnulado"];
             documentoVenta.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+            //documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
             documentoVentaBL.anularDocumentoVenta(documentoVenta);
             return JsonConvert.SerializeObject(documentoVenta);
 

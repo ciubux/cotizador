@@ -215,8 +215,8 @@
                     <th data-name="proveedor" data-sortable="false">Prov.</th>
                     <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                     <th data-name="producto" data-sortable="false">Producto / Descripción</th>
-
-                    <th data-name="presentacion" data-sortable="false" data-visible="true" data-breakpoints="xs">Unidad Sunat</th>
+                    <th data-name="unidad" data-sortable="false" data-visible="true" data-breakpoints="xs">Presentación</th>
+                    <th data-name="unidadInternacional" data-sortable="false" data-visible="true" data-breakpoints="xs">Unidad Sunat</th>
                     <!--<th data-name="valorUnitario" data-sortable="true" data-breakpoints="xs sm">Costo Unitario</th>-->
                     <th data-name="precioLista" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
                     <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
@@ -241,41 +241,39 @@
                 @foreach (var documentoDetalle in venta.pedido.pedidoDetalleList)
                 {
                     contador++;
-                    <tr data-expanded="true">
-                        <td>  @documentoDetalle.producto.idProducto  </td>
-                        <td>  @documentoDetalle.esPrecioAlternativo  </td>
-                        <td>  @documentoDetalle.producto.proveedor  </td>
-                        <td>  @documentoDetalle.producto.sku  </td>
-                        <td>  @documentoDetalle.producto.descripcion</td>
+                <tr data-expanded="true">
+                    <td>  @documentoDetalle.producto.idProducto  </td>
+                    <td>  @documentoDetalle.esPrecioAlternativo  </td>
+                    <td>  @documentoDetalle.producto.proveedor  </td>
+                    <td>  @documentoDetalle.producto.sku  </td>
+                    <td>  @documentoDetalle.producto.descripcion</td>
 
-                        <td>  @documentoDetalle.unidad  </td>
-                        <td class="@documentoDetalle.producto.idProducto detprecioLista" style="text-align:right">@documentoDetalle.precioLista</td>
-                        <td class="@documentoDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@documentoDetalle.porcentajeDescuento %</td>
-                        <td class="@documentoDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@documentoDetalle.porcentajeDescuentoMostrar %</td>
-                        <td class="@documentoDetalle.producto.idProducto detprecio" style="text-align:right">@documentoDetalle.precioNeto</td>
-                        <td class="@documentoDetalle.producto.idProducto detcostoLista">@documentoDetalle.costoLista  </td>
-                        <td class="@documentoDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@documentoDetalle.margen %</td>
+                    <td>  @documentoDetalle.unidad  </td>
+                    <td>  @documentoDetalle.unidadInternacional  </td>
+                    <td class="@documentoDetalle.producto.idProducto detprecioLista" style="text-align:right">@documentoDetalle.precioLista</td>
+                    <td class="@documentoDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@documentoDetalle.porcentajeDescuento %</td>
+                    <td class="@documentoDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@documentoDetalle.porcentajeDescuentoMostrar %</td>
+                    <td class="@documentoDetalle.producto.idProducto detprecio" style="text-align:right">@documentoDetalle.precioNeto</td>
+                    <td class="@documentoDetalle.producto.idProducto detcostoLista">@documentoDetalle.costoLista  </td>
+                    <td class="@documentoDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@documentoDetalle.margen %</td>
 
-                        <td class="@documentoDetalle.producto.idProducto detflete" style="text-align:right">@documentoDetalle.flete</td>
+                    <td class="@documentoDetalle.producto.idProducto detflete" style="text-align:right">@documentoDetalle.flete</td>
 
-                        <td class="@documentoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; font-weight:bold">@documentoDetalle.precioUnitario </td>
-                        <td class="@documentoDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@documentoDetalle.producto.precioClienteProducto.precioUnitario </td>
-
-
-
-                        <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right" font-weight:bold">@documentoDetalle.cantidad</td>
-                        <td class="@documentoDetalle.producto.idProducto detsubtotal" style="text-align:right">@documentoDetalle.subTotal</td>
-                        <td class="@documentoDetalle.producto.idProducto detobservacion" style="text-align:left">@documentoDetalle.observacion</td>
-                        <td class="@documentoDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@documentoDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
-
-
-                        <td class="@documentoDetalle.producto.idProducto">@documentoDetalle.precioUnitarioOriginal</td>
-                        <td class="@documentoDetalle.producto.idProducto detordenamiento"></td>
+                    <td class="@documentoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; font-weight:bold">@documentoDetalle.precioUnitario </td>
+                    <td class="@documentoDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@documentoDetalle.producto.precioClienteProducto.precioUnitario </td>
 
 
 
+                    <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right" font-weight:bold">@documentoDetalle.cantidad</td>
+                    <td class="@documentoDetalle.producto.idProducto detsubtotal" style="text-align:right">@documentoDetalle.subTotal</td>
+                    <td class="@documentoDetalle.producto.idProducto detobservacion" style="text-align:left">@documentoDetalle.observacion</td>
+                    <td class="@documentoDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@documentoDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
 
-                    </tr>
+
+                    <td class="@documentoDetalle.producto.idProducto">@documentoDetalle.precioUnitarioOriginal</td>
+                    <td class="@documentoDetalle.producto.idProducto detordenamiento"></td>
+
+                </tr>
                 }
 
             </tbody>
@@ -658,8 +656,6 @@
                                 </div>
                             </div>
                         </div>
-
-
 
                     </div>
 

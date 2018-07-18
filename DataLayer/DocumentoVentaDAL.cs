@@ -45,11 +45,16 @@ namespace DataLayer
 
         public void anularDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pu_anularFactura");
+            var objCommand = GetSqlCommand("pu_solicitarAnulacionDocumentoVenta");
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
             InputParameterAdd.Varchar(objCommand, "comentarioAnulado", documentoVenta.comentarioAnulado);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+
             ExecuteNonQuery(objCommand);
+            documentoVenta.tipoErrorSolicitudAnulacion = (DocumentoVenta.TiposErrorSolicitudAnulacion)(int)objCommand.Parameters["@tipoError"].Value;
+            documentoVenta.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
 
         public void aprobarAnulacionDocumentoVenta(DocumentoVenta documentoVenta)
@@ -117,7 +122,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie);
             InputParameterAdd.Guid(objCommand, "idDocumentoReferenciaVenta", documentoVenta.venta.documentoReferencia.idDocumentoReferenciaVenta);
-            InputParameterAdd.Varchar(objCommand, "observaciones", documentoVenta.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observaciones", documentoVenta.observaciones==null?"": documentoVenta.observaciones);
             InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoVenta.cliente.codigo);
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
@@ -141,7 +146,6 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie.Substring(1,3));
             InputParameterAdd.Guid(objCommand, "idPedido", documentoVenta.venta.pedido.idPedido);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
-
             ExecuteNonQuery(objCommand);
         }
 
@@ -416,6 +420,7 @@ namespace DataLayer
             {
 
                 documentoVenta.solicitadoAnulacion = Converter.GetBool(row, "SOLICITUD_ANULACION");
+                documentoVenta.permiteAnulacion = Converter.GetBool(row, "permite_anulacion");
 
 
                 foreach (String column in columnasCabecera)
@@ -439,7 +444,8 @@ namespace DataLayer
                         !column.Equals("AMBIENTE_PRODUCCION") &&
                         !column.Equals("id_venta") &&
                         !column.Equals("COMENTARIO_SOLICITUD_ANULACION") &&
-                        !column.Equals("COMENTARIO_APROBACION_ANULACION") 
+                        !column.Equals("COMENTARIO_APROBACION_ANULACION") &&
+                        !column.Equals("permite_anulacion") 
                         )
                     {
                         documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));
@@ -520,6 +526,8 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "numeroPedido", documentoVenta.pedido.numeroPedido);
             InputParameterAdd.BigInt(objCommand, "numeroGuiaRemision", documentoVenta.guiaRemision.numeroDocumento);
 
+           
+
 
             //   InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             DataTable dataTable = Execute(objCommand);
@@ -541,8 +549,8 @@ namespace DataLayer
                 documentoVenta.guiaRemision = new GuiaRemision();
                 documentoVenta.guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
                 documentoVenta.guiaRemision.numeroDocumento = Converter.GetLong(row, "numero_documento");
-                
 
+                documentoVenta.tipoDocumento = (DocumentoVenta.TipoDocumento)Converter.GetInt(row, "TIP_CPE");
 
 
 
@@ -574,7 +582,7 @@ namespace DataLayer
                 documentoVenta.comentarioAprobacionAnulacion = Converter.GetString(row, "comentario_aprobacion_anulacion");
                 documentoVenta.comentarioAprobacionAnulacion = documentoVenta.comentarioAprobacionAnulacion == null ? String.Empty : documentoVenta.comentarioAprobacionAnulacion;
 
-
+                documentoVenta.permiteAnulacion = Converter.GetBool(row, "permite_anulacion");
 
                 facturaList.Add(documentoVenta);
             }

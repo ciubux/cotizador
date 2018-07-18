@@ -1897,6 +1897,10 @@ jQuery(function ($) {
             data: json,
             dataType: 'json',
             contentType: 'application/json',
+            error: function (error) {
+
+                alert(error)
+            },
             success: function (respuesta) {
                 location.reload();
             }

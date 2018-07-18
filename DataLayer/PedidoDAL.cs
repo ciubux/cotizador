@@ -107,6 +107,7 @@ namespace DataLayer
             {
                 pedidoAdjunto.usuario = pedido.usuario;
                 pedidoAdjunto.idPedido = pedido.idPedido;
+                pedidoAdjunto.idCliente = pedido.cliente.idCliente;
                 this.InsertPedidoAdjunto(pedidoAdjunto);
             }
 
@@ -757,6 +758,11 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 pedido.seguimientoCrediticioPedido.usuario = new Usuario();
                 pedido.seguimientoCrediticioPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento_crediticio");
                 pedido.seguimientoCrediticioPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento_Crediticio");
+
+                pedido.ubigeoEntrega = new Ubigeo();
+                pedido.ubigeoEntrega.Id = Converter.GetString(row, "codigo_ubigeo");
+                pedido.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
+
                 pedidoList.Add(pedido);
             }
             return pedidoList;

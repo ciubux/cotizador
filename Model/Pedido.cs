@@ -138,12 +138,12 @@ namespace Model
 
         public String fechaHoraSolicitud
         {
-            get { return this.fechaSolicitud.ToString("dd/MM/yyyy hh:mm"); }
+            get { return this.fechaSolicitud.ToString("dd/MM/yyyy HH:mm"); }
         }
 
         public String fechaHoraRegistro
         {
-            get { return this.FechaRegistro.ToString("dd/MM/yyyy hh:mm"); }
+            get { return this.FechaRegistro.ToString("dd/MM/yyyy HH:mm"); }
         }
 
         public String numeroGrupoPedidoString
@@ -257,11 +257,11 @@ namespace Model
             Venta = 'V', 
             [Display(Name = "Traslado Interno")]
             TrasladoInterno = 'T',
-            [Display(Name = "Comodato Entregado")]
+            [Display(Name = "Comodato a Entregar")]
             ComodatoEntregado = 'M',
-            [Display(Name = "Transferencia Gratuita Entregada")]
+            [Display(Name = "Transferencia Gratuita a Entregar")]
             TransferenciaGratuitaEntregada = 'G',
-            [Display(Name = "Préstamo Entregado")]
+            [Display(Name = "Préstamo a Entregar")]
             PrestamoEntregado = 'P',
             [Display(Name = "Devolución de Compra")]
             DevolucionCompra = 'B',

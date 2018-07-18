@@ -844,6 +844,10 @@ jQuery(function ($) {
 
 
 
+    $("#btnCancelarNotaCredito").click(function () {
+
+        window.location = '/Factura/Index';
+    });
 
 
 
@@ -855,39 +859,55 @@ jQuery(function ($) {
         $("#btnFinalizarCreacionNotaCredito").removeAttr('disabled');
 
 
-    
-
-
-
-
-
-
         var json = "[ ";
-        var $j_object = $("td.detcantidad");
-        $.each($j_object, function (key, value) {
-            var arrId = value.getAttribute("class").split(" ");
 
-            /*Se elimina control input en columna cantidad*/
-            var cantidad = $("." + arrId[0] + ".detincantidad").val();
-            value.innerText = cantidad;
+        var permiteEditarCantidades = $("#permiteEditarCantidades").val();
+        var permiteEditarPrecios = $("#permiteEditarPrecios").val();
+        var permiteEliminarLineas = $("#permiteEliminarLineas").val();
+        
+        if (permiteEditarPrecios == "True") {
 
-            /*Se elimina control input en columna porcentaje descuento*/
-            var porcentajeDescuento = 0;
-            var flete = 0;
-            /*var porcentajeDescuento = $("." + arrId[0] + ".detinporcentajedescuento").val();
-            $("." + arrId[0] + ".detporcentajedescuento").text(porcentajeDescuento + " %");
-            */
-      //      var margen = $("." + arrId[0] + ".detmargen").text().replace("%", "").trim();
-             var precio = $("." + arrId[0] + ".detprecio").text();
-            //  var subtotal = $("." + arrId[0] + ".detsubtotal").text();
-          
+            var $j_object = $("td.detcantidad");
+            $.each($j_object, function (key, value) {
+                var arrId = value.getAttribute("class").split(" ");
+                /*Se elimina control input en columna cantidad*/
+                var cantidad = $("." + arrId[0] + ".detcantidad").html();
+                value.innerText = cantidad;
+                /*Se elimina control input en columna porcentaje descuento*/
+                var porcentajeDescuento = 0;
+                var flete = 0;
+                var precio = $("." + arrId[0] + ".detinprecioUnitario ").val();
+                var costo = 0;
+                var observacion = "";
+                json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo + '", "observacion":"' + observacion + '"},'
+            });
+        }
+        else
+        {
+            var $j_object = $("td.detprecioUnitario");
+            $.each($j_object, function (key, value) {
+                var arrId = value.getAttribute("class").split(" ");
+                /*Se elimina control input en columna cantidad*/
+                var precio = $("." + arrId[0] + ".detprecioUnitario ").html();
+                value.innerText = cantidad;
+                /*Se elimina control input en columna porcentaje descuento*/
+                var porcentajeDescuento = 0;
+                var flete = 0;
+                var cantidad = $("." + arrId[0] + ".detincantidad").val();
+                var costo = 0;
+                var observacion = "";
+                json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo + '", "observacion":"' + observacion + '"},'
+            });
 
-             var costo = 0;//$("." + arrId[0] + ".detcostoLista").text();
 
-             var observacion = "";//= $("." + arrId[0] + ".detobservacionarea").val();
 
-            json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo + '", "observacion":"' + observacion + '"},'
-        });
+        }
+
+
+
+
+      
+       
         json = json.substr(0, json.length - 1) + "]";
 
 

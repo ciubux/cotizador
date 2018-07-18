@@ -157,6 +157,26 @@ namespace Model
             UsuarioNoAutorizado = 3
         }
 
+        public TiposErrorSolicitudAnulacion tipoErrorSolicitudAnulacion { get; set; }
+        public String tipoErrorSolicitudAnulacionString
+        {
+            get
+            {
+                return EnumHelper<TiposErrorSolicitudAnulacion>.GetDisplayValue(this.tipoErrorSolicitudAnulacion);
+            }
+        }
+
+        public enum TiposErrorSolicitudAnulacion
+        {
+            [Display(Name = "Ninguno")]
+            NoExisteError = 0,
+            [Display(Name = "El documento de venta no permite anulación")]
+            NoPermiteAnulacion = 1,
+            [Display(Name = "Ya se ha solicitado anulación previamente")]
+            ExisteSolicitudAnulacion = 2,
+           
+        }
+
         public enum TipoDocumento
         {
             [Display(Name = "Todos")]
@@ -373,6 +393,8 @@ namespace Model
         public byte[] cpeFile { get; set; }
 
         public byte[] cdrFile { get; set; }
+
+        public bool permiteAnulacion { get; set; }
 
     }
 }

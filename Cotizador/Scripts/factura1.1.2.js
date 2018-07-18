@@ -9,25 +9,6 @@ jQuery(function ($) {
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
     var DESCARGAR_XML = 0;
 
-    //Estados para búsqueda de Pedidos
-    /*var ESTADOS_TODOS = -1;
-    var ESTADO_PENDIENTE_APROBACION = 0;
-    var ESTADO_APROBADA = 1;
-    var ESTADO_DENEGADA = 2;
-    var ESTADO_ACEPTADA = 3;
-    var ESTADO_RECHAZADA = 4;
-    var ESTADO_EN_EDICION = 7;
-
-    //Etiquetas de estadps para búsqueda de Pedidos
-    var ESTADO_PENDIENTE_APROBACION_STR = "Pendiente de Aprobación";
-    var ESTADO_APROBADA_STR = "Aprobada";
-    var ESTADO_DENEGADA_STR = "Denegada";
-    var ESTADO_ACEPTADA_STR = "Aceptada";
-    var ESTADO_RECHAZADA_STR = "Rechazada";
-    var ESTADO_EN_EDICION_STR = "En Edición";*/
-
-  
-    var GUID_EMPTY = "00000000-0000-0000-0000-000000000000";
     
 
     
@@ -538,7 +519,7 @@ jQuery(function ($) {
         var comentarioAnulado = $("#comentarioAnulado").val();
         $("#btnAceptarAnulacion").attr("disabled", "disabled");
         $.ajax({
-            url: "/Factura/Anular",
+            url: "/Factura/SolicitarAnulacion",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -550,15 +531,25 @@ jQuery(function ($) {
                 mostrarMensajeErrorProceso();
             },
             success: function (documentoVenta) {
+
+                if (documentoVenta.tipoErrorSolicitudAnulacion == 0)
+                {
+                    $.alert({
+                        title: TITLE_EXITO,
+                        type: 'green',
+                        content: "Se ha solicitado la anulación del documento: " + serieNumero + ", por favor envíe correo a facturacion@mpinstitucional.com para completar la solicitud.",
+                        buttons: {
+                            OK: function () { location.reload(); }
+                        }
+                    })
+                }
+                else {
+                    mostrarMensajeErrorProceso(MENSAJE_ERROR + "\n" + "Detalle Error: " + documentoVenta.descripcionError);
+                }
+
                 $("#btnAceptarAnulacion").removeAttr("disabled");
-                $.alert({
-                    title: TITLE_EXITO,
-                    type: 'green',
-                    content: "La factura: " + serieNumero + " se encuentra pendiente de aprobación para anulación.",
-                    buttons: {
-                        OK: function () { location.reload(); }
-                    }
-                })
+
+              
             }
         });
     });
@@ -580,7 +571,7 @@ jQuery(function ($) {
             },
             error: function () {
                 $("#btnAprobarAnulacion").removeAttr("disabled");
-                mostrarMensajeErrorProceso();
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
             },
             success: function (documentoVenta) {
                 $("#btnAprobarAnulacion").removeAttr("disabled");
@@ -639,18 +630,6 @@ jQuery(function ($) {
     /*####################################################
     EVENTOS BUSQUEDA FACTURA
     #####################################################*/
-
-    function mostrarMensajeErrorProceso() {
-        $.alert({
-            //icon: 'fa fa-warning',
-            title: 'Error',
-            content: MENSAJE_ERROR,
-            type: 'red',
-            buttons: {
-                OK: function () { }
-            }
-        });
-    }
 
 
     $("input[name=documentoVenta_solicitadoAnulacion]").on("click", function () {
@@ -916,15 +895,74 @@ jQuery(function ($) {
             },
             success: function (documentoVenta) {
 
-                
-                if (documentoVenta.solicitadoAnulacion == true) {
-                    $('#btnSolicitarAnulacion').hide();
-                    $('#btnIniciarAprobacion').show();
+                /*Solicitar Anulación */
+                if (documentoVenta.solicitadoAnulacion == false
+                    && 
+                    (documentoVenta.estadoDocumentoSunat == '102'
+                        ||  documentoVenta.estadoDocumentoSunat == '103')
+                ) {
+                    $('#btnSolicitarAnulacion').show();
+
                 }
                 else {
-                    $('#btnSolicitarAnulacion').show();
+                    $('#btnSolicitarAnulacion').hide();
+                }
+                
+                /*Aprobar anulacion*/
+                if (documentoVenta.solicitadoAnulacion == true && (documentoVenta.estadoDocumentoSunat == '102'
+                    || documentoVenta.estadoDocumentoSunat == '103')
+                    )   
+                {
+                    $('#btnIniciarAprobacion').show();
+                }
+                else
+                {
                     $('#btnIniciarAprobacion').hide();
                 }
+
+
+                //Nota de Crédito
+            if ((documentoVenta.estadoDocumentoSunat == '102'
+                || documentoVenta.estadoDocumentoSunat == '103')
+                && (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA || 
+                    documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA)
+                && documentoVenta.solicitadoAnulacion == false
+                ) {
+                $('#btnIniciarNotaCredito').show();
+            }
+            else {
+                $('#btnIniciarNotaCredito').hide();
+            }
+
+            
+
+            if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO
+                    || documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_DEBITO) {
+
+                    $('.datosNotaCreditoDebito').show();
+                    
+
+                    $("#pvMOTIVO").html(documentoVenta.tipoNotaCreditoString);
+                    $("#pvDES_MTVO_NC_ND").html(documentoVenta.cPE_CABECERA_BE.DES_MTVO_NC_ND);
+
+                    /*Documento Referencia*/
+
+                    $("#vpREFERENCIA_FECHA_EMISION").html(documentoVenta.cPE_DOC_REF_BEList[0].FEC_DOC_REF);
+                    var numeroReferencia = documentoVenta.cPE_DOC_REF_BEList[0].NUM_SERIE_CPE_REF + "-"
+                        + documentoVenta.cPE_DOC_REF_BEList[0].NUM_CORRE_CPE_REF;
+                    $("#vpREFERENCIA_SERIE_CORRELATIVO").html(numeroReferencia);
+                }
+                else {
+
+                    $('.datosNotaCreditoDebito').hide();
+                }
+               
+
+
+
+
+
+
 
            
                 $("#idDocumentoVenta").val(documentoVenta.idDocumentoVenta);
@@ -1004,23 +1042,49 @@ jQuery(function ($) {
 
   
     $("#btnContinuarGenerandoNotaCredito").click(function () {
-        $("#btnCancelarNotaCredito").click();
 
+        $("#btnContinuarGenerandoNotaCredito").attr("disabled", "disabled");
+        $("#btnCancelarNotaCredito").attr("disabled", "disabled");
         var tipoNotaCredito = $('input:radio[name=tipoNotaCredito]:checked').val();
 
-        var idDocumentoVenta =  $("#idDocumentoVenta").val();
+        var idDocumentoVenta = $("#idDocumentoVenta").val();
+
+
+        if (tipoNotaCredito == null) {
+            mostrarMensajeErrorProceso("Debe seleccionar el Motivo de la Nota de Crédito.");
+            $("#btnContinuarGenerandoNotaCredito").removeAttr("disabled");
+            $("#btnCancelarNotaCredito").removeAttr("disabled");
+            return false;
+        }
 
         var yourWindow;
         $.ajax({
             url: "/NotaCredito/iniciarCreacionNotaCredito",
             type: 'POST',
+            dataType: 'JSON',
             data: {
+
                 idDocumentoVenta: idDocumentoVenta,
                 tipoNotaCredito: tipoNotaCredito
             },
-            error: function (detalle) { alert("Ocurrió un problema al iniciar la edición de la nota de crédito."); },
-            success: function (fileName) {
-                window.location = '/NotaCredito/Crear';
+            error: function (error) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                $("#btnContinuarGenerandoNotaCredito").removeAttr("disabled");
+                $("#btnCancelarNotaCredito").removeAttr("disabled");
+            },
+            success: function (venta) {
+
+               
+                if (venta.tipoErrorCrearTransaccion == 0) {
+                    window.location = '/NotaCredito/Crear';
+                }
+                else {
+                    mostrarMensajeErrorProceso(MENSAJE_ERROR + "\n" + "Detalle Error: " + venta.descripcionError);
+                    $("#btnContinuarGenerandoNotaCredito").removeAttr("disabled");
+                    $("#btnCancelarNotaCredito").removeAttr("disabled");
+                }
+             
+               
             }
         });
 

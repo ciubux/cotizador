@@ -37,7 +37,7 @@ namespace Cotizador.Controllers
 
 
 
-        public void iniciarCreacionNotaCredito()
+        public String iniciarCreacionNotaCredito()
         {
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
@@ -55,48 +55,24 @@ namespace Cotizador.Controllers
             venta.documentoReferencia.serie = venta.documentoVenta.cPE_CABECERA_BE.SERIE;
             venta.documentoReferencia.numero = venta.documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
 
-
-
-         
-
             venta = ventaBL.GetPlantillaNotaCredito(venta);
-            venta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
-            venta.documentoVenta.fechaEmision = DateTime.Now;
-
-            //Temporal
-            Pedido pedido = venta.pedido;
-            pedido.ciudadASolicitar = new Ciudad();
-
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-
-
-        //    Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == venta.pedido.ciudad.idCiudad).FirstOrDefault();
-
-           /* string jsonSeries = "[]";
-            if (ciudad != null)
+            if (venta.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
             {
-                var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
-                jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
+                venta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
+                venta.documentoVenta.fechaEmision = DateTime.Now;
 
+                //Temporal
+                Pedido pedido = venta.pedido;
+                pedido.ciudadASolicitar = new Ciudad();
+
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.calcularMontosTotales(pedido);
+                this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
             }
-
-            */
-            /*   if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
-               {
-                   pedido.ciudadASolicitar = new Ciudad
-                   {
-                       idCiudad = pedido.ciudad.idCiudad,
-                       nombre = pedido.ciudad.nombre,
-                       esProvincia = pedido.ciudad.esProvincia
-                   };
-
-                   pedido.ciudad = pedido.cliente.ciudad;
-               }*/
-
-            PedidoBL pedidoBL = new PedidoBL();
-            pedidoBL.calcularMontosTotales(pedido);
-
-            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
+            return JsonConvert.SerializeObject(venta);
+            
         }
 
 

@@ -1,4 +1,14 @@
-﻿function base64ToArrayBuffer(base64) {
+﻿
+var CONS_TIPO_DOC_NOTA_CREDITO = 7;
+var CONS_TIPO_DOC_NOTA_DEBITO = 8;
+var CONS_TIPO_DOC_FACTURA = 1;
+var CONS_TIPO_DOC_BOLETA = 3;
+
+var GUID_EMPTY = "00000000-0000-0000-0000-000000000000";
+
+
+
+function base64ToArrayBuffer(base64) {
     var binaryString = window.atob(base64);
     var binaryLen = binaryString.length;
     var bytes = new Uint8Array(binaryLen);
@@ -26,6 +36,19 @@ function mostrarMensajeErrorProceso() {
         //icon: 'fa fa-warning',
         title: 'Error',
         content: MENSAJE_ERROR,
+        type: 'red',
+        buttons: {
+            OK: function () { }
+        }
+    });
+}
+
+
+function mostrarMensajeErrorProceso(mensajeError) {
+    $.alert({
+        //icon: 'fa fa-warning',
+        title: 'Error',
+        content: mensajeError,
         type: 'red',
         buttons: {
             OK: function () { }

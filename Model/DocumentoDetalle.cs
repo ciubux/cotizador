@@ -22,6 +22,8 @@ namespace Model
         public Producto producto { get; set; }
         public String unidad { get; set; }
 
+        public String unidadInternacional { get; set; }
+
 
         public Boolean esPrecioAlternativo { get; set; }
         public Usuario usuario { get; set; }

@@ -32,8 +32,10 @@ namespace BusinessLayer
             using (var dal = new VentaDAL())
             {
                 venta = dal.SelectVentaPlantillaNotaCredito(venta);
-
-                this.procesarVenta(venta);
+                if (venta.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+                {
+                    this.procesarVenta(venta);
+                }
             }
             return venta;
         }

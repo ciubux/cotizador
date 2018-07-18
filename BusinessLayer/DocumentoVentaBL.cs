@@ -249,11 +249,6 @@ namespace BusinessLayer
             }
         }
 
-
-
-
-
-
         public CPE_RESPUESTA_BE procesarCPE(DocumentoVenta documentoVenta)
         {
             using (var dal = new DocumentoVentaDAL())
@@ -287,7 +282,16 @@ namespace BusinessLayer
                     //Se consulta el estado del documento en SUNAT
                     if (documentoVenta.cPE_RESPUESTA_BE.CODIGO.Equals(Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK))
                     {
-                        dal.UpdateSiguienteNumeroFactura(documentoVenta);;
+                        if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.Factura)
+                        {
+                            dal.UpdateSiguienteNumeroFactura(documentoVenta);
+                        }
+                        else if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.NotaCrédito)
+                        {
+                            dal.UpdateSiguienteNumeroNotaCredito(documentoVenta);
+                        }                        
+
+
                         consultarEstadoDocumentoVenta(documentoVenta);
                     }
 
@@ -311,7 +315,7 @@ namespace BusinessLayer
             client.Endpoint.Address = new EndpointAddress(uri);
             
 
-            documentoVenta.rPTA_BE = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
+            documentoVenta.rPTA_BE = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0"+(int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
 
             //El resultado se inserta a BD
             using (var dal = new DocumentoVentaDAL())
@@ -322,14 +326,6 @@ namespace BusinessLayer
 
         public void anularDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-            Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
-            client.Endpoint.Address = new EndpointAddress(uri);
-          
-
-          //  documentoVenta.rPTA_BE = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
-
-            //El resultado se inserta a BD
             using (var dal = new DocumentoVentaDAL())
             {
                 dal.anularDocumentoVenta(documentoVenta);

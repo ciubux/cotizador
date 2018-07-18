@@ -2210,6 +2210,7 @@ jQuery(function ($) {
             //  contentType: 'multipart/form-data',
             data: { nombreArchivo: nombreArchivo },
             error: function (detalle) {
+                alert(detalle);
             },
             success: function (pedidoAdjunto) {
                 var sampleArr = base64ToArrayBuffer(pedidoAdjunto.adjunto);
@@ -3048,7 +3049,20 @@ jQuery(function ($) {
         });
     })*/
 
-        var numeroReferenciaCliente = $("#pedido_numeroReferenciaCliente").val();
+        if ($("#pedido_numeroReferenciaCliente2").val().length > 20) {
+            $("#pedido_numeroReferenciaCliente2").focus();
+            $.alert({
+                title: TITLE_VALIDACION_PEDIDO,
+                content: 'El número de referencia del cliente no debe contener más de 20 caracteres, si el dato a ingresar es más extenso agreguelo en Observaciones Factura.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }   
+
+
+        var numeroReferenciaCliente = $("#pedido_numeroReferenciaCliente2").val();
         var numeroReferenciaAdicional = $("#pedido_numeroReferenciaAdicional").val();
         var observaciones = $("#pedido_observaciones").val();
         var observacionesFactura = $("#pedido_observacionesFactura").val();
@@ -3103,7 +3117,7 @@ jQuery(function ($) {
         $("#verActualizarMontoIGV").html($("#verMontoIGV").html());
         $("#verActualizarMontoTotal").html($("#verMontoTotal").html());
 
-        $("#pedido_numeroReferenciaCliente").val($("#verNumeroReferenciaCliente").html());
+        $("#pedido_numeroReferenciaCliente2").val($("#verNumeroReferenciaCliente").html());
         $("#pedido_numeroReferenciaAdicional").val($("#verNumeroReferenciaAdicional").html());
 
         $("#pedido_observacionesFactura").val($("#verObservacionesFactura").html());
@@ -4004,7 +4018,8 @@ jQuery(function ($) {
                         '<td>  ' + pedidoList[i].fechaHoraRegistro + '</td>' +
                         '<td>  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
                         '<td>  ' + fechaProgramacion+ '</td>' +
-                        '<td>  ' + pedidoList[i].montoTotal+'  </td>' +
+                        '<td>  ' + pedidoList[i].montoTotal + '  </td>' +
+                        '<td>  ' + pedidoList[i].ubigeoEntrega.Distrito + '  </td>' +
                         '<td>  ' + pedidoList[i].seguimientoPedido.estadoString+'</td>' +
                       //  '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
                       //  '<td>  ' + observacion+'  </td>' +

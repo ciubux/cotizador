@@ -116,7 +116,27 @@ namespace Model
                    || this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.DescuentoGlobal;
             }
         }
-    
 
+
+
+        public TiposErrorCrearTransaccion tipoErrorCrearTransaccion { get; set; }
+        public String tipoErrorSolicitudAnulacionString
+        {
+            get
+            {
+                return EnumHelper<TiposErrorCrearTransaccion>.GetDisplayValue(this.tipoErrorCrearTransaccion);
+            }
+        }
+
+        public enum TiposErrorCrearTransaccion
+        {
+            [Display(Name = "Ninguno")]
+            NoExisteError = 0,
+            [Display(Name = "La venta ya ha sido afectada por otra venta, no se puede continuar generando el documento de venta.")]
+            ExisteVentaAfectacion = 1
+
+        }
+
+        public String descripcionError { get; set; }
     }
 }

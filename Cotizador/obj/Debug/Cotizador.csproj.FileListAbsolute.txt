@@ -460,8 +460,6 @@ C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Spire.Pdf.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Spire.License.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Microsoft.mshtml.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\cotizadorPDF.pdb
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\ApplicationInsights.config
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\roslyn\csc.exe
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -588,5 +586,7 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.pdb

@@ -20,11 +20,6 @@ namespace BusinessLayer
 
             if (pedido.tipoPedido != Pedido.tiposPedido.Venta)
             {
-
-
-
-
-
                 pedido.montoIGV = 0;
                 pedido.montoTotal = 0;
                 pedido.montoSubTotal = 0;
@@ -33,6 +28,14 @@ namespace BusinessLayer
                 {
                     pedido.ciudad = pedido.ciudadASolicitar;
                 }
+
+                
+
+
+
+
+
+
             }
             else {
                 DateTime horaActual = DateTime.Now;
@@ -52,9 +55,7 @@ namespace BusinessLayer
                 if (pedido.tipoPedido != Pedido.tiposPedido.Venta)
                 {
                     pedidoDetalle.precioNeto = 0;
-                }
-
-                
+                }               
 
                 pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
