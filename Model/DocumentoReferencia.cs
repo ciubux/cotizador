@@ -38,7 +38,5 @@ namespace Model
         public DateTime numeroOtroDocumentoReferencia { get; set; }
 
 
-
-
     }
 }

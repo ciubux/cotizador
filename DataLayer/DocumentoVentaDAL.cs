@@ -94,23 +94,18 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idDocumentoVentaReferencia", Guid.Empty);
             InputParameterAdd.Varchar(objCommand, "observaciones", documentoVenta.observaciones);
             InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoVenta.cliente.codigo);
-
             OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaSalida");
             OutputParameterAdd.Int(objCommand, "tipoError");
             OutputParameterAdd.Varchar(objCommand, "descripcionError",500);       
-
             ExecuteNonQuery(objCommand);
-
-            documentoVenta.idDocumentoVenta = (Guid)objCommand.Parameters["@idDocumentoVenta"].Value;
-            
+            documentoVenta.idDocumentoVenta = (Guid)objCommand.Parameters["@idDocumentoVenta"].Value;            
             documentoVenta.venta.idVenta = (Guid)objCommand.Parameters["@idVentaSalida"].Value;
-
             documentoVenta.tiposErrorValidacion =  (DocumentoVenta.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
             documentoVenta.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
 
-        public void InsertarDocumentoVentaNotaCredito(DocumentoVenta documentoVenta)
+        public void InsertarDocumentoVentaNotaCreditoDebito(DocumentoVenta documentoVenta)
         {
             var objCommand = GetSqlCommand("pi_documentoVentaNotaCreditoDebito");
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
@@ -149,11 +144,34 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+        public void UpdateSiguienteNumeroBoleta(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pu_siguienteNumeroBoleta");
+
+            InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie.Substring(1, 3));
+            InputParameterAdd.Guid(objCommand, "idPedido", documentoVenta.venta.pedido.idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+
 
         public void UpdateSiguienteNumeroNotaCredito(DocumentoVenta documentoVenta)
         {
             var objCommand = GetSqlCommand("pu_siguienteNumeroNotaCredito");
 
+            InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie.Substring(2, 2));
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+
+
+        public void UpdateSiguienteNumeroNotaDebito(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pu_siguienteNumeroNotaDebito");
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
             InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie.Substring(2, 2));

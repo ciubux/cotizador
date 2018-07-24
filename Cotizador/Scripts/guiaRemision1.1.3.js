@@ -486,23 +486,7 @@ jQuery(function ($) {
     }
 
 
-    function desactivarBotonesFacturar() {
-        $("#btnCancelarFacturarPedido").attr('disabled', 'disabled');
-        $("#btnEditarCliente").attr('disabled', 'disabled');
-        $("#btnEditarVenta").attr('disabled', 'disabled');
-        $("#btnAceptarFacturarPedido").attr('disabled', 'disabled');
-        $("#btnConfirmarFacturarPedido").attr('disabled', 'disabled');
-        $("#btnCancelarConfirmarFacturarPedido").attr('disabled', 'disabled');
-    }
 
-    function activarBotonesFacturar() {
-        $("#btnCancelarFacturarPedido").removeAttr('disabled');
-        $("#btnEditarCliente").removeAttr('disabled');
-        $("#btnEditarVenta").removeAttr('disabled');
-        $("#btnAceptarFacturarPedido").removeAttr('disabled');
-        $("#btnConfirmarFacturarPedido").removeAttr('disabled');
-        $("#btnCancelarConfirmarFacturarPedido").removeAttr('disabled');
-    }
 
 
 
@@ -601,23 +585,6 @@ jQuery(function ($) {
     }
       
 
-
-
-
-    ////////VER COTIZACIÓN  --- CAMBIO DE ESTADO
-
-    function invertirFormatoFecha(fecha)
-    {
-        var fechaInvertida = fecha.split("-");
-        fecha = fechaInvertida[2] + "/" + fechaInvertida[1] + "/" + fechaInvertida[0];
-        return fecha 
-    }
-
-    function convertirFechaNumero(fecha) {
-        var fechaInvertida = fecha.split("/");
-        fecha = fechaInvertida[2] + fechaInvertida[1] + fechaInvertida[0];
-        return Number(fecha)
-    }
 
 
     $(document).on('click', "input.chkNoEntregado", function () {
@@ -916,6 +883,21 @@ jQuery(function ($) {
                 $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
                 $("#verObservacionesPedido").html(pedido.observaciones);
 
+                if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_RUC) {
+                    $("#modalFacturarTitle").html("<b>Crear Factura</b>");
+                    $("#descripcionDatosDocumento").html("<b>Datos de la Factura</b>");
+                    $("#observacionesDocumento").html("Observaciones Factura:");
+                    $("#btnAceptarFacturarPedido").html("Generar Factura");
+                    
+                }
+                else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_DNI) {
+                    $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
+                    $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
+                    $("#observacionesDocumento").html("Observaciones Boleta:");
+                    $("#btnAceptarFacturarPedido").html("Generar Boleta");
+                }
+
+
                 $("#nombreArchivos > li").remove().end();
 
 
@@ -1015,22 +997,9 @@ jQuery(function ($) {
                 $("#documentoVenta_fechaVencimiento").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
                 $("#documentoVenta_horaEmision").val(getHoraActual());
 
-
-            /*    var guiaRemisionList = pedido.guiaRemisionList;
-                for (var j = 0; j < guiaRemisionList.length; j++) {
-                    $("#documentoVenta_fechaEmision").val(invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
-                   // $("#documentoVenta_fechaEmision").val("06/05/2018");
-                    $("#documentoVenta_fechaVencimiento").val(invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
-                    $("#documentoVenta_horaEmision").val(getHoraActual());
-                    break;
-                }*/
-
-
                 $("#tipoPago").val(pedido.cliente.tipoPagoFactura);
                 calcularFechaVencimiento();
                 $("#formaPago").val(pedido.cliente.formaPagoFactura);
-
-
 
                 $('#documentoVenta_serie')
                     .find('option')
@@ -1056,6 +1025,8 @@ jQuery(function ($) {
                 // sleep
                 $("#tableDetallePedido").append(d);
 
+
+              
 
                 $("#modalFacturar").modal('show');
 
@@ -1130,108 +1101,12 @@ jQuery(function ($) {
 
 
 
-    function addZero(i) {
-        if (i < 10) {
-            i = "0" + i;
-        }
-        return i;
-    }
-
-    function getHoraActual() {
-        var d = new Date();
-        var h = addZero(d.getHours());
-        var m = addZero(d.getMinutes());
-        var s = addZero(d.getSeconds());
-        return h + ":" + m;
-    }
+    
 
 
 
 
-    $('#documentoVenta_fechaEmision').change(function () {
-        var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate');
-        $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-        calcularFechaVencimiento();
-
-    });
-
-    function calcularFechaVencimiento() {
-        var tipoPago = $('#tipoPago').val();
-        $('#documentoVenta_fechaVencimiento').attr("disabled","disabled");
-        switch (tipoPago) {
-            case "0":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate');
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                $('#documentoVenta_fechaVencimiento').removeAttr("disabled");
-                break;
-            case "1":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate');
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-            case "2":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+7d');
-                date2.setDate(date2.getDate() + 7);
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-            case "3":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+15d');
-                date2.setDate(date2.getDate() + 15);
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-            case "4":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+30d');
-                date2.setDate(date2.getDate() + 30);
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-            case "5":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+60d');
-                date2.setDate(date2.getDate() + 60);
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-            case "6":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+90d');
-                date2.setDate(date2.getDate() + 90);
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-            case "7":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+120d');
-                date2.setDate(date2.getDate() + 120);
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-            case "8":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+20d');
-                date2.setDate(date2.getDate() + 20);
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-            case "9":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+45d');
-                date2.setDate(date2.getDate() + 45);
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-            case "10":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+45d');
-                date2.setDate(date2.getDate() + 21);
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-            case "11":
-                var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+45d');
-                date2.setDate(date2.getDate() + 25);
-                $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
-                break;
-
-
-
-
-        }
-    }
-
-
-    $('#tipoPago').change(function () {
-
-        calcularFechaVencimiento();
-
-
-    });
+    
 
 
     $("#btnEditarCliente").click(function () {
@@ -1288,286 +1163,9 @@ jQuery(function ($) {
     }
 
 
-    $("#btnAceptarFacturarPedido").click(function () {
-        if ($("#verRazonSocialSunat").html() == "") {
-            alert("No se han obtenido los datos del cliente desde SUNAT.");
-            return false;
-        }
-
-        if ($("#documentoVenta_fechaEmision").val() == "" || $("#documentoVenta_fechaEmision").val() == null) {
-            alert("Debe ingresar la fecha de emisión.");
-            $("#documentoVenta_fechaEmision").focus();
-            return false;
-        }
-
-        if ($("#documentoVenta_horaEmision").val() == "" || $("#documentoVenta_horaEmision").val() == null) {
-            alert("Debe ingresar la hora de emisión.");
-            $("#documentoVenta_horaEmision").focus();
-            return false;
-        }
-
-        if ($("#documentoVenta_fechaVencimiento").val() == "" || $("#documentoVenta_fechaVencimiento").val() == null) {
-            alert("Debe ingresar la fecha de vencimiento.");
-            $("#documentoVenta_fechaVencimiento").focus();
-            return false;
-        }
-
-        if (convertirFechaNumero($("#documentoVenta_fechaEmision").val()) > convertirFechaNumero($("#documentoVenta_fechaVencimiento").val())) {
-            alert("La fecha de vencimiento debe ser mayor o igual a la fecha de emisión.");
-            $("#documentoVenta_fechaVencimiento").focus();
-            return false;
-        }
-
-
-     if ($("#verNumeroReferenciaCliente").html().length > 20) {
-            $("#numeroReferenciaCliente").focus();
-            $.alert({
-                title: 'Validación',
-                content: 'El número de referencia del cliente no debe contener más de 20 caracteres, si el dato a ingresar es más extenso agreguelo en observaciones.',
-                buttons: {
-                    OK: function () { }
-                }
-            });
-            return false;
-        }  
-
-        var serie = $("#documentoVenta_serie").val();
-        var fechaEmision = $("#documentoVenta_fechaEmision").val();
-        var horaEmision = $("#documentoVenta_horaEmision").val();
-        var fechaVencimiento = $("#documentoVenta_fechaVencimiento").val();
-        var observaciones = $("#documentoVenta_observaciones").val();
-        var tipoPago = $("#tipoPago").val();
-        var formaPago = $("#formaPago").val();
-        var numeroReferenciaCliente = $("#verNumeroReferenciaCliente").html(); 
-
-       
-
-        desactivarBotonesFacturar();
-        
-
-        $('body').loadingModal({
-            text: 'Creando Factura...'
-        });
-
-
-        var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
-
-
-        $.ajax({
-            url: "/Factura/Create",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                fechaEmision: fechaEmision,
-                horaEmision: horaEmision,
-                fechaVencimiento: fechaVencimiento,
-                idMovimientoAlmacen: idMovimientoAlmacen,
-                tipoPago: tipoPago,
-                formaPago: formaPago,
-                observaciones: observaciones,
-                serie: serie,
-                numeroReferenciaCliente: numeroReferenciaCliente
-            },
-            error: function (resultado) {
-                $('body').loadingModal('hide')
-                mostrarMensajeErrorProceso(MENSAJE_ERROR);
-                activarBotonesFacturar();
-            },
-            success: function (documentoVenta) {
-                $('body').loadingModal('hide')
-
-                if (documentoVenta.cPE_RESPUESTA_BE.CODIGO == "001") {
-                    $("#idDocumentoVenta").val(documentoVenta.idDocumentoVenta);
-                    /*FECHA HORA EMISIÓN -  SERIE CORRELATIVO*/
-                    $("#vpFEC_EMI_HOR_EMI").html(documentoVenta.cPE_CABECERA_BE.FEC_EMI + ' ' + documentoVenta.cPE_CABECERA_BE.HOR_EMI) 
-                    $("#vpSERIE_CORRELATIVO").html(documentoVenta.cPE_CABECERA_BE.SERIE + ' ' + documentoVenta.cPE_CABECERA_BE.CORRELATIVO);
-
-                    /*NOMBRE COMERCIAL CLIENTE*/
-                    $("#vpNOM_RCT").html(documentoVenta.cPE_CABECERA_BE.NOM_RCT);
-
-                    /*DIRECCION - ORDEN DE COMPRA*/
-                    $("#vpDIR_DES_RCT").html(documentoVenta.cPE_CABECERA_BE.DIR_DES_RCT);
-                    $("#vpNRO_ORD_COM").html(documentoVenta.cPE_CABECERA_BE.NRO_ORD_COM);
-
-                    /*RUC - NRO GUIA*/
-                    $("#vpNRO_DOC_RCT").html(documentoVenta.cPE_CABECERA_BE.NRO_DOC_RCT);
-                    $("#vpNRO_GRE").html(documentoVenta.cPE_CABECERA_BE.NRO_GRE);
-
-                    /*OBSERVACIONES*/ /*CODIGO CLIENTE*/
-                    $("#vpOBSERVACIONES").html($("#documentoVenta_observaciones").val());                    
-                    $("#vpCODIGO_CLIENTE").html(documentoVenta.cliente.codigo);
-
-
-                    $("#vpCOND_PAGO").html(documentoVenta.tipoPagoString);
-                    $("#vpFEC_VCTO").html(documentoVenta.cPE_CABECERA_BE.FEC_VCTO);
-                    
-
-                    $("#vpMNT_TOT_GRV").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRV);
-                    $("#vpMNT_TOT_GRV_NAC").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRV_NAC);
-                    $("#vpMNT_TOT_INF").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_INF);
-                    $("#vpMNT_TOT_EXR").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_EXR);
-                    $("#vpMNT_TOT_GRT").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRT);
-                    $("#vpMNT_TOT_VAL_VTA").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_VAL_VTA);
-                    $("#vpMNT_TOT_TRB_IGV").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_TRB_IGV);
-                    $("#pvMNT_TOT_PRC_VTA").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_PRC_VTA);
-                   
-
-                    $("#modalVistaPreviaFactura").modal();
-
-
-                    $("#tableDetalleFacturaVistaPrevia > tbody").empty();
-                    //FooTable.init('#tableCotizaciones');
-                    $("#tableDetalleFacturaVistaPrevia").footable();
-                    var lineasFactura = documentoVenta.cPE_DETALLE_BEList;
-
-                    for (var i = 0; i < lineasFactura.length; i++) {
-
-                        var lineaFactura = "";
-
-                     /*   var styleEstado = "";
-                        if (guiaRemisionList[i].estaAnulado == 1) {
-                            styleEstado = "style='color: red'";
-                        }
-                        else if (guiaRemisionList[i].estaFacturado == 1) {
-                            styleEstado = "style='color: green'";
-                        }
-                        else {
-                            styleEstado = "style='color: black'";
-                        }*/
-
-                        var lineaFactura = '<tr data-expanded="false">' +
-                            '<td>  ' + lineasFactura[i].LIN_ITM + '</td>' +
-                            '<td>  ' + lineasFactura[i].COD_ITM + '</td>' +
-                            '<td>  ' + lineasFactura[i].CANT_UND_ITM + '</td>' +
-                            '<td>  ' + lineasFactura[i].COD_UND_ITM + '</td>' +
-                            '<td>  ' + lineasFactura[i].TXT_DES_ITM + '</td>' +
-                            '<td>  ' + lineasFactura[i].VAL_UNIT_ITM + '</td>' +
-                            '<td>  ' + lineasFactura[i].VAL_VTA_ITM + '</td>' +
-                            '<td class="atenuarDetalleFactura">  ' + lineasFactura[i].MNT_IGV_ITM + '</td>' +
-                            '<td class="atenuarDetalleFactura">  ' + lineasFactura[i].PRC_VTA_UND_ITM + '</td>' +
-                            '<td class="atenuarDetalleFactura">  ' + lineasFactura[i].PRC_VTA_ITEM + '</td>' +
-                            '<td class="atenuarDetalleFactura">  ' + lineasFactura[i].POR_IGV_ITM + '</td>' +
-                            '<td class="atenuarDetalleFactura">  ' + lineasFactura[i].COD_TIP_AFECT_IGV_ITM + '</td>' +
-                            '</tr>';
-
-                        $("#tableDetalleFacturaVistaPrevia").append(lineaFactura);
-                    }
-                        
-                    //documentoVenta.CPE_CABECERA_BE
-                    
-                        
-                  
-                    activarBotonesFacturar();
-                }
-                else {
-                    mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + documentoVenta.cPE_RESPUESTA_BE.DETALLE);
-                    //$("#btnAceptarFacturarPedido").removeAttr("disabled");
-                    activarBotonesFacturar();
-                }
 
 
 
-
-
-                
-            }
-        });
-        $("btnCancelarFacturarPedido").click();
-    });
-
-
-    $("#btnConfirmarFacturarPedido").click(function () {
-
-        
-        if ($("#verRazonSocialSunat").html() == "") {
-            alert("No se han obtenido los datos del cliente desde SUNAT.");
-            return false;
-        }
-
-        if ($("#documentoVenta_fechaEmision").val() == "" || $("#documentoVenta_fechaEmision").val() == null) {
-            alert("Debe ingresar la fecha de emisión.");
-            $("#documentoVenta_fechaEmision").focus();
-            return false;
-        }
-
-        if ($("#documentoVenta_horaEmision").val() == "" || $("#documentoVenta_horaEmision").val() == null) {
-            alert("Debe ingresar la hora de emisión.");
-            $("#documentoVenta_horaEmision").focus();
-            return false;
-        }
-
-        if ($("#documentoVenta_fechaVencimiento").val() == "" || $("#documentoVenta_fechaVencimiento").val() == null) {
-            alert("Debe ingresar la fecha de vencimiento.");
-            $("#documentoVenta_fechaVencimiento").focus();
-            return false;
-        }
-
-        if (convertirFechaNumero($("#documentoVenta_fechaEmision").val()) > convertirFechaNumero($("#documentoVenta_fechaVencimiento").val())) {
-            alert("La fecha de vencimiento debe ser mayor o igual a la fecha de emisión.");
-            $("#documentoVenta_fechaVencimiento").focus();
-            return false;
-        }
-
-
-
-        var serie = $("#documentoVenta_serie").val();
-        var fechaEmision = $("#documentoVenta_fechaEmision").val();
-        var horaEmision = $("#documentoVenta_horaEmision").val();
-        var fechaVencimiento = $("#documentoVenta_fechaVencimiento").val();
-        var observaciones = $("#documentoVenta_observaciones").val();
-        var tipoPago = $("#tipoPago").val();
-        var formaPago = $("#formaPago").val();
-
-
-
-        desactivarBotonesFacturar();
-
-
-        $('body').loadingModal({
-            text: 'Creando Factura...'
-        });
-
-
-        var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
-        var idDocumentoVenta = $("#idDocumentoVenta").val();
-
-        $.ajax({
-            url: "/Factura/ConfirmarCreacion",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idDocumentoVenta: idDocumentoVenta
-            },
-            error: function (resultado) {
-                $('body').loadingModal('hide')
-                mostrarMensajeErrorProceso(MENSAJE_ERROR);
-                activarBotonesFacturar();
-            },
-            success: function (resultado) {
-                $('body').loadingModal('hide')
-
-                if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
-                    $.alert({
-                        //icon: 'fa fa-warning',
-                        title: TITLE_EXITO,
-                        content: 'Se generó la factura ' + resultado.serieNumero + '.',
-                        type: 'green',
-                        buttons: {
-                            OK: function () { location.reload(); }
-                        }
-                    });
-                    activarBotonesFacturar();
-                }
-                else {
-                    mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE);
-                    //$("#btnAceptarFacturarPedido").removeAttr("disabled");
-                    activarBotonesFacturar();
-                }
-
-           }
-        });
-        $("btnCancelarFacturarPedido").click();
-    });
 
 
     $("#btnAceptarAnulacion").click(function () {
@@ -1594,12 +1192,7 @@ jQuery(function ($) {
 
        // window.open("GuiaRemision/Print");
     });
-
-
-
-   
-
-    
+        
 
     function limpiarComentario()
     {
@@ -1821,15 +1414,12 @@ jQuery(function ($) {
         /*Si no es una atención parcial no se debe poder editar*/
         if (!$('#guiaRemision_atencionParcial').prop('checked'))
         {
-
-
             return false;
-
         }
 
-       
 
-
+        $("#btnCancelarGuiaRemision").attr("disabled", "disabled");
+        $("#btnFinalizarCreacionGuiaRemision").attr("disabled", "disabled");   
 
 
         //Cambiar estilos a los botones
@@ -1927,73 +1517,7 @@ jQuery(function ($) {
         if (cantidad > cantidadPedido) {
             $("." + idproducto + ".detincantidad").val(cantidadPedido);
         }
-        /*
 
-
-
-        //Se calculo el precio con descuento 
-        var precio = Number((precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadDecimales));
-        //Se asigna el precio calculculado en la columna precio
-        $("." + idproducto + ".detprecio").html(precio);
-        //se obtiene la cantidad
-        var cantidad = Number($("." + idproducto + ".detincantidad").val());
-        //Se define el precio Unitario 
-        var precioUnitario = flete + precio
-        $("." + idproducto + ".detprecioUnitario").html(precioUnitario.toFixed(cantidadDecimales));
-        //Se calcula el subtotal
-        var subTotal = precioUnitario * cantidad;
-        //Se asigna el subtotal 
-        $("." + idproducto + ".detsubtotal").html(subTotal.toFixed(cantidadDecimales));
-        //Se calcula el margen
-        var costo = Number($("." + idproducto + ".detcostoLista").html());
-        var margen = (1 - (Number(costo) / Number(precio)))*100;
-        //Se asigna el margen 
-        $("." + idproducto + ".detmargen").text(margen.toFixed(1)+ " %");
-
-        var precioNetoAnterior = Number($("." + idproducto + ".detprecioNetoAnterior").html());        
-        var varprecioNetoAnterior = (precio / precioNetoAnterior - 1)*100;
-        $("." + idproducto + ".detvarprecioNetoAnterior").text(varprecioNetoAnterior.toFixed(1));
-
-        var costoAnterior = Number($("." + idproducto + ".detcostoAnterior").text());       
-        var varcosto = (costo / costoAnterior - 1)*100;
-        $("." + idproducto + ".detvarCosto").text(varcosto.toFixed(1) + " %");
-
-
-        //Se actualiza el subtotal de la cotizacion
-
-        var $j_object = $("td.detcantidad");
-
-        var subTotal = 0;
-        var igv = 0;
-        var total = 0;
-       
-        $.each($j_object, function (key, value) {
-            var arrId = value.getAttribute("class").split(" ");
-            var precioUnitario = Number($("." + arrId[0] + ".detprecioUnitario").text());
-            var cantidad = Number($("." + arrId[0] + ".detincantidad").val());
-            subTotal = subTotal + Number(Number((precioUnitario * cantidad)).toFixed(cantidadDecimales));
-        });
-
-        
-
-        var incluidoIGV = $("input[name=igv]:checked").val();
-        //Si no se etsá incluyendo IGV se le agrega
-        if (incluidoIGV == "0") {
-            igv = Number((subTotal * IGV).toFixed(cantidadDecimales));
-            total = subTotal + (igv);
-        }
-        //Si se está incluyendo IGV entonces se 
-        else
-        {
-            total = subTotal;
-            subTotal = Number((subTotal / (1 + IGV)).toFixed(cantidadDecimales));
-            igv = total - subTotal;
-        }
-
-        $('#montoSubTotal').html(subTotal.toFixed(cantidadDecimales));
-        $('#montoIGV').html(igv.toFixed(cantidadDecimales));
-        $('#montoTotal').html(total.toFixed(cantidadDecimales));
-        */
     };
 
 

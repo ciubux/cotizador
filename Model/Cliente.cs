@@ -82,10 +82,19 @@ namespace Model
                 + this.nombreComercial + " - Cod: " + this.codigo + " - RUC: " + this.ruc;
         }
 
+        public string codigoRazonSocial
+        {
+            get { return this.codigo + " - " + this.razonSocial; }
+        }
+
         [Display(Name = "Tipo de Pago Factura:")]
         public DocumentoVenta.TipoPago tipoPagoFactura { get; set; }
 
         [Display(Name = "Forma de Pago Factura:")]
         public DocumentoVenta.FormaPago formaPagoFactura { get; set; }
+
+        public String tipoDocumento { get; set; }
+
+
     }
 }

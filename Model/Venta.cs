@@ -11,6 +11,7 @@ namespace Model
 
         public Venta() {
             this.tipoNotaCredito = DocumentoVenta.TiposNotaCredito.AnulacionOperacion;
+            this.tipoNotaDebito = DocumentoVenta.TiposNotaDebito.Penalidades;
         }
        
         public Guid idVenta { get; set; }
@@ -78,6 +79,17 @@ namespace Model
 
         public DocumentoVenta.TipoDocumento tipoDocumentoVenta { get; set; }
 
+
+        [Display(Name = "Tipo Nota Débito:")]
+        public String tipoNotaDebitoString
+        {
+            get
+            {
+                return EnumHelper<DocumentoVenta.TiposNotaDebito>.GetDisplayValue(this.tipoNotaDebito);
+            }
+        }
+
+        public DocumentoVenta.TiposNotaDebito tipoNotaDebito { get; set; }
 
 
         [Display(Name = "Tipo Nota Crédito:")]

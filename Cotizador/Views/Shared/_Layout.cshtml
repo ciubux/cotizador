@@ -35,6 +35,9 @@
                         var linkPedidos = "";
                         var linkBusquedaPedidos = "";
                         var linkMantenimientoPedido = "";
+                        var linkBusquedaPedidosEntrada = "";
+                        var linkMantenimientoPedidoEntrada = "";
+
 
                         var linkMovimientosAlmacen = "";
                         var linkBusquedaGuiasRemision = "";
@@ -93,6 +96,8 @@
 
                             case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
                             case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
+                            case 22: linkBusquedaPedidosEntrada = "ative"; linkPedidos = "active"; break;
+                            case 23: linkMantenimientoPedidoEntrada = "ative"; linkPedidos = "active"; break;
 
                         }
                         var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
@@ -131,7 +136,7 @@
                                     @if (usuario.tomaPedidos)
                                     {
                                         <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Pedido", "Pedir", "Pedido")</li>
-                                    }
+                                    }                              
                                 </ul>
                             </li>
                         }

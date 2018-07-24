@@ -4717,10 +4717,10 @@ namespace Model.ServiceReferencePSE {
         System.Threading.Tasks.Task<Model.ServiceReferencePSE.CPE_DOC_TRIBUTARO_BE> callPreviewAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/CallRequestLow", ReplyAction="http://tempuri.org/IwsOnlineToCPE/CallRequestLowResponse")]
-        Model.ServiceReferencePSE.RPTA_BE[] CallRequestLow(string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc);
+        Model.ServiceReferencePSE.RPTA_BE[] CallRequestLow(string oId, string oGpo, string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/CallRequestLow", ReplyAction="http://tempuri.org/IwsOnlineToCPE/CallRequestLowResponse")]
-        System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_BE[]> CallRequestLowAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc);
+        System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_BE[]> CallRequestLowAsync(string oId, string oGpo, string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -4790,12 +4790,12 @@ namespace Model.ServiceReferencePSE {
             return base.Channel.callPreviewAsync(oUser, oPass, oCabecera, listDetalle, listAdicionales, listReferenciados, listAnticipos, listFacGuia, listRelacionado);
         }
         
-        public Model.ServiceReferencePSE.RPTA_BE[] CallRequestLow(string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc) {
-            return base.Channel.CallRequestLow(oUser, oPass, oDoc);
+        public Model.ServiceReferencePSE.RPTA_BE[] CallRequestLow(string oId, string oGpo, string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc) {
+            return base.Channel.CallRequestLow(oId, oGpo, oUser, oPass, oDoc);
         }
         
-        public System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_BE[]> CallRequestLowAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc) {
-            return base.Channel.CallRequestLowAsync(oUser, oPass, oDoc);
+        public System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_BE[]> CallRequestLowAsync(string oId, string oGpo, string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc) {
+            return base.Channel.CallRequestLowAsync(oId, oGpo, oUser, oPass, oDoc);
         }
     }
 }

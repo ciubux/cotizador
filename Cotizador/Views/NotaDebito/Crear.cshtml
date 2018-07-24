@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Crear Factura de Reemplazo";
+    ViewBag.Title = "Crear Nota Débito";
     Model.Venta venta = ViewBag.venta;
 }
 
@@ -10,9 +10,9 @@
 
     <input type="hidden" id="idPedido" />
 
-    <input type="hidden" id="permiteEditarCantidades" value="@venta.permiteEditarCantidades.ToString()" />
-    <input type="hidden" id="permiteEditarPrecios" value="@venta.permiteEditarPrecios.ToString()" />
-    <input type="hidden" id="permiteEliminarLineas" value="@venta.permiteEliminarLineas.ToString()" />
+    <input type="hidden" id="permiteEditarPrecios" value="True" />
+    <!--<input type="hidden" id="permiteEditarPrecios" value="@venta.permiteEditarPrecios.ToString()" />-->
+    <input type="hidden" id="permiteEliminarLineas" value="True" />
 
 
     <!--<input type="hidden" id="idPedido" />
@@ -30,10 +30,10 @@
 
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    @Html.LabelFor(v => venta.tipoNotaCreditoString, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(v => venta.tipoNotaDebitoString, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
-                        @Html.TextBoxFor(v => venta.tipoNotaCreditoString, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        <input type="hidden" id="tipoNotaDebito" value="@ViewBag.tipoNotaDebito" />
+                        @Html.TextBoxFor(v => venta.tipoNotaDebitoString, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                     </div>
                 </div>
             </div>
@@ -89,7 +89,7 @@
                 <div class="form-group">
                     @Html.LabelFor(v => venta.documentoReferencia.tipoDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
+                        <input type="hidden" id="tipoNotaDebito" value="@ViewBag.tipoNotaDebito" />
                         @Html.TextBoxFor(v => venta.documentoReferencia.tipoDocumento, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                     </div>
                 </div>
@@ -99,7 +99,6 @@
                 <div class="form-group">
                     @Html.LabelFor(v => venta.documentoReferencia.serieNumero, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
                         @Html.TextBoxFor(v => venta.documentoReferencia.serieNumero, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                     </div>
                 </div>
@@ -109,7 +108,6 @@
                 <div class="form-group">
                     @Html.LabelFor(v => venta.documentoReferencia.fechaEmisionFormat, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
                         @Html.TextBoxFor(v => venta.documentoReferencia.fechaEmisionFormat, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                     </div>
                 </div>
@@ -174,25 +172,11 @@
 
 
         <!-- </fieldset>-->
-        @{ var detalleEditable = "";
-            var detalleAllowDelete = "false";}
 
 
-        @if (venta.permiteEditarCantidades
-    || venta.permiteEditarPrecios
-    || venta.permiteEliminarLineas
-)
-        {
-            detalleEditable = "true";
-            if (venta.permiteEliminarLineas)
-            {
-                detalleAllowDelete = "true";
-            }
 
-        }
-        else
-        {
-            detalleEditable = "false";
+        @{ var detalleEditable = "true";
+            var detalleAllowDelete = "true";
         }
 
 
@@ -324,8 +308,8 @@
 
 
             <div class="pull-right">
-                <button type="button" id="btnCancelarNotaCredito" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button id="btnFinalizarCreacionNotaCredito" type="button" class="btn btn-success">Generar Nota de Crédito</button>
+                <button type="button" id="btnCancelarNotaDebito" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button id="btnFinalizarCreacionNotaDebito" type="button" class="btn btn-success">Generar Nota de Débito</button>
 
             </div>
         </div>
@@ -477,7 +461,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalVistaPreviaCPETitle"><b>Vista Previa Nota Crédito</b></h4>
+                <h4 class="modal-title" id="modalVistaPreviaCPETitle"><b>Vista Previa Nota Débito</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -504,7 +488,7 @@
                         <!--NUMERO FACTURA-->
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
-                                <label for="vpSERIE_CORRELATIVO" class="control-label col-xs-4">NOTA DE CRÉDITO:</label>
+                                <label for="vpSERIE_CORRELATIVO" class="control-label col-xs-4">NOTA DE DÉBITO:</label>
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="vpSERIE_CORRELATIVO"></p>
                                 </div>
@@ -775,8 +759,8 @@
             </div>
             <div class="modal-footer">
                 <input type="hidden" id="idDocumentoVenta" />
-                <button type="button" id="btnCancelarConfirmarNotaCredito" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnConfirmarGeneracionNotaCredito" class="btn btn-success">Confirmar Generación Nota Crédito</button>
+                <button type="button" id="btnCancelarConfirmarNotaDebito" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnConfirmarGeneracionNotaDebito" class="btn btn-success">Confirmar Generación Nota Débito</button>
             </div>
         </div>
     </div>
@@ -792,5 +776,5 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/notaCredito")
+    @Scripts.Render("~/bundles/notaDebito")
 }

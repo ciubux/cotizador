@@ -99,6 +99,8 @@ namespace Model
         public bool modificaMaestroClientes { get; set; }
         public bool modificaMaestroProductos { get; set; }
         public bool creaNotasCredito { get; set; }
+        public bool creaNotasDebito { get; set; }
+        public bool realizaRefacturacion { get; set; }
         public bool esCliente { get; set; }
     }
 }

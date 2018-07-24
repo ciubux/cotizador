@@ -411,11 +411,14 @@ namespace DataLayer
                 pedido.otrosCargos = Converter.GetDecimal(row, "otros_cargos");
                 pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
 
-             /* pedido.venta = new Venta();
-                pedido.venta.igv = Converter.GetDecimal(row, "igv_venta");
-                pedido.venta.subTotal = Converter.GetDecimal(row, "sub_total_venta");
-                pedido.venta.total = Converter.GetDecimal(row, "total_venta");
-                pedido.venta.idVenta = Converter.GetGuid(row, "id_Venta");*/
+                pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
+                pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
+
+                /* pedido.venta = new Venta();
+                   pedido.venta.igv = Converter.GetDecimal(row, "igv_venta");
+                   pedido.venta.subTotal = Converter.GetDecimal(row, "sub_total_venta");
+                   pedido.venta.total = Converter.GetDecimal(row, "total_venta");
+                   pedido.venta.idVenta = Converter.GetGuid(row, "id_Venta");*/
 
                 pedido.ubigeoEntrega = new Ubigeo();
                 pedido.ubigeoEntrega.Id = Converter.GetString(row, "ubigeo_entrega");

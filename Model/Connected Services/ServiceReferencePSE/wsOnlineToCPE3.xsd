@@ -116,6 +116,8 @@
   <xs:element name="CallRequestLow">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="oId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oGpo" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="oUser" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="oPass" nillable="true" type="xs:string" />
         <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="oDoc" nillable="true" type="q29:ArrayOfCPE_DOC_BAJA" />

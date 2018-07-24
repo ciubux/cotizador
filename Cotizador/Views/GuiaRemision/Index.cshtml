@@ -139,11 +139,11 @@
                     @Html.LabelFor(p => guiaRemision.ciudadOrigen, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                                                    new
-                                                    {
-                                                        ciudadSelectId = "idCiudad",
-                                                        selectedValue = guiaRemision.ciudadOrigen.idCiudad
-                                                    })
+                                                         new
+                                                         {
+                                                             ciudadSelectId = "idCiudad",
+                                                             selectedValue = guiaRemision.ciudadOrigen.idCiudad
+                                                         })
                     </div>
                 </div>
             </div>
@@ -246,18 +246,18 @@
                     <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
                     <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Sede MP</th>
                     <!--  <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
-    <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>-->
+                    <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>-->
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
                     <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
-                    @if(guiaRemision.usuario.creaGuias)
+                    @if (guiaRemision.usuario.creaGuias)
                     {
                         <th data-name="noEntregado" data-visible="true">No Entregado</th>
                         <th data-name="noEntregado" data-visible="false">No Entregado</th>
                     }
                     @if (!guiaRemision.usuario.creaGuias)
                     {
-                         <th data-name="noEntregado" data-visible="false">No Entregado</th>
+                        <th data-name="noEntregado" data-visible="false">No Entregado</th>
                         <th data-name="noEntregado" data-visible="true">No Entregado</th>
                     }
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
@@ -920,7 +920,7 @@
 
 
                     <fieldset>
-                        <legend>Datos de Factura:</legend>
+                        <legend id="descripcionDatosDocumento">Datos de Factura:</legend>
                         <!--DATOS DEL CLIENTE-->
 
                         <div class="row">
@@ -934,7 +934,7 @@
                             </div>
                             <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="verRUC" class="control-label col-xs-4">RUC:</label>
+                                    <label for="verRUC" class="control-label col-xs-4">Nro. Doc:</label>
                                     <div class="col-xs-8">
                                         <p class="form-control-static" id="verRUC"></p>
                                     </div>
@@ -963,7 +963,7 @@
                         <div class="row">
                             <div class="col-sm-6 col-lg-8">
                                 <div class="form-group">
-                                    <label for="verCorreoEnvioFactura" class="control-label col-xs-2">Correo Envío Factura:</label>
+                                    <label for="verCorreoEnvioFactura" class="control-label col-xs-2">Correo Envío Documento:</label>
                                     <div class="col-xs-10">
                                         <p class="form-control-static" id="verCorreoEnvioFactura"></p>
                                     </div>
@@ -1013,9 +1013,9 @@
                                     @Html.LabelFor(dv => documentoVenta.tipoPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-8">
                                         @Html.DropDownList("tipoPago",
-                                    EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
-                                    new { @class = "form-control" }
-                                    )
+                                         EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
+                                         new { @class = "form-control" }
+                                         )
                                     </div>
                                 </div>
                             </div>
@@ -1024,9 +1024,9 @@
                                     @Html.LabelFor(dv => documentoVenta.formaPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-8">
                                         @Html.DropDownList("formaPago",
-                                    EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
-                                    new { @class = "form-control" }
-                                    )
+                                         EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
+                                         new { @class = "form-control" }
+                                         )
                                     </div>
                                 </div>
                             </div>
@@ -1095,7 +1095,7 @@
                     <div class="row" style="margin-right: 10px">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
-                                @Html.LabelFor(dv => documentoVenta.observaciones, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-2" })
+                                <label id="observacionesDocumento" for="documentoVenta_observaciones" class="control-label col-xs-6 col-lg-2">Observaciones:</label>
                                 <div class="col-xs-10">
                                     @Html.TextBoxFor(dv => documentoVenta.observaciones, htmlAttributes: new { @class = "form-control" })
                                 </div>

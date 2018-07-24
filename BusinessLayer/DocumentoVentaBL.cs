@@ -13,11 +13,10 @@ namespace BusinessLayer
     public class DocumentoVentaBL
     {
 
-        public DocumentoVenta InsertarFactura(DocumentoVenta documentoVenta)
+        public DocumentoVenta InsertarDocumentoVenta(DocumentoVenta documentoVenta)
         {
             using (var dal = new DocumentoVentaDAL())
             {
-                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
                 dal.InsertarDocumentoVenta(documentoVenta);
 
                 if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
@@ -36,33 +35,7 @@ namespace BusinessLayer
                 }
                 return documentoVenta;
             }
-        }
-
-        public DocumentoVenta InsertarBoleta(DocumentoVenta documentoVenta)
-        {
-            using (var dal = new DocumentoVentaDAL())
-            {
-                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
-                dal.InsertarDocumentoVenta(documentoVenta);
-
-                if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
-                {
-                    //Se recupera el documento de venta creado para poder visualizarlo
-                    documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
-                    documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
-                    documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
-                    documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK;
-                }
-                else
-                {
-                    documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
-                    documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_ERROR_DATA;
-                    documentoVenta.cPE_RESPUESTA_BE.DETALLE = documentoVenta.tiposErrorValidacionString + ". " + documentoVenta.descripcionError;
-                }
-                return documentoVenta;
-            }
-        }
-
+        }        
 
 
         public DocumentoVenta InsertarNotaCredito(DocumentoVenta documentoVenta)
@@ -75,7 +48,7 @@ namespace BusinessLayer
                 //Se define el idMovimientoAlmacen como vacío para que tome el idventa
              //   documentoVenta.movimientoAlmacen.idMovimientoAlmacen = Guid.Empty;
 
-                dal.InsertarDocumentoVentaNotaCredito(documentoVenta);
+                dal.InsertarDocumentoVentaNotaCreditoDebito(documentoVenta);
 
                 if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
                 {
@@ -101,7 +74,7 @@ namespace BusinessLayer
             using (var dal = new DocumentoVentaDAL())
             {
                 documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaDébito;
-                dal.InsertarDocumentoVenta(documentoVenta);
+                dal.InsertarDocumentoVentaNotaCreditoDebito(documentoVenta);
 
                 if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
                 {
@@ -286,10 +259,18 @@ namespace BusinessLayer
                         {
                             dal.UpdateSiguienteNumeroFactura(documentoVenta);
                         }
+                        if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.BoletaVenta)
+                        {
+                            dal.UpdateSiguienteNumeroBoleta(documentoVenta);
+                        }
                         else if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.NotaCrédito)
                         {
                             dal.UpdateSiguienteNumeroNotaCredito(documentoVenta);
-                        }                        
+                        }
+                        else if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.NotaDébito)
+                        {
+                            dal.UpdateSiguienteNumeroNotaDebito(documentoVenta);
+                        }
 
 
                         consultarEstadoDocumentoVenta(documentoVenta);
@@ -338,6 +319,7 @@ namespace BusinessLayer
             Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
             client.Endpoint.Address = new EndpointAddress(uri);
 
+            /*
             List<CPE_DOC_BAJA> CPE_DOC_BAJAList = new List<CPE_DOC_BAJA>();
             CPE_DOC_BAJA CPE_DOC_BAJA = new CPE_DOC_BAJA();
             CPE_DOC_BAJA.NRO_DOC = Constantes.RUC_MP;
@@ -349,10 +331,9 @@ namespace BusinessLayer
             CPE_DOC_BAJA.MTVO_BAJA = documentoVenta.comentarioAprobacionAnulacion;
             CPE_DOC_BAJAList.Add(CPE_DOC_BAJA);
 
+           RPTA_BE[] rPTA_BEArray = client.CallRequestLow("179EB2F735F0B782C77F25426F0A1D2B0414945BA1E94B850764D722642358CB","14", Constantes.USER_EOL, Constantes.PASSWORD_EOL, CPE_DOC_BAJAList.ToArray());
 
-    //       RPTA_BE[] rPTA_BEArray = client.CallRequestLow(Constantes.USER_EOL, Constantes.PASSWORD_EOL, CPE_DOC_BAJAList.ToArray());
-
-     //       documentoVenta.rPTA_BE = rPTA_BEArray[0];
+          documentoVenta.rPTA_BE = rPTA_BEArray[0];            */
             //   = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
 
             //El resultado se inserta a BD

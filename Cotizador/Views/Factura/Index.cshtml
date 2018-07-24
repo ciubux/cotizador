@@ -21,11 +21,11 @@
                     @Html.LabelFor(dv => documentoVenta.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                                                    new
-                                                    {
-                                                        ciudadSelectId = "idCiudad",
-                                                        selectedValue = documentoVenta.ciudad.idCiudad
-                                                    })
+                                                         new
+                                                         {
+                                                             ciudadSelectId = "idCiudad",
+                                                             selectedValue = documentoVenta.ciudad.idCiudad
+                                                         })
                     </div>
                 </div>
             </div>
@@ -103,11 +103,11 @@
                     <div class="col-xs-8">
                         @if (Int64.Parse(documentoVenta.numero) > 0)
                         {
-                                @Html.TextBoxFor(dv => documentoVenta.numero, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                            @Html.TextBoxFor(dv => documentoVenta.numero, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
                         }
                         else
                         {
-                                @Html.TextBoxFor(dv => documentoVenta.numero, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                            @Html.TextBoxFor(dv => documentoVenta.numero, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
                         }
                         <!-- <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los demás criterios no serán considerados al realizar la búsqueda.</span>-->
                     </div>
@@ -190,9 +190,9 @@
                     @Html.LabelFor(dv => documentoVenta.estadoDocumentoSunatBusqueda, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.DropDownList("documentoVenta_estadoDocumentoSunatBusqueda",
-                                                EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.EstadosDocumentoSunatBusqueda), documentoVenta.estadoDocumentoSunatBusqueda),
-                                                new { @class = "form-control" }
-                                                )
+                                                     EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.EstadosDocumentoSunatBusqueda), documentoVenta.estadoDocumentoSunatBusqueda),
+                                                     new { @class = "form-control" }
+                                                     )
                     </div>
                 </div>
             </div>
@@ -465,7 +465,7 @@
                         </div>
 
                     </div>
-                    
+
 
 
 
@@ -584,7 +584,7 @@
                     }
                     @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
                     {
-                       <!-- <button type="button" id="btnDescargarXML" class="btn btn-primary">Descargar XML</button>-->
+                        <!-- <button type="button" id="btnDescargarXML" class="btn btn-primary">Descargar XML</button>-->
                     }
                 </div>
 
@@ -608,6 +608,14 @@
                     @if (documentoVenta.usuario.creaNotasCredito)
                     {
                         <button type="button" id="btnIniciarNotaCredito" class="btn btn-danger">Generar Nota Crédito</button>
+                    }
+                    @if (documentoVenta.usuario.creaNotasDebito)
+                    {
+                        <button type="button" id="btnIniciarNotaDebito" class="btn btn-danger">Generar Nota Débito</button>
+                    }
+                    @if (documentoVenta.usuario.realizaRefacturacion)
+                    {
+                        <button type="button" id="btnIniciarRefacturacion" class="btn btn-danger">Generar Factura Reemplazo</button>
                     }
                 </div>
 
@@ -755,7 +763,7 @@
                     <div class="row">
                         <div class="col-sm-6 col-lg-8">
                             <div class="form-group">
-                                <label for="serieNumeroFacturaParaNotaCredito" class="control-label col-xs-4">Número Factura:</label>
+                                <label for="serieNumeroFacturaParaNotaCredito" class="control-label col-xs-4">Número Documento:</label>
                                 <div class="col-xs-8">
                                     <input class="form-control" type="text" id="serieNumeroFacturaParaNotaCredito" disabled />
                                 </div>
@@ -784,19 +792,19 @@
                         </div>
                     </div>
 
-                        <!--  <div class="row">
-            <div class="col-sm-6 col-lg-12">
+                    <!--  <div class="row">
+                        <div class="col-sm-6 col-lg-12">
 
-                <div class="form-group">
-                    <label for="comentarioAprobacionAnulacion" class="control-label col-xs-3">Comentario:</label>
+                            <div class="form-group">
+                                <label for="comentarioAprobacionAnulacion" class="control-label col-xs-3">Comentario:</label>
 
-                    <div class="col-xs-9">
-                        <textarea class="form-control" rows="5" id="comentarioAprobacionAnulacion" name="comentarioAprobacionAnulacion"></textarea>
-                    </div>
-                </div>
-            </div>
+                                <div class="col-xs-9">
+                                    <textarea class="form-control" rows="5" id="comentarioAprobacionAnulacion" name="comentarioAprobacionAnulacion"></textarea>
+                                </div>
+                            </div>
+                        </div>
 
-        </div>--->
+                    </div>--->
 
                 </form>
             </div>
@@ -809,6 +817,65 @@
     </div>
 </div>
 
+
+
+
+
+
+<div class="modal fade" id="modalGenerarNotaDebito" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalGenerarNotaDebitoTitle"><b>Generar Nota de Débito</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+
+                    <!--FACTURA-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="serieNumeroFacturaParaNotaDebito" class="control-label col-xs-4">Número Documento:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" id="serieNumeroFacturaParaNotaDebito" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--MOTIVO-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                @Html.LabelFor(dv => documentoVenta.tipoNotaDebito, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaDebito1" name="tipoNotaDebito" value="1" /><label for="tipoNotaDebito1">INTERESES POR MORA</label> </li>
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaDebito2" name="tipoNotaDebito" value="2" /><label for="tipoNotaDebito2">AUMENTO EN EL VALOR</label> </li>
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaDebito3" name="tipoNotaDebito" value="3" /><label for="tipoNotaDebito3">PENALIDADES / OTROS CONCEPTOS</label> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarNotaDebito" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnContinuarGenerandoNotaDebito" class="btn btn-success">Continuar Generando Nota Débito</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

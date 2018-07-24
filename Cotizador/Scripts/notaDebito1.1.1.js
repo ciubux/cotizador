@@ -251,7 +251,7 @@ jQuery(function ($) {
 
     function changeInputString(propiedad, valor) {
         $.ajax({
-            url: "/NotaCredito/ChangeInputString",
+            url: "/NotaDebito/ChangeInputString",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -503,14 +503,14 @@ jQuery(function ($) {
     });
 
     function activarBotonesNotasCredito() {
-        $("#btnFinalizarCreacionNotaCredito").removeAttr("disabled");
-        $("#btnCancelarNotaCredito").removeAttr("disabled");
+        $("#btnFinalizarCreacionNotaDebito").removeAttr("disabled");
+        $("#btnCancelarNotaDebito").removeAttr("disabled");
         $(".footable-show").removeAttr("disabled");
     }
 
     function desactivarBotonesNotasCredito() {
-        $("#btnFinalizarCreacionNotaCredito").attr("disabled", "disabled");
-        $("#btnCancelarNotaCredito").attr("disabled", "disabled");
+        $("#btnFinalizarCreacionNotaDebito").attr("disabled", "disabled");
+        $("#btnCancelarNotaDebito").attr("disabled", "disabled");
         $(".footable-show").attr("disabled", "disabled");
     }
 
@@ -530,7 +530,7 @@ jQuery(function ($) {
     });
 
 
-    $("#btnFinalizarCreacionNotaCredito").click(function () {
+    $("#btnFinalizarCreacionNotaDebito").click(function () {
 
 
         
@@ -549,11 +549,19 @@ jQuery(function ($) {
             return false;
         }
 
+        if (convertirFechaNumero($("#documentoVenta_fechaEmision").val()) < convertirFechaNumero($("#venta_documentoReferencia_fechaEmisionFormat").val())) {
+            alert("La fecha de emisión de la nota de débito no puede ser anterior a la fecha de emisión de la factura.");
+            $("#documentoVenta_fechaEmision").focus();
+            return false;
+        }
+
         if ($("#documentoVenta_horaEmision").val() == "" || $("#documentoVenta_horaEmision").val() == null) {
             alert("Debe ingresar la hora de emisión.");
             $("#documentoVenta_horaEmision").focus();
             return false;
         }
+
+       
 
         var observaciones = $("#venta_observaciones").val();
         var fechaEmision = $("#documentoVenta_fechaEmision").val();
@@ -562,7 +570,7 @@ jQuery(function ($) {
         desactivarBotonesNotasCredito();
 
         $.ajax({
-            url: "/NotaCredito/Create",
+            url: "/NotaDebito/Create",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -614,7 +622,7 @@ jQuery(function ($) {
                     $("#vpMNT_TOT_TRB_IGV").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_TRB_IGV);
                     $("#pvMNT_TOT_PRC_VTA").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_PRC_VTA);
 
-                    $("#pvMOTIVO").html(documentoVenta.tipoNotaCreditoString);
+                    $("#pvMOTIVO").html(documentoVenta.tipoNotaDebitoString);
                     $("#pvDES_MTVO_NC_ND").html(documentoVenta.cPE_CABECERA_BE.DES_MTVO_NC_ND);
 
                     
@@ -641,17 +649,6 @@ jQuery(function ($) {
 
                         var lineaFactura = "";
 
-                        /*   var styleEstado = "";
-                           if (guiaRemisionList[i].estaAnulado == 1) {
-                               styleEstado = "style='color: red'";
-                           }
-                           else if (guiaRemisionList[i].estaFacturado == 1) {
-                               styleEstado = "style='color: green'";
-                           }
-                           else {
-                               styleEstado = "style='color: black'";
-                           }*/
-
                         var lineaFactura = '<tr data-expanded="false">' +
                             '<td>  ' + lineasFactura[i].LIN_ITM + '</td>' +
                             '<td>  ' + lineasFactura[i].COD_ITM + '</td>' +
@@ -670,10 +667,6 @@ jQuery(function ($) {
                         $("#tableDetalleCPEVistaPrevia").append(lineaFactura);
                     }
 
-                    //documentoVenta.CPE_CABECERA_BE
-
-
-
                     activarBotonesNotasCredito();
                 }
                 else {
@@ -691,33 +684,33 @@ jQuery(function ($) {
 
 
 
-    function desactivarBotonesConfirmarNotasCredito() {
-        $("#btnCancelarConfirmarNotaCredito").attr("disabled", "disabled");
-        $("#btnConfirmarGeneracionNotaCredito").attr("disabled", "disabled");
+    function desactivarBotonesConfirmarNotasDebito() {
+        $("#btnCancelarConfirmarNotaDebito").attr("disabled", "disabled");
+        $("#btnConfirmarGeneracionNotaDebito").attr("disabled", "disabled");
     }
 
-    function activarBotonesConfirmarNotasCredito() {
-        $("#btnCancelarConfirmarNotaCredito").removeAttr("disabled");
-        $("#btnConfirmarGeneracionNotaCredito").removeAttr("disabled");
+    function activarBotonesConfirmarNotasDebito() {
+        $("#btnCancelarConfirmarNotaDebito").removeAttr("disabled");
+        $("#btnConfirmarGeneracionNotaDebito").removeAttr("disabled");
     }
 
 
 
 
-    $("#btnConfirmarGeneracionNotaCredito").click(function () {
+    $("#btnConfirmarGeneracionNotaDebito").click(function () {
 
 
-        desactivarBotonesConfirmarNotasCredito();
+        desactivarBotonesConfirmarNotasDebito();
 
 
         $('body').loadingModal({
-            text: 'Creando Nota Crédito...'
+            text: 'Creando Nota Débito...'
         });
         
         var idDocumentoVenta = $("#idDocumentoVenta").val();
 
         $.ajax({
-            url: "/NotaCredito/ConfirmarCreacion",
+            url: "/NotaDebito/ConfirmarCreacion",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -726,7 +719,7 @@ jQuery(function ($) {
             error: function (resultado) {
                 $('body').loadingModal('hide')
                 mostrarMensajeErrorProceso(MENSAJE_ERROR);
-                activarBotonesConfirmarNotasCredito();
+                activarBotonesConfirmarNotasDebito();
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
@@ -735,12 +728,12 @@ jQuery(function ($) {
                     $.alert({
                         //icon: 'fa fa-warning',
                         title: TITLE_EXITO,
-                        content: 'Se generó la Nota de Crédito ' + resultado.serieNumero + '.',
+                        content: 'Se generó la Nota de Débito ' + resultado.serieNumero + '.',
                         type: 'green',
                         buttons: {
                             OK: function () {
                                    window.location = '/Factura/Index';
-                                    activarBotonesConfirmarNotasCredito();
+                                    activarBotonesConfirmarNotasDebito();
                             }
                         }
                     });                    
@@ -748,12 +741,12 @@ jQuery(function ($) {
                 else {
                     mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE);
                     //$("#btnAceptarFacturarPedido").removeAttr("disabled");
-                    activarBotonesConfirmarNotasCredito();
+                    activarBotonesConfirmarNotasDebito();
                 }
 
             }
         });
-        $("btnCancelarConfirmarNotaCredito").click();
+        $("btnCancelarConfirmarNotaDebito").click();
     });
 
 
@@ -776,8 +769,8 @@ jQuery(function ($) {
         $("button.footable-add").attr("class", "btn btn-default footable-add");
         $("button.footable-hide").attr("class", "btn btn-primary footable-hide");
 
-        $("#btnCancelarNotaCredito").attr('disabled', 'disabled');
-        $("#btnFinalizarCreacionNotaCredito").attr('disabled', 'disabled');
+        $("#btnCancelarNotaDebito").attr('disabled', 'disabled');
+        $("#btnFinalizarCreacionNotaDebito").attr('disabled', 'disabled');
 
 
         //llama a la función que cambia el estilo de display después de que la tabla se ha redibujado
@@ -844,7 +837,7 @@ jQuery(function ($) {
 
 
 
-    $("#btnCancelarNotaCredito").click(function () {
+    $("#btnCancelarNotaDebito").click(function () {
 
         window.location = '/Factura/Index';
     });
@@ -855,13 +848,13 @@ jQuery(function ($) {
     $(document).on('click', "button.footable-hide", function () {
 
         //Se habilitan controles
-        $("#btnCancelarNotaCredito").removeAttr('disabled');
-        $("#btnFinalizarCreacionNotaCredito").removeAttr('disabled');
+        $("#btnCancelarNotaDebito").removeAttr('disabled');
+        $("#btnFinalizarCreacionNotaDebito").removeAttr('disabled');
 
 
         var json = "[ ";
 
-        var permiteEditarCantidades = $("#permiteEditarCantidades").val();
+     //   var permiteEditarCantidades = $("#permiteEditarCantidades").val();
         var permiteEditarPrecios = $("#permiteEditarPrecios").val();
         var permiteEliminarLineas = $("#permiteEliminarLineas").val();
         
@@ -913,7 +906,7 @@ jQuery(function ($) {
 
 
         $.ajax({
-            url: "/NotaCredito/ChangeDetalle",
+            url: "/NotaDebito/ChangeDetalle",
             type: 'POST',
             data: json,
             dataType: 'json',
@@ -924,83 +917,7 @@ jQuery(function ($) {
         });
     });
 
-
-    /*Evento que se dispara cuando se modifica un control de cantidad de la grilla*/
-    $(document).on('change', "input.detincantidad", function () {
-        var idproducto = event.target.getAttribute("class").split(" ")[0];
-        var cantidad = Number($("." + idproducto + ".detincantidad").val());
-        var precioUnitario = $("." + idproducto + ".detprecioUnitario").html();
-        var subTotal = precioUnitario * cantidad;
-        //Se asigna el subtotal 
-        $("." + idproducto + ".detsubtotal").html(subTotal.toFixed(cantidadDecimales));
-        var subTotalDocumento = 0;
-        var $j_object = $("td.detprecioUnitario");
-        $.each($j_object, function (key, value) {
-            var arrId = value.getAttribute("class").split(" ");
-            var precioUnitarioTmp = Number($("." + arrId[0] + ".detprecioUnitario").html());
-            var cantidadTmp = Number($("." + arrId[0] + ".detincantidad").val());
-            subTotalDocumento = subTotalDocumento + Number(Number((precioUnitarioTmp * cantidadTmp)).toFixed(cantidadDecimales));
-        });
-        calcularSubtotalGrilla(idproducto, cantidad, precioUnitario, subTotalDocumento);
-    });
-
-
-    /*Evento que se dispara cuando se modifica un control de cantidad de la grilla*/
-    $(document).on('change', "input.detinprecioUnitario", function () {
-        var idproducto = event.target.getAttribute("class").split(" ")[0];
-        var precioUnitario = Number($("." + idproducto + ".detinprecioUnitario").val());
-        var cantidad = $("." + idproducto + ".detcantidad").html();
-        var subTotal = precioUnitario * cantidad;
-        //Se asigna el subtotal 
-        $("." + idproducto + ".detsubtotal").html(subTotal.toFixed(cantidadDecimales));
-        var subTotalDocumento = 0;
-        var $j_object = $("td.detcantidad");
-        $.each($j_object, function (key, value) {
-            var arrId = value.getAttribute("class").split(" ");
-            var precioUnitarioTmp = Number($("." + arrId[0] + ".detinprecioUnitario").val());
-            var cantidadTmp = Number($("." + arrId[0] + ".detcantidad").html());
-            subTotalDocumento = subTotalDocumento + Number(Number((precioUnitarioTmp * cantidadTmp)).toFixed(cantidadDecimales));
-        });
-        calcularSubtotalGrilla(idproducto, cantidad, precioUnitario, subTotalDocumento);
-    });
     
-
-
-
-    function calcularSubtotalGrilla(idproducto, cantidad, precioUnitario, subTotalDocumento) {
-        //Se obtiene el porcentaje descuento 
-        var porcentajeDescuento = 0;
-        var flete = 0;
-        var precioLista = 0;
-        var precio = precioUnitario;
-
-        //Se calcula el margen
-        var costo = 0;// Number($("." + idproducto + ".detcostoLista").html());
-        var margen = 0;//(1 - (Number(costo) / Number(precio))) * 100;        
-
-        var subTotal = subTotalDocumento;
-        var igv = 0;
-        var total = 0;         
-
-     /*   var incluidoIGV = $("input[name=igv]:checked").val();
-        //Si no se etsá incluyendo IGV se le agrega
-        if (incluidoIGV == "0") {*/
-        igv = Number((subTotal * IGV).toFixed(cantidadDecimales));
-        total = subTotal + (igv);
-     /*   }
-        //Si se está incluyendo IGV entonces se 
-        else {
-            total = subTotal;
-            subTotal = Number((subTotal / (1 + IGV)).toFixed(cantidadDecimales));
-            igv = total - subTotal;
-        }*/
-
-        $('#montoSubTotal').html(subTotal.toFixed(cantidadDecimales));
-        $('#montoIGV').html(igv.toFixed(cantidadDecimales));
-        $('#montoTotal').html(total.toFixed(cantidadDecimales));
-    };
-
-
 
     
 

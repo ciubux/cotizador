@@ -136,11 +136,14 @@ namespace Model
         public Boolean existeCambioSolicitante { get; set; }
 
 
+        [Display(Name = "Fecha Hora Solicitud")]
         public String fechaHoraSolicitud
         {
             get { return this.fechaSolicitud.ToString("dd/MM/yyyy HH:mm"); }
         }
 
+
+        [Display(Name = "Fecha Hora de Registro:")]
         public String fechaHoraRegistro
         {
             get { return this.FechaRegistro.ToString("dd/MM/yyyy HH:mm"); }
@@ -159,6 +162,9 @@ namespace Model
         public Usuario usuario { get; set; }
         public Boolean incluidoIGV { get; set; }
         //   public Decimal flete { get; set; }
+
+
+        [Display(Name = "Creado Por:")]
         public String usuarioCreacion { get; set; }
 
 
@@ -254,43 +260,51 @@ namespace Model
         {
             /*GENERAN GUIA REMISION*/
             [Display(Name = "Venta")]
-            Venta = 'V', 
+            Venta = 'V', /*PEDIDOS DE VENTA*/
             [Display(Name = "Traslado Interno")]
-            TrasladoInterno = 'T',
+            TrasladoInterno = 'T',  /*ALMACEN*/
             [Display(Name = "Comodato a Entregar")]
-            ComodatoEntregado = 'M',
+            ComodatoEntregado = 'M', /*PEDIDO DE VENTA*/
             [Display(Name = "Transferencia Gratuita a Entregar")]
-            TransferenciaGratuitaEntregada = 'G',
+            TransferenciaGratuitaEntregada = 'G', /*PEDIDO DE VENTA*/
             [Display(Name = "Préstamo a Entregar")]
-            PrestamoEntregado = 'P',
-            [Display(Name = "Devolución de Compra")]
-            DevolucionCompra = 'B',
-            [Display(Name = "Devolución de Préstamo Recibido")]
-            DevolucionPrestamoRecibido = 'E',
-            [Display(Name = "Devolución de Comodato Recibido")]
-            DevolucionComodatoRecibido = 'F',
-            [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
-            DevolucionTransferenciaGratuitaRecibida = 'H',
-
-            /*GENERAN NOTA INGRESO
-            [Display(Name = "Compra")]
-            Compra = 'C', 
-            [Display(Name = "Comodato Recibido")]
-            ComodatoRecibido = 'M',
-            [Display(Name = "Transferencia Gratuita Recibida")]
-            TransferenciaGratuitaRecibida = 'G',
-            [Display(Name = "Préstamo Recibido")]
-            PrestamoRecibido = 'P',
+            PrestamoEntregado = 'P', /*PEDIDO DE VENTA*/
             [Display(Name = "Devolución de Venta")]
-            DevolucionVenta = 'D', //GENERA NOTA DE CREDITO
+            DevolucionVenta = 'D', /*PEDIDO DE VENTA*/  //GENERA NOTA DE CREDITO
             [Display(Name = "Devolución de Préstamo Entregado")]
-            DevolucionPrestamoEntregado = 'E',
+            DevolucionPrestamoEntregado = 'E',  /*PEDIDO DE VENTA*/
             [Display(Name = "Devolución de Comodato Entregado")]
-            DevolucionComodatoEntregado = 'F',
+            DevolucionComodatoEntregado = 'F', /*PEDIDO DE VENTA*/
             [Display(Name = "Devolución de Transferencia Gratuita Entregada")]
-            DevolucionTransferenciaGratuitaEntregada = 'H',
-            */
+            DevolucionTransferenciaGratuitaEntregada = 'H' /*PEDIDO DE VENTA*/
         }
+
+
+
+        [Display(Name = "Tipo Pedido:")]
+        public tiposPedidoIngreso tipoPedidoEntrada { get; set; }
+        public enum tiposPedidoIngreso
+        {
+            //GENERAN NOTA INGRESO
+            [Display(Name = "Compra")]
+            Compra = 'C',  /*PEDIDO DE COMPRA*/
+
+            [Display(Name = "Comodato a Recibir")]
+            ComodatoRecibido = 'M', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Transferencia Gratuita a Recibir")]
+            TransferenciaGratuitaRecibida = 'G', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Préstamo a Recibir")]
+            PrestamoRecibido = 'P', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Devolución de Compra")]
+            DevolucionCompra = 'B', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Devolución de Préstamo Recibido")]
+            DevolucionPrestamoRecibido = 'E', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Devolución de Comodato Recibido")]
+            DevolucionComodatoRecibido = 'F', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
+            DevolucionTransferenciaGratuitaRecibida = 'H', /*PEDIDO DE COMPRA*/
+        }
+
 
         public String tiposPedidoString
         {

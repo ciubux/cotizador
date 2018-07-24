@@ -27,11 +27,19 @@ namespace BusinessLayer
             }
         }
 
-        public Venta GetPlantillaNotaCredito(Venta venta)
+        public void InsertVentaNotaDebito(Venta venta)
         {
             using (var dal = new VentaDAL())
             {
-                venta = dal.SelectVentaPlantillaNotaCredito(venta);
+                dal.InsertVentaNotaDebito(venta);
+            }
+        }
+
+        public Venta GetPlantillaVenta(Venta venta)
+        {
+            using (var dal = new VentaDAL())
+            {
+                venta = dal.SelectPlantillaVenta(venta);
                 if (venta.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
                 {
                     this.procesarVenta(venta);

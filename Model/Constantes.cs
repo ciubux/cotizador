@@ -24,7 +24,9 @@ namespace Model
         public static String UBIGEO_VACIO = "000000";
 
         public static int DIAS_DESDE_BUSQUEDA = 15;
-           
+
+        public static String TIPO_DOCUMENTO_CLIENTE_RUC = "6";
+        public static String TIPO_DOCUMENTO_CLIENTE_DNI = "1";
 
 
         public static String LABEL_DIRECCION_ENTREGA_VACIO = "Seleccione Dirección de Entrega";
@@ -39,6 +41,11 @@ namespace Model
         public static String VAR_SESSION_PEDIDO_BUSQUEDA = "pedidoBusqueda";
         public static String VAR_SESSION_PEDIDO_LISTA = "pedidoList";
         public static String VAR_SESSION_PEDIDO_VER = "pedidoVer";
+
+        public static String VAR_SESSION_PEDIDO_ENTRADA = "pedidoEntrada";
+        public static String VAR_SESSION_PEDIDO_ENTRADA_BUSQUEDA = "pedidoEntradaBusqueda";
+        public static String VAR_SESSION_PEDIDO_ENTRADA_LISTA = "pedidoEntradaList";
+        public static String VAR_SESSION_PEDIDO_ENTRADA_VER = "pedidoEntradaVer";
 
         public static String VAR_SESSION_CLIENTE = "cliente";
 

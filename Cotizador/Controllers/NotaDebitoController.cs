@@ -11,20 +11,14 @@ using System.Web.Mvc;
 
 namespace Cotizador.Controllers
 {
-    public class NotaCreditoController : Controller
+    public class NotaDebitoController : Controller
     {
-        // GET: NotaCredito
-        /*   public ActionResult Index()
-           {
-               return View();
-           }
-       */
+   
         public ActionResult Crear()
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
-         //   venta.tipoNotaCredito = venta.documentoVenta.tipoNotaCredito;
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_DEBITO];
             ViewBag.venta = venta;
-            ViewBag.tipoNotaCredito = (int)venta.tipoNotaCredito;           
+            ViewBag.tipoNotaDebito = (int)venta.tipoNotaDebito;           
 
             ViewBag.fechaEmision = venta.documentoVenta.fechaEmision.Value.ToString(Constantes.formatoFecha);
             ViewBag.horaEmision = venta.documentoVenta.fechaEmision.Value.ToString(Constantes.formatoHora);  
@@ -35,14 +29,14 @@ namespace Cotizador.Controllers
 
 
 
-        public String iniciarCreacionNotaCredito()
+        public String iniciarCreacion()
         {
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
             
             venta.documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
             venta.documentoVenta.venta = null;
-            venta.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
+            venta.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaDébito;
 
             venta.documentoVenta.idDocumentoVenta = Guid.Parse(Request["idDocumentoVenta"].ToString());
             
@@ -56,7 +50,7 @@ namespace Cotizador.Controllers
             venta = ventaBL.GetPlantillaVenta(venta);
             if (venta.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
             {
-                venta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
+                venta.tipoNotaDebito = (DocumentoVenta.TiposNotaDebito)Int32.Parse(Request["tipoNotaDebito"].ToString());
                 venta.documentoVenta.fechaEmision = DateTime.Now;
 
                 //Temporal
@@ -67,7 +61,7 @@ namespace Cotizador.Controllers
 
                 PedidoBL pedidoBL = new PedidoBL();
                 pedidoBL.calcularMontosTotales(pedido);
-                this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
+                this.Session[Constantes.VAR_SESSION_NOTA_DEBITO] = venta;
             }
             return JsonConvert.SerializeObject(venta);
             
@@ -77,33 +71,33 @@ namespace Cotizador.Controllers
         [HttpPost]
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_DEBITO];
             IDocumento documento = (Pedido)venta.pedido;
             List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
             documento.documentoDetalle = documentoDetalle;
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.calcularMontosTotales((Pedido)documento);
             venta.pedido = (Pedido)documento;
-            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
+            this.Session[Constantes.VAR_SESSION_NOTA_DEBITO] = venta;
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
 
 
         public void ChangeInputString()
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_DEBITO];
             PropertyInfo propertyInfo = venta.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(venta, this.Request.Params["valor"]);
-            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
+            this.Session[Constantes.VAR_SESSION_NOTA_DEBITO] = venta;
         }
 
         public void ChangeFechaEmision()
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_DEBITO];
             String[] fechaEmision = this.Request.Params["fechaEmision"].Split('/');
             String[] horaEmision = this.Request.Params["horaEmision"].Split(':');
             venta.documentoVenta.fechaEmision = new DateTime(Int32.Parse(fechaEmision[2]), Int32.Parse(fechaEmision[1]), Int32.Parse(fechaEmision[0]), Int32.Parse(horaEmision[0]), Int32.Parse(horaEmision[1]), 0);
-            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
+            this.Session[Constantes.VAR_SESSION_NOTA_DEBITO] = venta;
         }
 
         public String Create()
@@ -112,7 +106,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             try
             {
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_DEBITO];
 
                 String[] fecha = this.Request.Params["fechaEmision"].Split('/');
                 String[] hora = this.Request.Params["horaEmision"].Split(':');
@@ -132,7 +126,7 @@ namespace Cotizador.Controllers
                 
                 venta.usuario = usuario;
                 VentaBL ventaBL = new VentaBL();
-                ventaBL.InsertVentaNotaCredito(venta);
+                ventaBL.InsertVentaNotaDebito(venta);
 
                 //Falta Agregar validación de creación de venta
 
@@ -142,8 +136,8 @@ namespace Cotizador.Controllers
                 venta.documentoVenta.venta.idVenta = venta.idVenta;
                 venta.documentoVenta.venta.documentoReferencia = venta.documentoReferencia;
                 venta.documentoVenta.cliente = venta.cliente;
-                venta.documentoVenta = documentoVentaBL.InsertarNotaCredito(venta.documentoVenta);
-                venta.documentoVenta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(venta.documentoVenta.cPE_CABECERA_BE.COD_TIP_NC);
+                venta.documentoVenta = documentoVentaBL.InsertarNotaDebito(venta.documentoVenta);
+                venta.documentoVenta.tipoNotaDebito = (DocumentoVenta.TiposNotaDebito)Int32.Parse(venta.documentoVenta.cPE_CABECERA_BE.COD_TIP_ND);
                 return JsonConvert.SerializeObject(venta.documentoVenta);
             }
             catch (Exception ex)
@@ -162,7 +156,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             try
             {
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_DEBITO];
                 DocumentoVenta documentoVenta = new DocumentoVenta();
                 documentoVenta.venta = venta;
                 documentoVenta.idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
@@ -195,63 +189,3 @@ namespace Cotizador.Controllers
 }
 
 
-
-
-//    venta.documentoVenta.idDocumentoVenta = Guid.Parse(Request["idDocumentoVenta"].ToString());
-//    venta.documentoVenta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
-
-
-
-/*
-GRUPO A
-
-01 – Anulación de la operación 
-    Carga Venta Original y no te permite modifcar el detalle solo agregar sustento, Plazo de crédito es 0 días, contado.
-    Agregar Sustento
-
-02 - Anulación por error en el RUC 
-    Carga Venta Original y no te permite modifcar el detalle solo agregar sustento, Plazo de crédito es 0 días, contado.
-    Agregar Sustento
-    Validación 15 días 
-
-03 – Corrección por error en la descripción 
-    Carga Venta Original y no te permite modifcar el detalle solo agregar sustento, Plazo de crédito es 0 días, contado.
-    Agregar Sustento
-    Validación 15 días	
-
-06 – Devolución total 
-    ********* Considera la nota de ingreso
-
-
-GRUPO B
-
-    Previamente se debe seleccionar el producto
-
-04 – Descuento global (solo para factura) 
-    Solo deben permitir una linea,
-    la cantidad no se modifica y siempre es 1, 
-    considerar solo producto que tenga el flag de descuentoGlobal
-    Modificar el precio unitario 
-    Maximo descuento global debe ser menor al 100% del subtotal de la venta
-
-
-GRUPO C
-
-05 – Descuento por ítem (solo para factura) 
-09 – Disminución en el valor
-    Te carga el detalle de la venta original, 
-    Te permite eliminar lineas de detalle, 
-    No te permite modificar las cantidad, 
-    No te permite agregar lineas 
-    Modificar el precio unitario
-    El precio unitario debe ser menor al precio unitario de la factura (VALOR UNITARIO)
-
-
-GRUPO D
-
-07 – Devolución por ítem 
-    Te carga el detalle de la venta original, 
-    Te permite eliminar lineas de detalle, 
-    Te permite modificar las cantidad, 
-    No te permite agregar lineas 
-    No te permite el precio unitario*/

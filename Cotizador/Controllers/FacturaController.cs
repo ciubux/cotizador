@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -82,16 +83,16 @@ namespace Cotizador.Controllers
                 documentoVenta.observaciones = this.Request.Params["observaciones"];
 
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-                documentoVenta = documentoVentaBL.InsertarFactura(documentoVenta);
 
-                //Se retorna el codigo del documento de venta para poder realizar la confirmación
-                //        CPE_RESPUESTA_BE = cPE_RESPUESTA_BE,
-       /*         var otmp = new
-                {
-                    documentoVenta = documentoVenta
-                };
+                if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+                else if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI)
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
+                else
+                    throw new Exception("No se ha identificado el tipo de documento electrónico a crear.");
 
-                */
+
+                documentoVenta = documentoVentaBL.InsertarDocumentoVenta(documentoVenta);
               
 
                 return JsonConvert.SerializeObject(documentoVenta);
@@ -143,8 +144,91 @@ namespace Cotizador.Controllers
         }
 
 
-        
 
+        public String iniciarRefacturacion()
+        {
+            VentaBL ventaBL = new VentaBL();
+            Venta venta = new Venta();
+
+            venta.documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
+            venta.documentoVenta.venta = null;
+            venta.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+            venta.documentoVenta.idDocumentoVenta = Guid.Parse(Request["idDocumentoVenta"].ToString());
+
+            venta.documentoReferencia = new DocumentoReferencia();
+            venta.documentoReferencia.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(venta.documentoVenta.cPE_CABECERA_BE.TIP_CPE);
+            String[] fechaEmisionArray = venta.documentoVenta.cPE_CABECERA_BE.FEC_EMI.Split('-');
+            venta.documentoReferencia.fechaEmision = new DateTime(Int32.Parse(fechaEmisionArray[0]), Int32.Parse(fechaEmisionArray[1]), Int32.Parse(fechaEmisionArray[2]));
+            
+            venta.documentoReferencia.serie = venta.documentoVenta.cPE_CABECERA_BE.SERIE;
+            venta.documentoReferencia.numero = venta.documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
+
+            venta = ventaBL.GetPlantillaVenta(venta);
+            if (venta.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+            {
+               // venta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
+                venta.documentoVenta.fechaEmision = DateTime.Now;
+                venta.documentoVenta.fechaVencimiento = venta.documentoVenta.fechaEmision.Value;
+                //venta.documentoVenta.formaPago
+                //Temporal
+                Pedido pedido = venta.pedido;
+                pedido.ciudadASolicitar = new Ciudad();
+
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.calcularMontosTotales(pedido);
+                this.Session[Constantes.VAR_SESSION_FACTURA] = venta;
+            }
+            return JsonConvert.SerializeObject(venta);
+
+        }
+
+        [HttpPost]
+        public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
+        {
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_FACTURA];
+            IDocumento documento = (Pedido)venta.pedido;
+            List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
+            documento.documentoDetalle = documentoDetalle;
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.calcularMontosTotales((Pedido)documento);
+            venta.pedido = (Pedido)documento;
+            this.Session[Constantes.VAR_SESSION_FACTURA] = venta;
+            return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
+        }
+
+
+        public void ChangeInputString()
+        {
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            PropertyInfo propertyInfo = venta.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(venta, this.Request.Params["valor"]);
+            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
+        }
+
+        public void ChangeFechaEmision()
+        {
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            String[] fechaEmision = this.Request.Params["fechaEmision"].Split('/');
+            String[] horaEmision = this.Request.Params["horaEmision"].Split(':');
+            venta.documentoVenta.fechaEmision = new DateTime(Int32.Parse(fechaEmision[2]), Int32.Parse(fechaEmision[1]), Int32.Parse(fechaEmision[0]), Int32.Parse(horaEmision[0]), Int32.Parse(horaEmision[1]), 0);
+            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
+        }
+
+
+        public ActionResult Crear()
+        {
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_FACTURA];
+            //   venta.tipoNotaCredito = venta.documentoVenta.tipoNotaCredito;
+            ViewBag.venta = venta;
+            //ViewBag.tipoNotaCredito = (int)venta.tipoNotaCredito;
+
+            ViewBag.fechaEmision = venta.documentoVenta.fechaEmision.Value.ToString(Constantes.formatoFecha);
+            ViewBag.horaEmision = venta.documentoVenta.fechaEmision.Value.ToString(Constantes.formatoHora);
+
+            return View();
+        }
 
 
 
@@ -162,8 +246,16 @@ namespace Cotizador.Controllers
                 documentoVenta.cliente = venta.pedido.cliente;
                 documentoVenta.usuario = usuario;
 
+                if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+                else if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI)
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
+                else
+                    throw new Exception("No se ha identificado el tipo de documento electrónico a crear.");
+
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+
+
                 CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.procesarCPE(documentoVenta);
 
                 var otmp = new

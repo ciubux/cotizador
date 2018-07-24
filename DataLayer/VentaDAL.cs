@@ -51,12 +51,11 @@ namespace DataLayer
             var tipoErrorValidacion = (GuiaRemisionValidacion.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
             var descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
 
-            this.InsertVentaDetalleNotaCredito(venta);
-
+            this.InsertVentaDetalle(venta);
 
             objCommand = GetSqlCommand("pu_venta");
             InputParameterAdd.Guid(objCommand, "idVenta", venta.idVenta);
-            InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Venta");
+            InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Transacción.");
             ExecuteNonQuery(objCommand);
 
             this.Commit();
@@ -64,11 +63,11 @@ namespace DataLayer
         }
 
 
-        public void InsertVentaDetalleNotaCredito(Venta venta)
+        public void InsertVentaDetalle(Venta venta)
         {
             foreach (DocumentoDetalle documentoDetalle in venta.pedido.pedidoDetalleList)
             {
-                var objCommand = GetSqlCommand("pi_ventaDetalleNotaCredito");
+                var objCommand = GetSqlCommand("pi_ventaDetalle");
                 InputParameterAdd.Guid(objCommand, "idVenta", venta.idVenta);
                 InputParameterAdd.Guid(objCommand, "idUsuario", venta.usuario.idUsuario);
                 InputParameterAdd.Guid(objCommand, "idProducto", documentoDetalle.producto.idProducto);
@@ -78,12 +77,65 @@ namespace DataLayer
                 InputParameterAdd.Decimal(objCommand, "precioUnitario", documentoDetalle.precioUnitario);
                 InputParameterAdd.Int(objCommand, "equivalencia", documentoDetalle.producto.equivalencia);
                 InputParameterAdd.Varchar(objCommand, "unidad", documentoDetalle.unidad);
-                InputParameterAdd.Int(objCommand, "esPrecioAlternativo", documentoDetalle.esPrecioAlternativo ?1:0);
+                InputParameterAdd.Int(objCommand, "esPrecioAlternativo", documentoDetalle.esPrecioAlternativo ? 1 : 0);
 
                 ExecuteNonQuery(objCommand);
-            }     
+            }
         }
 
+
+
+
+
+
+        public void InsertVentaNotaDebito(Venta venta)
+        {
+            this.BeginTransaction(IsolationLevel.ReadCommitted);
+            var objCommand = GetSqlCommand("pi_ventaNotaDebito");
+            InputParameterAdd.Guid(objCommand, "idUsuario", venta.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "serieDocumentoReferencia", venta.documentoReferencia.serie);
+            InputParameterAdd.Varchar(objCommand, "numeroDocumentoReferencia", venta.documentoReferencia.numero);
+            InputParameterAdd.Int(objCommand, "tipoDocumentoReferencia", (int)venta.documentoReferencia.tipoDocumento);
+            InputParameterAdd.DateTime(objCommand, "fechaEmisionDocumentoReferencia", venta.documentoReferencia.fechaEmision);
+            InputParameterAdd.Guid(objCommand, "idCiudad", venta.cliente.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idCliente", venta.cliente.idCliente);
+            InputParameterAdd.Varchar(objCommand, "observaciones", venta.observaciones);
+            InputParameterAdd.Varchar(objCommand, "sustento", venta.sustento);
+            InputParameterAdd.Int(objCommand, "tipoNotaDebito", (int)venta.tipoNotaDebito);
+            InputParameterAdd.DateTime(objCommand, "fechaEmision", venta.documentoVenta.fechaEmision);
+
+
+
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");
+            OutputParameterAdd.BigInt(objCommand, "numeroVenta");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoReferenciaVenta");
+
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+            ExecuteNonQuery(objCommand);
+
+            venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
+            venta.numero = (Int64)objCommand.Parameters["@numeroVenta"].Value;
+            venta.documentoReferencia.idDocumentoReferenciaVenta = (Guid)objCommand.Parameters["@idDocumentoReferenciaVenta"].Value;
+
+            var tipoErrorValidacion = (GuiaRemisionValidacion.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
+            var descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+
+            this.InsertVentaDetalle(venta);
+
+
+            objCommand = GetSqlCommand("pu_venta");
+            InputParameterAdd.Guid(objCommand, "idVenta", venta.idVenta);
+            InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Transacción.");
+            ExecuteNonQuery(objCommand);
+
+            this.Commit();
+
+        }
+
+
+
+        
         public void UpdateVenta(Venta venta)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
@@ -118,10 +170,11 @@ namespace DataLayer
         
 
 
-        public Venta SelectVentaPlantillaNotaCredito(Venta venta)
+        public Venta SelectPlantillaVenta(Venta venta)
         {
-            var objCommand = GetSqlCommand("ps_plantillaNotaCredito");
+            var objCommand = GetSqlCommand("ps_plantillaVenta");
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", venta.documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)venta.documentoVenta.tipoDocumento);
 
             OutputParameterAdd.Int(objCommand, "tipoError");
             OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
@@ -142,30 +195,28 @@ namespace DataLayer
 
                 foreach (DataRow row in ventaDataTable.Rows)
                 {
-
                     venta.cliente = new Cliente();
                     venta.cliente.codigo = Converter.GetString(row, "codigo");
                     venta.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                     venta.cliente.razonSocial = Converter.GetString(row, "razon_social");
                     venta.cliente.ruc = Converter.GetString(row, "ruc");
-                    /*   venta.cliente.ciudad = new Ciudad();
-                       venta.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad_cliente");
-                       venta.cliente.ciudad.nombre = Converter.GetString(row, "nombre_ciudad_cliente");
-                   */
                     venta.cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
                     venta.cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
                     venta.cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
                     venta.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
                     venta.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
                     venta.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
-
                     venta.cliente.ciudad = new Ciudad();
                     venta.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-
-                    //Se obtiene la serie y número de la nota de crédito
                     venta.documentoVenta.serie = Converter.GetString(row, "serie");
                     venta.documentoVenta.numero = Converter.GetInt(row, "correlativo").ToString().PadLeft(8, '0');
-
+                    venta.pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
+                    venta.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+                    venta.pedido.observacionesFactura = Converter.GetString(row, "observaciones");
+                    venta.guiaRemision = new GuiaRemision();
+                    venta.guiaRemision.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                    venta.guiaRemision.serieDocumento = Converter.GetString(row, "serie_guia_remision");
+                    venta.guiaRemision.numeroDocumento = Converter.GetInt(row, "numero_guia_remision");
                 }
 
 
@@ -202,15 +253,6 @@ namespace DataLayer
                     {
                         pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
                     }
-
-                    /*            //          if (pedidoDetalle.esPrecioAlternativo)
-                              //         {
-                              pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.producto.equivalencia;
-                            }
-                              else
-                              {
-                                  pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
-                              }*/
 
                     pedidoDetalle.unidad = Converter.GetString(row, "unidad");
                     pedidoDetalle.unidadInternacional = Converter.GetString(row, "unidad_internacional");
@@ -334,8 +376,7 @@ namespace DataLayer
                 pedido.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
                 pedido.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
                 pedido.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
-
-
+                pedido.cliente.tipoDocumento = Converter.GetString(row, "tipo_documento");
 
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");

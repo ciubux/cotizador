@@ -13,6 +13,7 @@ namespace Model
         public DocumentoVenta()
         {
             this.tipoNotaCredito = TiposNotaCredito.AnulacionOperacion;
+            this.tipoNotaDebito = TiposNotaDebito.Penalidades;
         }
 
 
@@ -256,7 +257,7 @@ namespace Model
             Anulado = 105,
             [Display(Name = "EXCPETION")]
             Exception = 106,
-            [Display(Name = "EN PROCESO ANULACIÓN")]
+            [Display(Name = "ANULACIÓN SOLICITADA")]
             EnProcesoAnulacion = 108,
             [Display(Name = "NO IDENTIFICADO")]
             NoIdentificado = 0
@@ -331,7 +332,33 @@ namespace Model
             [Display(Name = "OTROS CONCEPTOS")]
             OtrosConceptos = 10,*/
         };
+        /*01 – Intereses por mora 02 – Aumento de valor 03 – Penalidades*/
 
+        public String tipoNotaDebitoString
+        {
+            get
+            {
+                return EnumHelper<TiposNotaDebito>.GetDisplayValue(this.tipoNotaDebito);
+            }
+        }
+
+
+        [Display(Name = "Motivo Nota Débito:")]
+        public TiposNotaDebito tipoNotaDebito { get; set; }
+        public enum TiposNotaDebito
+        {
+
+            /*01 – Intereses por mora 02 – Aumento de valor 03 – Penalidades*/
+            [Display(Name = "INTERESES POR MORA")]
+            Intereses = 1,
+            [Display(Name = "AUMENTO EN EL VALOR")]
+            AumentoValor = 2,
+            [Display(Name = "PENALIDADES / OTROS CONCEPTOS")]
+            Penalidades = 3
+            /*,
+        [Display(Name = "OTROS CONCEPTOS")]
+        OtrosConceptos = 10,*/
+        };
 
 
 
