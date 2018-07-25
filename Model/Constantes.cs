@@ -102,7 +102,12 @@ namespace Model
         public static String ENDPOINT_ADDRESS_EOL_PROD = "";
         public static string RUC_MP = "20509411671";
         public static String AMBIENTE_EOL = "";
-        
+        public static String CPE_CABECERA_BE_ID = "";
+        public static String CPE_CABECERA_BE_COD_GPO = "";
+
+
+
+
 
         public static String USER_EOL {
             get { return AMBIENTE_EOL.Equals("TEST") ? USER_EOL_TEST : USER_EOL_PROD; }

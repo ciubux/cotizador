@@ -159,8 +159,10 @@ namespace DataLayer
                         Constantes.ENDPOINT_ADDRESS_EOL_PROD = valorParametro; break;
                     case "DESCARGAR_XML":
                         Constantes.DESCARGAR_XML = int.Parse(valorParametro); break;
-
-
+                    case "CPE_CABECERA_BE_ID":
+                        Constantes.CPE_CABECERA_BE_ID = valorParametro; break;
+                    case "CPE_CABECERA_BE_COD_GPO":
+                        Constantes.CPE_CABECERA_BE_COD_GPO = valorParametro; break;
 
                     case "AMBIENTE_EOL":
                         { 

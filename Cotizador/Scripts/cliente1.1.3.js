@@ -302,8 +302,8 @@ jQuery(function ($) {
                 $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);
 
                 $("#cliente_plazoCredito").val(cliente.plazoCredito);
-                $("#tipoPago").val(cliente.tipoPagoFactura);
-                $("#formaPago").val(cliente.formaPagoFactura);
+                $("#tipoPagoCliente").val(cliente.tipoPagoFactura);
+                $("#formaPagoCliente").val(cliente.formaPagoFactura);
 
             /*    $("#direccionDomicilioLegalSunat").val(resultado.direccionDomicilioLegalSunat);
                 $("#cliente_ubigeo_Departamento").val(resultado.ubigeo.Departamento);
@@ -807,8 +807,8 @@ jQuery(function ($) {
         changeInputString("condicionContribuyente", $("#cliente_direcclientecliente_condicionContribuyente_estadoContribuyentecionDomicilioLegalSunat").val())
     });
 
-    $("#formaPago").change(function () {
-        var formaPagoFactura = $("#formaPago").val();
+    $("#formaPagoCliente").change(function () {
+        var formaPagoFactura = $("#formaPagoCliente").val();
         $.ajax({
             url: "/Cliente/ChangeFormaPagoFactura",
             type: 'POST',
@@ -819,8 +819,8 @@ jQuery(function ($) {
         });
     });
 
-    $("#tipoPago").change(function () {
-        var tipoPagoFactura = $("#tipoPago").val();
+    $("#tipoPagoCliente").change(function () {
+        var tipoPagoFactura = $("#tipoPagoCliente").val();
         $.ajax({
             url: "/Cliente/ChangeTipoPagoFactura",
             type: 'POST',
@@ -3565,8 +3565,8 @@ jQuery(function ($) {
         var horaEmision = $("#documentoVenta_horaEmision").val();
         var fechaVencimiento = $("#documentoVenta_fechaVencimiento").val();
         
-        var tipoPago = $("#tipoPago").val();
-        var formaPago = $("#formaPago").val();
+        var tipoPago = $("#tipoPagoCliente").val();
+        var formaPago = $("#formaPagoCliente").val();
         var correoEnvio = $("#documentoVenta_correoEnvio").val();
         /*var correoCopia = $("#documentoVenta_correoCopia").val();
         var correoOculto = $("#documentoVenta_correoOculto").val();*/

@@ -601,6 +601,14 @@ jQuery(function ($) {
         var idDocumentoVenta = $("#idDocumentoVenta").val();
         var serieNumero = $("#serieNumero").val();
         var comentarioAnulado = $("#comentarioAnulado").val();
+
+        if (comentarioAnulado.trim().length < 25) {
+            alert("El motivo de la anulación debe contener al menos 25 caracteres.");
+            $("#comentarioAnulado").focus();
+            return false;
+        }
+
+
         $("#btnAceptarAnulacion").attr("disabled", "disabled");
         $.ajax({
             url: "/Factura/SolicitarAnulacion",
@@ -644,6 +652,16 @@ jQuery(function ($) {
         var idDocumentoVenta = $("#idDocumentoVenta").val();
         var serieNumero = $("#serieNumero").val();
         var comentarioAprobacionAnulacion = $("#comentarioAprobacionAnulacion").val();
+
+
+        if (comentarioAprobacionAnulacion.trim().length < 25) {
+            alert("El motivo de aprobación debe contener al menos 25 caracteres (Este motivo será enviado a SUNAT).");
+            $("#comentarioAprobacionAnulacion").focus();
+            return false;
+        }
+
+
+
         $("#btnAprobarAnulacion").attr("disabled", "disabled");
         $.ajax({
             url: "/Factura/AprobarAnulacion",
@@ -659,14 +677,20 @@ jQuery(function ($) {
             },
             success: function (documentoVenta) {
                 $("#btnAprobarAnulacion").removeAttr("disabled");
-                $.alert({
-                    title: TITLE_EXITO,
-                    type: 'green',
-                    content: "La factura: " + serieNumero + " se encuentra en proceso de anulación.",
-                    buttons: {
-                        OK: function () { location.reload(); }
-                    }
-                })
+                if (documentoVenta.rPTA_BE.CODIGO == "001") {
+                    $.alert({
+                        title: TITLE_EXITO,
+                        type: 'green',
+                        content: "Se realizó la Solicitud de Anulación del documento: " + serieNumero + ".",
+                        buttons: {
+                            OK: function () { location.reload(); }
+                        }
+                    })
+                }
+                else {
+                    mostrarMensajeErrorProceso(documentoVenta.rPTA_BE.DETALLE);
+                }
+               
             }
         });
     });
@@ -1053,9 +1077,12 @@ jQuery(function ($) {
                     || documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_DEBITO) {
 
                     $('.datosNotaCreditoDebito').show();
-                    
-
-                    $("#pvMOTIVO").html(documentoVenta.tipoNotaCreditoString);
+                    if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO) {
+                        $("#pvMOTIVO").html(documentoVenta.tipoNotaCreditoString);
+                    }
+                    else {
+                        $("#pvMOTIVO").html(documentoVenta.tipoNotaDebitoString);
+                    }
                     $("#pvDES_MTVO_NC_ND").html(documentoVenta.cPE_CABECERA_BE.DES_MTVO_NC_ND);
 
                     /*Documento Referencia*/
@@ -1069,14 +1096,6 @@ jQuery(function ($) {
 
                     $('.datosNotaCreditoDebito').hide();
                 }
-               
-
-
-
-
-
-
-
            
                 $("#idDocumentoVenta").val(documentoVenta.idDocumentoVenta);
                 /*FECHA HORA EMISIÓN -  SERIE CORRELATIVO*/
@@ -1097,7 +1116,9 @@ jQuery(function ($) {
                 /*OBSERVACIONES*/ /*CODIGO CLIENTE*/
                 if (documentoVenta.cPE_DAT_ADIC_BEList.length > 0) {
                     $("#vpCODIGO_CLIENTE").html(documentoVenta.cPE_DAT_ADIC_BEList[0].TXT_DESC_ADIC_SUNAT);
-                    $("#vpOBSERVACIONES").html(documentoVenta.cPE_DAT_ADIC_BEList[1].TXT_DESC_ADIC_SUNAT);  
+                    if (documentoVenta.cPE_DAT_ADIC_BEList.length > 1) {
+                        $("#vpOBSERVACIONES").html(documentoVenta.cPE_DAT_ADIC_BEList[1].TXT_DESC_ADIC_SUNAT);
+                    }
                 }
                 else {
                     $("#vpCODIGO_CLIENTE").html("");

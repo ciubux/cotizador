@@ -319,28 +319,31 @@ namespace BusinessLayer
             Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
             client.Endpoint.Address = new EndpointAddress(uri);
 
-            /*
+            
             List<CPE_DOC_BAJA> CPE_DOC_BAJAList = new List<CPE_DOC_BAJA>();
             CPE_DOC_BAJA CPE_DOC_BAJA = new CPE_DOC_BAJA();
             CPE_DOC_BAJA.NRO_DOC = Constantes.RUC_MP;
-            CPE_DOC_BAJA.TIP_DOC = "6";
-            CPE_DOC_BAJA.TIP_CPE = "01";
-            CPE_DOC_BAJA.FEC_EMI = documentoVenta.fechaEmision.Value.ToString(Constantes.formatoFechaCPE);
-            CPE_DOC_BAJA.SERIE = documentoVenta.serie;
-            CPE_DOC_BAJA.CORRELATIVO = documentoVenta.numero;
+            CPE_DOC_BAJA.TIP_DOC = documentoVenta.cPE_CABECERA_BE.TIP_DOC_EMI;
+            CPE_DOC_BAJA.TIP_CPE = documentoVenta.cPE_CABECERA_BE.TIP_CPE;
+            CPE_DOC_BAJA.FEC_EMI = documentoVenta.cPE_CABECERA_BE.FEC_EMI;
+            CPE_DOC_BAJA.SERIE = documentoVenta.cPE_CABECERA_BE.SERIE;
+            CPE_DOC_BAJA.CORRELATIVO = documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
             CPE_DOC_BAJA.MTVO_BAJA = documentoVenta.comentarioAprobacionAnulacion;
             CPE_DOC_BAJAList.Add(CPE_DOC_BAJA);
 
-           RPTA_BE[] rPTA_BEArray = client.CallRequestLow("179EB2F735F0B782C77F25426F0A1D2B0414945BA1E94B850764D722642358CB","14", Constantes.USER_EOL, Constantes.PASSWORD_EOL, CPE_DOC_BAJAList.ToArray());
+           RPTA_BE[] rPTA_BEArray = client.CallRequestLow(Constantes.CPE_CABECERA_BE_ID, Constantes.CPE_CABECERA_BE_COD_GPO, Constantes.USER_EOL, Constantes.PASSWORD_EOL, CPE_DOC_BAJAList.ToArray());
 
-          documentoVenta.rPTA_BE = rPTA_BEArray[0];            */
-            //   = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
 
-            //El resultado se inserta a BD
-            using (var dal = new DocumentoVentaDAL())
+            documentoVenta.rPTA_BE = rPTA_BEArray[0];
+
+            if (documentoVenta.rPTA_BE.CODIGO == Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK)
             {
-                dal.aprobarAnulacionDocumentoVenta(documentoVenta);
+                using (var dal = new DocumentoVentaDAL())
+                {
+                    dal.aprobarAnulacionDocumentoVenta(documentoVenta);
+                }
             }
+
         }
         
 

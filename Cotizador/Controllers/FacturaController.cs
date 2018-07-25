@@ -124,10 +124,10 @@ namespace Cotizador.Controllers
                 {
                     documentoVenta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(documentoVenta.cPE_CABECERA_BE.COD_TIP_NC);
                 }
-                /*else if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.NotaDébito)
+                else if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.NotaDébito)
                 {
-                    documentoVenta.tipo = (DocumentoVenta.TiposNotaCredito)Int32.Parse(documentoVenta.cPE_CABECERA_BE.COD_TIP_NC);
-                }*/
+                    documentoVenta.tipoNotaDebito = (DocumentoVenta.TiposNotaDebito)Int32.Parse(documentoVenta.cPE_CABECERA_BE.COD_TIP_ND);
+                }
 
 
                 this.Session[Constantes.VAR_SESSION_FACTURA_VER] = documentoVenta;
@@ -450,14 +450,15 @@ namespace Cotizador.Controllers
         public String AprobarAnulacion()
         {
             DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-            List<DocumentoVenta> documentoVentaList = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
-            Guid idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
-            //  Guid idDocumentoVenta = this.Request.Params["idDocumentoVenta"]);
-
-            DocumentoVenta documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).FirstOrDefault();
+            /*  List<DocumentoVenta> documentoVentaList = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+              Guid idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+              DocumentoVenta documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).FirstOrDefault();
+  */
+            DocumentoVenta documentoVenta = new DocumentoVenta();
+            documentoVenta.idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+            documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
             documentoVenta.comentarioAprobacionAnulacion = this.Request.Params["comentarioAprobacionAnulacion"];
             documentoVenta.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
             documentoVentaBL.aprobarAnulacionDocumentoVenta(documentoVenta);
             return JsonConvert.SerializeObject(documentoVenta);
 

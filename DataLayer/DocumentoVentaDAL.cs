@@ -463,7 +463,12 @@ namespace DataLayer
                         !column.Equals("id_venta") &&
                         !column.Equals("COMENTARIO_SOLICITUD_ANULACION") &&
                         !column.Equals("COMENTARIO_APROBACION_ANULACION") &&
-                        !column.Equals("permite_anulacion") 
+                        !column.Equals("permite_anulacion") &&
+                        !column.Equals("observaciones_adicionales") &&
+                        !column.Equals("fecha_solicitud_anulacion") &&
+                        !column.Equals("fecha_aprobacion_anulacion") &&
+                        !column.Equals("usuario_solicitud_anulacion") &&
+                        !column.Equals("usuario_aprobacion_anulacion")
                         )
                     {
                         documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));

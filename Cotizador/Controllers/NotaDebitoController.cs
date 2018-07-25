@@ -164,7 +164,7 @@ namespace Cotizador.Controllers
                 documentoVenta.usuario = usuario;
 
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
+                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaDébito;
                 CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.procesarCPE(documentoVenta);
 
                 var otmp = new
