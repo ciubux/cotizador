@@ -708,7 +708,7 @@ namespace Cotizador.Controllers
             Pedido pedido = this.PedidoSession;
             PropertyInfo propertyInfo = pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(pedido, this.Request.Params["valor"]);
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            this.PedidoSession = pedido;
         }
 
         public void ChangeUbigeoEntrega()
@@ -723,7 +723,7 @@ namespace Cotizador.Controllers
         {
             Pedido pedido = this.PedidoSession;
             pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            this.PedidoSession = pedido;
         }
 
         public void ChangeOtrosCargos()

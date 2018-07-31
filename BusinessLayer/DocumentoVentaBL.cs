@@ -282,7 +282,6 @@ namespace BusinessLayer
                 catch(Exception ex)
                 {
                     throw ex;
-                   
                 }
             }
 

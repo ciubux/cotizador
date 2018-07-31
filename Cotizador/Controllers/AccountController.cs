@@ -128,7 +128,6 @@ namespace Cotizador.Controllers
                                 usuarioCreaCotizacionList.Add(usuarioTmp);
                             }
                         }
-
                     }
 
                     if (usuario.apruebaCotizacionesProvincias || usuario.creaCotizacionesProvincias)

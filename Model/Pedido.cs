@@ -11,6 +11,9 @@ namespace Model
         public Pedido()
         {
             this.tipoPedido = tiposPedido.Venta;
+            this.solicitante = new Solicitante();
+            this.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            this.ciudadASolicitar = new Ciudad();
         }
 
         public Guid idPedido { get; set; }

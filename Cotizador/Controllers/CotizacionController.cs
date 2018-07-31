@@ -634,12 +634,8 @@ namespace Cotizador.Controllers
                 resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
             else
                 resultado = resultado.Substring(0, resultado.Length) + "]}";
-
             return resultado;
         }
-
-
-
 
 
         public String GetCliente()
@@ -796,6 +792,8 @@ namespace Cotizador.Controllers
             if (detalle.esPrecioAlternativo)
             {
                 detalle.unidad = detalle.producto.unidad_alternativa;
+//                if(detalle.producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+
             }
 
             var nombreProducto = detalle.producto.descripcion;

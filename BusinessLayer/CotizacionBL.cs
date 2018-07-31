@@ -81,14 +81,30 @@ namespace BusinessLayer
                         {
                             evaluarDescuento = 1;
                         }
+                        else if (precioClienteProducto.fechaFinVigencia != null && DateTime.Now > precioClienteProducto.fechaFinVigencia.Value)
+                        {
+                            evaluarDescuento = 4;
+                        }
                         else
                         {
                             //Si el precio unitario registrado es distinto del precio registrado para facturacion
                             //Se envia a evaluar Descuento
-                            if (cotizacionDetalle.precioUnitario != precioClienteProducto.precioUnitario)
+                            if (!cotizacionDetalle.esPrecioAlternativo)
                             {
-                                evaluarDescuento = 2;
+                                if (cotizacionDetalle.precioUnitario != precioClienteProducto.precioUnitario)
+                                {
+                                    evaluarDescuento = 2;
+                                }
                             }
+                            else
+                            {
+                                if (cotizacionDetalle.precioUnitario != precioClienteProducto.precioUnitario / cotizacionDetalle.producto.equivalencia)
+                                {
+                                    evaluarDescuento = 2;
+                                }
+                            }
+
+
                         }
 
                     }
@@ -112,6 +128,9 @@ namespace BusinessLayer
                                     break;
                                 case 3:
                                     cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ".  No se encontró precio unitario en precios registrados en facturación.\n";
+                                    break;
+                                case 4:
+                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ". El precio unitario registrado en facturación tuvo vigencia hasta "+ precioClienteProducto.fechaFinVigencia.Value.ToString(Constantes.formatoFecha) + ".\n";
                                     break;
                             }
                             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;

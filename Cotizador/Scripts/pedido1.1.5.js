@@ -1054,8 +1054,10 @@ jQuery(function ($) {
     //EVENTO CUANDO SE ABRE VENTANA DE AGREGAR PRODUCTO
     $('#modalAgregarProducto').on('shown.bs.modal', function () {
         $('#familia').focus();
-        $('#familia').val("Todas");
-        $('#proveedor').val("Todos");
+        //$('#familia').val("Todas");
+        //$('#familia').change();
+        //$('#proveedor').val("Todos");
+        //$('#proveedor').change();
 
         //$('#producto').trigger('chosen:activate');
     })
@@ -3161,7 +3163,7 @@ jQuery(function ($) {
                     });
                 }
                 else {
-                    alert("Existe una Guia de Remisión abierta; por favor vaya a la pantala Guia Remisión, haga clic en cancelar y vuelva a intentarlo.");
+                    alert("Existe una Guia de Remisión abierta; por favor vaya a la pantalla Guia Remisión, haga clic en cancelar y vuelva a intentarlo.");
                     activarBotonesVer();
                 }
             }

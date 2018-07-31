@@ -681,7 +681,7 @@ jQuery(function ($) {
                     $.alert({
                         title: TITLE_EXITO,
                         type: 'green',
-                        content: "Se realizó la Solicitud de Anulación del documento: " + serieNumero + ".",
+                        content: "Se realizó la Solicitud de Anulación del documento: " + documentoVenta.cPE_CABECERA_BE.SERIE + "-" + documentoVenta.cPE_CABECERA_BE.CORRELATIVO + ".",
                         buttons: {
                             OK: function () { location.reload(); }
                         }
