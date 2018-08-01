@@ -122,6 +122,56 @@ namespace BusinessLayer
 
 
 
+        public CPE_RESPUESTA_BE procesarNotaDebito(DocumentoVenta documentoVenta)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                try
+                {
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaDébito;
+                    documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
+                    documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
+                    IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
+                    Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
+                    client.Endpoint.Address = new EndpointAddress(uri);
+
+
+                    documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
+                        documentoVenta.cPE_CABECERA_BE,
+                        documentoVenta.cPE_DETALLE_BEList.ToArray(),
+                        documentoVenta.cPE_DAT_ADIC_BEList.ToArray(),
+                        documentoVenta.cPE_DOC_REF_BEList.ToArray(),
+                        documentoVenta.cPE_ANTICIPO_BEList.ToArray(),
+                        documentoVenta.cPE_FAC_GUIA_BEList.ToArray(),
+                        documentoVenta.cPE_DOC_ASOC_BEList.ToArray(),
+                        documentoVenta.globalEnumTipoOnline);
+                    documentoVenta.serie = documentoVenta.cPE_CABECERA_BE.SERIE;
+                    documentoVenta.numero = documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
+
+
+                    dal.UpdateRespuestaDocumentoVenta(documentoVenta);
+
+                    //Si se procesa correctamente se actualiza el correlativo y los documentos internos y 
+                    //Se consulta el estado del documento en SUNAT
+                    if (documentoVenta.cPE_RESPUESTA_BE.CODIGO.Equals(Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK))
+                    {
+                        dal.UpdateSiguienteNumeroNotaDebito(documentoVenta);
+                        documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaDébito;
+                        consultarEstadoDocumentoVenta(documentoVenta);
+                    }
+
+                    return documentoVenta.cPE_RESPUESTA_BE;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+
+                }
+            }
+        }
+
+
         public CPE_RESPUESTA_BE procesarNotaCredito(DocumentoVenta documentoVenta)
         {
             using (var dal = new DocumentoVentaDAL())
@@ -155,7 +205,7 @@ namespace BusinessLayer
                     //Se consulta el estado del documento en SUNAT
                     if (documentoVenta.cPE_RESPUESTA_BE.CODIGO.Equals(Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK))
                     {
-                        dal.UpdateSiguienteNumeroFactura(documentoVenta);
+                        dal.UpdateSiguienteNumeroNotaCredito(documentoVenta);
                         documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
                         consultarEstadoDocumentoVenta(documentoVenta);
                     }
