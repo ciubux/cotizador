@@ -208,7 +208,7 @@ namespace Cotizador.Controllers
 
         public ActionResult Cotizar()
         {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.MANTENIMIENTO_COTIZACION;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoCotizacion;
 
             try
             {
@@ -280,7 +280,7 @@ namespace Cotizador.Controllers
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
             }
-            ViewBag.pagina = Constantes.MANTENIMIENTO_COTIZACION;
+            ViewBag.pagina = Constantes.paginas.MantenimientoCotizacion;
             return View();
         }
 

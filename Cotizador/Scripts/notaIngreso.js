@@ -87,7 +87,7 @@ jQuery(function ($) {
 
     $("#btnLimpiarBusqueda").click(function () {
         $.ajax({
-            url: "/GuiaRemision/CleanBusqueda",
+            url: "/NotaIngreso/CleanBusqueda",
             type: 'POST',
             success: function () {
                 location.reload();
@@ -96,20 +96,20 @@ jQuery(function ($) {
     });
 
     function verificarSiExisteNuevoTransportista() {
-        $('#guiaRemision_transportista option').each(function () {
+        $('#notaIngreso_transportista option').each(function () {
             if ($(this).val() == GUID_EMPTY) {
                 $("#btnAgregarTransportista").attr("disabled", "disabled");
-                $("#guiaRemision_transportista_descripcion").attr('disabled', 'disabled');
-                $("#guiaRemision_transportista_ruc").attr("disabled", "disabled");
-                $("#guiaRemision_transportista_direccion").attr("disabled", "disabled");
-                $("#guiaRemision_transportista_brevete").attr("disabled", "disabled");
+                $("#notaIngreso_transportista_descripcion").attr('disabled', 'disabled');
+                $("#notaIngreso_transportista_ruc").attr("disabled", "disabled");
+                $("#notaIngreso_transportista_direccion").attr("disabled", "disabled");
+                $("#notaIngreso_transportista_brevete").attr("disabled", "disabled");
             }
             else {
                 $("#btnAgregarTransportista").removeAttr("disabled");
-                $("#guiaRemision_transportista_descripcion").removeAttr('disabled');
-                $("#guiaRemision_transportista_ruc").removeAttr("disabled");
-                $("#guiaRemision_transportista_direccion").removeAttr("disabled");
-                $("#guiaRemision_transportista_brevete").removeAttr("disabled");
+                $("#notaIngreso_transportista_descripcion").removeAttr('disabled');
+                $("#notaIngreso_transportista_ruc").removeAttr("disabled");
+                $("#notaIngreso_transportista_direccion").removeAttr("disabled");
+                $("#notaIngreso_transportista_brevete").removeAttr("disabled");
             }
         });
     }
@@ -146,7 +146,7 @@ jQuery(function ($) {
             minTermLength: 5,
             afterTypeDelay: 300,
             cache: false,
-            url: "/GuiaRemision/SearchClientes"
+            url: "/NotaIngreso/SearchClientes"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
@@ -188,7 +188,7 @@ jQuery(function ($) {
         var idCliente = $(this).val();
 
         $.ajax({
-            url: "/GuiaRemision/GetCliente",
+            url: "/NotaIngreso/GetCliente",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -269,17 +269,17 @@ jQuery(function ($) {
 
 
     var fechaTraslado = $("#fechaTrasladotmp").val();
-    $("#guiaRemision_fechaTraslado").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTraslado);
+    $("#notaIngreso_fechaTraslado").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTraslado);
 
     var fechaEmision = $("#fechaEmisiontmp").val();
-    $("#guiaRemision_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmision);
+    $("#notaIngreso_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmision);
 
 
     var fechaTrasladoDesde = $("#fechaTrasladoDesdetmp").val();
-    $("#guiaRemision_fechaTrasladoDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTrasladoDesde);
+    $("#notaIngreso_fechaTrasladoDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTrasladoDesde);
 
     var fechaTrasladoHasta = $("#fechaTrasladoHastatmp").val();
-    $("#guiaRemision_fechaTrasladoHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTrasladoHasta);
+    $("#notaIngreso_fechaTrasladoHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTrasladoHasta);
 
 
     var documentoVenta_fechaEmision = $("#documentoVenta_fechaEmisiontmp").val();
@@ -302,29 +302,29 @@ jQuery(function ($) {
     /* ################################## INICIO CHANGE CONTROLES */
 
     function toggleControlesTransportista() {
-        var idTransportista = $("#guiaRemision_transportista").val();
+        var idTransportista = $("#notaIngreso_transportista").val();
         if (idTransportista == "") {
-            $("#guiaRemision_transportista_descripcion").attr('disabled', 'disabled');
-            $("#guiaRemision_transportista_ruc").attr('disabled', 'disabled');
-            $("#guiaRemision_transportista_direccion").attr('disabled', 'disabled');
-            $("#guiaRemision_transportista_brevete").attr('disabled', 'disabled');
+            $("#notaIngreso_transportista_descripcion").attr('disabled', 'disabled');
+            $("#notaIngreso_transportista_ruc").attr('disabled', 'disabled');
+            $("#notaIngreso_transportista_direccion").attr('disabled', 'disabled');
+            $("#notaIngreso_transportista_brevete").attr('disabled', 'disabled');
             
         }
         else {
             /*  $("#pedido_direccionEntrega_telefono").val($('#pedido_direccionEntrega').find(":selected").attr("telefono"));*/
-            $("#guiaRemision_transportista_descripcion").removeAttr("disabled");
-            $("#guiaRemision_transportista_ruc").removeAttr("disabled");
-            $("#guiaRemision_transportista_direccion").removeAttr("disabled");
-            $("#guiaRemision_transportista_brevete").removeAttr("disabled");
+            $("#notaIngreso_transportista_descripcion").removeAttr("disabled");
+            $("#notaIngreso_transportista_ruc").removeAttr("disabled");
+            $("#notaIngreso_transportista_direccion").removeAttr("disabled");
+            $("#notaIngreso_transportista_brevete").removeAttr("disabled");
         }
     }
 
-    $("#guiaRemision_transportista").change(function () {
+    $("#notaIngreso_transportista").change(function () {
         toggleControlesTransportista();
-        var idTransportista = $("#guiaRemision_transportista").val();
+        var idTransportista = $("#notaIngreso_transportista").val();
 
         $.ajax({
-            url: "/GuiaRemision/ChangeTransportista",
+            url: "/NotaIngreso/ChangeTransportista",
             type: 'POST',
             dataType: "JSON",
             data: {
@@ -332,10 +332,10 @@ jQuery(function ($) {
             },
             success: function (transportista) {
 
-                $("#guiaRemision_transportista_descripcion").val(transportista.descripcion);
-                $("#guiaRemision_transportista_ruc").val(transportista.ruc);
-                $("#guiaRemision_transportista_direccion").val(transportista.direccion);
-                $("#guiaRemision_transportista_brevete").val(transportista.brevete);
+                $("#notaIngreso_transportista_descripcion").val(transportista.descripcion);
+                $("#notaIngreso_transportista_ruc").val(transportista.ruc);
+                $("#notaIngreso_transportista_direccion").val(transportista.direccion);
+                $("#notaIngreso_transportista_brevete").val(transportista.brevete);
             }
         });
     });
@@ -346,7 +346,7 @@ jQuery(function ($) {
 
     function changeInputString(propiedad, valor) {
         $.ajax({
-            url: "/GuiaRemision/ChangeInputString",
+            url: "/NotaIngreso/ChangeInputString",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -356,22 +356,22 @@ jQuery(function ($) {
         });
     }
 
-    $("#guiaRemision_placaVehiculo").change(function () {
-        changeInputString("placaVehiculo", $("#guiaRemision_placaVehiculo").val())
+    $("#notaIngreso_placaVehiculo").change(function () {
+        changeInputString("placaVehiculo", $("#notaIngreso_placaVehiculo").val())
     });
 
     /*
-    $("#guiaRemision_certificadoInscripcion").change(function () {
-        changeInputString("certificadoInscripcion", $("#guiaRemision_certificadoInscripcion").val())
+    $("#notaIngreso_certificadoInscripcion").change(function () {
+        changeInputString("certificadoInscripcion", $("#notaIngreso_certificadoInscripcion").val())
     });*/
 
-    $("#guiaRemision_observaciones").change(function () {
-        changeInputString("observaciones", $("#guiaRemision_observaciones").val())
+    $("#notaIngreso_observaciones").change(function () {
+        changeInputString("observaciones", $("#notaIngreso_observaciones").val())
     });
 
     function changeInputStringTransportista(propiedad, valor) {
         $.ajax({
-            url: "/GuiaRemision/ChangeInputStringTransportista",
+            url: "/NotaIngreso/ChangeInputStringTransportista",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -381,16 +381,16 @@ jQuery(function ($) {
         });
     }
 
-    $("#guiaRemision_transportista_ruc").change(function () {
-        changeInputStringTransportista("ruc", $("#guiaRemision_transportista_ruc").val())
+    $("#notaIngreso_transportista_ruc").change(function () {
+        changeInputStringTransportista("ruc", $("#notaIngreso_transportista_ruc").val())
     });
 
-    $("#guiaRemision_transportista_direccion").change(function () {
-        changeInputStringTransportista("direccion", $("#guiaRemision_transportista_direccion").val())
+    $("#notaIngreso_transportista_direccion").change(function () {
+        changeInputStringTransportista("direccion", $("#notaIngreso_transportista_direccion").val())
     });
 
-    $("#guiaRemision_transportista_brevete").change(function () {
-        changeInputStringTransportista("brevete", $("#guiaRemision_transportista_brevete").val())
+    $("#notaIngreso_transportista_brevete").change(function () {
+        changeInputStringTransportista("brevete", $("#notaIngreso_transportista_brevete").val())
     });
     
 
@@ -401,22 +401,19 @@ jQuery(function ($) {
     ////////CREAR/EDITAR GUIA REMISION
     
 
-    function crearGuiaRemision(continuarLuego) {
-        if (!validarIngresoDatosObligatoriosGuiaRemision())
+    function crearNotaIngreso() {
+      /*  if (!validarIngresoDatosObligatoriosGuiaRemision())
             return false;
-
+        */
         desactivarBotonesCreacionModificacion();
 
         $('body').loadingModal({
-            text: 'Creando Guía Remisión...'
+            text: 'Creando Nota Ingreso...'
         });
         $.ajax({
-            url: "/GuiaRemision/Create",
+            url: "/NotaIngreso/Create",
             type: 'POST',
             dataType: 'JSON',
-            data: {
-                continuarLuego: continuarLuego
-            },
             error: function (detalle) {
                 $('body').loadingModal("hide");
                 activarBotonesCreacionModificacion();
@@ -424,63 +421,24 @@ jQuery(function ($) {
             },
             success: function (resultado) {
 
-
                 $('body').loadingModal('hide')
 
-              
-
-                if (resultado.guiaRemisionValidacion.tipoErrorValidacion == 0) {
+                if (resultado.notaIngresoValidacion.tipoErrorValidacion == 0) {
                     $.alert({
                         //icon: 'fa fa-warning',
                         title: TITLE_EXITO,
-                        content: "La guía de remisión número " + resultado.serieNumeroGuia + " fue creada correctamente.",
+                        content: "La nota de ingreso número " + resultado.serieNumeroNotaIngreso + " fue creada correctamente.",
                         type: 'green',
                         buttons: {
                             OK: function () {
-                                //showMovimientoAlmacen(resultado.idGuiaRemision);
-                                window.location = '/GuiaRemision/Index?idMovimientoAlmacen=' + resultado.idGuiaRemision; }
+                                window.location = '/NotaIngreso/Index?idMovimientoAlmacen=' + resultado.idNotaIngreso; }
                         }
                     });
                 }
                 else {
-                    mostrarMensajeErrorProceso(resultado.guiaRemisionValidacion.tipoErrorValidacionString + " " + resultado.guiaRemisionValidacion.descripcionError);
+                    mostrarMensajeErrorProceso(resultado.notaIngresoValidacion.tipoErrorValidacionString + " " + resultado.notaIngresoValidacion.descripcionError);
                     activarBotonesCreacionModificacion();
                 }
-
-
-                
-/*
-                $('body').loadingModal("hide");
-                activarBotonesCreacionModificacion();
-                $("#numero").val(resultado.codigo);
-
-                if (resultado.error == "DuplicateNumberDocumentException") {
-                    alert("El número de guía de remisión ya fue utilizado, por favor actualice el número de guía, haciendo clic en el botón actualizar.");
-                }
-                else {
-                    alert("La guía de remisión número " + resultado.serieNumeroGuia + " fue creada correctamente.");
-                    showMovimientoAlmacen(resultado.idGuiaRemision);
-                    window.location = '/GuiaRemision/Index?idMovimientoAlmacen=' + resultado.idGuiaRemision;
-                }
-                */
-                /*
-                else if (resultado.estado == ESTADO_APROBADA) {
-                    alert("La guía de remisión número " + resultado.codigo + " fue creada correctamente.");
-                    window.location = '/GuiaRemision/Index';
-                }
-                else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("La guía de remisión número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN.");
-                    window.location = '/GuiaRemision/Index';
-                }
-                else if (resultado.estado == ESTADO_EN_EDICION) {
-                    alert("La guía de remisión " + resultado.codigo + " fue guardada correctamente para seguir editandolo posteriormente.");
-                    window.location = '/GuiaRemision/Index';
-                }
-                else {
-                    alert(MENSAJE_ERROR);
-                    window.location = '/GuiaRemision/Index';
-                }*/
-
             }
         });
     }
@@ -507,79 +465,62 @@ jQuery(function ($) {
 
 
     function desactivarBotonesCreacionModificacion() {
-        $("#btnFinalizarCreacionGuiaRemision").attr('disabled', 'disabled');
-        $("#btnFinalizarEdicionGuiaRemision").attr('disabled', 'disabled');
-        $("#btnContinuarCreandoLuego").attr('disabled', 'disabled');
-        $("#btnCancelarGuiaRemision").attr('disabled', 'disabled');
+        $("#btnFinalizarCreacionNotaIngreso").attr('disabled', 'disabled');
+        $("#btnCancelarNotaIngreso").attr('disabled', 'disabled');
     }
 
     function activarBotonesCreacionModificacion() {
-        $("#btnFinalizarCreacionGuiaRemision").removeAttr('disabled');
-        $("#btnFinalizarEdicionGuiaRemision").removeAttr('disabled');
-        $("#btnContinuarCreandoLuego").removeAttr('disabled');
-        $("#btnCancelarGuiaRemision").removeAttr('disabled');
+        $("#btnFinalizarCreacionNotaIngreso").removeAttr('disabled');
+        $("#btnCancelarNotaIngreso").removeAttr('disabled');
     }
 
 
-    $("#btnFinalizarCreacionGuiaRemision").click(function () {
-        crearGuiaRemision(0);
+    $("#btnFinalizarCreacionNotaIngreso").click(function () {
+        crearNotaIngreso();
     });
-
-    $("#btnContinuarCreandoLuego").click(function () {
-        crearGuiaRemision(1);
-    });
-
-    $("#btnFinalizarEdicionGuiaRemision").click(function () {
-        editarGuiaRemision(0);
-    });
-
-    $("#btnContinuarEditandoLuego").click(function () {
-        editarGuiaRemision(1);
-    });
-
 
 
     function validarIngresoDatosObligatoriosGuiaRemision() {
              
-        if ($("#guiaRemision_transportista").val() == null || $("#guiaRemision_transportista").val().trim() == "") {
+        if ($("#notaIngreso_transportista").val() == null || $("#notaIngreso_transportista").val().trim() == "") {
             alert('Debe seleccionar el transportista.');
-            $('#guiaRemision_transportista').focus();
+            $('#notaIngreso_transportista').focus();
             return false;
         }
 
-        if ($("#guiaRemision_transportista_descripcion").val() == null || $("#guiaRemision_transportista_descripcion").val().trim() == "") {
+        if ($("#notaIngreso_transportista_descripcion").val() == null || $("#notaIngreso_transportista_descripcion").val().trim() == "") {
             alert('Debe ingresar el nombre del transportista.');
-            $('#guiaRemision_transportista_descripcion').focus();
+            $('#notaIngreso_transportista_descripcion').focus();
             return false;
         }
 
-        if ($("#guiaRemision_transportista_ruc").val() == null || $("#guiaRemision_transportista_ruc").val().trim() == "") {
+        if ($("#notaIngreso_transportista_ruc").val() == null || $("#notaIngreso_transportista_ruc").val().trim() == "") {
             alert('Debe ingresar el ruc del transportista.');
-            $('#guiaRemision_transportista_ruc').focus();
+            $('#notaIngreso_transportista_ruc').focus();
             return false;
         }
 
-        if ($("#guiaRemision_transportista_brevete").val() == null || $("#guiaRemision_transportista_brevete").val().trim() == "") {
+        if ($("#notaIngreso_transportista_brevete").val() == null || $("#notaIngreso_transportista_brevete").val().trim() == "") {
             alert('Debe ingresar el brevete del transportista.');
-            $('#guiaRemision_transportista_brevete').focus();
+            $('#notaIngreso_transportista_brevete').focus();
             return false;
         }
 
-        if ($("#guiaRemision_transportista_direccion").val() == null || $("#guiaRemision_transportista_direccion").val().trim() == "") {
+        if ($("#notaIngreso_transportista_direccion").val() == null || $("#notaIngreso_transportista_direccion").val().trim() == "") {
             alert('Debe ingresar la dirección del transportista.');
-            $('#guiaRemision_transportista_direccion').focus();
+            $('#notaIngreso_transportista_direccion').focus();
             return false;
         }
 
-        if ($("#guiaRemision_placaVehiculo").val() == null || $("#guiaRemision_placaVehiculo").val().trim() == "") {
+        if ($("#notaIngreso_placaVehiculo").val() == null || $("#notaIngreso_placaVehiculo").val().trim() == "") {
             alert('Debe ingresar la placa del vehículo.');
-            $('#guiaRemision_placaVehiculo').focus();
+            $('#notaIngreso_placaVehiculo').focus();
             return false;
         }
         /*
-        if ($("#guiaRemision_certificadoInscripcion").val() == null || $("#guiaRemision_certificadoInscripcion").val().trim() == "") {
+        if ($("#notaIngreso_certificadoInscripcion").val() == null || $("#notaIngreso_certificadoInscripcion").val().trim() == "") {
             alert('Debe ingresar el certificado de inscripción.');
-            $('#guiaRemision_certificadoInscripcion').focus();
+            $('#notaIngreso_certificadoInscripcion').focus();
             return false;
         }*/
 
@@ -592,7 +533,7 @@ jQuery(function ($) {
         });
 
         if (contador > 10) {
-            alert('La guía de remisión debe contener 10 productos como máximo, por favor marque el check de "Atención Parcial", indique que NO es la última atención y modifique la "Cantidad por Atender" a 0 a algunos productos (los productos que tengan 0 no se considerarán en la guía).');
+            alert('La nota de ingreso debe contener 10 productos como máximo, por favor marque el check de "Atención Parcial", indique que NO es la última atención y modifique la "Cantidad por Atender" a 0 a algunos productos (los productos que tengan 0 no se considerarán en la guía).');
             return false;
         }
 
@@ -633,7 +574,7 @@ jQuery(function ($) {
 
 
         $.ajax({
-            url: "/GuiaRemision/UpdateMarcaNoEntregado",
+            url: "/NotaIngreso/UpdateMarcaNoEntregado",
             data: {
                 idMovimientoAlmacen: idMovimientoAlmacen,
                 noEntregado: noEntregado
@@ -667,7 +608,7 @@ jQuery(function ($) {
 
     function showMovimientoAlmacen(idMovimientoAlmacen) {
         $.ajax({
-            url: "/GuiaRemision/Show",
+            url: "/NotaIngreso/Show",
             data: {
                 idMovimientoAlmacen: idMovimientoAlmacen
             },
@@ -689,48 +630,48 @@ jQuery(function ($) {
 
                 $("#idPedido").val(guiaRemision.pedido.idPedido);
                 $("#idMovimientoAlmacen").val(guiaRemision.idMovimientoAlmacen);
-                $("#ver_guiaRemision_ciudadOrigen_nombre").html(guiaRemision.ciudadOrigen.nombre);
-                $("#ver_guiaRemision_ciudadOrigen_direccionPuntoPartida").html(guiaRemision.ciudadOrigen.direccionPuntoPartida);
+                $("#ver_notaIngreso_ciudadOrigen_nombre").html(guiaRemision.ciudadOrigen.nombre);
+                $("#ver_notaIngreso_ciudadOrigen_direccionPuntoPartida").html(guiaRemision.ciudadOrigen.direccionPuntoPartida);
 
-                $("#ver_guiaRemision_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10)));
-                $("#ver_guiaRemision_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
-                $("#ver_guiaRemision_serieNumeroDocumento").html(guiaRemision.serieNumeroGuia);
+                $("#ver_notaIngreso_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10)));
+                $("#ver_notaIngreso_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
+                $("#ver_notaIngreso_serieNumeroDocumento").html(guiaRemision.serieNumeroGuia);
 
-                $("#facturarver_guiaRemision_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10)));
-                $("#facturarver_guiaRemision_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
-                $("#facturarver_guiaRemision_serieNumeroDocumento").html(guiaRemision.serieNumeroGuia);
+                $("#facturarver_notaIngreso_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10)));
+                $("#facturarver_notaIngreso_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
+                $("#facturarver_notaIngreso_serieNumeroDocumento").html(guiaRemision.serieNumeroGuia);
 
 
-                //   $("#ver_guiaRemision_numeroDocumento").html(guiaRemision.numeroDocumentoString);
-                $("#ver_guiaRemision_pedido_numeroPedido").html(guiaRemision.pedido.numeroPedidoString);
-                $("#ver_guiaRemision_pedido_cliente").html(guiaRemision.pedido.cliente.razonSocial);
-                $("#ver_guiaRemision_pedido_numeroReferenciaCliente").html(guiaRemision.pedido.numeroReferenciaCliente);
-                $("#ver_guiaRemision_motivoTraslado").html(guiaRemision.motivoTrasladoString);
-                $("#ver_guiaRemision_atencionParcial").html(guiaRemision.atencionParcial);
-                $("#ver_guiaRemision_pedido_ubigeoEntrega").html(guiaRemision.pedido.ubigeoEntrega.ToString);
-                $("#ver_guiaRemision_pedido_direccionEntrega").html(guiaRemision.pedido.direccionEntrega.descripcion);
-                $("#ver_guiaRemision_transportista_descripcion").html(guiaRemision.transportista.descripcion);
-                $("#ver_guiaRemision_transportista_ruc").html(guiaRemision.transportista.ruc);
-                $("#ver_guiaRemision_transportista_brevete").html(guiaRemision.transportista.brevete);
-                $("#ver_guiaRemision_transportista_direccion").html(guiaRemision.transportista.direccion);
-                $("#ver_guiaRemision_placaVehiculo").html(guiaRemision.placaVehiculo);
-                //$("#ver_guiaRemision_certificadoInscripcion").html(guiaRemision.certificadoInscripcion);
-                $("#ver_guiaRemision_observaciones").html(guiaRemision.observaciones);
+                //   $("#ver_notaIngreso_numeroDocumento").html(guiaRemision.numeroDocumentoString);
+                $("#ver_notaIngreso_pedido_numeroPedido").html(guiaRemision.pedido.numeroPedidoString);
+                $("#ver_notaIngreso_pedido_cliente").html(guiaRemision.pedido.cliente.razonSocial);
+                $("#ver_notaIngreso_pedido_numeroReferenciaCliente").html(guiaRemision.pedido.numeroReferenciaCliente);
+                $("#ver_notaIngreso_motivoTraslado").html(guiaRemision.motivoTrasladoString);
+                $("#ver_notaIngreso_atencionParcial").html(guiaRemision.atencionParcial);
+                $("#ver_notaIngreso_pedido_ubigeoEntrega").html(guiaRemision.pedido.ubigeoEntrega.ToString);
+                $("#ver_notaIngreso_pedido_direccionEntrega").html(guiaRemision.pedido.direccionEntrega.descripcion);
+                $("#ver_notaIngreso_transportista_descripcion").html(guiaRemision.transportista.descripcion);
+                $("#ver_notaIngreso_transportista_ruc").html(guiaRemision.transportista.ruc);
+                $("#ver_notaIngreso_transportista_brevete").html(guiaRemision.transportista.brevete);
+                $("#ver_notaIngreso_transportista_direccion").html(guiaRemision.transportista.direccion);
+                $("#ver_notaIngreso_placaVehiculo").html(guiaRemision.placaVehiculo);
+                //$("#ver_notaIngreso_certificadoInscripcion").html(guiaRemision.certificadoInscripcion);
+                $("#ver_notaIngreso_observaciones").html(guiaRemision.observaciones);
 
-                $("#ver_guiaRemision_estadoDescripcion").html(guiaRemision.estadoDescripcion);
+                $("#ver_notaIngreso_estadoDescripcion").html(guiaRemision.estadoDescripcion);
                 if (guiaRemision.estaAnulado == 1) {
-                    $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:red")
+                    $("#ver_notaIngreso_estadoDescripcion").attr("style", "color:red")
                     $("#btnAnularGuiaRemision").hide();
                     $("#btnImprimirGuiaRemision").hide();
                     $("#btnFacturarGuiaRemision").hide();
                 }
                 else {
-                    $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:black")
+                    $("#ver_notaIngreso_estadoDescripcion").attr("style", "color:black")
                     $("#btnAnularGuiaRemision").show();
                     $("#btnImprimirGuiaRemision").show();
 
                     if (guiaRemision.estaFacturado == 1) {
-                        $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:green")
+                        $("#ver_notaIngreso_estadoDescripcion").attr("style", "color:green")
                         $("#btnAnularGuiaRemision").hide();
                         $("#btnFacturarGuiaRemision").hide();
                     } else {
@@ -747,16 +688,16 @@ jQuery(function ($) {
 
 
                 if (guiaRemision.atencionParcial) {
-                    $("#ver_guiaRemision_atencionParcial").html("Atención Parcial");
+                    $("#ver_notaIngreso_atencionParcial").html("Atención Parcial");
                   /*  if (guiaRemision.ultimaAtencionParcial) {
-                        $("#ver_guiaRemision_atencionParcial").html("Atención Parcial");
+                        $("#ver_notaIngreso_atencionParcial").html("Atención Parcial");
                     }
                     else {
-                        $("#ver_guiaRemision_atencionParcial").html("Última Atención Parcial");
+                        $("#ver_notaIngreso_atencionParcial").html("Última Atención Parcial");
                     }*/
                 }
                 else {
-                    $("#ver_guiaRemision_atencionParcial").html("Atención Final");
+                    $("#ver_notaIngreso_atencionParcial").html("Atención Final");
                 }
 
 
@@ -818,9 +759,9 @@ jQuery(function ($) {
 
     
 
-    $("#btnCancelarGuiaRemision").click(function () {
+    $("#btnCancelarNotaIngreso").click(function () {
         if (confirm(MENSAJE_CANCELAR_EDICION)) {
-            window.location = '/GuiaRemision/CancelarCreacionGuiaRemision';
+            window.location = '/NotaIngreso/CancelarCreacionGuiaRemision';
         }
     })
 
@@ -850,11 +791,6 @@ jQuery(function ($) {
     }
 
    
-
-
-    $("#btnImprimirGuiaRemision").click(function () {
-        window.open("/GuiaRemision/Print");
-    });
 
 
     $("#btnFacturarGuiaRemision").click(function () {
@@ -1015,15 +951,6 @@ jQuery(function ($) {
                 $("#documentoVenta_fechaVencimiento").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
                 $("#documentoVenta_horaEmision").val(getHoraActual());
 
-
-            /*    var guiaRemisionList = pedido.guiaRemisionList;
-                for (var j = 0; j < guiaRemisionList.length; j++) {
-                    $("#documentoVenta_fechaEmision").val(invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
-                   // $("#documentoVenta_fechaEmision").val("06/05/2018");
-                    $("#documentoVenta_fechaVencimiento").val(invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
-                    $("#documentoVenta_horaEmision").val(getHoraActual());
-                    break;
-                }*/
 
 
                 $("#tipoPago").val(pedido.cliente.tipoPagoFactura);
@@ -1575,7 +1502,7 @@ jQuery(function ($) {
         var comentarioAnulado = $("#comentarioAnulado").val();
         $("#btnAceptarAnulacion").attr("disabled","disabled");
         $.ajax({
-            url: "/GuiaRemision/Anular",
+            url: "/NotaIngreso/Anular",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1587,12 +1514,12 @@ jQuery(function ($) {
             },
             success: function (resultado) {
                 $("#btnAceptarAnulacion").removeAttr("disabled");
-                alert("La guía de remisión número " + resultado.serieNumeroGuia + " fue anulada correctamente.");
-                window.location = '/GuiaRemision/Index';
+                alert("La nota de ingreso número " + resultado.serieNumeroGuia + " fue anulada correctamente.");
+                window.location = '/NotaIngreso/Index';
             }
         });
 
-       // window.open("GuiaRemision/Print");
+       // window.open("NotaIngreso/Print");
     });
 
 
@@ -1819,7 +1746,7 @@ jQuery(function ($) {
     $(document).on('click', "button.footable-show", function () {
 
         /*Si no es una atención parcial no se debe poder editar*/
-        if (!$('#guiaRemision_atencionParcial').prop('checked'))
+        if (!$('#notaIngreso_atencionParcial').prop('checked'))
         {
 
 
@@ -1892,7 +1819,7 @@ jQuery(function ($) {
     
         
         $.ajax({
-            url: "/GuiaRemision/ChangeDetalle",
+            url: "/NotaIngreso/ChangeDetalle",
             type: 'POST',
             data: json,
             dataType: 'json',
@@ -1923,73 +1850,6 @@ jQuery(function ($) {
         if (cantidad > cantidadPedido) {
             $("." + idproducto + ".detincantidad").val(cantidadPedido);
         }
-        /*
-
-
-
-        //Se calculo el precio con descuento 
-        var precio = Number((precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadDecimales));
-        //Se asigna el precio calculculado en la columna precio
-        $("." + idproducto + ".detprecio").html(precio);
-        //se obtiene la cantidad
-        var cantidad = Number($("." + idproducto + ".detincantidad").val());
-        //Se define el precio Unitario 
-        var precioUnitario = flete + precio
-        $("." + idproducto + ".detprecioUnitario").html(precioUnitario.toFixed(cantidadDecimales));
-        //Se calcula el subtotal
-        var subTotal = precioUnitario * cantidad;
-        //Se asigna el subtotal 
-        $("." + idproducto + ".detsubtotal").html(subTotal.toFixed(cantidadDecimales));
-        //Se calcula el margen
-        var costo = Number($("." + idproducto + ".detcostoLista").html());
-        var margen = (1 - (Number(costo) / Number(precio)))*100;
-        //Se asigna el margen 
-        $("." + idproducto + ".detmargen").text(margen.toFixed(1)+ " %");
-
-        var precioNetoAnterior = Number($("." + idproducto + ".detprecioNetoAnterior").html());        
-        var varprecioNetoAnterior = (precio / precioNetoAnterior - 1)*100;
-        $("." + idproducto + ".detvarprecioNetoAnterior").text(varprecioNetoAnterior.toFixed(1));
-
-        var costoAnterior = Number($("." + idproducto + ".detcostoAnterior").text());       
-        var varcosto = (costo / costoAnterior - 1)*100;
-        $("." + idproducto + ".detvarCosto").text(varcosto.toFixed(1) + " %");
-
-
-        //Se actualiza el subtotal de la cotizacion
-
-        var $j_object = $("td.detcantidad");
-
-        var subTotal = 0;
-        var igv = 0;
-        var total = 0;
-       
-        $.each($j_object, function (key, value) {
-            var arrId = value.getAttribute("class").split(" ");
-            var precioUnitario = Number($("." + arrId[0] + ".detprecioUnitario").text());
-            var cantidad = Number($("." + arrId[0] + ".detincantidad").val());
-            subTotal = subTotal + Number(Number((precioUnitario * cantidad)).toFixed(cantidadDecimales));
-        });
-
-        
-
-        var incluidoIGV = $("input[name=igv]:checked").val();
-        //Si no se etsá incluyendo IGV se le agrega
-        if (incluidoIGV == "0") {
-            igv = Number((subTotal * IGV).toFixed(cantidadDecimales));
-            total = subTotal + (igv);
-        }
-        //Si se está incluyendo IGV entonces se 
-        else
-        {
-            total = subTotal;
-            subTotal = Number((subTotal / (1 + IGV)).toFixed(cantidadDecimales));
-            igv = total - subTotal;
-        }
-
-        $('#montoSubTotal').html(subTotal.toFixed(cantidadDecimales));
-        $('#montoIGV').html(igv.toFixed(cantidadDecimales));
-        $('#montoTotal').html(total.toFixed(cantidadDecimales));
-        */
     };
 
 
@@ -2004,12 +1864,12 @@ jQuery(function ($) {
 
         var idCiudad = $("#idCiudad").val();
         var idCliente = $("#idCliente").val();
-        var fechaTrasladoDesde = $("#guiaRemision_fechaTrasladoDesde").val();
-        var fechaTrasladoHasta = $("#guiaRemision_fechaTrasladoHasta").val();
+        var fechaTrasladoDesde = $("#notaIngreso_fechaTrasladoDesde").val();
+        var fechaTrasladoHasta = $("#notaIngreso_fechaTrasladoHasta").val();
 
 
         $.ajax({
-            url: "/GuiaRemision/SearchGuiasRemisionGrupoCliente",
+            url: "/NotaIngreso/SearchGuiasRemisionGrupoCliente",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -2073,7 +1933,7 @@ jQuery(function ($) {
 
     $("#btnLimpiarBusquedaGuiasFacturaConsolidada").click(function () {
         $.ajax({
-            url: "/GuiaRemision/CleanBusquedaFacturaConsolidada",
+            url: "/NotaIngreso/CleanBusquedaFacturaConsolidada",
             type: 'POST',
             success: function () {
                 location.reload();
@@ -2089,7 +1949,7 @@ jQuery(function ($) {
         var miWindow;
         //Se debe crear la venta Consolidada y abrir la pantalla de edición
         $.ajax({
-            url: "/GuiaRemision/generarVentaConsolidada",
+            url: "/NotaIngreso/generarVentaConsolidada",
             type: 'POST',
             data: json,
             dataType: 'json',
@@ -2145,7 +2005,7 @@ jQuery(function ($) {
         });
 
         if (count == 0) {
-            alert("Debe seleccionar al menos una guía de remisión.");
+            alert("Debe seleccionar al menos una nota de ingreso.");
             return false;
         }
 
@@ -2154,11 +2014,11 @@ jQuery(function ($) {
 
         
 
-//        $("#ver_guiaRemision_list").html(ver_guiaRemision_list);
+//        $("#ver_notaIngreso_list").html(ver_notaIngreso_list);
 
 
         $.ajax({
-            url: "/GuiaRemision/consolidarAtenciones",
+            url: "/NotaIngreso/consolidarAtenciones",
             type: 'POST',
             data: json,
             dataType: 'json',
@@ -2215,31 +2075,19 @@ jQuery(function ($) {
 
 
     $("#btnBusqueda").click(function () {
-     /*   var idCiudad = $("#idCiudad").val();
-        if ((idCiudad == "" || idCiudad == GUID_EMPTY) && $("#guiaRemision_numeroDocumento").val() != "") {
-            $("#idCiudad").focus();
-            $.alert({
-                title: TITLE_MENSAJE_BUSQUEDA,
-                content: 'Para realizar una búsqueda con número de guía debe indicar la sede MP.',
-                buttons: {
-                    OK: function () { }
-                }
-            });
-            return false;
-        }*/
         //sede MP
         var idCiudad = $("#idCiudad").val();
         var idCliente = $("#idCliente").val(); 
 
-        var numeroDocumento = $("#guiaRemision_numeroDocumento").val();
-        var numeroPedido = $("#guiaRemision_pedido_numeroPedido").val();
-        var fechaTrasladoDesde = $("#guiaRemision_fechaTrasladoDesde").val();
-        var fechaTrasladoHasta = $("#guiaRemision_fechaTrasladoHasta").val();
+        var numeroDocumento = $("#notaIngreso_numeroDocumento").val();
+        var numeroPedido = $("#notaIngreso_pedido_numeroPedido").val();
+        var fechaTrasladoDesde = $("#notaIngreso_fechaTrasladoDesde").val();
+        var fechaTrasladoHasta = $("#notaIngreso_fechaTrasladoHasta").val();
         //var estado = $("#estado").val();
 
         $("#btnBusqueda").attr("disabled", "disabled");
         $.ajax({
-            url: "/GuiaRemision/Search",
+            url: "/NotaIngreso/Search",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -2333,10 +2181,10 @@ jQuery(function ($) {
 
 
 
-    $("input[name=guiaRemision_estaAnulado]").on("click", function () {
-        var estaAnulado = $("input[name=guiaRemision_estaAnulado]:checked").val();
+    $("input[name=notaIngreso_estaAnulado]").on("click", function () {
+        var estaAnulado = $("input[name=notaIngreso_estaAnulado]:checked").val();
         $.ajax({
-            url: "/GuiaRemision/ChangeEstaAnulado",
+            url: "/NotaIngreso/ChangeEstaAnulado",
             type: 'POST',
             data: {
                 estaAnulado: estaAnulado
@@ -2346,10 +2194,10 @@ jQuery(function ($) {
         });
     });
 
-    $("input[name=guiaRemision_estaFacturado]").on("click", function () {
-        var estaFacturado = $("input[name=guiaRemision_estaFacturado]:checked").val();
+    $("input[name=notaIngreso_estaFacturado]").on("click", function () {
+        var estaFacturado = $("input[name=notaIngreso_estaFacturado]:checked").val();
         $.ajax({
-            url: "/GuiaRemision/ChangeEstaFacturado",
+            url: "/NotaIngreso/ChangeEstaFacturado",
             type: 'POST',
             data: {
                 estaFacturado: estaFacturado
@@ -2360,10 +2208,10 @@ jQuery(function ($) {
     });
 
 
-    $("#guiaRemision_fechaTraslado").change(function () {
-        var fechaTraslado = $("#guiaRemision_fechaTraslado").val();
+    $("#notaIngreso_fechaTraslado").change(function () {
+        var fechaTraslado = $("#notaIngreso_fechaTraslado").val();
         $.ajax({
-            url: "/GuiaRemision/ChangefechaTraslado",
+            url: "/NotaIngreso/ChangefechaTraslado",
             type: 'POST',
             data: {
                 fechaTraslado: fechaTraslado
@@ -2373,10 +2221,10 @@ jQuery(function ($) {
         });
     });
 
-    $("#guiaRemision_fechaEmision").change(function () {
-        var fechaEmision = $("#guiaRemision_fechaEmision").val();
+    $("#notaIngreso_fechaEmision").change(function () {
+        var fechaEmision = $("#notaIngreso_fechaEmision").val();
         $.ajax({
-            url: "/GuiaRemision/ChangefechaEmision",
+            url: "/NotaIngreso/ChangefechaEmision",
             type: 'POST',
             data: {
                 fechaEmision: fechaEmision
@@ -2388,10 +2236,10 @@ jQuery(function ($) {
 
 
 
-    $("#guiaRemision_fechaTrasladoDesde").change(function () {
-        var fechaTrasladoDesde = $("#guiaRemision_fechaTrasladoDesde").val();
+    $("#notaIngreso_fechaTrasladoDesde").change(function () {
+        var fechaTrasladoDesde = $("#notaIngreso_fechaTrasladoDesde").val();
         $.ajax({
-            url: "/GuiaRemision/ChangefechaTrasladoDesde",
+            url: "/NotaIngreso/ChangefechaTrasladoDesde",
             type: 'POST',
             data: {
                 fechaTrasladoDesde: fechaTrasladoDesde
@@ -2401,10 +2249,10 @@ jQuery(function ($) {
         });
     });
 
-    $("#guiaRemision_fechaTrasladoHasta").change(function () {
-        var fechaTrasladoHasta = $("#guiaRemision_fechaTrasladoHasta").val();
+    $("#notaIngreso_fechaTrasladoHasta").change(function () {
+        var fechaTrasladoHasta = $("#notaIngreso_fechaTrasladoHasta").val();
         $.ajax({
-            url: "/GuiaRemision/ChangefechaTrasladoHasta",
+            url: "/NotaIngreso/ChangefechaTrasladoHasta",
             type: 'POST',
             data: {
                 fechaTrasladoHasta: fechaTrasladoHasta
@@ -2419,7 +2267,7 @@ jQuery(function ($) {
         var idCiudad = $("#idCiudad").val();
 
         $.ajax({
-            url: "/GuiaRemision/ChangeIdCiudad",
+            url: "/NotaIngreso/ChangeIdCiudad",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -2431,7 +2279,7 @@ jQuery(function ($) {
             },
             success: function (ciudad) {
 
-                $("#guiaRemision_ciudadOrigen_direccionPuntoPartida").val(ciudad.direccionPuntoPartida);
+                $("#notaIngreso_ciudadOrigen_direccionPuntoPartida").val(ciudad.direccionPuntoPartida);
 
             }
         });
@@ -2472,7 +2320,7 @@ jQuery(function ($) {
         }
 
         $.ajax({
-            url: "/GuiaRemision/ChangeUltimaAtencionParcial",
+            url: "/NotaIngreso/ChangeUltimaAtencionParcial",
             type: 'POST',
             data: {
                 ultimaAtencionParcial: ultimaAtencionParcial
@@ -2485,11 +2333,11 @@ jQuery(function ($) {
 
 
 
-    $("#guiaRemision_atencionParcial").change(function () {
+    $("#notaIngreso_atencionParcial").change(function () {
         
         var atencionParcial = 1;
 
-        if (!$('#guiaRemision_atencionParcial').prop('checked')) {
+        if (!$('#notaIngreso_atencionParcial').prop('checked')) {
             //  $("#descripcionUltimaAtencionParcial").html("");
             atencionParcial = 0;
         //    changeUltimaAtencionParcial(0);
@@ -2500,15 +2348,15 @@ jQuery(function ($) {
 
    
         
-        var estado = $("#guiaRemision_atencionParcial").val();
+        var estado = $("#notaIngreso_atencionParcial").val();
         $.ajax({
-            url: "/GuiaRemision/ChangeAtencionParcial",
+            url: "/NotaIngreso/ChangeAtencionParcial",
             type: 'POST',
             data: {
                 atencionParcial: atencionParcial
             },
             success: function () {
-               /* if (!$('#guiaRemision_atencionParcial').prop('checked')) {
+               /* if (!$('#notaIngreso_atencionParcial').prop('checked')) {
                     location.reload();
                 }*/
                 location.reload();
@@ -2517,7 +2365,7 @@ jQuery(function ($) {
 
 
      /*   
-        if ($('#guiaRemision_atencionParcial').prop('checked')) {
+        if ($('#notaIngreso_atencionParcial').prop('checked')) {
             ConfirmDialogAtencionParcial("¿Está atención parcial finaliza la atención del pedido?")
         }*/
        
@@ -2560,7 +2408,7 @@ jQuery(function ($) {
         var telefono = $("#transportista_telefono").val();
 
         $.ajax({
-            url: "/GuiaRemision/CreateTransportistaTemporal",
+            url: "/NotaIngreso/CreateTransportistaTemporal",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -2572,16 +2420,16 @@ jQuery(function ($) {
             error: function (detalle) { alert("Se generó un error al intentar crear el transportista."); },
             success: function (transportista) {
 
-                $('#guiaRemision_transportista').append($('<option>', {
+                $('#notaIngreso_transportista').append($('<option>', {
                     value: transportista.idTransportista,
                     text: transportista.descripcion
                 }));
-                $('#guiaRemision_transportista').val(transportista.idTransportista);
+                $('#notaIngreso_transportista').val(transportista.idTransportista);
 
-                $('#guiaRemision_transportista_descripcion').val(transportista.descripcion);
-                $('#guiaRemision_transportista_direccion').val(transportista.direccion);
-                $('#guiaRemision_transportista_ruc').val(transportista.ruc);
-                $('#guiaRemision_transportista_telefono').val(transportista.telefono);
+                $('#notaIngreso_transportista_descripcion').val(transportista.descripcion);
+                $('#notaIngreso_transportista_direccion').val(transportista.direccion);
+                $('#notaIngreso_transportista_ruc').val(transportista.ruc);
+                $('#notaIngreso_transportista_telefono').val(transportista.telefono);
                 verificarSiExisteNuevoTransportista();
                 toggleControlesTransportista();
             }
@@ -2621,54 +2469,27 @@ jQuery(function ($) {
 
 
 
-    $(document).on('click', "a.descargarDesdeVenta", function () {
 
-        //var arrrayClass = event.target.getAttribute("class").split(" ");
-        var nombreArchivo = event.target.innerHTML;
-        //var numeroPedido = arrrayClass[1];
 
-        $.ajax({
-            url: "/Venta/Descargar",
-            type: 'POST',
-            //  enctype: 'multipart/form-data',
-            dataType: 'JSON',
-            //  contentType: 'multipart/form-data',
-            data: { nombreArchivo: nombreArchivo },
-            error: function (detalle) {
-            },
-            success: function (pedidoAdjunto) {
-                var sampleArr = base64ToArrayBuffer(pedidoAdjunto.adjunto);
-                saveByteArray(nombreArchivo, sampleArr);
-            }
-        });
-    });
 
-    $(document).on('click', "a.descargar", function () {
 
-        //var arrrayClass = event.target.getAttribute("class").split(" ");
-        var nombreArchivo = event.target.innerHTML;
-        //var numeroPedido = arrrayClass[1];
+    $("#notaIngreso_serieDocumento").change(function () {
+
+        var serieDocumento = $(this).val();
 
         $.ajax({
-            url: "/GuiaRemision/Descargar",
+            url: "/NotaIngreso/UpdateSerieDocumento",
             type: 'POST',
-            //  enctype: 'multipart/form-data',
-            dataType: 'JSON',
-            //  contentType: 'multipart/form-data',
-            data: { nombreArchivo: nombreArchivo },
-            error: function (detalle) {
+       //     dataType: 'JSON',
+            data: {
+                serieDocumento: serieDocumento
             },
-            success: function (pedidoAdjunto) {
-                var sampleArr = base64ToArrayBuffer(pedidoAdjunto.adjunto);
-                saveByteArray(nombreArchivo, sampleArr);
+            success: function (siguienteNumeroNotaIngreso) {
+                $("#notaIngreso_numeroDocumentoString").val(siguienteNumeroNotaIngreso);
             }
         });
+
     });
-
-
-
-   
-
 
 
 });

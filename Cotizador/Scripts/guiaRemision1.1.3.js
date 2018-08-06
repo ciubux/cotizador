@@ -705,7 +705,7 @@ jQuery(function ($) {
                     }
                 }
 
-                if (guiaRemision.motivoTraslado != 86)
+                if (guiaRemision.motivoTraslado != 86 && guiaRemision.motivoTraslado != 71)
                     $("#btnFacturarGuiaRemision").hide();
 
 

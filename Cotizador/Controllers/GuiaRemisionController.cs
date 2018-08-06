@@ -90,7 +90,7 @@ namespace Cotizador.Controllers
         {
 
 
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.BUSQUEDA_GUIA_REMISION;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -111,7 +111,7 @@ namespace Cotizador.Controllers
 
             ViewBag.guiaRemision = guiaRemisionSearch;
             ViewBag.guiaRemisionList = this.Session[Constantes.VAR_SESSION_GUIA_LISTA];
-            ViewBag.pagina = Constantes.BUSQUEDA_GUIA_REMISION;
+            ViewBag.pagina = Constantes.paginas.BusquedaGuiasRemision;
 
             ViewBag.fechaTrasladoDesde = guiaRemisionSearch.fechaTrasladoDesde.ToString(Constantes.formatoFecha);
             ViewBag.fechaTrasladoHasta = guiaRemisionSearch.fechaTrasladoHasta.ToString(Constantes.formatoFecha);
@@ -436,7 +436,7 @@ namespace Cotizador.Controllers
         public ActionResult Guiar()
         {
 
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.MANTENIMIENTO_GUIA_REMISION;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -453,7 +453,7 @@ namespace Cotizador.Controllers
 
 
 
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.MANTENIMIENTO_GUIA_REMISION;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
             try
             {
                 if (this.Session[Constantes.VAR_SESSION_GUIA] == null)
@@ -475,14 +475,14 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            ViewBag.pagina = Constantes.MANTENIMIENTO_GUIA_REMISION;
+            ViewBag.pagina = Constantes.paginas.MantenimientoGuiaRemision;
             return View();
         }
 
 
         public String Create()
         {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.MANTENIMIENTO_GUIA_REMISION;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
 
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -500,7 +500,7 @@ namespace Cotizador.Controllers
             }
             catch (DuplicateNumberDocumentException ex)
             {
-                error = "DuplicateNumberDocumentException";
+                error = ex.Message;
             }
 
             long numeroGuiaRemision = guiaRemision.numero;
@@ -508,14 +508,7 @@ namespace Cotizador.Controllers
             String serieNumeroGuia = guiaRemision.serieNumeroGuia;
 
             int estado = (int)guiaRemision.seguimientoMovimientoAlmacenSalida.estado;
-            /*if (continuarLuego == 1)
-            {
-                SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
-                estado = (int)estadosSeguimientoPedido;
-                String observacion = "Se continuará editando luego";
-               // updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
-            }
-            guiaRemision = null;*/
+
             String jsonGuiaRemisionValidacion = JsonConvert.SerializeObject(guiaRemision.guiaRemisionValidacion);
 
             if(guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
@@ -523,10 +516,6 @@ namespace Cotizador.Controllers
 
                 this.GuiaRemisionSession = null;
             }
-            //usuarioBL.updatePedidoSerializado(usuario, null);
-            
-
-        
 
             String resultado = "{ \"serieNumeroGuia\":\"" + serieNumeroGuia + "\", \"idGuiaRemision\":\"" + idGuiaRemision + "\", \"error\":\"" + error + "\",     \"guiaRemisionValidacion\": " + jsonGuiaRemisionValidacion + "  }";
             return resultado;

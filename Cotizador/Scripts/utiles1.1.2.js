@@ -1,4 +1,72 @@
 ﻿
+
+//CONSTANTES POR DEFECTO
+var cantidadDecimales = 2;
+var cantidadCuatroDecimales = 4;
+var IGV = 0.18;
+var SIMBOLO_SOL = "S/";
+var MILISEGUNDOS_AUTOGUARDADO = 5000;
+var VARIACION_PRECIO_ITEM_PEDIDO = 0.01;
+
+
+
+
+
+/**
+ * Constantes para toma de pedidos
+ */
+//Estados para búsqueda de Pedidos
+
+
+var ESTADO_PENDIENTE_APROBACION = 0;
+var ESTADO_INGRESADO = 1;
+var ESTADO_DENEGADO = 2;
+var ESTADO_PROGRAMADO = 3;
+var ESTADO_ATENDIDO = 4;
+var ESTADO_ATENDIDO_PARCIALMENTE = 5;
+var ESTADO_EN_EDICION = 6;
+var ESTADO_ELIMINADO = 7;
+var ESTADO_FACTURADO = 8;
+var ESTADO_FACTURADO_PARCIALMENTE = 9;
+
+
+//Etiquetas de estadps para búsqueda de Pedidos
+var ESTADO_PENDIENTE_APROBACION_STR = "Pendiente de Aprobación de Ingreso";
+var ESTADO_INGRESADO_STR = "Pedido Ingresado";
+var ESTADO_DENEGADO_STR = "Pedido Denegado";
+var ESTADO_PROGRAMADO_STR = "Pedido Programado"
+var ESTADO_ATENDIDO_STR = "Pedido Atendido"
+var ESTADO_ATENDIDO_PARCIALMENTE_STR = "Pedido Atendido Parcialmente"
+var ESTADO_EN_EDICION_STR = "Pedido En Edicion";
+var ESTADO_ELIMINADO_STR = "Pedido Eliminado";
+var ESTADO_FACTURADO_STR = "Pedido Facturado";
+var ESTADO_FACTURADO_PARCIALMENTE_STR = "Pedido Facturado Parcialmente";
+var TITULO_CANCELAR_PROGRAMACION = "Cancelar Programación de Pedido";
+var TITULO_DENEGAR_INGRESO = "Denegar Ingreso de Pedido";
+var TITULO_APROBAR_INGRESO = "Aprobar Ingreso de Pedido";
+var TITULO_ELIMINAR = "Eliminar Pedido";
+
+//Estados Crediticios
+var ESTADO_PENDIENTE_LIBERACION = 0;
+var ESTADO_LIBERADO = 1;
+var ESTADO_BLOQUEADO = 2;
+
+var ESTADO_PENDIENTE_LIBERACION_STR = "Pedido Pendiente de Liberación";
+var ESTADO_LIBERADO_STR = "Pedido Liberado";
+var ESTADO_BLOQUEADO_STR = "Pedido Bloqueado";
+//Eliminar luego 
+var CANT_SOLO_OBSERVACIONES = 0;
+var CANT_SOLO_CANTIDADES = 1;
+var CANT_CANTIDADES_Y_OBSERVACIONES = 2;
+
+var GUID_EMPTY = "00000000-0000-0000-0000-000000000000";
+
+
+/**
+ * Constantes para Facturacion
+ */
+
+
 var CONS_TIPO_DOC_NOTA_CREDITO = 7;
 var CONS_TIPO_DOC_NOTA_DEBITO = 8;
 var CONS_TIPO_DOC_FACTURA = 1;
@@ -69,8 +137,8 @@ function convertirFechaNumero(fecha) {
 }
 
 
-function sumarHoras(hora, cantidad) {
-    var hora = hora.split(":");
+function sumarHoras(horatmp, cantidad) {
+    var hora = horatmp.split(":");
 
     var horaNumero = Number(hora[0]) + cantidad;
 

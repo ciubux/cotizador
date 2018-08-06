@@ -15,29 +15,7 @@ namespace Cotizador.Controllers
     {
 
 
-        private void calcularMontosTotales(Pedido pedido)
-        {
-            Decimal total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.pedidoDetalleList.AsEnumerable().Sum(o => o.subTotal)));
-            Decimal subtotal = 0;
-            Decimal igv = 0;
-
-            if (pedido.incluidoIGV)
-            {
-                subtotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total / (1 + Constantes.IGV)));
-                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total - subtotal));
-            }
-            else
-            {
-                subtotal = total;
-                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total * Constantes.IGV));
-                total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, subtotal + igv));
-            }
-
-            pedido.montoTotal = total;
-            pedido.montoSubTotal = subtotal;
-            pedido.montoIGV = igv;
-        }
-
+       
         private Pedido PedidoSession {
             get {
 
@@ -96,7 +74,7 @@ namespace Cotizador.Controllers
       
         public ActionResult Index()
         {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.BUSQUEDA_PEDIDO;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -173,7 +151,7 @@ namespace Cotizador.Controllers
             ViewBag.horaEmision = documentoVenta.fechaEmision.Value.ToString(Constantes.formatoHora);
             ViewBag.pedidoList = this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA];
             ViewBag.existeCliente = existeCliente;
-            ViewBag.pagina = Constantes.BUSQUEDA_PEDIDO;
+            ViewBag.pagina = Constantes.paginas.BusquedaPedidos;
             return View();
         }
 
@@ -181,7 +159,7 @@ namespace Cotizador.Controllers
         {
             try
             {
-                this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.MANTENIMIENTO_PEDIDO;
+                this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoPedido;
 
                 //Si no hay usuario, se dirige el logueo
                 if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
@@ -246,7 +224,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            ViewBag.pagina = Constantes.MANTENIMIENTO_PEDIDO;
+            ViewBag.pagina = Constantes.paginas.MantenimientoPedido;
             return View();
         }
 
@@ -255,7 +233,7 @@ namespace Cotizador.Controllers
         {
             try
             {
-                this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.MANTENIMIENTO_PEDIDO;
+                this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoPedido;
 
                 //Si no hay usuario, se dirige el logueo
                 if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
@@ -320,7 +298,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            ViewBag.pagina = Constantes.MANTENIMIENTO_PEDIDO;
+            ViewBag.pagina = Constantes.paginas.MantenimientoPedido;
             return View();
         }
 
@@ -375,7 +353,8 @@ namespace Cotizador.Controllers
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
             }
             pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
-            calcularMontosTotales(pedido);
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.calcularMontosTotales(pedido);
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
 
 
@@ -474,7 +453,7 @@ namespace Cotizador.Controllers
             }
 
             pedido = pedidoBL.obtenerProductosAPartirdePreciosRegistrados(pedido, familia, proveedor);
-            calcularMontosTotales(pedido);
+            pedidoBL.calcularMontosTotales(pedido);
             this.PedidoSession = pedido;
         }
 
@@ -631,7 +610,8 @@ namespace Cotizador.Controllers
             //CotizacionDetalle cotizacionDetalle = (CotizacionDetalle)Convert.ChangeType(pedido, typeof(CotizacionDetalle));
 
             //Calcula los montos totales de la cabecera de la cotizacion
-            calcularMontosTotales(pedido);
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.calcularMontosTotales(pedido);
 
 
             detalle.unidad = detalle.producto.unidad;
@@ -985,7 +965,8 @@ namespace Cotizador.Controllers
             IDocumento documento = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
             documento.documentoDetalle = documentoDetalle;
-            calcularMontosTotales((Pedido)documento);
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.calcularMontosTotales((Pedido)documento);
             this.Session[Constantes.VAR_SESSION_PEDIDO] = documento;
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }

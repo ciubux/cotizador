@@ -80,8 +80,6 @@ namespace BusinessLayer
         {
             using (var dal = new MovimientoALmacenDAL())
             {
-
-
                 notaIngreso.seguimientoMovimientoAlmacenEntrada.observacion = String.Empty;
                 notaIngreso.seguimientoMovimientoAlmacenEntrada.estado = SeguimientoMovimientoAlmacenEntrada.estadosSeguimientoMovimientoAlmacenEntrada.Recibido;
 
@@ -93,15 +91,13 @@ namespace BusinessLayer
                         existeCantidadPendienteAtencion = true;
                         break;
                     }
-
                 }
 
-
-          /*      if (!existeCantidadPendienteAtencion)
+                if (!existeCantidadPendienteAtencion)
                 {
-                    guiaRemision.atencionParcial = false;
-                    guiaRemision.ultimaAtencionParcial = true;
-                }*/
+                    notaIngreso.atencionParcial = false;
+                    notaIngreso.ultimaAtencionParcial = true;
+                }
 
                 try
                 {

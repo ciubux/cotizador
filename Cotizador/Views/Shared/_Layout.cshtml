@@ -35,8 +35,8 @@
                         var linkPedidos = "";
                         var linkBusquedaPedidos = "";
                         var linkMantenimientoPedido = "";
-                        var linkBusquedaPedidosEntrada = "";
-                        var linkMantenimientoPedidoEntrada = "";
+                        var linkBusquedaPedidosCompra = "";
+                        var linkMantenimientoPedidoCompra = "";
 
 
                         var linkMovimientosAlmacen = "";
@@ -96,8 +96,8 @@
 
                             case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
                             case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
-                            case 22: linkBusquedaPedidosEntrada = "ative"; linkPedidos = "active"; break;
-                            case 23: linkMantenimientoPedidoEntrada = "ative"; linkPedidos = "active"; break;
+                            case 22: linkBusquedaPedidosCompra = "ative"; linkPedidos = "active"; break;
+                            case 23: linkMantenimientoPedidoCompra = "ative"; linkPedidos = "active"; break;
 
                         }
                         var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
@@ -132,11 +132,19 @@
                                 <ul class="dropdown-menu" role="menu">
                                     @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                                     {
-                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Búsqueda Pedidos", "Index", "Pedido")</li>}
+                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Búsqueda Pedidos Venta", "Index", "Pedido")</li>}
                                     @if (usuario.tomaPedidos)
                                     {
-                                        <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Pedido", "Pedir", "Pedido")</li>
-                                    }                              
+                                        <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Pedido Venta", "Pedir", "Pedido")</li>
+                                    }     
+                                    
+                                    @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
+                                    {
+                                        <li id="linkBusquedaPedidosCompra" class="@linkBusquedaPedidosCompra">@Html.ActionLink("Búsqueda Pedidos Compra", "Index", "PedidoCompra")</li>}
+                                    @if (usuario.tomaPedidos)
+                                    {
+                                        <li id="linkMantenimientoPedidoCompra" class="@linkMantenimientoPedidoCompra">@Html.ActionLink("Crear/Modificar Pedido Compra", "Pedir", "PedidoCompra")</li>
+                                    }  
                                 </ul>
                             </li>
                         }

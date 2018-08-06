@@ -42,10 +42,10 @@ namespace Model
         public static String VAR_SESSION_PEDIDO_LISTA = "pedidoList";
         public static String VAR_SESSION_PEDIDO_VER = "pedidoVer";
 
-        public static String VAR_SESSION_PEDIDO_ENTRADA = "pedidoEntrada";
-        public static String VAR_SESSION_PEDIDO_ENTRADA_BUSQUEDA = "pedidoEntradaBusqueda";
-        public static String VAR_SESSION_PEDIDO_ENTRADA_LISTA = "pedidoEntradaList";
-        public static String VAR_SESSION_PEDIDO_ENTRADA_VER = "pedidoEntradaVer";
+        public static String VAR_SESSION_PEDIDO_COMPRA = "pedidoCompra";
+        public static String VAR_SESSION_PEDIDO_COMPRA_BUSQUEDA = "pedidoCompraBusqueda";
+        public static String VAR_SESSION_PEDIDO_COMPRA_LISTA = "pedidoCompraList";
+        public static String VAR_SESSION_PEDIDO_COMPRA_VER = "pedidoCompraVer";
 
         public static String VAR_SESSION_CLIENTE = "cliente";
 
@@ -177,13 +177,13 @@ namespace Model
 
         //Numero de Página
 
-        public static int BUSQUEDA_COTIZACION = 0;
+    /*    public static int BUSQUEDA_COTIZACION = 0;
         public static int MANTENIMIENTO_COTIZACION = 1;
         public static int BUSQUEDA_PEDIDO = 2;
         public static int MANTENIMIENTO_PEDIDO = 3;
         public static int BUSQUEDA_GUIA_REMISION = 4;
         public static int MANTENIMIENTO_GUIA_REMISION = 5;
-
+        */
 
 
         public enum paginas {

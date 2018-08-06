@@ -13,15 +13,8 @@ namespace Model
         public GuiaRemision()
         {
             this.motivoTraslado = motivosTraslado.Venta;
-        }
-
-        
-
-        [Display(Name = "Venta:")]
-        public Venta venta { get; set; }
-
-        [Display(Name = "Pedido:")]
-        public Pedido pedido { get; set; }
+        }       
+            
 
         [Display(Name = "Sede MP:")]
         public Ciudad ciudadOrigen { get; set; }
@@ -72,6 +65,56 @@ namespace Model
         public Boolean existeCambioTransportista { get; set; }
 
         public GuiaRemisionValidacion guiaRemisionValidacion { get; set; }
+
+        [Display(Name = "Motivo Traslado:")]
+        public motivosTraslado motivoTraslado { get; set; }
+        public enum motivosTraslado
+        {
+            [Display(Name = "Otros")]
+            Otros = 'O',
+            [Display(Name = "Abastecimiento de máq. expendedoras (ingreso/salida)")]
+            AbastecimientoMaqExpendedoras = 'A',
+            [Display(Name = "Compra")]
+            Compra = 'C',
+            [Display(Name = "Devolución de Compra")]
+            DevolucionCompra = 'B',
+            [Display(Name = "Devolución de Venta")]
+            DevolucionVenta = 'D',
+            [Display(Name = "Devolución de Préstamo")]
+            DevolucionPrestamo = 'E',
+            [Display(Name = "Comodato")]
+            Comodato = 'M',
+            [Display(Name = "Devolución de Comodato")]
+            DevolucionComodato = 'F',
+            [Display(Name = "Transferencia Gratuita")]
+            TransferenciaGratuita = 'G',
+            [Display(Name = "Devolución de Transferencia Gratuita")]
+            DevolucionTransferenciaGratuita = 'H',
+            [Display(Name = "Cambio de mercadería (entrega/retorno)")]
+            CambioMercaderia = 'I',
+            [Display(Name = "Consignación")]
+            Consignacion = 'N',
+            [Display(Name = "Préstamo")]
+            Prestamo = 'P',
+            [Display(Name = "Devolución de consignación")]
+            DevoluciónConsignacion = 'Q',
+            [Display(Name = "Traslado interno (misma emp.)")]
+            TrasladoInterno = 'T',
+            [Display(Name = "Recojo")]
+            Recojo = 'T',
+            [Display(Name = "Venta")]
+            Venta = 'V'
+        }
+
+
+        public String motivoTrasladoString
+        {
+            get
+            {
+                return EnumHelper<motivosTraslado>.GetDisplayValue(this.motivoTraslado);
+            }
+        }
+
 
     }
 }

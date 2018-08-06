@@ -10,7 +10,7 @@ namespace BusinessLayer
 {
     public class PedidoBL
     {
-        private void validarPedido(Pedido pedido)
+        private void validarPedidoVenta(Pedido pedido)
         {
             pedido.seguimientoPedido.observacion = String.Empty;
             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
@@ -159,28 +159,81 @@ namespace BusinessLayer
                 pedidoAdjunto.idCliente = pedido.cliente.idCliente;
             }
 
-                /*
-
-                if (!pedido.usuario.apruebaPedidos)
-                {
-
-                    pedido.seguimientoPedido.observacion = "La fecha de la solicitud es inferior a la fecha actual.";
-                    pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Pendiente;
-                }*/
 
             }
 
-
-
-
+        
         public void InsertPedido(Pedido pedido)
         {
             using (var dal = new PedidoDAL())
             {
-                validarPedido(pedido);
+                validarPedidoVenta(pedido);
                 dal.InsertPedido(pedido);
             }
         }
+
+        private void validarPedidoCompra(Pedido pedido)
+        {
+            pedido.seguimientoPedido.observacion = String.Empty;
+            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
+            pedido.seguimientoCrediticioPedido.observacion = String.Empty;
+            //Cambio Temporal
+            pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
+
+            if (pedido.tipoPedidoCompra != Pedido.tiposPedidoCompra.Compra)
+            {
+                pedido.montoIGV = 0;
+                pedido.montoTotal = 0;
+                pedido.montoSubTotal = 0;
+            }
+            else
+            {
+                DateTime horaActual = DateTime.Now;
+                DateTime horaLimite = new DateTime(horaActual.Year, horaActual.Month, horaActual.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Hour, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second);
+                if (horaActual >= horaLimite && pedido.ciudad.idCiudad == Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581"))
+                {
+                    pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
+                    /*Constantes.HORA_CORTE_CREDITOS_LIMA.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second*/
+                    pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
+                }
+            }
+
+
+
+            foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
+            {
+                if (pedido.tipoPedidoCompra != Pedido.tiposPedidoCompra.Compra)
+                {
+                    pedidoDetalle.precioNeto = 0;
+                }
+
+                pedidoDetalle.usuario = pedido.usuario;
+                pedidoDetalle.idPedido = pedido.idPedido;
+
+                /*Si es distinto de traslado se interno se valida los precios de lo contrario pasa directamente sin aprobacion*/
+            }
+
+
+            foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
+            {
+                pedidoAdjunto.usuario = pedido.usuario;
+                pedidoAdjunto.idCliente = pedido.cliente.idCliente;
+            }
+
+
+        }
+
+
+
+        public void InsertPedidoCompra(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                validarPedidoCompra(pedido);
+                dal.InsertPedidoCompra(pedido);
+            }
+        }
+
 
 
 
@@ -188,7 +241,17 @@ namespace BusinessLayer
         {
             using (var dal = new PedidoDAL())
             {
-                validarPedido(pedido);
+                validarPedidoVenta(pedido);
+                dal.UpdatePedido(pedido);
+            }
+        }
+
+
+        public void UpdatePedidoCompra(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                validarPedidoCompra(pedido);
                 dal.UpdatePedido(pedido);
             }
         }
@@ -246,15 +309,17 @@ namespace BusinessLayer
             List<Pedido> pedidoList = null;
             using (var dal = new PedidoDAL())
             {
-                //Si el usuario no es aprobador entonces solo buscará sus cotizaciones
-           /*     if (!pedido.usuario.apruebaCotizaciones)
-                {
-                    pedido.usuarioBusqueda = pedido.usuario;
-                }
-
-                pedido.usuarioBusqueda = pedido.usuario;
-                */
                 pedidoList = dal.SelectPedidos(pedido);
+            }
+            return pedidoList;
+        }
+
+        public List<Pedido> GetPedidosCompra(Pedido pedido)
+        {
+            List<Pedido> pedidoList = null;
+            using (var dal = new PedidoDAL())
+            {
+                pedidoList = dal.SelectPedidosCompra(pedido);
             }
             return pedidoList;
         }
@@ -338,6 +403,8 @@ namespace BusinessLayer
             }
 
         }
+
+
 
         public void calcularMontosTotales(Pedido pedido)
         {

@@ -20,7 +20,7 @@ namespace DataLayer
 
         public List<Ciudad> getCiudades()
         {
-            var objCommand = GetSqlCommand("ps_getCiudades");
+            var objCommand = GetSqlCommand("ps_ciudades");
             DataSet dataSet = ExecuteDataSet(objCommand);
 
             DataTable dataTableCiudad = dataSet.Tables[0];
@@ -52,6 +52,12 @@ namespace DataLayer
                 serieDocumentoElectronico.sedeMP.idCiudad = Converter.GetGuid(row, "id_sede_mp");
                 serieDocumentoElectronico.serie = Converter.GetString(row, "serie");
                 serieDocumentoElectronico.esPrincipal = Converter.GetBool(row, "es_principal");
+                serieDocumentoElectronico.siguienteNumeroBoleta = Converter.GetInt(row, "siguiente_numero_boleta");
+                serieDocumentoElectronico.siguienteNumeroFactura = Converter.GetInt(row, "siguiente_numero_factura");
+                serieDocumentoElectronico.siguienteNumeroNotaCredito = Converter.GetInt(row, "siguiente_numero_nota_credito");
+                serieDocumentoElectronico.siguienteNumeroNotaDebito = Converter.GetInt(row, "siguiente_numero_nota_debito");
+                serieDocumentoElectronico.siguienteNumeroGuiaRemision = Converter.GetInt(row, "siguiente_numero_guia_remision");
+                serieDocumentoElectronico.siguienteNumeroNotaIngreso = Converter.GetInt(row, "siguiente_numero_nota_ingreso");
                 serieDocumentoElectronicoList.Add(serieDocumentoElectronico);
             }
 

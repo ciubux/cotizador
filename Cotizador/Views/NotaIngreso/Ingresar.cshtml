@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "Crear/Modificar Nota Ingreso";
-    Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
+    Model.NotaIngreso notaIngreso = ViewBag.notaIngreso;
     Model.Transportista transportista = ViewBag.transportista;
 }
 
@@ -15,7 +15,7 @@
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" value="@ViewBag.debug" />
     <form class="form-horizontal">
-        <input type="hidden" id="idGuiaRemision" name="idGuiaRemision" value="2" />
+        <input type="hidden" id="idnotaIngreso" name="idnotaIngreso" value="2" />
 
 
         <!--SEDE ORIGEN-->
@@ -23,9 +23,9 @@
             <!--SEDE MP-->
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    @Html.LabelFor(g => guiaRemision.ciudadOrigen, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                    @Html.LabelFor(g => notaIngreso.ciudadOrigen, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
-                        @Html.TextBoxFor(g => guiaRemision.ciudadOrigen.nombre, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        @Html.TextBoxFor(g => notaIngreso.ciudadOrigen.nombre, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                     </div>
                 </div>
             </div>
@@ -33,15 +33,15 @@
             <div class="col-sm-6 col-lg-8">
                 <!--Dirección Origen-->
                 <div class="form-group">
-                    @Html.LabelFor(g => guiaRemision.ciudadOrigen.direccionPuntoPartida, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    @Html.LabelFor(g => notaIngreso.ciudadOrigen.direccionPuntoPartida, htmlAttributes: new { @class = "control-label col-xs-2" })
                     <div class="col-xs-10">
-                        @if (guiaRemision.pedido.numeroPedido > 0)
+                        @if (notaIngreso.pedido.numeroPedido > 0)
                     {
-                        @Html.TextBoxFor(g => guiaRemision.ciudadOrigen.direccionPuntoPartida, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        @Html.TextBoxFor(g => notaIngreso.ciudadOrigen.direccionPuntoPartida, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                 }
                 else
                 {
-                    @Html.TextBoxFor(g => guiaRemision.ciudadOrigen.direccionPuntoPartida, htmlAttributes: new { @class = "form-control" })
+                    @Html.TextBoxFor(g => notaIngreso.ciudadOrigen.direccionPuntoPartida, htmlAttributes: new { @class = "form-control" })
             }
                     </div>
                 </div>
@@ -53,30 +53,43 @@
             <div class="col-sm-6 col-lg-4">
                 <!--fecha Emision-->
                 <div class="form-group">
-                    @Html.LabelFor(g => guiaRemision.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(g => notaIngreso.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaEmisiontmp" value="@ViewBag.fechaEmisiontmp" />
-                        <input class="form-control" type="text" id="guiaRemision_fechaEmision" name="guiaRemision_fechaEmision">
+                        <input class="form-control" type="text" id="notaIngreso_fechaEmision" name="notaIngreso_fechaEmision">
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="col-sm-6 col-lg-4">
+              fecha Traslado
+              <div class="form-group">
+                  @Html.LabelFor(g => notaIngreso.fechaTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                  <div class="col-xs-8">
+                      <input type="hidden" id="fechaTrasladotmp" value="@ViewBag.fechaTrasladotmp" />
+                      <input class="form-control" type="text" id="notaIngreso_fechaTraslado" name="notaIngreso_fechaTraslado">
+                  </div>
+              </div>
+          </div>-->
+
+            <div class="col-sm-6 col-lg-4">
+                <!--Serie-->
+                <div class="form-group">
+                    @Html.LabelFor(g => notaIngreso.serieDocumentoElectronico, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.DropDownList("notaIngreso_serieDocumento",
+                    new SelectList(notaIngreso.ciudadOrigen.serieDocumentoElectronicoList as IEnumerable<Model.SerieDocumentoElectronico>, "serie", "serie", notaIngreso.serieDocumentoElectronico, null),
+             //       "Seleccione Serie",
+                    new { @class = "form-control" })
                     </div>
                 </div>
             </div>
 
             <div class="col-sm-6 col-lg-4">
-                <!--fecha Traslado-->
                 <div class="form-group">
-                    @Html.LabelFor(g => guiaRemision.fechaTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(p => notaIngreso.numeroDocumentoString, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input type="hidden" id="fechaTrasladotmp" value="@ViewBag.fechaTrasladotmp" />
-                        <input class="form-control" type="text" id="guiaRemision_fechaTraslado" name="guiaRemision_fechaTraslado">
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(p => guiaRemision.numeroDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        @Html.TextBoxFor(g => guiaRemision.serieNumeroGuia, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        @Html.TextBoxFor(g => notaIngreso.numeroDocumentoString, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                     </div>
                 </div>
             </div>
@@ -93,9 +106,9 @@
             <div class="col-sm-6 col-lg-4">
                 <!--Numero Pedido-->
                 <div class="form-group">
-                    @Html.LabelFor(g => guiaRemision.pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(g => notaIngreso.pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        @Html.TextBoxFor(g => guiaRemision.pedido.numeroPedidoString, htmlAttributes: new { @class = "form-control", type = "number", min = "0", disabled = "disabled" })
+                        @Html.TextBoxFor(g => notaIngreso.pedido.numeroPedidoString, htmlAttributes: new { @class = "form-control", type = "number", min = "0", disabled = "disabled" })
                     </div>
                 </div>
             </div>
@@ -103,9 +116,9 @@
             <div class="col-sm-6 col-lg-4">
                 <!-- Cliente-->
                 <div class="form-group">
-                    @Html.LabelFor(g => guiaRemision.pedido.cliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(g => notaIngreso.pedido.cliente, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        @Html.TextBoxFor(g => guiaRemision.pedido.cliente, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        @Html.TextBoxFor(g => notaIngreso.pedido.cliente, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                     </div>
                 </div>
             </div>
@@ -113,9 +126,9 @@
             <div class="col-sm-6 col-lg-4">
                 <!--Numero Referencia Cliente-->
                 <div class="form-group">
-                    @Html.LabelFor(g => guiaRemision.pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(g => notaIngreso.pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        @Html.TextBoxFor(g => guiaRemision.pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        @Html.TextBoxFor(g => notaIngreso.pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                     </div>
                 </div>
             </div>
@@ -131,10 +144,10 @@
             <!--MOTIVO DE TRASLADO-->
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    @Html.LabelFor(g => guiaRemision.motivoTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(g => notaIngreso.motivoTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.DropDownList("motivoTraslado",
-                                              EnumHelper.GetSelectList(typeof(Model.GuiaRemision.motivosTraslado), guiaRemision.motivoTraslado),
+                                              EnumHelper.GetSelectList(typeof(Model.NotaIngreso.motivosTraslado), notaIngreso.motivoTraslado),
                                               new { @class = "form-control", disabled = "disabled" }
                                               )
                     </div>
@@ -143,20 +156,20 @@
 
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="guiaRemision_atencionParcial" class="control-label col-xs-4">Atención Parcial:</label>
+                    <label for="notaIngreso_atencionParcial" class="control-label col-xs-4">Atención Parcial:</label>
                     <div class="col-xs-8">
-                        @if (guiaRemision.atencionParcial)
+                        @if (notaIngreso.atencionParcial)
                         {
-                        <input checked type="checkbox" id="guiaRemision_atencionParcial" name="guiaRemision_atencionParcial" />
+                        <input checked type="checkbox" id="notaIngreso_atencionParcial" name="notaIngreso_atencionParcial" />
                         }
                         else
                         {
-                            <input type="checkbox" id="guiaRemision_atencionParcial" name="guiaRemision_atencionParcial" />
+                            <input type="checkbox" id="notaIngreso_atencionParcial" name="notaIngreso_atencionParcial" />
                         }
 
 
 
-                        @if (guiaRemision.ultimaAtencionParcial)
+                        @if (notaIngreso.ultimaAtencionParcial)
                         {
                         <span class="form-control-static" id="descripcionUltimaAtencionParcial">(Última Atención Parcial)</span>
                             }
@@ -180,9 +193,9 @@
             <!--OBSERVACIOENS DEL PEDIDO-->
             <div class="col-sm-6 col-lg-8">
                 <div class="form-group">
-                    @Html.LabelFor(g => guiaRemision.pedido.observaciones, htmlAttributes: new { @class = "control-label col-xs-2", style = "color: darkred" })
+                    @Html.LabelFor(g => notaIngreso.pedido.observaciones, htmlAttributes: new { @class = "control-label col-xs-2", style = "color: darkred" })
                     <div class="col-xs-10">
-                        @Html.TextAreaFor(g => guiaRemision.pedido.observaciones, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        @Html.TextAreaFor(g => notaIngreso.pedido.observaciones, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                     </div>
                 </div>
             </div>
@@ -192,7 +205,7 @@
                     <label for="archivoAdjunto" class="control-label col-xs-4">Archivos Adjuntos:</label>
                     <div class="col-xs-8">
                         <ul id="nombreArchivos">
-                                @foreach (Model.PedidoAdjunto pedidoAdjunto in guiaRemision.pedido.pedidoAdjuntoList)
+                                @foreach (Model.PedidoAdjunto pedidoAdjunto in notaIngreso.pedido.pedidoAdjuntoList)
                                 {
                                 <li>
                                     <a href="javascript:m();" class="descargar">@pedidoAdjunto.nombre</a>
@@ -220,27 +233,27 @@
                     <div class="col-sm-6 col-lg-4">
                         <!--Numero Pedido-->
                         <div class="form-group">
-                            @Html.LabelFor(p => guiaRemision.pedido.ubigeoEntrega.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            @Html.LabelFor(p => notaIngreso.pedido.ubigeoEntrega.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
                             <div class="col-xs-8">
-                                @Html.TextBoxFor(p => guiaRemision.pedido.ubigeoEntrega.Departamento, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                                @Html.TextBoxFor(p => notaIngreso.pedido.ubigeoEntrega.Departamento, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6 col-lg-4">
                         <!--Numero Pedido-->
                         <div class="form-group">
-                            @Html.LabelFor(p => guiaRemision.pedido.ubigeoEntrega.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            @Html.LabelFor(p => notaIngreso.pedido.ubigeoEntrega.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
                             <div class="col-xs-8">
-                                @Html.TextBoxFor(p => guiaRemision.pedido.ubigeoEntrega.Provincia, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                                @Html.TextBoxFor(p => notaIngreso.pedido.ubigeoEntrega.Provincia, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6 col-lg-4">
                         <!--Numero Pedido-->
                         <div class="form-group">
-                            @Html.LabelFor(p => guiaRemision.pedido.ubigeoEntrega.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            @Html.LabelFor(p => notaIngreso.pedido.ubigeoEntrega.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
                             <div class="col-xs-8">
-                                @Html.TextBoxFor(p => guiaRemision.pedido.ubigeoEntrega.Distrito, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                                @Html.TextBoxFor(p => notaIngreso.pedido.ubigeoEntrega.Distrito, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                             </div>
                         </div>
                     </div>
@@ -251,9 +264,9 @@
                     <div class="col-sm-6 col-lg-8">
                         <!--Dirección Destino-->
                         <div class="form-group">
-                            @Html.LabelFor(g => guiaRemision.pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label col-xs-2" })
+                            @Html.LabelFor(g => notaIngreso.pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label col-xs-2" })
                             <div class="col-xs-10">
-                                @Html.TextBoxFor(g => guiaRemision.pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                                @Html.TextBoxFor(g => notaIngreso.pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                             </div>
                         </div>
                     </div>
@@ -270,10 +283,10 @@
                     <div class="col-sm-6 col-lg-8">
                         <!--TRANSPORTISTA-->
                         <div class="form-group">
-                            @Html.LabelFor(g => guiaRemision.transportista, htmlAttributes: new { @class = "control-label col-xs-2" })
+                            @Html.LabelFor(g => notaIngreso.transportista, htmlAttributes: new { @class = "control-label col-xs-2" })
                             <div class="col-xs-9">
-                                @Html.DropDownList("guiaRemision_transportista",
-                               new SelectList(guiaRemision.ciudadOrigen.transportistaList as IEnumerable<Model.Transportista>, "idTransportista", "descripcion", guiaRemision.transportista.idTransportista, null),
+                                @Html.DropDownList("notaIngreso_transportista",
+                               new SelectList(notaIngreso.ciudadOrigen.transportistaList as IEnumerable<Model.Transportista>, "idTransportista", "descripcion", notaIngreso.transportista.idTransportista, null),
                                "Seleccione Transportista",
                                new { @class = "form-control" })
                             </div>
@@ -299,13 +312,13 @@
                                 <div class="input-group-addon">
                                     <span class="input-group-text" id="basic-addon1">Nombre:</span>
                                 </div>
-                                @Html.TextBoxFor(g => guiaRemision.transportista.descripcion, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                                @Html.TextBoxFor(g => notaIngreso.transportista.descripcion, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                             </div>
                             <div class="input-group col-xs-4">
                                 <div class="input-group-addon">
                                     <span class="input-group-text" id="basic-addon1">RUC:</span>
                                 </div>
-                                @Html.TextBoxFor(g => guiaRemision.transportista.ruc, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                                @Html.TextBoxFor(g => notaIngreso.transportista.ruc, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                             </div>
                         </div>
                     </div>
@@ -317,7 +330,7 @@
                                 <div class="input-group-addon">
                                     <span class="input-group-text" id="basic-addon1">Brevete:</span>
                                 </div>
-                                @Html.TextBoxFor(g => guiaRemision.transportista.brevete, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                                @Html.TextBoxFor(g => notaIngreso.transportista.brevete, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                             </div>
                         </div>
                     </div>
@@ -332,7 +345,7 @@
                                 <div class="input-group-addon">
                                     <span class="input-group-text" id="basic-addon1">Dirección:</span>
                                 </div>
-                                @Html.TextBoxFor(g => guiaRemision.transportista.direccion, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                                @Html.TextBoxFor(g => notaIngreso.transportista.direccion, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                             </div>
                         </div>
                     </div>
@@ -347,23 +360,14 @@
                     <!--PLACA VEHICULO-->
                     <div class="col-sm-6 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(g => guiaRemision.placaVehiculo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            @Html.LabelFor(g => notaIngreso.placaVehiculo, htmlAttributes: new { @class = "control-label col-xs-4" })
                             <div class="col-xs-8">
-                                @Html.TextBoxFor(g => guiaRemision.placaVehiculo, htmlAttributes: new { @class = "form-control" })
+                                @Html.TextBoxFor(g => notaIngreso.placaVehiculo, htmlAttributes: new { @class = "form-control" })
                             </div>
                         </div>
                     </div>
 
-                    <!--
-                <div class="col-sm-6 col-lg-4">
-
-                        <div class="form-group">
-                            @Html.LabelFor(g => guiaRemision.certificadoInscripcion, htmlAttributes: new { @class = "control-label col-xs-4" })
-                            <div class="col-xs-8">
-                                @Html.TextBoxFor(g => guiaRemision.certificadoInscripcion, htmlAttributes: new { @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>-->
+                
 
                 </div>
             </fieldset>
@@ -371,7 +375,7 @@
 
             @{var edicionTableDetalleGuia = "true";
             }
-            @if (!guiaRemision.atencionParcial)
+            @if (!notaIngreso.atencionParcial)
             {
                 edicionTableDetalleGuia = "false";
             }
@@ -400,7 +404,7 @@
                 <tbody>
 
                     @{int contador = 0;}
-                    @foreach (var documentoDetalle in guiaRemision.pedido.documentoDetalle)
+                    @foreach (var documentoDetalle in notaIngreso.pedido.documentoDetalle)
                 {
                     contador++;
                     <tr data-expanded="true">
@@ -421,10 +425,10 @@
                 <!--OBSERVACIONES-->
                 <div class="col-sm-6 col-lg-8">
                     <div class="form-group">
-                        @Html.LabelFor(g => guiaRemision.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
+                        @Html.LabelFor(g => notaIngreso.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
                         <div class="col-xs-10">
-                            @Html.TextBoxFor(g => guiaRemision.observaciones, htmlAttributes: new { @class = "form-control" })
-                            <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                            @Html.TextBoxFor(g => notaIngreso.observaciones, htmlAttributes: new { @class = "form-control" })
+                            <!--<textarea class="form-control" rows="5" id="notaIngreso_observaciones" cols="100" name="notaIngreso_observaciones"></textarea>-->
                         </div>
                     </div>
                 </div>
@@ -433,8 +437,8 @@
 
             <div class="row">
                 <div class="pull-right">
-                    <button type="button" id="btnCancelarGuiaRemision" class="btn btn-danger">Cancelar</button>
-                    <button id="btnFinalizarCreacionGuiaRemision" type="button" class="btn btn-success">Generar Guía Remisión</button>
+                    <button type="button" id="btnCancelarNotaIngreso" class="btn btn-danger">Cancelar</button>
+                    <button id="btnFinalizarCreacionNotaIngreso" type="button" class="btn btn-success">Generar Nota Ingreso</button>
                 </div>
             </div>
 

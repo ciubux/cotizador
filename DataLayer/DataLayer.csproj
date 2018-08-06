@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Anotations\Columna.cs" />
     <Compile Include="DALConverter\UbigeoConvertTo.cs" />
+    <Compile Include="SerieDocumentoDAL.cs" />
     <Compile Include="SolicitanteDAL.cs" />
     <Compile Include="DireccionEntregaDAL.cs" />
     <Compile Include="DocumentoVentaDAL.cs" />

@@ -43,6 +43,10 @@ namespace Cotizador
                         "~/Scripts/pedido1.1.5.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/pedidoCompra").Include(
+                        "~/Scripts/pedidoCompra1.1.1.js"
+                        ));
+
             bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
                      "~/Scripts/cliente1.1.3.js"
                      ));

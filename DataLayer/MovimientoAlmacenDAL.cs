@@ -124,19 +124,20 @@ namespace DataLayer
             guiaRemision.guiaRemisionValidacion.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
 
             if(guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
-            { 
-                this.InsertMovimientoAlmacenDetalle(guiaRemision);
+            {                
 
                 if (guiaRemision.numeroDocumento != siguienteNumeroGuiaRemision)
                 {
                     throw new DuplicateNumberDocumentException();
                 }
+
+                this.InsertMovimientoAlmacenDetalle(guiaRemision);
             }
 
 
             objCommand = GetSqlCommand("pu_venta");
             InputParameterAdd.Guid(objCommand, "idVenta", guiaRemision.venta.idVenta);
-            InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Venta");
+            InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Transacción");
             ExecuteNonQuery(objCommand);
 
             this.Commit();
@@ -154,8 +155,8 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "serieDocumento", notaIngreso.serieDocumento); //puede ser null
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", notaIngreso.numeroDocumento); //puede ser null
             InputParameterAdd.Guid(objCommand, "idPedido", notaIngreso.pedido.idPedido);
-            //InputParameterAdd.Int(objCommand, "atencionParcial", notaIngreso.atencionParcial ? 1 : 0);
-            //InputParameterAdd.Int(objCommand, "ultimaAtencionParcial", guiaRemision.ultimaAtencionParcial ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "atencionParcial", notaIngreso.atencionParcial ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "ultimaAtencionParcial", notaIngreso.ultimaAtencionParcial ? 1 : 0);
             InputParameterAdd.Guid(objCommand, "idSedeOrigen", notaIngreso.ciudadOrigen.idCiudad);
             InputParameterAdd.Char(objCommand, "ubigeoEntrega", notaIngreso.pedido.ubigeoEntrega.Id);
             InputParameterAdd.Varchar(objCommand, "direccionEntrega", notaIngreso.pedido.direccionEntrega.descripcion);
@@ -169,69 +170,60 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observaciones", notaIngreso.observaciones);
             //InputParameterAdd.Varchar(objCommand, "certificadoInscripcion", notaIngreso.certificadoInscripcion);
             InputParameterAdd.Guid(objCommand, "idUsuario", notaIngreso.usuario.idUsuario);
-            InputParameterAdd.Int(objCommand, "estado", (int)notaIngreso.seguimientoMovimientoAlmacenSalida.estado);
+            InputParameterAdd.Int(objCommand, "estado", (int)notaIngreso.seguimientoMovimientoAlmacenEntrada.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", notaIngreso.seguimientoMovimientoAlmacenEntrada.observacion);
 
 
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");
-            OutputParameterAdd.BigInt(objCommand, "numeroMovimientoAlmacen");
-            OutputParameterAdd.BigInt(objCommand, "numeroVenta");
-            OutputParameterAdd.Int(objCommand, "siguienteNumeroGuiaRemision");
+            OutputParameterAdd.Int(objCommand, "siguienteNumeroNotaIngreso");
             OutputParameterAdd.Int(objCommand, "tipoError");
             OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
             ExecuteNonQuery(objCommand);
 
             notaIngreso.idMovimientoAlmacen = (Guid)objCommand.Parameters["@idMovimientoAlmacen"].Value;
-            notaIngreso.numero = (Int64)objCommand.Parameters["@numeroMovimientoAlmacen"].Value;
-            int siguienteNumeroGuiaRemision = (int)objCommand.Parameters["@siguienteNumeroGuiaRemision"].Value;
-
-
             notaIngreso.venta = new Venta();
             notaIngreso.venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
-            notaIngreso.venta.numero = (Int64)objCommand.Parameters["@numeroVenta"].Value;
+            int siguienteNumeroNotaIngreso = (int)objCommand.Parameters["@siguienteNumeroNotaIngreso"].Value;
 
-            notaIngreso.guiaRemisionValidacion = new GuiaRemisionValidacion();
+            notaIngreso.notaIngresoValidacion = new NotaIngresoValidacion();
 
-            notaIngreso.guiaRemisionValidacion.tipoErrorValidacion = (GuiaRemisionValidacion.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
-            notaIngreso.guiaRemisionValidacion.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+            notaIngreso.notaIngresoValidacion.tipoErrorValidacion = (NotaIngresoValidacion.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
+            notaIngreso.notaIngresoValidacion.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
 
-            if (notaIngreso.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
+            if (notaIngreso.notaIngresoValidacion.tipoErrorValidacion == NotaIngresoValidacion.TiposErrorValidacion.NoExisteError)
             {
-           //     this.InsertMovimientoAlmacenDetalle(notaIngreso);
-
-                if (notaIngreso.numeroDocumento != siguienteNumeroGuiaRemision)
+                if (notaIngreso.numeroDocumento != siguienteNumeroNotaIngreso)
                 {
                     throw new DuplicateNumberDocumentException();
                 }
-            }
 
+                this.InsertMovimientoAlmacenDetalle(notaIngreso);
+            }
 
             objCommand = GetSqlCommand("pu_venta");
             InputParameterAdd.Guid(objCommand, "idVenta", notaIngreso.venta.idVenta);
-            InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Venta");
+            InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Transacción");
             ExecuteNonQuery(objCommand);
 
             this.Commit();
-
         }
 
 
-        public void InsertMovimientoAlmacenDetalle(GuiaRemision guiaRemision)
+        public void InsertMovimientoAlmacenDetalle(MovimientoAlmacen movimientoAlmacen)
         {
 
-            foreach (DocumentoDetalle documentoDetalle in guiaRemision.pedido.documentoDetalle)
+            foreach (DocumentoDetalle documentoDetalle in movimientoAlmacen.pedido.documentoDetalle)
             {
-                
                 if(documentoDetalle.cantidadPorAtender > 0)
                 { 
                     var objCommand = GetSqlCommand("pi_movimientoAlmacenDetalleSalida");
-                    InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", guiaRemision.idMovimientoAlmacen);
-                    InputParameterAdd.Guid(objCommand, "idVenta", guiaRemision.venta.idVenta);
-                    InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
-                    InputParameterAdd.Guid(objCommand, "idPedido", guiaRemision.pedido.idPedido);
-                    InputParameterAdd.Char(objCommand, "tipoPedido", ((char)guiaRemision.pedido.tipoPedido).ToString());
+                    InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
+                    InputParameterAdd.Guid(objCommand, "idVenta", movimientoAlmacen.venta.idVenta);
+                    InputParameterAdd.Guid(objCommand, "idUsuario", movimientoAlmacen.usuario.idUsuario);
+                    InputParameterAdd.Guid(objCommand, "idPedido", movimientoAlmacen.pedido.idPedido);
+                    InputParameterAdd.Char(objCommand, "tipoPedido", ((char)movimientoAlmacen.pedido.tipoPedido).ToString());
                     InputParameterAdd.Guid(objCommand, "idProducto", documentoDetalle.producto.idProducto);
                     InputParameterAdd.Int(objCommand, "cantidad", documentoDetalle.cantidadPorAtender);
                     InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion);
@@ -743,7 +735,7 @@ namespace DataLayer
                 notaIngreso.observaciones = Converter.GetString(row, "observaciones");
                 notaIngreso.estaAnulado = Converter.GetBool(row, "anulado");
                 notaIngreso.estaFacturado = Converter.GetBool(row, "facturado");
-                notaIngreso.motivoTraslado = (GuiaRemision.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
+                notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
 
 
 

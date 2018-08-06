@@ -215,7 +215,7 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
-    <Compile Include="Controllers\PedidoEntradaController.cs" />
+    <Compile Include="Controllers\PedidoCompraController.cs" />
     <Compile Include="Controllers\SolicitanteController.cs" />
     <Compile Include="Controllers\DireccionEntregaController.cs" />
     <Compile Include="Controllers\DocumentoVentaController.cs" />
@@ -333,6 +333,7 @@
     <Content Include="Scripts\jquery-editable-select.js" />
     <Content Include="Scripts\jquery.loadingModal.js" />
     <Content Include="Scripts\jquery.loadingModal.min.js" />
+    <Content Include="Scripts\pedidoCompra1.1.1.js" />
     <Content Include="Scripts\utilesFacturacion1.1.1.js" />
     <Content Include="Scripts\utiles1.1.2.js" />
     <Content Include="Scripts\notaCredito1.1.2.js" />
@@ -439,9 +440,8 @@
     <Content Include="Views\NotaIngreso\IngresarEmpty.cshtml" />
     <Content Include="Views\NotaIngreso\Index.cshtml" />
     <Content Include="Views\NotaDebito\Crear.cshtml" />
-    <Content Include="Views\PedidoEntrada\CargarPedidos.cshtml" />
-    <Content Include="Views\PedidoEntrada\Index.cshtml" />
-    <Content Include="Views\PedidoEntrada\Pedir.cshtml" />
+    <Content Include="Views\PedidoCompra\Index.cshtml" />
+    <Content Include="Views\PedidoCompra\Pedir.cshtml" />
     <Content Include="Views\Factura\Crear.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@ namespace Model
         public Pedido()
         {
             this.tipoPedido = tiposPedido.Venta;
+            this.tipoPedidoCompra = tiposPedidoCompra.Compra;
             this.solicitante = new Solicitante();
             this.pedidoAdjuntoList = new List<PedidoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
@@ -257,6 +258,18 @@ namespace Model
 
         //VENTA, TRASLADO INTERNO, COMODATO,  TRANSFERENCIA GRATUITA, PRESTAMO
 
+        public enum tipos
+        {
+            [Display(Name = "Venta")]
+            Venta = 'V', 
+            [Display(Name = "Compra")]
+            Compra = 'C',
+        }
+
+        public tipos tipo { get; set; }
+
+
+
         [Display(Name = "Tipo Pedido:")]
         public tiposPedido tipoPedido { get; set; }
         public enum tiposPedido
@@ -282,11 +295,19 @@ namespace Model
             DevolucionTransferenciaGratuitaEntregada = 'H' /*PEDIDO DE VENTA*/
         }
 
+        public String tiposPedidoString
+        {
+            get
+            {
+                return EnumHelper<tiposPedido>.GetDisplayValue(this.tipoPedido);
+            }
+        }
+
 
 
         [Display(Name = "Tipo Pedido:")]
-        public tiposPedidoIngreso tipoPedidoEntrada { get; set; }
-        public enum tiposPedidoIngreso
+        public tiposPedidoCompra tipoPedidoCompra { get; set; }
+        public enum tiposPedidoCompra
         {
             //GENERAN NOTA INGRESO
             [Display(Name = "Compra")]
@@ -308,14 +329,14 @@ namespace Model
             DevolucionTransferenciaGratuitaRecibida = 'H', /*PEDIDO DE COMPRA*/
         }
 
-
-        public String tiposPedidoString
+        public String tiposPedidoCompraString
         {
             get
             {
-                return EnumHelper<tiposPedido>.GetDisplayValue(this.tipoPedido);
+                return EnumHelper<tiposPedidoCompra>.GetDisplayValue(this.tipoPedidoCompra);
             }
         }
+
 
         public DocumentoVenta documentoVenta { get; set; }
 
