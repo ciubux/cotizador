@@ -187,9 +187,11 @@ $("#btnAceptarFacturarPedido").click(function () {
 
 
                 if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA) {
+                    $("#modalVistaPreviaFacturaTitle").html("<b> Vista Previa Boleta</b>");
                     $("#btnConfirmarFacturarPedido").html("Confirmar Generación Boleta");
                 }
                 else if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA) {
+                    $("#modalVistaPreviaFacturaTitle").html("<b> Vista Previa Factura</b>");
                     $("#btnConfirmarFacturarPedido").html("Confirmar Generación Factura");
                 }
 
@@ -292,9 +294,12 @@ $("#btnAceptarFacturarPedido").click(function () {
 $("#btnConfirmarFacturarPedido").click(function () {
 
 
-    if ($("#verRazonSocialSunat").html() == "") {
+    //Si el tipoi de documento cliente es RUC entonces se debe validar los datos con SUNAT
+    if ($("#pedido_cliente_tipoDocumento").val() == CONS_TIPO_DOC_CLIENTE_RUC) {   
+        if ($("#verRazonSocialSunat").html() == "") {
         alert("No se han obtenido los datos del cliente desde SUNAT.");
         return false;
+        }
     }
 
     if ($("#documentoVenta_fechaEmision").val() == "" || $("#documentoVenta_fechaEmision").val() == null) {
