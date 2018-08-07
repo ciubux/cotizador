@@ -96,9 +96,12 @@ function activarBotonesFacturar() {
 }
 
 $("#btnAceptarFacturarPedido").click(function () {
-    if ($("#verRazonSocialSunat").html() == "") {
-        alert("No se han obtenido los datos del cliente desde SUNAT.");
-        return false;
+
+    if ($("#pedido_cliente_tipoDocumento").val() == CONS_TIPO_DOC_CLIENTE_RUC) {
+        if ($("#verRazonSocialSunat").html() == "") {
+            alert("No se han obtenido los datos del cliente desde SUNAT.");
+            return false;
+        }
     }
 
     if ($("#documentoVenta_fechaEmision").val() == "" || $("#documentoVenta_fechaEmision").val() == null) {
