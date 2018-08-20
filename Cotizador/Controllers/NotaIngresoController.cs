@@ -44,7 +44,7 @@ namespace Cotizador.Controllers
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
             NotaIngreso notaIngreso = this.NotaIngresoSession;
-            return clienteBL.getCLientesBusqueda(data, notaIngreso.ciudadOrigen.idCiudad);
+            return clienteBL.getCLientesBusqueda(data, notaIngreso.ciudadDestino.idCiudad);
         }
 
         public String GetCliente()
@@ -67,7 +67,7 @@ namespace Cotizador.Controllers
             NotaIngreso notaIngreso = new NotaIngreso();
             notaIngreso.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
             notaIngreso.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
-            notaIngreso.ciudadOrigen = new Ciudad();
+            notaIngreso.ciudadDestino = new Ciudad();
             notaIngreso.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             notaIngreso.pedido = new Pedido();
@@ -214,13 +214,13 @@ namespace Cotizador.Controllers
             notaIngreso.fechaTraslado = DateTime.Now;
             notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.Compra;
             notaIngreso.transportista = new Transportista();
-            notaIngreso.ciudadOrigen = new Ciudad();
-            notaIngreso.ciudadOrigen.idCiudad = Guid.Empty;
+            notaIngreso.ciudadDestino = new Ciudad();
+            notaIngreso.ciudadDestino.idCiudad = Guid.Empty;
             notaIngreso.pedido = new Pedido();
             notaIngreso.pedido.pedidoDetalleList = new List<PedidoDetalle>();
             notaIngreso.pedido.ciudad = new Ciudad();
             notaIngreso.pedido.ubigeoEntrega = new Ubigeo();
-            notaIngreso.ciudadOrigen.transportistaList = new List<Transportista>();
+            notaIngreso.ciudadDestino.transportistaList = new List<Transportista>();
             notaIngreso.seguimientoMovimientoAlmacenEntrada = new SeguimientoMovimientoAlmacenEntrada();
             //  notaIngreso.certificadoInscripcion = ".";
             this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
@@ -266,13 +266,13 @@ namespace Cotizador.Controllers
 
 
 
-                notaIngreso.ciudadOrigen = ciudadOrigen;
+                notaIngreso.ciudadDestino = ciudadOrigen;
 
                 notaIngreso.transportista = new Transportista();
                 notaIngreso.serieDocumento = ciudadOrigen.serieNotaIngreso;
                 notaIngreso.numeroDocumento = ciudadOrigen.siguienteNumeroNotaIngreso;
                 TransportistaBL transportistaBL = new TransportistaBL();
-                notaIngreso.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
+                notaIngreso.ciudadDestino.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
 
             }
             catch (Exception ex)
@@ -310,8 +310,8 @@ namespace Cotizador.Controllers
                 NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
 
                 SerieDocumentoBL serieDocumentoBL = new SerieDocumentoBL();
-                notaIngreso.ciudadOrigen.serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(notaIngreso.ciudadOrigen.idCiudad);
-                notaIngreso.serieDocumentoElectronico = notaIngreso.ciudadOrigen.serieDocumentoElectronicoList[0];
+                notaIngreso.ciudadDestino.serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(notaIngreso.ciudadDestino.idCiudad);
+                notaIngreso.serieDocumentoElectronico = notaIngreso.ciudadDestino.serieDocumentoElectronicoList[0];
                 notaIngreso.serieDocumento = notaIngreso.serieDocumentoElectronico.serie;
                 notaIngreso.numeroDocumento = notaIngreso.serieDocumentoElectronico.siguienteNumeroNotaIngreso;
 
@@ -379,7 +379,7 @@ namespace Cotizador.Controllers
             transportista.ruc = Request["ruc"];
             transportista.telefono = Request["telefono"];
             transportista.idTransportista = Guid.Empty;
-            NotaIngresoSession.ciudadOrigen.transportistaList.Add(transportista);
+            NotaIngresoSession.ciudadDestino.transportistaList.Add(transportista);
             NotaIngresoSession.transportista = transportista;
             this.NotaIngresoSession = notaIngreso;
             return JsonConvert.SerializeObject(transportista);
@@ -426,7 +426,7 @@ namespace Cotizador.Controllers
             ViewBag.notaIngreso = notaIngreso;
             ViewBag.pagina = this.Session[Constantes.VAR_SESSION_PAGINA];
 
-            return View("Print" + notaIngreso.ciudadOrigen.sede.ToUpper().Substring(0, 1));
+            return View("Print" + notaIngreso.ciudadDestino.sede.ToUpper().Substring(0, 1));
 
         }
 
@@ -450,7 +450,7 @@ namespace Cotizador.Controllers
         {
             String serieDocumento = this.Request.Params["serieDocumento"];
             NotaIngreso notaIngreso = this.NotaIngresoSession;
-            SerieDocumentoElectronico serieDocumentoElectronico = notaIngreso.ciudadOrigen.serieDocumentoElectronicoList.Where(s => s.serie == serieDocumento).FirstOrDefault();
+            SerieDocumentoElectronico serieDocumentoElectronico = notaIngreso.ciudadDestino.serieDocumentoElectronicoList.Where(s => s.serie == serieDocumento).FirstOrDefault();
             notaIngreso.serieDocumento = serieDocumentoElectronico.serie;
             notaIngreso.numeroDocumento = serieDocumentoElectronico.siguienteNumeroNotaIngreso;
             return notaIngreso.numeroDocumentoString;
@@ -500,13 +500,13 @@ namespace Cotizador.Controllers
                 idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
             }
             CiudadBL ciudadBL = new CiudadBL();
-            Ciudad ciudadOrigen = ciudadBL.getCiudad(idCiudad);
+            Ciudad ciudadDestino = ciudadBL.getCiudad(idCiudad);
             notaIngreso.transportista = new Transportista();
             TransportistaBL transportistaBL = new TransportistaBL();
-            ciudadOrigen.transportistaList = transportistaBL.getTransportistas(idCiudad);
-            notaIngreso.ciudadOrigen = ciudadOrigen;
+            ciudadDestino.transportistaList = transportistaBL.getTransportistas(idCiudad);
+            notaIngreso.ciudadDestino = ciudadDestino;
             this.NotaIngresoSession = notaIngreso;
-            return JsonConvert.SerializeObject(notaIngreso.ciudadOrigen);
+            return JsonConvert.SerializeObject(notaIngreso.ciudadDestino);
         }
 
         public void ChangeInputString()
@@ -577,7 +577,7 @@ namespace Cotizador.Controllers
             else
             {
                 Guid idTransportista = Guid.Parse(this.Request.Params["idTransportista"]);
-                notaIngreso.transportista = notaIngreso.ciudadOrigen.transportistaList.Where(t => t.idTransportista == idTransportista).FirstOrDefault();
+                notaIngreso.transportista = notaIngreso.ciudadDestino.transportistaList.Where(t => t.idTransportista == idTransportista).FirstOrDefault();
             }
            
             this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;

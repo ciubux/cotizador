@@ -13,8 +13,9 @@ namespace Model
         public GuiaRemision()
         {
             this.motivoTraslado = motivosTraslado.Venta;
-        }       
-            
+        }
+
+
 
         [Display(Name = "Sede MP:")]
         public Ciudad ciudadOrigen { get; set; }

@@ -16,7 +16,7 @@ namespace Model
 
 
         [Display(Name = "Sede MP:")]
-        public Ciudad ciudadOrigen { get; set; }
+        public Ciudad ciudadDestino { get; set; }
 
         [Display(Name = "Serie Nota Ingreso:")]
         public new String serieDocumento { get; set; }

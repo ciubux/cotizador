@@ -157,16 +157,16 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idPedido", notaIngreso.pedido.idPedido);
             InputParameterAdd.Int(objCommand, "atencionParcial", notaIngreso.atencionParcial ? 1 : 0);
             InputParameterAdd.Int(objCommand, "ultimaAtencionParcial", notaIngreso.ultimaAtencionParcial ? 1 : 0);
-            InputParameterAdd.Guid(objCommand, "idSedeOrigen", notaIngreso.ciudadOrigen.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idSedeDestino", notaIngreso.ciudadDestino.idCiudad);
             InputParameterAdd.Char(objCommand, "ubigeoEntrega", notaIngreso.pedido.ubigeoEntrega.Id);
             InputParameterAdd.Varchar(objCommand, "direccionEntrega", notaIngreso.pedido.direccionEntrega.descripcion);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((char)notaIngreso.motivoTraslado).ToString());
-            InputParameterAdd.Guid(objCommand, "idTransportista", notaIngreso.transportista.idTransportista);
+       /*     InputParameterAdd.Guid(objCommand, "idTransportista", notaIngreso.transportista.idTransportista);
             InputParameterAdd.Varchar(objCommand, "nombreTransportista", notaIngreso.transportista.descripcion);
             InputParameterAdd.Varchar(objCommand, "rucTransportista", notaIngreso.transportista.ruc);
             InputParameterAdd.Varchar(objCommand, "breveteTransportista", notaIngreso.transportista.brevete);
             InputParameterAdd.Varchar(objCommand, "direccionTransportista", notaIngreso.transportista.direccion);
-            InputParameterAdd.Varchar(objCommand, "placaVehiculo", notaIngreso.placaVehiculo);
+            InputParameterAdd.Varchar(objCommand, "placaVehiculo", notaIngreso.placaVehiculo);*/
             InputParameterAdd.Varchar(objCommand, "observaciones", notaIngreso.observaciones);
             //InputParameterAdd.Varchar(objCommand, "certificadoInscripcion", notaIngreso.certificadoInscripcion);
             InputParameterAdd.Guid(objCommand, "idUsuario", notaIngreso.usuario.idUsuario);
@@ -764,12 +764,12 @@ namespace DataLayer
                 notaIngreso.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
                 notaIngreso.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 //SEDE
-                notaIngreso.ciudadOrigen = new Ciudad();
-                notaIngreso.ciudadOrigen.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                notaIngreso.ciudadOrigen.nombre = Converter.GetString(row, "nombre_ciudad");
-                notaIngreso.ciudadOrigen.direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida");
-                notaIngreso.ciudadOrigen.esProvincia = Converter.GetBool(row, "es_provincia");
-                notaIngreso.ciudadOrigen.sede = Converter.GetString(row, "sede");
+                notaIngreso.ciudadDestino = new Ciudad();
+                notaIngreso.ciudadDestino.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                notaIngreso.ciudadDestino.nombre = Converter.GetString(row, "nombre_ciudad");
+                notaIngreso.ciudadDestino.direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida");
+                notaIngreso.ciudadDestino.esProvincia = Converter.GetBool(row, "es_provincia");
+                notaIngreso.ciudadDestino.sede = Converter.GetString(row, "sede");
                 //TRANSPORTISTA
                 notaIngreso.transportista = new Transportista();
                 notaIngreso.transportista.brevete = Converter.GetString(row, "brevete_transportista");
@@ -808,7 +808,7 @@ namespace DataLayer
 
             var objCommand = GetSqlCommand("ps_guiasRemision");
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", notaIngreso.numeroDocumento);
-            InputParameterAdd.Guid(objCommand, "idCiudad", notaIngreso.ciudadOrigen.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idCiudad", notaIngreso.ciudadDestino.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", notaIngreso.pedido.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "idUsuario", notaIngreso.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", notaIngreso.fechaTrasladoDesde);
@@ -850,9 +850,9 @@ namespace DataLayer
                 notaIngreso.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
                 notaIngreso.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 //SEDE
-                notaIngreso.ciudadOrigen = new Ciudad();
-                notaIngreso.ciudadOrigen.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                notaIngreso.ciudadOrigen.nombre = Converter.GetString(row, "nombre_ciudad");
+                notaIngreso.ciudadDestino = new Ciudad();
+                notaIngreso.ciudadDestino.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                notaIngreso.ciudadDestino.nombre = Converter.GetString(row, "nombre_ciudad");
                 //ESTADO
                 notaIngreso.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
                 notaIngreso.seguimientoMovimientoAlmacenSalida.estado = (SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida)Converter.GetInt(row, "estado_movimiento_almacen");
