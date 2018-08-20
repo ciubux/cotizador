@@ -2337,12 +2337,25 @@ jQuery(function ($) {
         var codigoPedido = $("#pedido_numeroPedido").val();
         var idPedido = $("#idPedido").val();
         var observacion = $("#comentarioPendienteIngreso").val();
+        var observacionEditable = $("#comentarioPendienteIngresoEditable").val();
+        if (observacionEditable.trim().length < 15) {
+            $("#comentarioPendienteIngresoEditable").focus();
+            $.alert({
+                title: "AGREGAR COMENTARIO",
+                type: 'orange', 
+                content: 'Debe ingresar al menos 15 caracteres en el comentario.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }   
         $.ajax({
             url: "/Pedido/updateEstadoPedido",
             data: {
                 idPedido: idPedido,
                 estado: ESTADO_PENDIENTE_APROBACION,
-                observacion: observacion
+                observacion: observacionEditable + "\n"+ observacion
             },
             type: 'POST',
             error: function () {
@@ -2735,8 +2748,7 @@ jQuery(function ($) {
                 }
 
                 //ACTUALIZAR PEDIDO
-                if ( pedido.seguimientoPedido.estado != ESTADO_EN_EDICION
-                    && pedido.seguimientoPedido.estado != ESTADO_PENDIENTE_APROBACION
+                if ( pedido.seguimientoPedido.estado != ESTADO_EN_EDICION                   
                     && pedido.seguimientoPedido.estado != ESTADO_DENEGADO
                     && pedido.seguimientoPedido.estado != ESTADO_ELIMINADO) {
                     $("#btnActualizarPedido").show();
@@ -2746,6 +2758,20 @@ jQuery(function ($) {
                 }
 
 
+                /**/
+                if (pedido.seguimientoPedido.estado == ESTADO_ATENDIDO) {
+                    $("#pedido_observacionesGuiaRemision").attr("disabled","disabled");
+                }
+                else {
+                    $("#pedido_observacionesGuiaRemision").removeAttr("disabled");
+                }
+
+                if (pedido.seguimientoPedido.estado == ESTADO_FACTURADO) {
+                    $("#pedido_observacionesFactura").attr("disabled", "disabled");
+                }
+                else {
+                    $("#pedido_observacionesFactura").removeAttr("disabled");
+                }
 
 
 
@@ -3069,6 +3095,7 @@ jQuery(function ($) {
         var numeroReferenciaCliente = $("#pedido_numeroReferenciaCliente2").val();
         var numeroReferenciaAdicional = $("#pedido_numeroReferenciaAdicional").val();
         var observaciones = $("#pedido_observaciones").val();
+        var observacionesGuiaRemision = $("#pedido_observacionesGuiaRemision").val();
         var observacionesFactura = $("#pedido_observacionesFactura").val();
         
 
@@ -3083,6 +3110,7 @@ jQuery(function ($) {
                 numeroReferenciaCliente: numeroReferenciaCliente,
                 numeroReferenciaAdicional: numeroReferenciaAdicional,
                 observaciones: observaciones,
+                observacionesGuiaRemision: observacionesGuiaRemision,
                 observacionesFactura: observacionesFactura
             },
             dataType: 'JSON',
@@ -3125,6 +3153,7 @@ jQuery(function ($) {
         $("#pedido_numeroReferenciaAdicional").val($("#verNumeroReferenciaAdicional").html());
 
         $("#pedido_observacionesFactura").val($("#verObservacionesFactura").html());
+        $("#pedido_observacionesGuiaRemision").val($("#verObservacionesGuiaRemision").html());
         $("#pedido_observaciones").val($("#verObservaciones").html());
         //pe.numero_referencia_adicional,
         //pedido_numeroReferenciaCliente
@@ -3928,6 +3957,35 @@ jQuery(function ($) {
     });
 
 
+    $(document).on('click', "input.chkStockConfirmado", function () {
+
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idPEdido = arrrayClass[0];
+        var numeroPedido = arrrayClass[1];
+
+        var stockConfirmado = 0;
+        if (event.target.checked) {
+            stockConfirmado = 1;
+        }
+
+
+        $.ajax({
+            url: "/Pedido/UpdateStockConfirmado",
+            data: {
+                idPEdido: idPEdido,
+                stockConfirmado: stockConfirmado
+            },
+            type: 'POST',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+            },
+            success: function (resultado) {
+
+            }
+        });
+    });
+
+
     $("#btnBusquedaPedidos").click(function () {
 
        
@@ -4001,6 +4059,23 @@ jQuery(function ($) {
                         fechaProgramacion = invertirFormatoFecha(pedidoList[i].fechaProgramacion.substr(0, 10));
                     }
 
+
+                    var stockConfirmado = '';
+                    if (pedidoList[i].stockConfirmado == 1) {
+                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox" checked></input>'
+                    }
+                    else {
+                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox"></input>'
+                    }
+
+                    var stockConfirmadoLectura = '';
+                    if (pedidoList[i].stockConfirmado == 1) {
+                        stockConfirmadoLectura = '<input disabled type="checkbox" checked></input>'
+                    }
+                    else {
+                        stockConfirmadoLectura = '<input disabled type="checkbox"></input>'
+                    }
+
                   /*  var codigoCliente = pedidoList[i].cliente.codigo;
                     if (codigoCliente == null || codigoCliente == 'null') {
                         codigoCliente = '';
@@ -4027,7 +4102,9 @@ jQuery(function ($) {
                         '<td>  ' + pedidoList[i].seguimientoPedido.estadoString+'</td>' +
                       //  '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
                       //  '<td>  ' + observacion+'  </td>' +
-                        '<td>  ' + pedidoList[i].seguimientoCrediticioPedido.estadoString+'</td>' +
+                        '<td>  ' + pedidoList[i].seguimientoCrediticioPedido.estadoString + '</td>' +
+                        '<td>' + stockConfirmado + '</td>' +
+                        '<td>' + stockConfirmadoLectura + '</td>' +
                         '<td>' +
                         '<button type="button" class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numeroPedido + ' btnVerPedido btn btn-primary ">Ver</button>' +
                         '</td>' +

@@ -7,6 +7,11 @@ namespace Model
 {
     public class PedidoDetalle : DocumentoDetalle
     {
+        public PedidoDetalle(Usuario usuario) 
+        {
+            this.usuario = usuario;
+        }
+
         public Guid idPedidoDetalle { get; set; }
         public Guid idPedido { get; set; }
 
@@ -54,5 +59,30 @@ namespace Model
         {
             get;set;
         }
+
+        public Decimal costoListaVisible
+        {
+            get
+            {
+                if (this.usuario.visualizaCostos)
+                    return this.costoLista;
+                else
+                    return 0M;
+            }
+        }
+
+        public Decimal margen
+        {
+
+            get
+            {
+
+                if (this.usuario.visualizaMargen && !this.usuario.esCliente)
+                    return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                else
+                    return 0.0M;
+            }
+        }
+
     }
 }

@@ -318,8 +318,7 @@ namespace Model
         }
 
         public DocumentoVenta documentoVenta { get; set; }
-
       
-
+        public Boolean stockConfirmado { get; set; }
     }
 }

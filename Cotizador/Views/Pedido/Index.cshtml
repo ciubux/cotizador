@@ -290,6 +290,20 @@
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
     <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
                     <th data-name="estadoCrediticio" data-sortable="true" data-breakpoints="xs">Estado Crediticio</th>
+
+
+                    @if (pedido.usuario.confirmaStock)
+                    {
+                        <th data-name="stockConfirmado" data-visible="true">Stock</th>
+                        <th data-name="stockConfirmado" data-visible="false">Stock</th>
+                    }
+                    else
+                    {
+                        <th data-name="stockConfirmado" data-visible="false">Stock</th>
+                        <th data-name="stockConfirmado" data-visible="true">Stock</th>
+                    }
+
+
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
             </thead>
@@ -646,14 +660,22 @@
                                 {
                                     <th data-name="precioNeto" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Precio Neto</th>
                                     <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-                                    <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                                 }
-                                else
+                                else 
                                 {
+                                    <!--Si no es cliente-->
                                     <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
-                                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-                                    <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
+                                    if (pedido.usuario.visualizaMargen)
+                                    { 
+                                        <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                                    }
+                                    else
+                                    { 
+                                        <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                                    }
                                 }
+
+                                <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
                                 <!--     @if (pedido.usuario.creaDocumentosVenta)
@@ -1145,6 +1167,19 @@
 
                         </div>
 
+                    </div>
+
+                    <div class="row">
+                        <!--OBSERVACIONES-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "form-control" })
+                                    <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">

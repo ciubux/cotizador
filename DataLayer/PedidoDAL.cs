@@ -99,6 +99,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaAdicional", pedido.numeroReferenciaAdicional);
             InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
 
             ExecuteNonQuery(objCommand);
@@ -108,7 +109,7 @@ namespace DataLayer
                 pedidoAdjunto.usuario = pedido.usuario;
                 pedidoAdjunto.idPedido = pedido.idPedido;
                 pedidoAdjunto.idCliente = pedido.cliente.idCliente;
-                this.InsertPedidoAdjunto(pedidoAdjunto);
+                InsertPedidoAdjunto(pedidoAdjunto);
             }
 
         }
@@ -303,7 +304,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle();
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(cotizacion.usuario);
                 cotizacionDetalle.producto = new Producto();
 
 
@@ -482,7 +483,8 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in pedidoDetalleDataTable.Rows)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle();
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(pedido.usuario);
+             
                 pedidoDetalle.producto = new Producto();
 
                 pedidoDetalle.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");
@@ -718,7 +720,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
                 pedido.FechaRegistro  = Converter.GetDateTime(row, "fecha_registro");
                 pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
-
+                pedido.stockConfirmado = Converter.GetBool(row, "stock_confirmado");
                 if (row["fecha_programacion"] == DBNull.Value)
                     pedido.fechaProgramacion = null;
                 else
@@ -802,7 +804,17 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
         }
 
-    
+
+        public void UpdateStockConfirmado(Pedido pedido)
+        {
+            var objCommand = GetSqlCommand("pu_pedidoStockConfirmado");
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Int(objCommand, "stockConfirmado", pedido.stockConfirmado ? 1 : 0);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+
+
 
     }
 }

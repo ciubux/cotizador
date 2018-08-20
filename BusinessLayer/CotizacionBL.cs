@@ -98,7 +98,7 @@ namespace BusinessLayer
                             }
                             else
                             {
-                                if (cotizacionDetalle.precioUnitario != precioClienteProducto.precioUnitario / cotizacionDetalle.producto.equivalencia)
+                                if (cotizacionDetalle.precioUnitario != ( precioClienteProducto.precioUnitario / cotizacionDetalle.producto.equivalencia))
                                 {
                                     evaluarDescuento = 2;
                                 }
@@ -197,7 +197,7 @@ namespace BusinessLayer
             //Detalle de la cotizacion
             foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle();
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(cotizacion.usuario);
                 cotizacionDetalle.producto = new Producto();
                 cotizacionDetalle.cantidad = 1;
                 cotizacionDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;

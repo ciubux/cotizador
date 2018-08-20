@@ -96,6 +96,9 @@ namespace DataLayer
                 usuario.creaNotasDebito = Converter.GetBool(row, "crea_notas_debito");
                 usuario.realizaRefacturacion = Converter.GetBool(row, "realiza_refacturacion");
 
+                usuario.visualizaMargen = Converter.GetBool(row, "visualiza_margen");
+                usuario.confirmaStock = Converter.GetBool(row, "confirma_stock");
+
                 usuario.esCliente = Converter.GetBool(row, "es_cliente");
 
             }

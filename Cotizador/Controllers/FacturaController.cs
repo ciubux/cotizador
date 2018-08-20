@@ -483,8 +483,8 @@ namespace Cotizador.Controllers
             documentoVenta = documentoVentaBL.descargarArchivoDocumentoVenta(documentoVenta);
 
             try {
-                documentoVenta.cpeFile = Encoding.UTF8.GetBytes(documentoVenta.rPTA_DOC_TRIB_BE.DOC_TRIB_XML);
-                documentoVenta.cdrFile = Encoding.UTF8.GetBytes(documentoVenta.rPTA_DOC_TRIB_BE.DOC_TRIB_RPTA);
+                documentoVenta.cpeFile = Encoding.GetEncoding(28591).GetBytes(documentoVenta.rPTA_DOC_TRIB_BE.DOC_TRIB_XML);
+                documentoVenta.cdrFile = Encoding.GetEncoding(28591).GetBytes(documentoVenta.rPTA_DOC_TRIB_BE.DOC_TRIB_RPTA);
             }
             catch (Exception e)
             {

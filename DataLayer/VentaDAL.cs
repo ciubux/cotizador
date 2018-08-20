@@ -224,7 +224,7 @@ namespace DataLayer
                 //Detalle de la cotizacion
                 foreach (DataRow row in ventaDetalleDataTable.Rows)
                 {
-                    PedidoDetalle pedidoDetalle = new PedidoDetalle();
+                    PedidoDetalle pedidoDetalle = new PedidoDetalle(pedido.usuario);
                     pedidoDetalle.producto = new Producto();
 
                     pedidoDetalle.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");
@@ -411,7 +411,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in ventaDetalleDataTable.Rows)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle();
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(pedido.usuario);
                 pedidoDetalle.producto = new Producto();
 
                 pedidoDetalle.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");

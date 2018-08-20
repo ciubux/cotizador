@@ -102,6 +102,8 @@ namespace Model
         public bool creaNotasDebito { get; set; }
         public bool realizaRefacturacion { get; set; }
         public bool esCliente { get; set; }
+        public bool visualizaMargen { get; set; }
+        public bool confirmaStock { get; set; }
     }
 }
 

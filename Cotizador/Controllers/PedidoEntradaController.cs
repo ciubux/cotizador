@@ -355,12 +355,12 @@ namespace Cotizador.Controllers
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
             foreach (DocumentoDetalle documentoDetalle in  cotizacion.documentoDetalle)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle();
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(pedido.usuario);
                 pedidoDetalle.cantidad = documentoDetalle.cantidad;
                 if (documentoDetalle.cantidad == 0)
                     pedidoDetalle.cantidad = 1;
 
-                pedidoDetalle.costoAnterior = documentoDetalle.costoAnterior;
+               // pedidoDetalle.costoAnterior = documentoDetalle.costoAnterior;
                 pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
                 pedidoDetalle.flete = documentoDetalle.flete;
                 pedidoDetalle.observacion = documentoDetalle.observacion;
@@ -369,7 +369,7 @@ namespace Cotizador.Controllers
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
                 else
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
-                pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
+               // pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
                 pedidoDetalle.producto = documentoDetalle.producto;
                 pedidoDetalle.unidad = documentoDetalle.unidad;
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
@@ -598,7 +598,7 @@ namespace Cotizador.Controllers
                 throw new System.Exception("Producto ya se encuentra en la lista");
             }
 
-            PedidoDetalle detalle = new PedidoDetalle();
+            PedidoDetalle detalle = new PedidoDetalle(pedido.usuario);
             ProductoBL productoBL = new ProductoBL();
             Producto producto = productoBL.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
             detalle.producto = producto;

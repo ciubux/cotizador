@@ -377,7 +377,15 @@
                     {
                         <th data-name="costo" data-visible="false">Costo</th>
                     }
-                    <th data-name="margen" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+
+                    @if (cotizacion.usuario.visualizaMargen)
+                    {
+                        <th data-name="margen" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                    }
+                    else
+                    {
+                        <th data-name="margen" data-visible="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                    }
 
                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
@@ -456,7 +464,7 @@
                         <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@cotizacionDetalle.porcentajeDescuento %</td>
                         <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@cotizacionDetalle.porcentajeDescuentoMostrar %</td>
                         <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoLista  </td>
+                        <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoListaVisible  </td>
 
                         <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
 
@@ -755,12 +763,20 @@
                                 </div>
 
 
+                                @if (cotizacion.usuario.visualizaMargen)
+                                {
+                                    <label for="margen" class="control-label col-xs-2">Mg %:</label>
+                                    <div class="col-xs-3">
 
-                                <label for="margen" class="control-label col-xs-2">Mg %:</label>
-                                <div class="col-xs-3">
-
-                                    <input class="form-control" type="number" disabled value="" min="1" step="1" id="margen" name="margen">
-                                </div>
+                                        <input class="form-control" type="number" disabled value="" min="1" step="1" id="margen" name="margen">
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-xs-5">
+                                        <input class="form-control" type="hidden" id="margen" name="margen">
+                                    </div>
+                                }
                             </div>
                         </div>
                         <!--CANTIDAD-->
@@ -796,7 +812,7 @@
                                 <div class="col-xs-3">
                                     <input class="form-control" type="number" step=".1" value="" id="fleteDetalle" name="fleteDetalle">
                                 </div>
-                                <label for="margen" class="control-label col-xs-2">Precio Unit:</label>
+                                <label for="precioUnitario" class="control-label col-xs-2">Precio Unit:</label>
                                 <div class="col-xs-4">
                                     <input class="form-control" type="number" disabled value="" min="1" step="1" id="precioUnitario" name="precioUnitario">
                                 </div>

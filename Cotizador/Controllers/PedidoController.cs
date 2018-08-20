@@ -355,22 +355,28 @@ namespace Cotizador.Controllers
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
             foreach (DocumentoDetalle documentoDetalle in  cotizacion.documentoDetalle)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle();
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(pedido.usuario);
                 pedidoDetalle.cantidad = documentoDetalle.cantidad;
                 if (documentoDetalle.cantidad == 0)
                     pedidoDetalle.cantidad = 1;
 
-                pedidoDetalle.costoAnterior = documentoDetalle.costoAnterior;
+                //pedidoDetalle.costoAnterior = documentoDetalle.costoAnterior;
                 pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
                 pedidoDetalle.flete = documentoDetalle.flete;
                 pedidoDetalle.observacion = documentoDetalle.observacion;
                 pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
-                if(documentoDetalle.esPrecioAlternativo)
+                pedidoDetalle.producto = documentoDetalle.producto;
+                if (documentoDetalle.esPrecioAlternativo)
+                {
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+                    /**/
+                    pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.producto.equivalencia;
+                    pedidoDetalle.producto.precioClienteProducto.precioNeto = pedidoDetalle.producto.precioClienteProducto.precioNeto / documentoDetalle.producto.equivalencia;
+                }
                 else
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
-                pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
-                pedidoDetalle.producto = documentoDetalle.producto;
+                //pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
+               
                 pedidoDetalle.unidad = documentoDetalle.unidad;
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
             }
@@ -598,7 +604,7 @@ namespace Cotizador.Controllers
                 throw new System.Exception("Producto ya se encuentra en la lista");
             }
 
-            PedidoDetalle detalle = new PedidoDetalle();
+            PedidoDetalle detalle = new PedidoDetalle(pedido.usuario);
             ProductoBL productoBL = new ProductoBL();
             Producto producto = productoBL.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
             detalle.producto = producto;
@@ -618,8 +624,12 @@ namespace Cotizador.Controllers
 
                 //Si es el precio Alternativo se debe modificar el precio_cliente_producto para que compare con el precio
                 //de la unidad alternativa en lugar del precio de la unidad estandar
+                //detalle.producto.precioClienteProducto.precioUnitario =
+                //  detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
+
                 detalle.producto.precioClienteProducto.precioUnitario =
-                    detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
+               detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
+
             }
             else
             {
@@ -1032,6 +1042,7 @@ namespace Cotizador.Controllers
             pedido.numeroReferenciaAdicional = this.Request.Params["numeroReferenciaAdicional"];
             pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
             pedido.observaciones = this.Request.Params["observaciones"];
+            pedido.observacionesGuiaRemision = this.Request.Params["observacionesGuiaRemision"];
             pedido.observacionesFactura = this.Request.Params["observacionesFactura"];
 
 
@@ -1474,6 +1485,18 @@ namespace Cotizador.Controllers
             pedido.solicitante = solicitante;
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
             return JsonConvert.SerializeObject(solicitante);
+        }
+
+
+        public void UpdateStockConfirmado()
+        {
+            Pedido pedido = new Pedido();
+            pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
+            pedido.stockConfirmado = Int32.Parse(this.Request.Params["stockConfirmado"]) == 1;
+            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.UpdateStockConfirmado(pedido);
         }
 
 

@@ -40,7 +40,7 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
-                        "~/Scripts/pedido1.1.5.js"
+                        "~/Scripts/pedido1.1.6.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
@@ -48,7 +48,7 @@ namespace Cotizador
                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
-                        "~/Scripts/guiaRemision1.1.4.js"
+                        "~/Scripts/guiaRemision1.1.5.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/notaIngreso").Include(
