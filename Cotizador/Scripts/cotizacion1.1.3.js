@@ -1,5 +1,8 @@
 jQuery(function ($) {
 
+
+   
+
     /*
     $("#tableCotizaciones").footable({
         "paging": {
@@ -177,6 +180,14 @@ jQuery(function ($) {
             return false;
         }
     }
+
+    $("#btnAgregarCliente").click(function () {
+        window.open(
+            "/Cliente/Editar?idCliente=" + GUID_EMPTY,
+            "Creación de Cliente",
+            "resizable,scrollbars,status"
+        );
+    });
 
     /**
      * ######################## INICIO CONTROLES DE FECHAS
@@ -1418,12 +1429,23 @@ jQuery(function ($) {
                 $("#numero").val(resultado.codigo);
 
                 if (resultado.estado == ESTADO_APROBADA) {
-                    alert("La cotización número " + resultado.codigo + " fue creada correctamente; se APROBÓ automáticamente, no requiere aprobación, ingrese un comentario si lo cree conveniente.");
-                    $("#comentarioAprobacion").val(resultado.observacion);
-                    $("#modalComentarioAprobacion").modal('show');                    
+
+
+                    $.alert({
+                        title: TITLE_EXITO,
+                        type: 'green',
+                        content: "La cotización número " + resultado.codigo + " fue creada correctamente; se APROBÓ automáticamente, no requiere aprobación, ingrese un comentario si lo cree conveniente.",
+                        buttons: {
+                            OK: function () {
+                                $("#comentarioAprobacion").val(resultado.observacion);
+                                $("#modalComentarioAprobacion").modal('show');
+
+                            }
+                        }
+                    });                  
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    alert("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN, ingrese un comentario si lo cree conveniente.");
+                    $("#solicitudIngresoComentario").html("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario de lo contrario se mantendrá en estado En Edición.")
                     $("#comentarioPendienteAprobacion").val(resultado.observacion);
                     $("#modalComentarioPendienteAprobacion").modal('show');
                 }
@@ -1464,20 +1486,26 @@ jQuery(function ($) {
                 $("#numero").val(resultado.codigo);
 
                 if (resultado.estado == ESTADO_APROBADA) {
-                    alert("La cotización número " + resultado.codigo + " fue editada correctamente; se APROBÓ automáticamente, no requiere aprobación.");
-                    $("#comentarioAprobacion").val(resultado.observacion);
-                    $("#modalComentarioAprobacion").modal('show');  
+
+
+                    $.alert({
+                        title: TITLE_EXITO,
+                        type: 'green',
+                        content: "La cotización número " + resultado.codigo + " fue editada correctamente; se APROBÓ automáticamente, no requiere aprobación, ingrese un comentario si lo cree conveniente.",
+                        buttons: {
+                            OK: function () {
+                                $("#comentarioAprobacion").val(resultado.observacion);
+                                $("#modalComentarioAprobacion").modal('show');
+                            
+                            }
+                        }
+                    });
+                    
+
+                   
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                   /* if (confirm("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN, ¿desea agregar un comentario?")) {
-                        $("#codigoCotizacion").val(resultado.codigo);
-                        $("#comentarioPendienteAprobacion").val(resultado.observacion);
-                        $("#modalComentarioPendienteAprobacion").modal('show');
-                    }
-                    else {
-                        window.location = '/Cotizacion/Index';
-                    }*/
-                    alert("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN, ingrese un comentario si lo cree conveniente.");
+                    $("#solicitudIngresoComentario").html("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario de lo contrario se mantendrá en estado En Edición.")
                     $("#comentarioPendienteAprobacion").val(resultado.observacion);
                     $("#modalComentarioPendienteAprobacion").modal('show');
                 }
@@ -2083,8 +2111,17 @@ jQuery(function ($) {
                 $("#btnCancelarCambioEstado").click();
             },
             success: function () {
-                alert("El estado de la cotización número: " + codigo + " se cambió correctamente.");
-                location.reload();
+
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "El estado de la cotización número: " + codigo + " se cambió correctamente.",
+                    buttons: {
+                        OK: function () { location.reload();}
+                    }
+                });
+
+                
                 //$("#btnBusquedaCotizaciones").click();
             }
         });
@@ -2961,8 +2998,18 @@ jQuery(function ($) {
                 $("#btnCancelarComentarioAprobacion").click();
             },
             success: function () {
-                alert("El comentario del estado de la cotización número: " + codigoCotizacion + " se cambió correctamente.");
-                $("#btnCancelarComentarioAprobacion").click();
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "El comentario del estado de la cotización número: " + codigoCotizacion + " se cambió correctamente.",
+                    buttons: {
+                        OK: function () {
+                            $("#btnCancelarComentarioAprobacion").click();
+                        }
+                    }
+                });
+
+                
                 
             }
         });
@@ -2973,21 +3020,46 @@ jQuery(function ($) {
     $("#btnAceptarComentario").click(function () {
         var codigoCotizacion = $("#numero").val();
         var observacion = $("#comentarioPendienteAprobacion").val();
+        var observacionEditable = $("#comentarioPendienteAprobacionEditable").val();
+        if (observacionEditable.trim().length < 15) {
+            $("#comentarioPendienteAprobacionEditable").focus();
+            $.alert({
+                title: "Agregar Comentario",
+                type: 'orange',
+                content: 'Debe ingresar al menos 15 caracteres en el comentario.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }   
+
         $.ajax({
             url: "/Cotizacion/updateEstadoCotizacion",
             data: {
                 codigo: codigoCotizacion,
                 estado: ESTADO_PENDIENTE_APROBACION,
-                observacion: observacion
+                observacion: observacionEditable + "\n" + observacion
             },
             type: 'POST',
             error: function () {
                 alert("Ocurrió un problema al intentar agregar un comentario a la cotización.")
-                $("#btnCancelarComentario").click();
+                //$("#btnCancelarComentario").click();
+                window.location = '/Cotizacion/CancelarCreacionCotizacion';
             },
             success: function () {
-                alert("El comentario del estado de la cotización número: " + codigoCotizacion + " se cambió correctamente.");
-                $("#btnCancelarComentario").click();
+                
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "El comentario del estado de la cotización número: " + codigoCotizacion + " se cambió correctamente.",
+                    buttons: {
+                        OK: function () { window.location = '/Cotizacion/CancelarCreacionCotizacion'; }
+                    }
+                });
+
+
+                
             }
         });
 

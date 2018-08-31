@@ -68,7 +68,6 @@ jQuery(function ($) {
         }
         else if ($("#pagina").val() == 19) {
             $("#btnBusquedaGuiasFacturaConsolidada").click();
-            
         }
 
     });
@@ -614,9 +613,6 @@ jQuery(function ($) {
 
             }
         });
-
-
-
     });
     
 
@@ -887,14 +883,15 @@ jQuery(function ($) {
                     $("#modalFacturarTitle").html("<b>Crear Factura</b>");
                     $("#descripcionDatosDocumento").html("<b>Datos de la Factura</b>");
                     $("#observacionesDocumento").html("Observaciones Factura:");
-                    $("#btnAceptarFacturarPedido").html("Generar Factura");
-                    
+                    $("#btnAceptarFacturarPedido").html("Generar Factura");   
+                    $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_RUC);
                 }
                 else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_DNI) {
                     $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
                     $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
                     $("#observacionesDocumento").html("Observaciones Boleta:");
                     $("#btnAceptarFacturarPedido").html("Generar Boleta");
+                    $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_DNI);
                 }
 
 

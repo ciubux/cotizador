@@ -146,14 +146,14 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_clienteSunat");
 
             InputParameterAdd.Guid(objCommand, "idUsuario", cliente.IdUsuarioRegistro);
-            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocial);
+            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocialSunat);
             InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
             InputParameterAdd.Varchar(objCommand, "ruc", cliente.ruc);
             InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
             InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura);
             InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat);
-            InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercialSunat);
+            InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercial);
             InputParameterAdd.Varchar(objCommand, "direccionDomicilioLegalSunat", cliente.direccionDomicilioLegalSunat);
             InputParameterAdd.Varchar(objCommand, "estadoContribuyente", cliente.estadoContribuyente);
             InputParameterAdd.Varchar(objCommand, "condicionContribuyente", cliente.condicionContribuyente);
@@ -181,7 +181,7 @@ namespace DataLayer
             //cliente.idCliente = (Guid)objCommand.Parameters["@newId"].Value;
             InputParameterAdd.Guid(objCommand, "idCliente", cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "idUsuario", cliente.IdUsuarioRegistro);
-            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocial);
+            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocialSunat);
             InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
 
             InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);

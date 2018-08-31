@@ -43,6 +43,8 @@ namespace DataLayer
 
         }
 
+
+        /*
         public List<UbigeoDTO> ObtenerUbigeos()
         {
             var objCommand = GetSqlCommand("ps_Ubigeo");
@@ -104,8 +106,11 @@ namespace DataLayer
                 }
             }
             return ubigeoDTODepartamentos;
-        }
-       
+        }*/
+
+
+        
+
         public List<Ubigeo> ObtenerDepartamentos()
         {
             var objCommand = GetSqlCommand("ps_Departamentos");
@@ -128,22 +133,27 @@ namespace DataLayer
 
             return UbigeoConvertTo.Ubigeos(Execute(objCommand));
         }
-        /*
-        public Ubigeo GetUbigeoById(string idUbigeo)
+
+
+        
+        public Ubigeo selectUbigeo(string codigo)
         {
             Ubigeo ubigeo = new Ubigeo();
-            var objCommand = GetSqlCommand("pNLS_UbigeoById");
-            InputParameterAdd.Varchar(objCommand, "idUbigeo", idUbigeo);
-            OutputParameterAdd.Varchar(objCommand, "departamento", 500);
-            OutputParameterAdd.Varchar(objCommand, "provincia", 500);
-            OutputParameterAdd.Varchar(objCommand, "distrito", 500);
-            ExecuteNonQuery(objCommand);
-            ubigeo.Id = idUbigeo;
-            ubigeo.Departamento = (string)objCommand.Parameters["@departamento"].Value;
-            ubigeo.Provincia = (string)objCommand.Parameters["@provincia"].Value;
-            ubigeo.Distrito = (string)objCommand.Parameters["@distrito"].Value;
-            return ubigeo;
-        }*/
+            var objCommand = GetSqlCommand("ps_ubigeo");
+            InputParameterAdd.Varchar(objCommand, "codigo", codigo);
+            DataTable dataTable = Execute(objCommand);
+            Ubigeo obj = new Ubigeo();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                obj.Id = Converter.GetString(row, "codigo");
+                obj.Distrito = Converter.GetString(row, "distrito");
+                obj.Provincia = Converter.GetString(row, "provincia");
+                obj.Departamento = Converter.GetString(row, "departamento");
+            }
+
+            return obj;
+        }
     }
 }
 

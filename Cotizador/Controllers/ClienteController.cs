@@ -19,25 +19,10 @@ namespace Cotizador.Controllers
         {
             get
             {
-
-             /*   Cliente cliente = null;
-                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
-                {
-                    //case Constantes.paginas.BusquedaCli: cliente = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA]; break;
-                    case Constantes.paginas.MantenimientoCliente: cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE]; break;
-                }
-                return cliente;*/
-
                 return (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
             }
             set
-            {/*
-                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
-                {
-                    //case Constantes.paginas.BusquedaPedidos: this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = value; break;
-                    case Constantes.paginas.MantenimientoCliente: this.Session[Constantes.VAR_SESSION_CLIENTE] = value; break;
-                }*/
-
+            {
                 this.Session[Constantes.VAR_SESSION_CLIENTE] = value;
             }
         }
@@ -53,6 +38,38 @@ namespace Cotizador.Controllers
             return View();
 
         }
+
+
+
+        public String GetDatosSunat()
+        {
+            try
+            { 
+                this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCliente;
+
+                if (this.Session[Constantes.VAR_SESSION_CLIENTE] == null)
+                {
+                    instanciarCliente();
+                }
+
+                Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+
+                ClienteBL clienteBL = new ClienteBL();
+                cliente = clienteBL.getDatosSunat(cliente);
+                String resultado = JsonConvert.SerializeObject(cliente);
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+            }
+            return "";
+        }
+
+
 
         public void ChangeInputString()
         {
@@ -116,7 +133,7 @@ namespace Cotizador.Controllers
             }
 
 
-            if (this.Session[Constantes.VAR_SESSION_CLIENTE] == null)
+            if (this.Session[Constantes.VAR_SESSION_CLIENTE] == null || idCliente == Guid.Empty)
             {
 
                 instanciarCliente();
@@ -126,21 +143,12 @@ namespace Cotizador.Controllers
 
 
 
-            if (idCliente != null)
+            if (idCliente != null && idCliente != Guid.Empty)
             {
                 ClienteBL clienteBL = new ClienteBL();
                 cliente = clienteBL.getCliente(idCliente.Value);
                 cliente.IdUsuarioRegistro = usuario.idUsuario;
                 this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
-            }
-                
-
-            if (cliente.idCliente == Guid.Empty)
-            {
-                ViewBag.existeCliente = 0;
-            }
-            else {
-                ViewBag.existeCliente = 1;
             }
 
             ViewBag.cliente = cliente;
@@ -238,10 +246,20 @@ namespace Cotizador.Controllers
 
         public String Create()
         {
+            ClienteBL clienteBL = new ClienteBL();
+            Cliente cliente = this.ClienteSession;
+            cliente = clienteBL.insertClienteSunat(cliente);
+            String resultado = JsonConvert.SerializeObject(cliente);
+            this.ClienteSession = null;
+            return resultado;
+            
+            /*
             String controller = Request["controller"].ToString();
             IDocumento documento = (IDocumento)this.Session[controller];
             Cliente cliente = new Cliente();
             Usuario usuario = (Usuario)this.Session["usuario"];
+
+
             cliente.IdUsuarioRegistro = usuario.idUsuario;
             cliente.razonSocial = Request["razonSocial"].ToString();
             cliente.nombreComercial = Request["nombreComercial"].ToString();
@@ -271,7 +289,7 @@ namespace Cotizador.Controllers
                 "\"idCLiente\":\"" + documento.cliente.idCliente + "\"," +
                 "\"codigoAlterno\":\"" + documento.cliente.codigoAlterno + "\"}";
 
-            return resultado;
+            return resultado;*/
         }
 
 

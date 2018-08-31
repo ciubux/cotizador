@@ -213,22 +213,6 @@
                     <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
                     <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
 
-                    @if (pedido.esRePedido)
-                {
-                    <th data-name="precioNetoAnterior" data-visible="true" style="color: #B9371B">Precio neto ant</th>
-                    <th data-name="precioNeto" data-visible="true" style="color: #B9371B">Var% precio neto</th>
-                    <th data-name="varCosto" data-visible="true" style="color: #B9371B">Var% costo</th>
-
-                if (ViewBag.debug == 1)
-                {
-                    <th data-name="costoAnterior" data-visible="true">CostoAnterior</th>
-            }
-            else
-            {
-                <th data-name="costoAnterior" data-visible="false">CostoAnterior</th>
-        }
-    }
-
                     <th data-name="precioPedido" data-visible="true" style="color: #B9371B">Precio Unit. Original Pedido</th>
                     <th class="ordenar" data-sortable="false" data-visible="false"></th>
 
@@ -308,13 +292,6 @@
                     <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
                     <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
                     <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
-                    @if (pedido.esRePedido)
-                {
-                    <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
-            }
 
 
                     <td class="@cotizacionDetalle.producto.idProducto">@cotizacionDetalle.precioUnitarioOriginal</td>

@@ -5,15 +5,51 @@ using System.Web;
 using System.Web.Mvc;
 using BusinessLayer;
 using Model;
+using Newtonsoft.Json;
 
 namespace Cotizador.Controllers
 {
     public class ProveedorController : Controller
     {
+        private Proveedor ProveedorSession
+        {
+            get
+            {
+                return (Proveedor)this.Session[Constantes.VAR_SESSION_PROVEEDOR];
+            }
+            set
+            {
+                this.Session[Constantes.VAR_SESSION_PROVEEDOR] = value;
+            }
+        }
         // GET: Ciudad
         public ActionResult Index()
         {
             return View();
+        }
+
+
+
+        public String SearchProveedores()
+        {
+            String data = this.Request.Params["data[q]"];
+            ProveedorBL proveedorBL = new ProveedorBL();
+            Proveedor proveedor = (Proveedor)this.Session[Constantes.VAR_SESSION_PROVEEDOR];
+            return proveedorBL.getProveedoresBusqueda(data, proveedor.ciudad.idCiudad);
+        }
+
+
+        public String GetProveedor()
+        {
+            Proveedor proveedor = (Proveedor)this.Session[Constantes.VAR_SESSION_PROVEEDOR];
+            Guid idProveedor = Guid.Parse(Request["idCliente"].ToString());
+            ProveedorBL proveedorBL = new ProveedorBL();
+            Ciudad ciudad = proveedor.ciudad;
+            proveedor = proveedorBL.getProveedor(idProveedor);
+            proveedor.ciudad = ciudad;
+            String resultado = JsonConvert.SerializeObject(proveedor);
+            this.ProveedorSession = proveedor;
+            return resultado;
         }
 
         // GET: Ciudad/Details/5

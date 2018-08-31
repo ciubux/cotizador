@@ -32,6 +32,10 @@ namespace Model
 
         [Display(Name = "Cliente:")]
         public Cliente cliente { get; set; }
+
+        [Display(Name = "Proveedor:")]
+        public Proveedor proveedor { get; set; }
+
         [Display(Name = "Orden de Compra N°:")]
         public String numeroReferenciaCliente { get; set; }
 
@@ -277,7 +281,7 @@ namespace Model
             /*GENERAN GUIA REMISION*/
             [Display(Name = "Venta")]
             Venta = 'V', /*PEDIDOS DE VENTA*/
-            [Display(Name = "Traslado Interno")]
+            [Display(Name = "Traslado Interno a Entregar")]
             TrasladoInterno = 'T',  /*ALMACEN*/
             [Display(Name = "Comodato a Entregar")]
             ComodatoEntregado = 'M', /*PEDIDO DE VENTA*/
@@ -312,7 +316,8 @@ namespace Model
             //GENERAN NOTA INGRESO
             [Display(Name = "Compra")]
             Compra = 'C',  /*PEDIDO DE COMPRA*/
-
+            [Display(Name = "Traslado Interno a Recibir")]
+            TrasladoInternoRecibido = 'T',  /*ALMACEN*/
             [Display(Name = "Comodato a Recibir")]
             ComodatoRecibido = 'M', /*PEDIDO DE COMPRA*/
             [Display(Name = "Transferencia Gratuita a Recibir")]
@@ -339,8 +344,7 @@ namespace Model
 
 
         public DocumentoVenta documentoVenta { get; set; }
-
       
-
+        public Boolean stockConfirmado { get; set; }
     }
 }

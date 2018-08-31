@@ -10,8 +10,8 @@ namespace Cotizador
         {
 
             bundles.Add(new ScriptBundle("~/bundles/utiles").Include(
-                         "~/Scripts/utiles1.1.2.js",
-                         "~/Scripts/utilesFacturacion1.1.1.js"
+                         "~/Scripts/utiles1.1.3.js",
+                         "~/Scripts/utilesFacturacion1.1.3.js"
                          ));
 
             bundles.Add(new ScriptBundle("~/bundles/venta").Include(
@@ -36,27 +36,29 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cotizacion").Include(
-                        "~/Scripts/cotizacion1.1.1.js"
+                        "~/Scripts/cotizacion1.1.3.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
-                        "~/Scripts/pedido1.1.5.js"
+                        "~/Scripts/pedidoGeneral1.1.3.js",
+                        "~/Scripts/pedido1.1.7.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedidoCompra").Include(
-                        "~/Scripts/pedidoCompra1.1.1.js"
+                        "~/Scripts/pedidoGeneral1.1.3.js",
+                        "~/Scripts/pedidoCompra1.1.3.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
-                     "~/Scripts/cliente1.1.3.js"
+                     "~/Scripts/cliente1.1.4.js"
                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
-                        "~/Scripts/guiaRemision1.1.3.js"
+                        "~/Scripts/guiaRemision1.1.7.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/notaIngreso").Include(
-                        "~/Scripts/notaIngreso.js"
+                        "~/Scripts/notaIngreso1.1.3.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -104,7 +106,7 @@ namespace Cotizador
                       "~/Content/bootstrap.css",
                       "~/Content/footable.bootstrap.min.css",
                       "~/Content/jquery-ui.min.css",
-                      "~/Content/site.css",
+                      "~/Content/site1.1.3.css",
                       "~/Content/chosen/chosen.css",
                       "~/Content/jquery.loadingModal.css",
                       "~/Content/jquery-confirm.css"));

@@ -522,11 +522,11 @@ namespace BusinessLayer
             return documentoVentaList;
         }
 
-        public Pedido GetPedido(Pedido pedido)
+        public Pedido GetPedido(Pedido pedido,Usuario usuario)
         {
             using (var dal = new PedidoDAL())
             {
-                pedido = dal.SelectPedido(pedido);
+                pedido = dal.SelectPedido(pedido,usuario);
 
             /*    if (pedido.mostrarValidezOfertaEnDias == 0)
                 {

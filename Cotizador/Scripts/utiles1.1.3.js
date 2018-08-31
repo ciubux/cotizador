@@ -9,7 +9,7 @@ var MILISEGUNDOS_AUTOGUARDADO = 5000;
 var VARIACION_PRECIO_ITEM_PEDIDO = 0.01;
 
 
-
+var TITLE_EXITO = 'Operación Realizada';
 
 
 /**
@@ -28,6 +28,8 @@ var ESTADO_EN_EDICION = 6;
 var ESTADO_ELIMINADO = 7;
 var ESTADO_FACTURADO = 8;
 var ESTADO_FACTURADO_PARCIALMENTE = 9;
+var ESTADO_RECIBIDO = 10;
+var ESTADO_RECIBIDO_PARCIALMENTE = 11;
 
 
 //Etiquetas de estadps para búsqueda de Pedidos
@@ -183,3 +185,4 @@ function mostrarMensajeErrorProceso(mensajeError) {
         }
     });
 }
+

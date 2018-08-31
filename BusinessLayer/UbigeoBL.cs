@@ -35,6 +35,15 @@ namespace BusinessLayer
            }*/
 
 
+        public Ubigeo getUbigeo(String codigo)
+        {
+            using (var ubigeoDal = new UbigeoDAL())
+            {
+                return ubigeoDal.selectUbigeo(codigo);
+            }
+        }
+
+
         public Ubigeo getUbigeoPorDistritoProvincia(String distrito, String provincia)
         {
             using (var ubigeoDal = new UbigeoDAL())

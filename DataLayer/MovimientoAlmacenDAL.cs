@@ -161,8 +161,12 @@ namespace DataLayer
             InputParameterAdd.Char(objCommand, "ubigeoEntrega", notaIngreso.pedido.ubigeoEntrega.Id);
             InputParameterAdd.Varchar(objCommand, "direccionEntrega", notaIngreso.pedido.direccionEntrega.descripcion);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((char)notaIngreso.motivoTraslado).ToString());
-       /*     InputParameterAdd.Guid(objCommand, "idTransportista", notaIngreso.transportista.idTransportista);
-            InputParameterAdd.Varchar(objCommand, "nombreTransportista", notaIngreso.transportista.descripcion);
+            InputParameterAdd.Varchar(objCommand, "serieGuiaReferencia", notaIngreso.serieGuiaReferencia);
+            InputParameterAdd.Int(objCommand, "numeroGuiaReferencia", notaIngreso.numeroGuiaReferencia);
+            InputParameterAdd.Varchar(objCommand, "serieDocumentoVentaReferencia", notaIngreso.serieDocumentoVentaReferencia);
+            InputParameterAdd.Int(objCommand, "numeroDocumentoVentaReferencia", notaIngreso.numeroDocumentoVentaReferencia);
+            InputParameterAdd.Int(objCommand, "tipoDocumentoVentaReferencia", (int)notaIngreso.tipoDocumentoVentaReferencia);
+     /*       InputParameterAdd.Varchar(objCommand, "nombreTransportista", notaIngreso.transportista.descripcion);
             InputParameterAdd.Varchar(objCommand, "rucTransportista", notaIngreso.transportista.ruc);
             InputParameterAdd.Varchar(objCommand, "breveteTransportista", notaIngreso.transportista.brevete);
             InputParameterAdd.Varchar(objCommand, "direccionTransportista", notaIngreso.transportista.direccion);
@@ -218,7 +222,7 @@ namespace DataLayer
             {
                 if(documentoDetalle.cantidadPorAtender > 0)
                 { 
-                    var objCommand = GetSqlCommand("pi_movimientoAlmacenDetalleSalida");
+                    var objCommand = GetSqlCommand("pi_movimientoAlmacenDetalle");
                     InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
                     InputParameterAdd.Guid(objCommand, "idVenta", movimientoAlmacen.venta.idVenta);
                     InputParameterAdd.Guid(objCommand, "idUsuario", movimientoAlmacen.usuario.idUsuario);
@@ -345,7 +349,7 @@ namespace DataLayer
         }
 
 
-        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor)
+        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor, Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_generarPlantillaCotizacion");
             InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
@@ -399,7 +403,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle();
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario);
                 cotizacionDetalle.producto = new Producto();
 
 
@@ -735,8 +739,13 @@ namespace DataLayer
                 notaIngreso.observaciones = Converter.GetString(row, "observaciones");
                 notaIngreso.estaAnulado = Converter.GetBool(row, "anulado");
                 notaIngreso.estaFacturado = Converter.GetBool(row, "facturado");
+                notaIngreso.serieGuiaReferencia = Converter.GetString(row, "serie_guia_referencia");
+                notaIngreso.numeroGuiaReferencia = Converter.GetInt(row, "numero_guia_referencia");
+                notaIngreso.serieDocumentoVentaReferencia = Converter.GetString(row, "serie_documento_venta_referencia");
+                notaIngreso.numeroDocumentoVentaReferencia = Converter.GetInt(row, "numero_documento_venta_referencia");
+                notaIngreso.tipoDocumentoVentaReferencia = (NotaIngreso.TiposDocumentoVentaReferencia)Converter.GetInt(row, "tipo_documento_venta_referencia");
+                
                 notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
-
 
 
                 //PEDIDO
@@ -767,7 +776,7 @@ namespace DataLayer
                 notaIngreso.ciudadDestino = new Ciudad();
                 notaIngreso.ciudadDestino.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 notaIngreso.ciudadDestino.nombre = Converter.GetString(row, "nombre_ciudad");
-                notaIngreso.ciudadDestino.direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida");
+                notaIngreso.ciudadDestino.direccionPuntoLlegada = Converter.GetString(row, "direccion_punto_llegada");
                 notaIngreso.ciudadDestino.esProvincia = Converter.GetBool(row, "es_provincia");
                 notaIngreso.ciudadDestino.sede = Converter.GetString(row, "sede");
                 //TRANSPORTISTA
@@ -806,7 +815,7 @@ namespace DataLayer
         {
             List<NotaIngreso> notaIngresoList = new List<NotaIngreso>();
 
-            var objCommand = GetSqlCommand("ps_guiasRemision");
+            var objCommand = GetSqlCommand("ps_notasIngreso");
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", notaIngreso.numeroDocumento);
             InputParameterAdd.Guid(objCommand, "idCiudad", notaIngreso.ciudadDestino.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", notaIngreso.pedido.cliente.idCliente);

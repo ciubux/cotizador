@@ -32,10 +32,26 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
-            InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono); //puede ser null
+            if (pedido.tipoPedido == Pedido.tiposPedido.Venta ||
+                pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno ||
+                pedido.tipoPedido == Pedido.tiposPedido.TransferenciaGratuitaEntregada ||
+                pedido.tipoPedido == Pedido.tiposPedido.ComodatoEntregado ||
+                pedido.tipoPedido == Pedido.tiposPedido.PrestamoEntregado)
+            {
+                InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono); //puede ser null
+            }
+            else {
+                InputParameterAdd.Guid(objCommand, "idDireccionEntrega", null); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "direccionEntrega", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "contactoEntrega", null); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", null); //puede ser null
+
+
+            }
+
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", pedido.fechaSolicitud);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde.Value);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
@@ -47,10 +63,27 @@ namespace DataLayer
             DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]),0);
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
-            InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
-            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
+            if (pedido.tipoPedido == Pedido.tiposPedido.Venta ||
+                pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno ||
+                pedido.tipoPedido == Pedido.tiposPedido.TransferenciaGratuitaEntregada ||
+                pedido.tipoPedido == Pedido.tiposPedido.ComodatoEntregado ||
+                pedido.tipoPedido == Pedido.tiposPedido.PrestamoEntregado)
+            {
+                InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
+                InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idSolicitante", null);
+                InputParameterAdd.Varchar(objCommand, "contactoPedido", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "correoContactoPedido", null);  //puede ser null
+            }
+
+
+
             InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV?1:0));
             InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
             InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
@@ -105,10 +138,24 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
-            InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono); //puede ser null
+
+            if (pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.Compra ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.TransferenciaGratuitaRecibida ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.ComodatoRecibido ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.PrestamoRecibido)
+            {
+                InputParameterAdd.Guid(objCommand, "idDireccionEntrega", null); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "direccionEntrega", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "contactoEntrega", null); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", null); //puede ser null
+                
+            }
+            else {
+                InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono); //puede ser null
+            }
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", pedido.fechaSolicitud);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde.Value);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
@@ -120,10 +167,26 @@ namespace DataLayer
             DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]), 0);
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
-            InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
-            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
+            if (pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.Compra ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.TransferenciaGratuitaRecibida ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.ComodatoRecibido ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.PrestamoRecibido)
+            {
+                InputParameterAdd.Guid(objCommand, "idSolicitante", null);
+                InputParameterAdd.Varchar(objCommand, "contactoPedido", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "correoContactoPedido", null);  //puede ser null
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
+                InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
+
+
+            }
+
             InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV ? 1 : 0));
             InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
             InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
@@ -172,6 +235,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaAdicional", pedido.numeroReferenciaAdicional);
             InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
 
             ExecuteNonQuery(objCommand);
@@ -181,7 +245,7 @@ namespace DataLayer
                 pedidoAdjunto.usuario = pedido.usuario;
                 pedidoAdjunto.idPedido = pedido.idPedido;
                 pedidoAdjunto.idCliente = pedido.cliente.idCliente;
-                this.InsertPedidoAdjunto(pedidoAdjunto);
+                InsertPedidoAdjunto(pedidoAdjunto);
             }
             this.Commit();
         }
@@ -202,10 +266,27 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
-            InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono); //puede ser null
+            if (pedido.tipoPedido == Pedido.tiposPedido.Venta ||
+                pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno ||
+                pedido.tipoPedido == Pedido.tiposPedido.TransferenciaGratuitaEntregada ||
+                pedido.tipoPedido == Pedido.tiposPedido.ComodatoEntregado ||
+                pedido.tipoPedido == Pedido.tiposPedido.PrestamoEntregado)
+            {
+                InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono); //puede ser null
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idDireccionEntrega", null); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "direccionEntrega", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "contactoEntrega", null); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", null); //puede ser null
+
+
+            }
+
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", pedido.fechaSolicitud);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde.Value);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
@@ -217,10 +298,24 @@ namespace DataLayer
             DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]), 0);
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
-            InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
-            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
+            if (pedido.tipoPedido == Pedido.tiposPedido.Venta ||
+               pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno ||
+               pedido.tipoPedido == Pedido.tiposPedido.TransferenciaGratuitaEntregada ||
+               pedido.tipoPedido == Pedido.tiposPedido.ComodatoEntregado ||
+               pedido.tipoPedido == Pedido.tiposPedido.PrestamoEntregado)
+            {
+                InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
+                InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idSolicitante", null);
+                InputParameterAdd.Varchar(objCommand, "contactoPedido", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "correoContactoPedido", null);  //puede ser null
+            }
             InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV ? 1 : 0));
             InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
             InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
@@ -255,7 +350,104 @@ namespace DataLayer
             }
             this.Commit();
         }
-    
+
+
+
+
+        public void UpdatePedidoCompra(Pedido pedido)
+        {
+            this.BeginTransaction(IsolationLevel.ReadCommitted);
+            var objCommand = GetSqlCommand("pu_pedidoCompra");
+
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido); //puede ser null
+
+            if (pedido.cotizacion.idCotizacion == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idCotizacion", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idCotizacion", pedido.cotizacion.idCotizacion); //puede ser null
+
+            InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
+            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
+            if (pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.Compra ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.TransferenciaGratuitaRecibida ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.ComodatoRecibido ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.PrestamoRecibido)
+            {
+                InputParameterAdd.Guid(objCommand, "idDireccionEntrega", null); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "direccionEntrega", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "contactoEntrega", null); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", null); //puede ser null
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto); //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono); //puede ser null
+            }
+
+            InputParameterAdd.DateTime(objCommand, "fechaSolicitud", pedido.fechaSolicitud);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde.Value);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
+
+            DateTime dtTmp = DateTime.Now;
+            String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');
+            DateTime horaEntregaDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaDesdeArray[0]), Int32.Parse(horaEntregaDesdeArray[1]), 0);
+            String[] horaEntregaHastaArray = pedido.horaEntregaHasta.Split(':');
+            DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]), 0);
+            InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
+            InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
+            if (pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.Compra ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.TransferenciaGratuitaRecibida ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.ComodatoRecibido ||
+               pedido.tipoPedidoCompra == Pedido.tiposPedidoCompra.PrestamoRecibido)
+            {
+                InputParameterAdd.Guid(objCommand, "idSolicitante", null);
+                InputParameterAdd.Varchar(objCommand, "contactoPedido", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", null);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "correoContactoPedido", null);  //puede ser null
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
+                InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
+                InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
+            }
+            InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV ? 1 : 0));
+            InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
+            InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
+            InputParameterAdd.Decimal(objCommand, "total", pedido.montoTotal);
+            InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);  //puede ser null
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
+            InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCrediticioPedido", pedido.seguimientoCrediticioPedido.observacion);
+            InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
+            InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
+            InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedidoCompra).ToString());
+
+            ExecuteNonQuery(objCommand);
+
+
+            foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
+            {
+                pedidoDetalle.idPedido = pedido.idPedido;
+                pedidoDetalle.usuario = pedido.usuario;
+                this.InsertPedidoDetalle(pedidoDetalle);
+            }
+
+            foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
+            {
+                pedidoAdjunto.idPedido = pedido.idPedido;
+                this.InsertPedidoAdjunto(pedidoAdjunto);
+            }
+            this.Commit();
+        }
+
 
         public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle)
         {
@@ -324,7 +516,7 @@ namespace DataLayer
         }
 
 
-        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor)
+        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor, Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_generarPlantillaCotizacion");
             InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
@@ -378,7 +570,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle();
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario);
                 cotizacionDetalle.producto = new Producto();
 
 
@@ -432,7 +624,7 @@ namespace DataLayer
 
 
 
-        public Pedido SelectPedido(Pedido pedido)
+        public Pedido SelectPedido(Pedido pedido, Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_pedido");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
@@ -562,7 +754,8 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in pedidoDetalleDataTable.Rows)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle();
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario);
+             
                 pedidoDetalle.producto = new Producto();
 
                 pedidoDetalle.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");
@@ -798,7 +991,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
                 pedido.FechaRegistro  = Converter.GetDateTime(row, "fecha_registro");
                 pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
-
+                pedido.stockConfirmado = Converter.GetBool(row, "stock_confirmado");
                 if (row["fecha_programacion"] == DBNull.Value)
                     pedido.fechaProgramacion = null;
                 else
@@ -977,7 +1170,17 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
         }
 
-    
+
+        public void UpdateStockConfirmado(Pedido pedido)
+        {
+            var objCommand = GetSqlCommand("pu_pedidoStockConfirmado");
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Int(objCommand, "stockConfirmado", pedido.stockConfirmado ? 1 : 0);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+
+
 
     }
 }

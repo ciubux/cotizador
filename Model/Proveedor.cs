@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
 namespace Model
 {
-    public class Proveedor : Auditoria
+    public class Proveedor : Persona
     {
-        public Guid idProveedor { get; set; }
-
-        public String codigo { get; set;  }
+        public Proveedor()
+        {
+            //Cada vez que se instancia un cliente se instancia con al menos una dirección de entrega
+            this.direccionEntregaList = new List<DireccionEntrega>();
+            this.solicitanteList = new List<Solicitante>();
+            this.ubigeo = new Ubigeo();
+        }
 
         public String nombre { get; set; }
 
-        
+        public Guid idProveedor { get; set; }
+
+
     }
 }

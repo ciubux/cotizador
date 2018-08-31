@@ -7,6 +7,7 @@ namespace Model
 {
     public class MovimientoDetalle : DocumentoDetalle
     {
+
         public Guid idMovimientoDetalle { get; set; }
         public Guid idMovimiento { get; set; }   
       

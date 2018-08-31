@@ -99,16 +99,16 @@ namespace BusinessLayer
                             if (evaluarVariacion == 2)
                             {
                                 //Se evalua precio cliente producto
-                                if (!pedidoDetalle.esPrecioAlternativo)
+                          /*      if (!pedidoDetalle.esPrecioAlternativo)
                                 {
-
+                                */
                                     if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioClienteProducto.precioUnitario + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
                         pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioClienteProducto.precioUnitario - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
                                     {
                                         pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio unitario registrado en facturación.\n";
                                         pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                                     }
-                                }
+                               /* }
                                 else {
                                     if (pedidoDetalle.precioUnitario > (pedidoDetalle.producto.precioClienteProducto.precioUnitario/ pedidoDetalle.producto.equivalencia) + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
                                                             pedidoDetalle.precioUnitario < (pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.equivalencia) - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
@@ -116,7 +116,7 @@ namespace BusinessLayer
                                         pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio unitario registrado en facturación.\n";
                                         pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                                     }
-                                }
+                                }*/
                             /*Se evalua contra precio lista*/
                             }
                             else {
@@ -252,7 +252,7 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 validarPedidoCompra(pedido);
-                dal.UpdatePedido(pedido);
+                dal.UpdatePedidoCompra(pedido);
             }
         }
 
@@ -265,6 +265,14 @@ namespace BusinessLayer
             }
         }
 
+        public void UpdateStockConfirmado(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                dal.UpdateStockConfirmado(pedido);
+            }
+        }
+
         public void ProgramarPedido(Pedido pedido,Usuario usuario)
         {
             using (var dal = new PedidoDAL())
@@ -273,7 +281,7 @@ namespace BusinessLayer
             }
         }
 
-        public Pedido obtenerProductosAPartirdePreciosRegistrados(Pedido pedido, String familia, String proveedor)
+        public Pedido obtenerProductosAPartirdePreciosRegistrados(Pedido pedido, String familia, String proveedor, Usuario usuario)
         {
 
             ProductoBL productoBL = new ProductoBL();
@@ -283,7 +291,7 @@ namespace BusinessLayer
             //Detalle de la cotizacion
             foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle();
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario);
                 pedidoDetalle.producto = new Producto();
                 pedidoDetalle.cantidad = 1;
                 pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
@@ -335,11 +343,11 @@ namespace BusinessLayer
         }
 
 
-        public Pedido GetPedido(Pedido pedido)
+        public Pedido GetPedido(Pedido pedido,Usuario usuario)
         {
             using (var dal = new PedidoDAL())
             {
-                pedido = dal.SelectPedido(pedido);
+                pedido = dal.SelectPedido(pedido, usuario);
 
             /*    if (pedido.mostrarValidezOfertaEnDias == 0)
                 {
@@ -380,6 +388,12 @@ namespace BusinessLayer
                         pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.precioSinIgv));
                         //Se agrega el IGV al costoLista
                         pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.costoSinIgv));
+                    }
+
+                    if (pedidoDetalle.esPrecioAlternativo)
+                    {
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario =
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.equivalencia;
                     }
                 }
             }

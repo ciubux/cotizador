@@ -31,12 +31,19 @@ namespace Model
             Atendido = 4,
             [Display(Name = "Guiado Parcialmente")]
             AtendidoParcialmente = 5,
+            [Display(Name = "Recibido")]
+            Recibido = 10,
+            [Display(Name = "Recibido Parcialmente")]
+            RecibidoParcialmente = 11,
             [Display(Name = "Facturado")]
             Facturado = 8,
             [Display(Name = "Facturado Parcialmente")]
             FacturadoParcialmente = 9,
             [Display(Name = "Eliminado")]
             Eliminada = 7,
+
+
+
             [Display(Name = "[Entrega No Finalizada]")]
             NoAtendidos = -2
         };

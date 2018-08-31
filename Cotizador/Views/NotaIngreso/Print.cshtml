@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "Vista Previa Impresión Nota Ingreso";
+    Model.NotaIngreso notaIngreso = ViewBag.notaIngreso;
+
+}
+
+<div>
+
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" id="idGuiaRemision" value="" />
+
+
+    <div class="row">
+        <!--SEDE MP-->
+        <div>
+            @Html.LabelFor(g => notaIngreso.ciudadDestino)
+            <span class="form-control-static" id="ver_notaIngreso_ciudadDestino_nombre">@notaIngreso.ciudadDestino.nombre</span>
+        </div>
+        <div>
+            @Html.LabelFor(g => notaIngreso.ciudadDestino.direccionPuntoLlegada)
+            <span class="form-control-static" id="ver_notaIngreso_ciudadDestino_direccionPuntoLlegada">@notaIngreso.ciudadDestino.direccionPuntoLlegada</span>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            @Html.LabelFor(g => notaIngreso.fechaTraslado)
+            <span class="form-control-static" id="ver_notaIngreso_fechaTraslado">@notaIngreso.fechaTraslado</span>
+        </div>
+        <div>
+            @Html.LabelFor(g => notaIngreso.serieNumeroNotaIngreso)
+            <span class="form-control-static" id="ver_notaIngreso_serieNumeroDocumento">@notaIngreso.serieNumeroNotaIngreso</span>
+        </div>
+    </div>
+
+
+    <!--NUMEROS PEDIDO-->
+    <div class="row">
+        <div>
+            @Html.LabelFor(g => notaIngreso.pedido.cliente)
+            <span class="form-control-static" id="ver_notaIngreso_pedido_cliente">@notaIngreso.pedido.cliente</span>
+        </div>
+
+        <div>
+            @Html.LabelFor(g => notaIngreso.pedido.numeroReferenciaCliente)
+            <span class="form-control-static" id="ver_notaIngreso_pedido_numeroReferenciaCliente">@notaIngreso.pedido.numeroReferenciaCliente</span>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div>
+            @Html.LabelFor(g => notaIngreso.fechaEmision)
+            <span class="form-control-static">@notaIngreso.fechaEmision</span>
+        </div>
+
+        <div>
+            @Html.LabelFor(g => notaIngreso.motivoTraslado)
+            <span class="form-control-static">@notaIngreso.motivoTrasladoString</span>
+        </div>
+
+    </div>
+
+        <!--GUIA REMISIÓN REFERENCIA-->
+    <div class="row">
+        <div>
+            @Html.LabelFor(p => notaIngreso.serieGuiaReferencia)
+            <span class="form-control-static">@notaIngreso.serieGuiaReferencia</span>
+        </div>
+        <div>
+            @Html.LabelFor(p => notaIngreso.numeroGuiaReferencia)
+            <span class="form-control-static">@notaIngreso.numeroGuiaReferencia</span>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            @Html.LabelFor(p => notaIngreso.tipoDocumentoVentaReferencia)
+            <span class="form-control-static">@notaIngreso.tipoDocumentoVentaReferenciaString</span>
+        </div>
+        <div >
+            @Html.LabelFor(p => notaIngreso.serieDocumentoVentaReferencia)
+            <span class="form-control-static">@notaIngreso.serieDocumentoVentaReferencia</span>
+        </div>
+        <div>
+            @Html.LabelFor(p => notaIngreso.numeroDocumentoVentaReferencia)
+            <span class="form-control-static">@notaIngreso.numeroDocumentoVentaReferencia</span>
+        </div>
+    </div>
+
+
+
+        <table id="tableDetalleGuia" class="table" data-editing="false">
+            <thead>
+                <tr>
+                    <th data-name="sku" data-sortable="false">Código</th>
+                    <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cantidad</th>
+                    <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                    <th data-name="producto" data-sortable="false">Producto</th>
+                </tr>
+            </thead>
+
+
+            <tbody>
+                @{int contador = 0;}
+                @foreach (var documentoDetalle in notaIngreso.documentoDetalle)
+            {
+                contador++;
+                <tr data-expanded="true">
+      
+                    <td>  @documentoDetalle.producto.sku</td>
+
+
+                    <td class="@documentoDetalle.producto.idProducto detcantidadSaldo" style="text-align:right">@documentoDetalle.cantidad</td>
+                    <td>  @documentoDetalle.unidad</td>
+                    <td>  @documentoDetalle.producto.descripcion  </td>
+                </tr>
+        }
+
+
+            </tbody>
+        </table>
+
+        <div class="row">
+
+            @Html.LabelFor(g => notaIngreso.observaciones)
+            <span class="form-control-static" id="ver_notaIngreso_observaciones">@notaIngreso.observaciones</span>
+
+    </div>
+
+
+    </div>
+
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/notaIngreso")
+    }
+
+
+
+

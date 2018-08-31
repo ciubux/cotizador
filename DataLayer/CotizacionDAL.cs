@@ -200,7 +200,7 @@ namespace DataLayer
 
 
 
-            public Cotizacion SelectCotizacion(Cotizacion cotizacion)
+        public Cotizacion SelectCotizacion(Cotizacion cotizacion, Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_cotizacion");
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
@@ -294,7 +294,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle();
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario);
                 cotizacionDetalle.producto = new Producto();
 
                 cotizacionDetalle.idCotizacionDetalle = Converter.GetGuid(row, "id_cotizacion_detalle");

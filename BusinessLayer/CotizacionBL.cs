@@ -98,7 +98,7 @@ namespace BusinessLayer
                             }
                             else
                             {
-                                if (cotizacionDetalle.precioUnitario != precioClienteProducto.precioUnitario / cotizacionDetalle.producto.equivalencia)
+                                if (cotizacionDetalle.precioUnitario != ( precioClienteProducto.precioUnitario / cotizacionDetalle.producto.equivalencia))
                                 {
                                     evaluarDescuento = 2;
                                 }
@@ -133,7 +133,9 @@ namespace BusinessLayer
                                     cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ". El precio unitario registrado en facturación tuvo vigencia hasta "+ precioClienteProducto.fechaFinVigencia.Value.ToString(Constantes.formatoFecha) + ".\n";
                                     break;
                             }
-                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                            //cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                            //La cotización no quedará en estado Pendiente de aprobación, dado que requiere el comentario para que pase a estado Pendiente de Aprobación
+                            cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                         }
                         
                     }               
@@ -187,7 +189,7 @@ namespace BusinessLayer
              
         }
 
-        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor)
+        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor,Usuario usuario)
         {
 
             ProductoBL productoBL = new ProductoBL();
@@ -197,7 +199,7 @@ namespace BusinessLayer
             //Detalle de la cotizacion
             foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle();
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario);
                 cotizacionDetalle.producto = new Producto();
                 cotizacionDetalle.cantidad = 1;
                 cotizacionDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
@@ -217,11 +219,11 @@ namespace BusinessLayer
 
 
 
-        public Cotizacion GetCotizacion(Cotizacion cotizacion)
+        public Cotizacion GetCotizacion(Cotizacion cotizacion, Usuario usuario)
         {
             using (var dal = new CotizacionDAL())
             {
-                cotizacion = dal.SelectCotizacion(cotizacion);
+                cotizacion = dal.SelectCotizacion(cotizacion, usuario);
 
                 if (cotizacion.mostrarValidezOfertaEnDias == 0)
                 {

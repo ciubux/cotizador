@@ -306,6 +306,8 @@ namespace Cotizador.Controllers
 
                 instanciarPedido();
             }
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA];
 
             Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
@@ -330,12 +332,12 @@ namespace Cotizador.Controllers
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
             foreach (DocumentoDetalle documentoDetalle in  cotizacion.documentoDetalle)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle();
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario);
                 pedidoDetalle.cantidad = documentoDetalle.cantidad;
                 if (documentoDetalle.cantidad == 0)
                     pedidoDetalle.cantidad = 1;
 
-                pedidoDetalle.costoAnterior = documentoDetalle.costoAnterior;
+               // pedidoDetalle.costoAnterior = documentoDetalle.costoAnterior;
                 pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
                 pedidoDetalle.flete = documentoDetalle.flete;
                 pedidoDetalle.observacion = documentoDetalle.observacion;
@@ -344,7 +346,7 @@ namespace Cotizador.Controllers
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
                 else
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
-                pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
+               // pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
                 pedidoDetalle.producto = documentoDetalle.producto;
                 pedidoDetalle.unidad = documentoDetalle.unidad;
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
@@ -400,6 +402,8 @@ namespace Cotizador.Controllers
 
         public void iniciarEdicionPedido()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             Pedido pedidoVer = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
             PedidoBL pedidoBL = new PedidoBL();
             Pedido pedido = new Pedido();
@@ -411,7 +415,7 @@ namespace Cotizador.Controllers
             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
             pedidoBL.cambiarEstadoPedido(pedido);
             //Se obtiene los datos de la cotización ya modificada
-            pedido = pedidoBL.GetPedido(pedido);
+            pedido = pedidoBL.GetPedido(pedido,usuario);
             //Temporal
             pedido.ciudadASolicitar = new Ciudad();
            
@@ -449,7 +453,7 @@ namespace Cotizador.Controllers
                 familia = (String)this.Session["familia"];
             }
 
-            pedido = pedidoBL.obtenerProductosAPartirdePreciosRegistrados(pedido, familia, proveedor);
+            pedido = pedidoBL.obtenerProductosAPartirdePreciosRegistrados(pedido, familia, proveedor, usuario);
             pedidoBL.calcularMontosTotales(pedido);
             this.PedidoSession = pedido;
         }
@@ -471,9 +475,9 @@ namespace Cotizador.Controllers
         public String SearchClientes()
         {
             String data = this.Request.Params["data[q]"];
-            ClienteBL clienteBL = new ClienteBL();
+            ProveedorBL proveedorBL = new ProveedorBL();
             Pedido pedido = this.PedidoSession;
-           return clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad);
+           return proveedorBL.getProveedoresBusqueda(data, pedido.ciudad.idCiudad);
         }
 
 
@@ -567,6 +571,8 @@ namespace Cotizador.Controllers
         public String AddProducto()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             Guid idProducto = Guid.Parse(this.Session["idProducto"].ToString());
             PedidoDetalle pedidoDetalle = pedido.pedidoDetalleList.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
             if (pedidoDetalle != null)
@@ -574,7 +580,7 @@ namespace Cotizador.Controllers
                 throw new System.Exception("Producto ya se encuentra en la lista");
             }
 
-            PedidoDetalle detalle = new PedidoDetalle();
+            PedidoDetalle detalle = new PedidoDetalle(usuario);
             ProductoBL productoBL = new ProductoBL();
             Producto producto = productoBL.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
             detalle.producto = producto;
@@ -929,8 +935,8 @@ namespace Cotizador.Controllers
 
         public void ChangeTipoPedido()
         {
-            Char tipoPedido = Convert.ToChar(Int32.Parse(this.Request.Params["tipoPedido"]));
-            this.PedidoSession.tipoPedido = (Pedido.tiposPedido)tipoPedido;
+            Char tipoPedidoCompra = Convert.ToChar(Int32.Parse(this.Request.Params["tipoPedido"]));
+            this.PedidoSession.tipoPedidoCompra = (Pedido.tiposPedidoCompra)tipoPedidoCompra;
         }
 
 
@@ -1003,8 +1009,8 @@ namespace Cotizador.Controllers
 
         public String UpdatePost()
         {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];           
-            
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
+            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             //pedido.
             PedidoBL pedidoBL = new PedidoBL();
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1179,7 +1185,7 @@ namespace Cotizador.Controllers
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA];
             pedido.usuario = usuario;
             PedidoBL bl = new PedidoBL();
-            bl.UpdatePedido(pedido);
+            bl.UpdatePedidoCompra(pedido);
             long numeroPedido = pedido.numeroPedido;
             String numeroPedidoString = pedido.numeroPedidoString;
             Guid idPedido = pedido.idPedido;
@@ -1370,9 +1376,9 @@ namespace Cotizador.Controllers
             PedidoBL pedidoBL = new PedidoBL();
             Pedido pedido = new Pedido();
             pedido.idPedido = Guid.Parse(Request["idPedido"].ToString());
-            pedido = pedidoBL.GetPedido(pedido);
-            this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER] = pedido;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            pedido = pedidoBL.GetPedido(pedido,usuario);
+            this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER] = pedido;
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonPedido = JsonConvert.SerializeObject(pedido);
 

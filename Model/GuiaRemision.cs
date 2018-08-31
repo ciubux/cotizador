@@ -71,6 +71,33 @@ namespace Model
         public motivosTraslado motivoTraslado { get; set; }
         public enum motivosTraslado
         {
+            [Display(Name = "Venta")]
+            Venta = 'V', /*PEDIDOS DE VENTA*/
+            [Display(Name = "Traslado Interno")]
+            TrasladoInterno = 'T',  /*ALMACEN*/
+            [Display(Name = "Comodato a Entregar")]
+            ComodatoEntregado = 'M', /*PEDIDO DE VENTA*/
+            [Display(Name = "Transferencia Gratuita a Entregar")]
+            TransferenciaGratuitaEntregada = 'G', /*PEDIDO DE VENTA*/
+            [Display(Name = "Préstamo a Entregar")]
+            PrestamoEntregado = 'P', /*PEDIDO DE VENTA*/
+
+
+            [Display(Name = "Devolución de Compra")]
+            DevolucionCompra = 'B', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Devolución de Préstamo Recibido")]
+            DevolucionPrestamoRecibido = 'E', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Devolución de Comodato Recibido")]
+            DevolucionComodatoRecibido = 'F', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
+            DevolucionTransferenciaGratuitaRecibida = 'H', /*PEDIDO DE COMPRA*/
+
+
+            /*
+
+
+
+
             [Display(Name = "Otros")]
             Otros = 'O',
             [Display(Name = "Abastecimiento de máq. expendedoras (ingreso/salida)")]
@@ -105,6 +132,15 @@ namespace Model
             Recojo = 'T',
             [Display(Name = "Venta")]
             Venta = 'V'
+
+    */
+
+
+
+
+
+
+
         }
 
 
@@ -116,6 +152,14 @@ namespace Model
             }
         }
 
+        public String estadoDescripcion
+        {
+            get
+            {
+                return this.estaAnulado ? "Guía Anulada" :
+                    (this.estaFacturado ? "Guía Emitida y Facturada" : "Guía Emitida");
+            }
+        }
 
     }
 }

@@ -299,7 +299,7 @@ namespace DataLayer
         }
 
 
-        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor)
+        public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor, Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_generarPlantillaCotizacion");
             InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
@@ -353,7 +353,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle();
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario);
                 cotizacionDetalle.producto = new Producto();
 
 

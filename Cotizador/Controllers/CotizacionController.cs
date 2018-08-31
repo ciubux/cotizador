@@ -757,8 +757,8 @@ namespace Cotizador.Controllers
             {
                 throw new System.Exception("Producto ya se encuentra en la lista");
             }
-
-            CotizacionDetalle detalle = new CotizacionDetalle();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            CotizacionDetalle detalle = new CotizacionDetalle(usuario);
             ProductoBL productoBL = new ProductoBL();
             Producto producto = productoBL.getProducto(idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente);
             detalle.producto = producto;
@@ -882,12 +882,21 @@ namespace Cotizador.Controllers
             long codigo = cotizacion.codigo;
             int estado = (int)cotizacion.seguimientoCotizacion.estado;
             String observacion = cotizacion.seguimientoCotizacion.observacion;
+
             if (continuarLuego == 1)
             {
                 SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                 estado = (int)estadosSeguimientoCotizacion;
                 observacion = "Se continuará editando luego";
                 updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
+            }
+            else
+            {
+                if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion)
+                {
+                    estado = (int)SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                }
+
             }
             // cotizacion = null;
             // this.CotizacionSession = null;
@@ -917,6 +926,13 @@ namespace Cotizador.Controllers
                 estado = (int)estadosSeguimientoCotizacion;
                 observacion = "Se continuará editando luego";
                 updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
+            }
+            else
+            {
+                if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion)
+                {
+                    estado = (int)SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                }
             }
 
             //cotizacion = null;
@@ -952,7 +968,7 @@ namespace Cotizador.Controllers
                 familia = (String)this.Session["familia"];
             }
 
-            cotizacion = cotizacionBL.obtenerProductosAPartirdePreciosRegistrados(cotizacion, familia, proveedor);
+            cotizacion = cotizacionBL.obtenerProductosAPartirdePreciosRegistrados(cotizacion, familia, proveedor, usuario);
             HelperDocumento.calcularMontosTotales(cotizacion);
             this.CotizacionSession = cotizacion;
         }
@@ -960,6 +976,7 @@ namespace Cotizador.Controllers
 
         public void iniciarEdicionCotizacion()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Cotizacion cotizacionVer = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
             CotizacionBL cotizacionBL = new CotizacionBL();
             Cotizacion cotizacion = new Cotizacion();
@@ -972,7 +989,7 @@ namespace Cotizador.Controllers
             cotizacionBL.cambiarEstadoCotizacion(cotizacion);
 
             //Se obtiene los datos de la cotización ya modificada
-            cotizacion = cotizacionBL.GetCotizacion(cotizacion);
+            cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
 
 
             this.Session[Constantes.VAR_SESSION_COTIZACION] = cotizacion;
@@ -980,13 +997,13 @@ namespace Cotizador.Controllers
 
         public String VerCotizacion()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             CotizacionBL cotizacionBL = new CotizacionBL();
             Cotizacion cotizacion = new Cotizacion();
             cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
-            cotizacion = cotizacionBL.GetCotizacion(cotizacion);
+            cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
             this.Session[Constantes.VAR_SESSION_COTIZACION_VER] = cotizacion;
 
-            Usuario usuario = (Usuario)this.Session["usuario"];
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonCotizacion = JsonConvert.SerializeObject(cotizacion);
 
@@ -1034,12 +1051,13 @@ namespace Cotizador.Controllers
 
         public void recotizacion()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             CotizacionBL cotizacionBL = new CotizacionBL();
             Cotizacion cotizacion = new Cotizacion();
             cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
             cotizacion.esRecotizacion = true;
             
-            cotizacion = cotizacionBL.GetCotizacion(cotizacion);
+            cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
             cotizacion.usuario = (Usuario)this.Session["usuario"];
             //Se seta el codigo y estadoAprobacion en 0 porque una recotización es una nueva cotización
             cotizacion.codigo = 0;
@@ -1062,13 +1080,13 @@ namespace Cotizador.Controllers
         [HttpPost]
         public String GenerarPDFdesdeIdCotizacion()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Int64 codigo = Int64.Parse(this.Request.Params["codigo"].ToString());
 
             CotizacionBL cotizacionBL = new CotizacionBL();
             Cotizacion cotizacion = new Cotizacion();
             cotizacion.codigo = codigo;
-            cotizacion = cotizacionBL.GetCotizacion(cotizacion);
-
+            cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
             GeneradorPDF gen = new GeneradorPDF();
             String nombreArchivo = gen.generarPDFExtended(cotizacion);
             return nombreArchivo;

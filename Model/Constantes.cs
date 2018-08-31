@@ -20,10 +20,10 @@ namespace Model
         public static String MENSAJE_SI = "Sí";
         public static String MENSAJE_NO = "No";
         public static Char PAD = '0';
-        public static int LONGITUD_NUMERO = 10;
+        public static int LONGITUD_NUMERO = 6;
         public static String UBIGEO_VACIO = "000000";
 
-        public static int DIAS_DESDE_BUSQUEDA = 15;
+        public static int DIAS_DESDE_BUSQUEDA = 10;
 
         public static String TIPO_DOCUMENTO_CLIENTE_RUC = "6";
         public static String TIPO_DOCUMENTO_CLIENTE_DNI = "1";
@@ -48,6 +48,8 @@ namespace Model
         public static String VAR_SESSION_PEDIDO_COMPRA_VER = "pedidoCompraVer";
 
         public static String VAR_SESSION_CLIENTE = "cliente";
+
+        public static String VAR_SESSION_PROVEEDOR = "proveedor";
 
         public static String VAR_SESSION_GUIA = "guiaRemision";
         public static String VAR_SESSION_GUIA_BUSQUEDA = "guiaRemisionBusqueda";
@@ -244,6 +246,9 @@ namespace Model
             BusquedaNotasIngreso = 20,
             [Display(Name = "MANTENIMIENTO NOTA INGRESO")]
             MantenimientoNotaIngreso = 21,
+
+            [Display(Name = "Imprimir Nota Ingreso")]
+            ImprimirNotaIngreso = 22
 
         };
 

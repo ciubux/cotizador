@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Model.DocumentoVenta;
 
 namespace Model
 {
@@ -12,6 +13,7 @@ namespace Model
         public NotaIngreso()
         {
             this.motivoTraslado = motivosTraslado.Compra;
+            this.tipoDocumentoVentaReferencia = TiposDocumentoVentaReferencia.Ninguno;
         }        
 
 
@@ -72,22 +74,26 @@ namespace Model
         public motivosTraslado motivoTraslado { get; set; }
         public enum motivosTraslado
         {
+
             [Display(Name = "Compra")]
             Compra = 'C',  /*PEDIDO DE COMPRA*/
+            [Display(Name = "Traslado Interno Recibido")]
+            TrasladoInterno = 'T', /*PEDIDO DE COMPRA*/
             [Display(Name = "Comodato a Recibir")]
             ComodatoRecibido = 'M', /*PEDIDO DE COMPRA*/
-            [Display(Name = "Transferencia Gratuita a Recibir")]
+            [Display(Name = "Transferencia Gratuita Recibida")]
             TransferenciaGratuitaRecibida = 'G', /*PEDIDO DE COMPRA*/
             [Display(Name = "Préstamo a Recibir")]
             PrestamoRecibido = 'P', /*PEDIDO DE COMPRA*/
-            [Display(Name = "Devolución de Compra")]
-            DevolucionCompra = 'B', /*PEDIDO DE COMPRA*/
-            [Display(Name = "Devolución de Préstamo Recibido")]
-            DevolucionPrestamoRecibido = 'E', /*PEDIDO DE COMPRA*/
-            [Display(Name = "Devolución de Comodato Recibido")]
-            DevolucionComodatoRecibido = 'F', /*PEDIDO DE COMPRA*/
-            [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
-            DevolucionTransferenciaGratuitaRecibida = 'H', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Devolución de Venta")]
+            DevolucionVenta = 'D', /*PEDIDO DE VENTA*/  //GENERA NOTA DE CREDITO
+            [Display(Name = "Devolución de Préstamo Entregado")]
+            DevolucionPrestamoEntregado = 'E',  /*PEDIDO DE VENTA*/
+            [Display(Name = "Devolución de Comodato Entregado")]
+            DevolucionComodatoEntregado = 'F', /*PEDIDO DE VENTA*/
+            [Display(Name = "Devolución de Transferencia Gratuita Entregada")]
+            DevolucionTransferenciaGratuitaEntregada = 'H' /*PEDIDO DE VENTA*/
+
         }
 
 
@@ -98,6 +104,53 @@ namespace Model
                 return EnumHelper<motivosTraslado>.GetDisplayValue(this.motivoTraslado);
             }
         }
+
+        public String estadoDescripcion
+        {
+            get
+            {
+                return this.estaAnulado ? "Nota Ingreso Anulada" : "Nota Ingreso Registrada";
+            }
+
+        }
+
+
+
+        [Display(Name = "Serie Guía Remisión Referencia:")]
+        public String serieGuiaReferencia { get; set; }
+        [Display(Name = "Número Guía Remisión Referencia:")]
+        public int numeroGuiaReferencia { get; set; }
+
+        [Display(Name = "Tipo Documento Venta Referencia:")]
+        public TiposDocumentoVentaReferencia tipoDocumentoVentaReferencia { get; set; }
+
+        public String tipoDocumentoVentaReferenciaString
+        {
+            get
+            {
+                return EnumHelper<TiposDocumentoVentaReferencia>.GetDisplayValue(this.tipoDocumentoVentaReferencia);
+            }
+        }
+
+        [Display(Name = "Serie Documento Venta Referencia:")]
+        public String serieDocumentoVentaReferencia { get; set; }
+        [Display(Name = "Número Documento Venta Referencia:")]
+        public int numeroDocumentoVentaReferencia { get; set; }
+
+
+        public enum TiposDocumentoVentaReferencia
+        {
+            [Display(Name = "Ninguno")]
+            Ninguno = 0,
+            [Display(Name = "Factura")]
+            Factura = 1,
+            [Display(Name = "Boleta de Venta")]
+            BoletaVenta = 3,
+            [Display(Name = "Nota de Crédito")]
+            NotaCrédito = 7,
+            [Display(Name = "Nota de Débito")]
+            NotaDébito = 8
+        };
 
     }
 }

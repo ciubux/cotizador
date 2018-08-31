@@ -68,6 +68,7 @@ jQuery(function ($) {
     var pagina = 2;
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
+    var TITLE_EXITO = 'Operación Realizada';
 
     $(document).ready(function () {
    //     obtenerConstantes();
@@ -150,6 +151,53 @@ jQuery(function ($) {
             }
         });
     }
+
+
+    $("#btnRecuperarDatosSunat").click(function () {
+
+        var ruc = $("#cliente_ruc").val();
+        
+        if (ruc.length != 11) {
+            $.alert({
+                title: "RUC Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un número de RUC válido.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $('#cliente_ruc').focus();
+            return false;
+        }
+
+        $.ajax({
+            url: "/Cliente/GetDatosSunat",
+            type: 'POST',
+            dataType: 'JSON',
+            data: { ruc: ruc },
+            success: function (cliente) {
+                $("#cliente_razonSocialSunat").val(cliente.razonSocialSunat);
+                $("#cliente_direccionDomicilioLegalSunat").val(cliente.direccionDomicilioLegalSunat);
+                $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);
+                $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
+                $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);
+                $("#cliente_estadoContribuyente").val(cliente.estadoContribuyente);
+                $("#cliente_condicionContribuyente").val(cliente.condicionContribuyente);
+            },
+            error: function () {
+                $.alert({
+                    title: 'Error',
+                    content: MENSAJE_ERROR,
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });       
+            }
+        });
+    });
+
+
 
     function autoGuardarPedido() {
         $.ajax({
@@ -418,30 +466,142 @@ jQuery(function ($) {
             
     });
 
-    
 
-    function editarCliente(continuarLuego) {
+    function validacionDatosCliente()
+    {
 
-        if ($("#cliente_direccionDomicilioLegalSunat").val().length > 120) {
-            alert("La dirección del domicilio legal obtenido de Sunat debe contener solo 120 caracteres.");
-            $('#cliente_direccionDomicilioLegalSunat').focus();
-            return false;
+
+        var ruc = $("#cliente_ruc").val();
+
+        if (ruc.length == 11) {
+
+            if ($("#cliente_direccionDomicilioLegalSunat").val().length > 120) {
+                $.alert({
+                    title: "Dirección Inválida",
+                    type: 'orange',
+                    content: 'La dirección del domicilio legal obtenido de Sunat debe contener solo 120 caracteres.',
+                    buttons: {
+                        OK: function () { $('#cliente_direccionDomicilioLegalSunat').focus(); }
+                    }
+                });
+
+                return false;
+            }
+
+            if ($("#cliente_razonSocialSunat").val().length == 0) {
+                $.alert({
+                    title: "No existe Razón Social",
+                    type: 'orange',
+                    content: 'No existe Razón Social, debe hacer clic en el botón "Obtener Datos Sunat"',
+                    buttons: {
+                        OK: function () { $('#cliente_razonSocialSunat').focus(); }
+                    }
+                });
+
+                return false;
+            }
+        }
+        else {
+
+            if ($("#cliente_nombreComercial").val().length == 0) {
+                $.alert({
+                    title: "No existe Nombre Cliente",
+                    type: 'orange',
+                    content: 'No existe Nombre Cliente, debe ingresar el Nombre del Cliente"',
+                    buttons: {
+                        OK: function () { $('#cliente_razonSocialSunat').focus(); }
+                    }
+                });
+
+                return false;
+            }
         }
 
-        /*
+
         
 
-        if ($("#ncRUC").val().trim() == "") {
-            alert("Debe ingresar el RUC.");
-            $('#ncRUC').focus();
+        if ($("#cliente_correoEnvioFactura").val().trim().length < 8) {
+            $.alert({
+                title: "No se ingresó Correo Electrónico",
+                type: 'orange',
+                content: 'Se debe agregar el correo electrónico para el envío de factura',
+                buttons: {
+                    OK: function () { $('#cliente_correoEnvioFactura').focus();}
+                }
+            });
+            
             return false;
         }
 
-        var razonSocial = $("#ncRazonSocial").val();
-        var nombreComercial = $("#ncNombreComercial").val();
-        var ruc = $("#ncRUC").val();
-        var contacto = $("#ncContacto").val();
-        */
+        return true;
+
+    }
+
+
+
+    
+
+    function crearCliente() {
+
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            $.alert({
+                title: "No selecionó Ciudad",
+                type: 'orange',
+                content: 'Debe seleccionar la sede MP previamente.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#idCiudad").focus()
+            return false;
+        }
+
+        if (!validacionDatosCliente())
+            return false;       
+
+        $('body').loadingModal({
+            text: 'Creando Cliente...'
+        });
+        $.ajax({
+            url: "/Cliente/Create",
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: 'Error',
+                    content: 'Se generó un error al intentar crear el cliente.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (resultado) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: TITLE_EXITO,
+                    content: 'El cliente se creó correctamente.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Cliente/Editar';
+                        }
+                    }
+                });
+            }
+        });
+
+        // $('#btnCancelCliente').click();
+
+    }
+
+    function editarCliente() {
+
+        if (!validacionDatosCliente())
+            return false;       
+
+    
         $('body').loadingModal({
             text: 'Editando Cliente...'
         });
@@ -450,305 +610,36 @@ jQuery(function ($) {
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
-                $('body').loadingModal('hide')
-                alert("Se generó un error al intentar editar el cliente.");
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: 'Error',
+                    content: 'Se generó un error al intentar editar el cliente.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
             },
             success: function (resultado) {
                 $('body').loadingModal('hide');
-                alert("El cliente se editó correctamente.");
-                window.location = '/Cliente/Editar';
+
+                $.alert({
+                    title: TITLE_EXITO,
+                    content: 'El cliente se editó correctamente.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Cliente/Editar';
+                        }
+                    }
+                });
             }
         });
 
 
         // $('#btnCancelCliente').click();
 
-    };
-
-    
-
-
-    /**
-     * FIN CONTROLES DE CLIENTE
-     */
-
-
-    $("#btnSaveDireccion").click(function () {
-
-        if ($("#direccionEntrega_descripcion").val().trim() == "") {
-            alert("Debe ingresar la dirección de entrega.");
-            $('#direccionEntrega_descripcion').focus();
-            return false;
-        }
-
-        if ($("#direccionEntrega_contacto").val().trim() == "") {
-            alert("Debe ingresar el nombre del contacto de entrega.");
-            $('#direccionEntrega_contacto').focus();
-            return false;
-        }
-
-        if ($("#direccionEntrega_telefono").val().trim() == "") {
-            alert("Debe ingresar el telefono del contacto de entrega.");
-            $('#direccionEntrega_telefono').focus();
-            return false;
-        }
-
-        var direccion = $("#direccionEntrega_descripcion").val();
-        var contacto = $("#direccionEntrega_contacto").val();
-        var telefono = $("#direccionEntrega_telefono").val();
-
-        $.ajax({
-            url: "/Pedido/CreateDireccionTemporal",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                direccion: direccion,
-                contacto: contacto,
-                telefono: telefono
-            },
-            error: function (detalle) { alert("Se generó un error al intentar crear la dirección."); },
-            success: function (direccion) {
-
-                $('#pedido_direccionEntrega').append($('<option>', {
-                    value: direccion.idDireccionEntrega,
-                    text: direccion.descripcion
-                }));
-                $('#pedido_direccionEntrega').val(direccion.idDireccionEntrega);
-
-                $('#pedido_direccionEntrega_descripcion').val(direccion.descripcion);
-                $('#pedido_direccionEntrega_contacto').val(direccion.contacto);
-                $('#pedido_direccionEntrega_telefono').val(direccion.telefono);
-                verificarSiExisteNuevaDireccionEntrega();
-                toggleControlesDireccionEntrega();
-            }
-        });
-
-
-        $('#btnCancelDireccion').click();
-
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * ######################## INICIO CONTROLES DE FECHAS
-     */
-    $.datepicker.regional['es'] = {
-        closeText: 'Cerrar',
-        prevText: '< Ant',
-        nextText: 'Sig >',
-        currentText: 'Hoy',
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
-        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
-        weekHeader: 'Sm',
-        dateFormat: 'dd/mm/yy',
-        firstDay: 1,
-        isRTL: false,
-        showMonthAfterYear: false,
-        yearSuffix: ''
-    };
-    $.datepicker.setDefaults($.datepicker.regional['es']);
-
-
-    var fechaSolicitud = $("#fechaSolicitudTmp").val();
-    $("#fechaSolicitud").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitud);
-
-    var fechaSolicitudDesde = $("#fechaSolicitudDesdetmp").val();
-    $("#pedido_fechaSolicitudDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudDesde);
-
-    var fechaSolicitudHasta = $("#fechaSolicitudHastatmp").val();
-    $("#pedido_fechaSolicitudHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudHasta);
-
-    var fechaEntregaDesde = $("#fechaEntregaDesdetmp").val();
-    $("#pedido_fechaEntregaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
-
-    var fechaEntregaHasta = $("#fechaEntregaHastatmp").val();
-    $("#pedido_fechaEntregaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
-
-
-
-    var fechaProgramacionDesde = $("#fechaProgramacionDesdetmp").val();
-    $("#pedido_fechaProgramacionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacionDesde);
-
-    var fechaProgramacionHasta = $("#fechaProgramacionHastatmp").val();
-    $("#pedido_fechaProgramacionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacionHasta);
-
-
-    var fechaPrecios = $("#fechaPreciostmp").val();
-    $("#fechaPrecios").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaPrecios);    
-
-    //var fechaProgramacion = $("#fechaProgramaciontmp").val();
-    $("#fechaProgramacion").datepicker({ dateFormat: "dd/mm/yy" });//.datepicker("setDate", fechaProgramacion);    
-
-    var documentoVenta_fechaEmision = $("#documentoVenta_fechaEmisiontmp").val();
-    $("#documentoVenta_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaEmision);
-
-    var documentoVenta_fechaVencimiento = $("#documentoVenta_fechaVencimientotmp").val();
-    $("#documentoVenta_fechaVencimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaVencimiento);
-
-
-    /**
-     * FIN DE CONTROLES DE FECHAS
-     */
-
-
-
-    /* ################################## INICIO CHANGE CONTROLES */
-
-    function validarTipoPedido(tipoPedido) {
-        //Si el tipo de pedido es traslado interno (84->'T')
-        if (tipoPedido == "84") {
-            $("#divReferenciaCliente").hide();
-            $("#divCiudadASolicitar").show();
-        }
-        else {
-            $("#divReferenciaCliente").show();
-            $("#divCiudadASolicitar").hide();
-        }
-
     }
-
-    $("#pedido_tipoPedido").change(function () { 
-        var tipoPedido = $("#pedido_tipoPedido").val();
-        validarTipoPedido(tipoPedido);
-        
-
-        $.ajax({
-            url: "/Pedido/ChangeTipoPedido",
-            type: 'POST',
-            data: {
-                tipoPedido: tipoPedido
-            },
-            success: function () { }
-        });
-    });
-
-    $("#idCiudadASolicitar").change(function () {
-        var idCiudadASolicitar = $("#idCiudadASolicitar").val();
-
-        $.ajax({
-            url: "/Pedido/ChangeIdCiudadASolicitar",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idCiudadASolicitar: idCiudadASolicitar
-            },
-            error: function (detalle) {
-                alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
-                location.reload();
-            },
-            success: function (ciudad) {
-            }
-        });
-    });  
-
-    
-
-    $("#pedido_numeroReferenciaCliente").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeNumeroReferenciaCliente",
-            type: 'POST',
-            data: {
-                numeroReferenciaCliente: $("#pedido_numeroReferenciaCliente").val()
-            },
-            success: function () { }
-        });
-    });
-
-    $('#pedido_direccionEntrega').change(function () {
-        toggleControlesDireccionEntrega();
-        var idDireccionEntrega = $('#pedido_direccionEntrega').val();
-        $.ajax({
-            url: "/Pedido/ChangeDireccionEntrega",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idDireccionEntrega: idDireccionEntrega
-            },
-            success: function (direccionEntrega) {
-                
-                $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);    
-                $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
-                $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
-                
-            }
-        })
-    });
-
-
-    $("#pedido_direccionEntrega_descripcion").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeDireccionEntregaDescripcion",
-            type: 'POST',
-            data: {
-                direccionEntregaDescripcion: $("#pedido_direccionEntrega_descripcion").val()
-            },
-            success: function () { }
-        });
-    });
-
-    $("#pedido_direccionEntrega_contacto").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeDireccionEntregaContacto",
-            type: 'POST',
-            data: {
-                direccionEntregaContacto: $("#pedido_direccionEntrega_contacto").val()
-            },
-            success: function () { }
-        });
-    });
-    
-    $("#pedido_direccionEntrega_telefono").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeDireccionEntregaTelefono",
-            type: 'POST',
-            data: {
-                direccionEntregaTelefono: $("#pedido_direccionEntrega_telefono").val()
-            },
-            success: function () { }
-        });
-    });
-
-
-    $(".fechaSolicitud").change(function () {
-        var fechaSolicitud = $("#fechaSolicitud").val();
-        var horaSolicitud = $("#horaSolicitud").val();
-        $.ajax({
-            url: "/Pedido/ChangeFechaSolicitud",
-            type: 'POST',
-            data: {
-                fechaSolicitud: fechaSolicitud,
-                horaSolicitud: horaSolicitud
-            },
-            success: function () {
-            }
-        });
-    });
-
-
-    
-
-
-
-
 
 
     function changeInputString(propiedad, valor) {
@@ -837,997 +728,18 @@ jQuery(function ($) {
 
 
 
-
-    /**
-     * ################################ INICIO CONTROLES DE AGREGAR PRODUCTO
-     */
-
-    ////////////////ABRIR AGREGAR PRODUCTO
-    $('#btnOpenAgregarProducto').click(function () {
-
-        //Para agregar un producto se debe seleccionar una ciudad
-        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar la sede MP previamente.");
-            return false;
-        }
-
-        //para agregar un producto se debe seleccionar un cliente
-        if ($("#idCliente").val().trim() == "") {
-            alert("Debe seleccionar previamente un cliente.");
-            $('#idCliente').trigger('chosen:activate');
-            return false;
-        }
-
-
-        //Se limpia el mensaje de resultado de agregar producto
-        $("#resultadoAgregarProducto").html("");
-
-        //Se desactiva el boton de agregar producto
-        desactivarBtnAddProduct();
-
-        //Se limpian los campos
-        $("#unidad").html("");
-        $("#imgProducto").attr("src", "images/NoDisponible.gif");
-        $("#precioUnitarioSinIGV").val(0);
-        $("#precioUnitarioAlternativoSinIGV").val(0);
-        $("#subtotal").val(0);
-        $("#porcentajeDescuento").val(Number(0).toFixed(10));
-        $('#valor').val(0);
-        $('#valorAlternativo').val(0);
-        $('#observacionProducto').val("");
-        $('#valor').attr('type', 'text');
-        $('#valorAlternativo').attr('type', 'hidden');
-        $('#precio').val(0);
-        $('#cantidad').val(1);
-
-
-        //Se agrega chosen al campo PRODUCTO
-        $("#producto").chosen({ placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
-
-        $("#producto").ajaxChosen({
-            dataType: "json",
-            type: "GET",
-            minTermLength: 5,
-            afterTypeDelay: 300,
-            cache: false,
-            url: "/Producto/Search"
-        }, {
-                loadingImg: "Content/chosen/images/loading.gif"
-            }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
-
-        $('#producto').val('').trigger('chosen:updated');
-        $('#producto').val('').trigger('liszt:updated');
-
-        $('#producto')
-            .find('option:first-child').prop('selected', true)
-            .end().trigger('chosen:updated');
-
-        calcularSubtotalProducto();
-
-    });
-
-    //EVENTO CUANDO SE ABRE VENTANA DE AGREGAR PRODUCTO
-    $('#modalAgregarProducto').on('shown.bs.modal', function () {
-        $('#familia').focus();
-        $('#familia').val("Todas");
-        $('#proveedor').val("Todos");
-
-        //$('#producto').trigger('chosen:activate');
-    })
-
-
-    /////////////CAMPO PRODUCTO 
-    $("#producto").change(function () {
-        $("#resultadoAgregarProducto").html("");
-        desactivarBtnAddProduct();
-        $.ajax({
-            url: "/Pedido/GetProducto",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idProducto: $(this).val(),
-            },
-            success: function (producto) {
-                // var producto = $.parseJSON(respuesta);
-
-
-                $("#imgProducto").attr("src", producto.image);
-
-                //Se agrega el precio estandar
-                var options = "<option value='0' selected>" + producto.unidad + "</option>";
-                if (producto.unidad_alternativa != "") {
-                    //Se agrega el precio alternativo
-                    options = options + "<option value='1'>" + producto.unidad_alternativa + "</option>";
-                }
-
-                //Limpieza de campos
-                $("#costoLista").val(Number(producto.costoLista));
-                $("#precioLista").val(Number(producto.precioLista));
-                $("#unidad").html(options);
-                $("#proveedor").val(producto.proveedor);
-                $("#familia").val(producto.familia);
-                $('#precioUnitarioSinIGV').val(producto.precioUnitarioSinIGV);
-                $('#precioUnitarioAlternativoSinIGV').val(producto.precioUnitarioAlternativoSinIGV);
-                $('#costoSinIGV').val(producto.costoSinIGV);
-                $('#costoAlternativoSinIGV').val(producto.costoAlternativoSinIGV);
-                $('#observacionProducto').val("");
-                $('#fleteDetalle').val(producto.fleteDetalle);
-                $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(10));
-                $("#cantidad").val(1);
-
-                $("#tableMostrarPrecios > tbody").empty();
-
-                $("#verProducto").html(producto.nombre);
-
-                FooTable.init('#tableMostrarPrecios');
-                for (var i = 0; i < producto.precioListaList.length; i++) {
-                    var fechaInicioVigencia = producto.precioListaList[i].fechaInicioVigencia;
-                    var fechaFinVigencia = producto.precioListaList[i].fechaFinVigencia;
-
-                    if (fechaInicioVigencia == null)
-                        fechaInicioVigencia = "No Definida";
-                    else
-                        fechaInicioVigencia = invertirFormatoFecha(producto.precioListaList[i].fechaInicioVigencia.substr(0, 10));
-
-                    if (fechaFinVigencia == null)
-                        fechaFinVigencia = "No Definida";
-                    else
-                        fechaFinVigencia = invertirFormatoFecha(producto.precioListaList[i].fechaFinVigencia.substr(0, 10));
-
-                    var numeroCotizacion = producto.precioListaList[i].numeroCotizacion;
-                    if (numeroCotizacion == null)
-                        numeroCotizacion = "No Identificado";
-
-                   
-
-                    $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
-
-                        '<td>' + numeroCotizacion + '</td>' +
-                        '<td>' + fechaInicioVigencia + '</td>' +
-                        '<td>' + fechaFinVigencia + '</td>' +
-                        '<td>' + producto.precioListaList[i].unidad + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].precioNeto).toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].precioUnitario).toFixed(cantidadCuatroDecimales) + '</td>' +
-
-                        '</tr>');
-                }
-
-
-
-                //Activar Botón para agregar producto a la grilla
-                activarBtnAddProduct();
-
-                //Se calcula el subtotal del producto
-                calcularSubtotalProducto();
-
-                $('#precioRegistrado').val($('#precio').val());
-
-
-
-            }
-        });
-    });
-
-
-
-
-
-
-    ///////////////////CAMPO PRESENTACIÓN
-    $("#unidad").change(function () {
-
-        //0 es precio estandar 
-        //1 es precio alternativo
-        var esPrecioAlternativo = Number($("#unidad").val());
-        $("#esPrecioAlternativo").val(esPrecioAlternativo);
-
-        var precioLista = 0;
-        var costoLista = 0;
-
-        if (esPrecioAlternativo == 0) {
-            precioLista = Number($("#precioUnitarioSinIGV").val());
-            costoLista = Number($("#costoSinIGV").val());
-        }
-        else {
-            precioLista = Number($("#precioUnitarioAlternativoSinIGV").val());
-            costoLista = Number($("#costoAlternativoSinIGV").val());
-        }
-
-        if ($("input[name=igv]:checked").val() == 1) {
-            precioLista = (precioLista + (precioLista * IGV)).toFixed(cantidadDecimales);
-            costoLista = (costoLista + (costoLista * IGV)).toFixed(cantidadDecimales);
-        }
-
-        $("#precioLista").val(precioLista);
-        $("#costoLista").val(costoLista);
-
-        calcularSubtotalProducto();
-
-        var flete = Number($("#flete").val());
-        if (flete > 0) {
-            alert("Tener en cuenta que al cambiar de unidad se recalcula el monto del flete.")
-
-            var fleteDetalle = costoLista * flete / 100;
-            $("#fleteDetalle").val(fleteDetalle.toFixed(cantidadDecimales));
-        }
-    });
-
-    /*
-    $("#porcentajeDescuento").change(function () {
-        
-        var descuento = Number($("#porcentajeDescuento").val());
-        $("#porcentajeDescuento").val(descuento.toFixed(4));
-
-        var precioLista = Number($("#precioLista").val());
-
-        var porcentajeDescuento = parseFloat($("#porcentajeDescuento").val());
-
-
-
-        var precio = $("#precio").val();
-
-        var precio = precioLista * (100 - porcentajeDescuento) * 0.01;
-        precio = precio.toFixed(cantidadDecimales);
-
-    //    precioLista * (100 - porcentajeDescuento) * 0.01;
-     //   precio = precio.toFixed(cantidadDecimales);
-
-
-        calcularSubtotalProducto();
-    });*/
-
-
-    /////////////////////////CAMPOS PORCENTAJE DESCUENTO y CANTIDAD 
-    $("#porcentajeDescuento, #cantidad").change(function () {
-
-        var descuento = Number($("#porcentajeDescuento").val());
-        /*      if (descuento > 100) {
-                  descuento = 100;
-              }*/
-        $("#porcentajeDescuento").val(descuento.toFixed(10));
-        $("#cantidad").val(Number($("#cantidad").val()).toFixed());
-        calcularSubtotalProducto();
-    });
-
-
-    /////////////////////////CAMPO FLETE
-
-    $("#fleteDetalle").change(function () {
-        var precioUnitario = Number($('#precio').val()) + Number($('#fleteDetalle').val());
-        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimales));
-        calcularSubtotalProducto();
-    });
-
-
-    /**
-    *Función de Cálculo 
-    */
-
-
-    function calcularSubtotalProducto() {
-        //Si es 0 quiere decir que es precio standar, si es 1 es el precio alternativo
-        var esPrecioAlternativo = Number($("#unidad").val());
-
-        //Se recuperan los valores de precioLista y costoLista
-        var precioLista = Number($("#precioLista").val());
-        var costoLista = Number($("#costoLista").val());
-
-        //Se identifica si se considera o no las cantidades y se recuperar los valores necesarios
-        //para los calculos
-
-        var porcentajeDescuento = parseFloat($("#porcentajeDescuento").val());
-
-        var precio = precioLista * (100 - porcentajeDescuento) * 0.01;
-        precio = precio.toFixed(cantidadCuatroDecimales);
-
-
-        var precioUnitario = Number(precio) + Number($('#fleteDetalle').val());
-        $('#precioUnitario').val(precioUnitario.toFixed(cantidadCuatroDecimales));
-
-
-        var considerarCantidades = $("#considerarCantidades").val();
-        //Controles de Cantidad
-        if (considerarCantidades == CANT_SOLO_CANTIDADES || considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES) {
-            $("#cantidadiv").show();
-            $('#subtotaldiv').show();
-            var cantidad = parseInt($("#cantidad").val());
-            //se calcula el subtotal con el precioUnitario que ya incluye el flete
-            var subTotal = precioUnitario * cantidad;
-            $("#subtotal").val(subTotal.toFixed(cantidadDecimales));
-        }
-        else {
-            $("#cantidadiv").hide();
-            $('#subtotaldiv').hide();
-            $("#subtotal").val(0);
-            $('#cantidad').val(0);
-        }
-
-        //Controles de Observaciones
-        $('#observacionProducto').val("");
-        if (considerarCantidades == CANT_SOLO_OBSERVACIONES || considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES) {
-
-            $('#observacionProductoDiv').show();
-        }
-        else {
-            $('#observacionProductoDiv').hide();
-        }
-
-        $("#precio").val(precio);
-
-        //Se calcula margen
-        margen = (1 - (Number($("#costoLista").val()) / Number(precio))) * 100;
-        $("#margen").val(margen.toFixed(cantidadDecimales));
-
-    };
-
-
-
-
-    /////////EVENTO CUANDO SE ABRE CALCULADORA DE DESCUENTO
-    $('#modalCalculadora').on('shown.bs.modal', function () {
-        var modalAgregarProductoIsShown = ($("#modalAgregarProducto").data('bs.modal') || { isShown: false }).isShown;
-        if (modalAgregarProductoIsShown) {
-            //El precio se obtiene de la pantalla de agregar producto
-            $('#nuevoPrecio').val($('#precio').val());
-            $('#nuevoDescuento').val($('#porcentajeDescuento').val());
-        }
-        else {
-            var idproducto = $('#idProducto').val();
-            var precio = $("." + idproducto + ".detprecio").html();
-            var porcentajedescuento = $("." + idproducto + ".detinporcentajedescuento").val();
-            //El precio se obtiene del elemento de la grilla
-            $('#nuevoPrecio').val(precio);
-            $('#nuevoDescuento').val(porcentajedescuento);
-        }
-        $('#nuevoPrecio').focus();
-    })
-
-
-
-
-    //////CONTROL DE BOTONES PARA AGREGAR PRODUCTO A LA GRILLA
-
-    function activarBtnAddProduct() {
-        $('#btnAddProduct').removeAttr('disabled');
-        $('#btnCalcularDescuento').removeAttr('disabled');
-        $('#btnMostrarPrecios').removeAttr('disabled');
-
-
-    }
-
-    function desactivarBtnAddProduct() {
-        $("#btnAddProduct").attr('disabled', 'disabled');
-        $('#btnCalcularDescuento').attr('disabled', 'disabled');
-        $('#btnMostrarPrecios').attr('disabled', 'disabled');
-    }
-
-    $(document).on('click', "button.btnMostrarPrecios", function () {
-
-        var idProducto = event.target.getAttribute("class").split(" ")[0];
-        var idCliente = $("#idCliente").val();
-        if (idCliente.trim() == "") {
-            alert("Debe seleccionar un cliente.");
-            $('#idCliente').trigger('chosen:activate');
-            return false;
-        }
-        $.ajax({
-            url: "/Precio/GetPreciosRegistrados",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idProducto: idProducto,
-                idCliente: idCliente,
-                controller: "pedido"
-            },
-            success: function (producto) {
-
-                $("#verProducto").html(producto.nombre);
-
-                var precioListaList = producto.precioLista;
-
-                // var producto = $.parseJSON(respuesta);
-                $("#tableMostrarPrecios > tbody").empty();
-
-                FooTable.init('#tableMostrarPrecios');
-                for (var i = 0; i < precioListaList.length; i++) {
-                    var fechaInicioVigencia = precioListaList[i].fechaInicioVigencia;
-                    var fechaFinVigencia = precioListaList[i].fechaFinVigencia;
-
-                    if (fechaInicioVigencia == null)
-                        fechaInicioVigencia = "No Definida";
-                    else
-                        fechaInicioVigencia = invertirFormatoFecha(precioListaList[i].fechaInicioVigencia.substr(0, 10));
-
-                    if (fechaFinVigencia == null)
-                        fechaFinVigencia = "No Definida";
-                    else
-                        fechaFinVigencia = invertirFormatoFecha(precioListaList[i].fechaFinVigencia.substr(0, 10));
-
-                    var numeroCotizacion = precioListaList[i].numeroCotizacion;
-                    if (numeroCotizacion == null)
-                        numeroCotizacion = "No Identificado";
-
-                    $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
-
-                        '<td>' + numeroCotizacion + '</td>' +
-                        '<td>' + fechaInicioVigencia + '</td>' +
-                        '<td>' + fechaFinVigencia + '</td>' +
-                        '<td>' + precioListaList[i].unidad + '</td>' +
-                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadCuatroDecimales) + '</td>' +
-
-                        '</tr>');
-                }
-            }
-        });
-        $("#modalMostrarPrecios").modal();
-
-    });
     
-
-
-    $("#considerarDescontinuados").change(function () {
-        var considerarDescontinuados = $('#considerarDescontinuados').prop('checked');
-        $.ajax({
-            url: "/Pedido/updateConsiderarDescontinuados",
-            type: 'POST',
-            data: {
-                considerarDescontinuados: considerarDescontinuados
-            },
-            success: function () {
-            }
-        });
-    });
-
-
-    $("#btnAddProduct").click(function () {
-        //Se desactiva el boton mientras se agrega el producto
-        desactivarBtnAddProduct();
-        var cantidad = parseInt($("#cantidad").val());
-        var porcentajeDescuento = parseFloat($("#porcentajeDescuento").val());
-        var precio = $("#precio").val();
-        var precioLista = $("#precioLista").val();
-        var costoLista = $("#costoLista").val();
-        var esPrecioAlternativo = Number($("#unidad").val());
-        var subtotal = $("#subtotal").val();
-        var incluidoIGV = $("input[name=igv]:checked").val();
-        var proveedor = $("#proveedor").val();
-        var flete = Number($("#fleteDetalle").val());
-        var observacion = $("#observacionProducto").val();
-        var costo = $("#costoLista").val();
-
-
-        $.ajax({
-            url: "/Pedido/AddProducto",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                cantidad: cantidad,
-                porcentajeDescuento: porcentajeDescuento,
-                precio: precio,
-                costo: costo,
-                esPrecioAlternativo: esPrecioAlternativo,
-                flete: flete,
-                subtotal: subtotal,
-                observacion: observacion
-            },
-            success: function (detalle) {
-
-             /*   var esRecotizacion = "";
-                if ($("#esRecotizacion").val() == "1") {
-                    esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">0.00</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">0.0 %</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
-                        '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
-                }*/
-
-                var observacionesEnDescripcion = "<br /><span class='" + detalle.idProducto + " detproductoObservacion'  style='color: darkred'>" + detalle.observacion + "</span>";
-
-
-                var precios = "";
-
-                if (detalle.precioUnitarioRegistrado == 0) {
-
-                    if (detalle.precioUnitario >= Number(precioLista) - Number(VARIACION_PRECIO_ITEM_PEDIDO)
-                        && detalle.precioUnitario <= Number(precioLista) + Number(VARIACION_PRECIO_ITEM_PEDIDO))
-                    {
-                        precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>';
-                        
-                    }
-                    else
-                    {
-                        precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">' + detalle.precioUnitario + '</td>';
-
-                    }
-
-
-                }
-                else {
-                    
-
-                    if (Number(detalle.precioUnitario) >= (Number(detalle.precioUnitarioRegistrado) - Number(VARIACION_PRECIO_ITEM_PEDIDO))
-                        && Number(detalle.precioUnitario) <= (Number(detalle.precioUnitarioRegistrado) + Number(VARIACION_PRECIO_ITEM_PEDIDO)))
-                    {
-                        precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>';
-                        
-                    }
-                    else
-                    {
-                    precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">' + detalle.precioUnitario + '</td>';
-
-                    }
-                }
-
-
-                $('#tableDetallePedido tbody tr.footable-empty').remove();
-                $("#tableDetallePedido tbody").append('<tr data-expanded="true">' +
-                    '<td>' + detalle.idProducto + '</td>' +
-                    '<td>' + esPrecioAlternativo + '</td>' +
-
-                    '<td>' + proveedor + '</td>' +
-                    '<td>' + detalle.codigoProducto + '</td>' +
-                    '<td>' + detalle.nombreProducto + observacionesEnDescripcion + '</td>' +
-                    '<td>' + detalle.unidad + '</td>' +
-                    '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
-                    '<td class="' + detalle.idProducto + ' detprecioLista" style="text-align:right">' + precioLista + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detporcentajedescuento" style="text-align:right">' + porcentajeDescuento.toFixed(10) + ' %</td>' +
-                    '<td class="' + detalle.idProducto + ' detporcentajedescuentoMostrar" style="width:75px; text-align:right;">' + porcentajeDescuento.toFixed(1) + ' %</td>' +
-                    '<td class="' + detalle.idProducto + ' detprecio" style="text-align:right">' + precio + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detcostoLista">' + costoLista + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detmargen" style="width:70px; text-align:right; ">' + detalle.margen + ' %</td>' +
-
-                    '<td class="' + detalle.idProducto + ' detflete" style="text-align:right">' + flete.toFixed(2) + '</td>' +
-                    precios +
-                    '<td class="' + detalle.idProducto + ' detprecioUnitarioRegistrado" style="text-align:right">' + detalle.precioUnitarioRegistrado + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button name="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios"></button></td>' +
-
-
-                 //   esRecotizacion +
-
-                    '<td class="' + detalle.idProducto + ' detordenamiento"></td>' +
-                    '</tr > ');
-
-                $('#tableDetallePedido thead tr th.footable-editing').remove();
-                $('#tableDetallePedido tbody tr td.footable-editing').remove();
-
-
-                $('#montoIGV').html(detalle.igv);
-                $('#montoSubTotal').html(detalle.subTotal);
-                ///var flete = Number($("#flete").val());
-                $('#montoTotal').html(detalle.total);
-                $("#total").val(detalle.total);
-                var total = Number($("#total").val())
-                $('#montoFlete').html((total * flete / 100).toFixed(cantidadDecimales));
-                $('#montoTotalMasFlete').html((total + (total * flete / 100)).toFixed(cantidadDecimales));
-
-                cargarTablaDetalle();
-                // $('#tablefoottable').footable();
-                $('#btnCancelAddProduct').click();
-
-
-
-
-            }, error: function (detalle) {
-
-                $("#resultadoAgregarProducto").html("Producto ya se encuentra en el detalle del pedido.");
-
-                // alert($("#resultadoAgregarProducto").html(detalle.responseText).closest("title"));
-
-            }
-
-
-        });
-
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-    * INTERFACE PARA CALCULO DE DESCUENTO
-    */
-    $('#modalCalculadora').on('show', function () {
-        $('#modalAgregarProducto').css('opacity', .5);
-        $('#modalAgregarProducto').unbind();
-    });
-
-    $('#modalCalculadora').on('hidden', function () {
-        $('#modalAgregarProducto').css('opacity', 1);
-        $('#modalAgregarProducto').removeData("modal").modal({});
-    });
-
-
-    $("#nuevoPrecio").change(function () {
-        var incluidoIGV = $("input[name=igv]:checked").val();
-        var nuevoPrecioModificado = Number($('#nuevoPrecio').val());
-        var nuevoPrecioInicial = 0;
-        var modalAgregarProductoIsShown = ($("#modalAgregarProducto").data('bs.modal') || { isShown: false }).isShown;
-
-        //En caso el calculo se realice al momento de agregar un producto
-        if (modalAgregarProductoIsShown) {
-
-            var esPrecioAlternativo = Number($("#unidad").val());
-            //Si es el precio estandar
-            nuevoPrecioInicial = Number(Number($("#precioUnitarioSinIGV").val()).toFixed(cantidadCuatroDecimales));
-
-            //Si NO es el precio estandar (si es el precio alternativo)
-            if (esPrecioAlternativo == 1) {
-                var nuevoPrecioInicial = Number(Number($("#precioUnitarioAlternativoSinIGV").val()).toFixed(cantidadCuatroDecimales));
-            }
-        }
-        //En caso el calculo se realice al momento de editar un producto en la grilla
-        else {
-            //El precio inicial se obtiene del precio lista
-            var idproducto = $('#idProducto').val();
-            var nuevoPrecioInicial = $("." + idproducto + ".detprecioLista").html();
-        }
-
-        var nuevoDescuento = 100 - (nuevoPrecioModificado * 100 / nuevoPrecioInicial);
-        $('#nuevoPrecio').val(nuevoPrecioModificado.toFixed(cantidadCuatroDecimales));
-        $('#nuevoDescuento').val(nuevoDescuento.toFixed(10));
-    });
-
-
-    $("#btnSaveDescuento").click(function () {
-
-        var modalAgregarProductoIsShown = ($("#modalAgregarProducto").data('bs.modal') || { isShown: false }).isShown;
-        if (modalAgregarProductoIsShown) {
-            $("#porcentajeDescuento").val($("#nuevoDescuento").val());
-            //Revisar si se puede comentar
-
-            $("#nuevoPrecio").val($("#precio").val());
-            calcularSubtotalProducto();
-
-        }
-        else {
-            //REVISAR CALCULO DE MARGEN Y PRECIO UNITARIO
-
-            var idproducto = $('#idProducto').val();
-
-            //Se recupera el precio calculado
-            var precio = Number($("#nuevoPrecio").val());
-            //Se asigna el precio calculculado en la columna precio
-            $("." + idproducto + ".detprecio").text(precio.toFixed(cantidadDecimales));
-            //Se asigna el descuento en el campo descuento
-            $("." + idproducto + ".detinporcentajedescuento").val($("#nuevoDescuento").val());
-
-            calcularSubtotalGrilla(idproducto);
-
-        }
-
-        $('#btnCancelCalculadora').click();
-
-    });
-
-
-
-
-
-
-
-
-    ////////////GENERAR PLANTILLA DE COTIZACIÓN
-
-
-
-    $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
-
-        var idCiudad = $("#idCiudad").val();
-        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar una ciudad previamente.");
-            $("#idCiudad").focus();
-            $("#btnCancelarObtenerProductos").click();
-            return false;
-        }
-        var idCliente = $("#idCliente").val();
-        if (idCliente.trim() == "") {
-            alert("Debe seleccionar un cliente.");
-            $('#idCliente').trigger('chosen:activate');
-            $("#btnCancelarObtenerProductos").click();
-            return false;
-        }
-
-
-        if (verificarSiExisteDetalle()) {
-            alert("No deben existir productos agregados al pedido.");
-            return false;
-        }
-
-    });
-
- 
-
-
-    $("#btnObtenerProductos").click(function () {
-        var idCiudad = $("#idCiudad").val();
-        var idCliente = $("#idCliente").val();
-        var fecha = $("#fechaPrecios").val();
-        var familia = $("#familiaBusquedaPrecios").val();
-        var proveedor = $("#proveedorBusquedaPrecios").val();
-
-
-        $.ajax({
-            url: "/Pedido/obtenerProductosAPartirdePreciosRegistrados",
-            data: {
-                idCliente: idCliente,
-                idCiudad: idCiudad,
-                fecha: fecha,
-                familia: familia, 
-                proveedor: proveedor
-            },
-            type: 'POST',
-            error: function () {
-
-                alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
-                //window.location = '/Pedido/Cotizador';
-            },
-            success: function () {
-                window.location = '/Pedido/Pedir';
-            }
-        });
-
-    });
-
-    
-
-
-
-
-
-    ////////CREAR/EDITAR COTIZACIÓN
-
-
-    function validarIngresoDatosObligatoriosPedido() {
-        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar una ciudad previamente.");
-            $("#idCiudad").focus();
-            return false;
-        }
-        var tipoPedido = $("#pedido_tipoPedido").val();
-        //Si el tipo de pedido es traslado interno (84->'T')
-        if (tipoPedido == "84") {
-            if ($("#idCiudadASolicitar").val() == "" || $("#idCiudadASolicitar").val() == null) {
-                alert("Debe seleccionar a que ciudad se solicita el traslado interno.");
-                $("#idCiudadAsolicitar").focus();
-                return false;
-            }
-        }
-
-
-        if ($("#idCliente").val().trim() == "") {
-            alert("Debe seleccionar un cliente.");
-            $('#idCliente').trigger('chosen:activate');
-            return false;
-        }
-
-   /*     if ($("#pedido_numeroReferenciaCliente").val().trim() == "") {
-            alert('Debe ingresar el número de orden de compra o pedido en el campo "Referencia Doc Cliente".');
-            $('#pedido_numeroReferenciaCliente').focus();
-            return false;
-        }*/
-
-        if ($("#ActualDepartamento").val().trim().length == 0) {
-            alert('Debe ingresar el departamento.');
-            $("#ActualDepartamento").focus();
-            return false;
-        }
-        if ($("#ActualProvincia").val().trim().length == 0) {
-            alert('Debe ingresar la provincia.');
-            $("#ActualProvincia").focus();
-            return false;
-        }
-        if ($("#ActualDistrito").val().trim().length == 0) {
-            alert('Debe ingresar el distrito.');
-            $("#ActualDistrito").focus();
-            return false;
-        }
-
-
-        if ($("#pedido_direccionEntrega").val().trim() == "") {
-            alert("Debe seleccionar la dirección de entrega.");
-            $('#pedido_direccionEntrega').focus();
-            return false;
-        }
-
-        if ($("#pedido_direccionEntrega_descripcion").val().trim() == "") {
-            alert("Debe ingresar la dirección de entrega.");
-            $('#pedido_direccionEntrega_descripcion').focus();
-            return false;
-        }
-
-        if ($("#pedido_direccionEntrega_contacto").val().trim() == "") {
-            alert("Debe ingresar el contacto de entrega.");
-            $('#pedido_direccionEntrega_contacto').focus();
-            return false;
-        }
-
-        if ($("#pedido_direccionEntrega_telefono").val().trim() == "") {
-            alert("Debe ingresar una el telefono del contacto de entrega.");
-            $('#pedido_direccionEntrega_telefono').focus();
-            return false;
-        }
-        /*
-        if (!$("#documentoVenta_correoEnvio").val().match(/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/)) {
-            alert("Debe ingresar un correo de envío válido.");
-            $("#documentoVenta_correoEnvio").focus();
-            return false;
-        }*/
-
-        var fechaSolicitud = $("#fechaSolicitud").val();
-        if (fechaSolicitud.trim() == "") {
-            alert("Debe ingresar la fecha de la solicitud.");
-            $("#fechaSolicitud").focus();
-            return false;
-        }
-
-        var horaSolicitud = $("#horaSolicitud").val();
-        if (horaSolicitud == null || horaSolicitud.trim() == "") {
-            alert("Debe ingresar la hora de la solicitud.");
-            $("#horaSolicitud").focus();
-            return false;
-        }
-
-
-        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
-        if (fechaEntregaDesde.trim() == "") {
-            alert("Debe ingresar la fecha desde cuando se puede realizar la entrega .");
-            $("#pedido_fechaEntregaDesde").focus();
-            return false;
-        }
-
-        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
-        if (fechaEntregaHasta.trim() == "") {
-            alert("Debe ingresar la fecha hasta cuando se puede realizar la entrega .");
-            $("#pedido_fechaEntregaHasta").focus();
-            return false;
-        }
-
-        
-        //la fecha máxima de entrega no puede ser inferior a la fecha de entrega
-        if (convertirFechaNumero(fechaEntregaHasta) < convertirFechaNumero(fechaEntregaDesde)) {
-            alert("La fecha entrega hasta debe ser mayor o igual a la fecha de entrega desde.");
-            $("#fechaEntregaHasta").focus();
-            return false;
-        }
-
-        
-
-        if ($("#pedido_contactoPedido").val().trim() == "") {
-            alert("Debe ingresar el nombre de la persona que realizó la solicitud.");
-            $('#pedido_contactoPedido').focus();
-            return false;
-        }
-        
-
-        
-        if ($("#pedido_telefonoContactoPedido").val().trim() == "" && $("#pedido_correoContactoPedido").val().trim() == "" ) {
-            alert("Debe ingresar un telefono y/o correo de contacto de entrega.");
-            $('#pedido_telefonoContactoPedido').focus();
-            return false;
-        }
-      
-        /*
-        if ($("#pedido_correoContactoPedido").val().trim() != "" && !$("#pedido_correoContactoPedido").val().match(/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/)) {
-            alert("Debe ingresar un correo válido.");
-            $("#pedido_correoContactoPedido").focus();
-            return false;
-        }
-
-
-        */
-        var contador = 0;
-        var $j_object = $("td.detcantidad");
-        $.each($j_object, function (key, value) {
-            contador++;
-        });
-
-        if (contador == 0) {
-            alert("Debe ingresar el detalle del pedido.");
-            return false;
-        }
-
-        return true;
-    }
-
-
-    $("#btnCancelarComentario").click(function () {
-        window.location = '/Pedido/CancelarCreacionPedido';
-    });
-
-    $("#btnAceptarComentario").click(function () {
-        var codigoPedido = $("#pedido_numeroPedido").val();
-        var idPedido = $("#idPedido").val();
-        var observacion = $("#comentarioPendienteIngreso").val();
-        $.ajax({
-            url: "/Pedido/updateEstadoPedido",
-            data: {
-                idPedido: idPedido,
-                estado: ESTADO_PENDIENTE_APROBACION,
-                observacion: observacion
-            },
-            type: 'POST',
-            error: function () {
-                alert("Ocurrió un problema al intentar agregar un comentario al pedido.");
-                $("#btnCancelarComentario").click();
-            },
-            success: function () {
-                alert("El comentario del estado del pedido número: " + codigoPedido + " se cambió correctamente.");;
-                $("#btnCancelarComentario").click();
-            }
-        });
-
-    });
-    /*
-        $("#btnAceptarComentarioCrediticio").click(function () {
-            var codigoPedido = $("#pedido_numeroPedido").val();
-            var observacion = $("#comentarioPendienteIngreso").val();
-            $.ajax({
-                url: "/Cotizacion/updateEstadoPedidoCrediticio",
-                data: {
-                    codigo: codigoPedido,
-                    estado: ESTADO_PENDIENTE_APROBACION,
-                    observacion: observacion
-                },
-                type: 'POST',
-                error: function () {
-                    alert("Ocurrió un problema al intentar agregar un comentario al pedido.")
-                    $("#btnCancelarComentario").click();
-                },
-                success: function () {
-                    alert("El comentario del estado del pedido número: " + codigoPedido + " se cambió correctamente.");
-                    $("#btnCancelarComentario").click();
-                }
-            });
-
-        });*/
-
-
-
-    $("#btnFinalizarCreacionCliente").click(function () {
-        editarCliente(0);
-    });
 
 
     $("#btnFinalizarEdicionCliente").click(function () {
-        editarCliente(0);
+        if ($("#cliente_codigo").val().length == 0)
+            crearCliente();
+        else
+            editarCliente();
     });
 
     
-    $("#btnContinuarEditandoLuego").click(function () {
-        if ($("#pedido_numeroPedido") == "") {
-            crearPedido(1);
-        }
-        else {
-            editarPedido(1);
-        }
-    });
-
-
-
     
-
-    
-
-
-
-
-
-
-
-
 
     $("#btnCopiar").click(function () {
         /* Get the text field */
@@ -3516,108 +2428,7 @@ jQuery(function ($) {
     });
 
 
-
-    $("#btnAceptarFacturarPedido").click(function () {
-
-        if ($("#documentoVenta_fechaEmision").val() == "" || $("#documentoVenta_fechaEmision").val() == null) {
-            alert("Debe ingresar la fecha de emisión.");
-            $("#documentoVenta_fechaEmision").focus();
-            return false;
-        }
-
-        if ($("#documentoVenta_horaEmision").val() == "" || $("#documentoVenta_horaEmision").val() == null) {
-            alert("Debe ingresar la hora de emisión.");
-            $("#documentoVenta_horaEmision").focus();
-            return false;
-        }
-
-        if ($("#documentoVenta_fechaVencimiento").val() == "" || $("#documentoVenta_fechaVencimiento").val() == null) {
-            alert("Debe ingresar la fecha de vencimiento.");
-            $("#documentoVenta_fechaVencimiento").focus();
-            return false;
-        }
-
-        if (convertirFechaNumero($("#documentoVenta_fechaEmision").val()) > convertirFechaNumero($("#documentoVenta_fechaVencimiento").val())) {
-            alert("La fecha de vencimiento debe ser mayor o igual a la fecha de emisión.");
-            $("#documentoVenta_fechaVencimiento").focus();
-            return false;
-        }
-
-        if ($("#documentoVenta_correoEnvio").val() == "" || $("#documentoVenta_correoEnvio").val() == null) {
-            alert("Debe ingresar el correo de envío.");
-            $("#documentoVenta_correoEnvio").focus();
-            return false;
-        }
-        else
-        {
-            if (!$("#documentoVenta_correoEnvio").val().match(/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/)) 
-            {
-                alert("Debe ingresar un correo de envío válido.");
-                $("#documentoVenta_correoEnvio").focus();
-                return false;
-            }
-        }
-
-
-           
-
-        var fechaEmision = $("#documentoVenta_fechaEmision").val();
-        var horaEmision = $("#documentoVenta_horaEmision").val();
-        var fechaVencimiento = $("#documentoVenta_fechaVencimiento").val();
-        
-        var tipoPago = $("#tipoPagoCliente").val();
-        var formaPago = $("#formaPagoCliente").val();
-        var correoEnvio = $("#documentoVenta_correoEnvio").val();
-        /*var correoCopia = $("#documentoVenta_correoCopia").val();
-        var correoOculto = $("#documentoVenta_correoOculto").val();*/
-
-        /*
-        if ($("#fechaProgramacion").val() == "" || $("#fechaProgramacion").val() == null) {
-            alert("Debe ingresar la fecha de programación.");
-            $("#fechaProgramacion").focus();
-            return false;
-        }
-        var fechaProgramacion = $('#fechaProgramacion').val();
-        var comentarioProgramacion = $('#comentarioProgramacion').val();
-        var fechaEntregaDesdeProgramacion = $("#fechaEntregaDesdeProgramacion").val();
-        var fechaEntregaHastaProgramacion = $("#fechaEntregaHastaProgramacion").val();
-
-        if (convertirFechaNumero(fechaProgramacion) < convertirFechaNumero(fechaEntregaDesdeProgramacion)
-            || convertirFechaNumero(fechaProgramacion) > convertirFechaNumero(fechaEntregaHastaProgramacion)
-        ) {
-            var respuesta = confirm("¡ATENCIÓN! Está programando la atención del pedido en una fecha fuera del rango solicitado por el cliente.");
-            if (!respuesta) {
-                $("#fechaProgramacion").focus();
-                return false;
-            }
-        }*/
-
-     //   var fechaProgramacion = $('#fechaProgramacion').val();
-
-        $.ajax({
-            url: "/Factura/Create",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                fechaEmision: fechaEmision,
-                horaEmision: horaEmision,
-                fechaVencimiento: fechaVencimiento,
-                tipoPago: tipoPago,
-                formaPago: formaPago,
-                correoEnvio: correoEnvio
-                /*correoCopia: correoCopia,
-                correoOculto: correoOculto*/
-            },
-            error: function (resultado) {
-                alert(MENSAJE_ERROR);
-            },
-            success: function (resultado) {
-                alert('Se generó la factura ' + resultado.serieNumero + '.');
-                location.reload();
-            }
-        });
-        $("btnCancelarFacturarPedido").click();
-    });
+    
 
     /****************** FIN PROGRAMACION PEDIDO****************************/
 });

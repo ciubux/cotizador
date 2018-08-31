@@ -78,6 +78,8 @@ D:\Repo\freelos\cotizador\DataLayer\bin\Debug\Model.pdb
 D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.csprojResolveAssemblyReference.cache
 D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.dll
 D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador\DataLayer\obj\Debug\DataLayer.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\bin\Debug\DataLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\bin\Debug\DataLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\bin\Debug\Framework.DAL.dll
@@ -89,7 +91,5 @@ C:\Users\cesar\Documents\MP2\cotizador\DataLayer\bin\Debug\Framework.DAL.pdb
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\bin\Debug\Framework.WebCommon.pdb
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\bin\Debug\Model.pdb
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\bin\Debug\Model.dll.config
-C:\Users\cesar\Documents\MP2\cotizador\DataLayer\obj\Debug\DataLayer.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\obj\Debug\DataLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\obj\Debug\DataLayer.pdb

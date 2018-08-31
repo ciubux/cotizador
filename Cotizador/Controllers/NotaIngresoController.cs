@@ -24,7 +24,7 @@ namespace Cotizador.Controllers
                 {
                     case Constantes.paginas.BusquedaNotasIngreso: notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA]; break;
                     case Constantes.paginas.MantenimientoNotaIngreso: notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO]; break;
-             //       case Constantes.paginas.BusquedaGuiasRemisionConsolidarFactura: notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA]; break;
+                        //       case Constantes.paginas.BusquedaGuiasRemisionConsolidarFactura: notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA]; break;
                 }
                 return notaIngreso;
             }
@@ -34,7 +34,7 @@ namespace Cotizador.Controllers
                 {
                     case Constantes.paginas.BusquedaNotasIngreso: this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA] = value; break;
                     case Constantes.paginas.MantenimientoNotaIngreso: this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = value; break;
-              //      case Constantes.paginas.BusquedaGuiasRemisionConsolidarFactura: this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA] = value; break;
+                        //      case Constantes.paginas.BusquedaGuiasRemisionConsolidarFactura: this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA] = value; break;
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace Cotizador.Controllers
 
             ViewBag.notaIngreso = notaIngresoSearch;
             ViewBag.notaIngresoList = this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_LISTA];
-            ViewBag.pagina = Constantes.paginas.BusquedaGuiasRemision;
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaGuiasRemision;
 
             ViewBag.fechaTrasladoDesde = notaIngresoSearch.fechaTrasladoDesde.ToString(Constantes.formatoFecha);
             ViewBag.fechaTrasladoHasta = notaIngresoSearch.fechaTrasladoHasta.ToString(Constantes.formatoFecha);
@@ -146,7 +146,7 @@ namespace Cotizador.Controllers
             return View();
         }
 
-     
+
         public String Search()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaNotasIngreso;
@@ -193,7 +193,7 @@ namespace Cotizador.Controllers
 
         #endregion
 
-        
+
         #region Crear Guia
 
         public Boolean ConsultarSiExisteNotaIngreso()
@@ -232,8 +232,15 @@ namespace Cotizador.Controllers
         {
             try
             {
-
-                Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
+                Pedido pedido = null;
+                if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Venta)
+                {
+                    pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+                }
+                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Compra)
+                {
+                    pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
+                }
 
                 if (this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] == null)
                 {
@@ -242,7 +249,19 @@ namespace Cotizador.Controllers
                 NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
                 notaIngreso.pedido = pedido;
 
-                notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)(char)pedido.tipoPedidoCompra;
+
+
+                if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Venta)
+                {
+                    notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)(char)pedido.tipoPedido;
+                }
+                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Compra)
+                {
+                    notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)(char)pedido.tipoPedidoCompra;
+                }
+
+
+
                 notaIngreso.transportista = new Transportista();
 
                 notaIngreso.observaciones = String.Empty;
@@ -262,15 +281,14 @@ namespace Cotizador.Controllers
                 CiudadBL ciudadBL = new CiudadBL();
 
 
-                Ciudad ciudadOrigen = ciudadBL.getCiudad(pedido.ciudad.idCiudad);
+                Ciudad ciudadDestino = ciudadBL.getCiudad(pedido.ciudad.idCiudad);
+                ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
 
-
-
-                notaIngreso.ciudadDestino = ciudadOrigen;
+                notaIngreso.ciudadDestino = ciudadDestino;
 
                 notaIngreso.transportista = new Transportista();
-                notaIngreso.serieDocumento = ciudadOrigen.serieNotaIngreso;
-                notaIngreso.numeroDocumento = ciudadOrigen.siguienteNumeroNotaIngreso;
+                notaIngreso.serieDocumento = ciudadDestino.serieNotaIngreso;
+                notaIngreso.numeroDocumento = ciudadDestino.siguienteNumeroNotaIngreso;
                 TransportistaBL transportistaBL = new TransportistaBL();
                 notaIngreso.ciudadDestino.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
 
@@ -319,7 +337,7 @@ namespace Cotizador.Controllers
                 ViewBag.fechaEmisiontmp = notaIngreso.fechaEmision.ToString(Constantes.formatoFecha);
                 ViewBag.notaIngreso = notaIngreso;
 
-             //   ViewBag.serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList;
+                //   ViewBag.serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList;
 
             }
             catch (Exception ex)
@@ -330,7 +348,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            ViewBag.pagina = Constantes.paginas.MantenimientoNotaIngreso;
+            ViewBag.pagina = (int)Constantes.paginas.MantenimientoNotaIngreso;
             return View();
         }
 
@@ -338,7 +356,7 @@ namespace Cotizador.Controllers
         public String Create()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoNotaIngreso;
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];            
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             NotaIngreso notaIngreso = this.NotaIngresoSession;
             notaIngreso.usuario = usuario;
 
@@ -419,14 +437,14 @@ namespace Cotizador.Controllers
 
         public ActionResult Print()
         {
-            //this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ImprimirNotaIngreso;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ImprimirNotaIngreso;
 
             NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_VER];
 
             ViewBag.notaIngreso = notaIngreso;
             ViewBag.pagina = this.Session[Constantes.VAR_SESSION_PAGINA];
 
-            return View("Print" + notaIngreso.ciudadDestino.sede.ToUpper().Substring(0, 1));
+            return View();
 
         }
 
@@ -514,6 +532,21 @@ namespace Cotizador.Controllers
             NotaIngreso notaIngreso = this.NotaIngresoSession;
             PropertyInfo propertyInfo = notaIngreso.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(notaIngreso, this.Request.Params["valor"]);
+            this.NotaIngresoSession = notaIngreso;
+        }
+
+        public void ChangeInputInt()
+        {
+            NotaIngreso notaIngreso = this.NotaIngresoSession;
+            PropertyInfo propertyInfo = notaIngreso.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(notaIngreso, Int32.Parse( this.Request.Params["valor"]));
+            this.NotaIngresoSession = notaIngreso;
+        }
+
+        public void ChangeTipoDocumentoVentaReferencia()
+        {
+            NotaIngreso notaIngreso = this.NotaIngresoSession;
+            notaIngreso.tipoDocumentoVentaReferencia = (NotaIngreso.TiposDocumentoVentaReferencia)int.Parse(this.Request.Params["tipoDocumentoVentaReferencia"]);
             this.NotaIngresoSession = notaIngreso;
         }
 

@@ -31,6 +31,7 @@ namespace Cotizador.Controllers
 
         public String iniciarCreacion()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
             
@@ -47,7 +48,7 @@ namespace Cotizador.Controllers
             venta.documentoReferencia.serie = venta.documentoVenta.cPE_CABECERA_BE.SERIE;
             venta.documentoReferencia.numero = venta.documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
 
-            venta = ventaBL.GetPlantillaVenta(venta);
+            venta = ventaBL.GetPlantillaVenta(venta, usuario);
             if (venta.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
             {
                 venta.tipoNotaDebito = (DocumentoVenta.TiposNotaDebito)Int32.Parse(Request["tipoNotaDebito"].ToString());
@@ -56,8 +57,6 @@ namespace Cotizador.Controllers
                 //Temporal
                 Pedido pedido = venta.pedido;
                 pedido.ciudadASolicitar = new Ciudad();
-
-                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
                 PedidoBL pedidoBL = new PedidoBL();
                 pedidoBL.calcularMontosTotales(pedido);

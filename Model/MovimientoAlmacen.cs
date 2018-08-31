@@ -25,14 +25,7 @@ namespace Model
 
         public Boolean estaNoEntregado { get; set; }
         
-        public String estadoDescripcion { get {
-
-                return this.estaAnulado ? "Guía Anulada" : 
-                    (this.estaFacturado ? "Guía Emitida y Facturada" :   "Guía Emitida");
-
-            }
-
-        }
+     
 
         public String comentarioAnulado { get; set; }
 

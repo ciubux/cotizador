@@ -286,7 +286,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\Site1.1.3.css" />
     <Content Include="images\Add-Male-User-icon.png" />
     <Content Include="images\add.png" />
     <Content Include="images\calculadora.png" />
@@ -326,19 +326,20 @@
     <Content Include="Scripts\chosen\PrintArea.js" />
     <Content Include="Scripts\factura1.1.5.js" />
     <Content Include="Scripts\notaDebito1.1.1.js" />
-    <Content Include="Scripts\notaIngreso.js" />
-    <Content Include="Scripts\guiaRemision1.1.3.js" />
-    <Content Include="Scripts\cliente1.1.3.js" />
+    <Content Include="Scripts\notaIngreso1.1.3.js" />
+    <Content Include="Scripts\guiaRemision1.1.7.js" />
+    <Content Include="Scripts\cliente1.1.4.js" />
     <Content Include="Scripts\jquery-confirm.js" />
     <Content Include="Scripts\jquery-editable-select.js" />
     <Content Include="Scripts\jquery.loadingModal.js" />
     <Content Include="Scripts\jquery.loadingModal.min.js" />
-    <Content Include="Scripts\pedidoCompra1.1.1.js" />
-    <Content Include="Scripts\utilesFacturacion1.1.1.js" />
-    <Content Include="Scripts\utiles1.1.2.js" />
+    <Content Include="Scripts\pedidoCompra1.1.3.js" />
+    <Content Include="Scripts\pedidoGeneral1.1.3.js" />
+    <Content Include="Scripts\utilesFacturacion1.1.3.js" />
+    <Content Include="Scripts\utiles1.1.3.js" />
     <Content Include="Scripts\notaCredito1.1.2.js" />
     <Content Include="Scripts\venta1.1.1.js" />
-    <Content Include="Scripts\pedido1.1.5.js" />
+    <Content Include="Scripts\pedido1.1.7.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -349,7 +350,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\cotizacion1.1.1.js" />
+    <Content Include="Scripts\cotizacion1.1.3.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
@@ -443,6 +444,7 @@
     <Content Include="Views\PedidoCompra\Index.cshtml" />
     <Content Include="Views\PedidoCompra\Pedir.cshtml" />
     <Content Include="Views\Factura\Crear.cshtml" />
+    <Content Include="Views\NotaIngreso\Print.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
@@ -476,6 +478,9 @@
       <Project>{2e588952-5389-42e5-8ed8-c42b9e38f6d7}</Project>
       <Name>Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

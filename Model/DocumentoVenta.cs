@@ -16,8 +16,6 @@ namespace Model
             this.tipoNotaDebito = TiposNotaDebito.Penalidades;
         }
 
-
-
         [Display(Name = "Fecha Emisión:")]
         public DateTime? fechaEmision { get; set; }
 
@@ -30,10 +28,6 @@ namespace Model
         [Display(Name = "Tipo Pago:")]
         public TipoPago tipoPago { get; set; }
 
-
-
-
-
         public String tipoPagoString
         {
             get
@@ -45,9 +39,6 @@ namespace Model
 
         [Display(Name = "Forma de Pago:")]
         public FormaPago formaPago { get; set; }
-
-        
-
 
         public enum TipoPago
         {

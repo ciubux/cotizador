@@ -111,7 +111,7 @@ namespace Cotizador.Controllers
 
             ViewBag.guiaRemision = guiaRemisionSearch;
             ViewBag.guiaRemisionList = this.Session[Constantes.VAR_SESSION_GUIA_LISTA];
-            ViewBag.pagina = Constantes.paginas.BusquedaGuiasRemision;
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaGuiasRemision;
 
             ViewBag.fechaTrasladoDesde = guiaRemisionSearch.fechaTrasladoDesde.ToString(Constantes.formatoFecha);
             ViewBag.fechaTrasladoHasta = guiaRemisionSearch.fechaTrasladoHasta.ToString(Constantes.formatoFecha);
@@ -378,8 +378,15 @@ namespace Cotizador.Controllers
         {
             try
             {
-
-                Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+                Pedido pedido = null;
+                if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Venta)
+                {
+                    pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+                }
+                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Compra)
+                {
+                    pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
+                }
 
                 if (this.Session[Constantes.VAR_SESSION_GUIA] == null)
                 {
@@ -388,7 +395,15 @@ namespace Cotizador.Controllers
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
                 guiaRemision.pedido = pedido;
 
-                guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedido;
+                if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Venta)
+                {
+                    guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedido;
+                }
+                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Compra)
+                {
+                    guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedidoCompra;
+                }               
+
                 guiaRemision.transportista = new Transportista();
                 // guiaRemision.ciudadOrigen = pedido.ciudad;
 
@@ -475,7 +490,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            ViewBag.pagina = Constantes.paginas.MantenimientoGuiaRemision;
+            ViewBag.pagina = (int)Constantes.paginas.MantenimientoGuiaRemision;
             return View();
         }
 

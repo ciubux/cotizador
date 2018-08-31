@@ -35,11 +35,11 @@ namespace BusinessLayer
             }
         }
 
-        public Venta GetPlantillaVenta(Venta venta)
+        public Venta GetPlantillaVenta(Venta venta, Usuario usuario)
         {
             using (var dal = new VentaDAL())
             {
-                venta = dal.SelectPlantillaVenta(venta);
+                venta = dal.SelectPlantillaVenta(venta, usuario);
                 if (venta.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
                 {
                     this.procesarVenta(venta);
