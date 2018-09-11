@@ -10,7 +10,7 @@ namespace Cotizador
         {
 
             bundles.Add(new ScriptBundle("~/bundles/utiles").Include(
-                         "~/Scripts/utiles1.1.3.js",
+                         "~/Scripts/utiles1.1.4.js",
                          "~/Scripts/utilesFacturacion1.1.3.js"
                          ));
 
@@ -41,16 +41,16 @@ namespace Cotizador
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
                         "~/Scripts/pedidoGeneral1.1.3.js",
-                        "~/Scripts/pedido1.1.7.js"
+                        "~/Scripts/pedido1.1.9.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedidoCompra").Include(
                         "~/Scripts/pedidoGeneral1.1.3.js",
-                        "~/Scripts/pedidoCompra1.1.3.js"
+                        "~/Scripts/pedidoCompra1.1.5.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
-                     "~/Scripts/cliente1.1.4.js"
+                     "~/Scripts/cliente1.1.5.js"
                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
@@ -58,7 +58,7 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/notaIngreso").Include(
-                        "~/Scripts/notaIngreso1.1.3.js"
+                        "~/Scripts/notaIngreso1.1.4.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -106,7 +106,7 @@ namespace Cotizador
                       "~/Content/bootstrap.css",
                       "~/Content/footable.bootstrap.min.css",
                       "~/Content/jquery-ui.min.css",
-                      "~/Content/site1.1.3.css",
+                      "~/Content/site1.1.4.css",
                       "~/Content/chosen/chosen.css",
                       "~/Content/jquery.loadingModal.css",
                       "~/Content/jquery-confirm.css"));

@@ -400,6 +400,64 @@ namespace BusinessLayer
             return pedido;
         }
 
+
+        public Pedido GetPedidoParaEditar(Pedido pedido, Usuario usuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                pedido = dal.SelectPedidoParaEditar(pedido, usuario);
+
+                /*    if (pedido.mostrarValidezOfertaEnDias == 0)
+                    {
+                        TimeSpan diferencia;
+                        diferencia = cotizacion.fechaLimiteValidezOferta - cotizacion.fecha;
+                        cotizacion.validezOfertaEnDias = diferencia.Days;
+                    }
+                    */
+                foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
+                {
+
+                    if (pedidoDetalle.producto.image == null)
+                    {
+                        FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                        MemoryStream storeStream = new MemoryStream();
+                        storeStream.SetLength(inStream.Length);
+                        inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                        storeStream.Flush();
+                        inStream.Close();
+                        pedidoDetalle.producto.image = storeStream.GetBuffer();
+                    }
+
+                    //Si NO es recotizacion
+                    if (pedido.incluidoIGV)
+                    {
+                        //Se agrega el IGV al precioLista
+                        decimal precioSinIgv = pedidoDetalle.producto.precioSinIgv;
+                        decimal precioLista = precioSinIgv + (precioSinIgv * pedido.montoIGV);
+                        pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioLista));
+                        //Se agrega el IGV al costoLista
+                        decimal costoSinIgv = pedidoDetalle.producto.costoSinIgv;
+                        decimal costoLista = costoSinIgv + (costoSinIgv * pedido.montoIGV);
+                        pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoLista));
+                    }
+                    else
+                    {
+                        //Se agrega el IGV al precioLista
+                        pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.precioSinIgv));
+                        //Se agrega el IGV al costoLista
+                        pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.costoSinIgv));
+                    }
+
+                    if (pedidoDetalle.esPrecioAlternativo)
+                    {
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario =
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.equivalencia;
+                    }
+                }
+            }
+            return pedido;
+        }
+
         public void cambiarEstadoPedido(Pedido pedido)
         {
             using (var dal = new PedidoDAL())

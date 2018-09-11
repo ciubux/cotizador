@@ -458,7 +458,9 @@ namespace Cotizador.Controllers
             documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
             documentoVenta.comentarioAprobacionAnulacion = this.Request.Params["comentarioAprobacionAnulacion"];
             documentoVenta.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            documentoVentaBL.aprobarAnulacionDocumentoVenta(documentoVenta);
+
+            
+            documentoVentaBL.aprobarAnulacionDocumentoVenta(documentoVenta, documentoVenta.usuario);
             return JsonConvert.SerializeObject(documentoVenta);
 
         }

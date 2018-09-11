@@ -2101,6 +2101,7 @@ jQuery(function ($) {
 
         var numeroDocumento = $("#notaIngreso_numeroDocumento").val();
         var numeroPedido = $("#notaIngreso_pedido_numeroPedido").val();
+        var numeroGuiaReferencia = $("#notaIngreso_numeroGuiaReferencia").val();
         var fechaTrasladoDesde = $("#notaIngreso_fechaTrasladoDesde").val();
         var fechaTrasladoHasta = $("#notaIngreso_fechaTrasladoHasta").val();
         //var estado = $("#estado").val();
@@ -2115,10 +2116,9 @@ jQuery(function ($) {
                 idCliente: idCliente,
                 numeroDocumento: numeroDocumento,
                 numeroPedido: numeroPedido,
+                numeroGuiaReferencia: numeroGuiaReferencia,
                 fechaTrasladoDesde: fechaTrasladoDesde,
                 fechaTrasladoHasta: fechaTrasladoHasta
-                
-
           //      estado: estado
             },
             error: function () {

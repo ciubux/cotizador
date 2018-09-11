@@ -179,6 +179,16 @@ namespace Cotizador.Controllers
                 notaIngreso.pedido.numeroPedido = int.Parse(this.Request.Params["numeroPedido"]);
             }
 
+            if (this.Request.Params["numeroGuiaReferencia"] == null || this.Request.Params["numeroGuiaReferencia"].Trim().Length == 0)
+            {
+                notaIngreso.numeroGuiaReferencia = 0;
+            }
+            else
+            {
+                notaIngreso.numeroGuiaReferencia = int.Parse(this.Request.Params["numeroGuiaReferencia"]);
+            }
+            
+
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
 
 

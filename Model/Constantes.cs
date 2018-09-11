@@ -106,6 +106,8 @@ namespace Model
         public static String AMBIENTE_EOL = "";
         public static String CPE_CABECERA_BE_ID = "";
         public static String CPE_CABECERA_BE_COD_GPO = "";
+        public static String MAIL_COMUNICACION_FACTURAS = "";
+        public static String PASSWORD_MAIL_COMUNICACION_FACTURAS = "";
 
 
 
@@ -251,6 +253,14 @@ namespace Model
             ImprimirNotaIngreso = 22
 
         };
+
+
+        #region PARAMETROS MAIL
+        public static String SERVER_SMPTP = "smtp.office365.com";
+        public static int PUERTO_SERVER_SMPTP = 587;
+
+
+        #endregion
 
 
     }

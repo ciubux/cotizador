@@ -1447,7 +1447,11 @@ jQuery(function ($) {
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     $("#solicitudIngresoComentario").html("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario de lo contrario se mantendrá en estado En Edición.")
                     $("#comentarioPendienteAprobacion").val(resultado.observacion);
-                    $("#modalComentarioPendienteAprobacion").modal('show');
+                    $("#modalComentarioPendienteAprobacion").modal({
+                        show: true,
+                        keyboard: false,
+                        backdrop: 'static'
+                    });
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
                     $("#numero").val(resultado.codigo);         
@@ -1507,7 +1511,11 @@ jQuery(function ($) {
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     $("#solicitudIngresoComentario").html("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario de lo contrario se mantendrá en estado En Edición.")
                     $("#comentarioPendienteAprobacion").val(resultado.observacion);
-                    $("#modalComentarioPendienteAprobacion").modal('show');
+                    $("#modalComentarioPendienteAprobacion").modal({
+                        show: true,
+                        keyboard: false,
+                        backdrop: 'static'
+                    });
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
                     $("#numero").val(resultado.codigo);

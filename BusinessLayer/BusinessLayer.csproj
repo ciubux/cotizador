@@ -83,6 +83,10 @@
       <Project>{2e588952-5389-42e5-8ed8-c42b9e38f6d7}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj">
+      <Project>{8492E629-D624-499A-86C2-6E7F23450E78}</Project>
+      <Name>ServiceLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

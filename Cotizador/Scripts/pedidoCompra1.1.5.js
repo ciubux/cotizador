@@ -1,6 +1,5 @@
 
 jQuery(function ($) {
-    var pagina = 2;
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_VALIDACION_PEDIDO = 'Revisar Datos del Pedido';
@@ -9,7 +8,7 @@ jQuery(function ($) {
     $(document).ready(function () {
         obtenerConstantes();
       //  setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
-        cargarChosenCliente(pagina);
+        cargarChosenCliente();
         toggleControlesUbigeo();
         toggleControlesDireccionEntrega();
         toggleControlesSolicitante();
@@ -73,7 +72,7 @@ jQuery(function ($) {
 
     function verificarSiExisteCliente() {
         if ($("#esCliente").val() == 0) {
-            if ($("#idCliente").val().trim() != "" && $("#pagina").val() == 3)
+            if ($("#idCliente").val().trim() != "" && $("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_COMPRA)
                 $("#idCiudad").attr("disabled", "disabled");
         }
     }
@@ -146,7 +145,7 @@ jQuery(function ($) {
      * ################################ INICIO CONTROLES DE CLIENTE
      */
 
-    function cargarChosenCliente(pagina) {
+    function cargarChosenCliente() {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Proveedor", no_results_text: "No se encontró Proveedor" }).on('chosen:showing_dropdown', function (evt, params) {
             if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
@@ -243,7 +242,7 @@ jQuery(function ($) {
             },
             success: function (cliente)
             {
-                if ($("#pagina").val() == 3)
+                if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_COMPRA)
                     $("#idCiudad").attr("disabled", "disabled");
 
                 $("#idCiudad").attr("disabled", "disabled");
@@ -1259,7 +1258,7 @@ jQuery(function ($) {
 
         var idCliente = "";
         var sessionPedido = "pedido"
-        if ($("#pagina").val() == 2) {
+        if ($("#pagina").val() == PAGINA_BUSQUEDA_PEDIDOS_COMPRA) {
             idCliente = $("#verIdCliente").val();
             sessionPedido = "pedidoVer";
         }
@@ -2163,8 +2162,13 @@ jQuery(function ($) {
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     //alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN")
+                    $("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
                     $("#comentarioPendienteIngreso").val(resultado.observacion);
-                    $("#modalComentarioPendienteIngreso").modal('show');
+                    $("#modalComentarioPendienteIngreso").modal({
+                        show: true,
+                        keyboard: false,
+                        backdrop: 'static'
+                    });
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
                     ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/PedidoCompra/CancelarCreacionPedido');
@@ -2214,8 +2218,13 @@ jQuery(function ($) {
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     //alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN")
+                    $("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
                     $("#comentarioPendienteIngreso").val(resultado.observacion);
-                    $("#modalComentarioPendienteIngreso").modal('show');
+                    $("#modalComentarioPendienteIngreso").modal({
+                        show: true,
+                        keyboard: false,
+                        backdrop: 'static'
+                    });
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
                     ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/PedidoCompra/CancelarCreacionPedido');

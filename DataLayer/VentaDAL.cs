@@ -295,7 +295,7 @@ namespace DataLayer
             return venta;
         }
 
-        public Venta SelectVenta(Venta venta)
+        public Venta SelectVenta(Venta venta, Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_venta");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", venta.guiaRemision.idMovimientoAlmacen);
@@ -411,7 +411,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in ventaDetalleDataTable.Rows)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle(pedido.usuario);
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario);
                 pedidoDetalle.producto = new Producto();
 
                 pedidoDetalle.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");

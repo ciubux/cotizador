@@ -51,11 +51,11 @@ namespace BusinessLayer
 
 
 
-        public Venta GetVenta(Venta venta)
+        public Venta GetVenta(Venta venta, Usuario usuario)
         {
             using (var dal = new VentaDAL())
             {
-                venta = dal.SelectVenta(venta);
+                venta = dal.SelectVenta(venta, usuario);
 
                 this.procesarVenta(venta);
             }

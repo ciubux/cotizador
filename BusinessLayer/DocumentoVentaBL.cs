@@ -7,6 +7,7 @@ using System.IO;
 using Model.DTO;
 using Model.ServiceReferencePSE;
 using System.ServiceModel;
+using ServiceLayer;
 
 namespace BusinessLayer
 {
@@ -362,7 +363,7 @@ namespace BusinessLayer
             }
         }
 
-        public void aprobarAnulacionDocumentoVenta(DocumentoVenta documentoVenta)
+        public void aprobarAnulacionDocumentoVenta(DocumentoVenta documentoVenta, Usuario usuario)
         {
             IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
             Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
@@ -390,6 +391,56 @@ namespace BusinessLayer
                 using (var dal = new DocumentoVentaDAL())
                 {
                     dal.aprobarAnulacionDocumentoVenta(documentoVenta);
+
+                    String mensaje = "<div autoid=\"_rp_x\" class=\"_rp_05\" id=\"Item.MessagePartBody\" style=\"\"> <div class=\"_rp_15 ms-font-weight-regular ms-font-color-neutralDark rpHighlightAllClass rpHighlightBodyClass\" id=\"Item.MessageUniqueBody\" style=\"font-family: wf_segoe-ui_normal, &quot;Segoe UI&quot;, &quot;Segoe WP&quot;, Tahoma, Arial, sans-serif, serif, EmojiFont;\"><div class=\"rps_9225\"><style type=\"text/css\"><!-- .rps_9225 p" +
+                    " { margin-top: 0; margin-bottom: 0; }" +
+                    "  --></style>" +
+                    " <div>" +
+                    " <div dir=\"ltr\">" +
+                    " <div id=\"x_divtagdefaultwrapper\" dir=\"ltr\" style=\"font-size: 12pt; color: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;\">" +
+                    " <p style=\"margin-top:0; margin-bottom:0\"></p>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " Estimado Cliente,</div>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " &nbsp;</div>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " Se le informa que la factura electrónica N°&nbsp;<span style=\"background-color:rgb(255,255,255)\">F001-00001559</span>, enviada por correo electrónico el día 2<span style=\"background-color:rgb(255,255,255)\">7</span><span style=\"background-color:rgb(255,255,255)\">/08</span>&nbsp;ha sido ANULADA en SUNAT, por haberse detectado un error en la emisión.&nbsp; &nbsp;</div>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " &nbsp;</div>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " NOTA:&nbsp;<span style=\"font-size:10pt\">Si desea cambiar el buzón de correo para la recepción de documentos electrónicos, por favor ingrese a&nbsp;</span><span style=\"color:rgb(0,111,201); font-size:10pt\"><a href=\"http://mpinstitucional.com/buzon.facturas\" target=\"_blank\" rel=\"noopener noreferrer\" data-auth=\"NotApplicable\" class=\"x_x_x_x_OWAAutoLink\" id=\"LPlnk624034\">http://mpinstitucional.com/buzon.facturas</a></span></div>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " <span style=\"font-size:10pt\">y complete el formulario.&nbsp;</span></div>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " &nbsp;<br>" +
+                    " </div>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " Agradeceremos confirmar la recepción del presente correo.</div>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " <br>" +
+                    " </div>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " Facturación Electrónica</div>" +
+                    " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
+                    " <span style=\"font-family:Calibri,Helvetica,sans-serif,EmojiFont,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;,NotoColorEmoji,&quot;Segoe UI Symbol&quot;,&quot;Android Emoji&quot;,EmojiSymbols; font-size:16px\"><b>MP INSTITUCIONAL S.A.C.</b></span></div>" +
+                    " <br>" +
+                    " <p></p>" +
+                    " </div>" +
+                    " </div>" +
+                    " " +
+                    " </div>" +
+                    " </div></div> <div class=\"_rp_j5\" style=\"display: none;\"></div> </div>";
+
+
+                    MailService mailService = new MailService();
+                    mailService.enviar(new List<string>() { "c.cornejo@mpinstitucional.com" }, "Solicitud Anulacion", mensaje, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, usuario);
+
+
+
+
+
+
+
                 }
             }
 

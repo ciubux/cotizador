@@ -140,6 +140,11 @@ namespace DataLayer
                         Constantes.PASSWORD_EOL_TEST = valorParametro; break;
                     case "ENDPOINT_ADDRESS_EOL_TEST":
                         Constantes.ENDPOINT_ADDRESS_EOL_TEST = valorParametro; break;
+                    case "MAIL_COMUNICACION_FACTURAS":
+                        Constantes.MAIL_COMUNICACION_FACTURAS = valorParametro; break;
+                    case "PASSWORD_MAIL_COMUNICACION_FACTURAS":
+                        Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS = valorParametro; break;                     
+
                     case "HORA_CORTE_CREDITOS_LIMA":
                         {
 

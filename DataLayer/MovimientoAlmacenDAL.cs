@@ -823,7 +823,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", notaIngreso.fechaTrasladoDesde);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", notaIngreso.fechaTrasladoHasta);
             InputParameterAdd.Int(objCommand, "anulado", notaIngreso.estaAnulado ? 1 : 0);
-            InputParameterAdd.Int(objCommand, "facturado", notaIngreso.estaFacturado ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "numeroGuiaReferencia", notaIngreso.numeroGuiaReferencia);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", notaIngreso.pedido.numeroPedido);
             DataTable dataTable = Execute(objCommand);
 

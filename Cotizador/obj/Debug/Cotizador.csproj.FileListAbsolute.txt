@@ -512,6 +512,7 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OOXML.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OpenXml4Net.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OpenXmlFormats.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Owin.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\ServiceLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Helpers.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Mvc.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Optimization.dll
@@ -532,6 +533,7 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\BusinessLayer.dll.config
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\CotizadorPDF.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Model.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\ServiceLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.SqlServer.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.DependencyCollector.xml

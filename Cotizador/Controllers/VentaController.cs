@@ -23,9 +23,11 @@ namespace Cotizador.Controllers
             Venta ventaVer = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
-       
-            
-            venta = ventaBL.GetVenta(ventaVer);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+
+            venta = ventaBL.GetVenta(ventaVer, usuario);
             //Temporal
             Pedido pedido = venta.pedido;
             pedido.ciudadASolicitar = new Ciudad();
@@ -52,9 +54,10 @@ namespace Cotizador.Controllers
             Venta venta = new Venta();
             venta.guiaRemision = new GuiaRemision();
             venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
-            venta = ventaBL.GetVenta(venta);
-            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            venta = ventaBL.GetVenta(venta, usuario);
+            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
+            
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonVenta = JsonConvert.SerializeObject(venta);
 

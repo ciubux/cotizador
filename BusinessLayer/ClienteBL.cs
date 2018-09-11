@@ -5,6 +5,9 @@ using System;
 using Model;
 using Model.ServiceSunatPadron;
 using System.ServiceModel;
+using System.Net;
+using System.IO;
+using System.Text;
 
 namespace BusinessLayer
 {
@@ -12,7 +15,7 @@ namespace BusinessLayer
     {
 
 
-        public Cliente getDatosSunat(Cliente cliente)
+        public Cliente getDatosPadronSunat(Cliente cliente)
         {
             /*var RUC = txtRuc.Text;
             RUC = RUC.Replace(" ", "");*/
@@ -103,7 +106,70 @@ namespace BusinessLayer
             return cliente;
         }
 
+        public String getNombreComercial(Cliente cliente)
+        {
+            String nombreComercial = String.Empty;
 
+
+            try
+            {
+                string URI = @"http://personasperu.com/empresas-" + cliente.ruc + ".html";
+                WebClient webClient = new WebClient();
+                Stream stream = webClient.OpenRead(URI);
+
+                /*wc. .DownloadFile(URI, @"archivo.txt");
+                FileStream stream = new FileStream(@"archivo.txt", FileMode.Open, FileAccess.Read);
+                */
+
+                StreamReader reader = new StreamReader(stream, Encoding.GetEncoding("utf-8"));
+            
+                string linea;
+
+                linea = reader.ReadLine();
+                while (linea != null)
+                {
+                    bool ini;
+                    linea = reader.ReadLine();
+                    ini = linea.Contains("Nombre Comercial");
+
+
+                    if (ini == true)
+                    {
+                        linea = reader.ReadLine().TrimEnd().TrimStart();
+
+                        if (linea.Contains("-"))
+                        {
+                           
+                            break;
+                        }
+
+                        int pi = "<td>".Length;
+                        int pf = "<input/>".Length;
+                        var rs1 = linea.Substring(pi, pf + 20);
+                        var rs2 = rs1.Substring(0, 25);
+
+                        nombreComercial = rs2.ToString();
+                        break;
+
+                    }
+
+
+                }
+
+
+
+
+         
+
+
+            }
+            catch (Exception ex)
+            {
+                nombreComercial = String.Empty;
+
+            }
+            return nombreComercial;
+        }
         public String getCLientesBusqueda(String textoBusqueda,Guid idCiudad)
         {
             using (var clienteDAL = new ClienteDAL())

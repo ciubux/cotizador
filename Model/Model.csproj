@@ -47,6 +47,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Correo.cs" />
     <Compile Include="NotaIngresoValidacion.cs" />
     <Compile Include="NotaIngreso.cs" />
     <Compile Include="Persona.cs" />

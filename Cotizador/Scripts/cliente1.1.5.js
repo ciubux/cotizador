@@ -73,7 +73,7 @@ jQuery(function ($) {
     $(document).ready(function () {
    //     obtenerConstantes();
   //      setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
-        cargarChosenCliente(pagina);
+        cargarChosenCliente();
   /*      toggleControlesUbigeo();
         verificarSiExisteNuevaDireccionEntrega();
         verificarSiExisteDetalle();
@@ -177,6 +177,8 @@ jQuery(function ($) {
             data: { ruc: ruc },
             success: function (cliente) {
                 $("#cliente_razonSocialSunat").val(cliente.razonSocialSunat);
+                $("#cliente_nombreComercial").val(cliente.nombreComercial);                
+                $("#cliente_nombreComercialSunat").val(cliente.nombreComercialSunat);
                 $("#cliente_direccionDomicilioLegalSunat").val(cliente.direccionDomicilioLegalSunat);
                 $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);
                 $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
@@ -244,7 +246,7 @@ jQuery(function ($) {
      * ################################ INICIO CONTROLES DE CLIENTE
      */
 
-    function cargarChosenCliente(pagina) {
+    function cargarChosenCliente() {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
             if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
@@ -254,6 +256,12 @@ jQuery(function ($) {
                 return false;
             }
         });
+
+
+        if ($("#cliente_codigo").val().length > 0) {
+            $("#idCiudad").attr("disabled", "disabled");
+        }
+
 
         $("#idCliente").ajaxChosen({
             dataType: "json",

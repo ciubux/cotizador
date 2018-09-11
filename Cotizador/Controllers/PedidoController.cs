@@ -49,9 +49,9 @@ namespace Cotizador.Controllers
 
             pedidoTmp.fechaSolicitudDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
             pedidoTmp.fechaSolicitudHasta = fechaHasta;
-               
-            pedidoTmp.fechaEntregaDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
-            pedidoTmp.fechaEntregaHasta = DateTime.Now.AddDays(Constantes.DIAS_DESDE_BUSQUEDA);
+
+            pedidoTmp.fechaEntregaDesde = null;// new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
+            pedidoTmp.fechaEntregaHasta = null;// DateTime.Now.AddDays(Constantes.DIAS_DESDE_BUSQUEDA);
 
             pedidoTmp.fechaProgramacionDesde = null;// new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             pedidoTmp.fechaProgramacionHasta = null;// new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
@@ -110,8 +110,17 @@ namespace Cotizador.Controllers
 
             ViewBag.fechaSolicitudDesde = pedidoSearch.fechaSolicitudDesde.ToString(Constantes.formatoFecha);
             ViewBag.fechaSolicitudHasta = pedidoSearch.fechaSolicitudHasta.ToString(Constantes.formatoFecha);
-            ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
-            ViewBag.fechaEntregaHasta = pedidoSearch.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
+         
+            if (pedidoSearch.fechaEntregaDesde != null)
+                ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
+            else
+                ViewBag.fechaEntregaDesde = null;
+
+            if (pedidoSearch.fechaEntregaHasta != null)
+                ViewBag.fechaEntregaHasta = pedidoSearch.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
+            else
+                ViewBag.fechaEntregaHasta = null;
+
 
             if (pedidoSearch.fechaProgramacionDesde != null)
                 ViewBag.fechaProgramacionDesde = pedidoSearch.fechaProgramacionDesde.Value.ToString(Constantes.formatoFecha);
@@ -122,6 +131,9 @@ namespace Cotizador.Controllers
                 ViewBag.fechaProgramacionHasta = pedidoSearch.fechaProgramacionHasta.Value.ToString(Constantes.formatoFecha);
             else
                 ViewBag.fechaProgramacionHasta = null;
+
+
+
 
             if (this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] == null)
             {
@@ -421,7 +433,7 @@ namespace Cotizador.Controllers
             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
             pedidoBL.cambiarEstadoPedido(pedido);
             //Se obtiene los datos de la cotización ya modificada
-            pedido = pedidoBL.GetPedido(pedido,usuario);
+            pedido = pedidoBL.GetPedidoParaEditar(pedido,usuario);
             //Temporal
             pedido.ciudadASolicitar = new Ciudad();
            
@@ -1326,17 +1338,50 @@ namespace Cotizador.Controllers
             String[] solHasta = this.Request.Params["fechaSolicitudHasta"].Split('/');
             pedido.fechaSolicitudHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]),23,59,59);
 
-            String[] entregaDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
-            pedido.fechaEntregaDesde = new DateTime(Int32.Parse(entregaDesde[2]), Int32.Parse(entregaDesde[1]), Int32.Parse(entregaDesde[0]));
 
-            String[] entregaHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
-            pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]), 23, 59, 59);
+            if (this.Request.Params["fechaEntregaDesde"] == null || this.Request.Params["fechaEntregaDesde"].Equals(""))
+            {
+                pedido.fechaEntregaDesde = null;
+            }
+            else
+            { 
+                String[] entregaDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
+                pedido.fechaEntregaDesde = new DateTime(Int32.Parse(entregaDesde[2]), Int32.Parse(entregaDesde[1]), Int32.Parse(entregaDesde[0]));
+            }
 
-            String[] programacionDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
-            pedido.fechaEntregaDesde = new DateTime(Int32.Parse(programacionDesde[2]), Int32.Parse(programacionDesde[1]), Int32.Parse(programacionDesde[0]));
 
-            String[] programacionHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
-            pedido.fechaEntregaHasta = new DateTime(Int32.Parse(programacionHasta[2]), Int32.Parse(programacionHasta[1]), Int32.Parse(programacionHasta[0]), 23, 59, 59);
+            if (this.Request.Params["fechaEntregaHasta"] == null || this.Request.Params["fechaEntregaHasta"].Equals(""))
+            {
+                pedido.fechaEntregaHasta = null;
+            }
+            else
+            {
+                String[] entregaHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
+                pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]), 23, 59, 59);
+            }
+
+            if (this.Request.Params["fechaProgramacionDesde"] == null || this.Request.Params["fechaProgramacionDesde"].Equals(""))
+            {
+                pedido.fechaProgramacionDesde = null;
+            }
+            else
+            {
+                String[] programacionDesde = this.Request.Params["fechaProgramacionDesde"].Split('/');
+                pedido.fechaProgramacionDesde = new DateTime(Int32.Parse(programacionDesde[2]), Int32.Parse(programacionDesde[1]), Int32.Parse(programacionDesde[0]));
+            }
+
+
+            if (this.Request.Params["fechaProgramacionHasta"] == null || this.Request.Params["fechaProgramacionHasta"].Equals(""))
+            {
+                pedido.fechaProgramacionHasta = null;
+            }
+            else
+            {
+                String[] programacionHasta = this.Request.Params["fechaProgramacionDesde"].Split('/');
+                pedido.fechaProgramacionHasta = new DateTime(Int32.Parse(programacionHasta[2]), Int32.Parse(programacionHasta[1]), Int32.Parse(programacionHasta[0]));
+            }
+
+
 
 
             if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)

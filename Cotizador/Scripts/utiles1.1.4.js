@@ -17,6 +17,10 @@ var TITLE_EXITO = 'Operación Realizada';
  */
 //Estados para búsqueda de Pedidos
 
+var PAGINA_BUSQUEDA_PEDIDOS_VENTA = "BusquedaPedidos";
+var PAGINA_BUSQUEDA_PEDIDOS_COMPRA = "BusquedaPedidos";
+var PAGINA_MANTENIMIENTO_PEDIDO_VENTA = "MantenimientoPedido";
+var PAGINA_MANTENIMIENTO_PEDIDO_COMPRA = "MantenimientoPedido";
 
 var ESTADO_PENDIENTE_APROBACION = 0;
 var ESTADO_INGRESADO = 1;
@@ -82,6 +86,8 @@ var CONS_TIPO_DOC_CLIENTE_DNI= "1";
 
 
 var GUID_EMPTY = "00000000-0000-0000-0000-000000000000";
+
+
 
 
 

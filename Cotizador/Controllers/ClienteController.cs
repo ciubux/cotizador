@@ -55,7 +55,9 @@ namespace Cotizador.Controllers
                 Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
 
                 ClienteBL clienteBL = new ClienteBL();
-                cliente = clienteBL.getDatosSunat(cliente);
+                cliente = clienteBL.getDatosPadronSunat(cliente);
+                cliente.nombreComercial = clienteBL.getNombreComercial(cliente);
+                cliente.nombreComercialSunat = cliente.nombreComercial;
                 String resultado = JsonConvert.SerializeObject(cliente);
                 return resultado;
             }
@@ -181,7 +183,7 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
-
+        /*
         public String ChangeDireccionDomicilioLegalSunat()
         {
             String direccionDomicilioLegalSunat = Request["direccionDomicilioLegalSunat"].ToString();
@@ -212,6 +214,7 @@ namespace Cotizador.Controllers
 
             this.ClienteSession.ubigeo = ubigeoBL.getUbigeoPorDistritoProvincia(distrito,provincia);
             this.ClienteSession.direccionDomicilioLegalSunat = direccionDomicilioLegalSunat;
+            
 
             var obj = new 
             {
@@ -223,12 +226,12 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
-
+        */
 
         public String ChangeIdCiudad()
         {
             Cliente cliente = this.ClienteSession;
-            cliente = new Cliente();
+
             Guid idCiudad = Guid.Empty;
             if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
             {
