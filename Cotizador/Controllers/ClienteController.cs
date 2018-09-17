@@ -183,7 +183,7 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
-        /*
+       
         public String ChangeDireccionDomicilioLegalSunat()
         {
             String direccionDomicilioLegalSunat = Request["direccionDomicilioLegalSunat"].ToString();
@@ -226,7 +226,7 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
-        */
+        
 
         public String ChangeIdCiudad()
         {

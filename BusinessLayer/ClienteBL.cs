@@ -69,18 +69,20 @@ namespace BusinessLayer
                     {
                         direccion.Add(" ");
                         direccion.Add(clienteSunat.tipozona);
-                    }
-                   
-                    if (clienteSunat.lote != "-")
-                    {
-                        direccion.Add(" LT. ");
-                        direccion.Add(clienteSunat.lote);
-                    }                   
+                    }                  
+                                 
                     if (clienteSunat.manzana != "-")
                     {
                         direccion.Add(" MZ. ");
                         direccion.Add(clienteSunat.manzana);
                     }
+
+                    if (clienteSunat.lote != "-")
+                    {
+                        direccion.Add(" LT. ");
+                        direccion.Add(clienteSunat.lote);
+                    }
+
                     if (clienteSunat.kilometro != "-")
                     {
                         direccion.Add(" KM.");
@@ -137,30 +139,29 @@ namespace BusinessLayer
                     {
                         linea = reader.ReadLine().TrimEnd().TrimStart();
 
-                        if (linea.Contains("-"))
+                /*     if (linea.Contains("-"))
                         {
                            
                             break;
-                        }
+                        }*/
+                        
+                     
 
-                        int pi = "<td>".Length;
-                        int pf = "<input/>".Length;
-                        var rs1 = linea.Substring(pi, pf + 20);
-                        var rs2 = rs1.Substring(0, 25);
+                      //  value =\"BANCO DE CREDITO DEL PERU\" />"
+
+                        int inicio = linea.IndexOf("<td>");
+                        linea = linea.Substring(inicio + 4);
+
+                        int fin = linea.IndexOf("\t");
+
+                        var rs2 = linea.Substring(0,fin);
+                     //   var rs2 = rs1.Substring(0, 25);
 
                         nombreComercial = rs2.ToString();
                         break;
 
                     }
-
-
                 }
-
-
-
-
-         
-
 
             }
             catch (Exception ex)

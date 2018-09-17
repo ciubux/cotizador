@@ -392,7 +392,7 @@ namespace BusinessLayer
                 {
                     dal.aprobarAnulacionDocumentoVenta(documentoVenta);
 
-                    String mensaje = "<div autoid=\"_rp_x\" class=\"_rp_05\" id=\"Item.MessagePartBody\" style=\"\"> <div class=\"_rp_15 ms-font-weight-regular ms-font-color-neutralDark rpHighlightAllClass rpHighlightBodyClass\" id=\"Item.MessageUniqueBody\" style=\"font-family: wf_segoe-ui_normal, &quot;Segoe UI&quot;, &quot;Segoe WP&quot;, Tahoma, Arial, sans-serif, serif, EmojiFont;\"><div class=\"rps_9225\"><style type=\"text/css\"><!-- .rps_9225 p" +
+            /*        String mensaje = "<div autoid=\"_rp_x\" class=\"_rp_05\" id=\"Item.MessagePartBody\" style=\"\"> <div class=\"_rp_15 ms-font-weight-regular ms-font-color-neutralDark rpHighlightAllClass rpHighlightBodyClass\" id=\"Item.MessageUniqueBody\" style=\"font-family: wf_segoe-ui_normal, &quot;Segoe UI&quot;, &quot;Segoe WP&quot;, Tahoma, Arial, sans-serif, serif, EmojiFont;\"><div class=\"rps_9225\"><style type=\"text/css\"><!-- .rps_9225 p" +
                     " { margin-top: 0; margin-bottom: 0; }" +
                     "  --></style>" +
                     " <div>" +
@@ -404,7 +404,7 @@ namespace BusinessLayer
                     " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
                     " &nbsp;</div>" +
                     " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
-                    " Se le informa que la factura electrónica N°&nbsp;<span style=\"background-color:rgb(255,255,255)\">F001-00001559</span>, enviada por correo electrónico el día 2<span style=\"background-color:rgb(255,255,255)\">7</span><span style=\"background-color:rgb(255,255,255)\">/08</span>&nbsp;ha sido ANULADA en SUNAT, por haberse detectado un error en la emisión.&nbsp; &nbsp;</div>" +
+                    " Se le informa que se ha solicitado la baja a SUNAT de la factura electrónica N°&nbsp;<span style=\"background-color:rgb(255,255,255)\">"+ documentoVenta.cPE_CABECERA_BE.SERIE+"-" + documentoVenta.cPE_CABECERA_BE.CORRELATIVO +"</span>, emitida el día <span style=\"background-color:rgb(255,255,255)\">"+ documentoVenta.cPE_CABECERA_BE.FEC_EMI + "</span>&nbsp;, por haberse detectado un error en la emisión. Le informaremos cuando SUNAT confirme la ANULACIÓN de la factura electrónica.&nbsp; &nbsp;</div>" +
                     " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
                     " &nbsp;</div>" +
                     " <div style=\"color:rgb(33,33,33); font-family:wf_segoe-ui_normal,&quot;Segoe UI&quot;,&quot;Segoe WP&quot;,Tahoma,Arial,sans-serif,serif,EmojiFont; font-size:15px; background-color:rgba(255,255,255,0.85)\">" +
@@ -431,9 +431,11 @@ namespace BusinessLayer
                     " </div>" +
                     " </div></div> <div class=\"_rp_j5\" style=\"display: none;\"></div> </div>";
 
+*/
+                    //documentoVenta.cPE_CABECERA_BE.CORREO_ENVIO
 
                     MailService mailService = new MailService();
-                    mailService.enviar(new List<string>() { "c.cornejo@mpinstitucional.com" }, "Solicitud Anulacion", mensaje, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, usuario);
+               //     mailService.enviar(new List<string>() { "c.cornejo@mpinstitucional.com" }, "Solicitud Anulacion", mensaje, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, usuario);
 
 
 

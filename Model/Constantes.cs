@@ -27,6 +27,7 @@ namespace Model
 
         public static String TIPO_DOCUMENTO_CLIENTE_RUC = "6";
         public static String TIPO_DOCUMENTO_CLIENTE_DNI = "1";
+        public static String TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA = "4";
 
 
         public static String LABEL_DIRECCION_ENTREGA_VACIO = "Seleccione Dirección de Entrega";

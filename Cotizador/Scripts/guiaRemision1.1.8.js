@@ -893,6 +893,13 @@ jQuery(function ($) {
                     $("#btnAceptarFacturarPedido").html("Generar Boleta");
                     $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_DNI);
                 }
+                else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
+                    $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
+                    $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
+                    $("#observacionesDocumento").html("Observaciones Boleta:");
+                    $("#btnAceptarFacturarPedido").html("Generar Boleta");
+                    $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA);
+                }
 
 
                 $("#nombreArchivos > li").remove().end();

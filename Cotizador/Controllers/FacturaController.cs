@@ -86,7 +86,8 @@ namespace Cotizador.Controllers
 
                 if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
-                else if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI)
+                else if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
+                    documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
                 else
                     throw new Exception("No se ha identificado el tipo de documento electrónico a crear.");
@@ -247,7 +248,8 @@ namespace Cotizador.Controllers
 
                 if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
-                else if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI)
+                else if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
+                     documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
                 else
                     throw new Exception("No se ha identificado el tipo de documento electrónico a crear.");

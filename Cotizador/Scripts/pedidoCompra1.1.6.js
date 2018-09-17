@@ -2264,7 +2264,7 @@ jQuery(function ($) {
                     type: 'green',
                     content: "El comentario del estado del pedido número: " + codigoPedido + " fue modificado.",
                     buttons: {
-                        OK: function () { }
+                        OK: function () { window.location = '/Pedido/Index'; }
                     }
                 });
                 $("#btnCancelarComentario").click();
