@@ -598,10 +598,17 @@ namespace Cotizador.Controllers
 
         public String Anular()
         {
+            
+
+         //   if (guiaRemision.fechaEmision.Month == DateTime.Now.Month)
+         //   {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
             guiaRemision.comentarioAnulado = Request["comentarioAnulado"];
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             movimientoAlmacenBL.AnularMovimientoAlmacen(guiaRemision);
+          //  }
+
+
             return JsonConvert.SerializeObject(guiaRemision);
         }
 

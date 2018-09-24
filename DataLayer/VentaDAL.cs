@@ -65,7 +65,7 @@ namespace DataLayer
 
         public void InsertVentaDetalle(Venta venta)
         {
-            foreach (DocumentoDetalle documentoDetalle in venta.pedido.pedidoDetalleList)
+            foreach (PedidoDetalle documentoDetalle in venta.pedido.pedidoDetalleList)
             {
                 var objCommand = GetSqlCommand("pi_ventaDetalle");
                 InputParameterAdd.Guid(objCommand, "idVenta", venta.idVenta);

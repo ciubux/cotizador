@@ -148,7 +148,7 @@ namespace Cotizador.Controllers
             ViewBag.horaEmision = documentoVenta.fechaEmision.Value.ToString(Constantes.formatoHora);
             ViewBag.pedidoList = this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_LISTA];
             ViewBag.existeCliente = existeCliente;
-            ViewBag.pagina = Constantes.paginas.BusquedaPedidos;
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaPedidosCompra;
             return View();
         }
 
@@ -221,7 +221,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            ViewBag.pagina = Constantes.paginas.MantenimientoPedido;
+            ViewBag.pagina = (int)Constantes.paginas.MantenimientoPedido;
             return View();
         }
 
@@ -295,7 +295,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            ViewBag.pagina = Constantes.paginas.MantenimientoPedido;
+            ViewBag.pagina = (int)Constantes.paginas.MantenimientoPedido;
             return View();
         }
 
@@ -937,6 +937,12 @@ namespace Cotizador.Controllers
         {
             Char tipoPedidoCompra = Convert.ToChar(Int32.Parse(this.Request.Params["tipoPedido"]));
             this.PedidoSession.tipoPedidoCompra = (Pedido.tiposPedidoCompra)tipoPedidoCompra;
+        }
+
+        public void ChangeTipoPedidoBusqueda()
+        {
+            Char tipoPedidoBusqueda = Convert.ToChar(Int32.Parse(this.Request.Params["tipoPedidoBusqueda"]));
+            this.PedidoSession.tipoPedidoCompraBusqueda = (Pedido.tiposPedidoCompraBusqueda)tipoPedidoBusqueda;
         }
 
 

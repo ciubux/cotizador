@@ -9,6 +9,7 @@ namespace Model
 {
     public static class Constantes
     {
+        /*FORMATOS*/
         public static String formatoDosDecimales = "{0:0.00}";
         public static String formatoUnDecimal = "{0:0.0}";
         public static String formatoCuatroDecimales = "{0:0.0000}";
@@ -22,16 +23,22 @@ namespace Model
         public static Char PAD = '0';
         public static int LONGITUD_NUMERO = 6;
         public static String UBIGEO_VACIO = "000000";
-
         public static int DIAS_DESDE_BUSQUEDA = 10;
 
+
+
+        public static String LABEL_DIRECCION_ENTREGA_VACIO = "Seleccione Dirección de Entrega";
+
+
+
+        /*Tipos Documentos Cliente*/
         public static String TIPO_DOCUMENTO_CLIENTE_RUC = "6";
         public static String TIPO_DOCUMENTO_CLIENTE_DNI = "1";
         public static String TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA = "4";
 
 
-        public static String LABEL_DIRECCION_ENTREGA_VACIO = "Seleccione Dirección de Entrega";
 
+        /*CONSTANTES PARA VARIABLES DE SESION*/
 
         public static String VAR_SESSION_COTIZACION = "cotizacion";
         public static String VAR_SESSION_COTIZACION_BUSQUEDA = "cotizacionBusqueda";
@@ -49,7 +56,6 @@ namespace Model
         public static String VAR_SESSION_PEDIDO_COMPRA_VER = "pedidoCompraVer";
 
         public static String VAR_SESSION_CLIENTE = "cliente";
-
         public static String VAR_SESSION_PROVEEDOR = "proveedor";
 
         public static String VAR_SESSION_GUIA = "guiaRemision";
@@ -95,11 +101,13 @@ namespace Model
 
         public static Decimal VARIACION_PRECIO_ITEM_PEDIDO = 0.01M;
 
+
+
+
         public static String USER_EOL_TEST = "";
         public static String PASSWORD_EOL_TEST = "";
         public static String ENDPOINT_ADDRESS_EOL_TEST = "";
         public static DateTime HORA_CORTE_CREDITOS_LIMA = DateTime.Now;
-
         public static String USER_EOL_PROD = "";
         public static String PASSWORD_EOL_PROD = "";
         public static String ENDPOINT_ADDRESS_EOL_PROD = "";
@@ -108,10 +116,7 @@ namespace Model
         public static String CPE_CABECERA_BE_ID = "";
         public static String CPE_CABECERA_BE_COD_GPO = "";
         public static String MAIL_COMUNICACION_FACTURAS = "";
-        public static String PASSWORD_MAIL_COMUNICACION_FACTURAS = "";
-
-
-
+        public static String PASSWORD_MAIL_COMUNICACION_FACTURAS = "";   
 
 
         public static String USER_EOL {
@@ -132,9 +137,7 @@ namespace Model
         {
             get { return AMBIENTE_EOL.Equals("PROD"); }
         }
-
-
-        
+                
 
 
         public static Decimal IGV = 0.18M;
@@ -168,91 +171,69 @@ namespace Model
         public static String EOL_RPTA_BE_CODIGO_ERROR_CONSULTA_STR = "Error en el Proceso de Consulta.";
         public static String EOL_RPTA_BE_CODIGO_FALLO_CONEXION_EOL_STR = "Fallo conexión a EOL.";
 
-      
-
-
-
-
-
-
-
-
-
-
-
-        //Numero de Página
-
-    /*    public static int BUSQUEDA_COTIZACION = 0;
-        public static int MANTENIMIENTO_COTIZACION = 1;
-        public static int BUSQUEDA_PEDIDO = 2;
-        public static int MANTENIMIENTO_PEDIDO = 3;
-        public static int BUSQUEDA_GUIA_REMISION = 4;
-        public static int MANTENIMIENTO_GUIA_REMISION = 5;
-        */
-
+              
 
         public enum paginas {
+            /*COTIZACION*/
             [Display(Name = "BUSQUEDA COTIZACION")]
             BusquedaCotizaciones = 0,
             [Display(Name = "MANTENIMIENTO COTIZACION")]
             MantenimientoCotizacion = 1,
+            /*PEDIDO VENTA*/
             [Display(Name = "BUSQUEDA PEDIDO")]
             BusquedaPedidos = 2,
             [Display(Name = "MANTENIMIENTO PEDIDO")]
             MantenimientoPedido = 3,
+            /*GUIA REMISION*/
             [Display(Name = "BUSQUEDA GUIA REMISION")]
             BusquedaGuiasRemision = 4,
             [Display(Name = "MANTENIMIENTO GUIA REMISION")]
             MantenimientoGuiaRemision = 5,
-
+            /*DOCUMENTOS DE VENTA*/
             [Display(Name = "BUSQUEDA FACTURAS")]
             BusquedaFacturas = 6,
             [Display(Name = "MANTENIMIENTO FACTURA")]
-            MantenimientoFactura = 7,   
-            
+            MantenimientoFactura = 7,               
             [Display(Name = "BUSQUEDA BOLETAS")]
             BusquedaBoletas = 8,
             [Display(Name = "MANTENIMIENTO BOLETA")]
             MantenimientoBoleta = 9,
-
             [Display(Name = "BUSQUEDA NOTAS DE CRÉDITO")]
             BusquedaNotasCredito = 10,
             [Display(Name = "MANTENIMIENTO NOTA DE CRÉDITO")]
             MantenimientoNotaCredito = 11,
-
             [Display(Name = "BUSQUEDA NOTAS DE DÉBITO")]
             BusquedaNotasDebito = 12,
             [Display(Name = "MANTENIMIENTO NOTA DE DÉBITO")]
             MantenimientoNotaDebito = 13,
-
-
-
-            [Display(Name = "Imprimir Guia Remisión")]
+            /*IMPRESION GUIA REMISION*/
+            [Display(Name = "IMPRIMIR GUÍA REMISIÓN")]
             ImprimirGuiaRemision = 14,
-
-
+            /*VENTAS*/
             [Display(Name = "BUSQUEDA VENTAS")]
             BusquedaVentas = 15,
             [Display(Name = "MANTENIMIENTO VENTAS")]
             MantenimientoVenta = 16,
-
-
+            /*CLIENTES*/
             [Display(Name = "BUSQUEDA CLIENTES")]
             BusquedaClientes = 17,
             [Display(Name = "MANTENIMIENTO CLIENTE")]
             MantenimientoCliente = 18,
-
+            /*CONSOLIDAR GUÍAS*/
             [Display(Name = "BUSQUEDA GUIAS REMISION CONSOLIDAR FACTURA")]
             BusquedaGuiasRemisionConsolidarFactura = 19,
-
+            /*NOTAS INGRESO*/
             [Display(Name = "BUSQUEDA NOTA INGRESO")]
             BusquedaNotasIngreso = 20,
             [Display(Name = "MANTENIMIENTO NOTA INGRESO")]
             MantenimientoNotaIngreso = 21,
-
-            [Display(Name = "Imprimir Nota Ingreso")]
-            ImprimirNotaIngreso = 22
-
+            [Display(Name = "IMPRIMIR NOTA INGRESO")]
+            ImprimirNotaIngreso = 22,
+            /*PEDIDO COMPRA*/
+            [Display(Name = "BUSQUEDA PEDIDO COMPRA")]
+            BusquedaPedidosCompra = 23,
+            [Display(Name = "MANTENIMIENTO PEDIDO COMPRA")]
+            MantenimientoPedidoCompra = 24
         };
 
 

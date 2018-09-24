@@ -1,0 +1,9 @@
+﻿@model Cotizador.Models.VendedorViewModels 
+@Html.DropDownList(
+    Model.VendedorSelectId,
+    Model.Vendedores, "Seleccione",
+    new
+    {
+        id = Model.VendedorSelectId,
+        @class = "form-control"
+    })

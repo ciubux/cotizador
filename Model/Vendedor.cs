@@ -16,5 +16,7 @@ namespace Model
         public Boolean esAsistenteServicioCliente { get; set; }
         public Boolean esResponsablePortafolio { get; set; }
         public Boolean esSupervisorComercial { get; set; }
+
+        public String codigoDescripcion { get { return this.codigo + " - " + this.descripcion; } }
     }
 }

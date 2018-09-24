@@ -17,6 +17,8 @@ D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.pdb
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csprojFakesResolveAssemblyReference.cache
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll
@@ -24,6 +26,7 @@ C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Spire.License.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Spire.Pdf.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
@@ -36,12 +39,9 @@ C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Spire.License.xml
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Spire.Pdf.xml
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\DataLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll.config
+C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.pdb
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
-C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
-C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.dll
-C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.pdb

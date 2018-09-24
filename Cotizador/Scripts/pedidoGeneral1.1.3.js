@@ -37,6 +37,10 @@ $("#btnAtenderPedidoCompra").click(function () {
 });
 
 
+
+
+
+
 function btnAtenderPedido(tipo) {
     desactivarBotonesVer();
     var idPedido = $("#idPedido").val();
@@ -157,3 +161,25 @@ function activarBotonesVer() {
     $("#btnEliminarPedido").removeAttr('disabled');
     $("#btnEditarVenta").removeAttr('disabled');
 }
+
+
+
+$("#tipoPedidoBusqueda").change(function () {
+    var tipoPedidoBusqueda = $("#tipoPedidoBusqueda").val();
+    var pagina = $("#pagina").val();
+
+    var Controlador = "";
+    if (pagina == PAGINA_BUSQUEDA_PEDIDOS_VENTA)
+        var Controlador = "Pedido";
+    else 
+        var Controlador = "PedidoCompra";
+
+    $.ajax({
+        url: "/" + Controlador + "/ChangeTipoPedidoBusqueda",
+        type: 'POST',
+        data: {
+            tipoPedidoBusqueda: tipoPedidoBusqueda
+        },
+        success: function () { }
+    });
+});

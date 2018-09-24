@@ -11,16 +11,44 @@ var VARIACION_PRECIO_ITEM_PEDIDO = 0.01;
 
 var TITLE_EXITO = 'Operación Realizada';
 
+var PAGINA_BusquedaCotizaciones = 0;
+var PAGINA_MantenimientoCotizacion = 1;
+var PAGINA_BUSQUEDA_PEDIDOS_VENTA = 2;
+var PAGINA_MANTENIMIENTO_PEDIDO_VENTA = 3;
+var PAGINA_BusquedaGuiasRemision = 4;
+var PAGINA_MantenimientoGuiaRemision = 5;
+var PAGINA_BusquedaFacturas = 6;
+var PAGINA_MantenimientoFactura = 7;
+var PAGINA_BusquedaBoletas = 8;
+var PAGINA_MantenimientoBoleta = 9;
+var PAGINA_BusquedaNotasCredito = 10;
+var PAGINA_MantenimientoNotaCredito = 11;
+var PAGINA_BusquedaNotasDebito = 12;
+var PAGINA_MantenimientoNotaDebito = 13;
+var PAGINA_ImprimirGuiaRemision = 14;
+var PAGINA_BusquedaVentas = 15;
+var PAGINA_MantenimientoVenta = 16;
+var PAGINA_BusquedaClientes = 17;
+var PAGINA_MantenimientoCliente = 18;
+var PAGINA_BusquedaGuiasRemisionConsolidarFactura = 19;
+var PAGINA_BusquedaNotasIngreso = 20;
+var PAGINA_MantenimientoNotaIngreso = 21;
+var PAGINA_ImprimirNotaIngreso = 22;
+var PAGINA_BUSQUEDA_PEDIDOS_COMPRA = 23;
+var PAGINA_MANTENIMIENTO_PEDIDO_COMPRA = 24;
 
 /**
  * Constantes para toma de pedidos
  */
-//Estados para búsqueda de Pedidos
 
-var PAGINA_BUSQUEDA_PEDIDOS_VENTA = "BusquedaPedidos";
-var PAGINA_BUSQUEDA_PEDIDOS_COMPRA = "BusquedaPedidos";
-var PAGINA_MANTENIMIENTO_PEDIDO_VENTA = "MantenimientoPedido";
-var PAGINA_MANTENIMIENTO_PEDIDO_COMPRA = "MantenimientoPedido";
+
+
+
+
+
+
+
+
 
 var ESTADO_PENDIENTE_APROBACION = 0;
 var ESTADO_INGRESADO = 1;

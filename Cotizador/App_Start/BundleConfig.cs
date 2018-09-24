@@ -50,7 +50,7 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
-                     "~/Scripts/cliente1.1.5.js"
+                     "~/Scripts/cliente1.1.6.js"
                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(

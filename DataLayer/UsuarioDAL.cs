@@ -273,7 +273,32 @@ namespace DataLayer
                     clienteList.Add(cliente);
                 }
                 usuario.clienteList = clienteList;
+
+
+                DataTable dataTableVendedores = dataSet.Tables[7];
+                List<Vendedor> vendedorList = new List<Vendedor>();
+
+                foreach (DataRow row in dataTableVendedores.Rows)
+                {
+                    Vendedor vendedor = new Vendedor();
+                    vendedor.idVendedor = Converter.GetInt(row, "id_vendedor");
+                    vendedor.descripcion = Converter.GetString(row, "descripcion");
+                    vendedor.codigo = Converter.GetString(row, "codigo");
+                    vendedor.esResponsableComercial = Converter.GetBool(row, "es_responsable_comercial");
+                    vendedor.esAsistenteServicioCliente = Converter.GetBool(row, "es_asistente_servicio_cliente");
+                    vendedor.esResponsablePortafolio = Converter.GetBool(row, "es_responsable_portafolio");
+                    vendedor.esSupervisorComercial = Converter.GetBool(row, "es_supervisor_comercial");
+                    vendedor.usuario = new Usuario();
+                    vendedor.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                    vendedorList.Add(vendedor);
+                }
+                usuario.vendedorList = vendedorList;
+                
             }
+
+
+
+
             return usuario;
         }
     }

@@ -25,7 +25,7 @@ namespace Model
 
 
         /*PERMISOS COTIZACION*/
-        public bool apruebaCotizaciones { get { return apruebaCotizacionesLima || apruebaCotizacionesProvincias;  } }
+        public bool apruebaCotizaciones { get { return apruebaCotizacionesLima || apruebaCotizacionesProvincias; } }
         public bool apruebaCotizacionesLima { get; set; }
         public bool apruebaCotizacionesProvincias { get; set; }
         public bool creaCotizaciones { get; set; }
@@ -104,6 +104,29 @@ namespace Model
         public bool esCliente { get; set; }
         public bool visualizaMargen { get; set; }
         public bool confirmaStock { get; set; }
+
+        public List<Vendedor> vendedorList { get; set; }
+
+
+        public List<Vendedor>  responsableComercialList {
+            get { return this.vendedorList.Where(v => v.esResponsableComercial).ToList(); }
+        }
+
+        public List<Vendedor> asistenteServicioClienteList
+        {
+            get { return this.vendedorList.Where(v => v.esAsistenteServicioCliente).ToList(); }
+        }
+
+        public List<Vendedor> responsablePortafolioList
+        {
+            get { return this.vendedorList.Where(v => v.esResponsablePortafolio).ToList(); }
+        }
+
+        public List<Vendedor> supervisorComercialList
+        {
+            get { return this.vendedorList.Where(v => v.esSupervisorComercial).ToList(); }
+        }
+
     }
 }
 

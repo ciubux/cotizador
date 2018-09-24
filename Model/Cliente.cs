@@ -14,12 +14,24 @@ namespace Model
             this.direccionEntregaList = new List<DireccionEntrega>();
             this.solicitanteList = new List<Solicitante>();
             this.ubigeo = new Ubigeo();
+            this.responsableComercial = new Vendedor();
+            this.asistenteServicioCliente = new Vendedor();
+            this.responsabelPortafolio = new Vendedor();
+            this.supervisorComercial = new Vendedor();
+            this.tipoDocumentoIdentidad = DocumentoVenta.TiposDocumentoIdentidad.RUC;
+            this.tipoPagoSolicitado = DocumentoVenta.TipoPago.NoAsignado;
         }
 
         public Guid idCliente { get; set; }
 
-
-           
+        [Display(Name = "Responsable Comercial:")]
+        public Vendedor responsableComercial { get; set; }
+        [Display(Name = "Asistente Servicio Cliente:")]
+        public Vendedor asistenteServicioCliente { get; set; }
+        [Display(Name = "Responsable Portafolio:")]
+        public Vendedor responsabelPortafolio { get; set; }
+        [Display(Name = "Supervisor Comercial:")]
+        public Vendedor supervisorComercial { get; set; }        
 
     }
 

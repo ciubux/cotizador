@@ -237,11 +237,13 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\UbigeoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\VendedorViewModels.cs" />
     <Compile Include="Models\CiudadViewModels.cs" />
     <Compile Include="Models\DepartamentoViewModels.cs" />
     <Compile Include="Models\DistritoViewModels.cs" />
@@ -329,7 +331,7 @@
     <Content Include="Scripts\notaDebito1.1.1.js" />
     <Content Include="Scripts\notaIngreso1.1.4.js" />
     <Content Include="Scripts\guiaRemision1.1.8.js" />
-    <Content Include="Scripts\cliente1.1.5.js" />
+    <Content Include="Scripts\cliente1.1.6.js" />
     <Content Include="Scripts\jquery-confirm.js" />
     <Content Include="Scripts\jquery-editable-select.js" />
     <Content Include="Scripts\jquery.loadingModal.js" />
@@ -446,6 +448,7 @@
     <Content Include="Views\PedidoCompra\Pedir.cshtml" />
     <Content Include="Views\Factura\Crear.cshtml" />
     <Content Include="Views\NotaIngreso\Print.cshtml" />
+    <Content Include="Views\Shared\_Vendedor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
@@ -458,6 +461,7 @@
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Mail\" />
     <Folder Include="Views\Ubigeo\" />
+    <Folder Include="Views\Vendedor\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

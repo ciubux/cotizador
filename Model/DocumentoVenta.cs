@@ -88,6 +88,27 @@ namespace Model
             TransferenciaInterbancaria = 7
         };
 
+
+        public TiposDocumentoIdentidad tipoDocumentoIdentidad { get; set; }
+        public enum TiposDocumentoIdentidad
+        {
+            [Display(Name = "REG.UNICO DE CONTRIBUYENTES (RUC)")]
+            RUC = 6,
+            [Display(Name = "DOC.NACIONAL DE IDENTIDAD (DNI)")]
+            DNI = 1,
+            [Display(Name = "CARNET DE EXTRANJERIA")]
+            Carnet = 4,
+        };
+        public String tipoDocumentoIdentidadString
+        {
+            get
+            {
+                return EnumHelper<TiposDocumentoIdentidad>.GetDisplayValue(this.tipoDocumentoIdentidad);
+            }
+        }
+
+
+
         [Display(Name = "Correo Envío:")]
         public String correoEnvio { get; set; }
 

@@ -30,18 +30,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="MVC Foolproof Validation">
       <HintPath>..\packages\foolproof.0.9.4517\lib\MVC Foolproof Validation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auditoria.cs" />
+    <Compile Include="Cliente.cs" />
     <Compile Include="Connected Services\ServiceSunatPadron\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -51,6 +60,7 @@
     <Compile Include="NotaIngresoValidacion.cs" />
     <Compile Include="NotaIngreso.cs" />
     <Compile Include="Persona.cs" />
+    <Compile Include="Producto.cs" />
     <Compile Include="SeguimientoNotaIngreso.cs" />
     <Compile Include="Solicitante.cs" />
     <Compile Include="GuiaRemisionValidacion.cs" />
@@ -76,6 +86,8 @@
     <Compile Include="Ubigeo.cs" />
     <Compile Include="DocumentoVenta.cs" />
     <Compile Include="DocumentoReferencia.cs" />
+    <Compile Include="Usuario.cs" />
+    <Compile Include="Vendedor.cs" />
     <Compile Include="Venta.cs" />
     <Compile Include="VentaDetalle.cs" />
     <Compile Include="MovimientoDetalle.cs" />
@@ -97,7 +109,6 @@
     <Compile Include="TipoCambio.cs" />
     <Compile Include="AutoGuardadoCotizacion.cs" />
     <Compile Include="Unidad.cs" />
-    <Compile Include="Producto.cs" />
     <Compile Include="Familia.cs" />
     <Compile Include="Proveedor.cs" />
     <Compile Include="Categoria.cs" />
@@ -105,10 +116,8 @@
     <Compile Include="PrecioClienteProducto.cs" />
     <Compile Include="CotizacionDetalle.cs" />
     <Compile Include="Cotizacion.cs" />
-    <Compile Include="Cliente.cs" />
     <Compile Include="Ciudad.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Usuario.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -156,6 +165,7 @@
     <None Include="Connected Services\ServiceSunatPadron\wsSunatPadron2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -187,6 +197,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

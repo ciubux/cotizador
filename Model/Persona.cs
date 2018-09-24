@@ -22,6 +22,7 @@ namespace Model
         [Display(Name = "RUC:")]
         public String ruc { get; set; }
 
+        [Display(Name = "Contacto:")]
         public String contacto1 { get; set; }
 
         public String contacto2 { get; set; }
@@ -57,14 +58,19 @@ namespace Model
 
         public Ubigeo ubigeo { get; set; }
 
-        [Display(Name = "Plazo de Crédito:")]
+        [Display(Name = "Plazo de Crédito en días (Anterior al ZAS):")]
         public String plazoCredito { get; set; }
 
-        [Display(Name = "Crédito Solicitado:")]
+        [Display(Name = "Monto Crédito (Solicitado) S/:")]
         public Decimal creditoSolicitado { get; set; }
 
-        [Display(Name = "Crédito Aprobado:")]
+        [Display(Name = "Monto Crédito (Aprobado) S/:")]
         public Decimal creditoAprobado { get; set; }
+
+
+        [Display(Name = "Sobre Giro S/:")]
+        public Decimal sobreGiro { get; set; }
+
 
         public override string ToString()
         {
@@ -77,13 +83,28 @@ namespace Model
             get { return this.codigo + " - " + this.razonSocial; }
         }
 
-        [Display(Name = "Tipo de Pago Factura:")]
+        [Display(Name = "Plazo Crédito (Aprobado):")]
         public DocumentoVenta.TipoPago tipoPagoFactura { get; set; }
+
+
+        [Display(Name = "Plazo Crédito (Solicitado):")]
+        public DocumentoVenta.TipoPago tipoPagoSolicitado { get; set; }
+
+
+        [Display(Name = "Sobre Plazo en días:")]
+        public int sobrePlazo { get; set; }
+
+     
 
         [Display(Name = "Forma de Pago Factura:")]
         public DocumentoVenta.FormaPago formaPagoFactura { get; set; }
 
         public String tipoDocumento { get; set; }
+
+        [Display(Name = "Tipo Doc. Identidad:")]
+        public DocumentoVenta.TiposDocumentoIdentidad tipoDocumentoIdentidad { get; set; }
+
+
 
 
     }

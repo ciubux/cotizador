@@ -1269,6 +1269,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Guid(objCommand, "idUsuarioBusqueda", pedido.usuarioBusqueda.idUsuario);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
+            InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoVentaBusqueda).ToString());
             InputParameterAdd.DateTime(objCommand, "fechaSolicitudDesde", new DateTime(pedido.fechaSolicitudDesde.Year, pedido.fechaSolicitudDesde.Month, pedido.fechaSolicitudDesde.Day, 0, 0, 0));
             InputParameterAdd.DateTime(objCommand, "fechaSolicitudHasta", new DateTime(pedido.fechaSolicitudHasta.Year, pedido.fechaSolicitudHasta.Month, pedido.fechaSolicitudHasta.Day, 23, 59, 59));
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde == null? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaDesde.Value.Year, pedido.fechaEntregaDesde.Value.Month, pedido.fechaEntregaDesde.Value.Day, 0, 0, 0));
@@ -1365,6 +1366,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Guid(objCommand, "idUsuarioBusqueda", pedido.usuarioBusqueda.idUsuario);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
+            InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoCompraBusqueda).ToString());
             InputParameterAdd.DateTime(objCommand, "fechaSolicitudDesde", new DateTime(pedido.fechaSolicitudDesde.Year, pedido.fechaSolicitudDesde.Month, pedido.fechaSolicitudDesde.Day, 0, 0, 0));
             InputParameterAdd.DateTime(objCommand, "fechaSolicitudHasta", new DateTime(pedido.fechaSolicitudHasta.Year, pedido.fechaSolicitudHasta.Month, pedido.fechaSolicitudHasta.Day, 23, 59, 59));
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", new DateTime(pedido.fechaEntregaDesde.Value.Year, pedido.fechaEntregaDesde.Value.Month, pedido.fechaEntregaDesde.Value.Day, 0, 0, 0));

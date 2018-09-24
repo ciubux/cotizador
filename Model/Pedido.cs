@@ -12,6 +12,9 @@ namespace Model
         {
             this.tipoPedido = tiposPedido.Venta;
             this.tipoPedidoCompra = tiposPedidoCompra.Compra;
+            this.tipoPedidoVentaBusqueda = tiposPedidoVentaBusqueda.Todos;
+            this.tipoPedidoCompraBusqueda = tiposPedidoCompraBusqueda.Todos;
+
             this.solicitante = new Solicitante();
             this.pedidoAdjuntoList = new List<PedidoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
@@ -177,6 +180,10 @@ namespace Model
 
 
 
+        public DocumentoVenta documentoVenta { get; set; }
+
+        [Display(Name = "Stock Confirmado:")]
+        public Boolean stockConfirmado { get; set; }
 
 
         public DateTime fechaModificacion { get; set; }
@@ -205,19 +212,9 @@ namespace Model
 
         public bool considerarDescontinuados { get; set; }
 
-
-
-
-
-
-
-
         /*Campos utilizados para búsqueda*/
         public Usuario usuarioBusqueda { get; set; }
-        [Display(Name = "Solicitado Desde:")]
-        public DateTime fechaSolicitudDesde { get; set; }
-        [Display(Name = "Solicitado Hasta:")]
-        public DateTime fechaSolicitudHasta { get; set; }
+
 
 
         [Display(Name = "Fecha Programación:")]
@@ -226,9 +223,6 @@ namespace Model
         [Display(Name = "Comentario Programación:")]
         public String comentarioProgramacion { get; set; }
 
-        public DateTime? fechaProgramacionDesde { get; set; }
-
-        public DateTime? fechaProgramacionHasta { get; set; }
 
         public DateTime fechaPrecios { get; set; }
 
@@ -303,9 +297,13 @@ namespace Model
         {
             get
             {
-                return EnumHelper<tiposPedido>.GetDisplayValue(this.tipoPedido);
+                    return EnumHelper<tiposPedido>.GetDisplayValue(this.tipoPedido);                
             }
         }
+
+
+
+
 
 
 
@@ -338,13 +336,67 @@ namespace Model
         {
             get
             {
-                return EnumHelper<tiposPedidoCompra>.GetDisplayValue(this.tipoPedidoCompra);
+                    return EnumHelper<tiposPedidoCompra>.GetDisplayValue(this.tipoPedidoCompra);
             }
         }
 
 
-        public DocumentoVenta documentoVenta { get; set; }
-      
-        public Boolean stockConfirmado { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+
+        #region Criterios de Búsqueda
+        [Display(Name = "Tipo Pedido:")]
+        public tiposPedidoVentaBusqueda tipoPedidoVentaBusqueda { get; set; }
+        public enum tiposPedidoVentaBusqueda
+        {
+            Todos = '0',
+            Venta = tiposPedido.Venta,
+            TrasladoInterno = tiposPedido.TrasladoInterno,
+            ComodatoEntregado = tiposPedido.ComodatoEntregado,
+            TransferenciaGratuitaEntregada = tiposPedido.TransferenciaGratuitaEntregada,
+            PrestamoEntregado = tiposPedido.PrestamoEntregado,
+            DevolucionVenta = tiposPedido.DevolucionVenta,
+            DevolucionPrestamoEntregado = tiposPedido.DevolucionPrestamoEntregado,
+            DevolucionComodatoEntregado = tiposPedido.DevolucionComodatoEntregado,
+            DevolucionTransferenciaGratuitaEntregada = tiposPedido.DevolucionTransferenciaGratuitaEntregada,
+        }
+
+        [Display(Name = "Tipo Pedido:")]
+        public tiposPedidoCompraBusqueda tipoPedidoCompraBusqueda { get; set; }
+        public enum tiposPedidoCompraBusqueda
+        {
+            Todos = '0',
+            Compra = tiposPedidoCompra.Compra,
+            TrasladoInternoRecibido = tiposPedidoCompra.TrasladoInternoRecibido,
+            ComodatoRecibido = tiposPedidoCompra.ComodatoRecibido,
+            TransferenciaGratuitaRecibida = tiposPedidoCompra.TransferenciaGratuitaRecibida,
+            PrestamoRecibido = tiposPedidoCompra.PrestamoRecibido,
+            DevolucionCompra = tiposPedidoCompra.DevolucionCompra,
+            DevolucionPrestamoRecibido = tiposPedidoCompra.DevolucionPrestamoRecibido,
+            DevolucionComodatoRecibido = tiposPedidoCompra.DevolucionComodatoRecibido,
+            DevolucionTransferenciaGratuitaRecibida = tiposPedidoCompra.DevolucionTransferenciaGratuitaRecibida,
+        }
+
+
+        [Display(Name = "Solicitado Desde:")]
+        public DateTime fechaSolicitudDesde { get; set; }
+        [Display(Name = "Solicitado Hasta:")]
+        public DateTime fechaSolicitudHasta { get; set; }
+        [Display(Name = "Programado Desde:")]
+        public DateTime? fechaProgramacionDesde { get; set; }
+        [Display(Name = "Programado Hasta:")]
+        public DateTime? fechaProgramacionHasta { get; set; }
+
+        #endregion
+
     }
 }

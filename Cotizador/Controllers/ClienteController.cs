@@ -81,6 +81,22 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 
+        public void ChangeInputInt()
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(cliente, Int32.Parse(this.Request.Params["valor"]));
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+        }
+
+        public void ChangeInputDecimal()
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(cliente, Decimal.Parse(this.Request.Params["valor"]));
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+        }
+
 
         public void ChangeFormaPagoFactura()
         {
@@ -93,6 +109,13 @@ namespace Cotizador.Controllers
         {
             Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
             cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPagoFactura"]);
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+        }
+
+        public void ChangeTipoPagoSolicitado()
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            cliente.tipoPagoSolicitado = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPagoSolicitado"]);
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 
@@ -255,44 +278,6 @@ namespace Cotizador.Controllers
             String resultado = JsonConvert.SerializeObject(cliente);
             this.ClienteSession = null;
             return resultado;
-            
-            /*
-            String controller = Request["controller"].ToString();
-            IDocumento documento = (IDocumento)this.Session[controller];
-            Cliente cliente = new Cliente();
-            Usuario usuario = (Usuario)this.Session["usuario"];
-
-
-            cliente.IdUsuarioRegistro = usuario.idUsuario;
-            cliente.razonSocial = Request["razonSocial"].ToString();
-            cliente.nombreComercial = Request["nombreComercial"].ToString();
-            cliente.ruc = Request["ruc"].ToString();
-            cliente.contacto1 = Request["contacto"].ToString();
-
-            ClienteBL clienteBL = new ClienteBL();
-            cliente.ciudad = documento.ciudad;
-            documento.cliente = clienteBL.insertCliente(cliente);
-
-            if (controller.Equals("cotizacion"))
-            {
-                Cotizacion cotizacion = (Cotizacion)documento;
-                cotizacion.contacto = cotizacion.cliente.contacto1;
-            }
-            else 
-            {
-
-
-            }
-
-
-            this.Session[controller] = documento;
-
-
-            String resultado = "{" +
-                "\"idCLiente\":\"" + documento.cliente.idCliente + "\"," +
-                "\"codigoAlterno\":\"" + documento.cliente.codigoAlterno + "\"}";
-
-            return resultado;*/
         }
 
 
@@ -479,7 +464,7 @@ namespace Cotizador.Controllers
         
         public ActionResult clientesCargarPedidoList()
         {
-            Usuario usuarioSession = ((Usuario)this.Session["usuario"]);
+            Usuario usuarioSession = ((Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]);
             List<Cliente> clienteList = new List<Cliente>();
             List<Cliente> clienteListTmp = usuarioSession.clienteList;
 
@@ -493,6 +478,13 @@ namespace Cotizador.Controllers
 
             return PartialView("_SelectCliente", model);
         }
+
+
+        public void changeTipoDocumentoIdentidad()
+        {
+            ClienteSession.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad) Int32.Parse(this.Request.Params["tipoDocumentoIdentidad"]);
+        }
+
 
 
     }

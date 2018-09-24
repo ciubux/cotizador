@@ -29,13 +29,6 @@ namespace BusinessLayer
                     pedido.ciudad = pedido.ciudadASolicitar;
                 }
 
-                
-
-
-
-
-
-
             }
             else {
                 DateTime horaActual = DateTime.Now;
@@ -60,8 +53,8 @@ namespace BusinessLayer
                 pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
 
-                /*Si es distinto de traslado se interno se valida los precios de lo contrario pasa directamente sin aprobacion*/
-                if (pedido.tipoPedido != Pedido.tiposPedido.TrasladoInterno)
+                /*Si es venta se valida los precios de lo contrario pasa directamente sin aprobacion*/
+                if (pedido.tipoPedido == Pedido.tiposPedido.Venta)
                 {
 
                     if (!pedido.usuario.apruebaPedidos)
@@ -209,8 +202,6 @@ namespace BusinessLayer
 
                 pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
-
-                /*Si es distinto de traslado se interno se valida los precios de lo contrario pasa directamente sin aprobacion*/
             }
 
 
