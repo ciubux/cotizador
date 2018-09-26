@@ -19,7 +19,7 @@ namespace Model
             this.responsabelPortafolio = new Vendedor();
             this.supervisorComercial = new Vendedor();
             this.tipoDocumentoIdentidad = DocumentoVenta.TiposDocumentoIdentidad.RUC;
-            this.tipoPagoSolicitado = DocumentoVenta.TipoPago.NoAsignado;
+            this.plazoCreditoSolicitado = DocumentoVenta.TipoPago.NoAsignado;
         }
 
         public Guid idCliente { get; set; }

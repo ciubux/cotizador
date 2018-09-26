@@ -74,26 +74,26 @@ namespace Model
         public motivosTraslado motivoTraslado { get; set; }
         public enum motivosTraslado
         {
-
             [Display(Name = "Compra")]
             Compra = 'C',  /*PEDIDO DE COMPRA*/
             [Display(Name = "Traslado Interno Recibido")]
-            TrasladoInterno = 'T', /*PEDIDO DE COMPRA*/
+            TrasladoInterno = 'I', /*PEDIDO DE ALMACEN*/
             [Display(Name = "Comodato a Recibir")]
             ComodatoRecibido = 'M', /*PEDIDO DE COMPRA*/
             [Display(Name = "Transferencia Gratuita Recibida")]
             TransferenciaGratuitaRecibida = 'G', /*PEDIDO DE COMPRA*/
             [Display(Name = "Préstamo a Recibir")]
-            PrestamoRecibido = 'P', /*PEDIDO DE COMPRA*/
+            PrestamoRecibido = 'R', /*PEDIDO DE ALMACEN*/
             [Display(Name = "Devolución de Venta")]
-            DevolucionVenta = 'D', /*PEDIDO DE VENTA*/  //GENERA NOTA DE CREDITO
+            DevolucionVenta = 'D', /*PEDIDO DE VENTA*/ 
             [Display(Name = "Devolución de Préstamo Entregado")]
-            DevolucionPrestamoEntregado = 'E',  /*PEDIDO DE VENTA*/
+            DevolucionPrestamoEntregado = 'D',  /*PEDIDO DE ALMACEN*/
             [Display(Name = "Devolución de Comodato Entregado")]
             DevolucionComodatoEntregado = 'F', /*PEDIDO DE VENTA*/
             [Display(Name = "Devolución de Transferencia Gratuita Entregada")]
-            DevolucionTransferenciaGratuitaEntregada = 'H' /*PEDIDO DE VENTA*/
-
+            DevolucionTransferenciaGratuitaEntregada = 'H', /*PEDIDO DE VENTA*/
+            [Display(Name = "Extorno de Guía Remisión")]
+            ExtornoGuíaRemision = 'X',  /*PEDIDO DE ALMACEN*/
         }
 
 

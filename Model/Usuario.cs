@@ -8,6 +8,12 @@ namespace Model
 {
     public class Usuario
     {
+        public Usuario()
+        {
+            this.vendedorList = new List<Vendedor>();
+        }
+
+
         public Guid idUsuario { get; set; }
 
         /*DATOS*/
@@ -104,6 +110,16 @@ namespace Model
         public bool esCliente { get; set; }
         public bool visualizaMargen { get; set; }
         public bool confirmaStock { get; set; }
+        public bool tomaPedidosCompra { get; set; }
+        public bool tomaPedidosAlmacen { get; set; }
+        public bool apruebaPlazoCredito { get; set; }
+        public bool apruebaMontoCredito { get; set; }
+        public bool defineResponsableComercial { get; set; }
+        public bool defineSupervisorComercial { get; set; }
+        public bool defiineAsistenteAtencionCliente { get; set; }
+        public bool defineResponsablePortafolio { get; set; }
+        public bool modificaPedidoVentaFechaEntregaHasta { get; set; }
+
 
         public List<Vendedor> vendedorList { get; set; }
 

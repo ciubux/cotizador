@@ -251,6 +251,12 @@ namespace Cotizador.Controllers
                 {
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
                 }
+                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Almacen)
+                {
+                    pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ALMACEN_VER];
+                }
+
+
 
                 if (this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] == null)
                 {
@@ -269,7 +275,10 @@ namespace Cotizador.Controllers
                 {
                     notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)(char)pedido.tipoPedidoCompra;
                 }
-
+                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Almacen)
+                {
+                    notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)(char)pedido.tipoPedidoAlmacen;
+                }
 
 
                 notaIngreso.transportista = new Transportista();

@@ -10,6 +10,8 @@ namespace BusinessLayer
 {
     public class PedidoBL
     {
+
+        #region Pedidos de VENTA
         private void validarPedidoVenta(Pedido pedido)
         {
             pedido.seguimientoPedido.observacion = String.Empty;
@@ -24,10 +26,10 @@ namespace BusinessLayer
                 pedido.montoTotal = 0;
                 pedido.montoSubTotal = 0;
 
-                if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
+               /* if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
                 {
                     pedido.ciudad = pedido.ciudadASolicitar;
-                }
+                }*/
 
             }
             else {
@@ -154,8 +156,7 @@ namespace BusinessLayer
 
 
             }
-
-        
+                
         public void InsertPedido(Pedido pedido)
         {
             using (var dal = new PedidoDAL())
@@ -165,6 +166,45 @@ namespace BusinessLayer
             }
         }
 
+        public void UpdatePedido(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                validarPedidoVenta(pedido);
+                dal.UpdatePedido(pedido);
+            }
+        }
+
+        public void UpdateStockConfirmado(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                dal.UpdateStockConfirmado(pedido);
+            }
+        }
+
+        public void ProgramarPedido(Pedido pedido, Usuario usuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                dal.ProgramarPedido(pedido, usuario);
+            }
+        }
+
+        public List<Pedido> GetPedidos(Pedido pedido)
+        {
+            List<Pedido> pedidoList = null;
+            using (var dal = new PedidoDAL())
+            {
+                pedidoList = dal.SelectPedidos(pedido);
+            }
+            return pedidoList;
+        }
+
+
+        #endregion
+
+        #region Pedidos de COMPRA
         private void validarPedidoCompra(Pedido pedido)
         {
             pedido.seguimientoPedido.observacion = String.Empty;
@@ -178,20 +218,7 @@ namespace BusinessLayer
                 pedido.montoIGV = 0;
                 pedido.montoTotal = 0;
                 pedido.montoSubTotal = 0;
-            }
-            else
-            {
-                DateTime horaActual = DateTime.Now;
-                DateTime horaLimite = new DateTime(horaActual.Year, horaActual.Month, horaActual.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Hour, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second);
-                if (horaActual >= horaLimite && pedido.ciudad.idCiudad == Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581"))
-                {
-                    pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
-                    /*Constantes.HORA_CORTE_CREDITOS_LIMA.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second*/
-                    pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
-                }
-            }
-
-
+            }           
 
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
@@ -200,6 +227,68 @@ namespace BusinessLayer
                     pedidoDetalle.precioNeto = 0;
                 }
 
+                pedidoDetalle.usuario = pedido.usuario;
+                pedidoDetalle.idPedido = pedido.idPedido;
+            }
+            foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
+            {
+                pedidoAdjunto.usuario = pedido.usuario;
+                pedidoAdjunto.idCliente = pedido.cliente.idCliente;
+            }
+        }
+
+        public void InsertPedidoCompra(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                validarPedidoCompra(pedido);
+                dal.InsertPedidoCompra(pedido);
+            }
+        }
+
+        public void UpdatePedidoCompra(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                validarPedidoCompra(pedido);
+                dal.UpdatePedidoCompra(pedido);
+            }
+        }
+
+        public List<Pedido> GetPedidosCompra(Pedido pedido)
+        {
+            List<Pedido> pedidoList = null;
+            using (var dal = new PedidoDAL())
+            {
+                pedidoList = dal.SelectPedidos(pedido);
+            }
+            return pedidoList;
+        }
+
+        #endregion
+
+        #region Pedidos de ALMACEN
+
+        private void validarPedidoAlmacen(Pedido pedido)
+        {
+            pedido.seguimientoPedido.observacion = String.Empty;
+            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
+            pedido.seguimientoCrediticioPedido.observacion = String.Empty;
+            //Cambio Temporal
+            pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
+
+            pedido.montoIGV = 0;
+            pedido.montoTotal = 0;
+            pedido.montoSubTotal = 0;
+
+            if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno)
+            {
+                pedido.ciudad = pedido.ciudadASolicitar;
+            }
+
+            foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
+            {
+                pedidoDetalle.precioNeto = 0;
                 pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
             }
@@ -214,61 +303,45 @@ namespace BusinessLayer
 
         }
 
-
-
-        public void InsertPedidoCompra(Pedido pedido)
+        public void InsertPedidoAlmacen(Pedido pedido)
         {
             using (var dal = new PedidoDAL())
             {
-                validarPedidoCompra(pedido);
-                dal.InsertPedidoCompra(pedido);
+                validarPedidoAlmacen(pedido);
+                dal.InsertPedidoAlmacen(pedido);
             }
         }
 
-
-
-
-        public void UpdatePedido(Pedido pedido)
+        public void UpdatePedidoAlmacen(Pedido pedido)
         {
             using (var dal = new PedidoDAL())
             {
-                validarPedidoVenta(pedido);
-                dal.UpdatePedido(pedido);
+                validarPedidoAlmacen(pedido);
+                dal.UpdatePedidoAlmacen(pedido);
             }
         }
 
-
-        public void UpdatePedidoCompra(Pedido pedido)
+        public List<Pedido> GetPedidosAlmacen(Pedido pedido)
         {
+            List<Pedido> pedidoList = null;
             using (var dal = new PedidoDAL())
             {
-                validarPedidoCompra(pedido);
-                dal.UpdatePedidoCompra(pedido);
+                pedidoList = dal.SelectPedidos(pedido);
             }
+            return pedidoList;
         }
 
+
+        #endregion
+
+
+        #region General
 
         public void ActualizarPedido(Pedido pedido)
         {
             using (var dal = new PedidoDAL())
             {
                 dal.ActualizarPedido(pedido);
-            }
-        }
-
-        public void UpdateStockConfirmado(Pedido pedido)
-        {
-            using (var dal = new PedidoDAL())
-            {
-                dal.UpdateStockConfirmado(pedido);
-            }
-        }
-
-        public void ProgramarPedido(Pedido pedido,Usuario usuario)
-        {
-            using (var dal = new PedidoDAL())
-            {
-                dal.ProgramarPedido(pedido,usuario);
             }
         }
 
@@ -300,30 +373,7 @@ namespace BusinessLayer
             return pedido;
         }
 
-
-
-
-        public List<Pedido> GetPedidos(Pedido pedido)
-        {
-            List<Pedido> pedidoList = null;
-            using (var dal = new PedidoDAL())
-            {
-                pedidoList = dal.SelectPedidos(pedido);
-            }
-            return pedidoList;
-        }
-
-        public List<Pedido> GetPedidosCompra(Pedido pedido)
-        {
-            List<Pedido> pedidoList = null;
-            using (var dal = new PedidoDAL())
-            {
-                pedidoList = dal.SelectPedidosCompra(pedido);
-            }
-            return pedidoList;
-        }
-
-
+       
         public PedidoAdjunto GetArchivoAdjunto(PedidoAdjunto pedidoAdjunto)
         {
             using (var dal = new PedidoDAL())
@@ -466,9 +516,7 @@ namespace BusinessLayer
             }
 
         }
-
-
-
+        
         public void calcularMontosTotales(Pedido pedido)
         {
             Decimal total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.pedidoDetalleList.AsEnumerable().Sum(o => o.subTotal)));
@@ -491,5 +539,7 @@ namespace BusinessLayer
             pedido.montoSubTotal = subtotal;
             pedido.montoIGV = igv;
         }
+
+        #endregion
     }
 }

@@ -444,10 +444,8 @@
                     </div>
 
 
-                    <!--DATOS DEL CLIENTE-->
+                    <!--DATOS DE LA CREACIÓN-->
                     <div class="row">
-
-
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
                                 @Html.LabelFor(p => pedido.usuarioCreacion, htmlAttributes: new { @class = "control-label col-xs-4" })
@@ -465,8 +463,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                         <!--NUMERO REFERENCIA ADICIONAL-->
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
@@ -476,10 +472,39 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
+
+                     <!--DATOS DEL VENDEDOR-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verResponsableComercial"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.cliente.supervisorComercial, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verSupervisorComercial"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.cliente.asistenteServicioCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verAsistenteServicioCliente"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
 
                     <fieldset>
                         <legend id="divpedido_direccionEntrega">Datos de Entrega:</legend>

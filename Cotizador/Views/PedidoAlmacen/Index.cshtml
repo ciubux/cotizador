@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Búsqueda Pedidos Compra";
+    ViewBag.Title = "Búsqueda Pedidos Almacén";
     Model.Pedido pedido = ViewBag.pedido;
     Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
     List<Model.Pedido> pedidoList = ViewBag.pedidoList;
@@ -19,108 +19,108 @@
         <div class="row">
             <!--NÚMERO PEDIDO-->
             @if (!pedido.usuario.esCliente)
-            {
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+        {
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
 
-                        <div class="col-xs-8">
-                            @if (pedido.numeroPedido > 0)
-                            {
-                                @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
-                            }
-                            <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los otros criterios no serán considerados en la búsqueda.</span>
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <!--NÚMERO GRUPO PEDIDO
-                <div class="col-sm-6 col-lg-5">
-                    <div class="form-group">
-                        @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
-
-                        <div class="col-xs-8">
-                            @if (pedido.numeroGrupoPedido > 0)
-                            {
-                            @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
-                            }
-                            else
-                            {
-                        @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
-                            }
-                        </div>
-
-                    </div>
-
-                </div>-->
-                <!--CIUDAD-->
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
-                        <div class="col-xs-8">
-                            @Html.Action("GetCiudades", "Ciudad",
-                                                                                 new
-                                                                                 {
-                                                                                     ciudadSelectId = "idCiudad",
-                                                                                     selectedValue = pedido.ciudad.idCiudad
-                                                                                 })
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-lg-4">
-                    <!--Cliente-->
-                    <div class="form-group">
-                        <label for="idCliente" class="control-label col-xs-4">Proveedor:</label>
-
-                        <div class="col-xs-8">
-                            <select class="form-control input-sm" id="idCliente" name="idCliente" required>
-                                @if (ViewBag.existeCliente == 1)
-                                {
-                                    <option selected value="@pedido.cliente.idCliente">@pedido.cliente</option>
-                                }
-                                else
-                                {
-                                    <option value=""></option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-
-                </div>
+                    <div class="col-xs-8">
+                        @if (pedido.numeroPedido > 0)
+                    {
+                        @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
             }
-            else
-            {
-
-                <div class="col-sm-6 col-lg-4">
-                    <!--USUARIO-->
-                    <div class="form-group">
-                        <label for="cliente" class="control-label col-xs-4">Cliente:</label>
-                        <div class="col-xs-8">
-                            @Html.Action("clientesPedidoList", "Cliente")
-                        </div>
+                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los otros criterios no serán considerados en la búsqueda.</span>
                     </div>
                 </div>
 
+            </div>
 
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
 
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
+            <!--NÚMERO GRUPO PEDIDO
+        <div class="col-sm-6 col-lg-5">
+            <div class="form-group">
+                @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
 
+                <div class="col-xs-8">
+                    @if (pedido.numeroGrupoPedido > 0)
+                    {
+                    @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                    }
+                    else
+                    {
+                @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                    }
                 </div>
 
-            }
+            </div>
+
+        </div>-->
+            <!--CIUDAD-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                                                                         new
+                                                                         {
+                                                                             ciudadSelectId = "idCiudad",
+                                                                             selectedValue = pedido.ciudad.idCiudad
+                                                                         })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <!--Cliente-->
+                <div class="form-group">
+                    <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
+
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            @if (ViewBag.existeCliente == 1)
+                        {
+                            <option selected value="@pedido.cliente.idCliente">@pedido.cliente</option>
+                    }
+                    else
+                    {
+                        <option value=""></option>
+                }
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+    }
+    else
+    {
+
+        <div class="col-sm-6 col-lg-4">
+            <!--USUARIO-->
+            <div class="form-group">
+                <label for="cliente" class="control-label col-xs-4">Cliente:</label>
+                <div class="col-xs-8">
+                    @Html.Action("clientesPedidoList", "Cliente")
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+
+                <div class="col-xs-8">
+                    @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+
+        </div>
+
+}
 
         </div>
 
@@ -129,16 +129,29 @@
         {
             <div class="row">
                 <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
 
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
-                        </div>
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
                     </div>
+                </div>
 
+            </div>
+
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="tipoPedido" class="control-label col-xs-4">Tipo Pedido:</label>
+                    <div class="col-xs-8">
+                        @Html.DropDownList("tipoPedidoBusqueda",
+                          EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedidoAlmacenBusqueda), pedido.tipoPedidoAlmacenBusqueda),
+                          new { @class = "form-control" }
+                          )
+                    </div>
                 </div>
             </div>
+        </div>
         }
 
         <div class="row">
@@ -222,36 +235,37 @@
                     <label for="estado" class="control-label col-xs-4">Estado Atención:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estado",
-                                                                       EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
-                                                                       new { @class = "form-control" }
-                                                                       )
+                                                                   EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
+                                                                   new { @class = "form-control" }
+                                                                   )
                     </div>
                 </div>
             </div>
+
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="estadoCrediticio" class="control-label col-xs-4">Estado Crediticio:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estadoCrediticio",
-                                                                                      EnumHelper.GetSelectList(typeof(Model.SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido), pedido.seguimientoCrediticioPedido.estado),
-                                                                                      new { @class = "form-control" }
-                                                                                      )
+                             EnumHelper.GetSelectList(typeof(Model.SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido), pedido.seguimientoCrediticioPedido.estado),
+                             new { @class = "form-control" }
+                             )
                     </div>
                 </div>
             </div>
 
             @if (!pedido.usuario.esCliente)
-            {
-                <div class="col-sm-6 col-lg-4">
-                    <!--USUARIO-->
-                    <div class="form-group">
-                        <label for="usuario" class="control-label col-xs-4">Creado Por:</label>
-                        <div class="col-xs-8">
-                            @Html.Action("usuariosPedidoList", "Usuario")
-                        </div>
+        {
+            <div class="col-sm-6 col-lg-4">
+                <!--USUARIO-->
+                <div class="form-group">
+                    <label for="usuario" class="control-label col-xs-4">Creado Por:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("usuariosPedidoList", "Usuario")
                     </div>
                 </div>
-            }
+            </div>
+    }
         </div>
 
 
@@ -273,7 +287,7 @@
                data-editing-add-text="Descartar cambios">
             <thead>
                 <tr>
-                   <th data-name="idPedido" data-visible="false"></th>
+                    <th data-name="idPedido" data-visible="false"></th>
                     <th data-name="numero" data-visible="true">N°</th>
                     <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
                     <th data-name="codigo" data-visible="true" data-sortable="false" data-breakpoints="xs">Cod. Cliente</th>
@@ -288,11 +302,21 @@
                     <th data-name="distrito" data-sortable="true" data-breakpoints="xs">Distrito Entrega</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado Atención</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
-                    <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
+                <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
                     <th data-name="estadoCrediticio" data-sortable="true" data-breakpoints="xs">Estado Crediticio</th>
 
 
-                  
+                    @if (pedido.usuario.confirmaStock)
+                {
+                    <th data-name="stockConfirmado" data-visible="true">Stock</th>
+                    <th data-name="stockConfirmado" data-visible="false">Stock</th>
+            }
+            else
+            {
+                <th data-name="stockConfirmado" data-visible="false">Stock</th>
+                <th data-name="stockConfirmado" data-visible="true">Stock</th>
+        }
+
 
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
@@ -302,13 +326,13 @@
 
 
         @if (pedidoList.Count == 0)
-        {
-            <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
-                <p class="pagination-centered" style=" font-size: medium" align="center">
-                    La búsqueda no obtuvo resultados.
-                </p>
-            </div>
-        }
+    {
+        <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
+            <p class="pagination-centered" style=" font-size: medium" align="center">
+                La búsqueda no obtuvo resultados.
+            </p>
+        </div>
+}
 
 
 
@@ -321,7 +345,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalVerPedido"><b>Información de Pedido Compra</b></h4>
+                <h4 class="modal-title" id="modalVerPedido"><b>Información de Pedido Venta</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -343,6 +367,15 @@
                                 </div>
                             </div>
                         </div>
+                        <!--NUMERO PEDIDO GRUPO
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                <div class="col-xs-8">
+                    <p class="form-control-static" id="verNumeroGrupo"></p>
+                </div>
+            </div>
+        </div>-->
                         <!--NUMERO COTIZACION-->
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
@@ -379,7 +412,7 @@
                         <!--CLIENTE-->
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
-                                <label for="pedido_cliente" class="control-label col-xs-4">Proveedor:</label>
+                                @Html.LabelFor(p => pedido.cliente, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verCliente"></p>
                                 </div>
@@ -396,12 +429,6 @@
                         </div>
 
 
-                    </div>
-
-
-                    <!--DATOS DEL CLIENTE-->
-                    <div class="row">
-
                         <!--NUMERO REFERENCIA CLIENTE-->
                         <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
                             <div class="form-group">
@@ -412,8 +439,36 @@
                             </div>
                         </div>
 
+
+
+                    </div>
+
+
+                    <!--DATOS DEL CLIENTE-->
+                    <div class="row">
+
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.usuarioCreacion, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verUsuarioCreacion"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.fechaHoraRegistro, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verFechaHoraRegistro"></p>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <!--NUMERO REFERENCIA ADICIONAL-->
-                        <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
+                        <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
                                 @Html.LabelFor(p => pedido.numeroReferenciaAdicional, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
@@ -425,7 +480,6 @@
 
 
                     </div>
-
 
                     <!--DATOS DEL VENDEDOR-->
                     <div class="row">
@@ -545,7 +599,7 @@
                             <!--FECHA HORA SOLICITUD-->
                             <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="fechaSolicitud" class="control-label col-xs-4">Fecha Hora Solicitud:</label>
+                                    @Html.LabelFor(p => pedido.fechaHoraSolicitud, htmlAttributes: new { @class = "control-label col-xs-4" })
                                     <div class="col-xs-8">
                                         <p class="form-control-static" id="verFechaHoraSolicitud"></p>
                                     </div>
@@ -650,14 +704,22 @@
                 {
                     <th data-name="precioNeto" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Precio Neto</th>
                     <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-                    <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
 }
 else
 {
+                <!--Si no es cliente-->
                 <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+if (pedido.usuario.visualizaMargen)
+{
                 <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-                <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
 }
+else
+{
+                <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+}
+}
+
+                                <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
                                 <!--     @if (pedido.usuario.creaDocumentosVenta)
@@ -716,6 +778,31 @@ else
 
                     </div>
 
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verObservacionesGuiaRemision">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.observacionesFactura, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verObservacionesFactura">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="row" style="margin-right: 10px">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
@@ -726,6 +813,31 @@ else
                             </div>
                         </div>
                     </div>
+
+
+                    @if (pedido.usuario.tomaPedidos)
+    {
+                <!--
+<div class="row">
+    <div class="col-sm-6 col-lg-9">
+        <div class="form-group">
+            <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
+            <div class="col-xs-3">
+                <div class="upload-btn-wrapper">
+                    <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                    <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+}
+
+
 
                 </form>
             </div>
@@ -760,6 +872,10 @@ else
                         <button type="button" id="btnDenegarIngresoPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
                     }
 
+                    @if (pedido.usuario.programaPedidos)
+                    {
+                        <button type="button" id="btnProgramarPedido" class="btn btn-success" data-toggle='modal' data-target='#modalProgramacion'>Programar</button>
+                    }
 
                     @if (pedido.usuario.creaGuias)
                     {
@@ -767,8 +883,8 @@ else
                     }
                     @if (pedido.usuario.creaGuias)
                     {
-                        <button type="button" id="btnAtenderPedidoCompra" class="btn btn-success">Generar Guía Remisión</button>
-                        <button type="button" id="btnIngresarPedidoCompra" class="btn btn-success">Generar Nota de Ingreso</button>
+                        <button type="button" id="btnAtenderPedidoAlmacen" class="btn btn-success">Generar Guía Remisión</button>
+                        <button type="button" id="btnIngresarPedidoAlmacen" class="btn btn-success">Generar Nota de Ingreso</button>
                     }
 
 
@@ -963,7 +1079,6 @@ else
 </div>
 
 
-
 <div class="modal fade" id="modalVerGuiasRemision" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -1123,6 +1238,19 @@ else
                         <!--OBSERVACIONES-->
                         <div class="col-sm-6 col-lg-8">
                             <div class="form-group">
+                                @Html.LabelFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "form-control" })
+                                    <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!--OBSERVACIONES-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
                                 @Html.LabelFor(p => pedido.observacionesFactura, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-10">
                                     @Html.TextBoxFor(p => pedido.observacionesFactura, htmlAttributes: new { @class = "form-control" })
@@ -1266,9 +1394,9 @@ else
                                     @Html.LabelFor(dv => documentoVenta.tipoPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-8">
                                         @Html.DropDownList("tipoPago",
-                                                EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
-                                                new { @class = "form-control" }
-                                                )
+                                           EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
+                                           new { @class = "form-control" }
+                                           )
                                     </div>
                                 </div>
                             </div>
@@ -1277,9 +1405,9 @@ else
                                     @Html.LabelFor(dv => documentoVenta.formaPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-8">
                                         @Html.DropDownList("formaPago",
-                                                EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
-                                                new { @class = "form-control" }
-                                                )
+                                           EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
+                                           new { @class = "form-control" }
+                                           )
                                     </div>
                                 </div>
                             </div>
@@ -1327,7 +1455,7 @@ else
 
                 <div class="modal-footer">
                     <button type="button" id="btnCancelarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btnAceptarFacturarPedido" class="btn btn-success"></button>
+                    <button type="button" id="btnAceptarFacturarPedido" class="btn btn-success">Facturar</button>
                 </div>
             </div>
         </div>
@@ -1664,9 +1792,9 @@ else
                                     @Html.LabelFor(dv => documentoVenta.tipoPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-8">
                                         @Html.DropDownList("tipoPago",
-                                                EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
-                                                new { @class = "form-control" }
-                                                )
+                                           EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
+                                           new { @class = "form-control" }
+                                           )
                                     </div>
                                 </div>
                             </div>
@@ -1675,9 +1803,9 @@ else
                                     @Html.LabelFor(dv => documentoVenta.formaPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-8">
                                         @Html.DropDownList("formaPago",
-                                                EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
-                                                new { @class = "form-control" }
-                                                )
+                                           EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
+                                           new { @class = "form-control" }
+                                           )
                                     </div>
                                 </div>
                             </div>
@@ -1725,13 +1853,12 @@ else
 
                 <div class="modal-footer">
                     <button type="button" id="btnCancelarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btnAceptarFacturarPedido" class="btn btn-success"></button>
+                    <button type="button" id="btnAceptarFacturarPedido" class="btn btn-success">Facturar</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 
 
@@ -1816,7 +1943,7 @@ else
         </div>
     </div>
 
-
+ 
     <table id="tableDetalleNotaIngreso" class="table" data-editing="false">
         <thead>
             <tr>
@@ -1834,11 +1961,7 @@ else
 
 </div>
 
-
-
-
-
 @section Scripts {
-    @Scripts.Render("~/bundles/pedidoCompra")
+    @Scripts.Render("~/bundles/pedidoAlmacen")
     @Scripts.Render("~/Scripts/App/ubigeo.js")
 }

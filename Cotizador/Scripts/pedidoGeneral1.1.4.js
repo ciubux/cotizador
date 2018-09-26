@@ -1,25 +1,34 @@
 ﻿var TIPO_PEDIDO_VENTA_VENTA = 'V'; 
-var TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO = 'T'; 
+//var TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO = 'T'; 
 var TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO = 'M';
 var TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA = 'G'; 
-var TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO = 'P'; 
+//var TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO = 'P'; 
 var TIPO_PEDIDO_VENTA_DEVOLUCION_VENTA = 'D';   //GENERA NOTA DE CREDITO
-var TIPO_PEDIDO_VENTA_DEVOLUCION_PRESTAMO_ENTREGADO = 'E';  
+//var TIPO_PEDIDO_VENTA_DEVOLUCION_PRESTAMO_ENTREGADO = 'E';  
 var TIPO_PEDIDO_VENTA_DEVOLUCION_COMODATO_ENTREGADO = 'F'; 
 var TIPO_PEDIDO_VENTA_DEVOLUCION_TRANSFERENCIA_GRATUITA_ENTREGADA = 'H'; 
 
 
 var TIPO_PEDIDO_COMPRA_COMPRA = 'C'; 
-var TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO = 'T'; 
+//var TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO = 'T'; 
 var TIPO_PEDIDO_COMPRA_COMODATO_RECIBIDO = 'M';
 var TIPO_PEDIDO_COMPRA_TRANSFERENCIA_GRATUITA_RECIBIDA = 'G'; 
-var TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO = 'P'; 
+//var TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO = 'P'; 
 var TIPO_PEDIDO_COMPRA_DEVOLUCION_COMPRA = 'B';   
-var TIPO_PEDIDO_COMPRA_DEVOLUCION_PRESTAMO_RECIBIDO = 'E';  
+//var TIPO_PEDIDO_COMPRA_DEVOLUCION_PRESTAMO_RECIBIDO = 'E';  
 var TIPO_PEDIDO_COMPRA_DEVOLUCION_COMODATO_RECIBIDO = 'F'; 
 var TIPO_PEDIDO_COMPRA_DEVOLUCION_TRANSFERENCIA_GRATUITA_RECIBIDA = 'H'; 
 
 
+var TIPO_PEDIDO_ALMACEN_TRASLADO_INTERNO_A_ENTREGAR = 'T';
+var TIPO_PEDIDO_ALMACEN_TRASLADO_INTERNO_A_RECIBIR = 'I';
+var TIPO_PEDIDO_ALMACEN_PRESTAMO_A_ENTREGAR = 'P';
+var TIPO_PEDIDO_ALMACEN_DEVOLUCION_PRESTAMO_ENTREGADO = 'D';
+var TIPO_PEDIDO_ALMACEN_PRESTAMO_A_RECIBIR = 'R';
+var TIPO_PEDIDO_ALMACEN_DEVOLUCION_PRESTAMO_RECIBIDO = 'E';
+var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
+
+  
 $("#btnAgregarCliente").click(function () {
     window.open(
         "/Cliente/Editar?idCliente=" + GUID_EMPTY,
@@ -36,8 +45,9 @@ $("#btnAtenderPedidoCompra").click(function () {
     btnAtenderPedido('C');
 });
 
-
-
+$("#btnAtenderPedidoAlmacen").click(function () {
+    btnAtenderPedido('A');
+});
 
 
 
@@ -80,8 +90,13 @@ function btnAtenderPedido(tipo) {
 $("#btnIngresarPedidoVenta").click(function () {
     btnIngresarPedido('V');
 });
+
 $("#btnIngresarPedidoCompra").click(function () {
     btnIngresarPedido('C');
+});
+
+$("#btnIngresarPedidoAlmacen").click(function () {
+    btnIngresarPedido('A');
 });
 
 function btnIngresarPedido(tipo) {
@@ -171,8 +186,10 @@ $("#tipoPedidoBusqueda").change(function () {
     var Controlador = "";
     if (pagina == PAGINA_BUSQUEDA_PEDIDOS_VENTA)
         var Controlador = "Pedido";
-    else 
+    else if (pagina == PAGINA_BUSQUEDA_PEDIDOS_COMPRA)
         var Controlador = "PedidoCompra";
+    else
+        var Controlador = "PedidoAlmacen";
 
     $.ajax({
         url: "/" + Controlador + "/ChangeTipoPedidoBusqueda",

@@ -55,6 +55,11 @@ namespace Model
         public static String VAR_SESSION_PEDIDO_COMPRA_LISTA = "pedidoCompraList";
         public static String VAR_SESSION_PEDIDO_COMPRA_VER = "pedidoCompraVer";
 
+        public static String VAR_SESSION_PEDIDO_ALMACEN = "pedidoAlmacen";
+        public static String VAR_SESSION_PEDIDO_ALMACEN_BUSQUEDA = "pedidoAlmacenBusqueda";
+        public static String VAR_SESSION_PEDIDO_ALMACEN_LISTA = "pedidoAlmacenList";
+        public static String VAR_SESSION_PEDIDO_ALMACEN_VER = "pedidoAlmacenVer";
+
         public static String VAR_SESSION_CLIENTE = "cliente";
         public static String VAR_SESSION_PROVEEDOR = "proveedor";
 
@@ -233,7 +238,12 @@ namespace Model
             [Display(Name = "BUSQUEDA PEDIDO COMPRA")]
             BusquedaPedidosCompra = 23,
             [Display(Name = "MANTENIMIENTO PEDIDO COMPRA")]
-            MantenimientoPedidoCompra = 24
+            MantenimientoPedidoCompra = 24,
+            /*PEDIDO ALMACEN*/
+            [Display(Name = "BUSQUEDA PEDIDO ALMACEN")]
+            BusquedaPedidosAlmacen = 25,
+            [Display(Name = "MANTENIMIENTO PEDIDO ALMACEN")]
+            MantenimientoPedidoAlmacen = 26
         };
 
 

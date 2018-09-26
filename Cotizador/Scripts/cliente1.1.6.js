@@ -87,12 +87,13 @@ jQuery(function ($) {
             || tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
             $("#labelClienteNombre").html("Nombres y Apellidos");
             $("#fieldSetDatosSunat").hide();
+            $("#btnRecuperarDatosSunat").hide();
            
         }
         else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC) {
             $("#labelClienteNombre").html("Razón Social");
             $("#fieldSetDatosSunat").show();
-          
+            $("#btnRecuperarDatosSunat").show();
         }
 
     }
@@ -742,13 +743,13 @@ jQuery(function ($) {
     });
 
 
-    $("#tipoPagoSolicitado").change(function () {
-        var tipoPagoSolicitado = $("#tipoPagoSolicitado").val();
+    $("#plazoCreditoSolicitado").change(function () {
+        var plazoCreditoSolicitado = $("#plazoCreditoSolicitado").val();
         $.ajax({
-            url: "/Cliente/ChangeTipoPagoSolicitado",
+            url: "/Cliente/ChangePlazoCreditoSolicitado",
             type: 'POST',
             data: {
-                tipoPagoSolicitado: tipoPagoSolicitado
+                plazoCreditoSolicitado: plazoCreditoSolicitado
             },
             success: function () { }
         });

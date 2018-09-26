@@ -32,7 +32,7 @@ namespace Cotizador.Controllers
             Pedido pedido = venta.pedido;
             pedido.ciudadASolicitar = new Ciudad();
 
-            if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
+        /*    if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
             {
                 pedido.ciudadASolicitar = new Ciudad
                 {
@@ -42,7 +42,7 @@ namespace Cotizador.Controllers
                 };
 
                 pedido.ciudad = pedido.cliente.ciudad;
-            }
+            }*/
 
             this.Session[Constantes.VAR_SESSION_VENTA] = venta;
         }

@@ -88,7 +88,7 @@ namespace Model
 
 
         [Display(Name = "Plazo Crédito (Solicitado):")]
-        public DocumentoVenta.TipoPago tipoPagoSolicitado { get; set; }
+        public DocumentoVenta.TipoPago plazoCreditoSolicitado { get; set; }
 
 
         [Display(Name = "Sobre Plazo en días:")]
@@ -104,8 +104,9 @@ namespace Model
         [Display(Name = "Tipo Doc. Identidad:")]
         public DocumentoVenta.TiposDocumentoIdentidad tipoDocumentoIdentidad { get; set; }
 
+        [Display(Name = "Vendedores Asignados:")]
+        public Boolean vendedoresAsignados { get; set; }
 
-
-
+        public Usuario usuario { get; set; }
     }
 }

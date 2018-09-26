@@ -40,7 +40,8 @@ namespace Cotizador.Controllers
 
         private void instanciarPedidoBusqueda()
         {
-            Pedido pedidoTmp = new Pedido();
+            
+            Pedido pedidoTmp = new Pedido(Pedido.tipos.Venta);
             DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now.AddDays(1);
             pedidoTmp.cotizacion = new Cotizacion();
@@ -66,7 +67,7 @@ namespace Cotizador.Controllers
             pedidoTmp.pedidoDetalleList = new List<PedidoDetalle>();
             pedidoTmp.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             pedidoTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
-
+            
             this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedidoTmp;
             this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = new List<Pedido>();
         }
@@ -381,7 +382,7 @@ namespace Cotizador.Controllers
 
         private void instanciarPedido()
         {
-            Pedido pedido = new Pedido();
+            Pedido pedido = new Pedido(Pedido.tipos.Venta);
             pedido.idPedido = Guid.Empty;
             pedido.numeroPedido = 0;
             pedido.numeroGrupoPedido = null;
@@ -425,7 +426,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Pedido pedidoVer = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido();
+            Pedido pedido = new Pedido(Pedido.tipos.Venta);
             pedido.idPedido = pedidoVer.idPedido;
             //    pedido.fechaModificacion = cotizacionVer.fechaModificacion;
             pedido.seguimientoPedido = new SeguimientoPedido();
@@ -438,14 +439,14 @@ namespace Cotizador.Controllers
             //Temporal
             pedido.ciudadASolicitar = new Ciudad();
            
-            if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
+          /*  if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
             {
                 pedido.ciudadASolicitar = new Ciudad { idCiudad = pedido.ciudad.idCiudad,
                                                         nombre = pedido.ciudad.nombre,
                                                         esProvincia = pedido.ciudad.esProvincia };
 
                 pedido.ciudad = pedido.cliente.ciudad;
-            }
+            }*/
 
             this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
         }
@@ -1296,7 +1297,7 @@ namespace Cotizador.Controllers
         {
            // Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido();
+            Pedido pedido = new Pedido(Pedido.tipos.Venta);
             pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
@@ -1312,7 +1313,7 @@ namespace Cotizador.Controllers
         {
             Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido();
+            Pedido pedido = new Pedido(Pedido.tipos.Venta);
             pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
@@ -1438,7 +1439,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             PedidoBL pedidoBL = new PedidoBL();
 
-            Pedido pedido = new Pedido();
+            Pedido pedido = new Pedido(Pedido.tipos.Venta);
             pedido.idPedido = Guid.Parse(Request["idPedido"].ToString());
             pedido = pedidoBL.GetPedido(pedido,usuario);
             this.Session[Constantes.VAR_SESSION_PEDIDO_VER] = pedido;
@@ -1529,7 +1530,7 @@ namespace Cotizador.Controllers
 
         public void UpdateStockConfirmado()
         {
-            Pedido pedido = new Pedido();
+            Pedido pedido = new Pedido(Pedido.tipos.Venta);
             pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
             pedido.stockConfirmado = Int32.Parse(this.Request.Params["stockConfirmado"]) == 1;
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];

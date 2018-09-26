@@ -74,7 +74,7 @@ namespace Model
             [Display(Name = "Venta")]
             Venta = 'V', /*PEDIDOS DE VENTA*/
             [Display(Name = "Traslado Interno")]
-            TrasladoInterno = 'T',  /*ALMACEN*/
+            TrasladoInterno = 'T',  /*PEDIDO DE ALMACEN*/
             [Display(Name = "Comodato a Entregar")]
             ComodatoEntregado = 'M', /*PEDIDO DE VENTA*/
             [Display(Name = "Transferencia Gratuita a Entregar")]
@@ -86,7 +86,7 @@ namespace Model
             [Display(Name = "Devolución de Compra")]
             DevolucionCompra = 'B', /*PEDIDO DE COMPRA*/
             [Display(Name = "Devolución de Préstamo Recibido")]
-            DevolucionPrestamoRecibido = 'E', /*PEDIDO DE COMPRA*/
+            DevolucionPrestamoRecibido = 'E', /*PEDIDO DE ALMACEN*/
             [Display(Name = "Devolución de Comodato Recibido")]
             DevolucionComodatoRecibido = 'F', /*PEDIDO DE COMPRA*/
             [Display(Name = "Devolución de Transferencia Gratuita Recibida")]

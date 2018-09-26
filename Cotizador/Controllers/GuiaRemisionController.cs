@@ -378,15 +378,24 @@ namespace Cotizador.Controllers
         {
             try
             {
+                var tipo = Request.Params["tipo"];
+
                 Pedido pedido = null;
-                if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Venta)
+                if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Venta)
                 {
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
                 }
-                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Compra)
+                else if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Compra)
                 {
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
                 }
+                else if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Almacen)
+                {
+                    pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ALMACEN_VER];
+                }
+
+
+
 
                 if (this.Session[Constantes.VAR_SESSION_GUIA] == null)
                 {
@@ -395,14 +404,19 @@ namespace Cotizador.Controllers
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
                 guiaRemision.pedido = pedido;
 
-                if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Venta)
+                if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Venta)
                 {
                     guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedido;
                 }
-                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Compra)
+                else if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Compra)
                 {
                     guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedidoCompra;
-                }               
+                }
+                else if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Almacen)
+                {
+                    guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedidoAlmacen;
+                }
+
 
                 guiaRemision.transportista = new Transportista();
                 // guiaRemision.ciudadOrigen = pedido.ciudad;

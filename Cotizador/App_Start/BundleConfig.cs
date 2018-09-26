@@ -10,7 +10,7 @@ namespace Cotizador
         {
 
             bundles.Add(new ScriptBundle("~/bundles/utiles").Include(
-                         "~/Scripts/utiles1.1.5.js",
+                         "~/Scripts/utiles1.1.6.js",
                          "~/Scripts/utilesFacturacion1.1.3.js"
                          ));
 
@@ -40,14 +40,19 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
-                        "~/Scripts/pedidoGeneral1.1.3.js",
-                        "~/Scripts/pedido1.1.10.js"
+                        "~/Scripts/pedidoGeneral1.1.4.js",
+                        "~/Scripts/pedido1.2.1.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedidoCompra").Include(
-                        "~/Scripts/pedidoGeneral1.1.3.js",
-                        "~/Scripts/pedidoCompra1.1.6.js"
+                        "~/Scripts/pedidoGeneral1.1.4.js",
+                        "~/Scripts/pedidoCompra1.2.1.js"
                         ));
+
+            bundles.Add(new ScriptBundle("~/bundles/pedidoAlmacen").Include(
+                       "~/Scripts/pedidoGeneral1.1.4.js",
+                       "~/Scripts/pedidoAlmacen1.2.1.js"
+                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
                      "~/Scripts/cliente1.1.6.js"

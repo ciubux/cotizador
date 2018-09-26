@@ -14,6 +14,7 @@ namespace Model
         {
             this.tipoNotaCredito = TiposNotaCredito.AnulacionOperacion;
             this.tipoNotaDebito = TiposNotaDebito.Penalidades;
+            this.tipoDocumentoIdentidad = TiposDocumentoIdentidad.RUC;
         }
 
         [Display(Name = "Fecha Emisión:")]

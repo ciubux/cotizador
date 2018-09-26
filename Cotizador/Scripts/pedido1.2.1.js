@@ -637,27 +637,27 @@ jQuery(function ($) {
 
     function validarTipoPedido(tipoPedido) {
         //Si el tipo de pedido es traslado interno (84->'T')
-        if (tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
+      /*  if (tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
             $("#divReferenciaCliente").hide();
             $("#divCiudadASolicitar").show();
             $(".mostrarDatosParaGuia").show();
         }
-        else {
+        else {*/
             $("#divReferenciaCliente").show();
             $("#divCiudadASolicitar").hide();
 
             if (tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
-                || tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
+              //  || tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
                 || tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
                 || tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-                || tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)) {
-
+                //   || tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
+            ) {
                 $(".mostrarDatosParaGuia").show();
             }
             else {
                 $(".mostrarDatosParaGuia").hide();
             }
-        }
+       // }
 
 
         
@@ -1737,7 +1737,7 @@ jQuery(function ($) {
 
         var tipoPedido = $("#pedido_tipoPedido").val();
         //Si el tipo de pedido es traslado interno (84->'T')
-        if (tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
+      /*  if (tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
             if ($("#idCiudadASolicitar").val() == "" || $("#idCiudadASolicitar").val() == null) {
                 $("#idCiudadAsolicitar").focus();
                 $.alert({
@@ -1749,7 +1749,7 @@ jQuery(function ($) {
                 });
                 return false;
             }
-        }
+        }*/
 
 
         if ($("#pedido_numeroReferenciaCliente").val().length > 20) {
@@ -1775,10 +1775,10 @@ jQuery(function ($) {
 
 
         if (tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
-            || tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
+            //|| tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
             || tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
             || tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-            || tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
+        //    || tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
         ) {
 
 
@@ -1948,10 +1948,10 @@ jQuery(function ($) {
 
 
         if (tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
-            || tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
+            //|| tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
             || tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
             || tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-            || tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
+            //|| tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
         ) {
 
             if ($("#pedido_solicitante_nombre").val().trim() == "") {
@@ -2522,15 +2522,19 @@ jQuery(function ($) {
                 $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
                 $("#verTipoPedido").html(pedido.tiposPedidoString);
 
-                if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
+                $("#verResponsableComercial").html(pedido.cliente.responsableComercial.codigoDescripcion + " " + pedido.cliente.responsableComercial.usuario.email);
+                $("#verSupervisorComercial").html(pedido.cliente.supervisorComercial.codigoDescripcion + " " + pedido.cliente.supervisorComercial.usuario.email);
+                $("#verAsistenteServicioCliente").html(pedido.cliente.asistenteServicioCliente.codigoDescripcion + " " + pedido.cliente.asistenteServicioCliente.usuario.email);              
+
+                /*if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
                     $("#divReferenciaCliente").hide();
                     $("#divCiudadSolicitante").show();
                     $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
                 }
-                else {
+                else {*/
                     $("#divReferenciaCliente").show();
                     $("#divCiudadSolicitante").hide();
-                }
+                //}
 
                 
                 $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
@@ -2647,10 +2651,10 @@ jQuery(function ($) {
 
                                
                 if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
-                    || pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
+                    //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
                     || pedido.tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
                     || pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-                    || pedido.tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
+                    //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
                 ) {
 
                     var guiaRemisionList = pedido.guiaRemisionList;
@@ -2861,10 +2865,10 @@ jQuery(function ($) {
                     pedido.seguimientoCrediticioPedido.estado == ESTADO_LIBERADO
                 ) {
                     if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
-                        || pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
+                        //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
                         || pedido.tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
                         || pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-                        || pedido.tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
+                        //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
                     ) {
                         $("#btnAtenderPedidoVenta").show();
 

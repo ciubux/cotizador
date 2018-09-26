@@ -604,10 +604,11 @@ jQuery(function ($) {
         $("#divReferenciaCliente").show();
         $("#divCiudadASolicitar").hide();
         if (tipoPedido == TIPO_PEDIDO_COMPRA_COMPRA.charCodeAt(0)
-            || tipoPedido == TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO.charCodeAt(0)
+      //      || tipoPedido == TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO.charCodeAt(0)
             || tipoPedido == TIPO_PEDIDO_COMPRA_COMODATO_RECIBIDO.charCodeAt(0)
             || tipoPedido == TIPO_PEDIDO_COMPRA_TRANSFERENCIA_GRATUITA_RECIBIDA.charCodeAt(0)
-            || tipoPedido == TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO.charCodeAt(0)) {
+           // || tipoPedido == TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO.charCodeAt(0)
+        ) {
 
                 $(".mostrarDatosParaGuia").hide();
             }
@@ -1709,10 +1710,11 @@ jQuery(function ($) {
 
 
         if (tipoPedido != TIPO_PEDIDO_COMPRA_COMPRA.charCodeAt(0)
-            && tipoPedido != TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO.charCodeAt(0)
+            //&& tipoPedido != TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO.charCodeAt(0)
             && tipoPedido != TIPO_PEDIDO_COMPRA_COMODATO_RECIBIDO.charCodeAt(0)
             && tipoPedido != TIPO_PEDIDO_COMPRA_TRANSFERENCIA_GRATUITA_RECIBIDA.charCodeAt(0)
-            && tipoPedido != TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO.charCodeAt(0))  {
+          //  && tipoPedido != TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO.charCodeAt(0)
+        ) {
 
 
             if ($("#ActualDepartamento").val().trim().length == 0) {
@@ -1881,10 +1883,11 @@ jQuery(function ($) {
 
 
         if (tipoPedido != TIPO_PEDIDO_COMPRA_COMPRA.charCodeAt(0)
-            && tipoPedido != TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO.charCodeAt(0)
+          //  && tipoPedido != TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO.charCodeAt(0)
             && tipoPedido != TIPO_PEDIDO_COMPRA_COMODATO_RECIBIDO.charCodeAt(0)
             && tipoPedido != TIPO_PEDIDO_COMPRA_TRANSFERENCIA_GRATUITA_RECIBIDA.charCodeAt(0)
-            && tipoPedido != TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO.charCodeAt(0)) {
+        //    && tipoPedido != TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO.charCodeAt(0)
+        ) {
 
             if ($("#pedido_solicitante_nombre").val().trim() == "") {
                 $('#pedido_solicitante_nombre').focus();
@@ -2441,6 +2444,11 @@ jQuery(function ($) {
                 $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
                 $("#verTipoPedido").html(pedido.tiposPedidoCompraString);
 
+                $("#verResponsableComercial").html(pedido.cliente.responsableComercial.codigoDescripcion + " " + pedido.cliente.responsableComercial.usuario.email);
+                $("#verSupervisorComercial").html(pedido.cliente.supervisorComercial.codigoDescripcion + " " + pedido.cliente.supervisorComercial.usuario.email);
+                $("#verAsistenteServicioCliente").html(pedido.cliente.asistenteServicioCliente.codigoDescripcion + " " + pedido.cliente.asistenteServicioCliente.usuario.email);              
+
+
                             
                 $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
 
@@ -2560,10 +2568,10 @@ jQuery(function ($) {
                                
                 
                 if (pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_COMPRA.charCodeAt(0)
-                    || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO.charCodeAt(0)
+                    //|| pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO.charCodeAt(0)
                     || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_COMODATO_RECIBIDO.charCodeAt(0)
                     || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_TRANSFERENCIA_GRATUITA_RECIBIDA.charCodeAt(0)
-                    || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO.charCodeAt(0)
+                   // || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO.charCodeAt(0)
                 ) {
                     var notaIngresoList = pedido.guiaRemisionList;
                     for (var j = 0; j < notaIngresoList.length; j++) {
@@ -2751,10 +2759,10 @@ jQuery(function ($) {
                     pedido.seguimientoCrediticioPedido.estado == ESTADO_LIBERADO
                 ) {
                     if (pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_COMPRA.charCodeAt(0)
-                        || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO.charCodeAt(0)
+                     //   || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_TRASLADO_INTERNO_RECIBIDO.charCodeAt(0)
                         || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_COMODATO_RECIBIDO.charCodeAt(0)
                         || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_TRANSFERENCIA_GRATUITA_RECIBIDA.charCodeAt(0)
-                        || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO.charCodeAt(0)
+                      //  || pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_PRESTAMO_RECIBIDO.charCodeAt(0)
                     ) {
                         $("#btnIngresarPedidoCompra").show();
                     }

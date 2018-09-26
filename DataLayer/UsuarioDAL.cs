@@ -81,16 +81,13 @@ namespace DataLayer
                 usuario.administraDocumentosVentaLima = Converter.GetBool(row, "administra_documentos_venta_lima");
                 usuario.administraDocumentosVentaProvincias = Converter.GetBool(row, "administra_documentos_venta_provincias");
                 usuario.visualizaDocumentosVenta = Converter.GetBool(row, "visualiza_documentos_venta");
-                usuario.apruebaAnulaciones = Converter.GetBool(row, "aprueba_anulaciones");
-                
-
+                usuario.apruebaAnulaciones = Converter.GetBool(row, "aprueba_anulaciones");          
 
                 usuario.sedeMP = new Ciudad();
                 usuario.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
 
                 usuario.modificaMaestroClientes = Converter.GetBool(row, "modifica_maestro_clientes");
                 usuario.modificaMaestroProductos = Converter.GetBool(row, "modifica_maestro_productos");
-                
                
                 usuario.creaNotasCredito = Converter.GetBool(row, "crea_notas_credito");
                 usuario.creaNotasDebito = Converter.GetBool(row, "crea_notas_debito");
@@ -100,6 +97,16 @@ namespace DataLayer
                 usuario.confirmaStock = Converter.GetBool(row, "confirma_stock");
 
                 usuario.esCliente = Converter.GetBool(row, "es_cliente");
+
+                usuario.tomaPedidosCompra = Converter.GetBool(row, "toma_pedidos_compra");
+                usuario.tomaPedidosAlmacen = Converter.GetBool(row, "toma_pedidos_almacen");
+                usuario.apruebaPlazoCredito = Converter.GetBool(row, "define_plazo_credito");
+                usuario.apruebaMontoCredito= Converter.GetBool(row, "define_monto_credito");
+                usuario.defineResponsableComercial = Converter.GetBool(row, "define_responsable_comercial");
+                usuario.defineSupervisorComercial = Converter.GetBool(row, "define_supervisor_comercial");
+                usuario.defiineAsistenteAtencionCliente = Converter.GetBool(row, "define_asistente_atencion_cliente");
+                usuario.defineResponsablePortafolio = Converter.GetBool(row, "define_responsable_portafolio");
+                usuario.modificaPedidoVentaFechaEntregaHasta = Converter.GetBool(row, "modifica_pedido_venta_fecha_entrega_hasta");
 
             }
 

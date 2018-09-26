@@ -112,10 +112,10 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 
-        public void ChangeTipoPagoSolicitado()
+        public void ChangePlazoCreditoSolicitado()
         {
             Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
-            cliente.tipoPagoSolicitado = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPagoSolicitado"]);
+            cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["plazoCreditoSolicitado"]);
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 
@@ -125,8 +125,10 @@ namespace Cotizador.Controllers
             cliente.idCliente = Guid.Empty;
             cliente.ciudad = new Ciudad();
             cliente.codigo = String.Empty;
-            Usuario usuario = (Usuario)this.Session["usuario"];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             cliente.IdUsuarioRegistro = usuario.idUsuario;
+            cliente.usuario = usuario;
+
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 
@@ -134,7 +136,7 @@ namespace Cotizador.Controllers
         {
             this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
             UsuarioBL usuarioBL = new UsuarioBL();
-            Usuario usuario = (Usuario)this.Session["usuario"];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             //   usuarioBL.updateCotizacionSerializada(usuario, null);
             return RedirectToAction("Editar", "Cliente");
@@ -173,6 +175,7 @@ namespace Cotizador.Controllers
                 ClienteBL clienteBL = new ClienteBL();
                 cliente = clienteBL.getCliente(idCliente.Value);
                 cliente.IdUsuarioRegistro = usuario.idUsuario;
+                cliente.usuario = usuario;
                 this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
             }
 

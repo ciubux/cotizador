@@ -36,7 +36,8 @@ var PAGINA_MantenimientoNotaIngreso = 21;
 var PAGINA_ImprimirNotaIngreso = 22;
 var PAGINA_BUSQUEDA_PEDIDOS_COMPRA = 23;
 var PAGINA_MANTENIMIENTO_PEDIDO_COMPRA = 24;
-
+var PAGINA_BUSQUEDA_PEDIDOS_ALMACEN = 25;
+var PAGINA_MANTENIMIENTO_PEDIDO_ALMACEN = 26;
 /**
  * Constantes para toma de pedidos
  */

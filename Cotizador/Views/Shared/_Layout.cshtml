@@ -37,7 +37,8 @@
                         var linkMantenimientoPedido = "";
                         var linkBusquedaPedidosCompra = "";
                         var linkMantenimientoPedidoCompra = "";
-
+                        var linkBusquedaPedidosAlmacen = "";
+                        var linkMantenimientoPedidoAlmacen = "";
 
                         var linkMovimientosAlmacen = "";
                         var linkBusquedaGuiasRemision = "";
@@ -94,12 +95,15 @@
 
                             case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
                             case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
-                            case 22: linkBusquedaPedidosCompra = "ative"; linkPedidos = "active"; break;
-                            case 23: linkMantenimientoPedidoCompra = "ative"; linkPedidos = "active"; break;
+                            case 22: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
+                            case 23: linkBusquedaPedidosCompra = "ative"; linkPedidos = "active"; break;
+                            case 24: linkMantenimientoPedidoCompra = "ative"; linkPedidos = "active"; break;
+                            case 25: linkBusquedaPedidosAlmacen = "ative"; linkPedidos = "active"; break;
+                            case 26: linkMantenimientoPedidoAlmacen = "ative"; linkPedidos = "active"; break;
                         }
                         var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
 
-                      
+
 
                         if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
                         {
@@ -144,6 +148,14 @@
                                 @if (usuario.tomaPedidos)
                                 {
                                     <li id="linkMantenimientoPedidoCompra" class="@linkMantenimientoPedidoCompra">@Html.ActionLink("Pedido Compra - Crear/Modificar", "Pedir", "PedidoCompra")</li>
+                                }  
+
+                                @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
+                                {
+                                    <li id="linkBusquedaPedidosAlmacen" class="@linkBusquedaPedidosAlmacen">@Html.ActionLink("Pedido Almacén - Búsqueda", "Index", "PedidoAlmacen")</li>}
+                                @if (usuario.tomaPedidos)
+                                {
+                                    <li id="linkMantenimientoPedidoAlmacen" class="@linkMantenimientoPedidoAlmacen">@Html.ActionLink("Pedido Almacén - Crear/Modificar", "Pedir", "PedidoAlmacen")</li>
                                 }  
                             </ul>
                         </li>

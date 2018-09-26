@@ -216,6 +216,7 @@
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
+    <Compile Include="Controllers\PedidoAlmacenController.cs" />
     <Compile Include="Controllers\PedidoCompraController.cs" />
     <Compile Include="Controllers\SolicitanteController.cs" />
     <Compile Include="Controllers\DireccionEntregaController.cs" />
@@ -336,13 +337,14 @@
     <Content Include="Scripts\jquery-editable-select.js" />
     <Content Include="Scripts\jquery.loadingModal.js" />
     <Content Include="Scripts\jquery.loadingModal.min.js" />
-    <Content Include="Scripts\pedidoCompra1.1.6.js" />
-    <Content Include="Scripts\pedidoGeneral1.1.3.js" />
+    <Content Include="Scripts\pedidoAlmacen1.2.1.js" />
+    <Content Include="Scripts\pedidoCompra1.2.1.js" />
+    <Content Include="Scripts\pedidoGeneral1.1.4.js" />
     <Content Include="Scripts\utilesFacturacion1.1.3.js" />
-    <Content Include="Scripts\utiles1.1.5.js" />
+    <Content Include="Scripts\utiles1.1.6.js" />
     <Content Include="Scripts\notaCredito1.1.2.js" />
     <Content Include="Scripts\venta1.1.1.js" />
-    <Content Include="Scripts\pedido1.1.10.js" />
+    <Content Include="Scripts\pedido1.2.1.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -449,6 +451,8 @@
     <Content Include="Views\Factura\Crear.cshtml" />
     <Content Include="Views\NotaIngreso\Print.cshtml" />
     <Content Include="Views\Shared\_Vendedor.cshtml" />
+    <Content Include="Views\PedidoAlmacen\Index.cshtml" />
+    <Content Include="Views\PedidoAlmacen\Pedir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
