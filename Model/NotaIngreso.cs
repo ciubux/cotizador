@@ -14,6 +14,7 @@ namespace Model
         {
             this.motivoTraslado = motivosTraslado.Compra;
             this.tipoDocumentoVentaReferencia = TiposDocumentoVentaReferencia.Ninguno;
+            this.motivoExtornoGuiaRemision = MotivosExtornoGuiaRemision.AnulacionOperacion;
         }        
 
 
@@ -52,9 +53,6 @@ namespace Model
         public String serieNumeroNotaIngreso { get { return  this.serieDocumento + "-" + this.numeroDocumentoString ; } }
              
 
-
-        public List<DocumentoDetalle> documentoDetalle { get; set; }
-
         public DocumentoVenta documentoVenta { get; set; }
 
         [Display(Name = "Transportista:")]
@@ -84,16 +82,15 @@ namespace Model
             TransferenciaGratuitaRecibida = 'G', /*PEDIDO DE COMPRA*/
             [Display(Name = "Préstamo a Recibir")]
             PrestamoRecibido = 'R', /*PEDIDO DE ALMACEN*/
-            [Display(Name = "Devolución de Venta")]
+
+            [Display(Name = "Extorno de Venta")]
             DevolucionVenta = 'D', /*PEDIDO DE VENTA*/ 
-            [Display(Name = "Devolución de Préstamo Entregado")]
-            DevolucionPrestamoEntregado = 'D',  /*PEDIDO DE ALMACEN*/
-            [Display(Name = "Devolución de Comodato Entregado")]
+            [Display(Name = "Extorno de Préstamo Entregado")]
+            DevolucionPrestamoEntregado = 'P',  /*PEDIDO DE ALMACEN*/
+            [Display(Name = "Extorno de Comodato Entregado")]
             DevolucionComodatoEntregado = 'F', /*PEDIDO DE VENTA*/
-            [Display(Name = "Devolución de Transferencia Gratuita Entregada")]
+            [Display(Name = "Extorno de Transferencia Gratuita Entregada")]
             DevolucionTransferenciaGratuitaEntregada = 'H', /*PEDIDO DE VENTA*/
-            [Display(Name = "Extorno de Guía Remisión")]
-            ExtornoGuíaRemision = 'X',  /*PEDIDO DE ALMACEN*/
         }
 
 
@@ -151,6 +148,34 @@ namespace Model
             [Display(Name = "Nota de Débito")]
             NotaDébito = 8
         };
+
+
+
+
+
+        /*Atributos para extorno de guías de remisión*/
+
+        [Display(Name = "Motivo de Extorno:")]
+        public MotivosExtornoGuiaRemision motivoExtornoGuiaRemision { get; set; }
+        public enum MotivosExtornoGuiaRemision
+        {
+            [Display(Name = "ANULACIÓN DE LA OPERACIÓN")]
+            AnulacionOperacion = 1,
+            [Display(Name = "DEVOLUCIÓN TOTAL")]
+            DevolucionTotal = 6,
+            [Display(Name = "DEVOLUCIÓN POR ITEM")]
+            DevolucionItem = 7
+        };
+
+        public String motivoExtornoGuiaRemisionToString
+        {
+            get
+            {
+                return EnumHelper<MotivosExtornoGuiaRemision>.GetDisplayValue(this.motivoExtornoGuiaRemision);
+            }
+        }
+
+        public GuiaRemision guiaRemisionAExtornar { get; set; }
 
     }
 }

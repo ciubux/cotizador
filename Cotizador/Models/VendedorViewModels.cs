@@ -27,5 +27,7 @@ namespace Cotizador.Models
                 });
             }
         }
+
+        public Boolean Disabled { get; set; }
     }
 }

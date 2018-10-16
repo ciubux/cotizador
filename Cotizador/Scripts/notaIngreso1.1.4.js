@@ -385,6 +385,10 @@ jQuery(function ($) {
         ChangeInputInt("numeroDocumentoVentaReferencia", $("#notaIngreso_numeroDocumentoVentaReferencia").val())
     });
 
+    $("#notaIngreso_sustentoExtorno").change(function () {
+        changeInputString("sustentoExtorno", $("#notaIngreso_sustentoExtorno").val())
+    });
+
     $("#tipoDocumentoVentaReferencia").change(function () {
         var tipoDocumentoVentaReferencia = $("#tipoDocumentoVentaReferencia").val();
         $.ajax({
@@ -520,37 +524,100 @@ jQuery(function ($) {
 
     function validarIngresoDatosObligatoriosNotaIngreso() {
 
-        if ($("#notaIngreso_serieGuiaReferencia").val().length > 4) {
-            alert('La serie de la guía de remisión de referencia no debe contener más de 4 caracteres.');
-            $('#notaIngreso_serieGuiaReferencia').focus();
-            return false;
-        }
+        if ($("#notaIngreso_serieGuiaReferencia").length) {
+            if ($("#notaIngreso_serieGuiaReferencia").val().length > 4) {
+                $.alert({
+                    //icon: 'fa fa-warning',
+                    title: 'Validación',
+                    content: 'La serie de la guía de remisión de referencia no debe contener más de 4 caracteres.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () {
+                            $('#notaIngreso_serieGuiaReferencia').focus();
+                        }
+                    }
+                });
+                return false;
+            }
 
-        if ($("#notaIngreso_numeroGuiaReferencia").val() > 0 && $('#notaIngreso_serieGuiaReferencia') == "") {
-            alert('Debe ingresar la serie de la guía de remisión de referencia.');
-            $('#notaIngreso_serieGuiaReferencia').focus();
-            return false;
-        }
+            if ($("#notaIngreso_numeroGuiaReferencia").val() > 0 && $('#notaIngreso_serieGuiaReferencia') == "") {
+                $.alert({
+                    //icon: 'fa fa-warning',
+                    title: 'Validación',
+                    content: 'Debe ingresar la serie de la guía de remisión de referencia.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () {
+                            $('#notaIngreso_serieGuiaReferencia').focus();
+                        }
+                    }
+                });
+                return false;
+            }
 
-        if ($("#notaIngreso_serieDocumentoVentaReferencia").val().length > 4) {
-            alert('La serie del documento de venta de referencia no debe contener más de 4 caracteres.');
-            $('#notaIngreso_serieDocumentoVentaReferencia').focus();
-            return false;
-        }
-        
-        if ($("#notaIngreso_numeroDocumentoVentaReferencia").val() > 0 && $("#tipoDocumentoVentaReferencia").val() == 0) {
-            alert('Debe ingresar el tipo de documento de venta de referencia.');
-            $('#tipoDocumentoVentaReferencia').focus();
-            return false;
-        }
+            if ($("#notaIngreso_serieDocumentoVentaReferencia").val().length > 4) {
+                $.alert({
+                    //icon: 'fa fa-warning',
+                    title: 'Validación',
+                    content: 'La serie del documento de venta de referencia.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () {
+                            $('#notaIngreso_serieDocumentoVentaReferencia').focus();
+                        }
+                    }
+                });
+                return false;
+            }
 
-        if ($("#notaIngreso_numeroDocumentoVentaReferencia").val() > 0 && $('#notaIngreso_numeroDocumentoVentaReferencia') == "") {
-            alert('Debe ingresar la serie del documento de venta de referencia.');
-            $('#notaIngreso_serieDocumentoVentaReferencia').focus();
-            return false;
+            if ($("#notaIngreso_numeroDocumentoVentaReferencia").val() > 0 && $("#tipoDocumentoVentaReferencia").val() == 0) {
+                $.alert({
+                    //icon: 'fa fa-warning',
+                    title: 'Validación',
+                    content: 'Debe ingresar el tipo de documento de venta de referencia.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () {
+                            $('#tipoDocumentoVentaReferencia').focus();
+                        }
+                    }
+                });
+                return false;
+            }
+
+            if ($("#notaIngreso_numeroDocumentoVentaReferencia").val() > 0 && $('#notaIngreso_numeroDocumentoVentaReferencia') == "") {
+                $.alert({
+                    //icon: 'fa fa-warning',
+                    title: 'Validación',
+                    content: 'Debe ingresar la serie del documento de venta de referencia.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () {
+                            $('#notaIngreso_serieDocumentoVentaReferencia').focus();
+                        }
+                    }
+                });
+                return false;
+            }
         }
+        else {
+            if ($("#notaIngreso_sustentoExtorno").val().length <= 25) {
+                $.alert({
+                    //icon: 'fa fa-warning',
+                    title: 'Validación',
+                    content: 'Debe ingresar el sustento del extorno.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () {
+                            $('#notaIngreso_sustentoExtorno').focus();
+                        }
+                    }
+                });
+                
+                return false;
+            }
 
-
+        }
        
      
         /*
@@ -679,12 +746,6 @@ jQuery(function ($) {
                 $("#ver_notaIngreso_motivoTraslado").html(notaIngreso.motivoTrasladoString);
                 $("#ver_notaIngreso_atencionParcial").html(notaIngreso.atencionParcial);
 
-                $("#ver_notaIngreso_serieGuiaReferencia").html(notaIngreso.serieGuiaReferencia);
-                $("#ver_notaIngreso_numeroGuiaReferencia").html(notaIngreso.numeroGuiaReferencia);
-                $("#ver_notaIngreso_serieDocumentoVentaReferencia").html(notaIngreso.serieDocumentoVentaReferencia);
-                $("#ver_notaIngreso_numeroDocumentoVentaReferencia").html(notaIngreso.numeroDocumentoVentaReferencia);
-                $("#ver_notaIngreso_tipoDocumentoVentaReferencia").html(notaIngreso.tipoDocumentoVentaReferenciaString);
-
                 /*
                 $("#ver_notaIngreso_pedido_ubigeoEntrega").html(notaIngreso.pedido.ubigeoEntrega.ToString);
                 $("#ver_notaIngreso_pedido_direccionEntrega").html(notaIngreso.pedido.direccionEntrega.descripcion);
@@ -708,7 +769,7 @@ jQuery(function ($) {
                 
 
                 if (notaIngreso.atencionParcial) {
-                    $("#ver_notaIngreso_atencionParcial").html("Atención Parcial");
+                    $("#ver_notaIngreso_atencionParcial").html("Ingreso Parcial");
                   /*  if (guiaRemision.ultimaAtencionParcial) {
                         $("#ver_notaIngreso_atencionParcial").html("Atención Parcial");
                     }
@@ -717,8 +778,32 @@ jQuery(function ($) {
                     }*/
                 }
                 else {
-                    $("#ver_notaIngreso_atencionParcial").html("Atención Final");
+                    $("#ver_notaIngreso_atencionParcial").html("Ingreso Final");
                 }
+
+                if (notaIngreso.guiaRemisionAExtornar == null) {
+                    $("#fieldsetDatosExtorno").hide();
+                    $("#fieldsetDocumentosReferencia").show();
+
+                    $("#ver_notaIngreso_serieGuiaReferencia").html(notaIngreso.serieGuiaReferencia);
+                    $("#ver_notaIngreso_numeroGuiaReferencia").html(notaIngreso.numeroGuiaReferencia);
+                    $("#ver_notaIngreso_serieDocumentoVentaReferencia").html(notaIngreso.serieDocumentoVentaReferencia);
+                    $("#ver_notaIngreso_numeroDocumentoVentaReferencia").html(notaIngreso.numeroDocumentoVentaReferencia);
+                    $("#ver_notaIngreso_tipoDocumentoVentaReferencia").html(notaIngreso.tipoDocumentoVentaReferenciaString);
+                    $("#btnExtornar").show();
+                }
+                else {
+                    $("#fieldsetDatosExtorno").show();
+                    $("#fieldsetDocumentosReferencia").hide();
+                    $("#ver_notaIngreso_guiaRemisionAExtornar_serieNumeroGuia").html(notaIngreso.guiaRemisionAExtornar.serieNumeroGuia);
+                    $("#ver_notaIngreso_motivoExtornoGuiaRemisionToString").html(notaIngreso.motivoExtornoGuiaRemisionToString);
+                    $("#ver_notaIngreso_sustentoExtorno").html(notaIngreso.sustentoExtorno);
+                    $("#btnExtornar").hide();
+                }
+
+
+
+
 
 
                 //invertirFormatoFecha(pedido.fechaMaximaEntrega.substr(0, 10)));
@@ -2514,6 +2599,59 @@ jQuery(function ($) {
     $("#btnImprimirNotaIngreso").click(function () {
         window.open("/NotaIngreso/Print");
     });
+
+
+
+
+
+    /*GENERACIÓN DE GUIA REMISIÓN POR DEVOLUCIÓN*/
+    $("#btnExtornar").click(function () {
+
+        desactivarBotonesVer();
+
+        //Se obtiene el tipo de nota de ingreso seleccionado
+    //    var tipoNotaIngreso = $('input:radio[name=tipoNotaIngreso]:checked').val();
+        //Se recupera el id de la guía de remisión
+        var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
+
+     /*   if (tipoNotaIngreso == null) {
+            mostrarMensajeErrorProceso("Debe seleccionar el Motivo de la Nota de Ingreso.");
+            $("#btnContinuarGenerandoNotaIngreso").removeAttr("disabled");
+            $("#btnCancelarNotaIngreso").removeAttr("disabled");
+            return false;
+        }*/
+
+        var yourWindow;
+        $.ajax({
+            url: "/GuiaRemision/iniciarAtencionDesdeNotaIngreso",
+            type: 'POST',
+            // dataType: 'JSON',
+            data: {
+                idMovimientoAlmacen: idMovimientoAlmacen//,
+         //       tipoNotaIngreso: tipoNotaIngreso
+            },
+            error: function (error) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+             //   $("#btnContinuarGenerandoNotaIngreso").removeAttr("disabled");
+             //   $("#btnCancelarNotaIngreso").removeAttr("disabled");
+            },
+            success: function (movimientoAlmacen) {
+                window.location = '/GuiaRemision/Guiar';
+                /*
+                if (movimientoAlmacen.tipoErrorCrearTransaccion == 0) {
+                    window.location = '/NotaCredito/Crear';
+                }
+                else {
+                    mostrarMensajeErrorProceso(MENSAJE_ERROR + "\n" + "Detalle Error: " + venta.descripcionError);
+                    $("#btnContinuarGenerandoNotaIngreso").removeAttr("disabled");
+                    $("#btnCancelarNotaIngreso").removeAttr("disabled");
+                }*/
+            }
+        });
+
+    });
+
+
 
 
 });

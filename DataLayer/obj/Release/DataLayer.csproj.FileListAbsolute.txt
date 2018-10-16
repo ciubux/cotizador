@@ -52,3 +52,4 @@ C:\Users\cesar\Documents\MP2\cotizador\DataLayer\obj\Release\DataLayer.csprojRes
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\obj\Release\DataLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\obj\Release\DataLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador\DataLayer\obj\Release\DataLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador\DataLayer\bin\Release\Model.dll.config

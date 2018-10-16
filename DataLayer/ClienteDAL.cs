@@ -79,6 +79,23 @@ namespace DataLayer
             return clienteList;
         }
 
+
+        public Guid getClienteId(String ruc, String codigoSedeMP)
+        {
+            var objCommand = GetSqlCommand("ps_clienteId");
+            InputParameterAdd.Varchar(objCommand, "ruc", ruc);
+            InputParameterAdd.Varchar(objCommand, "codigoSede", codigoSedeMP);
+            DataTable dataTable = Execute(objCommand);
+
+            Guid idCliente = Guid.Empty;
+            foreach (DataRow row in dataTable.Rows)
+            {
+                idCliente = Converter.GetGuid(row, "id_cliente");
+            }
+            return idCliente;
+        }
+
+
         public Cliente getCliente(Guid idCliente)
         {
             var objCommand = GetSqlCommand("ps_cliente");
@@ -125,33 +142,28 @@ namespace DataLayer
                 obj.sobreGiro = Converter.GetDecimal(row, "sobre_giro");
 
                 obj.vendedoresAsignados = Converter.GetBool(row, "vendedores_asignados");
-                obj.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
+                obj.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
 
                 /*Vendedores*/
                 obj.responsableComercial = new Vendedor();
+                obj.responsableComercial.idVendedor = Converter.GetInt(row, "responsable_comercial_id_vendedor");
                 obj.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
                 obj.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
 
                 obj.supervisorComercial = new Vendedor();
+                obj.supervisorComercial.idVendedor = Converter.GetInt(row, "supervisor_comercial_id_vendedor");
                 obj.supervisorComercial.codigo = Converter.GetString(row, "supervisor_comercial_codigo");
                 obj.supervisorComercial.descripcion = Converter.GetString(row, "supervisor_comercial_descripcion");
 
                 obj.asistenteServicioCliente = new Vendedor();
+                obj.asistenteServicioCliente.idVendedor = Converter.GetInt(row, "asistente_servicio_cliente_id_vendedor");
                 obj.asistenteServicioCliente.codigo = Converter.GetString(row, "asistente_servicio_cliente_codigo");
                 obj.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
 
+                obj.observacionesCredito = Converter.GetString(row, "observaciones_credito");
+                obj.observaciones = Converter.GetString(row, "observaciones");
 
-                ///Nuevos Campos
-                /*    InputParameterAdd.Int(objCommand, "tipoDocumentoIdentidad", (int)cliente.tipoDocumentoIdentidad);
-                    InputParameterAdd.Decimal(objCommand, "creditoSolicitado", cliente.creditoSolicitado);
-                    InputParameterAdd.Decimal(objCommand, "creditoAprobado", cliente.creditoAprobado);
-                    InputParameterAdd.Decimal(objCommand, "sobreGiro", (int)cliente.sobreGiro);
-                    InputParameterAdd.Int(objCommand, "sobrePlazo", cliente.sobrePlazo);
-                    InputParameterAdd.Int(objCommand, "tipoPagoSolicitado", (int)cliente.tipoPagoSolicitado);
-                    InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
-                    InputParameterAdd.Int(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
-                    InputParameterAdd.Int(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
-                    */
+                obj.bloqueado = Converter.GetBool(row, "bloqueado");
 
             }
 
@@ -194,7 +206,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
             InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura);
             InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat);
-            InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercial);
+            InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercialSunat);
             InputParameterAdd.Varchar(objCommand, "direccionDomicilioLegalSunat", cliente.direccionDomicilioLegalSunat);
             InputParameterAdd.Varchar(objCommand, "estadoContribuyente", cliente.estadoContribuyente);
             InputParameterAdd.Varchar(objCommand, "condicionContribuyente", cliente.condicionContribuyente);
@@ -202,22 +214,10 @@ namespace DataLayer
             //InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
             InputParameterAdd.Int(objCommand, "formaPagoFactura", (int)cliente.formaPagoFactura);
             
-            
-            ///Nuevos Campos
-            InputParameterAdd.Int(objCommand, "tipoDocumentoIdentidad", (int)cliente.tipoDocumentoIdentidad);
-            InputParameterAdd.Decimal(objCommand, "creditoSolicitado", cliente.creditoSolicitado);
-            InputParameterAdd.Decimal(objCommand, "creditoAprobado", cliente.creditoAprobado);
-            InputParameterAdd.Decimal(objCommand, "sobreGiro", (int)cliente.sobreGiro);
-            InputParameterAdd.Int(objCommand, "sobrePlazo", cliente.sobrePlazo);
-            InputParameterAdd.Int(objCommand, "tipoPagoSolicitado", (int)cliente.plazoCreditoSolicitado);
-            InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
-            InputParameterAdd.Int(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
-            InputParameterAdd.Int(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
-
             /*Plazo credito*/
             InputParameterAdd.Int(objCommand, "plazoCreditoSolicitado", (int)cliente.plazoCreditoSolicitado);
             InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
-            InputParameterAdd.Int(objCommand, "tipoPagoFactura", cliente.sobrePlazo);
+            InputParameterAdd.Int(objCommand, "sobrePlazo", cliente.sobrePlazo);
             /*Monto Crédito*/
             InputParameterAdd.Decimal(objCommand, "creditoSolicitado", cliente.creditoSolicitado);
             InputParameterAdd.Decimal(objCommand, "creditoAprobado", cliente.creditoAprobado);
@@ -226,11 +226,17 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
             InputParameterAdd.Decimal(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
             InputParameterAdd.Decimal(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
-            
+
+            InputParameterAdd.Char(objCommand, "tipoDocumento", ((char)cliente.tipoDocumentoIdentidad).ToString());
+
+            InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito);
+            InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
+
+
+            InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados?1:0));
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.Int(objCommand, "codigoAlterno");
-
 
             ExecuteNonQuery(objCommand);
 
@@ -260,22 +266,28 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "estadoContribuyente", cliente.estadoContribuyente);
             InputParameterAdd.Varchar(objCommand, "condicionContribuyente", cliente.condicionContribuyente);
             InputParameterAdd.Varchar(objCommand, "ubigeo", cliente.ubigeo.Id);
-            InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
+            //InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
             InputParameterAdd.Int(objCommand, "formaPagoFactura", (int)cliente.formaPagoFactura);
 
-            ///Nuevos Campos
-            InputParameterAdd.Int(objCommand, "tipoDocumentoIdentidad", (int)cliente.tipoDocumentoIdentidad);
+            /*Plazo credito*/
+            InputParameterAdd.Int(objCommand, "plazoCreditoSolicitado", (int)cliente.plazoCreditoSolicitado);
+            InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
+            InputParameterAdd.Int(objCommand, "sobrePlazo", cliente.sobrePlazo);
+            /*Monto Crédito*/
             InputParameterAdd.Decimal(objCommand, "creditoSolicitado", cliente.creditoSolicitado);
             InputParameterAdd.Decimal(objCommand, "creditoAprobado", cliente.creditoAprobado);
-            InputParameterAdd.Decimal(objCommand, "sobreGiro", (int)cliente.sobreGiro);
-            InputParameterAdd.Int(objCommand, "sobrePlazo", cliente.sobrePlazo);
-            InputParameterAdd.Int(objCommand, "tipoPagoSolicitado", (int)cliente.plazoCreditoSolicitado);
-            InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
-            InputParameterAdd.Int(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
-            InputParameterAdd.Int(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
+            InputParameterAdd.Decimal(objCommand, "sobreGiro", cliente.sobreGiro);
+            /*Vendedores*/
+            InputParameterAdd.Decimal(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
+            InputParameterAdd.Decimal(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
+            InputParameterAdd.Decimal(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
+
+            InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito);
+            InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
+            InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados ? 1 : 0));
+            InputParameterAdd.SmallInt(objCommand, "bloqueado", (short)(cliente.bloqueado ? 1 : 0));
 
             ExecuteNonQuery(objCommand);            
-        //    cliente.codigoAlterno = (Int32)objCommand.Parameters["@codigoAlterno"].Value;
 
             return cliente;
 

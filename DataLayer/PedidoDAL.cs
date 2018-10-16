@@ -543,8 +543,9 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
 
             if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno ||
-               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.PrestamoEntregado ||
-               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.DevolucionPrestamoRecibido)
+               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.PrestamoEntregado //||
+            //   pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.DevolucionPrestamoRecibido
+               )
             {
                 InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
                 InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
@@ -571,8 +572,9 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
 
             if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno ||
-               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.PrestamoEntregado ||
-               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.DevolucionPrestamoRecibido)
+               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.PrestamoEntregado //||
+               //pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.DevolucionPrestamoRecibido
+                    )
             {
                 InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
                 InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
@@ -642,8 +644,9 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
             if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno ||
-               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.PrestamoEntregado ||
-               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.DevolucionPrestamoRecibido)
+               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.PrestamoEntregado //||
+               //pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.DevolucionPrestamoRecibido
+                    )
             {
                 InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
                 InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
@@ -670,8 +673,9 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
             if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno ||
-               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.PrestamoEntregado ||
-               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.DevolucionPrestamoRecibido)
+               pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.PrestamoEntregado //||
+               //pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.DevolucionPrestamoRecibido
+                    )
             {
                 InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
                 InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null

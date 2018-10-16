@@ -158,7 +158,13 @@ textarea {
         width: 1100px;
     }
 
+    #modalGenerarNotaDebito .modal-dialog {
+        width: 1100px;
+    }
 
+    #modalGenerarNotaIngreso .modal-dialog {
+        width: 1100px;
+    }
 
 }
 

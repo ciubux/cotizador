@@ -74,8 +74,15 @@ namespace Model
 
         public override string ToString()
         {
-            return "R. Social: " + this.razonSocial + "  -  N. Comercial: "
-                + this.nombreComercial + " - Cod: " + this.codigo + " - RUC: " + this.ruc;
+            if (this.tipoDocumentoIdentidad != DocumentoVenta.TiposDocumentoIdentidad.RUC)
+            {
+                return "Nombres y Apellidos: " + this.razonSocial + " - COD: " + this.codigo + " - DOC: " + this.ruc;
+            }
+            else
+            {
+                return "R. Social: " + this.razonSocial + "  -  N. Comercial: "
+                + this.nombreComercial + " - COD: " + this.codigo + " - RUC: " + this.ruc;
+            }
         }
 
         public string codigoRazonSocial
@@ -85,6 +92,7 @@ namespace Model
 
         [Display(Name = "Plazo Crédito (Aprobado):")]
         public DocumentoVenta.TipoPago tipoPagoFactura { get; set; }
+
 
 
         [Display(Name = "Plazo Crédito (Solicitado):")]
@@ -108,5 +116,15 @@ namespace Model
         public Boolean vendedoresAsignados { get; set; }
 
         public Usuario usuario { get; set; }
+
+        [Display(Name = "Observaciones:")]
+        public String observaciones { get; set; }
+
+        [Display(Name = "Bloqueado:")]
+        public Boolean bloqueado { get; set; }
+
+        public Boolean sinMontoCreditoAprobado { get; set; }
+
+        public Boolean sinPlazoCreditoAprobado { get; set; }
     }
 }

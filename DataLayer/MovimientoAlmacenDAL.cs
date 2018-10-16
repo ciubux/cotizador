@@ -79,7 +79,16 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", guiaRemision.fechaTraslado);
             InputParameterAdd.Varchar(objCommand, "serieDocumento", guiaRemision.serieDocumento); //puede ser null
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", guiaRemision.numeroDocumento); //puede ser null
-            InputParameterAdd.Guid(objCommand, "idPedido", guiaRemision.pedido.idPedido);
+
+            if (guiaRemision.notaIngresoAExtornar == null)
+            {
+                InputParameterAdd.Guid(objCommand, "idPedido", guiaRemision.pedido.idPedido);
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idPedido", null);
+            }
+
             InputParameterAdd.Int(objCommand, "atencionParcial", guiaRemision.atencionParcial ? 1 : 0);
             InputParameterAdd.Int(objCommand, "ultimaAtencionParcial", guiaRemision.ultimaAtencionParcial ? 1 : 0);
             InputParameterAdd.Guid(objCommand, "idSedeOrigen", guiaRemision.ciudadOrigen.idCiudad);
@@ -98,6 +107,24 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", (int)guiaRemision.seguimientoMovimientoAlmacenSalida.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", guiaRemision.seguimientoMovimientoAlmacenSalida.observacion);
 
+            if (guiaRemision.notaIngresoAExtornar != null)
+            {
+                InputParameterAdd.Guid(objCommand, "idMovimientoAlmacenExtornado", guiaRemision.notaIngresoAExtornar.idMovimientoAlmacen);
+
+                /*Si la atención es parcial quiere decir que es una devolución parcial*/
+                if (guiaRemision.atencionParcial)
+                {
+                    InputParameterAdd.Int(objCommand, "motivoExtorno", (int)GuiaRemision.MotivosExtornoNotaIngreso.DevolucionItem);
+                }
+                else {
+                    InputParameterAdd.Int(objCommand, "motivoExtorno", (int)GuiaRemision.MotivosExtornoNotaIngreso.DevolucionTotal);
+                }
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idMovimientoAlmacenExtornado", null);
+                InputParameterAdd.Int(objCommand, "motivoExtorno", null);
+            }
 
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");
@@ -147,7 +174,6 @@ namespace DataLayer
 
         public void InsertMovimientoAlmacenEntrada(NotaIngreso notaIngreso)
         {
-
             this.BeginTransaction(IsolationLevel.ReadCommitted);
             var objCommand = GetSqlCommand("pi_movimientoAlmacenEntrada");
             InputParameterAdd.DateTime(objCommand, "fechaEmision", notaIngreso.fechaEmision);
@@ -166,18 +192,23 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "serieDocumentoVentaReferencia", notaIngreso.serieDocumentoVentaReferencia);
             InputParameterAdd.Int(objCommand, "numeroDocumentoVentaReferencia", notaIngreso.numeroDocumentoVentaReferencia);
             InputParameterAdd.Int(objCommand, "tipoDocumentoVentaReferencia", (int)notaIngreso.tipoDocumentoVentaReferencia);
-     /*       InputParameterAdd.Varchar(objCommand, "nombreTransportista", notaIngreso.transportista.descripcion);
-            InputParameterAdd.Varchar(objCommand, "rucTransportista", notaIngreso.transportista.ruc);
-            InputParameterAdd.Varchar(objCommand, "breveteTransportista", notaIngreso.transportista.brevete);
-            InputParameterAdd.Varchar(objCommand, "direccionTransportista", notaIngreso.transportista.direccion);
-            InputParameterAdd.Varchar(objCommand, "placaVehiculo", notaIngreso.placaVehiculo);*/
             InputParameterAdd.Varchar(objCommand, "observaciones", notaIngreso.observaciones);
-            //InputParameterAdd.Varchar(objCommand, "certificadoInscripcion", notaIngreso.certificadoInscripcion);
             InputParameterAdd.Guid(objCommand, "idUsuario", notaIngreso.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)notaIngreso.seguimientoMovimientoAlmacenEntrada.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", notaIngreso.seguimientoMovimientoAlmacenEntrada.observacion);
 
-
+            if (notaIngreso.guiaRemisionAExtornar != null)
+            {
+                InputParameterAdd.Guid(objCommand, "idMovimientoAlmacenExtornado", notaIngreso.guiaRemisionAExtornar.idMovimientoAlmacen);
+                InputParameterAdd.Int(objCommand, "motivoExtorno", (int)notaIngreso.motivoExtornoGuiaRemision);
+                InputParameterAdd.Varchar(objCommand, "sustentoExtorno", notaIngreso.sustentoExtorno);
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idMovimientoAlmacenExtornado", null);
+                InputParameterAdd.Int(objCommand, "motivoExtorno", null);
+                InputParameterAdd.Varchar(objCommand, "sustentoExtorno", null);
+            }
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");
@@ -217,8 +248,7 @@ namespace DataLayer
 
         public void InsertMovimientoAlmacenDetalle(MovimientoAlmacen movimientoAlmacen)
         {
-
-            foreach (DocumentoDetalle documentoDetalle in movimientoAlmacen.pedido.documentoDetalle)
+            foreach (DocumentoDetalle documentoDetalle in movimientoAlmacen.documentoDetalle)
             {
                 if(documentoDetalle.cantidadPorAtender > 0)
                 { 
@@ -236,8 +266,6 @@ namespace DataLayer
                     Guid idMovimientoAlmacenDetalle = (Guid)objCommand.Parameters["@idMovimientoAlmacenDetalle"].Value;
                 }
             }
-        
-      
         }
 
 
@@ -463,11 +491,11 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_guiaRemision");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", guiaRemision.idMovimientoAlmacen);
             DataSet dataSet = ExecuteDataSet(objCommand);
-            DataTable pedidoDataTable = dataSet.Tables[0];
-            DataTable pedidoDetalleDataTable = dataSet.Tables[1];
+            DataTable guiaRemisionDataTable = dataSet.Tables[0];
+            DataTable guiaRemisionDetalleDataTable = dataSet.Tables[1];
     
             //Datos de la cotizacion
-            foreach (DataRow row in pedidoDataTable.Rows)
+            foreach (DataRow row in guiaRemisionDataTable.Rows)
             {
                 //DATOS DE LA GUIA
                 guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
@@ -531,7 +559,7 @@ namespace DataLayer
 
             guiaRemision.documentoDetalle = new List<DocumentoDetalle>();
             //Detalle de la cotizacion
-            foreach (DataRow row in pedidoDetalleDataTable.Rows)
+            foreach (DataRow row in guiaRemisionDetalleDataTable.Rows)
             {
                 DocumentoDetalle documentoDetalle = new DocumentoDetalle();
                 documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
@@ -540,6 +568,7 @@ namespace DataLayer
                 documentoDetalle.producto = new Producto();
                 documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 documentoDetalle.producto.sku = Converter.GetString(row, "sku");
+                documentoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 guiaRemision.documentoDetalle.Add(documentoDetalle);
             }        
@@ -722,11 +751,11 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_notaIngreso");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", notaIngreso.idMovimientoAlmacen);
             DataSet dataSet = ExecuteDataSet(objCommand);
-            DataTable pedidoDataTable = dataSet.Tables[0];
-            DataTable pedidoDetalleDataTable = dataSet.Tables[1];
+            DataTable notaIngresoDataTable = dataSet.Tables[0];
+            DataTable notaIngresoDetalleDataTable = dataSet.Tables[1];
 
             //Datos de la cotizacion
-            foreach (DataRow row in pedidoDataTable.Rows)
+            foreach (DataRow row in notaIngresoDataTable.Rows)
             {
                 //DATOS DE LA GUIA
                 notaIngreso.serieDocumento = Converter.GetString(row, "serie_documento");
@@ -788,14 +817,27 @@ namespace DataLayer
 
                 //ADICIONALES
                 notaIngreso.placaVehiculo = Converter.GetString(row, "placa_vehiculo");
-              //  notaIngreso.certificadoInscripcion = Converter.GetString(row, "certificado_inscripcion");
+
+                if (Converter.GetInt(row, "motivo_extorno") > 0)
+                {
+                    notaIngreso.motivoExtornoGuiaRemision = (NotaIngreso.MotivosExtornoGuiaRemision)Converter.GetInt(row, "motivo_extorno");
+                }                
+                notaIngreso.sustentoExtorno = Converter.GetString(row, "sustento_extorno");
+
+                notaIngreso.guiaRemisionAExtornar = new GuiaRemision();
+                notaIngreso.guiaRemisionAExtornar.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen_extornado");
+                notaIngreso.guiaRemisionAExtornar.serieDocumento = Converter.GetString(row, "movimiento_almace_extorno_serie_documento");
+                notaIngreso.guiaRemisionAExtornar.numeroDocumento = Converter.GetInt(row, "movimiento_almace_extorno_numero_documento");
+
+
+                //  notaIngreso.certificadoInscripcion = Converter.GetString(row, "certificado_inscripcion");
 
             }
 
 
             notaIngreso.documentoDetalle = new List<DocumentoDetalle>();
             //Detalle de la cotizacion
-            foreach (DataRow row in pedidoDetalleDataTable.Rows)
+            foreach (DataRow row in notaIngresoDetalleDataTable.Rows)
             {
                 DocumentoDetalle documentoDetalle = new DocumentoDetalle();
                 documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
@@ -804,6 +846,7 @@ namespace DataLayer
                 documentoDetalle.producto = new Producto();
                 documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 documentoDetalle.producto.sku = Converter.GetString(row, "sku");
+                documentoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 notaIngreso.documentoDetalle.Add(documentoDetalle);
             }

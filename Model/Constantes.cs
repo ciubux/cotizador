@@ -24,6 +24,7 @@ namespace Model
         public static int LONGITUD_NUMERO = 6;
         public static String UBIGEO_VACIO = "000000";
         public static int DIAS_DESDE_BUSQUEDA = 10;
+        public static int ID_VENDEDOR_POR_ASIGNAR = 43;
 
 
 
@@ -61,6 +62,10 @@ namespace Model
         public static String VAR_SESSION_PEDIDO_ALMACEN_VER = "pedidoAlmacenVer";
 
         public static String VAR_SESSION_CLIENTE = "cliente";
+        public static String VAR_SESSION_CLIENTE_BUSQUEDA = "clienteBusqueda";
+        public static String VAR_SESSION_CLIENTE_LISTA = "clienteList";
+        public static String VAR_SESSION_CLIENTE_VER = "clienteVer";
+
         public static String VAR_SESSION_PROVEEDOR = "proveedor";
 
         public static String VAR_SESSION_GUIA = "guiaRemision";
@@ -243,7 +248,12 @@ namespace Model
             [Display(Name = "BUSQUEDA PEDIDO ALMACEN")]
             BusquedaPedidosAlmacen = 25,
             [Display(Name = "MANTENIMIENTO PEDIDO ALMACEN")]
-            MantenimientoPedidoAlmacen = 26
+            MantenimientoPedidoAlmacen = 26,
+            /*PRODUCTOS*/
+            [Display(Name = "BUSQUEDA PRODUCTOS")]
+            BusquedaProductos = 27,
+            [Display(Name = "MANTENIMIENTO PRODUCTO")]
+            MantenimientoProducto = 28,
         };
 
 

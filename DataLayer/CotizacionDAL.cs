@@ -258,7 +258,8 @@ namespace DataLayer
                     cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                     cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
                     cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
-
+                    cotizacion.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
+                    cotizacion.cliente.tipoPagoFactura =  (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
                     cotizacion.grupo = new Grupo();
                 }
 

@@ -414,9 +414,11 @@ jQuery(function ($) {
                 },
                 success: function (cliente) {
 
-                    if ($("#pagina").val() == 1)
+                    if ($("#pagina").val() == 1) {
                         $("#idCiudad").attr("disabled", "disabled");
-
+                        
+                    }
+                    $("#cotizacion_textoCondicionesPago").val(cliente.textoCondicionesPago);
                     $("#contacto").val(cliente.contacto);
                 }
             });
@@ -1608,7 +1610,7 @@ jQuery(function ($) {
      
 
         $.ajax({
-            url: "/Cotizacion/VerCotizacion",
+            url: "/Cotizacion/Show",
             data: {
                 numero: codigo
             },
@@ -1619,6 +1621,8 @@ jQuery(function ($) {
                 //var cotizacion = $.parseJSON(respuesta);
                 var cotizacion = resultado.cotizacion;
                 var usuario = resultado.usuario;
+
+                $("#verCondicionesPago").html(cotizacion.textoCondicionesPago);
                 
                 $("#verIdCliente").val(cotizacion.cliente.idCliente);
 

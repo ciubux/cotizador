@@ -26,11 +26,6 @@ namespace BusinessLayer
                 pedido.montoTotal = 0;
                 pedido.montoSubTotal = 0;
 
-               /* if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
-                {
-                    pedido.ciudad = pedido.ciudadASolicitar;
-                }*/
-
             }
             else {
                 DateTime horaActual = DateTime.Now;
@@ -61,89 +56,96 @@ namespace BusinessLayer
 
                     if (!pedido.usuario.apruebaPedidos)
                     {
-                        PrecioClienteProducto precioClienteProducto = pedidoDetalle.producto.precioClienteProducto;
-
-                        int evaluarVariacion = 0;
-                        //¿Tiene precio registrado para facturación? y eliente es el mismo?
-                        if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty && precioClienteProducto.cliente.idCliente == pedido.cliente.idCliente)
+                        //Si cliente está bloqueado
+                        if (pedido.cliente.bloqueado)
                         {
-                            if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
-                            {
-                                evaluarVariacion = 1;
-                            }
-                            else if (precioClienteProducto.fechaFinVigencia != null && DateTime.Now > precioClienteProducto.fechaFinVigencia.Value)
-                            {
-                                evaluarVariacion = 4;
-                            }
-                            else
-                            {
-                                //Si el precio unitario de referencia es válido se envía a evaluar el precio de referencia
-                                evaluarVariacion = 2;
-                            }
-
+                            pedido.seguimientoPedido.observacion = "El cliente se encuentra bloqueado.";
+                            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                         }
                         else
                         {
-                            evaluarVariacion = 3;
-                        }
-                        /*Si se tiener que evalular variacion*/
-                        if (evaluarVariacion > 0)
-                        {
+                            PrecioClienteProducto precioClienteProducto = pedidoDetalle.producto.precioClienteProducto;
 
-                            /*Se evalua contra precio cliente producto*/
-                            if (evaluarVariacion == 2)
+                            int evaluarVariacion = 0;
+                            //¿Tiene precio registrado para facturación? y eliente es el mismo?
+                            if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty && precioClienteProducto.cliente.idCliente == pedido.cliente.idCliente)
                             {
-                                //Se evalua precio cliente producto
-                          /*      if (!pedidoDetalle.esPrecioAlternativo)
+                                if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
                                 {
-                                */
+                                    evaluarVariacion = 1;
+                                }
+                                else if (precioClienteProducto.fechaFinVigencia != null && DateTime.Now > precioClienteProducto.fechaFinVigencia.Value)
+                                {
+                                    evaluarVariacion = 4;
+                                }
+                                else
+                                {
+                                    //Si el precio unitario de referencia es válido se envía a evaluar el precio de referencia
+                                    evaluarVariacion = 2;
+                                }
+
+                            }
+                            else
+                            {
+                                evaluarVariacion = 3;
+                            }
+                            /*Si se tiener que evalular variacion*/
+                            if (evaluarVariacion > 0)
+                            {
+
+                                /*Se evalua contra precio cliente producto*/
+                                if (evaluarVariacion == 2)
+                                {
+                                    //Se evalua precio cliente producto
+                                    /*      if (!pedidoDetalle.esPrecioAlternativo)
+                                          {
+                                          */
                                     if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioClienteProducto.precioUnitario + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
                         pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioClienteProducto.precioUnitario - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
                                     {
                                         pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio unitario registrado en facturación.\n";
                                         pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                                     }
-                               /* }
-                                else {
-                                    if (pedidoDetalle.precioUnitario > (pedidoDetalle.producto.precioClienteProducto.precioUnitario/ pedidoDetalle.producto.equivalencia) + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
-                                                            pedidoDetalle.precioUnitario < (pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.equivalencia) - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
-                                    {
-                                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio unitario registrado en facturación.\n";
-                                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
-                                    }
-                                }*/
-                            /*Se evalua contra precio lista*/
-                            }
-                            else {
-                                if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioLista + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
-                       pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioLista - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                                    /* }
+                                     else {
+                                         if (pedidoDetalle.precioUnitario > (pedidoDetalle.producto.precioClienteProducto.precioUnitario/ pedidoDetalle.producto.equivalencia) + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
+                                                                 pedidoDetalle.precioUnitario < (pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.equivalencia) - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                                         {
+                                             pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio unitario registrado en facturación.\n";
+                                             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                                         }
+                                     }*/
+                                    /*Se evalua contra precio lista*/
+                                }
+                                else
                                 {
-                                    if(evaluarVariacion == 1)
-                                    { 
-                                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio unitario registrado en facturación se registro hace más de " + Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION + " días.\n";
-                                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
-                                    }
-                                    if (evaluarVariacion == 4)
+                                    if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioLista + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
+                           pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioLista - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
                                     {
-                                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio unitario registrado en facturación tuvo vigencia hasta " + precioClienteProducto.fechaFinVigencia.Value.ToString(Constantes.formatoFecha) + ".\n";
-                                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                                        if (evaluarVariacion == 1)
+                                        {
+                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio unitario registrado en facturación se registro hace más de " + Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION + " días.\n";
+                                            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                                        }
+                                        if (evaluarVariacion == 4)
+                                        {
+                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio unitario registrado en facturación tuvo vigencia hasta " + precioClienteProducto.fechaFinVigencia.Value.ToString(Constantes.formatoFecha) + ".\n";
+                                            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                                        }
+                                        else
+                                        {
+                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. No se encontró precio unitario en precios registrados en facturación.\n";
+                                            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                                        }
+
                                     }
-                                    else
-                                    {
-                                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. No se encontró precio unitario en precios registrados en facturación.\n";
-                                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
-                                    }
+
 
                                 }
 
-
                             }
-
                         }
                     }
-
-
-                  
                 }
             }
 
@@ -220,6 +222,8 @@ namespace BusinessLayer
                 pedido.montoSubTotal = 0;
             }           
 
+
+
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 if (pedido.tipoPedidoCompra != Pedido.tiposPedidoCompra.Compra)
@@ -230,6 +234,13 @@ namespace BusinessLayer
                 pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
             }
+
+            if (pedido.cliente.bloqueado)
+            {
+                pedido.seguimientoPedido.observacion = "El cliente se encuentra bloqueado.";
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+            }
+            
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
                 pedidoAdjunto.usuario = pedido.usuario;

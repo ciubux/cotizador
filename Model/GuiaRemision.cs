@@ -53,9 +53,6 @@ namespace Model
         public String serieNumeroGuia { get { return  this.serieDocumento + "-" + this.numeroDocumentoString ; } }
              
 
-
-        public List<DocumentoDetalle> documentoDetalle { get; set; }
-
         public DocumentoVenta documentoVenta { get; set; }
 
         [Display(Name = "Transportista:")]
@@ -83,13 +80,13 @@ namespace Model
             PrestamoEntregado = 'P', /*PEDIDO DE VENTA*/
 
 
-            [Display(Name = "Devolución de Compra")]
+            [Display(Name = "Extorno de Compra")]
             DevolucionCompra = 'B', /*PEDIDO DE COMPRA*/
-            [Display(Name = "Devolución de Préstamo Recibido")]
+            [Display(Name = "Extorno de Préstamo Recibido")]
             DevolucionPrestamoRecibido = 'E', /*PEDIDO DE ALMACEN*/
-            [Display(Name = "Devolución de Comodato Recibido")]
+            [Display(Name = "Extorno de Comodato Recibido")]
             DevolucionComodatoRecibido = 'F', /*PEDIDO DE COMPRA*/
-            [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
+            [Display(Name = "Extorno de Transferencia Gratuita Recibida")]
             DevolucionTransferenciaGratuitaRecibida = 'H', /*PEDIDO DE COMPRA*/
 
 
@@ -160,6 +157,24 @@ namespace Model
                     (this.estaFacturado ? "Guía Emitida y Facturada" : "Guía Emitida");
             }
         }
+
+
+        /*Atributos para extorno de notas de ingreso*/
+
+
+        [Display(Name = "Motivo Extorno Nota Ingreso:")]
+        public MotivosExtornoNotaIngreso motivoExtornoNotaIngreso { get; set; }
+        public enum MotivosExtornoNotaIngreso
+        {
+            [Display(Name = "DEVOLUCIÓN TOTAL")]
+            DevolucionTotal = 6,
+            [Display(Name = "DEVOLUCIÓN POR ITEM")]
+            DevolucionItem = 7
+        };
+
+        public NotaIngreso notaIngresoAExtornar { get; set; }
+
+
 
     }
 }

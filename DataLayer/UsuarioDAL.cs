@@ -104,10 +104,11 @@ namespace DataLayer
                 usuario.apruebaMontoCredito= Converter.GetBool(row, "define_monto_credito");
                 usuario.defineResponsableComercial = Converter.GetBool(row, "define_responsable_comercial");
                 usuario.defineSupervisorComercial = Converter.GetBool(row, "define_supervisor_comercial");
-                usuario.defiineAsistenteAtencionCliente = Converter.GetBool(row, "define_asistente_atencion_cliente");
+                usuario.defineAsistenteAtencionCliente = Converter.GetBool(row, "define_asistente_atencion_cliente");
                 usuario.defineResponsablePortafolio = Converter.GetBool(row, "define_responsable_portafolio");
                 usuario.modificaPedidoVentaFechaEntregaHasta = Converter.GetBool(row, "modifica_pedido_venta_fecha_entrega_hasta");
 
+                usuario.bloqueaClientes = Converter.GetBool(row, "bloquea_clientes");
             }
 
             DataTable dataTableParametros = dataSet.Tables[1];
@@ -150,7 +151,9 @@ namespace DataLayer
                     case "MAIL_COMUNICACION_FACTURAS":
                         Constantes.MAIL_COMUNICACION_FACTURAS = valorParametro; break;
                     case "PASSWORD_MAIL_COMUNICACION_FACTURAS":
-                        Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS = valorParametro; break;                     
+                        Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS = valorParametro; break;
+                    case "ID_VENDEDOR_POR_ASIGNAR":
+                        Constantes.ID_VENDEDOR_POR_ASIGNAR = int.Parse(valorParametro); break;
 
                     case "HORA_CORTE_CREDITOS_LIMA":
                         {

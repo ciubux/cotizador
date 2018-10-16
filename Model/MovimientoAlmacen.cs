@@ -89,6 +89,9 @@ namespace Model
         [Display(Name = "Fecha Traslado Hasta:")]
         public DateTime fechaTrasladoHasta { get; set; }
 
-        
+        public List<DocumentoDetalle> documentoDetalle { get; set; }
+
+        [Display(Name = "Sustento de Extorno:")]
+        public String sustentoExtorno { get; set; }
     }
 }

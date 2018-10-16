@@ -24,15 +24,16 @@ namespace Model
 
         public Guid idCliente { get; set; }
 
-        [Display(Name = "Responsable Comercial:")]
+        [Display(Name = "Asesor Comercial:")]
         public Vendedor responsableComercial { get; set; }
-        [Display(Name = "Asistente Servicio Cliente:")]
+        [Display(Name = "Asistente de Atención al Cliente:")]
         public Vendedor asistenteServicioCliente { get; set; }
         [Display(Name = "Responsable Portafolio:")]
         public Vendedor responsabelPortafolio { get; set; }
         [Display(Name = "Supervisor Comercial:")]
-        public Vendedor supervisorComercial { get; set; }        
-
+        public Vendedor supervisorComercial { get; set; }
+        [Display(Name = "Observaciones (Créditos y Cobranzas):")]
+        public String observacionesCredito { get; set; }
     }
 
 }

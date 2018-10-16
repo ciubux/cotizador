@@ -298,12 +298,12 @@ namespace Model
             TransferenciaGratuitaEntregada = 'G', 
 
             /*GENERAN NOTAS DE INGRESO*/
-            [Display(Name = "Devolución de Venta")]
+ /*           [Display(Name = "Devolución de Venta")]
             DevolucionVenta = 'D',  //GENERA NOTA DE CREDITO
             [Display(Name = "Devolución de Comodato Entregado")]
             DevolucionComodatoEntregado = 'F', 
             [Display(Name = "Devolución de Transferencia Gratuita Entregada")]
-            DevolucionTransferenciaGratuitaEntregada = 'H' 
+            DevolucionTransferenciaGratuitaEntregada = 'H' */
         }
 
         public String tiposPedidoString
@@ -327,13 +327,13 @@ namespace Model
             TransferenciaGratuitaRecibida = 'G',
 
             /*GENERAN NOTAS DE INGRESO*/
-            [Display(Name = "Devolución de Compra")]
+   /*         [Display(Name = "Devolución de Compra")]
             DevolucionCompra = 'B', 
             [Display(Name = "Devolución de Comodato Recibido")]
             DevolucionComodatoRecibido = 'F', 
             [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
             DevolucionTransferenciaGratuitaRecibida = 'H', 
-        }
+    */    }
 
         public String tiposPedidoCompraString
         {
@@ -355,15 +355,15 @@ namespace Model
             TrasladoInternoRecibido = 'I',  //NOTA INGRESO
             [Display(Name = "Préstamo a Entregar")]
             PrestamoEntregado = 'P',   //GUIA REMISION
-            [Display(Name = "Devolución de Préstamo Entregado")]
-            DevolucionPrestamoEntregado = 'D', //NOTA INGRESO
+    //        [Display(Name = "Devolución de Préstamo Entregado")]
+    //        DevolucionPrestamoEntregado = 'D', //NOTA INGRESO
             [Display(Name = "Préstamo a Recibir")]
             PrestamoRecibido = 'R', //NOTA INGRESO
-            [Display(Name = "Devolución de Préstamo Recibido")]
+      /*      [Display(Name = "Devolución de Préstamo Recibido")]
             DevolucionPrestamoRecibido = 'E', //GUIA REMISION           
             [Display(Name = "Extorno de Guía Remisión")]
             ExtornoGuíaRemision = 'X',  //NOTA INGRESO
-
+            */
         }
 
         public String tiposPedidoAlmacenString
@@ -386,13 +386,13 @@ namespace Model
             ComodatoEntregado = tiposPedido.ComodatoEntregado,
             [Display(Name = "Transferencia Gratuita a Entregar")]
             TransferenciaGratuitaEntregada = tiposPedido.TransferenciaGratuitaEntregada,
-            [Display(Name = "Devolución de Venta")]
+      /*      [Display(Name = "Devolución de Venta")]
             DevolucionVenta = tiposPedido.DevolucionVenta,
             [Display(Name = "Devolución de Comodato Entregado")]
             DevolucionComodatoEntregado = tiposPedido.DevolucionComodatoEntregado,
             [Display(Name = "Devolución de Transferencia Gratuita Entregada")]
             DevolucionTransferenciaGratuitaEntregada = tiposPedido.DevolucionTransferenciaGratuitaEntregada,
-        }
+   */     }
         
         [Display(Name = "Tipo Pedido:")]
         public tiposPedidoCompraBusqueda tipoPedidoCompraBusqueda { get; set; }
@@ -406,13 +406,13 @@ namespace Model
             ComodatoRecibido = tiposPedidoCompra.ComodatoRecibido,
             [Display(Name = "Transferencia Gratuita a Recibir")]
             TransferenciaGratuitaRecibida = tiposPedidoCompra.TransferenciaGratuitaRecibida,
-            [Display(Name = "Devolución de Compra")]
+      /*      [Display(Name = "Devolución de Compra")]
             DevolucionCompra = tiposPedidoCompra.DevolucionCompra,
             [Display(Name = "Devolución de Comodato Recibido")]
             DevolucionComodatoRecibido = tiposPedidoCompra.DevolucionComodatoRecibido,
             [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
             DevolucionTransferenciaGratuitaRecibida = tiposPedidoCompra.DevolucionTransferenciaGratuitaRecibida,
-        }
+     */   }
 
 
         [Display(Name = "Tipo Pedido:")]
@@ -427,15 +427,15 @@ namespace Model
             TrasladoInternoRecibido = tiposPedidoAlmacen.TrasladoInternoRecibido,
             [Display(Name = "Préstamo a Entregar")]
             PrestamoEntregado = tiposPedidoAlmacen.PrestamoEntregado,
-            [Display(Name = "Devolución de Préstamo Entregado")]
-            DevolucionPrestamoEntregado = tiposPedidoAlmacen.DevolucionPrestamoEntregado,
+     //       [Display(Name = "Devolución de Préstamo Entregado")]
+    //        DevolucionPrestamoEntregado = tiposPedidoAlmacen.DevolucionPrestamoEntregado,
             [Display(Name = "Préstamo a Recibir")]
             PrestamoRecibido = tiposPedidoAlmacen.PrestamoRecibido, 
-            [Display(Name = "Devolución de Préstamo Recibido")]
+   /*         [Display(Name = "Devolución de Préstamo Recibido")]
             DevolucionPrestamoRecibido = tiposPedidoAlmacen.DevolucionPrestamoRecibido,
             [Display(Name = "Extorno de Guía Remisión")]
             ExtornoGuíaRemision = tiposPedidoAlmacen.ExtornoGuíaRemision,
-        }
+     */   }
 
 
         [Display(Name = "Solicitado Desde:")]

@@ -654,7 +654,8 @@ namespace Cotizador.Controllers
             String resultado = "{" +
                 "\"descripcionCliente\":\"" + cotizacion.cliente.ToString() + "\"," +
                 "\"idCliente\":\"" + cotizacion.cliente.idCliente + "\"," +
-                "\"contacto\":\"" + cotizacion.cliente.contacto1 + "\"" +
+                "\"contacto\":\"" + cotizacion.cliente.contacto1 + "\"," +
+                "\"textoCondicionesPago\":\"" + cotizacion.textoCondicionesPago + "\"" +
                 "}";
 
             this.CotizacionSession = cotizacion;
@@ -995,7 +996,7 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_COTIZACION] = cotizacion;
         }
 
-        public String VerCotizacion()
+        public String Show()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             CotizacionBL cotizacionBL = new CotizacionBL();

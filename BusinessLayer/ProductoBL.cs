@@ -37,6 +37,17 @@ namespace BusinessLayer
             return resultado;
         }
 
+
+
+        public Guid getProductoId(String sku)
+        {
+            using (var dal = new ProductoDAL())
+            {
+                return dal.getProductoId(sku);
+            }
+        }
+
+
         public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente)
         {
             using (var dal = new ProductoDAL())

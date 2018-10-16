@@ -1,65 +1,17 @@
 
 jQuery(function ($) {
-
-
-    //CONSTANTES POR DEFECTO
-    var cantidadDecimales = 2;
-    var cantidadCuatroDecimales = 4;
-    var IGV = 0.18;
-    var SIMBOLO_SOL = "S/";
-    var MILISEGUNDOS_AUTOGUARDADO = 5000;
-
-    //Estados para búsqueda de Pedidos
-    var ESTADOS_TODOS = -1;
-    var ESTADO_PENDIENTE_APROBACION = 0;
-    var ESTADO_APROBADA = 1;
-    var ESTADO_DENEGADA = 2;
-    var ESTADO_ACEPTADA = 3;
-    var ESTADO_RECHAZADA = 4;
-    var ESTADO_EN_EDICION = 7;
-
-    //Etiquetas de estadps para búsqueda de Pedidos
-    var ESTADO_PENDIENTE_APROBACION_STR = "Pendiente de Aprobación";
-    var ESTADO_APROBADA_STR = "Aprobada";
-    var ESTADO_DENEGADA_STR = "Denegada";
-    var ESTADO_ACEPTADA_STR = "Aceptada";
-    var ESTADO_RECHAZADA_STR = "Rechazada";
-    var ESTADO_EN_EDICION_STR = "En Edición";
-
-    //Eliminar luego 
-    var CANT_SOLO_OBSERVACIONES = 0;
-    var CANT_SOLO_CANTIDADES = 1;
-    var CANT_CANTIDADES_Y_OBSERVACIONES = 2;
-
-    var GUID_EMPTY = "00000000-0000-0000-0000-000000000000";
-
-    /*
-     * 2 BusquedaPedidos
-       3 CrearPedido
-     */
-
     
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
     var TITLE_MENSAJE_BUSQUEDA = "Ingresar datos solicitados";
 
-    function hola() {
-        alert('as');
-    }
-
-
-
-
     $(document).ready(function () {
-    
         obtenerConstantes();
-        //setTimeout(autoGuardarGuiaRemision, MILISEGUNDOS_AUTOGUARDADO);
         verificarSiExisteNuevoTransportista();
         esPaginaImpresion();
         cargarChosenCliente();
         $("#btnBusqueda").click();
-
 
         if ($("#pagina").val() == 4) {
             if ($("#idMovimientoAlmacen").val() != "") {
@@ -69,7 +21,6 @@ jQuery(function ($) {
         else if ($("#pagina").val() == 19) {
             $("#btnBusquedaGuiasFacturaConsolidada").click();
         }
-
     });
 
     window.onafterprint = function () {
@@ -359,10 +310,6 @@ jQuery(function ($) {
         changeInputString("placaVehiculo", $("#guiaRemision_placaVehiculo").val())
     });
 
-    /*
-    $("#guiaRemision_certificadoInscripcion").change(function () {
-        changeInputString("certificadoInscripcion", $("#guiaRemision_certificadoInscripcion").val())
-    });*/
 
     $("#guiaRemision_observaciones").change(function () {
         changeInputString("observaciones", $("#guiaRemision_observaciones").val())
@@ -422,12 +369,7 @@ jQuery(function ($) {
                 alert(MENSAJE_ERROR);
             },
             success: function (resultado) {
-
-
                 $('body').loadingModal('hide')
-
-              
-
                 if (resultado.guiaRemisionValidacion.tipoErrorValidacion == 0) {
                     $.alert({
                         //icon: 'fa fa-warning',
@@ -566,6 +508,22 @@ jQuery(function ($) {
             return false;
         }*/
 
+        if ($("#guiaRemision_pedido_direccionEntrega").length) {
+            if ($("#guiaRemision_pedido_direccionEntrega").val().trim() == "") {
+                $('#guiaRemision_pedido_direccionEntrega').focus();
+                $.alert({
+                    title: TITLE_VALIDACION_PEDIDO,
+                    content: 'Debe seleccionar la dirección de entrega.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                return false;
+            }
+        }
+      
+
+
         var contador = 0;
         var $j_object = $("td.detcantidad");
         $.each($j_object, function (key, value) {
@@ -684,17 +642,20 @@ jQuery(function ($) {
                 if (guiaRemision.estaAnulado == 1) {
                     $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:red")
                     $("#btnAnularGuiaRemision").hide();
+                    $("#btnExtornar").hide();
                     $("#btnImprimirGuiaRemision").hide();
                     $("#btnFacturarGuiaRemision").hide();
                 }
                 else {
                     $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:black")
                     $("#btnAnularGuiaRemision").show();
+                    $("#btnExtornar").show();
                     $("#btnImprimirGuiaRemision").show();
 
                     if (guiaRemision.estaFacturado == 1) {
                         $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:green")
                         $("#btnAnularGuiaRemision").hide();
+                        $("#btnExtornar").hide();
                         $("#btnFacturarGuiaRemision").hide();
                     } else {
                         $("#btnFacturarGuiaRemision").show();
@@ -771,14 +732,7 @@ jQuery(function ($) {
             }
         });
     }
-
-
-
-
-
     
-
-
     
 
     $("#btnCancelarGuiaRemision").click(function () {
@@ -791,25 +745,23 @@ jQuery(function ($) {
 
     function desactivarBotonesVer()
     {
-      /*  $("#btnCancelarCotizacion").attr('disabled', 'disabled');
-        $("#btnEditarCotizacion").attr('disabled', 'disabled');
-        $("#btnReCotizacion").attr('disabled', 'disabled');
-        $("#btnAprobarCotizacion").attr('disabled', 'disabled');
-        $("#btnDenegarCotizacion").attr('disabled', 'disabled');
-        $("#btnAceptarCotizacion").attr('disabled', 'disabled');
-        $("#btnRechazarCotizacion").attr('disabled', 'disabled');
-        $("#btnPDFCotizacion").attr('disabled', 'disabled');*/
+        $("#btnContinuarGenerandoNotaIngreso").attr("disabled", "disabled");
+        $("#btnCancelarNotaIngreso").attr("disabled", "disabled");
+        $("#btnCancelarVerGuiaRemision").attr("disabled", "disabled");
+        $("btnImprimirGuiaRemision").attr("disabled", "disabled");
+        $("btnFacturarGuiaRemision").attr("disabled", "disabled");
+        $("btnAnularGuiaRemision").attr("disabled", "disabled");
+        $("btnExtornar").attr("disabled", "disabled");
     }
 
     function activarBotonesVer() {
-  /*      $("#btnCancelarCotizacion").removeAttr('disabled');
-        $("#btnEditarCotizacion").removeAttr('disabled');
-        $("#btnReCotizacion").removeAttr('disabled');
-        $("#btnAprobarCotizacion").removeAttr('disabled');
-        $("#btnDenegarCotizacion").removeAttr('disabled');
-        $("#btnAceptarCotizacion").removeAttr('disabled');
-        $("#btnRechazarCotizacion").removeAttr('disabled');
-        $("#btnPDFCotizacion").removeAttr('disabled');*/
+        $("#btnContinuarGenerandoNotaIngreso").removeAttr("disabled");
+        $("#btnCancelarNotaIngreso").removeAttr("disabled");
+        $("#btnCancelarVerGuiaRemision").removeAttr("disabled");
+        $("btnImprimirGuiaRemision").removeAttr("disabled");
+        $("btnFacturarGuiaRemision").removeAttr("disabled");
+        $("btnAnularGuiaRemision").removeAttr("disabled");
+        $("btnExtornar").removeAttr("disabled");
     }
 
    
@@ -2199,7 +2151,97 @@ jQuery(function ($) {
 
 
 
-   
+
+
+    /*GENERACIÓN DE NOTA DE INGRESO*/
+    $('#btnExtornar').click(function () {
+        $("#serieNumeroDocumentoParaNotaIngreso").val($("#ver_guiaRemision_serieNumeroDocumento").html());
+        $("#modalGenerarNotaIngreso").modal();
+    });
+
+    $("#btnContinuarGenerandoNotaIngreso").click(function () {
+
+        desactivarBotonesVer();
+
+        //Se obtiene el tipo de nota de ingreso seleccionado
+        var motivoExtornoGuiaRemision = $('input:radio[name=motivoExtornoGuiaRemision]:checked').val();
+        //Se recupera el id de la guía de remisión
+        var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
+
+        if (motivoExtornoGuiaRemision == null) {
+            mostrarMensajeErrorProceso("Debe seleccionar el motivo de extorno de la Guía de Remisión.");
+            $("#btnContinuarGenerandoNotaIngreso").removeAttr("disabled");
+            $("#btnCancelarNotaIngreso").removeAttr("disabled");
+            return false;
+        }
+
+        var yourWindow;
+        $.ajax({
+            url: "/NotaIngreso/iniciarIngresoDesdeGuiaRemision",
+            type: 'POST',
+           // dataType: 'JSON',
+            data: {
+                idMovimientoAlmacen: idMovimientoAlmacen,
+                motivoExtornoGuiaRemision: motivoExtornoGuiaRemision
+            },
+            error: function (error) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                $("#btnContinuarGenerandoNotaIngreso").removeAttr("disabled");
+                $("#btnCancelarNotaIngreso").removeAttr("disabled");
+            },
+            success: function (movimientoAlmacen) {
+                window.location = '/NotaIngreso/Ingresar';
+                /*
+                if (movimientoAlmacen.tipoErrorCrearTransaccion == 0) {
+                    window.location = '/NotaCredito/Crear';
+                }
+                else {
+                    mostrarMensajeErrorProceso(MENSAJE_ERROR + "\n" + "Detalle Error: " + venta.descripcionError);
+                    $("#btnContinuarGenerandoNotaIngreso").removeAttr("disabled");
+                    $("#btnCancelarNotaIngreso").removeAttr("disabled");
+                }*/
+            }
+        });
+
+    });
+
+    $('#guiaRemision_pedido_direccionEntrega').change(function () {
+        toggleControlesDireccionEntrega();
+        var idDireccionEntrega = $('#guiaRemision_pedido_direccionEntrega').val();
+        $.ajax({
+            url: "/GuiaRemision/ChangeDireccionEntrega",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idDireccionEntrega: idDireccionEntrega
+            },
+            success: function (direccionEntrega) {
+
+                $("#guiaRemision_pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);
+                $("#guiaRemision_pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
+                $("#guiaRemision_pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
+                location.reload()
+            }
+        })
+    });
+
+
+
+    function toggleControlesDireccionEntrega() {
+        var idDireccionEntrega = $('#guiaRemision_pedido_direccionEntrega').val();
+        if (idDireccionEntrega == "") {
+            $("#guiaRemision_pedido_direccionEntrega_descripcion").attr('disabled', 'disabled');
+            $("#guiaRemision_pedido_direccionEntrega_contacto").attr('disabled', 'disabled');
+            $("#guiaRemision_pedido_direccionEntrega_telefono").attr('disabled', 'disabled');
+
+        }
+        else {
+            /*  $("#pedido_direccionEntrega_telefono").val($('#pedido_direccionEntrega').find(":selected").attr("telefono"));*/
+            $("#guiaRemision_pedido_direccionEntrega_descripcion").removeAttr("disabled");
+            $("#guiaRemision_pedido_direccionEntrega_contacto").removeAttr("disabled");
+            $("#guiaRemision_pedido_direccionEntrega_telefono").removeAttr("disabled");
+        }
+    }
 
 
 

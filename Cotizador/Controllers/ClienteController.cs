@@ -19,22 +19,46 @@ namespace Cotizador.Controllers
         {
             get
             {
-                return (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+                Cliente cliente = null;
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.BusquedaClientes: cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA]; break;
+                    case Constantes.paginas.MantenimientoCliente: cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE]; break;
+                }
+                return cliente;
             }
             set
             {
-                this.Session[Constantes.VAR_SESSION_CLIENTE] = value;
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.BusquedaClientes: this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA] = value; break;
+                    case Constantes.paginas.MantenimientoCliente: this.Session[Constantes.VAR_SESSION_CLIENTE] = value; break;
+                }
             }
         }
 
-        // GET: Cliente
         [HttpGet]
         public ActionResult Index()
         {
-            if (this.Session["usuario"] == null)
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaClientes;
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+
+            if (this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA] == null)
+            {
+                instanciarClienteBusqueda();
+            }
+
+            Cliente clienteSearch = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA];
+
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaClientes;
+            ViewBag.cliente = clienteSearch;
+            ViewBag.Si = Constantes.MENSAJE_SI;
+            ViewBag.No = Constantes.MENSAJE_NO;
             return View();
 
         }
@@ -100,23 +124,17 @@ namespace Cotizador.Controllers
 
         public void ChangeFormaPagoFactura()
         {
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
-            cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Int32.Parse(this.Request.Params["formaPagoFactura"]);
-            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+            this.ClienteSession.formaPagoFactura = (DocumentoVenta.FormaPago)Int32.Parse(this.Request.Params["formaPagoFactura"]);
         }
 
         public void ChangeTipoPagoFactura()
         {
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
-            cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPagoFactura"]);
-            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+            this.ClienteSession.tipoPagoFactura = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPagoFactura"]);
         }
 
         public void ChangePlazoCreditoSolicitado()
         {
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
-            cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["plazoCreditoSolicitado"]);
-            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+            this.ClienteSession.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["plazoCreditoSolicitado"]);
         }
 
         private void instanciarCliente()
@@ -130,6 +148,19 @@ namespace Cotizador.Controllers
             cliente.usuario = usuario;
 
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+        }
+
+        private void instanciarClienteBusqueda()
+        {
+            Cliente cliente = new Cliente();
+            cliente.idCliente = Guid.Empty;
+            cliente.ciudad = new Ciudad();
+            cliente.codigo = String.Empty;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            cliente.IdUsuarioRegistro = usuario.idUsuario;
+            cliente.usuario = usuario;
+
+            this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA] = cliente;
         }
 
         public ActionResult CancelarCreacionCliente()
@@ -196,14 +227,13 @@ namespace Cotizador.Controllers
 
         public String GetCliente()
         {
-
-
             Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE]; 
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
             Ciudad ciudad = cliente.ciudad;
             cliente = clienteBl.getCliente(idCliente);
             cliente.ciudad = ciudad;
+            cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             String resultado = JsonConvert.SerializeObject(cliente);
             this.ClienteSession = cliente;
             return resultado;
@@ -410,23 +440,6 @@ namespace Cotizador.Controllers
                         paso = 8;
                         clienteStaging.rubro = sheet.GetRow(row).GetCell(20).ToString();
 
-                      //  clienteStaging.sede = sede;
-
-                        /*
-                    ClienteStaging clienteStaging = new ClienteStaging();
-                    clienteStaging.PlazaId = sheet.GetRow(row).GetCell(0).ToString();
-                    clienteStaging.Plaza = sheet.GetRow(row).GetCell(1).ToString();
-                    clienteStaging.Id = sheet.GetRow(row).GetCell(2).ToString();
-                    clienteStaging.nombre = sheet.GetRow(row).GetCell(3).ToString();
-                    clienteStaging.documento = sheet.GetRow(row).GetCell(4).ToString();
-                    clienteStaging.codVe = sheet.GetRow(row).GetCell(5).ToString();
-                    clienteStaging.nombreComercial = sheet.GetRow(row).GetCell(6).ToString();
-                    clienteStaging.domicilioLegal = sheet.GetRow(row).GetCell(7).ToString();
-                    clienteStaging.distrito = sheet.GetRow(row).GetCell(8).ToString();
-                    clienteStaging.direccionDespacho = sheet.GetRow(row).GetCell(9).ToString();
-                    clienteStaging.distritoDespacho = sheet.GetRow(row).GetCell(10).ToString();
-                    clienteStaging.rubro = sheet.GetRow(row).GetCell(11).ToString();*/
-
                         clienteBL.setClienteStaging(clienteStaging);
 
                     }
@@ -488,7 +501,31 @@ namespace Cotizador.Controllers
             ClienteSession.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad) Int32.Parse(this.Request.Params["tipoDocumentoIdentidad"]);
         }
 
-
-
+        /*MANTENIMIENTO DE VENDEDORES*/
+        public void ChangeIdResponsableComercial()
+        {
+            if (this.Request.Params["idResponsableComercial"] == null || this.Request.Params["idResponsableComercial"] == String.Empty)
+                ClienteSession.responsableComercial.idVendedor = 0;
+            else
+                ClienteSession.responsableComercial.idVendedor = Int32.Parse(this.Request.Params["idResponsableComercial"]);
+        }
+        public void ChangeIdAsistenteServicioCliente()
+        {
+            if (this.Request.Params["idAsistenteServicioCliente"] == null || this.Request.Params["idAsistenteServicioCliente"] == String.Empty)
+                ClienteSession.asistenteServicioCliente.idVendedor = 0;
+            else
+                ClienteSession.asistenteServicioCliente.idVendedor = Int32.Parse(this.Request.Params["idAsistenteServicioCliente"]);
+        }
+        public void ChangeIdSupervisorComercial()
+        {
+            if (this.Request.Params["idSupervisorComercial"] == null || this.Request.Params["idSupervisorComercial"] == String.Empty)
+                ClienteSession.supervisorComercial.idVendedor = 0;
+            else
+                ClienteSession.supervisorComercial.idVendedor = Int32.Parse(this.Request.Params["idSupervisorComercial"]);
+        }
+        public void ChangeBloqueado()
+        {
+            ClienteSession.bloqueado = Int32.Parse(this.Request.Params["bloqueado"]) == 1;
+        }
     }
 }

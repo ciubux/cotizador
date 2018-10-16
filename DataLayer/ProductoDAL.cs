@@ -77,6 +77,21 @@ namespace DataLayer
             return lista;
         }
 
+
+        public Guid getProductoId(String sku)
+        {
+            var objCommand = GetSqlCommand("ps_productoId");
+            InputParameterAdd.Varchar(objCommand, "sku", sku);
+            DataTable dataTable = Execute(objCommand);
+
+            Guid idProducto = Guid.Empty;
+            foreach (DataRow row in dataTable.Rows)
+            {
+                idProducto = Converter.GetGuid(row, "id_producto");
+            }
+            return idProducto;
+        }
+
         public Producto getProducto(Guid idProducto, Guid idCliente)
         {
             var objCommand = GetSqlCommand("ps_getproducto");

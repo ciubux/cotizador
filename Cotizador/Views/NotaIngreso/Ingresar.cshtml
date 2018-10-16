@@ -78,9 +78,9 @@
                     @Html.LabelFor(g => notaIngreso.serieDocumentoElectronico, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.DropDownList("notaIngreso_serieDocumento",
-                     new SelectList(notaIngreso.ciudadDestino.serieDocumentoElectronicoList as IEnumerable<Model.SerieDocumentoElectronico>, "serie", "serie", notaIngreso.serieDocumentoElectronico, null),
-                     //       "Seleccione Serie",
-                     new { @class = "form-control" })
+                           new SelectList(notaIngreso.ciudadDestino.serieDocumentoElectronicoList as IEnumerable<Model.SerieDocumentoElectronico>, "serie", "serie", notaIngreso.serieDocumentoElectronico, null),
+                           //       "Seleccione Serie",
+                           new { @class = "form-control" })
                     </div>
                 </div>
             </div>
@@ -95,10 +95,6 @@
             </div>
 
         </div>
-
-
-
-
 
 
         <!--NUMEROS PEDIDO-->
@@ -133,9 +129,6 @@
                 </div>
             </div>
 
-
-
-
         </div>
 
         <div class="row">
@@ -147,50 +140,48 @@
                     @Html.LabelFor(g => notaIngreso.motivoTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.DropDownList("motivoTraslado",
-                                               EnumHelper.GetSelectList(typeof(Model.NotaIngreso.motivosTraslado), notaIngreso.motivoTraslado),
-                                               new { @class = "form-control", disabled = "disabled" }
-                                               )
+                                                     EnumHelper.GetSelectList(typeof(Model.NotaIngreso.motivosTraslado), notaIngreso.motivoTraslado),
+                                                     new { @class = "form-control", disabled = "disabled" }
+                                                     )
                     </div>
                 </div>
             </div>
 
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    <label for="notaIngreso_atencionParcial" class="control-label col-xs-4">Atención Parcial:</label>
-                    <div class="col-xs-8">
-                        @if (notaIngreso.atencionParcial)
-                    {
-                        <input checked type="checkbox" id="notaIngreso_atencionParcial" name="notaIngreso_atencionParcial" />
-                }
-                else
-                {
-                    <input type="checkbox" id="notaIngreso_atencionParcial" name="notaIngreso_atencionParcial" />
-            }
+            @if (notaIngreso.guiaRemisionAExtornar == null || (int)notaIngreso.motivoExtornoGuiaRemision == 7)
+            {
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="notaIngreso_atencionParcial" class="control-label col-xs-4">Ingreso Parcial:</label>
+                        <div class="col-xs-8">
+                            @if (notaIngreso.atencionParcial)
+                            {
+                                <input checked type="checkbox" id="notaIngreso_atencionParcial" name="notaIngreso_atencionParcial" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="notaIngreso_atencionParcial" name="notaIngreso_atencionParcial" />
+                            }
 
-
-
-                        @if (notaIngreso.ultimaAtencionParcial)
-                    {
-                        <span class="form-control-static" id="descripcionUltimaAtencionParcial">(Última Atención Parcial)</span>
-                }
-                else
-                {
-                    <span class="form-control-static" id="descripcionUltimaAtencionParcial"></span>
-            }
-
+                            @if (notaIngreso.ultimaAtencionParcial)
+                            {
+                                <span class="form-control-static" id="descripcionUltimaAtencionParcial">(Última Atención Parcial)</span>
+                            }
+                            else
+                            {
+                                <span class="form-control-static" id="descripcionUltimaAtencionParcial"></span>
+                            }
+                        </div>
 
                     </div>
-
                 </div>
-            </div>
-
-
+            }
+            
 
         </div>
 
         <div class="row">
 
-            <!--OBSERVACIOENS DEL PEDIDO-->
+            <!--OBSERVACIONES DEL PEDIDO-->
             <div class="col-sm-6 col-lg-8">
                 <div class="form-group">
                     @Html.LabelFor(g => notaIngreso.pedido.observaciones, htmlAttributes: new { @class = "control-label col-xs-2", style = "color: darkred" })
@@ -218,14 +209,60 @@
 
         </div>
 
+         @if (notaIngreso.guiaRemisionAExtornar != null)
+        {
+            <fieldset>
+                <legend>Datos del Extorno:</legend>
+                <!--GUIA REMISIÓN A EXTORNAR-->
+                <div class="row">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(p => notaIngreso.guiaRemisionAExtornar.serieDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(p => notaIngreso.guiaRemisionAExtornar.serieDocumento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(p => notaIngreso.guiaRemisionAExtornar.numeroDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(p => notaIngreso.guiaRemisionAExtornar.numeroDocumento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(p => notaIngreso.motivoExtornoGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(p => notaIngreso.motivoExtornoGuiaRemisionToString, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-sm-6 col-lg-8">
+                        <!--Sustento-->
+                        <div class="form-group">
+                            @Html.LabelFor(n => notaIngreso.sustentoExtorno, htmlAttributes: new { @class = "control-label col-xs-2" })
+                            <div class="col-xs-10">
+                                @Html.TextBoxFor(n => notaIngreso.sustentoExtorno, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+         }
+         else
+         { 
         <fieldset>
             <legend id="divpedido_transportista">Documentos de referencia:</legend>
             <!--GUIA REMISIÓN REFERENCIA-->
             <div class="row">
                 <div class="col-sm-6 col-lg-4">
-                    <!--Numero Pedido-->
                     <div class="form-group">
                         @Html.LabelFor(p => notaIngreso.serieGuiaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
                         <div class="col-xs-8">
@@ -234,7 +271,6 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
-                    <!--Numero Pedido-->
                     <div class="form-group">
                         @Html.LabelFor(p => notaIngreso.numeroGuiaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
                         <div class="col-xs-8">
@@ -247,20 +283,18 @@
             <div class="row">
 
                 <div class="col-sm-6 col-lg-4">
-                    <!--Serie-->
                     <div class="form-group">
                         @Html.LabelFor(g => notaIngreso.tipoDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
                         <div class="col-xs-8">
                             @Html.DropDownList("tipoDocumentoVentaReferencia",
-                                EnumHelper.GetSelectList(typeof(Model.NotaIngreso.TiposDocumentoVentaReferencia), notaIngreso.tipoDocumentoVentaReferencia),
-                                new { @class = "form-control" }
-                                )
+                           EnumHelper.GetSelectList(typeof(Model.NotaIngreso.TiposDocumentoVentaReferencia), notaIngreso.tipoDocumentoVentaReferencia),
+                           new { @class = "form-control" }
+                           )
                         </div>
                     </div>
                 </div>
 
                 <div class="col-sm-6 col-lg-4">
-                    <!--Numero Pedido-->
                     <div class="form-group">
                         @Html.LabelFor(p => notaIngreso.serieDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
                         <div class="col-xs-8">
@@ -269,7 +303,6 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
-                    <!--Numero Pedido-->
                     <div class="form-group">
                         @Html.LabelFor(p => notaIngreso.numeroDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
                         <div class="col-xs-8">
@@ -280,6 +313,10 @@
             </div>
 
         </fieldset>
+        }
+       
+
+
 
         @{var edicionTableDetalleGuia = "true";
         }
@@ -303,8 +340,8 @@
                 <tr>
                     <th data-name="idProducto" data-visible="false"></th>
                     <th data-name="sku" data-sortable="false">Código</th>
-                    <th data-name="cantidadPendienteAtencion" data-sortable="false" data-visible="true" data-breakpoints="xs sm" style="width: 70px">Cant. Pend. Atención</th>
-                    <th data-name="cantidadPorAtender" data-sortable="false" data-visible="true" data-breakpoints="xs sm" style="width: 70px">Cantidad a Atender</th>
+                    <th data-name="cantidadPendienteAtencion" data-sortable="false" data-visible="true" data-breakpoints="xs sm" style="width: 70px">Cant. Pend. Ingreso</th>
+                    <th data-name="cantidadPorAtender" data-sortable="false" data-visible="true" data-breakpoints="xs sm" style="width: 70px">Cantidad a Ingresar</th>
                     <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
                     <th data-name="producto" data-sortable="false">Producto</th>
                 </tr>
@@ -312,7 +349,7 @@
             <tbody>
 
                 @{int contador = 0;}
-                @foreach (var documentoDetalle in notaIngreso.pedido.documentoDetalle)
+                @foreach (var documentoDetalle in notaIngreso.documentoDetalle)
             {
                 contador++;
                 <tr data-expanded="true">

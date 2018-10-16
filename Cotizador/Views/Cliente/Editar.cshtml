@@ -58,14 +58,14 @@
 
                     <div class="col-xs-8">
                         <select class="form-control input-sm" id="idCliente" name="idCliente" required>
-                            @if (cliente.codigo != null && cliente.codigo.Length > 0)
-                    {
-                        <option selected value="@cliente.idCliente">@cliente</option>
-                    }
-                    else
-                    {
-                         <option value=""></option>
-                    }
+                            @if (cliente.idCliente != null && cliente.idCliente != Guid.Empty)
+                            {
+                                <option selected value="@cliente.idCliente">@cliente</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
                         </select>
                     </div>
                 </div>
@@ -120,8 +120,8 @@
             <!--Nombre COmercial CLIENTE-->
             <div class="col-sm-6 col-lg-8">
                 <div class="form-group">
-                    @Html.LabelFor(c => cliente.nombreComercial, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-2 col-lg-2", @id = "labelClienteNombre" })
-                    <div class="col-xs-8 col-sm-10 col-lg-10">
+                    @Html.LabelFor(c => cliente.nombreComercial, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-2", @id = "labelClienteNombre" })
+                    <div class="col-xs-8 col-sm-8 col-lg-10">
                         @Html.TextBoxFor(c => cliente.nombreComercial, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
@@ -140,11 +140,57 @@
         <!--CORREO CLIENTE-->
         <div class="row">
 
-            <div class="col-sm-6 col-sm-12 col-lg-8">
+            <div class="col-sm-6 col-lg-8">
                 <div class="form-group">
-                    @Html.LabelFor(c => cliente.correoEnvioFactura, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-2 col-lg-2" })
-                    <div class="col-xs-8 col-sm-10 col-lg-10">
+                    @Html.LabelFor(c => cliente.correoEnvioFactura, htmlAttributes: new { @class = "control-label col-xs-4  col-sm-4 col-lg-2" })
+                    <div class="col-xs-8 col-sm-8 col-lg-10">
                         @Html.TextBoxFor(c => cliente.correoEnvioFactura, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                    <div class="col-xs-8 col-sm-8 col-lg-8">
+
+                        @if (cliente.usuario.bloqueaClientes)
+                        {
+                            if (cliente.bloqueado)
+                            {
+                                <input checked type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
+                            }
+                        }
+                        else
+                        {
+                            if (cliente.bloqueado)
+                            {
+                                <input checked disabled type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
+                            }
+                            else
+                            {
+                                <input disabled type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
+                            }
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+         <div class="row">
+             
+            <div class="col-sm-6 col-lg-8">
+                <div class="form-group">
+                    @Html.LabelFor(p => cliente.observaciones, htmlAttributes: new { @class = "control-label  col-xs-4  col-sm-4 col-lg-2" })
+                    <div class="col-xs-8 col-sm-8 col-lg-10">
+                        @Html.TextAreaFor(p => cliente.observaciones, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
                     </div>
                 </div>
             </div>
@@ -269,31 +315,50 @@
             </div>
 
             <div class="row">
+             
+                    <div class="col-sm-6 col-lg-8">
+                        <div class="form-group">
+                            @Html.LabelFor(p => cliente.observacionesCredito, htmlAttributes: new { @class = "control-label  col-xs-4  col-sm-4 col-lg-2" })
+                            <div class="col-xs-8 col-sm-8 col-lg-10">
+                                @if (cliente.usuario.apruebaPlazoCredito || cliente.usuario.apruebaMontoCredito)
+                                {
+                                    @Html.TextAreaFor(p => cliente.observacionesCredito, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
+                                }
+                                else
+                                {
+                                    @Html.TextAreaFor(p => cliente.observacionesCredito, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%", @disabled = "disabled" })
+                                }
 
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => cliente.plazoCredito, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(c => cliente.plazoCredito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => cliente.formaPagoFactura, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
-                        <div class="col-xs-8">
-                            @Html.DropDownList("formaPagoCliente",
-                            EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), cliente.formaPagoFactura),
-                            new { @class = "form-control" }
-                            )
-                        </div>
-                    </div>
+                    <!--
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(dv => cliente.plazoCredito, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                <div class="col-xs-8">
+                    @Html.TextBoxFor(c => cliente.plazoCredito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
                 </div>
-
             </div>
+        </div>
+            -->
 
-        </fieldset>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(dv => cliente.formaPagoFactura, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                            <div class="col-xs-8">
+                                @Html.DropDownList("formaPagoCliente",
+                         EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), cliente.formaPagoFactura),
+                         new { @class = "form-control" }
+                         )
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+</fieldset>
 
 
 
@@ -388,7 +453,31 @@
 
 
         <fieldset>
-            <legend>Vendedores Asignados:</legend>
+            <legend>Responsables Comerciales Asignados:</legend>
+           <div class="row">
+                <!--Responsable Comercial-->
+               <div class="col-sm-6 col-lg-4">
+                   <div class="form-group">
+                       <div class="col-xs-4">
+                        </div>
+                        <div class="col-xs-8">
+                            @if (cliente.vendedoresAsignados)
+                            {
+
+                            <span id="spanVendedoresAsignados" style="color:forestgreen">Los Responsables Comerciales han sido validados.</span>
+                                <span id="spanVendedoresNoAsignados" style="color:darkred" hidden="hidden">No se ha culminado la validación de los Responsables Comerciales.</span>
+                            }
+                            else
+                            {
+                                <span id="spanVendedoresAsignados" style="color:forestgreen" hidden="hidden">Los Responsables Comerciales han sido validados.</span>
+                                <span id="spanVendedoresNoAsignados" style="color:darkred">No se ha culminado la validación de los Responsables Comerciales.</span>
+                           
+                            }
+                        </div>
+                   </div>
+               </div>
+            </div>
+
             <div class="row">
                 <!--Responsable Comercial-->
                 <div class="col-sm-6 col-lg-4">
@@ -400,7 +489,6 @@
                                     {
                                         vendedorSelectId = "idResponsableComercial",
                                         selectedValue = cliente.responsableComercial.idVendedor,
-                                        disabled = "disabled"
                                     })
                            
                         </div>
@@ -411,13 +499,25 @@
                     <div class="form-group">
                         @Html.LabelFor(c => cliente.supervisorComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idSupervisorComercial" })
                         <div class="col-xs-8">
-                            @Html.Action("GetSupervisoresComerciales", "Vendedor",
-                         new
-                         {
-                             vendedorSelectId = "idSupervisorComercial",
-                             selectedValue = cliente.supervisorComercial.idVendedor,
-                             disabled = "disabled"
-                         })
+                        @if (cliente.usuario.defineSupervisorComercial)
+                        {
+                                @Html.Action("GetSupervisoresComerciales", "Vendedor",
+                                  new
+                                  {
+                                      vendedorSelectId = "idSupervisorComercial",
+                                      selectedValue = cliente.supervisorComercial.idVendedor,
+                                  })
+                        }
+                        else
+                        {
+                                @Html.Action("GetSupervisoresComerciales", "Vendedor",
+                                  new
+                                  {
+                                      vendedorSelectId = "idSupervisorComercial",
+                                      selectedValue = cliente.supervisorComercial.idVendedor,
+                                      disabled = "disabled"
+                                  })
+                        }
                         </div>
                     </div>
                 </div>
@@ -426,19 +526,30 @@
                     <div class="form-group">
                         @Html.LabelFor(c => cliente.asistenteServicioCliente, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idSupervisorComercial" })
                         <div class="col-xs-8">
-                            @Html.Action("GetAsistentesServicioCliente", "Vendedor",
-                         new
-                         {
-                             vendedorSelectId = "idAsistenteServicioCliente",
-                             selectedValue = cliente.asistenteServicioCliente.idVendedor,
-                             disabled = "disabled"
-                         })
+                            @if (cliente.usuario.defineAsistenteAtencionCliente)
+                            {
+                                @Html.Action("GetAsistentesServicioCliente", "Vendedor",
+                                       new
+                                       {
+                                           vendedorSelectId = "idAsistenteServicioCliente",
+                                           selectedValue = cliente.asistenteServicioCliente.idVendedor,
+                                       })
+                            }
+                            else
+                            {
+                                @Html.Action("GetAsistentesServicioCliente", "Vendedor",
+                                  new
+                                  {
+                                      vendedorSelectId = "idAsistenteServicioCliente",
+                                      selectedValue = cliente.asistenteServicioCliente.idVendedor,
+                                      disabled = "disabled"
+                                  })
+                            }
+
                         </div>
                     </div>
                 </div>
             </div>
-
-
 
         </fieldset>
 
@@ -454,15 +565,14 @@
 
                 <button type="button" id="btnCancelarCliente" class="btn btn-danger">Cancelar</button>
 
-
                 @if (cliente.codigo == "" || cliente.codigo == null)
-            {
+                {
                 <button id="btnFinalizarEdicionCliente" type="button" class="btn btn-success">Finalizar Creación</button>
-        }
-        else
-        {
-            <button id="btnFinalizarEdicionCliente" type="button" class="btn btn-success">Finalizar Edición</button>
-    }
+                }
+                else
+                {
+                    <button id="btnFinalizarEdicionCliente" type="button" class="btn btn-success">Finalizar Edición</button>
+                }
             </div>
         </div>
 

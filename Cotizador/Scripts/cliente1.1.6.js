@@ -11,6 +11,18 @@ jQuery(function ($) {
         mostrarCamposSegunTipoDocIdentidad();
     });
 
+    function verificarSiExisteCliente() {
+        if ($("#idCliente").val().trim() != "") {
+            $("#idCiudad").attr("disabled", "disabled");
+            $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
+            $("#cliente_ruc").attr("disabled", "disabled");
+            $("#btnFinalizarEdicionCliente").html('Finalizar Edición');            
+        }
+        else {
+            $("#btnFinalizarEdicionCliente").html('Finalizar Creación');
+        }
+
+    }
 
     function mostrarCamposParaClienteConRUC() {
 
@@ -83,17 +95,17 @@ jQuery(function ($) {
 
     function mostrarCamposSegunTipoDocIdentidad() {
         var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
-        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI
-            || tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
+        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI.charCodeAt(0)
+            || tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA.charCodeAt(0)) {
             $("#labelClienteNombre").html("Nombres y Apellidos");
             $("#fieldSetDatosSunat").hide();
             $("#btnRecuperarDatosSunat").hide();
-           
         }
-        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC) {
-            $("#labelClienteNombre").html("Razón Social");
+        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC.charCodeAt(0)) {
+            $("#labelClienteNombre").html("Nombre Comercial");
             $("#fieldSetDatosSunat").show();
             $("#btnRecuperarDatosSunat").show();
+
         }
 
     }
@@ -173,10 +185,7 @@ jQuery(function ($) {
         document.body.scrollTop = default_scrollTop;
     };
 
-    function verificarSiExisteCliente() {
-        if ($("#idCliente").val().trim() != "" && $("#pagina").val() == 1)
-            $("#idCiudad").attr("disabled", "disabled");
-    }
+  
    
 
 
@@ -242,13 +251,7 @@ jQuery(function ($) {
                 $("#idCiudad").focus();
                 return false;
             }
-        });
-
-
-        if ($("#cliente_codigo").val().length > 0) {
-            $("#idCiudad").attr("disabled", "disabled");
-        }
-
+        });        
 
         $("#idCliente").ajaxChosen({
             dataType: "json",
@@ -260,6 +263,8 @@ jQuery(function ($) {
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
+
+        verificarSiExisteCliente();
     }
 
 
@@ -304,9 +309,9 @@ jQuery(function ($) {
                 idCliente: idCliente
             },
             success: function (cliente) {
-
+                limpiarFormulario();
+                
                 $('body').loadingModal('hide')
-                $("#idCiudad").attr("disabled", "disabled");
 
                 $("#cliente_codigo").val(cliente.codigo);
                 $("#cliente_ruc").val(cliente.ruc);
@@ -325,16 +330,51 @@ jQuery(function ($) {
                 $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
                 $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);
 
-                $("#cliente_plazoCredito").val(cliente.plazoCredito);
-                $("#tipoPagoCliente").val(cliente.tipoPagoFactura);
+                $("#tipoDocumentoIdentidad").val(cliente.tipoDocumentoIdentidad);
                 $("#formaPagoCliente").val(cliente.formaPagoFactura);
 
-            /*    $("#direccionDomicilioLegalSunat").val(resultado.direccionDomicilioLegalSunat);
-                $("#cliente_ubigeo_Departamento").val(resultado.ubigeo.Departamento);
-                $("#cliente_ubigeo_Provincia").val(resultado.ubigeo.Provincia);
-                $("#cliente_ubigeo_Distrito").val(resultado.ubigeo.Distrito);
-                */
-               // toggleControlesUbigeo();
+                /*Plazos de Crédito*/
+                $("#plazoCreditoSolicitado").val(cliente.plazoCreditoSolicitado);
+                $("#tipoPagoCliente").val(cliente.tipoPagoFactura);
+                $("#cliente_sobrePlazo").val(cliente.sobrePlazo);
+
+                /*Montos de Crédito*/
+                $("#cliente_creditoSolicitado").val(cliente.creditoSolicitado);
+                $("#cliente_creditoAprobado").val(cliente.creditoAprobado);
+                $("#cliente_sobreGiro").val(cliente.sobreGiro);
+
+                /*Vendedores*/
+
+                if (cliente.usuario.defineResponsableComercial || !cliente.vendedoresAsignados)
+                {
+                    $("#idResponsableComercial").removeAttr("disabled");
+                }
+                else
+                {
+                    $("#idResponsableComercial").attr("disabled", "disabled");
+                }
+
+                if (cliente.vendedoresAsignados) {
+                    $("#spanVendedoresAsignados").show();
+                    $("#spanVendedoresNoAsignados").hide();
+                }
+                else {
+                    $("#spanVendedoresAsignados").hide();
+                    $("#spanVendedoresNoAsignados").show();
+                }
+
+                $("#idResponsableComercial").val(cliente.responsableComercial.idVendedor);
+                $("#idSupervisorComercial").val(cliente.supervisorComercial.idVendedor);
+                $("#idAsistenteServicioCliente").val(cliente.asistenteServicioCliente.idVendedor);
+
+                $("#cliente_observacionesCredito").val(cliente.observacionesCredito);
+                $("#cliente_observaciones").val(cliente.observaciones);
+
+
+
+
+                verificarSiExisteCliente();
+                mostrarCamposSegunTipoDocIdentidad();
             }
         });
       
@@ -458,9 +498,56 @@ jQuery(function ($) {
             return false;
         }
 
+
+        var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
         var ruc = $("#cliente_ruc").val();
 
-        if (ruc.length == 11) {
+        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI.charCodeAt(0))
+        {
+            if (ruc.length != 8) {
+                $.alert({
+                    title: "DNI Inválido", type: 'orange',
+                    content: 'El número de DNI debe tener 8 dígitos.',
+                    buttons: { OK: function () { $('#cliente_ruc').focus(); }
+                    }
+                });
+            }
+
+            if ($("#cliente_nombreComercial").val().length == 0) {
+                $.alert({
+                    title: "Nombre Cliente Inválido",
+                    type: 'orange',
+                    content: 'No existe Nombre Cliente, debe ingresar el Nombre del Cliente"',
+                    buttons: {
+                        OK: function () { $('#cliente_razonSocialSunat').focus(); }
+                    }
+                });
+                return false;
+            }
+        }
+        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC.charCodeAt(0)) {
+            if (ruc.length != 11) {
+                $.alert({
+                    title: "DNI Inválido", type: 'orange',
+                    content: 'El número de DNI debe tener 8 dígitos.',
+                    buttons: {
+                        OK: function () { $('#cliente_ruc').focus(); }
+                    }
+                });
+            }
+
+            if ($("#cliente_correoEnvioFactura").val().trim().length < 8) {
+                $.alert({
+                    title: "Correo Electrónico Inválido",
+                    type: 'orange',
+                    content: 'Se debe agregar el correo electrónico para el envío de factura',
+                    buttons: {
+                        OK: function () { $('#cliente_correoEnvioFactura').focus(); }
+                    }
+                });
+
+                return false;
+            }
 
             if ($("#cliente_direccionDomicilioLegalSunat").val().length > 120) {
                 $.alert({
@@ -488,37 +575,56 @@ jQuery(function ($) {
                 return false;
             }
         }
-        else {
+        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA.charCodeAt(0)) {
+            if (ruc.length > 12 || ruc.length < 0) {
+                $.alert({
+                    title: "Carnet Extranjería Inválido", type: 'orange',
+                    content: 'El número de Carnet Extranjería debe tener 12 caracteres como máximo.',
+                    buttons: {
+                        OK: function () { $('#cliente_ruc').focus(); }
+                    }
+                });
+            }
 
             if ($("#cliente_nombreComercial").val().length == 0) {
                 $.alert({
-                    title: "No existe Nombre Cliente",
+                    title: "Nombre Cliente Inválido",
                     type: 'orange',
                     content: 'No existe Nombre Cliente, debe ingresar el Nombre del Cliente"',
                     buttons: {
                         OK: function () { $('#cliente_razonSocialSunat').focus(); }
                     }
                 });
-
                 return false;
             }
         }
 
+        if ($("#plazoCreditoSolicitado").is(':enabled')) {
 
-        
+            if ($("#plazoCreditoSolicitado").val() == "0") {
+                $.alert({
+                    title: "Plazo Crédito Solicitado Inválido",
+                    type: 'orange',
+                    content: 'Debe indicar el plazo de crédito Solicitado',
+                    buttons: {
+                        OK: function () { $('#cliente_razonSocialSunat').focus(); }
+                    }
+                });
+                return false;
+            }
+        }
 
-        if ($("#cliente_correoEnvioFactura").val().trim().length < 8) {
+      /*  if ($("#idResponsableComercial").val().trim() == 0) {
             $.alert({
-                title: "No se ingresó Correo Electrónico",
+                title: "Responsable Comercial Inválido",
                 type: 'orange',
-                content: 'Se debe agregar el correo electrónico para el envío de factura',
+                content: 'Debe seleccionar al Responsable Comercial',
                 buttons: {
-                    OK: function () { $('#cliente_correoEnvioFactura').focus();}
+                    OK: function () { $('#idResponsableComercial').focus(); }
                 }
             });
-            
             return false;
-        }
+        }        */
 
         return true;
 
@@ -658,6 +764,8 @@ jQuery(function ($) {
     });
 
 
+
+
     function changeInputString(propiedad, valor) {
         $.ajax({
             url: "/Cliente/ChangeInputString",
@@ -716,6 +824,14 @@ jQuery(function ($) {
 
     $("#cliente_condicionContribuyente").change(function () {
         changeInputString("condicionContribuyente", $("#cliente_direcclientecliente_condicionContribuyente_estadoContribuyentecionDomicilioLegalSunat").val())
+    });
+
+    $("#cliente_observacionesCredito").change(function () {
+        changeInputString("observacionesCredito", $("#cliente_observacionesCredito").val())
+    });
+
+    $("#cliente_observaciones").change(function () {
+        changeInputString("observaciones", $("#cliente_observaciones").val())
     });
 
     $("#formaPagoCliente").change(function () {
@@ -1271,53 +1387,66 @@ jQuery(function ($) {
         divVerMenos.style.display = 'none';
     });
 
-    /****************** PROGRAMACION PEDIDO****************************/
 
-    $('#modalProgramacion').on('shown.bs.modal', function () {
-        var fechaProgramacion = $("#fechaProgramaciontmp").val();
-        $("#fechaProgramacion").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacion);    
-    })
+    /*VENDEDORES*/
 
-    $("#btnAceptarProgramarPedido").click(function () {
-
-        if ($("#fechaProgramacion").val() == "" || $("#fechaProgramacion").val() == null) {
-            alert("Debe ingresar la fecha de programación.");
-            $("#fechaProgramacion").focus();
-            return false;
-        }
-        var fechaProgramacion = $('#fechaProgramacion').val();
-        var comentarioProgramacion = $('#comentarioProgramacion').val();
-        var fechaEntregaDesdeProgramacion = $("#fechaEntregaDesdeProgramacion").val();
-        var fechaEntregaHastaProgramacion = $("#fechaEntregaHastaProgramacion").val();
-
-        if (convertirFechaNumero(fechaProgramacion) < convertirFechaNumero(fechaEntregaDesdeProgramacion)
-            || convertirFechaNumero(fechaProgramacion) > convertirFechaNumero(fechaEntregaHastaProgramacion)
-        ) {
-            var respuesta = confirm("¡ATENCIÓN! Está programando la atención del pedido en una fecha fuera del rango solicitado por el cliente.");
-            if (!respuesta) {
-                $("#fechaProgramacion").focus();
-                return false;
-            }
-        }      
-
+    $("#idResponsableComercial").change(function () {
+        var idResponsableComercial = $("#idResponsableComercial").val();
         $.ajax({
-            url: "/Pedido/Programar",
-            type: 'POST',
-           // dataType: 'JSON',
+            url: "/Cliente/ChangeIdResponsableComercial", type: 'POST', 
             data: {
-                fechaProgramacion: fechaProgramacion,
-                comentarioProgramacion: comentarioProgramacion
+                idResponsableComercial: idResponsableComercial
             },
-            success: function (resultado) {
-                alert('El pedido número ' + $("#verNumero").html() + ' se programó para ser atendido.');
-                location.reload();
-            }
+            error: function () { location.reload();      },
+            success: function () {     }
         });
-        $("btnCancelarProgramarPedido").click();
+    });
+
+    $("#idSupervisorComercial").change(function () {
+        var idSupervisorComercial = $("#idSupervisorComercial").val();
+        $.ajax({
+            url: "/Cliente/ChangeIdSupervisorComercial", type: 'POST',
+            data: {
+                idSupervisorComercial: idSupervisorComercial
+            },
+            error: function () { location.reload(); },
+            success: function () { }
+        });
     });
 
 
-    
+    $("#idAsistenteServicioCliente").change(function () {
+        var idAsistenteServicioCliente = $("#idAsistenteServicioCliente").val();
+        $.ajax({
+            url: "/Cliente/ChangeIdAsistenteServicioCliente", type: 'POST',
+            data: {
+                idAsistenteServicioCliente: idAsistenteServicioCliente
+            },
+            error: function () { location.reload(); },
+            success: function () { }
+        });
+    });
 
-    /****************** FIN PROGRAMACION PEDIDO****************************/
+
+    $("#cliente_bloqueado").change(function () {
+
+        var bloqueado = 1;
+        if (!$('#cliente_bloqueado').prop('checked')) {
+            bloqueado = 0;
+        }
+
+        var estado = $("#cliente_bloqueado").val();
+        $.ajax({
+            url: "/Cliente/ChangeBloqueado",
+            type: 'POST',
+            data: {
+                bloqueado: bloqueado
+            },
+            success: function () {
+             //   location.reload();
+            }
+        });
+
+    });
+
 });

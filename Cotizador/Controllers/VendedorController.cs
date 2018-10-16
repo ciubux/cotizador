@@ -16,7 +16,7 @@ namespace Cotizador.Controllers
             return View();
         }
 
-        public ActionResult GetResponsablesComerciales(string vendedorSelectId, string selectedValue = null)
+        public ActionResult GetResponsablesComerciales(string vendedorSelectId, string selectedValue = null, string disabled = null)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -24,13 +24,14 @@ namespace Cotizador.Controllers
             {
                 Data = usuario.responsableComercialList,
                 VendedorSelectId = vendedorSelectId,
-                SelectedValue = selectedValue
+                SelectedValue = selectedValue,
+                Disabled = disabled == null || disabled != "disabled" ? false : true
             };
 
             return PartialView("_Vendedor", model);
         }
 
-        public ActionResult GetSupervisoresComerciales(string vendedorSelectId, string selectedValue = null)
+        public ActionResult GetSupervisoresComerciales(string vendedorSelectId, string selectedValue = null, string disabled = null)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -38,13 +39,14 @@ namespace Cotizador.Controllers
             {
                 Data = usuario.supervisorComercialList,
                 VendedorSelectId = vendedorSelectId,
-                SelectedValue = selectedValue
+                SelectedValue = selectedValue,
+                Disabled = disabled == null || disabled != "disabled" ? false : true
             };
 
             return PartialView("_Vendedor", model);
         }
 
-        public ActionResult GetAsistentesServicioCliente(string vendedorSelectId, string selectedValue = null)
+        public ActionResult GetAsistentesServicioCliente(string vendedorSelectId, string selectedValue = null, string disabled = null)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -52,7 +54,8 @@ namespace Cotizador.Controllers
             {
                 Data = usuario.asistenteServicioClienteList,
                 VendedorSelectId = vendedorSelectId,
-                SelectedValue = selectedValue
+                SelectedValue = selectedValue,
+                Disabled = disabled == null || disabled != "disabled" ? false : true
             };
 
             return PartialView("_Vendedor", model);

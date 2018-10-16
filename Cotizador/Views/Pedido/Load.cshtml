@@ -1,0 +1,34 @@
+﻿<div class="container">
+    <form action="/Pedido/Load" method="post" enctype="multipart/form-data" id="form1">
+        <table>
+            <tr>
+                <td>
+                    <label class="control-label col-xs-6" for="file">Archivo Pedido:</label>
+                </td>
+                <td>
+                    <input class="form-control" type="file" name="file" id="file" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label col-xs-6" for="ultimaFila">Última Fila:</label>
+                </td>
+                <td>
+                    <input class="form-control" type="number" value="0" name="ultimaFila" id="ultimaFila" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <button type="submit" class="form-control" form="form1" value="Submit">Cargar Pedidos</button>
+                </td>
+            </tr>
+            <tr>
+                <td> <label class="control-label col-xs-6" >Pedidos Creados:</label></td>
+                <td><textarea class="form-control" rows="15" cols="80">@ViewBag.numerosPedido</textarea> </td>
+            </tr>
+
+        </table>
+    </form>
+    
+</div>

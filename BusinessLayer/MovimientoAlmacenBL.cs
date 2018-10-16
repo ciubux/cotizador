@@ -84,7 +84,7 @@ namespace BusinessLayer
                 notaIngreso.seguimientoMovimientoAlmacenEntrada.estado = SeguimientoMovimientoAlmacenEntrada.estadosSeguimientoMovimientoAlmacenEntrada.Recibido;
 
                 Boolean existeCantidadPendienteAtencion = false;
-                foreach (DocumentoDetalle documentoDetalle in notaIngreso.pedido.documentoDetalle)
+                foreach (DocumentoDetalle documentoDetalle in notaIngreso.documentoDetalle)
                 {
                     if (documentoDetalle.cantidadPendienteAtencion != documentoDetalle.cantidadPorAtender)
                     {
@@ -164,6 +164,12 @@ namespace BusinessLayer
             using (var dal = new MovimientoALmacenDAL())
             {
                 notaIngreso = dal.SelectNotaIngreso(notaIngreso);
+
+                if (notaIngreso.guiaRemisionAExtornar.idMovimientoAlmacen == null || notaIngreso.guiaRemisionAExtornar.idMovimientoAlmacen == Guid.Empty)
+                {
+                    notaIngreso.guiaRemisionAExtornar = null;
+                }
+
             }
             return notaIngreso;
         }

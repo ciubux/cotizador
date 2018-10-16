@@ -1,6 +1,8 @@
 ﻿using BusinessLayer;
 using Model;
 using Newtonsoft.Json;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -1537,6 +1539,296 @@ namespace Cotizador.Controllers
 
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.UpdateStockConfirmado(pedido);
+        }
+
+
+        [HttpGet]
+        public ActionResult Load()
+        {
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.modificaMaestroProductos)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
+            ViewBag.numerosPedido = String.Empty;
+            return View();
+        }
+
+
+        private void addProductoCargaMasiva(Pedido pedido, String SKU, int esUnidadAlternativa, int cantidad, Decimal precioNeto)
+        {
+
+            PedidoDetalle detalle = new PedidoDetalle(pedido.usuario);
+            ProductoBL productoBL = new ProductoBL();
+
+            Guid idProducto = productoBL.getProductoId(SKU);
+            Producto producto = productoBL.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
+            detalle.producto = producto;
+
+
+            /*SE REQUIERE CALCULAR*/
+            detalle.porcentajeDescuento = 0;// Decimal.Parse(Request["porcentajeDescuento"].ToString());
+           
+
+            detalle.cantidad = cantidad;          
+            detalle.esPrecioAlternativo = esUnidadAlternativa == 1;
+            detalle.porcentajeDescuento = 100 - (precioNeto * 100 / detalle.precioLista);
+
+            detalle.observacion = String.Empty;
+            //decimal precioNeto = Decimal.Parse(Request["precio"].ToString());
+           // decimal costo = Decimal.Parse(Request["costo"].ToString());
+            decimal flete = 0;// Decimal.Parse(Request["flete"].ToString());
+            if (detalle.esPrecioAlternativo)
+            {
+                //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
+                //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
+                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * producto.equivalencia));
+
+                //Si es el precio Alternativo se debe modificar el precio_cliente_producto para que compare con el precio
+                //de la unidad alternativa en lugar del precio de la unidad estandar
+                //detalle.producto.precioClienteProducto.precioUnitario =
+                //  detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
+                detalle.producto.precioClienteProducto.precioUnitario =
+                detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
+            }
+            else
+            {
+                detalle.precioNeto = precioNeto;
+            }
+            detalle.flete = flete;
+            pedido.pedidoDetalleList.Add(detalle);
+
+            //CotizacionDetalle cotizacionDetalle = (CotizacionDetalle)Convert.ChangeType(pedido, typeof(CotizacionDetalle));
+            //Calcula los montos totales de la cabecera de la cotizacion
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.calcularMontosTotales(pedido);
+
+
+            detalle.unidad = detalle.producto.unidad;
+            //si esPrecioAlternativo  se mostrará la unidad alternativa
+            if (detalle.esPrecioAlternativo)
+            {
+                detalle.unidad = detalle.producto.unidad_alternativa;
+            }
+
+            var nombreProducto = detalle.producto.descripcion;
+            /* if (pedido.mostrarCodigoProveedor)
+             {*/
+            nombreProducto = detalle.producto.skuProveedor + " - " + detalle.producto.descripcion;
+
+            Decimal precioUnitarioRegistrado = detalle.producto.precioClienteProducto.precioUnitario;
+
+
+        }
+
+
+        private Pedido instanciarPedidoCargaMasiva(String ruc, String nombreSolicitante, 
+            String codCentroCostosCliente, String codCentroCostosMP, String centroCostos,
+            String direccionEntrega, String sedeMP, String ubigeo, String observaciones, 
+            int plazoEntrega, String ordenCompra)
+        {
+            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            pedido.idPedido = Guid.Empty;
+            pedido.numeroPedido = 0;
+            pedido.numeroGrupoPedido = null;
+            pedido.cotizacion = new Cotizacion();
+            pedido.ubigeoEntrega = new Ubigeo();
+            pedido.ubigeoEntrega.Id = ubigeo;
+
+            ClienteBL clienteBL = new ClienteBL();
+
+            Guid idCliente = clienteBL.getClienteId(ruc, sedeMP);
+            
+
+            //pedido.ciudad = new Ciudad();
+            pedido.cliente = clienteBL.getCliente(idCliente);
+            pedido.ciudad = pedido.cliente.ciudad;
+  
+            pedido.ciudadASolicitar = new Ciudad();
+            pedido.numeroReferenciaCliente = null;
+            pedido.direccionEntrega = new DireccionEntrega();
+            pedido.direccionEntrega.descripcion = direccionEntrega;
+
+            pedido.solicitante = new Solicitante();
+            pedido.solicitante.nombre = nombreSolicitante;         
+
+            pedido.fechaSolicitud = DateTime.Now;
+            pedido.fechaEntregaDesde = DateTime.Now.AddDays(1) ;
+            pedido.fechaEntregaHasta = DateTime.Now.AddDays(1+plazoEntrega);
+            pedido.horaEntregaDesde = "09:00";
+            pedido.horaEntregaHasta = "18:00";
+            pedido.contactoPedido = String.Empty;
+            pedido.telefonoContactoPedido = String.Empty;
+            pedido.incluidoIGV = false;
+            //  pedido.tasaIGV = Constantes.IGV;
+            //pedido.flete = 0;
+            // pedido.mostrarCodigoProveedor = true;
+            pedido.observaciones = observaciones +" CENTRO COSTOS: " + centroCostos+", CODIGO CENTRO COSTOS CLIENTE: " +codCentroCostosCliente +", CODIGO CENTRO COSTOS MP: " + codCentroCostosMP;
+            pedido.numeroReferenciaCliente = ordenCompra;
+
+            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            pedido.seguimientoPedido = new SeguimientoPedido();
+            pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
+            pedido.pedidoDetalleList = new List<PedidoDetalle>();
+            pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
+
+            return pedido;
+
+        }
+
+
+        [HttpPost]
+        public ActionResult Load(HttpPostedFileBase file)
+        {
+            try
+            {
+
+                HSSFWorkbook hssfwb;
+
+                ProductoBL productoBL = new ProductoBL();
+                productoBL.truncateProductoStaging();
+
+                hssfwb = new HSSFWorkbook(file.InputStream);
+
+                ISheet sheet = hssfwb.GetSheetAt(0);
+                int row = 1;
+                int ultimaFila = Int32.Parse(Request["ultimaFila"].ToString());
+                if (ultimaFila == 0)
+                {
+                    ultimaFila = sheet.LastRowNum;
+                }
+                else
+                {
+                    ultimaFila--;
+                }
+
+
+                /*Datos de Cliente y Solicitud*/
+                String ruc = UtilesHelper.getValorCelda(sheet,3,"B");
+                String solicitante = UtilesHelper.getValorCelda(sheet, 5, "B");
+                int plazoCredito = UtilesHelper.getValorCeldaInt(sheet, 6, "B");
+                int plazoEntrega = UtilesHelper.getValorCeldaInt(sheet, 7, "B");
+                String ordenCompra = UtilesHelper.getValorCelda(sheet, 8, "B");
+
+
+
+                List<Decimal> subTotales = new List<Decimal>();
+                List<String> ubigeos = new List<String>();
+                List<String> direccionesEntrega = new List<String>();
+
+
+
+                List<Pedido> pedidoList = new List<Pedido>();
+                Pedido ultimoPedido = new Pedido();
+                //Se considera la ultimafila más uno porque estamos trabajando con las posiciones físicas.
+                for (row = 12; row <= ultimaFila + 1; row++)
+                {
+                    try {
+                        //Se identifica el tipo de fila
+                        String tipo = UtilesHelper.getValorCelda(sheet, row, "C");
+                        if (tipo.Equals("C"))
+                        {
+                            //Si es cabecera se instancia el pedido
+                            String codigoCentroCostosCliente = UtilesHelper.getValorCelda(sheet, row, "A");
+                            String codigoCentroCostosMP = UtilesHelper.getValorCelda(sheet, row, "B");
+                            String nombreCentroCostos = UtilesHelper.getValorCelda(sheet, row, "D");
+                            String direccionEntrega = UtilesHelper.getValorCelda(sheet, row, "E");
+                            String observaciones = UtilesHelper.getValorCelda(sheet, row, "F");
+                            String sedeMP = UtilesHelper.getValorCelda(sheet, row, "G");
+                            String ubigeo = UtilesHelper.getValorCelda(sheet, row, "H");
+
+                            Decimal subtotal = UtilesHelper.getValorCeldaDecimal(sheet, row, "I");
+
+                            subTotales.Add(subtotal);
+                            ubigeos.Add(ubigeo);
+                            direccionesEntrega.Add(direccionEntrega);
+
+
+                            Pedido pedido = this.instanciarPedidoCargaMasiva(ruc, solicitante,
+                                codigoCentroCostosCliente, codigoCentroCostosMP, nombreCentroCostos,
+                                direccionEntrega, sedeMP, ubigeo, observaciones, plazoEntrega, ordenCompra);
+                            ultimoPedido = pedido;
+                            pedidoList.Add(pedido);
+                        }
+                        else if(tipo.Equals("D"))
+                        {
+
+                            String skuMP = UtilesHelper.getValorCelda(sheet, row, "D");
+                            int unidadAlternativa = UtilesHelper.getValorCeldaInt(sheet, row, "F");
+                            int cantidad = UtilesHelper.getValorCeldaInt(sheet, row, "G");
+                            decimal precioNeto = UtilesHelper.getValorCeldaDecimal(sheet, row, "H");
+
+                            if (cantidad > 0 && precioNeto > 0)
+                            {
+                                //Si es detalle se agrega el producto al último pedido
+                                addProductoCargaMasiva(ultimoPedido, skuMP, unidadAlternativa, cantidad, precioNeto);
+                            }
+                        }                
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Usuario usuario = (Usuario)this.Session["usuario"];
+                        Log log = new Log(ex.ToString() + " paso:", TipoLog.Error, usuario);
+                        LogBL logBL = new LogBL();
+                        logBL.insertLog(log);
+
+
+                    }
+                }
+
+                String numerosPedido = String.Empty;
+
+
+                int contadorPedidos = 0;
+
+                foreach (Pedido pedido in pedidoList)
+                {
+                    PedidoBL pedidoBL = new PedidoBL();
+                    pedidoBL.InsertPedido(pedido);
+                    numerosPedido = numerosPedido + pedido.numeroPedidoString;
+
+                    if (pedido.montoSubTotal != subTotales[contadorPedidos])
+                    {
+                        numerosPedido = numerosPedido + "[Diferencia subtotal] ";
+                    }
+                    if (!pedido.ubigeoEntrega.Id.Equals(ubigeos[contadorPedidos]))
+                    {
+                        numerosPedido = numerosPedido + "[Diferencia ubigeo] ";
+                    }
+                    if (!pedido.direccionEntrega.descripcion.Equals(direccionesEntrega[contadorPedidos]))
+                    {
+                        numerosPedido = numerosPedido + "[Diferencia dirección entrega] ";
+                    }
+
+                    numerosPedido = numerosPedido + ",";
+
+                    contadorPedidos++;
+
+                }
+
+                ViewBag.numerosPedido = numerosPedido.Substring(0, numerosPedido.Length - 1);
+
+            }
+            catch (Exception ex)
+            {
+                Usuario usuario = (Usuario)this.Session["usuario"];
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+                return View("CargaIncorrecta");
+            }
+
+            return View();
         }
 
 

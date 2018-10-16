@@ -311,6 +311,8 @@ namespace Cotizador.Controllers
                 TransportistaBL transportistaBL = new TransportistaBL();
                 notaIngreso.ciudadDestino.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
 
+                notaIngreso.documentoDetalle = notaIngreso.pedido.documentoDetalle;
+
             }
             catch (Exception ex)
             {
@@ -322,6 +324,77 @@ namespace Cotizador.Controllers
 
         }
 
+        public void iniciarIngresoDesdeGuiaRemision()
+        {
+            try
+            {
+                instanciarNotaIngreso();
+                NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
+
+                notaIngreso.motivoExtornoGuiaRemision = (NotaIngreso.MotivosExtornoGuiaRemision)Int32.Parse(Request.Params["motivoExtornoGuiaRemision"]);
+
+                notaIngreso.guiaRemisionAExtornar = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+                
+                notaIngreso.pedido = notaIngreso.guiaRemisionAExtornar.pedido;
+
+
+                if (notaIngreso.guiaRemisionAExtornar.motivoTraslado == GuiaRemision.motivosTraslado.Venta)
+                {
+                    notaIngreso.pedido.tipo = Pedido.tipos.Venta;
+                    notaIngreso.pedido.tipoPedido = Pedido.tiposPedido.Venta;
+                    notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.DevolucionVenta;
+                }
+                else if (notaIngreso.guiaRemisionAExtornar.motivoTraslado == GuiaRemision.motivosTraslado.ComodatoEntregado)
+                {
+                    notaIngreso.pedido.tipo = Pedido.tipos.Venta;
+                    notaIngreso.pedido.tipoPedido = Pedido.tiposPedido.ComodatoEntregado;
+                    notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.DevolucionComodatoEntregado;
+                }
+                else if (notaIngreso.guiaRemisionAExtornar.motivoTraslado == GuiaRemision.motivosTraslado.TransferenciaGratuitaEntregada)
+                {
+                    notaIngreso.pedido.tipo = Pedido.tipos.Venta;
+                    notaIngreso.pedido.tipoPedido = Pedido.tiposPedido.TransferenciaGratuitaEntregada;
+                    notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.DevolucionTransferenciaGratuitaEntregada;
+                }
+                else if (notaIngreso.guiaRemisionAExtornar.motivoTraslado == GuiaRemision.motivosTraslado.PrestamoEntregado)
+                {
+                    notaIngreso.pedido.tipo = Pedido.tipos.Almacen;
+                    notaIngreso.pedido.tipoPedidoAlmacen = Pedido.tiposPedidoAlmacen.PrestamoEntregado;
+                    notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.DevolucionPrestamoEntregado;
+                }
+
+
+                notaIngreso.observaciones = String.Empty;
+                notaIngreso.documentoDetalle = notaIngreso.guiaRemisionAExtornar.documentoDetalle;
+
+                foreach (DocumentoDetalle documentoDetalle in notaIngreso.documentoDetalle)
+                {
+                    documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidadSolicitada;
+                    documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadSolicitada;
+                }
+                       
+                CiudadBL ciudadBL = new CiudadBL();
+                Ciudad ciudadDestino = ciudadBL.getCiudad(notaIngreso.guiaRemisionAExtornar.ciudadOrigen.idCiudad);
+                ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
+
+                notaIngreso.ciudadDestino = ciudadDestino;
+
+                notaIngreso.transportista = new Transportista();
+                notaIngreso.serieDocumento = ciudadDestino.serieNotaIngreso;
+                notaIngreso.numeroDocumento = ciudadDestino.siguienteNumeroNotaIngreso;
+                TransportistaBL transportistaBL = new TransportistaBL();
+                notaIngreso.ciudadDestino.transportistaList = transportistaBL.getTransportistas(notaIngreso.guiaRemisionAExtornar.ciudadOrigen.idCiudad);
+
+                this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
+            }
+            catch (Exception ex)
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+            }
+        }
 
         public ActionResult Ingresar()
         {
@@ -429,11 +502,11 @@ namespace Cotizador.Controllers
 
             foreach (DocumentoDetalleJson documentoDetalleJson in documentoDetalleList)
             {
-                DocumentoDetalle documentoDetalle = notaIngreso.pedido.documentoDetalle.Where(d => d.producto.idProducto == Guid.Parse(documentoDetalleJson.idProducto)).FirstOrDefault();
+                DocumentoDetalle documentoDetalle = notaIngreso.documentoDetalle.Where(d => d.producto.idProducto == Guid.Parse(documentoDetalleJson.idProducto)).FirstOrDefault();
                 documentoDetalle.cantidadPorAtender = documentoDetalleJson.cantidad;
             }
             this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
-            return "{\"cantidad\":\"" + notaIngreso.pedido.documentoDetalle.Count + "\"}";
+            return "{\"cantidad\":\"" + notaIngreso.documentoDetalle.Count + "\"}";
         }
         #endregion
 
@@ -577,24 +650,21 @@ namespace Cotizador.Controllers
             this.NotaIngresoSession = notaIngreso;
         }
 
-       /* public void ChangeAtencionParcial()
+        public void ChangeAtencionParcial()
         {
             NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
             notaIngreso.atencionParcial = Int32.Parse( this.Request.Params["atencionParcial"])==1;
 
             if (!notaIngreso.atencionParcial)
             {
-                foreach (DocumentoDetalle documentoDetalle in notaIngreso.pedido.documentoDetalle)
+                foreach (DocumentoDetalle documentoDetalle in notaIngreso.documentoDetalle)
                 {
                     documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadPendienteAtencion;
                 }
 
             }
-            
-
-
             this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
-        }*/
+        }
 
         /*
         public void ChangeUltimaAtencionParcial()

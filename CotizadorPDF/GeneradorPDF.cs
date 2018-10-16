@@ -573,6 +573,11 @@ namespace cotizadorPDF
                 string[] stringSeparators = new string[] { "\n" };
                 string[] lines = observaciones.Split(stringSeparators, StringSplitOptions.None);
 
+
+                sectionObervaciones.Canvas.DrawString("* Condiciones de Pago: " + cot.textoCondicionesPago, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                y = y + sepLine;
+
+
                 if (cot.incluidoIGV)
                 {
                     sectionObervaciones.Canvas.DrawString("* Los precios incluyen IGV.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);

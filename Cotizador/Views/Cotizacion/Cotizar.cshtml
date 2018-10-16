@@ -520,6 +520,17 @@
         <div class="row">
             <div class="col-sm-6 col-lg-9">
                 <div class="form-group">
+                    <label for="condicionesPago" class="control-label col-xs-2">Condiciones de Pago:</label>
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => cotizacion.textoCondicionesPago, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
                     <label for="observaciones" class="control-label col-xs-2">Observaciones:</label>
                     <div class="col-xs-10">
                         <textarea rows="6" cols="100" style="min-width: 100%" id="observaciones" name="observaciones">@cotizacion.observaciones</textarea>

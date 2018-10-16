@@ -116,10 +116,10 @@ namespace Model
         public bool apruebaMontoCredito { get; set; }
         public bool defineResponsableComercial { get; set; }
         public bool defineSupervisorComercial { get; set; }
-        public bool defiineAsistenteAtencionCliente { get; set; }
+        public bool defineAsistenteAtencionCliente { get; set; }
         public bool defineResponsablePortafolio { get; set; }
         public bool modificaPedidoVentaFechaEntregaHasta { get; set; }
-
+        public bool bloqueaClientes { get; set; }
 
         public List<Vendedor> vendedorList { get; set; }
 

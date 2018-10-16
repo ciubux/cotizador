@@ -45,3 +45,6 @@ C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Sett
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\NPOI.dll
+C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\cesar\Documents\MP2\cotizador\CotizadorPDF\bin\Debug\NPOI.xml

@@ -165,7 +165,7 @@ namespace Cotizador.Controllers
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
 
             String[] movDesde = this.Request.Params["fechaTrasladoDesde"].Split('/');
-            guiaRemision.fechaTrasladoDesde = new DateTime(Int32.Parse(movDesde[2]), Int32.Parse(movDesde[1]), Int32.Parse(movDesde[0]));
+            guiaRemision.fechaTrasladoDesde = new DateTime(Int32.Parse(movDesde[2]), Int32.Parse(movDesde[1]), Int32.Parse(movDesde[0]),0,0,0);
 
             String[] movHasta = this.Request.Params["fechaTrasladoHasta"].Split('/');
             guiaRemision.fechaTrasladoHasta = new DateTime(Int32.Parse(movHasta[2]), Int32.Parse(movHasta[1]), Int32.Parse(movHasta[0]), 23, 59, 59);
@@ -449,7 +449,7 @@ namespace Cotizador.Controllers
                 guiaRemision.numeroDocumento = ciudadOrigen.siguienteNumeroGuiaRemision;
                 TransportistaBL transportistaBL = new TransportistaBL();
                 guiaRemision.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
-
+                guiaRemision.documentoDetalle = guiaRemision.pedido.documentoDetalle;
             }
             catch (Exception ex)
             {
@@ -461,7 +461,99 @@ namespace Cotizador.Controllers
 
         }
 
+        public void iniciarAtencionDesdeNotaIngreso()
+        {
+            try
+            {
+                instanciarGuiaRemision();
+                GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
 
+                //new NotaIngreso();
+                //notaIngreso.tipoNotaIngreso = (NotaIngreso.TiposNotaIngreso)Char.Parse(Request.Params["tipoNotaIngreso"]);
+                //notaIngreso.guiaRemisionAExtornar = new GuiaRemision();
+                
+                guiaRemision.notaIngresoAExtornar = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_VER];
+
+                guiaRemision.pedido = guiaRemision.notaIngresoAExtornar.pedido;
+
+                ClienteBL clienteBL = new ClienteBL();            
+                //Revisar si es necesario recuperar el cliente
+                guiaRemision.pedido.cliente = clienteBL.getCliente(guiaRemision.pedido.cliente.idCliente);
+
+                //Se obtiene la lista de direccioines de entrega registradas para el cliente
+                DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
+                guiaRemision.pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(guiaRemision.pedido.cliente.idCliente);
+
+                SolicitanteBL solicitanteBL = new SolicitanteBL();
+                guiaRemision.pedido.cliente.solicitanteList = solicitanteBL.getSolicitantes(guiaRemision.pedido.cliente.idCliente);
+
+                guiaRemision.pedido.direccionEntrega = new DireccionEntrega();
+
+                //Se limpia el ubigeo de entrega
+                guiaRemision.pedido.ubigeoEntrega = new Ubigeo();
+                guiaRemision.pedido.ubigeoEntrega.Id = Constantes.UBIGEO_VACIO;
+
+              
+
+                if (guiaRemision.notaIngresoAExtornar.motivoTraslado == NotaIngreso.motivosTraslado.Compra)
+                {
+                    guiaRemision.pedido.tipo = Pedido.tipos.Compra;
+                    guiaRemision.pedido.tipoPedidoCompra = Pedido.tiposPedidoCompra.Compra;
+                    guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.DevolucionCompra;
+                }
+                else if (guiaRemision.notaIngresoAExtornar.motivoTraslado == NotaIngreso.motivosTraslado.ComodatoRecibido)
+                {
+                    guiaRemision.pedido.tipo = Pedido.tipos.Compra;
+                    guiaRemision.pedido.tipoPedido = Pedido.tiposPedido.ComodatoEntregado;
+                    guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.DevolucionComodatoRecibido;
+                }
+                else if (guiaRemision.notaIngresoAExtornar.motivoTraslado == NotaIngreso.motivosTraslado.TransferenciaGratuitaRecibida)
+                {
+                    guiaRemision.pedido.tipo = Pedido.tipos.Compra;
+                    guiaRemision.pedido.tipoPedido = Pedido.tiposPedido.TransferenciaGratuitaEntregada;
+                    guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.DevolucionCompra;
+                }
+                else if (guiaRemision.notaIngresoAExtornar.motivoTraslado == NotaIngreso.motivosTraslado.PrestamoRecibido)
+                {
+                    guiaRemision.pedido.tipo = Pedido.tipos.Almacen;
+                    guiaRemision.pedido.tipoPedidoAlmacen = Pedido.tiposPedidoAlmacen.PrestamoRecibido;
+                    guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.DevolucionPrestamoRecibido;
+                }
+
+
+                guiaRemision.observaciones = String.Empty;
+                guiaRemision.documentoDetalle = guiaRemision.notaIngresoAExtornar.documentoDetalle;
+
+                foreach (DocumentoDetalle documentoDetalle in guiaRemision.documentoDetalle)
+                {
+                    documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidadSolicitada;
+                    documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadSolicitada;
+                }
+
+
+
+              CiudadBL ciudadBL = new CiudadBL();
+                Ciudad ciudadDestino = ciudadBL.getCiudad(guiaRemision.notaIngresoAExtornar.ciudadDestino.idCiudad);
+                ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
+                guiaRemision.ciudadOrigen = ciudadDestino;
+                guiaRemision.transportista = new Transportista();
+                guiaRemision.serieDocumento = ciudadDestino.serieGuiaRemision;
+                guiaRemision.numeroDocumento = ciudadDestino.siguienteNumeroGuiaRemision;
+                TransportistaBL transportistaBL = new TransportistaBL();
+                guiaRemision.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(guiaRemision.notaIngresoAExtornar.ciudadDestino.idCiudad);
+                                
+                
+
+                this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+            }
+            catch (Exception ex)
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+            }
+        }
         public ActionResult Guiar()
         {
 
@@ -572,11 +664,32 @@ namespace Cotizador.Controllers
 
             foreach (DocumentoDetalleJson documentoDetalleJson in documentoDetalleList)
             {
-                DocumentoDetalle documentoDetalle = guiaRemision.pedido.documentoDetalle.Where(d => d.producto.idProducto == Guid.Parse(documentoDetalleJson.idProducto)).FirstOrDefault();
+                DocumentoDetalle documentoDetalle = guiaRemision.documentoDetalle.Where(d => d.producto.idProducto == Guid.Parse(documentoDetalleJson.idProducto)).FirstOrDefault();
                 documentoDetalle.cantidadPorAtender = documentoDetalleJson.cantidad;
             }
             this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
             return "{\"cantidad\":\"" + guiaRemision.pedido.documentoDetalle.Count + "\"}";
+        }
+
+         public string ChangeDireccionEntrega()
+        {
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+
+            if (this.Request.Params["idDireccionEntrega"] == null || this.Request.Params["idDireccionEntrega"].Equals(String.Empty))
+            {
+                guiaRemision.pedido.direccionEntrega = new DireccionEntrega();
+            }
+            else
+            { 
+                Guid idDireccionEntrega = Guid.Parse(this.Request.Params["idDireccionEntrega"]);
+                guiaRemision.pedido.direccionEntrega = guiaRemision.pedido.cliente.direccionEntregaList.Where(d => d.idDireccionEntrega == idDireccionEntrega).FirstOrDefault();
+                guiaRemision.pedido.ubigeoEntrega = guiaRemision.pedido.direccionEntrega.ubigeo;
+
+            }
+
+            guiaRemision.pedido.existeCambioDireccionEntrega = false;
+            this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+            return JsonConvert.SerializeObject(guiaRemision.pedido.direccionEntrega);
         }
         #endregion
 
