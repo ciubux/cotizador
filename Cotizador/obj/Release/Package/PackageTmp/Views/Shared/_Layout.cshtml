@@ -59,6 +59,7 @@
                         var linkMantenimientoNotaDebito = "";
 
                         var linkMaestros = "";
+                        var linkBusquedaCliente = "";
                         var linkMantenimientoCliente = "";
                         var linkMantenimientoProducto = "";
 
@@ -69,39 +70,44 @@
 
                     }
                     @if (this.Session["pagina"] != null)
-                    {
-                        switch ((int)this.Session["pagina"])
-                        {
-                            case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
-                            case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active"; break;
-                            case 2: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
-                            case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
-                            case 4: linkBusquedaGuiasRemision = "ative"; linkMovimientosAlmacen = "active"; break;
-                            case 5: linkMantenimientoGuiaRemision = "ative"; linkMovimientosAlmacen = "active"; break;
-                            case 19: linkBusquedaGuiasRemisionConsolidarFactura = "ative"; linkMovimientosAlmacen = "active"; break;
+                            {
+                                switch ((int)this.Session["pagina"])
+                                {
+                                    case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
+                                    case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active"; break;
+                                    case 2: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
+                                    case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
+                                    case 4: linkBusquedaGuiasRemision = "ative"; linkMovimientosAlmacen = "active"; break;
+                                    case 5: linkMantenimientoGuiaRemision = "ative"; linkMovimientosAlmacen = "active"; break;
+                                    case 19: linkBusquedaGuiasRemisionConsolidarFactura = "ative"; linkMovimientosAlmacen = "active"; break;
 
-                            case 6: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
-                            case 7: linkMantenimientoFactura = "ative"; linkDocumentosVenta = "active"; break;
-                            case 8: linkBusquedaBoleta = "ative"; linkDocumentosVenta = "active"; break;
-                            case 9: linkMantenimientoBoleta = "ative"; linkDocumentosVenta = "active"; break;
-                            case 10: linkBusquedaNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
-                            case 11: linkMantenimientoNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
-                            case 12: linkBusquedaNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
-                            case 13: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
-                            case 14: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
-                            case 15: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
-                            case 16: linkMantenimientoCliente = "ative"; linkMaestros = "active"; break;
-                            case 17: linkMantenimientoProducto = "ative"; linkMaestros = "active"; break;
+                                    case 6: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
+                                    case 7: linkMantenimientoFactura = "ative"; linkDocumentosVenta = "active"; break;
+                                    case 8: linkBusquedaBoleta = "ative"; linkDocumentosVenta = "active"; break;
+                                    case 9: linkMantenimientoBoleta = "ative"; linkDocumentosVenta = "active"; break;
+                                    case 10: linkBusquedaNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
+                                    case 11: linkMantenimientoNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
+                                    case 12: linkBusquedaNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
+                                    case 13: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
+                                    case 14: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
+                                    case 15: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
 
-                            case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
-                            case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
-                            case 22: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
-                            case 23: linkBusquedaPedidosCompra = "ative"; linkPedidos = "active"; break;
-                            case 24: linkMantenimientoPedidoCompra = "ative"; linkPedidos = "active"; break;
-                            case 25: linkBusquedaPedidosAlmacen = "ative"; linkPedidos = "active"; break;
-                            case 26: linkMantenimientoPedidoAlmacen = "ative"; linkPedidos = "active"; break;
-                        }
-                        var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
+
+                                    case 17: linkBusquedaCliente = "ative"; linkMaestros = "active"; break;
+                                    case 18: linkMantenimientoCliente = "ative"; linkMaestros = "active"; break;
+                                  //  case 27: linkBusquedaProducto = "ative"; linkMaestros = "active"; break;
+                                    case 28: linkMantenimientoProducto = "ative"; linkMaestros = "active"; break;
+
+                                    case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
+                                    case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
+                                    case 22: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
+                                    case 23: linkBusquedaPedidosCompra = "ative"; linkPedidos = "active"; break;
+                                    case 24: linkMantenimientoPedidoCompra = "ative"; linkPedidos = "active"; break;
+                                    case 25: linkBusquedaPedidosAlmacen = "ative"; linkPedidos = "active"; break;
+                                    case 26: linkMantenimientoPedidoAlmacen = "ative"; linkPedidos = "active"; break;
+
+                                }
+                            var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
 
 
 
@@ -222,6 +228,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 @if (usuario.modificaMaestroClientes)
                                 {
+                                    <li id="linkBusquedaCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Búsqueda", "Index", "Cliente")</li>
                                     <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
                                 }
                                 @if (usuario.modificaMaestroProductos)

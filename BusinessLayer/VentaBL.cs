@@ -19,11 +19,19 @@ namespace BusinessLayer
             }
         }
 
-        public void InsertVentaNotaCredito(Venta venta)
+        public void InsertTransaccionNotaCredito(Transaccion transaccion)
         {
             using (var dal = new VentaDAL())
             {
-                dal.InsertVentaNotaCredito(venta);
+                dal.InsertTransaccionNotaCredito(transaccion);
+            }
+        }
+
+        public void UpdateTransaccionNotaCredito(Transaccion transaccion)
+        {
+            using (var dal = new VentaDAL())
+            {
+                dal.UpdateTransaccionNotaCredito(transaccion);
             }
         }
 
@@ -47,6 +55,21 @@ namespace BusinessLayer
             }
             return venta;
         }
+
+        public Transaccion GetNotaIngresoTransaccion(Transaccion transaccion, NotaIngreso notaIngreso, Usuario usuario)
+        {
+            using (var dal = new VentaDAL())
+            {
+                transaccion = dal.SelectNotaIngresoTransaccion(transaccion, notaIngreso, usuario);
+                if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+                {
+                    this.procesarVenta(transaccion);
+                }
+            }
+            return transaccion;
+        }
+
+
 
 
 

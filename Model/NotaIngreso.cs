@@ -15,6 +15,7 @@ namespace Model
             this.motivoTraslado = motivosTraslado.Compra;
             this.tipoDocumentoVentaReferencia = TiposDocumentoVentaReferencia.Ninguno;
             this.motivoExtornoGuiaRemision = MotivosExtornoGuiaRemision.AnulacionOperacion;
+            this.tipoExtorno = TiposExtorno.SinExtorno;
         }        
 
 
@@ -76,15 +77,43 @@ namespace Model
             Compra = 'C',  /*PEDIDO DE COMPRA*/
             [Display(Name = "Traslado Interno Recibido")]
             TrasladoInterno = 'I', /*PEDIDO DE ALMACEN*/
-            [Display(Name = "Comodato a Recibir")]
+            [Display(Name = "Comodato Recibido")]
             ComodatoRecibido = 'M', /*PEDIDO DE COMPRA*/
             [Display(Name = "Transferencia Gratuita Recibida")]
             TransferenciaGratuitaRecibida = 'G', /*PEDIDO DE COMPRA*/
-            [Display(Name = "Préstamo a Recibir")]
+            [Display(Name = "Préstamo Recibido")]
             PrestamoRecibido = 'R', /*PEDIDO DE ALMACEN*/
 
             [Display(Name = "Extorno de Venta")]
             DevolucionVenta = 'D', /*PEDIDO DE VENTA*/ 
+            [Display(Name = "Extorno de Préstamo Entregado")]
+            DevolucionPrestamoEntregado = 'P',  /*PEDIDO DE ALMACEN*/
+            [Display(Name = "Extorno de Comodato Entregado")]
+            DevolucionComodatoEntregado = 'F', /*PEDIDO DE VENTA*/
+            [Display(Name = "Extorno de Transferencia Gratuita Entregada")]
+            DevolucionTransferenciaGratuitaEntregada = 'H', /*PEDIDO DE VENTA*/
+        }
+
+
+        [Display(Name = "Motivo Traslado:")]
+        public motivosTrasladoBusqueda motivoTrasladoBusqueda { get; set; }
+        public enum motivosTrasladoBusqueda
+        {
+            [Display(Name = "Todos")]
+            Todos = '0',  
+            [Display(Name = "Compra")]
+            Compra = 'C',  /*PEDIDO DE COMPRA*/
+            [Display(Name = "Traslado Interno Recibido")]
+            TrasladoInterno = 'I', /*PEDIDO DE ALMACEN*/
+            [Display(Name = "Comodato Recibido")]
+            ComodatoRecibido = 'M', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Transferencia Gratuita Recibida")]
+            TransferenciaGratuitaRecibida = 'G', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Préstamo Recibido")]
+            PrestamoRecibido = 'R', /*PEDIDO DE ALMACEN*/
+
+            [Display(Name = "Extorno de Venta")]
+            DevolucionVenta = 'D', /*PEDIDO DE VENTA*/
             [Display(Name = "Extorno de Préstamo Entregado")]
             DevolucionPrestamoEntregado = 'P',  /*PEDIDO DE ALMACEN*/
             [Display(Name = "Extorno de Comodato Entregado")]
@@ -177,5 +206,6 @@ namespace Model
 
         public GuiaRemision guiaRemisionAExtornar { get; set; }
 
+ 
     }
 }

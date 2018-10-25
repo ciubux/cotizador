@@ -65,6 +65,7 @@ namespace Cotizador.Controllers
         private void instanciarNotaIngresoBusqueda()
         {
             NotaIngreso notaIngreso = new NotaIngreso();
+            notaIngreso.motivoTrasladoBusqueda = NotaIngreso.motivosTrasladoBusqueda.Todos;
             notaIngreso.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
             notaIngreso.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
             notaIngreso.ciudadDestino = new Ciudad();
@@ -327,14 +328,49 @@ namespace Cotizador.Controllers
         public void iniciarIngresoDesdeGuiaRemision()
         {
             try
-            {
+            {   /*IMPORTANTE: Se debe identificar si la guia esta facturada para ver si se genera nota de crédito*/
+
+
                 instanciarNotaIngreso();
                 NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
 
                 notaIngreso.motivoExtornoGuiaRemision = (NotaIngreso.MotivosExtornoGuiaRemision)Int32.Parse(Request.Params["motivoExtornoGuiaRemision"]);
-
                 notaIngreso.guiaRemisionAExtornar = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
-                
+
+                /*Si el motivo del extorno es devolución parcial se activa atención parcial para poder editar el detalle*/
+                notaIngreso.documentoDetalle = notaIngreso.guiaRemisionAExtornar.documentoDetalle;
+
+                if (notaIngreso.motivoExtornoGuiaRemision == NotaIngreso.MotivosExtornoGuiaRemision.DevolucionItem)
+                {
+                    notaIngreso.atencionParcial = true;
+                    /*Si ya ha sido extornado se debe recuperar las cantidades extornadas*/
+                    if (notaIngreso.guiaRemisionAExtornar.tipoExtorno != GuiaRemision.TiposExtorno.SinExtorno)
+                    {
+                        MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+                        movimientoAlmacenBL.obtenerCantidadesPorExtornar(notaIngreso.guiaRemisionAExtornar);
+                    }
+                    else
+                    {
+                        foreach (DocumentoDetalle documentoDetalle in notaIngreso.documentoDetalle)
+                        {
+                            documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidadSolicitada;
+                            documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadSolicitada;
+                        }
+                    }
+                }
+                else
+                {
+                 
+
+                    foreach (DocumentoDetalle documentoDetalle in notaIngreso.documentoDetalle)
+                    {
+                        documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidadSolicitada;
+                        documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadSolicitada;
+                    }
+
+                    notaIngreso.atencionParcial = false;
+                }
+               
                 notaIngreso.pedido = notaIngreso.guiaRemisionAExtornar.pedido;
 
 
@@ -363,15 +399,10 @@ namespace Cotizador.Controllers
                     notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.DevolucionPrestamoEntregado;
                 }
 
+                
 
                 notaIngreso.observaciones = String.Empty;
-                notaIngreso.documentoDetalle = notaIngreso.guiaRemisionAExtornar.documentoDetalle;
-
-                foreach (DocumentoDetalle documentoDetalle in notaIngreso.documentoDetalle)
-                {
-                    documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidadSolicitada;
-                    documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadSolicitada;
-                }
+               
                        
                 CiudadBL ciudadBL = new CiudadBL();
                 Ciudad ciudadDestino = ciudadBL.getCiudad(notaIngreso.guiaRemisionAExtornar.ciudadOrigen.idCiudad);
@@ -471,12 +502,33 @@ namespace Cotizador.Controllers
 
             String jsonNotaIngresoValidacion = JsonConvert.SerializeObject(notaIngreso.notaIngresoValidacion);
 
+            string generarNotaCredito = "false";
             if (notaIngreso.notaIngresoValidacion.tipoErrorValidacion == NotaIngresoValidacion.TiposErrorValidacion.NoExisteError)
             {
-                this.NotaIngresoSession = null;
+                if (notaIngreso.guiaRemisionAExtornar != null)
+                {
+                    //Si la guia a extornar se encuentra facturada se debe generar nota de crédito
+                    if (notaIngreso.guiaRemisionAExtornar.estaFacturado)
+                    {
+                        generarNotaCredito = "true";
+                    }
+                    else
+                    {
+                        this.NotaIngresoSession = null;
+                    }
+                }
+                else
+                {
+                    this.NotaIngresoSession = null;
+                }
             }
 
-            String resultado = "{ \"serieNumeroNotaIngreso\":\"" + serieNumeroNotaIngreso + "\", \"idNotaIngreso\":\"" + idNotaIngreso + "\", \"error\":\"" + error + "\",     \"notaIngresoValidacion\": " + jsonNotaIngresoValidacion + "  }";
+            
+            
+
+
+
+            String resultado = "{ \"serieNumeroNotaIngreso\":\"" + serieNumeroNotaIngreso + "\", \"idNotaIngreso\":\"" + idNotaIngreso + "\", \"error\":\"" + error + "\",     \"notaIngresoValidacion\": " + jsonNotaIngresoValidacion + ",     \"generarNotaCredito\": " + generarNotaCredito + "  }";
             return resultado;
         }
 
@@ -706,6 +758,14 @@ namespace Cotizador.Controllers
             String jsonTransportista = JsonConvert.SerializeObject(notaIngreso.transportista);
             return jsonTransportista;
         }
+
+        public void ChangeMotivoTraslado()
+        {
+            NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA];
+            notaIngreso.motivoTrasladoBusqueda = (NotaIngreso.motivosTrasladoBusqueda) (Char)Int32.Parse(this.Request.Params["motivoTraslado"]);
+            this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA] = notaIngreso;
+        }
+
 
         public ActionResult CancelarCreacionNotaIngreso()
         {

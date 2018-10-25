@@ -11,7 +11,7 @@ namespace Model
 
         public Guid idDocumentoReferenciaVenta { get; set; }
 
-        [Display(Name = "Tipo Doc. Ref.:")]
+        [Display(Name = "Tipo Documento:")]
         public DocumentoVenta.TipoDocumento tipoDocumento { get; set; }
 
         [Display(Name = "Serie:")]
@@ -20,16 +20,16 @@ namespace Model
         [Display(Name = "Número:")]
         public String numero { get; set; }
 
-        [Display(Name = "Número Doc. Ref.:")]
+        [Display(Name = "Número Documento:")]
         public String serieNumero { get {
                 return serie + "-" + numero;
             } }
 
-        [Display(Name = "Fecha Emisión Doc. Ref.:")]
+        [Display(Name = "Fecha Emisión:")]
         public DateTime fechaEmision { get; set; }
 
 
-        [Display(Name = "Fecha Emisión Doc. Ref.:")]
+        [Display(Name = "Fecha Emisión:")]
         public String fechaEmisionFormat { get {
                 return this.fechaEmision.ToString(Constantes.formatoFecha);
             } }

@@ -37,7 +37,7 @@ namespace DataLayer
             if (cotizacion.cliente.idCliente == Guid.Empty)
             {
                 InputParameterAdd.Guid(objCommand, "idCliente", null);
-                InputParameterAdd.Guid(objCommand, "idGrupo", cotizacion.grupo.idGrupo);
+               // InputParameterAdd.Guid(objCommand, "idGrupo", cotizacion.grupo.idGrupoCliente);
             }
             else
             {
@@ -97,7 +97,7 @@ namespace DataLayer
             if (cotizacion.cliente.idCliente == Guid.Empty)
             {
                 InputParameterAdd.Guid(objCommand, "idCliente", null);
-                InputParameterAdd.Guid(objCommand, "idGrupo", cotizacion.grupo.idGrupo);
+             //   InputParameterAdd.Guid(objCommand, "idGrupo", cotizacion.grupo.idGrupoCliente);
             }
             else
             {
@@ -246,9 +246,9 @@ namespace DataLayer
                 {
                     cotizacion.cliente = new Cliente();
 
-                    cotizacion.grupo = new Grupo();
+                    cotizacion.grupo = new GrupoCliente();
                     cotizacion.grupo.codigo = Converter.GetString(row, "codigo_grupo");
-                    cotizacion.grupo.idGrupo = Converter.GetGuid(row, "id_grupo");
+                    cotizacion.grupo.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
                     cotizacion.grupo.nombre = Converter.GetString(row, "nombre_grupo");
                 }
                 else
@@ -260,7 +260,7 @@ namespace DataLayer
                     cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
                     cotizacion.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
                     cotizacion.cliente.tipoPagoFactura =  (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
-                    cotizacion.grupo = new Grupo();
+                    cotizacion.grupo = new GrupoCliente();
                 }
 
 
@@ -271,6 +271,7 @@ namespace DataLayer
                 cotizacion.ciudad = new Ciudad();
                 cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+                cotizacion.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
 
                 cotizacion.usuario = new Usuario();
                 cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");

@@ -543,7 +543,9 @@ namespace Cotizador.Controllers
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             //Se recupera el producto y se guarda en Session
-            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+
+            Guid idProducto = Guid.Parse(this.Request.Params["idProducto"].ToString());
+            //Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
             this.Session["idProducto"] = idProducto.ToString();
 
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
@@ -1633,9 +1635,10 @@ namespace Cotizador.Controllers
         private Pedido instanciarPedidoCargaMasiva(String ruc, String nombreSolicitante, 
             String codCentroCostosCliente, String codCentroCostosMP, String centroCostos,
             String direccionEntrega, String sedeMP, String ubigeo, String observaciones, 
-            int plazoEntrega, String ordenCompra)
+            int plazoEntrega, String ordenCompra, Pedido.tiposPedido tipoPedidoVenta)
         {
             Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            pedido.tipoPedido = tipoPedidoVenta;
             pedido.idPedido = Guid.Empty;
             pedido.numeroPedido = 0;
             pedido.numeroGrupoPedido = null;
@@ -1662,7 +1665,7 @@ namespace Cotizador.Controllers
 
             pedido.fechaSolicitud = DateTime.Now;
             pedido.fechaEntregaDesde = DateTime.Now.AddDays(1) ;
-            pedido.fechaEntregaHasta = DateTime.Now.AddDays(1+plazoEntrega);
+            pedido.fechaEntregaHasta = DateTime.Now.AddDays(plazoEntrega);
             pedido.horaEntregaDesde = "09:00";
             pedido.horaEntregaHasta = "18:00";
             pedido.contactoPedido = String.Empty;
@@ -1694,8 +1697,8 @@ namespace Cotizador.Controllers
 
                 HSSFWorkbook hssfwb;
 
-                ProductoBL productoBL = new ProductoBL();
-                productoBL.truncateProductoStaging();
+          /*      ProductoBL productoBL = new ProductoBL();
+                productoBL.truncateProductoStaging();*/
 
                 hssfwb = new HSSFWorkbook(file.InputStream);
 
@@ -1718,6 +1721,8 @@ namespace Cotizador.Controllers
                 int plazoCredito = UtilesHelper.getValorCeldaInt(sheet, 6, "B");
                 int plazoEntrega = UtilesHelper.getValorCeldaInt(sheet, 7, "B");
                 String ordenCompra = UtilesHelper.getValorCelda(sheet, 8, "B");
+                Pedido.tiposPedido tipoPedidoVenta = (Pedido.tiposPedido)Char.Parse(UtilesHelper.getValorCelda(sheet, 2, "E"));
+
 
 
 
@@ -1755,7 +1760,7 @@ namespace Cotizador.Controllers
 
                             Pedido pedido = this.instanciarPedidoCargaMasiva(ruc, solicitante,
                                 codigoCentroCostosCliente, codigoCentroCostosMP, nombreCentroCostos,
-                                direccionEntrega, sedeMP, ubigeo, observaciones, plazoEntrega, ordenCompra);
+                                direccionEntrega, sedeMP, ubigeo, observaciones, plazoEntrega, ordenCompra, tipoPedidoVenta);
                             ultimoPedido = pedido;
                             pedidoList.Add(pedido);
                         }

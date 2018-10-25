@@ -246,7 +246,18 @@ jQuery(function ($) {
 
 
 
+    $("#documentoVenta_serie").change(function () {
 
+        var serie = $("#documentoVenta_serie").val();
+        $.ajax({
+            url: "/NotaCredito/ChangeSerie",
+            type: 'POST',
+            data: {
+                serie: serie
+            },
+            success: function () { }
+        });
+    });
 
 
     function changeInputString(propiedad, valor) {
@@ -556,7 +567,7 @@ jQuery(function ($) {
                     $("#vpNRO_GRE").html(documentoVenta.cPE_CABECERA_BE.NRO_GRE);
 
                     /*OBSERVACIONES*/ /*CODIGO CLIENTE*/
-                    $("#vpOBSERVACIONES").html($("#documentoVenta_observaciones").val());
+                    $("#vpOBSERVACIONES").html($("#venta_observaciones").val());
                     $("#vpCODIGO_CLIENTE").html(documentoVenta.cliente.codigo);
 
 
@@ -1107,6 +1118,19 @@ jQuery(function ($) {
         $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
         calcularFechaVencimiento();
 
+    });
+
+
+    $('#documentoVenta_observacionesUsoInterno').change(function () {
+        var observacionesUsoInterno = $("#documentoVenta_observacionesUsoInterno").val();
+        $.ajax({
+            url: "/NotaCredito/ChangeObservacionesUsoInterno",
+            type: 'POST',
+            data: {
+                observacionesUsoInterno: observacionesUsoInterno
+            },
+            success: function () { }
+        });
     });
 
     function calcularFechaVencimiento() {

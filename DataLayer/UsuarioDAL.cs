@@ -59,6 +59,8 @@ namespace DataLayer
 
                 //Pedidos
                 usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
+                usuario.realizaCargaMasivaPedidos = Converter.GetBool(row, "realiza_carga_masiva_pedidos");
+
                 usuario.apruebaPedidosLima = Converter.GetBool(row, "aprueba_pedidos_lima");
                 usuario.apruebaPedidosProvincias = Converter.GetBool(row, "aprueba_pedidos_provincias");
                 usuario.pedidoSerializado = Converter.GetString(row, "pedido_serializado");
@@ -102,12 +104,12 @@ namespace DataLayer
                 usuario.tomaPedidosAlmacen = Converter.GetBool(row, "toma_pedidos_almacen");
                 usuario.apruebaPlazoCredito = Converter.GetBool(row, "define_plazo_credito");
                 usuario.apruebaMontoCredito= Converter.GetBool(row, "define_monto_credito");
-                usuario.defineResponsableComercial = Converter.GetBool(row, "define_responsable_comercial");
-                usuario.defineSupervisorComercial = Converter.GetBool(row, "define_supervisor_comercial");
-                usuario.defineAsistenteAtencionCliente = Converter.GetBool(row, "define_asistente_atencion_cliente");
-                usuario.defineResponsablePortafolio = Converter.GetBool(row, "define_responsable_portafolio");
+                usuario.modificaResponsableComercial = Converter.GetBool(row, "define_responsable_comercial");
+                usuario.modificaSupervisorComercial = Converter.GetBool(row, "define_supervisor_comercial");
+                usuario.modificaAsistenteAtencionCliente = Converter.GetBool(row, "define_asistente_atencion_cliente");
+                usuario.modificaResponsablePortafolio = Converter.GetBool(row, "define_responsable_portafolio");
                 usuario.modificaPedidoVentaFechaEntregaHasta = Converter.GetBool(row, "modifica_pedido_venta_fecha_entrega_hasta");
-
+                usuario.modificaCanales = Converter.GetBool(row, "modifica_canales");
                 usuario.bloqueaClientes = Converter.GetBool(row, "bloquea_clientes");
             }
 

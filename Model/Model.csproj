@@ -88,6 +88,7 @@
     <Compile Include="DocumentoReferencia.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="Vendedor.cs" />
+    <Compile Include="Transaccion.cs" />
     <Compile Include="Venta.cs" />
     <Compile Include="VentaDetalle.cs" />
     <Compile Include="MovimientoDetalle.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="PrecioStaging.cs" />
     <Compile Include="PrecioListaStaging.cs" />
     <Compile Include="FacturaStaging.cs" />
-    <Compile Include="Grupo.cs" />
+    <Compile Include="GrupoCliente.cs" />
     <Compile Include="Constantes.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="DocumentoDetalleJson.cs" />

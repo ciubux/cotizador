@@ -5,12 +5,11 @@ using System.Web;
 
 namespace Model
 {
-    public class Grupo : Auditoria
+    public class GrupoCliente : Auditoria
     {
-        public Guid idGrupo { get; set; }
+        public int idGrupoCliente { get; set; }
         public String codigo { get; set;  }
         public String nombre { get; set; }
-        public String contacto { get; set; }
         public override string ToString()
         {
             return "Grupo: " + this.nombre + " - Cod: " + this.codigo;

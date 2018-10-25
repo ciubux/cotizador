@@ -217,6 +217,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
+    <Compile Include="Controllers\GrupoClienteController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
@@ -248,6 +249,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\GrupoClienteViewModels.cs" />
     <Compile Include="Models\VendedorViewModels.cs" />
     <Compile Include="Models\CiudadViewModels.cs" />
     <Compile Include="Models\DepartamentoViewModels.cs" />
@@ -328,6 +330,7 @@
     <Content Include="Content\jquery-confirm.less" />
     <None Include="Properties\PublishProfiles\cotizadormp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\zasmp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen\chosen.ajaxaddition.jquery.js" />
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
@@ -459,6 +462,8 @@
     <Content Include="Views\PedidoAlmacen\Index.cshtml" />
     <Content Include="Views\PedidoAlmacen\Pedir.cshtml" />
     <Content Include="Views\Pedido\Load.cshtml" />
+    <Content Include="Views\Shared\_GrupoCliente.cshtml" />
+    <Content Include="Views\Pedido\CargaIncorrecta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
@@ -468,6 +473,7 @@
     <Folder Include="Views\DireccionEntrega\" />
     <Folder Include="Views\DocumentoVenta\" />
     <Folder Include="Views\General\" />
+    <Folder Include="Views\GrupoCliente\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Mail\" />
     <Folder Include="Views\Ubigeo\" />

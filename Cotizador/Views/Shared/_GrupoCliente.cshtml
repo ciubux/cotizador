@@ -1,0 +1,9 @@
+﻿@model Cotizador.Models.GrupoClienteViewModels 
+@Html.DropDownList(
+    Model.GrupoClienteSelectId,
+    Model.GruposCliente, "Seleccione el Grupo Cliente",
+    new
+    {
+        id = Model.GrupoClienteSelectId,
+        @class = "form-control"
+    })

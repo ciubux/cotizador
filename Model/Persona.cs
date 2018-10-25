@@ -94,9 +94,26 @@ namespace Model
         public DocumentoVenta.TipoPago tipoPagoFactura { get; set; }
 
 
+        public String tipoPagoFacturaToString
+        {
+            get
+            {
+                return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.tipoPagoFactura);
+            }
+        }
+
+
 
         [Display(Name = "Plazo Crédito (Solicitado):")]
         public DocumentoVenta.TipoPago plazoCreditoSolicitado { get; set; }
+
+        public String plazoCreditoSolicitadoToString
+        {
+            get
+            {
+                return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.plazoCreditoSolicitado);
+            }
+        }
 
 
         [Display(Name = "Sobre Plazo en días:")]
@@ -107,10 +124,27 @@ namespace Model
         [Display(Name = "Forma de Pago Factura:")]
         public DocumentoVenta.FormaPago formaPagoFactura { get; set; }
 
+        public String formaPagoFacturaToString
+        {
+            get
+            {
+                return EnumHelper<DocumentoVenta.FormaPago>.GetDisplayValue(this.formaPagoFactura);
+            }
+        }
+
         public String tipoDocumento { get; set; }
 
         [Display(Name = "Tipo Doc. Identidad:")]
         public DocumentoVenta.TiposDocumentoIdentidad tipoDocumentoIdentidad { get; set; }
+
+        public String tipoDocumentoIdentidadToString
+        {
+            get
+            {
+                return EnumHelper<DocumentoVenta.TiposDocumentoIdentidad>.GetDisplayValue(this.tipoDocumentoIdentidad);
+            }
+        }
+
 
         [Display(Name = "Vendedores Asignados:")]
         public Boolean vendedoresAsignados { get; set; }
@@ -120,11 +154,6 @@ namespace Model
         [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }
 
-        [Display(Name = "Bloqueado:")]
-        public Boolean bloqueado { get; set; }
 
-        public Boolean sinMontoCreditoAprobado { get; set; }
-
-        public Boolean sinPlazoCreditoAprobado { get; set; }
     }
 }

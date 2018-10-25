@@ -207,6 +207,14 @@ namespace BusinessLayer
             }
         }
 
+        public List<Cliente> getClientes(Cliente cliente)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                return clienteDAL.SelectClientes(cliente);
+            }
+        }
+
         public Guid getClienteId(String ruc,String codigoSedeMP)
         {
             using (var clienteDAL = new ClienteDAL())
@@ -242,7 +250,7 @@ namespace BusinessLayer
                 }
                 else if(!cliente.vendedoresAsignados)
                 {
-                    cliente.vendedoresAsignados = cliente.usuario.defineResponsableComercial;
+                    cliente.vendedoresAsignados = cliente.usuario.modificaResponsableComercial;
                 }
                 return clienteDAL.insertClienteSunat(cliente);
             }
@@ -266,7 +274,7 @@ namespace BusinessLayer
                 }
                 else if (!cliente.vendedoresAsignados)
                 {
-                    cliente.vendedoresAsignados = cliente.usuario.defineResponsableComercial;
+                    cliente.vendedoresAsignados = cliente.usuario.modificaResponsableComercial;
                 }
                 return clienteDAL.updateClienteSunat(cliente);
             }

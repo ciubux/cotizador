@@ -146,8 +146,12 @@
                                 @if (usuario.tomaPedidos)
                                 {
                                     <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Crear/Modificar", "Pedir", "Pedido")</li>
-                                }     
-                                    
+                                }   
+                                @if (usuario.realizaCargaMasivaPedidos)
+                                {   
+                                    <li id="linkCargaPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Carga Masiva", "Load", "Pedido")</li>
+                                }                      
+
                                 @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                                 {
                                     <li id="linkBusquedaPedidosCompra" class="@linkBusquedaPedidosCompra">@Html.ActionLink("Pedido Compra - Búsqueda", "Index", "PedidoCompra")</li>}

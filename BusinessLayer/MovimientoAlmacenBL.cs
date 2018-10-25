@@ -5,6 +5,7 @@ using System;
 using Model;
 using System.IO;
 using Model.EXCEPTION;
+using System.Linq;
 
 namespace BusinessLayer
 {
@@ -84,11 +85,18 @@ namespace BusinessLayer
                 notaIngreso.seguimientoMovimientoAlmacenEntrada.estado = SeguimientoMovimientoAlmacenEntrada.estadosSeguimientoMovimientoAlmacenEntrada.Recibido;
 
                 Boolean existeCantidadPendienteAtencion = false;
+                Boolean existeDiferenciaConCantidadesOriginales = false;
                 foreach (DocumentoDetalle documentoDetalle in notaIngreso.documentoDetalle)
                 {
                     if (documentoDetalle.cantidadPendienteAtencion != documentoDetalle.cantidadPorAtender)
                     {
                         existeCantidadPendienteAtencion = true;
+                        break;
+                    }
+
+                    if (documentoDetalle.cantidadPendienteAtencion != documentoDetalle.cantidad)
+                    {
+                        existeDiferenciaConCantidadesOriginales = true;
                         break;
                     }
                 }
@@ -97,7 +105,16 @@ namespace BusinessLayer
                 {
                     notaIngreso.atencionParcial = false;
                     notaIngreso.ultimaAtencionParcial = true;
+
+
+                    //Si se está extornando una guía, la no existen cantidades pendientes de devolución
+                    //y el motivo es devolución por Item se cambia el motivo a devolución total
+                    if (!existeDiferenciaConCantidadesOriginales && notaIngreso.guiaRemisionAExtornar != null && notaIngreso.motivoExtornoGuiaRemision == NotaIngreso.MotivosExtornoGuiaRemision.DevolucionItem)
+                    {
+                        notaIngreso.motivoExtornoGuiaRemision = NotaIngreso.MotivosExtornoGuiaRemision.DevolucionTotal;
+                    }
                 }
+
 
                 try
                 {
@@ -181,6 +198,38 @@ namespace BusinessLayer
                 dal.insertSeguimientoPedido(pedido);
             }
 
+        }
+
+        public void obtenerCantidadesPorExtornar(MovimientoAlmacen movimientoAlmacen)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                List<DocumentoDetalle> documentoDetalleList = dal.SelectMovimientoAlmacenCantidadesExtornadas(movimientoAlmacen);
+
+                foreach (DocumentoDetalle documentoDetalle in movimientoAlmacen.documentoDetalle)
+                {
+
+                    DocumentoDetalle documentoDetalleCantidadExtornada = documentoDetalleList.Where(d => d.producto.idProducto == documentoDetalle.producto.idProducto).FirstOrDefault();
+                    if (documentoDetalleCantidadExtornada != null)
+                    {
+                        documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidad - documentoDetalleCantidadExtornada.cantidad;
+                        documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadPendienteAtencion;
+                    }
+                    else
+                    {
+                        documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidad;
+                        documentoDetalle.cantidadPorAtender = documentoDetalle.cantidad;
+                    }
+                }
+            }
+        }
+
+        public Guid obtenerIdDocumentoVenta(MovimientoAlmacen movimientoAlmacen)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                return dal.SelectMovimientoAlmacenIdCpeCabeceraBe(movimientoAlmacen);
+            }
         }
     }
 }

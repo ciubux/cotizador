@@ -93,5 +93,32 @@ namespace Model
 
         [Display(Name = "Sustento de Extorno:")]
         public String sustentoExtorno { get; set; }
+
+        
+
+        public List<Transaccion> transaccionList { get; set; }
+
+        [Display(Name = "Extornado:")]
+        public TiposExtorno tipoExtorno { get; set; }
+
+        public enum TiposExtorno
+        {
+            [Display(Name = "")]
+            SinExtorno = 0,
+            [Display(Name = "Extornada totalmente (Anulación)")]
+            ExtornadaTotalmentePorAnulacion = 1,
+            [Display(Name = "Extornada totalmente (Devolución)")]
+            ExtornadaTotalmentePorDevolucion = 6,
+            [Display(Name = "Extornada parcialmente (Devolución)")]
+            ExtornadaParcialmentePorDevolucion = 7
+        }
+
+        public String tipoExtornoToString
+        {
+            get
+            {
+                return EnumHelper<TiposExtorno>.GetDisplayValue(this.tipoExtorno);
+            }
+        }
     }
 }

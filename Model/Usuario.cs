@@ -40,6 +40,7 @@ namespace Model
 
         /*PERMISOS PEDIDO*/
         public bool tomaPedidos { get; set; }
+        public bool realizaCargaMasivaPedidos { get; set; }
         public bool apruebaPedidos { get { return apruebaPedidosLima || apruebaPedidosProvincias; } }
         public bool apruebaPedidosLima { get; set; }
         public bool apruebaPedidosProvincias { get; set; }
@@ -114,12 +115,14 @@ namespace Model
         public bool tomaPedidosAlmacen { get; set; }
         public bool apruebaPlazoCredito { get; set; }
         public bool apruebaMontoCredito { get; set; }
-        public bool defineResponsableComercial { get; set; }
-        public bool defineSupervisorComercial { get; set; }
-        public bool defineAsistenteAtencionCliente { get; set; }
-        public bool defineResponsablePortafolio { get; set; }
+        public bool modificaResponsableComercial { get; set; }
+        public bool modificaSupervisorComercial { get; set; }
+        public bool modificaAsistenteAtencionCliente { get; set; }
+        public bool modificaResponsablePortafolio { get; set; }
         public bool modificaPedidoVentaFechaEntregaHasta { get; set; }
         public bool bloqueaClientes { get; set; }
+
+        public bool modificaCanales { get; set; }
 
         public List<Vendedor> vendedorList { get; set; }
 

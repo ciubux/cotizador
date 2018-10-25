@@ -21,13 +21,13 @@ namespace Cotizador.Controllers
        */
         public ActionResult Crear()
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            Transaccion transaccion = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
          //   venta.tipoNotaCredito = venta.documentoVenta.tipoNotaCredito;
-            ViewBag.venta = venta;
-            ViewBag.tipoNotaCredito = (int)venta.tipoNotaCredito;           
+            ViewBag.venta = transaccion;
+            ViewBag.tipoNotaCredito = (int)transaccion.tipoNotaCredito;           
 
-            ViewBag.fechaEmision = venta.documentoVenta.fechaEmision.Value.ToString(Constantes.formatoFecha);
-            ViewBag.horaEmision = venta.documentoVenta.fechaEmision.Value.ToString(Constantes.formatoHora);  
+            ViewBag.fechaEmision = transaccion.documentoVenta.fechaEmision.Value.ToString(Constantes.formatoFecha);
+            ViewBag.horaEmision = transaccion.documentoVenta.fechaEmision.Value.ToString(Constantes.formatoHora);  
 
             return View();
         }
@@ -72,37 +72,122 @@ namespace Cotizador.Controllers
             
         }
 
+        public String iniciarCreacionNotaCreditoDesdeNotaIngreso()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            //Se recupera la nota de ingreso creada
+            NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
+            /*Se recupera el id de la factura a extornar*/
+            MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+            DocumentoVenta documentoVenta = new DocumentoVenta();
+            documentoVenta.idDocumentoVenta = movimientoAlmacenBL.obtenerIdDocumentoVenta(notaIngreso.guiaRemisionAExtornar);
+            
+
+
+
+            /*Con el id de la factura a extornar se obtiene todo del documento de pago*/
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            Transaccion transaccionExtorno = new Transaccion();
+            transaccionExtorno.documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
+
+            /*Se recupera el sustento y las ovservaciones de la guía*/
+            transaccionExtorno.sustento = notaIngreso.sustentoExtorno;
+            transaccionExtorno.documentoVenta.observacionesUsoInterno = notaIngreso.observaciones;
+
+            /*Se agrega la nota de ingreso al documento de venta para poder controlar la vista
+             * de modo tal que no se permita editar el detalle*/
+            transaccionExtorno.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
+            transaccionExtorno.documentoVenta.movimientoAlmacen = notaIngreso;
+            transaccionExtorno.documentoVenta.venta = null;
+            /*Se agrega el documento de referencia a la nota de crédito, los datos que se requieren son el tipo, serie, número y fecha*/
+            transaccionExtorno.documentoReferencia = new DocumentoReferencia();
+            transaccionExtorno.documentoReferencia.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(transaccionExtorno.documentoVenta.cPE_CABECERA_BE.TIP_CPE);
+            String[] fechaEmisionArray = transaccionExtorno.documentoVenta.cPE_CABECERA_BE.FEC_EMI.Split('-');
+            transaccionExtorno.documentoReferencia.fechaEmision = new DateTime(Int32.Parse(fechaEmisionArray[0]), Int32.Parse(fechaEmisionArray[1]), Int32.Parse(fechaEmisionArray[2]));          
+            transaccionExtorno.documentoReferencia.serie = transaccionExtorno.documentoVenta.cPE_CABECERA_BE.SERIE;
+            transaccionExtorno.documentoReferencia.numero = transaccionExtorno.documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
+
+            /*Se recupera la venta/transacción del extorno (nota de ingreso)*/
+            VentaBL ventaBL = new VentaBL();
+            transaccionExtorno = ventaBL.GetNotaIngresoTransaccion(transaccionExtorno, notaIngreso, usuario);
+
+            /*Se obtiene la ciudad para poder cargar las series del documento de pago*/
+            Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == transaccionExtorno.cliente.ciudad.idCiudad).FirstOrDefault();
+            List<SerieDocumentoElectronico> serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
+            transaccionExtorno.cliente.ciudad.serieDocumentoElectronicoList = serieDocumentoElectronicoList;
+
+            /*Se selecciona la primera serie de la lista*/
+            transaccionExtorno.documentoVenta.serieDocumentoElectronico = serieDocumentoElectronicoList[0];
+            transaccionExtorno.documentoVenta.serie = Constantes.PREFIJO_NOTA_CREDITO_FACTURA + transaccionExtorno.documentoVenta.serieDocumentoElectronico.serie.Substring(1);
+            transaccionExtorno.documentoVenta.numero = transaccionExtorno.documentoVenta.serieDocumentoElectronico.siguienteNumeroNotaCredito.ToString();
+
+
+            if (transaccionExtorno.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+            {
+                /*Si no existe error al recuperar la transacción, se define el tipo de nota de crédito
+                 según lo seleccionado al momento de generar el extorno*/
+                transaccionExtorno.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)(int)notaIngreso.motivoExtornoGuiaRemision;
+                transaccionExtorno.documentoVenta.fechaEmision = DateTime.Now;
+
+                Pedido pedido = transaccionExtorno.pedido;
+                pedido.ciudadASolicitar = new Ciudad();
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.calcularMontosTotales(pedido);
+                /*La transaccion de extorno como nota de crédito*/
+                this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = transaccionExtorno;
+            }
+            return JsonConvert.SerializeObject(transaccionExtorno);
+        }
+
 
         [HttpPost]
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
-            IDocumento documento = (Pedido)venta.pedido;
+            Transaccion transaccionExtorno = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            IDocumento documento = (Pedido)transaccionExtorno.pedido;
             List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
             documento.documentoDetalle = documentoDetalle;
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.calcularMontosTotales((Pedido)documento);
-            venta.pedido = (Pedido)documento;
-            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
+            transaccionExtorno.pedido = (Pedido)documento;
+            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = transaccionExtorno;
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
 
 
         public void ChangeInputString()
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
-            PropertyInfo propertyInfo = venta.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(venta, this.Request.Params["valor"]);
-            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
+            Transaccion transaccionExtorno = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            PropertyInfo propertyInfo = transaccionExtorno.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(transaccionExtorno, this.Request.Params["valor"]);
+            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = transaccionExtorno;
         }
 
         public void ChangeFechaEmision()
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            Transaccion transaccionExtorno = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
             String[] fechaEmision = this.Request.Params["fechaEmision"].Split('/');
             String[] horaEmision = this.Request.Params["horaEmision"].Split(':');
-            venta.documentoVenta.fechaEmision = new DateTime(Int32.Parse(fechaEmision[2]), Int32.Parse(fechaEmision[1]), Int32.Parse(fechaEmision[0]), Int32.Parse(horaEmision[0]), Int32.Parse(horaEmision[1]), 0);
-            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
+            transaccionExtorno.documentoVenta.fechaEmision = new DateTime(Int32.Parse(fechaEmision[2]), Int32.Parse(fechaEmision[1]), Int32.Parse(fechaEmision[0]), Int32.Parse(horaEmision[0]), Int32.Parse(horaEmision[1]), 0);
+            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = transaccionExtorno;
+        }
+
+        public void ChangeObservcacionesUsoInterno()
+        {
+            Transaccion transaccionExtorno = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            transaccionExtorno.documentoVenta.observacionesUsoInterno = this.Request.Params["observacionesUsoInterno"];
+            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = transaccionExtorno;
+        }
+
+        public void ChangeSerie()
+        {
+
+            Transaccion transaccionExtorno = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+            String serie = this.Request.Params["serie"];
+            transaccionExtorno.documentoVenta.serieDocumentoElectronico = transaccionExtorno.cliente.ciudad.serieDocumentoElectronicoList.Where(t => t.serie == serie).FirstOrDefault();
+            transaccionExtorno.documentoVenta.serie = Constantes.PREFIJO_NOTA_CREDITO_FACTURA + transaccionExtorno.documentoVenta.serieDocumentoElectronico.serie.Substring(1);
+            transaccionExtorno.documentoVenta.numero = transaccionExtorno.documentoVenta.serieDocumentoElectronico.siguienteNumeroNotaCredito.ToString();
+            this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = transaccionExtorno;
         }
 
         public String Create()
@@ -111,39 +196,47 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             try
             {
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+                Transaccion transaccion = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
 
                 String[] fecha = this.Request.Params["fechaEmision"].Split('/');
                 String[] hora = this.Request.Params["horaEmision"].Split(':');
 
-                venta.observaciones = this.Request.Params["observaciones"];
-                venta.sustento = this.Request.Params["sustento"];
+                transaccion.observaciones = this.Request.Params["observaciones"];
+                transaccion.sustento = this.Request.Params["sustento"];
 
                 
-                venta.documentoVenta.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
+                transaccion.documentoVenta.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
                 ////La fecha de vencimiento es identifica a la fecha de emisión
-                venta.documentoVenta.fechaVencimiento = venta.documentoVenta.fechaEmision.Value;
+                transaccion.documentoVenta.fechaVencimiento = transaccion.documentoVenta.fechaEmision.Value;
                 ////El tipo de pago es al contado
-                venta.documentoVenta.tipoPago = DocumentoVenta.TipoPago.Contado;
+                transaccion.documentoVenta.tipoPago = DocumentoVenta.TipoPago.Contado;
                 ////La forma de Pago es Efectivo
-                venta.documentoVenta.formaPago = DocumentoVenta.FormaPago.Efectivo;
-                venta.documentoVenta.usuario = usuario;
+                transaccion.documentoVenta.formaPago = DocumentoVenta.FormaPago.Efectivo;
+                transaccion.documentoVenta.usuario = usuario;
                 
-                venta.usuario = usuario;
+                transaccion.usuario = usuario;
                 VentaBL ventaBL = new VentaBL();
-                ventaBL.InsertVentaNotaCredito(venta);
 
-                //Falta Agregar validación de creación de venta
+                /*Si no se cuenta con movimiento de almacen (nota de ingreso) entonces se debe insertar la venta*/
+                if (transaccion.documentoVenta.movimientoAlmacen == null)
+                {
+                    ventaBL.InsertTransaccionNotaCredito(transaccion);
+                }
+                else {
+                /*Por el contrario si se cuenta con la nota de ingreso se debe actualizar la venta para agregar los datos del documento de referencia*/
+                    ventaBL.UpdateTransaccionNotaCredito(transaccion);
+                }
+                
 
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
                 //Se crea una venta solo para que pueda enviar 
-                venta.documentoVenta.venta = new Venta();
-                venta.documentoVenta.venta.idVenta = venta.idVenta;
-                venta.documentoVenta.venta.documentoReferencia = venta.documentoReferencia;
-                venta.documentoVenta.cliente = venta.cliente;
-                venta.documentoVenta = documentoVentaBL.InsertarNotaCredito(venta.documentoVenta);
-                venta.documentoVenta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(venta.documentoVenta.cPE_CABECERA_BE.COD_TIP_NC);
-                return JsonConvert.SerializeObject(venta.documentoVenta);
+                transaccion.documentoVenta.venta = new Venta();
+                transaccion.documentoVenta.venta.idVenta = transaccion.idVenta;
+                transaccion.documentoVenta.venta.documentoReferencia = transaccion.documentoReferencia;
+                transaccion.documentoVenta.cliente = transaccion.cliente;
+                transaccion.documentoVenta = documentoVentaBL.InsertarNotaCredito(transaccion.documentoVenta);
+                transaccion.documentoVenta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(transaccion.documentoVenta.cPE_CABECERA_BE.COD_TIP_NC);
+                return JsonConvert.SerializeObject(transaccion.documentoVenta);
             }
             catch (Exception ex)
             {

@@ -119,11 +119,13 @@ namespace DataLayer
                 else {
                     InputParameterAdd.Int(objCommand, "motivoExtorno", (int)GuiaRemision.MotivosExtornoNotaIngreso.DevolucionTotal);
                 }
+                InputParameterAdd.Varchar(objCommand, "sustentoExtorno", guiaRemision.sustentoExtorno);
             }
             else
             {
                 InputParameterAdd.Guid(objCommand, "idMovimientoAlmacenExtornado", null);
                 InputParameterAdd.Int(objCommand, "motivoExtorno", null);
+                InputParameterAdd.Varchar(objCommand, "sustentoExtorno", null);
             }
 
 
@@ -180,7 +182,18 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", notaIngreso.fechaTraslado);
             InputParameterAdd.Varchar(objCommand, "serieDocumento", notaIngreso.serieDocumento); //puede ser null
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", notaIngreso.numeroDocumento); //puede ser null
-            InputParameterAdd.Guid(objCommand, "idPedido", notaIngreso.pedido.idPedido);
+            
+
+            if (notaIngreso.guiaRemisionAExtornar == null)
+            {
+                InputParameterAdd.Guid(objCommand, "idPedido", notaIngreso.pedido.idPedido);
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idPedido", null);
+            }
+
+
             InputParameterAdd.Int(objCommand, "atencionParcial", notaIngreso.atencionParcial ? 1 : 0);
             InputParameterAdd.Int(objCommand, "ultimaAtencionParcial", notaIngreso.ultimaAtencionParcial ? 1 : 0);
             InputParameterAdd.Guid(objCommand, "idSedeDestino", notaIngreso.ciudadDestino.idCiudad);
@@ -493,7 +506,8 @@ namespace DataLayer
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable guiaRemisionDataTable = dataSet.Tables[0];
             DataTable guiaRemisionDetalleDataTable = dataSet.Tables[1];
-    
+            DataTable transaccionListDataTable = dataSet.Tables[2];
+
             //Datos de la cotizacion
             foreach (DataRow row in guiaRemisionDataTable.Rows)
             {
@@ -553,7 +567,8 @@ namespace DataLayer
                 //ADICIONALES
                 guiaRemision.placaVehiculo = Converter.GetString(row, "placa_vehiculo");
                 guiaRemision.certificadoInscripcion = Converter.GetString(row, "certificado_inscripcion");
-                
+
+                guiaRemision.tipoExtorno = (GuiaRemision.TiposExtorno)Converter.GetInt(row, "tipo_extorno");
             }
 
 
@@ -571,8 +586,19 @@ namespace DataLayer
                 documentoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 guiaRemision.documentoDetalle.Add(documentoDetalle);
-            }        
-               
+            }
+
+            guiaRemision.transaccionList = new List<Transaccion>();
+            foreach (DataRow row in transaccionListDataTable.Rows)
+            {
+                Transaccion transaccion = new Transaccion();
+                transaccion.documentoVenta = new DocumentoVenta();
+                transaccion.documentoVenta.serie = Converter.GetString(row, "SERIE");
+                transaccion.documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
+                transaccion.documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                guiaRemision.transaccionList.Add(transaccion);
+            }
+
             return guiaRemision;
         }
 
@@ -590,6 +616,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado?1:0);
             InputParameterAdd.Int(objCommand, "facturado", guiaRemision.estaFacturado ? 1 : 0);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", guiaRemision.pedido.numeroPedido);
+            InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)guiaRemision.motivoTrasladoBusqueda).ToString());
             DataTable dataTable = Execute(objCommand);
 
            
@@ -608,7 +635,7 @@ namespace DataLayer
                 guiaRemision.estaAnulado = Converter.GetBool(row, "anulado");
                 guiaRemision.estaFacturado = Converter.GetBool(row, "facturado");
                 guiaRemision.estaNoEntregado = Converter.GetBool(row, "no_entregado");
-
+                guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
                 //PEDIDO
                 guiaRemision.pedido = new Pedido();
                 guiaRemision.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
@@ -635,6 +662,7 @@ namespace DataLayer
                 guiaRemision.seguimientoMovimientoAlmacenSalida.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
                 guiaRemision.seguimientoMovimientoAlmacenSalida.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
 
+                guiaRemision.tipoExtorno = (GuiaRemision.TiposExtorno)Converter.GetInt(row, "tipo_extorno");
 
                 guiaRemisionList.Add(guiaRemision);
             }
@@ -831,7 +859,7 @@ namespace DataLayer
 
 
                 //  notaIngreso.certificadoInscripcion = Converter.GetString(row, "certificado_inscripcion");
-
+                notaIngreso.tipoExtorno = (NotaIngreso.TiposExtorno)Converter.GetInt(row, "tipo_extorno");
             }
 
 
@@ -868,6 +896,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "anulado", notaIngreso.estaAnulado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "numeroGuiaReferencia", notaIngreso.numeroGuiaReferencia);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", notaIngreso.pedido.numeroPedido);
+            InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)notaIngreso.motivoTrasladoBusqueda).ToString());
             DataTable dataTable = Execute(objCommand);
 
 
@@ -886,7 +915,7 @@ namespace DataLayer
                 notaIngreso.estaAnulado = Converter.GetBool(row, "anulado");
                 notaIngreso.estaFacturado = Converter.GetBool(row, "facturado");
                 notaIngreso.estaNoEntregado = Converter.GetBool(row, "no_entregado");
-
+                notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
                 //PEDIDO
                 notaIngreso.pedido = new Pedido();
                 notaIngreso.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
@@ -918,6 +947,39 @@ namespace DataLayer
             }
             return notaIngresoList;
         }
+
+
+        public List<DocumentoDetalle> SelectMovimientoAlmacenCantidadesExtornadas(MovimientoAlmacen movimientoAlmacen)
+        {
+            var objCommand = GetSqlCommand("ps_movimientoAlmacenCantidadesExtornadas");
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
+            DataTable dataTable = Execute(objCommand);
+            List<DocumentoDetalle> documentoDetalleList = new List<DocumentoDetalle>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                DocumentoDetalle documentoDetalle = new DocumentoDetalle();
+                documentoDetalle.producto = new Producto();
+                documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalleList.Add(documentoDetalle);
+            }
+            return documentoDetalleList;
+        }
+
+        public Guid SelectMovimientoAlmacenIdCpeCabeceraBe(MovimientoAlmacen movimientoAlmacen)
+        {
+            var objCommand = GetSqlCommand("ps_movimientoAlmacenObtenerIdCPECabeceraBE");
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
+            DataTable dataTable = Execute(objCommand);
+            List<DocumentoDetalle> documentoDetalleList = new List<DocumentoDetalle>();
+            Guid idCpeCabeceraBe = Guid.Empty;
+            foreach (DataRow row in dataTable.Rows)
+            {
+                idCpeCabeceraBe =  Converter.GetGuid(row, "id_cpe_cabecera_be");
+            }
+            return idCpeCabeceraBe;
+        }
+
 
     }
 }

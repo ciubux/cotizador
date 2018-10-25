@@ -466,16 +466,41 @@ jQuery(function ($) {
                 $('body').loadingModal('hide')
 
                 if (resultado.notaIngresoValidacion.tipoErrorValidacion == 0) {
-                    $.alert({
-                        //icon: 'fa fa-warning',
-                        title: TITLE_EXITO,
-                        content: "La nota de ingreso número " + resultado.serieNumeroNotaIngreso + " fue creada correctamente.",
-                        type: 'green',
-                        buttons: {
-                            OK: function () {
-                                window.location = '/NotaIngreso/Index?idMovimientoAlmacen=' + resultado.idNotaIngreso; }
-                        }
-                    });
+
+                    if (resultado.generarNotaCredito) {
+                            $.ajax({
+                                url: "/NotaCredito/iniciarCreacionNotaCreditoDesdeNotaIngreso",
+                                type: 'POST',
+                                dataType: 'JSON',
+                                //data: { },
+                                error: function (error) {
+                                    mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                                    /*IMPORTANTE: FALTA DEFINIR EL ESTADO DE LA NOTA DE INGRESO CUANDO NO SE CREA CORRECTAMENTE LA NOTA DE CREDITO*/
+                                },
+                                success: function (venta) {
+                                    if (venta.tipoErrorCrearTransaccion == 0) {
+                                        window.location = '/NotaCredito/Crear';
+                                    }
+                                    else {
+                                        mostrarMensajeErrorProceso(MENSAJE_ERROR + "\n" + "Detalle Error: " + venta.descripcionError);
+                                    }
+                                }
+                            });
+
+                    }
+                    else {
+                        $.alert({
+                            //icon: 'fa fa-warning',
+                            title: TITLE_EXITO,
+                            content: "La nota de ingreso número " + resultado.serieNumeroNotaIngreso + " fue creada correctamente.",
+                            type: 'green',
+                            buttons: {
+                                OK: function () {
+                                    window.location = '/NotaIngreso/Index?idMovimientoAlmacen=' + resultado.idNotaIngreso;
+                                }
+                            }
+                        });
+                    }
                 }
                 else {
                     mostrarMensajeErrorProceso(resultado.notaIngresoValidacion.tipoErrorValidacionString + " " + resultado.notaIngresoValidacion.descripcionError);
@@ -770,19 +795,14 @@ jQuery(function ($) {
 
                 if (notaIngreso.atencionParcial) {
                     $("#ver_notaIngreso_atencionParcial").html("Ingreso Parcial");
-                  /*  if (guiaRemision.ultimaAtencionParcial) {
-                        $("#ver_notaIngreso_atencionParcial").html("Atención Parcial");
-                    }
-                    else {
-                        $("#ver_notaIngreso_atencionParcial").html("Última Atención Parcial");
-                    }*/
                 }
                 else {
                     $("#ver_notaIngreso_atencionParcial").html("Ingreso Final");
                 }
 
                 if (notaIngreso.guiaRemisionAExtornar == null) {
-                    $("#fieldsetDatosExtorno").hide();
+                    $("#fieldsetDocumentoExtornado").hide();
+                    $("#fieldsetDetalleExtorno").hide();
                     $("#fieldsetDocumentosReferencia").show();
 
                     $("#ver_notaIngreso_serieGuiaReferencia").html(notaIngreso.serieGuiaReferencia);
@@ -793,7 +813,8 @@ jQuery(function ($) {
                     $("#btnExtornar").show();
                 }
                 else {
-                    $("#fieldsetDatosExtorno").show();
+                    $("#fieldsetDocumentoExtornado").show();
+                    $("#fieldsetDetalleExtorno").show();
                     $("#fieldsetDocumentosReferencia").hide();
                     $("#ver_notaIngreso_guiaRemisionAExtornar_serieNumeroGuia").html(notaIngreso.guiaRemisionAExtornar.serieNumeroGuia);
                     $("#ver_notaIngreso_motivoExtornoGuiaRemisionToString").html(notaIngreso.motivoExtornoGuiaRemisionToString);
@@ -801,15 +822,15 @@ jQuery(function ($) {
                     $("#btnExtornar").hide();
                 }
 
-
-
-
-
+                if (notaIngreso.motivoTraslado == MOTIVO_TRASLADO_ENTRADA_DEVOLUCION_VENTA.charCodeAt(0)
+                    || notaIngreso.motivoTraslado == MOTIVO_TRASLADO_ENTRADA_DEVOLUCION_PRESTAMO_ENTREGADO.charCodeAt(0)
+                    || notaIngreso.motivoTraslado == MOTIVO_TRASLADO_ENTRADA_DEVOLUCION_COMODATO_ENTREGADO.charCodeAt(0)
+                    || notaIngreso.motivoTraslado == MOTIVO_TRASLADO_ENTRADA_DEVOLUCION_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
+                ) {
+                    $("#btnExtornar").hide();
+                }
 
                 //invertirFormatoFecha(pedido.fechaMaximaEntrega.substr(0, 10)));
-
-
-
 
                 $("#tableDetalleGuia > tbody").empty();
 
@@ -1851,14 +1872,13 @@ jQuery(function ($) {
     $(document).on('click', "button.footable-show", function () {
 
         /*Si no es una atención parcial no se debe poder editar*/
-        if (!$('#notaIngreso_atencionParcial').prop('checked'))
-        {
+        if ($('#notaIngreso_atencionParcial').length) {
 
-
-            return false;
+            if (!$('#notaIngreso_atencionParcial').prop('checked')) {
+                return false;
+            }
 
         }
-
        
 
 
@@ -2256,6 +2276,7 @@ jQuery(function ($) {
                          '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
                          '<td>  ' + guiaRemisionList[i].serieNumeroNotaIngreso + '</td>' +
                          '<td>  ' + guiaRemisionList[i].pedido.numeroPedidoString + '</td>' +
+                         '<td>  ' + guiaRemisionList[i].motivoTrasladoString + '</td>' +
                          '<td>  ' + guiaRemisionList[i].usuario.nombre + '</td>' +
                          '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
                          '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
@@ -2263,6 +2284,7 @@ jQuery(function ($) {
                          '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
                          '<td>  ' + guiaRemisionList[i].ciudadDestino.nombre + '</td>' +
                          '<td ' + styleEstado + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
+                         '<td>' + guiaRemisionList[i].tipoExtornoToString + '</td>' +
                          '<td>' + noEntregado + '</td>' +
                          '<td>' + noEntregadoLectura + '</td>' +
                          '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerNotaIngreso btn btn-primary ">Ver</button></td > ' +
@@ -2361,6 +2383,19 @@ jQuery(function ($) {
             type: 'POST',
             data: {
                 fechaTrasladoHasta: fechaTrasladoHasta
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#motivoTraslado").change(function () {
+        var motivoTraslado = $("#motivoTraslado").val();
+        $.ajax({
+            url: "/NotaIngreso/ChangeMotivoTraslado",
+            type: 'POST',
+            data: {
+                motivoTraslado: motivoTraslado
             },
             success: function () {
             }

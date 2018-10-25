@@ -48,7 +48,7 @@ namespace Model
         [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }
         public Cliente cliente { get; set; }
-        public Grupo grupo { get; set; }
+        public GrupoCliente grupo { get; set; }
         public OpcionesConsiderarCantidades considerarCantidades { get; set; }
         public Boolean mostrarCodigoProveedor { get; set; }
         public Decimal montoSubTotal { get; set; }

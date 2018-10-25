@@ -605,7 +605,7 @@ jQuery(function ($) {
                     $("#vpNRO_GRE").html(documentoVenta.cPE_CABECERA_BE.NRO_GRE);
 
                     /*OBSERVACIONES*/ /*CODIGO CLIENTE*/
-                    $("#vpOBSERVACIONES").html($("#documentoVenta_observaciones").val());
+                    $("#vpOBSERVACIONES").html($("#venta_observaciones").val());
                     $("#vpCODIGO_CLIENTE").html(documentoVenta.cliente.codigo);
 
 

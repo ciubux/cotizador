@@ -13,6 +13,8 @@ namespace Model
         public GuiaRemision()
         {
             this.motivoTraslado = motivosTraslado.Venta;
+            this.tipoExtorno = TiposExtorno.SinExtorno;
+            this.motivoExtornoNotaIngreso = MotivosExtornoNotaIngreso.DevolucionTotal;
         }
 
 
@@ -65,6 +67,35 @@ namespace Model
         public GuiaRemisionValidacion guiaRemisionValidacion { get; set; }
 
         [Display(Name = "Motivo Traslado:")]
+        public motivosTrasladoBusqueda motivoTrasladoBusqueda { get; set; }
+        public enum motivosTrasladoBusqueda
+        {
+            [Display(Name = "Todos")]
+            Todos = '0', /*PEDIDOS DE VENTA*/
+            [Display(Name = "Venta")]
+            Venta = 'V', /*PEDIDOS DE VENTA*/
+            [Display(Name = "Traslado Interno a Entregar")]
+            TrasladoInterno = 'T',  /*PEDIDO DE ALMACEN*/
+            [Display(Name = "Comodato a Entregar")]
+            ComodatoEntregado = 'M', /*PEDIDO DE VENTA*/
+            [Display(Name = "Transferencia Gratuita a Entregar")]
+            TransferenciaGratuitaEntregada = 'G', /*PEDIDO DE VENTA*/
+            [Display(Name = "Préstamo a Entregar")]
+            PrestamoEntregado = 'P', /*PEDIDO DE VENTA*/
+
+
+            [Display(Name = "Extorno de Compra")]
+            DevolucionCompra = 'B', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Extorno de Préstamo Recibido")]
+            DevolucionPrestamoRecibido = 'E', /*PEDIDO DE ALMACEN*/
+            [Display(Name = "Extorno de Comodato Recibido")]
+            DevolucionComodatoRecibido = 'F', /*PEDIDO DE COMPRA*/
+            [Display(Name = "Extorno de Transferencia Gratuita Recibida")]
+            DevolucionTransferenciaGratuitaRecibida = 'H', /*PEDIDO DE COMPRA*/
+
+        }
+
+            [Display(Name = "Motivo Traslado:")]
         public motivosTraslado motivoTraslado { get; set; }
         public enum motivosTraslado
         {
@@ -174,7 +205,7 @@ namespace Model
 
         public NotaIngreso notaIngresoAExtornar { get; set; }
 
-
+       
 
     }
 }

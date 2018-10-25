@@ -166,6 +166,10 @@ textarea {
         width: 1100px;
     }
 
+    #modalVerCliente .modal-dialog {
+        width: 1200px;
+    }
+    
 }
 
 

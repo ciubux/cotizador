@@ -99,10 +99,10 @@ namespace Cotizador.Controllers
 
         public void ChangeInputString()
         {
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            Cliente cliente = this.ClienteSession;
             PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(cliente, this.Request.Params["valor"]);
-            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+            this.ClienteSession = cliente;
         }
 
         public void ChangeInputInt()
@@ -170,7 +170,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             //   usuarioBL.updateCotizacionSerializada(usuario, null);
-            return RedirectToAction("Editar", "Cliente");
+            return RedirectToAction("Index", "Cliente");
         }
 
         public ActionResult Editar(Guid? idCliente = null )
@@ -199,7 +199,7 @@ namespace Cotizador.Controllers
 
             Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
 
-
+            List<GrupoCliente> grupoClienteList = new List<GrupoCliente>();
 
             if (idCliente != null && idCliente != Guid.Empty)
             {
@@ -207,11 +207,13 @@ namespace Cotizador.Controllers
                 cliente = clienteBL.getCliente(idCliente.Value);
                 cliente.IdUsuarioRegistro = usuario.idUsuario;
                 cliente.usuario = usuario;
+                GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
+                grupoClienteList = grupoClienteBL.getGruposCliente();
                 this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
             }
 
             ViewBag.cliente = cliente;
-
+            ViewBag.gruposCliente = grupoClienteList;
             return View();
 
         }
@@ -220,14 +222,28 @@ namespace Cotizador.Controllers
         {
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
-            return clienteBL.getCLientesBusqueda(data, cliente.ciudad.idCiudad);
+            return clienteBL.getCLientesBusqueda(data, this.ClienteSession.ciudad.idCiudad);
+        }
+
+        public String Search()
+        {
+            //Se indica la página con la que se va a trabajar
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaClientes;
+            //Se recupera el objeto cliente que contiene los criterios de Búsqueda de la session
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA];
+            ClienteBL clienteBL = new ClienteBL();
+            List<Cliente> clienteList = clienteBL.getClientes(cliente);
+            //Se coloca en session el resultado de la búsqueda
+            this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = clienteList;
+            //Se retorna la cantidad de elementos encontrados
+            return JsonConvert.SerializeObject(clienteList);
+            //return pedidoList.Count();
         }
 
 
         public String GetCliente()
         {
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE]; 
+            Cliente cliente = this.ClienteSession; 
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
             Ciudad ciudad = cliente.ciudad;
@@ -239,7 +255,21 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
-       
+        public String Show()
+        {
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+            ClienteBL clienteBl = new ClienteBL();
+            Cliente cliente = clienteBl.getCliente(idCliente);
+            cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String resultado = JsonConvert.SerializeObject(cliente);
+            this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = cliente;
+            return resultado;
+        }
+
+
+        
+
+
         public String ChangeDireccionDomicilioLegalSunat()
         {
             String direccionDomicilioLegalSunat = Request["direccionDomicilioLegalSunat"].ToString();
@@ -306,10 +336,10 @@ namespace Cotizador.Controllers
         public String Create()
         {
             ClienteBL clienteBL = new ClienteBL();
-            Cliente cliente = this.ClienteSession;
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
             cliente = clienteBL.insertClienteSunat(cliente);
             String resultado = JsonConvert.SerializeObject(cliente);
-            this.ClienteSession = null;
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
             return resultado;
         }
 
@@ -327,7 +357,7 @@ namespace Cotizador.Controllers
                 cliente = clienteBL.updateClienteSunat(cliente);
             }
             String resultado = JsonConvert.SerializeObject(cliente);
-            this.ClienteSession = null;
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
             return resultado;
         }
 
@@ -526,6 +556,28 @@ namespace Cotizador.Controllers
         public void ChangeBloqueado()
         {
             ClienteSession.bloqueado = Int32.Parse(this.Request.Params["bloqueado"]) == 1;
+        }
+
+        public void ChangeSinPlazoCreditoAprobado()
+        {
+            ClienteSession.sinPlazoCredito = Int32.Parse(this.Request.Params["sinPlazoCredito"]) == 1;
+        }
+
+        public String ConsultarSiExisteCliente()
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            if (cliente == null)
+                return "{\"existe\":\"false\",\"codigo\":\"0\"}";
+            else
+                return "{\"existe\":\"true\",\"codigo\":\"" + cliente.codigo + "\"}";
+        }
+
+
+        public void iniciarEdicionCliente()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Cliente clienteVer = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = clienteVer;
         }
     }
 }

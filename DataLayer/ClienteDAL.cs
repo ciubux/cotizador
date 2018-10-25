@@ -101,73 +101,150 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_cliente");
             InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
             DataTable dataTable = Execute(objCommand);
-            Cliente obj = new Cliente();
+            Cliente cliente = new Cliente();
 
             foreach (DataRow row in dataTable.Rows)
             {
-                obj.idCliente = Converter.GetGuid(row, "id_cliente");
-                obj.codigo = Converter.GetString(row, "codigo");
-                obj.razonSocial = Converter.GetString(row, "razon_social");
-                obj.nombreComercial = Converter.GetString(row, "nombre_comercial");
-                obj.ruc = Converter.GetString(row, "ruc");
-                obj.contacto1 = Converter.GetString(row, "contacto1");
-                obj.contacto2 = Converter.GetString(row, "contacto2");
-                obj.domicilioLegal = Converter.GetString(row, "domicilio_legal");
-                obj.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
-                obj.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
-                obj.nombreComercialSunat = Converter.GetString(row, "nombre_comercial_sunat");
-                obj.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
-                obj.estadoContribuyente = Converter.GetString(row, "estado_contribuyente_sunat");
-                obj.condicionContribuyente = Converter.GetString(row, "condicion_contribuyente_sunat");
+                cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                cliente.codigo = Converter.GetString(row, "codigo");
+                cliente.razonSocial = Converter.GetString(row, "razon_social");
+                cliente.nombreComercial = Converter.GetString(row, "nombre_comercial");
+                cliente.ruc = Converter.GetString(row, "ruc");
+                cliente.contacto1 = Converter.GetString(row, "contacto1");
+                cliente.contacto2 = Converter.GetString(row, "contacto2");
+                cliente.domicilioLegal = Converter.GetString(row, "domicilio_legal");
+                cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
+                cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                cliente.nombreComercialSunat = Converter.GetString(row, "nombre_comercial_sunat");
+                cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
+                cliente.estadoContribuyente = Converter.GetString(row, "estado_contribuyente_sunat");
+                cliente.condicionContribuyente = Converter.GetString(row, "condicion_contribuyente_sunat");
 
-                obj.ubigeo = new Ubigeo();
-                obj.ubigeo.Id = Converter.GetString(row, "codigo_ubigeo");
-                obj.ubigeo.Departamento = Converter.GetString(row, "departamento");
-                obj.ubigeo.Provincia = Converter.GetString(row, "provincia");
-                obj.ubigeo.Distrito = Converter.GetString(row, "distrito");
-                obj.plazoCredito = Converter.GetString(row, "plazo_credito");
+                cliente.ubigeo = new Ubigeo();
+                cliente.ubigeo.Id = Converter.GetString(row, "codigo_ubigeo");
+                cliente.ubigeo.Departamento = Converter.GetString(row, "departamento");
+                cliente.ubigeo.Provincia = Converter.GetString(row, "provincia");
+                cliente.ubigeo.Distrito = Converter.GetString(row, "distrito");
+                cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
 
-                obj.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
-                obj.ciudad = new Ciudad();
-                obj.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
+                cliente.ciudad = new Ciudad();
+                cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                cliente.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
 
                 /*Plazo Crédito*/
-                obj.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
-                obj.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
-                obj.sobrePlazo = Converter.GetInt(row, "sobre_plazo");
+                cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
+                cliente.sobrePlazo = Converter.GetInt(row, "sobre_plazo");
 
                 /*Monto Crédito*/
-                obj.creditoSolicitado = Converter.GetDecimal(row, "credito_solicitado");
-                obj.creditoAprobado = Converter.GetDecimal(row, "credito_aprobado");
-                obj.sobreGiro = Converter.GetDecimal(row, "sobre_giro");
+                cliente.creditoSolicitado = Converter.GetDecimal(row, "credito_solicitado");
+                cliente.creditoAprobado = Converter.GetDecimal(row, "credito_aprobado");
+                cliente.sobreGiro = Converter.GetDecimal(row, "sobre_giro");
 
-                obj.vendedoresAsignados = Converter.GetBool(row, "vendedores_asignados");
-                obj.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
+                cliente.vendedoresAsignados = Converter.GetBool(row, "vendedores_asignados");
+                cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
 
                 /*Vendedores*/
-                obj.responsableComercial = new Vendedor();
-                obj.responsableComercial.idVendedor = Converter.GetInt(row, "responsable_comercial_id_vendedor");
-                obj.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
-                obj.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
+                cliente.responsableComercial = new Vendedor();
+                cliente.responsableComercial.idVendedor = Converter.GetInt(row, "responsable_comercial_id_vendedor");
+                cliente.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
+                cliente.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
 
-                obj.supervisorComercial = new Vendedor();
-                obj.supervisorComercial.idVendedor = Converter.GetInt(row, "supervisor_comercial_id_vendedor");
-                obj.supervisorComercial.codigo = Converter.GetString(row, "supervisor_comercial_codigo");
-                obj.supervisorComercial.descripcion = Converter.GetString(row, "supervisor_comercial_descripcion");
+                cliente.supervisorComercial = new Vendedor();
+                cliente.supervisorComercial.idVendedor = Converter.GetInt(row, "supervisor_comercial_id_vendedor");
+                cliente.supervisorComercial.codigo = Converter.GetString(row, "supervisor_comercial_codigo");
+                cliente.supervisorComercial.descripcion = Converter.GetString(row, "supervisor_comercial_descripcion");
 
-                obj.asistenteServicioCliente = new Vendedor();
-                obj.asistenteServicioCliente.idVendedor = Converter.GetInt(row, "asistente_servicio_cliente_id_vendedor");
-                obj.asistenteServicioCliente.codigo = Converter.GetString(row, "asistente_servicio_cliente_codigo");
-                obj.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
+                cliente.asistenteServicioCliente = new Vendedor();
+                cliente.asistenteServicioCliente.idVendedor = Converter.GetInt(row, "asistente_servicio_cliente_id_vendedor");
+                cliente.asistenteServicioCliente.codigo = Converter.GetString(row, "asistente_servicio_cliente_codigo");
+                cliente.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
 
-                obj.observacionesCredito = Converter.GetString(row, "observaciones_credito");
-                obj.observaciones = Converter.GetString(row, "observaciones");
+                cliente.observacionesCredito = Converter.GetString(row, "observaciones_credito");
+                cliente.observaciones = Converter.GetString(row, "observaciones");
 
-                obj.bloqueado = Converter.GetBool(row, "bloqueado");
+                cliente.bloqueado = Converter.GetBool(row, "bloqueado");
 
+                cliente.perteneceCanalMultiregional = Converter.GetBool(row, "pertenece_canal_multiregional");
+                cliente.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
+                cliente.perteneceCanalProvincia = Converter.GetBool(row, "pertenece_canal_provincia");
+                cliente.perteneceCanalPCP = Converter.GetBool(row, "pertenece_canal_pcp");
+                cliente.perteneceCanalOrdon = Converter.GetBool(row, "pertenece_canal_ordon");
+                cliente.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
+
+                cliente.grupoCliente = new GrupoCliente();
+                cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
             }
 
-            return obj;
+            return cliente;
+        }
+
+        public List<Cliente> SelectClientes(Cliente cliente)
+        {
+            var objCommand = GetSqlCommand("ps_clientes");
+            InputParameterAdd.Varchar(objCommand, "codigo", cliente.codigo);
+            InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
+            InputParameterAdd.Varchar(objCommand, "textoBusqueda", cliente.textoBusqueda);
+            InputParameterAdd.Int(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
+            InputParameterAdd.Int(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
+            InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
+            InputParameterAdd.Int(objCommand, "sinPlazoCreditoAprobado", cliente.sinPlazoCreditoAprobado ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "bloqueado", cliente.bloqueado ? 1 : 0);
+            DataTable dataTable = Execute(objCommand);
+
+            List<Cliente> clienteList = new List<Cliente>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente ClienteResultado = new Cliente();
+                ClienteResultado.idCliente = Converter.GetGuid(row, "id_cliente");
+                ClienteResultado.codigo = Converter.GetString(row, "codigo");
+                ClienteResultado.ciudad = new Ciudad();
+                ClienteResultado.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                ClienteResultado.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
+
+                ClienteResultado.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                ClienteResultado.nombreComercial = Converter.GetString(row, "nombre_comercial");
+                ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
+                ClienteResultado.ruc = Converter.GetString(row, "ruc");
+
+                /*Vendedores*/
+                ClienteResultado.responsableComercial = new Vendedor();
+                ClienteResultado.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
+                ClienteResultado.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
+
+                ClienteResultado.supervisorComercial = new Vendedor();
+                ClienteResultado.supervisorComercial.codigo = Converter.GetString(row, "supervisor_comercial_codigo");
+                ClienteResultado.supervisorComercial.descripcion = Converter.GetString(row, "supervisor_comercial_descripcion");
+
+                ClienteResultado.asistenteServicioCliente = new Vendedor();
+                ClienteResultado.asistenteServicioCliente.codigo = Converter.GetString(row, "asistente_servicio_cliente_codigo");
+                ClienteResultado.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
+
+                /*Plazo de Crédito Aprobado*/
+                ClienteResultado.plazoCredito = Converter.GetString(row, "plazo_credito");
+                /*Forma de Pago Aprobado*/
+                ClienteResultado.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
+
+                /*Plazo Crédito*/
+                ClienteResultado.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                ClienteResultado.creditoAprobado = Converter.GetDecimal(row, "credito_aprobado");
+                ClienteResultado.sobrePlazo = Converter.GetInt(row, "sobre_plazo");
+
+                /*Monto Crédito*/
+                ClienteResultado.creditoSolicitado = Converter.GetDecimal(row, "credito_solicitado");
+                ClienteResultado.creditoAprobado = Converter.GetDecimal(row, "credito_aprobado");
+                ClienteResultado.sobreGiro = Converter.GetDecimal(row, "sobre_giro");
+
+                ClienteResultado.vendedoresAsignados = Converter.GetBool(row, "vendedores_asignados");
+                ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
+
+                ClienteResultado.bloqueado = Converter.GetBool(row, "bloqueado");
+                clienteList.Add(ClienteResultado);
+            }
+
+            return clienteList;
         }
 
         public Cliente insertCliente(Cliente cliente)

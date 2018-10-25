@@ -67,3 +67,6 @@ C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\BusinessLayer.d
 C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\ServiceLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\Model.dll.config
 C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\ServiceLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\NPOI.dll
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\ICSharpCode.SharpZipLib.dll
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\NPOI.xml

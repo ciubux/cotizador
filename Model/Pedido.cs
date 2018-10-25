@@ -185,7 +185,7 @@ namespace Model
 
         public String numeroPedidoString
         {
-            get { return this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
+            get { return this.numeroPedido == 0?"":this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
         }
 
         public Usuario usuario { get; set; }
@@ -349,9 +349,9 @@ namespace Model
         public tiposPedidoAlmacen tipoPedidoAlmacen { get; set; }
         public enum tiposPedidoAlmacen
         {
-            [Display(Name = "Traslado Interno a Entregar")]
+            [Display(Name = "Solicitud de Traslado Interno")]
             TrasladoInterno = 'T', //GUIA REMISION
-            [Display(Name = "Traslado Interno a Recibir")]
+            [Display(Name = "Recepción de Traslado Interno")]
             TrasladoInternoRecibido = 'I',  //NOTA INGRESO
             [Display(Name = "Préstamo a Entregar")]
             PrestamoEntregado = 'P',   //GUIA REMISION

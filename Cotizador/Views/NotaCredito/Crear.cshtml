@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Crear Factura de Reemplazo";
+    ViewBag.Title = "Crear Nota de Crédito";
     Model.Venta venta = ViewBag.venta;
 }
 
@@ -23,8 +23,8 @@
         <input type="hidden" id="considerarCantidades" name="considerarCantidades" value="2" />
 
         <!--    <fieldset>
-        <legend>Datos de Nota Crédito:</legend>
-        DATOS DEL CLIENTE-->
+    <legend>Datos de Nota Crédito:</legend>
+    DATOS DEL CLIENTE-->
 
         <div class="row">
 
@@ -53,21 +53,20 @@
         <div class="row">
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    @Html.LabelFor(v => venta.documentoVenta.serieNumero, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                    @Html.LabelFor(v => venta.documentoVenta.serie, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                     <div class="col-xs-8">
-                        @Html.TextBoxFor(p => venta.documentoVenta.serieNumero, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        @Html.DropDownListFor(x => venta.documentoVenta.serieDocumentoElectronico,
+                         new SelectList(venta.cliente.ciudad.serieDocumentoElectronicoList, "serie", "serie", venta.documentoVenta.serieDocumentoElectronico), htmlAttributes: new { @class = "form-control", id = "documentoVenta_serie" })
                     </div>
                 </div>
             </div>
-
-
 
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     @Html.LabelFor(v => venta.documentoVenta.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                     <div class="col-xs-8">
                         <!--<input type="hidden" id="fechaEmision" value="" />
-                        <input type="hidden" id="fechaEntregaHastaProgramacion" value="" />-->
+                    <input type="hidden" id="fechaEntregaHastaProgramacion" value="" />-->
                         <input type="hidden" id="documentoVenta_fechaEmisiontmp" value="@ViewBag.fechaEmision" />
                         <input class="form-control" type="text" id="documentoVenta_fechaEmision" name="documentoVenta_fechaEmision">
                     </div>
@@ -83,39 +82,7 @@
             </div>
         </div>
 
-        <div class="row">
 
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(v => venta.documentoReferencia.tipoDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
-                        @Html.TextBoxFor(v => venta.documentoReferencia.tipoDocumento, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(v => venta.documentoReferencia.serieNumero, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
-                        @Html.TextBoxFor(v => venta.documentoReferencia.serieNumero, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(v => venta.documentoReferencia.fechaEmisionFormat, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
-                        @Html.TextBoxFor(v => venta.documentoReferencia.fechaEmisionFormat, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
-                    </div>
-                </div>
-            </div>
-
-        </div>
 
 
         <div class="row">
@@ -125,7 +92,7 @@
                     <div class="col-xs-10">
                         @Html.TextBoxFor(v => venta.documentoVenta.cPE_CABECERA_BE.NOM_RCT, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                         <!--
-                        <p class="form-control-static" id="verRazonSocialSunat"></p>-->
+                    <p class="form-control-static" id="verRazonSocialSunat"></p>-->
                     </div>
                 </div>
             </div>
@@ -168,20 +135,87 @@
             </div>
         </div>
 
+        <fieldset>
+            <legend>Documento a extornar:</legend>
+            <div class="row">
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(v => venta.documentoReferencia.tipoDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
+                            @Html.TextBoxFor(v => venta.documentoReferencia.tipoDocumento, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(v => venta.documentoReferencia.serieNumero, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
+                            @Html.TextBoxFor(v => venta.documentoReferencia.serieNumero, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(v => venta.documentoReferencia.fechaEmisionFormat, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
+                            @Html.TextBoxFor(v => venta.documentoReferencia.fechaEmisionFormat, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
 
 
+        @if (venta.documentoVenta.movimientoAlmacen != null)
+    {
+        <fieldset>
+            <legend>Datos de Nota Ingreso:</legend>
+            <div class="row">
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="venta_documentoVenta_movimientoAlmacen_sustentoExtorno" class="control-label col-xs-4">Número:</label>
+                        <div class="col-xs-8">
+                            <input class="form-control" disabled value="@( ((Model.NotaIngreso)venta.documentoVenta.movimientoAlmacen).serieNumeroNotaIngreso)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        <label for="venta_documentoVenta_movimientoAlmacen_sustentoExtorno" class="control-label col-xs-2">Sustento:</label>
+                        <div class="col-xs-10">
+                            @Html.TextBoxFor(p => venta.documentoVenta.movimientoAlmacen.sustentoExtorno, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+
+}
 
 
 
         <!-- </fieldset>-->
-        @{ var detalleEditable = "";
-            var detalleAllowDelete = "false";}
+        @{ var detalleEditable = "false";
+        var detalleAllowDelete = "false";}
 
+        <!--Si no existe movimiento de almacen quiere decir que se estrá creando la nota de crédito
+    directamente desde la factura-->
+        @if (venta.documentoVenta.movimientoAlmacen == null)
+    {
 
-        @if (venta.permiteEditarCantidades
-    || venta.permiteEditarPrecios
-    || venta.permiteEliminarLineas
-)
+        if (venta.permiteEditarCantidades
+        || venta.permiteEditarPrecios
+        || venta.permiteEliminarLineas)
         {
             detalleEditable = "true";
             if (venta.permiteEliminarLineas)
@@ -194,7 +228,7 @@
         {
             detalleEditable = "false";
         }
-
+    }
 
 
 
@@ -239,8 +273,8 @@
 
                 @{int contador = 0;}
                 @foreach (var documentoDetalle in venta.pedido.pedidoDetalleList)
-                {
-                    contador++;
+            {
+                contador++;
                 <tr data-expanded="true">
                     <td>  @documentoDetalle.producto.idProducto  </td>
                     <td>  @documentoDetalle.esPrecioAlternativo  </td>
@@ -274,7 +308,7 @@
                     <td class="@documentoDetalle.producto.idProducto detordenamiento"></td>
 
                 </tr>
-                }
+        }
 
             </tbody>
         </table>
@@ -291,8 +325,21 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 col-lg-3">
+           
+        </div>
 
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    @Html.LabelFor(p => venta.documentoVenta.observacionesUsoInterno, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <div class="col-xs-8">
+                        @Html.TextAreaFor(p => venta.documentoVenta.observacionesUsoInterno, htmlAttributes: new { @class = "form-control", rows = "5" })
+                        <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
 
                 <div class="form-group">
                     <div class="pull-right">
@@ -316,8 +363,6 @@
 
             </div>
         </div>
-
-
 
         <div class="row">
 

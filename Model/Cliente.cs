@@ -34,6 +34,33 @@ namespace Model
         public Vendedor supervisorComercial { get; set; }
         [Display(Name = "Observaciones (Créditos y Cobranzas):")]
         public String observacionesCredito { get; set; }
+
+        [Display(Name = "N° Doc / Razón Social / Nombre:")]
+        public String textoBusqueda { get; set; }
+
+        [Display(Name = "Bloqueado:")]
+        public Boolean bloqueado { get; set; }
+
+        public Boolean sinPlazoCredito { get; set; }
+
+        public Boolean sinMontoCreditoAprobado { get; set; }
+
+        public Boolean sinPlazoCreditoAprobado { get; set; }
+        [Display(Name = "Grupo Cliente:")]
+        public GrupoCliente grupoCliente { get; set; }
+        [Display(Name = "Pertenece Canal Multiregional:")]
+        public Boolean perteneceCanalMultiregional { get; set; }
+        [Display(Name = "Pertenece Canal Lima:")]
+        public Boolean perteneceCanalLima { get; set; }
+        [Display(Name = "Pertenece Canal Provincia:")]
+        public Boolean perteneceCanalProvincia { get; set; }
+        [Display(Name = "Pertenece Canal PCP:")]
+        public Boolean perteneceCanalPCP { get; set; }
+        [Display(Name = "Pertenece Canal Ordon:")]
+        public Boolean perteneceCanalOrdon { get; set; }
+        [Display(Name = "es Sub Distribuidor:")]
+        public Boolean esSubDistribuidor { get; set; }      
+
     }
 
 }

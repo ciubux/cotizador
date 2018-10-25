@@ -30,13 +30,20 @@ namespace Model
 
         public static String LABEL_DIRECCION_ENTREGA_VACIO = "Seleccione Dirección de Entrega";
 
-
+        public static String PREFIJO_NOTA_CREDITO_FACTURA = "FC";
+        public static String PREFIJO_NOTA_CREDITO_BOLETA = "BC";
+        public static String PREFIJO_NOTA_DEBITO_FACTURA = "BD";
+        public static String PREFIJO_NOTA_DEBITO_BOLETA = "FD";
 
         /*Tipos Documentos Cliente*/
         public static String TIPO_DOCUMENTO_CLIENTE_RUC = "6";
         public static String TIPO_DOCUMENTO_CLIENTE_DNI = "1";
         public static String TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA = "4";
 
+
+        public static int MOTIVO_EXTORNO_ANULACION_OPERACION = 1;
+        public static int MOTIVO_EXTORNO_DEVOLUCION_TOTAL = 6;
+        public static int MOTIVO_EXTORNO_DEVOLUCION_PARCIAL = 7;
 
 
         /*CONSTANTES PARA VARIABLES DE SESION*/

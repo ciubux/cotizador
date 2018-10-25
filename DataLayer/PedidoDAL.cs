@@ -1028,6 +1028,7 @@ namespace DataLayer
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+                pedido.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
 
                 pedido.usuario = new Usuario();
                 pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");

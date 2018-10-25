@@ -48,7 +48,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
             cotizacionTmp.ciudad = new Ciudad();
             cotizacionTmp.cliente = new Cliente();
-            cotizacionTmp.grupo = new Grupo();
+            cotizacionTmp.grupo = new GrupoCliente();
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
             cotizacionTmp.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Todos;
             // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
@@ -173,7 +173,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.fechaPrecios = cotizacionTmp.fecha.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
             cotizacionTmp.ciudad = new Ciudad();
             cotizacionTmp.cliente = new Cliente();
-            cotizacionTmp.grupo = new Grupo();
+            cotizacionTmp.grupo = new GrupoCliente();
             cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
             cotizacionTmp.igv = Constantes.IGV;
             cotizacionTmp.flete = 0;
@@ -243,7 +243,7 @@ namespace Cotizador.Controllers
 
 
                 int existeCliente = 0;
-                if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
+                if (cotizacion.cliente.idCliente != Guid.Empty)// || cotizacion.grupo.idGrupoCliente != Guid.Empty)
                 {
                     existeCliente = 1;
                 }
@@ -257,7 +257,7 @@ namespace Cotizador.Controllers
                 }
                 else
                 {
-                    ViewBag.idClienteGrupo = cotizacion.grupo.idGrupo;
+                    ViewBag.idClienteGrupo = cotizacion.grupo.idGrupoCliente;
                     ViewBag.clienteGrupo = cotizacion.grupo.ToString();
                 }
 
@@ -564,7 +564,7 @@ namespace Cotizador.Controllers
         {
             Cotizacion cotizacion = this.CotizacionSession;
             cotizacion.cliente = new Cliente();
-            cotizacion.grupo = new Grupo();
+            cotizacion.grupo = new GrupoCliente();
             Guid idCiudad = Guid.Empty;
             if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
             { 
@@ -614,8 +614,8 @@ namespace Cotizador.Controllers
 
             List<Cliente> clienteList = clienteBL.getCLientesBusquedaCotizacion(data, cotizacion.ciudad.idCiudad);
 
-            GrupoBL grupoBL = new GrupoBL();
-            List<Grupo> grupoList = grupoBL.getGruposBusqueda(data);
+            GrupoClienteBL grupoBL = new GrupoClienteBL();
+            List<GrupoCliente> grupoList = grupoBL.getGruposBusqueda(data);
 
             String resultado = "{\"q\":\"" + data + "\",\"results\":[";
             Boolean existeClienteGrupo = false;
@@ -624,9 +624,9 @@ namespace Cotizador.Controllers
                 resultado += "{\"id\":\"c" + cliente.idCliente + "\",\"text\":\"" + cliente.ToString() + "\"},";
                 existeClienteGrupo = true;
             }
-            foreach (Grupo grupo in grupoList)
+            foreach (GrupoCliente grupo in grupoList)
             {
-                resultado += "{\"id\":\"g" + grupo.idGrupo + "\",\"text\":\"" + grupo.ToString() + "\"},";
+                resultado += "{\"id\":\"g" + grupo.idGrupoCliente + "\",\"text\":\"" + grupo.ToString() + "\"},";
                 existeClienteGrupo = true;
             }
 
@@ -649,7 +649,7 @@ namespace Cotizador.Controllers
             cotizacion.contacto = cotizacion.cliente.contacto1;
 
             //Se crea un grupo vacío para no considerarlo al momento de grabar la cotización
-            cotizacion.grupo = new Grupo();
+            cotizacion.grupo = new GrupoCliente();
 
             String resultado = "{" +
                 "\"descripcionCliente\":\"" + cotizacion.cliente.ToString() + "\"," +
@@ -669,17 +669,17 @@ namespace Cotizador.Controllers
 
 
             Guid idGrupo = Guid.Parse(Request["idGrupo"].ToString());
-            GrupoBL grupoBl = new GrupoBL();
+            GrupoClienteBL grupoBl = new GrupoClienteBL();
             cotizacion.grupo = grupoBl.getGrupo(idGrupo);            
-            cotizacion.contacto = cotizacion.grupo.contacto;
+         //   cotizacion.contacto = cotizacion.grupo.contacto;
 
             //Se crea un cliente vacío para no considerarlo al momento de grabar la cotización
             cotizacion.cliente = new Cliente();
 
             String resultado = "{" +
                 "\"descripcionGrupo\":\"" + cotizacion.grupo.ToString() + "\"," +
-                "\"idGrupo\":\"" + cotizacion.grupo.idGrupo + "\"," +
-                "\"contacto\":\"" + cotizacion.grupo.contacto + "\"" +
+                "\"idGrupo\":\"" + cotizacion.grupo.idGrupoCliente + "\"," +
+                //"\"contacto\":\"" + cotizacion.grupo.contacto + "\"" +
                 "}";
             return resultado;
         }

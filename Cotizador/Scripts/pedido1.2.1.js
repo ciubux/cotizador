@@ -1,10 +1,7 @@
 
 jQuery(function ($) {
 
-    
-
-    
-        var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
+    var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_VALIDACION_PEDIDO = 'Revisar Datos del Pedido';
     var TITLE_EXITO = 'Operación Realizada';
@@ -3049,7 +3046,7 @@ jQuery(function ($) {
                     }
                         else {
                         if(resultado.numero == $("#verNumero").html())
-                                alert('Ya se encuentra editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización".');
+                                alert('Ya se encuentra editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Pedido".');
                             else
                                 alert('Está editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Pedido" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar y Continuar Editando Luego.');
                     }
@@ -3058,6 +3055,7 @@ jQuery(function ($) {
             }
         });
     });
+
 
     $("#btnGuardarActualizarPedido").click(function () {
 

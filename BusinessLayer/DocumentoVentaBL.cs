@@ -103,8 +103,6 @@ namespace BusinessLayer
             }
         }
 
-
-
         public void ActualizarEstadoDocumentosElectronicos(Usuario usuario)
         {
             using (var dal = new DocumentoVentaDAL())

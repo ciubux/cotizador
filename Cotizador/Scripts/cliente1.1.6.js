@@ -7,12 +7,14 @@ jQuery(function ($) {
     var TITLE_EXITO = 'Operación Realizada';
 
     $(document).ready(function () {
-        cargarChosenCliente();
+        $("#btnBusqueda").click();
+        //cargarChosenCliente();
         mostrarCamposSegunTipoDocIdentidad();
+        verificarSiExisteCliente();
     });
 
     function verificarSiExisteCliente() {
-        if ($("#idCliente").val().trim() != "") {
+        if ($("#idCliente").val().trim() != GUID_EMPTY) {
             $("#idCiudad").attr("disabled", "disabled");
             $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
             $("#cliente_ruc").attr("disabled", "disabled");
@@ -264,7 +266,7 @@ jQuery(function ($) {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
 
-        verificarSiExisteCliente();
+        //verificarSiExisteCliente();
     }
 
 
@@ -673,7 +675,7 @@ jQuery(function ($) {
                     type: 'green',
                     buttons: {
                         OK: function () {
-                            window.location = '/Cliente/Editar';
+                            window.location = '/Cliente/Index';
                         }
                     }
                 });
@@ -715,7 +717,7 @@ jQuery(function ($) {
                     type: 'green',
                     buttons: {
                         OK: function () {
-                            window.location = '/Cliente/Editar';
+                            window.location = '/Cliente/Index';
                         }
                     }
                 });
@@ -832,6 +834,14 @@ jQuery(function ($) {
 
     $("#cliente_observaciones").change(function () {
         changeInputString("observaciones", $("#cliente_observaciones").val())
+    });
+
+    $("#cliente_textoBusqueda").change(function () {
+        changeInputString("textoBusqueda", $("#cliente_textoBusqueda").val())
+    });
+
+    $("#cliente_codigo").change(function () {
+        changeInputString("codigo", $("#cliente_codigo").val())
     });
 
     $("#formaPagoCliente").change(function () {
@@ -1428,6 +1438,33 @@ jQuery(function ($) {
     });
 
 
+    $("input[name=cliente_bloqueadoBusqueda]").on("click", function () {
+        var bloqueado = $("input[name=cliente_bloqueadoBusqueda]:checked").val();
+        $.ajax({
+            url: "/Cliente/ChangeBloqueado",
+            type: 'POST',
+            data: {
+                bloqueado: bloqueado
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("input[name=cliente_sinPlazoCredito]").on("click", function () {
+        var sinPlazoCredito = $("input[name=cliente_sinPlazoCredito]:checked").val();
+        $.ajax({
+            url: "/Cliente/ChangeSinPlazoCreditoAprobado",
+            type: 'POST',
+            data: {
+                sinPlazoCredito: sinPlazoCredito
+            },
+            success: function () {
+            }
+        });
+    });
+
+
     $("#cliente_bloqueado").change(function () {
 
         var bloqueado = 1;
@@ -1446,7 +1483,210 @@ jQuery(function ($) {
              //   location.reload();
             }
         });
-
     });
+
+
+
+    $("#btnBusqueda").click(function () {
+        if ($("#cliente_textoBusqueda").val().length < 4 &&
+            $("#idResponsableComercial").val() == 0 &&
+            $("#idSupervisorComercial").val() == 0 &&
+            $("#idAsistenteServicioCliente").val() == 0 &&
+            $("input[name=cliente_bloqueadoBusqueda]:checked").val() == 0 &&
+            $("input[name=cliente_sinPlazoCredito]:checked").val() == 0
+            ) {
+            $.alert({
+                title: 'Validacion',
+                content: 'Si no ha seleccionado en los criterios de búsqueda algún responsable, un grupo o no ha marcado la opción solo bloqueados o solo sin plazo de crédito entonces debe ingresar el texto a buscar utilizando 3 o más caracteres en el campo "N° Doc / Razón Social / Nombre".',
+                type: 'orange',
+                buttons: {
+                    OK: function () {
+
+                        $("#cliente_textoBusqueda").focus();
+                    }
+                }
+            });
+            $("#tableClientes > tbody").empty();
+            $("#tableClientes").footable({
+                "paging": {
+                    "enabled": true
+                }
+            });
+            return false;
+        }
+
+        $("#btnBusqueda").attr("disabled", "disabled");
+        $.ajax({
+            url: "/Cliente/Search",
+            type: 'POST',
+            dataType: 'JSON',
+            error: function () {
+                $("#btnBusqueda").removeAttr("disabled");
+            },
+
+            success: function (clienteList) {
+                $("#btnBusqueda").removeAttr("disabled");
+                $("#tableClientes > tbody").empty();
+                $("#tableClientes").footable({
+                    "paging": {
+                        "enabled": true
+                    }
+                });
+
+                for (var i = 0; i < clienteList.length; i++) {
+
+                    var textoBloqueado = "";
+                    if (clienteList[i].bloqueado == true)
+                        textoBloqueado = "Bloqueado";
+
+
+                    var clienteRow = '<tr data-expanded="true">' +
+                        '<td>  ' + clienteList[i].idPedido + '</td>' +
+                        '<td>  ' + clienteList[i].codigo + '  </td>' +
+                        '<td>  ' + clienteList[i].razonSocialSunat + '  </td>' +
+                        '<td>  ' + clienteList[i].nombreComercial + ' </td>' +
+                        '<td>  ' + clienteList[i].tipoDocumentoIdentidadToString + '</td>' +
+                        '<td>  ' + clienteList[i].ruc + '  </td>' +
+                        '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
+                        '<td>  ' + clienteList[i].responsableComercial.descripcion + '</td>' +
+                        '<td>  ' + clienteList[i].supervisorComercial.descripcion + '</td>' +
+                        '<td>  ' + clienteList[i].asistenteServicioCliente.descripcion + '</td>' +
+                        '<td>  ' + clienteList[i].tipoPagoFacturaToString + '</td>' +
+                        '<td>  ' + clienteList[i].creditoAprobado.toFixed(cantidadDecimales) + '  </td>' +
+                        '<td>  ' + textoBloqueado + '  </td>' +
+                        '<td>' +
+                        '<button type="button" class="' + clienteList[i].idCliente + ' ' + clienteList[i].codigo + ' btnVerCliente btn btn-primary ">Ver</button>' +
+                        '</td>' +
+                        '</tr>';
+
+                    $("#tableClientes").append(clienteRow);
+
+                }
+
+                if (clienteList.length > 0)
+                    $("#msgBusquedaSinResultados").hide();
+                else
+                    $("#msgBusquedaSinResultados").show();
+            }
+        });
+    });
+
+    $(document).on('click', "button.btnVerCliente", function () {
+
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idCliente = arrrayClass[0];
+        var codigoCliente = arrrayClass[1];
+
+        $.ajax({
+            url: "/Cliente/Show",
+            data: {
+                idCliente: idCliente
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso();
+            },
+            success: function (cliente) {
+                $('body').loadingModal('hide')
+                $("#verCiudadNombre").html(cliente.ciudad.nombre);
+                $("#verCodigo").html(cliente.codigo);
+                $("#verRuc").html(cliente.ruc);
+                $("#verTipoDocumentoIdentidad").html(cliente.tipoDocumentoIdentidadToString);
+                $("#verNumeroDocumento").html(cliente.ruc);
+                $("#verNombreComercial").html(cliente.nombreComercial);
+                $("#verContacto").html(cliente.contacto1);
+                $("#verCorreoEnvioFactura").html(cliente.correoEnvioFactura);
+                if (cliente.bloqueado) {
+                    $("#verBloqueado").html("Sí");
+                }
+                else {
+                    $("#verBloqueado").html("No");
+                }
+
+                $("#verObservaciones").html(cliente.observaciones);
+
+                /*Plazo Crédito*/
+                $("#verPlazoCreditoSolicitado").html(cliente.plazoCreditoSolicitadoToString);
+                $("#verPlazoCreditoAprobado").html(cliente.tipoPagoFacturaToString);
+                $("#verSobrePlazo").html(cliente.sobrePlazo);               
+
+                /*Montos de Crédito*/
+                $("#verCreditoSolicitado").html(cliente.creditoSolicitado.toFixed(cantidadDecimales));
+                $("#verCreditoAprobado").html(cliente.creditoAprobado.toFixed(cantidadDecimales));
+                $("#verSobreGiro").html(cliente.sobreGiro.toFixed(cantidadDecimales));
+
+                $("#verObservacionesCredito").html(cliente.observacionesCredito);
+                $("#verFormaPagoFactura").html(cliente.formaPagoFacturaToString);
+
+                /*Datos Sunat*/
+                $("#verRazonSocialSunat").html(cliente.razonSocialSunat);       
+                $("#verNombreComercialSunat").html(cliente.nombreComercialSunat);
+                $("#verDireccionDomicilioLegalSunat").html(cliente.direccionDomicilioLegalSunat);
+
+
+
+                $("#verEstadoContribuyente").html(cliente.estadoContribuyente);
+                $("#verCondicionContribuyente").html(cliente.condicionContribuyente);
+
+                /*
+                $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);
+                $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
+                $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);*/
+                
+
+                /*Vendedores*/
+                $("#verResponsableComercial").html(cliente.responsableComercial.descripcion);
+                $("#verSupervisorComercial").html(cliente.supervisorComercial.descripcion);
+                $("#verAsistenteServicioCliente").html(cliente.asistenteServicioCliente.descripcion);
+
+
+
+             //   $("#btnEditarCliente").show();
+                
+                $("#modalVerCliente").modal('show');
+                
+            }
+        });
+    });
+
+    $("#btnEditarCliente").click(function () {
+      //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+        $.ajax({
+            url: "/Cliente/ConsultarSiExisteCliente",
+            type: 'POST',
+            async: false,
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.existe == "false") {
+
+                    $.ajax({
+                        url: "/Cliente/iniciarEdicionCliente",
+                        type: 'POST',
+                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del cliente."); },
+                        success: function (fileName) {
+                            window.location = '/Cliente/Editar';
+                        }
+                    });
+
+                }
+                else {
+                    if (resultado.codigo == 0) {
+                        alert('Está creando un nuevo cliente; para continuar por favor diríjase a la página "Crear/Modificar Cliente" y luego haga clic en el botón Cancelar.');
+                    }
+                    
+                    else {
+                        if (resultado.codigo == $("#verCodigo").html())
+                            alert('Ya se encuentra editando el cliente con código ' + resultado.codigo + '; para continuar por favor dirigase a la página "Crear/Modificar Cliente".');
+                        else
+                            alert('Está editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cliente" y luego haga clic en el botón Cancelar.');
+                    }
+                }
+            }
+        });
+    });
+
+
 
 });

@@ -143,6 +143,8 @@ namespace Model
         [Display(Name = "Serie:")]
         public String serie { get; set; }
 
+        [Display(Name = "Serie:")]
+        public SerieDocumentoElectronico serieDocumentoElectronico { get; set; }
 
         [Display(Name = "Número Doc.:")]
         public String serieNumero { get { return this.serie + "-" + this.numero; } }
@@ -414,6 +416,9 @@ namespace Model
 
         [Display(Name = "Observaciones Factura:")]
         public String observaciones { get; set; }
+
+        [Display(Name = "Observaciones para uso interno:")]
+        public String observacionesUsoInterno { get; set; }
 
         [Display(Name = "Está Anulado:")]
         public Boolean esAnulado { get; set; }

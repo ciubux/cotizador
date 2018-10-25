@@ -119,7 +119,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idDocumentoReferenciaVenta", documentoVenta.venta.documentoReferencia.idDocumentoReferenciaVenta);
             InputParameterAdd.Varchar(objCommand, "observaciones", documentoVenta.observaciones==null?"": documentoVenta.observaciones);
             InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoVenta.cliente.codigo);
-
+            InputParameterAdd.Varchar(objCommand, "observacionesUsoInterno", documentoVenta.observacionesUsoInterno);
             OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
             OutputParameterAdd.Int(objCommand, "tipoError");
             OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
@@ -468,7 +468,12 @@ namespace DataLayer
                         !column.Equals("fecha_solicitud_anulacion") &&
                         !column.Equals("fecha_aprobacion_anulacion") &&
                         !column.Equals("usuario_solicitud_anulacion") &&
-                        !column.Equals("usuario_aprobacion_anulacion")
+                        !column.Equals("usuario_aprobacion_anulacion") &&
+                        !column.Equals("aprobado") &&
+                        !column.Equals("usuario_aprobacion") &&
+                        !column.Equals("fecha_aprobacion") &&
+                        !column.Equals("observaciones")
+                        
                         )
                     {
                         documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));

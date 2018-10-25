@@ -65,6 +65,7 @@ namespace Cotizador.Controllers
         private void instanciarGuiaRemisionBusqueda()
         {
             GuiaRemision guiaRemision = new GuiaRemision();
+            guiaRemision.motivoTrasladoBusqueda = GuiaRemision.motivosTrasladoBusqueda.Todos;
             guiaRemision.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
             guiaRemision.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
             guiaRemision.ciudadOrigen = new Ciudad();
@@ -878,6 +879,15 @@ namespace Cotizador.Controllers
             String jsonTransportista = JsonConvert.SerializeObject(guiaRemision.transportista);
             return jsonTransportista;
         }
+
+        public void ChangeMotivoTraslado()
+        {
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA];
+            guiaRemision.motivoTrasladoBusqueda = (GuiaRemision.motivosTrasladoBusqueda)(Char)Int32.Parse(this.Request.Params["motivoTraslado"]);
+            this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] = guiaRemision;
+        }
+
+        
 
         public ActionResult CancelarCreacionGuiaRemision()
         {
