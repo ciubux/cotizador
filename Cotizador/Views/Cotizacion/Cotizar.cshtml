@@ -1,6 +1,13 @@
 ﻿@{
     ViewBag.Title = "Crear/Modificar Cotización";
     Model.Cotizacion cotizacion = ViewBag.cotizacion;
+
+    var aplicaSedes = cotizacion.aplicaSedes ? 1 : 0;
+    var clienteSedePrincipal = 0;
+    if (cotizacion.cliente.idCliente != null)
+    {
+        clienteSedePrincipal = cotizacion.cliente.sedePrincipal ? 1 : 0;
+    }
     // Model.Cotizacion.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
     // @model Enum;
 }
@@ -11,7 +18,9 @@
 <div class="container">
     <input type="hidden" id="codigoCotizacion" value="" />
     <input type="hidden" id="idProducto" value="" />
-     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" id="aplicaSedes" value="@aplicaSedes" />
+    <input type="hidden" id="clienteSedePrincipal" value="@clienteSedePrincipal" />
     <input type="hidden" value="@ViewBag.debug" />
     <form class="form-horizontal">
         <div class="row">
@@ -317,7 +326,7 @@
                         <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
                     }
                     <label for="mostrarCosto" class=" form-check-label"> Mostrar Costo:</label>
-                   
+
 
                 }
             </div>
@@ -337,7 +346,7 @@
                data-editing-allow-edit="false"
                data-sorting="true"
                data-show-toggle="false"
-               data-editing-hide-text="Finalizar Edición Detalle" 
+               data-editing-hide-text="Finalizar Edición Detalle"
                data-editing-add-text="Descartar Cambios Detalle">
             <thead>
                 <tr>
@@ -565,8 +574,8 @@
         </div>
 
         <div class="row">
-            <div class="pull-left">            
-                   <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar</button>
+            <div class="pull-left">
+                <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar</button>
             </div>
 
 
@@ -880,7 +889,7 @@
             <div class="modal-body">
                 <form class="form-horizontal">
 
-                    
+
 
                     <div class="row">
 
@@ -1155,7 +1164,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="modalMensajePendienteAprobacionTitle"><b>Modificar Comentario Estado Pendiente Aprobación</b></h4>
-              
+
                 <p></p>
             </div>
             <div class="modal-body">
@@ -1163,13 +1172,13 @@
                     <div class="row">
 
 
-                        <div class="col-sm-6 col-lg-12" >
+                        <div class="col-sm-6 col-lg-12">
 
                             <!--MOTIVO RECHAZO-->
                             <div class="form-group">
                                 <!--<label for="comentarioPendienteAprobacion" class="control-label col-xs-4">Comentario:</label>-->
                                 <div class="col-xs-12">
-                                    <span style="color: darkred" id="solicitudIngresoComentario" ></span>
+                                    <span style="color: darkred" id="solicitudIngresoComentario"></span>
                                 </div>
                             </div>
                         </div>

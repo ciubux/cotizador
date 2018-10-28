@@ -54,6 +54,7 @@ namespace Cotizador.Controllers
             // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
             cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
             cotizacionTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
+            cotizacionTmp.aplicaSedes = false;
             this.CotizacionSession = cotizacionTmp;
             this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA] = new List<Cotizacion>();
         }
@@ -183,6 +184,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.usuario = usuario;
             cotizacionTmp.observaciones = Constantes.OBSERVACION;
             cotizacionTmp.incluidoIGV = false;
+            cotizacionTmp.aplicaSedes = false;
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
             this.CotizacionSession = cotizacionTmp;
         }
@@ -655,6 +657,7 @@ namespace Cotizador.Controllers
                 "\"descripcionCliente\":\"" + cotizacion.cliente.ToString() + "\"," +
                 "\"idCliente\":\"" + cotizacion.cliente.idCliente + "\"," +
                 "\"contacto\":\"" + cotizacion.cliente.contacto1 + "\"," +
+                "\"sedePrincipal\":\"" + (cotizacion.cliente.sedePrincipal ? "1" : "0") + "\"," +
                 "\"textoCondicionesPago\":\"" + cotizacion.textoCondicionesPago + "\"" +
                 "}";
 
@@ -870,7 +873,10 @@ namespace Cotizador.Controllers
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
+            bool aplicaSedes = bool.Parse(Request["aplicaSedes"].ToString());
+            
             Cotizacion cotizacion = this.CotizacionSession;
+            cotizacion.aplicaSedes = aplicaSedes && !cotizacion.cliente.sedePrincipal ? false : aplicaSedes;
             cotizacion.usuario = usuario;
             CotizacionBL bl = new CotizacionBL();
 
@@ -914,7 +920,9 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
+            bool aplicaSedes = bool.Parse(Request["aplicaSedes"].ToString());
             Cotizacion cotizacion = this.CotizacionSession;
+            cotizacion.aplicaSedes = aplicaSedes && !cotizacion.cliente.sedePrincipal ? false : aplicaSedes;
             cotizacion.usuario = usuario;
             CotizacionBL bl = new CotizacionBL();
             bl.UpdateCotizacion(cotizacion);

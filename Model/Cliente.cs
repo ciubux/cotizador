@@ -13,6 +13,8 @@ namespace Model
             //Cada vez que se instancia un cliente se instancia con al menos una dirección de entrega
             this.direccionEntregaList = new List<DireccionEntrega>();
             this.solicitanteList = new List<Solicitante>();
+            this.sedeList = new List<Cliente>();
+
             this.ubigeo = new Ubigeo();
             this.responsableComercial = new Vendedor();
             this.asistenteServicioCliente = new Vendedor();
@@ -23,6 +25,8 @@ namespace Model
         }
 
         public Guid idCliente { get; set; }
+
+        public List<Cliente> sedeList { get; set; }
 
         [Display(Name = "Asesor Comercial:")]
         public Vendedor responsableComercial { get; set; }
@@ -59,8 +63,25 @@ namespace Model
         [Display(Name = "Pertenece Canal Ordon:")]
         public Boolean perteneceCanalOrdon { get; set; }
         [Display(Name = "es Sub Distribuidor:")]
-        public Boolean esSubDistribuidor { get; set; }      
+        public Boolean esSubDistribuidor { get; set; }
 
-    }
+        [Display(Name = "Es Sede Principal:")]
+        public Boolean sedePrincipal { get; set; }
+
+        public String sedeListWebString 
+        {
+            get {
+                String webString = "";
+
+                foreach(Cliente sede in this.sedeList)
+                {
+                    if (sede.ciudad != null)
+                    {
+                        webString = webString + sede.ciudad.nombre + "<br>";
+                    }
+                }
+                return webString;
+            }
+        }
 
 }

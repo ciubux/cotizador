@@ -59,6 +59,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
 
             InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada?1:0));
+            InputParameterAdd.Bit(objCommand, "aplicaSedes", cotizacion.aplicaSedes);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion);
 
 
@@ -122,7 +123,7 @@ namespace DataLayer
 
             InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada ? 1 : 0));
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion);
-
+            InputParameterAdd.Bit(objCommand, "aplicaSedes", cotizacion.aplicaSedes);
 
             OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
             ExecuteNonQuery(objCommand);

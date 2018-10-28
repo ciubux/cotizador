@@ -81,6 +81,8 @@ namespace Model
 
         public DateTime fechaPrecios { get; set; }
 
+        public Boolean aplicaSedes { get; set; }
+
         public List<DocumentoDetalle> documentoDetalle
         {
             get {

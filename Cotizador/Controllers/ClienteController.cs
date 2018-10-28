@@ -250,6 +250,7 @@ namespace Cotizador.Controllers
             cliente = clienteBl.getCliente(idCliente);
             cliente.ciudad = ciudad;
             cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             String resultado = JsonConvert.SerializeObject(cliente);
             this.ClienteSession = cliente;
             return resultado;

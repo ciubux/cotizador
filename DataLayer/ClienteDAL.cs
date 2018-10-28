@@ -173,6 +173,8 @@ namespace DataLayer
                 cliente.perteneceCanalOrdon = Converter.GetBool(row, "pertenece_canal_ordon");
                 cliente.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
 
+                cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
+
                 cliente.grupoCliente = new GrupoCliente();
                 cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
                 cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
@@ -180,6 +182,31 @@ namespace DataLayer
 
             return cliente;
         }
+
+        public List<Cliente> getSedes(String ruc)
+        {
+            var objCommand = GetSqlCommand("ps_clienteSedes");
+            InputParameterAdd.Varchar(objCommand, "ruc", ruc);
+            DataTable dataTable = Execute(objCommand);
+
+            List<Cliente> clienteList = new List<Cliente>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente ClienteResultado = new Cliente();
+                ClienteResultado.idCliente = Converter.GetGuid(row, "id_cliente");
+                ClienteResultado.codigo = Converter.GetString(row, "codigo");
+
+                ClienteResultado.razonSocialSunat = Converter.GetString(row, "razon_social");
+                ClienteResultado.nombreComercial = Converter.GetString(row, "nombre_comercial");
+                ClienteResultado.ruc = Converter.GetString(row, "ruc");
+
+
+                clienteList.Add(ClienteResultado);
+            }
+
+            return clienteList;
+        }
+
 
         public List<Cliente> SelectClientes(Cliente cliente)
         {
