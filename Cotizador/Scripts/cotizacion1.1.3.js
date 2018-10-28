@@ -420,7 +420,8 @@ jQuery(function ($) {
                     }
                     $("#cotizacion_textoCondicionesPago").val(cliente.textoCondicionesPago);
                     $("#contacto").val(cliente.contacto);
-                    $("#sedePrincipal").val(cliente.sedePrincipal);
+                    $("#clienteSedePrincipal").val(cliente.sedePrincipal);
+                    listaTextoSedesCliente = cliente.sedesString;
                 }
             });
         }
@@ -1417,7 +1418,7 @@ jQuery(function ($) {
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
                 title: '¿Desea aplicar la cotización a todoas las sedes?',
-                content: 'Sedes: ',
+                content: 'Sedes:<br>' + listaTextoSedesCliente,
                 buttons: {
                     aplica: {
                         text: 'SI',
@@ -1517,7 +1518,7 @@ jQuery(function ($) {
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
                 title: '¿Desea aplicar la cotización a todoas las sedes?',
-                content: 'Sedes: ',
+                content: 'Sedes:<br>' + listaTextoSedesCliente,
                 buttons: {
                     aplica: {
                         text: 'SI',

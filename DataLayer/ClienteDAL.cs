@@ -200,6 +200,9 @@ namespace DataLayer
                 ClienteResultado.nombreComercial = Converter.GetString(row, "nombre_comercial");
                 ClienteResultado.ruc = Converter.GetString(row, "ruc");
 
+                ClienteResultado.ciudad = new Ciudad();
+                ClienteResultado.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                ClienteResultado.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
 
                 clienteList.Add(ClienteResultado);
             }

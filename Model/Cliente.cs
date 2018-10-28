@@ -68,12 +68,13 @@ namespace Model
         [Display(Name = "Es Sede Principal:")]
         public Boolean sedePrincipal { get; set; }
 
-        public String sedeListWebString 
+        public String sedeListWebString
         {
-            get {
+            get
+            {
                 String webString = "";
 
-                foreach(Cliente sede in this.sedeList)
+                foreach (Cliente sede in this.sedeList)
                 {
                     if (sede.ciudad != null)
                     {
@@ -83,5 +84,6 @@ namespace Model
                 return webString;
             }
         }
+    }
 
 }

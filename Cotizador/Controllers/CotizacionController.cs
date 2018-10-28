@@ -658,6 +658,7 @@ namespace Cotizador.Controllers
                 "\"idCliente\":\"" + cotizacion.cliente.idCliente + "\"," +
                 "\"contacto\":\"" + cotizacion.cliente.contacto1 + "\"," +
                 "\"sedePrincipal\":\"" + (cotizacion.cliente.sedePrincipal ? "1" : "0") + "\"," +
+                "\"sedesString\":\"" + cotizacion.cliente.sedeListWebString + "\"," +
                 "\"textoCondicionesPago\":\"" + cotizacion.textoCondicionesPago + "\"" +
                 "}";
 
