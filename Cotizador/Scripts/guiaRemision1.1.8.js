@@ -638,7 +638,9 @@ jQuery(function ($) {
 
                 $("#ver_guiaRemision_estadoDescripcion").html(guiaRemision.estadoDescripcion);
 
-                /*Si la guía de remisión se encuentra anulada no se puede extornar, ni imprimir, ni facturar*/
+
+
+                /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
                     $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:red")
                     $("#btnAnularGuiaRemision").hide();
@@ -648,24 +650,30 @@ jQuery(function ($) {
                 }
                 else {
                     $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:black")
-
                     $("#btnImprimirGuiaRemision").show();
 
                     $("#guiaRemision_tipoExtorno").val(guiaRemision.tipoExtorno);
-                     /*Si la guía de remisión no ha sido extornada, se puede anular, extornar y facturar*/
+                    /*Si se encuentra NO EXTORNADA*/
                     if (guiaRemision.tipoExtorno == MOV_TIPO_EXTORNO_SIN_EXTORNO) {
                         $("#btnAnularGuiaRemision").show();
                         $("#btnExtornar").show();
-                        $("#fieldsetDetalleExtorno").hide();
+
+                        $("#divTipoExtorno").hide();
+                        $("#btnVerNotasIngresoExtornantes").hide();
+
+
                     }
-                    /*Si la guía de remisión ha sido extornada parcialmente, se puede extornar para culminar con el extorno, no se puede anular y tampoco facturar*/
+                    /*Si se encuentra EXTORNADA no se puede Anular, Ni facturar*/
                     else {
                         $("#btnAnularGuiaRemision").hide();
-                        $("#fieldsetDetalleExtorno").show();
                         $("#btnFacturarGuiaRemision").hide();
+
+                        $("#divTipoExtorno").show();
+                        $("#btnVerNotasIngresoExtornantes").show();
 
                         $("#ver_guiaRemision_tipoExtorno").html(guiaRemision.tipoExtornoToString);
                         if (guiaRemision.tipoExtorno == MOV_TIPO_EXTORNO_EXTORNO_PARCIAL) {
+                            /*Si la guía de remisión ha sido extornada parcialmente, se puede extornar para culminar con el extorno, no se puede anular y tampoco facturar*/
                             $("#btnExtornar").show();
                         }
                         else {
@@ -673,24 +681,39 @@ jQuery(function ($) {
                         }
                     }
 
+                    //es EXTORNANTE
+                    if (guiaRemision.notaIngresoAExtornar == null) {
+                        $("#fieldsetDocumentoExtornado").hide();
+                        $("#fieldsetDetalleExtorno").hide();
+                    }
+                    else {
+                        $("#btnExtornar").hide();
+                        $("#fieldsetDocumentoExtornado").show();
+                        $("#fieldsetDetalleExtorno").show();
+                        $("#ver_guiaRemision_notaIngresoAExtornar_serieNumeroNotaIngreso").html(guiaRemision.notaIngresoAExtornar.serieNumeroNotaIngreso);
+                        $("#ver_guiaRemision_motivoExtornoNotaIngresoToString").html(guiaRemision.motivoExtornoNotaIngresoToString);
+                        $("#ver_guiaRemision_sustentoExtorno").html(guiaRemision.sustentoExtorno);
+                    }
 
-                    /*IMPORTANTE REVISION*/
+                    /*FACTURADO*/
                     if (guiaRemision.estaFacturado == 1) {
                         $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:green")
                         $("#btnAnularGuiaRemision").hide();
                         $("#btnFacturarGuiaRemision").hide();
                     }
 
-                    if (    guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_COMPRA.charCodeAt(0)
+                   /* if (    guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_COMPRA.charCodeAt(0)
                         || guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_PRESTAMO_RECIBIDO.charCodeAt(0)
                         || guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_COMODATO_RECIBIDO.charCodeAt(0)
                         || guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_TRANSFERENCIA_GRATUITA_RECIBIDA.charCodeAt(0)
                     )
                     {
                         $("#btnExtornar").hide();
-                    }
+                    }*/
                   
                 }
+
+
 
                 var transaccionList = guiaRemision.transaccionList;
                 var documentosVenta = "";
@@ -703,9 +726,20 @@ jQuery(function ($) {
                 $("#documentosVenta").val(documentosVenta);
 
                 /*Si la guía de remisión no corresponde a una venta o a una transferencia gratuita no se puede facturar*/
-                if (guiaRemision.motivoTraslado != 86 && guiaRemision.motivoTraslado != 71) {
-                    $("#btnFacturarGuiaRemision").hide();
+               
+                if (guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_TRASLADO_INTERNO.charCodeAt(0)
+                    && guiaRemision.ingresado == false
+                )
+                {
+                    $("#btnIngresar").show()
                 }
+                else if (guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_VENTA.charCodeAt(0)
+                    && guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_TRANSFERENCIA_GRATUITA.charCodeAt(0)) {
+                    $("#btnFacturarGuiaRemision").hide();
+                    $("#btnExtornar").hide();
+                    $("#btnIngresar").hide()
+                }
+                
 
                 if (guiaRemision.atencionParcial) {
                     $("#ver_guiaRemision_atencionParcial").html("Atención Parcial");
@@ -768,6 +802,8 @@ jQuery(function ($) {
         $("btnFacturarGuiaRemision").attr("disabled", "disabled");
         $("btnAnularGuiaRemision").attr("disabled", "disabled");
         $("btnExtornar").attr("disabled", "disabled");
+        $("btnVerNotasIngresoExtornantes").attr("disabled", "disabled");
+        $("btnIngresar").attr("disabled", "disabled");
     }
 
     function activarBotonesVer() {
@@ -778,6 +814,8 @@ jQuery(function ($) {
         $("btnFacturarGuiaRemision").removeAttr("disabled");
         $("btnAnularGuiaRemision").removeAttr("disabled");
         $("btnExtornar").removeAttr("disabled");
+        $("btnVerNotasIngresoExtornantes").removeAttr("disabled");
+        $("btnIngresar").removeAttr("disabled");
     }
 
    
@@ -785,6 +823,63 @@ jQuery(function ($) {
 
     $("#btnImprimirGuiaRemision").click(function () {
         window.open("/GuiaRemision/Print");
+    });
+
+    $("#btnVerNotasIngresoExtornantes").click(function () {
+        var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
+        $.ajax({
+            url: "/GuiaRemision/GetMovimientosAlmacenExtornantes",
+            data: {
+                idMovimientoAlmacen: idMovimientoAlmacen
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso();
+            },
+            success: function (notaIngresoList) {
+                $("#formVerNotasIngreso").empty();
+
+                for (var j = 0; j < notaIngresoList.length; j++) {
+                    $("#tableDetalleNotaIngreso > tbody").empty();
+                    var plantilla = $("#plantillaVerNotasIngreso").html();
+                    var dGuia = '';
+                    var documentoDetalleList = notaIngresoList[j].documentoDetalle;
+                    for (var k = 0; k < documentoDetalleList.length; k++) {
+
+                        dGuia += '<tr>' +
+                            '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
+                            '<td>' + documentoDetalleList[k].cantidad + '</td>' +
+                            '<td>' + documentoDetalleList[k].unidad + '</td>' +
+                            '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
+                            '</tr>';
+                    }
+
+                    $("#tableDetalleNotaIngreso").append(dGuia);
+
+                    plantilla = $("#plantillaVerNotasIngreso").html();
+
+                    plantilla = plantilla.replace("#serieNumero", notaIngresoList[j].serieDocumento + '-' + notaIngresoList[j].numeroDocumento);
+                    plantilla = plantilla.replace("#fechaEmisionNotaIngreso", invertirFormatoFecha(notaIngresoList[j].fechaEmision.substr(0, 10)));
+
+                    plantilla = plantilla.replace("#serieNumeroNotaCrédito", notaIngresoList[j].venta.documentoVenta.serieNumero);
+                    if (notaIngresoList[j].venta.documentoVenta.fechaEmision != null) {
+                        plantilla = plantilla.replace("#fechaEmisionNotaCrédito", invertirFormatoFecha(notaIngresoList[j].venta.documentoVenta.fechaEmision.substr(0, 10)));
+                    }
+                    else
+                        plantilla = plantilla.replace("#fechaEmisionFactura", "");
+
+
+                    plantilla = plantilla.replace("tableDetalleGuia", "tableDetalleGuia" + j);
+
+                    $("#formVerNotasIngreso").append(plantilla);
+                }
+
+                $("#modalVerNotasIngreso").modal('show');
+
+            }
+        });
+        
     });
 
 
@@ -2181,15 +2276,41 @@ jQuery(function ($) {
     });
 
 
+    
+
+
+    $('#btnIngresar').click(function () {
+
+        desactivarBotonesVer();
+        var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
+        /*Si no se cuenta con documentos de venta */
+        var yourWindow;
+        $.ajax({
+            url: "/NotaIngreso/iniciarIngresoDesdeGuiaRemisionTrasladoInterno",
+            type: 'POST',
+            // dataType: 'JSON',
+            data: {
+                idMovimientoAlmacen: idMovimientoAlmacen
+            },
+            error: function (error) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                $("#btnContinuarGenerandoNotaIngreso").removeAttr("disabled");
+                $("#btnCancelarNotaIngreso").removeAttr("disabled");
+            },
+            success: function (movimientoAlmacen) {
+                window.location = '/NotaIngreso/Ingresar';
+            }
+        });
+    });
+
+
+
 
 
 
     /*GENERACIÓN DE NOTA DE INGRESO*/
     $('#btnExtornar').click(function () {
-
-
         var documentosVentaString = $("#documentosVenta").val();
-
         /*Si no se cuenta con documentos de venta */
         if (documentosVentaString.length == 0) {
             $("#serieNumeroDocumentoVenta").val(documentosVenta);
@@ -2199,7 +2320,6 @@ jQuery(function ($) {
             var documentosVenta = documentosVentaString.split(";");
             var documentoSize = documentosVenta.length;
             if (documentosVenta.length > 1) {
-
                 $.alert({
                     //icon: 'fa fa-warning',
                     title: "Error",

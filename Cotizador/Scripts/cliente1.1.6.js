@@ -381,48 +381,7 @@ jQuery(function ($) {
         });
       
     });
-
- 
-
-
     
-
-    $('#modalAgregarCliente').on('shown.bs.modal', function () {
-
-
-
-        $("#ncRazonSocial").val("");
-        $("#ncRUC").val("");
-        $("#ncNombreComercial").val("");
-        $("#ncDireccion").val("");
-        $("#ncTelefono").val("");
-
-        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar una ciudad previamente.");
-            $("#idCiudad").focus();
-            $('#btnCancelCliente').click();
-            return false;
-        }
-
-
-
-    });
-
-
-    $('#modalAgregarDireccion').on('shown.bs.modal', function () {
-        $('#direccionEntrega_descripcion').focus();
-   /*     $('#pedido_direccionEntrega option').each(function () {
-
-            if ($(this).val() == GUID_EMPTY) {
-                alert("");
-            }
-            alert();
-
-            return true;
-        });*/
-    });
-  
-
  
     $(window).on("paste", function (e) {
         
@@ -1368,6 +1327,25 @@ jQuery(function ($) {
     });  
 
 
+    $("#idGrupoCliente").change(function () {
+        var idGrupoCliente = $("#idGrupoCliente").val();
+
+        $.ajax({
+            url: "/Cliente/ChangeIdGrupoCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idGrupoCliente: idGrupoCliente
+            },
+            error: function (detalle) {
+                location.reload();
+            },
+            success: function (GrupoCliente) {
+            }
+        });
+    });  
+
+
 
     $(document).on('click', "a.verMas", function () {
         var idCotizacion = event.target.getAttribute("class").split(" ")[0];
@@ -1437,19 +1415,75 @@ jQuery(function ($) {
         });
     });
 
+       
+    
 
     $("input[name=cliente_bloqueadoBusqueda]").on("click", function () {
-        var bloqueado = $("input[name=cliente_bloqueadoBusqueda]:checked").val();
+        var valor = $("input[name=cliente_bloqueadoBusqueda]:checked").val();
+        changeInputBoolean('bloqueado', valor)
+    });
+
+    $("#cliente_bloqueado").change(function () {
+        var valor = 1;
+        if (!$('#cliente_bloqueado').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('bloqueado', valor)
+    });
+
+    $("#cliente_CanalMultireginal").change(function () {
+        var valor = 1;
+        if (!$('#cliente_CanalMultireginal').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('perteneceCanalMultiregional', valor)
+    });
+
+    $("#cliente_CanalLima").change(function () {
+        var valor = 1;
+        if (!$('#cliente_CanalLima').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('perteneceCanalLima', valor)
+    });
+
+    $("#cliente_CanalProvincias").change(function () {
+        var valor = 1;
+        if (!$('#cliente_CanalProvincia').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('perteneceCanalProvincias', valor)
+    });
+
+    $("#cliente_CanalPCP").change(function () {
+        var valor = 1;
+        if (!$('#cliente_CanalPCP').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('perteneceCanalPCP', valor)
+    });
+
+    $("#cliente_esSubdistribuidor").change(function () {
+        var valor = 1;
+        if (!$('#cliente_esSubdistribuidor').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('esSubDistribuidor', valor)
+    });
+
+    function changeInputBoolean(propiedad, valor) {
         $.ajax({
-            url: "/Cliente/ChangeBloqueado",
+            url: "/Cliente/ChangeInputBoolean",
             type: 'POST',
             data: {
-                bloqueado: bloqueado
+                propiedad: propiedad,
+                valor: valor
             },
-            success: function () {
-            }
+            success: function () { }
         });
-    });
+    }
+
+
 
     $("input[name=cliente_sinPlazoCredito]").on("click", function () {
         var sinPlazoCredito = $("input[name=cliente_sinPlazoCredito]:checked").val();
@@ -1465,27 +1499,7 @@ jQuery(function ($) {
     });
 
 
-    $("#cliente_bloqueado").change(function () {
-
-        var bloqueado = 1;
-        if (!$('#cliente_bloqueado').prop('checked')) {
-            bloqueado = 0;
-        }
-
-        var estado = $("#cliente_bloqueado").val();
-        $.ajax({
-            url: "/Cliente/ChangeBloqueado",
-            type: 'POST',
-            data: {
-                bloqueado: bloqueado
-            },
-            success: function () {
-             //   location.reload();
-            }
-        });
-    });
-
-
+    
 
     $("#btnBusqueda").click(function () {
         if ($("#cliente_textoBusqueda").val().length < 4 &&

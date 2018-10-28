@@ -149,7 +149,11 @@
 
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="guiaRemision_atencionParcial" class="control-label col-xs-4">Atención Parcial:</label>
+                    
+                      @if (guiaRemision.notaIngresoAExtornar == null)
+                        {   <label for="guiaRemision_atencionParcial" class="control-label col-xs-4">Atención Parcial:</label>}
+                        else
+                        {   <label for="guiaRemision_atencionParcial" class="control-label col-xs-4">Devolución Parcial:</label> }
                     <div class="col-xs-8">
                         @if (guiaRemision.atencionParcial)
                     {

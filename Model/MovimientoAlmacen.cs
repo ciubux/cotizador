@@ -98,18 +98,18 @@ namespace Model
 
         public List<Transaccion> transaccionList { get; set; }
 
-        [Display(Name = "Extornado:")]
+        [Display(Name = "Tipo Extorno:")]
         public TiposExtorno tipoExtorno { get; set; }
 
         public enum TiposExtorno
         {
             [Display(Name = "")]
             SinExtorno = 0,
-            [Display(Name = "Extornada totalmente (Anulación)")]
+            [Display(Name = "Extornada Totalmente (Anulación)")]
             ExtornadaTotalmentePorAnulacion = 1,
-            [Display(Name = "Extornada totalmente (Devolución)")]
+            [Display(Name = "Extornada Totalmente (Devolución)")]
             ExtornadaTotalmentePorDevolucion = 6,
-            [Display(Name = "Extornada parcialmente (Devolución)")]
+            [Display(Name = "Extornada Parcialmente (Devolución)")]
             ExtornadaParcialmentePorDevolucion = 7
         }
 
@@ -120,5 +120,8 @@ namespace Model
                 return EnumHelper<TiposExtorno>.GetDisplayValue(this.tipoExtorno);
             }
         }
+
+        public List<MovimientoAlmacen> movimientoAlmacenExtornanteList = new List<MovimientoAlmacen>();
+
     }
 }

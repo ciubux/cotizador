@@ -53,7 +53,7 @@ namespace Model
         [Display(Name = "Pertenece Canal Lima:")]
         public Boolean perteneceCanalLima { get; set; }
         [Display(Name = "Pertenece Canal Provincia:")]
-        public Boolean perteneceCanalProvincia { get; set; }
+        public Boolean perteneceCanalProvincias { get; set; }
         [Display(Name = "Pertenece Canal PCP:")]
         public Boolean perteneceCanalPCP { get; set; }
         [Display(Name = "Pertenece Canal Ordon:")]

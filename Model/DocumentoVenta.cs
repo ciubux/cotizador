@@ -260,21 +260,21 @@ namespace Model
 
         public enum EstadosDocumentoSunat
         {
-            [Display(Name = "EN PROCESO")]
+            [Display(Name = "En Proceso")]
             EnProceso = 101,
-            [Display(Name = "ACEPTADO")]
+            [Display(Name = "Aceptada")]
             Aceptado = 102,
-            [Display(Name = "ACEPTADO CON OBS.")]
+            [Display(Name = "Aceptada con Obs.")]
             AceptadoConObs = 103,
-            [Display(Name = "RECHAZADO")]
+            [Display(Name = "Rechazada")]
             Rechazado = 104,
-            [Display(Name = "ANULADO")]
+            [Display(Name = "Anulada")]
             Anulado = 105,
-            [Display(Name = "EXCPETION")]
+            [Display(Name = "Exception")]
             Exception = 106,
-            [Display(Name = "ANULACIÓN SOLICITADA")]
+            [Display(Name = "Anulación Solicitada (Solicitud de Baja)")]
             EnProcesoAnulacion = 108,
-            [Display(Name = "NO IDENTIFICADO")]
+            [Display(Name = "No Identificado")]
             NoIdentificado = 0
         };
 
@@ -291,19 +291,19 @@ namespace Model
         public EstadosDocumentoSunatBusqueda estadoDocumentoSunatBusqueda { get; set; }
         public enum EstadosDocumentoSunatBusqueda
         {
-            [Display(Name = "TODOS")]
+            [Display(Name = "Todos")]
             Todos = 0,
-            [Display(Name = "EN PROCESO")]
+            [Display(Name = "En proceso")]
             EnProceso = 101,
-            [Display(Name = "ACEPTADO")]
+            [Display(Name = "Aceptada")]
             TodosAceptados = 205,
-            [Display(Name = "RECHAZADO")]
+            [Display(Name = "Rechazada")]
             Rechazado = 104,
-            [Display(Name = "EN PROCESO ANULACIÓN")]
+            [Display(Name = "Anulación Solicitada (Solicitud de Baja)")]
             EnProcesoAnulacion = 108,
-            [Display(Name = "ANULADO")]
+            [Display(Name = "Anulada")]
             Anulado = 105,
-            [Display(Name = "OTROS")]
+            [Display(Name = "Otros")]
             Otros = 1
         };
 

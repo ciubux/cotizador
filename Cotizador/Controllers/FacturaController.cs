@@ -393,6 +393,7 @@ namespace Cotizador.Controllers
 
 
             this.FacturaSession.estadoDocumentoSunatBusqueda = (DocumentoVenta.EstadosDocumentoSunatBusqueda)Int32.Parse(this.Request.Params["estadoDocumentoSunatBusqueda"]);
+            this.FacturaSession.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(this.Request.Params["tipoDocumento"]);
 
             DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
 

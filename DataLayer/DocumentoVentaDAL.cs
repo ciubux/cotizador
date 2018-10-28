@@ -553,8 +553,9 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", (int)documentoVenta.estadoDocumentoSunatBusqueda);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", documentoVenta.pedido.numeroPedido);
             InputParameterAdd.BigInt(objCommand, "numeroGuiaRemision", documentoVenta.guiaRemision.numeroDocumento);
+            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
 
-           
+
 
 
             //   InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);

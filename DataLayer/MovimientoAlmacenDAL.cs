@@ -223,6 +223,18 @@ namespace DataLayer
                 InputParameterAdd.Varchar(objCommand, "sustentoExtorno", null);
             }
 
+
+            if (notaIngreso.guiaRemisionAIngresar != null)
+            {
+                InputParameterAdd.Guid(objCommand, "idMovimientoAlmacenIngresado", notaIngreso.guiaRemisionAIngresar.idMovimientoAlmacen);
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idMovimientoAlmacenIngresado", null);
+            }
+
+
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");
             OutputParameterAdd.Int(objCommand, "siguienteNumeroNotaIngreso");
@@ -506,6 +518,7 @@ namespace DataLayer
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable guiaRemisionDataTable = dataSet.Tables[0];
             DataTable guiaRemisionDetalleDataTable = dataSet.Tables[1];
+
             DataTable transaccionListDataTable = dataSet.Tables[2];
 
             //Datos de la cotizacion
@@ -568,6 +581,21 @@ namespace DataLayer
                 guiaRemision.placaVehiculo = Converter.GetString(row, "placa_vehiculo");
                 guiaRemision.certificadoInscripcion = Converter.GetString(row, "certificado_inscripcion");
 
+                guiaRemision.ingresado = Converter.GetBool(row, "ingresado");
+
+                if (Converter.GetInt(row, "motivo_extorno") > 0)
+                {
+                    guiaRemision.motivoExtornoNotaIngreso = (GuiaRemision.MotivosExtornoNotaIngreso)Converter.GetInt(row, "motivo_extorno");
+
+                    guiaRemision.sustentoExtorno = Converter.GetString(row, "sustento_extorno");
+
+                    guiaRemision.notaIngresoAExtornar = new NotaIngreso();
+                    guiaRemision.notaIngresoAExtornar.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen_extornado");
+                    guiaRemision.notaIngresoAExtornar.serieDocumento = Converter.GetString(row, "movimiento_almacen_extorno_serie_documento");
+                    guiaRemision.notaIngresoAExtornar.numeroDocumento = Converter.GetInt(row, "movimiento_almacen_extorno_numero_documento");
+                }
+
+                guiaRemision.ingresado = Converter.GetBool(row, "ingresado");
                 guiaRemision.tipoExtorno = (GuiaRemision.TiposExtorno)Converter.GetInt(row, "tipo_extorno");
             }
 
@@ -602,6 +630,59 @@ namespace DataLayer
             return guiaRemision;
         }
 
+        public List<MovimientoAlmacen> SelectMovimientosAlmacenExtornantes(MovimientoAlmacen movimientoAlmacen)
+        {
+            List<MovimientoAlmacen> MovimientoAlmacenExtornantesList = new List<MovimientoAlmacen>();
+            var objCommand = GetSqlCommand("ps_movimientosAlmacenExtornantes");
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Guid idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                if (movimientoAlmacen.idMovimientoAlmacen != idMovimientoAlmacen)
+                {
+
+                    movimientoAlmacen = new MovimientoAlmacen();
+                    movimientoAlmacen.documentoDetalle = new List<DocumentoDetalle>();
+                    movimientoAlmacen.serieDocumento = Converter.GetString(row, "serie_documento");
+                    movimientoAlmacen.numeroDocumento = Converter.GetInt(row, "numero_documento");
+                    movimientoAlmacen.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                    movimientoAlmacen.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
+                    movimientoAlmacen.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                    movimientoAlmacen.venta = new Venta();
+                    movimientoAlmacen.venta.documentoVenta = new DocumentoVenta();
+                    movimientoAlmacen.venta.documentoVenta.idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta");
+                    movimientoAlmacen.venta.documentoVenta.serie = Converter.GetString(row, "cpe_serie");
+                    movimientoAlmacen.venta.documentoVenta.numero = Converter.GetString(row, "cpe_numero");
+
+                    if (row["cpe_fecha_emision"] == DBNull.Value)
+                        movimientoAlmacen.venta.documentoVenta.fechaEmision = null;
+                    else
+                        movimientoAlmacen.venta.documentoVenta.fechaEmision = Converter.GetDateTime(row, "cpe_fecha_emision");
+                    MovimientoAlmacenExtornantesList.Add(movimientoAlmacen);
+
+                }
+
+                DocumentoDetalle documentoDetalle = new DocumentoDetalle();
+                documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.producto = new Producto();
+                documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                documentoDetalle.producto.sku = Converter.GetString(row, "sku");
+                documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                documentoDetalle.unidad = Converter.GetString(row, "unidad");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                
+                movimientoAlmacen.documentoDetalle.Add(documentoDetalle);
+
+
+            }
+            return MovimientoAlmacenExtornantesList;
+        }
+
+        
+
         public List<GuiaRemision> SelectGuiasRemision(GuiaRemision guiaRemision)
         {
             List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
@@ -616,7 +697,11 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado?1:0);
             InputParameterAdd.Int(objCommand, "facturado", guiaRemision.estaFacturado ? 1 : 0);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", guiaRemision.pedido.numeroPedido);
+
+
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)guiaRemision.motivoTrasladoBusqueda).ToString());
+
+
             DataTable dataTable = Execute(objCommand);
 
            
@@ -849,14 +934,22 @@ namespace DataLayer
                 if (Converter.GetInt(row, "motivo_extorno") > 0)
                 {
                     notaIngreso.motivoExtornoGuiaRemision = (NotaIngreso.MotivosExtornoGuiaRemision)Converter.GetInt(row, "motivo_extorno");
-                }                
-                notaIngreso.sustentoExtorno = Converter.GetString(row, "sustento_extorno");
+                             
+                    notaIngreso.sustentoExtorno = Converter.GetString(row, "sustento_extorno");
 
-                notaIngreso.guiaRemisionAExtornar = new GuiaRemision();
-                notaIngreso.guiaRemisionAExtornar.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen_extornado");
-                notaIngreso.guiaRemisionAExtornar.serieDocumento = Converter.GetString(row, "movimiento_almace_extorno_serie_documento");
-                notaIngreso.guiaRemisionAExtornar.numeroDocumento = Converter.GetInt(row, "movimiento_almace_extorno_numero_documento");
+                    notaIngreso.guiaRemisionAExtornar = new GuiaRemision();
+                    notaIngreso.guiaRemisionAExtornar.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen_extornado");
+                    notaIngreso.guiaRemisionAExtornar.serieDocumento = Converter.GetString(row, "movimiento_almacen_extorno_serie_documento");
+                    notaIngreso.guiaRemisionAExtornar.numeroDocumento = Converter.GetInt(row, "movimiento_almacen_extorno_numero_documento");
+                }
 
+                if (notaIngreso.motivoTraslado == NotaIngreso.motivosTraslado.TrasladoInterno)
+                {
+                    notaIngreso.guiaRemisionAIngresar = new GuiaRemision();
+                    notaIngreso.guiaRemisionAIngresar.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen_ingresado");
+                    notaIngreso.guiaRemisionAIngresar.serieDocumento = Converter.GetString(row, "movimiento_almacen_ingresado_serie_documento");
+                    notaIngreso.guiaRemisionAIngresar.numeroDocumento = Converter.GetInt(row, "movimiento_almacen_ingresado_numero_documento");
+                }
 
                 //  notaIngreso.certificadoInscripcion = Converter.GetString(row, "certificado_inscripcion");
                 notaIngreso.tipoExtorno = (NotaIngreso.TiposExtorno)Converter.GetInt(row, "tipo_extorno");
@@ -942,6 +1035,8 @@ namespace DataLayer
                 notaIngreso.seguimientoMovimientoAlmacenSalida.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
                 notaIngreso.seguimientoMovimientoAlmacenSalida.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
 
+
+                notaIngreso.tipoExtorno = (GuiaRemision.TiposExtorno)Converter.GetInt(row, "tipo_extorno");
 
                 notaIngresoList.Add(notaIngreso);
             }

@@ -594,15 +594,15 @@
                 <div class="col-sm-6 col-lg-4">
 
                     <div class="form-group">
-                        @Html.LabelFor(c => cliente.perteneceCanalProvincia, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                        @Html.LabelFor(c => cliente.perteneceCanalProvincias, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
                         <div class="col-xs-8 col-sm-8 col-lg-8">
-                            @if (cliente.perteneceCanalProvincia)
+                            @if (cliente.perteneceCanalProvincias)
                             {
-                            <input checked type="checkbox" id="cliente_CanalProvincia" name="cliente_CanalProvincia" />
+                            <input checked type="checkbox" id="cliente_CanalProvincias" name="cliente_CanalProvincias" />
                             }
                             else
                             {
-                            <input type="checkbox" id="cliente_CanalProvincia" name="cliente_CanalProvincia" />
+                            <input type="checkbox" id="cliente_CanalProvincias" name="cliente_CanalProvincias" />
                             }
                         </div>
                     </div>
@@ -653,10 +653,8 @@
      
 
             <div class="pull-right">
-                <button type="button" id="btnCancelCliente" class="btn btn-danger">Cancelar</button>
-               
-               <button id="btnFinalizarEdicionCliente" type="button" class="btn btn-success">Finalizar Creación</button>
-                
+                <button type="button" id="btnCancelarCliente" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionCliente" type="button" class="btn btn-success">Finalizar Creación</button>
             </div>
         </div>
 

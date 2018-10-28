@@ -52,7 +52,7 @@ namespace Model
 
 
         [Display(Name = "Número Guía:")]
-        public String serieNumeroGuia { get { return  this.serieDocumento + "-" + this.numeroDocumentoString ; } }
+        public String serieNumeroGuia { get { return  "G"+this.serieDocumento + "-" + this.numeroDocumentoString ; } }
              
 
         public DocumentoVenta documentoVenta { get; set; }
@@ -184,8 +184,8 @@ namespace Model
         {
             get
             {
-                return this.estaAnulado ? "Guía Anulada" :
-                    (this.estaFacturado ? "Guía Emitida y Facturada" : "Guía Emitida");
+                return this.estaAnulado ? "Anulada" :
+                    (this.estaFacturado ? "Emitida y Facturada" : "Emitida");
             }
         }
 
@@ -203,9 +203,19 @@ namespace Model
             DevolucionItem = 7
         };
 
+        public String motivoExtornoNotaIngresoToString
+        {
+            get
+            {
+                return EnumHelper<MotivosExtornoNotaIngreso>.GetDisplayValue(this.motivoExtornoNotaIngreso);
+            }
+        }
+
+        /*INGRESO*/
+
         public NotaIngreso notaIngresoAExtornar { get; set; }
 
-       
+        public Boolean ingresado { get; set; }
 
     }
 }

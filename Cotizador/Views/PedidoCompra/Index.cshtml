@@ -204,7 +204,7 @@
                 </div>
             </div>
 
-            <!--FECHA PROGRACION-->
+            <!--FECHA PROGRACION
             <div class="col-sm-6 col-lg-4">
                 <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4">Fecha de Programación:</label>
                 <div class="input-group col-xs-6 col-lg-8">
@@ -224,7 +224,7 @@
                     <input class="form-control" type="text" id="pedido_fechaProgramacionHasta" name="pedido_fechaProgramacionHasta">
 
                 </div>
-            </div>
+            </div>-->
 
         </div>
 
@@ -301,7 +301,7 @@
                     <th data-name="fechaSolicitud" data-sortable="true" data-breakpoints="xs">Fecha y Hora Solicitud</th>
                     <th data-name="rangoFechaEntrega" data-sortable="true" data-breakpoints="xs">Rango Fecha Entrega</th>
                     <th data-name="fechaProgramacion" data-sortable="true" data-breakpoints="xs">Programado Para:</th>
-                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
+                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (No Inc. IGV)</th>
                     <th data-name="distrito" data-sortable="true" data-breakpoints="xs">Distrito Entrega</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado Atención</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
@@ -474,10 +474,10 @@
                         </div>
                     </div>
 
-                    <fieldset>
+                    <!--<fieldset>
                         <legend id="divpedido_direccionEntrega">Datos de Entrega:</legend>
 
-                        <!--DIRECCION ENTREGA-->
+                        
                         <div class="row">
 
                             <div class="col-sm-6 col-lg-4">
@@ -489,7 +489,7 @@
                                 </div>
                             </div>
 
-                            <!--DIRECCION ENTREGA -->
+                            
                             <div class="col-sm-6 col-lg-8">
                                 <div class="form-group">
                                     @Html.LabelFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label col-xs-2" })
@@ -502,9 +502,9 @@
                         </div>
 
 
-                        <!--CONTACTO y FECHAS ENTREGA -->
+                        
                         <div class="row">
-                            <!--CONTACTO ENTREGA-->
+                            
                             <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
                                     @Html.LabelFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "control-label col-xs-4" })
@@ -513,7 +513,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--TELEFONO CONTACTO ENTREGA-->
+
                             <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
                                     @Html.LabelFor(p => pedido.direccionEntrega.telefono, htmlAttributes: new { @class = "control-label col-xs-4" })
@@ -522,7 +522,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--FECHAS ENTREGA-->
                             <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
 
@@ -535,13 +534,13 @@
 
                         </div>
                     </fieldset>
-
+                       
 
                     <fieldset>
                         <legend id="divpedido_direccionEntrega">Datos de Solicitud:</legend>
 
                         <div class="row">
-                            <!--CONTACTO PEDIDO-->
+                            
                             <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
                                     @Html.LabelFor(p => pedido.contactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
@@ -550,7 +549,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--TELEFONO CORREO CONTACTO PEDIDO-->
+                            
                             <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
                                     @Html.LabelFor(p => pedido.telefonoCorreoContactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
@@ -559,7 +558,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--FECHA HORA SOLICITUD-->
+                            
                             <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="fechaSolicitud" class="control-label col-xs-4">Fecha Hora Solicitud:</label>
@@ -572,7 +571,7 @@
                         </div>
 
                     </fieldset>
-
+                         -->
 
                     <!--Otros datos -->
                     <fieldset>

@@ -351,8 +351,8 @@ namespace Model
         {
             [Display(Name = "Solicitud de Traslado Interno")]
             TrasladoInterno = 'T', //GUIA REMISION
-            [Display(Name = "Recepción de Traslado Interno")]
-            TrasladoInternoRecibido = 'I',  //NOTA INGRESO
+       //     [Display(Name = "Recepción de Traslado Interno")]
+       //s     TrasladoInternoRecibido = 'I',  //NOTA INGRESO
             [Display(Name = "Préstamo a Entregar")]
             PrestamoEntregado = 'P',   //GUIA REMISION
     //        [Display(Name = "Devolución de Préstamo Entregado")]
@@ -423,8 +423,8 @@ namespace Model
             /*GENERAN GUÍA REMISIÓN DE INGRESO*/
             [Display(Name = "Traslado Interno a Entregar")]
             TrasladoInterno = tiposPedidoAlmacen.TrasladoInterno,
-            [Display(Name = "Traslado Interno a Recibir")]
-            TrasladoInternoRecibido = tiposPedidoAlmacen.TrasladoInternoRecibido,
+     //       [Display(Name = "Traslado Interno a Recibir")]
+    //        TrasladoInternoRecibido = tiposPedidoAlmacen.TrasladoInternoRecibido,
             [Display(Name = "Préstamo a Entregar")]
             PrestamoEntregado = tiposPedidoAlmacen.PrestamoEntregado,
      //       [Display(Name = "Devolución de Préstamo Entregado")]

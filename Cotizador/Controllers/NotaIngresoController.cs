@@ -427,6 +427,68 @@ namespace Cotizador.Controllers
             }
         }
 
+        public void iniciarIngresoDesdeGuiaRemisionTrasladoInterno()
+        {
+            try
+            {   /*IMPORTANTE: Se debe identificar si la guia esta facturada para ver si se genera nota de crédito*/
+
+
+                instanciarNotaIngreso();
+                NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
+
+                //notaIngreso.motivoExtornoGuiaRemision = (NotaIngreso.MotivosExtornoGuiaRemision)Int32.Parse(Request.Params["motivoExtornoGuiaRemision"]);
+                notaIngreso.guiaRemisionAIngresar = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+
+                /*Si el motivo del extorno es devolución parcial se activa atención parcial para poder editar el detalle*/
+                notaIngreso.documentoDetalle = notaIngreso.guiaRemisionAIngresar.documentoDetalle;
+
+                
+
+                foreach (DocumentoDetalle documentoDetalle in notaIngreso.documentoDetalle)
+                {
+                    documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidadSolicitada;
+                    documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadSolicitada;
+                }
+
+                notaIngreso.atencionParcial = false;
+                
+
+                notaIngreso.pedido = notaIngreso.guiaRemisionAIngresar.pedido;
+
+
+                
+                notaIngreso.pedido.tipo = Pedido.tipos.Almacen;
+                notaIngreso.pedido.tipoPedidoAlmacen = Pedido.tiposPedidoAlmacen.TrasladoInternoRecibido;
+                notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.TrasladoInterno;
+                
+                
+                notaIngreso.observaciones = String.Empty;
+
+
+                CiudadBL ciudadBL = new CiudadBL();
+                Ciudad ciudadDestino = ciudadBL.getCiudad(notaIngreso.guiaRemisionAIngresar.ciudadOrigen.idCiudad);
+                ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
+
+                notaIngreso.ciudadDestino = ciudadDestino;
+
+                notaIngreso.transportista = new Transportista();
+                notaIngreso.serieDocumento = ciudadDestino.serieNotaIngreso;
+                notaIngreso.numeroDocumento = ciudadDestino.siguienteNumeroNotaIngreso;
+                TransportistaBL transportistaBL = new TransportistaBL();
+                notaIngreso.ciudadDestino.transportistaList = transportistaBL.getTransportistas(notaIngreso.guiaRemisionAIngresar.ciudadOrigen.idCiudad);
+
+                this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
+            }
+            catch (Exception ex)
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+            }
+        }
+
+
         public ActionResult Ingresar()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoNotaIngreso;
@@ -806,5 +868,13 @@ namespace Cotizador.Controllers
 
 
 
+        public String GetMovimientosAlmacenExtornantes()
+        {
+            MovimientoAlmacen movimientoAlmacen = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_VER];
+            MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+            List<MovimientoAlmacen> movimientoAlmacenExtornanteList = movimientoAlmacenBL.GetMovimientosAlmacenExtornantes(movimientoAlmacen);
+            String resultado = JsonConvert.SerializeObject(movimientoAlmacenExtornanteList);
+            return resultado;
+        }
     }
 }

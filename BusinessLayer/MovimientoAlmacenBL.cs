@@ -138,6 +138,9 @@ namespace BusinessLayer
             return guiaRemisionList;
         }
 
+       
+        
+
         public List<NotaIngreso> GetNotasIngreso(NotaIngreso notaIngreso)
         {
             List<NotaIngreso> notaIngresoList = null;
@@ -147,6 +150,16 @@ namespace BusinessLayer
                 notaIngresoList = dal.SelectNotasIngreso(notaIngreso);
             }
             return notaIngresoList;
+        }
+
+        public List<MovimientoAlmacen> GetMovimientosAlmacenExtornantes(MovimientoAlmacen movimientoAlmacen)
+        {
+            List<MovimientoAlmacen> movimientoAlmacenList = new List<MovimientoAlmacen>();
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                movimientoAlmacenList = dal.SelectMovimientosAlmacenExtornantes(movimientoAlmacen);
+            }
+            return movimientoAlmacenList;
         }
 
         public List<GuiaRemision> GetGuiasRemisionGrupoCliente(GuiaRemision guiaRemision)
@@ -181,12 +194,6 @@ namespace BusinessLayer
             using (var dal = new MovimientoALmacenDAL())
             {
                 notaIngreso = dal.SelectNotaIngreso(notaIngreso);
-
-                if (notaIngreso.guiaRemisionAExtornar.idMovimientoAlmacen == null || notaIngreso.guiaRemisionAExtornar.idMovimientoAlmacen == Guid.Empty)
-                {
-                    notaIngreso.guiaRemisionAExtornar = null;
-                }
-
             }
             return notaIngreso;
         }

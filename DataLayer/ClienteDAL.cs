@@ -168,7 +168,7 @@ namespace DataLayer
 
                 cliente.perteneceCanalMultiregional = Converter.GetBool(row, "pertenece_canal_multiregional");
                 cliente.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
-                cliente.perteneceCanalProvincia = Converter.GetBool(row, "pertenece_canal_provincia");
+                cliente.perteneceCanalProvincias = Converter.GetBool(row, "pertenece_canal_provincia");
                 cliente.perteneceCanalPCP = Converter.GetBool(row, "pertenece_canal_pcp");
                 cliente.perteneceCanalOrdon = Converter.GetBool(row, "pertenece_canal_ordon");
                 cliente.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
@@ -312,6 +312,9 @@ namespace DataLayer
 
             InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados?1:0));
 
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
+            
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.Int(objCommand, "codigoAlterno");
 
@@ -363,6 +366,14 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
             InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "bloqueado", (short)(cliente.bloqueado ? 1 : 0));
+
+            InputParameterAdd.SmallInt(objCommand, "perteneceCanalMultiregional", (short)(cliente.perteneceCanalMultiregional ? 1 : 0));
+            InputParameterAdd.SmallInt(objCommand, "perteneceCanalLima", (short)(cliente.perteneceCanalLima ? 1 : 0));
+            InputParameterAdd.SmallInt(objCommand, "perteneceCanalProvincias", (short)(cliente.perteneceCanalProvincias ? 1 : 0));
+            InputParameterAdd.SmallInt(objCommand, "perteneceCanalPCP", (short)(cliente.perteneceCanalPCP ? 1 : 0));
+            InputParameterAdd.SmallInt(objCommand, "esSubDistribuidor", (short)(cliente.esSubDistribuidor ? 1 : 0));
+
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
 
             ExecuteNonQuery(objCommand);            
 

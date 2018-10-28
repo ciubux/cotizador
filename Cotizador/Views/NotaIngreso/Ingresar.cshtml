@@ -212,7 +212,7 @@
         </div>
 
          @if (notaIngreso.guiaRemisionAExtornar != null)
-        {
+         {
             <fieldset>
                 <legend>Documento a extornar:</legend>
                 <!--GUIA REMISIÓN A EXTORNAR-->
@@ -276,8 +276,48 @@
                 </div>
             </fieldset>
          }
-         else
-         { 
+         else if (notaIngreso.guiaRemisionAIngresar != null)
+         {
+                  <fieldset>
+                <legend>Documento a Ingresar:</legend>
+                <!--GUIA REMISIÓN A EXTORNAR-->
+                <div class="row">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="tipoMovimientoAlmacen" class="control-label col-xs-4">Documento:</label>
+                            <div class="col-xs-8">
+                                <input type="text" class="form-control" disabled value="Guía Remisión" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(p => notaIngreso.guiaRemisionAIngresar.serieNumeroGuia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(p => notaIngreso.guiaRemisionAIngresar.serieNumeroGuia, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(p => notaIngreso.guiaRemisionAIngresar.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(p => notaIngreso.guiaRemisionAIngresar.fechaEmisionFormatoImpresion, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </fieldset>
+
+
+         }
+         else {
         <fieldset>
             <legend id="divpedido_transportista">Documentos de referencia:</legend>
             <!--GUIA REMISIÓN REFERENCIA-->

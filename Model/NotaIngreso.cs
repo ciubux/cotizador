@@ -51,7 +51,7 @@ namespace Model
 
 
         [Display(Name = "Número Nota Ingreso:")]
-        public String serieNumeroNotaIngreso { get { return  this.serieDocumento + "-" + this.numeroDocumentoString ; } }
+        public String serieNumeroNotaIngreso { get { return  "NI"+this.serieDocumento + "-" + this.numeroDocumentoString ; } }
              
 
         public DocumentoVenta documentoVenta { get; set; }
@@ -135,7 +135,8 @@ namespace Model
         {
             get
             {
-                return this.estaAnulado ? "Nota Ingreso Anulada" : "Nota Ingreso Registrada";
+                return this.estaAnulado ? "Anulada" :
+                    (this.estaFacturado ? "Registrada (con Nota Crédito)" : "Registrada");
             }
 
         }
@@ -206,6 +207,6 @@ namespace Model
 
         public GuiaRemision guiaRemisionAExtornar { get; set; }
 
- 
+        public GuiaRemision guiaRemisionAIngresar { get; set; }
     }
 }

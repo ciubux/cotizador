@@ -58,6 +58,15 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public String GetMovimientosAlmacenExtornantes()
+        {
+            MovimientoAlmacen movimientoAlmacen = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+            List<MovimientoAlmacen> movimientoAlmacenExtornanteList = movimientoAlmacenBL.GetMovimientosAlmacenExtornantes(movimientoAlmacen);
+            String resultado = JsonConvert.SerializeObject(movimientoAlmacenExtornanteList);
+            return resultado;
+        }
+
 
 
         #region Busqueda Guias

@@ -531,6 +531,11 @@ jQuery(function ($) {
 
         desactivarBotonesNotasCredito();
 
+        $('body').loadingModal({
+            text: 'Creando Nota de Crédito...'
+        });
+        $('body').loadingModal('show');
+
         $.ajax({
             url: "/NotaCredito/Create",
             type: 'POST',
@@ -681,8 +686,9 @@ jQuery(function ($) {
 
 
         $('body').loadingModal({
-            text: 'Creando Nota Crédito...'
+            text: 'Creando Nota de Crédito...'
         });
+        $('body').loadingModal('show');
         
         var idDocumentoVenta = $("#idDocumentoVenta").val();
 

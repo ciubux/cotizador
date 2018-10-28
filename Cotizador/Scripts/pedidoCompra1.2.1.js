@@ -2662,7 +2662,10 @@ jQuery(function ($) {
                     && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO
                     && pedido.seguimientoPedido.estado != ESTADO_FACTURADO
                     && pedido.seguimientoPedido.estado != ESTADO_FACTURADO_PARCIALMENTE
-                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO_PARCIALMENTE) {
+                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO_PARCIALMENTE
+                    && pedido.seguimientoPedido.estado != ESTADO_RECIBIDO
+                    && pedido.seguimientoPedido.estado != ESTADO_RECIBIDO_PARCIALMENTE
+                ) {
                     $("#btnEditarPedido").show();
                     if (pedido.seguimientoPedido.estado == ESTADO_EN_EDICION) {
                         $("#btnEditarPedido").html("Continuar Editando");
@@ -2738,7 +2741,8 @@ jQuery(function ($) {
                     && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO_PARCIALMENTE
                     && pedido.seguimientoPedido.estado != ESTADO_FACTURADO
                     && pedido.seguimientoPedido.estado != ESTADO_FACTURADO_PARCIALMENTE
-
+                    && pedido.seguimientoPedido.estado != ESTADO_RECIBIDO
+                    && pedido.seguimientoPedido.estado != ESTADO_RECIBIDO_PARCIALMENTE
                 ) {
 
                     $("#btnBloquearPedido").show();

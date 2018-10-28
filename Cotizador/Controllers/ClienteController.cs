@@ -146,6 +146,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             cliente.IdUsuarioRegistro = usuario.idUsuario;
             cliente.usuario = usuario;
+            cliente.grupoCliente = new GrupoCliente();
 
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
@@ -332,6 +333,23 @@ namespace Cotizador.Controllers
           
         }
 
+        public String ChangeIdGrupoCliente()
+        {
+            Cliente cliente = this.ClienteSession;
+
+            Int32 idGrupoCliente = 0;
+            if (this.Request.Params["idGrupoCliente"] != null && !this.Request.Params["idGrupoCliente"].Equals(""))
+            {
+                idGrupoCliente = Int32.Parse(this.Request.Params["idGrupoCliente"]);
+            }
+
+            GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
+            List<GrupoCliente> grupoClientList = grupoClienteBL.getGruposCliente();
+            cliente.grupoCliente = grupoClientList.Where(g => g.idGrupoCliente == idGrupoCliente).FirstOrDefault();
+            this.ClienteSession = cliente;
+            return "{\"idGrupoCliente\": \"" + idGrupoCliente + "\"}";
+
+        }
 
         public String Create()
         {
@@ -553,9 +571,16 @@ namespace Cotizador.Controllers
             else
                 ClienteSession.supervisorComercial.idVendedor = Int32.Parse(this.Request.Params["idSupervisorComercial"]);
         }
-        public void ChangeBloqueado()
+      /*  public void ChangeBloqueado()
         {
             ClienteSession.bloqueado = Int32.Parse(this.Request.Params["bloqueado"]) == 1;
+        }*/
+        public void ChangeInputBoolean()
+        {
+            Cliente cliente = this.ClienteSession;
+            PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(cliente, Int32.Parse(this.Request.Params["valor"]) == 1);
+            this.ClienteSession = cliente;
         }
 
         public void ChangeSinPlazoCreditoAprobado()

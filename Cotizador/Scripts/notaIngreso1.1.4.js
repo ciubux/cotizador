@@ -450,7 +450,7 @@ jQuery(function ($) {
         desactivarBotonesCreacionModificacion();
 
         $('body').loadingModal({
-            text: 'Creando Nota Ingreso...'
+            text: 'Creando Nota de Ingreso...'
         });
         $.ajax({
             url: "/NotaIngreso/Create",
@@ -468,25 +468,41 @@ jQuery(function ($) {
                 if (resultado.notaIngresoValidacion.tipoErrorValidacion == 0) {
 
                     if (resultado.generarNotaCredito) {
-                            $.ajax({
-                                url: "/NotaCredito/iniciarCreacionNotaCreditoDesdeNotaIngreso",
-                                type: 'POST',
-                                dataType: 'JSON',
-                                //data: { },
-                                error: function (error) {
-                                    mostrarMensajeErrorProceso(MENSAJE_ERROR);
-                                    /*IMPORTANTE: FALTA DEFINIR EL ESTADO DE LA NOTA DE INGRESO CUANDO NO SE CREA CORRECTAMENTE LA NOTA DE CREDITO*/
-                                },
-                                success: function (venta) {
-                                    if (venta.tipoErrorCrearTransaccion == 0) {
-                                        window.location = '/NotaCredito/Crear';
-                                    }
-                                    else {
-                                        mostrarMensajeErrorProceso(MENSAJE_ERROR + "\n" + "Detalle Error: " + venta.descripcionError);
-                                    }
-                                }
-                            });
 
+                        $.alert({
+                            //icon: 'fa fa-warning',
+                            title: TITLE_EXITO,
+                            content: "La nota de ingreso número " + resultado.serieNumeroNotaIngreso + " fue creada PROVISIONALMENTE. A continuación, genere la Nota de Crédito correspondiente para culminar el proceso de extorno.",
+                            type: 'orange',
+                            buttons: {
+                                OK: function () {
+                                    $('body').loadingModal({
+                                        text: 'Creando Nota de Crédito...'
+                                    });
+                                    $('body').loadingModal('show');
+                                $.ajax({
+                                    url: "/NotaCredito/iniciarCreacionNotaCreditoDesdeNotaIngreso",
+                                    type: 'POST',
+                                    dataType: 'JSON',
+                                    //data: { },
+                                    error: function (error) {
+                                        $('body').loadingModal('hide')
+                                        mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                                        /*IMPORTANTE: FALTA DEFINIR EL ESTADO DE LA NOTA DE INGRESO CUANDO NO SE CREA CORRECTAMENTE LA NOTA DE CREDITO*/
+                                    },
+                                    success: function (venta) {
+                                        $('body').loadingModal('hide')
+                                        if (venta.tipoErrorCrearTransaccion == 0) {
+                                            window.location = '/NotaCredito/Crear';
+                                        }
+                                        else {
+                                            mostrarMensajeErrorProceso(MENSAJE_ERROR + "\n" + "Detalle Error: " + venta.descripcionError);
+                                        }
+                                    }
+                                });
+                                }
+                            }
+                        });
                     }
                     else {
                         $.alert({
@@ -625,12 +641,12 @@ jQuery(function ($) {
                 return false;
             }
         }
-        else {
+        else if ($("#notaIngreso_sustentoExtorno").length > 0) {
             if ($("#notaIngreso_sustentoExtorno").val().length <= 25) {
                 $.alert({
                     //icon: 'fa fa-warning',
                     title: 'Validación',
-                    content: 'Debe ingresar el sustento del extorno.',
+                    content: 'El sustento de extorno debe tener más de 25 caracteres.',
                     type: 'red',
                     buttons: {
                         OK: function () {
@@ -783,14 +799,92 @@ jQuery(function ($) {
                 $("#ver_notaIngreso_observaciones").html(notaIngreso.observaciones);
 
                 $("#ver_notaIngreso_estadoDescripcion").html(notaIngreso.estadoDescripcion);
+
                 if (notaIngreso.estaAnulado == 1) {
                     $("#ver_notaIngreso_estadoDescripcion").attr("style", "color:red")
                     $("#btnAnularNotaIngreso").hide();
+                    $("#btnExtornar").hide();
+                    $("#btnImprimirNotaIngreso").hide();
                 }
                 else {
                     $("#ver_notaIngreso_estadoDescripcion").attr("style", "color:black")
-                    $("#btnAnularNotaIngreso").show();
+                    $("#btnImprimirNotaIngreso").show();
+
+                    //No se requiere agregar este campo en nota de crédito
+                    //$("#notaIngreso_tipoExtorno").val(notaIngreso.tipoExtorno);
+                    /*Si la nota de ingreso no ha sido extornada, se puede anular, extornar y facturar*/
+                    if (notaIngreso.tipoExtorno == MOV_TIPO_EXTORNO_SIN_EXTORNO) {
+                        $("#btnAnularNotaIngreso").show();
+                        $("#btnExtornar").show();
+
+                        $("#fieldsetTipoExtorno").hide();
+                        $("#btnVerGuiasRemisionExtornantes").hide();
+                    }
+                    /*Si la nota de ingreso ha sido extornada parcialmente, se puede extornar para culminar con el extorno, no se puede anular y tampoco facturar*/
+                    else {
+                        $("#btnAnularNotaIngreso").hide();
+                        $("#btnFacturarGuiaRemision").hide();
+
+                        $("#fieldsetTipoExtorno").show();
+                        $("#btnVerGuiasRemisionExtornantes").show();
+                        $("#ver_notaIngreso_tipoExtorno").html(notaIngreso.tipoExtornoToString);
+                        if (notaIngreso.tipoExtorno == MOV_TIPO_EXTORNO_EXTORNO_PARCIAL) {
+                            $("#btnExtornar").show();
+                        }
+                        else {
+                            $("#btnExtornar").hide();
+                        }
+                    }
+
+
+                    if (notaIngreso.guiaRemisionAExtornar == null && notaIngreso.guiaRemisionAIngresar == null) {
+                        $("#fieldsetDocumentoExtornado").hide();
+                        $("#fieldsetDetalleExtorno").hide();
+                        $("#fieldsetDocumentoIngresado").hide();
+                        $("#fieldsetDocumentosReferencia").show();
+
+                        $("#ver_notaIngreso_serieGuiaReferencia").html(notaIngreso.serieGuiaReferencia);
+                        $("#ver_notaIngreso_numeroGuiaReferencia").html(notaIngreso.numeroGuiaReferencia);
+                        $("#ver_notaIngreso_serieDocumentoVentaReferencia").html(notaIngreso.serieDocumentoVentaReferencia);
+                        $("#ver_notaIngreso_numeroDocumentoVentaReferencia").html(notaIngreso.numeroDocumentoVentaReferencia);
+                        $("#ver_notaIngreso_tipoDocumentoVentaReferencia").html(notaIngreso.tipoDocumentoVentaReferenciaString);
+
+                    }
+                    else if (notaIngreso.guiaRemisionAIngresar != null) {
+                        $("#fieldsetDocumentoExtornado").hide();
+                        $("#fieldsetDetalleExtorno").hide();
+                        $("#fieldsetDocumentoIngresado").show();
+                        $("#fieldsetDocumentosReferencia").hide();
+                        $("#ver_notaIngreso_guiaRemisionAIngresar_serieNumeroGuia").html(notaIngreso.guiaRemisionAIngresar.serieNumeroGuia);
+                        $("#btnExtornar").hide();
+                    }
+                    else
+                    {
+                        $("#fieldsetDocumentoExtornado").show();
+                        $("#fieldsetDetalleExtorno").show();
+                        $("#fieldsetDocumentosReferencia").hide();        
+                        $("#fieldsetDocumentoIngresado").hide();
+                        $("#ver_notaIngreso_guiaRemisionAExtornar_serieNumeroGuia").html(notaIngreso.guiaRemisionAExtornar.serieNumeroGuia);
+                        $("#ver_notaIngreso_motivoExtornoGuiaRemisionToString").html(notaIngreso.motivoExtornoGuiaRemisionToString);
+                        $("#ver_notaIngreso_sustentoExtorno").html(notaIngreso.sustentoExtorno);
+                        $("#btnExtornar").hide();
+                    }
+
+
+
+
+
+                    /*Tiene Nota de Crédito*/
+                    if (notaIngreso.estaFacturado == 1) {
+                        $("#ver_notaIngreso_estadoDescripcion").attr("style", "color:green")
+                        $("#btnAnularNotaIngreso").hide();
+                    }
+                    
                 }
+
+
+
+
                 
 
                 if (notaIngreso.atencionParcial) {
@@ -800,35 +894,9 @@ jQuery(function ($) {
                     $("#ver_notaIngreso_atencionParcial").html("Ingreso Final");
                 }
 
-                if (notaIngreso.guiaRemisionAExtornar == null) {
-                    $("#fieldsetDocumentoExtornado").hide();
-                    $("#fieldsetDetalleExtorno").hide();
-                    $("#fieldsetDocumentosReferencia").show();
+              
+                
 
-                    $("#ver_notaIngreso_serieGuiaReferencia").html(notaIngreso.serieGuiaReferencia);
-                    $("#ver_notaIngreso_numeroGuiaReferencia").html(notaIngreso.numeroGuiaReferencia);
-                    $("#ver_notaIngreso_serieDocumentoVentaReferencia").html(notaIngreso.serieDocumentoVentaReferencia);
-                    $("#ver_notaIngreso_numeroDocumentoVentaReferencia").html(notaIngreso.numeroDocumentoVentaReferencia);
-                    $("#ver_notaIngreso_tipoDocumentoVentaReferencia").html(notaIngreso.tipoDocumentoVentaReferenciaString);
-                    $("#btnExtornar").show();
-                }
-                else {
-                    $("#fieldsetDocumentoExtornado").show();
-                    $("#fieldsetDetalleExtorno").show();
-                    $("#fieldsetDocumentosReferencia").hide();
-                    $("#ver_notaIngreso_guiaRemisionAExtornar_serieNumeroGuia").html(notaIngreso.guiaRemisionAExtornar.serieNumeroGuia);
-                    $("#ver_notaIngreso_motivoExtornoGuiaRemisionToString").html(notaIngreso.motivoExtornoGuiaRemisionToString);
-                    $("#ver_notaIngreso_sustentoExtorno").html(notaIngreso.sustentoExtorno);
-                    $("#btnExtornar").hide();
-                }
-
-                if (notaIngreso.motivoTraslado == MOTIVO_TRASLADO_ENTRADA_DEVOLUCION_VENTA.charCodeAt(0)
-                    || notaIngreso.motivoTraslado == MOTIVO_TRASLADO_ENTRADA_DEVOLUCION_PRESTAMO_ENTREGADO.charCodeAt(0)
-                    || notaIngreso.motivoTraslado == MOTIVO_TRASLADO_ENTRADA_DEVOLUCION_COMODATO_ENTREGADO.charCodeAt(0)
-                    || notaIngreso.motivoTraslado == MOTIVO_TRASLADO_ENTRADA_DEVOLUCION_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-                ) {
-                    $("#btnExtornar").hide();
-                }
 
                 //invertirFormatoFecha(pedido.fechaMaximaEntrega.substr(0, 10)));
 
@@ -890,6 +958,65 @@ jQuery(function ($) {
             window.location = '/NotaIngreso/CancelarCreacionNotaIngreso';
         }
     })
+
+
+    $("#btnVerGuiasRemisionExtornantes").click(function () {
+        var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
+        $.ajax({
+            url: "/NotaIngreso/GetMovimientosAlmacenExtornantes",
+            data: {
+                idMovimientoAlmacen: idMovimientoAlmacen
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso();
+            },
+            success: function (guiaRemisionList) {
+                $("#formVerGuiasRemision").empty();
+
+                for (var j = 0; j < guiaRemisionList.length; j++) {
+                    $("#tableDetalleGuiaRemision > tbody").empty();
+                    var plantilla = $("#plantillaVerGuiasRemision").html();
+                    var dGuia = '';
+                    var documentoDetalleList = guiaRemisionList[j].documentoDetalle;
+                    for (var k = 0; k < documentoDetalleList.length; k++) {
+
+                        dGuia += '<tr>' +
+                            '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
+                            '<td>' + documentoDetalleList[k].cantidad + '</td>' +
+                            '<td>' + documentoDetalleList[k].unidad + '</td>' +
+                            '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
+                            '</tr>';
+                    }
+
+                    $("#tableDetalleGuiaRemision").append(dGuia);
+
+                    plantilla = $("#plantillaVerGuiaRemision").html();
+
+                    plantilla = plantilla.replace("#serieNumero", guiaRemisionList[j].serieDocumento + '-' + guiaRemisionList[j].numeroDocumento);
+                    plantilla = plantilla.replace("#fechaEmisionGuiaRemision", invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
+                    /*
+                    plantilla = plantilla.replace("#serieNumeroFactura", guiaRemisionList[j].venta.documentoVenta.serieNumero);
+                    if (guiaRemisionList[j].venta.documentoVenta.fechaEmision != null) {
+                        plantilla = plantilla.replace("#fechaEmisionFactura", invertirFormatoFecha(guiaRemisionList[j].venta.documentoVenta.fechaEmision.substr(0, 10)));
+                    }
+                    else
+                        plantilla = plantilla.replace("#fechaEmisionFactura", "");
+                    */
+
+                    plantilla = plantilla.replace("tableDetalleGuia", "tableDetalleGuia" + j);
+
+                    $("#formVerGuiasRemision").append(plantilla);
+                }
+
+                $("#modalVerGuiasRemision").modal('show');
+
+            }
+        });
+
+    });
+
 
 
 
@@ -1401,6 +1528,7 @@ jQuery(function ($) {
         $('body').loadingModal({
             text: 'Creando Factura...'
         });
+
 
 
         var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();

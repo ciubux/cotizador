@@ -784,6 +784,9 @@ jQuery(function ($) {
         //var estado = $("#estado").val();
 
         var estadoDocumentoSunatBusqueda = $("#documentoVenta_estadoDocumentoSunatBusqueda").val();
+        var tipoDocumento = $("#documentoVenta_tipoDocumento").val();
+
+        
 
 
         $("#btnBusqueda").attr("disabled", "disabled");
@@ -799,7 +802,8 @@ jQuery(function ($) {
                 numeroGuiaRemision: numeroGuiaRemision,
                 fechaEmisionDesde: fechaEmisionDesde,
                 fechaEmisionHasta: fechaEmisionHasta,
-                estadoDocumentoSunatBusqueda: estadoDocumentoSunatBusqueda
+                estadoDocumentoSunatBusqueda: estadoDocumentoSunatBusqueda,
+                tipoDocumento: tipoDocumento
             },
             error: function () {
                 $("#btnBusqueda").removeAttr("disabled");
