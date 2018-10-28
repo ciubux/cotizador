@@ -262,6 +262,10 @@ namespace DataLayer
                     cotizacion.cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
                     cotizacion.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
                     cotizacion.cliente.tipoPagoFactura =  (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                    if (cotizacion.cliente.sedePrincipal) {
+                        ClienteDAL dalCliente = new ClienteDAL();
+                        cotizacion.cliente.sedeList = dalCliente.getSedes(cotizacion.cliente.ruc);
+                    }
                     cotizacion.grupo = new GrupoCliente();
                 }
 
