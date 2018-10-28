@@ -239,7 +239,7 @@ namespace DataLayer
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
                 cotizacion.fechaModificacion = Converter.GetDateTime(row, "fecha_modificacion");
                 cotizacion.fechaEsModificada = Converter.GetBool(row, "fecha_Es_Modificada");
-
+                cotizacion.aplicaSedes = Converter.GetBool(row, "aplica_sedes");
                 cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
 
                 //Si el cliente es Null
@@ -259,6 +259,7 @@ namespace DataLayer
                     cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                     cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
                     cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
+                    cotizacion.cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
                     cotizacion.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
                     cotizacion.cliente.tipoPagoFactura =  (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
                     cotizacion.grupo = new GrupoCliente();

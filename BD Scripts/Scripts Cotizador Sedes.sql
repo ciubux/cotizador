@@ -529,3 +529,115 @@ END
 
 
 
+/* Alter ps_cotizacion - Traer sede_principal */
+
+ALTER PROCEDURE [dbo].[ps_cotizacion] 
+@codigo bigint
+AS
+BEGIN
+
+SELECT 
+--COTIZACION
+co.id_cotizacion, co.fecha,  co.fecha_limite_validez_oferta ,  co.fecha_inicio_vigencia_precios, co.fecha_fin_vigencia_precios, 
+co.incluido_igv, co.considera_cantidades,  co.mostrar_validez_oferta_dias, co.contacto,
+co.porcentaje_flete, co.igv, co.total, co.observaciones, co.mostrar_codigo_proveedor, co.fecha_modificacion,
+co.fecha_es_modificada, co.aplica_sedes,
+---CLIENTE
+cl.id_cliente, cl.codigo, cl.razon_social, cl.ruc, cl.sede_principal,
+cl.plazo_credito_solicitado, cl.tipo_pago_factura,
+--CIUDAD
+ci.id_ciudad, ci.nombre as nombre_ciudad ,
+--USUARIO
+us.nombre  as nombre_usuario, us.cargo, us.contacto as contacto_usuario, us.email,
+--GRUPO
+gr.id_grupo, gr.codigo as codigo_grupo, gr.nombre as nombre_grupo, gr.contacto as contacto_grupo,
+--SEGUIMIENTO
+sc.estado_cotizacion as estado_seguimiento,
+us2.nombre as usuario_seguimiento, sc.observacion as observacion_seguimiento,
+us2.id_usuario as id_usuario_seguimiento,
+--DETALLE
+(SELECT max(porcentaje_descuento) from COTIZACION_DETALLE  WHERE estado = 1 AND id_cotizacion = co.id_cotizacion) as maximo_porcentaje_descuento
+
+
+
+FROM COTIZACION as co
+INNER JOIN CIUDAD AS ci ON co.id_ciudad = ci.id_ciudad
+INNER JOIN USUARIO AS us on co.usuario_creacion = us.id_usuario
+INNER JOIN SEGUIMIENTO_COTIZACION sc ON co.id_cotizacion = sc.id_cotizacion
+INNER JOIN USUARIO AS us2 on sc.id_usuario = us2.id_usuario
+LEFT JOIN CLIENTE AS cl ON co.id_cliente = cl.id_cliente
+LEFT JOIN GRUPO AS gr ON co.id_grupo = gr.id_grupo  
+where co.codigo = @codigo and co.estado = 1
+AND sc.estado = 1;
+
+
+
+select * from (
+	SELECT cd.id_cotizacion_detalle, 
+	cd.cantidad, 
+	cd.precio_sin_igv, 
+	cd.costo_sin_igv, 
+	cd.equivalencia,
+	cd.unidad, 
+	cd.porcentaje_descuento,
+	cd.precio_neto, 
+	cd.es_precio_alternativo, 
+	cd.observaciones,
+	cd.fecha_modificacion,
+	cd.flete,
+	pr.id_producto, 
+	pr.sku, 
+	pr.descripcion, 
+	pr.sku_proveedor, 
+	pr.imagen, 
+	pr.proveedor, 
+	pr.costo as producto_costo, 
+	pr.precio as producto_precio,
+	pr.precio_provincia as producto_precio_provincia,
+
+	--pc.unidad, 
+	CASE pc.es_unidad_alternativa WHEN 1 THEN pc.precio_neto * pc.equivalencia 
+	ELSE pc.precio_neto END as precio_neto_vigente, 
+
+
+
+	pc.flete as flete_vigente, 
+
+	CASE pc.es_unidad_alternativa WHEN 1 THEN pc.precio_unitario * pc.equivalencia 
+	ELSE pc.precio_unitario END as precio_unitario_vigente, 
+
+
+	pc.equivalencia as equivalencia_vigente,
+	pc.id_precio_cliente_producto,
+	pc.fecha_inicio_vigencia,
+	pc.fecha_fin_vigencia,
+	pc.id_cliente,
+	
+	ROW_NUMBER() OVER(PARTITION BY cd.id_producto,co.id_cliente ORDER BY 
+	pc.fecha_inicio_vigencia DESC, pc.codigo DESC) AS RowNumber
+
+	FROM COTIZACION_DETALLE as cd INNER JOIN 
+	COTIZACION as co ON cd.id_cotizacion = co.id_cotizacion 
+	INNER JOIN PRODUCTO pr ON cd.id_producto = pr.id_producto
+	LEFT JOIN 
+	(SELECT pc.*, co.codigo FROM 
+		PRECIO_CLIENTE_PRODUCTO pc 
+		LEFT JOIN COTIZACION co ON pc.id_cotizacion = co.id_cotizacion
+		WHERE /*fecha_inicio_vigencia < GETDATE()
+		AND fecha_inicio_vigencia >= DATEADD(month,-6,GETDATE())  
+		AND (fecha_fin_vigencia is NULL OR fecha_fin_vigencia >= GETDATE())*/
+		 fecha_inicio_vigencia > DATEADD(day, cast((SELECT valor FROM PARAMETRO where codigo = 'DIAS_MAX_BUSQUEDA_PRECIOS') as int) * -1 , GETDATE()) 
+
+		--ORDER BY fecha_inicio_vigencia DESC
+	) pc ON pc.id_producto = pr.id_producto 
+	AND co.id_cliente = pc.id_cliente AND cd.equivalencia = pc.equivalencia
+--	AND cd.es_precio_alternativo = pc.es_unidad_alternativa
+	where co.codigo = @codigo and cd.estado = 1 ) SQuery 
+	where RowNumber = 1
+	ORDER BY fecha_modificacion ASC;
+
+END
+
+
+
+

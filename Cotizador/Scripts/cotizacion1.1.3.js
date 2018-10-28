@@ -1418,7 +1418,8 @@ jQuery(function ($) {
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
                 title: '¿Desea aplicar la cotización a todoas las sedes?',
-                content: 'Sedes:<br>' + listaTextoSedesCliente,
+                content: '<div class="col-sm-4"><b>Sedes:</b><div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div>',
+                type: 'orange',
                 buttons: {
                     aplica: {
                         text: 'SI',
@@ -1518,7 +1519,8 @@ jQuery(function ($) {
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
                 title: '¿Desea aplicar la cotización a todoas las sedes?',
-                content: 'Sedes:<br>' + listaTextoSedesCliente,
+                content: '<div class="col-sm-4"><b>Sedes:</b><div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div>',
+                type: 'orange',
                 buttons: {
                     aplica: {
                         text: 'SI',
