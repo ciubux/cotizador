@@ -152,18 +152,18 @@
                                     <li id="linkCargaPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Carga Masiva", "Load", "Pedido")</li>
                                 }                      
 
-                                @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
+                                @if (usuario.tomaPedidosCompra)
                                 {
                                     <li id="linkBusquedaPedidosCompra" class="@linkBusquedaPedidosCompra">@Html.ActionLink("Pedido Compra - Búsqueda", "Index", "PedidoCompra")</li>}
-                                @if (usuario.tomaPedidos)
+                                @if (usuario.tomaPedidosCompra)
                                 {
                                     <li id="linkMantenimientoPedidoCompra" class="@linkMantenimientoPedidoCompra">@Html.ActionLink("Pedido Compra - Crear/Modificar", "Pedir", "PedidoCompra")</li>
                                 }  
 
-                                @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
+                                @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
                                 {
                                     <li id="linkBusquedaPedidosAlmacen" class="@linkBusquedaPedidosAlmacen">@Html.ActionLink("Pedido Almacén - Búsqueda", "Index", "PedidoAlmacen")</li>}
-                                @if (usuario.tomaPedidos)
+                                @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
                                 {
                                     <li id="linkMantenimientoPedidoAlmacen" class="@linkMantenimientoPedidoAlmacen">@Html.ActionLink("Pedido Almacén - Crear/Modificar", "Pedir", "PedidoAlmacen")</li>
                                 }  

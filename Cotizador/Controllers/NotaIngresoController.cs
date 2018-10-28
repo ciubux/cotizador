@@ -458,7 +458,7 @@ namespace Cotizador.Controllers
 
                 
                 notaIngreso.pedido.tipo = Pedido.tipos.Almacen;
-                notaIngreso.pedido.tipoPedidoAlmacen = Pedido.tiposPedidoAlmacen.TrasladoInternoRecibido;
+                notaIngreso.pedido.tipoPedidoAlmacen = Pedido.tiposPedidoAlmacen.TrasladoInterno;
                 notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.TrasladoInterno;
                 
                 

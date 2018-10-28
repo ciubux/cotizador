@@ -24,7 +24,9 @@ namespace Model
             [Display(Name = "Ninguno")]
             NoExisteError = 0,
             [Display(Name = "Existen Notas de Ingreso con Fecha Posterior")]
-            ExisteDocumentoFechaPosterior = 1
+            ExisteDocumentoFechaPosterior = 1,
+            [Display(Name = "No se puede extornar Guía de Remisión")]
+            GuiaRemisionConsolidada = 2
         }
 
         public String descripcionError { get; set; }

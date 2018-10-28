@@ -729,8 +729,7 @@ jQuery(function ($) {
                
                 if (guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_TRASLADO_INTERNO.charCodeAt(0)
                     && guiaRemision.ingresado == false
-                )
-                {
+                ) {
                     $("#btnIngresar").show()
                 }
                 else if (guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_VENTA.charCodeAt(0)
@@ -738,6 +737,9 @@ jQuery(function ($) {
                     $("#btnFacturarGuiaRemision").hide();
                     $("#btnExtornar").hide();
                     $("#btnIngresar").hide()
+                }
+                else {
+                    $("#btnIngresar").hide();
                 }
                 
 
@@ -2323,7 +2325,7 @@ jQuery(function ($) {
                 $.alert({
                     //icon: 'fa fa-warning',
                     title: "Error",
-                    content: "Existen múltiples documentos de venta asociadas a esta guía de remisión, no se puede extornar, contacte con TI.",
+                    content: "Existen múltiples Documentos de Venta asocidados a esta Guía de Remisión, no se puede extornar, contacte con TI.",
                     type: 'red',
                     buttons: {
                         OK: function () {
