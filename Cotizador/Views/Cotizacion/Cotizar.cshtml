@@ -553,7 +553,18 @@
                     <div class="col-xs-10">
                         <textarea rows="6" cols="100" style="min-width: 100%" id="observaciones" name="observaciones">@cotizacion.observaciones</textarea>
                     </div>
+
                 </div>
+                @if (cotizacion.aplicaSedes)
+                {
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <p class="form-control-static text-danger" id="verSedesAplica">
+                                Esta cotización aplicará también para las sedes:  @cotizacion.cliente.sedeListWebString.Replace("<br>", ", ")
+                            </p>
+                        </div>
+                    </div>
+                }
             </div>
             <div class="col-sm-6 col-lg-3">
 

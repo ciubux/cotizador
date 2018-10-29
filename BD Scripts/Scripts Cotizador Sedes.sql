@@ -263,8 +263,8 @@ Begin*/
 			FETCH NEXT FROM cursor_sedes INTO @id_cliente_sede
 		END
 
-	CLOSE the_cursor
-	DEALLOCATE the_cursor
+	CLOSE cursor_sedes
+	DEALLOCATE cursor_sedes
 	
 	--SELECT * FROM COTIZACION_DETALLE
 

@@ -1439,7 +1439,9 @@ jQuery(function ($) {
                     cancelar: {
                         text: 'Cancelar',
                         btnClass: '',
-                        action: function () { }
+                        action: function () {
+                            activarBotonesFinalizarCreacion();
+                        }
                     }
                 }
             });
@@ -1518,7 +1520,7 @@ jQuery(function ($) {
 
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
-                title: '¿Desea aplicar la cotización a todoas las sedes?',
+                title: '¿Desea aplicar la cotización a todos las sedes?',
                 content: '<div><div class="col-sm-4"><b>Sedes:</b></div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div></div>',
                 type: 'orange',
                 buttons: {
@@ -1540,7 +1542,9 @@ jQuery(function ($) {
                     cancelar: {
                         text: 'Cancelar',
                         btnClass: '',
-                        action: function () { }
+                        action: function () {
+                            activarBotonesFinalizarCreacion();
+                        }
                     }
                 }
             });
@@ -1736,7 +1740,7 @@ jQuery(function ($) {
                     $("#montosTotalesDiv").hide();
 
                 $("#verObservaciones").html(cotizacion.observaciones);
-                if (cotizacion.aplicaSedes == false) {
+                if (cotizacion.aplicaSedes === true) {
                     $("#verSedesAplica").html("Esta cotización aplicará también para las sedes: " + cotizacion.cliente.sedeListWebString.replace(new RegExp('<br>', 'g'), ', '));
                 }
                 $("#verMontoSubTotal").html(cotizacion.montoSubTotal);
