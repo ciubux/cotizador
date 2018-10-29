@@ -78,12 +78,12 @@ namespace Model
                 {
                     if (sede.ciudad != null)
                     {
-                        if (!webString.Equals(""))
+                        if (webString.Equals(""))
                         {
-                            webString = webString + sede.ciudad.nombre + "<br>";
+                            webString = sede.ciudad.nombre;
                         } else
                         {
-                            webString = webString + sede.ciudad.nombre;
+                            webString = webString + "<br>" + sede.ciudad.nombre;
                         }
                     }
                 }
