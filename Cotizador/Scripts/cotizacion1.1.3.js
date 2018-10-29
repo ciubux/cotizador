@@ -1418,7 +1418,7 @@ jQuery(function ($) {
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
                 title: '¿Desea aplicar la cotización a todoas las sedes?',
-                content: '<div class="row"><div class="col-sm-4"><b>Sedes:</b></div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div></div>',
+                content: '<div><div class="col-sm-4"><b>Sedes:</b></div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div></div>',
                 type: 'orange',
                 buttons: {
                     aplica: {
@@ -1519,7 +1519,7 @@ jQuery(function ($) {
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
                 title: '¿Desea aplicar la cotización a todoas las sedes?',
-                content: '<div class="col-sm-4"><b>Sedes:</b><div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div>',
+                content: '<div><div class="col-sm-4"><b>Sedes:</b></div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div></div>',
                 type: 'orange',
                 buttons: {
                     aplica: {
@@ -1736,7 +1736,9 @@ jQuery(function ($) {
                     $("#montosTotalesDiv").hide();
 
                 $("#verObservaciones").html(cotizacion.observaciones);
-                $("#verSedesAplica").html("Esta cotización aplicará también para las sedes: " + cotizacion.cliente.sedeListWebString.replace('<br>', ', '));
+                if (cotizacion.aplicaSedes == false) {
+                    $("#verSedesAplica").html("Esta cotización aplicará también para las sedes: " + cotizacion.cliente.sedeListWebString.replace(new RegExp('<br>', 'g'), ', '));
+                }
                 $("#verMontoSubTotal").html(cotizacion.montoSubTotal);
                 $("#verMontoIGV").html(cotizacion.montoIGV);
                 $("#verMontoTotal").html(cotizacion.montoTotal);
