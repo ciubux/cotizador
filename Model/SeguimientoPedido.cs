@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Model
 {
-    public class SeguimientoPedido
+    public class SeguimientoPedido : Auditoria
     {
         public SeguimientoPedido()
         {
@@ -47,6 +47,8 @@ namespace Model
             [Display(Name = "[Entrega No Finalizada]")]
             NoAtendidos = -2
         };
+
+        public Guid idSeguimientoPedido { get; set; }
 
         public estadosSeguimientoPedido estado { get; set; }
         public String observacion { get; set; }

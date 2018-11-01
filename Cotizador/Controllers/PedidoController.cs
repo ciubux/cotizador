@@ -1836,6 +1836,31 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        public String GetHistorial()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            PedidoBL pedidoBL = new PedidoBL();
+            List<SeguimientoPedido> historial = new List<SeguimientoPedido>();
+            Guid idPedido = Guid.Parse(Request["id"].ToString());
+            historial = pedidoBL.GetHistorialSeguimiento(idPedido);
 
+            String json = "";
+
+            foreach (SeguimientoPedido seg in historial)
+            {
+                string jsonItem = JsonConvert.SerializeObject(seg);
+                if (json.Equals(""))
+                {
+                    json = jsonItem;
+                }
+                else
+                {
+                    json = json + "," + jsonItem;
+                }
+            }
+
+            json = "{\"result\": [" + json + "]}";
+            return json;
+        }
     }
 }

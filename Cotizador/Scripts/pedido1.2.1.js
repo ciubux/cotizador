@@ -2505,7 +2505,8 @@ jQuery(function ($) {
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
 
               //  var usuario = resultado.usuario;
-
+                
+                $("#verIdPedido").val(pedido.idPedido);
 
                 $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
                 $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
@@ -4204,6 +4205,59 @@ jQuery(function ($) {
             }
         });
     });
+
+    $("#lnkVerHistorial").click(function () {
+        showHistorial();
+    });
+
+    function showHistorial() {
+        $('body').loadingModal({
+            text: 'Obteniendo Historial...'
+        });
+
+        var idPedido = $("#verIdPedido").val();
+
+        $.ajax({
+            url: "/Pedido/GetHistorial",
+            data: {
+                id: idPedido
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial del pedido."); },
+            success: function (resultado) {
+
+                $("#tableHistorialPedido > tbody").empty();
+
+                FooTable.init('#tableHistorialPedido');
+
+                var d = '';
+                var lista = resultado.result;
+                for (var i = 0; i < resultado.result.length; i++) {
+
+                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+                    d += '<tr>' +
+                        '<td>' + lista[i].FechaRegistroDesc + '</td>' +
+                        '<td>' + lista[i].usuario.nombre + '</td>' +
+                        '<td>' + lista[i].estadoString + '</td>' +
+                        '<td>' + observacion + '</td>' +
+                        '</tr>';
+
+                }
+                //  
+                // sleep
+                $("#tableHistorialPedido").append(d);
+
+
+
+
+                $("#modalVerHistorialPedido").modal('show');
+                $('body').loadingModal('hide');
+                //  window.location = '/Cotizacion/Index';
+            }
+        });
+    };
 
     $(document).on('change', "#ActualDepartamento", function () {
         var ubigeoEntregaId = "000000";

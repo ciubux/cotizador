@@ -345,6 +345,15 @@ namespace BusinessLayer
 
         #endregion
 
+        public List<SeguimientoPedido> GetHistorialSeguimiento(Guid idPedido)
+        {
+            List<SeguimientoPedido> seguimientoList = new List<SeguimientoPedido>();
+            using (var dal = new PedidoDAL())
+            {
+                seguimientoList = dal.GetHistorialSeguimiento(idPedido);
+            }
+            return seguimientoList;
+        }
 
         #region General
 

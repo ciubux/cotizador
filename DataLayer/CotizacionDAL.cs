@@ -515,5 +515,31 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+
+        public List<SeguimientoCotizacion> GetHistorialSeguimiento(Guid idCotizacion)
+        {
+            var objCommand = GetSqlCommand("ps_cotizacion_seguimiento");
+            InputParameterAdd.Guid(objCommand, "idCotizacion", idCotizacion);
+            DataTable dataTable = Execute(objCommand);
+
+            List<SeguimientoCotizacion> seguimientoCotizacion = new List<SeguimientoCotizacion>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                SeguimientoCotizacion seg = new SeguimientoCotizacion();
+                seg.idSeguimientoCotizacion = Converter.GetGuid(row, "id_estado_seguimiento");
+                seg.observacion = Converter.GetString(row, "observacion");
+                seg.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                seg.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion) Converter.GetInt(row, "estado_cotizacion");
+
+                seg.usuario = new Usuario();
+                seg.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                seg.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+
+                seguimientoCotizacion.Add(seg);
+            }
+
+            return seguimientoCotizacion;
+        }
     }
 }

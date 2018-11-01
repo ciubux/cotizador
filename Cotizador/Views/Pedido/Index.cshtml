@@ -19,108 +19,108 @@
         <div class="row">
             <!--NÚMERO PEDIDO-->
             @if (!pedido.usuario.esCliente)
-        {
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+            {
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
 
-                    <div class="col-xs-8">
-                        @if (pedido.numeroPedido > 0)
-                    {
-                        @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
-                }
-                else
-                {
-                    @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                        <div class="col-xs-8">
+                            @if (pedido.numeroPedido > 0)
+                            {
+                                @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                            }
+                            <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los otros criterios no serán considerados en la búsqueda.</span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!--NÚMERO GRUPO PEDIDO
+                <div class="col-sm-6 col-lg-5">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+
+                        <div class="col-xs-8">
+                            @if (pedido.numeroGrupoPedido > 0)
+                            {
+                            @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                            }
+                            else
+                            {
+                        @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                            }
+                        </div>
+
+                    </div>
+
+                </div>-->
+                <!--CIUDAD-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                        <div class="col-xs-8">
+                            @Html.Action("GetCiudades", "Ciudad",
+                                                                             new
+                                                                             {
+                                                                                 ciudadSelectId = "idCiudad",
+                                                                                 selectedValue = pedido.ciudad.idCiudad
+                                                                             })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <!--Cliente-->
+                    <div class="form-group">
+                        <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
+
+                        <div class="col-xs-8">
+                            <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                                @if (ViewBag.existeCliente == 1)
+                                {
+                                    <option selected value="@pedido.cliente.idCliente">@pedido.cliente</option>
+                                }
+                                else
+                                {
+                                    <option value=""></option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
             }
-                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los otros criterios no serán considerados en la búsqueda.</span>
+            else
+            {
+
+                <div class="col-sm-6 col-lg-4">
+                    <!--USUARIO-->
+                    <div class="form-group">
+                        <label for="cliente" class="control-label col-xs-4">Cliente:</label>
+                        <div class="col-xs-8">
+                            @Html.Action("clientesPedidoList", "Cliente")
+                        </div>
                     </div>
                 </div>
 
-            </div>
 
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
 
-            <!--NÚMERO GRUPO PEDIDO
-        <div class="col-sm-6 col-lg-5">
-            <div class="form-group">
-                @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
-
-                <div class="col-xs-8">
-                    @if (pedido.numeroGrupoPedido > 0)
-                    {
-                    @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
-                    }
-                    else
-                    {
-                @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
-                    }
-                </div>
-
-            </div>
-
-        </div>-->
-            <!--CIUDAD-->
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
-                    <div class="col-xs-8">
-                        @Html.Action("GetCiudades", "Ciudad",
-                                                                         new
-                                                                         {
-                                                                             ciudadSelectId = "idCiudad",
-                                                                             selectedValue = pedido.ciudad.idCiudad
-                                                                         })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="col-sm-6 col-lg-4">
-                <!--Cliente-->
-                <div class="form-group">
-                    <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
-
-                    <div class="col-xs-8">
-                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
-                            @if (ViewBag.existeCliente == 1)
-                        {
-                            <option selected value="@pedido.cliente.idCliente">@pedido.cliente</option>
-                    }
-                    else
-                    {
-                        <option value=""></option>
-                }
-                        </select>
-                    </div>
                 </div>
 
-            </div>
-    }
-    else
-    {
-
-        <div class="col-sm-6 col-lg-4">
-            <!--USUARIO-->
-            <div class="form-group">
-                <label for="cliente" class="control-label col-xs-4">Cliente:</label>
-                <div class="col-xs-8">
-                    @Html.Action("clientesPedidoList", "Cliente")
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
-                @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
-
-                <div class="col-xs-8">
-                    @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
-                </div>
-            </div>
-
-        </div>
-
-}
+            }
 
         </div>
 
@@ -129,29 +129,29 @@
         {
             <div class="row">
                 <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
 
-                    <div class="col-xs-8">
-                        @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
+                        </div>
                     </div>
+
                 </div>
 
-            </div>
 
-
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    <label for="tipoPedido" class="control-label col-xs-4">Tipo Pedido:</label>
-                    <div class="col-xs-8">
-                        @Html.DropDownList("tipoPedidoBusqueda",
-                          EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedidoVentaBusqueda), pedido.tipoPedidoVentaBusqueda),
-                          new { @class = "form-control" }
-                          )
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="tipoPedido" class="control-label col-xs-4">Tipo Pedido:</label>
+                        <div class="col-xs-8">
+                            @Html.DropDownList("tipoPedidoBusqueda",
+                              EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedidoVentaBusqueda), pedido.tipoPedidoVentaBusqueda),
+                              new { @class = "form-control" }
+                              )
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         }
 
         <div class="row">
@@ -255,17 +255,17 @@
             </div>
 
             @if (!pedido.usuario.esCliente)
-        {
-            <div class="col-sm-6 col-lg-4">
-                <!--USUARIO-->
-                <div class="form-group">
-                    <label for="usuario" class="control-label col-xs-4">Creado Por:</label>
-                    <div class="col-xs-8">
-                        @Html.Action("usuariosPedidoList", "Usuario")
+            {
+                <div class="col-sm-6 col-lg-4">
+                    <!--USUARIO-->
+                    <div class="form-group">
+                        <label for="usuario" class="control-label col-xs-4">Creado Por:</label>
+                        <div class="col-xs-8">
+                            @Html.Action("usuariosPedidoList", "Usuario")
+                        </div>
                     </div>
                 </div>
-            </div>
-    }
+            }
         </div>
 
 
@@ -302,20 +302,20 @@
                     <th data-name="distrito" data-sortable="true" data-breakpoints="xs">Distrito Entrega</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado Atención</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
-                <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
+                    <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
                     <th data-name="estadoCrediticio" data-sortable="true" data-breakpoints="xs">Estado Crediticio</th>
 
 
                     @if (pedido.usuario.confirmaStock)
-                {
-                    <th data-name="stockConfirmado" data-visible="true">Stock</th>
-                    <th data-name="stockConfirmado" data-visible="false">Stock</th>
-            }
-            else
-            {
-                <th data-name="stockConfirmado" data-visible="false">Stock</th>
-                <th data-name="stockConfirmado" data-visible="true">Stock</th>
-        }
+                    {
+                        <th data-name="stockConfirmado" data-visible="true">Stock</th>
+                        <th data-name="stockConfirmado" data-visible="false">Stock</th>
+                    }
+                    else
+                    {
+                        <th data-name="stockConfirmado" data-visible="false">Stock</th>
+                        <th data-name="stockConfirmado" data-visible="true">Stock</th>
+                    }
 
 
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
@@ -326,13 +326,13 @@
 
 
         @if (pedidoList.Count == 0)
-    {
-        <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
-            <p class="pagination-centered" style=" font-size: medium" align="center">
-                La búsqueda no obtuvo resultados.
-            </p>
-        </div>
-}
+        {
+            <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
+                <p class="pagination-centered" style=" font-size: medium" align="center">
+                    La búsqueda no obtuvo resultados.
+                </p>
+            </div>
+        }
 
 
 
@@ -355,6 +355,7 @@
 
             <div class="modal-body">
                 <form class="form-horizontal">
+                    <input type="hidden" id="verIdPedido" />
                     <input type="hidden" id="verIdCliente" />
                     <!--NUMEROS PEDIDO-->
                     <div class="row">
@@ -474,7 +475,7 @@
                         </div>
                     </div>
 
-                     <!--DATOS DEL VENDEDOR-->
+                    <!--DATOS DEL VENDEDOR-->
                     <div class="row">
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
@@ -616,6 +617,7 @@
                                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                                     <div class="col-xs-8">
                                         <p class="form-control-static" id="verEstado"></p>
+                                        <a id="lnkVerHistorial" href="#">Ver Historial</a>
                                     </div>
                                 </div>
                             </div>
@@ -718,16 +720,16 @@
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
                                 <!--     @if (pedido.usuario.creaDocumentosVenta)
-                                     {
-                                         <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
-                                         }
-                                         else
-                                         {
-                                                         <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
-                                         }
-                                -->
+                     {
+                         <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+                         }
+                         else
+                         {
+                                         <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+                         }
+                -->
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
-                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
+                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm"></th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
                                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
                                 <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
@@ -813,22 +815,22 @@
                     @if (pedido.usuario.tomaPedidos)
                     {
                         <!--
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-9">
-                                <div class="form-group">
-                                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
-                                    <div class="col-xs-3">
-                                        <div class="upload-btn-wrapper">
-                                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
-                                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
+                    <div class="col-xs-3">
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
 
                     }
 
@@ -1938,7 +1940,7 @@
         </div>
     </div>
 
- 
+
     <table id="tableDetalleNotaIngreso" class="table" data-editing="false">
         <thead>
             <tr>
@@ -1950,11 +1952,54 @@
         </thead>
         <tbody></tbody>
     </table>
-
-
-
-
 </div>
+
+
+
+
+<div class="modal fade" id="modalVerHistorialPedido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerHistorialPedido"><b>Historial de Cotización</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <table id="tableHistorialPedido" class="table" data-editing="false"
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs">Fecha</th>
+                            <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Usuario</th>
+                            <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Estado</th>
+                            <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" id="btnCloseHistorial" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/pedido")

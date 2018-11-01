@@ -1603,6 +1603,30 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
         #endregion        
          
 
+        public List<SeguimientoPedido> GetHistorialSeguimiento(Guid idPedido)
+        {
+            var objCommand = GetSqlCommand("ps_pedido_seguimiento");
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            DataTable dataTable = Execute(objCommand);
 
+            List<SeguimientoPedido> seguimientoPedidos = new List<SeguimientoPedido>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                SeguimientoPedido seg = new SeguimientoPedido();
+                seg.idSeguimientoPedido = Converter.GetGuid(row, "id_seguimiento_pedido");
+                seg.observacion = Converter.GetString(row, "observacion");
+                seg.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                seg.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_pedido");
+
+                seg.usuario = new Usuario();
+                seg.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                seg.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+
+                seguimientoPedidos.Add(seg);
+            }
+
+            return seguimientoPedidos;
+        }
     }
 }

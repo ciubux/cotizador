@@ -1708,6 +1708,7 @@ jQuery(function ($) {
 
                 $("#verCondicionesPago").html(cotizacion.textoCondicionesPago);
                 
+                $("#verIdCotizacion").val(cotizacion.idCotizacion);
                 $("#verIdCliente").val(cotizacion.cliente.idCliente);
 
                 $("#verNumero").html(cotizacion.codigo);
@@ -2868,9 +2869,58 @@ jQuery(function ($) {
     })
 
 
-    
+    $("#lnkVerHistorial").click(function () {
+        showHistorial();
+    })
+
+    function showHistorial() {
+        $('body').loadingModal({
+            text: 'Obteniendo Historial...'
+        });
+        
+        var idCotizacion = $("#verIdCotizacion").val();
+        
+        $.ajax({
+            url: "/Cotizacion/GetHistorial",
+            data: {
+                id: idCotizacion
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial de la cotización."); },
+            success: function (resultado) {
+               
+                $("#tableHistorialCotizacion > tbody").empty();
+
+                FooTable.init('#tableHistorialCotizacion');
+                
+                var d = '';
+                var lista = resultado.result;
+                for (var i = 0; i < resultado.result.length; i++) {
+
+                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+                    d += '<tr>' +
+                        '<td>' + lista[i].FechaRegistroDesc + '</td>' +
+                        '<td>' + lista[i].usuario.nombre + '</td>' +
+                        '<td>' + lista[i].estadoString + '</td>' +
+                        '<td>' + observacion + '</td>' +
+                        '</tr>';
+
+                }
+                //  
+                // sleep
+                $("#tableHistorialCotizacion").append(d);
+
+                
 
 
+                $("#modalVerHistorialCotizacion").modal('show');
+                $('body').loadingModal('hide'); 
+                //  window.location = '/Cotizacion/Index';
+            }
+        });
+    }
 
 
 
