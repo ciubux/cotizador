@@ -3,15 +3,28 @@ CREATE PROCEDURE [dbo].[ps_pedidos_sin_atencion]
 AS
 BEGIN
 
-SELECT 
-pe.id_pedido, sp.estado_pedido as estado_seguimiento
-FROM PEDIDO pe
-INNER JOIN SEGUIMIENTO_PEDIDO sp ON pe.id_pedido = sp.id_pedido
-where pe.estado = 1  AND  pe.fecha_entrega_hasta >= Convert(datetime, '2018-11-01' )
-AND pe.fecha_entrega_hasta <= GETDATE()
---((ISNULL(pe.fecha_entrega_hasta_expandida, '') = '' AND pe.fecha_entrega_hasta >= GETDATE() OR (NOT ISNULL(pe.fecha_entrega_hasta_expandida, '') = '' AND pe.fecha_entrega_hasta >= GETDATE() ) )
-AND sp.estado = 1 AND sp.estado_pedido IN (5,6,9, 11);
+SELECT pe.id_pedido
 
+FROM PEDIDO_DETALLE as pd 
+INNER JOIN PEDIDO as pe ON pd.id_pedido = pe.id_pedido 
+INNER JOIN SEGUIMIENTO_PEDIDO sp ON pe.id_pedido = sp.id_pedido AND sp.estado_pedido IN (5,6,9, 11)
+LEFT JOIN 
+(
+SELECT mad.id_pedido_detalle, SUM(cantidad) as cantidadAtendida  FROM
+MOVIMIENTO_ALMACEN_DETALLE AS mad 
+INNER JOIN MOVIMIENTO_ALMACEN ma ON mad.id_movimiento_almacen = ma.id_movimiento_almacen
+WHERE mad.estado = 1 AND  ma.estado = 1 AND ma.anulado = 0
+GROUP BY mad.id_pedido_detalle
+) AS  mad ON mad.id_pedido_detalle  = pd.id_pedido_detalle
+	
+	
+where pe.estado = 1 and pd.estado = 1 and
+	  pe.fecha_entrega_hasta <= GETDATE() 
+	  and (pd.cantidad - COALESCE(mad.cantidadAtendida,0)) > 0 
+group by pe.id_pedido
+order by pe.id_pedido;
+
+--  pe.fecha_entrega_hasta >= Convert(datetime, '2018-11-01' )
 
 END
 
@@ -33,11 +46,8 @@ pe.fecha_entrega_desde, pe.fecha_entrega_hasta,
 pe.hora_entrega_desde, pe.hora_entrega_hasta,
 pe.numero_referencia_cliente, pe.id_direccion_entrega, pe.direccion_entrega, pe.contacto_entrega,
 pe.telefono_contacto_entrega, 
-pe.fecha_programacion,
 pe.contacto_pedido,pe.telefono_contacto_pedido, pe.correo_contacto_pedido,
-pe.numero_referencia_adicional,
 pe.fecha_creacion as fecha_registro,
-pe.id_solicitante,
 pe.tipo,
 --UBIGEO
 pe.ubigeo_entrega, ub.departamento, ub.provincia, ub.distrito,
@@ -150,7 +160,7 @@ select * from (
 	--AND pd.es_precio_alternativo = pc.es_unidad_alternativa
 
 
-	where pd.id_pedido = @idPedido and pd.estado = 1 
+	where pd.id_pedido = @idPedido and pd.estado = 1 and (pd.cantidad - COALESCE(mad.cantidadAtendida,0)) > 0
 	
 	) SQuery 
 		where RowNumber = 1
@@ -165,13 +175,6 @@ INNER JOIN PEDIDO pe ON de.id_cliente = pe.id_cliente
 where pe.id_pedido = @idPedido
 AND de.estado = 1;
 
-
-
-SELECT TOP 0 so.id_solicitante, so.nombre, so.telefono, so.correo
-FROM SOLICITANTE so
-INNER JOIN PEDIDO pe ON so.id_cliente = pe.id_cliente
-where pe.id_pedido = @idPedido
-AND so.estado = 1;
 
 END
 

@@ -561,5 +561,22 @@ namespace BusinessLayer
         }
 
         #endregion
+
+
+        public List<Pedido> EnviarEmailAlertaPedidosNoEnviados()
+        {
+            List<Pedido> pedidoList = new List<Pedido>();
+            using (var dal = new PedidoDAL())
+            {
+                List<Guid> pedidoIds = dal.SelectPedidosSinAtencion();
+                foreach (Guid id in pedidoIds)
+                {
+                    Pedido pedido = dal.SelectPedidoEmail(id);
+                    pedidoList.Add(pedido);
+                }
+            }
+
+            return pedidoList;
+        }
     }
 }

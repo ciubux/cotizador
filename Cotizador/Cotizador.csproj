@@ -219,6 +219,7 @@
     <Compile Include="Controllers\NotaIngresoController.cs" />
     <Compile Include="Controllers\PedidoAlmacenController.cs" />
     <Compile Include="Controllers\PedidoCompraController.cs" />
+    <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\SolicitanteController.cs" />
     <Compile Include="Controllers\DireccionEntregaController.cs" />
     <Compile Include="Controllers\DocumentoVentaController.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
+    <Compile Include="Email\PedidoSinAtencion.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -460,6 +462,7 @@
     <Content Include="Views\Pedido\Load.cshtml" />
     <Content Include="Views\Shared\_GrupoCliente.cshtml" />
     <Content Include="Views\Pedido\CargaIncorrecta.cshtml" />
+    <Content Include="Views\Email\PeddoSinAtencion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
