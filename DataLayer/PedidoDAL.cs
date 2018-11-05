@@ -733,6 +733,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaAdicional", pedido.numeroReferenciaAdicional);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaExtendida", pedido.fechaEntregaExtendida);
             InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);
             InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
@@ -929,6 +930,7 @@ namespace DataLayer
                 pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
                 pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
                 pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
+                pedido.fechaEntregaExtendida = Converter.GetDateTime(row, "fecha_entrega_extendida");
                 pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
                 pedido.montoIGV = Converter.GetDecimal(row, "igv");
                 pedido.montoTotal = Converter.GetDecimal(row, "total");
@@ -1691,6 +1693,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo");
                 pedido.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
                 pedido.fechaEntregaDesde = Converter.GetDateTime(row, "fecha_entrega_desde");
+                pedido.fechaEntregaExtendida = Converter.GetDateTime(row, "fecha_entrega_extendida");
                 pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
                 pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
                 pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");

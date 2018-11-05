@@ -73,8 +73,15 @@ namespace Model
         [Display(Name = "Fecha de Entrega:")]
         public DateTime? fechaEntregaDesde { get; set; }
 
+        
         [Display(Name = "Fecha Máxima de Entrega:")]
         public DateTime? fechaEntregaHasta { get; set; }
+
+        [Display(Name = "Fecha de Entrega Extendida:")]
+        public DateTime? fechaEntregaExtendida { get; set; }
+
+        public string fechaEntregaExtendidaString => fechaEntregaExtendida == null ? "" : ((DateTime) fechaEntregaExtendida).ToString("dd/MM/yyyy");
+    
 
         [Display(Name = "Hora de Entrega:")]
         public String horaEntregaDesde { get; set; }

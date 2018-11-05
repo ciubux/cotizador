@@ -630,6 +630,9 @@ jQuery(function ($) {
     $("#documentoVenta_fechaVencimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaVencimiento);
 
 
+    $("#pedido_fechaEntregaExtendida").datepicker({ dateFormat: "dd/mm/yy", minDate: 0 });
+
+
     /**
      * FIN DE CONTROLES DE FECHAS
      */
@@ -2551,6 +2554,8 @@ jQuery(function ($) {
                 $("#verCliente").html(pedido.cliente.codigoRazonSocial);
                 $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
                 $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
+                $("#verFechaEntregaExtendida").val(pedido.fechaEntregaExtendidaString);
+            
                 $("#verDireccionEntrega").html(pedido.direccionEntrega.descripcion);
                 $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
                 $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
@@ -3108,6 +3113,9 @@ jQuery(function ($) {
 
         var numeroReferenciaCliente = $("#pedido_numeroReferenciaCliente2").val();
         var numeroReferenciaAdicional = $("#pedido_numeroReferenciaAdicional").val();
+
+        var fechaEntregaExtendida = $("#pedido_fechaEntregaExtendida").val();
+
         var observaciones = $("#pedido_observaciones").val();
         var observacionesGuiaRemision = $("#pedido_observacionesGuiaRemision").val();
         var observacionesFactura = $("#pedido_observacionesFactura").val();
@@ -3124,6 +3132,7 @@ jQuery(function ($) {
             data: {
                 numeroReferenciaCliente: numeroReferenciaCliente,
                 numeroReferenciaAdicional: numeroReferenciaAdicional,
+                fechaEntregaExtendida: fechaEntregaExtendida,
                 observaciones: observaciones,
                 observacionesGuiaRemision: observacionesGuiaRemision,
                 observacionesFactura: observacionesFactura
@@ -3166,6 +3175,8 @@ jQuery(function ($) {
 
         $("#pedido_numeroReferenciaCliente2").val($("#verNumeroReferenciaCliente").html());
         $("#pedido_numeroReferenciaAdicional").val($("#verNumeroReferenciaAdicional").html());
+
+        $("#pedido_fechaEntregaExtendida").val($("#verFechaEntregaExtendida").val());
 
         $("#pedido_observacionesFactura").val($("#verObservacionesFactura").html());
         $("#pedido_observacionesGuiaRemision").val($("#verObservacionesGuiaRemision").html());

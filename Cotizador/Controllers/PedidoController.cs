@@ -1044,8 +1044,8 @@ namespace Cotizador.Controllers
 
         public String UpdatePost()
         {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];           
-            
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+
             //pedido.
             PedidoBL pedidoBL = new PedidoBL();
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1056,8 +1056,17 @@ namespace Cotizador.Controllers
             pedido.observacionesGuiaRemision = this.Request.Params["observacionesGuiaRemision"];
             pedido.observacionesFactura = this.Request.Params["observacionesFactura"];
 
-
-
+            if (Logueado.modificaPedidoFechaEntregaExtendida) { 
+                if (this.Request.Params["fechaEntregaExtendida"] == null || this.Request.Params["fechaEntregaExtendida"].Equals(""))
+                {
+                    pedido.fechaEntregaExtendida = null;
+                }
+                else
+                {
+                    String[] entregaExtendida = this.Request.Params["fechaEntregaExtendida"].Split('/');
+                    pedido.fechaEntregaExtendida = new DateTime(Int32.Parse(entregaExtendida[2]), Int32.Parse(entregaExtendida[1]), Int32.Parse(entregaExtendida[0]), 23, 59, 59);
+                }
+            }
 
             pedidoBL.ActualizarPedido(pedido);
             long numeroPedido = pedido.numeroPedido;

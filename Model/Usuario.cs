@@ -121,9 +121,9 @@ namespace Model
         public bool modificaResponsablePortafolio { get; set; }
         public bool modificaPedidoVentaFechaEntregaHasta { get; set; }
         public bool bloqueaClientes { get; set; }
-
         public bool modificaCanales { get; set; }
-
+        public bool modificaPedidoFechaEntregaExtendida { get; set; }
+        
         public List<Vendedor> vendedorList { get; set; }
 
 
