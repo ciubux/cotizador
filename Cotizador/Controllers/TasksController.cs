@@ -32,7 +32,10 @@ namespace Cotizador.Controllers
             {
                 if (pedido.cliente != null)
                 {
+                    var urlVerPedido = this.Url.Action( "Index", "Pedido", new { idPedido = pedido.idPedido }, this.Request.Url.Scheme);
                     PedidoSinAtencion emailTemplate = new PedidoSinAtencion();
+                    emailTemplate.urlVerPedido = urlVerPedido;
+
                     String template = emailTemplate.BuildTemplate(pedido);
                     List<String> destinatarios = new List<String>();
                     /*
@@ -46,9 +49,10 @@ namespace Cotizador.Controllers
                     }
                     */
                     destinatarios.Add("yrvingrl520@gmail.com");
+                    
                     if (destinatarios.Count > 0 && count < 2)
                     {
-                        mail.enviar(destinatarios, "El pedido " + pedido.numeroPedidoString + " no ha sido atendido", template, "yrvingtest456@gmail.com", "yrvingprueba", new Usuario());
+                        mail.enviar(destinatarios, "El pedido " + pedido.numeroPedidoString + " no ha sido atendido", template, "c.cornejo@mpinstitucional.com", "D0wnl0@D2", new Usuario());
                         count++;
                     }
                 }

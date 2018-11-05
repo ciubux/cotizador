@@ -10,14 +10,15 @@ namespace Cotizador.Email
     
     public class PedidoSinAtencion
     {
+        public String urlVerPedido = "";
         private String mailPrincipal = @"<table border=""0"" cellspacing=""0"" cellpadding=""0"" align=""center"">
 	<tbody>
 		<tr>
 			<td>
-				<table style=""width: 100%; min-width: 600px; max-width: 600px; padding-top: 10px;"" border=""0"" cellspacing=""0"" cellpadding=""0"">
+				<table style=""width: 100%; min-width: 600px; max-width: 600px; border: solid 1px #333;"" border=""0"" cellspacing=""0"" cellpadding=""0"">
 					<tbody>
 						<tr>
-							<td style=""background-color: #ffffff; height: 60px;"">
+							<td style=""background-color: #ffffff; height: 60px; padding: 5px 0px;"">
 								<table style=""width: 100%; height: 100%;"" border=""0"" cellspacing=""0"" cellpadding=""0"">
 									<tbody>
 										<tr>
@@ -50,7 +51,7 @@ namespace Cotizador.Email
 														<tr>
 															<td colspan=""3"" align=""left"" style=""font-size: 14px;"">
 																<span style=""font-family: Arial; font-weight: bold;"">Número de Pedido: </span>
-																<span style=""font-family: Arial; color: #777575;"">{{nro_pedido}}</span>
+																<span style=""font-family: Arial; color: #777575;""><a href=""{{url_pedido}}"">{{nro_pedido}}</a></span>
 															</td>
 														</tr>
 														<tr>
@@ -126,11 +127,13 @@ namespace Cotizador.Email
 
         public String BuildTemplate(Pedido pedido)
         {
+            
             String template = mailPrincipal;
             template = template.Replace("{{nro_pedido}}", pedido.numeroPedidoString);
             template = template.Replace("{{codigo_cliente}}", pedido.cliente.codigo);
             template = template.Replace("{{nombre_cliente}}", pedido.cliente.razonSocial);
-
+            template = template.Replace("{{url_pedido}}", this.urlVerPedido);
+            
 
             String detalles = "";
             

@@ -1646,6 +1646,32 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             return seguimientoPedidos;
         }
 
+        public List<SeguimientoCrediticioPedido> GetHistorialCrediticioSeguimiento(Guid idPedido)
+        {
+            var objCommand = GetSqlCommand("ps_pedido_seguimiento_crediticio");
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            DataTable dataTable = Execute(objCommand);
+
+            List<SeguimientoCrediticioPedido> seguimientoPedidos = new List<SeguimientoCrediticioPedido>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                SeguimientoCrediticioPedido seg = new SeguimientoCrediticioPedido();
+                //seg.id = Converter.GetGuid(row, "id_seguimiento_crediticio");
+                seg.observacion = Converter.GetString(row, "observacion");
+                seg.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                seg.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Converter.GetInt(row, "estado_pedido");
+
+                seg.usuario = new Usuario();
+                seg.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                seg.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+
+                seguimientoPedidos.Add(seg);
+            }
+
+            return seguimientoPedidos;
+
+        }
         public Pedido SelectPedidoEmail(Guid idPedido)
         {
             var objCommand = GetSqlCommand("ps_pedido_email");

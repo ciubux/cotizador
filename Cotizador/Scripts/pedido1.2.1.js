@@ -20,7 +20,13 @@ jQuery(function ($) {
         $("#btnBusquedaPedidos").click();
         var tipoPedido = $("#pedido_tipoPedido").val();
         validarTipoPedido(tipoPedido);
-        
+
+        if ($("#pagina").val() == 2) {
+            if ($("#idPedido").val() != "") {
+                showPedido($("#idPedido").val());
+            }
+        }
+
     });
 
    
@@ -2486,8 +2492,11 @@ jQuery(function ($) {
         var idPedido = arrrayClass[0];
         var numeroPedido = arrrayClass[1];
       //  $("#tableDetalleCotizacion > tbody").empty();
+        showPedido(idPedido);
      
+    });
 
+    function showPedido(idPedido) {
         $.ajax({
             url: "/Pedido/Show",
             data: {
@@ -2970,7 +2979,7 @@ jQuery(function ($) {
                 //  window.location = '/Pedido/Index';
             }
         });
-    });
+    }
 
 
 
@@ -4210,6 +4219,10 @@ jQuery(function ($) {
         showHistorial();
     });
 
+    $("#lnkVerHistorialCrediticio").click(function () {
+        showHistorialCrediticio();
+    });
+
     function showHistorial() {
         $('body').loadingModal({
             text: 'Obteniendo Historial...'
@@ -4253,6 +4266,55 @@ jQuery(function ($) {
 
 
                 $("#modalVerHistorialPedido").modal('show');
+                $('body').loadingModal('hide');
+                //  window.location = '/Cotizacion/Index';
+            }
+        });
+    };
+
+    function showHistorialCrediticio() {
+        $('body').loadingModal({
+            text: 'Obteniendo Historial Crediticio...'
+        });
+
+        var idPedido = $("#verIdPedido").val();
+
+        $.ajax({
+            url: "/Pedido/GetHistorialCrediticio",
+            data: {
+                id: idPedido
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial crediticio del pedido."); },
+            success: function (resultado) {
+
+                $("#tableHistorialCrediticioPedido > tbody").empty();
+
+                FooTable.init('#tableHistorialCrediticioPedido');
+
+                var d = '';
+                var lista = resultado.result;
+                for (var i = 0; i < resultado.result.length; i++) {
+
+                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+                    d += '<tr>' +
+                        '<td>' + lista[i].FechaRegistroDesc + '</td>' +
+                        '<td>' + lista[i].usuario.nombre + '</td>' +
+                        '<td>' + lista[i].estadoString + '</td>' +
+                        '<td>' + observacion + '</td>' +
+                        '</tr>';
+
+                }
+                //  
+                // sleep
+                $("#tableHistorialCrediticioPedido").append(d);
+
+
+
+
+                $("#modalVerHistorialCrediticioPedido").modal('show');
                 $('body').loadingModal('hide');
                 //  window.location = '/Cotizacion/Index';
             }

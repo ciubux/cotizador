@@ -409,6 +409,14 @@ namespace Cotizador.Controllers
                     {
                         this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
                     }
+
+                    if (this.Session["Prev_Request_Url"] != null)
+                    {
+                        string prevUrl = this.Session["Prev_Request_Url"].ToString();
+                        this.Session["Prev_Request_Url"] = null;
+                        return Redirect(prevUrl);
+                    }
+
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

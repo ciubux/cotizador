@@ -10,7 +10,7 @@
     <h3>@ViewBag.Title</h3>
 </div>
 <div class="container">
-    <input type="hidden" id="idPedido" value="" />
+    <input type="hidden" id="idPedido" value="@ViewBag.idPedido" />
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" id="esCliente" value="@pedido.usuario.esCliente" />
 
@@ -653,6 +653,7 @@
                                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                                     <div class="col-xs-8">
                                         <p class="form-control-static" id="verEstadoCrediticio"></p>
+                                        <a id="lnkVerHistorialCrediticio" href="#">Ver Historial</a>
                                     </div>
                                 </div>
                             </div>
@@ -720,14 +721,14 @@
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
                                 <!--     @if (pedido.usuario.creaDocumentosVenta)
-                     {
-                         <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
-                         }
-                         else
-                         {
-                                         <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
-                         }
-                -->
+                                     {
+                                         <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+                                         }
+                                         else
+                                         {
+                                                         <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+                                         }
+                                -->
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm"></th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
@@ -815,22 +816,22 @@
                     @if (pedido.usuario.tomaPedidos)
                     {
                         <!--
-        <div class="row">
-            <div class="col-sm-6 col-lg-9">
-                <div class="form-group">
-                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
-                    <div class="col-xs-3">
-                        <div class="upload-btn-wrapper">
-                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
-                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
-                        </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
-                    </div>
-                </div>
-            </div>
-        </div>-->
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-9">
+                                <div class="form-group">
+                                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
+                                    <div class="col-xs-3">
+                                        <div class="upload-btn-wrapper">
+                                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
 
                     }
 
@@ -1956,12 +1957,11 @@
 
 
 
-
 <div class="modal fade" id="modalVerHistorialPedido" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalVerHistorialPedido"><b>Historial de Cotización</b></h4>
+                <h4 class="modal-title" id="modalVerHistorialPedido"><b>Historial de Pedido</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1978,9 +1978,9 @@
                        data-show-toggle="false">
                     <thead>
                         <tr>
-                            <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs">Fecha</th>
-                            <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Usuario</th>
-                            <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Estado</th>
+                            <th data-name="fecha" data-sortable="false" data-visible="true" data-breakpoints="xs">Fecha</th>
+                            <th data-name="usuario" data-sortable="false" data-breakpoints="xs">Usuario</th>
+                            <th data-name="estado" data-sortable="false" data-breakpoints="xs">Estado</th>
                             <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
                         </tr>
                     </thead>
@@ -1998,6 +1998,50 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="modalVerHistorialCrediticioPedido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerHistorialPedido"><b>Historial Crediticio de Pedido</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <table id="tableHistorialCrediticioPedido" class="table" data-editing="false"
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="fecha" data-sortable="false" data-visible="true" data-breakpoints="xs">Fecha</th>
+                            <th data-name="usuario" data-sortable="false" data-breakpoints="xs">Usuario</th>
+                            <th data-name="estado" data-sortable="false" data-breakpoints="xs">Estado</th>
+                            <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" id="btnCloseHistorialCrediticio" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 

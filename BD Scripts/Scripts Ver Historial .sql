@@ -26,3 +26,17 @@ order by sc.fecha_creacion desc
 END
 
 
+create PROCEDURE [dbo].[ps_pedido_seguimiento_crediticio] 
+@idPedido uniqueIdentifier
+AS
+BEGIN
+
+SELECT sc.id_seguimiento_crediticio_pedido,  sc.estado_pedido, sc.id_usuario, sc.observacion, sc.fecha_creacion, u.nombre as nombre_usuario
+FROM SEGUIMIENTO_CREDITICIO_PEDIDO sc
+INNER JOIN USUARIO u ON sc.id_usuario = u.id_usuario
+where sc.id_pedido = @idPedido 
+order by sc.fecha_creacion desc
+
+END
+
+

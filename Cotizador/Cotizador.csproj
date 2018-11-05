@@ -217,6 +217,7 @@
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
+    <Compile Include="Controllers\ParentController.cs" />
     <Compile Include="Controllers\PedidoAlmacenController.cs" />
     <Compile Include="Controllers\PedidoCompraController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
@@ -475,6 +476,7 @@
     <Folder Include="Views\GrupoCliente\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Mail\" />
+    <Folder Include="Views\Parent\" />
     <Folder Include="Views\Ubigeo\" />
     <Folder Include="Views\Vendedor\" />
   </ItemGroup>

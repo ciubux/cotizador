@@ -355,6 +355,16 @@ namespace BusinessLayer
             return seguimientoList;
         }
 
+        public List<SeguimientoCrediticioPedido> GetHistorialSeguimientoCrediticio(Guid idPedido)
+        {
+            List<SeguimientoCrediticioPedido> seguimientoList = new List<SeguimientoCrediticioPedido>();
+            using (var dal = new PedidoDAL())
+            {
+                seguimientoList = dal.GetHistorialCrediticioSeguimiento(idPedido);
+            }
+            return seguimientoList;
+        }
+
         #region General
 
         public void ActualizarPedido(Pedido pedido)
