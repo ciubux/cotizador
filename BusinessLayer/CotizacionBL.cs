@@ -353,6 +353,15 @@ namespace BusinessLayer
         }
 
    
+        public List<SeguimientoCotizacion> GetHistorialSeguimiento(Guid idCotizacion)
+        {
+            List<SeguimientoCotizacion> seguimientoList = new List<SeguimientoCotizacion>();
+            using (var dal = new CotizacionDAL())
+            {
+                seguimientoList = dal.GetHistorialSeguimiento(idCotizacion);
+            }
+            return seguimientoList;
+        }
 
     }
 }

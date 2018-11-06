@@ -74,8 +74,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
 
         <div class="row">
@@ -203,6 +201,7 @@
 
             <div class="modal-body">
                 <form class="form-horizontal">
+                    <input type="hidden" id="verIdCotizacion" value="" />
                     <input type="hidden" id="verIdCliente" value="" />
                     <input type="hidden" id="idProducto" value="" />
                     <div class="row">
@@ -291,6 +290,7 @@
                                 <label for="verEstado" class="control-label col-xs-4">Estado:</label>
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verEstado"></p>
+                                    <a id="lnkVerHistorial" href="#">Ver Historial</a>
                                 </div>
                             </div>
                         </div>
@@ -338,21 +338,21 @@
                                 <th data-name="porcentajeDescuentoMostrar" data-sortable="false" data-breakpoints="xs">Dscto % al P. Lista</th>
                                 <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs">Precio Neto</th>
                                 @if (cotizacion.usuario.apruebaCotizaciones || cotizacion.usuario.visualizaCostos)
-                {
-                    <th data-name="costo" data-sortable="false" data-breakpoints="xs" style="width:60px">Costo</th>
-}
-else
-{
-                <th data-name="costo" data-visible="false" data-breakpoints="xs" style="width:60px">Costo</th>
-}
+                                {
+                                    <th data-name="costo" data-sortable="false" data-breakpoints="xs" style="width:60px">Costo</th>
+                                }
+                                else
+                                {
+                                    <th data-name="costo" data-visible="false" data-breakpoints="xs" style="width:60px">Costo</th>
+                                }
                                 @if (cotizacion.usuario.visualizaMargen)
-                {
-                    <th data-name="margen" data-sortable="false" data-breakpoints="xs" style="width:60px">Mg %</th>
-}
-else
-{
-                <th data-name="margen" data-visible="false" data-breakpoints="xs" style="width:60px">Mg %</th>
-}
+                                {
+                                    <th data-name="margen" data-sortable="false" data-breakpoints="xs" style="width:60px">Mg %</th>
+                                }
+                                else
+                                {
+                                    <th data-name="margen" data-visible="false" data-breakpoints="xs" style="width:60px">Mg %</th>
+                                }
                                 <th data-name="flete" data-sortable="false" data-breakpoints="xs">Flete</th>
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs">Precio Unit.</th>
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs">Cant.</th>
@@ -382,6 +382,13 @@ else
                                 <label for="verObservaciones" class="control-label col-xs-2">Observaciones:</label>
                                 <div class="col-xs-10">
                                     <p class="form-control-static" id="verObservaciones">
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-danger" id="verSedesAplica">
                                     </p>
                                 </div>
                             </div>
@@ -587,6 +594,50 @@ else
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalVerHistorialCotizacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerHistorialCotizacion"><b>Historial de Cotización</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <table id="tableHistorialCotizacion" class="table" data-editing="false"
+                        data-editing-allow-add="false"
+                        data-editing-allow-delete="false"
+                        data-editing-allow-edit="false"
+                        data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="fecha" data-sortable="false" data-visible="true" data-breakpoints="xs">Fecha</th>
+                            <th data-name="usuario" data-sortable="false" data-breakpoints="xs">Usuario</th>
+                            <th data-name="estado" data-sortable="false" data-breakpoints="xs">Estado</th>
+                            <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" id="btnCloseHistorial" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+
             </div>
         </div>
     </div>

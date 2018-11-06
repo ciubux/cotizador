@@ -203,7 +203,14 @@ namespace BusinessLayer
         {
             using (var clienteDAL = new ClienteDAL())
             {
-                return clienteDAL.getCliente(idCliente);
+                Cliente clie = clienteDAL.getCliente(idCliente);
+
+                if (clie.sedePrincipal)
+                {
+                    clie.sedeList = clienteDAL.getSedes(clie.ruc);
+                }
+
+                return clie;
             }
         }
 

@@ -420,6 +420,8 @@ jQuery(function ($) {
                     }
                     $("#cotizacion_textoCondicionesPago").val(cliente.textoCondicionesPago);
                     $("#contacto").val(cliente.contacto);
+                    $("#clienteSedePrincipal").val(cliente.sedePrincipal);
+                    listaTextoSedesCliente = cliente.sedesString;
                 }
             });
         }
@@ -1410,15 +1412,57 @@ jQuery(function ($) {
     function crearCotizacion(continuarLuego) {
         if (!validarIngresoDatosObligatoriosCotizacion())
             return false;
+
+        var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
+
+        if (continuarLuego == 0 && sedePrincipal == 1) {
+            $.confirm({
+                title: '¿Desea aplicar la cotización a todoas las sedes?',
+                content: '<div><div class="col-sm-4"><b>Sedes:</b></div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div></div>',
+                type: 'orange',
+                buttons: {
+                    aplica: {
+                        text: 'SI',
+                        btnClass: '',
+                        action: function () {
+                            $('#aplicaSedes').val("1");
+                            callCreate(continuarLuego);
+                        }
+                    },
+                    noAplica: {
+                        text: 'NO',
+                        btnClass: '',
+                        action: function () {
+                            callCreate(continuarLuego);
+                        }
+                    },
+                    cancelar: {
+                        text: 'Cancelar',
+                        btnClass: '',
+                        action: function () {
+                            activarBotonesFinalizarCreacion();
+                        }
+                    }
+                }
+            });
+        } else {
+            callCreate(continuarLuego);
+        }
+    }
+
+    function callCreate(continuarLuego) {
         $('body').loadingModal({
             text: 'Creando Cotización...'
         });
+
+        var aplicaSedes = $('#aplicaSedes').val();
         $.ajax({
             url: "/Cotizacion/Create",
             type: 'POST',
             dataType: 'JSON',
             data: {
-                continuarLuego: continuarLuego
+                continuarLuego: continuarLuego,
+                aplicaSedes: aplicaSedes
             },
             error: function (detalle) {
                 $('body').loadingModal('hide')
@@ -1444,7 +1488,7 @@ jQuery(function ($) {
 
                             }
                         }
-                    });                  
+                    });
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     $("#solicitudIngresoComentario").html("La cotización número " + resultado.codigo + " fue creada correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario de lo contrario se mantendrá en estado En Edición.")
@@ -1456,12 +1500,12 @@ jQuery(function ($) {
                     });
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
-                    $("#numero").val(resultado.codigo);         
-                    ConfirmDialog("La cotización número " + resultado.codigo + " fue guardada correctamente. ¿Desea continuar editando ahora?", null,'/Cotizacion/CancelarCreacionCotizacion');
+                    $("#numero").val(resultado.codigo);
+                    ConfirmDialog("La cotización número " + resultado.codigo + " fue guardada correctamente. ¿Desea continuar editando ahora?", null, '/Cotizacion/CancelarCreacionCotizacion');
                 }
                 else {
                     alert("La cotización ha tenido problemas para ser procesada; Contacte con el Administrador");
-                   // window.location = '/Cotizacion/Index';
+                    // window.location = '/Cotizacion/Index';
                 }
 
             }
@@ -1471,15 +1515,57 @@ jQuery(function ($) {
     function editarCotizacion(continuarLuego) {
         if (!validarIngresoDatosObligatoriosCotizacion())
             return false;
+
+        var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
+
+        if (continuarLuego == 0 && sedePrincipal == 1) {
+            $.confirm({
+                title: '¿Desea aplicar la cotización a todos las sedes?',
+                content: '<div><div class="col-sm-4"><b>Sedes:</b></div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div></div>',
+                type: 'orange',
+                buttons: {
+                    aplica: {
+                        text: 'SI',
+                        btnClass: '',
+                        action: function () {
+                            $('#aplicaSedes').val("1");
+                            callUpdate(continuarLuego);
+                        }
+                    },
+                    noAplica: {
+                        text: 'NO',
+                        btnClass: '',
+                        action: function () {
+                            callUpdate(continuarLuego);
+                        }
+                    },
+                    cancelar: {
+                        text: 'Cancelar',
+                        btnClass: '',
+                        action: function () {
+                            activarBotonesFinalizarCreacion();
+                        }
+                    }
+                }
+            });
+        } else {
+            callUpdate(continuarLuego);
+        }  
+    }
+
+    function callUpdate(continuarLuego) {
         $('body').loadingModal({
             text: 'Editando Cotización...'
         });
+
+        var aplicaSedes = $('#aplicaSedes').val();
         $.ajax({
             url: "/Cotizacion/Update",
             type: 'POST',
             dataType: 'JSON',
             data: {
-                continuarLuego: continuarLuego
+                continuarLuego: continuarLuego,
+                aplicaSedes: aplicaSedes
             },
             error: function (detalle) {
                 $('body').loadingModal('hide')
@@ -1502,13 +1588,13 @@ jQuery(function ($) {
                             OK: function () {
                                 $("#comentarioAprobacion").val(resultado.observacion);
                                 $("#modalComentarioAprobacion").modal('show');
-                            
+
                             }
                         }
                     });
-                    
 
-                   
+
+
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     $("#solicitudIngresoComentario").html("La cotización número " + resultado.codigo + " fue editada correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario de lo contrario se mantendrá en estado En Edición.")
@@ -1522,7 +1608,7 @@ jQuery(function ($) {
                 else if (resultado.estado == ESTADO_EN_EDICION) {
                     $("#numero").val(resultado.codigo);
 
-                    ConfirmDialog("La cotización número " + resultado.codigo + " fue guardada correctamente. ¿Desea continuar editando ahora?", null,'/Cotizacion/CancelarCreacionCotizacion');
+                    ConfirmDialog("La cotización número " + resultado.codigo + " fue guardada correctamente. ¿Desea continuar editando ahora?", null, '/Cotizacion/CancelarCreacionCotizacion');
 
 
 
@@ -1536,8 +1622,6 @@ jQuery(function ($) {
             }
         });
     }
-
-
 
     $("#btnFinalizarCreacionCotizacion").click(function () {
         crearCotizacion(0);
@@ -1633,6 +1717,7 @@ jQuery(function ($) {
 
                 $("#verCondicionesPago").html(cotizacion.textoCondicionesPago);
                 
+                $("#verIdCotizacion").val(cotizacion.idCotizacion);
                 $("#verIdCliente").val(cotizacion.cliente.idCliente);
 
                 $("#verNumero").html(cotizacion.codigo);
@@ -1665,6 +1750,9 @@ jQuery(function ($) {
                     $("#montosTotalesDiv").hide();
 
                 $("#verObservaciones").html(cotizacion.observaciones);
+                if (cotizacion.aplicaSedes === true) {
+                    $("#verSedesAplica").html("Esta cotización aplicará también para las sedes: " + cotizacion.cliente.sedeListWebString.replace(new RegExp('<br>', 'g'), ', '));
+                }
                 $("#verMontoSubTotal").html(cotizacion.montoSubTotal);
                 $("#verMontoIGV").html(cotizacion.montoIGV);
                 $("#verMontoTotal").html(cotizacion.montoTotal);
@@ -2790,9 +2878,58 @@ jQuery(function ($) {
     })
 
 
-    
+    $("#lnkVerHistorial").click(function () {
+        showHistorial();
+    })
+
+    function showHistorial() {
+        $('body').loadingModal({
+            text: 'Obteniendo Historial...'
+        });
+        
+        var idCotizacion = $("#verIdCotizacion").val();
+        
+        $.ajax({
+            url: "/Cotizacion/GetHistorial",
+            data: {
+                id: idCotizacion
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial de la cotización."); },
+            success: function (resultado) {
+               
+                $("#tableHistorialCotizacion > tbody").empty();
+
+                FooTable.init('#tableHistorialCotizacion');
+                
+                var d = '';
+                var lista = resultado.result;
+                for (var i = 0; i < resultado.result.length; i++) {
+
+                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+                    d += '<tr>' +
+                        '<td>' + lista[i].FechaRegistroDesc + '</td>' +
+                        '<td>' + lista[i].usuario.nombre + '</td>' +
+                        '<td>' + lista[i].estadoString + '</td>' +
+                        '<td>' + observacion + '</td>' +
+                        '</tr>';
+
+                }
+                //  
+                // sleep
+                $("#tableHistorialCotizacion").append(d);
+
+                
 
 
+                $("#modalVerHistorialCotizacion").modal('show');
+                $('body').loadingModal('hide'); 
+                //  window.location = '/Cotizacion/Index';
+            }
+        });
+    }
 
 
 

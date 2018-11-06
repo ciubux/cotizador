@@ -10,7 +10,7 @@
     <h3>@ViewBag.Title</h3>
 </div>
 <div class="container">
-    <input type="hidden" id="idPedido" value="" />
+    <input type="hidden" id="idPedido" value="@ViewBag.idPedido" />
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" id="esCliente" value="@pedido.usuario.esCliente" />
 
@@ -45,6 +45,7 @@
                     <div class="form-group">
                         @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
 
+
                         <div class="col-xs-8">
                             @if (pedido.numeroGrupoPedido > 0)
                             {
@@ -71,6 +72,7 @@
                                                                                            ciudadSelectId = "idCiudad",
                                                                                            selectedValue = pedido.ciudad.idCiudad
                                                                                        })
+
                         </div>
                     </div>
                 </div>
@@ -149,6 +151,7 @@
                                         EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedidoVentaBusqueda), pedido.tipoPedidoVentaBusqueda),
                                         new { @class = "form-control" }
                                         )
+
                         </div>
                     </div>
                 </div>
@@ -315,11 +318,10 @@
                     }
                     else
                     {
+
                                     <th data-name="stockConfirmado" data-visible="false">Stock</th>
                                     <th data-name="stockConfirmado" data-visible="true">Stock</th>
                     }
-
-
 
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
@@ -358,7 +360,9 @@
 
             <div class="modal-body">
                 <form class="form-horizontal">
+                    <input type="hidden" id="verIdPedido" />
                     <input type="hidden" id="verIdCliente" />
+                    <input type="hidden" id="verFechaEntregaExtendida" />
                     <!--NUMEROS PEDIDO-->
                     <div class="row">
                         <!--NÚMERO PEDIDO-->
@@ -619,6 +623,7 @@
                                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                                     <div class="col-xs-8">
                                         <p class="form-control-static" id="verEstado"></p>
+                                        <a id="lnkVerHistorial" href="#">Ver Historial</a>
                                     </div>
                                 </div>
                             </div>
@@ -654,6 +659,7 @@
                                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                                     <div class="col-xs-8">
                                         <p class="form-control-static" id="verEstadoCrediticio"></p>
+                                        <a id="lnkVerHistorialCrediticio" href="#">Ver Historial</a>
                                     </div>
                                 </div>
                             </div>
@@ -730,7 +736,7 @@
                                          }
                                 -->
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
-                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
+                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm"></th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
                                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
                                 <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
@@ -1126,8 +1132,20 @@
                     </div>
 
 
-
-
+                    @if (pedido.usuario.modificaPedidoFechaEntregaExtendida)
+                    {
+                    <!--FECHA ENTREGA EXTENDIDA-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4" id="divFechaEntregaExtendida">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.fechaEntregaExtendida, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(p => pedido.fechaEntregaExtendida, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
                     <div class="row">
                         <!--ORDEN DE COMPRA-->
                         <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
@@ -1960,11 +1978,97 @@
         </thead>
         <tbody></tbody>
     </table>
-
-
-
-
 </div>
+
+
+
+<div class="modal fade" id="modalVerHistorialPedido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerHistorialPedido"><b>Historial de Pedido</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <table id="tableHistorialPedido" class="table" data-editing="false"
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="fecha" data-sortable="false" data-visible="true" data-breakpoints="xs">Fecha</th>
+                            <th data-name="usuario" data-sortable="false" data-breakpoints="xs">Usuario</th>
+                            <th data-name="estado" data-sortable="false" data-breakpoints="xs">Estado</th>
+                            <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" id="btnCloseHistorial" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalVerHistorialCrediticioPedido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerHistorialPedido"><b>Historial Crediticio de Pedido</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <table id="tableHistorialCrediticioPedido" class="table" data-editing="false"
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="fecha" data-sortable="false" data-visible="true" data-breakpoints="xs">Fecha</th>
+                            <th data-name="usuario" data-sortable="false" data-breakpoints="xs">Usuario</th>
+                            <th data-name="estado" data-sortable="false" data-breakpoints="xs">Estado</th>
+                            <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" id="btnCloseHistorialCrediticio" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/pedido")

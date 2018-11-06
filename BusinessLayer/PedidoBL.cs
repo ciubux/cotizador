@@ -345,6 +345,25 @@ namespace BusinessLayer
 
         #endregion
 
+        public List<SeguimientoPedido> GetHistorialSeguimiento(Guid idPedido)
+        {
+            List<SeguimientoPedido> seguimientoList = new List<SeguimientoPedido>();
+            using (var dal = new PedidoDAL())
+            {
+                seguimientoList = dal.GetHistorialSeguimiento(idPedido);
+            }
+            return seguimientoList;
+        }
+
+        public List<SeguimientoCrediticioPedido> GetHistorialSeguimientoCrediticio(Guid idPedido)
+        {
+            List<SeguimientoCrediticioPedido> seguimientoList = new List<SeguimientoCrediticioPedido>();
+            using (var dal = new PedidoDAL())
+            {
+                seguimientoList = dal.GetHistorialCrediticioSeguimiento(idPedido);
+            }
+            return seguimientoList;
+        }
 
         #region General
 
@@ -552,5 +571,22 @@ namespace BusinessLayer
         }
 
         #endregion
+
+
+        public List<Pedido> EnviarEmailAlertaPedidosNoEnviados()
+        {
+            List<Pedido> pedidoList = new List<Pedido>();
+            using (var dal = new PedidoDAL())
+            {
+                List<Guid> pedidoIds = dal.SelectPedidosSinAtencion();
+                foreach (Guid id in pedidoIds)
+                {
+                    Pedido pedido = dal.SelectPedidoEmail(id);
+                    pedidoList.Add(pedido);
+                }
+            }
+
+            return pedidoList;
+        }
     }
 }

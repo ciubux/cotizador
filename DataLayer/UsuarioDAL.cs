@@ -111,6 +111,7 @@ namespace DataLayer
                 usuario.modificaPedidoVentaFechaEntregaHasta = Converter.GetBool(row, "modifica_pedido_venta_fecha_entrega_hasta");
                 usuario.modificaCanales = Converter.GetBool(row, "modifica_canales");
                 usuario.bloqueaClientes = Converter.GetBool(row, "bloquea_clientes");
+                usuario.modificaPedidoFechaEntregaExtendida = Converter.GetBool(row, "modifica_pedido_fecha_entrega_extendida");
             }
 
             DataTable dataTableParametros = dataSet.Tables[1];

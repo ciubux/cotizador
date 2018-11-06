@@ -13,7 +13,7 @@ using System.Web.Mvc;
 
 namespace Cotizador.Controllers
 {
-    public class PedidoController : Controller
+    public class PedidoController : ParentController
     {
 
 
@@ -78,7 +78,7 @@ namespace Cotizador.Controllers
         }
 
       
-        public ActionResult Index()
+        public ActionResult Index(Guid? idPedido = null)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
 
@@ -171,6 +171,8 @@ namespace Cotizador.Controllers
             ViewBag.existeCliente = existeCliente;
 
             ViewBag.pagina = (int)Constantes.paginas.BusquedaPedidos;
+
+            ViewBag.idPedido = idPedido;
             return View();
         }
 
@@ -1045,8 +1047,8 @@ namespace Cotizador.Controllers
 
         public String UpdatePost()
         {
-            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];           
-            
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+
             //pedido.
             PedidoBL pedidoBL = new PedidoBL();
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1057,8 +1059,17 @@ namespace Cotizador.Controllers
             pedido.observacionesGuiaRemision = this.Request.Params["observacionesGuiaRemision"];
             pedido.observacionesFactura = this.Request.Params["observacionesFactura"];
 
-
-
+            if (Logueado.modificaPedidoFechaEntregaExtendida) { 
+                if (this.Request.Params["fechaEntregaExtendida"] == null || this.Request.Params["fechaEntregaExtendida"].Equals(""))
+                {
+                    pedido.fechaEntregaExtendida = null;
+                }
+                else
+                {
+                    String[] entregaExtendida = this.Request.Params["fechaEntregaExtendida"].Split('/');
+                    pedido.fechaEntregaExtendida = new DateTime(Int32.Parse(entregaExtendida[2]), Int32.Parse(entregaExtendida[1]), Int32.Parse(entregaExtendida[0]), 23, 59, 59);
+                }
+            }
 
             pedidoBL.ActualizarPedido(pedido);
             long numeroPedido = pedido.numeroPedido;
@@ -1839,6 +1850,58 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        public String GetHistorial()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            PedidoBL pedidoBL = new PedidoBL();
+            List<SeguimientoPedido> historial = new List<SeguimientoPedido>();
+            Guid idPedido = Guid.Parse(Request["id"].ToString());
+            historial = pedidoBL.GetHistorialSeguimiento(idPedido);
 
+            String json = "";
+
+            foreach (SeguimientoPedido seg in historial)
+            {
+                string jsonItem = JsonConvert.SerializeObject(seg);
+                if (json.Equals(""))
+                {
+                    json = jsonItem;
+                }
+                else
+                {
+                    json = json + "," + jsonItem;
+                }
+            }
+
+            json = "{\"result\": [" + json + "]}";
+            return json;
+        }
+
+        public String GetHistorialCrediticio()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            PedidoBL pedidoBL = new PedidoBL();
+            List<SeguimientoCrediticioPedido> historial = new List<SeguimientoCrediticioPedido>();
+            Guid idPedido = Guid.Parse(Request["id"].ToString());
+            historial = pedidoBL.GetHistorialSeguimientoCrediticio(idPedido);
+
+            String json = "";
+
+            foreach (SeguimientoCrediticioPedido seg in historial)
+            {
+                string jsonItem = JsonConvert.SerializeObject(seg);
+                if (json.Equals(""))
+                {
+                    json = jsonItem;
+                }
+                else
+                {
+                    json = json + "," + jsonItem;
+                }
+            }
+
+            json = "{\"result\": [" + json + "]}";
+            return json;
+        }
     }
 }

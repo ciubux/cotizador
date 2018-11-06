@@ -20,7 +20,13 @@ jQuery(function ($) {
         $("#btnBusquedaPedidos").click();
         var tipoPedido = $("#pedido_tipoPedido").val();
         validarTipoPedido(tipoPedido);
-        
+
+        if ($("#pagina").val() == 2) {
+            if ($("#idPedido").val() != "") {
+                showPedido($("#idPedido").val());
+            }
+        }
+
     });
 
    
@@ -621,6 +627,9 @@ jQuery(function ($) {
 
     var documentoVenta_fechaVencimiento = $("#documentoVenta_fechaVencimientotmp").val();
     $("#documentoVenta_fechaVencimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaVencimiento);
+
+
+    $("#pedido_fechaEntregaExtendida").datepicker({ dateFormat: "dd/mm/yy", minDate: 0 });
 
 
     /**
@@ -2489,8 +2498,11 @@ jQuery(function ($) {
         var idPedido = arrrayClass[0];
         var numeroPedido = arrrayClass[1];
       //  $("#tableDetalleCotizacion > tbody").empty();
+        showPedido(idPedido);
      
+    });
 
+    function showPedido(idPedido) {
         $.ajax({
             url: "/Pedido/Show",
             data: {
@@ -2510,7 +2522,8 @@ jQuery(function ($) {
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
 
               //  var usuario = resultado.usuario;
-
+                
+                $("#verIdPedido").val(pedido.idPedido);
 
                 $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
                 $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
@@ -2546,6 +2559,8 @@ jQuery(function ($) {
                 $("#verCliente").html(pedido.cliente.codigoRazonSocial);
                 $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
                 $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
+                $("#verFechaEntregaExtendida").val(pedido.fechaEntregaExtendidaString);
+            
                 $("#verDireccionEntrega").html(pedido.direccionEntrega.descripcion);
                 $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
                 $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
@@ -2974,7 +2989,7 @@ jQuery(function ($) {
                 //  window.location = '/Pedido/Index';
             }
         });
-    });
+    }
 
 
 
@@ -3103,6 +3118,9 @@ jQuery(function ($) {
 
         var numeroReferenciaCliente = $("#pedido_numeroReferenciaCliente2").val();
         var numeroReferenciaAdicional = $("#pedido_numeroReferenciaAdicional").val();
+
+        var fechaEntregaExtendida = $("#pedido_fechaEntregaExtendida").val();
+
         var observaciones = $("#pedido_observaciones").val();
         var observacionesGuiaRemision = $("#pedido_observacionesGuiaRemision").val();
         var observacionesFactura = $("#pedido_observacionesFactura").val();
@@ -3119,6 +3137,7 @@ jQuery(function ($) {
             data: {
                 numeroReferenciaCliente: numeroReferenciaCliente,
                 numeroReferenciaAdicional: numeroReferenciaAdicional,
+                fechaEntregaExtendida: fechaEntregaExtendida,
                 observaciones: observaciones,
                 observacionesGuiaRemision: observacionesGuiaRemision,
                 observacionesFactura: observacionesFactura
@@ -3161,6 +3180,8 @@ jQuery(function ($) {
 
         $("#pedido_numeroReferenciaCliente2").val($("#verNumeroReferenciaCliente").html());
         $("#pedido_numeroReferenciaAdicional").val($("#verNumeroReferenciaAdicional").html());
+
+        $("#pedido_fechaEntregaExtendida").val($("#verFechaEntregaExtendida").val());
 
         $("#pedido_observacionesFactura").val($("#verObservacionesFactura").html());
         $("#pedido_observacionesGuiaRemision").val($("#verObservacionesGuiaRemision").html());
@@ -4225,6 +4246,112 @@ jQuery(function ($) {
             }
         });
     });
+
+    $("#lnkVerHistorial").click(function () {
+        showHistorial();
+    });
+
+    $("#lnkVerHistorialCrediticio").click(function () {
+        showHistorialCrediticio();
+    });
+
+    function showHistorial() {
+        $('body').loadingModal({
+            text: 'Obteniendo Historial...'
+        });
+
+        var idPedido = $("#verIdPedido").val();
+
+        $.ajax({
+            url: "/Pedido/GetHistorial",
+            data: {
+                id: idPedido
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial del pedido."); },
+            success: function (resultado) {
+
+                $("#tableHistorialPedido > tbody").empty();
+
+                FooTable.init('#tableHistorialPedido');
+
+                var d = '';
+                var lista = resultado.result;
+                for (var i = 0; i < resultado.result.length; i++) {
+
+                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+                    d += '<tr>' +
+                        '<td>' + lista[i].FechaRegistroDesc + '</td>' +
+                        '<td>' + lista[i].usuario.nombre + '</td>' +
+                        '<td>' + lista[i].estadoString + '</td>' +
+                        '<td>' + observacion + '</td>' +
+                        '</tr>';
+
+                }
+                //  
+                // sleep
+                $("#tableHistorialPedido").append(d);
+
+
+
+
+                $("#modalVerHistorialPedido").modal('show');
+                $('body').loadingModal('hide');
+                //  window.location = '/Cotizacion/Index';
+            }
+        });
+    };
+
+    function showHistorialCrediticio() {
+        $('body').loadingModal({
+            text: 'Obteniendo Historial Crediticio...'
+        });
+
+        var idPedido = $("#verIdPedido").val();
+
+        $.ajax({
+            url: "/Pedido/GetHistorialCrediticio",
+            data: {
+                id: idPedido
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial crediticio del pedido."); },
+            success: function (resultado) {
+
+                $("#tableHistorialCrediticioPedido > tbody").empty();
+
+                FooTable.init('#tableHistorialCrediticioPedido');
+
+                var d = '';
+                var lista = resultado.result;
+                for (var i = 0; i < resultado.result.length; i++) {
+
+                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+                    d += '<tr>' +
+                        '<td>' + lista[i].FechaRegistroDesc + '</td>' +
+                        '<td>' + lista[i].usuario.nombre + '</td>' +
+                        '<td>' + lista[i].estadoString + '</td>' +
+                        '<td>' + observacion + '</td>' +
+                        '</tr>';
+
+                }
+                //  
+                // sleep
+                $("#tableHistorialCrediticioPedido").append(d);
+
+
+
+
+                $("#modalVerHistorialCrediticioPedido").modal('show');
+                $('body').loadingModal('hide');
+                //  window.location = '/Cotizacion/Index';
+            }
+        });
+    };
 
     $(document).on('change', "#ActualDepartamento", function () {
         var ubigeoEntregaId = "000000";

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Model
 {
-    public class SeguimientoCrediticioPedido
+    public class SeguimientoCrediticioPedido : Auditoria
     {
         public SeguimientoCrediticioPedido()
         {

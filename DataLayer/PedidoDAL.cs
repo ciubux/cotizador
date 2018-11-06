@@ -226,7 +226,7 @@ namespace DataLayer
 
         public List<Pedido> SelectPedidos(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("ps_pedidosTMP");
+            var objCommand = GetSqlCommand("ps_pedidos");
             InputParameterAdd.BigInt(objCommand, "numero", pedido.numeroPedido);
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
@@ -736,6 +736,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaAdicional", pedido.numeroReferenciaAdicional);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaExtendida", pedido.fechaEntregaExtendida);
             InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);
             InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
@@ -932,6 +933,7 @@ namespace DataLayer
                 pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
                 pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
                 pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
+                pedido.fechaEntregaExtendida = Converter.GetDateTime(row, "fecha_entrega_extendida");
                 pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
                 pedido.montoIGV = Converter.GetDecimal(row, "igv");
                 pedido.montoTotal = Converter.GetDecimal(row, "total");
@@ -1606,6 +1608,319 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
         #endregion        
          
 
+        public List<Guid> SelectPedidosSinAtencion()
+        {
+            List<Guid> pedidoIds = new List<Guid>();
 
+            var objCommand = GetSqlCommand("ps_pedidos_sin_atencion");
+            DataTable dataTable = Execute(objCommand);
+            
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Guid idPedido = Converter.GetGuid(row, "id_pedido");
+                
+                pedidoIds.Add(idPedido);
+            }
+            
+            return pedidoIds;
+        }
+
+        public List<SeguimientoPedido> GetHistorialSeguimiento(Guid idPedido)
+        {
+            var objCommand = GetSqlCommand("ps_pedido_seguimiento");
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            DataTable dataTable = Execute(objCommand);
+
+            List<SeguimientoPedido> seguimientoPedidos = new List<SeguimientoPedido>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                SeguimientoPedido seg = new SeguimientoPedido();
+                seg.idSeguimientoPedido = Converter.GetGuid(row, "id_seguimiento_pedido");
+                seg.observacion = Converter.GetString(row, "observacion");
+                seg.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                seg.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_pedido");
+
+                seg.usuario = new Usuario();
+                seg.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                seg.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+
+                seguimientoPedidos.Add(seg);
+            }
+
+            return seguimientoPedidos;
+        }
+
+        public List<SeguimientoCrediticioPedido> GetHistorialCrediticioSeguimiento(Guid idPedido)
+        {
+            var objCommand = GetSqlCommand("ps_pedido_seguimiento_crediticio");
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            DataTable dataTable = Execute(objCommand);
+
+            List<SeguimientoCrediticioPedido> seguimientoPedidos = new List<SeguimientoCrediticioPedido>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                SeguimientoCrediticioPedido seg = new SeguimientoCrediticioPedido();
+                //seg.id = Converter.GetGuid(row, "id_seguimiento_crediticio");
+                seg.observacion = Converter.GetString(row, "observacion");
+                seg.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                seg.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Converter.GetInt(row, "estado_pedido");
+
+                seg.usuario = new Usuario();
+                seg.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                seg.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+
+                seguimientoPedidos.Add(seg);
+            }
+
+            return seguimientoPedidos;
+
+        }
+        public Pedido SelectPedidoEmail(Guid idPedido)
+        {
+            var objCommand = GetSqlCommand("ps_pedido_email");
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable pedidoDataTable = dataSet.Tables[0];
+            DataTable pedidoDetalleDataTable = dataSet.Tables[1];
+            DataTable direccionEntregaDataTable = dataSet.Tables[2];
+
+            //   DataTable dataTable = Execute(objCommand);
+            //Datos de la cotizacion
+            Pedido pedido = new Pedido();
+            foreach (DataRow row in pedidoDataTable.Rows)
+            {
+                pedido.idPedido = idPedido;
+                pedido.numeroPedido = Converter.GetLong(row, "numero");
+                pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo");
+                pedido.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
+                pedido.fechaEntregaDesde = Converter.GetDateTime(row, "fecha_entrega_desde");
+                pedido.fechaEntregaExtendida = Converter.GetDateTime(row, "fecha_entrega_extendida");
+                pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
+                pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
+                pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
+                pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
+                pedido.montoIGV = Converter.GetDecimal(row, "igv");
+                pedido.montoTotal = Converter.GetDecimal(row, "total");
+                pedido.observaciones = Converter.GetString(row, "observaciones");
+                pedido.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.montoTotal - pedido.montoIGV));
+                pedido.fechaModificacion = Converter.GetDateTime(row, "fecha_modificacion");
+                pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+                pedido.direccionEntrega = new DireccionEntrega();
+                pedido.direccionEntrega.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega");
+                pedido.direccionEntrega.descripcion = Converter.GetString(row, "direccion_entrega");
+                pedido.direccionEntrega.contacto = Converter.GetString(row, "contacto_entrega");
+                pedido.direccionEntrega.telefono = Converter.GetString(row, "telefono_contacto_entrega");
+
+                pedido.solicitante = new Solicitante();
+                pedido.solicitante.idSolicitante = Converter.GetGuid(row, "id_solicitante");
+
+                pedido.contactoPedido = Converter.GetString(row, "contacto_pedido");
+                pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
+                pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
+
+                pedido.solicitante.nombre = pedido.contactoPedido;
+                pedido.solicitante.telefono = pedido.telefonoContactoPedido;
+                pedido.solicitante.correo = pedido.correoContactoPedido;
+
+                pedido.fechaProgramacion = Converter.GetDateTime(row, "fecha_programacion");
+                pedido.observacionesFactura = Converter.GetString(row, "observaciones_factura");
+                pedido.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
+
+                
+                pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
+                pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
+
+                /* pedido.venta = new Venta();
+                   pedido.venta.igv = Converter.GetDecimal(row, "igv_venta");
+                   pedido.venta.subTotal = Converter.GetDecimal(row, "sub_total_venta");
+                   pedido.venta.total = Converter.GetDecimal(row, "total_venta");
+                   pedido.venta.idVenta = Converter.GetGuid(row, "id_Venta");*/
+
+                pedido.ubigeoEntrega = new Ubigeo();
+                pedido.ubigeoEntrega.Id = Converter.GetString(row, "ubigeo_entrega");
+                pedido.ubigeoEntrega.Departamento = Converter.GetString(row, "departamento");
+                pedido.ubigeoEntrega.Provincia = Converter.GetString(row, "provincia");
+                pedido.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
+
+               
+                pedido.cliente = new Cliente();
+                pedido.cliente.codigo = Converter.GetString(row, "codigo");
+                pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                pedido.cliente.ruc = Converter.GetString(row, "ruc");
+                pedido.cliente.ciudad = new Ciudad();
+                pedido.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad_cliente");
+                pedido.cliente.ciudad.nombre = Converter.GetString(row, "nombre_ciudad_cliente");
+                pedido.cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                pedido.cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
+                pedido.cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
+                pedido.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
+                pedido.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                pedido.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
+
+                /*Vendedores*/
+                pedido.cliente.responsableComercial = new Vendedor();
+                pedido.cliente.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
+                pedido.cliente.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
+                pedido.cliente.responsableComercial.usuario = new Usuario();
+                pedido.cliente.responsableComercial.usuario.email = Converter.GetString(row, "responsable_comercial_email");
+
+                pedido.cliente.supervisorComercial = new Vendedor();
+                pedido.cliente.supervisorComercial.codigo = Converter.GetString(row, "supervisor_comercial_codigo");
+                pedido.cliente.supervisorComercial.descripcion = Converter.GetString(row, "supervisor_comercial_descripcion");
+                pedido.cliente.supervisorComercial.usuario = new Usuario();
+                pedido.cliente.supervisorComercial.usuario.email = Converter.GetString(row, "supervisor_comercial_email");
+
+                pedido.cliente.asistenteServicioCliente = new Vendedor();
+                pedido.cliente.asistenteServicioCliente.codigo = Converter.GetString(row, "asistente_servicio_cliente_codigo");
+                pedido.cliente.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
+                pedido.cliente.asistenteServicioCliente.usuario = new Usuario();
+                pedido.cliente.asistenteServicioCliente.usuario.email = Converter.GetString(row, "asistente_servicio_cliente_email");
+
+                pedido.ciudad = new Ciudad();
+                pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+                pedido.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
+
+                pedido.usuario = new Usuario();
+                pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                pedido.usuario.cargo = Converter.GetString(row, "cargo");
+                pedido.usuario.contacto = Converter.GetString(row, "contacto_usuario");
+                pedido.usuario.email = Converter.GetString(row, "email");
+
+                pedido.seguimientoPedido = new SeguimientoPedido();
+                pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_seguimiento");
+                pedido.seguimientoPedido.observacion = Converter.GetString(row, "observacion_seguimiento");
+                pedido.seguimientoPedido.usuario = new Usuario();
+                pedido.seguimientoPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
+                pedido.seguimientoPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
+
+                pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
+                pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Converter.GetInt(row, "estado_seguimiento_crediticio");
+                pedido.seguimientoCrediticioPedido.observacion = Converter.GetString(row, "observacion_seguimiento_crediticio");
+                pedido.seguimientoCrediticioPedido.usuario = new Usuario();
+                pedido.seguimientoCrediticioPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento_crediticio");
+                pedido.seguimientoCrediticioPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento_crediticio");
+
+            }
+
+
+            pedido.pedidoDetalleList = new List<PedidoDetalle>();
+            //Detalle de la cotizacion
+            foreach (DataRow row in pedidoDetalleDataTable.Rows)
+            {
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(new Usuario());
+
+                pedidoDetalle.producto = new Producto();
+
+                pedidoDetalle.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");
+                pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
+                pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
+                pedidoDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+                pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
+
+
+                //Si NO es recotizacion se consideran los precios y el costo de lo guardado
+                pedidoDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
+                pedidoDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+
+                //Si la unidad es alternativa se múltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el precio estándar
+
+                if (pedidoDetalle.esPrecioAlternativo)
+                {
+                    pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.producto.equivalencia;
+                }
+                else
+                {
+                    pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                }
+
+                pedidoDetalle.unidad = Converter.GetString(row, "unidad");
+
+                pedidoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                pedidoDetalle.producto.sku = Converter.GetString(row, "sku");
+                pedidoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
+
+                pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
+
+                pedidoDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
+
+                pedidoDetalle.observacion = Converter.GetString(row, "observaciones");
+
+
+                PrecioClienteProducto precioClienteProducto = new PrecioClienteProducto();
+
+                precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto_vigente");
+                precioClienteProducto.flete = Converter.GetDecimal(row, "flete_vigente");
+                precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario_vigente");
+                precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia_vigente");
+
+                precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
+
+                precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+
+                if (row["fecha_fin_vigencia"] == DBNull.Value)
+                {
+                    precioClienteProducto.fechaFinVigencia = null;
+                }
+                else
+                {
+                    precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+                }
+
+                //  precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+                precioClienteProducto.cliente = new Cliente();
+                precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                pedidoDetalle.producto.precioClienteProducto = precioClienteProducto;
+
+
+                pedidoDetalle.precioUnitarioVenta = Converter.GetDecimal(row, "precio_unitario_venta");
+                pedidoDetalle.idVentaDetalle = Converter.GetGuid(row, "id_venta_detalle");
+
+                pedido.pedidoDetalleList.Add(pedidoDetalle);
+            }
+
+            List<DireccionEntrega> direccionEntregaList = new List<DireccionEntrega>();
+
+            foreach (DataRow row in direccionEntregaDataTable.Rows)
+            {
+                DireccionEntrega obj = new DireccionEntrega
+                {
+                    idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega"),
+                    descripcion = Converter.GetString(row, "descripcion"),
+                    contacto = Converter.GetString(row, "contacto"),
+                    telefono = Converter.GetString(row, "telefono"),
+                    ubigeo = new Ubigeo { Id = Converter.GetString(row, "ubigeo") }
+                };
+                direccionEntregaList.Add(obj);
+            }
+
+            if (pedido.cliente != null)
+            {
+                pedido.cliente.direccionEntregaList = direccionEntregaList;
+            }
+            
+
+            pedido.guiaRemisionList = new List<GuiaRemision>();
+
+            GuiaRemision movimientoAlmacen = new GuiaRemision();
+            movimientoAlmacen.idMovimientoAlmacen = Guid.Empty;
+
+
+
+            /*mad.id_movimiento_almacen_detalle, mad.cantidad, 
+            mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
+
+            pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            
+
+            return pedido;
+        }
     }
 }

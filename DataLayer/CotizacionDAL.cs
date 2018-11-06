@@ -59,6 +59,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
 
             InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada?1:0));
+            InputParameterAdd.Bit(objCommand, "aplicaSedes", cotizacion.aplicaSedes);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion);
 
 
@@ -122,7 +123,7 @@ namespace DataLayer
 
             InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada ? 1 : 0));
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion);
-
+            InputParameterAdd.Bit(objCommand, "aplicaSedes", cotizacion.aplicaSedes);
 
             OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
             ExecuteNonQuery(objCommand);
@@ -238,7 +239,7 @@ namespace DataLayer
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
                 cotizacion.fechaModificacion = Converter.GetDateTime(row, "fecha_modificacion");
                 cotizacion.fechaEsModificada = Converter.GetBool(row, "fecha_Es_Modificada");
-
+                cotizacion.aplicaSedes = Converter.GetBool(row, "aplica_sedes");
                 cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
 
                 //Si el cliente es Null
@@ -258,8 +259,13 @@ namespace DataLayer
                     cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                     cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
                     cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
+                    cotizacion.cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
                     cotizacion.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
                     cotizacion.cliente.tipoPagoFactura =  (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                    if (cotizacion.cliente.sedePrincipal) {
+                        ClienteDAL dalCliente = new ClienteDAL();
+                        cotizacion.cliente.sedeList = dalCliente.getSedes(cotizacion.cliente.ruc);
+                    }
                     cotizacion.grupo = new GrupoCliente();
                 }
 
@@ -509,5 +515,31 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+
+        public List<SeguimientoCotizacion> GetHistorialSeguimiento(Guid idCotizacion)
+        {
+            var objCommand = GetSqlCommand("ps_cotizacion_seguimiento");
+            InputParameterAdd.Guid(objCommand, "idCotizacion", idCotizacion);
+            DataTable dataTable = Execute(objCommand);
+
+            List<SeguimientoCotizacion> seguimientoCotizacion = new List<SeguimientoCotizacion>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                SeguimientoCotizacion seg = new SeguimientoCotizacion();
+                seg.idSeguimientoCotizacion = Converter.GetGuid(row, "id_estado_seguimiento");
+                seg.observacion = Converter.GetString(row, "observacion");
+                seg.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                seg.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion) Converter.GetInt(row, "estado_cotizacion");
+
+                seg.usuario = new Usuario();
+                seg.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                seg.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+
+                seguimientoCotizacion.Add(seg);
+            }
+
+            return seguimientoCotizacion;
+        }
     }
 }
