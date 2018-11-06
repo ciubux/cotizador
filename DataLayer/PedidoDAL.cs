@@ -234,6 +234,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Guid(objCommand, "idUsuarioBusqueda", pedido.usuarioBusqueda.idUsuario);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", pedido.idGrupoCliente);
 
             switch (pedido.tipo)
             {

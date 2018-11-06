@@ -3991,6 +3991,7 @@ jQuery(function ($) {
         var fechaProgramacionHasta = $("#pedido_fechaProgramacionHasta").val();
         var pedido_numeroPedido = $("#pedido_numeroPedido").val();
         var pedido_numeroGrupoPedido = $("#pedido_numeroGrupoPedido").val();
+        var pedido_idGrupoCliente = $("#pedido_idGrupoCliente").val();
         var estado = $("#estado").val();
         var estadoCrediticio = $("#estadoCrediticio").val();
         $("#btnBusquedaPedidos").attr("disabled", "disabled");
@@ -4009,6 +4010,7 @@ jQuery(function ($) {
                 fechaProgramacionHasta: fechaProgramacionHasta,
                 numero: pedido_numeroPedido,
                 numeroGrupo: pedido_numeroGrupoPedido,
+                idGrupoCliente: pedido_idGrupoCliente,
                 estado: estado,
                 estadoCrediticio: estadoCrediticio
             },
@@ -4220,6 +4222,18 @@ jQuery(function ($) {
         });
     });
 
+    $("#pedido_idGrupoCliente").change(function () {
+        var idGrupoCliente = $("#pedido_idGrupoCliente").val();
+        $.ajax({
+            url: "/Pedido/ChangeIdGrupoCliente",
+            type: 'POST',
+            data: {
+                idGrupoCliente: idGrupoCliente
+            },
+            success: function () {
+            }
+        });
+    });
 
     $("#estado").change(function () {
         var estado = $("#estado").val();

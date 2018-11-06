@@ -1,9 +1,11 @@
 ﻿@{
-    ViewBag.Title = "Búsqueda Pedidos Venta";
-    Model.Pedido pedido = ViewBag.pedido;
-    Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
-    List<Model.Pedido> pedidoList = ViewBag.pedidoList;
-    Model.DocumentoVenta documentoVenta = ViewBag.documentoVenta;
+                /**/
+
+                ViewBag.Title = "Búsqueda Pedidos Venta";
+                Model.Pedido pedido = ViewBag.pedido;
+                Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
+                List<Model.Pedido> pedidoList = ViewBag.pedidoList;
+                Model.DocumentoVenta documentoVenta = ViewBag.documentoVenta;
 }
 
 <div class="page-header">
@@ -130,32 +132,47 @@
 
         @if (!pedido.usuario.esCliente)
         {
-            <div class="row">
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
 
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
-                        </div>
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
                     </div>
-
                 </div>
 
+            </div>
 
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        <label for="tipoPedido" class="control-label col-xs-4">Tipo Pedido:</label>
-                        <div class="col-xs-8">
-                            @Html.DropDownList("tipoPedidoBusqueda",
-                                        EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedidoVentaBusqueda), pedido.tipoPedidoVentaBusqueda),
-                                        new { @class = "form-control" }
-                                        )
 
-                        </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="tipoPedido" class="control-label col-xs-4">Tipo Pedido:</label>
+                    <div class="col-xs-8">
+                        @Html.DropDownList("tipoPedidoBusqueda",
+                                    EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedidoVentaBusqueda), pedido.tipoPedidoVentaBusqueda),
+                                    new { @class = "form-control" }
+                                    )
+
                     </div>
                 </div>
             </div>
+
+            <!--CODIGO GRUPO CLIENTE-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="pedido_idGrupoCliente">Grupo Cliente:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetGruposCliente", "GrupoCliente",
+                                new
+                                {
+                                    grupoClienteSelectId = "pedido_idGrupoCliente",
+                                    selectedValue = pedido.idGrupoCliente
+                                })
+                    </div>
+                </div>
+            </div>
+        </div>
         }
 
         <div class="row">
@@ -319,8 +336,8 @@
                     else
                     {
 
-                                    <th data-name="stockConfirmado" data-visible="false">Stock</th>
-                                    <th data-name="stockConfirmado" data-visible="true">Stock</th>
+                        <th data-name="stockConfirmado" data-visible="false">Stock</th>
+                        <th data-name="stockConfirmado" data-visible="true">Stock</th>
                     }
 
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
@@ -1134,17 +1151,17 @@
 
                     @if (pedido.usuario.modificaPedidoFechaEntregaExtendida)
                     {
-                    <!--FECHA ENTREGA EXTENDIDA-->
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-4" id="divFechaEntregaExtendida">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.fechaEntregaExtendida, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    @Html.TextBoxFor(p => pedido.fechaEntregaExtendida, htmlAttributes: new { @class = "form-control" })
+                        <!--FECHA ENTREGA EXTENDIDA-->
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4" id="divFechaEntregaExtendida">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.fechaEntregaExtendida, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        @Html.TextBoxFor(p => pedido.fechaEntregaExtendida, htmlAttributes: new { @class = "form-control" })
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     }
                     <div class="row">
                         <!--ORDEN DE COMPRA-->
@@ -2068,9 +2085,8 @@
 </div>
 
 
-
-
 @section Scripts {
-    @Scripts.Render("~/bundles/pedido")
-    @Scripts.Render("~/Scripts/App/ubigeo.js")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedido")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/Scripts/App/ubigeo.js")
 }
+

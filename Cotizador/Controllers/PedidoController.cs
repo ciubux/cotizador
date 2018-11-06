@@ -937,6 +937,19 @@ namespace Cotizador.Controllers
         }
 
 
+        public void ChangeIdGrupoCliente()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            if (this.Request.Params["idGrupoCliente"] == null || this.Request.Params["idGrupoCliente"].Trim().Length == 0)
+            {
+                pedido.idGrupoCliente = 0;
+            }
+            else
+            {
+                pedido.idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            }
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
 
 
 
@@ -1428,6 +1441,14 @@ namespace Cotizador.Controllers
                 pedido.numeroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
             }
 
+            if (this.Request.Params["idGrupoCliente"] == null || this.Request.Params["idGrupoCliente"].Trim().Length == 0)
+            {
+                pedido.idGrupoCliente = 0;
+            }
+            else
+            {
+                pedido.idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            }
 
             pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido) Int32.Parse(this.Request.Params["estado"]);
             pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Int32.Parse(this.Request.Params["estadoCrediticio"]);
