@@ -36,12 +36,12 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cotizacion").Include(
-                        "~/Scripts/cotizacion1.1.5.js"
+                        "~/Scripts/cotizacion1.1.3.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
                         "~/Scripts/pedidoGeneral1.1.6.js",
-                        "~/Scripts/pedido1.2.3.js"
+                        "~/Scripts/pedido1.2.1.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedidoCompra").Include(
