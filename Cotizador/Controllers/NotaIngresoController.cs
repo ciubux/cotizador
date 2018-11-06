@@ -432,7 +432,7 @@ namespace Cotizador.Controllers
             try
             {   /*IMPORTANTE: Se debe identificar si la guia esta facturada para ver si se genera nota de crédito*/
 
-
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 instanciarNotaIngreso();
                 NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
 
@@ -466,7 +466,8 @@ namespace Cotizador.Controllers
 
 
                 CiudadBL ciudadBL = new CiudadBL();
-                Ciudad ciudadDestino = ciudadBL.getCiudad(notaIngreso.guiaRemisionAIngresar.ciudadOrigen.idCiudad);
+                /*Por Revisar*/
+                Ciudad ciudadDestino = ciudadBL.getCiudad(usuario.sedeMP.idCiudad);
                 ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
 
                 notaIngreso.ciudadDestino = ciudadDestino;

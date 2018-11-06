@@ -29,9 +29,14 @@ var TIPO_PEDIDO_ALMACEN_DEVOLUCION_PRESTAMO_RECIBIDO = 'E';
 var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
 
 
+/**
+ * ######################## INICIO CONTROLES DE FECHAS
+ */
+/*
+jQuery(function ($) {
 
-
-
+}
+*/
 
 
   

@@ -20,6 +20,10 @@ namespace Model
             this.supervisorComercial = new Vendedor();
             this.tipoDocumentoIdentidad = DocumentoVenta.TiposDocumentoIdentidad.RUC;
             this.plazoCreditoSolicitado = DocumentoVenta.TipoPago.NoAsignado;
+            this.horaInicioPrimerTurnoEntrega = "09:00:00";
+            this.horaFinPrimerTurnoEntrega = "18:00:00";
+            this.horaInicioSegundoTurnoEntrega = "";
+            this.horaFinSegundoTurnoEntrega = "";
         }
 
         public Guid idCliente { get; set; }
@@ -59,8 +63,93 @@ namespace Model
         [Display(Name = "Pertenece Canal Ordon:")]
         public Boolean perteneceCanalOrdon { get; set; }
         [Display(Name = "es Sub Distribuidor:")]
-        public Boolean esSubDistribuidor { get; set; }      
+        public Boolean esSubDistribuidor { get; set; }
 
+
+        public String horaInicioPrimerTurnoEntrega { get; set; }
+
+        public String horaInicioPrimerTurnoEntregaFormat { get
+            {
+                if (horaInicioPrimerTurnoEntrega != null && horaInicioPrimerTurnoEntrega.Length >= 5)
+                {
+                    return this.horaInicioPrimerTurnoEntrega.Substring(0, 5);
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            }
+        }
+
+        public String horaFinPrimerTurnoEntrega { get; set; }
+
+        public String horaFinPrimerTurnoEntregaFormat
+        {
+            get
+            {
+                if (horaFinPrimerTurnoEntrega != null && horaFinPrimerTurnoEntrega.Length >= 5)
+                {
+                    return this.horaFinPrimerTurnoEntrega.Substring(0, 5);
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            }
+        }
+
+        public String horaInicioSegundoTurnoEntrega { get; set; }
+
+        public String horaInicioSegundoTurnoEntregaFormat
+        {
+            get
+            {
+                if (horaInicioSegundoTurnoEntrega != null && horaInicioSegundoTurnoEntrega.Length >= 5)
+                {
+                    return this.horaInicioSegundoTurnoEntrega.Substring(0, 5);
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            }
+        }
+        public String horaFinSegundoTurnoEntrega { get; set; }
+
+        public String horaFinSegundoTurnoEntregaFormat
+        {
+            get
+            {
+                if (horaFinSegundoTurnoEntrega != null && horaFinSegundoTurnoEntrega.Length >= 5)
+                {
+                    return this.horaFinSegundoTurnoEntrega.Substring(0, 5);
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            }
+        }
+
+
+        [Display(Name = "Primer Turno de Entrega:")]
+        public String primerTurnoEntrega
+        {
+            get
+            {
+                return "Desde: " + this.horaInicioPrimerTurnoEntrega + " Hasta: " + this.horaFinPrimerTurnoEntrega;
+            }
+        }
+
+
+        [Display(Name = "Segundo Turno de Entrega:")]
+        public String segundoTurnoEntrega
+        {
+            get
+            {
+                return "Desde: " + this.horaInicioSegundoTurnoEntrega + " Hasta: " + this.horaFinSegundoTurnoEntrega;
+            }
+        }
     }
 
 }

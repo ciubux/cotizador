@@ -867,7 +867,12 @@ jQuery(function ($) {
                         '<td>  ' + facturaList[i].idDocumentoVenta + '</td>' +
                         '<td>  ' + facturaList[i].serieNumero + '</td>' +
                         '<td>  ' + facturaList[i].pedido.numeroPedidoString + '</td>' +
+
+
                         '<td>  ' + facturaList[i].guiaRemision.serieNumeroGuia + '</td>' +
+
+
+
                         '<td>  ' + facturaList[i].usuario.nombre + '</td>' +
                         '<td>  ' + invertirFormatoFecha(facturaList[i].fechaEmision.substr(0, 10)) + '</td>' +
                         '<td>  ' + facturaList[i].cliente.razonSocial + '</td>' +
@@ -983,6 +988,11 @@ jQuery(function ($) {
 
     $(document).on('click', "button.btnVerDocumentoVenta", function () {
 
+        $('body').loadingModal({
+            text: 'Abriendo Documento de Venta...'
+        });
+        $('body').loadingModal('show');
+
         activarBotonesVer();
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idDocumentoVenta = arrrayClass[0];
@@ -1002,11 +1012,12 @@ jQuery(function ($) {
                 idDocumentoVenta: idDocumentoVenta
             },
             error: function (resultado) {
+                $('body').loadingModal('hide');
                 mostrarMensajeErrorProceso(MENSAJE_ERROR);
                 activarBotonesFacturar();
             },
             success: function (documentoVenta) {
-
+                $('body').loadingModal('hide');
                 /*Solicitar Anulación */
                 if (documentoVenta.solicitadoAnulacion == false
                     && 

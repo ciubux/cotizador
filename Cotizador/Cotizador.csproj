@@ -340,7 +340,7 @@
     <Content Include="Scripts\notaDebito1.1.2.js" />
     <Content Include="Scripts\notaIngreso1.2.0.js" />
     <Content Include="Scripts\guiaRemision1.2.0.js" />
-    <Content Include="Scripts\cliente1.2.0.js" />
+    <Content Include="Scripts\cliente1.2.2.js" />
     <Content Include="Scripts\jquery-confirm.js" />
     <Content Include="Scripts\jquery-editable-select.js" />
     <Content Include="Scripts\jquery.loadingModal.js" />

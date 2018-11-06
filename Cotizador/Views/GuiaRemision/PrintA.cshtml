@@ -61,7 +61,7 @@
                 <div class="col_uno">@documentoDetalle.producto.sku</div>
                 <div class="col_dos">@documentoDetalle.cantidad</div>
                 <div class="col_tres">@documentoDetalle.unidad</div>
-                <div class="col_cuatro">@(documentoDetalle.producto.skuProveedor + " - " + documentoDetalle.producto.descripcion)</div>
+                <div class="col_cuatro">@(documentoDetalle.producto.descripcion + " (" + documentoDetalle.producto.skuProveedor + ")")</div>
             </div>
 
         }

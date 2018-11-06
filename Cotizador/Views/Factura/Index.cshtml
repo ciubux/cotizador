@@ -98,8 +98,7 @@
             <!--NUMERO FACTURA-->
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    @Html.LabelFor(dv => documentoVenta.serieNumero, htmlAttributes: new { @class = "control-label col-xs-4" })
-
+                    <label for="documentoVenta_numero" class="control-label col-xs-4">Tipo/Número Doc.:</label>
                     <div class="col-xs-4">
                         @Html.DropDownList("documentoVenta_tipoDocumento",
                            EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoDocumento), documentoVenta.tipoDocumento),
@@ -124,7 +123,7 @@
             <!--NUMERO GUIA-->
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="documentoVenta_numero" class="control-label col-xs-4">Número Mov. Almacén:</label>
+                    <label for="documentoVenta_guiaRemision_numero" class="control-label col-xs-4">Número Mov. Almacén:</label>
 
                     <div class="col-xs-8">
                         @if (documentoVenta.guiaRemision.numeroDocumento > 0)
@@ -224,7 +223,7 @@
                     <th data-name="idDocumentoVenta" data-visible="false"></th>
                     <th data-name="serieNumeroFactura" data-visible="true">Factura</th>
                     <th data-name="numeroPedido" data-visible="true">Pedido</th>
-                    <th data-name="serieNumeroGuia" data-visible="true">Guia Remisión</th>
+                    <th data-name="serieNumeroGuia" data-visible="true">Movimiento Almacén</th>
                     <th data-name="usuario" data-visible="true">Creada Por</th>
                     <th data-name="fechaEmision" data-sortable="true" data-breakpoints="xs">Fecha Emisión</th>
                     <th data-name="razonSocial" data-sortable="true">Razón Social</th>

@@ -154,75 +154,75 @@
         </div>
         }
 
-        <div class="row">
+            <div class="row">
 
-            <!--FECHA SOLICITUD-->
-            <div class="col-sm-6 col-lg-4">
-                <label for="pedido_fechaSolicitudDesde" class="control-label col-xs-6 col-lg-4">Fecha de Solicitud:</label>
-                <div class="input-group col-xs-6 col-lg-8">
-                    <div class="input-group-addon" style="width:70px">
-                        <span class="input-group-text" id="basic-addon1">Desde:</span>
+                <!--FECHA CREACIÓN-->
+                <div class="col-sm-6 col-lg-4">
+                    <label for="pedido_fechaCreacionDesde" class="control-label col-xs-6 col-lg-4">Fecha de Creación:</label>
+                    <div class="input-group col-xs-6 col-lg-8">
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Desde:</span>
+                        </div>
+                        <input type="hidden" id="fechaCreacionDesdetmp" value="@ViewBag.fechaCreacionDesde" />
+                        <input class="form-control" type="text" id="pedido_fechaCreacionDesde" name="pedido_fechaCreacionDesde">
                     </div>
-                    <input type="hidden" id="fechaSolicitudDesdetmp" value="@ViewBag.fechaSolicitudDesde" />
-                    <input class="form-control" type="text" id="pedido_fechaSolicitudDesde" name="pedido_fechaSolicitudDesde">
-                </div>
-                <label for="fechaSolicitudHasta" class="control-label col-xs-6 col-lg-4"></label>
-                <div class="input-group col-xs-6 col-lg-8">
+                    <label for="fechaSolicitudHasta" class="control-label col-xs-6 col-lg-4"></label>
+                    <div class="input-group col-xs-6 col-lg-8">
 
-                    <div class="input-group-addon" style="width:70px">
-                        <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                        </div>
+                        <input type="hidden" id="fechaCreacionHastatmp" value="@ViewBag.fechaCreacionHasta" />
+                        <input class="form-control" type="text" id="pedido_fechaCreacionHasta" name="pedido_fechaCreacionHasta">
+
                     </div>
-                    <input type="hidden" id="fechaSolicitudHastatmp" value="@ViewBag.fechaSolicitudHasta" />
-                    <input class="form-control" type="text" id="pedido_fechaSolicitudHasta" name="pedido_fechaSolicitudHasta">
-
                 </div>
+
+                <!--FECHA ENTREGA-->
+                <div class="col-sm-6 col-lg-4">
+                    <label for="pedido_fechaEntregaDesde" class="control-label col-xs-6 col-lg-4">Fecha de Entrega:</label>
+                    <div class="input-group col-xs-6 col-lg-8">
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Desde:</span>
+                        </div>
+                        <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesde" />
+                        <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde">
+                    </div>
+                    <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+                    <div class="input-group col-xs-6 col-lg-8">
+
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                        </div>
+                        <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHasta" />
+                        <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta">
+
+                    </div>
+                </div>
+
+                <!--FECHA PROGRACION
+    <div class="col-sm-6 col-lg-4">
+        <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4">Fecha de Programación:</label>
+        <div class="input-group col-xs-6 col-lg-8">
+            <div class="input-group-addon" style="width:70px">
+                <span class="input-group-text" id="basic-addon1">Desde:</span>
             </div>
+            <input type="hidden" id="fechaProgramacionDesdetmp" value="@ViewBag.fechaProgramacionDesde" />
+            <input class="form-control" type="text" id="pedido_fechaProgramacionDesde" name="pedido_fechaProgramacionDesde">
+        </div>
+        <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+        <div class="input-group col-xs-6 col-lg-8">
 
-            <!--FECHA ENTREGA-->
-            <div class="col-sm-6 col-lg-4">
-                <label for="pedido_fechaEntregaDesde" class="control-label col-xs-6 col-lg-4">Fecha de Entrega:</label>
-                <div class="input-group col-xs-6 col-lg-8">
-                    <div class="input-group-addon" style="width:70px">
-                        <span class="input-group-text" id="basic-addon1">Desde:</span>
-                    </div>
-                    <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesde" />
-                    <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde">
-                </div>
-                <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
-                <div class="input-group col-xs-6 col-lg-8">
-
-                    <div class="input-group-addon" style="width:70px">
-                        <span class="input-group-text" id="basic-addon1">Hasta:</span>
-                    </div>
-                    <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHasta" />
-                    <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta">
-
-                </div>
+            <div class="input-group-addon" style="width:70px">
+                <span class="input-group-text" id="basic-addon1">Hasta:</span>
             </div>
-
-            <!--FECHA PROGRACION
-            <div class="col-sm-6 col-lg-4">
-                <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4">Fecha de Programación:</label>
-                <div class="input-group col-xs-6 col-lg-8">
-                    <div class="input-group-addon" style="width:70px">
-                        <span class="input-group-text" id="basic-addon1">Desde:</span>
-                    </div>
-                    <input type="hidden" id="fechaProgramacionDesdetmp" value="@ViewBag.fechaProgramacionDesde" />
-                    <input class="form-control" type="text" id="pedido_fechaProgramacionDesde" name="pedido_fechaProgramacionDesde">
-                </div>
-                <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
-                <div class="input-group col-xs-6 col-lg-8">
-
-                    <div class="input-group-addon" style="width:70px">
-                        <span class="input-group-text" id="basic-addon1">Hasta:</span>
-                    </div>
-                    <input type="hidden" id="fechaProgramacionHastatmp" value="@ViewBag.fechaProgramacionHasta" />
-                    <input class="form-control" type="text" id="pedido_fechaProgramacionHasta" name="pedido_fechaProgramacionHasta">
-
-                </div>
-            </div>-->
+            <input type="hidden" id="fechaProgramacionHastatmp" value="@ViewBag.fechaProgramacionHasta" />
+            <input class="form-control" type="text" id="pedido_fechaProgramacionHasta" name="pedido_fechaProgramacionHasta">
 
         </div>
+    </div>-->
+
+            </div>
 
 
 
@@ -295,16 +295,16 @@
                     <th data-name="numeroReferenciaCliente" data-visible="true">O/C N°</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
                     <th data-name="fechaRegistro" data-sortable="true" data-breakpoints="xs">Fecha Registro</th>
-                    <th data-name="fechaSolicitud" data-sortable="true" data-breakpoints="xs">Fecha y Hora Solicitud</th>
+                   <!-- <th data-name="fechaSolicitud" data-sortable="true" data-breakpoints="xs">Fecha y Hora Solicitud</th>-->
                     <th data-name="rangoFechaEntrega" data-sortable="true" data-breakpoints="xs">Rango Fecha Entrega</th>
-                    <th data-name="fechaProgramacion" data-sortable="true" data-breakpoints="xs">Programado Para:</th>
+                    <!--<th data-name="fechaProgramacion" data-sortable="true" data-breakpoints="xs">Programado Para:</th>-->
                     <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (No Inc. IGV)</th>
                     <th data-name="distrito" data-sortable="true" data-breakpoints="xs">Distrito Entrega</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado Atención</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
                 <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
                     <th data-name="estadoCrediticio" data-sortable="true" data-breakpoints="xs">Estado Crediticio</th>
-
+                    <th data-name="observaciones" data-sortable="true" data-breakpoints="xs">Obs. Uso Interno</th>
 
                     @if (pedido.usuario.confirmaStock)
                 {

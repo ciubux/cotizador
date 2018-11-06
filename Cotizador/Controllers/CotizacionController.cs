@@ -10,6 +10,7 @@ using NPOI.HSSF.UserModel;
 using System.IO;
 using NPOI.SS.UserModel;
 using Newtonsoft.Json;
+using NPOI.HSSF.Model;
 
 namespace Cotizador.Controllers
 {
@@ -1111,6 +1112,130 @@ namespace Cotizador.Controllers
 
                 usuarioBL.updateCotizacionSerializada(usuario, cotizacionSerializada);
             }
+        }
+
+
+
+        public void exportarExcel()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            CotizacionBL cotizacionBL = new CotizacionBL();
+
+            Cotizacion cotizacion = new Cotizacion();
+
+
+            cotizacion.codigo = 4260;
+            cotizacion.idCotizacion = Guid.Parse("D33A328D-8C5C-4F1A-BF54-39B3DBC39479");
+
+
+            cotizacion  = cotizacionBL.GetCotizacion(cotizacion, usuario);
+
+
+
+
+
+            HSSFWorkbook wb;
+            HSSFSheet shCabecera;
+            HSSFSheet shDetalle;
+            // create xls if not exists
+            //  if (!File.Exists("test.xls"))
+            {
+                wb = HSSFWorkbook.Create(InternalWorkbook.CreateWorkbook());
+                // create sheet
+                shCabecera = (HSSFSheet)wb.CreateSheet("Cabecera");
+                shDetalle = (HSSFSheet)wb.CreateSheet("Detalle");
+               
+                    // 5 rows, 8 columns
+                    for (int r = 0; r < 7; r++)
+                    {
+                        var row = shCabecera.CreateRow(r);
+                        for (int c = 0; c < 8; c++)
+                        {
+                            row.CreateCell(c);
+                        }
+                    }
+                UtilesHelper.setValorCelda(shCabecera, 1, "A", "Número:");
+                UtilesHelper.setValorCelda(shCabecera, 1, "B", cotizacion.codigo);
+                UtilesHelper.setValorCelda(shCabecera, 1, "C", "Ciudad:");
+                UtilesHelper.setValorCelda(shCabecera, 1, "D", cotizacion.ciudad.nombre);
+
+                UtilesHelper.setValorCelda(shCabecera, 2, "A", "Cliente:");
+                UtilesHelper.setValorCelda(shCabecera, 2, "B", cotizacion.cliente.razonSocial);
+                UtilesHelper.setValorCelda(shCabecera, 2, "C", "RUC:");
+                UtilesHelper.setValorCelda(shCabecera, 2, "D", cotizacion.cliente.ruc);
+                UtilesHelper.setValorCelda(shCabecera, 2, "E", "Código MP");
+                UtilesHelper.setValorCelda(shCabecera, 2, "F", cotizacion.cliente.codigo);
+
+                UtilesHelper.setValorCelda(shCabecera, 3, "A", "Fecha Última Edición:");
+                UtilesHelper.setValorCelda(shCabecera, 3, "B", cotizacion.fecha);
+                UtilesHelper.setValorCelda(shCabecera, 3, "C", "Validez Oferta Hasta:");
+                UtilesHelper.setValorCelda(shCabecera, 3, "D", cotizacion.fechaLimiteValidezOferta);
+                UtilesHelper.setValorCelda(shCabecera, 3, "E", "Inicio Vigencia Precios:");
+                if(cotizacion.fechaInicioVigenciaPrecios == null)
+                    UtilesHelper.setValorCelda(shCabecera, 3, "F","No Definida");
+                else
+                    UtilesHelper.setValorCelda(shCabecera, 3, "F", cotizacion.fechaInicioVigenciaPrecios.Value);
+                UtilesHelper.setValorCelda(shCabecera, 3, "G", "Fin Vigencia Precios:");
+                if (cotizacion.fechaFinVigenciaPrecios == null)
+                    UtilesHelper.setValorCelda(shCabecera, 3, "H", "No Definida");
+                else
+                    UtilesHelper.setValorCelda(shCabecera, 3, "H", cotizacion.fechaFinVigenciaPrecios.Value);
+
+                UtilesHelper.setValorCelda(shCabecera, 4, "A", "Estado:");
+                UtilesHelper.setValorCelda(shCabecera, 4, "B", cotizacion.seguimientoCotizacion.estadoString);
+                UtilesHelper.setValorCelda(shCabecera, 4, "C", "Modificada Por:");
+                UtilesHelper.setValorCelda(shCabecera, 4, "D", cotizacion.seguimientoCotizacion.usuario.nombre);
+                UtilesHelper.setValorCelda(shCabecera, 4, "E", "Comentario:");
+                UtilesHelper.setValorCelda(shCabecera, 4, "F", cotizacion.seguimientoCotizacion.observacion);
+
+                UtilesHelper.setValorCelda(shCabecera, 5, "A", "Condiciones de Pago:");
+                UtilesHelper.setValorCelda(shCabecera, 5, "B", cotizacion.observaciones);
+                UtilesHelper.setValorCelda(shCabecera, 5, "C", "Observaciones:");
+                UtilesHelper.setValorCelda(shCabecera, 5, "D", cotizacion.textoCondicionesPago);
+
+                UtilesHelper.setValorCelda(shCabecera, 6, "A", "Sub Total:");
+                UtilesHelper.setValorCelda(shCabecera, 6, "B", Convert.ToDouble(cotizacion.montoTotal));
+                UtilesHelper.setValorCelda(shCabecera, 6, "C", "IGV:");
+                UtilesHelper.setValorCelda(shCabecera, 6, "D", Convert.ToDouble(cotizacion.montoIGV));
+                UtilesHelper.setValorCelda(shCabecera, 6, "E", "Total:");
+                UtilesHelper.setValorCelda(shCabecera, 6, "F", Convert.ToDouble(cotizacion.montoTotal));
+
+                //sh.GetRow(1).GetCell(1).SetCellValue(10);
+
+
+                for (int r = 0; r < 3; r++)
+                {
+                    var row = shCabecera.CreateRow(r);
+                    for (int c = 0; c < 8; c++)
+                    {
+                        row.CreateCell(c);
+                    }
+                }
+
+
+
+                using (var fs = new FileStream("C:\\Users\\cesar\\Documents\\MP2\\cotizador\\cotizacion.xls", FileMode.Create, FileAccess.Write))
+                    {
+                        wb.Write(fs);
+
+                    }
+            }
+
+            // get sheets list from xls
+            /*    using (var fs = new FileStream("test.xls", FileMode.Open, FileAccess.Read))
+                {
+                    wb = new HSSFWorkbook(fs);
+
+                    for (int i = 0; i < wb.Count; i++)
+                    {
+                        //comboBox1.Items.Add(wb.GetSheetAt(i).SheetName);
+                    }
+                }
+                */
+
+
+
+
         }
 
 

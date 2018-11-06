@@ -192,6 +192,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
             InputParameterAdd.Int(objCommand, "sinPlazoCreditoAprobado", cliente.sinPlazoCreditoAprobado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "bloqueado", cliente.bloqueado ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
             DataTable dataTable = Execute(objCommand);
 
             List<Cliente> clienteList = new List<Cliente>();
@@ -241,6 +242,11 @@ namespace DataLayer
                 ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
 
                 ClienteResultado.bloqueado = Converter.GetBool(row, "bloqueado");
+
+                ClienteResultado.grupoCliente = new GrupoCliente();
+                ClienteResultado.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                ClienteResultado.grupoCliente.nombre = Converter.GetString(row, "grupo");
+
                 clienteList.Add(ClienteResultado);
             }
 
@@ -312,16 +318,49 @@ namespace DataLayer
 
             InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados?1:0));
 
-            InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
-            
+            InputParameterAdd.SmallInt(objCommand, "bloqueado", (short)(cliente.bloqueado ? 1 : 0));
+
+            InputParameterAdd.SmallInt(objCommand, "perteneceCanalMultiregional", (short)(cliente.perteneceCanalMultiregional ? 1 : 0));
+            InputParameterAdd.SmallInt(objCommand, "perteneceCanalLima", (short)(cliente.perteneceCanalLima ? 1 : 0));
+            InputParameterAdd.SmallInt(objCommand, "perteneceCanalProvincias", (short)(cliente.perteneceCanalProvincias ? 1 : 0));
+            InputParameterAdd.SmallInt(objCommand, "perteneceCanalPCP", (short)(cliente.perteneceCanalPCP ? 1 : 0));
+            InputParameterAdd.SmallInt(objCommand, "esSubDistribuidor", (short)(cliente.esSubDistribuidor ? 1 : 0));
+
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente == null ? 0 : cliente.grupoCliente.idGrupoCliente);
+
+            DateTime dtTmp = DateTime.Now;
+            String[] horaTmp = cliente.horaInicioPrimerTurnoEntrega.Split(':');
+            DateTime horaInicioPrimerTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
+            InputParameterAdd.DateTime(objCommand, "horaInicioPrimerTurnoEntrega", horaInicioPrimerTurnoEntrega);
+            horaTmp = cliente.horaFinPrimerTurnoEntrega.Split(':');
+            DateTime horaFinPrimerTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);            
+            InputParameterAdd.DateTime(objCommand, "horaFinPrimerTurnoEntrega", horaFinPrimerTurnoEntrega);
+            if (cliente.horaInicioSegundoTurnoEntrega == null || cliente.horaFinSegundoTurnoEntrega == null
+                || cliente.horaInicioSegundoTurnoEntrega.Equals(String.Empty)
+                || cliente.horaFinSegundoTurnoEntrega.Equals(String.Empty))
+            {
+                InputParameterAdd.DateTime(objCommand, "horaInicioSegundoTurnoEntrega", null);
+                InputParameterAdd.DateTime(objCommand, "horaFinSegundoTurnoEntrega", null);
+            }
+            else
+            {
+                horaTmp = cliente.horaInicioSegundoTurnoEntrega.Split(':');
+                DateTime horaInicioSegundoTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
+                InputParameterAdd.DateTime(objCommand, "horaInicioSegundoTurnoEntrega", horaInicioSegundoTurnoEntrega);
+                horaTmp = cliente.horaFinSegundoTurnoEntrega.Split(':');
+                DateTime horaFinSegundoTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
+                InputParameterAdd.DateTime(objCommand, "horaFinSegundoTurnoEntrega", horaFinSegundoTurnoEntrega);
+            }
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.Int(objCommand, "codigoAlterno");
+            OutputParameterAdd.Varchar(objCommand, "codigo",4);
 
             ExecuteNonQuery(objCommand);
 
             cliente.idCliente = (Guid)objCommand.Parameters["@newId"].Value;
             cliente.codigoAlterno = (Int32)objCommand.Parameters["@codigoAlterno"].Value;
+            cliente.codigo = (String)objCommand.Parameters["@codigo"].Value;
 
             return cliente;
 
@@ -373,8 +412,31 @@ namespace DataLayer
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalPCP", (short)(cliente.perteneceCanalPCP ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "esSubDistribuidor", (short)(cliente.esSubDistribuidor ? 1 : 0));
 
-            InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
 
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente==null?0: cliente.grupoCliente.idGrupoCliente);
+            DateTime dtTmp = DateTime.Now;
+            String[] horaTmp = cliente.horaInicioPrimerTurnoEntrega.Split(':');
+            DateTime horaInicioPrimerTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
+            InputParameterAdd.DateTime(objCommand, "horaInicioPrimerTurnoEntrega", horaInicioPrimerTurnoEntrega);
+            horaTmp = cliente.horaFinPrimerTurnoEntrega.Split(':');
+            DateTime horaFinPrimerTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
+            InputParameterAdd.DateTime(objCommand, "horaFinPrimerTurnoEntrega", horaFinPrimerTurnoEntrega);
+            if (cliente.horaInicioSegundoTurnoEntrega == null || cliente.horaFinSegundoTurnoEntrega == null
+                || cliente.horaInicioSegundoTurnoEntrega.Equals(String.Empty)
+                || cliente.horaFinSegundoTurnoEntrega.Equals(String.Empty))
+            {
+                InputParameterAdd.DateTime(objCommand, "horaInicioSegundoTurnoEntrega", null);
+                InputParameterAdd.DateTime(objCommand, "horaFinSegundoTurnoEntrega", null);
+            }
+            else
+            {
+                horaTmp = cliente.horaInicioSegundoTurnoEntrega.Split(':');
+                DateTime horaInicioSegundoTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
+                InputParameterAdd.DateTime(objCommand, "horaInicioSegundoTurnoEntrega", horaInicioSegundoTurnoEntrega);
+                horaTmp = cliente.horaFinSegundoTurnoEntrega.Split(':');
+                DateTime horaFinSegundoTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
+                InputParameterAdd.DateTime(objCommand, "horaFinSegundoTurnoEntrega", horaFinSegundoTurnoEntrega);
+            }
             ExecuteNonQuery(objCommand);            
 
             return cliente;

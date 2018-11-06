@@ -76,7 +76,7 @@ namespace Model
             [Display(Name = "Compra")]
             Compra = 'C',  /*PEDIDO DE COMPRA*/
             [Display(Name = "Traslado Interno Recibido")]
-            TrasladoInterno = 'I', /*PEDIDO DE ALMACEN*/
+            TrasladoInterno = 'T', /*PEDIDO DE ALMACEN*/
             [Display(Name = "Comodato Recibido")]
             ComodatoRecibido = 'M', /*PEDIDO DE COMPRA*/
             [Display(Name = "Transferencia Gratuita Recibida")]
@@ -87,7 +87,7 @@ namespace Model
             [Display(Name = "Extorno de Venta")]
             DevolucionVenta = 'D', /*PEDIDO DE VENTA*/ 
             [Display(Name = "Extorno de Préstamo Entregado")]
-            DevolucionPrestamoEntregado = 'P',  /*PEDIDO DE ALMACEN*/
+            DevolucionPrestamoEntregado = 'E',  /*PEDIDO DE ALMACEN*/
             [Display(Name = "Extorno de Comodato Entregado")]
             DevolucionComodatoEntregado = 'F', /*PEDIDO DE VENTA*/
             [Display(Name = "Extorno de Transferencia Gratuita Entregada")]
@@ -104,7 +104,7 @@ namespace Model
             [Display(Name = "Compra")]
             Compra = 'C',  /*PEDIDO DE COMPRA*/
             [Display(Name = "Traslado Interno Recibido")]
-            TrasladoInterno = 'I', /*PEDIDO DE ALMACEN*/
+            TrasladoInterno = 'T', /*PEDIDO DE ALMACEN*/
             [Display(Name = "Comodato Recibido")]
             ComodatoRecibido = 'M', /*PEDIDO DE COMPRA*/
             [Display(Name = "Transferencia Gratuita Recibida")]
@@ -115,7 +115,7 @@ namespace Model
             [Display(Name = "Extorno de Venta")]
             DevolucionVenta = 'D', /*PEDIDO DE VENTA*/
             [Display(Name = "Extorno de Préstamo Entregado")]
-            DevolucionPrestamoEntregado = 'P',  /*PEDIDO DE ALMACEN*/
+            DevolucionPrestamoEntregado = 'E',  /*PEDIDO DE ALMACEN*/
             [Display(Name = "Extorno de Comodato Entregado")]
             DevolucionComodatoEntregado = 'F', /*PEDIDO DE VENTA*/
             [Display(Name = "Extorno de Transferencia Gratuita Entregada")]

@@ -272,6 +272,163 @@ namespace Model
         #endregion
 
 
-    }
+        
+        public static string CUERPO_CORREO_SOLICITUD_DE_BAJA = @"<html>
+<head>
+    <meta http-equiv=Content-Type content='text/html; charset=windows-1252'>
+    <meta name=Generator content='Microsoft Word 15 (filtered)'>
+    <style>
+        <!--
+        /* Font Definitions */
+        @font-face {
+            font-family: 'Cambria Math';
+            panose-1: 2 4 5 3 5 4 6 3 2 4;
+        }
+
+        @font-face {
+            font-family: Calibri;
+            panose-1: 2 15 5 2 2 2 4 3 2 4;
+        }
+
+        @font-face {
+            font-family: 'Segoe UI';
+            panose-1: 2 11 5 2 4 2 4 2 2 3;
+        }
+        /* Style Definitions */
+        p.MsoNormal, li.MsoNormal, div.MsoNormal {
+            margin-top: 0cm;
+            margin-right: 0cm;
+            margin-bottom: 8.0pt;
+            margin-left: 0cm;
+            line-height: 107%;
+            font-size: 11.0pt;
+            font-family: 'Calibri',sans-serif;
+        }
+
+        a:link, span.MsoHyperlink {
+            color: blue;
+            text-decoration: underline;
+        }
+
+        a:visited, span.MsoHyperlinkFollowed {
+            color: #954F72;
+            text-decoration: underline;
+        }
+
+        .MsoPapDefault {
+            margin-bottom: 8.0pt;
+            line-height: 107%;
+        }
+
+        @page WordSection1 {
+            size: 595.3pt 841.9pt;
+            margin: 70.85pt 3.0cm 70.85pt 3.0cm;
+        }
+
+        div.WordSection1 {
+            page: WordSection1;
+        }
+        -->
+    </style>
+
+</head>
+
+<body lang=ES link=blue vlink='#954F72'>
+
+    <div class=WordSection1>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <span style='font-size:11.5pt;font-family:'Segoe UI',sans-serif;
+color:#212121'>Estimado Cliente,</span>
+        </p>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <span style='font-size:11.5pt;font-family:'Segoe UI',sans-serif;
+color:#212121'>&nbsp;</span>
+        </p>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <span style='font-size:11.5pt;font-family:'Segoe UI',sans-serif;
+color:#212121'>
+                Se le informa que la factura electrÃ³nica NÂ°&nbsp;<span >F{xxx}-{xxxxxxxx}</span>, enviada por correo
+                electrÃ³nico el dÃ­a&nbsp;<span>{xx/xx}</span>&nbsp;ha
+                sido ANULADA en SUNAT, por haberse detectado un error en la emisiÃ³n.&nbsp;
+                &nbsp;
+            </span>
+        </p>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <span style='font-size:11.5pt;font-family:'Segoe UI',sans-serif;
+color:#212121'>&nbsp;</span>
+        </p>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <span style='font-size:11.5pt;font-family:'Segoe UI',sans-serif;
+color:#212121'>NOTA:&nbsp;</span><span style='font-size:10.0pt;font-family:
+'Segoe UI',sans-serif;color:#212121'>
+                Si desea cambiar el buzÃ³n de correo para
+                la recepciÃ³n de documentos electrÃ³nicos, por favor ingrese a
+            </span><span style='font-size:11.5pt;font-family:'Segoe UI',sans-serif;color:#212121'>
+                <a href='http://mpinstitucional.com/buzon.facturas' target='_blank'>
+                    <span style='font-size:10.0pt'>http://mpinstitucional.com/buzon.facturas</span>
+                </a>
+            </span>
+        </p>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <span style='font-size:10.0pt;font-family:'Segoe UI',sans-serif;
+color:#212121'>y complete el formulario.&nbsp;</span>
+        </p>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <span style='font-size:11.5pt;font-family:'Segoe UI',sans-serif;
+color:#212121'>&nbsp;</span>
+        </p>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <span style='font-size:11.5pt;font-family:'Segoe UI',sans-serif;
+color:#212121'>Agradeceremos confirmar la recepciÃ³n del presente correo.</span>
+        </p>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <span style='font-size:11.5pt;font-family:'Segoe UI',sans-serif;
+color:#212121'>&nbsp;</span>
+        </p>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <span style='font-size:11.5pt;font-family:'Segoe UI',sans-serif;
+color:#212121'>FacturaciÃ³n ElectrÃ³nica</span>
+        </p>
+
+        <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+normal;background:white'>
+            <b>
+                <span style='font-size:12.0pt;color:#212121'>
+                    MP
+                    INSTITUCIONAL S.A.C.
+                </span>
+            </b>
+        </p>
+
+        <p class=MsoNormal>&nbsp;</p>
+
+    </div>
+
+</body>
+
+</html>
+";
+
+        }
 
 }

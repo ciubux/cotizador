@@ -157,15 +157,15 @@
 
         <div class="row">
 
-            <!--FECHA SOLICITUD-->
+            <!--FECHA CREACIÓN-->
             <div class="col-sm-6 col-lg-4">
-                <label for="pedido_fechaSolicitudDesde" class="control-label col-xs-6 col-lg-4">Fecha de Solicitud:</label>
+                <label for="pedido_fechaCreacionDesde" class="control-label col-xs-6 col-lg-4">Fecha de Creación:</label>
                 <div class="input-group col-xs-6 col-lg-8">
                     <div class="input-group-addon" style="width:70px">
                         <span class="input-group-text" id="basic-addon1">Desde:</span>
                     </div>
-                    <input type="hidden" id="fechaSolicitudDesdetmp" value="@ViewBag.fechaSolicitudDesde" />
-                    <input class="form-control" type="text" id="pedido_fechaSolicitudDesde" name="pedido_fechaSolicitudDesde">
+                    <input type="hidden" id="fechaCreacionDesdetmp" value="@ViewBag.fechaCreacionDesde" />
+                    <input class="form-control" type="text" id="pedido_fechaCreacionDesde" name="pedido_fechaCreacionDesde">
                 </div>
                 <label for="fechaSolicitudHasta" class="control-label col-xs-6 col-lg-4"></label>
                 <div class="input-group col-xs-6 col-lg-8">
@@ -173,8 +173,8 @@
                     <div class="input-group-addon" style="width:70px">
                         <span class="input-group-text" id="basic-addon1">Hasta:</span>
                     </div>
-                    <input type="hidden" id="fechaSolicitudHastatmp" value="@ViewBag.fechaSolicitudHasta" />
-                    <input class="form-control" type="text" id="pedido_fechaSolicitudHasta" name="pedido_fechaSolicitudHasta">
+                    <input type="hidden" id="fechaCreacionHastatmp" value="@ViewBag.fechaCreacionHasta" />
+                    <input class="form-control" type="text" id="pedido_fechaCreacionHasta" name="pedido_fechaCreacionHasta">
 
                 </div>
             </div>
@@ -296,16 +296,17 @@
                     <th data-name="numeroReferenciaCliente" data-visible="true">O/C N°</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
                     <th data-name="fechaRegistro" data-sortable="true" data-breakpoints="xs">Fecha Registro</th>
-                    <th data-name="fechaSolicitud" data-sortable="true" data-breakpoints="xs">Fecha y Hora Solicitud</th>
+                    <!--<th data-name="fechaSolicitud" data-sortable="true" data-breakpoints="xs">Fecha y Hora Solicitud</th>-->
                     <th data-name="rangoFechaEntrega" data-sortable="true" data-breakpoints="xs">Rango Fecha Entrega</th>
-                    <th data-name="fechaProgramacion" data-sortable="true" data-breakpoints="xs">Programado Para:</th>
-                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (No Inc. IGV)</th>
+                    <th data-name="horarioEntrega" data-sortable="true" data-breakpoints="xs">Horarios Entrega</th>
+                    <!--<th data-name="fechaProgramacion" data-sortable="true" data-breakpoints="xs">Programado Para:</th>-->
+                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (Incl. IGV)</th>
                     <th data-name="distrito" data-sortable="true" data-breakpoints="xs">Distrito Entrega</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado Atención</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
                     <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
                     <th data-name="estadoCrediticio" data-sortable="true" data-breakpoints="xs">Estado Crediticio</th>
-
+                    <th data-name="observaciones" data-sortable="true" data-breakpoints="xs">Obs. Uso Interno</th>
 
                     @if (pedido.usuario.confirmaStock)
                     {
@@ -314,9 +315,10 @@
                     }
                     else
                     {
-                        <th data-name="stockConfirmado" data-visible="false">Stock</th>
-                        <th data-name="stockConfirmado" data-visible="true">Stock</th>
+                                    <th data-name="stockConfirmado" data-visible="false">Stock</th>
+                                    <th data-name="stockConfirmado" data-visible="true">Stock</th>
                     }
+
 
 
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
@@ -728,7 +730,7 @@
                                          }
                                 -->
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
-                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm"></th>
+                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
                                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
                                 <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>

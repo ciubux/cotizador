@@ -1603,7 +1603,12 @@ jQuery(function ($) {
     }
 
     $(document).on('click', "button.btnVerCotizacion", function () {
-        
+
+        $('body').loadingModal({
+            text: 'Abriendo Cotización...'
+        });
+        $('body').loadingModal('show');
+
         activarBotonesVer();
         var codigo = event.target.getAttribute("class").split(" ")[0];
       //  $("#tableDetalleCotizacion > tbody").empty();
@@ -1616,9 +1621,13 @@ jQuery(function ($) {
             },
             type: 'POST',
             dataType: 'JSON',
-            error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + ".");
+            },
             success: function (resultado) {
                 //var cotizacion = $.parseJSON(respuesta);
+                $('body').loadingModal('hide');
                 var cotizacion = resultado.cotizacion;
                 var usuario = resultado.usuario;
 

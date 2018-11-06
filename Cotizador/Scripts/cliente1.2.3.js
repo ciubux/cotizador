@@ -724,6 +724,24 @@ jQuery(function ($) {
         changeInputDecimal("sobreGiro", $("#cliente_sobreGiro").val())
     });
 
+    /*
+    function changeInputTime(propiedad, valor) {
+        $.ajax({
+            url: "/Cliente/ChangeInputTime",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }*/
+
+
+
+    $("#cliente_horaInicioPrimerTurnoEntregaFormat").change(function () {
+        changeInputString("horaInicioPrimerTurnoEntrega", $("#cliente_horaInicioPrimerTurnoEntregaFormat").val())
+    });
 
 
 
@@ -1502,16 +1520,21 @@ jQuery(function ($) {
     
 
     $("#btnBusqueda").click(function () {
-        if ($("#cliente_textoBusqueda").val().length < 4 &&
+
+
+
+        if ($("#cliente_textoBusqueda").val().length < 3 &&
             $("#idResponsableComercial").val() == 0 &&
             $("#idSupervisorComercial").val() == 0 &&
             $("#idAsistenteServicioCliente").val() == 0 &&
             $("input[name=cliente_bloqueadoBusqueda]:checked").val() == 0 &&
-            $("input[name=cliente_sinPlazoCredito]:checked").val() == 0
+            $("input[name=cliente_sinPlazoCredito]:checked").val() == 0 &&
+            $("#cliente_codigo").val().trim().length == 0 &&
+            $("#idGrupoCliente").val() == 0
             ) {
             $.alert({
-                title: 'Validacion',
-                content: 'Si no ha seleccionado en los criterios de búsqueda algún responsable, un grupo o no ha marcado la opción solo bloqueados o solo sin plazo de crédito entonces debe ingresar el texto a buscar utilizando 3 o más caracteres en el campo "N° Doc / Razón Social / Nombre".',
+                title: 'Ingresar texto a buscar',
+                content: 'Debe ingresar el texto a buscar utilizando 3 o más caracteres en el campo "N° Doc / Razón Social / Nombre"',
                 type: 'orange',
                 buttons: {
                     OK: function () {
@@ -1562,6 +1585,7 @@ jQuery(function ($) {
                         '<td>  ' + clienteList[i].tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + clienteList[i].ruc + '  </td>' +
                         '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
+                        '<td>  ' + clienteList[i].grupoCliente.nombre + '  </td>' +
                         '<td>  ' + clienteList[i].responsableComercial.descripcion + '</td>' +
                         '<td>  ' + clienteList[i].supervisorComercial.descripcion + '</td>' +
                         '<td>  ' + clienteList[i].asistenteServicioCliente.descripcion + '</td>' +
@@ -1586,6 +1610,10 @@ jQuery(function ($) {
     });
 
     $(document).on('click', "button.btnVerCliente", function () {
+        $('body').loadingModal({
+            text: 'Abriendo Cliente...'
+        });
+        $('body').loadingModal('show');
 
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idCliente = arrrayClass[0];
@@ -1599,6 +1627,7 @@ jQuery(function ($) {
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
+                $('body').loadingModal('hide');
                 mostrarMensajeErrorProceso();
             },
             success: function (cliente) {
@@ -1655,7 +1684,32 @@ jQuery(function ($) {
                 $("#verAsistenteServicioCliente").html(cliente.asistenteServicioCliente.descripcion);
 
 
+                $("#verGrupoCliente").html(cliente.grupoCliente.nombre)
 
+                var count = 5;
+                if (!cliente.perteneceCanalMultiregional) {
+                    $("#li_perteneceCanalMultiregional").hide();
+                    count--;
+                }
+                if (!cliente.perteneceCanalLima) {
+                    $("#li_perteneceCanalLima").hide();
+                    count--;
+                }
+                if (!cliente.perteneceCanalProvincias) {
+                    $("#li_perteneceCanalProvincias").hide();
+                    count--;
+                }
+                if (!cliente.perteneceCanalPCP) {
+                    $("#li_perteneceCanalPCP").hide();
+                    count--;
+                }
+                if (!cliente.esSubDistribuidor) {
+                    $("#li_esSubDistribuidor").hide();
+                    count--;
+                }
+
+                if (count == 0)
+                    $("#fieldset_canales").hide();
              //   $("#btnEditarCliente").show();
                 
                 $("#modalVerCliente").modal('show');

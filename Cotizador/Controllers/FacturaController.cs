@@ -150,37 +150,37 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             VentaBL ventaBL = new VentaBL();
-            Venta venta = new Venta();
+            Transaccion transaccion = new Transaccion();
 
-            venta.documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
-            venta.documentoVenta.venta = null;
-            venta.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
-            venta.documentoVenta.idDocumentoVenta = Guid.Parse(Request["idDocumentoVenta"].ToString());
+            transaccion.documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
+            transaccion.documentoVenta.venta = null;
+            transaccion.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+            transaccion.documentoVenta.idDocumentoVenta = Guid.Parse(Request["idDocumentoVenta"].ToString());
 
-            venta.documentoReferencia = new DocumentoReferencia();
-            venta.documentoReferencia.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(venta.documentoVenta.cPE_CABECERA_BE.TIP_CPE);
-            String[] fechaEmisionArray = venta.documentoVenta.cPE_CABECERA_BE.FEC_EMI.Split('-');
-            venta.documentoReferencia.fechaEmision = new DateTime(Int32.Parse(fechaEmisionArray[0]), Int32.Parse(fechaEmisionArray[1]), Int32.Parse(fechaEmisionArray[2]));
+            transaccion.documentoReferencia = new DocumentoReferencia();
+            transaccion.documentoReferencia.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(transaccion.documentoVenta.cPE_CABECERA_BE.TIP_CPE);
+            String[] fechaEmisionArray = transaccion.documentoVenta.cPE_CABECERA_BE.FEC_EMI.Split('-');
+            transaccion.documentoReferencia.fechaEmision = new DateTime(Int32.Parse(fechaEmisionArray[0]), Int32.Parse(fechaEmisionArray[1]), Int32.Parse(fechaEmisionArray[2]));
             
-            venta.documentoReferencia.serie = venta.documentoVenta.cPE_CABECERA_BE.SERIE;
-            venta.documentoReferencia.numero = venta.documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
+            transaccion.documentoReferencia.serie = transaccion.documentoVenta.cPE_CABECERA_BE.SERIE;
+            transaccion.documentoReferencia.numero = transaccion.documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
 
-            venta = ventaBL.GetPlantillaVenta(venta, usuario);
-            if (venta.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+            transaccion = ventaBL.GetPlantillaVenta(transaccion, usuario);
+            if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
             {
                // venta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
-                venta.documentoVenta.fechaEmision = DateTime.Now;
-                venta.documentoVenta.fechaVencimiento = venta.documentoVenta.fechaEmision.Value;
+                transaccion.documentoVenta.fechaEmision = DateTime.Now;
+                transaccion.documentoVenta.fechaVencimiento = transaccion.documentoVenta.fechaEmision.Value;
                 //venta.documentoVenta.formaPago
                 //Temporal
-                Pedido pedido = venta.pedido;
+                Pedido pedido = transaccion.pedido;
                 pedido.ciudadASolicitar = new Ciudad();
 
                 PedidoBL pedidoBL = new PedidoBL();
                 pedidoBL.calcularMontosTotales(pedido);
-                this.Session[Constantes.VAR_SESSION_FACTURA] = venta;
+                this.Session[Constantes.VAR_SESSION_FACTURA] = transaccion;
             }
-            return JsonConvert.SerializeObject(venta);
+            return JsonConvert.SerializeObject(transaccion);
 
         }
 

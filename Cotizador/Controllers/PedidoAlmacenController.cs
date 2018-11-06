@@ -44,8 +44,8 @@ namespace Cotizador.Controllers
             pedidoTmp.solicitante = new Solicitante();
             pedidoTmp.direccionEntrega = new DireccionEntrega();
 
-            pedidoTmp.fechaSolicitudDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
-            pedidoTmp.fechaSolicitudHasta = fechaHasta;
+            pedidoTmp.fechaCreacionDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
+            pedidoTmp.fechaCreacionHasta = fechaHasta;
 
             pedidoTmp.fechaEntregaDesde = null;
             pedidoTmp.fechaEntregaHasta = null;
@@ -105,9 +105,13 @@ namespace Cotizador.Controllers
 
             }
 
+            ViewBag.fechaCreacionDesde = pedidoSearch.fechaCreacionDesde.ToString(Constantes.formatoFecha);
+            ViewBag.fechaCreacionHasta = pedidoSearch.fechaCreacionHasta.ToString(Constantes.formatoFecha);
+
+            /*
             ViewBag.fechaSolicitudDesde = pedidoSearch.fechaSolicitudDesde.ToString(Constantes.formatoFecha);
             ViewBag.fechaSolicitudHasta = pedidoSearch.fechaSolicitudHasta.ToString(Constantes.formatoFecha);
-
+            */
 
             if (pedidoSearch.fechaEntregaDesde != null)
                 ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
@@ -1325,11 +1329,11 @@ namespace Cotizador.Controllers
             //Se recupera el pedido Búsqueda de la session
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ALMACEN_BUSQUEDA];
 
-            String[] solDesde = this.Request.Params["fechaSolicitudDesde"].Split('/');
-            pedido.fechaSolicitudDesde = new DateTime(Int32.Parse(solDesde[2]), Int32.Parse(solDesde[1]), Int32.Parse(solDesde[0]));
+            String[] solDesde = this.Request.Params["fechaCreacionDesde"].Split('/');
+            pedido.fechaCreacionDesde = new DateTime(Int32.Parse(solDesde[2]), Int32.Parse(solDesde[1]), Int32.Parse(solDesde[0]));
 
-            String[] solHasta = this.Request.Params["fechaSolicitudHasta"].Split('/');
-            pedido.fechaSolicitudHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]),23,59,59);
+            String[] solHasta = this.Request.Params["fechaCreacionHasta"].Split('/');
+            pedido.fechaCreacionHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]), 23, 59, 59);
 
             if (this.Request.Params["fechaEntregaDesde"] == null || this.Request.Params["fechaEntregaDesde"].Equals(""))
             {

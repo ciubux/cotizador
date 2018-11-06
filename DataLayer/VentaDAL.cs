@@ -215,53 +215,53 @@ namespace DataLayer
         
 
 
-        public Venta SelectPlantillaVenta(Venta venta, Usuario usuario)
+        public Transaccion SelectPlantillaVenta(Transaccion transaccion, Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_plantillaVenta");
-            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", venta.documentoVenta.idDocumentoVenta);
-            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)venta.documentoVenta.tipoDocumento);
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", transaccion.documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)transaccion.documentoVenta.tipoDocumento);
 
             OutputParameterAdd.Int(objCommand, "tipoError");
             OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
 
             DataSet dataSet = ExecuteDataSet(objCommand);
-            venta.tipoErrorCrearTransaccion = (Venta.TiposErrorCrearTransaccion)(int)objCommand.Parameters["@tipoError"].Value;
-            venta.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+            transaccion.tipoErrorCrearTransaccion = (Venta.TiposErrorCrearTransaccion)(int)objCommand.Parameters["@tipoError"].Value;
+            transaccion.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
 
-            if (venta.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+            if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
             {
                 DataTable ventaDataTable = dataSet.Tables[0];
                 DataTable ventaDetalleDataTable = dataSet.Tables[1];
 
                 //   DataTable dataTable = Execute(objCommand);
                 //Datos de la cotizacion
-                venta.pedido = new Pedido();
-                Pedido pedido = venta.pedido;
+                transaccion.pedido = new Pedido();
+                Pedido pedido = transaccion.pedido;
 
                 foreach (DataRow row in ventaDataTable.Rows)
                 {
-                    venta.cliente = new Cliente();
-                    venta.cliente.codigo = Converter.GetString(row, "codigo");
-                    venta.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                    venta.cliente.razonSocial = Converter.GetString(row, "razon_social");
-                    venta.cliente.ruc = Converter.GetString(row, "ruc");
-                    venta.cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
-                    venta.cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
-                    venta.cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
-                    venta.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
-                    venta.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
-                    venta.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
-                    venta.cliente.ciudad = new Ciudad();
-                    venta.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                    venta.documentoVenta.serie = Converter.GetString(row, "serie");
-                    venta.documentoVenta.numero = Converter.GetInt(row, "correlativo").ToString().PadLeft(8, '0');
-                    venta.pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
-                    venta.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
-                    venta.pedido.observacionesFactura = Converter.GetString(row, "observaciones");
-                    venta.guiaRemision = new GuiaRemision();
-                    venta.guiaRemision.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
-                    venta.guiaRemision.serieDocumento = Converter.GetString(row, "serie_guia_remision");
-                    venta.guiaRemision.numeroDocumento = Converter.GetInt(row, "numero_guia_remision");
+                    transaccion.cliente = new Cliente();
+                    transaccion.cliente.codigo = Converter.GetString(row, "codigo");
+                    transaccion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                    transaccion.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                    transaccion.cliente.ruc = Converter.GetString(row, "ruc");
+                    transaccion.cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                    transaccion.cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
+                    transaccion.cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
+                    transaccion.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
+                    transaccion.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                    transaccion.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
+                    transaccion.cliente.ciudad = new Ciudad();
+                    transaccion.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                    transaccion.documentoVenta.serie = Converter.GetString(row, "serie");
+                    transaccion.documentoVenta.numero = Converter.GetInt(row, "correlativo").ToString().PadLeft(8, '0');
+                    transaccion.pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
+                    transaccion.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+                    transaccion.pedido.observacionesFactura = Converter.GetString(row, "observaciones");
+                    transaccion.guiaRemision = new GuiaRemision();
+                    transaccion.guiaRemision.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                    transaccion.guiaRemision.serieDocumento = Converter.GetString(row, "serie_guia_remision");
+                    transaccion.guiaRemision.numeroDocumento = Converter.GetInt(row, "numero_guia_remision");
                 }
 
 
@@ -337,7 +337,7 @@ namespace DataLayer
                 }
                 pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
             }
-            return venta;
+            return transaccion;
         }
 
 

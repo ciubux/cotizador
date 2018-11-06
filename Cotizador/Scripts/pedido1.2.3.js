@@ -590,19 +590,18 @@ jQuery(function ($) {
     var fechaSolicitud = $("#fechaSolicitudTmp").val();
     $("#fechaSolicitud").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitud);
 
-    var fechaSolicitudDesde = $("#fechaSolicitudDesdetmp").val();
-    $("#pedido_fechaSolicitudDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudDesde);
+    var fechaCreacionDesde = $("#fechaCreacionDesdetmp").val();
+    $("#pedido_fechaCreacionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaCreacionDesde);
 
-    var fechaSolicitudHasta = $("#fechaSolicitudHastatmp").val();
-    $("#pedido_fechaSolicitudHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitudHasta);
-
+    var fechaCreacionHasta = $("#fechaCreacionHastatmp").val();
+    $("#pedido_fechaCreacionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaCreacionHasta);
+    
     var fechaEntregaDesde = $("#fechaEntregaDesdetmp").val();
     $("#pedido_fechaEntregaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
 
     var fechaEntregaHasta = $("#fechaEntregaHastatmp").val();
     $("#pedido_fechaEntregaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
-
-
+    
 
     var fechaProgramacionDesde = $("#fechaProgramacionDesdetmp").val();
     $("#pedido_fechaProgramacionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacionDesde);
@@ -2480,7 +2479,11 @@ jQuery(function ($) {
 
     /*VER PEDIDO*/
     $(document).on('click', "button.btnVerPedido", function () {
-        
+
+        $('body').loadingModal({
+            text: 'Abriendo Pedido...'
+        });
+        $('body').loadingModal('show');
         activarBotonesVer();
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idPedido = arrrayClass[0];
@@ -2497,9 +2500,11 @@ jQuery(function ($) {
             dataType: 'JSON',
             error: function (detalle) {
                 //alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + ".");
+                $('body').loadingModal('hide');
                 mostrarMensajeErrorProceso();
             },
             success: function (resultado) {
+                $('body').loadingModal('hide');
                 //var cotizacion = $.parseJSON(respuesta);
                 var pedido = resultado.pedido;
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
@@ -3957,9 +3962,8 @@ jQuery(function ($) {
        
         var idCiudad = $("#idCiudad").val();
         var idCliente = $("#idCliente").val();
-        var fechaSolicitudDesde = $("#pedido_fechaSolicitudDesde").val();
-        var fechaSolicitudHasta = $("#pedido_fechaSolicitudHasta").val();
-        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
+        var fechaCreacionDesde = $("#pedido_fechaCreacionDesde").val();
+        var fechaCreacionHasta = $("#pedido_fechaCreacionHasta").val();
         var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
         var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
         var fechaProgramacionDesde = $("#pedido_fechaProgramacionDesde").val();
@@ -3976,8 +3980,8 @@ jQuery(function ($) {
             data: {
                 idCiudad: idCiudad,
                 idCliente: idCliente,
-                fechaSolicitudDesde: fechaSolicitudDesde,
-                fechaSolicitudHasta: fechaSolicitudHasta,
+                fechaCreacionDesde: fechaCreacionDesde,
+                fechaCreacionHasta: fechaCreacionHasta,
                 fechaEntregaDesde: fechaEntregaDesde,
                 fechaEntregaHasta: fechaEntregaHasta,
                 fechaProgramacionDesde: fechaProgramacionDesde,
@@ -4051,6 +4055,22 @@ jQuery(function ($) {
                         numeroReferenciaCliente = '';
                     }*/
 
+                    var observaciones = pedidoList[i].observaciones == null || pedidoList[i].observaciones == 'undefined' ? '' : pedidoList[i].observaciones;
+
+                    if (pedidoList[i].observaciones != null && pedidoList[i].observaciones.length > 20) {
+                        var idComentarioCorto = pedidoList[i].idPedido + "corto";
+                        var idComentarioLargo = pedidoList[i].idPedido + "largo";
+                        var idVerMas = pedidoList[i].idPedido + "verMas";
+                        var idVermenos = pedidoList[i].idPedido + "verMenos";
+                        var comentario = pedidoList[i].observaciones.substr(0, 20) + "...";
+
+                        observaciones = '<div id="' + idComentarioCorto + '" style="display:block;">' + comentario + '</div>' +
+                            '<div id="' + idComentarioLargo + '" style="display:none;">' + pedidoList[i].observaciones + '</div>' +
+                            '<p><a id="' + idVerMas + '" class="' + pedidoList[i].idPedido + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
+                            '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
+                    }
+                    
+
                     var pedido = '<tr data-expanded="true">' +
                         '<td>  ' + pedidoList[i].idPedido+'</td>' +
                         '<td>  ' + pedidoList[i].numeroPedidoString + '  </td>' +
@@ -4060,15 +4080,16 @@ jQuery(function ($) {
                         '<td>  ' + pedidoList[i].numeroReferenciaCliente+'  </td>' +
                         '<td>  ' + pedidoList[i].usuario.nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].fechaHoraRegistro + '</td>' +
-                        '<td>  ' + pedidoList[i].fechaHoraSolicitud + '</td>' +                        
+                        //'<td>  ' + pedidoList[i].fechaHoraSolicitud + '</td>' +                        
                         '<td>  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
-                        '<td>  ' + fechaProgramacion+ '</td>' +
+                        '<td>  ' + pedidoList[i].rangoHoraEntrega + '</td>' + //horarioEntrega
                         '<td>  ' + pedidoList[i].montoTotal + '  </td>' +
                         '<td>  ' + pedidoList[i].ubigeoEntrega.Distrito + '  </td>' +
                         '<td>  ' + pedidoList[i].seguimientoPedido.estadoString+'</td>' +
                       //  '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
                       //  '<td>  ' + observacion+'  </td>' +
                         '<td>  ' + pedidoList[i].seguimientoCrediticioPedido.estadoString + '</td>' +
+                        '<td> ' + observaciones + ' </td>' + 
                         '<td>' + stockConfirmado + '</td>' +
                         '<td>' + stockConfirmadoLectura + '</td>' +
                         '<td>' +

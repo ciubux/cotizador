@@ -160,6 +160,9 @@ namespace Model
             }
         }
 
+
+
+
         public Boolean existeCambioDireccionEntrega { get; set; }
 
         public Boolean existeCambioSolicitante { get; set; }
@@ -349,7 +352,7 @@ namespace Model
         public tiposPedidoAlmacen tipoPedidoAlmacen { get; set; }
         public enum tiposPedidoAlmacen
         {
-            [Display(Name = "Solicitud de Traslado Interno")]
+            [Display(Name = "Solicitud de Traslado")]
             TrasladoInterno = 'T', //GUIA REMISION
        //     [Display(Name = "Recepción de Traslado Interno")]
        //s     TrasladoInternoRecibido = 'I',  //NOTA INGRESO
@@ -442,6 +445,11 @@ namespace Model
         public DateTime fechaSolicitudDesde { get; set; }
         [Display(Name = "Solicitado Hasta:")]
         public DateTime fechaSolicitudHasta { get; set; }
+        [Display(Name = "Creado Desde:")]
+        public DateTime fechaCreacionDesde { get; set; }
+        [Display(Name = "Creado Hasta:")]
+        public DateTime fechaCreacionHasta { get; set; }
+
         [Display(Name = "Programado Desde:")]
         public DateTime? fechaProgramacionDesde { get; set; }
         [Display(Name = "Programado Hasta:")]

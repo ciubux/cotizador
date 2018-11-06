@@ -239,7 +239,13 @@ namespace BusinessLayer
                 if (cliente.asistenteServicioCliente.idVendedor == 0)
                 {
                     cliente.asistenteServicioCliente.idVendedor = Constantes.ID_VENDEDOR_POR_ASIGNAR;
+                    cliente.vendedoresAsignados = false;
                 }
+                else 
+                {
+                    cliente.vendedoresAsignados = cliente.usuario.modificaResponsableComercial;
+                }
+
                 if (cliente.supervisorComercial.idVendedor == 0)
                 {
                     cliente.supervisorComercial.idVendedor = Constantes.ID_VENDEDOR_POR_ASIGNAR;
@@ -247,10 +253,6 @@ namespace BusinessLayer
                 if (cliente.responsableComercial.idVendedor == 0)
                 {
                     cliente.responsableComercial.idVendedor = Constantes.ID_VENDEDOR_POR_ASIGNAR;
-                }
-                else if(!cliente.vendedoresAsignados)
-                {
-                    cliente.vendedoresAsignados = cliente.usuario.modificaResponsableComercial;
                 }
                 return clienteDAL.insertClienteSunat(cliente);
             }
@@ -263,7 +265,13 @@ namespace BusinessLayer
                 if (cliente.asistenteServicioCliente.idVendedor == 0)
                 {
                     cliente.asistenteServicioCliente.idVendedor = Constantes.ID_VENDEDOR_POR_ASIGNAR;
+                    cliente.vendedoresAsignados = false;
                 }
+                else if (!cliente.vendedoresAsignados)
+                {
+                    cliente.vendedoresAsignados = cliente.usuario.modificaResponsableComercial;
+                }
+
                 if (cliente.supervisorComercial.idVendedor == 0)
                 {
                     cliente.supervisorComercial.idVendedor = Constantes.ID_VENDEDOR_POR_ASIGNAR;
@@ -272,10 +280,8 @@ namespace BusinessLayer
                 {
                     cliente.responsableComercial.idVendedor = Constantes.ID_VENDEDOR_POR_ASIGNAR;
                 }
-                else if (!cliente.vendedoresAsignados)
-                {
-                    cliente.vendedoresAsignados = cliente.usuario.modificaResponsableComercial;
-                }
+
+               
                 return clienteDAL.updateClienteSunat(cliente);
             }
         }

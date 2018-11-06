@@ -121,6 +121,14 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 
+        public void ChangeInputTime()
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(cliente, Int32.Parse(this.Request.Params["valor"]));
+            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+        }
+
 
         public void ChangeFormaPagoFactura()
         {
@@ -160,6 +168,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             cliente.IdUsuarioRegistro = usuario.idUsuario;
             cliente.usuario = usuario;
+            cliente.grupoCliente = new GrupoCliente();
 
             this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA] = cliente;
         }
@@ -235,7 +244,7 @@ namespace Cotizador.Controllers
             ClienteBL clienteBL = new ClienteBL();
             List<Cliente> clienteList = clienteBL.getClientes(cliente);
             //Se coloca en session el resultado de la búsqueda
-            this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = clienteList;
+            this.Session[Constantes.VAR_SESSION_CLIENTE_LISTA] = clienteList;
             //Se retorna la cantidad de elementos encontrados
             return JsonConvert.SerializeObject(clienteList);
             //return pedidoList.Count();
@@ -341,11 +350,17 @@ namespace Cotizador.Controllers
             if (this.Request.Params["idGrupoCliente"] != null && !this.Request.Params["idGrupoCliente"].Equals(""))
             {
                 idGrupoCliente = Int32.Parse(this.Request.Params["idGrupoCliente"]);
+                GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
+                List<GrupoCliente> grupoClientList = grupoClienteBL.getGruposCliente();
+                cliente.grupoCliente = grupoClientList.Where(g => g.idGrupoCliente == idGrupoCliente).FirstOrDefault();
+
+            }
+            else
+            {
+                cliente.grupoCliente.idGrupoCliente = 0;
+                cliente.grupoCliente.nombre = String.Empty;
             }
 
-            GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
-            List<GrupoCliente> grupoClientList = grupoClienteBL.getGruposCliente();
-            cliente.grupoCliente = grupoClientList.Where(g => g.idGrupoCliente == idGrupoCliente).FirstOrDefault();
             this.ClienteSession = cliente;
             return "{\"idGrupoCliente\": \"" + idGrupoCliente + "\"}";
 
@@ -356,8 +371,11 @@ namespace Cotizador.Controllers
             ClienteBL clienteBL = new ClienteBL();
             Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
             cliente = clienteBL.insertClienteSunat(cliente);
-            String resultado = JsonConvert.SerializeObject(cliente);
-            this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+            if (cliente.codigo != null && !cliente.codigo.Equals(""))
+            {
+                this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+            }
+            String resultado = JsonConvert.SerializeObject(cliente);            
             return resultado;
         }
 
@@ -369,13 +387,18 @@ namespace Cotizador.Controllers
             if (cliente.idCliente == Guid.Empty)
             {
                 cliente = clienteBL.insertClienteSunat(cliente);
+                if (cliente.codigo != null && !cliente.codigo.Equals(""))
+                {
+                    this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+                }
             }
             else
             {
                 cliente = clienteBL.updateClienteSunat(cliente);
+                this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
             }
             String resultado = JsonConvert.SerializeObject(cliente);
-            this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+            //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
             return resultado;
         }
 

@@ -577,7 +577,12 @@ jQuery(function ($) {
 
     /*VER GUIAREMISION*/
     $(document).on('click', "button.btnVerGuiaRemision", function () {
-        
+
+        $('body').loadingModal({
+            text: 'Abriendo Guía de Remisión...'
+        });
+        $('body').loadingModal('show');
+
         activarBotonesVer();
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idMovimientoAlmacen = arrrayClass[0];
@@ -595,10 +600,11 @@ jQuery(function ($) {
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
+                $('body').loadingModal('hide');
                 alert(MENSAJE_ERROR);
             },
             success: function (resultado) {
-
+                $('body').loadingModal('hide');
                 $("#comentarioAnulado").val("");
                 //var cotizacion = $.parseJSON(respuesta);
                 var guiaRemision = resultado.guiaRemision;
@@ -731,6 +737,8 @@ jQuery(function ($) {
                     && guiaRemision.ingresado == false
                 ) {
                     $("#btnIngresar").show()
+                    $("#btnFacturarGuiaRemision").hide();
+                    $("#btnExtornar").hide();
                 }
                 else if (guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_VENTA.charCodeAt(0)
                     && guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_TRANSFERENCIA_GRATUITA.charCodeAt(0)) {
@@ -738,7 +746,8 @@ jQuery(function ($) {
                     $("#btnExtornar").hide();
                     $("#btnIngresar").hide()
                 }
-                else {
+                else if (guiaRemision.ingresado) {
+                    $("#btnAnularGuiaRemision").hide();
                     $("#btnIngresar").hide();
                 }
                 

@@ -735,6 +735,11 @@ jQuery(function ($) {
 
     /*VER GUIAREMISION*/
     $(document).on('click', "button.btnVerNotaIngreso", function () {
+
+        $('body').loadingModal({
+            text: 'Abriendo Nota de Ingreso...'
+        });
+        $('body').loadingModal('show');
         
         activarBotonesVer();
         var arrrayClass = event.target.getAttribute("class").split(" ");
@@ -753,11 +758,12 @@ jQuery(function ($) {
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
+                $('body').loadingModal('hide');
                 alert(MENSAJE_ERROR);
             },
             success: function (resultado) {
 
-
+                $('body').loadingModal('hide');
 
                 $("#comentarioAnulado").val("");
                 //var cotizacion = $.parseJSON(respuesta);

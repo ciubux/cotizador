@@ -11,39 +11,38 @@ namespace BusinessLayer
     {
         // Gets the first character of a string.
 
+        public static List<String> columnas = new List<string>{ "A", "B","C", "D", "E",
+        "F","G","H","I","J","K","L","M","N","O","P","R","S","T","U","V","W","X","Y","Z"};
 
         public static String getValorCelda(ISheet sheet, int fila, string columna)
         {
-            List<String> columnas = new List<string>();
-            columnas.Add("A");
-            columnas.Add("B");
-            columnas.Add("C");
-            columnas.Add("D");
-            columnas.Add("E");
-            columnas.Add("F");
-            columnas.Add("G");
-            columnas.Add("H");
-            columnas.Add("I");
-            columnas.Add("J");
-            columnas.Add("K");
-            columnas.Add("L");
-            columnas.Add("M");
-            columnas.Add("N");
-            columnas.Add("O");
-            columnas.Add("P");
-            columnas.Add("Q");
-            columnas.Add("R");
-            columnas.Add("S");
-            columnas.Add("T");
-            columnas.Add("U");
-            columnas.Add("V");
-            columnas.Add("W");
-            columnas.Add("X");
-            columnas.Add("Y");
-            columnas.Add("Z");
-
-            String valorCelda = sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).ToString();
+            String valorCelda = String.Empty;
+            if (sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))) != null)
+            {
+                valorCelda = sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).ToString();
+            }
+            
             return valorCelda;
+        }
+
+        public static void setValorCelda(ISheet sheet, int fila, string columna, string valor)
+        {
+            sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
+        }
+
+        public static void setValorCelda(ISheet sheet, int fila, string columna, double valor)
+        {
+            sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
+        }
+
+        public static void setValorCelda(ISheet sheet, int fila, string columna, int valor)
+        {
+            sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
+        }
+
+        public static void setValorCelda(ISheet sheet, int fila, string columna, DateTime valor)
+        {
+            sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
         }
 
         public static int getValorCeldaInt(ISheet sheet, int fila, string columna)

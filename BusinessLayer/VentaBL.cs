@@ -43,17 +43,17 @@ namespace BusinessLayer
             }
         }
 
-        public Venta GetPlantillaVenta(Venta venta, Usuario usuario)
+        public Transaccion GetPlantillaVenta(Transaccion transaccion, Usuario usuario)
         {
             using (var dal = new VentaDAL())
             {
-                venta = dal.SelectPlantillaVenta(venta, usuario);
-                if (venta.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+                transaccion = dal.SelectPlantillaVenta(transaccion, usuario);
+                if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
                 {
-                    this.procesarVenta(venta);
+                    this.procesarVenta(transaccion);
                 }
             }
-            return venta;
+            return transaccion;
         }
 
         public Transaccion GetNotaIngresoTransaccion(Transaccion transaccion, NotaIngreso notaIngreso, Usuario usuario)
