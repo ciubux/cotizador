@@ -386,6 +386,10 @@ namespace BusinessLayer
 
             if (documentoVenta.rPTA_BE.CODIGO == Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK)
             {
+                using (var dal = new DocumentoVentaDAL())
+                {
+                    dal.aprobarAnulacionDocumentoVenta(documentoVenta);
+                }
 
                 string body = string.Empty;
                 using (StringReader reader = new StringReader(Constantes.CUERPO_CORREO_SOLICITUD_DE_BAJA))
@@ -393,25 +397,49 @@ namespace BusinessLayer
                     body = reader.ReadToEnd();
                 }
 
-                body = body.Replace("{xxx}", documentoVenta.cPE_CABECERA_BE.SERIE.ToString());
+                body = body.Replace("{xxxx}", documentoVenta.cPE_CABECERA_BE.SERIE.ToString());
                 body = body.Replace("{xxxxxxxx}", documentoVenta.cPE_CABECERA_BE.CORRELATIVO.ToString());
                 body = body.Replace("{xx/xx}",DateTime.Parse(documentoVenta.cPE_CABECERA_BE.FEC_EMI).ToString("dd/MM"));
-                
 
+                List<string> correos = new List<string>();
 
-
-
-
-
-                using (var dal = new DocumentoVentaDAL())
-                {
-                    dal.aprobarAnulacionDocumentoVenta(documentoVenta);
-
-                    MailService mailService = new MailService();
-                   mailService.enviar(new List<string>() { "c.cornejo@mpinstitucional.com" },
-                       "Solicitud Anulación",
-                       body, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, usuario);
+                if (documentoVenta.cPE_CABECERA_BE.CORREO_ENVIO != null &&
+                    documentoVenta.cPE_CABECERA_BE.CORREO_ENVIO.Length > 0
+                    ) {
+                    String[] correoEnvioArray  = documentoVenta.cPE_CABECERA_BE.CORREO_ENVIO.Split(';');
+                    foreach (String correoEnvio in correoEnvioArray)
+                    {
+                        correos.Add(correoEnvio.Trim());
+                    }                   
                 }
+
+                if (documentoVenta.cPE_CABECERA_BE.CORREO_COPIA != null &&
+                   documentoVenta.cPE_CABECERA_BE.CORREO_COPIA.Length > 0
+                   )
+                {
+                    String[] correoEnvioArray = documentoVenta.cPE_CABECERA_BE.CORREO_COPIA.Split(';');
+                    foreach (String correoEnvio in correoEnvioArray)
+                    {
+                        correos.Add(correoEnvio.Trim());
+                    }
+                }
+
+                if (documentoVenta.cPE_CABECERA_BE.CORREO_OCULTO != null &&
+                   documentoVenta.cPE_CABECERA_BE.CORREO_OCULTO.Length > 0
+                   )
+                {
+                    String[] correoEnvioArray = documentoVenta.cPE_CABECERA_BE.CORREO_OCULTO.Split(';');
+                    foreach (String correoEnvio in correoEnvioArray)
+                    {
+                        correos.Add(correoEnvio.Trim());
+                    }
+                }
+
+                MailService mailService = new MailService();
+                mailService.enviar(correos,Constantes.ASUNTO_ANULACION_FACTURA,
+                    body, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, usuario);
+
+               
             }
 
         }

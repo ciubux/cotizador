@@ -39,7 +39,7 @@ namespace Cotizador.Controllers
                     String template = emailTemplate.BuildTemplate(pedido);
                     List<String> destinatarios = new List<String>();
                    
-                    /*
+                    
                     if (pedido.cliente.asistenteServicioCliente != null)
                     {
                         destinatarios.Add(pedido.cliente.asistenteServicioCliente.usuario.email);
@@ -48,7 +48,7 @@ namespace Cotizador.Controllers
                     {
                         destinatarios.Add(pedido.cliente.responsableComercial.usuario.email);
                     }
-                    */
+                  
                     destinatarios.Add("yrvingrl520@gmail.com");
                     destinatarios.Add("c.cornejo@mpinstitucional.com");
 
