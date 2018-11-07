@@ -226,7 +226,7 @@ namespace DataLayer
 
         public List<Pedido> SelectPedidos(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("ps_pedidosTMP");
+            var objCommand = GetSqlCommand("ps_pedidos");
             InputParameterAdd.BigInt(objCommand, "numero", pedido.numeroPedido);
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
