@@ -1,3 +1,4 @@
+/* Agregar Filtro grupo cliente */
 ALTER PROCEDURE [dbo].[ps_pedidos] 
 
 @numero bigint,
@@ -15,7 +16,7 @@ ALTER PROCEDURE [dbo].[ps_pedidos]
 @fechaProgramacionDesde datetime,
 @fechaProgramacionHasta datetime, 
 @tipo char(1),
-@idGrupoCliente int,
+@idGrupoCliente int, --parametro agregado
 @estado smallint,
 @estadoCrediticio smallint
 AS
@@ -91,6 +92,7 @@ BEGIN
 	and (pe.fecha_entrega_desde <= @fechaEntregaHasta or  @fechaEntregaHasta IS NULL)
 	and (pe.fecha_programacion >= @fechaProgramacionDesde OR @fechaProgramacionDesde IS NULL)
 	and (pe.fecha_programacion <=  @fechaProgramacionHasta OR @fechaProgramacionHasta IS NULL)
+	-- TODA CONDICION DE CLIENTE
 	and (
 	cl.id_cliente = @idCliente or 
 	

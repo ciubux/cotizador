@@ -55,7 +55,16 @@ namespace Cotizador.Controllers
 
                     if (destinatarios.Count > 0)
                     {
-                        mail.enviar(destinatarios, "El pedido " + pedido.numeroPedidoString + " no ha sido atendido", template, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, new Usuario());
+                        String asunto = "El pedido " + pedido.numeroPedidoString;
+                        if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.AtendidoParcialmente)
+                        {
+                            asunto = asunto + " ha sido atendido parcialmente";
+                        } else
+                        {
+                            asunto = asunto + " no ha sido atendido";
+                        }
+
+                        mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, new Usuario());
                         count++;
                     }
                 }

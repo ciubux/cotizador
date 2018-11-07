@@ -1417,13 +1417,13 @@ jQuery(function ($) {
 
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
-                title: '¿Desea aplicar la cotización a todoas las sedes?',
-                content: '<div><div class="col-sm-4"><b>Sedes:</b></div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div></div>',
+                title: 'Cliente Multiregional Identificado',
+                content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
                 type: 'orange',
                 buttons: {
                     aplica: {
                         text: 'SI',
-                        btnClass: '',
+                        btnClass: 'btn-success',
                         action: function () {
                             $('#aplicaSedes').val("1");
                             callCreate(continuarLuego);
@@ -1431,7 +1431,7 @@ jQuery(function ($) {
                     },
                     noAplica: {
                         text: 'NO',
-                        btnClass: '',
+                        btnClass: 'btn-danger',
                         action: function () {
                             callCreate(continuarLuego);
                         }
@@ -1520,13 +1520,13 @@ jQuery(function ($) {
 
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
-                title: '¿Desea aplicar la cotización a todos las sedes?',
-                content: '<div><div class="col-sm-4"><b>Sedes:</b></div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div></div>',
+                title: 'Cliente Multiregional Identificado',
+                content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
                 type: 'orange',
                 buttons: {
                     aplica: {
                         text: 'SI',
-                        btnClass: '',
+                        btnClass: 'btn-success',
                         action: function () {
                             $('#aplicaSedes').val("1");
                             callUpdate(continuarLuego);
@@ -1534,7 +1534,7 @@ jQuery(function ($) {
                     },
                     noAplica: {
                         text: 'NO',
-                        btnClass: '',
+                        btnClass: 'btn-danger',
                         action: function () {
                             callUpdate(continuarLuego);
                         }
@@ -1721,6 +1721,7 @@ jQuery(function ($) {
                 $("#verIdCliente").val(cotizacion.cliente.idCliente);
 
                 $("#verNumero").html(cotizacion.codigo);
+                
                 $("#verCiudad").html(cotizacion.ciudad.nombre);
                 $("#verCliente").html(cotizacion.cliente.razonSocial);
                 $("#verContacto").html(cotizacion.contacto);
@@ -2898,7 +2899,7 @@ jQuery(function ($) {
             dataType: 'JSON',
             error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial de la cotización."); },
             success: function (resultado) {
-               
+                $("#historial_titulo_numero_cotizacion").html($("#verNumero").html());
                 $("#tableHistorialCotizacion > tbody").empty();
 
                 FooTable.init('#tableHistorialCotizacion');

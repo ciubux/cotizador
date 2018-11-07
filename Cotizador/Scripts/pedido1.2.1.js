@@ -4286,6 +4286,8 @@ jQuery(function ($) {
             error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial del pedido."); },
             success: function (resultado) {
 
+                $("#historial_titulo_numero_pedido").html($("#verNumero").html());
+
                 $("#tableHistorialPedido > tbody").empty();
 
                 FooTable.init('#tableHistorialPedido');
@@ -4334,7 +4336,7 @@ jQuery(function ($) {
             dataType: 'JSON',
             error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial crediticio del pedido."); },
             success: function (resultado) {
-
+                $("#historial_crediticio_titulo_numero_pedido").html($("#verNumero").html());
                 $("#tableHistorialCrediticioPedido > tbody").empty();
 
                 FooTable.init('#tableHistorialCrediticioPedido');

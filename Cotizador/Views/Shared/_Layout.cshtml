@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "1";
+    TempData["ScriptVersion"] = "6";
 }
 
 <!DOCTYPE html>
@@ -9,7 +9,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cotizador - @ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
+    
+    @Styles.RenderFormat("<link rel=\"stylesheet\" href=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"/>", "~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
