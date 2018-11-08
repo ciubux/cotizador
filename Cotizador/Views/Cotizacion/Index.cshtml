@@ -605,7 +605,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalVerHistorialCotizacion"><b>Historial de Cotización</b></h4>
+                <h4 class="modal-title" id="modalVerHistorialCotizacion"><b>Historial de Estados de la Cotización Número: <span id="historial_titulo_numero_cotizacion"></span></b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -616,10 +616,10 @@
 
             <div class="modal-body">
                 <table id="tableHistorialCotizacion" class="table" data-editing="false"
-                        data-editing-allow-add="false"
-                        data-editing-allow-delete="false"
-                        data-editing-allow-edit="false"
-                        data-show-toggle="false">
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-show-toggle="false">
                     <thead>
                         <tr>
                             <th data-name="fecha" data-sortable="false" data-visible="true" data-breakpoints="xs">Fecha</th>
@@ -645,5 +645,5 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/cotizacion")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/cotizacion")
 }

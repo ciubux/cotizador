@@ -47,7 +47,7 @@ namespace BusinessLayer
                     pedidoDetalle.precioNeto = 0;
                 }               
 
-                pedidoDetalle.usuario = pedido.usuario;
+               // pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
 
                 /*Si es venta se valida los precios de lo contrario pasa directamente sin aprobacion*/
@@ -231,7 +231,7 @@ namespace BusinessLayer
                     pedidoDetalle.precioNeto = 0;
                 }
 
-                pedidoDetalle.usuario = pedido.usuario;
+                //pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
             }
 
@@ -300,7 +300,7 @@ namespace BusinessLayer
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 pedidoDetalle.precioNeto = 0;
-                pedidoDetalle.usuario = pedido.usuario;
+               // pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
             }
 
@@ -385,7 +385,7 @@ namespace BusinessLayer
             //Detalle de la cotizacion
             foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario);
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                 pedidoDetalle.producto = new Producto();
                 pedidoDetalle.cantidad = 1;
                 pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;

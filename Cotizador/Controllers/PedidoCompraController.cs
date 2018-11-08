@@ -347,7 +347,7 @@ namespace Cotizador.Controllers
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
             foreach (DocumentoDetalle documentoDetalle in  cotizacion.documentoDetalle)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario);
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                 pedidoDetalle.cantidad = documentoDetalle.cantidad;
                 if (documentoDetalle.cantidad == 0)
                     pedidoDetalle.cantidad = 1;
@@ -595,7 +595,7 @@ namespace Cotizador.Controllers
                 throw new System.Exception("Producto ya se encuentra en la lista");
             }
 
-            PedidoDetalle detalle = new PedidoDetalle(usuario);
+            PedidoDetalle detalle = new PedidoDetalle(usuario.visualizaCostos,usuario.visualizaMargen);
             ProductoBL productoBL = new ProductoBL();
             Producto producto = productoBL.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
             detalle.producto = producto;

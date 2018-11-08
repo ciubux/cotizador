@@ -169,7 +169,18 @@ textarea {
     #modalVerCliente .modal-dialog {
         width: 1200px;
     }
-    
+
+    #modalVerHistorialCotizacion .modal-dialog {
+        width: 900px;
+    }
+
+    #modalVerHistorialPedido .modal-dialog {
+        width: 900px;
+    }
+
+    #modalVerHistorialCrediticioPedido .modal-dialog {
+        width: 900px;
+    }
 }
 
 

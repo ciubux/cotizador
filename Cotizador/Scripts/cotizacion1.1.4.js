@@ -1417,13 +1417,13 @@ jQuery(function ($) {
 
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
-                title: '¿Desea aplicar la cotización a todoas las sedes?',
-                content: '<div><div class="col-sm-4"><b>Sedes:</b></div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div></div>',
+                title: 'Cliente Multiregional Identificado',
+                content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
                 type: 'orange',
                 buttons: {
                     aplica: {
                         text: 'SI',
-                        btnClass: '',
+                        btnClass: 'btn-success',
                         action: function () {
                             $('#aplicaSedes').val("1");
                             callCreate(continuarLuego);
@@ -1431,7 +1431,7 @@ jQuery(function ($) {
                     },
                     noAplica: {
                         text: 'NO',
-                        btnClass: '',
+                        btnClass: 'btn-danger',
                         action: function () {
                             callCreate(continuarLuego);
                         }
@@ -1520,13 +1520,13 @@ jQuery(function ($) {
 
         if (continuarLuego == 0 && sedePrincipal == 1) {
             $.confirm({
-                title: '¿Desea aplicar la cotización a todos las sedes?',
-                content: '<div><div class="col-sm-4"><b>Sedes:</b></div> <div class="col-sm-8">' + listaTextoSedesCliente + '</div></div>',
+                title: 'Cliente Multiregional Identificado',
+                content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
                 type: 'orange',
                 buttons: {
                     aplica: {
                         text: 'SI',
-                        btnClass: '',
+                        btnClass: 'btn-success',
                         action: function () {
                             $('#aplicaSedes').val("1");
                             callUpdate(continuarLuego);
@@ -1534,7 +1534,7 @@ jQuery(function ($) {
                     },
                     noAplica: {
                         text: 'NO',
-                        btnClass: '',
+                        btnClass: 'btn-danger',
                         action: function () {
                             callUpdate(continuarLuego);
                         }
@@ -1721,6 +1721,7 @@ jQuery(function ($) {
                 $("#verIdCliente").val(cotizacion.cliente.idCliente);
 
                 $("#verNumero").html(cotizacion.codigo);
+                
                 $("#verCiudad").html(cotizacion.ciudad.nombre);
                 $("#verCliente").html(cotizacion.cliente.razonSocial);
                 $("#verContacto").html(cotizacion.contacto);
@@ -2607,7 +2608,6 @@ jQuery(function ($) {
             $("#btnFinalizarEdicionCotizacion").attr('disabled', 'disabled');
             $("#btnCancelCotizacion").attr('disabled', 'disabled');
         }
-
         
         $("input[name=mostrarcodproveedor]").attr('disabled', 'disabled');
 
@@ -2627,7 +2627,7 @@ jQuery(function ($) {
         $.each($j_object, function (key, value) {
 
             var arrId = value.getAttribute("class").split(" ");
-            var cantidad = value.innerText;
+            var cantidad = value.innerText.trim();
             value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detincantidad form-control' value='" + cantidad + "' type='number'/>";
         });
 
@@ -2638,7 +2638,7 @@ jQuery(function ($) {
             $.each($j_object, function (key, value) {
 
                 var arrId = value.getAttribute("class").split(" ");
-                var observacion = value.innerText;
+                var observacion = value.innerText.trim();
                 value.innerHTML = "<textarea class='" + arrId[0] + " detobservacionarea form-control'/>" + observacion + "</textarea>";
             });
         }
@@ -2648,7 +2648,7 @@ jQuery(function ($) {
             $.each($j_object, function (key, value) {
 
                 var arrId = value.getAttribute("class").split(" ");
-                var observacion = value.innerText;
+                var observacion = value.innerText.trim();
                 value.innerHTML = "<textarea class='" + arrId[0] + " detobservacionarea form-control'/>" + observacion + "</textarea>";
             });
 
@@ -2664,7 +2664,7 @@ jQuery(function ($) {
         $.each($j_object1, function (key, value) {
 
             var arrId = value.getAttribute("class").split(" ");
-            var porcentajedescuento = value.innerText;
+            var porcentajedescuento = value.innerText.trim();
             porcentajedescuento = porcentajedescuento.replace("%", "").trim();
             $(".detporcentajedescuentoMostrar." + arrId[0]).html("<div style='width: 150px' ><div style='float:left' ><input style='width: 100px' class='" + arrId[0] + " detinporcentajedescuento form-control' value='" + porcentajedescuento + "' type='number'/></div><div > <button type='button' class='" + arrId[0] + " btnCalcularDescuento btn btn-primary bouton-image monBouton' data-toggle='modal' data-target='#modalCalculadora' ></button ></div></div>");
 
@@ -2675,7 +2675,7 @@ jQuery(function ($) {
         $.each($j_objectFlete, function (key, value) {
 
             var arrId = value.getAttribute("class").split(" ");
-            var flete = value.innerText;
+            var flete = value.innerText.trim();
             value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detinflete form-control' value='" + flete + "' type='number'/>";
         });
 
@@ -2898,7 +2898,7 @@ jQuery(function ($) {
             dataType: 'JSON',
             error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial de la cotización."); },
             success: function (resultado) {
-               
+                $("#historial_titulo_numero_cotizacion").html($("#verNumero").html());
                 $("#tableHistorialCotizacion > tbody").empty();
 
                 FooTable.init('#tableHistorialCotizacion');

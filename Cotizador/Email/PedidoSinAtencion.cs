@@ -54,6 +54,12 @@ namespace Cotizador.Email
 																<span style=""font-family: Arial; color: #777575;""><a href=""{{url_pedido}}"">{{nro_pedido}}</a></span>
 															</td>
 														</tr>
+                                                        <tr>
+															<td colspan=""3"" align=""left"" style=""font-size: 14px;"">
+																<span style=""font-family: Arial; font-weight: bold;"">Estado: </span>
+																<span style=""font-family: Arial; color: #777575;"">{{estado_pedido}}</span>
+															</td>
+														</tr>
 														<tr>
 															<td colspan=""3"" align=""left"" style=""font-size: 14px;"">
 																  <span style=""font-family: Arial; font-weight: bold;"">Código Cliente: </span>
@@ -114,7 +120,7 @@ namespace Cotizador.Email
 											<td align=""left"" style=""font-size: 14px;"">
 												<span style=""font-family: Arial; color: #777575;"">{{codigo_producto}}</span>
 											</td>
-											<td align=""center"" style=""font-size: 14px;"">
+											<td align=""left"" style=""font-size: 14px;"">
 												<span style=""font-family: Arial; color: #777575;"">{{nombre_producto}}</span>
 											</td>
 											<td align=""right"" style=""font-size: 14px;"">
@@ -130,6 +136,8 @@ namespace Cotizador.Email
             
             String template = mailPrincipal;
             template = template.Replace("{{nro_pedido}}", pedido.numeroPedidoString);
+            template = template.Replace("{{estado_pedido}}", pedido.seguimientoPedido.estadoString);
+            
             template = template.Replace("{{codigo_cliente}}", pedido.cliente.codigo);
             template = template.Replace("{{nombre_cliente}}", pedido.cliente.razonSocial);
             template = template.Replace("{{url_pedido}}", this.urlVerPedido);

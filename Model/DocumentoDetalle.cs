@@ -27,7 +27,7 @@ namespace Model
 
 
         public Boolean esPrecioAlternativo { get; set; }
-        public Usuario usuario { get; set; }
+        //public Usuario usuario { get; set; }
         public String observacion { get; set; }
         public Decimal subTotal
         {

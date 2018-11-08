@@ -155,8 +155,13 @@ namespace DataLayer
                         Constantes.MAIL_COMUNICACION_FACTURAS = valorParametro; break;
                     case "PASSWORD_MAIL_COMUNICACION_FACTURAS":
                         Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS = valorParametro; break;
+                    case "MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS":
+                        Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = valorParametro; break;
+                    case "PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS":
+                        Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = valorParametro; break;
                     case "ID_VENDEDOR_POR_ASIGNAR":
                         Constantes.ID_VENDEDOR_POR_ASIGNAR = int.Parse(valorParametro); break;
+
 
                     case "HORA_CORTE_CREDITOS_LIMA":
                         {

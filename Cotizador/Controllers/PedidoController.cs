@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using Cotizador.Models.DTOs;
 using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
@@ -354,7 +355,7 @@ namespace Cotizador.Controllers
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
             foreach (DocumentoDetalle documentoDetalle in  cotizacion.documentoDetalle)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle(pedido.usuario);
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(pedido.usuario.visualizaCostos, pedido.usuario.visualizaMargen);
                 pedidoDetalle.cantidad = documentoDetalle.cantidad;
                 if (documentoDetalle.cantidad == 0)
                     pedidoDetalle.cantidad = 1;
@@ -610,7 +611,7 @@ namespace Cotizador.Controllers
                 throw new System.Exception("Producto ya se encuentra en la lista");
             }
 
-            PedidoDetalle detalle = new PedidoDetalle(pedido.usuario);
+            PedidoDetalle detalle = new PedidoDetalle(pedido.usuario.visualizaCostos, pedido.usuario.visualizaMargen);
             ProductoBL productoBL = new ProductoBL();
             Producto producto = productoBL.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
             detalle.producto = producto;
@@ -937,6 +938,19 @@ namespace Cotizador.Controllers
         }
 
 
+        public void ChangeIdGrupoCliente()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            if (this.Request.Params["idGrupoCliente"] == null || this.Request.Params["idGrupoCliente"].Trim().Length == 0)
+            {
+                pedido.idGrupoCliente = 0;
+            }
+            else
+            {
+                pedido.idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            }
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
 
 
 
@@ -1428,6 +1442,14 @@ namespace Cotizador.Controllers
                 pedido.numeroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
             }
 
+            if (this.Request.Params["idGrupoCliente"] == null || this.Request.Params["idGrupoCliente"].Trim().Length == 0)
+            {
+                pedido.idGrupoCliente = 0;
+            }
+            else
+            {
+                pedido.idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            }
 
             pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido) Int32.Parse(this.Request.Params["estado"]);
             pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Int32.Parse(this.Request.Params["estadoCrediticio"]);
@@ -1437,8 +1459,35 @@ namespace Cotizador.Controllers
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = pedidoList;
             this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
-            //Se retorna la cantidad de elementos encontrados
-            return JsonConvert.SerializeObject(pedidoList);
+
+            List<PedidoDTO> pedidoDTOList = new List<PedidoDTO>();
+
+            foreach (Pedido pedidoTmp in pedidoList )
+            {
+                PedidoDTO pedidoDTO = new PedidoDTO();
+                pedidoDTO.fechaProgramacion = pedidoTmp.fechaProgramacion;
+                pedidoDTO.stockConfirmado = pedidoTmp.stockConfirmado;
+                pedidoDTO.observaciones = pedidoTmp.observaciones;
+                pedidoDTO.idPedido = pedidoTmp.idPedido;
+                pedidoDTO.numeroPedido = pedidoTmp.numeroPedido;
+                pedidoDTO.numeroPedidoString = pedidoTmp.numeroPedidoString;
+                pedidoDTO.ciudad_nombre = pedidoTmp.ciudad.nombre;
+                pedidoDTO.cliente_codigo = pedidoTmp.cliente.codigo;
+                pedidoDTO.cliente_razonSocial = pedidoTmp.cliente.razonSocial;
+                pedidoDTO.numeroReferenciaCliente = pedidoTmp.numeroReferenciaCliente;
+                pedidoDTO.usuario_nombre = pedidoTmp.usuario.nombre;
+                pedidoDTO.fechaHoraRegistro = pedidoTmp.fechaHoraRegistro;
+                pedidoDTO.rangoFechasEntrega = pedidoTmp.rangoFechasEntrega;
+                pedidoDTO.rangoHoraEntrega = pedidoTmp.rangoHoraEntrega;
+                pedidoDTO.montoTotal = pedidoTmp.montoTotal;
+                pedidoDTO.ubigeoEntrega_distrito = pedidoTmp.ubigeoEntrega.Distrito;
+                pedidoDTO.seguimientoPedido_estadoString = pedidoTmp.seguimientoPedido.estadoString;
+                pedidoDTO.seguimientoCrediticioPedido_estadoString = pedidoTmp.seguimientoCrediticioPedido.estadoString;
+                pedidoDTOList.Add(pedidoDTO);
+            }
+
+             String pedidoListString = JsonConvert.SerializeObject(pedidoDTOList);
+             return pedidoListString;
             //return pedidoList.Count();
         }
 
@@ -1582,7 +1631,7 @@ namespace Cotizador.Controllers
         private void addProductoCargaMasiva(Pedido pedido, String SKU, int esUnidadAlternativa, int cantidad, Decimal precioNeto)
         {
 
-            PedidoDetalle detalle = new PedidoDetalle(pedido.usuario);
+            PedidoDetalle detalle = new PedidoDetalle(pedido.usuario.visualizaCostos, pedido.usuario.visualizaMargen);
             ProductoBL productoBL = new ProductoBL();
 
             Guid idProducto = productoBL.getProductoId(SKU);

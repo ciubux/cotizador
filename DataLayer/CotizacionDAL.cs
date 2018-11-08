@@ -74,7 +74,7 @@ namespace DataLayer
             foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
             {
                 cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
-                this.InsertCotizacionDetalle(cotizacionDetalle);
+                this.InsertCotizacionDetalle(cotizacionDetalle, cotizacion.usuario);
             }
 
 
@@ -150,14 +150,14 @@ namespace DataLayer
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
                     cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
-                    this.InsertCotizacionDetalle(cotizacionDetalle);
+                    this.InsertCotizacionDetalle(cotizacionDetalle, cotizacion.usuario);
                 }
             //}
 
         }
 
 
-        public void InsertCotizacionDetalle(CotizacionDetalle cotizacionDetalle)
+        public void InsertCotizacionDetalle(CotizacionDetalle cotizacionDetalle, Usuario usuario)
         {
             var objCommand = GetSqlCommand("pi_cotizacionDetalle");
             InputParameterAdd.Guid(objCommand, "idCotizacion", cotizacionDetalle.idCotizacion);
@@ -172,7 +172,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", cotizacionDetalle.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "precioNeto", cotizacionDetalle.precioNeto);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", cotizacionDetalle.esPrecioAlternativo?1:0);
-            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacionDetalle.usuario.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", cotizacionDetalle.flete);
             InputParameterAdd.Varchar(objCommand, "observaciones", cotizacionDetalle.observacion);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
@@ -302,7 +302,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario);
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                 cotizacionDetalle.producto = new Producto();
 
                 cotizacionDetalle.idCotizacionDetalle = Converter.GetGuid(row, "id_cotizacion_detalle");

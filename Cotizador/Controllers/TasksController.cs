@@ -33,29 +33,48 @@ namespace Cotizador.Controllers
                 if (pedido.cliente != null)
                 {
                     var urlVerPedido = this.Url.Action( "Index", "Pedido", new { idPedido = pedido.idPedido }, this.Request.Url.Scheme);
+                    urlVerPedido = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=" + pedido.idPedido.ToString();
                     PedidoSinAtencion emailTemplate = new PedidoSinAtencion();
                     emailTemplate.urlVerPedido = urlVerPedido;
 
                     String template = emailTemplate.BuildTemplate(pedido);
                     List<String> destinatarios = new List<String>();
-                   
-                    
-                    if (pedido.cliente.asistenteServicioCliente != null)
+
+                    Boolean seEnvioCorreo = false; 
+                    if (pedido.cliente.asistenteServicioCliente != null && pedido.cliente.asistenteServicioCliente.usuario != null
+                        && !pedido.cliente.asistenteServicioCliente.usuario.email.Equals(String.Empty))
                     {
                         destinatarios.Add(pedido.cliente.asistenteServicioCliente.usuario.email);
+                        seEnvioCorreo = true;
                     }
-                    if (pedido.cliente.responsableComercial != null)
+                    if (pedido.cliente.responsableComercial != null && pedido.cliente.responsableComercial.usuario != null
+                        && !pedido.cliente.responsableComercial.usuario.email.Equals(String.Empty))
                     {
                         destinatarios.Add(pedido.cliente.responsableComercial.usuario.email);
+                        seEnvioCorreo = true;
                     }
-                  
-                    destinatarios.Add("yrvingrl520@gmail.com");
-                    destinatarios.Add("c.cornejo@mpinstitucional.com");
+                    if (pedido.cliente.supervisorComercial != null && pedido.cliente.supervisorComercial.usuario != null
+                        && !pedido.cliente.supervisorComercial.usuario.email.Equals(String.Empty))
+                    {
+                        destinatarios.Add(pedido.cliente.supervisorComercial.usuario.email);
+                        seEnvioCorreo = true;
+                    }
 
+                    if(!seEnvioCorreo)
+                        destinatarios.Add("c.cornejo@mpinstitucional.com");
 
                     if (destinatarios.Count > 0)
                     {
-                        mail.enviar(destinatarios, "El pedido " + pedido.numeroPedidoString + " no ha sido atendido", template, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, new Usuario());
+                        String asunto = "El pedido " + pedido.numeroPedidoString;
+                        if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.AtendidoParcialmente)
+                        {
+                            asunto = asunto + " ha sido atendido parcialmente";
+                        } else
+                        {
+                            asunto = asunto + " no ha sido atendido";
+                        }
+
+                        mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
                         count++;
                     }
                 }

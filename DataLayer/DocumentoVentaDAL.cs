@@ -255,12 +255,12 @@ namespace DataLayer
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 pedidoDetalle.idPedido = pedido.idPedido;
-                this.InsertPedidoDetalle(pedidoDetalle);
+                this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
         }
     
 
-        public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle)
+        public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle, Usuario usuario)
         {
             var objCommand = GetSqlCommand("pi_pedidoDetalle");
             InputParameterAdd.Guid(objCommand, "idPedido", pedidoDetalle.idPedido);
@@ -275,7 +275,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", pedidoDetalle.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "precioNetoEquivalente", pedidoDetalle.precioNeto);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", pedidoDetalle.esPrecioAlternativo?1:0);
-            InputParameterAdd.Guid(objCommand, "idUsuario", pedidoDetalle.usuario.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", pedidoDetalle.flete);
             InputParameterAdd.Varchar(objCommand, "observaciones", pedidoDetalle.observacion);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
@@ -353,7 +353,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario);
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                 cotizacionDetalle.producto = new Producto();
 
 

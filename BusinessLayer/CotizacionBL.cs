@@ -50,7 +50,7 @@ namespace BusinessLayer
             foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
             {
                 cotizacionDetalle.idCotizacion = cotizacion.idCotizacion;
-                cotizacionDetalle.usuario = cotizacion.usuario;
+                //cotizacionDetalle.usuario = cotizacion.usuario;
 
                 //Si no se consideran cantidades no se debe grabar la cantidad y el subtotal
                 if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
@@ -199,7 +199,7 @@ namespace BusinessLayer
             //Detalle de la cotizacion
             foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario);
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                 cotizacionDetalle.producto = new Producto();
                 cotizacionDetalle.cantidad = 1;
                 cotizacionDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;

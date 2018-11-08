@@ -7,9 +7,10 @@ namespace Model
 {
     public class PedidoDetalle : DocumentoDetalle
     {
-        public PedidoDetalle(Usuario usuario) 
+        public PedidoDetalle(Boolean visualizaCostos, Boolean visualizaMargen) 
         {
-            this.usuario = usuario;
+            this.visualizaCostos = visualizaCostos;
+            this.visualizaMargen = visualizaMargen;
         }
 
         public Guid idPedidoDetalle { get; set; }
@@ -60,16 +61,20 @@ namespace Model
             get;set;
         }
 
+        public Boolean visualizaCostos { get; set; }
+
         public Decimal costoListaVisible
         {
             get
             {
-                if (this.usuario.visualizaCostos)
+                if (this.visualizaCostos)
                     return this.costoLista;
                 else
                     return 0M;
             }
         }
+
+        public Boolean visualizaMargen { get; set; }
 
         public Decimal margen
         {
@@ -77,7 +82,7 @@ namespace Model
             get
             {
 
-                if (this.usuario.visualizaMargen && !this.usuario.esCliente)
+                if (this.visualizaMargen)// && !this.usuario.esCliente)
                     return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / (precioNeto == 0 ? 1 : precioNeto)) * 100));
                 else
                     return 0.0M;

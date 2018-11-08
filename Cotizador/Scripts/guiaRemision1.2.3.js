@@ -732,7 +732,7 @@ jQuery(function ($) {
                 $("#documentosVenta").val(documentosVenta);
 
                 /*Si la guía de remisión no corresponde a una venta o a una transferencia gratuita no se puede facturar*/
-               
+                $("#btnIngresar").hide();
                 if (guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_TRASLADO_INTERNO.charCodeAt(0)
                     && guiaRemision.ingresado == false
                 ) {

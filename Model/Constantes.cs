@@ -133,7 +133,9 @@ namespace Model
         public static String CPE_CABECERA_BE_ID = "";
         public static String CPE_CABECERA_BE_COD_GPO = "";
         public static String MAIL_COMUNICACION_FACTURAS = "";
-        public static String PASSWORD_MAIL_COMUNICACION_FACTURAS = "";   
+        public static String PASSWORD_MAIL_COMUNICACION_FACTURAS = "";
+        public static String MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = "";
+        public static String PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = "";
 
 
         public static String USER_EOL {

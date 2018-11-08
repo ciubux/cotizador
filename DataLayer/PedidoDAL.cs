@@ -111,7 +111,7 @@ namespace DataLayer
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 pedidoDetalle.idPedido = pedido.idPedido;
-                this.InsertPedidoDetalle(pedidoDetalle);
+                this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
@@ -209,8 +209,8 @@ namespace DataLayer
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 pedidoDetalle.idPedido = pedido.idPedido;
-                pedidoDetalle.usuario = pedido.usuario;
-                this.InsertPedidoDetalle(pedidoDetalle);
+                //pedidoDetalle.usuario = pedido.usuario;
+                this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
@@ -234,6 +234,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Guid(objCommand, "idUsuarioBusqueda", pedido.usuarioBusqueda.idUsuario);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", pedido.idGrupoCliente);
 
             switch (pedido.tipo)
             {
@@ -417,7 +418,7 @@ namespace DataLayer
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 pedidoDetalle.idPedido = pedido.idPedido;
-                this.InsertPedidoDetalle(pedidoDetalle);
+                this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
@@ -510,8 +511,8 @@ namespace DataLayer
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 pedidoDetalle.idPedido = pedido.idPedido;
-                pedidoDetalle.usuario = pedido.usuario;
-                this.InsertPedidoDetalle(pedidoDetalle);
+                //pedidoDetalle.usuario = pedido.usuario;
+                this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
@@ -617,7 +618,7 @@ namespace DataLayer
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 pedidoDetalle.idPedido = pedido.idPedido;
-                this.InsertPedidoDetalle(pedidoDetalle);
+                this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
@@ -712,8 +713,8 @@ namespace DataLayer
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 pedidoDetalle.idPedido = pedido.idPedido;
-                pedidoDetalle.usuario = pedido.usuario;
-                this.InsertPedidoDetalle(pedidoDetalle);
+                //pedidoDetalle.usuario = pedido.usuario;
+                this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
@@ -736,7 +737,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaAdicional", pedido.numeroReferenciaAdicional);
-            InputParameterAdd.DateTime(objCommand, "fechaEntregaExtendida", pedido.fechaEntregaExtendida);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaExtendida", pedido.fechaEntregaExtendida.Value.Year == 1?null: pedido.fechaEntregaExtendida);
             InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);
             InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
@@ -768,7 +769,7 @@ namespace DataLayer
             pedidoAdjunto.idPedidoAdjunto = (Guid)objCommand.Parameters["@newId"].Value;
         }
 
-        public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle)
+        public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle, Usuario usuario)
         {
             var objCommand = GetSqlCommand("pi_pedidoDetalle");
             InputParameterAdd.Guid(objCommand, "idPedido", pedidoDetalle.idPedido);
@@ -783,7 +784,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", pedidoDetalle.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "precioNeto", pedidoDetalle.precioNeto);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", pedidoDetalle.esPrecioAlternativo?1:0);
-            InputParameterAdd.Guid(objCommand, "idUsuario", pedidoDetalle.usuario.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", pedidoDetalle.flete);
             InputParameterAdd.Varchar(objCommand, "observaciones", pedidoDetalle.observacion);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
@@ -859,7 +860,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario);
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                 cotizacionDetalle.producto = new Producto();
 
 
@@ -1062,7 +1063,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in pedidoDetalleDataTable.Rows)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario);
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
 
                 pedidoDetalle.producto = new Producto();
 
@@ -1375,7 +1376,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             //Detalle de la cotizacion
             foreach (DataRow row in pedidoDetalleDataTable.Rows)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario);
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
 
                 pedidoDetalle.producto = new Producto();
 
@@ -1811,7 +1812,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             //Detalle de la cotizacion
             foreach (DataRow row in pedidoDetalleDataTable.Rows)
             {
-                PedidoDetalle pedidoDetalle = new PedidoDetalle(new Usuario());
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(false, false);
 
                 pedidoDetalle.producto = new Producto();
 

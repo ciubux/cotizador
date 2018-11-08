@@ -764,7 +764,7 @@ namespace Cotizador.Controllers
                 throw new System.Exception("Producto ya se encuentra en la lista");
             }
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            CotizacionDetalle detalle = new CotizacionDetalle(usuario);
+            CotizacionDetalle detalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
             ProductoBL productoBL = new ProductoBL();
             Producto producto = productoBL.getProducto(idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente);
             detalle.producto = producto;

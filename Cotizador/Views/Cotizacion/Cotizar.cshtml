@@ -10,16 +10,20 @@
     }
     // Model.Cotizacion.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
     // @model Enum;
+    String encodedStrTSC = cotizacion.cliente.sedeListWebString;
+    encodedStrTSC = encodedStrTSC.Replace("<br>", "</li><li>");
+    encodedStrTSC = "<br><ul><li>" + encodedStrTSC + "</li></ul>";
+
 }
 <script>
-    var encodedStrTSC =  '@cotizacion.cliente.sedeListWebString';
-
+    var encodedStrTSC = '@encodedStrTSC';
+    
     var parserTSC = new DOMParser;
     var domTSC = parserTSC.parseFromString(
         '<!doctype html><body>' + encodedStrTSC,
         'text/html');
     var listaTextoSedesCliente = domTSC.body.textContent;
-    
+
 </script>
 <div class="page-header">
     <h3>@ViewBag.Title</h3>
@@ -1286,5 +1290,5 @@
 <link href="http://allfont.es/allfont.css?fonts=dot-matrix" rel="stylesheet" type="text/css" />
 
 @section Scripts {
-    @Scripts.Render("~/bundles/cotizacion")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/cotizacion")
 }

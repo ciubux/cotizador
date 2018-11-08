@@ -477,7 +477,7 @@ namespace BusinessLayer
                 pedido.seguimientoPedido.observacion = String.Empty;
                 pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
 
-                foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
+             /*   foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
                 {
                     //pedidoDetalle.idPedido = pedido.idPedido;
                     pedidoDetalle.usuario = pedido.usuario;
@@ -506,7 +506,7 @@ namespace BusinessLayer
 
                     }*/
 
-                }
+               // }
                 dal.InsertPedido(pedido);
             }
         }
@@ -524,7 +524,7 @@ namespace BusinessLayer
                 foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
                 {
                     pedidoDetalle.idPedido = pedido.idPedido;
-                    pedidoDetalle.usuario = pedido.usuario;
+                    //pedidoDetalle.usuario = pedido.usuario;
 
                     //Si no es aprobador para que la cotización se cree como aprobada el porcentaje de descuento debe ser mayor o igual 
                     //al porcentaje Limite sin aprobacion

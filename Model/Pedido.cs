@@ -21,6 +21,8 @@ namespace Model
             this.solicitante = new Solicitante();
             this.pedidoAdjuntoList = new List<PedidoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
+
+            this.idGrupoCliente = 0;
         }
 
         public Pedido()
@@ -35,6 +37,8 @@ namespace Model
             this.solicitante = new Solicitante();
             this.pedidoAdjuntoList = new List<PedidoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
+
+            this.idGrupoCliente = 0;
         }
 
 
@@ -43,6 +47,8 @@ namespace Model
         public Int64 numeroPedido { get; set; }
         [Display(Name = "Número Grupo Pedido:")]
         public Int64? numeroGrupoPedido { get; set; }
+
+        public int idGrupoCliente { get; set; }
 
         public Cotizacion cotizacion { get; set; }
         [Display(Name = "Sede MP:")]
