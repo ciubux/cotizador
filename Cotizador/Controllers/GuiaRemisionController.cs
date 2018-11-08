@@ -441,11 +441,11 @@ namespace Cotizador.Controllers
                 {
                     if (pedido.numeroReferenciaCliente.Contains("O/C"))
                     {
-                        guiaRemision.observaciones = pedido.numeroReferenciaCliente.Trim() + " ";
+                        guiaRemision.observaciones = pedido.numeroReferenciaCliente.Trim() + " / ";
                     }
                     else
                     {
-                        guiaRemision.observaciones = "O/C N° " + pedido.numeroReferenciaCliente.Trim() + " ";
+                        guiaRemision.observaciones = "O/C N° " + pedido.numeroReferenciaCliente.Trim() + " / ";
                     }
                 }
                 guiaRemision.observaciones = guiaRemision.observaciones + pedido.observacionesGuiaRemision;
