@@ -58,6 +58,17 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public String GetGrupoCliente()
+        {
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
+
+            guiaRemision.pedido.idGrupoCliente = idGrupoCliente;
+
+            this.GuiaRemisionSession = guiaRemision;
+            return "";
+        }
+
         public String GetMovimientosAlmacenExtornantes()
         {
             MovimientoAlmacen movimientoAlmacen = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];

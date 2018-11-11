@@ -217,7 +217,22 @@ jQuery(function ($) {
     });
 
 
+    $("#idGrupoCliente").change(function () {
+        //  $("#contacto").val("");
+        var idGrupoCliente = $(this).val();
 
+        $.ajax({
+            url: "/NotaIngreso/GetGrupoCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idGrupoCliente: idGrupoCliente
+            },
+            success: function (cliente) {
+            }
+        });
+
+    });
 
     
 

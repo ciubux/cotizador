@@ -124,6 +124,8 @@ namespace Cotizador.Controllers
                 ViewBag.clienteGrupo = cotizacionSearch.cliente.ToString();
             }
 
+            ViewBag.idGrupoCliente = cotizacionSearch.grupo.idGrupoCliente;
+
             ViewBag.cotizacion = cotizacionSearch;
 
             ViewBag.cotizacionList =  this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA];
@@ -295,7 +297,6 @@ namespace Cotizador.Controllers
         }
 
         
-
         public int updateSeleccionConsiderarCantidades()
         {
             Cotizacion cotizacion = this.CotizacionSession;
@@ -407,7 +408,13 @@ namespace Cotizador.Controllers
             cotizacion.considerarDescontinuados = Boolean.Parse(this.Request.Params["considerarDescontinuados"]);
             this.CotizacionSession = cotizacion;
         }
-        
+
+        public void updateIdGrupoCliente()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            cotizacion.grupo.idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            this.CotizacionSession = cotizacion;
+        }
 
 
         public void updateFlete()

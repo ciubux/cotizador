@@ -582,6 +582,17 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public String GetGrupoCliente()
+        {
+            DocumentoVenta factura = this.FacturaSession;
+            int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
+
+            factura.idGrupoCliente = idGrupoCliente;
+
+            this.FacturaSession = factura;
+            return "";
+        }
+
         public String ChangeIdCiudad()
         {
             Guid idCiudad = Guid.Empty;

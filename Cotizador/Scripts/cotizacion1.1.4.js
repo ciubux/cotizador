@@ -370,6 +370,18 @@ jQuery(function ($) {
 
 
 
+    $("#idGrupoCliente").change(function () {
+        var idGrupoCliente = $("#idGrupoCliente").val();
+        $.ajax({
+            url: "/Cotizacion/updateIdGrupoCliente",
+            type: 'POST',
+            data: {
+                idGrupoCliente: idGrupoCliente
+            },
+            success: function () {
+            }
+        });
+    });
 
 
     function cargarChosenCliente() {

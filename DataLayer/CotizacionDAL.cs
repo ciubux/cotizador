@@ -407,6 +407,8 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "id_cliente", cotizacion.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "id_ciudad", cotizacion.ciudad.idCiudad);
+
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", cotizacion.grupo.idGrupoCliente);
             //Si se busca por codigo y el usuario es aprobador de cotizaciones no se considera el usuario
             if (cotizacion.usuario.apruebaCotizaciones && cotizacion.codigo > 0)
             {

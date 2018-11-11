@@ -167,7 +167,22 @@ jQuery(function ($) {
     });
 
 
+    $("#idGrupoCliente").change(function () {
+        //  $("#contacto").val("");
+        var idGrupoCliente = $(this).val();
 
+        $.ajax({
+            url: "/GuiaRemision/GetGrupoCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idGrupoCliente: idGrupoCliente
+            },
+            success: function (cliente) {
+            }
+        });
+
+    });
 
     
 
@@ -1836,6 +1851,7 @@ jQuery(function ($) {
         //sede MP
         var idCiudad = $("#idCiudad").val();
         var idCliente = $("#idCliente").val(); 
+        var idGrupoCliente = $("#idGrupoCliente").val(); 
 
         var numeroDocumento = $("#guiaRemision_numeroDocumento").val();
         var numeroPedido = $("#guiaRemision_pedido_numeroPedido").val();
@@ -1851,6 +1867,7 @@ jQuery(function ($) {
             data: {
                 idCiudad: idCiudad,
                 idCliente: idCliente,
+                idGrupoCliente: idGrupoCliente,
                 numeroDocumento: numeroDocumento,
                 numeroPedido: numeroPedido,
                 fechaTrasladoDesde: fechaTrasladoDesde,

@@ -155,7 +155,7 @@ namespace Model
         }
 
 
-        [Display(Name = "Es Sede Principal:")]
+        [Display(Name = "Genera Cotizaciones Multergionales:")]
         public Boolean sedePrincipal { get; set; }
 
         public String sedeListWebString
@@ -180,6 +180,9 @@ namespace Model
                 return webString;
             }
         }
+
+        [Display(Name = "Negociación Multiregional:")]
+        public Boolean negociacionMultiregional { get; set; }
     }
 
 }

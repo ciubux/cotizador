@@ -1,4 +1,4 @@
-﻿@model Cotizador.Models.GrupoClienteViewModels 
+﻿@model Cotizador.Models.GrupoClienteViewModels
 @Html.DropDownList(
     Model.GrupoClienteSelectId,
     Model.GruposCliente, "Seleccione el Grupo Cliente",
@@ -7,3 +7,10 @@
         id = Model.GrupoClienteSelectId,
         @class = "form-control"
     })
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        $("#@Model.GrupoClienteSelectId").chosen({ placeholder_text_single: "Seleccione el Grupo Cliente", no_results_text: "No se encontró Grupo Cliente" }).on('chosen:showing_dropdown');
+    });
+    
+</script>

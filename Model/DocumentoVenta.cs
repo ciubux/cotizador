@@ -441,5 +441,7 @@ namespace Model
 
         public bool permiteAnulacion { get; set; }
 
+
+        public int idGrupoCliente { get; set; }
     }
 }

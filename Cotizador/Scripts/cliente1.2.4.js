@@ -120,6 +120,8 @@ jQuery(function ($) {
         $("#cliente_nombreComercial").val("");
         $("#cliente_domicilioLegal").val("");
         $("#cliente_contacto1").val("");
+        $("#cliente_telefonoContacto1").val("");
+        $("#cliente_emailContacto1").val("");
         $("#cliente_correoEnvioFactura").val("");
         $("#cliente_razonSocialSunat").val("");
         $("#cliente_nombreComercialSunat").val("");
@@ -320,7 +322,9 @@ jQuery(function ($) {
                 $("#cliente_razonSocial").val(cliente.razonSocial);
                 $("#cliente_nombreComercial").val(cliente.nombreComercial);
                 $("#cliente_domicilioLegal").val(cliente.domicilioLegal);
-                $("#cliente_contacto1").val(cliente.contacto1);                
+                $("#cliente_contacto1").val(cliente.contacto1);         
+                $("#cliente_telefonoContacto1").val(cliente.telefonoContacto1);
+                $("#cliente_emailContacto1").val(cliente.emailContacto1);
                 $("#cliente_correoEnvioFactura").val(cliente.correoEnvioFactura);
                 $("#cliente_razonSocialSunat").val(cliente.razonSocialSunat);
                 $("#cliente_nombreComercialSunat").val(cliente.nombreComercialSunat);
@@ -762,8 +766,29 @@ jQuery(function ($) {
    
 
     $("#cliente_contacto1").change(function () {
-        changeInputString("contacto1", $("#cliente_contacto1").val())
+        changeInputString("contacto1", $("#cliente_contacto1").val());
     });
+
+    $("#cliente_telefonoContacto1").change(function () {
+        changeInputString("telefonoContacto1", $("#cliente_telefonoContacto1").val());
+    });
+
+    $("#cliente_emailContacto1").change(function () {
+        changeInputString("emailContacto1", $("#cliente_emailContacto1").val());
+    });
+
+    $("#cliente_negociacionMultiregional").change(function () {
+        if (($("#cliente_negociacionMultiregional").is(":checked")) {
+            $("#cliente_negociacionMultiregional").removeAttr("disabled", "");
+            
+        } else {
+            $("#cliente_negociacionMultiregional").prop("checked", false);
+            $("#cliente_negociacionMultiregional").attr("disabled", "");
+        }
+
+    });
+
+
 
     $("#cliente_ruc").change(function () {
         changeInputString("ruc", $("#cliente_ruc").val())

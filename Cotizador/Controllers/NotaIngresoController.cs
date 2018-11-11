@@ -58,6 +58,16 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public String GetGrupoCliente()
+        {
+            NotaIngreso notaIngreso = this.NotaIngresoSession;
+            int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
+
+            notaIngreso.pedido.idGrupoCliente = idGrupoCliente;
+
+            this.NotaIngresoSession = notaIngreso;
+            return "";
+        }
 
 
         #region Busqueda Guias

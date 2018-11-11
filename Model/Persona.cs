@@ -22,7 +22,7 @@ namespace Model
         [Display(Name = "RUC:")]
         public String ruc { get; set; }
 
-        [Display(Name = "Contacto:")]
+        [Display(Name = "Contacto Compras:")]
         public String contacto1 { get; set; }
 
         public String contacto2 { get; set; }
@@ -154,6 +154,10 @@ namespace Model
         [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }
 
+        [Display(Name = "Telefono Contacto Compras:")]
+        public String telefonoContacto1 { get; set; }
 
+        [Display(Name = "E-mail Contacto Compras:")]
+        public String emailContacto1 { get; set; }
     }
 }

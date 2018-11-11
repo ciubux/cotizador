@@ -545,6 +545,7 @@ namespace DataLayer
             }
 
             InputParameterAdd.Guid(objCommand, "idCliente", documentoVenta.cliente.idCliente);
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", documentoVenta.idGrupoCliente);
             InputParameterAdd.Guid(objCommand, "idCiudad", documentoVenta.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(documentoVenta.fechaEmisionDesde.Year, documentoVenta.fechaEmisionDesde.Month, documentoVenta.fechaEmisionDesde.Day, 0, 0, 0));
