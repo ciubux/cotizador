@@ -69,6 +69,12 @@ namespace Model
         [Display(Name = "es Sub Distribuidor:")]
         public Boolean esSubDistribuidor { get; set; }
 
+        [Display(Name = "Habilitado Para Negocación Multiregional")]
+        public Boolean habilitadoNegociacionMultiregional { get { return negociacionMultiregional; } }
+
+        [Display(Name = "Habilitado Para Realizar Cotizaciones Multiregionales")]
+        public Boolean habilitadoSedePrincipal { get { return sedePrincipal; } }
+
         public String horaInicioPrimerTurnoEntrega { get; set; }
 
         public String horaInicioPrimerTurnoEntregaFormat { get

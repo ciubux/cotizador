@@ -155,6 +155,9 @@ namespace Cotizador.Controllers
             cliente.IdUsuarioRegistro = usuario.idUsuario;
             cliente.usuario = usuario;
             cliente.grupoCliente = new GrupoCliente();
+            cliente.sedePrincipal = false;
+            cliente.negociacionMultiregional = false;
+
 
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
@@ -606,6 +609,16 @@ namespace Cotizador.Controllers
             propertyInfo.SetValue(cliente, Int32.Parse(this.Request.Params["valor"]) == 1);
             this.ClienteSession = cliente;
         }
+        
+
+        public void ChangeInputBitBoolean()
+        {
+            Cliente cliente = this.ClienteSession;
+            PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(cliente, Boolean.Parse(this.Request.Params["valor"]) == true);
+            this.ClienteSession = cliente;
+        }
+
 
         public void ChangeSinPlazoCreditoAprobado()
         {

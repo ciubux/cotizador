@@ -209,7 +209,12 @@ UPDATE CLIENTE
 SET negociacion_multiregional = @negociacionMultiregional
 WHERE ruc like @ruc;
 	
-
+IF @negociacionMultiregional = 'FALSE'
+BEGIN
+	UPDATE CLIENTE 
+	SET sede_principal = 'FALSE'
+	WHERE ruc like @ruc;
+END
 
 IF @idGrupoCliente > 0 
 BEGIN
@@ -342,6 +347,13 @@ BEGIN
 	UPDATE CLIENTE 
 	SET negociacion_multiregional = @negociacionMultiregional
 	WHERE ruc like @ruc;
+	
+	IF @negociacionMultiregional = 'FALSE'
+	BEGIN
+		UPDATE CLIENTE 
+		SET sede_principal = 'FALSE'
+		WHERE ruc like @ruc;
+	END
 END
 
 DELETE CLIENTE_GRUPO_CLIENTE 
@@ -382,8 +394,86 @@ END
 
 
 
+ALTER PROCEDURE [dbo].[ps_cliente] 
+@idCliente uniqueidentifier 
+AS
+BEGIN
 
-/* Busacar cotizaciones por grupo cliente */
+SELECT cl.id_cliente, cl.codigo, cl.razon_social,
+cl.nombre_comercial, cl.contacto1, cl.telefono_contacto1, cl.email_contacto1, cl.contacto2, cl.ruc,
+cl.domicilio_legal, 
+/*Si el cliente no tiene correo entonces se obtiene de algún pedido que tenga correo*/
+CASE cl.correo_envio_factura WHEN '' THEN 
+(SELECT TOP 1 correo_contacto_pedido FROM PEDIDO where id_cliente = cl.id_cliente
+AND correo_contacto_pedido IS NOT NULL AND correo_contacto_pedido NOT IN ( '','.') )
+ELSE cl.correo_envio_factura END AS correo_envio_factura, 
+
+cl.razon_social_sunat, cl.nombre_comercial_sunat, 
+cl.direccion_domicilio_legal_sunat, cl.estado_contribuyente_sunat, 
+cl.condicion_contribuyente_sunat,
+ub.codigo as codigo_ubigeo,
+ub.provincia, ub.departamento, ub.distrito, cl.plazo_credito,
+
+cl.forma_pago_factura, 
+cl.sede_principal, 
+cl.negociacion_multiregional, 
+cl.id_ciudad,
+ci.nombre as ciudad_nombre,
+cl.tipo_documento,
+/*PLAZO CREDITO*/
+cl.plazo_credito_solicitado, --plazo credito aprobado
+cl.tipo_pago_factura, --plazo credito aprobado
+cl.sobre_plazo,
+/*MONTO CREDITO*/
+cl.credito_solicitado,
+cl.credito_aprobado,
+cl.sobre_giro, 
+/*FLAG VENDEDORES*/
+cl.vendedores_asignados,
+
+--VENDEDORES,
+verc.id_vendedor as responsable_comercial_id_vendedor,
+verc.codigo as responsable_comercial_codigo,
+verc.descripcion as responsable_comercial_descripcion,
+
+vesc.id_vendedor as supervisor_comercial_id_vendedor,
+vesc.codigo as supervisor_comercial_codigo,
+vesc.descripcion as supervisor_comercial_descripcion,
+
+veasc.id_vendedor as asistente_servicio_cliente_id_vendedor,
+veasc.codigo as asistente_servicio_cliente_codigo,
+veasc.descripcion as asistente_servicio_cliente_descripcion,
+
+cl.observaciones_credito, 
+cl.observaciones, 
+cl.bloqueado,
+
+cl.pertenece_canal_multiregional,
+cl.pertenece_canal_lima,
+cl.pertenece_canal_provincia,
+cl.pertenece_canal_pcp,
+cl.pertenece_canal_ordon,
+cl.es_sub_distribuidor,
+
+clgr.id_grupo_cliente ,
+gr.grupo as grupo_nombre
+
+FROM CLIENTE AS cl 
+INNER JOIN CIUDAD AS ci ON cl.id_ciudad = ci.id_ciudad
+LEFT JOIN UBIGEO AS ub ON cl.ubigeo = ub.codigo
+LEFT JOIN VENDEDOR AS verc ON cl.id_responsable_comercial = verc.id_vendedor
+LEFT JOIN VENDEDOR AS vesc ON cl.id_supervisor_comercial = vesc.id_vendedor
+LEFT JOIN VENDEDOR AS veasc ON cl.id_asistente_servicio_cliente = veasc.id_vendedor
+LEFT JOIN CLIENTE_GRUPO_CLIENTE AS clgr ON clgr.id_cliente = cl.id_cliente
+LEFT JOIN GRUPO_CLIENTE AS gr ON gr.id_grupo_cliente = clgr.id_grupo_cliente 
+WHERE cl.estado = 1 AND cl.id_cliente = @idCliente 
+
+END
+
+
+
+
+/* Buscar cotizaciones por grupo cliente */
 ALTER PROCEDURE [dbo].[ps_cotizaciones] 
 
 @codigo bigint,

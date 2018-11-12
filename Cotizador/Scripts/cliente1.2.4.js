@@ -778,12 +778,11 @@ jQuery(function ($) {
     });
 
     $("#cliente_negociacionMultiregional").change(function () {
-        if (($("#cliente_negociacionMultiregional").is(":checked")) {
-            $("#cliente_negociacionMultiregional").removeAttr("disabled", "");
-            
+        if ($("#cliente_negociacionMultiregional").is(":checked")) {
+            $("#cliente_sedePrincipal").removeAttr("disabled");
         } else {
-            $("#cliente_negociacionMultiregional").prop("checked", false);
-            $("#cliente_negociacionMultiregional").attr("disabled", "");
+            $("#cliente_sedePrincipal").prop("checked", false);
+            $("#cliente_sedePrincipal").attr("disabled", "");
         }
 
     });
@@ -1474,6 +1473,22 @@ jQuery(function ($) {
         changeInputBoolean('bloqueado', valor)
     });
 
+    $("#cliente_negociacionMultiregional").change(function () {
+        var valor = 1;
+        if (!$('#cliente_negociacionMultiregional').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('negociacionMultiregional', valor)
+    });
+
+    $("#cliente_sedePrincipal").change(function () {
+        var valor = 1;
+        if (!$('#cliente_sedePrincipal').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('sedePrincipal', valor)
+    });
+
     $("#cliente_CanalMultireginal").change(function () {
         var valor = 1;
         if (!$('#cliente_CanalMultireginal').prop('checked')) {
@@ -1526,6 +1541,18 @@ jQuery(function ($) {
         });
     }
 
+    function changeInputBitBoolean(propiedad, valor) {
+        $.ajax({
+            url: "/Cliente/ChangeInputBitBoolean",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+    
 
 
     $("input[name=cliente_sinPlazoCredito]").on("click", function () {
@@ -1664,6 +1691,8 @@ jQuery(function ($) {
                 $("#verNumeroDocumento").html(cliente.ruc);
                 $("#verNombreComercial").html(cliente.nombreComercial);
                 $("#verContacto").html(cliente.contacto1);
+                $("#verTelefonoContacto").html(cliente.telefonoContacto1);
+                $("#verEmailContacto").html(cliente.emailContacto1);
                 $("#verCorreoEnvioFactura").html(cliente.correoEnvioFactura);
                 if (cliente.bloqueado) {
                     $("#verBloqueado").html("Sí");
@@ -1735,6 +1764,20 @@ jQuery(function ($) {
 
                 if (count == 0)
                     $("#fieldset_canales").hide();
+
+                var count = 2;
+                if (!cliente.negociacionMultiregional) {
+                    $("#li_negociacionMultiregional").hide();
+                    count--;
+                }
+                if (!cliente.sedePrincipal) {
+                    $("#li_sedePrincipal").hide();
+                    count--;
+                }
+
+                if (count == 0)
+                    $("#fieldset_negociacion_multiregional").hide();
+
              //   $("#btnEditarCliente").show();
                 
                 $("#modalVerCliente").modal('show');

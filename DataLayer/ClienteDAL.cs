@@ -111,6 +111,8 @@ namespace DataLayer
                 cliente.nombreComercial = Converter.GetString(row, "nombre_comercial");
                 cliente.ruc = Converter.GetString(row, "ruc");
                 cliente.contacto1 = Converter.GetString(row, "contacto1");
+                cliente.telefonoContacto1 = Converter.GetString(row, "telefono_contacto1");
+                cliente.emailContacto1 = Converter.GetString(row, "email_contacto1");
                 cliente.contacto2 = Converter.GetString(row, "contacto2");
                 cliente.domicilioLegal = Converter.GetString(row, "domicilio_legal");
                 cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
@@ -174,6 +176,7 @@ namespace DataLayer
                 cliente.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
 
                 cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
+                cliente.negociacionMultiregional = Converter.GetBool(row, "negociacion_multiregional");
 
                 cliente.grupoCliente = new GrupoCliente();
                 cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
@@ -316,6 +319,8 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
             InputParameterAdd.Varchar(objCommand, "ruc", cliente.ruc);
             InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
+            InputParameterAdd.Varchar(objCommand, "telefonoContacto1", cliente.telefonoContacto1);
+            InputParameterAdd.Varchar(objCommand, "emailContacto1", cliente.emailContacto1);
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
             InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura);
             InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat);
@@ -355,6 +360,9 @@ namespace DataLayer
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalProvincias", (short)(cliente.perteneceCanalProvincias ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalPCP", (short)(cliente.perteneceCanalPCP ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "esSubDistribuidor", (short)(cliente.esSubDistribuidor ? 1 : 0));
+
+            InputParameterAdd.Bit(objCommand, "sedePrincipal", cliente.sedePrincipal);
+            InputParameterAdd.Bit(objCommand, "negociacionMultiregional", cliente.negociacionMultiregional);
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente == null ? 0 : cliente.grupoCliente.idGrupoCliente);
 
@@ -407,6 +415,8 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocialSunat);
             InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
             InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
+            InputParameterAdd.Varchar(objCommand, "telefonoContacto1", cliente.telefonoContacto1);
+            InputParameterAdd.Varchar(objCommand, "emailContacto1", cliente.emailContacto1);
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);            
             InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura);
             InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat);
@@ -442,6 +452,8 @@ namespace DataLayer
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalPCP", (short)(cliente.perteneceCanalPCP ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "esSubDistribuidor", (short)(cliente.esSubDistribuidor ? 1 : 0));
 
+            InputParameterAdd.Bit(objCommand, "sedePrincipal", cliente.sedePrincipal);
+            InputParameterAdd.Bit(objCommand, "negociacionMultiregional", cliente.negociacionMultiregional);
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente==null?0: cliente.grupoCliente.idGrupoCliente);
             DateTime dtTmp = DateTime.Now;

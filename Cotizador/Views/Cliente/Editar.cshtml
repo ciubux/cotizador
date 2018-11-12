@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Crear/Modificar Cliente";
     Model.Cliente cliente = ViewBag.cliente;
+    var disabledLabel = "disabled = ''";
     /*Model.DireccionEntrega direccionEntrega = ViewBag.direccionEntrega;*/
     // Model.pedido.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
     // @model Enum;
@@ -176,7 +177,7 @@
                         @Html.TextBoxFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
                     <div class="col-xs-8 col-sm-8 col-lg-8">
@@ -209,38 +210,7 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(c => cliente.negociacionMultiregional, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10 col-lg-10" })
-                    <div class="col-xs-2 col-sm-2 col-lg-2">
-                        @if (cliente.negociacionMultiregional)
-                        {
-                            <input checked type="checkbox" id="cliente_negociacionMultiregional" name="cliente_negociacionMultiregional" />
-                        }
-                        else
-                        {
-                            <input type="checkbox" id="cliente_negociacionMultiregional" name="cliente_negociacionMultiregional" />
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(c => cliente.sedePrincipal, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10 col-lg-10" })
-                    <div class="col-xs-2 col-sm-2 col-lg-2">
-                        @if (cliente.sedePrincipal)
-                        {
-                            <input checked type="checkbox" id="cliente_sedePrincipal" name="cliente_sedePrincipal" />
-                        }
-                        else
-                        {
-                            <input type="checkbox" id="cliente_sedePrincipal" name="cliente_sedePrincipal" />
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <fieldset>
             <legend>Crédito y Condiciones de Pago:</legend>
@@ -381,15 +351,15 @@
                 </div>
 
                 <!--
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(dv => cliente.plazoCredito, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
-                    <div class="col-xs-8">
-                        @Html.TextBoxFor(c => cliente.plazoCredito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => cliente.plazoCredito, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(c => cliente.plazoCredito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        </div>
                     </div>
                 </div>
-            </div>
-                -->
+                    -->
 
                 <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
@@ -599,50 +569,87 @@
         </fieldset>
 
         <!--
-    <fieldset>
-        <legend>Horarios Entrega:</legend>
-        <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
-                @Html.LabelFor(p => cliente.primerTurnoEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
-                <div class="input-group col-xs-6 col-lg-8">
-                    <div class="input-group-addon" style="width:70px">
-                        <span class="input-group-text" id="basic-addon1">Desde:</span>
+        <fieldset>
+            <legend>Horarios Entrega:</legend>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => cliente.primerTurnoEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
+                    <div class="input-group col-xs-6 col-lg-8">
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Desde:</span>
+                        </div>
+                        @Html.TextBoxFor(c => cliente.horaInicioPrimerTurnoEntregaFormat, htmlAttributes: new { @class = "form-control", @type = "time" })
                     </div>
-                    @Html.TextBoxFor(c => cliente.horaInicioPrimerTurnoEntregaFormat, htmlAttributes: new { @class = "form-control", @type = "time" })
-                </div>
-                <label for="horaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
-                <div class="input-group col-xs-6 col-lg-8">
+                    <label for="horaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+                    <div class="input-group col-xs-6 col-lg-8">
 
-                    <div class="input-group-addon" style="width:70px">
-                        <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                        </div>
+                        @Html.TextBoxFor(c => cliente.horaFinPrimerTurnoEntregaFormat, htmlAttributes: new { @class = "form-control", @type = "time" })
                     </div>
-                    @Html.TextBoxFor(c => cliente.horaFinPrimerTurnoEntregaFormat, htmlAttributes: new { @class = "form-control", @type = "time" })
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
-                @Html.LabelFor(p => cliente.segundoTurnoEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
-                <div class="input-group col-xs-6 col-lg-8">
-                    <div class="input-group-addon" style="width:70px">
-                        <span class="input-group-text" id="basic-addon1">Desde:</span>
-                    </div>
-                    @Html.TextBoxFor(c => cliente.horaInicioSegundoTurnoEntregaFormat, htmlAttributes: new { @class = "form-control", @type = "time" })
-                </div>
-                <label for="horaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
-                <div class="input-group col-xs-6 col-lg-8">
-
-                    <div class="input-group-addon" style="width:70px">
-                        <span class="input-group-text" id="basic-addon1">Hasta:</span>
-                    </div>
-                    @Html.TextBoxFor(c => cliente.horaFinSegundoTurnoEntregaFormat, htmlAttributes: new { @class = "form-control", @type = "time" })
                 </div>
             </div>
-        </div>
-    </fieldset>
-    -->
 
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => cliente.segundoTurnoEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
+                    <div class="input-group col-xs-6 col-lg-8">
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Desde:</span>
+                        </div>
+                        @Html.TextBoxFor(c => cliente.horaInicioSegundoTurnoEntregaFormat, htmlAttributes: new { @class = "form-control", @type = "time" })
+                    </div>
+                    <label for="horaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+                    <div class="input-group col-xs-6 col-lg-8">
+
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                        </div>
+                        @Html.TextBoxFor(c => cliente.horaFinSegundoTurnoEntregaFormat, htmlAttributes: new { @class = "form-control", @type = "time" })
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        -->
+
+        <fieldset>
+            <legend>Negociacion Multiregional:</legend>
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => cliente.negociacionMultiregional, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10 col-lg-10" })
+                        <div class="col-xs-2 col-sm-2 col-lg-2">
+                            @if (cliente.negociacionMultiregional)
+                            {
+                                <input checked type="checkbox" id="cliente_negociacionMultiregional" name="cliente_negociacionMultiregional" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="cliente_negociacionMultiregional" name="cliente_negociacionMultiregional" />
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => cliente.sedePrincipal, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10 col-lg-10" })
+                        <div class="col-xs-2 col-sm-2 col-lg-2">
+                            @if (cliente.sedePrincipal)
+                            {
+                                <input checked type="checkbox" id="cliente_sedePrincipal" name="cliente_sedePrincipal" />
+                            }
+                            else
+                            {
+                                <input @if (!cliente.negociacionMultiregional) { @disabledLabel  }
+                                       type="checkbox" id="cliente_sedePrincipal" name="cliente_sedePrincipal" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
 
         @if (cliente.usuario.modificaCanales)
         {
@@ -653,8 +660,8 @@
 
                     <div class="col-sm-6 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(c => cliente.perteneceCanalMultiregional, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                            @Html.LabelFor(c => cliente.perteneceCanalMultiregional, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10 col-lg-10" })
+                            <div class="col-xs-2 col-sm-2 col-lg-2">
                                 @if (cliente.perteneceCanalMultiregional)
                                 {
                                     <input checked type="checkbox" id="cliente_CanalMultireginal" name="cliente_CanalMultireginal" />
@@ -669,8 +676,8 @@
 
                     <div class="col-sm-6 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(c => cliente.perteneceCanalLima, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                            @Html.LabelFor(c => cliente.perteneceCanalLima, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10 col-lg-10" })
+                            <div class="col-xs-2 col-sm-2 col-lg-2">
                                 @if (cliente.perteneceCanalLima)
                                 {
                                     <input checked type="checkbox" id="cliente_CanalLima" name="cliente_CanalLima" />
@@ -686,8 +693,8 @@
                     <div class="col-sm-6 col-lg-4">
 
                         <div class="form-group">
-                            @Html.LabelFor(c => cliente.perteneceCanalProvincias, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                            @Html.LabelFor(c => cliente.perteneceCanalProvincias, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10 col-lg-10" })
+                            <div class="col-xs-2 col-sm-2 col-lg-2">
                                 @if (cliente.perteneceCanalProvincias)
                                 {
                                     <input checked type="checkbox" id="cliente_CanalProvincias" name="cliente_CanalProvincias" />
@@ -706,8 +713,8 @@
 
                     <div class="col-sm-6 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(c => cliente.perteneceCanalPCP, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                            @Html.LabelFor(c => cliente.perteneceCanalPCP, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10 col-lg-10" })
+                            <div class="col-xs-2 col-sm-2 col-lg-2">
                                 @if (cliente.perteneceCanalPCP)
                                 {
                                     <input checked type="checkbox" id="cliente_CanalPCP" name="cliente_CanalPCP" />
@@ -722,8 +729,8 @@
 
                     <div class="col-sm-6 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(c => cliente.esSubDistribuidor, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                            @Html.LabelFor(c => cliente.esSubDistribuidor, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10 col-lg-10" })
+                            <div class="col-xs-2 col-sm-2 col-lg-2">
                                 @if (cliente.esSubDistribuidor)
                                 {
                                     <input checked type="checkbox" id="cliente_esSubdistribuidor" name="cliente_CanalLima" />
@@ -756,5 +763,5 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/cliente")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/cliente")
 }
