@@ -4,6 +4,7 @@ using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -1698,7 +1699,10 @@ namespace Cotizador.Controllers
         private Pedido instanciarPedidoCargaMasiva(String ruc, String nombreSolicitante, 
             String codCentroCostosCliente, String codCentroCostosMP, String centroCostos,
             String direccionEntrega, String sedeMP, String ubigeo, String observaciones, 
-            int plazoEntrega, String ordenCompra, Pedido.tiposPedido tipoPedidoVenta)
+            DateTime? fechaEntregaDesde, DateTime? fechaEntregaHasta,
+            String inicioPrimerTurnoEntrega, String finPrimerTurnoEntrega, String inicioSegundoTurnoEntrega, String finSegundoTurnoEntrega,
+            String ordenCompra, Pedido.tipos tipoPedido, Pedido.tiposPedido tipoPedidoVenta, Pedido.tiposPedidoAlmacen tipoPedidoAlmacen, String facturaConsolidada
+            )
         {
             Pedido pedido = new Pedido(Pedido.tipos.Venta);
             pedido.tipoPedido = tipoPedidoVenta;
@@ -1727,18 +1731,37 @@ namespace Cotizador.Controllers
             pedido.solicitante.nombre = nombreSolicitante;         
 
             pedido.fechaSolicitud = DateTime.Now;
-            pedido.fechaEntregaDesde = DateTime.Now.AddDays(1) ;
-            pedido.fechaEntregaHasta = DateTime.Now.AddDays(plazoEntrega);
-            pedido.horaEntregaDesde = "09:00";
-            pedido.horaEntregaHasta = "18:00";
+            pedido.fechaEntregaDesde = fechaEntregaDesde.Value;
+            pedido.fechaEntregaHasta = fechaEntregaHasta.Value;
+            pedido.horaEntregaDesde = inicioPrimerTurnoEntrega;
+            pedido.horaEntregaHasta = finPrimerTurnoEntrega;
             pedido.contactoPedido = String.Empty;
             pedido.telefonoContactoPedido = String.Empty;
             pedido.incluidoIGV = false;
             //  pedido.tasaIGV = Constantes.IGV;
             //pedido.flete = 0;
             // pedido.mostrarCodigoProveedor = true;
-            pedido.observaciones = observaciones +" CENTRO COSTOS: " + centroCostos+", CODIGO CENTRO COSTOS CLIENTE: " +codCentroCostosCliente +", CODIGO CENTRO COSTOS MP: " + codCentroCostosMP;
+            pedido.observacionesGuiaRemision = String.Empty;
             pedido.numeroReferenciaCliente = ordenCompra;
+            if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
+            {
+                pedido.observacionesGuiaRemision = "O/C N° " + pedido.numeroReferenciaCliente + " / ";
+            }
+            if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
+            {
+                pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + centroCostos+ " ("+codCentroCostosCliente +  ") / ";
+                pedido.observaciones = centroCostos + " (" + codCentroCostosCliente + ") / ";
+            }
+            pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + observaciones;
+            pedido.observaciones = pedido.observaciones + observaciones;
+
+            if (facturaConsolidada.Equals("NO"))
+            {
+                pedido.observacionesFactura = pedido.observaciones;
+            }
+
+            //observaciones + " CENTRO COSTOS: " + centroCostos+", CODIGO CENTRO COSTOS CLIENTE: " +codCentroCostosCliente +", CODIGO CENTRO COSTOS MP: " + codCentroCostosMP;
+            
 
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             pedido.seguimientoPedido = new SeguimientoPedido();
@@ -1758,12 +1781,13 @@ namespace Cotizador.Controllers
             try
             {
 
-                HSSFWorkbook hssfwb;
+                //HSSFWorkbook hssfwb;
+                XSSFWorkbook hssfwb;
 
-          /*      ProductoBL productoBL = new ProductoBL();
-                productoBL.truncateProductoStaging();*/
+                /*      ProductoBL productoBL = new ProductoBL();
+                      productoBL.truncateProductoStaging();*/
 
-                hssfwb = new HSSFWorkbook(file.InputStream);
+                hssfwb = new XSSFWorkbook(file.InputStream);
 
                 ISheet sheet = hssfwb.GetSheetAt(0);
                 int row = 1;
@@ -1779,13 +1803,48 @@ namespace Cotizador.Controllers
 
 
                 /*Datos de Cliente y Solicitud*/
-                String ruc = UtilesHelper.getValorCelda(sheet,3,"B");
-                String solicitante = UtilesHelper.getValorCelda(sheet, 5, "B");
-                int plazoCredito = UtilesHelper.getValorCeldaInt(sheet, 6, "B");
-                int plazoEntrega = UtilesHelper.getValorCeldaInt(sheet, 7, "B");
-                String ordenCompra = UtilesHelper.getValorCelda(sheet, 8, "B");
-                Pedido.tiposPedido tipoPedidoVenta = (Pedido.tiposPedido)Char.Parse(UtilesHelper.getValorCelda(sheet, 2, "E"));
 
+                DateTime? fechaSolicitud = UtilesHelper.getValorCeldaDate(sheet, 2, "B");
+                String razonSocial = UtilesHelper.getValorCelda(sheet, 3, "B");
+                String ruc = UtilesHelper.getValorCelda(sheet,4,"B");
+                String nombreComercial = UtilesHelper.getValorCelda(sheet, 5, "B");
+                String pedidoContado = UtilesHelper.getValorCelda(sheet, 6, "B"); //Se integra con implementación pendiente de Yrving
+                DateTime? fechaEntregaDesdeGeneral = UtilesHelper.getValorCeldaDate(sheet, 7, "B");
+                DateTime? fechaEntregaHastaGeneral = UtilesHelper.getValorCeldaDate(sheet, 8, "B");
+                String inicioPrimerTurnoEntrega = UtilesHelper.getValorCelda(sheet, 9, "B");
+                String finPrimerTurnoEntrega = UtilesHelper.getValorCelda(sheet, 9, "C");
+                String inicioSegundoTurnoEntrega = UtilesHelper.getValorCelda(sheet, 10, "B");
+                String finSegundoTurnoEntrega = UtilesHelper.getValorCelda(sheet, 10, "C");
+                String numeroOrdenCompra = UtilesHelper.getValorCelda(sheet, 11, "B");
+                String facturaConsolidada = UtilesHelper.getValorCelda(sheet, 12, "B");
+
+                String tipoPedidoString = UtilesHelper.getValorCelda(sheet, 3, "E");
+                Pedido.tipos tipoPedido;
+                Pedido.tiposPedido tipoPedidoVenta = Pedido.tiposPedido.Venta;
+                Pedido.tiposPedidoAlmacen tipoPedidoTrasladoInterno = Pedido.tiposPedidoAlmacen.TrasladoInterno;
+                if (tipoPedidoString.Equals("Venta"))
+                {
+                    tipoPedido = Pedido.tipos.Venta;
+                    tipoPedidoVenta = Pedido.tiposPedido.Venta;
+                }
+                else if (tipoPedidoString.Equals("Transferencia Gratuita"))
+                {
+                    tipoPedido = Pedido.tipos.Venta;
+                    tipoPedidoVenta = Pedido.tiposPedido.TransferenciaGratuitaEntregada;
+                }
+                else
+                {
+                    tipoPedido = Pedido.tipos.Almacen;
+                    tipoPedidoTrasladoInterno = Pedido.tiposPedidoAlmacen.TrasladoInterno;
+                }
+
+                String sedeSolicitante = String.Empty;
+                if (tipoPedido == Pedido.tipos.Almacen)
+                {
+                    sedeSolicitante = UtilesHelper.getValorCelda(sheet, 4, "E");
+                }
+
+                String solicitante = UtilesHelper.getValorCelda(sheet, 5, "E");
 
 
 
@@ -1794,16 +1853,15 @@ namespace Cotizador.Controllers
                 List<String> direccionesEntrega = new List<String>();
 
 
-
                 List<Pedido> pedidoList = new List<Pedido>();
                 Pedido ultimoPedido = new Pedido();
                 //Se considera la ultimafila más uno porque estamos trabajando con las posiciones físicas.
-                for (row = 12; row <= ultimaFila + 1; row++)
+                for (row = 16; row <= ultimaFila + 1; row++)
                 {
                     try {
                         //Se identifica el tipo de fila
-                        String tipo = UtilesHelper.getValorCelda(sheet, row, "C");
-                        if (tipo.Equals("C"))
+                        String tipoCabecera = UtilesHelper.getValorCelda(sheet, row, "C");
+                        if (tipoCabecera.Equals("C"))
                         {
                             //Si es cabecera se instancia el pedido
                             String codigoCentroCostosCliente = UtilesHelper.getValorCelda(sheet, row, "A");
@@ -1813,6 +1871,11 @@ namespace Cotizador.Controllers
                             String observaciones = UtilesHelper.getValorCelda(sheet, row, "F");
                             String sedeMP = UtilesHelper.getValorCelda(sheet, row, "G");
                             String ubigeo = UtilesHelper.getValorCelda(sheet, row, "H");
+                            DateTime? fechaEntregaHasta = UtilesHelper.getValorCeldaDate(sheet, row, "M");
+                            if (fechaEntregaHasta == null)
+                            {
+                                fechaEntregaHasta = fechaEntregaHastaGeneral;
+                            }
 
                             Decimal subtotal = UtilesHelper.getValorCeldaDecimal(sheet, row, "I");
 
@@ -1820,14 +1883,20 @@ namespace Cotizador.Controllers
                             ubigeos.Add(ubigeo);
                             direccionesEntrega.Add(direccionEntrega);
 
+                            /*String inicioPrimerTurnoEntrega = UtilesHelper.getValorCelda(sheet, 9, "B");
+                            String finPrimerTurnoEntrega = UtilesHelper.getValorCelda(sheet, 9, "C");
+                            String inicioSegundoTurnoEntrega = UtilesHelper.getValorCelda(sheet, 10, "B");
+                            String finSegundoTurnoEntrega = UtilesHelper.getValorCelda(sheet, 10, "C");*/
 
                             Pedido pedido = this.instanciarPedidoCargaMasiva(ruc, solicitante,
                                 codigoCentroCostosCliente, codigoCentroCostosMP, nombreCentroCostos,
-                                direccionEntrega, sedeMP, ubigeo, observaciones, plazoEntrega, ordenCompra, tipoPedidoVenta);
+                                direccionEntrega, sedeMP, ubigeo, observaciones, fechaEntregaDesdeGeneral, fechaEntregaHasta,
+                                inicioPrimerTurnoEntrega, finPrimerTurnoEntrega, inicioSegundoTurnoEntrega, finSegundoTurnoEntrega,
+                                numeroOrdenCompra, tipoPedido, tipoPedidoVenta, tipoPedidoTrasladoInterno, facturaConsolidada);
                             ultimoPedido = pedido;
                             pedidoList.Add(pedido);
                         }
-                        else if(tipo.Equals("D"))
+                        else if(tipoCabecera.Equals("D"))
                         {
 
                             String skuMP = UtilesHelper.getValorCelda(sheet, row, "D");
@@ -1954,3 +2023,4 @@ namespace Cotizador.Controllers
         }
     }
 }
+ 

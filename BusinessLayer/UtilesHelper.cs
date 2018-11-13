@@ -25,6 +25,9 @@ namespace BusinessLayer
             return valorCelda;
         }
 
+
+
+
         public static void setValorCelda(ISheet sheet, int fila, string columna, string valor)
         {
             sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
@@ -59,6 +62,18 @@ namespace BusinessLayer
             }
 
             return valorCeldaInt;
+        }
+
+
+        public static DateTime? getValorCeldaDate(ISheet sheet, int fila, string columna)
+        {
+            DateTime? valorCelda = null;
+            if (sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))) != null)
+            {
+                valorCelda = sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).DateCellValue;
+            }
+
+            return valorCelda;
         }
 
         public static decimal getValorCeldaDecimal(ISheet sheet, int fila, string columna)

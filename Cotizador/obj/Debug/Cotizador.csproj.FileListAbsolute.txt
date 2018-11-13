@@ -605,3 +605,4 @@ C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.csprojRes
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\ICSharpCode.SharpZipLib.dll

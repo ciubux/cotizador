@@ -46,24 +46,24 @@ namespace Cotizador.Controllers
 
                         Boolean seEnvioCorreo = false;
                         if (pedido.cliente.asistenteServicioCliente != null && pedido.cliente.asistenteServicioCliente.usuario != null
-                            && !pedido.cliente.asistenteServicioCliente.usuario.email.Equals(String.Empty))
+                            && pedido.cliente.asistenteServicioCliente.usuario.email != null && !pedido.cliente.asistenteServicioCliente.usuario.email.Equals(String.Empty))
                         {
                             destinatarios.Add(pedido.cliente.asistenteServicioCliente.usuario.email);
                             seEnvioCorreo = true;
                         }
                         if (pedido.cliente.responsableComercial != null && pedido.cliente.responsableComercial.usuario != null
-                            && !pedido.cliente.responsableComercial.usuario.email.Equals(String.Empty))
+                            && pedido.cliente.responsableComercial.usuario.email != null && !pedido.cliente.responsableComercial.usuario.email.Equals(String.Empty))
                         {
                             destinatarios.Add(pedido.cliente.responsableComercial.usuario.email);
                             seEnvioCorreo = true;
                         }
                         if (pedido.cliente.supervisorComercial != null && pedido.cliente.supervisorComercial.usuario != null
-                            && !pedido.cliente.supervisorComercial.usuario.email.Equals(String.Empty))
+                            && pedido.cliente.supervisorComercial.usuario.email != null && !pedido.cliente.supervisorComercial.usuario.email.Equals(String.Empty))
                         {
                             destinatarios.Add(pedido.cliente.supervisorComercial.usuario.email);
                             seEnvioCorreo = true;
                         }
-                        if (pedido.usuario.email.Equals(String.Empty))
+                        if (!pedido.usuario.email.Equals(String.Empty))
                         {
                             destinatarios.Add(pedido.usuario.email);
                             seEnvioCorreo = true;

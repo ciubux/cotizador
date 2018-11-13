@@ -2962,7 +2962,7 @@ jQuery(function ($) {
         $.each($j_object, function (key, value) {
 
             var arrId = value.getAttribute("class").split(" ");
-            var cantidad = value.innerText;
+            var cantidad = value.innerText.trim();
             value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detincantidad form-control' value='" + cantidad + "' type='number'/>";
         });
 
@@ -2973,7 +2973,7 @@ jQuery(function ($) {
             $.each($j_object, function (key, value) {
 
                 var arrId = value.getAttribute("class").split(" ");
-                var observacion = value.innerText;
+                var observacion = value.innerText.trim();
                 value.innerHTML = "<textarea class='" + arrId[0] + " detobservacionarea form-control'/>" + observacion + "</textarea>";
             });
         }
@@ -2982,7 +2982,7 @@ jQuery(function ($) {
             $.each($j_object, function (key, value) {
 
                 var arrId = value.getAttribute("class").split(" ");
-                var observacion = value.innerText;
+                var observacion = value.innerText.trim();
                 value.innerHTML = "<textarea class='" + arrId[0] + " detobservacionarea form-control'/>" + observacion + "</textarea>";
             });
 
@@ -2998,7 +2998,7 @@ jQuery(function ($) {
         $.each($j_object1, function (key, value) {
 
             var arrId = value.getAttribute("class").split(" ");
-            var porcentajedescuento = value.innerText;
+            var porcentajedescuento = value.innerText.trim();
             porcentajedescuento = porcentajedescuento.replace("%", "").trim();
             $(".detporcentajedescuentoMostrar." + arrId[0]).html("<div style='width: 150px' ><div style='float:left' ><input style='width: 100px' class='" + arrId[0] + " detinporcentajedescuento form-control' value='" + porcentajedescuento + "' type='number'/></div><div > <button type='button' class='" + arrId[0] + " btnCalcularDescuento btn btn-primary bouton-image monBouton' data-toggle='modal' data-target='#modalCalculadora' ></button ></div></div>");
 
@@ -3009,7 +3009,7 @@ jQuery(function ($) {
         $.each($j_objectFlete, function (key, value) {
 
             var arrId = value.getAttribute("class").split(" ");
-            var flete = value.innerText;
+            var flete = value.innerText.trim();
             value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detinflete form-control' value='" + flete + "' type='number'/>";
         });
 

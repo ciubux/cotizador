@@ -71,6 +71,8 @@ namespace Model
 
         public String horaInicioPrimerTurnoEntrega { get; set; }
 
+        public String canal { get; set; }
+
         public String horaInicioPrimerTurnoEntregaFormat { get
             {
                 if (horaInicioPrimerTurnoEntrega != null && horaInicioPrimerTurnoEntrega.Length >= 5)

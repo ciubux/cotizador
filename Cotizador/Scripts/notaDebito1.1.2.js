@@ -788,7 +788,7 @@ jQuery(function ($) {
             $.each($j_object, function (key, value) {
 
                 var arrId = value.getAttribute("class").split(" ");
-                var cantidad = value.innerText;
+                var cantidad = value.innerText.trim();
                 value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detincantidad form-control' value='" + cantidad + "' type='number'/>";
             });
         }
@@ -798,7 +798,7 @@ jQuery(function ($) {
             $.each($j_object, function (key, value) {
 
                 var arrId = value.getAttribute("class").split(" ");
-                var precioUnitario = value.innerText;
+                var precioUnitario = value.innerText.trim();
                 value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detinprecioUnitario form-control' value='" + precioUnitario + "' type='number'/>";
             });
         }
