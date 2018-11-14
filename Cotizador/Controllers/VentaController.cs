@@ -78,11 +78,8 @@ namespace Cotizador.Controllers
 
 
         public String Descargar()
-        {
-            String nombreArchivo = Request["nombreArchivo"].ToString();
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
-            if (venta == null)
-                venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+        {/*
+           
 
             Pedido pedido = venta.pedido; ;
 
@@ -91,6 +88,28 @@ namespace Cotizador.Controllers
 
             if (pedidoAdjunto != null)
             {
+                return JsonConvert.SerializeObject(pedidoAdjunto);
+            }
+            else
+            {
+                return null;
+            }*/
+
+            String nombreArchivo = Request["nombreArchivo"].ToString();
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
+            if (venta == null)
+                venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+
+
+            Pedido pedido = venta.pedido; 
+
+            PedidoAdjunto pedidoAdjunto = pedido.pedidoAdjuntoList.Where(p => p.nombre.Equals(nombreArchivo)).FirstOrDefault();
+
+
+            if (pedidoAdjunto != null)
+            {
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoAdjunto = pedidoBL.GetArchivoAdjunto(pedidoAdjunto);
                 return JsonConvert.SerializeObject(pedidoAdjunto);
             }
             else

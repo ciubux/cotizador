@@ -741,10 +741,16 @@ jQuery(function ($) {
                     $("#btnExtornar").hide();
                 }
                 else if (guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_VENTA.charCodeAt(0)
-                    && guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_TRANSFERENCIA_GRATUITA.charCodeAt(0)) {
+                    && guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_TRANSFERENCIA_GRATUITA.charCodeAt(0)
+                ) {
                     $("#btnFacturarGuiaRemision").hide();
-                    $("#btnExtornar").hide();
-                    $("#btnIngresar").hide()
+                   
+                    $("#btnIngresar").hide();
+
+                    if (guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_COMODATO.charCodeAt(0)
+                        && guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_PRESTAMO.charCodeAt(0)) {
+                        $("#btnExtornar").hide();
+                    }
                 }
                 else if (guiaRemision.ingresado) {
                     $("#btnAnularGuiaRemision").hide();
@@ -2322,6 +2328,8 @@ jQuery(function ($) {
     /*GENERACIÓN DE NOTA DE INGRESO*/
     $('#btnExtornar').click(function () {
         var documentosVentaString = $("#documentosVenta").val();
+
+        $("#li_motivoExtornoGuiaRemision7").hide();
         /*Si no se cuenta con documentos de venta */
         if (documentosVentaString.length == 0) {
             $("#serieNumeroDocumentoVenta").val(documentosVenta);
@@ -2348,6 +2356,7 @@ jQuery(function ($) {
             else {
                 $("#serieNumeroDocumentoVenta").val(documentosVenta);
                 $("#divDocumentoVenta").show();
+                $("#li_motivoExtornoGuiaRemision7").show();
             }
         }
 
@@ -2361,6 +2370,9 @@ jQuery(function ($) {
             $("#li_motivoExtornoGuiaRemision1").show();
             $("#li_motivoExtornoGuiaRemision6").show();
         }
+
+
+
         $("#modalGenerarNotaIngreso").modal();
     });
 
