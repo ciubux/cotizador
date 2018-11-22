@@ -554,6 +554,223 @@ END
 
 
 
+/* Agrega columnas hora_entrega_adicional_desde y hora_entrega_adicional_hasta*/
+ALTER PROCEDURE [dbo].[ps_pedidos] 
+
+@numero bigint,
+@numeroGrupo bigint,
+@idCliente uniqueidentifier,
+@idCiudad uniqueidentifier,
+@idUsuario uniqueidentifier,
+@idUsuarioBusqueda uniqueidentifier,
+@numeroReferenciaCliente varchar(20),
+@tipoPedido char(1),
+@fechaCreacionDesde datetime,
+@fechaCreacionHasta datetime, 
+@fechaEntregaDesde datetime,
+@fechaEntregaHasta datetime, 
+@fechaProgramacionDesde datetime,
+@fechaProgramacionHasta datetime, 
+@tipo char(1),
+@idGrupoCliente int,
+@estado smallint,
+@estadoCrediticio smallint
+AS
+BEGIN
+
+
+
+DECLARE @aprobadorPedidosLima int;
+DECLARE @aprobadorPedidosProvincias int;
+DECLARE @EST_PEDIDO_EDICION int;
+DECLARE @EST_PEDIDO_PEND_APROBACION int;
+DECLARE @EST_PEDIDO_INGRESADO int;
+DECLARE @EST_PEDIDO_DENEGADO int;
+DECLARE @EST_PEDIDO_PROGRAMADO int;
+DECLARE @EST_PEDIDO_ATENDIDO_PARCIALMENTE int;
+
+SET @EST_PEDIDO_EDICION = 6;
+SET @EST_PEDIDO_PEND_APROBACION = 0;
+SET @EST_PEDIDO_INGRESADO = 1;
+SET @EST_PEDIDO_DENEGADO = 2;
+SET @EST_PEDIDO_PROGRAMADO = 3;
+SET @EST_PEDIDO_ATENDIDO_PARCIALMENTE = 5;
+
+if  @numero = 0 
+BEGIN
+
+
+
+	SELECT 
+	--PEDIDO
+	pe.numero as numero_pedido, pe.numero_grupo as numero_grupo_pedido,
+    pe.id_pedido, pe.fecha_solicitud, pe.incluido_igv, 
+	pe.igv, pe.total, ISNULL(pe.observaciones,'') observaciones,
+	pe.fecha_creacion, pe.fecha_entrega_desde, pe.fecha_entrega_hasta, 
+	pe.hora_entrega_desde, pe.hora_entrega_hasta, pe.hora_entrega_adicional_desde, pe.hora_entrega_adicional_hasta,
+	pe.fecha_creacion as fecha_registro,
+	pe.fecha_programacion,
+	pe.stock_confirmado,
+	REPLACE(COALESCE(pe.numero_referencia_cliente,''),'O/C N°','')as numero_referencia_cliente,
+	--CLIENTE
+	COALESCE( cl.codigo,'') as codigo,  cl.id_cliente,cl.razon_social, cl.ruc,
+	 --USUARIO
+	 us.nombre as nombre_usuario, us.id_usuario,
+	 --CIUDAD
+	ci.id_ciudad, ci.nombre as nombre_ciudad, 
+	--SEGUIMIENTO
+	sc.estado_pedido as estado_seguimiento,
+	us2.nombre as usuario_seguimiento, sc.observacion as observacion_seguimiento,
+	us2.id_usuario as id_usuario_seguimiento,
+	--SEGUIMIENTO CREDITICIO
+	scp.estado_pedido as estado_seguimiento_crediticio,
+	us3.nombre as usuario_seguimiento_Crediticio, scp.observacion as observacion_seguimiento_Crediticio,
+	us3.id_usuario as id_usuario_seguimiento_crediticio,
+	--DETALLES
+	--(SELECT max(porcentaje_descuento) from COTIZACION_DETALLE  WHERE estado = 1 AND id_cotizacion = pe.id_pedido) as maximo_porcentaje_descuento
+	ub.codigo codigo_ubigeo,
+	ISNULl(ub.distrito,'-') distrito
+
+	 FROM PEDIDO as pe
+	INNER JOIN CLIENTE AS cl ON pe.id_cliente = cl.id_cliente
+	INNER JOIN CIUDAD AS ci ON pe.id_ciudad = ci.id_ciudad
+	INNER JOIN USUARIO AS us on pe.usuario_creacion = us.id_usuario
+	INNER JOIN SEGUIMIENTO_PEDIDO sc on sc.id_pedido = pe.id_pedido
+	INNER JOIN USUARIO AS us2 on sc.id_usuario = us2.id_usuario
+	INNER JOIN SEGUIMIENTO_CREDITICIO_PEDIDO scp on scp.id_pedido = pe.id_pedido
+	INNER JOIN USUARIO AS us3 on scp.id_usuario = us3.id_usuario
+	LEFT JOIN UBIGEO AS ub ON pe.ubigeo_entrega = ub.codigo 
+	where   pe.fecha_creacion >= @fechaCreacionDesde 
+	and pe.fecha_creacion <=  @fechaCreacionHasta
+
+
+	and (pe.fecha_entrega_desde >= @fechaEntregaDesde or  @fechaEntregaDesde IS NULL)
+	and (pe.fecha_entrega_desde <= @fechaEntregaHasta or  @fechaEntregaHasta IS NULL)
+	and (pe.fecha_programacion >= @fechaProgramacionDesde OR @fechaProgramacionDesde IS NULL)
+	and (pe.fecha_programacion <=  @fechaProgramacionHasta OR @fechaProgramacionHasta IS NULL)
+	and (
+	cl.id_cliente = @idCliente or 
+	
+	(@idCliente = '00000000-0000-0000-0000-000000000000' AND @idGrupoCliente <= 0
+		AND (
+				(	(SELECT es_cliente FROM USUARIO where id_usuario = @idUsuario ) = 0
+					OR 
+					(	(SELECT es_cliente FROM USUARIO where id_usuario = @idUsuario ) = 1
+						AND cl.id_cliente in 
+						(SELECT id_cliente FROM CLIENTE where ruc IN 
+							(SELECT RUC FROM USUARIO_CLIENTE WHERE id_usuario =@idUsuario)
+						)
+					)
+				)	
+					
+			)
+	
+	)
+	OR 
+	(@idGrupoCliente > 0 AND pe.id_cliente in (select id_cliente from CLIENTE_GRUPO_CLIENTE where id_grupo_cliente = @idGrupoCliente))
+	)
+	and (ci.id_ciudad = @idCiudad 
+		OR
+		(@idCiudad = '00000000-0000-0000-0000-000000000000'
+		AND @idUsuario IN (SELECT id_usuario FROM USUARIO where (aprueba_pedidos_lima = 1 AND aprueba_pedidos_provincias = 1) OR es_cliente = 1 ))
+	)
+	and (pe.usuario_creacion = @idUsuarioBusqueda OR @idUsuarioBusqueda = '00000000-0000-0000-0000-000000000000')
+	
+
+	/*
+	and (ci.id_ciudad = @idCiudad 
+		OR pe.usuario_creacion = @idUsuario
+		OR
+		(@idCiudad = '00000000-0000-0000-0000-000000000000'
+		AND @idUsuario IN (SELECT id_usuario FROM USUARIO where aprueba_pedidos_lima = 1 AND aprueba_pedidos_provincias = 1 ))
+	)*/
+
+	AND 
+		(sc.estado_pedido = @estado 
+		OR @estado = -1  
+		OR (@estado = -2 AND (sc.estado_pedido IN (@EST_PEDIDO_EDICION,
+														@EST_PEDIDO_PEND_APROBACION,
+														@EST_PEDIDO_INGRESADO,
+														@EST_PEDIDO_DENEGADO,
+														@EST_PEDIDO_PROGRAMADO,
+														@EST_PEDIDO_ATENDIDO_PARCIALMENTE)
+									OR 	pe.no_entregado = 1				
+									)
+		)
+		
+		
+		)
+	AND (
+		scp.estado_pedido = @estadoCrediticio 
+		OR @estadoCrediticio = -1	)
+		
+	AND (@numeroReferenciaCliente = '' OR 
+		@numeroReferenciaCliente IS NULL OR 
+		pe.numero_referencia_cliente LIKE '%'+@numeroReferenciaCliente+'%')
+	AND sc.estado = 1 AND scp.estado = 1
+	AND pe.estado = 1
+
+	AND pe.tipo = @tipo
+	AND (@tipoPedido = '0' OR  pe.tipo_pedido = @tipoPedido)
+
+	order by pe.numero asc ;
+	END
+else
+BEGIN
+	SELECT 
+	--PEDIDO
+	pe.numero as numero_pedido, pe.numero_grupo as numero_grupo_pedido,
+    pe.id_pedido, pe.fecha_solicitud, pe.incluido_igv, 
+	pe.igv, pe.total, ISNULL(pe.observaciones,'') observaciones,
+	pe.fecha_creacion, pe.fecha_entrega_desde, pe.fecha_entrega_hasta, 
+	pe.hora_entrega_desde, pe.hora_entrega_hasta,
+	pe.fecha_creacion as fecha_registro,
+	pe.fecha_programacion,
+	pe.stock_confirmado,
+	REPLACE(COALESCE(pe.numero_referencia_cliente,''),'O/C N°','')as numero_referencia_cliente,
+	--CLIENTE
+	COALESCE( cl.codigo,'') as codigo,  cl.id_cliente,cl.razon_social, cl.ruc, 
+	 --USUARIO
+	 us.nombre as nombre_usuario, us.id_usuario,
+	 --CIUDAD
+	ci.id_ciudad, ci.nombre as nombre_ciudad, 
+	--SEGUIMIENTO
+	sc.estado_pedido as estado_seguimiento,
+	us2.nombre as usuario_seguimiento, sc.observacion as observacion_seguimiento,
+	us2.id_usuario as id_usuario_seguimiento,
+	--SEGUIMIENTO CREDITICIO
+	scp.estado_pedido as estado_seguimiento_crediticio,
+	us3.nombre as usuario_seguimiento_Crediticio, scp.observacion as observacion_seguimiento_Crediticio,
+	us3.id_usuario as id_usuario_seguimiento_crediticio,
+	--DETALLES
+	--(SELECT max(porcentaje_descuento) from COTIZACION_DETALLE  WHERE estado = 1 AND id_cotizacion = co.id_cotizacion) as maximo_porcentaje_descuento
+	ub.codigo codigo_ubigeo,
+	ISNULl(ub.distrito,'-') distrito
+
+	 FROM PEDIDO as pe
+	INNER JOIN CLIENTE AS cl ON pe.id_cliente = cl.id_cliente
+	INNER JOIN CIUDAD AS ci ON pe.id_ciudad = ci.id_ciudad
+	INNER JOIN USUARIO AS us on pe.usuario_creacion = us.id_usuario
+	INNER JOIN SEGUIMIENTO_PEDIDO sc on sc.id_pedido = pe.id_pedido
+	INNER JOIN USUARIO AS us2 on sc.id_usuario = us2.id_usuario
+	INNER JOIN SEGUIMIENTO_CREDITICIO_PEDIDO scp on scp.id_pedido = pe.id_pedido
+	INNER JOIN USUARIO AS us3 on scp.id_usuario = us3.id_usuario
+	LEFT JOIN UBIGEO AS ub ON pe.ubigeo_entrega = ub.codigo 
+	where pe.numero = @numero 
+	--filtro que evita que un usuario pueda obtener una cotización de otro usuario a través del codigo
+--	and (us.id_usuario = @idUsuario or @idUsuario = '00000000-0000-0000-0000-000000000000'
+--	OR (SELECT USUARIO @idUsuario)
+	
+	--)
+--	AND (sc.estado_pedido = @estado or @estado = -1  )
+	AND sc.estado = 1 AND scp.estado = 1
+	AND pe.estado = 1
+
+	AND pe.tipo = @tipo;
+	END
+END
+
+
 
 
 
@@ -787,6 +1004,221 @@ AND so.estado = 1;
 END
 
 
+
+
+
+
+
+
+
+
+
+
+
+/* Agrega columnas hora_entrega_adicional_desde y hora_entrega_adicional_hasta*/
+ALTER PROCEDURE [dbo].[ps_pedidoParaEditar] 
+@idPedido uniqueIdentifier
+AS
+BEGIN
+
+SELECT 
+--PEDIDO
+pe.numero, pe.numero_grupo, pe.fecha_solicitud,  
+pe.fecha_entrega_desde, pe.fecha_entrega_hasta,
+pe.hora_entrega_desde, pe.hora_entrega_hasta, pe.hora_entrega_adicional_desde, pe.hora_entrega_adicional_hasta,
+pe.incluido_igv,  pe.igv, pe.total, pe.observaciones,  pe.fecha_modificacion,
+pe.numero_referencia_cliente, pe.id_direccion_entrega, pe.direccion_entrega, pe.contacto_entrega,
+pe.telefono_contacto_entrega, 
+pe.fecha_programacion,
+pe.tipo_pedido, pe.observaciones_factura, pe.observaciones_guia_remision,
+pe.contacto_pedido,pe.telefono_contacto_pedido, pe.correo_contacto_pedido,
+pe.otros_cargos,
+pe.numero_referencia_adicional,
+pe.fecha_creacion as fecha_registro,
+cpe.serie AS serie_factura,
+cpe.CORRELATIVO AS numero_factura,
+pe.id_solicitante,
+pe.tipo,
+--UBIGEO
+pe.ubigeo_entrega, ub.departamento, ub.provincia, ub.distrito,
+---CLIENTE
+cl.id_cliente, cl.codigo, cl.razon_social, cl.ruc, cic.id_ciudad as id_ciudad_cliente, cic.nombre as nombre_ciudad_cliente,
+cl.razon_social_sunat, cl.direccion_domicilio_legal_sunat, cl.correo_envio_factura, cl.plazo_credito,
+cl.tipo_pago_factura,
+cl.forma_pago_factura,
+
+
+---VENTA
+ve.igv as igv_venta,
+ve.sub_total as sub_total_venta,
+ve.total as total_venta,
+ve.id_venta,
+
+--CIUDAD
+ci.id_ciudad, ci.nombre as nombre_ciudad ,
+--USUARIO
+us.nombre  as nombre_usuario, us.cargo, us.contacto as contacto_usuario, us.email,
+--SEGUIMIENTO
+sp.estado_pedido as estado_seguimiento,
+us2.nombre as usuario_seguimiento, sp.observacion as observacion_seguimiento,
+us2.id_usuario as id_usuario_seguimiento,
+--SEGUIMIENTO CREDITICIO
+spc.estado_pedido as estado_seguimiento_crediticio,
+us3.nombre as usuario_seguimiento_crediticio, spc.observacion as observacion_seguimiento_crediticio,
+us3.id_usuario as id_usuario_seguimiento_crediticio,
+--DETALLE
+co.id_cotizacion,
+co.codigo as cotizacion_codigo
+FROM PEDIDO as pe
+INNER JOIN CIUDAD AS ci ON pe.id_ciudad = ci.id_ciudad
+INNER JOIN USUARIO AS us on pe.usuario_creacion = us.id_usuario
+INNER JOIN SEGUIMIENTO_PEDIDO sp ON pe.id_pedido = sp.id_pedido
+INNER JOIN USUARIO AS us2 on sp.id_usuario = us2.id_usuario
+INNER JOIN SEGUIMIENTO_CREDITICIO_PEDIDO spc ON pe.id_pedido = spc.id_pedido
+INNER JOIN USUARIO AS us3 on spc.id_usuario = us3.id_usuario
+INNER JOIN CLIENTE AS cl ON pe.id_cliente = cl.id_cliente
+INNER JOIN CIUDAD AS cic ON cl.id_ciudad = cic.id_ciudad
+LEFT JOIN UBIGEO ub ON pe.ubigeo_entrega = ub.codigo
+LEFT JOIN COTIZACION co ON co.id_cotizacion = pe.id_cotizacion
+LEFT JOIN VENTA ve ON ve.id_pedido = pe.id_pedido
+LEFT JOIN CPE_CABECERA_BE cpe ON cpe.id_cpe_cabecera_be = ve.id_documento_venta
+LEFT JOIN SOLICITANTE so ON so.id_solicitante = pe.id_solicitante
+--LEFT JOIN GRUPO AS gr ON pe.id_grupo = gr.id_grupo  
+where pe.id_pedido = @idPedido and 
+pe.estado = 1
+AND sp.estado = 1
+AND spc.estado = 1;
+
+
+
+--RECUPERA EL DETALLE DEL PEDIDO
+
+select * from (
+	SELECT pd.id_pedido_detalle, pd.cantidad, pd.precio_sin_igv, pd.costo_sin_igv, 
+	pd.equivalencia as equivalencia,
+	pd.unidad, pd.porcentaje_descuento, pd.precio_neto, pd.es_precio_alternativo, pd.flete,
+	pr.id_producto, pr.sku, pr.descripcion, pr.sku_proveedor, pr.imagen, pr.proveedor, 
+	pr.costo as costo_producto, pr.precio as precio_producto,
+	pd.observaciones,
+	pd.fecha_modificacion,
+
+	--Si es precio alternativo y el precio registrado es estandar
+--	 CASE pd.es_precio_alternativo WHEN 
+	CASE pc.es_unidad_alternativa WHEN 1 THEN pc.precio_neto * pc.equivalencia 
+	ELSE pc.precio_neto END as precio_neto_vigente, 
+
+	pc.flete as flete_vigente, 
+
+	CASE pc.es_unidad_alternativa WHEN 1 THEN pc.precio_unitario * pc.equivalencia 
+	ELSE pc.precio_unitario END as precio_unitario_vigente, 
+
+	pc.equivalencia as equivalencia_vigente,
+	pc.id_precio_cliente_producto,
+	pc.fecha_inicio_vigencia,
+	pc.fecha_fin_vigencia,
+	pc.id_cliente,
+
+	vd.precio_unitario as precio_unitario_venta,
+	vd.igv_precio_unitario as igv_precio_unitario_venta,	
+	vd.id_venta_detalle,
+	(pd.cantidad - COALESCE(mad.cantidadAtendida,0)) AS cantidadPendienteAtencion,
+
+	ROW_NUMBER() OVER(PARTITION BY pd.id_producto,pe.id_cliente 
+	ORDER BY pc.fecha_inicio_vigencia DESC, pc.fecha_creacion DESC) AS RowNumber
+
+
+	FROM PEDIDO_DETALLE as pd 
+	INNER JOIN PEDIDO as pe ON pd.id_pedido = pe.id_pedido 
+	INNER JOIN PRODUCTO pr ON pd.id_producto = pr.id_producto
+	LEFT JOIN 
+	(
+	SELECT mad.id_pedido_detalle, SUM(cantidad) as cantidadAtendida  FROM
+	MOVIMIENTO_ALMACEN_DETALLE AS mad 
+	INNER JOIN MOVIMIENTO_ALMACEN ma ON mad.id_movimiento_almacen = ma.id_movimiento_almacen
+	WHERE ma.id_pedido = @idPedido
+	AND mad.estado = 1 AND  ma.estado = 1 AND ma.anulado = 0
+	GROUP BY mad.id_pedido_detalle
+	) AS  mad ON mad.id_pedido_detalle  = pd.id_pedido_detalle
+	
+	LEFT JOIN VENTA_DETALLE AS vd ON vd.id_pedido_detalle = mad.id_pedido_detalle
+
+
+	LEFT JOIN
+	(SELECT pc.* FROM 
+		PRECIO_CLIENTE_PRODUCTO pc
+		WHERE --fecha_inicio_vigencia < GETDATE()
+		--AND (fecha_fin_vigencia is NULL OR fecha_fin_vigencia >= GETDATE())
+		--AND
+		 fecha_inicio_vigencia > DATEADD(day, cast((SELECT valor FROM PARAMETRO where codigo = 'DIAS_MAX_BUSQUEDA_PRECIOS') as int) * -1 , GETDATE()) 
+		--ORDER BY fecha_inicio_vigencia DESC
+	) pc ON pc.id_producto = pr.id_producto 
+	AND pe.id_cliente = pc.id_cliente AND pd.equivalencia = pc.equivalencia
+	--AND pd.es_precio_alternativo = pc.es_unidad_alternativa
+
+
+	where pd.id_pedido = @idPedido and pd.estado = 1 
+	
+	) SQuery 
+		where RowNumber = 1
+	ORDER BY fecha_modificacion ASC;
+
+
+--RECUPERA LAS DIRECCIONES DE ENTREGA
+
+SELECT de.id_direccion_entrega, de.descripcion, de.contacto, de.telefono, ubigeo
+FROM DIRECCION_ENTREGA de
+INNER JOIN PEDIDO pe ON de.id_cliente = pe.id_cliente
+where pe.id_pedido = @idPedido
+AND de.estado = 1;
+
+
+--RECUPERA LAS GUÍAS Y FACTURAS
+
+SELECT 
+ma.id_movimiento_almacen, ma.serie_documento, ma.numero_documento, 
+ma.fecha_emision,
+ma.fecha_traslado,
+dv.id_cpe_cabecera_be as id_documento_venta, dv.SERIE, dv.CORRELATIVO, 
+ CONVERT( DATETIME,dv.FEC_EMI ,20) AS fecha_emision_factura,
+ 	CASE  dv.COD_ESTD_SUNAT 
+	WHEN '101' THEN 'EN PROCESO'
+	WHEN '102' THEN 'ACEPTADO'
+	WHEN '103' THEN 'ACEPTADO CON OBS'
+	WHEN '104' THEN 'RECHAZADO'
+	WHEN '105' THEN 'ANULADO'
+	ELSE '---' END as estado ,
+mad.id_movimiento_almacen_detalle, mad.cantidad, 
+mad.unidad, pr.id_producto, pr.sku, pr.descripcion
+FROM MOVIMIENTO_ALMACEN_DETALLE as mad 
+INNER JOIN MOVIMIENTO_ALMACEN as ma ON mad.id_movimiento_almacen = ma.id_movimiento_almacen
+INNER JOIN PRODUCTO pr ON mad.id_producto = pr.id_producto
+INNER JOIN VENTA ve ON ve.id_movimiento_almacen = ma.id_movimiento_almacen
+LEFT JOIN CPE_CABECERA_BE dv ON ve.id_documento_venta = dv.id_cpe_cabecera_be
+AND mad.estado = 1
+WHERE ma.id_pedido = @idPedido
+AND ma.estado = 1
+AND ma.anulado = 0
+ORDER BY ma.numero_documento, mad.fecha_creacion asc;
+
+
+
+--RECUPERA LOS ARCHIVOS ADJUNTOS
+
+SELECT arch.id_archivo_adjunto as id_pedido_adjunto,  nombre--, arch.adjunto,
+ FROM ARCHIVO_ADJUNTO arch
+ INNER JOIN PEDIDO_ARCHIVO parch ON arch.id_archivo_adjunto = parch.id_archivo_adjunto
+   WHERE parch.id_pedido = @idPedido
+   AND arch.estado = 1
+   AND parch.estado = 1;
+
+
+SELECT so.id_solicitante, so.nombre, so.telefono, so.correo
+FROM SOLICITANTE so
+INNER JOIN PEDIDO pe ON so.id_cliente = pe.id_cliente
+where pe.id_pedido = @idPedido
+AND so.estado = 1;
+
+END
 
 
 

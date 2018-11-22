@@ -360,10 +360,7 @@ namespace Cotizador.Controllers
             {
                 pedido.horaEntregaAdicionalHasta = cotizacion.cliente.horaFinSegundoTurnoEntregaFormat;
             }
-
-            pedido.horaEntregaAdicionalDesde = cotizacion.cliente.horaInicioPrimerTurnoEntrega;
-            pedido.horaEntregaAdicionalHasta = cotizacion.cliente.horaFinSegundoTurnoEntrega;
-
+            
 
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
             pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(cotizacion.cliente.idCliente);

@@ -305,6 +305,9 @@ namespace DataLayer
                 pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
                 pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
                 pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
+                pedido.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
+                pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
+
                 pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
 
                 pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");

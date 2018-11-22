@@ -164,7 +164,12 @@ namespace Model
         {
             get
             {
-                return "Desde: " + this.horaEntregaDesde + " Hasta: " + this.horaEntregaHasta;
+                string texto = "1er Turno: " + this.horaEntregaDesde + " - " + this.horaEntregaHasta;
+                if (this.horaEntregaAdicionalDesde != null && !this.horaEntregaAdicionalDesde.Equals("00:00:00"))
+                {
+                    texto = texto + "   2do Turno: " + this.horaEntregaAdicionalDesde + " - " + this.horaEntregaAdicionalHasta;
+                }
+                return texto;
             }
         }
 
