@@ -62,6 +62,7 @@ namespace Cotizador.Controllers
 
             pedidoTmp.fechaProgramacionDesde = null;// new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             pedidoTmp.fechaProgramacionHasta = null;// new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
+            
 
             pedidoTmp.ciudad = new Ciudad();
             pedidoTmp.cliente = new Cliente();
@@ -338,10 +339,31 @@ namespace Cotizador.Controllers
             pedido.cotizacion.idCotizacion = cotizacion.idCotizacion;
             pedido.cotizacion.codigo = cotizacion.codigo;
             pedido.ciudad = cotizacion.ciudad;
-            pedido.cliente = cotizacion.cliente;          
-            
-          
-            
+            pedido.cliente = cotizacion.cliente;
+            pedido.esPagoContado = cotizacion.esPagoContado;
+
+
+            if (cotizacion.cliente.horaInicioPrimerTurnoEntrega != null && !cotizacion.cliente.horaInicioPrimerTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaDesde = cotizacion.cliente.horaInicioPrimerTurnoEntregaFormat;
+            }
+            if (cotizacion.cliente.horaFinPrimerTurnoEntrega != null && !cotizacion.cliente.horaFinPrimerTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaHasta = cotizacion.cliente.horaFinPrimerTurnoEntregaFormat;
+            }
+
+            if (cotizacion.cliente.horaInicioSegundoTurnoEntrega != null && !cotizacion.cliente.horaInicioSegundoTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaAdicionalDesde = cotizacion.cliente.horaInicioSegundoTurnoEntregaFormat;
+            }
+            if (cotizacion.cliente.horaFinSegundoTurnoEntrega != null && !cotizacion.cliente.horaFinSegundoTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaAdicionalHasta = cotizacion.cliente.horaFinSegundoTurnoEntregaFormat;
+            }
+
+            pedido.horaEntregaAdicionalDesde = cotizacion.cliente.horaInicioPrimerTurnoEntrega;
+            pedido.horaEntregaAdicionalHasta = cotizacion.cliente.horaFinSegundoTurnoEntrega;
+
 
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
             pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(cotizacion.cliente.idCliente);
@@ -399,6 +421,7 @@ namespace Cotizador.Controllers
             pedido.ubigeoEntrega.Id = "000000";
             pedido.ciudad = new Ciudad();
             pedido.cliente = new Cliente();
+            pedido.esPagoContado = false;
 
             pedido.tipoPedido = Pedido.tiposPedido.Venta;
             pedido.ciudadASolicitar = new Ciudad();
@@ -527,6 +550,10 @@ namespace Cotizador.Controllers
             pedido.cliente.solicitanteList = solicitanteBL.getSolicitantes(idCliente);
 
             pedido.direccionEntrega = new DireccionEntrega();
+            pedido.horaEntregaDesde = pedido.cliente.horaInicioPrimerTurnoEntrega;
+            pedido.horaEntregaHasta = pedido.cliente.horaFinPrimerTurnoEntrega;
+            pedido.horaEntregaAdicionalDesde = pedido.cliente.horaInicioPrimerTurnoEntrega;
+            pedido.horaEntregaAdicionalHasta = pedido.cliente.horaFinPrimerTurnoEntrega;
 
             //Se limpia el ubigeo de entrega
             pedido.ubigeoEntrega = new Ubigeo();
@@ -1029,13 +1056,28 @@ namespace Cotizador.Controllers
         }
 
 
+        public String ChangeEsPagoContado()
+        {
+            Pedido pedido = this.PedidoSession;
+            try
+            {
+                pedido.esPagoContado = Int32.Parse(this.Request.Params["esPagoContado"]) == 1;
+            }
+            catch (Exception ex)
+            {
+            }
+            this.PedidoSession = pedido;
+
+            return "{\"textoCondicionesPago\":\"" + pedido.textoCondicionesPago + "\"}";
+        }
+
 
         #endregion
 
 
         #region CAMBIOS CAMPOS DE FORMULARIO BUSQUEDA
 
-    
+
 
         public void ChangeEstado()
         {

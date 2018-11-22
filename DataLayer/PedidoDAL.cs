@@ -48,13 +48,13 @@ namespace DataLayer
                 InputParameterAdd.Varchar(objCommand, "direccionEntrega", null);  //puede ser null
                 InputParameterAdd.Varchar(objCommand, "contactoEntrega", null); //puede ser null
                 InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", null); //puede ser null
-
-
             }
 
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", pedido.fechaSolicitud);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde.Value);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
+
+            InputParameterAdd.Bit(objCommand, "esPagoContado", pedido.esPagoContado);
 
             DateTime dtTmp = DateTime.Now;
             String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');
@@ -63,6 +63,25 @@ namespace DataLayer
             DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]),0);
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
+
+
+            if (pedido.horaEntregaAdicionalDesde != null && !pedido.horaEntregaAdicionalDesde.Equals("")
+                && pedido.horaEntregaAdicionalDesde != null && !pedido.horaEntregaAdicionalDesde.Equals(""))
+            {
+                String[] horaEntregaAdicionalDesdeArray = pedido.horaEntregaAdicionalDesde.Split(':');
+                DateTime horaEntregaAdicionalDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaAdicionalDesdeArray[0]), Int32.Parse(horaEntregaAdicionalDesdeArray[1]), 0);
+                String[] horaEntregaAdicionalHastaArray = pedido.horaEntregaAdicionalHasta.Split(':');
+                DateTime horaEntregaAdicionalHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaAdicionalHastaArray[0]), Int32.Parse(horaEntregaAdicionalHastaArray[1]), 0);
+                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalDesde", horaEntregaAdicionalDesde);
+                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalHasta", horaEntregaAdicionalHasta);
+            }
+            else
+            {
+                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalDesde", null);
+                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalHasta", null);
+            }
+
+
             if (pedido.tipoPedido == Pedido.tiposPedido.Venta ||
                 pedido.tipoPedido == Pedido.tiposPedido.TransferenciaGratuitaEntregada ||
                 pedido.tipoPedido == Pedido.tiposPedido.ComodatoEntregado)
@@ -161,6 +180,8 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde.Value);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
 
+            InputParameterAdd.Bit(objCommand, "esPagoContado", pedido.esPagoContado);
+
             DateTime dtTmp = DateTime.Now;
             String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');
             DateTime horaEntregaDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaDesdeArray[0]), Int32.Parse(horaEntregaDesdeArray[1]), 0);
@@ -168,6 +189,23 @@ namespace DataLayer
             DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]), 0);
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
+
+            if (pedido.horaEntregaAdicionalDesde != null && !pedido.horaEntregaAdicionalDesde.Equals("")
+                && pedido.horaEntregaAdicionalDesde != null && !pedido.horaEntregaAdicionalDesde.Equals(""))
+            {
+                String[] horaEntregaAdicionalDesdeArray = pedido.horaEntregaAdicionalDesde.Split(':');
+                DateTime horaEntregaAdicionalDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaAdicionalDesdeArray[0]), Int32.Parse(horaEntregaAdicionalDesdeArray[1]), 0);
+                String[] horaEntregaAdicionalHastaArray = pedido.horaEntregaAdicionalHasta.Split(':');
+                DateTime horaEntregaAdicionalHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaAdicionalHastaArray[0]), Int32.Parse(horaEntregaAdicionalHastaArray[1]), 0);
+                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalDesde", horaEntregaAdicionalDesde);
+                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalHasta", horaEntregaAdicionalHasta);
+            } else
+            {
+                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalDesde", null);
+                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalHasta", null);
+            }
+
+
             if (pedido.tipoPedido == Pedido.tiposPedido.Venta ||
                pedido.tipoPedido == Pedido.tiposPedido.TransferenciaGratuitaEntregada ||
                pedido.tipoPedido == Pedido.tiposPedido.ComodatoEntregado)
@@ -934,6 +972,8 @@ namespace DataLayer
                 pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
                 pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
                 pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
+                pedido.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
+                pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
                 pedido.fechaEntregaExtendida = Converter.GetDateTime(row, "fecha_entrega_extendida");
                 pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
                 pedido.montoIGV = Converter.GetDecimal(row, "igv");
@@ -950,6 +990,8 @@ namespace DataLayer
 
                 pedido.solicitante = new Solicitante();
                 pedido.solicitante.idSolicitante = Converter.GetGuid(row, "id_solicitante");
+
+                pedido.esPagoContado = Converter.GetBool(row, "es_pago_contado"); 
 
                 pedido.contactoPedido = Converter.GetString(row, "contacto_pedido");
                 pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
@@ -1009,6 +1051,7 @@ namespace DataLayer
                 pedido.cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
                 pedido.cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
                 pedido.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
+                pedido.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
                 pedido.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
                 pedido.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
 

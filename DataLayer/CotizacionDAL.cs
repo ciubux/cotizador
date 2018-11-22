@@ -53,7 +53,8 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto);
-          
+            InputParameterAdd.Bit(objCommand, "esPagoContado", cotizacion.esPagoContado);
+
             InputParameterAdd.SmallInt(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
             InputParameterAdd.Int(objCommand, "mostrarValidezOfertaDias", cotizacion.mostrarValidezOfertaEnDias);
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
@@ -120,6 +121,8 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
             InputParameterAdd.Int(objCommand, "mostrarValidezOfertaDias", cotizacion.mostrarValidezOfertaEnDias);
+
+            InputParameterAdd.Bit(objCommand, "esPagoContado", cotizacion.esPagoContado);
 
             InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada ? 1 : 0));
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion);
@@ -241,7 +244,7 @@ namespace DataLayer
                 cotizacion.fechaEsModificada = Converter.GetBool(row, "fecha_Es_Modificada");
                 cotizacion.aplicaSedes = Converter.GetBool(row, "aplica_sedes");
                 cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
-
+                cotizacion.esPagoContado = Converter.GetBool(row, "es_pago_contado");
                 //Si el cliente es Null
                 if (row["id_cliente"] == DBNull.Value)
                 {

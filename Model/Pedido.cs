@@ -95,7 +95,11 @@ namespace Model
         [Display(Name = "Fecha Máxima de Entrega:")]
         public String horaEntregaHasta { get; set; }
 
+        [Display(Name = "Hora de Entrega 2:")]
+        public String horaEntregaAdicionalDesde { get; set; }
 
+        [Display(Name = "Max Hora de Entrega 2:")]
+        public String horaEntregaAdicionalHasta { get; set; }
 
         [Display(Name = "Fecha Solicitud:")]
         public DateTime fechaSolicitud { get; set; }
@@ -260,6 +264,7 @@ namespace Model
 
         public DateTime fechaPrecios { get; set; }
 
+        public Boolean esPagoContado { get; set; }
 
         public List<GuiaRemision> guiaRemisionList { get; set; }
     
@@ -380,6 +385,43 @@ namespace Model
             [Display(Name = "Extorno de Guía Remisión")]
             ExtornoGuíaRemision = 'X',  //NOTA INGRESO
             */
+        }
+
+        public String textoCondicionesPago
+        {
+            get
+            {
+                if (this.esPagoContado)
+                {
+                    return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(DocumentoVenta.TipoPago.Contado);
+                }
+                else
+                {
+                    if (this.cliente != null)
+                    {
+                        /*Se evalua si el solicitado es al contado*/
+                        if (this.cliente.plazoCreditoSolicitado == DocumentoVenta.TipoPago.Contado)
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.plazoCreditoSolicitado) + ".";
+                        }
+                        /*Si no es al contado y el pago aprobado es no asignado se muestra el mensaje que indica que está sujeto a evaluación*/
+                        else if (this.cliente.tipoPagoFactura == DocumentoVenta.TipoPago.NoAsignado)
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.plazoCreditoSolicitado) + ", sujeto a evaluación crediticia (aprobación pendiente).";
+                        }
+                        /*Si no es un caso anterior se muestra el plazo de credito aprobado*/
+                        else
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.tipoPagoFactura) + ".";
+                        }
+                    }
+                    else
+                    {
+                        return String.Empty;
+                    }
+                }
+            }
+
         }
 
         public String tiposPedidoAlmacenString

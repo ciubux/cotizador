@@ -158,7 +158,6 @@ namespace Cotizador.Controllers
             cliente.sedePrincipal = false;
             cliente.negociacionMultiregional = false;
 
-
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 

@@ -44,6 +44,7 @@ namespace Cotizador.Controllers
         private void instanciarCotizacionBusqueda()
         {
             Cotizacion cotizacionTmp = new Cotizacion();
+            cotizacionTmp.esPagoContado = false;
             cotizacionTmp.fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now;
             cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
@@ -453,7 +454,20 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
         }
 
+        public String updateEsPagoContado()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            try
+            {
+                cotizacion.esPagoContado = Int32.Parse(this.Request.Params["esPagoContado"]) == 1; 
+            }
+            catch (Exception ex)
+            {
+            }
+            this.CotizacionSession = cotizacion;
 
+            return "{\"textoCondicionesPago\":\"" + cotizacion.textoCondicionesPago + "\"}";
+        }
 
         public void updateMostrarCodigoProveedor()
         {

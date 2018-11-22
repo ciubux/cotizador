@@ -2295,6 +2295,23 @@ jQuery(function ($) {
 
     });
 
+    $("#chkEsPagoContado").change(function () {
+        var valor = 1;
+        if (!$('#chkEsPagoContado').prop('checked')) {
+            valor = 0;
+        }
+        $.ajax({
+            url: "/Cotizacion/updateEsPagoContado",
+            type: 'POST',
+            data: {
+                esPagoContado: valor
+            },
+            dataType: 'JSON',
+            success: function (result) {
+                $("#cotizacion_textoCondicionesPago").val(result.textoCondicionesPago);
+            }
+        });
+    });
 
     $("#observaciones").change(function () {
 

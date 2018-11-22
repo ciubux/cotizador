@@ -545,6 +545,15 @@
                     <label for="condicionesPago" class="control-label col-xs-2">Condiciones de Pago:</label>
                     <div class="col-xs-8">
                         @Html.TextBoxFor(p => cotizacion.textoCondicionesPago, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @if (cotizacion.esPagoContado)
+                        {
+                            <input type="checkbox" checked class="form-check-input" id="chkEsPagoContado">
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" id="chkEsPagoContado">
+                        }
+                        <label class="form-check-label" for="chkEsPagoContado">Es pago contado</label>
                     </div>
                 </div>
             </div>

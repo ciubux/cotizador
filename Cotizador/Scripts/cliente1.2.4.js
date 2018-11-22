@@ -1,6 +1,6 @@
 
 jQuery(function ($) {
-
+    var turnoTimepickerStep = 30;
     var pagina = 2;
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
@@ -11,6 +11,20 @@ jQuery(function ($) {
         //cargarChosenCliente();
         mostrarCamposSegunTipoDocIdentidad();
         verificarSiExisteCliente();
+
+        $('.timepicker').timepicker({
+            timeFormat: 'HH:mm ',
+            interval: turnoTimepickerStep,
+            minTime: '6:00',
+            maxTime: '22:00',
+            startTime: '06:00',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true,
+            change: function (time) {
+                $(this).change();
+            }
+        });
     });
 
     function verificarSiExisteCliente() {
@@ -744,10 +758,269 @@ jQuery(function ($) {
 
 
     $("#cliente_horaInicioPrimerTurnoEntregaFormat").change(function () {
-        changeInputString("horaInicioPrimerTurnoEntrega", $("#cliente_horaInicioPrimerTurnoEntregaFormat").val())
+        var hour = $("#cliente_horaInicioPrimerTurnoEntregaFormat").val().trim();
+        var hourPost = $("#cliente_horaFinPrimerTurnoEntregaFormat").val().trim();
+        if (validateHourFormat(hour)) {
+            changeInputString("horaInicioPrimerTurnoEntrega", hour);
+
+
+            if (!validateHourFormat(hourPost) || !validateHoraPosterior(hour, hourPost)) {
+                hour = hour.split(":");
+
+                var hTime = parseInt(hour[0]);
+                var mTime = parseInt(hour[1]);
+
+                var txtHoruPost = "";
+
+                if (hTime >= 23) {
+                    var txtHoruPost = "23:59";
+                } else {
+                    var txtHoruPost = "";
+                    hTime = hTime + 1;
+                    if (hTime < 10) {
+                        txtHoruPost = "0" + hTime;
+                    } else {
+                        txtHoruPost = hTime;
+                    }
+                    txtHoruPost = txtHoruPost + ":";
+                    if (mTime < 10) {
+                        txtHoruPost = txtHoruPost + "0" + mTime;
+                    } else {
+                        txtHoruPost = txtHoruPost + mTime;
+                    }
+                }
+
+                $("#cliente_horaFinPrimerTurnoEntregaFormat").val(txtHoruPost);
+                changeInputString("horaFinPrimerTurnoEntrega", txtHoruPost);
+
+                $("#cliente_horaInicioSegundoTurnoEntregaFormat").val("");
+                changeInputString("horaInicioSegundoTurnoEntrega", "");
+
+                $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                changeInputString("horaFinSegundoTurnoEntrega", "");
+            }
+        } else {
+            $("#cliente_horaInicioPrimerTurnoEntregaFormat").val("09:00");
+            changeInputString("horaInicioPrimerTurnoEntrega", "09:00");
+            $.alert({
+                title: "Hora Invalida",
+                type: 'orange',
+                content: 'Debe seleccionar una hora de la lista.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+        }
+    });
+
+    $("#cliente_horaFinPrimerTurnoEntregaFormat").change(function () {
+        var hourPrev = $("#cliente_horaInicioPrimerTurnoEntregaFormat").val().trim();
+        var hour = $("#cliente_horaFinPrimerTurnoEntregaFormat").val().trim();
+        var hourPost = $("#cliente_horaInicioSegundoTurnoEntregaFormat").val().trim();
+
+        if (validateHourFormat(hour)) {
+            var valid = true;
+            if (!validateHourFormat(hourPrev)) {
+                valid = false;
+                $.alert({
+                    title: "Hora Invalida",
+                    type: 'orange',
+                    content: 'Error en los horarios.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+
+            if (!validateHoraPosterior(hourPrev, hour)) {
+                valid = false;
+                $.alert({
+                    title: "Hora Invalida",
+                    type: 'orange',
+                    content: 'Debe seleccionar una hora mayor a la hora inicial del primer turno.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+
+            if (valid) {
+                changeInputString("horaFinPrimerTurnoEntrega", $("#cliente_horaFinPrimerTurnoEntregaFormat").val());
+
+                if (!validateHourFormat(hourPost) || !validateHoraPosterior(hour, hourPost)) {
+                    $("#cliente_horaInicioSegundoTurnoEntregaFormat").val("");
+                    changeInputString("horaInicioSegundoTurnoEntrega", "");
+
+                    $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                    changeInputString("horaFinSegundoTurnoEntrega", "");
+                }
+            } else {
+                $("#cliente_horaFinPrimerTurnoEntregaFormat").val("18:00");
+                changeInputString("horaFinPrimerTurnoEntrega", "18:00");
+
+                $("#cliente_horaInicioSegundoTurnoEntregaFormat").val("");
+                changeInputString("horaInicioSegundoTurnoEntrega", "");
+
+                $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                changeInputString("horaFinSegundoTurnoEntrega", "");
+            }
+        } else {
+            $("#cliente_horaFinPrimerTurnoEntregaFormat").val("18:00");
+            changeInputString("horaFinPrimerTurnoEntrega", "18:00");
+            $.alert({
+                title: "Hora Invalida",
+                type: 'orange',
+                content: 'Debe seleccionar una hora de la lista.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+        }
     });
 
 
+    $("#cliente_horaInicioSegundoTurnoEntregaFormat").change(function () {
+        
+        var hourPrev = $("#cliente_horaFinPrimerTurnoEntregaFormat").val().trim();
+        var hour = $("#cliente_horaInicioSegundoTurnoEntregaFormat").val().trim();
+        var hourPost = $("#cliente_horaFinSegundoTurnoEntregaFormat").val().trim();
+        
+        if (validateHourFormat(hour)) {
+            var valid = true;
+            if (!validateHourFormat(hourPrev)) {
+                valid = false;
+                $.alert({
+                    title: "Hora Invalida",
+                    type: 'orange',
+                    content: 'Error en los horarios.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+
+            if (!validateHoraPosterior(hourPrev, hour)) {
+                valid = false;
+                $.alert({
+                    title: "Hora Invalida",
+                    type: 'orange',
+                    content: 'Debe seleccionar una hora mayor a la hora de final del primer turno.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+
+            if (valid) {
+                changeInputString("horaInicioSegundoTurnoEntrega", $("#cliente_horaInicioSegundoTurnoEntregaFormat").val());
+
+                if (!validateHourFormat(hourPost) || !validateHoraPosterior(hour, hourPost)) {
+                    $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                    changeInputString("horaFinSegundoTurnoEntrega", "");
+                }
+            } else {
+                $("#cliente_horaInicioSegundoTurnoEntregaFormat").val("");
+                changeInputString("horaInicioSegundoTurnoEntrega", "");
+
+                $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                changeInputString("horaFinSegundoTurnoEntrega", "");
+            }
+        } else {
+            $("#cliente_horaInicioSegundoTurnoEntregaFormat").val("");
+            changeInputString("horaInicioSegundoTurnoEntrega", "");
+            $.alert({
+                title: "Hora Invalida",
+                type: 'orange',
+                content: 'Debe seleccionar una hora de la lista.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+        }
+    });
+
+
+    $("#cliente_horaFinSegundoTurnoEntregaFormat").change(function () {
+        var hourPrev = $("#cliente_horaInicioSegundoTurnoEntregaFormat").val().trim();
+        var hour = $("#cliente_horaFinSegundoTurnoEntregaFormat").val().trim();
+
+        if (validateHourFormat(hour)) {
+            var valid = true;
+            if (!validateHourFormat(hourPrev)) {
+                valid = false;
+                $.alert({
+                    title: "Hora Invalida",
+                    type: 'orange',
+                    content: 'Error en los horarios.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+
+            if (!validateHoraPosterior(hourPrev, hour)) {
+                valid = false;
+                $.alert({
+                    title: "Hora Invalida",
+                    type: 'orange',
+                    content: 'Debe seleccionar una hora mayor a la hora de inicial del segundo turno.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+
+            if (valid) {
+                changeInputString("horaFinSegundoTurnoEntrega", $("#cliente_horaFinSegundoTurnoEntregaFormat").val());
+            } else {
+                $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                changeInputString("horaFinSegundoTurnoEntrega", "");
+            }
+        } else {
+            $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+            $.alert({
+                title: "Hora Invalida",
+                type: 'orange',
+                content: 'Debe seleccionar una hora de la lista.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+        }
+    });
+
+    function validateHoraPosterior(horaPrev, horaPost) {
+        //var horaPrev = $("#" + idHoraPrev).val();
+        //var horaPost = $("#" + idHoraPost).val();
+        
+        horaPrev = horaPrev.split(":");
+        horaPost = horaPost.split(":");
+
+        var hPrev = parseInt(horaPrev[0]);
+        var mPrev = parseInt(horaPrev[1]);
+        var hPost = parseInt(horaPost[0]);
+        var mPost = parseInt(horaPost[1]);
+
+        if (hPrev <= hPost) {
+            if (hPrev == hPost) {
+                if (mPrev >= mPost) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    function validateHourFormat(hourString) {
+        var hourFormat = /(([0-1][0-9])|(2[0-3])):?[0-5][0-9]/;
+
+        return hourFormat.test(hourString);
+    }
 
     function changeInputString(propiedad, valor) {
         $.ajax({
@@ -1731,6 +2004,10 @@ jQuery(function ($) {
                 $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
                 $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);*/
                 
+                $("#verHoraInicioPrimerTurnoEntrega").html(cliente.horaInicioPrimerTurnoEntregaFormat);
+                $("#verHoraFinPrimerTurnoEntrega").html(cliente.horaFinPrimerTurnoEntregaFormat);
+                $("#verHoraInicioSegundoTurnoEntrega").html(cliente.horaInicioSegundoTurnoEntregaFormat);
+                $("#verHoraFinSegundoTurnoEntrega").html(cliente.horaFinSegundoTurnoEntregaFormat);
 
                 /*Vendedores*/
                 $("#verResponsableComercial").html(cliente.responsableComercial.descripcion);
@@ -1740,44 +2017,52 @@ jQuery(function ($) {
 
                 $("#verGrupoCliente").html(cliente.grupoCliente.nombre)
 
-                var count = 5;
-                if (!cliente.perteneceCanalMultiregional) {
-                    $("#li_perteneceCanalMultiregional").hide();
-                    count--;
+
+                if (cliente.perteneceCanalMultiregional) {
+                    $("#li_perteneceCanalMultiregional img").attr("src", "/images/check2.png");
+                } else {
+                    $("#li_perteneceCanalMultiregional img").attr("src", "/images/equis.png");
                 }
-                if (!cliente.perteneceCanalLima) {
-                    $("#li_perteneceCanalLima").hide();
-                    count--;
-                }
-                if (!cliente.perteneceCanalProvincias) {
-                    $("#li_perteneceCanalProvincias").hide();
-                    count--;
-                }
-                if (!cliente.perteneceCanalPCP) {
-                    $("#li_perteneceCanalPCP").hide();
-                    count--;
-                }
-                if (!cliente.esSubDistribuidor) {
-                    $("#li_esSubDistribuidor").hide();
-                    count--;
+                
+                if (cliente.perteneceCanalLima) {
+                    $("#li_perteneceCanalLima img").attr("src", "/images/check2.png");
+                } else {
+                    $("#li_perteneceCanalLima img").attr("src", "/images/equis.png");
                 }
 
-                if (count == 0)
-                    $("#fieldset_canales").hide();
-
-                var count = 2;
-                if (!cliente.negociacionMultiregional) {
-                    $("#li_negociacionMultiregional").hide();
-                    count--;
-                }
-                if (!cliente.sedePrincipal) {
-                    $("#li_sedePrincipal").hide();
-                    count--;
+                if (cliente.perteneceCanalProvincias) {
+                    $("#li_perteneceCanalProvincias img").attr("src", "/images/check2.png");
+                } else {
+                    $("#li_perteneceCanalProvincias img").attr("src", "/images/equis.png");
                 }
 
-                if (count == 0)
-                    $("#fieldset_negociacion_multiregional").hide();
+                if (cliente.perteneceCanalPCP) {
+                    $("#li_perteneceCanalPCP img").attr("src", "/images/check2.png");
+                } else {
+                    $("#li_perteneceCanalPCP img").attr("src", "/images/equis.png");
+                }
 
+                if (cliente.esSubDistribuidor) {
+                    $("#li_esSubDistribuidor img").attr("src", "/images/check2.png");
+                } else {
+                    $("#li_esSubDistribuidor img").attr("src", "/images/equis.png");
+                }
+
+
+
+                if (cliente.negociacionMultiregional) {
+                    $("#li_negociacionMultiregional img").attr("src", "/images/check2.png");
+                } else {
+                    $("#li_negociacionMultiregional img").attr("src", "/images/equis.png");
+                }
+
+                if (cliente.sedePrincipal) {
+                    $("#li_sedePrincipal img").attr("src", "/images/check2.png");
+                } else {
+                    $("#li_sedePrincipal img").attr("src", "/images/equis.png");
+                }
+
+                
              //   $("#btnEditarCliente").show();
                 
                 $("#modalVerCliente").modal('show');

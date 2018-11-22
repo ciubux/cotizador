@@ -392,14 +392,14 @@
                             </div>
                         </div>
                         <!--NUMERO PEDIDO GRUPO
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verNumeroGrupo"></p>
-                                </div>
-                            </div>
-                        </div>-->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                <div class="col-xs-8">
+                    <p class="form-control-static" id="verNumeroGrupo"></p>
+                </div>
+            </div>
+        </div>-->
                         <!--NUMERO COTIZACION-->
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
@@ -744,14 +744,14 @@
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
                                 <!--     @if (pedido.usuario.creaDocumentosVenta)
-                                     {
-                                         <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
-                                         }
-                                         else
-                                         {
-                                                         <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
-                                         }
-                                -->
+                     {
+                         <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+                         }
+                         else
+                         {
+                                         <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+                         }
+                -->
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
@@ -802,6 +802,18 @@
                     <div class="row">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
+                                <label for="verCondicionesPago" class="control-label col-xs-2">Condiciones de Pago:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCondicionesPago">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
                                 @Html.LabelFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-10">
                                     <p class="form-control-static" id="verObservacionesGuiaRemision">
@@ -839,22 +851,22 @@
                     @if (pedido.usuario.tomaPedidos)
                     {
                         <!--
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-9">
-                                <div class="form-group">
-                                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
-                                    <div class="col-xs-3">
-                                        <div class="upload-btn-wrapper">
-                                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
-                                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
+                    <div class="col-xs-3">
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
 
                     }
 

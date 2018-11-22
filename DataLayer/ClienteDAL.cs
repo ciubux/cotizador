@@ -147,6 +147,47 @@ namespace DataLayer
                 cliente.vendedoresAsignados = Converter.GetBool(row, "vendedores_asignados");
                 cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
 
+                /* horarios entrega */
+                DateTime horaTmp = Converter.GetDateTime(row, "hora_inicio_primer_turno_entrega");
+                if (horaTmp != null && !horaTmp.ToString("HH:mm:ss").Equals("00:00:00"))
+                {
+                    cliente.horaInicioPrimerTurnoEntrega = horaTmp.ToString("HH:mm:ss");
+                }
+                else
+                {
+                    cliente.horaInicioPrimerTurnoEntrega = "";
+                }
+
+                horaTmp = Converter.GetDateTime(row, "hora_fin_primer_turno_entrega");
+                if (horaTmp != null && !horaTmp.ToString("HH:mm:ss").Equals("00:00:00"))
+                {
+                    cliente.horaFinPrimerTurnoEntrega = horaTmp.ToString("HH:mm:ss");
+                }
+                else
+                {
+                    cliente.horaFinPrimerTurnoEntrega = "";
+                }
+
+                horaTmp = Converter.GetDateTime(row, "hora_inicio_segundo_turno_entrega");
+                if (horaTmp != null && !horaTmp.ToString("HH:mm:ss").Equals("00:00:00"))
+                {
+                    cliente.horaInicioSegundoTurnoEntrega = horaTmp.ToString("HH:mm:ss");
+                }
+                else
+                {
+                    cliente.horaInicioSegundoTurnoEntrega = "";
+                }
+
+                horaTmp = Converter.GetDateTime(row, "hora_fin_segundo_turno_entrega");
+                if (horaTmp != null && !horaTmp.ToString("HH:mm:ss").Equals("00:00:00"))
+                {
+                    cliente.horaFinSegundoTurnoEntrega = horaTmp.ToString("HH:mm:ss");
+                }
+                else
+                {
+                    cliente.horaFinSegundoTurnoEntrega = "";
+                }
+
                 /*Vendedores*/
                 cliente.responsableComercial = new Vendedor();
                 cliente.responsableComercial.idVendedor = Converter.GetInt(row, "responsable_comercial_id_vendedor");
@@ -242,6 +283,8 @@ namespace DataLayer
                 ClienteResultado.nombreComercial = Converter.GetString(row, "nombre_comercial");
                 ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
                 ClienteResultado.ruc = Converter.GetString(row, "ruc");
+
+               
 
                 /*Vendedores*/
                 ClienteResultado.responsableComercial = new Vendedor();

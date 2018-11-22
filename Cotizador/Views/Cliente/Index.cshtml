@@ -614,16 +614,40 @@
 
                     </fieldset>
 
+                    <fieldset>
+                        <legend>Horarios Entrega:</legend>
+
+
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-12 col-lg-4">Primer Turno de Entrega:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="primerTurnoEntrega"><span id="verHoraInicioPrimerTurnoEntrega"></span> - <span id="verHoraFinPrimerTurnoEntrega"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-12 col-lg-4">Segundo Turno de Entrega:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="primerTurnoEntrega"><span id="verHoraInicioSegundoTurnoEntrega"></span> - <span id="verHoraFinSegundoTurnoEntrega"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
                     <fieldset id="fieldset_negociacion_multiregional">
                         <legend>Negociacion Multiregional:</legend>
 
 
                         <div class="row">
-                            <div class="col-sm-6 col-lg-4">
+                            <div class="col-sm-12 col-lg-12">
                                 <div class="form-group">
-                                    <ul>
-                                        <li id="li_negociacionMultiregional">@Html.LabelFor(c => cliente.habilitadoNegociacionMultiregional)</li>
-                                        <li id="li_sedePrincipal">@Html.LabelFor(c => cliente.habilitadoSedePrincipal)</li>
+                                    <ul class="list-unstyled">
+                                        <li id="li_negociacionMultiregional">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.habilitadoNegociacionMultiregional)</li>
+                                        <li id="li_sedePrincipal">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.habilitadoSedePrincipal)</li>
                                     </ul>
                                 </div>
                             </div>
@@ -634,14 +658,14 @@
                         <legend>Canales:</legend>
 
                         <div class="row">
-                            <div class="col-sm-6 col-lg-4">
+                            <div class="col-sm-12 col-lg-12">
                                 <div class="form-group">
-                                    <ul>
-                                        <li id="li_perteneceCanalMultiregional">@Html.LabelFor(c => cliente.perteneceCanalMultiregional);</li>
-                                        <li id="li_perteneceCanalLima">@Html.LabelFor(c => cliente.perteneceCanalLima);</li>
-                                        <li id="li_perteneceCanalProvincias">@Html.LabelFor(c => cliente.perteneceCanalProvincias);</li>
-                                        <li id="li_perteneceCanalPCP">@Html.LabelFor(c => cliente.perteneceCanalPCP);</li>
-                                        <li id="li_esSubDistribuidor">@Html.LabelFor(c => cliente.esSubDistribuidor);</li>
+                                    <ul class="list-unstyled">
+                                        <li id="li_perteneceCanalMultiregional">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalMultiregional)</li>
+                                        <li id="li_perteneceCanalLima">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalLima)</li>
+                                        <li id="li_perteneceCanalProvincias">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalProvincias)</li>
+                                        <li id="li_perteneceCanalPCP">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalPCP)</li>
+                                        <li id="li_esSubDistribuidor">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.esSubDistribuidor)</li>
                                     </ul>
                                 </div>
                             </div>
