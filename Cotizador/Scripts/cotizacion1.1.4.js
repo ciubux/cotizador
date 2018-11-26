@@ -3157,6 +3157,18 @@ jQuery(function ($) {
         });
     });  
 
+    $("#buscarSedesGrupoCliente").change(function () {
+        var valor = $("input[name=buscarSedesGrupoCliente]:checked").val();
+        $.ajax({
+            url: "/Cotizacion/updateBuscarSedesGrupoCliente",
+            type: 'POST',
+            data: {
+                buscarSedesGrupoCliente: valor
+            },
+            success: function () {
+            }
+        });
+    });
 
 
     $("#btnCancelarComentario").click(function()

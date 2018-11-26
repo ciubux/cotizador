@@ -250,6 +250,7 @@
     <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="Email\PedidoSinAtencion.cs" />
+    <Compile Include="ExcelExport\PedidoSearch.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

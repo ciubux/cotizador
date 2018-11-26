@@ -94,6 +94,7 @@ namespace Cotizador.Controllers
             guiaRemision.pedido = new Pedido();
             guiaRemision.pedido.cliente = new Cliente();
             guiaRemision.pedido.cliente.idCliente = Guid.Empty;
+            guiaRemision.pedido.buscarSedesGrupoCliente = false;
 
             guiaRemision.fechaTrasladoDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             guiaRemision.fechaTrasladoHasta = DateTime.Now.AddDays(0);
@@ -829,6 +830,20 @@ namespace Cotizador.Controllers
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
             PropertyInfo propertyInfo = guiaRemision.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(guiaRemision, this.Request.Params["valor"]);
+            this.GuiaRemisionSession = guiaRemision;
+        }
+
+        public void ChangeBuscarSedesGrupoCliente()
+        {
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            if (this.Request.Params["buscarSedesGrupoCliente"] != null && Int32.Parse(this.Request.Params["buscarSedesGrupoCliente"]) == 1)
+            {
+                guiaRemision.pedido.buscarSedesGrupoCliente = true;
+            }
+            else
+            {
+                guiaRemision.pedido.buscarSedesGrupoCliente = false;
+            }
             this.GuiaRemisionSession = guiaRemision;
         }
 

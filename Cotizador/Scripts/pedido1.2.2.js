@@ -4266,6 +4266,20 @@ jQuery(function ($) {
             }
         });
     });
+    
+
+    $("#pedido_buscarSedesGrupoCliente").change(function () {
+        var valor = $("input[name=pedido_buscarSedesGrupoCliente]:checked").val();
+        $.ajax({
+            url: "/Pedido/ChangeBuscarSedesGrupoCliente",
+            type: 'POST',
+            data: {
+                buscarSedesGrupoCliente: valor
+            },
+            success: function () {
+            }
+        });
+    });
 
     $("#estado").change(function () {
         var estado = $("#estado").val();

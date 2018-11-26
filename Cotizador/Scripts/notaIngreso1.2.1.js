@@ -234,7 +234,19 @@ jQuery(function ($) {
 
     });
 
-    
+
+    $("#buscarSedesGrupoCliente").change(function () {
+        var valor = $("input[name=buscarSedesGrupoCliente]:checked").val();
+        $.ajax({
+            url: "/NotaIngreso/ChangeBuscarSedesGrupoCliente",
+            type: 'POST',
+            data: {
+                buscarSedesGrupoCliente: valor
+            },
+            success: function () {
+            }
+        });
+    });
 
     /**
      * FIN CONTROLES DE CLIENTE

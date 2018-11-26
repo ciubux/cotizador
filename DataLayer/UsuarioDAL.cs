@@ -113,6 +113,7 @@ namespace DataLayer
                 usuario.bloqueaClientes = Converter.GetBool(row, "bloquea_clientes");
                 usuario.modificaPedidoFechaEntregaExtendida = Converter.GetBool(row, "modifica_pedido_fecha_entrega_extendida");
                 usuario.modificaNegociacionMultiregional = Converter.GetBool(row, "modifica_negociacion_multiregional");
+                usuario.buscaSedesGrupoCliente = Converter.GetBool(row, "busca_sedes_grupo_cliente");
                 
             }
 

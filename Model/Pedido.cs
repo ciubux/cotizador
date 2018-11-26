@@ -50,6 +50,9 @@ namespace Model
 
         public int idGrupoCliente { get; set; }
 
+        public bool buscarSedesGrupoCliente { get; set; }
+
+
         public Cotizacion cotizacion { get; set; }
         [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }

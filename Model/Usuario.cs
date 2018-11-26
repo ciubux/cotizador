@@ -125,6 +125,7 @@ namespace Model
         public bool modificaPedidoFechaEntregaExtendida { get; set; }
         public bool modificaNegociacionMultiregional { get; set; }
 
+        public bool buscaSedesGrupoCliente { get; set; }
         public List<Vendedor> vendedorList { get; set; }
 
 

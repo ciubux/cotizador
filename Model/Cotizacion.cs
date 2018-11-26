@@ -71,7 +71,7 @@ namespace Model
 
         public Decimal minimoMargen { get; set; }
 
-
+        public bool buscarSedesGrupoCliente { get; set; }
 
 
         /*Campos utilizados para búsqueda*/

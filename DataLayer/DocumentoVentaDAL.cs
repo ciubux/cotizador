@@ -545,6 +545,7 @@ namespace DataLayer
             }
 
             InputParameterAdd.Guid(objCommand, "idCliente", documentoVenta.cliente.idCliente);
+            InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", documentoVenta.buscarSedesGrupoCliente);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", documentoVenta.idGrupoCliente);
             InputParameterAdd.Guid(objCommand, "idCiudad", documentoVenta.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);

@@ -53,6 +53,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.grupo = new GrupoCliente();
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
             cotizacionTmp.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Todos;
+            cotizacionTmp.buscarSedesGrupoCliente = false;
             // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
             cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
             cotizacionTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
@@ -575,6 +576,20 @@ namespace Cotizador.Controllers
         {
             Cotizacion cotizacion = this.CotizacionSession;
             cotizacion.usuarioBusqueda = new Usuario { idUsuario = Guid.Parse(this.Request.Params["usuario"]) };
+            this.CotizacionSession = cotizacion;
+        }
+
+        public void updateBuscarSedesGrupoCliente()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            if (this.Request.Params["buscarSedesGrupoCliente"] != null && Int32.Parse(this.Request.Params["buscarSedesGrupoCliente"]) == 1)
+            {
+                cotizacion.buscarSedesGrupoCliente = true;
+            }
+            else
+            {
+                cotizacion.buscarSedesGrupoCliente = false;
+            }
             this.CotizacionSession = cotizacion;
         }
 

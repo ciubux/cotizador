@@ -306,7 +306,19 @@ jQuery(function ($) {
     });
 
 
- 
+    $("#buscarSedesGrupoCliente").change(function () {
+        var valor = $("input[name=buscarSedesGrupoCliente]:checked").val();
+        $.ajax({
+            url: "/GuiaRemision/ChangeBuscarSedesGrupoCliente",
+            type: 'POST',
+            data: {
+                buscarSedesGrupoCliente: valor
+            },
+            success: function () {
+            }
+        });
+    });
+    
 
 
     function changeInputString(propiedad, valor) {

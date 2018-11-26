@@ -443,5 +443,7 @@ namespace Model
 
 
         public int idGrupoCliente { get; set; }
+
+        public bool buscarSedesGrupoCliente { get; set; }
     }
 }

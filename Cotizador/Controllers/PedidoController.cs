@@ -62,7 +62,8 @@ namespace Cotizador.Controllers
 
             pedidoTmp.fechaProgramacionDesde = null;// new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             pedidoTmp.fechaProgramacionHasta = null;// new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
-            
+
+            pedidoTmp.buscarSedesGrupoCliente = false;
 
             pedidoTmp.ciudad = new Ciudad();
             pedidoTmp.cliente = new Cliente();
@@ -976,7 +977,21 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
         }
 
+        public void ChangeBuscarSedesGrupoCliente()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+            if (this.Request.Params["buscarSedesGrupoCliente"] != null && Int32.Parse(this.Request.Params["buscarSedesGrupoCliente"]) == 1)
+            {
+                pedido.buscarSedesGrupoCliente = true;
+            }
+            else
+            {
+                pedido.buscarSedesGrupoCliente = false;
+            }
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
 
+    
 
         public String ChangeIdCiudad()
         {
