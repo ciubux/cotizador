@@ -14,6 +14,8 @@ namespace Model
 
         public int cantidad { get; set; }
 
+        public decimal cantidadDecimal { get; set; }
+
         public int cantidadPorAtender { get; set; }
 
         public int cantidadPendienteAtencion { get; set; }

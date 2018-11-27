@@ -24,45 +24,45 @@
                     @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @if (pedido.numeroPedido != 0)
-                        {
-                            @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
-                        }
+                    {
+                        @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+            }
                     </div>
                 </div>
             </div>
             <!--NÚMERO GRUPO PEDIDO
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        @if (pedido.numeroGrupoPedido != 0)
-                        {
-                            @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
-                        }
-                    </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                <div class="col-xs-8">
+                    @if (pedido.numeroGrupoPedido != 0)
+                    {
+                        @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+                    }
                 </div>
-            </div>-->
+            </div>
+        </div>-->
             <!--NÚMERO COTIZACION-->
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     @Html.LabelFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @if (pedido.cotizacion.codigo != 0)
-                        {
-                            @Html.TextBoxFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
-                        }
+                    {
+                        @Html.TextBoxFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+            }
                     </div>
                 </div>
             </div>
@@ -72,9 +72,9 @@
                     @Html.LabelFor(p => pedido.tipoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.DropDownList("pedido_tipoPedido",
-                                         EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedido), pedido.tipoPedido),
-                                         new { @class = "form-control" }
-                                         )
+                                          EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedido), pedido.tipoPedido),
+                                          new { @class = "form-control" }
+                                          )
                     </div>
                 </div>
             </div>
@@ -95,11 +95,11 @@
                     @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                                                     new
-                                                     {
-                                                         ciudadSelectId = "idCiudad",
-                                                         selectedValue = pedido.ciudad.idCiudad
-                                                     })
+                                                      new
+                                                      {
+                                                          ciudadSelectId = "idCiudad",
+                                                          selectedValue = pedido.ciudad.idCiudad
+                                                      })
                     </div>
                 </div>
             </div>
@@ -111,18 +111,18 @@
                     <div class="col-xs-6">
                         <select class="form-control input-sm" id="idCliente" name="idCliente" required>
                             @if (ViewBag.existeCliente == 1)
-                            {
-                                <option selected value="@pedido.cliente.idCliente ">@pedido.cliente</option>
-                            }
-                            else
-                            {
-                                <option value=""></option>
-                            }
+                        {
+                            <option selected value="@pedido.cliente.idCliente ">@pedido.cliente</option>
+                    }
+                    else
+                    {
+                        <option value=""></option>
+                }
                         </select>
                     </div>
 
                     <div class="col-xs-2">
-                        <button id="btnAgregarCliente" type="button" class="btn btn-primary bouton-image-add addBouton" ></button>
+                        <button id="btnAgregarCliente" type="button" class="btn btn-primary bouton-image-add addBouton"></button>
                     </div>
 
                 </div>
@@ -144,11 +144,11 @@
                     @Html.LabelFor(p => pedido.ciudadASolicitar, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudadASolicitar" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudadesASolicitar", "Ciudad",
-                                                     new
-                                                     {
-                                                         ciudadSelectId = "idCiudadASolicitar",
-                                                         selectedValue = pedido.ciudadASolicitar.idCiudad
-                                                     })
+                                                      new
+                                                      {
+                                                          ciudadSelectId = "idCiudadASolicitar",
+                                                          selectedValue = pedido.ciudadASolicitar.idCiudad
+                                                      })
                     </div>
                 </div>
             </div>
@@ -160,120 +160,120 @@
         <fieldset>
             <legend id="divpedido_direccionEntrega">Datos de Entrega:</legend>
 
-                <div class="row mostrarDatosParaGuia">
-                    <!--ENTREGAR EN-->
-                    <div class="col-sm-6 col-lg-8">
-                        <div class="form-group">
-                            @Html.LabelFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
-                            <div class="col-xs-8 col-lg-9">
-                                @Html.DropDownList("pedido_direccionEntrega",
-                                                                   new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "descripcion", pedido.direccionEntrega.idDireccionEntrega, null),
-                                                                   "Seleccione Dirección de Entrega",
-                                                                   new { @class = "form-control" })
-                            </div>
-                            <div class="col-xs-2 col-lg-1">
-                                <button id="btnAgregarDireccion" type="button" class="btn btn-primary bouton-image-add addDireccion" data-toggle="modal" data-target="#modalAgregarDireccion"></button>
-                            </div>
+            <div class="row mostrarDatosParaGuia">
+                <!--ENTREGAR EN-->
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.DropDownList("pedido_direccionEntrega",
+                                                                new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "descripcion", pedido.direccionEntrega.idDireccionEntrega, null),
+                                                                "Seleccione Dirección de Entrega",
+                                                                new { @class = "form-control" })
                         </div>
-
-
+                        <div class="col-xs-2 col-lg-1">
+                            <button id="btnAgregarDireccion" type="button" class="btn btn-primary bouton-image-add addDireccion" data-toggle="modal" data-target="#modalAgregarDireccion"></button>
+                        </div>
                     </div>
-
 
 
                 </div>
-                <div class="row mostrarDatosParaGuia">
-                    <!--CONTACTO ENTREGA -->
-                    <div class="col-sm-6 col-lg-8">
-                        <div class="form-group">
-                            @Html.LabelFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "control-label col-xs-2" })
-                            <div class="input-group col-xs-6">
-                                <div class="input-group-addon">
-                                    <span class="input-group-text" id="basic-addon1">Nombre:</span>
-                                </div>
 
-                                @Html.TextBoxFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "form-control" })
+
+
+            </div>
+            <div class="row mostrarDatosParaGuia">
+                <!--CONTACTO ENTREGA -->
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "control-label col-xs-2" })
+                        <div class="input-group col-xs-6">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Nombre:</span>
                             </div>
-                            <div class="input-group col-xs-4">
-                                <div class="input-group-addon">
-                                    <span class="input-group-text" id="basic-addon1">Teléfono:</span>
-                                </div>
-                                @Html.TextBoxFor(p => pedido.direccionEntrega.telefono, htmlAttributes: new { @class = "form-control" })
-                            </div>
+
+                            @Html.TextBoxFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "form-control" })
                         </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="form-group">
-                            <div class="input-group col-xs-12">
-                                <div class="input-group-addon">
-                                    <span class="input-group-text" id="basic-addon1">Dirección:</span>
-                                </div>
-                                @Html.TextBoxFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "form-control" })
+                        <div class="input-group col-xs-4">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Teléfono:</span>
                             </div>
+                            @Html.TextBoxFor(p => pedido.direccionEntrega.telefono, htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
-
-                <div class="row mostrarDatosParaGuia">
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="form-group">
-                            @Html.LabelFor(model => pedido.ubigeoEntrega.Departamento, new { @class = "control-label col-xs-4" })
-                            <div class="col-xs-8">
-                                <!--class="control-departamento-width" style="display:flex">-->
-                                @Html.Action("GetDepartamentos", "Ubigeo",
-                                                                          new
-                                                                          {
-                                                                              departamentoSelectId = "ActualDepartamento",
-                                                                              provinciaSelectId = "ActualProvincia",
-                                                                              distritoSelectId = "ActualDistrito",
-                                                                              provinciaDivId = "dvProvincias",
-                                                                              distritoDivId = "dvDistritos",
-                                                                              selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2)
-                                                                          })
-
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <div class="input-group col-xs-12">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Dirección:</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="form-group">
-
-                            @Html.LabelFor(model => pedido.ubigeoEntrega.Provincia, new { @class = "control-label col-xs-4" })
-                            <div id="dvProvincias" class="col-xs-8">
-                                <!-- class="control-provincia-width" style="display:flex">-->
-                                @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
-                                                                      new
-                                                                      {
-                                                                          departamentoSelectId = "ActualDepartamento",
-                                                                          provinciaSelectId = "ActualProvincia",
-                                                                          distritoSelectId = "ActualDistrito",
-                                                                          distritoDivId = "dvDistritos",
-                                                                          codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                                                          selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4)
-                                                                      })
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="form-group">
-
-                            @Html.LabelFor(model => pedido.ubigeoEntrega.Distrito, new { @class = "control-label col-xs-4" })
-                            <div id="dvDistritos" class="col-xs-8">
-                                <!-- class="control-distrito-width" style="display:flex">-->
-                                @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
-                                {
-                                    distritoSelectId = "ActualDistrito",
-                                    codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                    codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
-                                    selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6)
-                                })
-
-                            </div>
+                            @Html.TextBoxFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="row mostrarDatosParaGuia">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => pedido.ubigeoEntrega.Departamento, new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            <!--class="control-departamento-width" style="display:flex">-->
+                            @Html.Action("GetDepartamentos", "Ubigeo",
+                                                                       new
+                                                                       {
+                                                                           departamentoSelectId = "ActualDepartamento",
+                                                                           provinciaSelectId = "ActualProvincia",
+                                                                           distritoSelectId = "ActualDistrito",
+                                                                           provinciaDivId = "dvProvincias",
+                                                                           distritoDivId = "dvDistritos",
+                                                                           selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2)
+                                                                       })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => pedido.ubigeoEntrega.Provincia, new { @class = "control-label col-xs-4" })
+                        <div id="dvProvincias" class="col-xs-8">
+                            <!-- class="control-provincia-width" style="display:flex">-->
+                            @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
+                                                                   new
+                                                                   {
+                                                                       departamentoSelectId = "ActualDepartamento",
+                                                                       provinciaSelectId = "ActualProvincia",
+                                                                       distritoSelectId = "ActualDistrito",
+                                                                       distritoDivId = "dvDistritos",
+                                                                       codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                                                       selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4)
+                                                                   })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => pedido.ubigeoEntrega.Distrito, new { @class = "control-label col-xs-4" })
+                        <div id="dvDistritos" class="col-xs-8">
+                            <!-- class="control-distrito-width" style="display:flex">-->
+                            @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
+                        {
+                            distritoSelectId = "ActualDistrito",
+                            codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                            codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
+                            selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6)
+                        })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
-           
+
 
 
             <div class="row">
@@ -331,55 +331,55 @@
         <fieldset>
             <legend>Datos de la Solicitud:</legend>
 
-                <div class="row mostrarDatosParaGuia" >
-                    <div class="col-sm-6 col-lg-8">
-                        <div class="form-group">
-                            @Html.LabelFor(p => pedido.solicitante, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
-                            <div class="col-xs-8 col-lg-9">
-                                @Html.DropDownList("pedido_solicitante",
-                                                      new SelectList(pedido.cliente.solicitanteList as IEnumerable<Model.Solicitante>, "idSolicitante", "nombre", pedido.solicitante.idSolicitante, null),
-                                                      "Seleccione Solicitante",
-                                                      new { @class = "form-control" })
-                            </div>
-                            <div class="col-xs-2 col-lg-1">
-                                <button id="btnAgregarSolicitante" type="button" class="btn btn-primary bouton-image-add addBouton" data-toggle="modal" data-target="#modalAgregarSolicitante"></button>
-                            </div>
+            <div class="row mostrarDatosParaGuia">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.solicitante, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.DropDownList("pedido_solicitante",
+                                                   new SelectList(pedido.cliente.solicitanteList as IEnumerable<Model.Solicitante>, "idSolicitante", "nombre", pedido.solicitante.idSolicitante, null),
+                                                   "Seleccione Solicitante",
+                                                   new { @class = "form-control" })
                         </div>
-
-
+                        <div class="col-xs-2 col-lg-1">
+                            <button id="btnAgregarSolicitante" type="button" class="btn btn-primary bouton-image-add addBouton" data-toggle="modal" data-target="#modalAgregarSolicitante"></button>
+                        </div>
                     </div>
+
 
                 </div>
 
-                <div class="row mostrarDatosParaGuia">
-                    <div class="col-sm-6 col-lg-8">
-                        <div class="form-group">
-                            <label for="pedido_solicitante_nombre" class="control-label col-xs-2">Datos de Solicitante:</label>
-                            <div class="input-group col-xs-6">
-                                <div class="input-group-addon">
-                                    <span class="input-group-text" id="basic-addon1">Nombre:</span>
-                                </div>
-                                @Html.TextBoxFor(p => pedido.solicitante.nombre, htmlAttributes: new { @class = "form-control" })
-                            </div>
-                            <div class="input-group col-xs-4">
-                                <div class="input-group-addon">
-                                    <span class="input-group-text" id="basic-addon1">Teléfono:</span>
-                                </div>
-                                @Html.TextBoxFor(p => pedido.solicitante.telefono, htmlAttributes: new { @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="input-group col-xs-12">
+            </div>
+
+            <div class="row mostrarDatosParaGuia">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        <label for="pedido_solicitante_nombre" class="control-label col-xs-2">Datos de Solicitante:</label>
+                        <div class="input-group col-xs-6">
                             <div class="input-group-addon">
-                                <span class="input-group-text" id="basic-addon1">E-mail:</span>
+                                <span class="input-group-text" id="basic-addon1">Nombre:</span>
                             </div>
-                            @Html.TextBoxFor(p => pedido.solicitante.correo, htmlAttributes: new { @class = "form-control" })
-
+                            @Html.TextBoxFor(p => pedido.solicitante.nombre, htmlAttributes: new { @class = "form-control" })
                         </div>
-                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Correo del Cliente a donde se le notificará sobre la atención de su Pedido.</span>
+                        <div class="input-group col-xs-4">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Teléfono:</span>
+                            </div>
+                            @Html.TextBoxFor(p => pedido.solicitante.telefono, htmlAttributes: new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="input-group col-xs-12">
+                        <div class="input-group-addon">
+                            <span class="input-group-text" id="basic-addon1">E-mail:</span>
+                        </div>
+                        @Html.TextBoxFor(p => pedido.solicitante.correo, htmlAttributes: new { @class = "form-control" })
+
+                    </div>
+                    <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Correo del Cliente a donde se le notificará sobre la atención de su Pedido.</span>
+                </div>
+            </div>
 
             <div class="row">
                 <!--FECHA SOLICITUD -->
@@ -401,11 +401,11 @@
                     <div class="form-group">
                         <label for="fechaEntrega" class="control-label col-xs-6 col-lg-4">Hora de Solicitud:</label>
                         <!-- <div class="input-group col-xs-6 col-lg-8">
-                            <div class="input-group-addon" style="width:70px">
-                                <span class="input-group-text" id="basic-addon1">Hora:</span>
-                            </div>
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Hora:</span>
+                        </div>
 
-                        </div>-->
+                    </div>-->
                         <div class="input-group col-xs-8 col-lg-8">
                             <input class="form-control" type="time" id="horaSolicitud" name="horaSolicitud" value="@ViewBag.horaSolicitud">
                         </div>
@@ -428,26 +428,26 @@
                             <div class="radio radio-inline">
                                 <label class="radio-label">
                                     @if (pedido.incluidoIGV)
-                                    {
-                                        <input class="radio-input" disabled checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" disabled type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
-                                    }
+                                {
+                                    <input class="radio-input" disabled checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                            }
+                            else
+                            {
+                                <input class="radio-input" disabled type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                        }
 
                                 </label>
                             </div>
                             <div class="radio radio-inline">
                                 <label class="radio-label">
                                     @if (!pedido.incluidoIGV)
-                                    {
-                                        <input class="radio-input" disabled checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" disabled type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
-                                    }
+                                {
+                                    <input class="radio-input" disabled checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                            }
+                            else
+                            {
+                                <input class="radio-input" disabled type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                        }
                                 </label>
                             </div>
                         </div>
@@ -473,22 +473,6 @@
         <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
 
             <div class="pull-left">
-                @if (pedido.usuario.apruebaPedidos)
-                {
-                    <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
-
-                    if (pedido.mostrarCosto)
-                    {
-                        <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
-                    }
-                    else
-                    {
-                        <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
-                    }
-                }
-            </div>
-
-            <div class="pull-left">
                 <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
             </div>
 
@@ -497,6 +481,24 @@
             </div>
 
         </div>
+        @if (pedido.usuario.visualizaCostos)
+        {
+        <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
+
+            <div class="pull-left">
+                <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
+                @if (pedido.mostrarCosto)
+                {
+                <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                }
+                else
+                {
+                <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                }
+                
+            </div>
+        </div>
+        }
 
         <table id="tableDetallePedido" class="table" data-editing="true"
                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
@@ -512,13 +514,13 @@
                     <th data-name="idProducto" data-visible="false"></th>
 
                     @if (ViewBag.debug == 1)
-                    {
-                        <th data-name="esPrecioAlternativo" data-visible="true">EsPrecioAlternativo</th>
-                    }
-                    else
-                    {
-                        <th data-name="esPrecioAlternativo" data-visible="false">EsPrecioAlternativo</th>
-                    }
+                {
+                    <th data-name="esPrecioAlternativo" data-visible="true">EsPrecioAlternativo</th>
+            }
+            else
+            {
+                <th data-name="esPrecioAlternativo" data-visible="false">EsPrecioAlternativo</th>
+        }
                     <th data-name="proveedor" data-sortable="false">Prov.</th>
                     <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                     <th data-name="producto" data-sortable="false">Producto / Descripción</th>
@@ -528,34 +530,34 @@
                     <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
 
                     @if (ViewBag.debug == 1)
-                    {
-                        <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-                    }
-                    else
-                    {
-                        <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-                    }
+                {
+                    <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+            }
+            else
+            {
+                <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+        }
 
                     <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
                     <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
 
-                    @if (pedido.mostrarCosto || ViewBag.debug == 1)
-                    {
-                        <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
-                    }
-                    else
-                    {
-                        <th data-name="costo" data-visible="false">Costo</th>
-                    }
+                    @if (pedido.mostrarCosto)
+                {
+                    <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
+            }
+            else
+            {
+                <th data-name="costo" data-visible="false">Costo</th>
+        }
 
                     @if (pedido.usuario.visualizaMargen)
-                    {
-                        <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-                    }
-                    else
-                    {
-                        <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-                    }
+                {
+                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+            }
+            else
+            {
+                <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+        }
 
                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
@@ -565,7 +567,7 @@
                     <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
                     <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
 
-              
+
                     <th class="ordenar" data-sortable="false" data-visible="false"></th>
 
 
@@ -575,8 +577,8 @@
 
                 @{int contador = 0;}
                 @foreach (var cotizacionDetalle in pedido.pedidoDetalleList)
-                {
-                    contador++;
+            {
+                contador++;
                 <tr data-expanded="true">
                     <td>  @cotizacionDetalle.producto.idProducto  </td>
                     <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
@@ -602,7 +604,7 @@
                     <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
                     <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoLista  </td>
                     <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
-                   
+
 
                     <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
 
@@ -610,31 +612,31 @@
 
 
                     @if (cotizacionDetalle.producto.precioClienteProducto.precioUnitario == 0)
-    {
-        if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioLista - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
-  && cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioLista + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                {
+                    if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioLista - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+              && cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioLista + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                    {
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
+
+                }
+                else
+                {
+                    <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
+            }
+
+        }
+        else
         {
+            if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+            && cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+            {
                 <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
 
-}
-else
-{
-                <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
-}
-
-}
-else
-{
-if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
-&& cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
-{
-                <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
-
-}
-else
-{
-                <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
-}
+        }
+        else
+        {
+            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
+    }
 }
                     <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
 
@@ -651,7 +653,7 @@ else
 
 
                 </tr>
-                }
+        }
 
             </tbody>
         </table>
@@ -744,12 +746,12 @@ else
                     <div class="col-xs-8">
                         <ul id="nombreArchivos">
                             @foreach (Model.PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
-                            {
-                                <li>
-                                    <a href="javascript:mostrar();" class="descargar">@pedidoAdjunto.nombre</a>
-                                    <a href="javascript:mostrar();"><img src="~/images/icon-close.png" id="@pedidoAdjunto.nombre" class="btnDeleteArchivo" /></a>
-                                </li>
-                            }
+                        {
+                            <li>
+                                <a href="javascript:mostrar();" class="descargar">@pedidoAdjunto.nombre</a>
+                                <a href="javascript:mostrar();"><img src="~/images/icon-close.png" id="@pedidoAdjunto.nombre" class="btnDeleteArchivo" /></a>
+                            </li>
+                    }
                         </ul>
                     </div>
                 </div>
@@ -768,13 +770,13 @@ else
             <div class="pull-right">
                 <button type="button" id="btnCancelarPedido" class="btn btn-danger">Cancelar</button>
                 @if (pedido.numeroPedido > 0)
-                {
-                    <button id="btnFinalizarEdicionPedido" type="button" class="btn btn-success">Finalizar Edición</button>
-                }
-                else
-                {
-                    <button id="btnFinalizarCreacionPedido" type="button" class="btn btn-success">Finalizar Creación</button>
-                }
+            {
+                <button id="btnFinalizarEdicionPedido" type="button" class="btn btn-success">Finalizar Edición</button>
+        }
+        else
+        {
+            <button id="btnFinalizarCreacionPedido" type="button" class="btn btn-success">Finalizar Creación</button>
+    }
             </div>
         </div>
 

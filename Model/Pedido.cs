@@ -196,12 +196,12 @@ namespace Model
 
         public String numeroGrupoPedidoString
         {
-            get { return this.numeroGrupoPedido == 0 ? "" : this.numeroGrupoPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
+            get { return this.numeroGrupoPedido == 0 || this.numeroGrupoPedido == null ? "" : this.numeroGrupoPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
         }
 
         public String numeroPedidoString
         {
-            get { return this.numeroPedido == 0?"":this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
+            get { return this.numeroPedido == 0 || this.numeroPedido == null ? "":this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
         }
 
         public Usuario usuario { get; set; }

@@ -1701,14 +1701,15 @@ namespace Cotizador.Controllers
             String direccionEntrega, String sedeMP, String ubigeo, String observaciones, 
             DateTime? fechaEntregaDesde, DateTime? fechaEntregaHasta,
             String inicioPrimerTurnoEntrega, String finPrimerTurnoEntrega, String inicioSegundoTurnoEntrega, String finSegundoTurnoEntrega,
-            String ordenCompra, Pedido.tipos tipoPedido, Pedido.tiposPedido tipoPedidoVenta, Pedido.tiposPedidoAlmacen tipoPedidoAlmacen, String facturaConsolidada
+            String ordenCompra, Pedido.tipos tipoPedido, Pedido.tiposPedido tipoPedidoVenta, Pedido.tiposPedidoAlmacen tipoPedidoAlmacen, String facturaConsolidada,
+            Int64 numeroGrupo
             )
         {
             Pedido pedido = new Pedido(Pedido.tipos.Venta);
             pedido.tipoPedido = tipoPedidoVenta;
             pedido.idPedido = Guid.Empty;
             pedido.numeroPedido = 0;
-            pedido.numeroGrupoPedido = null;
+            pedido.numeroGrupoPedido = numeroGrupo;
             pedido.cotizacion = new Cotizacion();
             pedido.ubigeoEntrega = new Ubigeo();
             pedido.ubigeoEntrega.Id = ubigeo;
@@ -1726,6 +1727,9 @@ namespace Cotizador.Controllers
             pedido.numeroReferenciaCliente = null;
             pedido.direccionEntrega = new DireccionEntrega();
             pedido.direccionEntrega.descripcion = direccionEntrega;
+            pedido.direccionEntrega.codigoCliente = codCentroCostosCliente;
+            pedido.direccionEntrega.codigoMP= codCentroCostosMP;
+            pedido.direccionEntrega.nombre = centroCostos;
 
             pedido.solicitante = new Solicitante();
             pedido.solicitante.nombre = nombreSolicitante;         
@@ -1745,13 +1749,27 @@ namespace Cotizador.Controllers
             pedido.numeroReferenciaCliente = ordenCompra;
             if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
             {
-                pedido.observacionesGuiaRemision = "O/C N° " + pedido.numeroReferenciaCliente + " / ";
+                pedido.observacionesGuiaRemision = "O/C N° " + pedido.numeroReferenciaCliente + "";
             }
-            if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
+            if (centroCostos != null && centroCostos.Length > 0)
             {
-                pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + centroCostos+ " ("+codCentroCostosCliente +  ") / ";
-                pedido.observaciones = centroCostos + " (" + codCentroCostosCliente + ") / ";
+                if (codCentroCostosCliente != null && codCentroCostosCliente.Length > 0)
+                {
+                    pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + centroCostos + " (" + codCentroCostosCliente + ")";
+                    pedido.observaciones = centroCostos;
+                }
+                else
+                {
+                    pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + centroCostos;
+                    pedido.observaciones = centroCostos + " (" + codCentroCostosCliente + ")";
+                }                
             }
+            if (observaciones != null && !observaciones.Equals(String.Empty))
+            {
+                pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + " / " + observaciones;
+                pedido.observaciones = pedido.observaciones + " / " + observaciones;
+            }
+
             pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + observaciones;
             pedido.observaciones = pedido.observaciones + observaciones;
 
@@ -1781,13 +1799,11 @@ namespace Cotizador.Controllers
             try
             {
 
-                //HSSFWorkbook hssfwb;
-                XSSFWorkbook hssfwb;
+                PedidoBL pedidoBL = new PedidoBL();
+                Int64 numeroGrupo =  pedidoBL.GetSiguienteNumeroGrupoPedido();
 
-                /*      ProductoBL productoBL = new ProductoBL();
-                      productoBL.truncateProductoStaging();*/
 
-                hssfwb = new XSSFWorkbook(file.InputStream);
+                XSSFWorkbook hssfwb = new XSSFWorkbook(file.InputStream);
 
                 ISheet sheet = hssfwb.GetSheetAt(0);
                 int row = 1;
@@ -1872,13 +1888,13 @@ namespace Cotizador.Controllers
                             String sedeMP = UtilesHelper.getValorCelda(sheet, row, "G");
                             String ubigeo = UtilesHelper.getValorCelda(sheet, row, "H");
                             DateTime? fechaEntregaHasta = UtilesHelper.getValorCeldaDate(sheet, row, "M");
-                            if (fechaEntregaHasta == null)
+                            if (fechaEntregaHasta == null )
                             {
                                 fechaEntregaHasta = fechaEntregaHastaGeneral;
                             }
 
                             Decimal subtotal = UtilesHelper.getValorCeldaDecimal(sheet, row, "I");
-
+                            fechaEntregaHasta = fechaEntregaHastaGeneral;
                             subTotales.Add(subtotal);
                             ubigeos.Add(ubigeo);
                             direccionesEntrega.Add(direccionEntrega);
@@ -1892,7 +1908,8 @@ namespace Cotizador.Controllers
                                 codigoCentroCostosCliente, codigoCentroCostosMP, nombreCentroCostos,
                                 direccionEntrega, sedeMP, ubigeo, observaciones, fechaEntregaDesdeGeneral, fechaEntregaHasta,
                                 inicioPrimerTurnoEntrega, finPrimerTurnoEntrega, inicioSegundoTurnoEntrega, finSegundoTurnoEntrega,
-                                numeroOrdenCompra, tipoPedido, tipoPedidoVenta, tipoPedidoTrasladoInterno, facturaConsolidada);
+                                numeroOrdenCompra, tipoPedido, tipoPedidoVenta, tipoPedidoTrasladoInterno, facturaConsolidada,
+                                numeroGrupo);
                             ultimoPedido = pedido;
                             pedidoList.Add(pedido);
                         }
@@ -1930,7 +1947,7 @@ namespace Cotizador.Controllers
 
                 foreach (Pedido pedido in pedidoList)
                 {
-                    PedidoBL pedidoBL = new PedidoBL();
+
                     pedidoBL.InsertPedido(pedido);
                     numerosPedido = numerosPedido + pedido.numeroPedidoString;
 
@@ -2020,6 +2037,13 @@ namespace Cotizador.Controllers
 
             json = "{\"result\": [" + json + "]}";
             return json;
+        }
+
+        public void changeMostrarCosto()
+        {
+            Pedido pedido = this.PedidoSession;
+            pedido.mostrarCosto = Boolean.Parse(this.Request.Params["mostrarCosto"]);
+            this.PedidoSession = pedido;
         }
     }
 }

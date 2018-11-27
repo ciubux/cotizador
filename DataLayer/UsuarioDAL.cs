@@ -80,6 +80,10 @@ namespace DataLayer
 
                 //DOCUMENTOS VENTA
                 usuario.creaDocumentosVenta = Converter.GetBool(row, "crea_documentos_venta");
+                usuario.creaFacturaConsolidadaMultiregional = Converter.GetBool(row, "crea_factura_consolidada_multiregional");
+                usuario.creaFacturaConsolidadaLocal = Converter.GetBool(row, "crea_factura_consolidada_local");
+                usuario.visualizaGuiasPendienteFacturacion = Converter.GetBool(row, "visualiza_guias_pendientes_facturacion");
+
                 usuario.administraDocumentosVentaLima = Converter.GetBool(row, "administra_documentos_venta_lima");
                 usuario.administraDocumentosVentaProvincias = Converter.GetBool(row, "administra_documentos_venta_provincias");
                 usuario.visualizaDocumentosVenta = Converter.GetBool(row, "visualiza_documentos_venta");

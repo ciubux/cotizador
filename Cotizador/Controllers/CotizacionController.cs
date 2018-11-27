@@ -1066,9 +1066,14 @@ namespace Cotizador.Controllers
             CotizacionBL cotizacionBL = new CotizacionBL();
             Cotizacion cotizacion = new Cotizacion();
             cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
+
+
+            Boolean mantenerPorcentajeDescuento = Boolean.Parse(this.Request.Params["mantenerPorcentajeDescuento"]);
+
+            
             cotizacion.esRecotizacion = true;
             
-            cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
+            cotizacion = cotizacionBL.GetReCotizacion(cotizacion, usuario, mantenerPorcentajeDescuento);
             cotizacion.usuario = (Usuario)this.Session["usuario"];
             //Se seta el codigo y estadoAprobacion en 0 porque una recotización es una nueva cotización
             cotizacion.codigo = 0;
@@ -1078,6 +1083,9 @@ namespace Cotizador.Controllers
             cotizacion.fechaFinVigenciaPrecios = null;
             cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
             
+
+
+
             this.Session["cotizacion"] = cotizacion;
         }
 
@@ -1177,19 +1185,19 @@ namespace Cotizador.Controllers
                 UtilesHelper.setValorCelda(shCabecera, 2, "F", cotizacion.cliente.codigo);
 
                 UtilesHelper.setValorCelda(shCabecera, 3, "A", "Fecha Última Edición:");
-                UtilesHelper.setValorCelda(shCabecera, 3, "B", cotizacion.fecha);
+           //     UtilesHelper.setValorCelda(shCabecera, 3, "B", cotizacion.fecha);
                 UtilesHelper.setValorCelda(shCabecera, 3, "C", "Validez Oferta Hasta:");
-                UtilesHelper.setValorCelda(shCabecera, 3, "D", cotizacion.fechaLimiteValidezOferta);
+            //    UtilesHelper.setValorCelda(shCabecera, 3, "D", cotizacion.fechaLimiteValidezOferta);
                 UtilesHelper.setValorCelda(shCabecera, 3, "E", "Inicio Vigencia Precios:");
                 if(cotizacion.fechaInicioVigenciaPrecios == null)
                     UtilesHelper.setValorCelda(shCabecera, 3, "F","No Definida");
                 else
-                    UtilesHelper.setValorCelda(shCabecera, 3, "F", cotizacion.fechaInicioVigenciaPrecios.Value);
+           //         UtilesHelper.setValorCelda(shCabecera, 3, "F", cotizacion.fechaInicioVigenciaPrecios.Value);
                 UtilesHelper.setValorCelda(shCabecera, 3, "G", "Fin Vigencia Precios:");
-                if (cotizacion.fechaFinVigenciaPrecios == null)
+           /*     if (cotizacion.fechaFinVigenciaPrecios == null)
                     UtilesHelper.setValorCelda(shCabecera, 3, "H", "No Definida");
                 else
-                    UtilesHelper.setValorCelda(shCabecera, 3, "H", cotizacion.fechaFinVigenciaPrecios.Value);
+                    UtilesHelper.setValorCelda(shCabecera, 3, "H", cotizacion.fechaFinVigenciaPrecios.Value);*/
 
                 UtilesHelper.setValorCelda(shCabecera, 4, "A", "Estado:");
                 UtilesHelper.setValorCelda(shCabecera, 4, "B", cotizacion.seguimientoCotizacion.estadoString);

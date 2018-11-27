@@ -78,10 +78,13 @@ namespace Model
         public static String VAR_SESSION_GUIA = "guiaRemision";
         public static String VAR_SESSION_GUIA_BUSQUEDA = "guiaRemisionBusqueda";
         public static String VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA = "guiaRemisionBusquedaFacturaConsolidada";
-        public static String VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS = "guiaRemisionBusquedaFacturaConsolidadaIDs";
+        public static String VAR_SESSION_GUIA_CONSOLIDADA = "guiaRemisionConsolidada";
+        
+        public static String VAR_SESSION_RESUMEN_CONSOLIDADO = "documentoVentaResumenConsolidado";
         public static String VAR_SESSION_GUIA_LISTA = "guiaRemisionList";
         public static String VAR_SESSION_GUIA_LISTA_FACTURA_CONSOLIDADA = "guiaRemisionListFacturaConsolidada";
         public static String VAR_SESSION_GUIA_VER = "guiaRemisionVer";
+        public static String VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS = "guiaRemisionBusquedaFacturaConsolidadaIDs";
 
         public static String VAR_SESSION_NOTA_INGRESO = "notaIngreso";
         public static String VAR_SESSION_NOTA_INGRESO_BUSQUEDA = "notaIngresoBusqueda";
@@ -269,6 +272,9 @@ namespace Model
         #region PARAMETROS MAIL
         public static String SERVER_SMPTP = "smtp.office365.com";
         public static int PUERTO_SERVER_SMPTP = 587;
+        public static String MAIL_ADMINISTRADOR = "c.cornejo@mpinstitucional.com";
+        public static String MAIL_CREDITOS = "creditos@mpinstitucional.com";
+        public static String MAIL_COBRANZAS = "cobranzas@mpinstitucional.com";
 
 
         #endregion

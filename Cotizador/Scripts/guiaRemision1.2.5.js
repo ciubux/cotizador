@@ -1,3 +1,4 @@
+/// <reference path="moment.js" />
 
 jQuery(function ($) {
     
@@ -10,17 +11,23 @@ jQuery(function ($) {
         obtenerConstantes();
         verificarSiExisteNuevoTransportista();
         esPaginaImpresion();
-        cargarChosenCliente();
+      
         $("#btnBusqueda").click();
 
         if ($("#pagina").val() == 4) {
             if ($("#idMovimientoAlmacen").val() != "") {
                 showMovimientoAlmacen($("#idMovimientoAlmacen").val());
             }
+            cargarChosenCliente();
         }
         else if ($("#pagina").val() == 19) {
             $("#btnBusquedaGuiasFacturaConsolidada").click();
+            cargarChosenClienteConsolidacion();
         }
+        else {
+            cargarChosenCliente();
+        }
+
     });
 
     window.onafterprint = function () {
@@ -103,6 +110,31 @@ jQuery(function ($) {
     }
 
 
+    function cargarChosenClienteConsolidacion() {
+
+        $("#idClienteConsolidacion").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
+            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+                alert("Debe seleccionar la sede MP previamente.");
+                $("#idClienteConsolidacion").trigger('chosen:close');
+                $("#idCiudad").focus();
+                return false;
+            }
+        });
+
+        $("#idClienteConsolidacion").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/GuiaRemision/SearchClientes"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
+    }
+    
+
+
     /**
     *################################## INICIO CONTROLES CIUDAD
     */
@@ -145,16 +177,35 @@ jQuery(function ($) {
                 idCliente: idCliente
             },
             success: function (cliente) {
-          /*      $("#pedido_numeroReferenciaCliente").val("");
-                $("#pedido_direccionEntrega").val("");
-                $("#pedido_contactoEntrega").val("");
-                $("#pedido_telefonoContactoEntrega").val("");
-                $("#pedido_contactoPedido").val("");
-                $("#pedido_telefonoContactoPedido").val("");*/
             }
         });
       
     });
+
+    $("#idClienteConsolidacion").change(function () {
+        //  $("#contacto").val("");
+        var idCliente = $(this).val();
+
+        $.ajax({
+            url: "/GuiaRemision/GetCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCliente: idCliente
+            },
+            success: function (cliente) {
+                $("#tableGuiasRemision > tbody").empty();
+                $("#ver_guiaRemision_pedido_cliente_razon_social").html(cliente.razonSocial);
+                $("#ver_guiaRemision_pedido_cliente_ruc").html(cliente.ruc);
+                $("#ver_venta_cliente_razon_social").html(cliente.razonSocial);
+                $("#ver_venta_pedido_cliente_ruc").html(cliente.ruc);               
+            }
+        });
+
+    });
+
+
+
 
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
 
@@ -378,7 +429,7 @@ jQuery(function ($) {
                         type: 'green',
                         buttons: {
                             OK: function () {
-                                //showMovimientoAlmacen(resultado.idGuiaRemision);
+                                
                                 window.location = '/GuiaRemision/Index?idMovimientoAlmacen=' + resultado.idGuiaRemision; }
                         }
                     });
@@ -900,6 +951,10 @@ jQuery(function ($) {
     });
 
 
+
+
+
+
     $("#btnFacturarGuiaRemision").click(function () {
 
         var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
@@ -914,212 +969,206 @@ jQuery(function ($) {
                 mostrarMensajeErrorProceso();
             },
             success: function (resultado) {
-                //var cotizacion = $.parseJSON(respuesta);
-
-                var venta = resultado.venta;
-                var pedido = resultado.venta.pedido;
-                var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
-
-                //  var usuario = resultado.usuario;
-
-
-                $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
-                $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
-                $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
-                //Important
-
-                $("#idPedido").val(pedido.idPedido);
-
-                $("#verNumero").html(pedido.numeroPedidoString);
-                $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
-                $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
-                $("#verTipoPedido").html(pedido.tiposPedidoString);
-
-                $("#verUsuarioNombre").html(pedido.usuario.nombre);
-                $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
-
-                if (pedido.tipoPedido == "84") {
-                    $("#divReferenciaCliente").hide();
-                    $("#divCiudadSolicitante").show();
-                    $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
-                }
-                else {
-                    $("#divReferenciaCliente").show();
-                    $("#divCiudadSolicitante").hide();
-                }
-
-
-                $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
-
-                $("#verCiudad").html(pedido.ciudad.nombre);
-                $("#idClienteFacturacion").val(pedido.cliente.idCliente);
-                $("#verCliente").html(pedido.cliente.razonSocial);
-                $("#verClienteCodigo").html(pedido.cliente.codigo);
-                $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
-                $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
-                $("#verObservacionesPedido").html(pedido.observaciones);
-
-                if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_RUC) {
-                    $("#modalFacturarTitle").html("<b>Crear Factura</b>");
-                    $("#descripcionDatosDocumento").html("<b>Datos de la Factura</b>");
-                    $("#observacionesDocumento").html("Observaciones Factura:");
-                    $("#btnAceptarFacturarPedido").html("Generar Factura");   
-                    $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_RUC);
-                }
-                else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_DNI) {
-                    $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
-                    $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
-                    $("#observacionesDocumento").html("Observaciones Boleta:");
-                    $("#btnAceptarFacturarPedido").html("Generar Boleta");
-                    $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_DNI);
-                }
-                else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
-                    $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
-                    $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
-                    $("#observacionesDocumento").html("Observaciones Boleta:");
-                    $("#btnAceptarFacturarPedido").html("Generar Boleta");
-                    $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA);
-                }
-
-
-                $("#nombreArchivos > li").remove().end();
-
-
-                for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargarDesdeVenta">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
-                    $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                }    
-
-                
-
-
-                $("#verDireccionEntrega").html(pedido.direccionEntrega.descripcion);
-                $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
-                $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
-
-                $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
-
-                $("#verContactoPedido").html(pedido.contactoPedido);
-                $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
-
-                $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
-
-                $("#verEstado").html(pedido.seguimientoPedido.estadoString);
-                $("#verModificadoPor").html(pedido.seguimientoPedido.usuario.nombre);
-                $("#verObservacionEstado").html(pedido.seguimientoPedido.observacion);
-
-                $("#verEstadoCrediticio").html(pedido.seguimientoCrediticioPedido.estadoString);
-                $("#verModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido.usuario.nombre);
-                $("#verObservacionEstadoCreiditicio").html(pedido.seguimientoCrediticioPedido.observacion);
-
-
-                $("#verObservaciones").html(pedido.observaciones);
-                $("#verMontoSubTotal").html(Number(pedido.montoSubTotal).toFixed(cantidadDecimales));
-                $("#verMontoIGV").html(Number(pedido.montoIGV).toFixed(cantidadDecimales));
-                $("#verMontoTotal").html(Number(pedido.montoTotal).toFixed(cantidadDecimales));
-                $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
-
-                $("#verMontoSubTotalVenta").html(Number(venta.subTotal).toFixed(cantidadDecimales));
-                $("#verMontoIGVVenta").html(Number(venta.igv).toFixed(cantidadDecimales));
-                $("#verMontoTotalVenta").html(Number(venta.total).toFixed(cantidadDecimales));
-
-
-
-
-
-                $("#tableDetallePedido > tbody").empty();
-
-                FooTable.init('#tableDetallePedido');
-
-            //    $("#formVerGuiasRemision").html("");
-
-                var d = '';
-                var lista = pedido.pedidoDetalleList;
-                for (var i = 0; i < lista.length; i++) {
-
-                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
-
-                    d += '<tr>' +
-                        '<td>' + lista[i].producto.proveedor + '</td>' +
-                        '<td>' + lista[i].producto.sku + '</td>' +
-                        '<td>' + lista[i].producto.descripcion + '</td>' +
-                        '<td>' + lista[i].unidad + '</td>' +
-                        '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
-                        '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
-                        '<td>' + lista[i].precioNeto.toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
-                        '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
-           //             '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + lista[i].cantidad + '</td>' +
-                   //     '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
-                        '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + observacion + '</td>' +
-                        '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
-
-
-                        '</tr>';
-
-
-
-                }
-
-
-
-
-                $("#verRazonSocialSunat").html(pedido.cliente.razonSocialSunat);
-                $("#verRUC").html(pedido.cliente.ruc);
-                $("#verDireccionDomicilioLegalSunat").html(pedido.cliente.direccionDomicilioLegalSunat);
-                $("#verCodigo").html(pedido.cliente.codigo);
-
-                $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
-                $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
-
-
-                $("#documentoVenta_fechaEmision").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
-                $("#documentoVenta_fechaVencimiento").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
-                $("#documentoVenta_horaEmision").val(getHoraActual());
-
-                $("#tipoPago").val(pedido.cliente.tipoPagoFactura);
-                calcularFechaVencimiento();
-                $("#formaPago").val(pedido.cliente.formaPagoFactura);
-
-                $('#documentoVenta_serie')
-                    .find('option')
-                    .remove()
-                    .end()
-                    ;
-
-                for (var i = 0; i < serieDocumentoElectronicoList.length; i++) {
-                    $('#documentoVenta_serie').append($('<option>', {
-                        value: serieDocumentoElectronicoList[i].serie,
-                        text: serieDocumentoElectronicoList[i].serie
-                    }));
-                }
-
-
-
-                
-
-
-
-
-                //  
-                // sleep
-                $("#tableDetallePedido").append(d);
-
-
-              
-
-                $("#modalFacturar").modal('show');
-
-                //  window.location = '/Pedido/Index';
+                mostrarModalFacturar(resultado);
             }
         });
 
-
     })
+
+
+    function mostrarModalFacturar(resultado) {
+        //var cotizacion = $.parseJSON(respuesta);
+
+        var venta = resultado.venta;
+        var pedido = resultado.venta.pedido;
+        var guiaRemision = resultado.venta.guiaRemision;
+        var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
+
+        //  var usuario = resultado.usuario;
+
+
+        $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+        $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
+        $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+        //Important
+
+        $("#idPedido").val(pedido.idPedido);
+
+        $("#verNumero").html(pedido.numeroPedidoString);
+        $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
+        $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
+        $("#verTipoPedido").html(pedido.tiposPedidoString);
+
+        $("#verUsuarioNombre").html(pedido.usuario.nombre);
+        $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
+
+        if (pedido.tipoPedido == "84") {
+            $("#divReferenciaCliente").hide();
+            $("#divCiudadSolicitante").show();
+            $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+        }
+        else {
+            $("#divReferenciaCliente").show();
+            $("#divCiudadSolicitante").hide();
+        }
+
+
+        $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
+
+        $("#verCiudad").html(pedido.ciudad.nombre);
+        $("#idClienteFacturacion").val(pedido.cliente.idCliente);
+        $("#verCliente").html(pedido.cliente.razonSocial);
+        $("#verClienteCodigo").html(pedido.cliente.codigo);
+        $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
+        $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
+        $("#verObservacionesPedido").html(pedido.observaciones);
+
+        if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_RUC) {
+            $("#modalFacturarTitle").html("<b>Crear Factura</b>");
+            $("#descripcionDatosDocumento").html("<b>Datos de la Factura</b>");
+            $("#observacionesDocumento").html("Observaciones Factura:");
+            $("#btnAceptarFacturarPedido").html("Generar Factura");
+            $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_RUC);
+        }
+        else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_DNI) {
+            $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
+            $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
+            $("#observacionesDocumento").html("Observaciones Boleta:");
+            $("#btnAceptarFacturarPedido").html("Generar Boleta");
+            $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_DNI);
+        }
+        else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
+            $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
+            $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
+            $("#observacionesDocumento").html("Observaciones Boleta:");
+            $("#btnAceptarFacturarPedido").html("Generar Boleta");
+            $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA);
+        }
+
+
+        $("#nombreArchivos > li").remove().end();
+
+
+        for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
+            var liHTML = '<a href="javascript:mostrar();" class="descargarDesdeVenta">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
+            $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+        }
+
+
+
+
+        $("#verDireccionEntrega").html(pedido.direccionEntrega.descripcion);
+        $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
+        $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
+
+        $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
+
+        $("#verContactoPedido").html(pedido.contactoPedido);
+        $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
+
+        $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
+
+    /*    $("#verEstado").html(pedido.seguimientoPedido.estadoString);
+        $("#verModificadoPor").html(pedido.seguimientoPedido.usuario.nombre);
+        $("#verObservacionEstado").html(pedido.seguimientoPedido.observacion);
+
+        $("#verEstadoCrediticio").html(pedido.seguimientoCrediticioPedido.estadoString);
+        $("#verModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido.usuario.nombre);
+        $("#verObservacionEstadoCreiditicio").html(pedido.seguimientoCrediticioPedido.observacion);
+        *//*
+
+        $("#facturarver_guiaRemision_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10)));
+        $("#facturarver_guiaRemision_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
+        $("#facturarver_guiaRemision_serieNumeroDocumento").html(guiaRemision.serieNumeroGuia);*/
+
+        $("#verObservaciones").html(pedido.observaciones);
+        $("#verMontoSubTotal").html(Number(pedido.montoSubTotal).toFixed(cantidadDecimales));
+        $("#verMontoIGV").html(Number(pedido.montoIGV).toFixed(cantidadDecimales));
+        $("#verMontoTotal").html(Number(pedido.montoTotal).toFixed(cantidadDecimales));
+        $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
+
+        $("#verMontoSubTotalVenta").html(Number(venta.subTotal).toFixed(cantidadDecimales));
+        $("#verMontoIGVVenta").html(Number(venta.igv).toFixed(cantidadDecimales));
+        $("#verMontoTotalVenta").html(Number(venta.total).toFixed(cantidadDecimales));
+
+
+
+
+
+        $("#tableDetallePedido > tbody").empty();
+
+        FooTable.init('#tableDetallePedido');
+
+        //    $("#formVerGuiasRemision").html("");
+
+        var d = '';
+        var lista = pedido.pedidoDetalleList;
+        for (var i = 0; i < lista.length; i++) {
+
+            var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+            d += '<tr>' +
+                '<td>' + lista[i].producto.proveedor + '</td>' +
+                '<td>' + lista[i].producto.sku + '</td>' +
+                '<td>' + lista[i].producto.descripcion + '</td>' +
+                '<td>' + lista[i].unidad + '</td>' +
+                '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
+                '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
+                '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
+                '<td>' + lista[i].precioNeto.toFixed(cantidadCuatroDecimales) + '</td>' +
+                '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
+                '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
+                //             '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
+                '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
+                '<td>' + lista[i].cantidad + '</td>' +
+                //     '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
+                '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
+                '<td>' + observacion + '</td>' +
+                '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
+                '</tr>';
+        }
+
+
+
+
+        $("#verRazonSocialSunat").html(pedido.cliente.razonSocialSunat);
+        $("#verRUC").html(pedido.cliente.ruc);
+        $("#verDireccionDomicilioLegalSunat").html(pedido.cliente.direccionDomicilioLegalSunat);
+        $("#verCodigo").html(pedido.cliente.codigo);
+
+        $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
+        $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
+
+
+        $("#documentoVenta_fechaEmision").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
+        $("#documentoVenta_fechaVencimiento").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
+        $("#documentoVenta_horaEmision").val(getHoraActual());
+
+        $("#tipoPago").val(pedido.cliente.tipoPagoFactura);
+        calcularFechaVencimiento();
+        $("#formaPago").val(pedido.cliente.formaPagoFactura);
+
+        $('#documentoVenta_serie')
+            .find('option')
+            .remove()
+            .end()
+            ;
+
+        for (var i = 0; i < serieDocumentoElectronicoList.length; i++) {
+            $('#documentoVenta_serie').append($('<option>', {
+                value: serieDocumentoElectronicoList[i].serie,
+                text: serieDocumentoElectronicoList[i].serie
+            }));
+        }
+
+        $("#tableDetallePedido").append(d);
+
+        $("#modalFacturar").modal('show');
+    }
+
+
+
+
 
 
     $(document).on('click', "button.btnMostrarPrecios", function () {
@@ -1607,216 +1656,6 @@ jQuery(function ($) {
 
 
 
-    /*####################################################
-    EVENTOS BUSQUEDA GUIAS FACTURA CONSOLIDADA
-    #####################################################*/
-
-
-    $("#btnBusquedaGuiasFacturaConsolidada").click(function () {
-
-        var idCiudad = $("#idCiudad").val();
-        var idCliente = $("#idCliente").val();
-        var fechaTrasladoDesde = $("#guiaRemision_fechaTrasladoDesde").val();
-        var fechaTrasladoHasta = $("#guiaRemision_fechaTrasladoHasta").val();
-
-
-        $.ajax({
-            url: "/GuiaRemision/SearchGuiasRemisionGrupoCliente",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idCiudad: idCiudad,
-                idCliente: idCliente,
-                fechaTrasladoDesde: fechaTrasladoDesde,
-                fechaTrasladoHasta: fechaTrasladoHasta
-            },
-            success: function (guiaRemisionList) {
-
-                $("#checkCabecera").attr("checked", "checked");
-
-                $("#tableGuiasRemision > tbody").empty();
-
-
-                //No se pagina
-                $("#tableGuiasRemision").footable();
-
-                for (var i = 0; i < guiaRemisionList.length; i++) {
-
-                    var guiaRemision = "";
-
-                    var style = "";
-                    if (guiaRemisionList[i].estaAnulado == 1) {
-                        style = "style='color: red'";
-                    }
-                    else if (guiaRemisionList[i].estaFacturado == 1) {
-                        style = "style='color: green'";
-                    }
-                    else {
-                        style = "style='color: black'";
-                    }
-
-                    var guiaRemision = '<tr data-expanded="false">' +
-                        '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
-                        '<td><input class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].serieNumeroGuia +'" name="chkMovimientoAlmacen" type="checkbox" checked>' + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].serieNumeroGuia + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido.numeroPedidoString + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].usuario.nombre + '</td>' +
-                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
-                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido.cliente.razonSocial + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].ciudadOrigen.nombre + '</td>' +
-                        '<td ' + style + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
-                        '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerGuiaRemision btn btn-primary ">Ver</button></td > ' +
-                        '</tr>';
-
-                    $("#tableGuiasRemision").append(guiaRemision);
-                }
-
-
-                if (guiaRemisionList.length > 0)
-                    $("#msgBusquedaSinResultados").hide();
-                else
-                    $("#msgBusquedaSinResultados").show();
-            }
-        });
-    });
-
-
-    $("#btnLimpiarBusquedaGuiasFacturaConsolidada").click(function () {
-        $.ajax({
-            url: "/GuiaRemision/CleanBusquedaFacturaConsolidada",
-            type: 'POST',
-            success: function () {
-                location.reload();
-            }
-        });
-    });
-
-
-    $("#btnAceptarGenerarVenta").click(function () {
-
-
-        $("#btnAceptarGenerarVenta").attr("disabled", "disabled");
-        var miWindow;
-        //Se debe crear la venta Consolidada y abrir la pantalla de edición
-        $.ajax({
-            url: "/GuiaRemision/generarVentaConsolidada",
-            type: 'POST',
-            data: json,
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function (respuesta) {
-
-                $("#btnAceptarGenerarVenta").removeAttr("disabled");
-
-                miWindow = window.open(
-                    "/Venta/VenderConsolidado",
-                    "Edición de Venta Consolidad",
-                    "resizable,scrollbars,status"
-                );
-
-               
-
-                        
-
-
-            }
-        });
-
-    });
-    
-
-
-
-
-
-
-    $("#btnConsolidarAtenciones").click(function () {
-
-        // $(document).on('click', "button.btnVerGuiaRemision", function () {});
-
-
-        $("#guiaRemisionList > li").remove().end();
-
-        var json = '[ ';
-
-        var count = 0;
-        var $j_object = $("input[name='chkMovimientoAlmacen']");
-        $.each($j_object, function (key, value) {
-
-            var classChkMovimientoAlmacen = value.getAttribute("class").split(" ");
-            var idMovimientoAlmacen = classChkMovimientoAlmacen[0];
-
-            if (value.checked) {
-                count++;
-                $('#guiaRemisionList').append($('<li />').html(classChkMovimientoAlmacen[1]));
-                json = json + '{"idMovimientoAlmacen":"' + idMovimientoAlmacen + '"},';
-            }
-
-        });
-
-        if (count == 0) {
-            alert("Debe seleccionar al menos una guía de remisión.");
-            return false;
-        }
-
-
-        json = json.substr(0, json.length - 1) + ']';
-
-        
-
-//        $("#ver_guiaRemision_list").html(ver_guiaRemision_list);
-
-
-        $.ajax({
-            url: "/GuiaRemision/consolidarAtenciones",
-            type: 'POST',
-            data: json,
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function (respuesta) {
-
-                var ventaDetalleList = respuesta.ventaDetalleList;
-
-                $("#modalVerVentaConsolidada").modal();
-
-                $("#tableVentaConsolidada > tbody").empty();
-                $("#tableVentaConsolidada").footable();
-
-           /*     $("#tableGuiasRemision").footable({
-                    "paging": {
-                        "enabled": true
-                    }
-                });
-                */
-                for (var i = 0; i < ventaDetalleList.length; i++) {
-               
-                    var ventaDetalle = '<tr data-expanded="false">' +
-                        '<td>  ' + ventaDetalleList[i].producto.idProducto + '</td>' +
-                        '<td>  ' + ventaDetalleList[i].producto.sku + '</td>' +
-                        '<td>  ' + ventaDetalleList[i].producto.descripcion + '</td>' +
-                        '<td>  ' + ventaDetalleList[i].producto.unidad_alternativa + '</td>' +
-                        '<td>  ' + ventaDetalleList[i].sumCantidadUnidadAlternativa + '</td>' +
-                        '<td>  ' + ventaDetalleList[i].producto.unidad + '</td>' +
-                        '<td>  ' + ventaDetalleList[i].sumCantidadUnidadEstandar + '</td>' +
-
-                /*        '<td>  ' + ventaDetalleList[i].producto.equivalencia + '</td>' +
-                        '<td>  ' + ventaDetalleList[i].esPrecioAlternativo + '</td>' +*/
-
-                        '<td>  ' + ventaDetalleList[i].sumPrecioNeto + '</td>' +
-                        '<td>  ' + ventaDetalleList[i].sumPrecioUnitario + '</td>' +                        
-                        '</tr>';                 
-
-                    $("#tableVentaConsolidada").append(ventaDetalle);
-                }
-
-            }
-        });
-
-    });
-
-
 
 
 
@@ -1827,21 +1666,21 @@ jQuery(function ($) {
 
 
     $("#btnBusqueda").click(function () {
-     /*   var idCiudad = $("#idCiudad").val();
-        if ((idCiudad == "" || idCiudad == GUID_EMPTY) && $("#guiaRemision_numeroDocumento").val() != "") {
-            $("#idCiudad").focus();
-            $.alert({
-                title: TITLE_MENSAJE_BUSQUEDA,
-                content: 'Para realizar una búsqueda con número de guía debe indicar la sede MP.',
-                buttons: {
-                    OK: function () { }
-                }
-            });
-            return false;
-        }*/
+        /*   var idCiudad = $("#idCiudad").val();
+           if ((idCiudad == "" || idCiudad == GUID_EMPTY) && $("#guiaRemision_numeroDocumento").val() != "") {
+               $("#idCiudad").focus();
+               $.alert({
+                   title: TITLE_MENSAJE_BUSQUEDA,
+                   content: 'Para realizar una búsqueda con número de guía debe indicar la sede MP.',
+                   buttons: {
+                       OK: function () { }
+                   }
+               });
+               return false;
+           }*/
         //sede MP
         var idCiudad = $("#idCiudad").val();
-        var idCliente = $("#idCliente").val(); 
+        var idCliente = $("#idCliente").val();
 
         var numeroDocumento = $("#guiaRemision_numeroDocumento").val();
         var numeroPedido = $("#guiaRemision_pedido_numeroPedido").val();
@@ -1861,9 +1700,9 @@ jQuery(function ($) {
                 numeroPedido: numeroPedido,
                 fechaTrasladoDesde: fechaTrasladoDesde,
                 fechaTrasladoHasta: fechaTrasladoHasta
-                
 
-          //      estado: estado
+
+                //      estado: estado
             },
             error: function () {
                 $("#btnBusqueda").removeAttr("disabled");
@@ -1881,17 +1720,16 @@ jQuery(function ($) {
 
                 for (var i = 0; i < guiaRemisionList.length; i++) {
 
-                    var guiaRemision = "";                    
+                    var guiaRemision = "";
 
                     var styleEstado = "";
                     if (guiaRemisionList[i].estaAnulado == 1) {
                         styleEstado = "style='color: red'";
                     }
-                    else if (guiaRemisionList[i].estaFacturado == 1){
+                    else if (guiaRemisionList[i].estaFacturado == 1) {
                         styleEstado = "style='color: green'";
                     }
-                    else
-                    {
+                    else {
                         styleEstado = "style='color: black'";
                     }
 
@@ -1910,25 +1748,25 @@ jQuery(function ($) {
                     else {
                         noEntregadoLectura = '<input disabled type="checkbox"></input>'
                     }
-                    
-                     var guiaRemision = '<tr data-expanded="false">'+
-                         '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].serieNumeroGuia + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].pedido.numeroPedidoString + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].motivoTrasladoString + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].usuario.nombre + '</td>' +
-                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
-                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].pedido.cliente.razonSocial + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].ciudadOrigen.nombre + '</td>' +
-                         '<td ' + styleEstado + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
-                         '<td>' + guiaRemisionList[i].tipoExtornoToString+'</td>' +
-                         '<td>' + noEntregado + '</td>' +
-                         '<td>' + noEntregadoLectura + '</td>' +
-                         '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerGuiaRemision btn btn-primary ">Ver</button></td > ' +
-                         '</tr>';                
-                    
+
+                    var guiaRemision = '<tr data-expanded="false">' +
+                        '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].serieNumeroGuia + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido.numeroPedidoString + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].motivoTrasladoString + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].usuario.nombre + '</td>' +
+                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido.cliente.razonSocial + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].ciudadOrigen.nombre + '</td>' +
+                        '<td ' + styleEstado + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
+                        '<td>' + guiaRemisionList[i].tipoExtornoToString + '</td>' +
+                        '<td>' + noEntregado + '</td>' +
+                        '<td>' + noEntregadoLectura + '</td>' +
+                        '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerGuiaRemision btn btn-primary ">Ver</button></td > ' +
+                        '</tr>';
+
                     $("#tableGuiasRemision").append(guiaRemision);
                 }
 
@@ -2040,8 +1878,8 @@ jQuery(function ($) {
             }
         });
     });
-    
-    
+
+
     $("#idCiudad").change(function () {
         var idCiudad = $("#idCiudad").val();
 
@@ -2062,7 +1900,7 @@ jQuery(function ($) {
 
             }
         });
-    });  
+    });
 
 
     function ConfirmDialogAtencionParcial(message) {
@@ -2074,7 +1912,7 @@ jQuery(function ($) {
                 buttons: {
                     Si: function () {
                         changeUltimaAtencionParcial(1);
-                        
+
                         $(this).dialog("close");
 
                     },
@@ -2105,7 +1943,7 @@ jQuery(function ($) {
                 ultimaAtencionParcial: ultimaAtencionParcial
             },
             success: function () {
-                location.reload(); 
+                location.reload();
             }
         });
     }
@@ -2113,20 +1951,20 @@ jQuery(function ($) {
 
 
     $("#guiaRemision_atencionParcial").change(function () {
-        
+
         var atencionParcial = 1;
 
         if (!$('#guiaRemision_atencionParcial').prop('checked')) {
             //  $("#descripcionUltimaAtencionParcial").html("");
             atencionParcial = 0;
-        //    changeUltimaAtencionParcial(0);
+            //    changeUltimaAtencionParcial(0);
         }
-      /*  else {
-            changeUltimaAtencionParcial(1);
-        }*/
+        /*  else {
+              changeUltimaAtencionParcial(1);
+          }*/
 
-   
-        
+
+
         var estado = $("#guiaRemision_atencionParcial").val();
         $.ajax({
             url: "/GuiaRemision/ChangeAtencionParcial",
@@ -2135,20 +1973,20 @@ jQuery(function ($) {
                 atencionParcial: atencionParcial
             },
             success: function () {
-               /* if (!$('#guiaRemision_atencionParcial').prop('checked')) {
-                    location.reload();
-                }*/
+                /* if (!$('#guiaRemision_atencionParcial').prop('checked')) {
+                     location.reload();
+                 }*/
                 location.reload();
             }
         });
 
 
-     /*   
-        if ($('#guiaRemision_atencionParcial').prop('checked')) {
-            ConfirmDialogAtencionParcial("¿Está atención parcial finaliza la atención del pedido?")
-        }*/
-       
-        
+        /*   
+           if ($('#guiaRemision_atencionParcial').prop('checked')) {
+               ConfirmDialogAtencionParcial("¿Está atención parcial finaliza la atención del pedido?")
+           }*/
+
+
 
     });
 
@@ -2179,7 +2017,7 @@ jQuery(function ($) {
         }
 
 
-        
+
 
         var descripcion = $("#transportista_descripcion").val();
         var direccion = $("#transportista_direccion").val();
@@ -2234,10 +2072,10 @@ jQuery(function ($) {
         var $j_object = $("input[name='chkMovimientoAlmacen']");
         $.each($j_object, function (key, value) {
 
-            if (value.checked == false ) {
+            if (value.checked == false) {
                 //$("#checkCabecera").attr("checked", "checked");
                 countFalse++;
-            }        
+            }
         });
 
         if (countFalse > 0)
@@ -2293,7 +2131,7 @@ jQuery(function ($) {
     });
 
 
-    
+
 
 
     $('#btnIngresar').click(function () {
@@ -2400,7 +2238,7 @@ jQuery(function ($) {
         $.ajax({
             url: "/NotaIngreso/iniciarIngresoDesdeGuiaRemision",
             type: 'POST',
-           // dataType: 'JSON',
+            // dataType: 'JSON',
             data: {
                 idMovimientoAlmacen: idMovimientoAlmacen,
                 motivoExtornoGuiaRemision: motivoExtornoGuiaRemision
@@ -2463,6 +2301,617 @@ jQuery(function ($) {
             $("#guiaRemision_pedido_direccionEntrega_telefono").removeAttr("disabled");
         }
     }
+
+
+
+    /*####################################################
+    EVENTOS BUSQUEDA GUIAS FACTURA CONSOLIDADA
+    #####################################################*/
+
+
+    $("#btnBusquedaGuiasFacturaConsolidada").click(function () {
+
+        var idCiudad = $("#idCiudad").val();
+        var idCliente = $("#idClienteConsolidacion").val();
+        var fechaTrasladoDesde = $("#guiaRemision_fechaTrasladoDesde").val();
+        var fechaTrasladoHasta = $("#guiaRemision_fechaTrasladoHasta").val();
+
+
+        $.ajax({
+            url: "/GuiaRemision/SearchParaFacturaConsolidada",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad,
+                idCliente: idCliente,
+                fechaTrasladoDesde: fechaTrasladoDesde,
+                fechaTrasladoHasta: fechaTrasladoHasta
+            },
+            success: function (guiaRemisionList) {
+
+                $("#checkCabecera").attr("checked", "checked");
+
+                $("#tableGuiasRemision > tbody").empty();
+
+
+                //No se pagina
+                $("#tableGuiasRemision").footable();
+
+                for (var i = 0; i < guiaRemisionList.length; i++) {
+
+                    var guiaRemision = "";
+
+                    var style = "";
+                    if (guiaRemisionList[i].estaAnulado == 1) {
+                        style = "style='color: red'";
+                    }
+                    else if (guiaRemisionList[i].estaFacturado == 1) {
+                        style = "style='color: green'";
+                    }
+                    else {
+                        style = "style='color: black'";
+                    }
+
+                    var guiaRemision = '<tr data-expanded="false">' +
+                        '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
+                        '<td><input class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].serieNumeroGuia + ' ' + guiaRemisionList[i].pedido.numeroReferenciaCliente + ' ' + guiaRemisionList[i].ciudadOrigen.nombre +
+                        '" numeroPedido="' + guiaRemisionList[i].pedido.numeroPedidoString + '" numeroGrupoPedido="' + guiaRemisionList[i].pedido.numeroGrupoPedidoString+'" name="chkMovimientoAlmacen" type="checkbox" checked>' + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].serieNumeroGuia + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido.numeroPedidoString + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido.numeroGrupoPedidoString + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].usuario.nombre + '</td>' +
+                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido.cliente.razonSocial + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].ciudadOrigen.nombre + '</td>' +
+                        '<td ' + style + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
+                        '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerGuiaRemision btn btn-primary ">Ver</button></td > ' +
+                        '</tr>';
+
+                    $("#tableGuiasRemision").append(guiaRemision);
+                }
+
+
+                if (guiaRemisionList.length > 0)
+                    $("#msgBusquedaSinResultados").hide();
+                else
+                    $("#msgBusquedaSinResultados").show();
+            }
+        });
+    });
+
+
+    $("#btnLimpiarBusquedaGuiasFacturaConsolidada").click(function () {
+        $.ajax({
+            url: "/GuiaRemision/CleanBusquedaFacturaConsolidada",
+            type: 'POST',
+            success: function () {
+                location.reload();
+            }
+        });
+    });
+
+
+    $("#btnIniciarGenerarVenta").click(function () {
+
+        $.ajax({
+            url: "/GuiaRemision/validarPreciosVentaConsolidada",
+            type: 'POST',
+          //  dataType: 'json',
+           // contentType: 'application/json',
+            error: function (detalle) {
+            
+            },
+            success: function (resultado) {
+                if (resultado != "") {
+                    $.alert({
+                        title: "Precios Inválidos",
+                        type: "orange",
+                        content: resultado,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+
+                }
+                else {
+                    iniciarGenerarVenta()
+                }
+            }
+        });
+
+
+
+    });
+
+    function iniciarGenerarVenta() {
+
+        $("#modalIngresarDatosVentaConsolidada").modal();
+
+        $(".selectUnidad").removeAttr("disabled");
+        $("#idGuiaRemisionFacturaConsolidada").removeAttr("disabled");
+        $("#numeroOrdenCompraFacturaConsolidada").removeAttr("disabled");
+        $("#numeroReferenciaAdicionalFacturaConsolidada").removeAttr("disabled");
+        $("#numeroReferenciaAdicionalFacturaConsolidada").val("");
+
+
+        $('#idGuiaRemisionFacturaConsolidada')
+            .find('option')
+            .remove()
+            .end();
+
+        //     $("#guiaRemisionList > li").remove().end();
+
+        var json = '[ ';
+
+        var count = 0;
+        var $j_object = $("input[name='chkMovimientoAlmacen']");
+
+        var ordenCompraAsignado = false;
+        $.each($j_object, function (key, value) {
+
+            var classChkMovimientoAlmacen = value.getAttribute("class").split(" ");
+            var idMovimientoAlmacen = classChkMovimientoAlmacen[0];
+            if (value.checked) {
+
+                var numeroOrdenCompraFacturaConsolidada = "";
+                if (classChkMovimientoAlmacen[2] != null && classChkMovimientoAlmacen[2] != "null") {
+                    numeroOrdenCompraFacturaConsolidada = classChkMovimientoAlmacen[2];
+                }
+
+                if (!ordenCompraAsignado) {
+                    ordenCompraAsignado = true;
+                    $("#numeroOrdenCompraFacturaConsolidada").val(numeroOrdenCompraFacturaConsolidada);
+                    $("#ver_guiaRemision_pedido_cliente_ciudad").html(classChkMovimientoAlmacen[3]);
+
+                }
+
+                $('#idGuiaRemisionFacturaConsolidada').append($('<option>', {
+                    value: classChkMovimientoAlmacen[0],
+                    text: classChkMovimientoAlmacen[1],
+                    numeroOrdenCompraFacturaConsolidada: numeroOrdenCompraFacturaConsolidada,
+                    ciudad: classChkMovimientoAlmacen[3],
+                }));
+            }
+
+        });
+
+
+
+        $("#tableVentaConsolidadaConfirmacion > tbody").empty();
+        $("#tableVentaConsolidadaConfirmacion").footable();
+
+        for (var i = 0; i < ventaDetalleList.length; i++) {
+
+            var unidad = "";
+            var cantidad = 1;
+            /*Si la equivalencia es 1 quiere decir que no cuenta con unidad alternativa*/
+            if (ventaDetalleList[i].producto.equivalencia == 1) {
+                unidad = "<select class='form-control selectUnidad'  sku='" + ventaDetalleList[i].producto.sku + "'  idProducto='" + ventaDetalleList[i].producto.idProducto + "'  >" +
+                    "<option esUnidadAlternativa='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>" +
+                    "</select > ";
+                cantidad = ventaDetalleList[i].sumCantidadUnidadEstandar;
+            }
+            else {
+                unidad = "<select class='form-control selectUnidad'  sku='" + ventaDetalleList[i].producto.sku + "'  idProducto='" + ventaDetalleList[i].producto.idProducto + "'  >" +
+                    "<option esUnidadAlternativa='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>" +
+                    "<option esUnidadAlternativa='1' cantidad='" + ventaDetalleList[i].sumCantidadUnidadAlternativa + "'> " + ventaDetalleList[i].producto.unidad_alternativa + "</option>" +
+                    "</select > ";
+                cantidad = ventaDetalleList[i].sumCantidadUnidadEstandar;
+            }
+
+            var ventaDetalle = '<tr data-expanded="false">' +
+                '<td>  ' + ventaDetalleList[i].producto.idProducto + '</td>' +
+                '<td>  ' + ventaDetalleList[i].producto.sku + '</td>' +
+                '<td>  ' + ventaDetalleList[i].producto.descripcion + '</td>' +
+                '<td> ' + unidad + '</td>' +
+                '<td style="text-align: right" id="cantidadSeleccionada' + ventaDetalleList[i].producto.idProducto + '"> ' + cantidad + '</td>' +
+                '<td style="text-align: right" >  ' + ventaDetalleList[i].sumPrecioUnitario.toFixed(cantidadDecimales) + '</td>' +
+                '</tr>';
+
+            $("#tableVentaConsolidadaConfirmacion").append(ventaDetalle);
+        }
+
+    }
+
+
+    $("#btnContinuarGenerandoVenta").click(function () {
+
+        $('body').loadingModal("show");
+        $('body').loadingModal({
+            text: 'Generando Venta...'
+        });
+
+        $("#idMovimientoAlmacen").val($("#idGuiaRemisionFacturaConsolidada").val());
+
+        var unidadInvalida = 0;
+
+        var json = '[ ';
+
+        var $j_object = $(".selectUnidad");
+        $.each($j_object, function (key, value) {
+
+
+            if (!esEntero($(this).find('option:selected').attr("cantidad"))) {
+
+                $.alert({
+                    title: "Unidad Inválida",
+                    type: "orange",
+                    content: 'La cantidad atendida del producto ' + value.getAttribute("sku") + ' expresada en la unidad ' + $(this).val() +' tiene decimales. Debe seleccionar unidad alernativa.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                unidadInvalida++;
+                $(this).focus();
+            }
+
+            json = json + '{"idProducto":"' + value.getAttribute("idProducto") + '", '+
+                '"cantidad":' + $(this).find('option:selected').attr("cantidad") + ', ' +
+                '"esUnidadAlternativa":' + $(this).find('option:selected').attr("esUnidadAlternativa") +
+            '},';
+        });
+
+        if (unidadInvalida > 0) {
+            $('body').loadingModal("hide");
+            return false;
+        }
+
+        json = json.substr(0, json.length - 1) + ']';
+        
+
+
+        var isDisabled = $('#numeroOrdenCompraFacturaConsolidada').prop('disabled');
+
+        var controller = "generarVentaConsolidada";
+        if (isDisabled)
+            controller = "obtenerVentaConsolidada";
+
+        $(".selectUnidad").attr("disabled", "disabled");
+        $("#idGuiaRemisionFacturaConsolidada").attr("disabled", "disabled");
+        $("#numeroOrdenCompraFacturaConsolidada").attr("disabled", "disabled");
+        $("#numeroReferenciaAdicionalFacturaConsolidada").attr("disabled", "disabled");
+        
+
+        $.ajax({
+            url: "/Venta/" + controller,
+            type: 'POST',
+            data: json,
+            dataType: 'json',
+            contentType: 'application/json',
+            error: function (detalle) {
+                $('body').loadingModal("hide");
+                mostrarMensajeErrorProceso();
+            },
+            success: function (resultado) {
+                $('body').loadingModal("hide");
+                mostrarModalFacturar(resultado);
+
+                var guiaRemision = resultado.venta.guiaRemision;
+
+                $("#facturarver_guiaRemision_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10)));
+                $("#facturarver_guiaRemision_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
+                $("#facturarver_guiaRemision_serieNumeroDocumento").html(guiaRemision.serieNumeroGuia);
+            }
+        });
+
+
+        
+
+    });
+
+
+    $(document).on('change', ".selectUnidad", function () {
+        $("#cantidadSeleccionada" + $(this).attr("idProducto")).html($(this).find('option:selected').attr("cantidad"));
+    })
+
+
+
+    var ventaDetalleList = null;
+
+
+    $("#btnConsolidarAtenciones").click(function () {
+
+        // $(document).on('click', "button.btnVerGuiaRemision", function () {});
+
+
+        $("#guiaRemisionList > li").remove().end();
+
+
+        var json = '[ ';
+
+        var count = 0;
+        var $j_object = $("input[name='chkMovimientoAlmacen']");
+
+        var existeDiferenciaNumeroPedido = false;
+        var existeDiferenciaNumeroGrupoPedido = false;
+        var numeroPedidoAnterior = "";
+        var numeroGrupoPedidoAnterior = "";
+
+        $.each($j_object, function (key, value) {
+
+            var classChkMovimientoAlmacen = value.getAttribute("class").split(" ");
+            var idMovimientoAlmacen = classChkMovimientoAlmacen[0];
+
+            if (value.checked) {
+                count++;
+                $('#guiaRemisionList').append($('<li />').html(classChkMovimientoAlmacen[1]));
+                json = json + '{"idMovimientoAlmacen":"' + idMovimientoAlmacen + '"},';
+
+                var numeroPedido = value.getAttribute("numeroPedido");
+                var numeroGrupoPedido = value.getAttribute("numeroGrupoPedido");
+
+                if (numeroPedidoAnterior != numeroPedido && numeroPedidoAnterior != "")
+                    existeDiferenciaNumeroPedido = true;
+                else
+                    numeroPedidoAnterior = numeroPedido
+
+                if (numeroGrupoPedidoAnterior != numeroGrupoPedido && numeroGrupoPedidoAnterior != "")
+                    existeDiferenciaNumeroGrupoPedido = true;
+                else
+                    numeroGrupoPedidoAnterior = numeroGrupoPedido
+
+            }
+
+        });
+
+        if (existeDiferenciaNumeroPedido && numeroGrupoPedidoAnterior == "") {
+            $.alert({
+                //icon: 'fa fa-warning',
+                title: "¡Advertencia!",
+                content: "Se han seleccionado distintos pedidos.",
+                type: 'orange',
+                buttons: {
+                    OK: function () {
+                    }
+                }
+            });
+        }
+        else if (existeDiferenciaNumeroGrupoPedido) {
+            $.alert({
+                //icon: 'fa fa-warning',
+                title: "¡Advertencia!",
+                content: "Se han seleccionado distintos grupos de pedido.",
+                type: 'orange',
+                buttons: {
+                    OK: function () {
+                    }
+                }
+            });
+        }
+
+
+
+
+
+        if (count == 0) {
+            $.alert({
+                //icon: 'fa fa-warning',
+                title: "Seleccionar Guías Remisión",
+                content: "Debe seleccionar al menos una guía de remisión.",
+                type: 'orange',
+                buttons: {
+                    OK: function () {
+                    }
+                }
+            });
+            return false;
+        }
+
+
+
+
+
+        json = json.substr(0, json.length - 1) + ']';
+
+
+        $.ajax({
+            url: "/GuiaRemision/consolidarAtenciones",
+            type: 'POST',
+            data: json,
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (respuesta) {
+
+                ventaDetalleList = respuesta.ventaDetalleList;
+
+                $("#modalVerVentaConsolidada").modal();
+
+                $("#tableVentaConsolidada > tbody").empty();
+                $("#tableVentaConsolidada").footable();
+
+           /*     $("#tableGuiasRemision").footable({
+                    "paging": {
+                        "enabled": true
+                    }
+                });
+                */
+                for (var i = 0; i < ventaDetalleList.length; i++) {
+               
+                    var ventaDetalle = '<tr data-expanded="false">' +
+                        '<td>  ' + ventaDetalleList[i].producto.idProducto + '</td>' +
+                        '<td>  ' + ventaDetalleList[i].producto.sku + '</td>' +
+                        '<td>  ' + ventaDetalleList[i].producto.descripcion + '</td>' +
+                        '<td>  ' + ventaDetalleList[i].producto.unidad + '</td>' +
+                        '<td>  ' + ventaDetalleList[i].sumCantidadUnidadEstandar + '</td>' +
+                        '<td>  ' + ventaDetalleList[i].producto.unidad_alternativa + '</td>' +
+                        '<td>  ' + ventaDetalleList[i].sumCantidadUnidadAlternativa + '</td>' +
+                        '<td>  ' + ventaDetalleList[i].producto.equivalencia + '</td>' +
+                /*        '<td>  ' + ventaDetalleList[i].producto.equivalencia + '</td>' +
+                        '<td>  ' + ventaDetalleList[i].esPrecioAlternativo + '</td>' +*/
+
+                        '<td style="text-align: right" >  ' + ventaDetalleList[i].sumPrecioNeto + '</td>' +
+                        '<td style="text-align: right" >  ' + ventaDetalleList[i].sumPrecioUnitario.toFixed(cantidadDecimales) + '</td>' +                      
+                        '</tr>';                 
+
+                    $("#tableVentaConsolidada").append(ventaDetalle);
+                }
+
+            }
+        });
+
+    });
+
+
+
+    $("#btnGenerarReporteDetallado").click(function () {
+        $("#guiaRemisionList > li").remove().end();
+        var json = '[ ';
+        var count = 0;
+        var $j_object = $("input[name='chkMovimientoAlmacen']");
+        $.each($j_object, function (key, value) {
+            var classChkMovimientoAlmacen = value.getAttribute("class").split(" ");
+            var idMovimientoAlmacen = classChkMovimientoAlmacen[0];
+            if (value.checked) {
+                count++;
+                $('#guiaRemisionList').append($('<li />').html(classChkMovimientoAlmacen[1]));
+                json = json + '{"idMovimientoAlmacen":"' + idMovimientoAlmacen + '"},';
+            }
+        });
+
+        if (count == 0) {
+            alert("Debe seleccionar al menos una guía de remisión.");
+            return false;
+        }
+
+        json = json.substr(0, json.length - 1) + ']';
+        window.open('/GuiaRemision/obtenerDetalleAtenciones');
+        /*
+        $.ajax({
+            url: "/GuiaRemision/obtenerDetalleAtenciones",
+            type: 'POST',
+           // data: json,
+            dataType: 'JSON',
+            //contentType: 'application/json',
+            error: function (detalle) {
+                alert(detalle);
+            },
+            success: function (xls) {
+                window.open('/General/DownLoadFile?fileName=' + fileName);
+                var sampleArr = base64ToArrayBuffer(pedidoAdjunto.adjunto);
+                saveByteArray("Detalle Atenciones.xls", sampleArr);
+            }
+        });*/
+
+    });
+
+    $('#idGuiaRemisionFacturaConsolidada').change(function () {
+        $("#numeroOrdenCompraFacturaConsolidada").val($("#idGuiaRemisionFacturaConsolidada").attr("numeroOrdenCompraFacturaConsolidada"));
+        $("#ciudad").val($("#idGuiaRemisionFacturaConsolidada").attr("ciudad"));
+
+        $.ajax({
+            url: "/GuiaRemision/ChangeGuiaRemisionFacturaConsolidada",
+            type: 'POST',
+            data: {
+                idGuiaRemision: $("#idGuiaRemisionFacturaConsolidada").val()
+            },
+            error: function (detalle) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+            },
+            success: function (resultado) {
+            }
+        })
+    });
+
+    $('#numeroOrdenCompraFacturaConsolidada').change(function () {
+
+        $.ajax({
+            url: "/GuiaRemision/ChangeNumeroOrdenCompraFacturaConsolidada",
+            type: 'POST',
+            data: {
+                numeroOrdenCompra: $("#numeroOrdenCompraFacturaConsolidada").val()
+            },
+            error: function (detalle) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+            },
+            success: function (resultado) {
+            }
+        })
+    });
+
+
+    $("#guiaRemision_placaVehiculo").change(function () {
+        changeInputString("placaVehiculo", $("#guiaRemision_placaVehiculo").val())
+    });
+
+
+    function changeInputStringPedido(propiedad, valor) {
+        $.ajax({
+            url: "/GuiaRemision/changeInputStringPedido",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+    function ChangeInputIntPedido(propiedad, valor) {
+        $.ajax({
+            url: "/GuiaRemision/changeInputIntPedido",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+    $("#guiaRemision_pedido_numeroReferenciaCliente").change(function () {
+        changeInputStringPedido("numeroReferenciaCliente", $("#guiaRemision_pedido_numeroReferenciaCliente").val())
+    });
+
+    $("#guiaRemision_pedido_numeroGrupoPedido").change(function () {
+        ChangeInputIntPedido("numeroGrupoPedido", $("#guiaRemision_pedido_numeroGrupoPedido").val())
+    });
+
+    $("#guiaRemision_pedido_numeroPedido").change(function () {
+        ChangeInputIntPedido("numeroPedido", $("#guiaRemision_pedido_numeroPedido").val())
+    });
+
+
+
+
+
+    $('#numeroReferenciaAdicionalFacturaConsolidada').change(function () {
+        $.ajax({
+            url: "/GuiaRemision/ChangeNumeroReferenciaAdicionalFacturaConsolidada",
+            type: 'POST',
+            data: {
+                numeroReferenciaAdicional: $("#numeroReferenciaAdicionalFacturaConsolidada").val()
+            },
+            error: function (detalle) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+            },
+            success: function (resultado) {
+            }
+        })
+    });
+
+    $("#btnEditarVentaConsolidada").click(function () {
+
+        $("#btnCancelarFacturarPedido").click();
+        // desactivarBotonesVer();
+
+
+        var yourWindow;
+        $.ajax({
+            url: "/Venta/iniciarEdicionVentaConsolidada",
+            type: 'POST',
+            error: function (detalle) { alert("Ocurrió un problema al iniciar la edición de la venta consolidada."); },
+            success: function (fileName) {
+                yourWindow = window.open(
+                    "/Venta/Vender",
+                    "Edición de Venta Consolidada",
+                    "resizable,scrollbars,status"
+                );
+            }
+        });
+
+    });
 
 
 

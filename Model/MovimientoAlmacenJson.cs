@@ -11,6 +11,5 @@ namespace Model
     public class MovimientoAlmacenJson
     {
         public String idMovimientoAlmacen { get; set; }       
-        
     }
 }

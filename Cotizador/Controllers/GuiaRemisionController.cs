@@ -2,8 +2,14 @@
 using Model;
 using Model.EXCEPTION;
 using Newtonsoft.Json;
+using NPOI.HSSF.Model;
+using NPOI.HSSF.UserModel;
+using NPOI.HSSF.Util;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -219,6 +225,8 @@ namespace Cotizador.Controllers
 
         private void instanciarGuiaRemisionBusquedaFacturaConsolidada()
         {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaGuiasRemisionConsolidarFactura;
+
             GuiaRemision guiaRemision = new GuiaRemision();
             guiaRemision.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
             guiaRemision.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
@@ -285,14 +293,17 @@ namespace Cotizador.Controllers
             ViewBag.documentoVenta = documentoVenta;
 
             ViewBag.existeCliente = existeCliente;
-            
+            //ViewBag.movimientoAlmacenIdList = this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
             return View();
         }
 
-        public String SearchGuiasRemisionGrupoCliente()
+
+
+
+        public String SearchParaFacturaConsolidada()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaGuiasRemisionConsolidarFactura;
-
+  
             //Se recupera el pedido Búsqueda de la session
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
 
@@ -307,16 +318,32 @@ namespace Cotizador.Controllers
             guiaRemision.estaAnulado = false;
             guiaRemision.estaFacturado = false;
             guiaRemision.numeroDocumento = 0;
-            guiaRemision.pedido.numeroPedido  = 0;
+        //    guiaRemision.pedido.numeroPedido  = 0;
 
             List<GuiaRemision> guiaRemisionList = movimientoAlmacenBL.GetGuiasRemisionGrupoCliente(guiaRemision);
+            List<Guid>  movimientoAlmacenIdList =  new List<Guid>();
+
+
+            this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = null;
+            if (guiaRemisionList.Count > 0)
+            {
+                this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = guiaRemisionList[0];
+            }
+
+            foreach (GuiaRemision guiaRemisionId in guiaRemisionList)
+            {
+                movimientoAlmacenIdList.Add(guiaRemisionId.idMovimientoAlmacen);
+            }
+            this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS] = movimientoAlmacenIdList;
+
+
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_GUIA_LISTA_FACTURA_CONSOLIDADA] = guiaRemisionList;
             this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA] = guiaRemision;
             //Se retorna la cantidad de elementos encontrados
             return JsonConvert.SerializeObject(guiaRemisionList);
-
         }
+
 
 
         [HttpPost]
@@ -325,23 +352,316 @@ namespace Cotizador.Controllers
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA];
 
             String idMovimientoAlmacenList = " '";
+            List<Guid> movimientoAlmacenIdList = new List<Guid>();
 
             foreach (MovimientoAlmacenJson movimientoAlmacenJson in MovimientoAlmacenJsonList)
             {
+
                 idMovimientoAlmacenList = idMovimientoAlmacenList + movimientoAlmacenJson.idMovimientoAlmacen+"','";
+                movimientoAlmacenIdList.Add(Guid.Parse(movimientoAlmacenJson.idMovimientoAlmacen));
             }
 
             idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
 
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
-            this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS] = idMovimientoAlmacenList;            
-            DocumentoVenta documentoVenta = movimientoAlmacenBL.obtenerVentaConsolidarFactura(idMovimientoAlmacenList);
-
+            this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS] = movimientoAlmacenIdList;            
+            DocumentoVenta documentoVenta = movimientoAlmacenBL.obtenerResumenConsolidadoAtenciones(idMovimientoAlmacenList);
+            this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO] = documentoVenta;
             String resultado = JsonConvert.SerializeObject(documentoVenta);
             return resultado;
 
             /*this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
             return "{\"cantidad\":\"" + guiaRemision.pedido.documentoDetalle.Count + "\"}";*/
+        }
+
+
+        public String validarPreciosVentaConsolidada()
+        {
+            String idMovimientoAlmacenList = " '";
+            List<Guid> movimientoAlmacenIdList = new List<Guid>();
+
+            List<Guid> guidMovimientoAlmacenList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
+            foreach (Guid idMovimientoAlmacen in guidMovimientoAlmacenList)
+            {
+
+                idMovimientoAlmacenList = idMovimientoAlmacenList + idMovimientoAlmacen + "','";
+            }
+            idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
+
+
+            MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+            List<GuiaRemision> guiaRemisionList = movimientoAlmacenBL.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList);
+
+            DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO];
+
+
+            List<Producto> productoList = new List<Producto>();
+
+
+            foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
+            {
+                Producto producto = new Producto();
+                producto.idProducto = ventaDetalle.producto.idProducto;
+                productoList.Add(producto);
+            }
+
+            Boolean existeDiferenciaDePrecios = false;
+
+            //Se recorren las guias
+            foreach (GuiaRemision guiaRemision in guiaRemisionList)
+            {
+                //Se recorren los productos para buscar si existe en la guía
+                foreach (Producto producto in  productoList)
+                {
+                     DocumentoDetalle documentoDetalle = guiaRemision.documentoDetalle.Where(d => d.producto.idProducto == producto.idProducto).FirstOrDefault();
+                    if (documentoDetalle != null)
+                    {
+                        if (producto.precioSinIgv == 0)
+                        {
+                            producto.precioSinIgv = documentoDetalle.precioNeto;
+                        }
+                        else if (documentoDetalle.precioNeto != producto.precioSinIgv)
+                        {
+                            existeDiferenciaDePrecios = true;
+                            break;
+
+                        }
+                        
+                    }
+
+                }
+
+                if (existeDiferenciaDePrecios)
+                {
+                    break;
+                }
+
+            }
+
+            String resultado = String.Empty;
+            if (existeDiferenciaDePrecios)
+                resultado = "Existe Diferencia Precios, descargue el reporte detallado de las atenciones haciendo clic en el botón Generar Reporte Detallado.";
+            return resultado;
+        }
+
+
+
+
+
+        [HttpGet]
+        public ActionResult obtenerDetalleAtenciones()
+        {
+            //GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA];
+
+            String idMovimientoAlmacenList = " '";
+            List<Guid> movimientoAlmacenIdList = new List<Guid>();
+
+            List<Guid> guidMovimientoAlmacenList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
+            foreach (Guid idMovimientoAlmacen in guidMovimientoAlmacenList)
+            {
+
+                idMovimientoAlmacenList = idMovimientoAlmacenList + idMovimientoAlmacen + "','";
+            }
+            idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
+
+
+            MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+            List<GuiaRemision> guiaRemisionList = movimientoAlmacenBL.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList);
+
+            DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO];
+
+
+      
+
+            HSSFWorkbook wb;
+          //  Dictionary<String, ICellStyle> styles = CreateExcelStyles(wb);
+            HSSFSheet sheet;
+            {
+                wb = HSSFWorkbook.Create(InternalWorkbook.CreateWorkbook());
+
+
+                HSSFFont titleFont = (HSSFFont)wb.CreateFont();
+                titleFont.FontHeightInPoints = (short)11;
+                titleFont.FontName = "Arial";
+                titleFont.Color = IndexedColors.Black.Index;
+                titleFont.IsBold = true;
+              //  HSSFColor color = new HSSFColor(); // (new byte[] { 184, 212, 249 });
+           //     color.RGB.SetValue(new byte[] { 184, 212, 249 },0);
+                HSSFCellStyle titleCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                titleCellStyle.SetFont(titleFont);
+                titleCellStyle.FillPattern = FillPattern.SolidForeground;
+                titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
+
+                //titleCellStyle.FillBackgroundColor = HSSFColor.BlueGrey.Index;
+
+
+                
+                          
+
+                IDataFormat format = wb.CreateDataFormat();
+                ICellStyle dateFormatStyle = wb.CreateCellStyle();
+                dateFormatStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
+        
+
+
+
+
+
+                // create sheet
+                sheet = (HSSFSheet)wb.CreateSheet("Atenciones");
+
+
+                /*guiaRemision,fecha_emision, ma.direccion_entrega, ub.distrito, 
+                 * ub.provincia,  ub.departamento, ma.observaciones,*/
+
+                /*Cabecera, Sub total*/
+                int rTotal = (guiaRemisionList.Count) + 4;
+                int cTotal = 9 + (documentoVenta.ventaDetalleList.Count()*2);
+
+                /*Se crean todas las celdas*/
+                for (int r = 0; r < rTotal; r++)
+                {
+                    var row = sheet.CreateRow(r);
+                    for (int c = 0; c < cTotal; c++)
+                    {
+                        row.CreateCell(c);
+                    }
+                }
+
+                int i = 10;
+                foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
+                {
+                 
+
+                    UtilesHelper.setValorCelda(sheet, 1, i, ventaDetalle.producto.sku + " - " + ventaDetalle.producto.unidad, titleCellStyle);
+
+                    UtilesHelper.setValorCelda(sheet, 2, i, "Cantidad", titleCellStyle);
+                    UtilesHelper.setValorCelda(sheet, 2, i+1, "Precio (S/)", titleCellStyle);
+                   
+
+                    var mergeCell = new NPOI.SS.Util.CellRangeAddress(0, 0, i - 1, i);
+                    sheet.AddMergedRegion(mergeCell);
+
+                    i = i + 2;
+                }
+
+                UtilesHelper.setValorCelda(sheet, 2, "A", "Guía Remisión:", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "B", "N° Pedido:", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "C", "N° Grupo Pedido:", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "D", "Fecha", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "E", "Dirección Entrega", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "F", "Distrito", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "G", "Provincia", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "H", "Departamento", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "I", "Observaciones", titleCellStyle);
+
+
+
+
+
+
+                i = 3;
+
+              /*  for (int iii = 0; iii<50;iii++)
+                { */
+
+                foreach (GuiaRemision guiaRemision in guiaRemisionList)
+                {
+                    UtilesHelper.setValorCelda(sheet, i, "A", guiaRemision.serieNumeroGuia);
+                    UtilesHelper.setValorCelda(sheet, i, "B", guiaRemision.pedido.numeroPedidoString);
+                    UtilesHelper.setValorCelda(sheet, i, "C", guiaRemision.pedido.numeroGrupoPedidoString);
+                    UtilesHelper.setValorCelda(sheet, i, "D", guiaRemision.fechaEmision, dateFormatStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "E", guiaRemision.direccionEntrega);
+                    UtilesHelper.setValorCelda(sheet, i, "F", guiaRemision.ubigeoEntrega.Distrito);
+                    UtilesHelper.setValorCelda(sheet, i, "G", guiaRemision.ubigeoEntrega.Provincia);
+                    UtilesHelper.setValorCelda(sheet, i, "H", guiaRemision.ubigeoEntrega.Departamento);
+                    UtilesHelper.setValorCelda(sheet, i, "I", guiaRemision.observaciones);
+
+                    int ic = 10;
+                    foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
+                    {
+
+                        DocumentoDetalle documentoDetalle = guiaRemision.documentoDetalle.Where(d => d.producto.idProducto == ventaDetalle.producto.idProducto).FirstOrDefault();
+
+                        if (documentoDetalle != null)
+                        {
+
+                            // UtilesHelper.setValorCelda(sheet, 1, ic, ventaDetalle.producto.sku + " - " + ventaDetalle.producto.unidad);
+                            UtilesHelper.setValorCelda(sheet, i, ic, Convert.ToDouble(documentoDetalle.cantidadDecimal));
+                            UtilesHelper.setValorCelda(sheet, i, ic + 1, Convert.ToDouble(documentoDetalle.precioNeto) );
+                        }
+                        ic = ic + 2;
+                    }
+
+
+                    i++;
+                }
+                //}
+
+
+                int flag = 0;
+                for (int cf = 9; cf < cTotal; cf++)
+                {
+                    sheet.GetRow(i - 1).GetCell(cf).CellStyle = titleCellStyle;
+                    sheet.GetRow(i - 1).GetCell(cf).SetCellType(CellType.Formula);
+                    if (flag == 0)
+                    {
+                        sheet.GetRow(i - 1).GetCell(cf).CellFormula = "SUM(" + UtilesHelper.columnas[cf] + "3:" + UtilesHelper.columnas[cf] + (i - 1) + ")";
+                        flag++;
+                    }
+                    else {
+                        sheet.GetRow(i - 1).GetCell(cf).CellFormula = "AVERAGE(" + UtilesHelper.columnas[cf] + "3:" + UtilesHelper.columnas[cf] + (i - 1) + ")";
+                        flag = 0;
+                    }
+                }
+                i++;
+                flag = 0;
+                for (int cf = 9; cf < cTotal; cf++)
+                {
+                    sheet.GetRow(i - 1).GetCell(cf).CellStyle = titleCellStyle;
+               
+                    if (flag == 0)
+                    {
+                       // sheet.GetRow(i - 1).GetCell(cf).SetCellValue("SUB TOTAL:");
+                        flag++;
+                    }
+                    else
+                    {
+                        sheet.GetRow(i - 1).GetCell(cf).SetCellType(CellType.Formula);
+                        sheet.GetRow(i - 1).GetCell(cf).CellFormula = UtilesHelper.columnas[cf-1] + (i - 1) + "*" + UtilesHelper.columnas[cf] + (i - 1);
+                        flag = 0;
+                    }
+
+                }
+
+
+
+
+
+                MemoryStream ms = new MemoryStream();
+                using (MemoryStream tempStream = new MemoryStream())
+                {
+                    wb.Write(tempStream);
+                    var byteArray = tempStream.ToArray();
+                    ms.Write(byteArray, 0, byteArray.Length);
+                    ms.Flush();
+                    ms.Position = 0;
+                    FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
+
+                    GuiaRemision guiaRemision = this.GuiaRemisionSession;
+                    result.FileDownloadName = "Detalle de Atenciones - "+ guiaRemision.pedido.cliente.razonSocial + " .xls";
+
+                
+                  
+
+
+                    return result;
+                }
+
+              
+
+            }
+            
         }
 
 
@@ -821,6 +1141,14 @@ namespace Cotizador.Controllers
             this.GuiaRemisionSession = guiaRemision;
         }
 
+        public void ChangeInputInt()
+        {
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            PropertyInfo propertyInfo = guiaRemision.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(guiaRemision, Int32.Parse(this.Request.Params["valor"]));
+            this.GuiaRemisionSession = guiaRemision;
+        }
+
         public void ChangeInputStringTransportista()
         {
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
@@ -828,6 +1156,30 @@ namespace Cotizador.Controllers
             propertyInfo.SetValue(guiaRemision.transportista, this.Request.Params["valor"]);
             this.GuiaRemisionSession = guiaRemision;
         }
+
+        public void ChangeInputStringPedido()
+        {
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            PropertyInfo propertyInfo = guiaRemision.pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(guiaRemision.pedido, this.Request.Params["valor"]);
+            this.GuiaRemisionSession = guiaRemision;
+        }
+
+        public void ChangeInputIntPedido()
+        {
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            PropertyInfo propertyInfo = guiaRemision.pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
+            try
+            {
+                propertyInfo.SetValue(guiaRemision.pedido, Int64.Parse(this.Request.Params["valor"]));
+            }
+            catch (Exception e)
+            {
+                propertyInfo.SetValue(guiaRemision.pedido, 0);
+            }
+            this.GuiaRemisionSession = guiaRemision;
+        }
+
 
         public void ChangeAtencionParcial()
         {
@@ -896,7 +1248,36 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] = guiaRemision;
         }
 
-        
+
+        #endregion
+
+
+        #region ChangesConsolidacionGuias
+
+        public void ChangeGuiaRemisionFacturaConsolidada()
+        {
+            Guid idGuiaRemision = Guid.Parse(this.Request.Params["idGuiaRemision"]);
+            List<GuiaRemision> guiaRemisionList = (List<GuiaRemision>)this.Session[Constantes.VAR_SESSION_GUIA_LISTA_FACTURA_CONSOLIDADA];
+            GuiaRemision guiaRemision = guiaRemisionList.Where(g => g.idMovimientoAlmacen == idGuiaRemision).FirstOrDefault();
+            this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = guiaRemision;
+        }
+
+        public void ChangeNumeroOrdenCompraFacturaConsolidada()
+        {
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA];
+            guiaRemision.pedido.numeroReferenciaCliente = this.Request.Params["numeroOrdenCompra"];
+            this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = guiaRemision;
+        }
+
+        public void ChangeNumeroReferenciaAdicionalFacturaConsolidada()
+        {
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA];
+            guiaRemision.pedido.numeroReferenciaAdicional  = this.Request.Params["numeroReferenciaAdicional"];
+            this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = guiaRemision;
+        }
+
+        #endregion
+
 
         public ActionResult CancelarCreacionGuiaRemision()
         {
@@ -912,7 +1293,7 @@ namespace Cotizador.Controllers
         {
             String nombreArchivo = Request["nombreArchivo"].ToString();
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
-            if(guiaRemision == null)
+            if (guiaRemision == null)
                 guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
 
             Pedido pedido = guiaRemision.pedido; ;
@@ -928,14 +1309,6 @@ namespace Cotizador.Controllers
             {
                 return null;
             }
-
         }
-
-
-
-        #endregion
-
-
-
     }
 }

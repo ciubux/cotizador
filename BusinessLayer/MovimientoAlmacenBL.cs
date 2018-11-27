@@ -21,11 +21,19 @@ namespace BusinessLayer
         }
 
 
-        public DocumentoVenta obtenerVentaConsolidarFactura(String idMovimientoAlmacenList)
+        public DocumentoVenta obtenerResumenConsolidadoAtenciones(String idMovimientoAlmacenList)
         {
             using (var dal = new MovimientoALmacenDAL())
             {
-                return dal.obtenerVentaConsolidarFactura(idMovimientoAlmacenList);
+                return dal.obtenerResumenConsolidadoAtenciones(idMovimientoAlmacenList);
+            }
+        }
+
+        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(String idMovimientoAlmacenList)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                return dal.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList);
             }
         }
 

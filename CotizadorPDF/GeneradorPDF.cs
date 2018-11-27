@@ -311,14 +311,14 @@ namespace cotizadorPDF
                 String reiniciarY = "";
 
                 //Si son dos paginas entonces se obtiene la página y se obtiene cuantos registros
-                //mayores a 10 son
+                //existen luego de la posición 10
                 if (countPages == 2)
                 {
                     y = margenTop;
 
                     if (cot.cotizacionDetalleList.Count > 10)
                     {
-                        y = y + (52 * (cot.cotizacionDetalleList.Count - 10));
+                        y = y + (54 * (cot.cotizacionDetalleList.Count - 10));
                     }
 
                     sectionTotales = doc.Pages[1];
@@ -755,8 +755,24 @@ namespace cotizadorPDF
                 using (MemoryStream stream = new MemoryStream(imageData))
                 {    
                     image = PdfImage.FromStream(stream);
-                    float width = 45f;
-                    float height = 45f;
+                    float width = 0;
+                    float height = 0;
+                    if (image.PhysicalDimension.Width >= image.PhysicalDimension.Height)
+                    {
+                        float relacion = 45f / image.PhysicalDimension.Width;
+                        width = 45f;
+                        height = image.PhysicalDimension.Height * relacion;
+                    }
+                    else 
+                    {
+                        float relacion = 45f / image.PhysicalDimension.Height;
+                        height  = 45f;
+                        width = image.PhysicalDimension.Width * relacion;
+                    }
+
+
+
+
                     args.Graphics.DrawImage(image, x, y, width, height);
                 }
             }

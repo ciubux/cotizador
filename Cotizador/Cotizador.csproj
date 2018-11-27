@@ -345,7 +345,7 @@
     <Content Include="Scripts\factura1.1.7.js" />
     <Content Include="Scripts\notaDebito1.1.2.js" />
     <Content Include="Scripts\notaIngreso1.2.1.js" />
-    <Content Include="Scripts\guiaRemision1.2.3.js" />
+    <Content Include="Scripts\guiaRemision1.2.5.js" />
     <Content Include="Scripts\cliente1.2.4.js" />
     <Content Include="Scripts\jquery-confirm.js" />
     <Content Include="Scripts\jquery-editable-select.js" />
@@ -354,11 +354,11 @@
     <Content Include="Scripts\pedidoAlmacen1.2.5.js" />
     <Content Include="Scripts\pedidoCompra1.2.4.js" />
     <Content Include="Scripts\pedidoGeneral1.1.6.js" />
-    <Content Include="Scripts\utilesFacturacion1.1.4.js" />
-    <Content Include="Scripts\utiles1.1.7.js" />
+    <Content Include="Scripts\utilesFacturacion1.1.6.js" />
+    <Content Include="Scripts\utiles1.1.9.js" />
     <Content Include="Scripts\notaCredito1.1.3.js" />
     <Content Include="Scripts\venta1.1.2.js" />
-    <Content Include="Scripts\pedido1.2.2.js" />
+    <Content Include="Scripts\pedido1.2.4.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -369,7 +369,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\cotizacion1.1.4.js" />
+    <Content Include="Scripts\cotizacion1.1.6.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />

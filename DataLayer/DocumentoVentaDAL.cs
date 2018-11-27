@@ -144,6 +144,43 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+        public DocumentoVenta UpdateSiguienteNumeroFacturaConsolidada(DocumentoVenta documentoVenta, String idMovimientoAlmacenList)
+        {
+            var objCommand = GetSqlCommand("pu_siguienteNumeroFacturaConsolidada");
+
+            InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie.Substring(1, 3));
+            InputParameterAdd.Guid(objCommand, "idPedido", documentoVenta.venta.pedido.idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
+            //ExecuteNonQuery(objCommand);
+
+            DataTable dataTable = Execute(objCommand);
+
+            DocumentoVenta documentoVentaValidacion = new DocumentoVenta();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                documentoVentaValidacion = new DocumentoVenta();
+                documentoVentaValidacion.idDocumentoVenta = Converter.GetGuid(row, "id_cpe_cabecera_be");
+                documentoVentaValidacion.serie = Converter.GetString(row, "SERIE");
+                documentoVentaValidacion.numero = Converter.GetString(row, "CORRELATIVO");
+                documentoVentaValidacion.fechaEmision = Converter.GetDateTime(row, "FEC_EMI");
+                documentoVentaValidacion.subTotal = Converter.GetDecimal(row, "SUB_TOTAL_CPE");
+                documentoVentaValidacion.total = Converter.GetDecimal(row, "TOTAL_CPE");
+                documentoVentaValidacion.venta = new Venta();
+                documentoVentaValidacion.venta.subTotal = Converter.GetDecimal(row, "SUB_TOTAL_VENTA");
+                documentoVentaValidacion.venta.total = Converter.GetDecimal(row, "TOTAL_VENTA");
+                documentoVentaValidacion.cliente = new Cliente();
+                documentoVentaValidacion.cliente.razonSocialSunat = Converter.GetString(row, "NOM_RCT");
+              
+            }
+
+            return documentoVentaValidacion;
+
+        }
+
         public void UpdateSiguienteNumeroBoleta(DocumentoVenta documentoVenta)
         {
             var objCommand = GetSqlCommand("pu_siguienteNumeroBoleta");

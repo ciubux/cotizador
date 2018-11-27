@@ -271,7 +271,7 @@ namespace BusinessLayer
             }
         }
 
-        public CPE_RESPUESTA_BE procesarCPE(DocumentoVenta documentoVenta)
+        public CPE_RESPUESTA_BE procesarCPE(DocumentoVenta documentoVenta,List<Guid> movimientoAlmacenIdList = null)
         {
             using (var dal = new DocumentoVentaDAL())
             {
@@ -306,7 +306,61 @@ namespace BusinessLayer
                     {
                         if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.Factura)
                         {
-                            dal.UpdateSiguienteNumeroFactura(documentoVenta);
+
+                            //Si se cuenta con la lista de guias de remisión se procede a actualizar el estado d elas guías consolidadas
+                            if (movimientoAlmacenIdList == null)
+                            {
+                                dal.UpdateSiguienteNumeroFactura(documentoVenta);
+                            }
+                            else
+                            {
+                                String idMovimientoAlmacenList = " '";
+
+                                foreach (Guid idMovimientoAlmacen in movimientoAlmacenIdList)
+                                {
+
+                                    idMovimientoAlmacenList = idMovimientoAlmacenList + idMovimientoAlmacen + "','";
+                                }
+
+                                idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
+
+                                DocumentoVenta documentoVentaValidacion = dal.UpdateSiguienteNumeroFacturaConsolidada(documentoVenta, idMovimientoAlmacenList);
+
+                                String bodyMail = @"<h3>Se generó factura Consolidada, Cliente: " + documentoVentaValidacion.cliente.razonSocialSunat + "</h3>" +
+                                    "<p>Factura: " + documentoVentaValidacion.serieNumero + "(" + documentoVentaValidacion.fechaEmision.Value.ToString(Constantes.formatoFecha) + ")" + "</p>" +
+                                    "<p>Sub Total Factura: " + documentoVentaValidacion.subTotal.ToString() + "</p>" +
+                                    "<p>Sub Total Venta: " + documentoVentaValidacion.venta.subTotal.ToString() + "</p>" +
+                                    "<p>DIFERENCIA SUB TOTALES: " + (documentoVentaValidacion.subTotal - documentoVentaValidacion.venta.subTotal) + "</p>" +
+                                    "<p>Total Factura: " + documentoVentaValidacion.total.ToString() + "</p>" +
+                                    "<p>Total Venta: " + documentoVentaValidacion.venta.total.ToString() + "</p>" +
+                                    "<p>DIFERENCIA TOTALES: " + (documentoVentaValidacion.total - documentoVentaValidacion.venta.total) + "</p>" +
+                                    "<p>ID Documento Venta: " + documentoVentaValidacion.idDocumentoVenta.ToString() + "</p>";
+
+                                MailService mailService = new MailService();
+                                mailService.enviar(new List<string>(){Constantes.MAIL_ADMINISTRADOR }, "SE GENERÓ FACTURA CONSOLIDADA "+ documentoVentaValidacion.cliente.razonSocialSunat,
+                                    bodyMail, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, documentoVenta.usuario);
+                            }
+
+
+                            /*Se Identifica */
+                            if (Int32.Parse(documentoVenta.cPE_CABECERA_BE.FRM_PAG) == (int)DocumentoVenta.FormaPago.Letra)
+                            {
+                                CPE_CABECERA_BE cPE_CABECERA_BE = documentoVenta.cPE_CABECERA_BE;
+                                String bodyMail = @"<h3>Se generó factura " + cPE_CABECERA_BE.SERIE + "-" + cPE_CABECERA_BE.CORRELATIVO + "</h3>" +
+                                    "<p>FECHA EMISIÓN: " + cPE_CABECERA_BE.FEC_EMI + "</p>"+
+                                    "<p>TOTAL (S/): " + cPE_CABECERA_BE.MNT_TOT + "</p>" +
+                                    "<p>FORMA DE PAGO: LETRA</p>" +
+                                    "<p>CLIENTE: " + cPE_CABECERA_BE.NOM_RCT + "</p>" +
+                                    "<p>RUC: " + cPE_CABECERA_BE.NRO_DOC_RCT + "</p>";
+
+                                MailService mailService = new MailService();
+                                mailService.enviar(new List<string>() { Constantes.MAIL_ADMINISTRADOR,
+                                Constantes.MAIL_COBRANZAS, Constantes.MAIL_CREDITOS
+                                }, "SE GENERÓ FACTURA " + documentoVenta.cPE_CABECERA_BE.SERIE+"-"+ documentoVenta.cPE_CABECERA_BE.CORRELATIVO+" - FORMA DE PAGO LETRA",
+                                bodyMail, Constantes.MAIL_COMUNICACION_FACTURAS,
+                                Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, documentoVenta.usuario);
+                            }
+
                         }
                         if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.BoletaVenta)
                         {

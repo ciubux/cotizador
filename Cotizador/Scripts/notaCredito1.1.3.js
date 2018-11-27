@@ -33,7 +33,7 @@ jQuery(function ($) {
     var ESTADO_PROGRAMADO_STR = "Pedido Programado"
     var ESTADO_ATENDIDO_STR = "Pedido Atendido"
     var ESTADO_ATENDIDO_PARCIALMENTE_STR = "Pedido Atendido Parcialmente"
-    var ESTADO_EN_EDICION_STR = "Pedido En Edicion";
+    var ESTADO_EN_EDICION_STR = "Pedido En Edición";
     var ESTADO_ELIMINADO_STR = "Pedido Eliminado";
     var ESTADO_FACTURADO_STR = "Pedido Facturado";
 

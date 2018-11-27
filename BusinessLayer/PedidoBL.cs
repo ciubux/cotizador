@@ -37,8 +37,15 @@ namespace BusinessLayer
                     pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
                 }
             }
-            
 
+
+
+            if (pedido.cliente.bloqueado)
+            {
+                pedido.seguimientoPedido.observacion = "El cliente se encuentra BLOQUEADO."; // Agregar quien bloquea
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+            }
+            
 
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
@@ -57,13 +64,7 @@ namespace BusinessLayer
                     if (!pedido.usuario.apruebaPedidos)
                     {
                         //Si cliente está bloqueado
-                        if (pedido.cliente.bloqueado)
-                        {
-                            pedido.seguimientoPedido.observacion = "El cliente se encuentra bloqueado.";
-                            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
-                        }
-                        else
-                        {
+
                             PrecioClienteProducto precioClienteProducto = pedidoDetalle.producto.precioClienteProducto;
 
                             int evaluarVariacion = 0;
@@ -144,7 +145,7 @@ namespace BusinessLayer
                                 }
 
                             }
-                        }
+                        
                     }
                 }
             }
@@ -413,6 +414,14 @@ namespace BusinessLayer
             return pedidoAdjunto;
         }
 
+
+        public Int64 GetSiguienteNumeroGrupoPedido()
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.SelectSiguienteNumeroGrupoPedido();
+            }
+        }
 
         public Pedido GetPedido(Pedido pedido,Usuario usuario)
         {

@@ -1786,6 +1786,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + lista[i].producto.precioClienteProducto.precioUnitario.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
                         '</tr>';
@@ -1981,7 +1982,7 @@ jQuery(function ($) {
         $("#btnRechazarCotizacion").attr('disabled', 'disabled');
         $("#btnEliminarCotizacion").attr('disabled', 'disabled');
         $("#btnPDFCotizacion").attr('disabled', 'disabled');
-        $("btnGenerarPedido").attr('disabled', 'disabled');
+        $("#btnGenerarPedido").attr('disabled', 'disabled');
     }
 
     function activarBotonesVer() {
@@ -1994,12 +1995,18 @@ jQuery(function ($) {
         $("#btnRechazarCotizacion").removeAttr('disabled');
         $("#btnPDFCotizacion").removeAttr('disabled');
         $("#btnEliminarCotizacion").removeAttr('disabled');
-        $("btnGenerarPedido").removeAttr('disabled');
+        $("#btnGenerarPedido").removeAttr('disabled');
     }
 
 
     $("#btnReCotizacion").click(function () {
         desactivarBotonesVer();
+
+        var texto = "<p>ESTA COTIZACIÓN DATA DEL " + $("#verFechaCreacion").html() + ". LOS PRECIOS DE LISTA PODRÍAN HABER VARIADO.</p>" +
+                "<p>EN LA NUEVA COTIZACIÓN DESEA:</p>"+
+            "<ul><li type='A'>TRASLADAR CUALQUIER CAMBIO EN LOS PRECIOS DE LISTA (MANTENIENDO LOS MISMOS % DE DESCUENTO)</li>" +
+            "<li type='A'>MANTENER LOS PRECIOS DE LA COTIZACIÓN ANTERIOR</li></ul>";
+
         $.ajax({
             url: "/Cotizacion/ConsultarSiExisteCotizacion",
             type: 'POST',
@@ -2007,19 +2014,41 @@ jQuery(function ($) {
             dataType: 'JSON',
             success: function (resultado) {
                 if (resultado.existe == "false") {
-
-                    var numero = $("#verNumero").html();
-                    $.ajax({
-                        url: "/Cotizacion/recotizacion",
-                        data: {
-                            numero: numero
-                        },
-                        type: 'POST',
-                        error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
-                        success: function (fileName) {
-                            window.location = '/Cotizacion/Cotizar';
+                    $.confirm({
+                        title: 'Advertencia sobre precios de lista',
+                        content: '<div><div class="col-sm-12">' + texto+'</span></div></div>',
+                        type: 'orange',
+                        buttons: {
+                            cancelar: {
+                                text: 'Cancelar',
+                                btnClass: '',
+                                action: function () {
+                                    activarBotonesVer();
+                                }
+                            },
+                            aplica: {
+                                text: 'OPCIÓN A',
+                                btnClass: 'btn-success',
+                                action: function () {
+                                    $('body').loadingModal("text", "Recotizando...");
+                                    $('body').loadingModal("show");
+                                    recotizar(true);
+                                }
+                            },
+                            noAplica: {
+                                text: 'OPCIÓN B',
+                                btnClass: 'btn-primary',
+                                action: function () {
+                                    $('body').loadingModal("text", "Recotizando...");
+                                    $('body').loadingModal("show");
+                                    recotizar(false);
+                                }
+                            }
+                           
                         }
                     });
+
+                  
                 }
                 else {
                     mostrarMensajeCotizacionEnCurso(resultado);
@@ -2027,6 +2056,30 @@ jQuery(function ($) {
             }
         })
     });
+
+
+    function recotizar(mantenerPorcentajeDescuento)
+    {
+        var numero = $("#verNumero").html();
+        $.ajax({
+            url: "/Cotizacion/recotizacion",
+            data: {
+                numero: numero,
+                mantenerPorcentajeDescuento: mantenerPorcentajeDescuento
+            },
+            type: 'POST',
+            error: function (detalle) {
+                $('body').loadingModal("hide");
+                alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + ".");
+            },
+            success: function (fileName) {
+                window.location = '/Cotizacion/Cotizar';
+            }
+        });
+
+    }
+
+
 
     /*btnEditarCotizacion desde busqueda*/
 

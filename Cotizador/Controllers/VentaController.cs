@@ -23,26 +23,12 @@ namespace Cotizador.Controllers
             Venta ventaVer = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
-
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-
 
             venta = ventaBL.GetVenta(ventaVer, usuario);
             //Temporal
             Pedido pedido = venta.pedido;
             pedido.ciudadASolicitar = new Ciudad();
-
-        /*    if (pedido.tipoPedido == Pedido.tiposPedido.TrasladoInterno)
-            {
-                pedido.ciudadASolicitar = new Ciudad
-                {
-                    idCiudad = pedido.ciudad.idCiudad,
-                    nombre = pedido.ciudad.nombre,
-                    esProvincia = pedido.ciudad.esProvincia
-                };
-
-                pedido.ciudad = pedido.cliente.ciudad;
-            }*/
 
             this.Session[Constantes.VAR_SESSION_VENTA] = venta;
         }
@@ -77,8 +63,181 @@ namespace Cotizador.Controllers
 
 
 
-        public String Descargar()
-        {/*
+
+
+
+        [HttpPost]
+        public String generarVentaConsolidada(List<DocumentoDetalleJson> documentoDetalleJsonList)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            List<Guid> guiaRemisionIdList =  (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
+
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA];
+
+            VentaBL ventaBL = new VentaBL();
+            Venta venta = new Venta();
+            //venta.guiaRemision = new GuiaRemision();
+            venta.guiaRemision = guiaRemision;//.idMovimientoAlmacen;
+            venta.usuario = usuario;
+            venta.pedido = new Pedido();
+            venta.pedido.numeroReferenciaCliente = guiaRemision.pedido.numeroReferenciaCliente;
+            venta.pedido.numeroReferenciaAdicional = guiaRemision.pedido.numeroReferenciaAdicional;
+            venta.pedido.pedidoDetalleList = new List<PedidoDetalle>();
+
+            DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO];
+
+            foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
+            {
+                DocumentoDetalleJson documentoDetalleJson = documentoDetalleJsonList.Where(d => Guid.Parse(d.idProducto) == ventaDetalle.producto.idProducto).FirstOrDefault();
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos,usuario.visualizaMargen);
+                //pedidoDetalle.producto = new Producto();
+                pedidoDetalle.producto = ventaDetalle.producto;
+                pedidoDetalle.cantidad = documentoDetalleJson.cantidad;
+                ///Importante definir como null para que se recupere del producto al momento de insertar
+                pedidoDetalle.unidadInternacional = null; 
+
+                pedidoDetalle.producto.equivalencia = ventaDetalle.producto.equivalencia;
+                pedidoDetalle.esPrecioAlternativo = documentoDetalleJson.esUnidadAlternativa == 1;
+
+                if (pedidoDetalle.esPrecioAlternativo)
+                {
+                    pedidoDetalle.unidad = ventaDetalle.producto.unidad_alternativa;
+                    //////REVISAR QUE LA CANTIDAD DEBE SER SIEMPRE ENTERO
+                    pedidoDetalle.cantidad = Convert.ToInt32(ventaDetalle.sumCantidadUnidadAlternativa);
+                    pedidoDetalle.precioNeto = (ventaDetalle.sumPrecioUnitario * pedidoDetalle.producto.equivalencia) / pedidoDetalle.cantidad;
+                }
+                else
+                {
+                    pedidoDetalle.unidad = ventaDetalle.producto.unidad;
+                    //////REVISAR QUE LA CANTIDAD DEBE SER SIEMPRE ENTERO
+                    pedidoDetalle.cantidad = Convert.ToInt32(ventaDetalle.sumCantidadUnidadEstandar);
+                    pedidoDetalle.precioNeto = ventaDetalle.sumPrecioUnitario / pedidoDetalle.cantidad;
+                }
+                venta.pedido.pedidoDetalleList.Add(pedidoDetalle);
+            }
+
+            ventaBL.procesarVenta(venta);
+
+            ventaBL.InsertVentaConsolidada(venta);
+
+            ventaBL.GetVentaConsolidada(venta,usuario);
+
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.calcularMontosTotales(venta.pedido);
+
+            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
+
+            string jsonUsuario = JsonConvert.SerializeObject(usuario);
+            string jsonVenta = JsonConvert.SerializeObject(venta);
+
+            Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == venta.pedido.ciudad.idCiudad).FirstOrDefault();
+
+            string jsonSeries = "[]";
+            if (ciudad != null)
+            {
+                var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
+                jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
+
+            }
+
+             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
+             return json;
+         }
+
+        [HttpPost]
+        public String obtenerVentaConsolidada(List<DocumentoDetalleJson> documentoDetalleJsonList)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            //List<Guid> guiaRemisionIdList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
+
+            //GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA];
+
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+
+            VentaBL ventaBL = new VentaBL();
+            ventaBL.GetVentaConsolidada(venta, usuario);
+
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.calcularMontosTotales(venta.pedido);
+
+            string jsonUsuario = JsonConvert.SerializeObject(usuario);
+            string jsonVenta = JsonConvert.SerializeObject(venta);
+
+            Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == venta.pedido.ciudad.idCiudad).FirstOrDefault();
+
+            string jsonSeries = "[]";
+            if (ciudad != null)
+            {
+                var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
+                jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
+            }
+
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
+            return json;
+        }
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public void iniciarEdicionVentaConsolidada()
+        {
+            this.Session[Constantes.VAR_SESSION_VENTA] = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+        }
+
+
+        /*
+
+        public String GetVentaConsolidada(String idMovimientoAlmacenList)
+        {
+            VentaBL ventaBL = new VentaBL();
+            Venta venta = new Venta();
+            venta.guiaRemision = new GuiaRemision();
+            venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            venta = ventaBL.GetVenta(venta, usuario);
+            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
+
+            string jsonUsuario = JsonConvert.SerializeObject(usuario);
+            string jsonVenta = JsonConvert.SerializeObject(venta);
+
+            Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == venta.pedido.ciudad.idCiudad).FirstOrDefault();
+
+            string jsonSeries = "[]";
+            if (ciudad != null)
+            {
+                var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
+                jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
+
+            }
+
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
+            return json;
+        }
+        */
+
+
+
+
+            public String Descargar()
+           {/*
            
 
             Pedido pedido = venta.pedido; ;

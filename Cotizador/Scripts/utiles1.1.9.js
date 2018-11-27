@@ -28,7 +28,7 @@ var MOTIVO_TRASLADO_ENTRADA_DEVOLUCION_COMODATO_ENTREGADO = "F";
 var MOTIVO_TRASLADO_ENTRADA_DEVOLUCION_TRANSFERENCIA_GRATUITA_ENTREGADA = "H";
 
 
-
+var TIPO_NOTA_CREDITO_ANULACION_DE_LA_OPERACION = "1";
 
 
 
@@ -251,3 +251,7 @@ function mostrarMensajeErrorProceso(mensajeError) {
     });
 }
 
+
+function esEntero(numero) {
+    return numero % 1 == 0;
+}

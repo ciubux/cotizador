@@ -278,6 +278,55 @@ namespace Cotizador.Controllers
         }
 
 
+        public String ConfirmarCreacionFacturaConsolidada()
+        {
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            try
+            {
+                List<Guid> movimientoAlmacenIdList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
+
+                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+                DocumentoVenta documentoVenta = new DocumentoVenta();
+                documentoVenta.venta = venta;
+                documentoVenta.idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+                documentoVenta.cliente = venta.pedido.cliente;
+                documentoVenta.usuario = usuario;
+
+                if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+                else if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
+                     documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
+                else
+                    throw new Exception("No se ha identificado el tipo de documento electrónico a crear.");
+
+                DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+
+
+                CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.procesarCPE(documentoVenta, movimientoAlmacenIdList);
+
+                var otmp = new
+                {
+                    CPE_RESPUESTA_BE = cPE_RESPUESTA_BE,
+                    serieNumero = documentoVenta.serieNumero,
+                    idDocumentoVenta = documentoVenta.idDocumentoVenta
+                };
+
+
+
+                return JsonConvert.SerializeObject(otmp);
+            }
+            catch (Exception ex)
+            {
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+                return ex.ToString();
+            }
+        }
+
+
 
 
 

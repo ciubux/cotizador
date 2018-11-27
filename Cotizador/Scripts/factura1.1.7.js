@@ -1194,15 +1194,16 @@ jQuery(function ($) {
 
   
     $("#btnContinuarGenerandoNotaCredito").click(function () {
-
         desactivarBotonesVer();
 
-
-
         var tipoNotaCredito = $('input:radio[name=tipoNotaCredito]:checked').val();
+        /*
+        if (tipoNotaCredito == TIPO_NOTA_CREDITO_ANULACION_DE_LA_OPERACION) {
+            /*alert("Anulacion de la operacion");
+        }*/
+
 
         var idDocumentoVenta = $("#idDocumentoVenta").val();
-
 
         if (tipoNotaCredito == null) {
             mostrarMensajeErrorProceso("Debe seleccionar el Motivo de la Nota de Crédito.");

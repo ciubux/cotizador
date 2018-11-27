@@ -66,6 +66,13 @@ textarea {
 }
 
 
+.mensaje {
+    font-weight: bold;
+    font-size: medium;
+    color: brown;
+}
+
+
 @media screen and (min-width: 768px) {
 	
 	#modalAgregarProducto .modal-dialog  {width:900px;}
@@ -108,7 +115,7 @@ textarea {
     }
     
     #modalVerCotizacion .modal-dialog {
-        width: 1200px;
+        width: 1300px;
     }
     #modalMostrarPrecios .modal-dialog {
         width: 900px;
@@ -128,6 +135,10 @@ textarea {
     
     #modalVerGuiasRemision .modal-dialog {
         width: 1200px;
+    }
+
+    #modalIngresarDatosVentaConsolidada .modal-dialog {
+        width: 1100px;
     }
 
     #modalVerNotasIngreso .modal-dialog {
@@ -455,4 +466,19 @@ $darkred: darken($red, 0.2);*/
 .list-group,
 .list-group-item {
     display: block;
+}
+
+
+/**@brand-primary: darken(#428bca, 6.5%); // #337ab7
+@brand-success: #5cb85c;
+@brand-info:    #5bc0de;
+@brand-warning: #f0ad4e;
+@brand-danger:  #d9534f;*/
+
+.badge-warning {
+    background-color: #f0ad4e;
+}
+
+.badge-danger {
+    background-color: #d9534f;
 }

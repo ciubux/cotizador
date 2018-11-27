@@ -3456,7 +3456,7 @@ jQuery(function ($) {
     $("#mostrarCosto").change(function () {
         var mostrarCosto = $('#mostrarCosto').prop('checked') ;
         $.ajax({
-            url: "/Pedido/updateMostrarCosto",
+            url: "/Pedido/changeMostrarCosto",
             type: 'POST',
             data: {
                 mostrarCosto: mostrarCosto

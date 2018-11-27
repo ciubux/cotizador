@@ -67,6 +67,16 @@ namespace Model
         /*PERMISOS FACTURA ELECTRONICA*/
         public bool creaDocumentosVenta { get; set; }
 
+        public bool creaFacturaConsolidadaMultiregional { get; set; }
+
+        public bool visualizaGuiasPendienteFacturacion { get; set; }
+
+        
+
+        public bool creaFacturaConsolidadaLocal { get; set; }
+
+
+
         public bool administraDocumentosVenta { get { return administraDocumentosVentaLima || administraDocumentosVentaProvincias; } }
 
         public bool apruebaAnulaciones { get; set; }

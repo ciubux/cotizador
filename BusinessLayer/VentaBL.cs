@@ -43,6 +43,14 @@ namespace BusinessLayer
             }
         }
 
+        public void InsertVentaConsolidada(Venta venta)
+        {
+            using (var dal = new VentaDAL())
+            {
+                dal.InsertVentaConsolidada(venta);
+            }
+        }
+
         public Transaccion GetPlantillaVenta(Transaccion transaccion, Usuario usuario)
         {
             using (var dal = new VentaDAL())
@@ -85,8 +93,19 @@ namespace BusinessLayer
             return venta;
         }
 
+        
+        public Venta GetVentaConsolidada(Venta venta, Usuario usuario)
+        {
+            using (var dal = new VentaDAL())
+            {
+                venta = dal.SelectVentaConsolidada(venta, usuario);
+                this.procesarVenta(venta);
+            }
+            return venta;
+        }
 
-        private void procesarVenta(Venta venta)
+
+        public void procesarVenta(Venta venta)
         {
             foreach (PedidoDetalle pedidoDetalle in venta.pedido.pedidoDetalleList)
             {

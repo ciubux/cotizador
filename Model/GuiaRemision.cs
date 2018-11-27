@@ -31,6 +31,9 @@ namespace Model
         [Display(Name = "Punto Partida:")]
         public String direccionOrigen { get; set; }
 
+        public String direccionEntrega { get; set; }
+
+        public Ubigeo ubigeoEntrega { get; set; }
 
         [Display(Name = "Atención Parcial:")]
         public Boolean atencionParcial { get; set; }
@@ -210,6 +213,7 @@ namespace Model
                 return EnumHelper<MotivosExtornoNotaIngreso>.GetDisplayValue(this.motivoExtornoNotaIngreso);
             }
         }
+
 
         /*INGRESO*/
 

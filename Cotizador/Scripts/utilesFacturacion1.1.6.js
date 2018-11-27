@@ -81,19 +81,25 @@ function desactivarBotonesFacturar() {
     $("#btnCancelarFacturarPedido").attr('disabled', 'disabled');
     $("#btnEditarCliente").attr('disabled', 'disabled');
     $("#btnEditarVenta").attr('disabled', 'disabled');
+    $("#btnEditarVentaConsolidada").attr('disabled', 'disabled');
     $("#btnAceptarFacturarPedido").attr('disabled', 'disabled');
     $("#btnConfirmarFacturarPedido").attr('disabled', 'disabled');
     $("#btnCancelarConfirmarFacturarPedido").attr('disabled', 'disabled');
+    $("#btnConfirmarFacturaConsolidada").attr('disabled', 'disabled');
 }
 
 function activarBotonesFacturar() {
     $("#btnCancelarFacturarPedido").removeAttr('disabled');
     $("#btnEditarCliente").removeAttr('disabled');
     $("#btnEditarVenta").removeAttr('disabled');
+    $("#btnEditarVentaConsolidada").removeAttr('disabled');
     $("#btnAceptarFacturarPedido").removeAttr('disabled');
     $("#btnConfirmarFacturarPedido").removeAttr('disabled');
     $("#btnCancelarConfirmarFacturarPedido").removeAttr('disabled');
+    $("#btnConfirmarFacturaConsolidada").removeAttr('disabled');
 }
+
+
 
 $("#btnAceptarFacturarPedido").click(function () {
 
@@ -154,11 +160,12 @@ $("#btnAceptarFacturarPedido").click(function () {
 
     desactivarBotonesFacturar();
 
-
-    $('body').loadingModal({
+   /* $('body').loadingModal({
         text: 'Creando Factura...'
-    });
+    });*/
 
+    $('body').loadingModal('text', 'Creando Factura...');
+    $('body').loadingModal('show')
 
     var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
 
@@ -344,9 +351,8 @@ $("#btnConfirmarFacturarPedido").click(function () {
     desactivarBotonesFacturar();
 
 
-    $('body').loadingModal({
-        text: 'Creando Factura...'
-    });
+    $('body').loadingModal('text', 'Confirmando Generación Factura...');
+    $('body').loadingModal('show')
 
 
     var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
@@ -388,6 +394,65 @@ $("#btnConfirmarFacturarPedido").click(function () {
         }
     });
     $("btnCancelarFacturarPedido").click();
+});
+
+
+
+
+
+
+$("#btnConfirmarFacturaConsolidada").click(function () {
+ 
+    desactivarBotonesFacturar(); 
+
+   
+    $('body').loadingModal('text', 'Confirmando Generación Factura...');
+    $('body').show();
+
+    var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
+    var idDocumentoVenta = $("#idDocumentoVenta").val();
+
+    $.ajax({
+        url: "/Factura/ConfirmarCreacionFacturaConsolidada",
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+            idDocumentoVenta: idDocumentoVenta
+        },
+        error: function (resultado) {
+            $('body').loadingModal('hide')
+            mostrarMensajeErrorProceso(MENSAJE_ERROR);
+            activarBotonesFacturar();
+        },
+        success: function (resultado) {
+            $('body').loadingModal('hide')
+
+            if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
+                $.alert({
+                    //icon: 'fa fa-warning',
+                    title: TITLE_EXITO,
+                    content: 'Se generó el documento electrónico: ' + resultado.serieNumero + '.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () { location.reload(); }
+                    }
+                });
+                activarBotonesFacturar();
+            }
+            else {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE);
+                //$("#btnAceptarFacturarPedido").removeAttr("disabled");
+                activarBotonesFacturar();
+            }
+
+        }
+    });
+    $("btnCancelarFacturarPedido").click();
+
+
+    //////REVISAR
+
+
 });
 
 
