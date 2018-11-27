@@ -4156,10 +4156,14 @@ jQuery(function ($) {
                  
                 }
 
-                if (pedidoList.length > 0)
+                if (pedidoList.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
-                else
+                    $("#divExportButton").show();
+                }
+                else {
                     $("#msgBusquedaSinResultados").show();
+                    $("#divExportButton").hide();
+                }
             }
         });
     });
@@ -4565,6 +4569,10 @@ jQuery(function ($) {
         var fechaProgramacion = $("#fechaProgramaciontmp").val();
         $("#fechaProgramacion").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacion);    
     })
+
+    $("#btnExportExcel").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
 
     $("#btnAceptarProgramarPedido").click(function () {
 

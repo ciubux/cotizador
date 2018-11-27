@@ -1,4 +1,5 @@
-﻿using NPOI.SS.UserModel;
+﻿using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,20 @@ namespace BusinessLayer
             sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
         }
 
+        public static void setValorCelda(ISheet sheet, int fila, int columna, string valor, HSSFCellStyle cellStyle = null)
+        {
+            sheet.GetRow(fila - 1).GetCell(columna - 1).SetCellValue(valor);
+            if (cellStyle != null)
+            { sheet.GetRow(fila - 1).GetCell(columna - 1).CellStyle = cellStyle; }
+        }
+
+        public static void setValorCelda(ISheet sheet, int fila, string columna, string valor, HSSFCellStyle cellStyle = null)
+        {
+            sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
+            if (cellStyle != null)
+            { sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).CellStyle = cellStyle; }
+        }
+
         public static int getValorCeldaInt(ISheet sheet, int fila, string columna)
         {
             String valorCelda = UtilesHelper.getValorCelda(sheet, fila, columna);
@@ -79,3 +94,4 @@ namespace BusinessLayer
 
     }
 }
+

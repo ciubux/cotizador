@@ -7,7 +7,13 @@ using System.Linq;
 using System.Web;
 using System.IO;
 using System.Data;
+using Model;
 using Newtonsoft.Json;
+using NPOI.HSSF.Model;
+using NPOI.HSSF.Util;
+using BusinessLayer;
+
+using System.Web.Mvc;
 
 namespace Cotizador.ExcelExport
 {
@@ -18,70 +24,121 @@ namespace Cotizador.ExcelExport
     }
     public class PedidoSearch
     {
-
-        public void generateExcel()
+        public FileStreamResult generateExcel(List<Pedido> list)
         {
-            DataTable dt = new DataTable();
-
-            dt.Columns.Add("ID");
-            dt.Columns.Add("Name");
-
-            DataRow dr = dt.NewRow();
-            dr["ID"] = "1";
-            dr["Name"] = "Test";
-
-            dt.Rows.Add(dr);
-
-            // Declare HSSFWorkbook object for create sheet  
-            var workbook = new HSSFWorkbook();
-            var sheet = workbook.CreateSheet("Pedidos");
-
-            // Convert datatable into json  
-            string JSON = JsonConvert.SerializeObject(dt);
-
-            // Convert json into SummaryClass class list  
-            var items = JsonConvert.DeserializeObject<List<SummaryClass>>(JSON);
-
-            // Set column name this column name use for fetch data from list  
-            var columns = new[] { "ID", "Name" };
-
-            // Set header name this header use for set name in excel first row  
-            var headers = new[] { "ID", "Name" };
-
-            var headerRow = sheet.CreateRow(0);
-
-            //Below loop is create header  
-            for (int i = 0; i < columns.Length; i++)
+            
+            HSSFWorkbook wb;
+            //  Dictionary<String, ICellStyle> styles = CreateExcelStyles(wb);
+            HSSFSheet sheet;
             {
-                var cell = headerRow.CreateCell(i);
-                cell.SetCellValue(headers[i]);
-            }
+                wb = HSSFWorkbook.Create(InternalWorkbook.CreateWorkbook());
 
-            //Below loop is fill content  
-            for (int i = 0; i < items.Count; i++)
-            {
-                var rowIndex = i + 1;
-                var row = sheet.CreateRow(rowIndex);
 
-                for (int j = 0; j < columns.Length; j++)
+                HSSFFont titleFont = (HSSFFont)wb.CreateFont();
+                titleFont.FontHeightInPoints = (short)11;
+                titleFont.FontName = "Arial";
+                titleFont.Color = IndexedColors.Black.Index;
+                titleFont.IsBold = true;
+                //  HSSFColor color = new HSSFColor(); // (new byte[] { 184, 212, 249 });
+                //     color.RGB.SetValue(new byte[] { 184, 212, 249 },0);
+                HSSFCellStyle titleCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                titleCellStyle.SetFont(titleFont);
+                titleCellStyle.FillPattern = FillPattern.SolidForeground;
+                titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
+
+                //titleCellStyle.FillBackgroundColor = HSSFColor.BlueGrey.Index;
+
+
+
+
+
+                IDataFormat format = wb.CreateDataFormat();
+                ICellStyle dateFormatStyle = wb.CreateCellStyle();
+                dateFormatStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
+
+                
+
+                // create sheet
+                sheet = (HSSFSheet)wb.CreateSheet("Atenciones");
+
+
+                /*guiaRemision,fecha_emision, ma.direccion_entrega, ub.distrito, 
+                 * ub.provincia,  ub.departamento, ma.observaciones,*/
+
+                /*Cabecera, Sub total*/
+                int rTotal = (list.Count) + 4;
+                int cTotal = 13 + 2;
+
+                /*Se crean todas las celdas*/
+                for (int r = 0; r < rTotal; r++)
                 {
-                    var cell = row.CreateCell(j);
-                    var o = items[i];
-                    cell.SetCellValue(o.GetType().GetProperty(columns[j]).GetValue(o, null).ToString());
+                    var row = sheet.CreateRow(r);
+                    for (int c = 0; c < cTotal; c++)
+                    {
+                        row.CreateCell(c);
+                    }
+                }
+
+                int i = 0; 
+
+                UtilesHelper.setValorCelda(sheet, 1, "A", "N°", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "B", "Sede MP", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "C", "Cod.Cliente", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "D", "Razón Social", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "E", "O/C N°", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "F", "Creado por", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "G", "Fecha Registro", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "H", "Rango Fecha Entrega ", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "I", "Horarios Entrega", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "J", "Total(Incl.IGV)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "K", "Distrito Entrega", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "L", "Estado Atención", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "M", "Estado Crediticio", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "N", "Obs. Uso Intern", titleCellStyle);
+                
+                    
+
+                i = 2;
+
+                /*  for (int iii = 0; iii<50;iii++)
+                  { */
+
+                foreach (Pedido obj in list)
+                {
+                    UtilesHelper.setValorCelda(sheet, i, "A", obj.numeroPedidoString);
+                    UtilesHelper.setValorCelda(sheet, i, "B", obj.ciudad.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "C", obj.cliente.codigo);
+                    UtilesHelper.setValorCelda(sheet, i, "D", obj.cliente.razonSocial);
+                    UtilesHelper.setValorCelda(sheet, i, "E", obj.numeroReferenciaCliente);
+                    UtilesHelper.setValorCelda(sheet, i, "F", obj.usuario.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "G", obj.fechaHoraRegistro);
+                    UtilesHelper.setValorCelda(sheet, i, "H", obj.rangoFechasEntrega);
+                    UtilesHelper.setValorCelda(sheet, i, "I", obj.rangoHoraEntrega);
+                    UtilesHelper.setValorCelda(sheet, i, "J", (double) obj.montoTotal);
+                    UtilesHelper.setValorCelda(sheet, i, "K", obj.ubigeoEntrega.Distrito);
+                    UtilesHelper.setValorCelda(sheet, i, "L", obj.seguimientoPedido.estadoString);
+                    UtilesHelper.setValorCelda(sheet, i, "M", obj.seguimientoCrediticioPedido.estadoString);
+                    UtilesHelper.setValorCelda(sheet, i, "N", obj.observaciones);
+
+                    i++;
+                }
+                
+
+                MemoryStream ms = new MemoryStream();
+                using (MemoryStream tempStream = new MemoryStream())
+                {
+                    wb.Write(tempStream);
+                    var byteArray = tempStream.ToArray();
+                    ms.Write(byteArray, 0, byteArray.Length);
+                    ms.Flush();
+                    ms.Position = 0;
+                    FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
+
+                    result.FileDownloadName = "Pedidos_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
+
+                    return result;
                 }
             }
-
-            // Declare one MemoryStream variable for write file in stream  
-            var stream = new MemoryStream();
-            workbook.Write(stream);
-
-            string FilePath = "SetYourFileSavePath - With File Name";
-
-            //Write to file using file stream  
-            FileStream file = new FileStream(FilePath, FileMode.CreateNew, FileAccess.Write);
-            stream.WriteTo(file);
-            file.Close();
-            stream.Close();
         }
     }
 }

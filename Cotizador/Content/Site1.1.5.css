@@ -296,6 +296,10 @@ input.label-input {
     background-repeat: no-repeat;
 }
 
+.botonExcel:before {
+    background-image: url(/images/excel.png);
+}
+
 .botonClean:before {
     background-image: url(/images/clean.png);
 }
