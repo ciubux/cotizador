@@ -1842,7 +1842,9 @@ jQuery(function ($) {
     });
 
 
-    
+    $("#btnExportExcel").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
 
     $("#btnBusqueda").click(function () {
 
@@ -1926,10 +1928,15 @@ jQuery(function ($) {
 
                 }
 
-                if (clienteList.length > 0)
+                if (clienteList.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
-                else
+                    $("#divExportButton").show();
+                }
+                else {
                     $("#msgBusquedaSinResultados").show();
+                    $("#divExportButton").hide();
+                }
+
             }
         });
     });

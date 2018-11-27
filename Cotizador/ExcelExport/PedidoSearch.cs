@@ -17,11 +17,7 @@ using System.Web.Mvc;
 
 namespace Cotizador.ExcelExport
 {
-    public class SummaryClass
-    {
-        public string ID { get; set; }
-        public string Name { get; set; }
-    }
+   
     public class PedidoSearch
     {
         public FileStreamResult generateExcel(List<Pedido> list)
@@ -67,7 +63,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 4;
-                int cTotal = 13 + 2;
+                int cTotal = 14 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
