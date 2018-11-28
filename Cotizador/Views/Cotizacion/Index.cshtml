@@ -130,7 +130,7 @@
             </div>
         </div>
 
-        
+
         <div class="row">
             @if (cotizacion.usuario.apruebaCotizaciones)
             {
@@ -158,11 +158,15 @@
                 </div>
             </div>
         </div>
-        
+
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnLimpiarBusquedaCotizaciones" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
             <button id="btnBusquedaCotizaciones" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+        </div>
+
+        <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Cotizacion")">Exportar</button>
         </div>
 
 

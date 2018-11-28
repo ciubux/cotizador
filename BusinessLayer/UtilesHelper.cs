@@ -75,6 +75,7 @@ namespace BusinessLayer
             sheet.GetRow(fila - 1).GetCell(columna-1).SetCellValue(valor);
         }
 
+        
         public static int getValorCeldaInt(ISheet sheet, int fila, string columna)
         {
             String valorCelda = UtilesHelper.getValorCelda(sheet, fila, columna);
@@ -121,3 +122,4 @@ namespace BusinessLayer
 
     }
 }
+

@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using Cotizador.Models.DTOs;
+using Cotizador.ExcelExport;
 using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
@@ -1421,6 +1422,15 @@ namespace Cotizador.Controllers
             //return cotizacionList.Count();
         }
 
+        [HttpGet]
+        public ActionResult ExportLastSearchExcel()
+        {
+            List<Pedido> list = (List<Pedido>) this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA];
+
+            PedidoSearch excel = new PedidoSearch();
+            return excel.generateExcel(list);
+        }
+
         public String Search()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
@@ -1508,6 +1518,7 @@ namespace Cotizador.Controllers
 
             pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido) Int32.Parse(this.Request.Params["estado"]);
             pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Int32.Parse(this.Request.Params["estadoCrediticio"]);
+
 
             PedidoBL pedidoBL = new PedidoBL();
             List<Pedido> pedidoList = pedidoBL.GetPedidos(pedido);

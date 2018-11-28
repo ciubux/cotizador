@@ -250,6 +250,8 @@
     <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="Email\PedidoSinAtencion.cs" />
+    <Compile Include="ExcelExport\CotizacionSearch.cs" />
+    <Compile Include="ExcelExport\ClienteSearch.cs" />
     <Compile Include="ExcelExport\PedidoSearch.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -314,6 +316,7 @@
     <Content Include="images\clean.png" />
     <Content Include="images\equis.png" />
     <Content Include="images\etiqueta-de-precio-en-dolares.png" />
+    <Content Include="images\excel.png" />
     <Content Include="images\hombre-de-negocios.png" />
     <Content Include="images\hombre-de-negocios2.png" />
     <Content Include="images\icon-close.png" />

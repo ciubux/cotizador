@@ -3030,7 +3030,9 @@ jQuery(function ($) {
         });
     });
     
-
+    $("#btnExportExcel").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
 
     $("#btnBusquedaCotizaciones").click(function () {
         var idCiudad = $("#idCiudad").val();
@@ -3128,10 +3130,14 @@ jQuery(function ($) {
                     */
                     }
 
-                if (cotizacionList.length > 0)
+                if (cotizacionList.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
-                else
+                    $("#divExportButton").show();
+                }
+                else {
                     $("#msgBusquedaSinResultados").show();
+                    $("#divExportButton").hide();
+                }
                
               //  location.reload();
             }

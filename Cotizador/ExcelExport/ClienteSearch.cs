@@ -18,9 +18,9 @@ using System.Web.Mvc;
 namespace Cotizador.ExcelExport
 {
    
-    public class PedidoSearch
+    public class ClienteSearch
     {
-        public FileStreamResult generateExcel(List<Pedido> list)
+        public FileStreamResult generateExcel(List<Cliente> list)
         {
             
             HSSFWorkbook wb;
@@ -77,46 +77,47 @@ namespace Cotizador.ExcelExport
 
                 int i = 0; 
 
-                UtilesHelper.setValorCelda(sheet, 1, "A", "N°", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "B", "Sede MP", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "C", "Cod.Cliente", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "D", "Razón Social", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "E", "O/C N°", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "F", "Creado por", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "G", "Fecha Registro", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "H", "Rango Fecha Entrega ", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "I", "Horarios Entrega", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "J", "Total(Incl.IGV)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "K", "Distrito Entrega", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "L", "Estado Atención", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "M", "Estado Crediticio", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "N", "Obs. Uso Intern", titleCellStyle);
-                
-                    
-
+                UtilesHelper.setValorCelda(sheet, 1, "A", "Código", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "B", "Razón Social", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "C", "Nombre", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "D", "Tipo Doc.", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "E", "N° Doc.", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "F", "Sede MP", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "G", "Grupo", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "H", "Asesor Comercial", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "I", "Supervisor Comercial", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "J", "Asistente Servicio Cliente", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "K", "Plazo Crédito Aprobado", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "L", "Crédito Aprobado (S/)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "L", "¿Bloqueado?", titleCellStyle);
                 i = 2;
 
                 /*  for (int iii = 0; iii<50;iii++)
                   { */
 
-                foreach (Pedido obj in list)
+                foreach (Cliente obj in list)
                 {
-                    UtilesHelper.setValorCelda(sheet, i, "A", obj.numeroPedidoString);
-                    UtilesHelper.setValorCelda(sheet, i, "B", obj.ciudad.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "C", obj.cliente.codigo);
-                    UtilesHelper.setValorCelda(sheet, i, "D", obj.cliente.razonSocial);
-                    UtilesHelper.setValorCelda(sheet, i, "E", obj.numeroReferenciaCliente);
-                    UtilesHelper.setValorCelda(sheet, i, "F", obj.usuario.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "G", obj.fechaHoraRegistro);
-                    UtilesHelper.setValorCelda(sheet, i, "H", obj.rangoFechasEntrega);
-                    UtilesHelper.setValorCelda(sheet, i, "I", obj.rangoHoraEntrega);
-                    UtilesHelper.setValorCelda(sheet, i, "J", (double) obj.montoTotal);
-                    UtilesHelper.setValorCelda(sheet, i, "K", obj.ubigeoEntrega.Distrito);
-                    UtilesHelper.setValorCelda(sheet, i, "L", obj.seguimientoPedido.estadoString);
-                    UtilesHelper.setValorCelda(sheet, i, "M", obj.seguimientoCrediticioPedido.estadoString);
-                    UtilesHelper.setValorCelda(sheet, i, "N", obj.observaciones);
-
-                    i++;
+                    UtilesHelper.setValorCelda(sheet, i, "A", obj.codigo);
+                    UtilesHelper.setValorCelda(sheet, i, "B", obj.razonSocialSunat);
+                    UtilesHelper.setValorCelda(sheet, i, "C", obj.nombreComercial);
+                    UtilesHelper.setValorCelda(sheet, i, "D", obj.tipoDocumentoIdentidadToString);
+                    UtilesHelper.setValorCelda(sheet, i, "E", obj.ruc);
+                    UtilesHelper.setValorCelda(sheet, i, "F", obj.ciudad.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "G", obj.grupoCliente.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "H", obj.responsableComercial.descripcion);
+                    UtilesHelper.setValorCelda(sheet, i, "I", obj.supervisorComercial.descripcion);
+                    UtilesHelper.setValorCelda(sheet, i, "J", obj.asistenteServicioCliente.descripcion);
+                    UtilesHelper.setValorCelda(sheet, i, "K", obj.tipoPagoFacturaToString);
+                    UtilesHelper.setValorCelda(sheet, i, "L", (double) obj.creditoAprobado);
+                    if (obj.bloqueado)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "M", "BLOQUEADO");
+                    } else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "M", "");
+                    }
+                    
+                   i++;
                 }
                 
 
@@ -130,7 +131,7 @@ namespace Cotizador.ExcelExport
                     ms.Position = 0;
                     FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
 
-                    result.FileDownloadName = "Pedidos_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
+                    result.FileDownloadName = "Clientes_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
 
                     return result;
                 }

@@ -18,9 +18,9 @@ using System.Web.Mvc;
 namespace Cotizador.ExcelExport
 {
    
-    public class PedidoSearch
+    public class CotizacionSearch
     {
-        public FileStreamResult generateExcel(List<Pedido> list)
+        public FileStreamResult generateExcel(List<Cotizacion> list)
         {
             
             HSSFWorkbook wb;
@@ -63,7 +63,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 4;
-                int cTotal = 14 + 2;
+                int cTotal = 12 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -75,22 +75,21 @@ namespace Cotizador.ExcelExport
                     }
                 }
 
-                int i = 0; 
+                int i = 0;
+                
 
                 UtilesHelper.setValorCelda(sheet, 1, "A", "N°", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "B", "Sede MP", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "C", "Cod.Cliente", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "B", "Creado por", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "C", "Fecha Última Edición", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "D", "Razón Social", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "E", "O/C N°", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "F", "Creado por", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "G", "Fecha Registro", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "H", "Rango Fecha Entrega ", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "I", "Horarios Entrega", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "E", "RUC", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "F", "Ciudad", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "G", "Total(No Inc. IGV)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "H", "Desc % (max)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "I", "Estado", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "J", "Total(Incl.IGV)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "K", "Distrito Entrega", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "L", "Estado Atención", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "M", "Estado Crediticio", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "N", "Obs. Uso Intern", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "K", "Modificado última vez por", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "L", "Comentario Estado", titleCellStyle);
                 
                     
 
@@ -99,27 +98,24 @@ namespace Cotizador.ExcelExport
                 /*  for (int iii = 0; iii<50;iii++)
                   { */
 
-                foreach (Pedido obj in list)
+                foreach (Cotizacion obj in list)
                 {
-                    UtilesHelper.setValorCelda(sheet, i, "A", obj.numeroPedidoString);
-                    UtilesHelper.setValorCelda(sheet, i, "B", obj.ciudad.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "C", obj.cliente.codigo);
+                    UtilesHelper.setValorCelda(sheet, i, "A", obj.codigo);
+                    UtilesHelper.setValorCelda(sheet, i, "B", obj.usuario.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "C", obj.fecha.ToString("dd/MM/yyyy HH:mm"));
                     UtilesHelper.setValorCelda(sheet, i, "D", obj.cliente.razonSocial);
-                    UtilesHelper.setValorCelda(sheet, i, "E", obj.numeroReferenciaCliente);
-                    UtilesHelper.setValorCelda(sheet, i, "F", obj.usuario.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "G", obj.fechaHoraRegistro);
-                    UtilesHelper.setValorCelda(sheet, i, "H", obj.rangoFechasEntrega);
-                    UtilesHelper.setValorCelda(sheet, i, "I", obj.rangoHoraEntrega);
-                    UtilesHelper.setValorCelda(sheet, i, "J", (double) obj.montoTotal);
-                    UtilesHelper.setValorCelda(sheet, i, "K", obj.ubigeoEntrega.Distrito);
-                    UtilesHelper.setValorCelda(sheet, i, "L", obj.seguimientoPedido.estadoString);
-                    UtilesHelper.setValorCelda(sheet, i, "M", obj.seguimientoCrediticioPedido.estadoString);
-                    UtilesHelper.setValorCelda(sheet, i, "N", obj.observaciones);
+                    UtilesHelper.setValorCelda(sheet, i, "E", obj.cliente.ruc);
+                    UtilesHelper.setValorCelda(sheet, i, "F", obj.ciudad.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "G", (double) obj.montoSubTotal);
+                    UtilesHelper.setValorCelda(sheet, i, "H", (double) obj.maximoPorcentajeDescuentoPermitido);
+                    UtilesHelper.setValorCelda(sheet, i, "I", obj.seguimientoCotizacion.estadoString);
+                    UtilesHelper.setValorCelda(sheet, i, "J", (double)obj.montoTotal);
+                    UtilesHelper.setValorCelda(sheet, i, "K", obj.seguimientoCotizacion.usuario.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "L", obj.seguimientoCotizacion.observacion);
 
                     i++;
                 }
                 
-
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())
                 {
@@ -130,7 +126,7 @@ namespace Cotizador.ExcelExport
                     ms.Position = 0;
                     FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
 
-                    result.FileDownloadName = "Pedidos_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
+                    result.FileDownloadName = "Cotizaciones_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
 
                     return result;
                 }

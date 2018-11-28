@@ -1,6 +1,7 @@
 ﻿using BusinessLayer;
 using Model;
 using cotizadorPDF;
+using Cotizador.ExcelExport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -138,6 +139,14 @@ namespace Cotizador.Controllers
 
 
 
+        [HttpGet]
+        public ActionResult ExportLastSearchExcel()
+        {
+            List<Cotizacion> list = (List<Cotizacion>)this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA];
+
+            CotizacionSearch excel = new CotizacionSearch();
+            return excel.generateExcel(list);
+        }
 
         /*Ejecución de la búsqueda de cotizaciones*/
         public String SearchCotizaciones()

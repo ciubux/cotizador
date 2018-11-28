@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using Cotizador.ExcelExport;
 using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
@@ -228,6 +229,15 @@ namespace Cotizador.Controllers
             ViewBag.gruposCliente = grupoClienteList;
             return View();
 
+        }
+
+        [HttpGet]
+        public ActionResult ExportLastSearchExcel()
+        {
+            List<Cliente> list = (List<Cliente>)this.Session[Constantes.VAR_SESSION_CLIENTE_LISTA];
+
+            ClienteSearch excel = new ClienteSearch();
+            return excel.generateExcel(list);
         }
 
         public String SearchClientes()
