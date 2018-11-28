@@ -370,6 +370,18 @@ jQuery(function ($) {
 
 
 
+    $("#idGrupoCliente").change(function () {
+        var idGrupoCliente = $("#idGrupoCliente").val();
+        $.ajax({
+            url: "/Cotizacion/updateIdGrupoCliente",
+            type: 'POST',
+            data: {
+                idGrupoCliente: idGrupoCliente
+            },
+            success: function () {
+            }
+        });
+    });
 
 
     function cargarChosenCliente() {
@@ -2336,6 +2348,23 @@ jQuery(function ($) {
 
     });
 
+    $("#chkEsPagoContado").change(function () {
+        var valor = 1;
+        if (!$('#chkEsPagoContado').prop('checked')) {
+            valor = 0;
+        }
+        $.ajax({
+            url: "/Cotizacion/updateEsPagoContado",
+            type: 'POST',
+            data: {
+                esPagoContado: valor
+            },
+            dataType: 'JSON',
+            success: function (result) {
+                $("#cotizacion_textoCondicionesPago").val(result.textoCondicionesPago);
+            }
+        });
+    });
 
     $("#observaciones").change(function () {
 
@@ -3181,6 +3210,18 @@ jQuery(function ($) {
         });
     });  
 
+    $("#buscarSedesGrupoCliente").change(function () {
+        var valor = $("input[name=buscarSedesGrupoCliente]:checked").val();
+        $.ajax({
+            url: "/Cotizacion/updateBuscarSedesGrupoCliente",
+            type: 'POST',
+            data: {
+                buscarSedesGrupoCliente: valor
+            },
+            success: function () {
+            }
+        });
+    });
 
 
     $("#btnCancelarComentario").click(function()

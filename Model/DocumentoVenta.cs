@@ -248,6 +248,7 @@ namespace Model
 
         public GuiaRemision guiaRemision { get; set; }
 
+        public NotaIngreso notaIngreso { get; set; }
         public String estadoDocumentoSunatString
         {
             get
@@ -441,5 +442,9 @@ namespace Model
 
         public bool permiteAnulacion { get; set; }
 
+
+        public int idGrupoCliente { get; set; }
+
+        public bool buscarSedesGrupoCliente { get; set; }
     }
 }

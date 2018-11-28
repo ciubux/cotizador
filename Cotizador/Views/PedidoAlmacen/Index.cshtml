@@ -704,20 +704,20 @@
                 {
                     <th data-name="precioNeto" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Precio Neto</th>
                     <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-}
-else
-{
-                <!--Si no es cliente-->
-                <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
-if (pedido.usuario.visualizaMargen)
-{
-                <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-}
-else
-{
-                <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-}
-}
+                }
+                else
+                {
+                                <!--Si no es cliente-->
+                                <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+                if (pedido.usuario.visualizaMargen)
+                {
+                                <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                }
+                else
+                {
+                                <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                }
+                }
 
                                 <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
@@ -778,30 +778,7 @@ else
 
                     </div>
 
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-9">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-2" })
-                                <div class="col-xs-10">
-                                    <p class="form-control-static" id="verObservacionesGuiaRemision">
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-9">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.observacionesFactura, htmlAttributes: new { @class = "control-label col-xs-2" })
-                                <div class="col-xs-10">
-                                    <p class="form-control-static" id="verObservacionesFactura">
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                  
 
                     <div class="row" style="margin-right: 10px">
                         <div class="col-sm-6 col-lg-9">
@@ -816,26 +793,26 @@ else
 
 
                     @if (pedido.usuario.tomaPedidos)
-    {
-                <!--
-<div class="row">
-    <div class="col-sm-6 col-lg-9">
-        <div class="form-group">
-            <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
-            <div class="col-xs-3">
-                <div class="upload-btn-wrapper">
-                    <button class="btn btn-primary">Adjuntar Archivo(s)</button>
-                    <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
-                </div>
-            </div>
-            <div class="col-xs-3">
-                <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
-            </div>
-        </div>
-    </div>
-</div>-->
+                    {
+                        <!--
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-9">
+                                <div class="form-group">
+                                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
+                                    <div class="col-xs-3">
+                                        <div class="upload-btn-wrapper">
+                                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
 
-}
+                    }
 
 
 

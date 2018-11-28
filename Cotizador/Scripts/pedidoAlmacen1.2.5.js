@@ -1975,8 +1975,6 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                 return false;
             }
 
-
-
             if ($("#pedido_solicitante_telefono").val().trim() == "" && $("#pedido_solicitante_correo").val().trim() == "") {
                 $('#pedido_solicitante_telefono').focus();
                 $.alert({
@@ -1990,7 +1988,6 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
             }
         }
 
-
         if ($("#pedido_observacionesGuiaRemision").val().length > 200) {
             $("#pedido_observacionesGuiaRemision").focus();
             $.alert({
@@ -2001,7 +1998,7 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                 }
             });
             return false;
-        }  
+        }  /*
 
         if ($("#pedido_observacionesFactura").val().length > 200) {
             $("#pedido_observacionesFactura").focus();
@@ -2014,7 +2011,7 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
             });
             return false;
         }  
-        
+        */
       
         /*
         if ($("#pedido_correoContactoPedido").val().trim() != "" && !$("#pedido_correoContactoPedido").val().match(/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/)) {

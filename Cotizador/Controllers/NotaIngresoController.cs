@@ -58,6 +58,16 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public String GetGrupoCliente()
+        {
+            NotaIngreso notaIngreso = this.NotaIngresoSession;
+            int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
+
+            notaIngreso.pedido.idGrupoCliente = idGrupoCliente;
+
+            this.NotaIngresoSession = notaIngreso;
+            return "";
+        }
 
 
         #region Busqueda Guias
@@ -74,6 +84,7 @@ namespace Cotizador.Controllers
             notaIngreso.pedido = new Pedido();
             notaIngreso.pedido.cliente = new Cliente();
             notaIngreso.pedido.cliente.idCliente = Guid.Empty;
+            notaIngreso.pedido.buscarSedesGrupoCliente = false;
 
             notaIngreso.fechaTrasladoDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             notaIngreso.fechaTrasladoHasta = DateTime.Now.AddDays(0);
@@ -732,6 +743,21 @@ namespace Cotizador.Controllers
             notaIngreso.ciudadDestino = ciudadDestino;
             this.NotaIngresoSession = notaIngreso;
             return JsonConvert.SerializeObject(notaIngreso.ciudadDestino);
+        }
+
+
+        public void ChangeBuscarSedesGrupoCliente()
+        {
+            NotaIngreso notaIngreso = this.NotaIngresoSession;
+            if (this.Request.Params["buscarSedesGrupoCliente"] != null && Int32.Parse(this.Request.Params["buscarSedesGrupoCliente"]) == 1)
+            {
+                notaIngreso.pedido.buscarSedesGrupoCliente = true;
+            }
+            else
+            {
+                notaIngreso.pedido.buscarSedesGrupoCliente = false;
+            }
+            this.NotaIngresoSession = notaIngreso;
         }
 
         public void ChangeInputString()

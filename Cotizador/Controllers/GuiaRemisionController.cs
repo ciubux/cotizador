@@ -64,6 +64,17 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public String GetGrupoCliente()
+        {
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
+
+            guiaRemision.pedido.idGrupoCliente = idGrupoCliente;
+
+            this.GuiaRemisionSession = guiaRemision;
+            return "";
+        }
+
         public String GetMovimientosAlmacenExtornantes()
         {
             MovimientoAlmacen movimientoAlmacen = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
@@ -89,6 +100,7 @@ namespace Cotizador.Controllers
             guiaRemision.pedido = new Pedido();
             guiaRemision.pedido.cliente = new Cliente();
             guiaRemision.pedido.cliente.idCliente = Guid.Empty;
+            guiaRemision.pedido.buscarSedesGrupoCliente = false;
 
             guiaRemision.fechaTrasladoDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             guiaRemision.fechaTrasladoHasta = DateTime.Now.AddDays(0);
@@ -1141,11 +1153,25 @@ namespace Cotizador.Controllers
             this.GuiaRemisionSession = guiaRemision;
         }
 
+
         public void ChangeInputInt()
         {
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
             PropertyInfo propertyInfo = guiaRemision.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(guiaRemision, Int32.Parse(this.Request.Params["valor"]));
+        }
+
+        public void ChangeBuscarSedesGrupoCliente()
+        {
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            if (this.Request.Params["buscarSedesGrupoCliente"] != null && Int32.Parse(this.Request.Params["buscarSedesGrupoCliente"]) == 1)
+            {
+                guiaRemision.pedido.buscarSedesGrupoCliente = true;
+            }
+            else
+            {
+                guiaRemision.pedido.buscarSedesGrupoCliente = false;
+            }
             this.GuiaRemisionSession = guiaRemision;
         }
 

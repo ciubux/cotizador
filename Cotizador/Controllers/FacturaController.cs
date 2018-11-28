@@ -198,6 +198,20 @@ namespace Cotizador.Controllers
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
 
+        public void ChangeBuscarSedesGrupoCliente()
+        {
+            DocumentoVenta factura = this.FacturaSession;
+            if (this.Request.Params["buscarSedesGrupoCliente"] != null && Int32.Parse(this.Request.Params["buscarSedesGrupoCliente"]) == 1)
+            {
+                factura.buscarSedesGrupoCliente = true;
+            }
+            else
+            {
+                factura.buscarSedesGrupoCliente = false;
+            }
+
+            this.FacturaSession = factura;
+        }
 
         public void ChangeInputString()
         {
@@ -569,7 +583,7 @@ namespace Cotizador.Controllers
             DateTime fechaHasta = DateTime.Now.AddDays(1);
             documentoVenta.fechaEmisionDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
             documentoVenta.fechaEmisionHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
-
+            documentoVenta.buscarSedesGrupoCliente = false;
 
             documentoVenta.tipoNotaCredito = DocumentoVenta.TiposNotaCredito.AnulacionOperacion;
 
@@ -629,6 +643,17 @@ namespace Cotizador.Controllers
             String resultado = JsonConvert.SerializeObject(factura.cliente);
             this.FacturaSession = factura;
             return resultado;
+        }
+
+        public String GetGrupoCliente()
+        {
+            DocumentoVenta factura = this.FacturaSession;
+            int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
+
+            factura.idGrupoCliente = idGrupoCliente;
+
+            this.FacturaSession = factura;
+            return "";
         }
 
         public String ChangeIdCiudad()

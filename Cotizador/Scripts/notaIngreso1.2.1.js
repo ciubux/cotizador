@@ -217,9 +217,36 @@ jQuery(function ($) {
     });
 
 
+    $("#idGrupoCliente").change(function () {
+        //  $("#contacto").val("");
+        var idGrupoCliente = $(this).val();
+
+        $.ajax({
+            url: "/NotaIngreso/GetGrupoCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idGrupoCliente: idGrupoCliente
+            },
+            success: function (cliente) {
+            }
+        });
+
+    });
 
 
-    
+    $("#buscarSedesGrupoCliente").change(function () {
+        var valor = $("input[name=buscarSedesGrupoCliente]:checked").val();
+        $.ajax({
+            url: "/NotaIngreso/ChangeBuscarSedesGrupoCliente",
+            type: 'POST',
+            data: {
+                buscarSedesGrupoCliente: valor
+            },
+            success: function () {
+            }
+        });
+    });
 
     /**
      * FIN CONTROLES DE CLIENTE

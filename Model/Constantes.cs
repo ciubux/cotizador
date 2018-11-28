@@ -22,6 +22,7 @@ namespace Model
         public static String MENSAJE_NO = "No";
         public static Char PAD = '0';
         public static int LONGITUD_NUMERO = 6;
+        public static int LONGITUD_NUMERO_GRUPO = 4;
         public static String UBIGEO_VACIO = "000000";
         public static int DIAS_DESDE_BUSQUEDA = 10;
         public static int ID_VENDEDOR_POR_ASIGNAR = 43;

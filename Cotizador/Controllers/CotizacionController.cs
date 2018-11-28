@@ -44,6 +44,7 @@ namespace Cotizador.Controllers
         private void instanciarCotizacionBusqueda()
         {
             Cotizacion cotizacionTmp = new Cotizacion();
+            cotizacionTmp.esPagoContado = false;
             cotizacionTmp.fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now;
             cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
@@ -52,6 +53,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.grupo = new GrupoCliente();
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
             cotizacionTmp.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Todos;
+            cotizacionTmp.buscarSedesGrupoCliente = false;
             // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
             cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
             cotizacionTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
@@ -123,6 +125,8 @@ namespace Cotizador.Controllers
                 ViewBag.idClienteGrupo = cotizacionSearch.cliente.idCliente;
                 ViewBag.clienteGrupo = cotizacionSearch.cliente.ToString();
             }
+
+            ViewBag.idGrupoCliente = cotizacionSearch.grupo.idGrupoCliente;
 
             ViewBag.cotizacion = cotizacionSearch;
 
@@ -295,7 +299,6 @@ namespace Cotizador.Controllers
         }
 
         
-
         public int updateSeleccionConsiderarCantidades()
         {
             Cotizacion cotizacion = this.CotizacionSession;
@@ -407,7 +410,13 @@ namespace Cotizador.Controllers
             cotizacion.considerarDescontinuados = Boolean.Parse(this.Request.Params["considerarDescontinuados"]);
             this.CotizacionSession = cotizacion;
         }
-        
+
+        public void updateIdGrupoCliente()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            cotizacion.grupo.idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            this.CotizacionSession = cotizacion;
+        }
 
 
         public void updateFlete()
@@ -446,7 +455,20 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
         }
 
+        public String updateEsPagoContado()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            try
+            {
+                cotizacion.esPagoContado = Int32.Parse(this.Request.Params["esPagoContado"]) == 1; 
+            }
+            catch (Exception ex)
+            {
+            }
+            this.CotizacionSession = cotizacion;
 
+            return "{\"textoCondicionesPago\":\"" + cotizacion.textoCondicionesPago + "\"}";
+        }
 
         public void updateMostrarCodigoProveedor()
         {
@@ -554,6 +576,20 @@ namespace Cotizador.Controllers
         {
             Cotizacion cotizacion = this.CotizacionSession;
             cotizacion.usuarioBusqueda = new Usuario { idUsuario = Guid.Parse(this.Request.Params["usuario"]) };
+            this.CotizacionSession = cotizacion;
+        }
+
+        public void updateBuscarSedesGrupoCliente()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            if (this.Request.Params["buscarSedesGrupoCliente"] != null && Int32.Parse(this.Request.Params["buscarSedesGrupoCliente"]) == 1)
+            {
+                cotizacion.buscarSedesGrupoCliente = true;
+            }
+            else
+            {
+                cotizacion.buscarSedesGrupoCliente = false;
+            }
             this.CotizacionSession = cotizacion;
         }
 

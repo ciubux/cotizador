@@ -71,7 +71,7 @@ namespace Model
 
         public Decimal minimoMargen { get; set; }
 
-
+        public bool buscarSedesGrupoCliente { get; set; }
 
 
         /*Campos utilizados para búsqueda*/
@@ -82,6 +82,8 @@ namespace Model
         public DateTime fechaPrecios { get; set; }
 
         public Boolean aplicaSedes { get; set; }
+
+        public Boolean esPagoContado { get; set; } 
 
         public List<DocumentoDetalle> documentoDetalle
         {
@@ -116,29 +118,33 @@ namespace Model
         {
             get
             {
-                if (this.cliente != null)
+                if (this.esPagoContado)
                 {
-                    /*Se evalua si el solicitado es al contado*/
-                    if (this.cliente.plazoCreditoSolicitado == DocumentoVenta.TipoPago.Contado)
+                    return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(DocumentoVenta.TipoPago.Contado);
+                } else {
+                    if (this.cliente != null)
                     {
-                        return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.plazoCreditoSolicitado) + ".";
+                        /*Se evalua si el solicitado es al contado*/
+                        if (this.cliente.plazoCreditoSolicitado == DocumentoVenta.TipoPago.Contado)
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.plazoCreditoSolicitado) + ".";
+                        }
+                        /*Si no es al contado y el pago aprobado es no asignado se muestra el mensaje que indica que está sujeto a evaluación*/
+                        else if (this.cliente.tipoPagoFactura == DocumentoVenta.TipoPago.NoAsignado)
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.plazoCreditoSolicitado) + ", sujeto a evaluación crediticia (aprobación pendiente).";
+                        }
+                        /*Si no es un caso anterior se muestra el plazo de credito aprobado*/
+                        else
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.tipoPagoFactura) + ".";
+                        }
                     }
-                    /*Si no es al contado y el pago aprobado es no asignado se muestra el mensaje que indica que está sujeto a evaluación*/
-                    else if (this.cliente.tipoPagoFactura == DocumentoVenta.TipoPago.NoAsignado)
+                    else
                     {
-                        return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.plazoCreditoSolicitado) + ", sujeto a evaluación crediticia (aprobación pendiente).";
-                    }
-                    /*Si no es un caso anterior se muestra el plazo de credito aprobado*/
-                    else 
-                    {
-                        return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.tipoPagoFactura) + ".";
+                        return String.Empty;
                     }
                 }
-                else
-                {
-                    return String.Empty;
-                }
-
             }
          
         }

@@ -748,6 +748,8 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", guiaRemision.numeroDocumento);
             InputParameterAdd.Guid(objCommand, "idCiudad", guiaRemision.ciudadOrigen.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", guiaRemision.pedido.cliente.idCliente);
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", guiaRemision.pedido.idGrupoCliente);
+            InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", guiaRemision.pedido.buscarSedesGrupoCliente);
             InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", guiaRemision.fechaTrasladoDesde);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", guiaRemision.fechaTrasladoHasta);
@@ -1046,6 +1048,8 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", notaIngreso.numeroDocumento);
             InputParameterAdd.Guid(objCommand, "idCiudad", notaIngreso.ciudadDestino.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", notaIngreso.pedido.cliente.idCliente);
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", notaIngreso.pedido.idGrupoCliente);
+            InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", notaIngreso.pedido.buscarSedesGrupoCliente);
             InputParameterAdd.Guid(objCommand, "idUsuario", notaIngreso.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", notaIngreso.fechaTrasladoDesde);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", notaIngreso.fechaTrasladoHasta);

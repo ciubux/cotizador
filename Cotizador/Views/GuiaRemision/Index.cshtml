@@ -97,7 +97,34 @@
 
             </div>
 
-
+            <!--CODIGO GRUPO CLIENTE-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetGruposCliente", "GrupoCliente",
+                                new
+                                {
+                                    grupoClienteSelectId = "idGrupoCliente",
+                                    selectedValue = guiaRemision.pedido.idGrupoCliente
+                                })
+                    </div>
+                    @if (guiaRemision.usuario.buscaSedesGrupoCliente)
+                    {
+                        <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                            @if (guiaRemision.pedido.buscarSedesGrupoCliente)
+                            {
+                                <input checked type="checkbox" name="buscarSedesGrupoCliente" id="buscarSedesGrupoCliente" value="1">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="buscarSedesGrupoCliente" id="buscarSedesGrupoCliente" value="1">
+                            }
+                            Todas las sedes
+                        </label>
+                    }
+                </div>
+            </div>
 
         </div>
 
@@ -1726,8 +1753,6 @@
 
 
 
-
-
 @section Scripts {
-    @Scripts.Render("~/bundles/guiaRemision")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/guiaRemision")
 }

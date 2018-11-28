@@ -22,7 +22,7 @@ namespace Cotizador.Models
                 return Data.Select(c => new SelectListItem
                 {
                     Value = c.idGrupoCliente.ToString(),
-                    Text = c.nombre,
+                    Text = c.codigo + " - " + c.nombre,
                     Selected = SelectedValue != null && SelectedValue == c.idGrupoCliente.ToString()
                 });
             }

@@ -75,6 +75,22 @@ $('#tipoPago').change(function () {
     calcularFechaVencimiento();
 });
 
+$('#formaPago').change(function () {
+    var tipoPago = $("#tipoPago").val();
+    var formaPago = $("#formaPago").val();
+    if (tipoPago == 1 && formaPago == 3) {
+        $.alert({
+            title: 'Forma de Pago Incorrecta',
+            type: 'red',
+            content: 'La Forma de Pago no puede ser LETRA si ha seleccionado el Tipo de Pago CONTADO.',
+            buttons: {
+                OK: function () { }
+            }
+        });
+        $("#formaPago").val(0);
+    }
+    
+});
 
 
 function desactivarBotonesFacturar() {
@@ -139,6 +155,7 @@ $("#btnAceptarFacturarPedido").click(function () {
         $("#numeroReferenciaCliente").focus();
         $.alert({
             title: 'Validación',
+            type: 'orange',
             content: 'El número de referencia del cliente no debe contener más de 20 caracteres, si el dato a ingresar es más extenso agreguelo en observaciones.',
             buttons: {
                 OK: function () { }

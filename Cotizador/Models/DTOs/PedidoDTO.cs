@@ -16,7 +16,7 @@ namespace Cotizador.Models.DTOs
         public Guid idPedido { get; set; }
 
         public Int64 numeroPedido { get; set; }
-        public String numeroPedidoString { get; set; }
+        public String numeroPedidoNumeroGrupoString { get; set; }
 
         public String ciudad_nombre { get; set; }
 

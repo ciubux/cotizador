@@ -582,6 +582,8 @@ namespace DataLayer
             }
 
             InputParameterAdd.Guid(objCommand, "idCliente", documentoVenta.cliente.idCliente);
+            InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", documentoVenta.buscarSedesGrupoCliente);
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", documentoVenta.idGrupoCliente);
             InputParameterAdd.Guid(objCommand, "idCiudad", documentoVenta.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(documentoVenta.fechaEmisionDesde.Year, documentoVenta.fechaEmisionDesde.Month, documentoVenta.fechaEmisionDesde.Day, 0, 0, 0));
@@ -612,12 +614,22 @@ namespace DataLayer
                 documentoVenta.pedido = new Pedido();
                 documentoVenta.pedido.numeroPedido = Converter.GetLong(row, "numero");
                 
-                documentoVenta.guiaRemision = new GuiaRemision();
-                documentoVenta.guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
-                documentoVenta.guiaRemision.numeroDocumento = Converter.GetLong(row, "numero_documento");
+               
 
                 documentoVenta.tipoDocumento = (DocumentoVenta.TipoDocumento)Converter.GetInt(row, "TIP_CPE");
-
+                if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.BoletaVenta
+                    || documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.Factura)
+                {
+                    documentoVenta.guiaRemision = new GuiaRemision();
+                    documentoVenta.guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
+                    documentoVenta.guiaRemision.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                }
+                else if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.NotaCrédito)
+                {
+                    documentoVenta.notaIngreso = new NotaIngreso();
+                    documentoVenta.notaIngreso.serieDocumento = Converter.GetString(row, "serie_documento");
+                    documentoVenta.notaIngreso.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                }
 
 
                 documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");

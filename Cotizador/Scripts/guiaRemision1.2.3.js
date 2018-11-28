@@ -218,7 +218,22 @@ jQuery(function ($) {
     });
 
 
+    $("#idGrupoCliente").change(function () {
+        //  $("#contacto").val("");
+        var idGrupoCliente = $(this).val();
 
+        $.ajax({
+            url: "/GuiaRemision/GetGrupoCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idGrupoCliente: idGrupoCliente
+            },
+            success: function (cliente) {
+            }
+        });
+
+    });
 
     
 
@@ -342,7 +357,19 @@ jQuery(function ($) {
     });
 
 
- 
+    $("#buscarSedesGrupoCliente").change(function () {
+        var valor = $("input[name=buscarSedesGrupoCliente]:checked").val();
+        $.ajax({
+            url: "/GuiaRemision/ChangeBuscarSedesGrupoCliente",
+            type: 'POST',
+            data: {
+                buscarSedesGrupoCliente: valor
+            },
+            success: function () {
+            }
+        });
+    });
+    
 
 
     function changeInputString(propiedad, valor) {
@@ -1145,6 +1172,7 @@ jQuery(function ($) {
         $("#documentoVenta_horaEmision").val(getHoraActual());
 
         $("#tipoPago").val(pedido.cliente.tipoPagoFactura);
+        $("#tipoPago").attr("disabled", "disabled");
         calcularFechaVencimiento();
         $("#formaPago").val(pedido.cliente.formaPagoFactura);
 
@@ -1681,6 +1709,7 @@ jQuery(function ($) {
         //sede MP
         var idCiudad = $("#idCiudad").val();
         var idCliente = $("#idCliente").val();
+        var idGrupoCliente = $("#idGrupoCliente").val(); 
 
         var numeroDocumento = $("#guiaRemision_numeroDocumento").val();
         var numeroPedido = $("#guiaRemision_pedido_numeroPedido").val();
@@ -1696,6 +1725,7 @@ jQuery(function ($) {
             data: {
                 idCiudad: idCiudad,
                 idCliente: idCliente,
+                idGrupoCliente: idGrupoCliente,
                 numeroDocumento: numeroDocumento,
                 numeroPedido: numeroPedido,
                 fechaTrasladoDesde: fechaTrasladoDesde,
@@ -2016,9 +2046,6 @@ jQuery(function ($) {
             return false;
         }
 
-
-
-
         var descripcion = $("#transportista_descripcion").val();
         var direccion = $("#transportista_direccion").val();
         var ruc = $("#transportista_ruc").val();
@@ -2033,6 +2060,7 @@ jQuery(function ($) {
                 direccion: direccion,
                 ruc: ruc,
                 telefono: telefono
+          //      estado: estado
             },
             error: function (detalle) { alert("Se generó un error al intentar crear el transportista."); },
             success: function (transportista) {

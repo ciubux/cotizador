@@ -139,7 +139,36 @@ jQuery(function ($) {
 
 
 
+    $("#idGrupoCliente").change(function () {
+        //  $("#contacto").val("");
+        var idGrupoCliente = $(this).val();
 
+        $.ajax({
+            url: "/Factura/GetGrupoCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idGrupoCliente: idGrupoCliente
+            },
+            success: function (cliente) {
+            }
+        });
+
+    });
+
+
+    $("#buscarSedesGrupoCliente").change(function () {
+        var valor = $("input[name=buscarSedesGrupoCliente]:checked").val();
+        $.ajax({
+            url: "/Factura/ChangeBuscarSedesGrupoCliente",
+            type: 'POST',
+            data: {
+                buscarSedesGrupoCliente: valor
+            },
+            success: function () {
+            }
+        });
+    });
     
 
     /**
@@ -862,6 +891,13 @@ jQuery(function ($) {
                     if (DESCARGAR_XML == 1)
                         botonDescargarXML = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarXML btn btn- primary">Descargar XML</button>';
 
+                    var movimientoAlmacen = "";
+                    if (facturaList[i].guiaRemision != null) {
+                        movimientoAlmacen = facturaList[i].guiaRemision.serieNumeroGuia;
+                    }
+                    else if (facturaList[i].notaIngreso != null) {
+                        movimientoAlmacen = facturaList[i].notaIngreso.serieNumeroNotaIngreso;
+                    }
 
                     var factura = '<tr data-expanded="false">'+
                         '<td>  ' + facturaList[i].idDocumentoVenta + '</td>' +
@@ -869,7 +905,7 @@ jQuery(function ($) {
                         '<td>  ' + facturaList[i].pedido.numeroPedidoString + '</td>' +
 
 
-                        '<td>  ' + facturaList[i].guiaRemision.serieNumeroGuia + '</td>' +
+                        '<td>  ' + movimientoAlmacen + '</td>' +
 
 
 

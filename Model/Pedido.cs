@@ -50,6 +50,9 @@ namespace Model
 
         public int idGrupoCliente { get; set; }
 
+        public bool buscarSedesGrupoCliente { get; set; }
+
+
         public Cotizacion cotizacion { get; set; }
         [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }
@@ -86,7 +89,7 @@ namespace Model
         [Display(Name = "Fecha de Entrega Extendida:")]
         public DateTime? fechaEntregaExtendida { get; set; }
 
-        public string fechaEntregaExtendidaString => fechaEntregaExtendida == null ? "" : ((DateTime) fechaEntregaExtendida).ToString("dd/MM/yyyy");
+        public string fechaEntregaExtendidaString => !fechaEntregaExtendida.HasValue ? "" : ((DateTime) fechaEntregaExtendida).ToString("dd/MM/yyyy");
     
 
         [Display(Name = "Hora de Entrega:")]
@@ -95,7 +98,11 @@ namespace Model
         [Display(Name = "Fecha Máxima de Entrega:")]
         public String horaEntregaHasta { get; set; }
 
+        [Display(Name = "Hora de Entrega 2:")]
+        public String horaEntregaAdicionalDesde { get; set; }
 
+        [Display(Name = "Max Hora de Entrega 2:")]
+        public String horaEntregaAdicionalHasta { get; set; }
 
         [Display(Name = "Fecha Solicitud:")]
         public DateTime fechaSolicitud { get; set; }
@@ -138,14 +145,23 @@ namespace Model
                     String entregaDesde = this.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
                     String entregaHasta = this.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
 
-                    if (entregaDesde.Equals(entregaHasta))
+                    if (!fechaEntregaExtendida.HasValue)
                     {
-                        return entregaDesde;
+                        if (entregaDesde.Equals(entregaHasta))
+                        {
+                            return entregaDesde;
+                        }
+                        else
+                        {
+                            return "Desde: " + entregaDesde + " Hasta: " + entregaHasta;
+                        }
                     }
                     else
                     {
-                        return "Desde: " + entregaDesde + " Hasta: " + entregaHasta;
+                        entregaHasta = this.fechaEntregaExtendida.Value.ToString(Constantes.formatoFecha);
+                        return "Desde: " + entregaDesde + " Hasta (Ext.): " + entregaHasta;
                     }
+
                 }
                 else
                 {
@@ -155,12 +171,17 @@ namespace Model
             }
         }
 
-        [Display(Name = "Horario de Entrega:")]
+        [Display(Name = "Horarios de Entrega:")]
         public String rangoHoraEntrega
         {
             get
             {
-                return "Desde: " + this.horaEntregaDesde + " Hasta: " + this.horaEntregaHasta;
+                string texto = "1er Turno: " + this.horaEntregaDesde + " - " + this.horaEntregaHasta;
+                if (this.horaEntregaAdicionalDesde != null && !this.horaEntregaAdicionalDesde.Equals("00:00:00"))
+                {
+                    texto = texto + "   2do Turno: " + this.horaEntregaAdicionalDesde + " - " + this.horaEntregaAdicionalHasta;
+                }
+                return texto;
             }
         }
 
@@ -196,13 +217,29 @@ namespace Model
 
         public String numeroGrupoPedidoString
         {
-            get { return this.numeroGrupoPedido == 0 || this.numeroGrupoPedido == null ? "" : this.numeroGrupoPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
+            get { return this.numeroGrupoPedido == 0 || this.numeroGrupoPedido == null ? "" : this.numeroGrupoPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO_GRUPO, Constantes.PAD); }
         }
 
         public String numeroPedidoString
         {
-            get { return this.numeroPedido == 0 || this.numeroPedido == null ? "":this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
+            get { return this.numeroPedido == 0  ? "":this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
         }
+
+
+        public String numeroPedidoNumeroGrupoString
+        {
+            get {
+
+                String numeroPedido = this.numeroPedido == 0 ? "" : this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD);
+                if (!numeroGrupoPedidoString.Equals(String.Empty))
+                    numeroPedido = numeroPedido + " (" + numeroGrupoPedidoString + ")";
+                return numeroPedido;
+
+            }
+        }
+
+
+
 
         public Usuario usuario { get; set; }
         public Boolean incluidoIGV { get; set; }
@@ -260,6 +297,7 @@ namespace Model
 
         public DateTime fechaPrecios { get; set; }
 
+        public Boolean esPagoContado { get; set; }
 
         public List<GuiaRemision> guiaRemisionList { get; set; }
     
@@ -380,6 +418,43 @@ namespace Model
             [Display(Name = "Extorno de Guía Remisión")]
             ExtornoGuíaRemision = 'X',  //NOTA INGRESO
             */
+        }
+
+        public String textoCondicionesPago
+        {
+            get
+            {
+                if (this.esPagoContado)
+                {
+                    return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(DocumentoVenta.TipoPago.Contado);
+                }
+                else
+                {
+                    if (this.cliente != null)
+                    {
+                        /*Se evalua si el solicitado es al contado*/
+                        if (this.cliente.plazoCreditoSolicitado == DocumentoVenta.TipoPago.Contado)
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.plazoCreditoSolicitado) + ".";
+                        }
+                        /*Si no es al contado y el pago aprobado es no asignado se muestra el mensaje que indica que está sujeto a evaluación*/
+                        else if (this.cliente.tipoPagoFactura == DocumentoVenta.TipoPago.NoAsignado)
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.plazoCreditoSolicitado) + ", sujeto a evaluación crediticia (aprobación pendiente).";
+                        }
+                        /*Si no es un caso anterior se muestra el plazo de credito aprobado*/
+                        else
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.tipoPagoFactura) + ".";
+                        }
+                    }
+                    else
+                    {
+                        return String.Empty;
+                    }
+                }
+            }
+
         }
 
         public String tiposPedidoAlmacenString

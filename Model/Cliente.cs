@@ -56,18 +56,24 @@ namespace Model
         public Boolean sinPlazoCreditoAprobado { get; set; }
         [Display(Name = "Grupo Cliente:")]
         public GrupoCliente grupoCliente { get; set; }
-        [Display(Name = "Pertenece Canal Multiregional:")]
+        [Display(Name = "Pertenece Canal Multiregional")]
         public Boolean perteneceCanalMultiregional { get; set; }
-        [Display(Name = "Pertenece Canal Lima:")]
+        [Display(Name = "Pertenece Canal Lima")]
         public Boolean perteneceCanalLima { get; set; }
-        [Display(Name = "Pertenece Canal Provincia:")]
+        [Display(Name = "Pertenece Canal Provincia")]
         public Boolean perteneceCanalProvincias { get; set; }
-        [Display(Name = "Pertenece Canal PCP:")]
+        [Display(Name = "Pertenece Canal PCP")]
         public Boolean perteneceCanalPCP { get; set; }
-        [Display(Name = "Pertenece Canal Ordon:")]
+        [Display(Name = "Pertenece Canal Ordon")]
         public Boolean perteneceCanalOrdon { get; set; }
         [Display(Name = "es Sub Distribuidor:")]
         public Boolean esSubDistribuidor { get; set; }
+
+        [Display(Name = "Cliente habilitado para negociacion multiregional")]
+        public Boolean habilitadoNegociacionMultiregional { get { return negociacionMultiregional; } }
+
+        [Display(Name = "Registra cotizaciones multiregionales para este cliente")]
+        public Boolean habilitadoSedePrincipal { get { return sedePrincipal; } }
 
         public String horaInicioPrimerTurnoEntrega { get; set; }
 
@@ -157,7 +163,7 @@ namespace Model
         }
 
 
-        [Display(Name = "Es Sede Principal:")]
+        [Display(Name = "Genera Cotizaciones Multergionales:")]
         public Boolean sedePrincipal { get; set; }
 
         public String sedeListWebString
@@ -182,6 +188,9 @@ namespace Model
                 return webString;
             }
         }
+
+        [Display(Name = "Negociación Multiregional:")]
+        public Boolean negociacionMultiregional { get; set; }
     }
 
 }

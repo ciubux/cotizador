@@ -21,11 +21,11 @@
                     @Html.LabelFor(dv => documentoVenta.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                                                         new
-                                                         {
-                                                             ciudadSelectId = "idCiudad",
-                                                             selectedValue = documentoVenta.ciudad.idCiudad
-                                                         })
+                        new
+                        {
+                            ciudadSelectId = "idCiudad",
+                            selectedValue = documentoVenta.ciudad.idCiudad
+                        })
                     </div>
                 </div>
             </div>
@@ -52,43 +52,34 @@
 
             </div>
 
-
-            @if (documentoVenta.usuario.apruebaAnulaciones)
-            {
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        <label for="documentoVenta_solicitadoAnulacion" class="control-label col-xs-4">Mostrar solo con Solicitud de Anulación:</label>
-                        <div class="col-xs-8">
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    @if (documentoVenta.solicitadoAnulacion)
-                                    {
-                                        <input class="radio-input" checked type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladosi" value="1">@ViewBag.Si;
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladosi" value="1">@ViewBag.Si;
-                                    }
-
-                                </label>
-                            </div>
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    @if (!documentoVenta.solicitadoAnulacion)
-                                    {
-                                        <input class="radio-input" checked type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladono" value="0">@ViewBag.No;
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladono" value="0">@ViewBag.No;
-                                    }
-                                </label>
-                            </div>
-                        </div>
-
+            <!--CODIGO GRUPO CLIENTE-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetGruposCliente", "GrupoCliente",
+                                new
+                                {
+                                    grupoClienteSelectId = "idGrupoCliente",
+                                    selectedValue = documentoVenta.idGrupoCliente
+                                })
                     </div>
+                    @if (documentoVenta.usuario.buscaSedesGrupoCliente)
+                    {
+                        <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                            @if (documentoVenta.pedido.buscarSedesGrupoCliente)
+                            {
+                                <input checked type="checkbox" name="buscarSedesGrupoCliente" id="buscarSedesGrupoCliente" value="1">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="buscarSedesGrupoCliente" id="buscarSedesGrupoCliente" value="1">
+                            }
+                            Todas las sedes
+                        </label>
+                    }
                 </div>
-            }
+            </div>
 
         </div>
 
@@ -104,7 +95,7 @@
                            EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoDocumento), documentoVenta.tipoDocumento),
                            new { @class = "form-control" }
                            )
-                            </div>
+                    </div>
                     <div class="col-xs-4">
                         @if (Int64.Parse(documentoVenta.numero) > 0)
                         {
@@ -204,6 +195,45 @@
         </div>
 
 
+        @if (documentoVenta.usuario.apruebaAnulaciones)
+        {
+            <div class="row">
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="documentoVenta_solicitadoAnulacion" class="control-label col-xs-4">Mostrar solo con Solicitud de Anulación:</label>
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (documentoVenta.solicitadoAnulacion)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladosi" value="1">@ViewBag.Si;
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladosi" value="1">@ViewBag.Si;
+                                    }
+
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (!documentoVenta.solicitadoAnulacion)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladono" value="0">@ViewBag.No;
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladono" value="0">@ViewBag.No;
+                                    }
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
             <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
@@ -890,5 +920,5 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/factura")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/factura")
 }

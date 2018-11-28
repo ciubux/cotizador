@@ -261,6 +261,11 @@ namespace BusinessLayer
                 {
                     cliente.responsableComercial.idVendedor = Constantes.ID_VENDEDOR_POR_ASIGNAR;
                 }
+
+                if (!cliente.negociacionMultiregional)
+                {
+                    cliente.sedePrincipal = false;
+                }
                 return clienteDAL.insertClienteSunat(cliente);
             }
         }
@@ -288,7 +293,11 @@ namespace BusinessLayer
                     cliente.responsableComercial.idVendedor = Constantes.ID_VENDEDOR_POR_ASIGNAR;
                 }
 
-               
+                if (!cliente.negociacionMultiregional)
+                {
+                    cliente.sedePrincipal = false;
+                }
+
                 return clienteDAL.updateClienteSunat(cliente);
             }
         }

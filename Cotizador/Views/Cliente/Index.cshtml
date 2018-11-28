@@ -247,28 +247,28 @@
             <div class="modal-body">
                 <form class="form-horizontal">
                     <input type="hidden" id="verIdCliente" />
-                    
-                         <div class="row">
 
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    @Html.LabelFor(c => cliente.ciudad, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                    <div class="col-xs-8">
-                                        <p class="form-control-static" id="verCiudadNombre"></p>
-                                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => cliente.ciudad, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCiudadNombre"></p>
                                 </div>
                             </div>
-                  
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    @Html.LabelFor(c => cliente.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                    <div class="col-xs-8">
-                                        <p class="form-control-static" id="verCodigo"></p>
-                                    </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => cliente.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigo"></p>
                                 </div>
                             </div>
+                        </div>
                     </div>
-       
+
                     <div class="row">
 
                         <!--Tipo Documento Identidad-->
@@ -276,7 +276,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(dv => cliente.tipoDocumentoIdentidad, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verTipoDocumentoIdentidad"></p> 
+                                    <p class="form-control-static" id="verTipoDocumentoIdentidad"></p>
                                 </div>
                             </div>
                         </div>
@@ -289,7 +289,7 @@
                                     <p class="form-control-static" id="verNumeroDocumento"></p>
                                 </div>
                             </div>
-                        </div>      
+                        </div>
 
                         <!--Número Documento-->
                         <div class="col-sm-6 col-lg-4">
@@ -299,7 +299,7 @@
                                     <p class="form-control-static" id="verGrupoCliente"></p>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </div>
 
 
@@ -338,20 +338,36 @@
 
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
-                                @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                @Html.LabelFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
                                 <div class="col-xs-8 col-sm-8 col-lg-8">
-                                    <p class="form-control-static" id="verBloqueado"></p>
+                                    <p class="form-control-static" id="verTelefonoContacto"></p>
                                 </div>
                             </div>
                         </div>
 
+
+
                     </div>
-                        <div class="row">
+                    <div class="row">
                         <div class="col-sm-6 col-lg-8">
                             <div class="form-group">
                                 @Html.LabelFor(p => cliente.observaciones, htmlAttributes: new { @class = "control-label  col-xs-4  col-sm-4 col-lg-2" })
                                 <div class="col-xs-8 col-sm-8 col-lg-10">
                                     <p class="form-control-static" id="verObservaciones"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                <div class="col-xs-8 col-sm-8 col-lg-8">
+                                    <p class="form-control-static" id="verEmailContacto"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                <div class="col-xs-8 col-sm-8 col-lg-8">
+                                    <p class="form-control-static" id="verBloqueado"></p>
                                 </div>
                             </div>
                         </div>
@@ -422,26 +438,26 @@
 
                         <!--Observaciones Crédito-->
                         <div class="row">
-             
-                                <div class="col-sm-6 col-lg-8">
-                                    <div class="form-group">
-                                        @Html.LabelFor(p => cliente.observacionesCredito, htmlAttributes: new { @class = "control-label  col-xs-4  col-sm-4 col-lg-2" })
-                                        <div class="col-xs-8 col-sm-8 col-lg-10">
-                                            <p class="form-control-static" id="verObservacionesCredito"></p>
-                                        </div>
+
+                            <div class="col-sm-6 col-lg-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => cliente.observacionesCredito, htmlAttributes: new { @class = "control-label  col-xs-4  col-sm-4 col-lg-2" })
+                                    <div class="col-xs-8 col-sm-8 col-lg-10">
+                                        <p class="form-control-static" id="verObservacionesCredito"></p>
                                     </div>
                                 </div>
-
-                                <div class="col-sm-6 col-lg-4">
-                                    <div class="form-group">
-                                        @Html.LabelFor(dv => cliente.formaPagoFactura, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
-                                        <div class="col-xs-8">
-                                            <p class="form-control-static" id="verFormaPagoFactura"></p>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(dv => cliente.formaPagoFactura, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verFormaPagoFactura"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
 
                     </fieldset>
 
@@ -485,35 +501,35 @@
                             </div>
                         </div>
                         <!--
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    @Html.LabelFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                    <div class="col-xs-8">
-                                        @Html.TextBoxFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    @Html.LabelFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                    <div class="col-xs-8">
-                                        @Html.TextBoxFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    @Html.LabelFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                    <div class="col-xs-8">
-                                        @Html.TextBoxFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                        <!--ESTADO CONTRIBUYENTE CLIENTE-->
-                                                
+        <!--ESTADO CONTRIBUYENTE CLIENTE-->
+
                         <div class="row">
                             <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
@@ -540,30 +556,30 @@
 
                     <fieldset>
                         <legend>Responsables Comerciales Asignados:</legend>
-                       <!-- <div class="row">
-                            Responsable Comercial
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    <div class="col-xs-4">
-                                    </div>
-                                    <div class="col-xs-8">
-                                        @if (cliente.vendedoresAsignados)
-                                        {
+                        <!-- <div class="row">
+            Responsable Comercial
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <div class="col-xs-4">
+                    </div>
+                    <div class="col-xs-8">
+                        @if (cliente.vendedoresAsignados)
+                        {
 
-                                        <span id="spanVendedoresAsignados" style="color:forestgreen">Los Responsables Comerciales han sido validados.</span>
-                                            <span id="spanVendedoresNoAsignados" style="color:darkred" hidden="hidden">No se ha culminado la validación de los Responsables Comerciales.</span>
-                                        }
-                                        else
-                                        {
-                                            <span id="spanVendedoresAsignados" style="color:forestgreen" hidden="hidden">Los Responsables Comerciales han sido validados.</span>
-                                            <span id="spanVendedoresNoAsignados" style="color:darkred">No se ha culminado la validación de los Responsables Comerciales.</span>
-                           
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                                -->
+                        <span id="spanVendedoresAsignados" style="color:forestgreen">Los Responsables Comerciales han sido validados.</span>
+                            <span id="spanVendedoresNoAsignados" style="color:darkred" hidden="hidden">No se ha culminado la validación de los Responsables Comerciales.</span>
+                        }
+                        else
+                        {
+                            <span id="spanVendedoresAsignados" style="color:forestgreen" hidden="hidden">Los Responsables Comerciales han sido validados.</span>
+                            <span id="spanVendedoresNoAsignados" style="color:darkred">No se ha culminado la validación de los Responsables Comerciales.</span>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+                -->
 
                         <div class="row">
                             <!--Responsable Comercial-->
@@ -598,26 +614,67 @@
 
                     </fieldset>
 
-                <fieldset id="fieldset_canales">
-                <legend >Canales:</legend>
+                    <fieldset>
+                        <legend>Horarios Entrega:</legend>
 
-                   <div class="row">
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                <ul>
-                                    <li id="li_perteneceCanalMultiregional">@Html.LabelFor(c => cliente.perteneceCanalMultiregional)</li>
-                                    <li id="li_perteneceCanalLima">@Html.LabelFor(c => cliente.perteneceCanalLima)</li>
-                                    <li id="li_perteneceCanalProvincias">@Html.LabelFor(c => cliente.perteneceCanalProvincias)</li>
-                                    <li id="li_perteneceCanalPCP">@Html.LabelFor(c => cliente.perteneceCanalPCP)</li>
-                                    <li id="li_esSubDistribuidor">@Html.LabelFor(c => cliente.esSubDistribuidor)</li>
-                                </ul>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-12 col-lg-4">Primer Turno de Entrega:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="primerTurnoEntrega"><span id="verHoraInicioPrimerTurnoEntrega"></span> - <span id="verHoraFinPrimerTurnoEntrega"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-12 col-lg-4">Segundo Turno de Entrega:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="primerTurnoEntrega"><span id="verHoraInicioSegundoTurnoEntrega"></span> - <span id="verHoraFinSegundoTurnoEntrega"></span></p>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                    </div>
-                </fieldset>
+                    </fieldset>
+
+                    <fieldset id="fieldset_negociacion_multiregional">
+                        <legend>Negociacion Multiregional:</legend>
 
 
-                
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <ul class="list-unstyled">
+                                        <li id="li_negociacionMultiregional">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.habilitadoNegociacionMultiregional)</li>
+                                        <li id="li_sedePrincipal">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.habilitadoSedePrincipal)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset id="fieldset_canales">
+                        <legend>Canales:</legend>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <ul class="list-unstyled">
+                                        <li id="li_perteneceCanalMultiregional">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalMultiregional)</li>
+                                        <li id="li_perteneceCanalLima">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalLima)</li>
+                                        <li id="li_perteneceCanalProvincias">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalProvincias)</li>
+                                        <li id="li_perteneceCanalPCP">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalPCP)</li>
+                                        <li id="li_esSubDistribuidor">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.esSubDistribuidor)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+
+
                 </form>
             </div>
 

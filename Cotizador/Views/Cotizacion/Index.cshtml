@@ -100,26 +100,40 @@
             </div>
 
 
-
-
-            <!--ESTADO-->
+            <!--CODIGO GRUPO CLIENTE-->
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
-                    <label for="estado" class="control-label col-xs-4">Estado:</label>
+                    <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
                     <div class="col-xs-8">
-                        @Html.DropDownList("estado",
-                                                     EnumHelper.GetSelectList(typeof(Model.SeguimientoCotizacion.estadosSeguimientoCotizacion), cotizacion.seguimientoCotizacion.estado),
-                                                     new { @class = "form-control" }
-                                                     )
+                        @Html.Action("GetGruposCliente", "GrupoCliente",
+                                new
+                                {
+                                    grupoClienteSelectId = "idGrupoCliente",
+                                    selectedValue = ViewBag.idGrupoCliente
+                                })
                     </div>
+                    @if (cotizacion.usuario.buscaSedesGrupoCliente)
+                    {
+                        <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                            @if (cotizacion.buscarSedesGrupoCliente)
+                            {
+                                <input checked type="checkbox" name="buscarSedesGrupoCliente" id="buscarSedesGrupoCliente" value="1">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="buscarSedesGrupoCliente" id="buscarSedesGrupoCliente" value="1">
+                            }
+                            Todas las sedes
+                        </label>
+                    }
                 </div>
             </div>
         </div>
 
-        @if (cotizacion.usuario.apruebaCotizaciones)
-        {
-            <div class="row">
-
+        
+        <div class="row">
+            @if (cotizacion.usuario.apruebaCotizaciones)
+            {
                 <div class="col-sm-6 col-lg-5">
                     <!--USUARIO-->
                     <div class="form-group">
@@ -130,8 +144,21 @@
                     </div>
 
                 </div>
+            }
+            <!--ESTADO-->
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="estado" class="control-label col-xs-4">Estado:</label>
+                    <div class="col-xs-8">
+                        @Html.DropDownList("estado",
+                                                        EnumHelper.GetSelectList(typeof(Model.SeguimientoCotizacion.estadosSeguimientoCotizacion), cotizacion.seguimientoCotizacion.estado),
+                                                        new { @class = "form-control" }
+                                                        )
+                    </div>
+                </div>
             </div>
-        }
+        </div>
+        
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnLimpiarBusquedaCotizaciones" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>

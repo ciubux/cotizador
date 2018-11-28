@@ -294,7 +294,7 @@ jQuery(function ($) {
                 $("#ActualDistrito").val("");
                 toggleControlesUbigeo();
 
-
+                $("#pedido_textoCondicionesPago").val(cliente.textoCondicionesPago);
 
 
 
@@ -320,15 +320,15 @@ jQuery(function ($) {
                     }));
                 }
 
-
-
+                //To Do: Set horarios
+                $("#pedido_horaEntregaDesde").val(cliente.horaInicioPrimerTurnoEntregaFormat);
+                $("#pedido_horaEntregaHasta").val(cliente.horaFinPrimerTurnoEntregaFormat);
+                $("#pedido_horaEntregaAdicionalDesde").val(cliente.horaInicioSegundoTurnoEntregaFormat);
+                $("#pedido_horaEntregaAdicionalHasta").val(cliente.horaFinSegundoTurnoEntregaFormat);
             }
         });
       
     });
-
- 
-
 
     
 
@@ -786,7 +786,23 @@ jQuery(function ($) {
     });
 
 
-
+    $("#chkEsPagoContado").change(function () {
+        var valor = 1;
+        if (!$('#chkEsPagoContado').prop('checked')) {
+            valor = 0;
+        }
+        $.ajax({
+            url: "/Pedido/ChangeEsPagoContado",
+            type: 'POST',
+            data: {
+                esPagoContado: valor
+            },
+            dataType: 'JSON',
+            success: function (result) {
+                $("#pedido_textoCondicionesPago").val(result.textoCondicionesPago);
+            }
+        });
+    });
 
 
 
@@ -887,12 +903,12 @@ jQuery(function ($) {
 
         //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
         //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
-        if (convertirHoraToNumero(horaEntregaDesde) + 2 > convertirHoraToNumero(horaEntregaHasta)) {
-            $("#pedido_horaEntregaHasta").val(sumarHoras($("#pedido_horaEntregaDesde").val(),2));
+        if (convertirHoraToNumero(horaEntregaDesde) + 1 > convertirHoraToNumero(horaEntregaHasta)) {
+            $("#pedido_horaEntregaHasta").val(sumarHoras($("#pedido_horaEntregaDesde").val(),1));
             $("#pedido_horaEntregaHasta").change();
         }
        
-        changeInputString("horaEntregaDesde", $("#pedido_horaEntregaDesde").val())
+        changeInputString("horaEntregaDesde", $("#pedido_horaEntregaDesde").val());
     });
 
     $("#pedido_horaEntregaHasta").change(function () {
@@ -901,12 +917,42 @@ jQuery(function ($) {
 
         //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
         //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
-        if (convertirHoraToNumero(horaEntregaDesde) + 2 > convertirHoraToNumero(horaEntregaHasta)) {
-            $("#pedido_horaEntregaDesde").val(sumarHoras($("#pedido_horaEntregaHasta").val(), -2));
+        if (convertirHoraToNumero(horaEntregaDesde) + 1 > convertirHoraToNumero(horaEntregaHasta)) {
+            $("#pedido_horaEntregaDesde").val(sumarHoras($("#pedido_horaEntregaHasta").val(), -1));
             $("#pedido_horaEntregaDesde").change();
         }
-        changeInputString("horaEntregaHasta", $("#pedido_horaEntregaHasta").val())
+        changeInputString("horaEntregaHasta", $("#pedido_horaEntregaHasta").val());
 
+    });
+
+    $("#pedido_horaEntregaAdicionalDesde").change(function () {
+
+        var horaEntregaDesde = $("#pedido_horaEntregaAdicionalDesde").val();
+        var horaEntregaHasta = $("#pedido_horaEntregaAdicionalHasta").val();
+
+        //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
+        //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
+        if (convertirHoraToNumero(horaEntregaDesde) + 1 > convertirHoraToNumero(horaEntregaHasta)) {
+            $("#pedido_horaEntregaAdicionalHasta").val(sumarHoras($("#pedido_horaEntregaAdicionalDesde").val(), 1));
+            $("#pedido_horaEntregaAdicionalHasta").change();
+        }
+
+        changeInputString("horaEntregaAdicionalDesde", $("#pedido_horaEntregaAdicionalDesde").val());
+    });
+
+    $("#pedido_horaEntregaAdicionalHasta").change(function () {
+
+        var horaEntregaDesde = $("#pedido_horaEntregaAdicionalDesde").val();
+        var horaEntregaHasta = $("#pedido_horaEntregaAdicionalHasta").val();
+
+        //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
+        //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
+        if (convertirHoraToNumero(horaEntregaDesde) + 1 > convertirHoraToNumero(horaEntregaHasta)) {
+            $("#pedido_horaEntregaAdicionalDesde").val(sumarHoras($("#pedido_horaEntregaAdicionalHasta").val(), -1));
+            $("#pedido_horaEntregaAdicionalDesde").change();
+        }
+
+        changeInputString("horaEntregaAdicionalHasta", $("#pedido_horaEntregaAdicionalHasta").val());
     });
 
     $("#pedido_numeroReferenciaCliente").change(function () {
@@ -2551,6 +2597,7 @@ jQuery(function ($) {
                     $("#divCiudadSolicitante").hide();
                 //}
 
+                $("#verCondicionesPago").html(pedido.textoCondicionesPago);
                 
                 $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
 
@@ -4081,7 +4128,7 @@ jQuery(function ($) {
 
                     var pedido = '<tr data-expanded="true">' +
                         '<td>  ' + pedidoList[i].idPedido+'</td>' +
-                        '<td>  ' + pedidoList[i].numeroPedidoString + '  </td>' +
+                        '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + '  </td>' +
                         '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +
                         '<td>  ' + pedidoList[i].cliente_razonSocial + '</td>' +
@@ -4214,6 +4261,20 @@ jQuery(function ($) {
             type: 'POST',
             data: {
                 idGrupoCliente: idGrupoCliente
+            },
+            success: function () {
+            }
+        });
+    });
+    
+
+    $("#pedido_buscarSedesGrupoCliente").change(function () {
+        var valor = $("input[name=pedido_buscarSedesGrupoCliente]:checked").val();
+        $.ajax({
+            url: "/Pedido/ChangeBuscarSedesGrupoCliente",
+            type: 'POST',
+            data: {
+                buscarSedesGrupoCliente: valor
             },
             success: function () {
             }

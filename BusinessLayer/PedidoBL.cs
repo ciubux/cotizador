@@ -254,7 +254,7 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 validarPedidoCompra(pedido);
-                dal.InsertPedidoCompra(pedido);
+                dal.InsertPedido(pedido);
             }
         }
 
@@ -263,7 +263,7 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 validarPedidoCompra(pedido);
-                dal.UpdatePedidoCompra(pedido);
+                dal.UpdatePedido(pedido);
             }
         }
 
@@ -320,7 +320,7 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 validarPedidoAlmacen(pedido);
-                dal.InsertPedidoAlmacen(pedido);
+                dal.InsertPedido(pedido);
             }
         }
 
@@ -329,7 +329,7 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 validarPedidoAlmacen(pedido);
-                dal.UpdatePedidoAlmacen(pedido);
+                dal.UpdatePedido(pedido);
             }
         }
 
