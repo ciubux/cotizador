@@ -1,0 +1,10 @@
+﻿@model Cotizador.Models.DescuentoViewModels
+
+@Html.DropDownList(
+            Model.ProductoSelectId,
+            Model.Productos, "Seleccione",
+            new
+            {
+                id = Model.ProductoSelectId,
+                @class = "form-control"
+            })

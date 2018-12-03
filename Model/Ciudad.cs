@@ -35,5 +35,6 @@ namespace Model
 
         public List<SerieDocumentoElectronico> serieDocumentoElectronicoList { get; set; }
 
+        public String correoCoordinador { get; set; }
     }
 }

@@ -64,6 +64,19 @@ namespace BusinessLayer
             return transaccion;
         }
 
+        public Transaccion GetPlantillaVentaDescuentoGlobal(Transaccion transaccion, Usuario usuario, Guid idProducto)
+        {
+            using (var dal = new VentaDAL())
+            {
+                transaccion = dal.SelectPlantillaVenta(transaccion, usuario, idProducto);
+                if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+                {
+                    this.procesarVenta(transaccion);
+                }
+            }
+            return transaccion;
+        }
+
         public Transaccion GetNotaIngresoTransaccion(Transaccion transaccion, NotaIngreso notaIngreso, Usuario usuario)
         {
             using (var dal = new VentaDAL())

@@ -65,11 +65,11 @@
                 <div class="col_uno">@documentoDetalle.producto.sku</div>
                 <div class="col_dos">@documentoDetalle.cantidad</div>
                 <div class="col_tres">@documentoDetalle.unidad</div>
-                <div class="col_cuatro">@(documentoDetalle.producto.descripcion+" ("+ documentoDetalle.producto.skuProveedor+")")</div>
+                <div class="col_cuatro">@(documentoDetalle.producto.descripcion + " (" + documentoDetalle.producto.skuProveedor + ")")</div>
             </div>
 
         }
-     
+
 
 
     </div>
@@ -98,17 +98,17 @@
             <div class="col_tres">@guiaRemision.transportista.brevete</div>
         </div>
 
-        
-    </div>
-
 
     </div>
 
 
+</div>
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/guiaRemision")
-    }
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/guiaRemision")
+}
 
 <link rel="stylesheet" href="http://mpinstitucional.com/css/PrintGuiaL.css">
 

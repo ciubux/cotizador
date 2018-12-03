@@ -8,6 +8,7 @@ using System.ServiceModel;
 using System.Net;
 using System.IO;
 using System.Text;
+using ServiceLayer;
 
 namespace BusinessLayer
 {
@@ -297,8 +298,40 @@ namespace BusinessLayer
                 {
                     cliente.sedePrincipal = false;
                 }
+                
 
-                return clienteDAL.updateClienteSunat(cliente);
+                cliente = clienteDAL.updateClienteSunat(cliente);
+
+                MailService mail = new MailService();
+                /*Si existen cambios en la solicitud o aprobacion de créditos*/
+                if (cliente.existenCambiosCreditos)
+                {
+                    List<String> destinatarios = new List<String>();
+                    if (cliente.usuario.apruebaPlazoCredito || cliente.usuario.apruebaMontoCredito)
+                    {
+                        if (cliente.usuarioSolicitante != null && cliente.usuarioSolicitante.email != null && !cliente.usuarioSolicitante.email.Equals(String.Empty))
+                        {
+                            destinatarios.Add(cliente.usuarioSolicitante.email);
+                            String asunto = "APROBACIÓN de Crédito - " + cliente.razonSocial + " (" + cliente.codigo + ")";
+                            String bodyMail = String.Empty;
+                            bodyMail = @"</p>Estimados, </p>" +
+                                "</p>Se ha modificado el plazo de crédito aprobado, el monto de crédito aprobado o la forma de pago del cliente:" + cliente.razonSocial + "(" + cliente.codigo + ").</p>";
+                            mail.enviar(destinatarios, asunto, bodyMail, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+                        }
+                    }
+                    else
+                    {
+                        //Enviar correo a Creditos
+                        destinatarios.Add(Constantes.MAIL_CREDITOS);
+                        String asunto = "SOLICITUD de Crédito - " + cliente.razonSocial + " (" + cliente.codigo + ")";
+                        String bodyMail = String.Empty;
+                        bodyMail = @"</p>Estimados, </p>" +
+                            "</p>Se ha modificado el plazo de crédito solicitado, el monto de crédito solicitado o la forma de pago del cliente: " + cliente.razonSocial + " (" + cliente.codigo + ").</p>";
+                        mail.enviar(destinatarios, asunto, bodyMail, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+                    }
+                }
+
+                return cliente;
             }
         }
 

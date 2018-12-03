@@ -454,7 +454,10 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_clienteSunat");
             //cliente.idCliente = (Guid)objCommand.Parameters["@newId"].Value;
             InputParameterAdd.Guid(objCommand, "idCliente", cliente.idCliente);
-            InputParameterAdd.Guid(objCommand, "idUsuario", cliente.IdUsuarioRegistro);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cliente.usuario.idUsuario);
+
+
+
             InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocialSunat);
             InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
             InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
@@ -522,10 +525,18 @@ namespace DataLayer
                 DateTime horaFinSegundoTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
                 InputParameterAdd.DateTime(objCommand, "horaFinSegundoTurnoEntrega", horaFinSegundoTurnoEntrega);
             }
-            ExecuteNonQuery(objCommand);            
 
+            OutputParameterAdd.Int(objCommand, "existenCambiosCreditos");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "usuarioSolicitanteCredito");
+            OutputParameterAdd.Varchar(objCommand, "correoUsuarioSolicitanteCredito",50);
+            ExecuteNonQuery(objCommand);
+
+            cliente.existenCambiosCreditos = (Boolean) ((int)objCommand.Parameters["@existenCambiosCreditos"].Value == 1);
+            cliente.usuarioSolicitante = new Usuario();
+            cliente.usuarioSolicitante.idUsuario = (Guid)objCommand.Parameters["@usuarioSolicitanteCredito"].Value;
+            cliente.usuarioSolicitante.email = (String)objCommand.Parameters["@correoUsuarioSolicitanteCredito"].Value;
+            
             return cliente;
-
         }
 
 

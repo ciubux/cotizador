@@ -732,6 +732,9 @@ namespace DataLayer
                 pedido.direccionEntrega.descripcion = Converter.GetString(row, "direccion_entrega");
                 pedido.direccionEntrega.contacto = Converter.GetString(row, "contacto_entrega");
                 pedido.direccionEntrega.telefono = Converter.GetString(row, "telefono_contacto_entrega");
+                pedido.direccionEntrega.codigoCliente = Converter.GetString(row, "direccion_entrega_codigo_cliente");
+                pedido.direccionEntrega.codigoMP = Converter.GetString(row, "direccion_entrega_codigo_mp");
+                pedido.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
 
                 pedido.solicitante = new Solicitante();
                 pedido.solicitante.idSolicitante = Converter.GetGuid(row, "id_solicitante");
@@ -1067,6 +1070,9 @@ namespace DataLayer
                 pedido.direccionEntrega.descripcion = Converter.GetString(row, "direccion_entrega");
                 pedido.direccionEntrega.contacto = Converter.GetString(row, "contacto_entrega");
                 pedido.direccionEntrega.telefono = Converter.GetString(row, "telefono_contacto_entrega");
+                pedido.direccionEntrega.codigoCliente = Converter.GetString(row, "direccion_entrega_codigo_cliente");
+                pedido.direccionEntrega.codigoMP = Converter.GetString(row, "direccion_entrega_codigo_mp");
+                pedido.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
 
                 pedido.solicitante = new Solicitante();
                 pedido.solicitante.idSolicitante = Converter.GetGuid(row, "id_solicitante");

@@ -756,14 +756,9 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado?1:0);
             InputParameterAdd.Int(objCommand, "facturado", guiaRemision.estaFacturado ? 1 : 0);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", guiaRemision.pedido.numeroPedido);
-
-
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)guiaRemision.motivoTrasladoBusqueda).ToString());
 
-
-            DataTable dataTable = Execute(objCommand);
-
-           
+            DataTable dataTable = Execute(objCommand);           
 
             foreach (DataRow row in dataTable.Rows)
             {
@@ -854,6 +849,8 @@ namespace DataLayer
                 guiaRemision.pedido = new Pedido();
                 guiaRemision.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
                 guiaRemision.pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
+                guiaRemision.pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
+                
                 //CLIENTE
                 guiaRemision.pedido.cliente = new Cliente();
                 guiaRemision.pedido.cliente.codigo = Converter.GetString(row, "codigo");

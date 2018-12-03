@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using BusinessLayer.Email;
 using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
@@ -11,7 +12,6 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
-using Cotizador.Email;
 
 namespace Cotizador.Controllers
 {

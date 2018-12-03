@@ -2,7 +2,6 @@
     ViewBag.Title = "Búsqueda Documentos de Venta";
     Model.DocumentoVenta documentoVenta = ViewBag.documentoVenta;
     List<Model.DocumentoVenta> documentoVentaList = ViewBag.documentoVentaList;
-
 }
 
 <div class="page-header">
@@ -818,7 +817,7 @@
                                         <li class="list-group-item"><input type="radio" id="tipoNotaCredito4" name="tipoNotaCredito" value="4" /><label for="tipoNotaCredito4">DESCUENTO GLOBAL</label> </li>
                                         <li class="list-group-item"><input type="radio" id="tipoNotaCredito5" name="tipoNotaCredito" value="5" /><label for="tipoNotaCredito5">DESCUENTO POR ITEM</label> </li>
                                         <!--<li class="list-group-item"><input type="radio" id="tipoNotaCredito6" name="tipoNotaCredito" value="6" /><label for="tipoNotaCredito6">DEVOLUCIÓN TOTAL</label> </li>
-                                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito7" name="tipoNotaCredito" value="7" /><label for="tipoNotaCredito7">DEVOLUCIÓN POR ITEM</label> </li>-->
+                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito7" name="tipoNotaCredito" value="7" /><label for="tipoNotaCredito7">DEVOLUCIÓN POR ITEM</label> </li>-->
                                         <li class="list-group-item"><input type="radio" id="tipoNotaCredito8" name="tipoNotaCredito" value="9" /><label for="tipoNotaCredito8">DISMINUCIÓN EN EL VALOR</label> </li>
                                     </ul>
                                 </div>
@@ -826,19 +825,22 @@
                         </div>
                     </div>
 
-                    <!--  <div class="row">
-                        <div class="col-sm-6 col-lg-12">
 
+                    
+                    <div id="divProductoDescuento" class="row">
+                        <div class="col-sm-6 col-lg-8">
                             <div class="form-group">
-                                <label for="comentarioAprobacionAnulacion" class="control-label col-xs-3">Comentario:</label>
-
-                                <div class="col-xs-9">
-                                    <textarea class="form-control" rows="5" id="comentarioAprobacionAnulacion" name="comentarioAprobacionAnulacion"></textarea>
+                                <label class="control-label col-xs-4" for="idProducto">Descuento a Aplicar:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("GetDescuentos", "Producto",
+                                     new
+                                     {
+                                         productoSelectId = "idProducto"
+                                     })
                                 </div>
                             </div>
                         </div>
-
-                    </div>--->
+                    </div>
 
                 </form>
             </div>
@@ -910,6 +912,10 @@
         </div>
     </div>
 </div>
+
+
+
+
 
 
 

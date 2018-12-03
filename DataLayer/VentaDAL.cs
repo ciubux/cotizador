@@ -212,12 +212,19 @@ namespace DataLayer
 
         }
 
+
+
         
-
-
-        public Transaccion SelectPlantillaVenta(Transaccion transaccion, Usuario usuario)
+        public Transaccion SelectPlantillaVenta(Transaccion transaccion, Usuario usuario, Guid? idProducto = null)
         {
             var objCommand = GetSqlCommand("ps_plantillaVenta");
+            /*Si se cuenta con id Producto entonces quiere decir que es un descuento global*/
+            if (idProducto != null)
+            { 
+                objCommand = GetSqlCommand("ps_plantillaVentaDescuentoGlobal");
+                InputParameterAdd.Guid(objCommand, "idProducto", idProducto.Value);
+            }
+
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", transaccion.documentoVenta.idDocumentoVenta);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)transaccion.documentoVenta.tipoDocumento);
 
@@ -282,6 +289,7 @@ namespace DataLayer
                     pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
 
                     pedidoDetalle.precioUnitarioOriginal = Converter.GetDecimal(row, "precio_unitario_original");
+                    pedidoDetalle.cantidadOriginal = Converter.GetInt(row, "cantidad");
 
                     //Si NO es recotizacion se consideran los precios y el costo de lo guardado
                     pedidoDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");

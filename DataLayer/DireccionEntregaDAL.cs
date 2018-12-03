@@ -35,7 +35,11 @@ namespace DataLayer
                     descripcion = Converter.GetString(row, "descripcion"),
                     contacto = Converter.GetString(row, "contacto"),
                     telefono = Converter.GetString(row, "telefono"),
-                    ubigeo = new Ubigeo {  Id = Converter.GetString(row, "ubigeo")  }
+                    ubigeo = new Ubigeo {  Id = Converter.GetString(row, "ubigeo")  },
+                    codigoCliente = Converter.GetString(row, "codigo_cliente"),
+                    codigoMP = Converter.GetString(row, "codigo_mp"),
+                    observaciones = Converter.GetString(row, "observaciones"),
+                    nombre = Converter.GetString(row, "nombre")
                 };
                 lista.Add(obj);
             }

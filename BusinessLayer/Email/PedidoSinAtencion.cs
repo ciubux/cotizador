@@ -5,7 +5,7 @@ using System.Web;
 
 using Model;
 
-namespace Cotizador.Email
+namespace BusinessLayer.Email
 {
     
     public class PedidoSinAtencion

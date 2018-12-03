@@ -321,8 +321,20 @@ namespace DataLayer
                 
             }
 
+            if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
+            {
+                DataTable dataTableProductosDescuento = dataSet.Tables[8];
+                Constantes.DESCUENTOS_LIST = new List<Producto>();
 
-
+                foreach (DataRow row in dataTableProductosDescuento.Rows)
+                {
+                    Producto producto = new Producto();
+                    producto.idProducto = Converter.GetGuid(row, "id_Producto");
+                    producto.sku = Converter.GetString(row, "sku");
+                    producto.descripcion = Converter.GetString(row, "descripcion");
+                    Constantes.DESCUENTOS_LIST.Add(producto);
+                }
+            }
 
             return usuario;
         }

@@ -61,6 +61,11 @@ namespace Model
             get;set;
         }
 
+        public int cantidadOriginal
+        {
+            get; set;
+        }
+
         public Boolean visualizaCostos { get; set; }
 
         public Decimal costoListaVisible

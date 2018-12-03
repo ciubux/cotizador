@@ -61,7 +61,7 @@
 
     </div>
 
-        <!--GUIA REMISIÓN REFERENCIA-->
+    <!--GUIA REMISIÓN REFERENCIA-->
     <div class="row">
         <div>
             @Html.LabelFor(p => notaIngreso.serieGuiaReferencia)
@@ -77,7 +77,7 @@
             @Html.LabelFor(p => notaIngreso.tipoDocumentoVentaReferencia)
             <span class="form-control-static">@notaIngreso.tipoDocumentoVentaReferenciaString</span>
         </div>
-        <div >
+        <div>
             @Html.LabelFor(p => notaIngreso.serieDocumentoVentaReferencia)
             <span class="form-control-static">@notaIngreso.serieDocumentoVentaReferencia</span>
         </div>
@@ -89,24 +89,24 @@
 
 
 
-        <table id="tableDetalleGuia" class="table" data-editing="false">
-            <thead>
-                <tr>
-                    <th data-name="sku" data-sortable="false">Código</th>
-                    <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cantidad</th>
-                    <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
-                    <th data-name="producto" data-sortable="false">Producto</th>
-                </tr>
-            </thead>
+    <table id="tableDetalleGuia" class="table" data-editing="false">
+        <thead>
+            <tr>
+                <th data-name="sku" data-sortable="false">Código</th>
+                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cantidad</th>
+                <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                <th data-name="producto" data-sortable="false">Producto</th>
+            </tr>
+        </thead>
 
 
-            <tbody>
-                @{int contador = 0;}
-                @foreach (var documentoDetalle in notaIngreso.documentoDetalle)
+        <tbody>
+            @{int contador = 0;}
+            @foreach (var documentoDetalle in notaIngreso.documentoDetalle)
             {
                 contador++;
                 <tr data-expanded="true">
-      
+
                     <td>  @documentoDetalle.producto.sku</td>
 
 
@@ -114,27 +114,27 @@
                     <td>  @documentoDetalle.unidad</td>
                     <td>  @documentoDetalle.producto.descripcion  </td>
                 </tr>
-        }
+            }
 
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <div class="row">
+    <div class="row">
 
-            @Html.LabelFor(g => notaIngreso.observaciones)
-            <span class="form-control-static" id="ver_notaIngreso_observaciones">@notaIngreso.observaciones</span>
-
-    </div>
-
+        @Html.LabelFor(g => notaIngreso.observaciones)
+        <span class="form-control-static" id="ver_notaIngreso_observaciones">@notaIngreso.observaciones</span>
 
     </div>
 
 
+</div>
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/notaIngreso")
-    }
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/notaIngreso")
+}
 
 
 

@@ -265,7 +265,8 @@
                     <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
                     <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
                     <th data-name="historialPrecios" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Historial Precios</th>
-                    <th data-name="precioFactura" data-visible="true" data-sortable="false" style="color: #B9371B">Precio Unit. Original Factura</th>
+                    <th data-name="precioFactura" data-visible="true" data-sortable="false" style="color: #B9371B">Cantidad Original Factura</th>
+                    <th data-name="cantitadFactura" data-visible="true" data-sortable="false" style="color: #B9371B">Precio Unit. Original Factura</th>
                     <th class="ordenar" data-sortable="false" data-visible="false"></th>
                 </tr>
             </thead>
@@ -303,8 +304,8 @@
                     <td class="@documentoDetalle.producto.idProducto detobservacion" style="text-align:left">@documentoDetalle.observacion</td>
                     <td class="@documentoDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@documentoDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
 
-
-                    <td class="@documentoDetalle.producto.idProducto">@documentoDetalle.precioUnitarioOriginal</td>
+                    <td class="@documentoDetalle.producto.idProducto detCantidadOriginal">@documentoDetalle.cantidadOriginal</td>
+                    <td class="@documentoDetalle.producto.idProducto detPrecioUnitarioOriginal">@documentoDetalle.precioUnitarioOriginal</td>
                     <td class="@documentoDetalle.producto.idProducto detordenamiento"></td>
 
                 </tr>

@@ -5,6 +5,8 @@ using System;
 using Model;
 using System.IO;
 using System.Linq;
+using ServiceLayer;
+using BusinessLayer.Email;
 
 namespace BusinessLayer
 {
@@ -321,6 +323,36 @@ namespace BusinessLayer
             {
                 validarPedidoAlmacen(pedido);
                 dal.InsertPedido(pedido);
+                if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno)
+                {
+                    /*Se debe recuperar el correo de la ciudad origen*/
+                    MailService mail = new MailService();
+
+                    //var urlVerPedido = this.Url.Action("Index", "Pedido", new { idPedido = pedido.idPedido }, this.Request.Url.Scheme);
+                    var urlVerPedido = Constantes.URL_VER_PEDIDO + pedido.idPedido.ToString();
+                    PedidoSinAtencion emailTemplate = new PedidoSinAtencion();
+                    emailTemplate.urlVerPedido = urlVerPedido;
+
+
+                    foreach (PedidoDetalle det in pedido.pedidoDetalleList)
+                    {
+                        det.cantidadPendienteAtencion = det.cantidad;
+                    }
+
+                    String template = emailTemplate.BuildTemplate(pedido);
+                    List<String> destinatarios = new List<String>();
+
+                    Ciudad ciudadOrigen = pedido.usuario.sedesMP.Where(p => p.idCiudad == pedido.ciudad.idCiudad).FirstOrDefault();
+                    destinatarios.Add(ciudadOrigen.correoCoordinador);
+
+
+                    if (destinatarios.Count > 0)
+                    {
+                        String asunto = "Se ha creado el pedido de TRASLADO INTERNO " + pedido.numeroPedidoString;   
+                        mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+                    }
+                }
+
             }
         }
 
@@ -330,6 +362,34 @@ namespace BusinessLayer
             {
                 validarPedidoAlmacen(pedido);
                 dal.UpdatePedido(pedido);
+                if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno)
+                {
+                    /*Se debe recuperar el correo de la ciudad origen*/
+                    MailService mail = new MailService();
+
+                    //var urlVerPedido = this.Url.Action("Index", "Pedido", new { idPedido = pedido.idPedido }, this.Request.Url.Scheme);
+                    var urlVerPedido = Constantes.URL_VER_PEDIDO + pedido.idPedido.ToString();
+                    PedidoSinAtencion emailTemplate = new PedidoSinAtencion();
+                    emailTemplate.urlVerPedido = urlVerPedido;
+
+                    foreach (PedidoDetalle det in pedido.pedidoDetalleList)
+                    {
+                        det.cantidadPendienteAtencion = det.cantidad;
+                    }
+
+                    String template = emailTemplate.BuildTemplate(pedido);
+                    List<String> destinatarios = new List<String>();
+
+                    Ciudad ciudadOrigen = pedido.usuario.sedesMP.Where(p => p.idCiudad == pedido.ciudad.idCiudad).FirstOrDefault();
+                    destinatarios.Add(ciudadOrigen.correoCoordinador);
+
+
+                    if (destinatarios.Count > 0)
+                    {
+                        String asunto = "Se ha modificado el pedido de TRASLADO INTERNO " + pedido.numeroPedidoString;
+                        mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+                    }
+                }
             }
         }
 

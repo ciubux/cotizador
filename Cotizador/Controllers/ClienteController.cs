@@ -631,7 +631,7 @@ namespace Cotizador.Controllers
 
         public void ChangeSinPlazoCreditoAprobado()
         {
-            ClienteSession.sinPlazoCredito = Int32.Parse(this.Request.Params["sinPlazoCredito"]) == 1;
+            ClienteSession.sinPlazoCreditoAprobado = Int32.Parse(this.Request.Params["sinPlazoCreditoAprobado"]) == 1;
         }
 
         public String ConsultarSiExisteCliente()

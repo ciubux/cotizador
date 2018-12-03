@@ -49,7 +49,7 @@ namespace Model
         [Display(Name = "Bloqueado:")]
         public Boolean bloqueado { get; set; }
 
-        public Boolean sinPlazoCredito { get; set; }
+      //  public Boolean sinPlazoCredito { get; set; }
 
         public Boolean sinMontoCreditoAprobado { get; set; }
 
@@ -191,6 +191,10 @@ namespace Model
 
         [Display(Name = "Negociación Multiregional:")]
         public Boolean negociacionMultiregional { get; set; }
+
+        public Boolean existenCambiosCreditos { get; set; }
+
+        public Usuario usuarioSolicitante { get; set; }
     }
 
 }

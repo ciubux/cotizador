@@ -540,6 +540,7 @@ jQuery(function ($) {
         //$("#idDocumentoVenta").val(arrrayClass[0]);
         $("#serieNumeroFacturaParaNotaCredito").val($("#vpSERIE_CORRELATIVO").html());
         $("#modalGenerarNotaCredito").modal();
+        $("#divProductoDescuento").hide();
         //modalAnulacion.modal();
     });
 
@@ -1225,8 +1226,16 @@ jQuery(function ($) {
     });
 
 
-
-
+    $("input:radio[name=tipoNotaCredito]").change(function () {
+        var tipoNotaCredito = $('input:radio[name=tipoNotaCredito]:checked').val();
+       
+        if (tipoNotaCredito == TIPO_NOTA_CREDITO_DESCUENTO_GLOBAL) {
+            $("#divProductoDescuento").show();
+        }
+        else {
+            $("#divProductoDescuento").hide();
+        }
+    });
 
   
     $("#btnContinuarGenerandoNotaCredito").click(function () {
@@ -1240,6 +1249,7 @@ jQuery(function ($) {
 
 
         var idDocumentoVenta = $("#idDocumentoVenta").val();
+        var idProducto = $("#idProducto").val();
 
         if (tipoNotaCredito == null) {
             mostrarMensajeErrorProceso("Debe seleccionar el Motivo de la Nota de Crédito.");
@@ -1256,7 +1266,8 @@ jQuery(function ($) {
             data: {
 
                 idDocumentoVenta: idDocumentoVenta,
-                tipoNotaCredito: tipoNotaCredito
+                tipoNotaCredito: tipoNotaCredito,
+                idProducto: idProducto
             },
             error: function (error) {
                 mostrarMensajeErrorProceso(MENSAJE_ERROR);

@@ -439,7 +439,7 @@ namespace Cotizador.Controllers
             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
             pedidoBL.cambiarEstadoPedido(pedido);
             //Se obtiene los datos de la cotización ya modificada
-            pedido = pedidoBL.GetPedido(pedido,usuario);
+            pedido = pedidoBL.GetPedidoParaEditar(pedido,usuario);
             //Temporal
             pedido.ciudadASolicitar = new Ciudad();
            
@@ -489,7 +489,7 @@ namespace Cotizador.Controllers
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session["usuario"];
          //   usuarioBL.updateCotizacionSerializada(usuario, null);
-            return RedirectToAction("Index", "Pedido");
+            return RedirectToAction("Index", "PedidoAlmacen");
         }
 
 
@@ -1177,6 +1177,8 @@ namespace Cotizador.Controllers
             }
 
             pedidoBL.InsertPedidoAlmacen(pedido);
+
+
             long numeroPedido = pedido.numeroPedido;
             String numeroPedidoString = pedido.numeroPedidoString;
             Guid idPedido = pedido.idPedido;

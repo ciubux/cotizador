@@ -406,6 +406,11 @@ namespace Cotizador.Controllers
 
             DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO];
 
+            this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = null;
+            if (guiaRemisionList.Count > 0)
+            {
+                this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = guiaRemisionList[0];
+            }
 
             List<Producto> productoList = new List<Producto>();
 

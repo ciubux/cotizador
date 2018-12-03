@@ -495,7 +495,7 @@ jQuery(function ($) {
 
 
     $("#btnFinalizarCreacionNotaCredito").click(function () {
-       
+
 
         var sustento = $("#venta_sustento").val();
         if (sustento.trim().length < 25) {
@@ -524,6 +524,53 @@ jQuery(function ($) {
             $("#documentoVenta_horaEmision").focus();
             return false;
         }
+
+        /**
+         * detCantidadOriginal detPrecioUnitarioOriginal
+         */
+        var $j_object = $("td.detsubtotal");
+
+        //var cantidad = "";
+        var cantidadIncorrecta = false;
+        var precioUnitarioIncorrecto = false;
+        var cantidadProductos = 0;
+        $.each($j_object, function (key, value) {
+            cantidadProductos++;
+            var arrId = value.getAttribute("class").split(" ");
+            var cantidad = $("." + arrId[0] + ".detcantidad").html().trim();
+            var cantidadOriginal = $("." + arrId[0] + ".detCantidadOriginal").html().trim();
+            if ((cantidad > cantidadOriginal) || cantidad == 0)
+                cantidadIncorrecta = true;
+
+            var precioUnitario = $("." + arrId[0] + ".detprecioUnitario").html().trim();
+            var precioUnitarioOriginal = $("." + arrId[0] + ".detPrecioUnitarioOriginal").html().trim();
+            if ((precioUnitario > precioUnitarioOriginal) || precioUnitario == 0)
+                precioUnitarioIncorrecto = true;
+        });
+
+        if (cantidadProductos == 0) {
+            alert("Debe agregar al menos una línea de detalle en la Nota de Crédito.");
+            return false;
+        }
+
+        if (cantidadIncorrecta) {
+            alert("Error en cantidades ingresadas.");
+            return false;
+        }
+
+        if (precioUnitarioIncorrecto) {
+            alert("Error en precios ingresados.");
+            return false;
+        }
+
+
+
+
+
+
+
+
+
 
         var observaciones = $("#venta_observaciones").val();
         var fechaEmision = $("#documentoVenta_fechaEmision").val();

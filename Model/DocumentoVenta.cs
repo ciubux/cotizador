@@ -26,7 +26,7 @@ namespace Model
         [Display(Name = "Fecha Vencimiento:")]
         public DateTime fechaVencimiento { get; set; }
 
-        [Display(Name = "Tipo Pago:")]
+        [Display(Name = "Condición de Pago:")]
         public TipoPago tipoPago { get; set; }
 
         public String tipoPagoString

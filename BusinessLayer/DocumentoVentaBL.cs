@@ -355,7 +355,7 @@ namespace BusinessLayer
 
                                 MailService mailService = new MailService();
                                 mailService.enviar(new List<string>() { Constantes.MAIL_ADMINISTRADOR,
-                                Constantes.MAIL_COBRANZAS, Constantes.MAIL_CREDITOS
+                                Constantes.MAIL_COBRANZAS
                                 }, "SE GENERÓ FACTURA " + documentoVenta.cPE_CABECERA_BE.SERIE+"-"+ documentoVenta.cPE_CABECERA_BE.CORRELATIVO+" - FORMA DE PAGO LETRA",
                                 bodyMail, Constantes.MAIL_COMUNICACION_FACTURAS,
                                 Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, documentoVenta.usuario);

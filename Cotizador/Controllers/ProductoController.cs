@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using Cotizador.Models;
 using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
@@ -319,5 +320,23 @@ namespace Cotizador.Controllers
             }
         }
 
+
+
+
+
+        public ActionResult GetDescuentos(string productoSelectId, string selectedValue = null, string disabled = null)
+        {
+            //Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            
+             var model = new DescuentoViewModels
+            {
+                Data = Constantes.DESCUENTOS_LIST,
+                ProductoSelectId = productoSelectId,
+                SelectedValue = selectedValue,
+                Disabled = disabled == null || disabled != "disabled" ? false : true
+            };
+
+            return PartialView("_Descuento", model);
+        }
     }
 }

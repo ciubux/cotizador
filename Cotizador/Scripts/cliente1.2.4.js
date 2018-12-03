@@ -1828,13 +1828,13 @@ jQuery(function ($) {
     
 
 
-    $("input[name=cliente_sinPlazoCredito]").on("click", function () {
-        var sinPlazoCredito = $("input[name=cliente_sinPlazoCredito]:checked").val();
+    $("input[name=cliente_sinPlazoCreditoAprobado]").on("click", function () {
+        var sinPlazoCreditoAprobado = $("input[name=cliente_sinPlazoCreditoAprobado]:checked").val();
         $.ajax({
             url: "/Cliente/ChangeSinPlazoCreditoAprobado",
             type: 'POST',
             data: {
-                sinPlazoCredito: sinPlazoCredito
+                sinPlazoCreditoAprobado: sinPlazoCreditoAprobado
             },
             success: function () {
             }

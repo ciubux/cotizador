@@ -150,6 +150,19 @@ $("#btnAceptarFacturarPedido").click(function () {
         return false;
     }
 
+    if ($("#tipoPago").val() == 0) {
+        $("#tipoPago").focus();
+        $.alert({
+            title: 'Validación',
+            type: 'orange',
+            content: 'La Condición de Pago NO ASIGNADO es inválido. Conctate con el área de Créditos para que apruebe la Condición de Pago.',
+            buttons: {
+                OK: function () { }
+            }
+        });
+        return false;
+    }
+
 
     if ($("#verNumeroReferenciaCliente").html().length > 20) {
         $("#numeroReferenciaCliente").focus();

@@ -36,13 +36,13 @@
                     @Html.LabelFor(g => notaIngreso.ciudadDestino.direccionPuntoLlegada, htmlAttributes: new { @class = "control-label col-xs-2" })
                     <div class="col-xs-10">
                         @if (notaIngreso.pedido.numeroPedido > 0)
-                    {
-                        @Html.TextBoxFor(g => notaIngreso.ciudadDestino.direccionPuntoLlegada, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
-                }
-                else
-                {
-                    @Html.TextBoxFor(g => notaIngreso.ciudadDestino.direccionPuntoLlegada, htmlAttributes: new { @class = "form-control" })
-            }
+                        {
+                            @Html.TextBoxFor(g => notaIngreso.ciudadDestino.direccionPuntoLlegada, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(g => notaIngreso.ciudadDestino.direccionPuntoLlegada, htmlAttributes: new { @class = "form-control" })
+                        }
                     </div>
                 </div>
             </div>
@@ -62,15 +62,15 @@
             </div>
 
             <!-- <div class="col-sm-6 col-lg-4">
-            fecha Traslado
-            <div class="form-group">
-                @Html.LabelFor(g => notaIngreso.fechaTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
-                <div class="col-xs-8">
-                    <input type="hidden" id="fechaTrasladotmp" value="@ViewBag.fechaTrasladotmp" />
-                    <input class="form-control" type="text" id="notaIngreso_fechaTraslado" name="notaIngreso_fechaTraslado">
+                fecha Traslado
+                <div class="form-group">
+                    @Html.LabelFor(g => notaIngreso.fechaTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        <input type="hidden" id="fechaTrasladotmp" value="@ViewBag.fechaTrasladotmp" />
+                        <input class="form-control" type="text" id="notaIngreso_fechaTraslado" name="notaIngreso_fechaTraslado">
+                    </div>
                 </div>
-            </div>
-        </div>-->
+            </div>-->
 
             <div class="col-sm-6 col-lg-4">
                 <!--Serie-->
@@ -78,9 +78,9 @@
                     @Html.LabelFor(g => notaIngreso.serieDocumentoElectronico, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.DropDownList("notaIngreso_serieDocumento",
-                           new SelectList(notaIngreso.ciudadDestino.serieDocumentoElectronicoList as IEnumerable<Model.SerieDocumentoElectronico>, "serie", "serie", notaIngreso.serieDocumentoElectronico, null),
-                           //       "Seleccione Serie",
-                           new { @class = "form-control" })
+                                new SelectList(notaIngreso.ciudadDestino.serieDocumentoElectronicoList as IEnumerable<Model.SerieDocumentoElectronico>, "serie", "serie", notaIngreso.serieDocumentoElectronico, null),
+                                //       "Seleccione Serie",
+                                new { @class = "form-control" })
                     </div>
                 </div>
             </div>
@@ -140,9 +140,9 @@
                     @Html.LabelFor(g => notaIngreso.motivoTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.DropDownList("motivoTraslado",
-                                                     EnumHelper.GetSelectList(typeof(Model.NotaIngreso.motivosTraslado), notaIngreso.motivoTraslado),
-                                                     new { @class = "form-control", disabled = "disabled" }
-                                                     )
+                                                          EnumHelper.GetSelectList(typeof(Model.NotaIngreso.motivosTraslado), notaIngreso.motivoTraslado),
+                                                          new { @class = "form-control", disabled = "disabled" }
+                                                          )
                     </div>
                 </div>
             </div>
@@ -177,7 +177,7 @@
             }
 
 
-            
+
 
         </div>
 
@@ -199,11 +199,11 @@
                     <div class="col-xs-8">
                         <ul id="nombreArchivos">
                             @foreach (Model.PedidoAdjunto pedidoAdjunto in notaIngreso.pedido.pedidoAdjuntoList)
-                        {
-                            <li>
-                                <a href="javascript:m();" class="descargar">@pedidoAdjunto.nombre</a>
-                            </li>
-                    }
+                            {
+                                <li>
+                                    <a href="javascript:m();" class="descargar">@pedidoAdjunto.nombre</a>
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>
@@ -211,8 +211,8 @@
 
         </div>
 
-         @if (notaIngreso.guiaRemisionAExtornar != null)
-         {
+        @if (notaIngreso.guiaRemisionAExtornar != null)
+        {
             <fieldset>
                 <legend>Documento a extornar:</legend>
                 <!--GUIA REMISIÓN A EXTORNAR-->
@@ -250,9 +250,9 @@
 
             </fieldset>
 
-              <fieldset>
+            <fieldset>
                 <legend>Detalle del extorno:</legend>
-            
+
                 <div class="row">
 
                     <div class="col-sm-6 col-lg-4">
@@ -275,10 +275,10 @@
                     </div>
                 </div>
             </fieldset>
-         }
-         else if (notaIngreso.guiaRemisionAIngresar != null)
-         {
-                  <fieldset>
+        }
+        else if (notaIngreso.guiaRemisionAIngresar != null)
+        {
+            <fieldset>
                 <legend>Documento a Ingresar:</legend>
                 <!--GUIA REMISIÓN A EXTORNAR-->
                 <div class="row">
@@ -316,65 +316,66 @@
             </fieldset>
 
 
-         }
-         else {
-        <fieldset>
-            <legend id="divpedido_transportista">Documentos de referencia:</legend>
-            <!--GUIA REMISIÓN REFERENCIA-->
-            <div class="row">
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => notaIngreso.serieGuiaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => notaIngreso.serieGuiaReferencia, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => notaIngreso.numeroGuiaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => notaIngreso.numeroGuiaReferencia, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--DOCUMENTO VENTA REFERENCIA-->
-            <div class="row">
-
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(g => notaIngreso.tipoDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
-                        <div class="col-xs-8">
-                            @Html.DropDownList("tipoDocumentoVentaReferencia",
-                           EnumHelper.GetSelectList(typeof(Model.NotaIngreso.TiposDocumentoVentaReferencia), notaIngreso.tipoDocumentoVentaReferencia),
-                           new { @class = "form-control" }
-                           )
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => notaIngreso.serieDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => notaIngreso.serieDocumentoVentaReferencia, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => notaIngreso.numeroDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => notaIngreso.numeroDocumentoVentaReferencia, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </fieldset>
         }
-       
+        else
+        {
+            <fieldset>
+                <legend id="divpedido_transportista">Documentos de referencia:</legend>
+                <!--GUIA REMISIÓN REFERENCIA-->
+                <div class="row">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(p => notaIngreso.serieGuiaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(p => notaIngreso.serieGuiaReferencia, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(p => notaIngreso.numeroGuiaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(p => notaIngreso.numeroGuiaReferencia, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--DOCUMENTO VENTA REFERENCIA-->
+                <div class="row">
+
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(g => notaIngreso.tipoDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.DropDownList("tipoDocumentoVentaReferencia",
+                                    EnumHelper.GetSelectList(typeof(Model.NotaIngreso.TiposDocumentoVentaReferencia), notaIngreso.tipoDocumentoVentaReferencia),
+                                    new { @class = "form-control" }
+                                    )
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(p => notaIngreso.serieDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(p => notaIngreso.serieDocumentoVentaReferencia, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(p => notaIngreso.numeroDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(p => notaIngreso.numeroDocumentoVentaReferencia, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+        }
+
 
 
 
@@ -418,18 +419,18 @@
 
                 @{int contador = 0;}
                 @foreach (var documentoDetalle in notaIngreso.documentoDetalle)
-            {
-                contador++;
-                <tr data-expanded="true">
-                    <td>  @documentoDetalle.producto.idProducto</td>
-                    <td>  @documentoDetalle.producto.sku</td>
-                    <!--<td class="@documentoDetalle.producto.idProducto" style="text-align:right">@documentoDetalle.cantidadSolicitada</td>-->
-                    <td class="@documentoDetalle.producto.idProducto detcantidadSaldo" style="text-align:right">@documentoDetalle.cantidadPendienteAtencion</td>
-                    <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right">@documentoDetalle.cantidadPorAtender</td>
-                    <td>  @documentoDetalle.unidad</td>
-                    <td>  @documentoDetalle.producto.descripcion  </td>
-                </tr>
-        }
+                {
+                    contador++;
+                    <tr data-expanded="true">
+                        <td>  @documentoDetalle.producto.idProducto</td>
+                        <td>  @documentoDetalle.producto.sku</td>
+                        <!--<td class="@documentoDetalle.producto.idProducto" style="text-align:right">@documentoDetalle.cantidadSolicitada</td>-->
+                        <td class="@documentoDetalle.producto.idProducto detcantidadSaldo" style="text-align:right">@documentoDetalle.cantidadPendienteAtencion</td>
+                        <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right">@documentoDetalle.cantidadPorAtender</td>
+                        <td>  @documentoDetalle.unidad</td>
+                        <td>  @documentoDetalle.producto.descripcion  </td>
+                    </tr>
+                }
             </tbody>
         </table>
 
@@ -553,7 +554,7 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/notaIngreso")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/notaIngreso")
 }
 
 

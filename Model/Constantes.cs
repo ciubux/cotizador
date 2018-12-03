@@ -27,6 +27,8 @@ namespace Model
         public static int DIAS_DESDE_BUSQUEDA = 10;
         public static int ID_VENDEDOR_POR_ASIGNAR = 43;
 
+        public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
+
 
 
         public static String LABEL_DIRECCION_ENTREGA_VACIO = "Seleccione Dirección de Entrega";
@@ -141,6 +143,7 @@ namespace Model
         public static String MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = "";
         public static String PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = "";
 
+        public static List<Producto> DESCUENTOS_LIST;
 
         public static String USER_EOL {
             get { return AMBIENTE_EOL.Equals("TEST") ? USER_EOL_TEST : USER_EOL_PROD; }

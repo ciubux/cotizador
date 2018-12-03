@@ -395,6 +395,8 @@ namespace Cotizador.Controllers
 
             ViewBag.Si = Constantes.MENSAJE_SI;
             ViewBag.No = Constantes.MENSAJE_NO;
+
+            //ViewBag.descuentoList = Constantes.DESCUENTOS_LIST;
             return View();
 
         }

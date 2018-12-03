@@ -46,7 +46,8 @@ namespace Cotizador.Controllers
             transaccion.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
 
             transaccion.documentoVenta.idDocumentoVenta = Guid.Parse(Request["idDocumentoVenta"].ToString());
-            
+         
+
             transaccion.documentoReferencia = new DocumentoReferencia();
             transaccion.documentoReferencia.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(transaccion.documentoVenta.cPE_CABECERA_BE.TIP_CPE);
             String[] fechaEmisionArray = transaccion.documentoVenta.cPE_CABECERA_BE.FEC_EMI.Split('-');
@@ -58,11 +59,24 @@ namespace Cotizador.Controllers
 
 
 
+            DocumentoVenta.TiposNotaCredito tiposNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
 
-            transaccion = ventaBL.GetPlantillaVenta(transaccion, usuario);
+            if (tiposNotaCredito == DocumentoVenta.TiposNotaCredito.DescuentoGlobal)
+            {
+                Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+                transaccion = ventaBL.GetPlantillaVentaDescuentoGlobal(transaccion, usuario, idProducto);
+            }
+            else
+            {
+                transaccion = ventaBL.GetPlantillaVenta(transaccion, usuario);
+            }
+
+
+            
             if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
             {
-                transaccion.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
+                transaccion.tipoNotaCredito = tiposNotaCredito;
+
                 transaccion.documentoVenta.fechaEmision = DateTime.Now;
 
                 //Temporal

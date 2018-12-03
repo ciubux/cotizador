@@ -77,8 +77,8 @@
 
 
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/guiaRemision")
-    }
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/guiaRemision")
+}
 
 <link rel="stylesheet" href="http://mpinstitucional.com/css/PrintGuiaA.css">
