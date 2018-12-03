@@ -256,7 +256,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\DTOs\PedidoDTO.cs" />
+    <Compile Include="Models\DTOsSearch\ParserDTOsSearch.cs" />
+    <Compile Include="Models\DTOsSearch\PedidoDTO.cs" />
     <Compile Include="Models\GrupoClienteViewModels.cs" />
     <Compile Include="Models\DescuentoViewModels.cs" />
     <Compile Include="Models\VendedorViewModels.cs" />

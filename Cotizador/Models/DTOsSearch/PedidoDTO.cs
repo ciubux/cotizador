@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Cotizador.Models.DTOs
+namespace Cotizador.Models.DTOsSearch
 {
     public class PedidoDTO
     {

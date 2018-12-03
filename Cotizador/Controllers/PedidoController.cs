@@ -1,5 +1,4 @@
 ﻿using BusinessLayer;
-using Cotizador.Models.DTOs;
 using Cotizador.ExcelExport;
 using Model;
 using Newtonsoft.Json;
@@ -13,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using Cotizador.Models.DTOsSearch;
 
 namespace Cotizador.Controllers
 {
@@ -1526,33 +1526,7 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = pedidoList;
             this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
 
-            List<PedidoDTO> pedidoDTOList = new List<PedidoDTO>();
-
-            foreach (Pedido pedidoTmp in pedidoList )
-            {
-                PedidoDTO pedidoDTO = new PedidoDTO();
-                pedidoDTO.fechaProgramacion = pedidoTmp.fechaProgramacion;
-                pedidoDTO.stockConfirmado = pedidoTmp.stockConfirmado;
-                pedidoDTO.observaciones = pedidoTmp.observaciones;
-                pedidoDTO.idPedido = pedidoTmp.idPedido;
-                pedidoDTO.numeroPedido = pedidoTmp.numeroPedido;
-                pedidoDTO.numeroPedidoNumeroGrupoString = pedidoTmp.numeroPedidoNumeroGrupoString;
-                pedidoDTO.ciudad_nombre = pedidoTmp.ciudad.nombre;
-                pedidoDTO.cliente_codigo = pedidoTmp.cliente.codigo;
-                pedidoDTO.cliente_razonSocial = pedidoTmp.cliente.razonSocial;
-                pedidoDTO.numeroReferenciaCliente = pedidoTmp.numeroReferenciaCliente;
-                pedidoDTO.usuario_nombre = pedidoTmp.usuario.nombre;
-                pedidoDTO.fechaHoraRegistro = pedidoTmp.fechaHoraRegistro;
-                pedidoDTO.rangoFechasEntrega = pedidoTmp.rangoFechasEntrega;
-                pedidoDTO.rangoHoraEntrega = pedidoTmp.rangoHoraEntrega;
-                pedidoDTO.montoTotal = pedidoTmp.montoTotal;
-                pedidoDTO.ubigeoEntrega_distrito = pedidoTmp.ubigeoEntrega.Distrito;
-                pedidoDTO.seguimientoPedido_estadoString = pedidoTmp.seguimientoPedido.estadoString;
-                pedidoDTO.seguimientoCrediticioPedido_estadoString = pedidoTmp.seguimientoCrediticioPedido.estadoString;
-                pedidoDTOList.Add(pedidoDTO);
-            }
-
-             String pedidoListString = JsonConvert.SerializeObject(pedidoDTOList);
+             String pedidoListString = JsonConvert.SerializeObject(ParserDTOsSearch.PedidoToPedidoDTO(pedidoList));
              return pedidoListString;
             //return pedidoList.Count();
         }
