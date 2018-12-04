@@ -1,0 +1,26 @@
+﻿@model Cotizador.Models.VendedorViewModels
+
+@if (Model.Disabled)
+{
+    @Html.DropDownList(
+                Model.VendedorSelectId,
+                Model.Vendedores, "Seleccione",
+                new
+                {
+                    id = Model.VendedorSelectId,
+                    @class = "form-control",
+                    @disabled = "disabled"
+                })
+}
+else
+{
+    @Html.DropDownList(
+            Model.VendedorSelectId,
+            Model.Vendedores, "Seleccione",
+            new
+            {
+                id = Model.VendedorSelectId,
+                @class = "form-control"
+
+            })
+}

@@ -22,7 +22,7 @@ namespace Model
         public String distritoDespacho { get; set; }
         public String rubro { get; set; }
         public String sede { get; set; }
-
+        public String plazo { get; set; }
 
     }
 }

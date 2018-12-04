@@ -28,3 +28,8 @@ C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Release\Model.csprojResolveAsse
 C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Release\Model.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Release\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Release\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Model\bin\Release\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador\Model\bin\Release\EntityFramework.dll
+C:\Users\cesar\Documents\MP2\cotizador\Model\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\cesar\Documents\MP2\cotizador\Model\bin\Release\EntityFramework.xml
+C:\Users\cesar\Documents\MP2\cotizador\Model\bin\Release\EntityFramework.SqlServer.xml

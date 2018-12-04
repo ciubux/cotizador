@@ -1,14 +1,20 @@
-﻿<!DOCTYPE html>
+﻿@{
+
+    TempData["ScriptVersion"] = "46";
+
+}
+
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cotizador - @ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
+    
+    @Styles.RenderFormat("<link rel=\"stylesheet\" href=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"/>", "~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-
 
 <body>
 
@@ -26,30 +32,233 @@
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li id="linkMisCotizaciones">@Html.ActionLink("Mis Cotizaciones", "Index", "Home")</li>
-                    <li id="linkCotizador">@Html.ActionLink("Cotizar", "Cotizar", "Home")</li>
-                    <!--
-                     <li id="linkMisPedidos">@Html.ActionLink("Mis Pedidos", "Index", "Pedido")</li>
-                     <li id="linkPedir">@Html.ActionLink("Pedir", "Pedir", "Pedido")</li>
-                        -->
-                    <!--
-    <li>
-        <a class="dropdown-toggle" data-toggle="dropdown">
-            Carga de Archivos
-            <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-            <li>@Html.ActionLink("Cargar Clientes", "Index", "Cliente")</li>
-            <li>@Html.ActionLink("Cargar Productos", "Index", "Producto")</li>
-            <li>@Html.ActionLink("Cargar Precios", "Index", "Precio")</li>
-            <li>@Html.ActionLink("Cargar Facturas", "Index", "Factura")</li>
-        </ul>
+                    @{
+                        var linkCotizaciones = "";
+                        var linkBusquedaCotizaciones = "";
+                        var linkMantenimientoCotizacion = "";
 
-    </li>-->
+                        var linkPedidos = "";
+                        var linkBusquedaPedidos = "";
+                        var linkMantenimientoPedido = "";
+                        var linkBusquedaPedidosCompra = "";
+                        var linkMantenimientoPedidoCompra = "";
+                        var linkBusquedaPedidosAlmacen = "";
+                        var linkMantenimientoPedidoAlmacen = "";
+
+                        var linkMovimientosAlmacen = "";
+                        var linkBusquedaGuiasRemision = "";
+                        var linkMantenimientoGuiaRemision = "";
+
+
+                        var linkDocumentosVenta = "";
+                        var linkBusquedaFactura = "";
+                        var linkMantenimientoFactura = "";
+
+                        var linkBusquedaBoleta = "";
+                        var linkMantenimientoBoleta = "";
+
+                        var linkBusquedaNotaCredito = "";
+                        var linkMantenimientoNotaCredito = "";
+
+                        var linkBusquedaNotaDebito = "";
+                        var linkMantenimientoNotaDebito = "";
+
+                        var linkMaestros = "";
+                        var linkBusquedaCliente = "";
+                        var linkMantenimientoCliente = "";
+                        var linkMantenimientoProducto = "";
+
+                        var linkCrearFacturaConsolidada = "";
+
+                        var linkBusquedaNotasIngreso = "";
+                        var linkMantenimientoNotaIngreso = "";
+
+                    }
+                    @if (this.Session["pagina"] != null)
+                    {
+                        switch ((int)this.Session["pagina"])
+                        {
+                            case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
+                            case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active"; break;
+                            case 2: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
+                            case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
+                            case 4: linkBusquedaGuiasRemision = "ative"; linkMovimientosAlmacen = "active"; break;
+                            case 5: linkMantenimientoGuiaRemision = "ative"; linkMovimientosAlmacen = "active"; break;
+
+
+                            case 6: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
+                            case 19: linkCrearFacturaConsolidada = "ative"; linkDocumentosVenta = "active"; break;
+                            case 7: linkMantenimientoFactura = "ative"; linkDocumentosVenta = "active"; break;
+                            case 8: linkBusquedaBoleta = "ative"; linkDocumentosVenta = "active"; break;
+                            case 9: linkMantenimientoBoleta = "ative"; linkDocumentosVenta = "active"; break;
+                            case 10: linkBusquedaNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
+                            case 11: linkMantenimientoNotaCredito = "ative"; linkDocumentosVenta = "active"; break;
+                            case 12: linkBusquedaNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
+                            case 13: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
+                            case 14: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
+                            case 15: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
+
+
+                            case 17: linkBusquedaCliente = "ative"; linkMaestros = "active"; break;
+                            case 18: linkMantenimientoCliente = "ative"; linkMaestros = "active"; break;
+                            //  case 27: linkBusquedaProducto = "ative"; linkMaestros = "active"; break;
+                            case 28: linkMantenimientoProducto = "ative"; linkMaestros = "active"; break;
+
+                            case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
+                            case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
+                            case 22: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
+                            case 23: linkBusquedaPedidosCompra = "ative"; linkPedidos = "active"; break;
+                            case 24: linkMantenimientoPedidoCompra = "ative"; linkPedidos = "active"; break;
+                            case 25: linkBusquedaPedidosAlmacen = "ative"; linkPedidos = "active"; break;
+                            case 26: linkMantenimientoPedidoAlmacen = "ative"; linkPedidos = "active"; break;
+
+                        }
+                        var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
+
+
+
+                        if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
+                        {
+                            <li class="@linkCotizaciones">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Cotizaciones
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    @if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
+                                    {
+                                        <li id="linkBusquedaCotizaciones" class="@linkBusquedaCotizaciones">@Html.ActionLink("Cotización - Búsqueda", "Index", "Cotizacion")</li>
+                                    }
+                                    @if (usuario.creaCotizaciones)
+                                    {
+                                        <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Cotización - Crear/Modificar", "Cotizar", "Cotizacion")</li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+
+                        if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
+                        {
+
+                            <li class="@linkPedidos">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Pedidos
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
+                                    {
+                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Pedido Venta - Búsqueda", "Index", "Pedido")</li>}
+                                    @if (usuario.tomaPedidos)
+                                    {
+                                        <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Crear/Modificar", "Pedir", "Pedido")</li>
+                                    }
+                                    @if (usuario.realizaCargaMasivaPedidos)
+                                    {
+                                        <li id="linkCargaPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Carga Masiva", "Load", "Pedido")</li>
+                                    }
+
+                                    @if (usuario.tomaPedidosCompra)
+                                    {
+                                        <li id="linkBusquedaPedidosCompra" class="@linkBusquedaPedidosCompra">@Html.ActionLink("Pedido Compra - Búsqueda", "Index", "PedidoCompra")</li>}
+                                    @if (usuario.tomaPedidosCompra)
+                                    {
+                                        <li id="linkMantenimientoPedidoCompra" class="@linkMantenimientoPedidoCompra">@Html.ActionLink("Pedido Compra - Crear/Modificar", "Pedir", "PedidoCompra")</li>
+                                    }
+
+                                    @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
+                                    {
+                                        <li id="linkBusquedaPedidosAlmacen" class="@linkBusquedaPedidosAlmacen">@Html.ActionLink("Pedido Almacén - Búsqueda", "Index", "PedidoAlmacen")</li>}
+                                    @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
+                                    {
+                                        <li id="linkMantenimientoPedidoAlmacen" class="@linkMantenimientoPedidoAlmacen">@Html.ActionLink("Pedido Almacén - Crear/Modificar", "Pedir", "PedidoAlmacen")</li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+
+                        if (usuario.creaGuias || usuario.administraGuias || usuario.visualizaGuias)
+                        {
+
+                            <li class="@linkMovimientosAlmacen">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Movimientos de Almacén
+                                    <span class="caret"></span>
+                                </a>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    @if (usuario.administraGuias || usuario.creaGuias || usuario.visualizaGuias)
+                                    {
+                                        <li id="linkBusquedaGuiasRemision" class="@linkBusquedaGuiasRemision">@Html.ActionLink("Guia de Remisión - Búsqueda", "Index", "GuiaRemision")</li>
+                                    }
+
+                                    @if (usuario.creaGuias)
+                                    {
+                                        <li id="linkMantenimientoGuiaRemision" class="@linkMantenimientoGuiaRemision">@Html.ActionLink("Guía de Remisión - Crear/Modificar", "Guiar", "GuiaRemision")</li>
+                                    }
+
+                                    @if (usuario.administraGuias || usuario.creaGuias || usuario.visualizaGuias)
+                                    {
+                                        <li id="linkBusquedaNotasIngreso" class="@linkBusquedaNotasIngreso">@Html.ActionLink("Nota de Ingreso - Búsqueda", "Index", "NotaIngreso")</li>
+                                    }
+
+                                    @if (usuario.creaGuias)
+                                    {
+                                        <li id="linkMantenimientoNotaIngreso" class="@linkMantenimientoNotaIngreso">@Html.ActionLink("Nota de Ingreso - Crear/Modificar", "Ingresar", "NotaIngreso")</li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+
+                        if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta)
+                        {
+
+                            <li class="@linkDocumentosVenta">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Documentos de Venta
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+
+                                    @if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta)
+                                    {
+                                        <li id="linkBusquedaFactura" class="@linkBusquedaFactura">@Html.ActionLink("Documentos de Venta - Búsqueda", "Index", "Factura")</li>
+                                    }
+                                    
+                                    @if (usuario.visualizaGuiasPendienteFacturacion || usuario.creaFacturaConsolidadaMultiregional || usuario.creaFacturaConsolidadaLocal)
+                                    {
+                                        <li id="linkCrearFacturaConsolidada" class="@linkCrearFacturaConsolidada">@Html.ActionLink("Documentos de Venta - Crear Factura Consolidada", "ConsolidarFactura", "GuiaRemision")</li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+
+                        if (usuario.modificaMaestroClientes || usuario.modificaMaestroProductos)
+                        {
+                            <li class="@linkMaestros">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Maestros
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    @if (usuario.modificaMaestroClientes)
+                                    {
+                                        <li id="linkBusquedaCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Búsqueda", "Index", "Cliente")</li>
+                                        <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
+                                    }
+                                    @if (usuario.modificaMaestroProductos)
+                                    {
+                                        <li id="linkMantenimientoProducto" class="@linkMantenimientoProducto">@Html.ActionLink("Producto - Crear/Modificar ", "Index", "Producto")</li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+
+                    }
 
                 </ul>
 
-               @Html.Partial("_LoginPartial")
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
@@ -62,11 +271,15 @@
         </footer>
     </div>
 
+
     @Scripts.Render("~/bundles/jquery")
-   
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/js")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/footable")
     @Scripts.Render("~/bundles/jquery-chosen")
     @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/loadingModal")
+    @Scripts.Render("~/bundles/confirm")
+    @Scripts.Render("~/bundles/utiles")
 </body>
 </html>

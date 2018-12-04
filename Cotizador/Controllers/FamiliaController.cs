@@ -23,6 +23,10 @@ namespace Cotizador.Controllers
         }
 
 
+        public void ChangeFamilia()
+        {
+            this.Session["familia"] = this.Request.Params["familia"];
+        }
         public ActionResult list()
         {
             List<Familia> familiaListTmp = (List<Familia>)this.Session["familiaList"];

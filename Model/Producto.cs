@@ -17,47 +17,59 @@ namespace Model
         public Byte[] image { get; set; }
         public String unidad { get; set; }
         public String proveedor { get; set; }
-        public Decimal precioLista { get; set; }
-        public Decimal precioProvinciaSinIgv { get; set; }
-       // public Decimal valor { get; set; }
         public String familia { get; set; }
         public String clase { get; set; }
         public String marca { get; set; }
 
+
+
+
+
+        public Decimal precioLista { get; set; }
+        public Decimal precioProvinciaSinIgv { get; set; }
+       
+
         private String _unidad_alternativa;
         public String unidad_alternativa
         {
-            get { return equivalencia==1?String.Empty:_unidad_alternativa; }
+            //        get { return equivalencia == 1?String.Empty:_unidad_alternativa; }
+            get { return _unidad_alternativa; }
             set { _unidad_alternativa = value; }
         }
+
+       // private int _equivalencia;
         public int equivalencia { get; set; }
 
-        public Decimal precioSinIgv { get; set; }
+       // private Decimal _precioSinIgv;
 
-        public Decimal precioAlternativoSinIgv {
-            get {
-                return  Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioSinIgv / equivalencia));
+        public Decimal precioSinIgv {      get;set;    }
+
+        public Decimal precioAlternativoSinIgv
+        {
+            get
+            {
+                return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioSinIgv / (equivalencia==0?1:equivalencia )));
             }
         }
-
 
         public List<PrecioClienteProducto> precioListaList { get; set; }
 
-        public Decimal? precioNeto { get; set; }
-        public Decimal costoSinIgv { get; set; }
-        public Decimal costoAlternativoSinIgv {
+        public Decimal costoSinIgv { get;set; }
+
+        public Decimal costoAlternativoSinIgv
+        {
             get
             {
-                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoSinIgv / equivalencia));
+                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoSinIgv / (equivalencia == 0 ? 1 : equivalencia)));
             }
         }
-
-
 
         public Decimal costoLista { get; set; }
         public override string ToString()
         {
             return this.sku.Trim() + " - " + this.descripcion;
         }
+
+        public PrecioClienteProducto precioClienteProducto { get; set; }
     }
 }

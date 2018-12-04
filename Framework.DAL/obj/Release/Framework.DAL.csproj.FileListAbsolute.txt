@@ -21,3 +21,4 @@ C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\obj\Release\Framework.DAL.d
 C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\obj\Release\Framework.DAL.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\bin\Release\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\bin\Release\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\bin\Release\Model.dll.config

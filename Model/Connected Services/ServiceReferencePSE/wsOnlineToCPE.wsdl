@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="wsOnlineToCPE" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" />
+      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Commons" />
+      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA" />
+      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IwsOnlineToCPE_callProcessOnline_InputMessage">
+    <wsdl:part name="parameters" element="tns:callProcessOnline" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callProcessOnline_OutputMessage">
+    <wsdl:part name="parameters" element="tns:callProcessOnlineResponse" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callStateCPE_InputMessage">
+    <wsdl:part name="parameters" element="tns:callStateCPE" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callStateCPE_OutputMessage">
+    <wsdl:part name="parameters" element="tns:callStateCPEResponse" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callExtractCPE_InputMessage">
+    <wsdl:part name="parameters" element="tns:callExtractCPE" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callExtractCPE_OutputMessage">
+    <wsdl:part name="parameters" element="tns:callExtractCPEResponse" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callProcessUpd_InputMessage">
+    <wsdl:part name="parameters" element="tns:callProcessUpd" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callProcessUpd_OutputMessage">
+    <wsdl:part name="parameters" element="tns:callProcessUpdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callPreview_InputMessage">
+    <wsdl:part name="parameters" element="tns:callPreview" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callPreview_OutputMessage">
+    <wsdl:part name="parameters" element="tns:callPreviewResponse" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_CallRequestLow_InputMessage">
+    <wsdl:part name="parameters" element="tns:CallRequestLow" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_CallRequestLow_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CallRequestLowResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IwsOnlineToCPE">
+    <wsdl:operation name="callProcessOnline">
+      <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callProcessOnline" message="tns:IwsOnlineToCPE_callProcessOnline_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callProcessOnlineResponse" message="tns:IwsOnlineToCPE_callProcessOnline_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="callStateCPE">
+      <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callStateCPE" message="tns:IwsOnlineToCPE_callStateCPE_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callStateCPEResponse" message="tns:IwsOnlineToCPE_callStateCPE_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="callExtractCPE">
+      <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callExtractCPE" message="tns:IwsOnlineToCPE_callExtractCPE_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callExtractCPEResponse" message="tns:IwsOnlineToCPE_callExtractCPE_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="callProcessUpd">
+      <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callProcessUpd" message="tns:IwsOnlineToCPE_callProcessUpd_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callProcessUpdResponse" message="tns:IwsOnlineToCPE_callProcessUpd_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="callPreview">
+      <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callPreview" message="tns:IwsOnlineToCPE_callPreview_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callPreviewResponse" message="tns:IwsOnlineToCPE_callPreview_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CallRequestLow">
+      <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/CallRequestLow" message="tns:IwsOnlineToCPE_CallRequestLow_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/CallRequestLowResponse" message="tns:IwsOnlineToCPE_CallRequestLow_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IwsOnlineToCPE" type="tns:IwsOnlineToCPE">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="callProcessOnline">
+      <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/callProcessOnline" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="callStateCPE">
+      <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/callStateCPE" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="callExtractCPE">
+      <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/callExtractCPE" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="callProcessUpd">
+      <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/callProcessUpd" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="callPreview">
+      <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/callPreview" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CallRequestLow">
+      <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/CallRequestLow" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="wsOnlineToCPE">
+    <wsdl:port name="BasicHttpBinding_IwsOnlineToCPE" binding="tns:BasicHttpBinding_IwsOnlineToCPE">
+      <soap:address location="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

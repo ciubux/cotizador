@@ -337,129 +337,13 @@ C:\Users\cesar\Documents\projects\cotizador\Cotizador\bin\es\Microsoft.Owin.Secu
 C:\Users\cesar\Documents\projects\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Documents\projects\cotizador\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\cesar\Documents\projects\cotizador\Cotizador\obj\Debug\Cotizador.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\ApplicationInsights.config
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\csc.exe
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\Microsoft.CSharp.Core.targets
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\Microsoft.VisualBasic.Core.targets
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\System.Collections.Immutable.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\System.Reflection.Metadata.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\vbc.exe
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\VBCSCompiler.exe
-D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\VBCSCompiler.exe.config
-D:\Repo\freelos\cotizador\Cotizador\bin\Cotizador.dll.config
-D:\Repo\freelos\cotizador\Cotizador\bin\Cotizador.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Cotizador.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\Antlr3.Runtime.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\BusinessLayer.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\CotizadorPDF.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\EntityFramework.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\EntityFramework.SqlServer.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.Agent.Intercept.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.DependencyCollector.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.PerfCounterCollector.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.Web.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.WindowsServer.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.ApplicationInsights.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.Core.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.Owin.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Host.SystemWeb.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Cookies.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Facebook.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Google.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.OAuth.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Twitter.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Web.Infrastructure.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Model.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Newtonsoft.Json.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Owin.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.Helpers.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.Mvc.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.Optimization.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.Razor.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.Deployment.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.Razor.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\WebGrease.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\DataLayer.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.Settings.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Spire.License.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.mshtml.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Framework.WebCommon.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\BusinessLayer.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\CotizadorPDF.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\Model.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.DependencyCollector.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.Web.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.WindowsServer.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.ApplicationInsights.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.Helpers.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.Mvc.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.Optimization.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.Razor.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.Deployment.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.Razor.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Antlr3.Runtime.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\Newtonsoft.Json.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\EntityFramework.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\EntityFramework.SqlServer.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.Core.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.Owin.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Host.SystemWeb.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Facebook.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Cookies.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.OAuth.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Google.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Twitter.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\DataLayer.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.Settings.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\Framework.WebCommon.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\es\System.Web.Helpers.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\System.Web.Mvc.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\System.Web.Optimization.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\System.Web.Razor.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\System.Web.WebPages.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\System.Web.WebPages.Deployment.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\System.Web.WebPages.Razor.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\EntityFramework.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\EntityFramework.SqlServer.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Host.SystemWeb.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Facebook.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
-D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
-D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\cotizadorPDF.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Spire.Pdf.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Spire.License.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\Microsoft.mshtml.dll
 C:\Users\cesar\Source\Repos\cotizador\Cotizador\bin\cotizadorPDF.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\ApplicationInsights.config
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\roslyn\csc.exe
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -510,6 +394,7 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OOXML.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OpenXml4Net.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\NPOI.OpenXmlFormats.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Owin.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\ServiceLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Helpers.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Mvc.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.Optimization.dll
@@ -529,6 +414,10 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\BusinessLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\BusinessLayer.dll.config
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\CotizadorPDF.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\ServiceLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.xml
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.SqlServer.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.DependencyCollector.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AI.Web.xml
@@ -545,8 +434,6 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.WebPages.Deploym
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\System.Web.WebPages.Razor.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Antlr3.Runtime.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Newtonsoft.Json.xml
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.xml
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\EntityFramework.SqlServer.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.Core.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.Owin.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.xml
@@ -566,6 +453,8 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Framework.DAL.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Framework.DAL.Settings.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Spire.License.xml
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\EntityFramework.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\EntityFramework.SqlServer.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.Helpers.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.Mvc.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.Optimization.resources.dll
@@ -573,8 +462,6 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.Razor.resourc
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.WebPages.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.WebPages.Deployment.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\System.Web.WebPages.Razor.resources.dll
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\EntityFramework.resources.dll
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\EntityFramework.SqlServer.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
@@ -585,7 +472,531 @@ C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\cesar\Documents\MP2\cotizador\Cotizador\obj\Debug\Cotizador.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\ApplicationInsights.config
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\csc.exe
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\vbc.exe
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\VBCSCompiler.exe
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Cotizador.dll.config
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Cotizador.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Cotizador.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Antlr3.Runtime.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\BusinessLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\CotizadorPDF.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\EntityFramework.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\EntityFramework.SqlServer.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.Web.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.ApplicationInsights.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.Google.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Model.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Newtonsoft.Json.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\NPOI.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\NPOI.OOXML.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\NPOI.OpenXml4Net.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\NPOI.OpenXmlFormats.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Owin.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\ServiceLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Spire.License.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Spire.Pdf.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.Helpers.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.Mvc.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.Optimization.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.Razor.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.WebPages.Deployment.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.WebPages.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.WebPages.Razor.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\WebGrease.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\DataLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.mshtml.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Framework.DAL.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\BusinessLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\BusinessLayer.dll.config
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\CotizadorPDF.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\ServiceLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\EntityFramework.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\EntityFramework.SqlServer.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.Web.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.ApplicationInsights.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\NPOI.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Spire.License.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Spire.Pdf.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.Helpers.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.Mvc.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.Optimization.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.Razor.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.WebPages.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.WebPages.Deployment.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\System.Web.WebPages.Razor.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Antlr3.Runtime.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Newtonsoft.Json.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\DataLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\DataLayer.dll.config
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Framework.DAL.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\EntityFramework.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\EntityFramework.SqlServer.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\System.Web.Helpers.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\System.Web.Mvc.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\System.Web.Optimization.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\System.Web.Razor.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\System.Web.WebPages.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\System.Web.WebPages.Deployment.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\System.Web.WebPages.Razor.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\Microsoft.Owin.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\Microsoft.Owin.Host.SystemWeb.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\Microsoft.Owin.Security.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\Microsoft.Owin.Security.Facebook.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\ICSharpCode.SharpZipLib.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.csprojAssemblyReference.cache
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\ApplicationInsights.config
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\csc.exe
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\vbc.exe
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\VBCSCompiler.exe
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Cotizador.dll.config
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Cotizador.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Cotizador.pdb
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Antlr3.Runtime.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\BusinessLayer.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\CotizadorPDF.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\EntityFramework.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\EntityFramework.SqlServer.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\ICSharpCode.SharpZipLib.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.Web.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.ApplicationInsights.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Google.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Model.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Newtonsoft.Json.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\NPOI.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\NPOI.OOXML.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\NPOI.OpenXml4Net.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\NPOI.OpenXmlFormats.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Owin.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\ServiceLayer.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.Helpers.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.Mvc.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.Optimization.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.Razor.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Razor.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\WebGrease.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\DataLayer.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Spire.Pdf.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Framework.DAL.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Framework.DAL.Settings.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Spire.License.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.mshtml.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Framework.WebCommon.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\BusinessLayer.pdb
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\BusinessLayer.dll.config
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\CotizadorPDF.pdb
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Model.pdb
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Model.dll.config
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\ServiceLayer.pdb
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\EntityFramework.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\EntityFramework.SqlServer.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.Web.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.ApplicationInsights.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\NPOI.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.Helpers.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.Mvc.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.Optimization.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.Razor.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Razor.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Antlr3.Runtime.pdb
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Newtonsoft.Json.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\DataLayer.pdb
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\DataLayer.dll.config
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Spire.Pdf.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Framework.DAL.pdb
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Framework.DAL.Settings.pdb
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Spire.License.xml
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\Framework.WebCommon.pdb
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\EntityFramework.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\EntityFramework.SqlServer.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\System.Web.Helpers.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\System.Web.Mvc.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\System.Web.Optimization.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\System.Web.Razor.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\System.Web.WebPages.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\System.Web.WebPages.Deployment.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\System.Web.WebPages.Razor.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Host.SystemWeb.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.Facebook.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.dll
+C:\Users\Administrador\Desktop\base2\cotizador-devInvoice\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\ApplicationInsights.config
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\csc.exe
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\vbc.exe
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\VBCSCompiler.exe
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Cotizador.dll.config
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Cotizador.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Cotizador.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Antlr3.Runtime.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\BusinessLayer.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\CotizadorPDF.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\EntityFramework.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\EntityFramework.SqlServer.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\ICSharpCode.SharpZipLib.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.Web.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.ApplicationInsights.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Google.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Model.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Newtonsoft.Json.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\NPOI.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\NPOI.OOXML.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\NPOI.OpenXml4Net.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\NPOI.OpenXmlFormats.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Owin.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\ServiceLayer.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.Helpers.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.Mvc.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.Optimization.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.Razor.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Razor.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\WebGrease.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\DataLayer.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Spire.Pdf.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Framework.DAL.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Framework.DAL.Settings.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Spire.License.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.mshtml.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Framework.WebCommon.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\BusinessLayer.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\BusinessLayer.dll.config
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\CotizadorPDF.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Model.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Model.dll.config
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\ServiceLayer.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\EntityFramework.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\EntityFramework.SqlServer.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.Web.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.ApplicationInsights.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\NPOI.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.Helpers.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.Mvc.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.Optimization.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.Razor.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Razor.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Antlr3.Runtime.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Newtonsoft.Json.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\DataLayer.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\DataLayer.dll.config
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Spire.Pdf.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Framework.DAL.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Framework.DAL.Settings.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Spire.License.xml
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\Framework.WebCommon.pdb
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\EntityFramework.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\EntityFramework.SqlServer.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\System.Web.Helpers.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\System.Web.Mvc.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\System.Web.Optimization.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\System.Web.Razor.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\System.Web.WebPages.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\System.Web.WebPages.Deployment.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\System.Web.WebPages.Razor.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Host.SystemWeb.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.Facebook.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.csprojAssemblyReference.cache
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.dll
+C:\Users\Administrador\Desktop\FINAQQW\2\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\ApplicationInsights.config
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\csc.exe
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\vbc.exe
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\VBCSCompiler.exe
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Cotizador.dll.config
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Cotizador.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Cotizador.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Antlr3.Runtime.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\BusinessLayer.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\CotizadorPDF.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\EntityFramework.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\EntityFramework.SqlServer.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.Web.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.ApplicationInsights.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Google.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Model.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Newtonsoft.Json.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Owin.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\ServiceLayer.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.Helpers.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.Mvc.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.Optimization.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.Razor.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Razor.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\WebGrease.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\DataLayer.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Spire.Pdf.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Framework.DAL.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Framework.DAL.Settings.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Spire.License.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.mshtml.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Framework.WebCommon.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\BusinessLayer.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\BusinessLayer.dll.config
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\CotizadorPDF.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Model.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Model.dll.config
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\ServiceLayer.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\EntityFramework.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\EntityFramework.SqlServer.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.Web.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.ApplicationInsights.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\NPOI.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.Helpers.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.Mvc.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.Optimization.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.Razor.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\System.Web.WebPages.Razor.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Antlr3.Runtime.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Newtonsoft.Json.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\DataLayer.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\DataLayer.dll.config
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Spire.Pdf.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Framework.DAL.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Framework.DAL.Settings.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Spire.License.xml
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\Framework.WebCommon.pdb
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\EntityFramework.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\EntityFramework.SqlServer.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\System.Web.Helpers.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\System.Web.Mvc.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\System.Web.Optimization.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\System.Web.Razor.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\System.Web.WebPages.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\System.Web.WebPages.Deployment.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\System.Web.WebPages.Razor.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Host.SystemWeb.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.Facebook.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.csprojAssemblyReference.cache
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.dll
+C:\Users\Administrador\Desktop\Nueva carpeta\FINAL FINAL\FINAL FINAL\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.pdb

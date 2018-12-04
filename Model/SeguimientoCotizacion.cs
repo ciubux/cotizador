@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Model
 {
-    public class SeguimientoCotizacion
+    public class SeguimientoCotizacion : Auditoria
     {
         public SeguimientoCotizacion()
         {
@@ -24,13 +24,17 @@ namespace Model
             Aprobada = 1,
             [Display(Name = "Denegada")]
             Denegada = 2,
-            [Display(Name = "Aceptada")]
+            [Display(Name = "Aceptada por Cliente")]
             Aceptada = 3,
-            [Display(Name = "Rechazada")]
+            [Display(Name = "Rechazada por Cliente")]
             Rechazada = 4,
             [Display(Name = "En Edición")]
-            Edicion = 5
+            Edicion = 5,
+            [Display(Name = "Eliminada")]
+            Eliminada = 6
         };
+
+        public Guid idSeguimientoCotizacion { get; set; }
 
         public estadosSeguimientoCotizacion estado { get; set; }
         public String observacion { get; set; }

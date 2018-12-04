@@ -20,6 +20,12 @@ namespace Model
         public Decimal precioUnitario { get; set; }
         public String numeroCotizacion { get; set; }
 
+        public int equivalencia { get; set; }
+
+        public Cliente cliente { get; set; }
+
+        public Producto producto { get; set; }
+
     /*    public String nombreVista
         {
             get { return codigo + "(" + nombre + ")"; }

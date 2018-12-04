@@ -25,5 +25,9 @@ namespace Model
             }
         }
 
+        public string FechaRegistroDesc
+        {
+            get { return FechaRegistro.ToString("dd/MM/yyyy HH:mm:ss"); }
+        }
     }
 }

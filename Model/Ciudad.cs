@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -13,10 +14,26 @@ namespace Model
 
         public int orden { get; set; }
 
-        public bool esProvincia {
-            get {
-                return this.orden > 1; 
-                    }
-        }
+        [Display(Name = "Punto Partida:")]
+        public String direccionPuntoPartida { get; set; }
+
+        [Display(Name = "Punto Llegada:")]
+        public String direccionPuntoLlegada { get; set; }
+
+        public bool esProvincia { get; set; }  
+
+        public List<Transportista> transportistaList { get; set; }
+
+        public String serieGuiaRemision { get; set; }
+
+        public int siguienteNumeroGuiaRemision { get; set; }
+
+        public String serieNotaIngreso { get; set; }
+
+        public int siguienteNumeroNotaIngreso { get; set; }
+        public String sede { get; set; }
+
+        public List<SerieDocumentoElectronico> serieDocumentoElectronicoList { get; set; }
+
     }
 }

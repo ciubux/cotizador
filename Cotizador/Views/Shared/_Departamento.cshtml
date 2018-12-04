@@ -1,0 +1,12 @@
+﻿@model Cotizador.Models.DepartamentoViewModels
+
+@Html.DropDownList(
+    Model.DepartamentoSelectId, 
+    Model.Departamentos, "Seleccione el departamento",
+    new
+    {
+        id = Model.DepartamentoSelectId,
+        @class = "form-control",
+        onchange = $"onChangeDepartamento('{Model.DepartamentoSelectId}','{Model.ProvinciaSelectId}','{Model.DistritoSelectId}','" +
+                   $"{Model.ProvinciaDivId}','{Model.DistritoDivId}','{Model.UrlProvinciasPorDepartamento}','{Model.UrlDistritosPorProvincia}');"
+    })

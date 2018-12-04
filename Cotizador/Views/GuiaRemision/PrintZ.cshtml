@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "Vista Previa Impresión Guía Remisión";
+    Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
+
+}
+
+<div>
+
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" id="idGuiaRemision" value="" />
+
+    <div>
+        <div class="row row_uno">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.fechaEmisionFormatoImpresion</div>
+            <div class="col_tres">@guiaRemision.fechaTrasladoFormatoImpresion</div>
+        </div>
+
+        <div class="row row_dos">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.pedido.cliente.razonSocial</div>
+            <div class="col_tres">@guiaRemision.pedido.cliente.codigo</div>
+            <div class="col_cuato">@guiaRemision.serieNumeroGuia</div>
+        </div>
+
+        <div class="row row_tres">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.pedido.cliente.domicilioLegal.Substring(0,10)</div>
+        </div>
+
+        <div class="row row_cuatro">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.pedido.cliente.ruc</div>
+            <div class="col_tres"></div>
+            <div class="col_cuatro"></div>
+        </div>
+
+        <div class="row row_cinco">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.observaciones</div>
+        </div>
+
+
+        <div class="row row_seis">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.ciudadOrigen.direccionPuntoPartida</div>
+        </div>
+
+        <div class="row row_siete">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.pedido.direccionEntrega.descripcion</div>
+        </div>
+
+
+
+
+    </div>
+
+
+    <div class="detalle">
+
+        @foreach (Model.DocumentoDetalle documentoDetalle in @guiaRemision.documentoDetalle)
+        {
+            <div class="row row_detalle">
+                <div class="col_uno">@documentoDetalle.producto.sku</div>
+                <div class="col_dos">@documentoDetalle.cantidad</div>
+                <div class="col_tres">@documentoDetalle.unidad</div>
+                <div class="col_cuatro">@(documentoDetalle.producto.skuProveedor+" - "+documentoDetalle.producto.descripcion)</div>
+            </div>
+
+        }
+
+
+
+    </div>
+
+
+    <div>
+        <div class="row row_ocho">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.transportista.descripcion</div>
+        </div>
+
+        <div class="row row_nueve">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.transportista.direccion</div>
+        </div>
+
+        <div class="row row_diez">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.transportista.ruc</div>
+            <div class="col_tres">@guiaRemision.certificadoInscripcion</div>
+        </div>
+
+        <div class="row row_once">
+            <div class="col_uno">&nbsp;</div>
+            <div class="col_dos">@guiaRemision.placaVehiculo</div>
+            <div class="col_tres">@guiaRemision.transportista.brevete</div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/guiaRemision")
+
+}
+
+@Styles.Render("~/Content/PrintGuiaZ")
+
+

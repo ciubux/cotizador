@@ -63,3 +63,10 @@ C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\obj\Release\BusinessLayer.c
 C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\obj\Release\BusinessLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\obj\Release\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\obj\Release\BusinessLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\BusinessLayer.dll.config
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\ServiceLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\ServiceLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\NPOI.dll
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\ICSharpCode.SharpZipLib.dll
+C:\Users\cesar\Documents\MP2\cotizador\BusinessLayer\bin\Release\NPOI.xml

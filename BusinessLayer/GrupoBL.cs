@@ -6,20 +6,28 @@ using Model;
 
 namespace BusinessLayer
 {
-    public class GrupoBL
+    public class GrupoClienteBL
     {
-        public List<Grupo> getGruposBusqueda(String textoBusqueda)
+        public List<GrupoCliente> getGruposBusqueda(String textoBusqueda)
         {
-            using (var grupoDAL = new GrupoDAL())
+            using (var grupoDAL = new GrupoClienteDAL())
             {
                 return grupoDAL.getGruposBusqueda(textoBusqueda);
             }
         }
-        public Grupo getGrupo(Guid idGrupo)
+        public GrupoCliente getGrupo(Guid idGrupo)
         {
-            using (var grupoDAL = new GrupoDAL())
+            using (var grupoDAL = new GrupoClienteDAL())
             {
                 return grupoDAL.getGrupo(idGrupo);
+            }
+        }
+
+        public List<GrupoCliente> getGruposCliente()
+        {
+            using (var grupoDAL = new GrupoClienteDAL())
+            {
+                return grupoDAL.getGruposCliente();
             }
         }
     }

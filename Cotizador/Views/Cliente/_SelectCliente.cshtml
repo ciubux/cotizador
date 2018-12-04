@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Model.Cliente>
+
+@Html.DropDownList("cliente",
+new SelectList(Model, "idCliente", "razonSocial", ((Model.Pedido)this.Session["pedidoBusqueda"]).cliente.idCliente),
+new { @class = "form-control ", onchange = @"
+$.ajax({
+url: '/Pedido/GetCliente',
+type: 'POST',
+dataType: 'JSON',
+data: {
+    idCliente: this.value
+}
+});
+" })

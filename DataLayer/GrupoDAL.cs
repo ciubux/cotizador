@@ -7,31 +7,31 @@ using Model;
 
 namespace DataLayer
 {
-    public class GrupoDAL : DaoBase
+    public class GrupoClienteDAL : DaoBase
     {
-        public GrupoDAL(IDalSettings settings) : base(settings)
+        public GrupoClienteDAL(IDalSettings settings) : base(settings)
         {
         }
 
-        public GrupoDAL() : this(new CotizadorSettings())
+        public GrupoClienteDAL() : this(new CotizadorSettings())
         {
         }
 
     
 
 
-        public List<Grupo> getGruposBusqueda(String textoBusqueda)
+        public List<GrupoCliente> getGruposBusqueda(String textoBusqueda)
         {
             var objCommand = GetSqlCommand("ps_getgrupos_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
             DataTable dataTable = Execute(objCommand);
-            List<Grupo> grupoList = new List<Grupo>();
+            List<GrupoCliente> grupoList = new List<GrupoCliente>();
 
             foreach (DataRow row in dataTable.Rows)
             {
-                Grupo grupo = new Grupo
+                GrupoCliente grupo = new GrupoCliente
                 {
-                    idGrupo = Converter.GetGuid(row, "id_grupo"),
+                    idGrupoCliente = Converter.GetInt(row, "id_grupo"),
                     codigo = Converter.GetString(row, "codigo"),
                     nombre = Converter.GetString(row, "nombre"),
                 };
@@ -40,22 +40,42 @@ namespace DataLayer
             return grupoList;
         }
 
-        public Grupo getGrupo(Guid idGrupo)
+        public GrupoCliente getGrupo(Guid idGrupo)
         {
             var objCommand = GetSqlCommand("ps_getgrupo");
             InputParameterAdd.Guid(objCommand, "idGrupo", idGrupo);
             DataTable dataTable = Execute(objCommand);
-            Grupo obj = new Grupo();
+            GrupoCliente obj = new GrupoCliente();
 
             foreach (DataRow row in dataTable.Rows)
             {
-                obj.idGrupo = Converter.GetGuid(row, "id_grupo");
+                obj.idGrupoCliente = Converter.GetInt(row, "id_grupo");
                 obj.codigo = Converter.GetString(row, "codigo");
                 obj.nombre = Converter.GetString(row, "nombre");
-                obj.contacto = Converter.GetString(row, "contacto");
+                //obj.contacto = Converter.GetString(row, "contacto");
             }
 
             return obj;
+        }
+
+
+        public List<GrupoCliente> getGruposCliente()
+        {
+            var objCommand = GetSqlCommand("ps_gruposCliente");
+            //InputParameterAdd.Guid(objCommand, "idGrupo", idGrupo);
+            DataTable dataTable = Execute(objCommand);
+            List<GrupoCliente> grupoClienteList = new List<GrupoCliente>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                GrupoCliente grupoCliente = new GrupoCliente();
+                grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                grupoCliente.codigo = Converter.GetString(row, "codigo");
+                grupoCliente.nombre = Converter.GetString(row, "nombre");
+                grupoClienteList.Add(grupoCliente);
+            }
+
+            return grupoClienteList;
         }
     }
 }
