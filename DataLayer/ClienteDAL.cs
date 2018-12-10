@@ -100,10 +100,13 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_cliente");
             InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
-            DataTable dataTable = Execute(objCommand);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable dataTableCliente = dataSet.Tables[0];
+            DataTable dataTableAdjunto = dataSet.Tables[1];
+
             Cliente cliente = new Cliente();
 
-            foreach (DataRow row in dataTable.Rows)
+            foreach (DataRow row in dataTableCliente.Rows)
             {
                 cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 cliente.codigo = Converter.GetString(row, "codigo");
@@ -223,6 +226,15 @@ namespace DataLayer
                 cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
                 cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
             }
+
+            foreach (DataRow row in dataTableAdjunto.Rows)
+            {
+                ClienteAdjunto clienteAdjunto = new ClienteAdjunto();
+                clienteAdjunto.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
+                clienteAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
+                clienteAdjunto.nombre = Converter.GetString(row, "nombre");
+                cliente.clienteAdjuntoList.Add(clienteAdjunto);
+            }          
 
             return cliente;
         }
@@ -443,11 +455,33 @@ namespace DataLayer
             cliente.codigoAlterno = (Int32)objCommand.Parameters["@codigoAlterno"].Value;
             cliente.codigo = (String)objCommand.Parameters["@codigo"].Value;
 
+
+            foreach (ClienteAdjunto clienteAdjunto in cliente.clienteAdjuntoList)
+            {
+                clienteAdjunto.idCliente = cliente.idCliente;
+                clienteAdjunto.usuario = cliente.usuario;
+                this.InsertClienteAdjunto(clienteAdjunto);
+            }
+
             return cliente;
 
         }
 
 
+        public void InsertClienteAdjunto(ClienteAdjunto clienteAdjunto)
+        {
+            var objCommand = GetSqlCommand("pi_clienteAdjunto");
+            //InputParameterAdd.Guid(objCommand, "idPedido", pedidoAdjunto.idPedido);
+            InputParameterAdd.Guid(objCommand, "idCliente", clienteAdjunto.idCliente);
+            InputParameterAdd.Varchar(objCommand, "nombre", clienteAdjunto.nombre);
+            InputParameterAdd.VarBinary(objCommand, "adjunto", clienteAdjunto.adjunto);
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", clienteAdjunto.usuario.idUsuario);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idArchivoAdjunto");
+            ExecuteNonQuery(objCommand);
+
+            clienteAdjunto.idArchivoAdjunto = (Guid)objCommand.Parameters["@idArchivoAdjunto"].Value;
+        }
 
         public Cliente updateClienteSunat(Cliente cliente)
         {
@@ -535,7 +569,14 @@ namespace DataLayer
             cliente.usuarioSolicitante = new Usuario();
             cliente.usuarioSolicitante.idUsuario = (Guid)objCommand.Parameters["@usuarioSolicitanteCredito"].Value;
             cliente.usuarioSolicitante.email = (String)objCommand.Parameters["@correoUsuarioSolicitanteCredito"].Value;
-            
+
+            foreach (ClienteAdjunto clienteAdjunto in cliente.clienteAdjuntoList)
+            {
+                clienteAdjunto.idCliente = cliente.idCliente;
+                clienteAdjunto.usuario = cliente.usuario;
+                this.InsertClienteAdjunto(clienteAdjunto);
+            }
+
             return cliente;
         }
 

@@ -1165,9 +1165,14 @@ jQuery(function ($) {
 
         $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
         $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
+        var fecha = new Date();
+        var month = fecha.getMonth() + 1;
+        var day = fecha.getDate();
 
+        var fechaHoy = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + fecha.getFullYear();
 
-        $("#documentoVenta_fechaEmision").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
+        //$("#documentoVenta_fechaEmision").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
+       $("#documentoVenta_fechaEmision").val(fechaHoy);
         $("#documentoVenta_fechaVencimiento").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
         $("#documentoVenta_horaEmision").val(getHoraActual());
 
@@ -2423,15 +2428,25 @@ jQuery(function ($) {
 
     $("#btnIniciarGenerarVenta").click(function () {
 
+        $("#btnCancelarVerVentaConsolidada").attr("disabled", "disabled");
+        $("#btnGenerarReporteDetallado").attr("disabled", "disabled");
+        $("#btnIniciarGenerarVenta").attr("disabled","disabled");
+
+
         $.ajax({
             url: "/GuiaRemision/validarPreciosVentaConsolidada",
             type: 'POST',
           //  dataType: 'json',
            // contentType: 'application/json',
             error: function (detalle) {
-            
+                $("#btnCancelarVerVentaConsolidada").removeAttr("disabled");    
+                $("#btnGenerarReporteDetallado").removeAttr("disabled");    
+                $("#btnIniciarGenerarVenta").removeAttr("disabled");    
             },
             success: function (resultado) {
+                $("#btnCancelarVerVentaConsolidada").removeAttr("disabled");
+                $("#btnGenerarReporteDetallado").removeAttr("disabled");    
+                $("#btnIniciarGenerarVenta").removeAttr("disabled");    
                 if (resultado != "") {
                     $.alert({
                         title: "Precios Inválidos",
@@ -2784,6 +2799,59 @@ jQuery(function ($) {
 
 
     $("#btnGenerarReporteDetallado").click(function () {
+
+        $("#modalIngresarDatosReporteDetallado").modal();
+
+
+
+        $("#tableReporteDetalladoConfirmacion > tbody").empty();
+        $("#tableReporteDetalladoConfirmacion").footable();
+
+        for (var i = 0; i < ventaDetalleList.length; i++) {
+
+            var unidad = "";
+            var cantidad = 1;
+            /*Si la equivalencia es 1 quiere decir que no cuenta con unidad alternativa*/
+            if (ventaDetalleList[i].producto.equivalencia == 1) {
+                unidad = "<select class='form-control selectUnidadReporteDetallado'  sku='" + ventaDetalleList[i].producto.sku + "'  idProducto='" + ventaDetalleList[i].producto.idProducto + "'  >" +
+                    "<option esUnidadAlternativa='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>" +
+                    "</select > ";
+                cantidad = ventaDetalleList[i].sumCantidadUnidadEstandar;
+            }
+            else {
+                unidad = "<select class='form-control selectUnidadReporteDetallado'  sku='" + ventaDetalleList[i].producto.sku + "'  idProducto='" + ventaDetalleList[i].producto.idProducto + "'  >" +
+                    "<option esUnidadAlternativa='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>" +
+                    "<option esUnidadAlternativa='1' cantidad='" + ventaDetalleList[i].sumCantidadUnidadAlternativa + "'> " + ventaDetalleList[i].producto.unidad_alternativa + "</option>" +
+                    "</select > ";
+                cantidad = ventaDetalleList[i].sumCantidadUnidadEstandar;
+            }
+
+            var ventaDetalle = '<tr data-expanded="false">' +
+                '<td>  ' + ventaDetalleList[i].producto.idProducto + '</td>' +
+                '<td>  ' + ventaDetalleList[i].producto.sku + '</td>' +
+                '<td>  ' + ventaDetalleList[i].producto.descripcion + '</td>' +
+                '<td> ' + unidad + '</td>' +
+                '<td style="text-align: right" id="cantidadSeleccionada' + ventaDetalleList[i].producto.idProducto + '"> ' + cantidad + '</td>' +
+                '<td style="text-align: right" >  ' + ventaDetalleList[i].sumPrecioUnitario.toFixed(cantidadDecimales) + '</td>' +
+                '</tr>';
+
+            $("#tableReporteDetalladoConfirmacion").append(ventaDetalle);
+        }
+
+    });
+
+
+    $("#btnContinuarReporteDetallado").click(function () {
+
+
+        var serieUnidadesAlternativas = "";
+
+        var $j_object = $(".selectUnidadReporteDetallado");
+        $.each($j_object, function (key, value) {
+            serieUnidadesAlternativas = serieUnidadesAlternativas + $(this).find('option:selected').attr("esUnidadAlternativa");
+        });
+
+
         $("#guiaRemisionList > li").remove().end();
         var json = '[ ';
         var count = 0;
@@ -2804,7 +2872,10 @@ jQuery(function ($) {
         }
 
         json = json.substr(0, json.length - 1) + ']';
-        window.open('/GuiaRemision/obtenerDetalleAtenciones');
+        
+
+
+        window.open('/GuiaRemision/obtenerDetalleAtenciones?serieUnidadesAlternativas=' + serieUnidadesAlternativas);
         /*
         $.ajax({
             url: "/GuiaRemision/obtenerDetalleAtenciones",

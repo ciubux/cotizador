@@ -650,5 +650,91 @@ namespace Cotizador.Controllers
             Cliente clienteVer = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
             this.Session[Constantes.VAR_SESSION_CLIENTE] = clienteVer;
         }
+
+
+
+        #region carga de imagenes
+
+        public void ChangeFiles(List<HttpPostedFileBase> files)
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+
+            if ((int)this.Session[Constantes.VAR_SESSION_PAGINA] == (int)Constantes.paginas.BusquedaClientes)
+                cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+
+            foreach (var file in files)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    if (cliente.clienteAdjuntoList.Where(p => p.nombre.Equals(file.FileName)).FirstOrDefault() != null)
+                    {
+                        continue;
+                    }
+
+                    ClienteAdjunto clienteAdjunto = new ClienteAdjunto();
+                    using (Stream inputStream = file.InputStream)
+                    {
+                        MemoryStream memoryStream = inputStream as MemoryStream;
+                        if (memoryStream == null)
+                        {
+                            memoryStream = new MemoryStream();
+                            inputStream.CopyTo(memoryStream);
+                        }
+                        clienteAdjunto.nombre = file.FileName;
+                        clienteAdjunto.adjunto = memoryStream.ToArray();
+                    }
+                    cliente.clienteAdjuntoList.Add(clienteAdjunto);
+                }
+            }
+
+        }
+
+
+        public String DescartarArchivos()
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            if ((int)this.Session[Constantes.VAR_SESSION_PAGINA] == (int)Constantes.paginas.BusquedaClientes)
+                cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+
+            String nombreArchivo = Request["nombreArchivo"].ToString();
+
+            List<ClienteAdjunto> clienteAdjuntoList = new List<ClienteAdjunto>();
+            foreach (ClienteAdjunto clienteAdjunto in cliente.clienteAdjuntoList)
+            {
+                if (!clienteAdjunto.nombre.Equals(nombreArchivo))
+                    clienteAdjuntoList.Add(clienteAdjunto);
+            }
+
+            cliente.clienteAdjuntoList = clienteAdjuntoList;
+
+            return JsonConvert.SerializeObject(cliente.clienteAdjuntoList);
+        }
+
+        public String Descargar()
+        {
+            String nombreArchivo = Request["nombreArchivo"].ToString();
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+
+            if ((int)this.Session[Constantes.VAR_SESSION_PAGINA] == (int)Constantes.paginas.BusquedaClientes)
+            {
+                cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+            }
+
+            ArchivoAdjunto archivoAdjunto = cliente.clienteAdjuntoList.Where(p => p.nombre.Equals(nombreArchivo)).FirstOrDefault();
+
+            if (archivoAdjunto != null)
+            {
+                ArchivoAdjuntoBL archivoAdjuntoBL = new ArchivoAdjuntoBL();
+                archivoAdjunto = archivoAdjuntoBL.GetArchivoAdjunto(archivoAdjunto);
+                return JsonConvert.SerializeObject(archivoAdjunto);
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        #endregion
     }
 }

@@ -26,6 +26,7 @@ namespace Model
             this.horaFinPrimerTurnoEntrega = "18:00:00";
             this.horaInicioSegundoTurnoEntrega = "";
             this.horaFinSegundoTurnoEntrega = "";
+            this.clienteAdjuntoList = new List<ClienteAdjunto>();
         }
 
         public Guid idCliente { get; set; }
@@ -195,6 +196,8 @@ namespace Model
         public Boolean existenCambiosCreditos { get; set; }
 
         public Usuario usuarioSolicitante { get; set; }
+
+        public List<ClienteAdjunto> clienteAdjuntoList { get; set; }
     }
 
 }

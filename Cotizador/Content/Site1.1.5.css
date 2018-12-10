@@ -141,6 +141,10 @@ textarea {
         width: 1100px;
     }
 
+    #modalIngresarDatosReporteDetallado .modal-dialog {
+        width: 1100px;
+    }
+
     #modalVerNotasIngreso .modal-dialog {
         width: 1200px;
     }

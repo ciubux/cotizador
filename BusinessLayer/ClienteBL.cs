@@ -280,6 +280,10 @@ namespace BusinessLayer
                     cliente.asistenteServicioCliente.idVendedor = Constantes.ID_VENDEDOR_POR_ASIGNAR;
                     cliente.vendedoresAsignados = false;
                 }
+                if (cliente.asistenteServicioCliente.idVendedor == Constantes.ID_VENDEDOR_POR_ASIGNAR)
+                {
+                    cliente.vendedoresAsignados = false;
+                }
                 else if (!cliente.vendedoresAsignados)
                 {
                     cliente.vendedoresAsignados = cliente.usuario.modificaResponsableComercial;

@@ -10,8 +10,7 @@ namespace Model
 
       
         public Guid idDocumentoDetalle { get; set; }
-
-
+        
         public int cantidad { get; set; }
 
         public decimal cantidadDecimal { get; set; }
@@ -46,7 +45,10 @@ namespace Model
         {
             get
             {
-                return Decimal.Parse(String.Format(Constantes.formatoOchoDecimales, _porcentajeDescuento));
+                if(precioLista == precioNeto)
+                    return Decimal.Parse(String.Format(Constantes.formatoOchoDecimales, 0));
+                else
+                    return Decimal.Parse(String.Format(Constantes.formatoOchoDecimales, _porcentajeDescuento));
             }
             set { _porcentajeDescuento = value; }
         }
@@ -129,6 +131,7 @@ namespace Model
             get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, flete + precioNeto)); } 
         }
         
+        public bool validar { get; set; }
 
     }
 }

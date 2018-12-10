@@ -256,3 +256,38 @@ function mostrarMensajeErrorProceso(mensajeError) {
 function esEntero(numero) {
     return numero % 1 == 0;
 }
+
+
+function cargarArchivosAdjuntos(files) {
+    var numFiles = files.length;
+    var nombreArchivos = "";
+    for (i = 0; i < numFiles; i++) {
+
+        var fileFound = 0;
+        $("#nombreArchivos > li").each(function (index) {
+
+            if ($(this).find("a.descargar")[0].text == files[i].name) {
+                $.alert({
+                    title: 'Error',
+                    content: 'El archivo "' + files[i].name + '" ya se encuentra agregado.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+
+                fileFound = 1;
+            }
+        });
+
+        if (fileFound == 0) {
+
+            var liHTML = '<a href="javascript:mostrar();" class="descargar">' + files[i].name + '</a>' +
+                '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + files[i].name + '" class="btnDeleteArchivo" /></a>';
+
+            $('#nombreArchivos').append($('<li />').html(liHTML));
+        }
+    }
+
+
+}

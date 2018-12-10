@@ -68,7 +68,7 @@ namespace BusinessLayer
                 //Si no es aprobador para que la cotización se cree como aprobada el porcentaje de descuento debe ser mayor o igual 
                 //al porcentaje Limite sin aprobacion
 
-                if (!cotizacion.usuario.apruebaCotizaciones || cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion)
+                if (cotizacionDetalle.validar && (!cotizacion.usuario.apruebaCotizaciones || cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion))
                 {
                     PrecioClienteProducto precioClienteProducto = cotizacionDetalle.producto.precioClienteProducto;
 
@@ -222,7 +222,7 @@ namespace BusinessLayer
 
 
 
-        public Cotizacion GetCotizacion(Cotizacion cotizacion, Usuario usuario)
+        public Cotizacion GetCotizacion(Cotizacion cotizacion, Usuario usuario, SeguimientoCotizacion.estadosSeguimientoCotizacion? estadoAnteriorCotizacion = null)
         {
             using (var dal = new CotizacionDAL())
             {
@@ -239,8 +239,17 @@ namespace BusinessLayer
                     cotizacion.validezOfertaEnDias = diferencia.Days;
                 }
 
+                Boolean validar = true;
+                
+                if (estadoAnteriorCotizacion != null && estadoAnteriorCotizacion.Value == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
+                {
+                    validar = false;
+                }                
+
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
+
+                    cotizacionDetalle.validar = validar;
 
                     if (cotizacionDetalle.producto.image == null)
                     {

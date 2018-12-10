@@ -29,11 +29,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(String idMovimientoAlmacenList)
+        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(String idMovimientoAlmacenList, Dictionary<String,Boolean> mostrarUnidadAlternativaList = null)
         {
             using (var dal = new MovimientoALmacenDAL())
             {
-                return dal.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList);
+                return dal.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList, mostrarUnidadAlternativaList);
             }
         }
 

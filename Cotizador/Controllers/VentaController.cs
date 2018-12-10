@@ -260,16 +260,15 @@ namespace Cotizador.Controllers
                 venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
 
 
-            Pedido pedido = venta.pedido; 
+            Pedido pedido = venta.pedido;
 
-            PedidoAdjunto pedidoAdjunto = pedido.pedidoAdjuntoList.Where(p => p.nombre.Equals(nombreArchivo)).FirstOrDefault();
+            ArchivoAdjunto archivoAdjunto = pedido.pedidoAdjuntoList.Where(p => p.nombre.Equals(nombreArchivo)).FirstOrDefault();
 
-
-            if (pedidoAdjunto != null)
+            if (archivoAdjunto != null)
             {
-                PedidoBL pedidoBL = new PedidoBL();
-                pedidoAdjunto = pedidoBL.GetArchivoAdjunto(pedidoAdjunto);
-                return JsonConvert.SerializeObject(pedidoAdjunto);
+                ArchivoAdjuntoBL archivoAdjuntoBL = new ArchivoAdjuntoBL();
+                archivoAdjunto = archivoAdjuntoBL.GetArchivoAdjunto(archivoAdjunto);
+                return JsonConvert.SerializeObject(archivoAdjunto);
             }
             else
             {

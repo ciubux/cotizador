@@ -56,7 +56,7 @@ namespace DataLayer
         }
 
 
-        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(String idMovimientoAlmacenList)
+        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(String idMovimientoAlmacenList, Dictionary<String,Boolean> mostrarUnidadAlternativaList)
         {
             var objCommand = GetSqlCommand("ps_detalleConsolidadoAtenciones");
             InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
@@ -66,6 +66,8 @@ namespace DataLayer
 
             Guid idMovimientoAlmacenActual = Guid.Empty;
             GuiaRemision guiaRemision = null;
+
+            int i = 0;
             foreach (DataRow row in guiaRemisionDataTable.Rows)
             {
                
@@ -74,8 +76,10 @@ namespace DataLayer
 
                 if (idMovimientoAlmacen != idMovimientoAlmacenActual)
                 {
+                    i = 0;
                     idMovimientoAlmacenActual = idMovimientoAlmacen;
                     guiaRemision = new GuiaRemision();
+                    guiaRemision.idMovimientoAlmacen = idMovimientoAlmacenActual;
                     guiaRemisionList.Add(guiaRemision);
                     guiaRemision.documentoDetalle = new List<DocumentoDetalle>();
                     guiaRemision.pedido = new Pedido();
@@ -98,17 +102,43 @@ namespace DataLayer
                 documentoDetalle.producto.sku = Converter.GetString(row, "sku");
                 documentoDetalle.producto.unidad = Converter.GetString(row, "producto_unidad");
                 documentoDetalle.producto.equivalencia = Converter.GetInt(row, "equivalencia");
-                documentoDetalle.unidad = Converter.GetString(row, "unidad");
-                documentoDetalle.cantidadDecimal = Converter.GetDecimal(row, "cantidad");
-                documentoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+
+                //Boolean mostrarUnidadAlternativa = false;
+                documentoDetalle.esPrecioAlternativo = false;
+
+
+                if (mostrarUnidadAlternativaList != null)
+                {
+                    documentoDetalle.esPrecioAlternativo = mostrarUnidadAlternativaList[documentoDetalle.producto.sku];
+
+                   // documentoDetalle.esPrecioAlternativo = mostrarUnidadAlternativaList.GetEnumerator() [i];
+                }
+
+                //documentoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+
                 if (documentoDetalle.esPrecioAlternativo)
-                    documentoDetalle.precioNeto = (Converter.GetDecimal(row, "precio_neto") * documentoDetalle.producto.equivalencia);
-                else
-                    documentoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
-                //documentoDetalle.precioNeto
-                //vd.precio_neto* vd.cantidad as precio_neto,      
+                {
+                    documentoDetalle.esPrecioAlternativo = false;
+                    documentoDetalle.unidad = Converter.GetString(row, "unidad_alternativa");
+                    documentoDetalle.cantidadDecimal = Converter.GetDecimal(row, "cantidad_alternativa");
+
+                    /*  if (documentoDetalle.esPrecioAlternativo)
+                          documentoDetalle.precioNeto = (Converter.GetDecimal(row, "precio_neto_alternativo") * documentoDetalle.producto.equivalencia);
+                      else*/
+                    
+                    documentoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto_alternativo");
+                }
+                else {
+                    documentoDetalle.unidad = Converter.GetString(row, "unidad");
+                    documentoDetalle.cantidadDecimal = Converter.GetDecimal(row, "cantidad");
+                    /*if (documentoDetalle.esPrecioAlternativo)
+                        documentoDetalle.precioNeto = (Converter.GetDecimal(row, "precio_neto") * documentoDetalle.producto.equivalencia);
+                    else*/
+                        documentoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                } 
 
                 guiaRemision.documentoDetalle.Add(documentoDetalle);
+                i++;
             }
 
             return guiaRemisionList;

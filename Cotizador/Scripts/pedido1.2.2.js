@@ -2100,6 +2100,8 @@ jQuery(function ($) {
         });       
     }
 
+    /*CARGA Y DESCARGA DE ARCHIVOS*/
+
 
     $('input[name=filePedidos]').change(function (e) {
         //$('#nombreArchivos').val(e.currentTarget.files);
@@ -2131,39 +2133,9 @@ jQuery(function ($) {
 
 
     $('input:file[multiple]').change(   function (e) {
-        //$('#nombreArchivos').val(e.currentTarget.files);
-
-        var numFiles = e.currentTarget.files.length;
-        var nombreArchivos = "";
-        for (i = 0; i < numFiles; i++) {
-
-            var fileFound = 0;
-            $("#nombreArchivos > li").each(function (index) {           
-
-                if ($(this).find("a.descargar")[0].text == e.currentTarget.files[i].name) {
-                    alert('El archivo "' + e.currentTarget.files[i].name + '" ya se encuentra agregado.');
-                    fileFound = 1;
-                }
-            });
-
-
-            if (fileFound == 0)
-            {
-
-                var liHTML = '<a href="javascript:mostrar();" class="descargar">' + e.currentTarget.files[i].name + '</a>' +
-                    '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + e.currentTarget.files[i].name +'" class="btnDeleteArchivo" /></a>';
-
-                $('#nombreArchivos').append($('<li />').html(liHTML));
-                
-
-              ///  $('<li />').text(e.currentTarget.files[i].name).appendTo($('#nombreArchivos'));
-            }
-
-        }
-
-
+        
+        cargarArchivosAdjuntos(e.currentTarget.files);
         var data = new FormData($('#formularioConArchivos')[0]);
-
         $.ajax({
             url: "/Pedido/ChangeFiles",
             type: 'POST',
@@ -2174,8 +2146,6 @@ jQuery(function ($) {
             error: function (detalle) {    },
             success: function (resultado) {     }
         });
-
-
 
     });
 
@@ -2232,12 +2202,19 @@ jQuery(function ($) {
             error: function (detalle) {
                 alert(detalle);
             },
-            success: function (pedidoAdjunto) {
-                var sampleArr = base64ToArrayBuffer(pedidoAdjunto.adjunto);
+            success: function (archivoAdjunto) {
+                var sampleArr = base64ToArrayBuffer(archivo.adjunto);
                 saveByteArray(nombreArchivo, sampleArr);
             }
         });
     });
+
+
+
+
+
+
+
 
     /*
 

@@ -23,11 +23,11 @@
                     @Html.LabelFor(p => guiaRemision.ciudadOrigen, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                                                                          new
-                                                                          {
-                                                                              ciudadSelectId = "idCiudad",
-                                                                              selectedValue = guiaRemision.ciudadOrigen.idCiudad
-                                                                          })
+                                                                               new
+                                                                               {
+                                                                                   ciudadSelectId = "idCiudad",
+                                                                                   selectedValue = guiaRemision.ciudadOrigen.idCiudad
+                                                                               })
                     </div>
                 </div>
             </div>
@@ -409,6 +409,82 @@
     </div>
 </div>
 
+
+
+
+
+
+<div class="modal fade" id="modalIngresarDatosReporteDetallado" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="titleModalIngresarDatosReporteDetallado"><b>Información requerida para generar Reporte Detallado</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <!--
+                    <div class="row">
+                       
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                @Html.LabelFor(g => guiaRemision.pedido.cliente.razonSocial, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="ver_guiaRemision_pedido_cliente_razon_social">@guiaRemision.pedido.cliente.razonSocial</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(g => guiaRemision.pedido.cliente.ruc, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_guiaRemision_pedido_cliente_ruc">@guiaRemision.pedido.cliente.ruc</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                        -->
+
+             
+
+                    <table id="tableReporteDetalladoConfirmacion" class="table" data-editing="false">
+                        <thead>
+                            <tr>
+                                <th data-name="idProducto" data-visible="false"></th>
+                                <th data-name="sku" data-sortable="false">Código</th>
+                                <th data-name="descripcion" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Producto</th>
+                                <th data-name="unidad" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                                <th data-name="cantidad" data-sortable="false" data-breakpoints="xs">Cant.</th>
+                                <th data-name="precioUnitario" data-sortable="false">Monto Venta</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+
+
+                <div class="pull-right">
+                    <button type="button" id="btnCancelarReporteDetallado" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnContinuarReporteDetallado" class="btn btn-success">Continuar Generando Reporte Detallado</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -826,9 +902,9 @@
                                     @Html.LabelFor(dv => documentoVenta.tipoPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-8">
                                         @Html.DropDownList("tipoPago",
-                                                                       EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
-                                                                       new { @class = "form-control" }
-                                                                       )
+                                                                            EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
+                                                                            new { @class = "form-control" }
+                                                                            )
                                     </div>
                                 </div>
                             </div>
@@ -837,9 +913,9 @@
                                     @Html.LabelFor(dv => documentoVenta.formaPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-8">
                                         @Html.DropDownList("formaPago",
-                                                                       EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
-                                                                       new { @class = "form-control" }
-                                                                       )
+                                                                            EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
+                                                                            new { @class = "form-control" }
+                                                                            )
                                     </div>
                                 </div>
                             </div>

@@ -464,16 +464,6 @@ namespace BusinessLayer
             return pedido;
         }
 
-       
-        public PedidoAdjunto GetArchivoAdjunto(PedidoAdjunto pedidoAdjunto)
-        {
-            using (var dal = new PedidoDAL())
-            {
-                pedidoAdjunto = dal.SelectArchivoAdjunto(pedidoAdjunto);
-            }
-            return pedidoAdjunto;
-        }
-
 
         public Int64 GetSiguienteNumeroGrupoPedido()
         {

@@ -1159,6 +1159,8 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        #region carga de imagenes
+
         public void ChangeFiles(List<HttpPostedFileBase> files)
         {
            
@@ -1229,14 +1231,13 @@ namespace Cotizador.Controllers
 
             }
 
-            PedidoAdjunto pedidoAdjunto  = pedido.pedidoAdjuntoList.Where(p => p.nombre.Equals(nombreArchivo)).FirstOrDefault();
-
+            ArchivoAdjunto archivoAdjunto  = pedido.pedidoAdjuntoList.Where(p => p.nombre.Equals(nombreArchivo)).FirstOrDefault();
             
-            if (pedidoAdjunto != null)
+            if (archivoAdjunto != null)
             {
-                PedidoBL pedidoBL = new PedidoBL();
-                pedidoAdjunto = pedidoBL.GetArchivoAdjunto(pedidoAdjunto);         
-                return JsonConvert.SerializeObject(pedidoAdjunto);
+                ArchivoAdjuntoBL archivoAdjuntoBL = new ArchivoAdjuntoBL();
+                archivoAdjunto = archivoAdjuntoBL.GetArchivoAdjunto(archivoAdjunto);         
+                return JsonConvert.SerializeObject(archivoAdjunto);
             }
             else
             {
@@ -1245,6 +1246,7 @@ namespace Cotizador.Controllers
             
         }
 
+        #endregion
 
 
 
@@ -1795,12 +1797,12 @@ namespace Cotizador.Controllers
                 if (codCentroCostosCliente != null && codCentroCostosCliente.Length > 0)
                 {
                     pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + centroCostos + " (" + codCentroCostosCliente + ")";
-                    pedido.observaciones = centroCostos;
+                    pedido.observaciones = centroCostos + " (" + codCentroCostosCliente + ")";
                 }
                 else
                 {
                     pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + centroCostos;
-                    pedido.observaciones = centroCostos + " (" + codCentroCostosCliente + ")";
+                    pedido.observaciones = centroCostos;
                 }                
             }
             if (observaciones != null && !observaciones.Equals(String.Empty))
@@ -1809,8 +1811,8 @@ namespace Cotizador.Controllers
                 pedido.observaciones = pedido.observaciones + " / " + observaciones;
             }
 
-            pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + observaciones;
-            pedido.observaciones = pedido.observaciones + observaciones;
+        //    pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + observaciones;
+        //    pedido.observaciones = pedido.observaciones + observaciones;
 
             if (facturaConsolidada.Equals("NO"))
             {

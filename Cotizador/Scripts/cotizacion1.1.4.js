@@ -1027,6 +1027,7 @@ jQuery(function ($) {
 
                     '<td class="' + detalle.idProducto + ' detflete" style="text-align:right">' + flete.toFixed(2) + '</td>' +
                     '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>' +
+                    '<td class="' + detalle.idProducto + ' detprecioUnitarioAnt" style="text-align:right">' + detalle.precioUnitarioAnt + '</td>' +
                     '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
                     '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
@@ -1773,7 +1774,7 @@ jQuery(function ($) {
 
                 $("#tableDetalleCotizacion > tbody").empty();
 
-                FooTable.init('#tableDetalleCotizacion');
+                //FooTable.init('#tableDetalleCotizacion');
 
 
 
@@ -1798,7 +1799,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + lista[i].producto.precioClienteProducto.precioUnitario.toFixed(cantidadDecimales) + '</td>' +
+                        '<td class="tdprecioUnitarioAnterior">' + lista[i].producto.precioClienteProducto.precioUnitario.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
                         '</tr>';
@@ -1920,14 +1921,18 @@ jQuery(function ($) {
                     $("#btnPDFCotizacion").hide();
                 }
 
+                FooTable.init('#tableDetalleCotizacion');
+                
+
                 if (
                     cotizacion.seguimientoCotizacion.estado == ESTADO_ACEPTADA 
                 ) {
-
                     $("#btnGenerarPedido").show();
+                    //window.setInterval(ocultarPrecioUnitarioAnterior, 5000);                    
                 }
                 else {
                     $("#btnGenerarPedido").hide();
+                    //window.setInterval(mostrarPrecioUnitarioAnterior, 5000);
                 }
 
                 /*Eliminar Cotizacion*/
@@ -1945,13 +1950,34 @@ jQuery(function ($) {
 
 
 
+                /*
+                $("#tableDetalleCotizacion").footable({
+                    "paging": {
+                        "enabled": false
+                    }
+                });*/
                 $("#modalVerCotizacion").modal('show');
 
+                
+                
+
+
+               // FooTable.init('#tableDetalleCotizacion')
+                //$('#tablefoottable').footable()
                 //  window.location = '/Cotizacion/Index';
             }
         });
     });
 
+    function ocultarPrecioUnitarioAnterior() {
+        //$(".tdprecioUnitarioAnterior").attr("data-visible", "false");
+        $(".tdprecioUnitarioAnterior").attr("style", "display:none;");
+    }
+
+    function mostrarPrecioUnitarioAnterior() {
+        //$(".tdprecioUnitarioAnterior").attr("data-visible", "true");
+        $(".tdprecioUnitarioAnterior").attr("style", "display: table-cell;");
+    }
 
 
     function generarPDF()

@@ -42,18 +42,20 @@ namespace Model
                 {
                     idProductos.Add(Guid.Parse(cotizacionDetalleJson.idProducto));
                 }
-                List<DocumentoDetalle> detallesActualizados = detalles.Where(s => idProductos.Contains(s.producto.idProducto)).ToList();
+                List<DocumentoDetalle> detallesPorActualizar = detalles.Where(s => idProductos.Contains(s.producto.idProducto)).ToList();
                 List<DocumentoDetalle> detallesOrdenados = new List<DocumentoDetalle>();
                 //Se realiza este foreach para considerar el ordenamiento
                 foreach (Guid idProducto in idProductos)
                 {
                     DocumentoDetalleJson cotizacionDetalleJson = cotizacionDetalleJsonList.Where(s => s.idProducto == idProducto.ToString()).FirstOrDefault();
-                    DocumentoDetalle documentoDetalle = detallesActualizados.Where(s => s.producto.idProducto == idProducto).FirstOrDefault();
+                    DocumentoDetalle documentoDetalle = detallesPorActualizar.Where(s => s.producto.idProducto == idProducto).FirstOrDefault();
 
                     documentoDetalle.cantidad = cotizacionDetalleJson.cantidad;
 
                     
                     documentoDetalle.flete = cotizacionDetalleJson.flete;
+
+                    decimal precioNetoAnterior = documentoDetalle.precioNeto;
 
                     if (documentoDetalle.esPrecioAlternativo)
                     {
@@ -62,6 +64,11 @@ namespace Model
                     else
                     {
                         documentoDetalle.precioNeto = cotizacionDetalleJson.precio;
+                    }
+
+                    if (precioNetoAnterior != documentoDetalle.precioNeto || documentoDetalle.porcentajeDescuento != cotizacionDetalleJson.porcentajeDescuento)
+                    {
+                        documentoDetalle.validar = true;
                     }
 
                     documentoDetalle.porcentajeDescuento = cotizacionDetalleJson.porcentajeDescuento;

@@ -11,6 +11,7 @@ namespace Model
         {
             this.visualizaCostos = visualizaCostos;
             this.visualizaMargen = visualizaMargen;
+            this.validar = true;
         }
 
         public Guid idCotizacionDetalle { get; set; }

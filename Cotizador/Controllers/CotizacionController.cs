@@ -853,10 +853,10 @@ namespace Cotizador.Controllers
                 nombreProducto = detalle.producto.skuProveedor + " - " + detalle.producto.descripcion;
             }
 
-     /*       if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos )
-            {
-                nombreProducto = nombreProducto + "\\n" + detalle.observacion;
-            }*/
+            /*       if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos )
+                   {
+                       nombreProducto = nombreProducto + "\\n" + detalle.observacion;
+                   }*/
             /*
             String resultado = "{" +
                 "\"idProducto\":\"" + detalle.producto.idProducto + "\"," +
@@ -881,6 +881,7 @@ namespace Cotizador.Controllers
                 subTotal = cotizacion.montoSubTotal.ToString(),
                 margen = detalle.margen,
                 precioUnitario = detalle.precioUnitario,
+                precioUnitarioAnt = detalle.producto.precioClienteProducto.precioUnitario,
                 observacion = detalle.observacion,
                 total = cotizacion.montoTotal.ToString()
             };
@@ -1041,11 +1042,14 @@ namespace Cotizador.Controllers
             cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
             cotizacion.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             //Se cambia el estado de la cotizacion a Edición
+
+            SeguimientoCotizacion.estadosSeguimientoCotizacion estadoAnteriorCotizacion = cotizacion.seguimientoCotizacion.estado;
+
             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
             cotizacionBL.cambiarEstadoCotizacion(cotizacion);
 
             //Se obtiene los datos de la cotización ya modificada
-            cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
+            cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario, estadoAnteriorCotizacion);
 
 
             this.Session[Constantes.VAR_SESSION_COTIZACION] = cotizacion;

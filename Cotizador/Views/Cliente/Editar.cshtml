@@ -13,7 +13,7 @@
 <div class="container">
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" value="@ViewBag.debug" />
-    <form class="form-horizontal">
+    <form class="form-horizontal" enctype="multipart/form-data" id="formularioConArchivos" method="post">
         <input type="hidden" id="considerarCantidades" name="considerarCantidades" value="2" />
 
         <div class="row">
@@ -220,19 +220,19 @@
                         @Html.LabelFor(dv => cliente.plazoCreditoSolicitado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                         <div class="col-xs-8">
                             @if (cliente.usuario.apruebaPlazoCredito)
-                            {
-                                @Html.DropDownList("plazoCreditoSolicitado",
-                                                  EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), cliente.plazoCreditoSolicitado),
-                                                  new { @class = "form-control", @disabled = "disabled" }
-                                                  )
-                            }
-                            else
-                            {
-                                @Html.DropDownList("plazoCreditoSolicitado",
-                                                  EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), cliente.plazoCreditoSolicitado),
-                                                  new { @class = "form-control" }
-                                                  )
-                            }
+                    {
+                        @Html.DropDownList("plazoCreditoSolicitado",
+                                       EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), cliente.plazoCreditoSolicitado),
+                                       new { @class = "form-control", @disabled = "disabled" }
+                                       )
+            }
+            else
+            {
+                @Html.DropDownList("plazoCreditoSolicitado",
+                               EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), cliente.plazoCreditoSolicitado),
+                               new { @class = "form-control" }
+                               )
+    }
                         </div>
                     </div>
                 </div>
@@ -242,20 +242,20 @@
                         @Html.LabelFor(dv => cliente.tipoPagoFactura, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                         <div class="col-xs-8">
                             @if (cliente.usuario.apruebaPlazoCredito)
-                            {
+                    {
 
-                                @Html.DropDownList("tipoPagoCliente",
-                                                  EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), cliente.tipoPagoFactura),
-                                                  new { @class = "form-control" }
-                                                  )
-                            }
-                            else
-                            {
-                                @Html.DropDownList("tipoPagoCliente",
-                                                  EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), cliente.tipoPagoFactura),
-                                                  new { @class = "form-control", @disabled = "disabled" }
-                                                  )
-                            }
+                        @Html.DropDownList("tipoPagoCliente",
+                                       EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), cliente.tipoPagoFactura),
+                                       new { @class = "form-control" }
+                                       )
+            }
+            else
+            {
+                @Html.DropDownList("tipoPagoCliente",
+                               EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), cliente.tipoPagoFactura),
+                               new { @class = "form-control", @disabled = "disabled" }
+                               )
+    }
                         </div>
                     </div>
                 </div>
@@ -265,13 +265,13 @@
                         @Html.LabelFor(dv => cliente.sobrePlazo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                         <div class="col-xs-8">
                             @if (cliente.usuario.apruebaPlazoCredito)
-                            {
-                                @Html.TextBoxFor(c => cliente.sobrePlazo, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(c => cliente.sobrePlazo, htmlAttributes: new { @class = "form-control", @disabled = "disabled", type = "number", min = "0" })
-                            }
+                    {
+                        @Html.TextBoxFor(c => cliente.sobrePlazo, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+            }
+            else
+            {
+                @Html.TextBoxFor(c => cliente.sobrePlazo, htmlAttributes: new { @class = "form-control", @disabled = "disabled", type = "number", min = "0" })
+    }
                         </div>
                     </div>
                 </div>
@@ -285,13 +285,13 @@
                         @Html.LabelFor(dv => cliente.creditoSolicitado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                         <div class="col-xs-8">
                             @if (cliente.usuario.apruebaMontoCredito)
-                            {
-                                @Html.TextBoxFor(c => cliente.creditoSolicitado, htmlAttributes: new { @class = "form-control", disabled = "disabled", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(c => cliente.creditoSolicitado, htmlAttributes: new { @class = "form-control", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
-                            }
+                    {
+                        @Html.TextBoxFor(c => cliente.creditoSolicitado, htmlAttributes: new { @class = "form-control", disabled = "disabled", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+            }
+            else
+            {
+                @Html.TextBoxFor(c => cliente.creditoSolicitado, htmlAttributes: new { @class = "form-control", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+    }
 
                         </div>
                     </div>
@@ -302,13 +302,13 @@
                         @Html.LabelFor(dv => cliente.creditoAprobado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                         <div class="col-xs-8">
                             @if (cliente.usuario.apruebaMontoCredito)
-                            {
-                                @Html.TextBoxFor(c => cliente.creditoAprobado, htmlAttributes: new { @class = "form-control", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(c => cliente.creditoAprobado, htmlAttributes: new { @class = "form-control", @disabled = "disabled", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
-                            }
+                    {
+                        @Html.TextBoxFor(c => cliente.creditoAprobado, htmlAttributes: new { @class = "form-control", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+            }
+            else
+            {
+                @Html.TextBoxFor(c => cliente.creditoAprobado, htmlAttributes: new { @class = "form-control", @disabled = "disabled", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+    }
                         </div>
                     </div>
                 </div>
@@ -318,13 +318,13 @@
                         @Html.LabelFor(dv => cliente.sobreGiro, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                         <div class="col-xs-8">
                             @if (cliente.usuario.apruebaMontoCredito)
-                            {
-                                @Html.TextBoxFor(c => cliente.sobreGiro, htmlAttributes: new { @class = "form-control", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(c => cliente.sobreGiro, htmlAttributes: new { @class = "form-control", @disabled = "disabled", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
-                            }
+                    {
+                        @Html.TextBoxFor(c => cliente.sobreGiro, htmlAttributes: new { @class = "form-control", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+            }
+            else
+            {
+                @Html.TextBoxFor(c => cliente.sobreGiro, htmlAttributes: new { @class = "form-control", @disabled = "disabled", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+    }
                         </div>
                     </div>
                 </div>
@@ -338,41 +338,74 @@
                         <div class="col-xs-8 col-sm-8 col-lg-10">
 
                             @if (cliente.usuario.apruebaPlazoCredito || cliente.usuario.apruebaMontoCredito)
-                            {
-                                @Html.TextAreaFor(p => cliente.observacionesCredito, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
-                            }
-                            else
-                            {
-                                @Html.TextAreaFor(p => cliente.observacionesCredito, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%", @disabled = "disabled" })
-                            }
+                    {
+                        @Html.TextAreaFor(p => cliente.observacionesCredito, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
+            }
+            else
+            {
+                @Html.TextAreaFor(p => cliente.observacionesCredito, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%", @disabled = "disabled" })
+    }
 
                         </div>
                     </div>
                 </div>
 
                 <!--
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(dv => cliente.plazoCredito, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
-                    <div class="col-xs-8">
-                        @Html.TextBoxFor(c => cliente.plazoCredito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                    </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(dv => cliente.plazoCredito, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                <div class="col-xs-8">
+                    @Html.TextBoxFor(c => cliente.plazoCredito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
                 </div>
             </div>
-                -->
+        </div>
+            -->
 
                 <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
                         @Html.LabelFor(dv => cliente.formaPagoFactura, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                         <div class="col-xs-8">
                             @Html.DropDownList("formaPagoCliente",
-                           EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), cliente.formaPagoFactura),
-                           new { @class = "form-control" }
-                           )
+                        EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), cliente.formaPagoFactura),
+                        new { @class = "form-control" }
+                        )
                         </div>
                     </div>
                 </div>
 
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
+                        <div class="col-xs-3">
+                            <div class="upload-btn-wrapper">
+                                <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                                <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        <label for="archivoAdjunto" class="control-label col-xs-2"></label>
+                        <div class="col-xs-8">
+                            <ul id="nombreArchivos">
+                                @foreach (Model.ClienteAdjunto clienteAdjunto in cliente.clienteAdjuntoList)
+                                {
+                                    <li>
+                                        <a href="javascript:mostrar();" class="descargar">@clienteAdjunto.nombre</a>
+                                        <a href="javascript:mostrar();"><img src="~/images/icon-close.png" id="@clienteAdjunto.nombre" class="btnDeleteArchivo" /></a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </fieldset>
@@ -747,6 +780,9 @@
                     </div>
                 </fieldset>
             }
+
+
+
 
 
             <div class="row">

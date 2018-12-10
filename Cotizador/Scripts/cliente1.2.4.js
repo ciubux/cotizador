@@ -2069,7 +2069,24 @@ jQuery(function ($) {
                     $("#li_sedePrincipal img").attr("src", "/images/equis.png");
                 }
 
-                
+                $("#nombreArchivos > li").remove().end();
+
+
+                for (var i = 0; i < cliente.clienteAdjuntoList.length; i++) {
+                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + cliente.clienteAdjuntoList[i].nombre + '</a>';
+                    $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+                }
+
+
+                $("#verNombreArchivos > li").remove().end();
+
+
+                for (var i = 0; i < cliente.clienteAdjuntoList.length; i++) {
+                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + cliente.clienteAdjuntoList[i].nombre + '</a>';
+                    //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+                    $('#verNombreArchivos').append($('<li />').html(liHTML));
+                }     
+
              //   $("#btnEditarCliente").show();
                 
                 $("#modalVerCliente").modal('show');
@@ -2114,6 +2131,123 @@ jQuery(function ($) {
             }
         });
     });
+
+
+
+
+
+     /*CARGA Y DESCARGA DE ARCHIVOS*/
+
+    /*
+    $('input[name=filePedidos]').change(function (e) {
+        //$('#nombreArchivos').val(e.currentTarget.files);
+        var numFiles = e.currentTarget.files.length;
+        var nombreArchivos = "";
+        for (i = 0; i < numFiles; i++) {
+            var fileFound = 0;
+            $("#nombreArchivos > li").each(function (index) {
+
+                if ($(this).find("a.descargar")[0].text == e.currentTarget.files[i].name) {
+                    alert('El archivo "' + e.currentTarget.files[i].name + '" ya se encuentra agregado.');
+                    fileFound = 1;
+                }
+            });
+
+            if (fileFound == 0) {
+
+                var liHTML = '<a href="javascript:mostrar();" class="descargar">' + e.currentTarget.files[i].name + '</a>' +
+                    '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + e.currentTarget.files[i].name + '" class="btnDeleteArchivo" /></a>';
+
+                $('#nombreArchivos').append($('<li />').html(liHTML));
+
+
+                ///  $('<li />').text(e.currentTarget.files[i].name).appendTo($('#nombreArchivos'));
+            }
+
+        }
+    });*/
+
+
+    $('input:file[multiple]').change(function (e) {       
+
+        cargarArchivosAdjuntos(e.currentTarget.files);
+
+        var data = new FormData($('#formularioConArchivos')[0]);
+
+        $.ajax({
+            url: "/Cliente/ChangeFiles",
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            contentType: false,
+            processData: false,
+            data: data,
+            error: function (detalle) { },
+            success: function (resultado) { }
+        });
+
+
+    });
+
+
+
+    $(document).on('click', ".btnDeleteArchivo", function () {
+
+        var nombreArchivo = event.target.id;
+
+
+
+
+        //$("#btnDeleteArchivo").click(function () {
+        $("#files").val("");
+        $("#nombreArchivos > li").remove().end();
+        $.ajax({
+            url: "/Cliente/DescartarArchivos",
+            type: 'POST',
+            dataType: 'JSON',
+            data: { nombreArchivo: nombreArchivo },
+            error: function (detalle) { },
+            success: function (pedidoAdjuntoList) {
+
+                $("#nombreArchivos > li").remove().end();
+
+                for (var i = 0; i < pedidoAdjuntoList.length; i++) {
+
+                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedidoAdjuntoList[i].nombre + '</a>' +
+                        '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + pedidoAdjuntoList[i].nombre + '" class="btnDeleteArchivo" /></a>';
+
+                    $('#nombreArchivos').append($('<li />').html(liHTML));
+                    //      .appendTo($('#nombreArchivos'));
+
+                }
+
+
+            }
+        });
+    });
+
+    $(document).on('click', "a.descargar", function () {
+
+        //var arrrayClass = event.target.getAttribute("class").split(" ");
+        var nombreArchivo = event.target.innerHTML;
+        //var numeroPedido = arrrayClass[1];
+
+        $.ajax({
+            url: "/Cliente/Descargar",
+            type: 'POST',
+            //  enctype: 'multipart/form-data',
+            dataType: 'JSON',
+            //  contentType: 'multipart/form-data',
+            data: { nombreArchivo: nombreArchivo },
+            error: function (detalle) {
+                alert(detalle);
+            },
+            success: function (pedidoAdjunto) {
+                var sampleArr = base64ToArrayBuffer(pedidoAdjunto.adjunto);
+                saveByteArray(nombreArchivo, sampleArr);
+            }
+        });
+    });
+
 
 
 

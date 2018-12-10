@@ -1353,20 +1353,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             return pedido;
         }
 
-        public PedidoAdjunto SelectArchivoAdjunto(PedidoAdjunto pedidoAdjunto)
-        {
-            var objCommand = GetSqlCommand("ps_archivoAdjunto");
-            InputParameterAdd.Guid(objCommand, "idArchivoAdjunto", pedidoAdjunto.idPedidoAdjunto);
-            DataTable dataTable = Execute(objCommand);
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                pedidoAdjunto.nombre = Converter.GetString(row, "nombre");
-                pedidoAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
-            }
-
-            return pedidoAdjunto;
-        }
+      
 
         public void insertSeguimientoPedido(Pedido pedido)
         {

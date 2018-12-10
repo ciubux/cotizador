@@ -5,10 +5,8 @@ using System.Web;
 
 namespace Model
 {
-    public class PedidoAdjunto : ArchivoAdjunto
+    public class ClienteAdjunto : ArchivoAdjunto
     {
-        public Guid idPedidoAdjunto { get; set; }
-        public Guid idPedido { get; set; }
         public Guid idCliente { get; set; }
     }
 }

@@ -372,13 +372,13 @@
                     <th data-name="idProducto" data-visible="false"></th>
 
                     @if (ViewBag.debug == 1)
-                {
-                    <th data-name="esPrecioAlternativo" data-visible="true">EsPrecioAlternativo</th>
-            }
-            else
-            {
+    {
+                <th data-name="esPrecioAlternativo" data-visible="true">EsPrecioAlternativo</th>
+}
+else
+{
                 <th data-name="esPrecioAlternativo" data-visible="false">EsPrecioAlternativo</th>
-        }
+}
                     <th data-name="proveedor" data-sortable="false">Prov.</th>
                     <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                     <th data-name="producto" data-sortable="false">Producto / Descripción</th>
@@ -388,67 +388,72 @@
                     <th data-name="precioLista" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
 
                     @if (ViewBag.debug == 1)
-                {
-                    <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-            }
-            else
-            {
+    {
+                <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+}
+else
+{
                 <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-        }
+}
 
                     <th data-name="porcentajeDescuentoMostrar" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
                     <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
 
                     @if (cotizacion.mostrarCosto || ViewBag.debug == 1)
-                {
-                    <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
-            }
-            else
-            {
+    {
+                <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
+}
+else
+{
                 <th data-name="costo" data-visible="false">Costo</th>
-        }
+}
 
                     @if (cotizacion.usuario.visualizaMargen)
-                {
-                    <th data-name="margen" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-            }
-            else
-            {
+    {
+                <th data-name="margen" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+}
+else
+{
                 <th data-name="margen" data-visible="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-        }
+}
 
                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
+                    @if (!cotizacion.esRecotizacion)
+                    {
+                        <th data-name="precioUnitarioAnterior" style="color: #B9371B" data-sortable="false" data-breakpoints="xs sm">Precio Unit Ant.</th>
+                    }
+
                     @if ((int)cotizacion.considerarCantidades == 1 || (int)cotizacion.considerarCantidades == 2)
-                {
-                    <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
-                    <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
-                    <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
-            }
-            else
-            {
+    {
+                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
+                <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
+                <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
+}
+else
+{
                 <th data-name="cantidad" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Cant.</th>
                 <th data-name="subTotal" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Sub Total</th>
                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
-        }
+}
                     <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
 
                     @if (cotizacion.esRecotizacion)
-                {
-                    <th data-name="precioNetoAnterior" data-visible="true" style="color: #B9371B">Precio neto ant</th>
-                    <th data-name="precioNeto" data-visible="true" style="color: #B9371B">Var% precio neto</th>
-                    <th data-name="varCosto" data-visible="true" style="color: #B9371B">Var% costo</th>
+    {
+                <th data-name="precioNetoAnterior" data-visible="true" style="color: #B9371B">Precio neto ant</th>
+                <th data-name="precioNeto" data-visible="true" style="color: #B9371B">Var% precio neto</th>
+                <th data-name="varCosto" data-visible="true" style="color: #B9371B">Var% costo</th>
 
-                if (ViewBag.debug == 1)
-                {
-                    <th data-name="costoAnterior" data-visible="true">CostoAnterior</th>
-            }
-            else
-            {
+if (ViewBag.debug == 1)
+{
+                <th data-name="costoAnterior" data-visible="true">CostoAnterior</th>
+}
+else
+{
                 <th data-name="costoAnterior" data-visible="false">CostoAnterior</th>
-        }
-    }
+}
+}
                     <th class="ordenar" data-sortable="false" data-visible="false"></th>
 
 
@@ -500,6 +505,13 @@
 
                     <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
                     <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
+                    @if (!cotizacion.esRecotizacion)
+                    {
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioAnt" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
+                    }
+
+
+
                     <td class="@cotizacionDetalle.producto.idProducto detcantidad" style="text-align:right">@cotizacionDetalle.cantidad</td>
                     <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
                     <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>

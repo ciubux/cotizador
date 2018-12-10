@@ -410,7 +410,7 @@ namespace DataLayer
                     pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
                     pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
                     pedidoDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
-
+                    pedidoDetalle.cantidadOriginal = pedidoDetalle.cantidad;
                     pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                     pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
 

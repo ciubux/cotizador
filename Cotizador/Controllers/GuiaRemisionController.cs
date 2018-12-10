@@ -406,11 +406,8 @@ namespace Cotizador.Controllers
 
             DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO];
 
-            this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = null;
-            if (guiaRemisionList.Count > 0)
-            {
-                this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = guiaRemisionList[0];
-            }
+            List<GuiaRemision> guiaRemisionListBusqueda = (List<GuiaRemision>)this.Session[Constantes.VAR_SESSION_GUIA_LISTA_FACTURA_CONSOLIDADA];
+            this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = guiaRemisionListBusqueda.Where(g => g.idMovimientoAlmacen == guiaRemisionList[0].idMovimientoAlmacen).FirstOrDefault();
 
             List<Producto> productoList = new List<Producto>();
 
@@ -470,6 +467,23 @@ namespace Cotizador.Controllers
         {
             //GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA];
 
+            String serieUnidadesAlternativas = Request["serieUnidadesAlternativas"].ToString();
+
+
+            DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO];
+
+
+            Dictionary<String, Boolean> mostrarUnidadAlternativaList = new Dictionary<string, bool>();
+
+            //List<bool> mostrarUnidadAlternativaList = new List<bool>();
+            int u = 0;
+            foreach (char mostrarUnidadAlternativa in serieUnidadesAlternativas.ToCharArray())
+            {
+                mostrarUnidadAlternativaList.Add(documentoVenta.ventaDetalleList[u].producto.sku, mostrarUnidadAlternativa == '1');
+                u++;
+            }
+
+
             String idMovimientoAlmacenList = " '";
             List<Guid> movimientoAlmacenIdList = new List<Guid>();
 
@@ -483,9 +497,9 @@ namespace Cotizador.Controllers
 
 
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
-            List<GuiaRemision> guiaRemisionList = movimientoAlmacenBL.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList);
+            List<GuiaRemision> guiaRemisionList = movimientoAlmacenBL.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList, mostrarUnidadAlternativaList);
 
-            DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO];
+            
 
 
       
@@ -508,26 +522,14 @@ namespace Cotizador.Controllers
                 titleCellStyle.SetFont(titleFont);
                 titleCellStyle.FillPattern = FillPattern.SolidForeground;
                 titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
-
-                //titleCellStyle.FillBackgroundColor = HSSFColor.BlueGrey.Index;
-
-
                 
-                          
-
                 IDataFormat format = wb.CreateDataFormat();
                 ICellStyle dateFormatStyle = wb.CreateCellStyle();
                 dateFormatStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
         
-
-
-
-
-
                 // create sheet
                 sheet = (HSSFSheet)wb.CreateSheet("Atenciones");
-
-
+               
                 /*guiaRemision,fecha_emision, ma.direccion_entrega, ub.distrito, 
                  * ub.provincia,  ub.departamento, ma.observaciones,*/
 
@@ -549,8 +551,17 @@ namespace Cotizador.Controllers
                 foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
                 {
                  
+                    //¿Es alternativo?
+                    if (mostrarUnidadAlternativaList[ventaDetalle.producto.sku])
+                    {
+                        UtilesHelper.setValorCelda(sheet, 1, i, ventaDetalle.producto.sku + " - " + ventaDetalle.producto.unidad_alternativa, titleCellStyle);
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, 1, i, ventaDetalle.producto.sku + " - " + ventaDetalle.producto.unidad, titleCellStyle);
+                    }
 
-                    UtilesHelper.setValorCelda(sheet, 1, i, ventaDetalle.producto.sku + " - " + ventaDetalle.producto.unidad, titleCellStyle);
+                    
 
                     UtilesHelper.setValorCelda(sheet, 2, i, "Cantidad", titleCellStyle);
                     UtilesHelper.setValorCelda(sheet, 2, i+1, "Precio (S/)", titleCellStyle);
@@ -774,18 +785,29 @@ namespace Cotizador.Controllers
                       documentoDetalle.cantidadPorAtender = documentoDetalle.cantidad;
                   }*/
                 guiaRemision.observaciones = String.Empty;
+                bool existeOrdenCompra = false;
                 if (pedido.numeroReferenciaCliente != null && !pedido.numeroReferenciaCliente.Trim().Equals(String.Empty))
                 {
                     if (pedido.numeroReferenciaCliente.Contains("O/C"))
                     {
-                        guiaRemision.observaciones = pedido.numeroReferenciaCliente.Trim() + " / ";
+                        guiaRemision.observaciones = pedido.numeroReferenciaCliente.Trim();
                     }
                     else
                     {
-                        guiaRemision.observaciones = "O/C N° " + pedido.numeroReferenciaCliente.Trim() + " / ";
+                        guiaRemision.observaciones = "O/C N° " + pedido.numeroReferenciaCliente.Trim();
                     }
+                    existeOrdenCompra = true;
                 }
-                guiaRemision.observaciones = guiaRemision.observaciones + pedido.observacionesGuiaRemision;
+                if (pedido.observacionesGuiaRemision != null && !pedido.observacionesGuiaRemision.Trim().Equals(String.Empty))
+                {
+                    if (existeOrdenCompra)
+                    {
+                        guiaRemision.observaciones = guiaRemision.observaciones + " / ";
+                    }
+                    guiaRemision.observaciones = guiaRemision.observaciones + pedido.observacionesGuiaRemision;
+                }
+                
+                    
 
                 CiudadBL ciudadBL = new CiudadBL();
                 Ciudad ciudadOrigen = ciudadBL.getCiudad(pedido.ciudad.idCiudad);
