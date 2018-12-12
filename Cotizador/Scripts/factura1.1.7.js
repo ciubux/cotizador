@@ -768,6 +768,9 @@ jQuery(function ($) {
     EVENTOS BUSQUEDA FACTURA
     #####################################################*/
 
+    $("#btnExportExcel").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
 
     $("input[name=documentoVenta_solicitadoAnulacion]").on("click", function () {
         var solicitadoAnulacion = $("input[name=documentoVenta_solicitadoAnulacion]:checked").val();
@@ -934,11 +937,14 @@ jQuery(function ($) {
                 }
 
 
-                if (facturaList.length > 0)
+                if (facturaList.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
-                else
+                    $("#divExportButton").show();
+                }
+                else {
+                    $("#divExportButton").hide();
                     $("#msgBusquedaSinResultados").show();
-
+                }
             }
         });
     });

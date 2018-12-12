@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using Cotizador.ExcelExport;
 using Model;
 using Model.EXCEPTION;
 using Newtonsoft.Json;
@@ -183,6 +184,16 @@ namespace Cotizador.Controllers
 
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             movimientoAlmacenBL.UpdateMarcaNoEntregado(guiaRemision);
+        }
+
+
+        [HttpGet]
+        public ActionResult ExportLastSearchExcel()
+        {
+            List<GuiaRemision> list = (List<GuiaRemision>)this.Session[Constantes.VAR_SESSION_GUIA_LISTA];
+
+            GuiaRemisionSearch excel = new GuiaRemisionSearch();
+            return excel.generateExcel(list);
         }
 
         public String Search()

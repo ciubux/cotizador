@@ -284,7 +284,8 @@ namespace Cotizador.Controllers
             ClienteBL clienteBl = new ClienteBL();
             Cliente cliente = clienteBl.getCliente(idCliente);
             cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            String resultado = JsonConvert.SerializeObject(cliente);
+            List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(idCliente);
+            String resultado = "{\"cliente\":" + JsonConvert.SerializeObject(cliente) + ", \"precios\":" + JsonConvert.SerializeObject(listaPrecios) + "}";
             this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = cliente;
             return resultado;
         }

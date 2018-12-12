@@ -30,3 +30,9 @@ C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Debug\Framework
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
+D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojAssemblyReference.cache
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb

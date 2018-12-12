@@ -105,6 +105,50 @@ namespace BusinessLayer
             }
         }
 
+        public List<Producto> getProductos(Producto producto)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.SelectProductos(producto);
+            }
+        }
+
+        public Producto getProductoById(Guid idProducto) 
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                Producto producto = productoDAL.GetProductoById(idProducto); 
+                if (producto.image == null)
+                {
+                    FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                    MemoryStream storeStream = new MemoryStream();
+                    storeStream.SetLength(inStream.Length);
+                    inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                    storeStream.Flush();
+                    inStream.Close();
+                    producto.image = storeStream.GetBuffer();
+                }
+                return producto;
+            }
+        }
+
+        public Producto insertProducto(Producto producto)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.insertProducto(producto);
+            }
+        }
+
+        public Producto updateProducto(Producto producto)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.updateProducto(producto);
+            }
+        }
+
+
         public List<DocumentoDetalle> obtenerProductosAPartirdePreciosRegistrados(Guid idCliente, DateTime fechaPrecios, Boolean esProvincia, Boolean incluidoIGV, String familia, String proveedor)
         {
             using (var dal = new ProductoDAL())

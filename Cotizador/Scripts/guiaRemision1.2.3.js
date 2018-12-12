@@ -1684,7 +1684,9 @@ jQuery(function ($) {
 
 
 
-
+    $("#btnExportExcel").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
 
 
     /*####################################################
@@ -1801,11 +1803,14 @@ jQuery(function ($) {
                 }
 
 
-                if (guiaRemisionList.length > 0)
+                if (guiaRemisionList.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
-                else
+                    $("#divExportButton").show();
+                }
+                else { 
                     $("#msgBusquedaSinResultados").show();
-
+                    $("#divExportButton").hide();
+                }
             }
         });
     });

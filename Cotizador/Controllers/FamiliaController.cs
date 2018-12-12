@@ -44,7 +44,7 @@ namespace Cotizador.Controllers
                 familiaList.Add(familia);
             }
             var model = familiaList;
-
+            ViewBag.selectFamilia = this.Session["familia"];
             return PartialView("_SelectFamilia", model);
         }
 

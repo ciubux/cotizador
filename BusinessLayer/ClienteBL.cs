@@ -214,6 +214,43 @@ namespace BusinessLayer
             }
         }
 
+        public List<DocumentoDetalle> getPreciosVigentesCliente(Guid idCliente)
+        {
+            using (var productoDal = new ProductoDAL())
+            {
+                List<DocumentoDetalle> items = productoDal.getPreciosVigentesCliente(idCliente);
+                foreach (DocumentoDetalle pedidoDetalle in items)
+                {
+                    if (pedidoDetalle.producto.image == null)
+                    {
+                        FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                        MemoryStream storeStream = new MemoryStream();
+                        storeStream.SetLength(inStream.Length);
+                        inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                        storeStream.Flush();
+                        inStream.Close();
+                        pedidoDetalle.producto.image = storeStream.GetBuffer();
+                    }
+
+                    
+                    //Se agrega el IGV al precioLista
+                    pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.precioSinIgv));   
+
+
+                    if (pedidoDetalle.esPrecioAlternativo)
+                    {
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario =
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.equivalencia;
+                    }
+
+                    pedidoDetalle.porcentajeDescuento = (1 - (pedidoDetalle.precioNeto / pedidoDetalle.precioLista))*100;
+                }
+                
+
+                return items;
+            }
+        }
+
         public List<Cliente> getClientes(Cliente cliente)
         {
             using (var clienteDAL = new ClienteDAL())

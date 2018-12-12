@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using Cotizador.ExcelExport;
 using Model;
 using Model.EXCEPTION;
 using Newtonsoft.Json;
@@ -158,6 +159,14 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult ExportLastSearchExcel()
+        {
+            List<NotaIngreso> list = (List<NotaIngreso>)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_LISTA];
+
+            NotaIngresoSearch excel = new NotaIngresoSearch();
+            return excel.generateExcel(list);
+        }
 
         public String Search()
         {

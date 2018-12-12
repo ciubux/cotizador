@@ -89,7 +89,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "J", "Asistente Servicio Cliente", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "K", "Plazo Crédito Aprobado", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "L", "Crédito Aprobado (S/)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "L", "¿Bloqueado?", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "M", "¿Bloqueado?", titleCellStyle);
                 i = 2;
 
                 /*  for (int iii = 0; iii<50;iii++)

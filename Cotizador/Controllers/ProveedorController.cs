@@ -83,6 +83,7 @@ namespace Cotizador.Controllers
                 proveedorList.Add(proveedor);
             }
             var model = proveedorList;
+            ViewBag.selectProveedor = this.Session["proveedor"];
 
             return PartialView("_SelectProveedor", model);
         }

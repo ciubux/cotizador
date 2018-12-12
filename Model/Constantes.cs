@@ -74,6 +74,11 @@ namespace Model
         public static String VAR_SESSION_CLIENTE_LISTA = "clienteList";
         public static String VAR_SESSION_CLIENTE_VER = "clienteVer";
 
+        public static String VAR_SESSION_PRODUCTO = "producto";
+        public static String VAR_SESSION_PRODUCTO_BUSQUEDA = "productoBusqueda";
+        public static String VAR_SESSION_PRODUCTO_LISTA = "productoList";
+        public static String VAR_SESSION_PRODUCTO_VER = "productoVer";
+
         public static String VAR_SESSION_PROVEEDOR = "proveedor";
 
         public static String VAR_SESSION_GUIA = "guiaRemision";
@@ -267,6 +272,8 @@ namespace Model
             BusquedaProductos = 27,
             [Display(Name = "MANTENIMIENTO PRODUCTO")]
             MantenimientoProducto = 28,
+            [Display(Name = "CREATE/UPDATE PRODUCTO")]
+            CUProducto = 29
         };
 
 

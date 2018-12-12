@@ -25,6 +25,7 @@ jQuery(function ($) {
                 $(this).change();
             }
         });
+        
     });
 
     function verificarSiExisteCliente() {
@@ -1876,6 +1877,8 @@ jQuery(function ($) {
                     "enabled": true
                 }
             });
+
+            
             return false;
         }
 
@@ -1941,6 +1944,7 @@ jQuery(function ($) {
         });
     });
 
+    var idClienteView = "";
     $(document).on('click', "button.btnVerCliente", function () {
         $('body').loadingModal({
             text: 'Abriendo Cliente...'
@@ -1962,7 +1966,9 @@ jQuery(function ($) {
                 $('body').loadingModal('hide');
                 mostrarMensajeErrorProceso();
             },
-            success: function (cliente) {
+            success: function (result) {
+                var cliente = result.cliente;
+                idClienteView = idCliente;
                 $('body').loadingModal('hide')
                 $("#verCiudadNombre").html(cliente.ciudad.nombre);
                 $("#verCodigo").html(cliente.codigo);
@@ -2069,13 +2075,113 @@ jQuery(function ($) {
                     $("#li_sedePrincipal img").attr("src", "/images/equis.png");
                 }
 
+                var preciosList = result.precios;
+
+                for (var i = 0; i < preciosList.length; i++) {
+
+                    var preciosRow = '<tr data-expanded="true">' +
+                        '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
+                        '<td>  ' + preciosList[i].producto.proveedor  + '  </td>' +
+                        '<td>  ' + preciosList[i].producto.sku + '  </td>' +
+                        '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
+                        '<td>  ' + preciosList[i].unidad + '</td>' +
+                        '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
+                        '<td>  ' + preciosList[i].precioLista + '  </td>' +
+                        '<td>  ' + preciosList[i].porcentajeDescuentoMostrar + ' % </td>' +
+                        
+                        '<td>  ' + preciosList[i].precioNeto + '  </td>' +
+                        '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>  ' + preciosList[i].producto.precioClienteProducto.precioUnitario + '</td>' +
+                       
+                        '<td>' +
+                        '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +
+                        '</td>' +
+                        '</tr>';
+
+                    $("#tableListaPrecios").append(preciosRow);
+
+                }
+
+                if (preciosList.length > 0) {
+                    $("#msgPreciosSinResultados").hide();
+                }
+                else {
+                    $("#msgPreciosSinResultados").show();
+                }
+                FooTable.init('#tableListaPrecios');
                 
-             //   $("#btnEditarCliente").show();
                 
+                 //<td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
+                    
+                        
+                     //   $("#btnEditarCliente").show();
+                        
                 $("#modalVerCliente").modal('show');
-                
+                        
             }
         });
+    });
+
+    $("#modalVerCliente").on('click', ".btnMostrarPrecios", function () {
+
+        var idProducto = $(this).attr("idProducto");
+        
+        //verIdCliente
+
+        $.ajax({
+            url: "/Precio/GetPreciosRegistradosCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idProducto: idProducto,
+                idCliente: idClienteView
+            },
+            success: function (producto) {
+                $("#verProducto").html(producto.nombre);
+                $("#verCodigoProducto").html(producto.sku);
+
+
+                var precioListaList = producto.precioLista;
+
+                // var producto = $.parseJSON(respuesta);
+                $("#tableMostrarPrecios > tbody").empty();
+
+                FooTable.init('#tableMostrarPrecios');
+                for (var i = 0; i < precioListaList.length; i++) {
+                    var fechaInicioVigencia = precioListaList[i].fechaInicioVigencia;
+                    var fechaFinVigencia = precioListaList[i].fechaFinVigencia;
+
+                    if (fechaInicioVigencia == null)
+                        fechaInicioVigencia = "No Definida";
+                    else
+                        fechaInicioVigencia = invertirFormatoFecha(precioListaList[i].fechaInicioVigencia.substr(0, 10));
+
+                    if (fechaFinVigencia == null)
+                        fechaFinVigencia = "No Definida";
+                    else
+                        fechaFinVigencia = invertirFormatoFecha(precioListaList[i].fechaFinVigencia.substr(0, 10));
+
+                    var numeroCotizacion = precioListaList[i].numeroCotizacion;
+                    if (numeroCotizacion == null)
+                        numeroCotizacion = "No Identificado";
+
+                    $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
+
+                        '<td>' + numeroCotizacion + '</td>' +
+                        '<td>' + fechaInicioVigencia + '</td>' +
+                        '<td>' + fechaFinVigencia + '</td>' +
+                        '<td>' + precioListaList[i].unidad + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadCuatroDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadCuatroDecimales) + '</td>' +
+
+                        '</tr>');
+                    
+                }
+            }
+        });
+        $("#modalMostrarPrecios").modal();
+
     });
 
     $("#btnEditarCliente").click(function () {

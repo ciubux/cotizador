@@ -181,6 +181,10 @@ textarea {
         width: 1200px;
     }
 
+    #modalVerProducto .modal-dialog {
+        width: 1000px;
+    }
+
     #modalVerHistorialCotizacion .modal-dialog {
         width: 900px;
     }

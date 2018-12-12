@@ -1,6 +1,6 @@
 ﻿@{
 
-    TempData["ScriptVersion"] = "46";
+    TempData["ScriptVersion"] = "72";
 
 }
 
@@ -67,6 +67,8 @@
                         var linkBusquedaCliente = "";
                         var linkMantenimientoCliente = "";
                         var linkMantenimientoProducto = "";
+                        var linkBusquedaProducto = "";
+                        var linkCRProducto = "";
 
                         var linkCrearFacturaConsolidada = "";
 
@@ -103,7 +105,8 @@
                             case 18: linkMantenimientoCliente = "ative"; linkMaestros = "active"; break;
                             //  case 27: linkBusquedaProducto = "ative"; linkMaestros = "active"; break;
                             case 28: linkMantenimientoProducto = "ative"; linkMaestros = "active"; break;
-
+                            case 29: linkCRProducto = "ative"; linkMaestros = "active"; break;
+                                
                             case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
                             case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
                             case 22: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
@@ -248,7 +251,9 @@
                                     }
                                     @if (usuario.modificaMaestroProductos)
                                     {
-                                        <li id="linkMantenimientoProducto" class="@linkMantenimientoProducto">@Html.ActionLink("Producto - Crear/Modificar ", "Index", "Producto")</li>
+                                        <li id="linkMantenimientoProducto" class="@linkMantenimientoProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
+                                        <li id="linkBusquedaProducto" class="@linkBusquedaProducto">@Html.ActionLink("Producto - Búsqueda", "List", "Producto")</li>
+                                        <li id="linkCRProducto" class="@linkCRProducto">@Html.ActionLink("Producto - Crear/Modificar ", "Editar", "Producto")</li>
                                     }
                                 </ul>
                             </li>
