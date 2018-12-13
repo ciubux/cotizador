@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using Cotizador.Models;
+using Cotizador.ExcelExport;
 using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -15,6 +17,160 @@ namespace Cotizador.Controllers
 {
     public class ProductoController : Controller
     {
+
+        [HttpGet]
+        public ActionResult List()
+        {
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaProductos;
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA] == null)
+            {
+                instanciarProductoBusqueda();
+            }
+
+            Producto productoSearch = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA];
+
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaProductos;
+            ViewBag.producto = productoSearch;
+            ViewBag.Si = Constantes.MENSAJE_SI;
+            ViewBag.No = Constantes.MENSAJE_NO;
+            return View();
+
+        }
+
+        public String SearchList()
+        {
+            //Se indica la página con la que se va a trabajar
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaProductos;
+            //Se recupera el objeto cliente que contiene los criterios de Búsqueda de la session
+            Producto producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA];
+            producto.familia = this.Session["familia"].ToString();
+            producto.proveedor = this.Session["proveedor"].ToString();
+            ProductoBL productoBL = new ProductoBL();
+            List<Producto> productoList = productoBL.getProductos(producto);
+            //Se coloca en session el resultado de la búsqueda
+            this.Session[Constantes.VAR_SESSION_PRODUCTO_LISTA] = productoList;
+            //Se retorna la cantidad de elementos encontrados
+            return JsonConvert.SerializeObject(productoList);
+
+        }
+
+        public String Show()
+        {
+            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+            ProductoBL productoBL = new ProductoBL();
+            Producto producto = productoBL.getProductoById(idProducto);
+            producto.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String resultado =  JsonConvert.SerializeObject(producto);
+            this.Session[Constantes.VAR_SESSION_PRODUCTO_VER] = producto;
+            return resultado;
+        }
+
+        public ActionResult Editar(Guid? idProducto = null)
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.CUProducto;
+            Usuario usuario = null;
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.modificaMaestroClientes)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
+
+
+            if (this.Session[Constantes.VAR_SESSION_PRODUCTO] == null || idProducto == Guid.Empty)
+            {
+                instanciarProducto();
+            }
+
+            Producto producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO];
+            
+            if (idProducto != null && idProducto != Guid.Empty)
+            {
+                ProductoBL productoBL = new ProductoBL();
+                producto = productoBL.getProductoById(idProducto.Value);
+                producto.IdUsuarioRegistro = usuario.idUsuario;
+                producto.usuario = usuario;
+                
+                this.Session[Constantes.VAR_SESSION_PRODUCTO] = producto;
+            }
+
+            this.Session["familia"] = producto.familia;
+            this.Session["proveedor"] = producto.proveedor;
+
+            ViewBag.producto = producto;
+            return View();
+
+        }
+
+        private void instanciarProducto()
+        {
+            Producto producto = new Producto();
+            producto.idProducto = Guid.Empty;
+            producto.sku = String.Empty;
+            producto.skuProveedor = String.Empty;
+            producto.descripcion = String.Empty;
+            producto.familia = String.Empty;
+            producto.proveedor = String.Empty;
+            producto.costoSinIgv = 0;
+            producto.familia = String.Empty;
+            producto.proveedor = String.Empty;
+            producto.unidad = String.Empty;
+            producto.unidadProveedor = String.Empty;
+            producto.unidad_alternativa = String.Empty;
+            producto.unidadEstandarInternacional = String.Empty;
+            FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+            MemoryStream storeStream = new MemoryStream();
+            storeStream.SetLength(inStream.Length);
+            inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+            storeStream.Flush();
+            inStream.Close();
+            producto.image = storeStream.GetBuffer();
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            producto.IdUsuarioRegistro = usuario.idUsuario;
+            producto.usuario = usuario;
+
+            this.Session[Constantes.VAR_SESSION_PRODUCTO] = producto;
+        }
+
+        private void instanciarProductoBusqueda()
+        {
+            Producto producto = new Producto();
+            producto.idProducto = Guid.Empty;
+            producto.sku = String.Empty;
+            producto.skuProveedor = String.Empty;
+            producto.descripcion = String.Empty;
+            producto.familia = "Todas";
+            producto.proveedor = "Todos";
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            producto.IdUsuarioRegistro = usuario.idUsuario;
+            producto.usuario = usuario;
+            this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA] = producto;
+        }
+
+
+        [HttpGet]
+        public ActionResult ExportLastSearchExcel()
+        {
+            List<Producto> list = (List<Producto>)this.Session[Constantes.VAR_SESSION_PRODUCTO_LISTA];
+
+            ProductoSearch excel = new ProductoSearch();
+            return excel.generateExcel(list, (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]);
+        }
+
 
         public String Search()
         {
@@ -49,9 +205,56 @@ namespace Cotizador.Controllers
 
         }
 
+        public String ConsultarSiExisteProducto()
+        {
+            Producto producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO];
+            if (producto == null)
+                return "{\"existe\":\"false\",\"idProducto\":\"0\"}";
+            else
+                return "{\"existe\":\"true\",\"idProducto\":\"" + producto.idProducto + "\"}";
+        }
 
 
+        public void iniciarEdicionProducto()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Producto productoVer = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO_VER];
+            this.Session[Constantes.VAR_SESSION_PRODUCTO] = productoVer;
+        }
 
+        public String Create()
+        {
+            ProductoBL productoBL = new ProductoBL();
+            Producto producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO];
+            producto.familia = this.Session["familia"].ToString();
+            producto.proveedor = this.Session["proveedor"].ToString();
+            producto = productoBL.insertProducto(producto);
+            this.Session[Constantes.VAR_SESSION_PRODUCTO] = null;
+            String resultado = JsonConvert.SerializeObject(producto);
+            return resultado;
+        }
+
+
+        public String Update()
+        {
+            ProductoBL productoBL = new ProductoBL();
+            Producto producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO];
+            producto.familia = this.Session["familia"].ToString();
+            producto.proveedor = this.Session["proveedor"].ToString();
+            if (producto.idProducto == Guid.Empty)
+            {
+                producto = productoBL.insertProducto(producto);
+                this.Session[Constantes.VAR_SESSION_PRODUCTO] = null;
+            }
+            else
+            {
+                producto = productoBL.updateProducto(producto);
+                this.Session[Constantes.VAR_SESSION_PRODUCTO] = null;
+            }
+            String resultado = JsonConvert.SerializeObject(producto);
+            //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+            return resultado;
+        }
 
         [HttpPost]
         public ActionResult Load(HttpPostedFileBase file)
@@ -322,13 +525,11 @@ namespace Cotizador.Controllers
 
 
 
-
-
         public ActionResult GetDescuentos(string productoSelectId, string selectedValue = null, string disabled = null)
         {
             //Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            
-             var model = new DescuentoViewModels
+
+            var model = new DescuentoViewModels
             {
                 Data = Constantes.DESCUENTOS_LIST,
                 ProductoSelectId = productoSelectId,
@@ -338,5 +539,85 @@ namespace Cotizador.Controllers
 
             return PartialView("_Descuento", model);
         }
+        private Producto ProductoSession
+        {
+            get
+            {
+                Producto producto = null;
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.BusquedaProductos: producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA]; break;
+                    case Constantes.paginas.CUProducto: producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO]; break;
+                }
+                return producto;
+            }
+            set
+            {
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.BusquedaProductos: this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA] = value; break;
+                    case Constantes.paginas.CUProducto: this.Session[Constantes.VAR_SESSION_PRODUCTO] = value; break;
+                }
+            }
+        }
+
+        public void ChangeInputString()
+        {
+            Producto producto = (Producto) this.ProductoSession;
+            PropertyInfo propertyInfo = producto.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(producto, this.Request.Params["valor"]);
+            this.ProductoSession = producto;
+        }
+
+        public void ChangeInputInt()
+        {
+            Producto producto = (Producto)this.ProductoSession;
+            PropertyInfo propertyInfo = producto.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(producto, Int32.Parse(this.Request.Params["valor"]));
+            this.ProductoSession = producto;
+        }
+
+        public void ChangeInputDecimal()
+        {
+            Producto producto = (Producto)this.ProductoSession;
+            PropertyInfo propertyInfo = producto.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(producto, Decimal.Parse(this.Request.Params["valor"]));
+            this.ProductoSession = producto;
+        }
+        public void ChangeInputBoolean()
+        {
+            Producto producto = (Producto)this.ProductoSession;
+            PropertyInfo propertyInfo = producto.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(producto, Int32.Parse(this.Request.Params["valor"]) == 1);
+            this.ProductoSession = producto;
+        }
+
+        public void ChangeImage()
+        {
+            Producto producto = (Producto)this.ProductoSession;
+            String imgBase = this.Request.Params["imgBase"].ToString();
+            string[] sepImgBase = imgBase.Split(new string[] { "base64," }, StringSplitOptions.None);
+
+            if (sepImgBase.Count() == 2)
+            {
+                imgBase = sepImgBase[1];
+                producto.image = Convert.FromBase64String(imgBase);
+            } 
+
+            this.ProductoSession = producto;
+        }
+
+        public ActionResult CancelarCreacionProducto()
+        {
+            this.Session[Constantes.VAR_SESSION_PRODUCTO] = null;
+            UsuarioBL usuarioBL = new UsuarioBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            //   usuarioBL.updateCotizacionSerializada(usuario, null);
+            return RedirectToAction("List", "Producto");
+
+        }
     }
+
+
 }

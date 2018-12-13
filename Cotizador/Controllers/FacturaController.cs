@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using Cotizador.ExcelExport;
 using Model;
 using Model.ServiceReferencePSE;
 using Newtonsoft.Json;
@@ -415,6 +416,16 @@ namespace Cotizador.Controllers
             instanciarfacturaBusqueda();
         }
 
+
+
+        [HttpGet]
+        public ActionResult ExportLastSearchExcel()
+        {
+            List<DocumentoVenta> list = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+
+            Facturasearch excel = new Facturasearch();
+            return excel.generateExcel(list);
+        }
 
         public String Search()
         {

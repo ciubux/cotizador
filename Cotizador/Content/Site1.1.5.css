@@ -185,6 +185,10 @@ textarea {
         width: 1200px;
     }
 
+    #modalVerProducto .modal-dialog {
+        width: 1000px;
+    }
+
     #modalVerHistorialCotizacion .modal-dialog {
         width: 900px;
     }
@@ -490,3 +494,21 @@ $darkred: darken($red, 0.2);*/
 .badge-danger {
     background-color: #d9534f;
 }
+
+
+.tab-content > .active, .pill-content > .active {
+    background-color: #eeeeee;
+    padding: 5px 15px;
+}
+
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    background-color: #eeeeee;
+    text-decoration: underline;
+}
+
+.tab-content > .tab-pane, .pill-content > .pill-pane {
+    padding: 10px 15px;
+}
+
+

@@ -133,5 +133,29 @@ namespace Model
         
         public bool validar { get; set; }
 
+
+
+        public PrecioClienteProducto precioCliente;
+
+
+        private Decimal _porcentajeMargen;
+        //Recupera el porcentajeDescuento con la mayor cantidad de decimales definidos
+        public Decimal porcentajeMargen
+        {
+            get
+            {
+                return Decimal.Parse(String.Format(Constantes.formatoOchoDecimales, _porcentajeMargen));
+            }
+            set { _porcentajeMargen = value; }
+        }
+
+        public Decimal porcentajeMargenMostrar
+        {
+            get
+            {
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, _porcentajeMargen));
+            }
+        }
+
     }
 }

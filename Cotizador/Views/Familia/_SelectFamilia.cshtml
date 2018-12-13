@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Model.Familia>
 
 @Html.DropDownList("familia",
-new SelectList(Model, "nombre", "nombre", 0),
+new SelectList(Model, "nombre", "nombre", ViewBag.selectFamilia),
 new { @class = "form-control ", onchange = @"
 $.ajax({
 url: '/Familia/ChangeFamilia',

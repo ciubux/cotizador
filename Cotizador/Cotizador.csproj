@@ -249,8 +249,12 @@
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
+    <Compile Include="ExcelExport\FacturaSearch.cs" />
+    <Compile Include="ExcelExport\NotaIngresoSearch.cs" />
+    <Compile Include="ExcelExport\GuiaRemisionSearch.cs" />
     <Compile Include="ExcelExport\CotizacionSearch.cs" />
     <Compile Include="ExcelExport\ClienteSearch.cs" />
+    <Compile Include="ExcelExport\ProductoSearch.cs" />
     <Compile Include="ExcelExport\PedidoSearch.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -350,6 +354,7 @@
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
+    <Content Include="Scripts\producto1.0.0.js" />
     <Content Include="Scripts\cotizacion1.1.4.js" />
     <Content Include="Scripts\factura1.1.7.js" />
     <Content Include="Scripts\guiaRemision1.2.3.js" />
@@ -484,6 +489,8 @@
     <Content Include="Views\Pedido\CargaIncorrecta.cshtml" />
     <Content Include="Views\Email\PeddoSinAtencion.cshtml" />
     <Content Include="Views\Shared\_Descuento.cshtml" />
+    <Content Include="Views\Producto\List.cshtml" />
+    <Content Include="Views\Producto\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
