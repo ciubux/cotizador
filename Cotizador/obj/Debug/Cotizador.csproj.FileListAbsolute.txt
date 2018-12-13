@@ -495,6 +495,7 @@ C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\EntityFramework.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\EntityFramework.SqlServer.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\ICSharpCode.SharpZipLib.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.Agent.Intercept.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.DependencyCollector.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\Microsoft.AI.PerfCounterCollector.dll
@@ -605,4 +606,3 @@ C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.csprojRes
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Debug\Cotizador.pdb
-C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\bin\ICSharpCode.SharpZipLib.dll

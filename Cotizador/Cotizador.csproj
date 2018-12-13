@@ -352,7 +352,7 @@
     <Content Include="Scripts\chosen\PrintArea.js" />
     <Content Include="Scripts\cotizacion1.1.4.js" />
     <Content Include="Scripts\factura1.1.7.js" />
-    <Content Include="Scripts\guiaRemision1.3.2.js" />
+    <Content Include="Scripts\guiaRemision1.2.3.js" />
     <Content Include="Scripts\jquery-timepicker\jquery.timepicker.css" />
     <Content Include="Scripts\jquery-timepicker\jquery.timepicker.js" />
     <Content Include="Scripts\jquery-timepicker\jquery.timepicker.min.css" />
@@ -369,7 +369,7 @@
     <Content Include="Scripts\pedidoCompra1.2.4.js" />
     <Content Include="Scripts\pedidoGeneral1.1.6.js" />
     <Content Include="Scripts\utiles1.1.7.js" />
-    <Content Include="Scripts\utilesFacturacion1.1.6.js" />
+    <Content Include="Scripts\utilesFacturacion1.1.4.js" />
     <Content Include="Scripts\notaCredito1.1.3.js" />
     <Content Include="Scripts\venta1.1.2.js" />
     <Content Include="Scripts\footable.min.js" />
