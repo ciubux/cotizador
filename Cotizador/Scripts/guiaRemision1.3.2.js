@@ -2650,6 +2650,10 @@ jQuery(function ($) {
     })
 
 
+    $(document).on('change', ".selectUnidadReporteDetallado", function () {
+        $("#cantidadSeleccionadaReporteDetallado" + $(this).attr("idProducto")).html($(this).find('option:selected').attr("cantidad"));
+    })
+
 
     var ventaDetalleList = null;
 
@@ -2831,7 +2835,7 @@ jQuery(function ($) {
                 '<td>  ' + ventaDetalleList[i].producto.sku + '</td>' +
                 '<td>  ' + ventaDetalleList[i].producto.descripcion + '</td>' +
                 '<td> ' + unidad + '</td>' +
-                '<td style="text-align: right" id="cantidadSeleccionada' + ventaDetalleList[i].producto.idProducto + '"> ' + cantidad + '</td>' +
+                '<td style="text-align: right" id="cantidadSeleccionadaReporteDetallado' + ventaDetalleList[i].producto.idProducto + '"> ' + cantidad + '</td>' +
                 '<td style="text-align: right" >  ' + ventaDetalleList[i].sumPrecioUnitario.toFixed(cantidadDecimales) + '</td>' +
                 '</tr>';
 

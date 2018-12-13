@@ -889,6 +889,7 @@ namespace DataLayer
                 pedidoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
+                pedidoDetalle.producto.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo_producto");
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
@@ -1191,6 +1192,7 @@ namespace DataLayer
                 //Si NO es recotizacion se consideran los precios y el costo de lo guardado
                 pedidoDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                 pedidoDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+                pedidoDetalle.producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
 
                 //Si la unidad es alternativa se múltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el precio estándar
 

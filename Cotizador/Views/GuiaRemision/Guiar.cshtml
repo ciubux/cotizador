@@ -590,16 +590,24 @@
                 @{int contador = 0;}
                 @foreach (var documentoDetalle in guiaRemision.documentoDetalle)
                 {
-                    contador++;
-                    <tr data-expanded="true">
-                        <td>  @documentoDetalle.producto.idProducto</td>
-                        <td>  @documentoDetalle.producto.sku</td>
-                        <!--<td class="@documentoDetalle.producto.idProducto" style="text-align:right">@documentoDetalle.cantidadSolicitada</td>-->
-                        <td class="@documentoDetalle.producto.idProducto detcantidadSaldo" style="text-align:right">@documentoDetalle.cantidadPendienteAtencion</td>
-                        <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right">@documentoDetalle.cantidadPorAtender</td>
-                        <td>  @documentoDetalle.unidad</td>
-                        <td>  @documentoDetalle.producto.descripcion  </td>
-                    </tr>
+
+                    <!--Bien o Bien Comodato-->
+                    if ((int)documentoDetalle.producto.tipoProducto == 1 || (int)documentoDetalle.producto.tipoProducto == 2)
+                    {
+
+
+
+                        contador++;
+                        <tr data-expanded="true">
+                            <td>  @documentoDetalle.producto.idProducto</td>
+                            <td>  @documentoDetalle.producto.sku</td>
+                            <!--<td class="@documentoDetalle.producto.idProducto" style="text-align:right">@documentoDetalle.cantidadSolicitada</td>-->
+                            <td class="@documentoDetalle.producto.idProducto detcantidadSaldo" style="text-align:right">@documentoDetalle.cantidadPendienteAtencion</td>
+                            <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right">@documentoDetalle.cantidadPorAtender</td>
+                            <td>  @documentoDetalle.unidad</td>
+                            <td>  @documentoDetalle.producto.descripcion  </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>

@@ -127,6 +127,8 @@ namespace DataLayer
                 producto.precioClienteProducto = new PrecioClienteProducto();
                 producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
 
+                producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
+
                 /*Obtenido a partir de precio Lista*/
                 if (row["precio_neto"] != DBNull.Value)
                 {

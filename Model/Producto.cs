@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,6 +8,12 @@ namespace Model
 {
     public class Producto : Auditoria
     {
+        public Producto()
+        {
+            this.tipoProducto = TipoProducto.Bien;
+        }
+
+
         public Guid idProducto { get; set; }
         public Guid idFamilia { get; set; }
         public Guid idProveedor { get; set; }
@@ -71,5 +78,24 @@ namespace Model
         }
 
         public PrecioClienteProducto precioClienteProducto { get; set; }
+
+        public TipoProducto tipoProducto { get; set; }
+
+        public enum TipoProducto
+        {
+            [Display(Name = "Bien")]
+            Bien = 1,
+            [Display(Name = "Bien Comodato")]
+            Comodato = 2,
+            [Display(Name = "Servicio")]
+            Servicio = 3,
+            [Display(Name = "Cargo")]
+            Cargo = 4,
+            [Display(Name = "Recargo")]
+            Recargo = 5,
+            [Display(Name = "Descuento")]
+            Descuento = 6,
+        }
+        
     }
 }

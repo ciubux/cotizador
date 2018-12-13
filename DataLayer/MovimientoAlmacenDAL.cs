@@ -373,6 +373,7 @@ namespace DataLayer
                     InputParameterAdd.Guid(objCommand, "idProducto", documentoDetalle.producto.idProducto);
                     InputParameterAdd.Int(objCommand, "cantidad", documentoDetalle.cantidadPorAtender);
                     InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion);
+                    InputParameterAdd.Int(objCommand, "tipoProducto", (int)documentoDetalle.producto.tipoProducto);
                     OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacenDetalle");
                     ExecuteNonQuery(objCommand);
                     Guid idMovimientoAlmacenDetalle = (Guid)objCommand.Parameters["@idMovimientoAlmacenDetalle"].Value;

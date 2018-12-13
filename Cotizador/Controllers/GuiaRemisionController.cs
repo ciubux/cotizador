@@ -819,6 +819,11 @@ namespace Cotizador.Controllers
                 TransportistaBL transportistaBL = new TransportistaBL();
                 guiaRemision.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
                 guiaRemision.documentoDetalle = guiaRemision.pedido.documentoDetalle;
+
+
+
+
+
             }
             catch (Exception ex)
             {
