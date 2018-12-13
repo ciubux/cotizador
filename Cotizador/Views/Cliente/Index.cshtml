@@ -304,6 +304,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                    </div>
+
                     <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#cliente_datos">Datos Generales</a></li>
                         <li><a data-toggle="tab" href="#cliente_crediticia">Información Crediticia</a></li>
@@ -351,34 +359,34 @@
                                 </div>
                             </div>
                             <!--
-    <div class="row">
-        <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
-                @Html.LabelFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
-                <div class="col-xs-8">
-                    @Html.TextBoxFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+            <div class="row">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
-                @Html.LabelFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
-                <div class="col-xs-8">
-                    @Html.TextBoxFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
-                @Html.LabelFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
-                <div class="col-xs-8">
-                    @Html.TextBoxFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!--ESTADO CONTRIBUYENTE CLIENTE-->
+            <!--ESTADO CONTRIBUYENTE CLIENTE-->
 
                             <div class="row">
                                 <div class="col-sm-6 col-lg-4">
@@ -588,32 +596,32 @@
                             <fieldset>
                                 <legend>Responsables Comerciales Asignados:</legend>
                                 <!-- <div class="row">
-            Responsable Comercial
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    <div class="col-xs-4">
-                    </div>
-                    <div class="col-xs-8">
-                        @if (cliente.vendedoresAsignados)
-                        {
+                    Responsable Comercial
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <div class="col-xs-4">
+                            </div>
+                            <div class="col-xs-8">
+                                @if (cliente.vendedoresAsignados)
+                                {
 
-                        <span id="spanVendedoresAsignados" style="color:forestgreen">Los Responsables Comerciales han sido validados.</span>
-                            <span id="spanVendedoresNoAsignados" style="color:darkred" hidden="hidden">No se ha culminado la validación de los Responsables Comerciales.</span>
-                        }
-                        else
-                        {
-                            <span id="spanVendedoresAsignados" style="color:forestgreen" hidden="hidden">Los Responsables Comerciales han sido validados.</span>
-                            <span id="spanVendedoresNoAsignados" style="color:darkred">No se ha culminado la validación de los Responsables Comerciales.</span>
+                                <span id="spanVendedoresAsignados" style="color:forestgreen">Los Responsables Comerciales han sido validados.</span>
+                                    <span id="spanVendedoresNoAsignados" style="color:darkred" hidden="hidden">No se ha culminado la validación de los Responsables Comerciales.</span>
+                                }
+                                else
+                                {
+                                    <span id="spanVendedoresAsignados" style="color:forestgreen" hidden="hidden">Los Responsables Comerciales han sido validados.</span>
+                                    <span id="spanVendedoresNoAsignados" style="color:darkred">No se ha culminado la validación de los Responsables Comerciales.</span>
 
-                        }
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-                -->
+                        -->
 
                                 <div class="row">
- <!--Responsable Comercial-->
+                                    <!--Responsable Comercial-->
                                     <div class="col-sm-6 col-lg-4">
                                         <div class="form-group">
                                             @Html.LabelFor(c => cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
@@ -645,18 +653,23 @@
 
                             </fieldset>
 
-                            
+
 
                             <fieldset id="fieldset_negociacion_multiregional">
                                 <legend>Negociacion Multiregional:</legend>
-
 
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-12">
                                         <div class="form-group">
                                             <ul class="list-unstyled">
-                                                <li id="li_negociacionMultiregional">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.habilitadoNegociacionMultiregional)</li>
-                                                <li id="li_sedePrincipal">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.habilitadoSedePrincipal)</li>
+                                                <li id="li_negociacionMultiregional">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Ruc Habilitado para negociacion multiregional</label>
+                                                </li>
+                                                <li id="li_sedePrincipal">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">MP <span id="spn_vercliente_mp_registracotizaciones"></span> Registra cotizaciones multiregionales para este RUC</label>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -670,11 +683,26 @@
                                     <div class="col-sm-12 col-lg-12">
                                         <div class="form-group">
                                             <ul class="list-unstyled">
-                                                <li id="li_perteneceCanalMultiregional">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalMultiregional)</li>
-                                                <li id="li_perteneceCanalLima">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalLima)</li>
-                                                <li id="li_perteneceCanalProvincias">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalProvincias)</li>
-                                                <li id="li_perteneceCanalPCP">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.perteneceCanalPCP)</li>
-                                                <li id="li_esSubDistribuidor">&nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />&nbsp;&nbsp; @Html.LabelFor(c => cliente.esSubDistribuidor)</li>
+                                                <li id="li_perteneceCanalMultiregional">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Multiregional</label>
+                                                </li>
+                                                <li id="li_perteneceCanalLima">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Lima</label>
+                                                </li>
+                                                <li id="li_perteneceCanalProvincias">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Provincia</label>
+                                                </li>
+                                                <li id="li_perteneceCanalPCP">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">PCP</label>
+                                                </li>
+                                                <li id="li_esSubDistribuidor">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Sub Distribuidor</label>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -682,41 +710,47 @@
                             </fieldset>
                         </div>
 
-                            <div id="cliente_precios" class="tab-pane fade">
-                                <table id="tableListaPrecios" class="table" data-editing="false"
-                                       data-editing-allow-add="false"
-                                       data-editing-allow-delete="false"
-                                       data-editing-allow-edit="false"
-                                       data-show-toggle="false">
-                                    <thead>
-                                        <tr>
-                                            <th data-name="idProducto" data-visible="false"></th>
-                                            <th data-name="proveedor" data-sortable="false">Prov.</th>
-                                            <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
-                                            <th data-name="producto" data-sortable="false">Producto / Descripción</th>
-                                            <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
-                                            <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
-                                            <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
-                                            <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-                                            <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
-                                            <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
-                                            <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
-                                            <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
+                        <div id="cliente_precios" class="tab-pane fade">
+                            <table id="tableListaPrecios" class="table" data-editing="false"
+                                   data-editing-allow-add="false"
+                                   data-editing-allow-delete="false"
+                                   data-editing-allow-edit="false"
+                                   data-show-toggle="false">
+                                <thead>
+                                    <tr>
+                                        <th data-name="idProducto" data-visible="false"></th>
+                                        <th data-name="proveedor" data-sortable="false">Prov.</th>
+                                        <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
+                                        <th data-name="producto" data-sortable="false">Producto / Descripción</th>
+                                        <th data-name="fechaInicioVigencia" data-sortable="false">Fecha Inicio Vigencia</th>
+                                        <th data-name="fechaFinVigencia" data-sortable="false">Fecha Fin Vigencia</th>
+                                        <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                                        <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
+                                        <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+                                        <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                                        <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+                                        <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
+                                        <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+                                        @if (cliente.usuario.visualizaMargen)
+                                        {
+                                            <th data-name="porcentajeMargen" class="porcentajeMargen" data-sortable="false" data-breakpoints="xs sm">Margen</th>
+                                        }
+                                        <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
+                    </div>
 
-                        <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
-                            <p class="pagination-centered" style=" font-size: medium" align="center">
-                                No existen precios vigentes.
-                            </p>
-                        </div>
+                    <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
+                        <p class="pagination-centered" style=" font-size: medium" align="center">
+                            No existen precios vigentes.
+                        </p>
+                    </div>
 
 
-</form>
+                </form>
             </div>
 
             <div class="modal-footer">

@@ -234,8 +234,8 @@ namespace BusinessLayer
 
                     
                     //Se agrega el IGV al precioLista
-                    pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.precioSinIgv));   
-
+                    pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.precioSinIgv));
+                    pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.costoSinIgv));
 
                     if (pedidoDetalle.esPrecioAlternativo)
                     {
@@ -243,7 +243,8 @@ namespace BusinessLayer
                         pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.equivalencia;
                     }
 
-                    pedidoDetalle.porcentajeDescuento = (1 - (pedidoDetalle.precioNeto / pedidoDetalle.precioLista))*100;
+                    pedidoDetalle.porcentajeDescuento = (1 - (pedidoDetalle.precioNeto / (pedidoDetalle.precioLista == 0 ? 1 : pedidoDetalle.precioLista)))*100;
+                    pedidoDetalle.porcentajeMargen = (1 - (pedidoDetalle.costoLista / (pedidoDetalle.precioNeto == 0 ? 1 : pedidoDetalle.precioNeto))) * 100;
                 }
                 
 

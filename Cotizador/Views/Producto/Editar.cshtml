@@ -17,7 +17,31 @@
 
             <div class="col-sm-6 col-lg-4">
                 <div class="row text-center">
-                    <img id="verImagen" style="height:150px;" src="data:image/png;base64,@Convert.ToBase64String(producto.image)" />
+                    <img id="verImagen"
+                         style="height:150px;"
+                         class="image-fluid"
+                         accept="image/x-png,image/gif,image/jpeg"
+                         src="data:image/png;base64,@Convert.ToBase64String(producto.image)">
+                    
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-center align-self-center">
+                            <label for="imgProductUpload" class="btn btn-primary btn-load-image">Cambiar Imagen</label>
+                        </div>
+                    </div>
+                    <input type="file"
+                           id="imgProductUpload"
+                           style="display:none;"
+                           accept="image/x-png,image/gif,image/jpeg"
+                           class="hiddenfileinput"
+                           data-max-size="1048576"
+                           data-url-set-image="@Url.Action("ChangeImage", "Producto")">
                 </div>
             </div>
             <div class="col-sm-6 col-lg-8">
@@ -78,6 +102,14 @@
         </div>
 
         <div class="row">
+            <div class="col-sm-12 col-lg-12">
+                <div class="form-group">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="row">
                 <!--Unidad-->
                 <div class="col-sm-6 col-lg-4">
@@ -94,7 +126,7 @@
                     <div class="form-group">
                         @Html.LabelFor(c => producto.unidadProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4", @id = "labelClienteNombre" })
                         <div class="col-xs-6 col-sm-6 col-lg-8">
-                            @Html.TextBoxFor(c => producto.unidadProveedor, htmlAttributes: new { @class = "form-control"})
+                            @Html.TextBoxFor(c => producto.unidadProveedor, htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                 </div>

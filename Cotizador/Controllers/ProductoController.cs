@@ -570,6 +570,21 @@ namespace Cotizador.Controllers
             this.ProductoSession = producto;
         }
 
+        public void ChangeImage()
+        {
+            Producto producto = (Producto)this.ProductoSession;
+            String imgBase = this.Request.Params["imgBase"].ToString();
+            string[] sepImgBase = imgBase.Split(new string[] { "base64," }, StringSplitOptions.None);
+
+            if (sepImgBase.Count() == 2)
+            {
+                imgBase = sepImgBase[1];
+                producto.image = Convert.FromBase64String(imgBase);
+            } 
+
+            this.ProductoSession = producto;
+        }
+
         public ActionResult CancelarCreacionProducto()
         {
             this.Session[Constantes.VAR_SESSION_PRODUCTO] = null;

@@ -611,8 +611,7 @@ jQuery(function ($) {
             }
         });
     });
-
-    var idClienteView = "";
+    
     $(document).on('click', "button.btnVerCliente", function () {
         $('body').loadingModal({
             text: 'Abriendo Cliente...'
@@ -741,10 +740,10 @@ jQuery(function ($) {
 
 });
 
-/*
-$(document).ready(function () {
-    $('.imgUpload').change(function (event) {
 
+$(document).ready(function () {
+    $('#imgProductUpload').change(function (event) {
+        
         var fileInput = $(event.target);
         var maxSize = fileInput.data('max-size');
         var maxSizeMb = fileInput.data('max-size-mb');
@@ -755,7 +754,7 @@ $(document).ready(function () {
             if (fileSize > maxSize) {
                 $.alert({
                     title: "Imagen Inválida",
-                    type: 'oranredge',
+                    type: 'red',
                     content: 'El tamaño del archivo debe ser como maximo ' + maxSizeMb + 'MB.',
                     buttons: {
                         OK: function () { }
@@ -770,7 +769,7 @@ $(document).ready(function () {
         } else {
             $.alert({
                 title: "Imagen Inválida",
-                type: 'oranredge',
+                type: 'red',
                 content: 'Seleccione una imagen por favor.',
                 buttons: {
                     OK: function () { }
@@ -780,9 +779,13 @@ $(document).ready(function () {
         }
     });
 
-    $('#imgProduct').change(function (event) {
+    $('#imgProductUpload').change(function (event) {
+        
+        $('body').loadingModal({
+            text: '...'
+        });
 
-        var that = document.getElementById('imagephoto');
+        var that = document.getElementById('imgProductUpload');
         var file = that.files[0];
         var form = new FormData();
         var url = $(that).data("urlSetImage");
@@ -791,7 +794,7 @@ $(document).ready(function () {
 
         reader.onload = function (e) {
             // get loaded data and render thumbnail.
-            document.getElementById("imagephoto_src").src = e.target.result;
+            document.getElementById("verImagen").src = e.target.result;
             var img = new Image();
 
             img.onload = function () {
@@ -799,42 +802,25 @@ $(document).ready(function () {
                 var height = img.height;
             };
             img.src = e.target.result;
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                cache: false,
+                data: {
+                    imgBase: $("#verImagen").attr("src") 
+                },
+                success: function () { }
+
+            }).done(function () {
+                $('body').loadingModal('hide');
+            });
         };
 
         // read the image file as a data URL.
         reader.readAsDataURL(file);
 
         form.append('image', file);
-
-        $('body').loadingModal({
-            text: '...'
-        });
-        $.ajax({
-            url: url,
-            type: "POST",
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: form,
-            beforeSend: function () {
-                //$.blockUI();
-            },
-            success: function (response) {
-                console.log("Ok!");
-                //$.unblockUI();
-            },
-            error: function (error) {
-                console.log(error);
-                //$.unblockUI();
-            }
-        }).done(function () {
-            $('body').loadingModal('hide')
-        });
-    });
-
-    $('#file_cv_submit').change(function (event) {
-        $(this).closest("form").submit();
+        
     });
 });
-
-*/

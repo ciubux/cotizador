@@ -2028,9 +2028,9 @@ jQuery(function ($) {
                 $("#verAsistenteServicioCliente").html(cliente.asistenteServicioCliente.descripcion);
 
 
-                $("#verGrupoCliente").html(cliente.grupoCliente.nombre)
-
-
+                $("#verGrupoCliente").html(cliente.grupoCliente.nombre);
+                $("#spn_vercliente_mp_registracotizaciones").html(cliente.ciudad.nombre);
+                
                 if (cliente.perteneceCanalMultiregional) {
                     $("#li_perteneceCanalMultiregional img").attr("src", "/images/check2.png");
                 } else {
@@ -2076,23 +2076,43 @@ jQuery(function ($) {
                 }
 
                 var preciosList = result.precios;
+                var margenText = "";
 
                 for (var i = 0; i < preciosList.length; i++) {
+                    var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
+                    var fechaFinVigencia = preciosList[i].precioCliente.fechaFinVigencia;
+
+                    if (fechaInicioVigencia == null)
+                        fechaInicioVigencia = "No Definida";
+                    else
+                        fechaInicioVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaInicioVigencia.substr(0, 10));
+
+                    if (fechaFinVigencia == null)
+                        fechaFinVigencia = "No Definida";
+                    else
+                        fechaFinVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaFinVigencia.substr(0, 10));
+
+                    margenText = "";
+                    if ($("#tableListaPrecios th.porcentajeMargen").length) {
+                        margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1)  + ' % </td>';
+                    }
 
                     var preciosRow = '<tr data-expanded="true">' +
                         '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
                         '<td>  ' + preciosList[i].producto.proveedor  + '  </td>' +
                         '<td>  ' + preciosList[i].producto.sku + '  </td>' +
                         '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
+                        '<td>' + fechaInicioVigencia + '</td>' +
+                        '<td>' + fechaFinVigencia + '</td>' +
                         '<td>  ' + preciosList[i].unidad + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
-                        '<td>  ' + preciosList[i].precioLista + '  </td>' +
-                        '<td>  ' + preciosList[i].porcentajeDescuentoMostrar + ' % </td>' +
+                        '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
+                        '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
                         
-                        '<td>  ' + preciosList[i].precioNeto + '  </td>' +
+                        '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
                         '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>  ' + preciosList[i].producto.precioClienteProducto.precioUnitario + '</td>' +
-                       
+                        '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                         margenText +
                         '<td>' +
                         '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +
                         '</td>' +

@@ -316,6 +316,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
+                
 
                 cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
@@ -351,6 +352,24 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
 
 
+                cotizacionDetalle.precioCliente = new PrecioClienteProducto();
+                if (row["fecha_inicio_vigencia"] == DBNull.Value)
+                {
+                    cotizacionDetalle.precioCliente.fechaInicioVigencia = null;
+                }
+                else
+                {
+                    cotizacionDetalle.precioCliente.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                }
+
+                if (row["fecha_fin_vigencia"] == DBNull.Value)
+                {
+                    cotizacionDetalle.precioCliente.fechaFinVigencia = null;
+                }
+                else
+                {
+                    cotizacionDetalle.precioCliente.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+                }
                 //   cotizacionDetalle.porcentajeDescuento = Decimal.Parse(Request["porcentajeDescuento"].ToString());
                 ///   detalle.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
 
@@ -473,6 +492,7 @@ namespace DataLayer
             
             InputParameterAdd.Guid(objCommand, "idUsuario", producto.IdUsuarioRegistro);
             InputParameterAdd.Varchar(objCommand, "sku", producto.sku);
+            InputParameterAdd.Binary(objCommand, "imagen", producto.image);
             InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion);
             InputParameterAdd.Varchar(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
@@ -508,6 +528,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idProducto", producto.idProducto);
             InputParameterAdd.Guid(objCommand, "idUsuario", producto.IdUsuarioRegistro);
             InputParameterAdd.Varchar(objCommand, "sku", producto.sku);
+            InputParameterAdd.Binary(objCommand, "imagen", producto.image);
             InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion);
             InputParameterAdd.Varchar(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
