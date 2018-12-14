@@ -154,7 +154,15 @@ jQuery(function ($) {
     }
 
 
-    
+    $("#btnLimpiarBusqueda").click(function () {
+        $.ajax({
+            url: "/Cliente/CleanBusqueda",
+            type: 'POST',
+            success: function () {
+                location.reload();
+            }
+        });
+    });
 
     function ConfirmDialogReload(message) {
         $('<div></div>').appendTo('body')

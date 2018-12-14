@@ -176,6 +176,11 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA] = cliente;
         }
 
+        public void CleanBusqueda()
+        {
+            instanciarClienteBusqueda();
+        }
+
         public ActionResult CancelarCreacionCliente()
         {
             this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
