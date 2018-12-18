@@ -320,7 +320,7 @@ namespace DataLayer
                 usuario.vendedorList = vendedorList;
                 
             }
-
+            
             if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
             {
                 DataTable dataTableProductosDescuento = dataSet.Tables[8];

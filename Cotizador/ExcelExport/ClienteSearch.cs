@@ -63,7 +63,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 4;
-                int cTotal = 14 + 2;
+                int cTotal = 22 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -75,22 +75,38 @@ namespace Cotizador.ExcelExport
                     }
                 }
 
-                int i = 0; 
+                int i = 0;
+                
 
-                UtilesHelper.setValorCelda(sheet, 1, "A", "Código", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "B", "Razón Social", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "C", "Nombre", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "D", "Tipo Doc.", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "E", "N° Doc.", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "F", "Sede MP", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "G", "Grupo", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "H", "Asesor Comercial", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "I", "Supervisor Comercial", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "J", "Asistente Servicio Cliente", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "K", "Plazo Crédito Aprobado", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "L", "Crédito Aprobado (S/)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "M", "¿Bloqueado?", titleCellStyle);
-                i = 2;
+                UtilesHelper.setValorCelda(sheet, 1, "O", "Negociación Multireginal", titleCellStyle);
+                UtilesHelper.combinarCeldas(sheet, 1, 1, "O", "P");
+                UtilesHelper.setValorCelda(sheet, 1, "Q", "Canales", titleCellStyle);
+                UtilesHelper.combinarCeldas(sheet, 1, 1, "Q", "V");
+
+                UtilesHelper.setValorCelda(sheet, 2, "A", "Código", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "B", "Razón Social", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "C", "Nombre", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "D", "Tipo Doc.", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "E", "N° Doc.", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "F", "Sede MP", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "G", "Grupo", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "H", "Asesor Validado", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "I", "Asesor Comercial", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "J", "Supervisor Comercial", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "K", "Asistente Servicio Cliente", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "L", "Plazo Crédito Aprobado", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "M", "Crédito Aprobado (S/)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "N", "¿Bloqueado?", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "O", "RUC Habilitado", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "P", "Registra Cotizaciones", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "Q", "Multiregional", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "R", "Lima", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "S", "Provincia", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "T", "PCP", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "U", "SubDistribuidor", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "V", "Ordon", titleCellStyle);
+
+                i = 3;
 
                 /*  for (int iii = 0; iii<50;iii++)
                   { */
@@ -104,20 +120,100 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "E", obj.ruc);
                     UtilesHelper.setValorCelda(sheet, i, "F", obj.ciudad.nombre);
                     UtilesHelper.setValorCelda(sheet, i, "G", obj.grupoCliente.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "H", obj.responsableComercial.descripcion);
-                    UtilesHelper.setValorCelda(sheet, i, "I", obj.supervisorComercial.descripcion);
-                    UtilesHelper.setValorCelda(sheet, i, "J", obj.asistenteServicioCliente.descripcion);
-                    UtilesHelper.setValorCelda(sheet, i, "K", obj.tipoPagoFacturaToString);
-                    UtilesHelper.setValorCelda(sheet, i, "L", (double) obj.creditoAprobado);
+                    if (obj.vendedoresAsignados)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "H", "SI");
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "H", "");
+                    }
+                    UtilesHelper.setValorCelda(sheet, i, "I", obj.responsableComercial.descripcion);
+                    UtilesHelper.setValorCelda(sheet, i, "J", obj.supervisorComercial.descripcion);
+                    UtilesHelper.setValorCelda(sheet, i, "K", obj.asistenteServicioCliente.descripcion);
+                    UtilesHelper.setValorCelda(sheet, i, "L", obj.tipoPagoFacturaToString);
+                    UtilesHelper.setValorCelda(sheet, i, "M", (double) obj.creditoAprobado);
                     if (obj.bloqueado)
                     {
-                        UtilesHelper.setValorCelda(sheet, i, "M", "BLOQUEADO");
+                        UtilesHelper.setValorCelda(sheet, i, "N", "BLOQUEADO");
                     } else
                     {
-                        UtilesHelper.setValorCelda(sheet, i, "M", "");
+                        UtilesHelper.setValorCelda(sheet, i, "N", "");
+                    }
+
+                    if (obj.negociacionMultiregional)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "O", "SI");
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "O", "");
+                    }
+
+                    if (obj.sedePrincipal)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "P", "SI");
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "P", "");
+                    }
+
+                    if (obj.perteneceCanalMultiregional)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "Q", "SI");
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "Q", "");
+                    }
+
+                    if (obj.perteneceCanalLima)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "R", "SI");
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "R", "");
+                    }
+
+                    if (obj.perteneceCanalProvincias)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "S", "SI");
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "S", "");
+                    }
+
+                    if (obj.perteneceCanalPCP)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "T", "SI");
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "T", "");
+                    }
+
+                    if (obj.esSubDistribuidor)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "U", "SI");
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "U", "");
+                    }
+
+                    if (obj.perteneceCanalOrdon)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "V", "SI");
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "V", "");
                     }
                     
-                   i++;
+                    i++;
                 }
                 
 

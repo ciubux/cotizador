@@ -167,6 +167,9 @@ namespace Cotizador.Controllers
             Cliente cliente = new Cliente();
             cliente.idCliente = Guid.Empty;
             cliente.ciudad = new Ciudad();
+            cliente.vendedoresAsignados = false;
+            cliente.sinPlazoCreditoAprobado = false;
+            cliente.bloqueado = false;
             cliente.codigo = String.Empty;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             cliente.IdUsuarioRegistro = usuario.idUsuario;
@@ -633,6 +636,11 @@ namespace Cotizador.Controllers
         public void ChangeSinPlazoCreditoAprobado()
         {
             ClienteSession.sinPlazoCreditoAprobado = Int32.Parse(this.Request.Params["sinPlazoCreditoAprobado"]) == 1;
+        }
+
+        public void ChangeSinAsesorValidado()
+        {
+            ClienteSession.vendedoresAsignados = Int32.Parse(this.Request.Params["sinAsesorValidado"]) == 1;
         }
 
         public String ConsultarSiExisteCliente()

@@ -20,7 +20,7 @@
                     @Html.LabelFor(c => cliente.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.TextBoxFor(c => cliente.codigo, htmlAttributes: new { @class = "form-control" })
-                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el código los otros criterios no serán considerados en la búsqueda.</span>
+                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el código los otros criterios no serán considerados en la búsqueda. </span>
                     </div>
                 </div>
             </div>
@@ -121,74 +121,47 @@
             </div>
 
 
-            <div class="col-sm-6 col-lg-4">
+            <div class="col-sm-12 col-lg-8">
                 <div class="form-group">
-                    <label for="cliente_sinPlazoCreditoAprobado" class="control-label col-xs-4">¿Considerar solo sin plazo crédito aprobado?:</label>
-                    <div class="col-xs-8">
-                        <div class="radio radio-inline">
-                            <label class="radio-label">
-                                @if (cliente.sinPlazoCreditoAprobado)
-                                {
-                                    <input class="radio-input" checked type="radio" name="cliente_sinPlazoCreditoAprobado" id="sinPlazoCreditosi" value="1">@ViewBag.Si;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="cliente_sinPlazoCreditoAprobado" id="sinPlazoCreditosi" value="1">@ViewBag.Si;
-                                }
-
-                            </label>
+                    <div class="col-xs-1">
+                    </div>
+                    <div class="col-xs-11">
+                        <div class="row">
+                            @if (cliente.sinPlazoCreditoAprobado)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_sinPlazoCreditoAprobado" id="sinPlazoCreditos" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_sinPlazoCreditoAprobado" id="sinPlazoCreditos" value="1">
+                            }
+                            <label for="sinPlazoCreditos" class="control-label">Solo sin plazo crédito aprobado</label>
                         </div>
-                        <div class="radio radio-inline">
-                            <label class="radio-label">
-                                @if (!cliente.sinPlazoCreditoAprobado)
-                                {
-                                    <input class="radio-input" checked type="radio" name="cliente_sinPlazoCreditoAprobado" id="sinPlazoCreditono" value="0">@ViewBag.No;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="cliente_sinPlazoCreditoAprobado" id="sinPlazoCreditono" value="0">@ViewBag.No;
-                                }
-                            </label>
+                        <div class="row">
+                            @if (cliente.bloqueado)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_bloqueadoBusqueda" id="bloqueadoBusqueda" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_bloqueadoBusqueda" id="bloqueadoBusqueda" value="1">
+                            }
+                            <label for="bloqueadoBusqueda" class="control-label">Solo bloqueados</label>
+                        </div>
+                        <div class="row">
+                            @if (cliente.vendedoresAsignados)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_sinAsesorValidado" id="sinAsesorValidado" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_sinAsesorValidado" id="sinAsesorValidado" value="1">
+                            }
+                            <label for="sinAsesorValidado" class="control-label">Solo con asesor pendientes de validación</label>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-            <!--Considerar Bloqueados-->
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    <label for="cliente_bloqueadoBusqueda" class="control-label col-xs-4">¿Considerar solo bloqueados?:</label>
-                    <div class="col-xs-8">
-                        <div class="radio radio-inline">
-                            <label class="radio-label">
-                                @if (cliente.bloqueado)
-                                {
-                                    <input class="radio-input" checked type="radio" name="cliente_bloqueadoBusqueda" id="bloqueadosi" value="1">@ViewBag.Si;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="cliente_bloqueadoBusqueda" id="bloqueadosi" value="1">@ViewBag.Si;
-                                }
-
-                            </label>
-                        </div>
-                        <div class="radio radio-inline">
-                            <label class="radio-label">
-                                @if (!cliente.bloqueado)
-                                {
-                                    <input class="radio-input" checked type="radio" name="cliente_bloqueadoBusqueda" id="bloqueadono" value="0">@ViewBag.No;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="cliente_bloqueadoBusqueda" id="bloqueadono" value="0">@ViewBag.No;
-                                }
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
 
@@ -220,6 +193,7 @@
                     <th data-name="numeroDocumento" data-visible="true" data-sortable="true">N° Doc.</th>
                     <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
                     <th data-name="grupo" data-sortable="false" data-breakpoints="xs">Grupo</th>
+                    <th data-name="vendedorAsignado" data-visible="true" data-sortable="true">¿Asesor Validado?</th>
                     <th data-name="asesorComercial" data-visible="true" data-sortable="true">Asesor Comercial</th>
                     <th data-name="supervisorComercial" data-visible="true" data-sortable="true">Supervisor Comercial</th>
                     <th data-name="asistenteServicioCliente" data-visible="true" data-sortable="true">Asistente Servicio Cliente</th>
@@ -267,6 +241,15 @@
                                 @Html.LabelFor(c => cliente.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verCodigo"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => cliente.nombreCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verNombreCliente"></p>
                                 </div>
                             </div>
                         </div>
@@ -716,6 +699,10 @@
                                                 <li id="li_esSubDistribuidor">
                                                     &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
                                                     &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Sub Distribuidor</label>
+                                                </li>
+                                                <li id="li_perteneceCanalOrdon">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Ordon</label>
                                                 </li>
                                             </ul>
                                         </div>

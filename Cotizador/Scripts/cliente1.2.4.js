@@ -151,6 +151,12 @@ jQuery(function ($) {
         $("#cliente_plazoCredito").val("");
         $("#tipoPagoCliente").val("0");
         $("#formaPagoCliente").val("0");
+
+
+        $("#idGrupoCliente").val("");
+        $("#sinPlazoCreditos").removeAttr("checked");
+        $("#bloqueadoBusqueda").removeAttr("checked");
+        $("#sinAsesorValidado").removeAttr("checked");
     }
 
 
@@ -1734,10 +1740,6 @@ jQuery(function ($) {
        
     
 
-    $("input[name=cliente_bloqueadoBusqueda]").on("click", function () {
-        var valor = $("input[name=cliente_bloqueadoBusqueda]:checked").val();
-        changeInputBoolean('bloqueado', valor)
-    });
 
     $("#cliente_bloqueado").change(function () {
         var valor = 1;
@@ -1829,34 +1831,62 @@ jQuery(function ($) {
     
 
 
-    $("input[name=cliente_sinPlazoCreditoAprobado]").on("click", function () {
-        var sinPlazoCreditoAprobado = $("input[name=cliente_sinPlazoCreditoAprobado]:checked").val();
+    $("#sinAsesorValidado").change(function () {
+        var valCheck = 0;
+        if ($("#sinAsesorValidado").is(":checked")) {
+            valCheck = 1;
+        }
+
         $.ajax({
-            url: "/Cliente/ChangeSinPlazoCreditoAprobado",
+            url: "/Cliente/ChangeSinAsesorValidado",
             type: 'POST',
             data: {
-                sinPlazoCreditoAprobado: sinPlazoCreditoAprobado
+                sinAsesorValidado: valCheck
             },
             success: function () {
             }
         });
     });
 
+    $("#sinPlazoCreditos").change(function () {
+        var valCheck = 0;
+        if ($("#sinPlazoCreditos").is(":checked")) {
+            valCheck = 1;
+        }
+
+        $.ajax({
+            url: "/Cliente/ChangeSinPlazoCreditoAprobado",
+            type: 'POST',
+            data: {
+                sinPlazoCreditoAprobado: valCheck
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#bloqueadoBusqueda").change(function () {
+        var valCheck = 0;
+        if ($("#bloqueadoBusqueda").is(":checked")) {
+            valCheck = 1;
+        }
+        changeInputBoolean('bloqueado', valCheck);
+    });
+    
 
     $("#btnExportExcel").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
 
     $("#btnBusqueda").click(function () {
-
-
-
+        
         if ($("#cliente_textoBusqueda").val().length < 3 &&
             $("#idResponsableComercial").val() == 0 &&
             $("#idSupervisorComercial").val() == 0 &&
             $("#idAsistenteServicioCliente").val() == 0 &&
-            $("input[name=cliente_bloqueadoBusqueda]:checked").val() == 0 &&
-            $("input[name=cliente_sinPlazoCredito]:checked").val() == 0 &&
+            $("#bloqueadoBusqueda").is(":checked") == 0 &&
+            $("#sinPlazoCreditos").is(":checked") == 0 &&
+            $("#sinAsesorValidado").is(":checked") == 0 &&
             $("#cliente_codigo").val().trim().length == 0 &&
             $("#idGrupoCliente").val() == 0
             ) {
@@ -1903,8 +1933,17 @@ jQuery(function ($) {
                 for (var i = 0; i < clienteList.length; i++) {
 
                     var textoBloqueado = "";
+                    var textoVendedorValidado = "";
+
                     if (clienteList[i].bloqueado == true)
                         textoBloqueado = "Bloqueado";
+
+                    if (clienteList[i].vendedoresAsignados == true) {
+                        textoVendedorValidado = '<span class="green">Validado</span>';
+                    } else {
+                        textoVendedorValidado = '<span class="red">No validado</span>';
+                    }
+
 
 
                     var clienteRow = '<tr data-expanded="true">' +
@@ -1916,6 +1955,7 @@ jQuery(function ($) {
                         '<td>  ' + clienteList[i].ruc + '  </td>' +
                         '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
                         '<td>  ' + clienteList[i].grupoCliente.nombre + '  </td>' +
+                        '<td>  ' + textoVendedorValidado + '</td>' +
                         '<td>  ' + clienteList[i].responsableComercial.descripcion + '</td>' +
                         '<td>  ' + clienteList[i].supervisorComercial.descripcion + '</td>' +
                         '<td>  ' + clienteList[i].asistenteServicioCliente.descripcion + '</td>' +
@@ -1976,6 +2016,7 @@ jQuery(function ($) {
                 $("#verTipoDocumentoIdentidad").html(cliente.tipoDocumentoIdentidadToString);
                 $("#verNumeroDocumento").html(cliente.ruc);
                 $("#verNombreComercial").html(cliente.nombreComercial);
+                $("#verNombreCliente").html(cliente.nombreCliente);
                 $("#verContacto").html(cliente.contacto1);
                 $("#verTelefonoContacto").html(cliente.telefonoContacto1);
                 $("#verEmailContacto").html(cliente.emailContacto1);
@@ -2053,6 +2094,12 @@ jQuery(function ($) {
                     $("#li_perteneceCanalPCP img").attr("src", "/images/check2.png");
                 } else {
                     $("#li_perteneceCanalPCP img").attr("src", "/images/equis.png");
+                }
+
+                if (cliente.perteneceCanalOrdon) {
+                    $("#li_perteneceCanalOrdon img").attr("src", "/images/check2.png");
+                } else {
+                    $("#li_perteneceCanalOrdon img").attr("src", "/images/equis.png");
                 }
 
                 if (cliente.esSubDistribuidor) {

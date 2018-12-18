@@ -102,8 +102,6 @@ namespace Model
             }
         }
 
-
-
         [Display(Name = "Plazo Crédito (Solicitado):")]
         public DocumentoVenta.TipoPago plazoCreditoSolicitado { get; set; }
 

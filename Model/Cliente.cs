@@ -93,6 +93,27 @@ namespace Model
             }
         }
 
+        [Display(Name = "Nombre Cliente:")]
+        public String nombreCliente
+        {
+            get
+            {
+                String textNombre = this.nombreComercialSunat;
+
+                if (this.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC)
+                {
+                    textNombre = this.ruc + " " + this.razonSocial + " (" + this.nombreComercial + ")";
+                }
+
+                if (this.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.DNI)
+                {
+                    textNombre = this.nombreComercial;
+                }
+
+                return textNombre;
+            }
+        }
+
         public String horaFinPrimerTurnoEntrega { get; set; }
 
         public String horaFinPrimerTurnoEntregaFormat

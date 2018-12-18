@@ -277,6 +277,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
             InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
             InputParameterAdd.Int(objCommand, "sinPlazoCreditoAprobado", cliente.sinPlazoCreditoAprobado ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "sinAsesorValidado", cliente.vendedoresAsignados ? 1 : 0);
             InputParameterAdd.Int(objCommand, "bloqueado", cliente.bloqueado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
             DataTable dataTable = Execute(objCommand);
@@ -330,6 +331,16 @@ namespace DataLayer
                 ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
 
                 ClienteResultado.bloqueado = Converter.GetBool(row, "bloqueado");
+
+                ClienteResultado.perteneceCanalMultiregional = Converter.GetBool(row, "pertenece_canal_multiregional");
+                ClienteResultado.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
+                ClienteResultado.perteneceCanalProvincias = Converter.GetBool(row, "pertenece_canal_provincia");
+                ClienteResultado.perteneceCanalPCP = Converter.GetBool(row, "pertenece_canal_pcp");
+                ClienteResultado.perteneceCanalOrdon = Converter.GetBool(row, "pertenece_canal_ordon");
+                ClienteResultado.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
+
+                ClienteResultado.sedePrincipal = Converter.GetBool(row, "sede_principal");
+                ClienteResultado.negociacionMultiregional = Converter.GetBool(row, "negociacion_multiregional");
 
                 ClienteResultado.grupoCliente = new GrupoCliente();
                 ClienteResultado.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
