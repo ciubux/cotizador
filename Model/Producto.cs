@@ -20,12 +20,12 @@ namespace Model
         public Guid idUnidad { get; set; }
         [Display(Name = "Código (SKU):")]
         public String sku { get; set; }
-        [Display(Name = "Código (SKU) Proveedor:")]
+        [Display(Name = "SKU Prov.:")]
         public String skuProveedor { get; set; }
         [Display(Name = "Descripción:")]
         public String descripcion { get; set; }
         public Byte[] image { get; set; }
-        [Display(Name = "Unidad:")]
+        [Display(Name = "Unidad de Venta:")]
         public String unidad { get; set; }
         [Display(Name = "Proveedor:")]
         public String proveedor { get; set; }
@@ -40,12 +40,12 @@ namespace Model
         [Display(Name = "Inafecto:")]
         public bool inafecto { get; set; }
 
-        [Display(Name = "Unidad Estandar Internacional:")]
+        [Display(Name = "Unidad SUNAT:")]
         public String unidadEstandarInternacional { get; set; }
 
         public Decimal precioLista { get; set; }
 
-        [Display(Name = "Precio Provincia:")]
+        [Display(Name = "Precio Provincias:")]
         public Decimal precioProvinciaSinIgv { get; set; }
        
 
@@ -61,15 +61,15 @@ namespace Model
         [Display(Name = "Unidad Proveedor:")]
         public String unidadProveedor { get; set; }
         // private int _equivalencia;
-        [Display(Name = "Equivalencia:")]
+        [Display(Name = "Equivalencia Und. Alt.:")]
         public int equivalencia { get; set; }
 
-        [Display(Name = "Equivalencia Proveedor:")]
+        [Display(Name = "Equivalencia Und. Prov.:")]
         public int equivalenciaProveedor { get; set; }
 
         // private Decimal _precioSinIgv;
 
-        [Display(Name = "Precio:")]
+        [Display(Name = "Precio Lima:")]
         public Decimal precioSinIgv {      get;set;    }
 
         [Display(Name = "Precio Alternativo:")]
@@ -102,6 +102,7 @@ namespace Model
 
         public PrecioClienteProducto precioClienteProducto { get; set; }
 
+        [Display(Name = "Tipo:")]
         public TipoProducto tipoProducto { get; set; }
 
         public enum TipoProducto

@@ -272,12 +272,14 @@ jQuery(function ($) {
         });
     }
 
-    $("#cliente_creditoSolicitado").change(function () {
-        changeInputDecimal("creditoSolicitado", $("#cliente_creditoSolicitado").val())
+    $("#producto_estado_si").click(function () {
+        var valCheck = 1;
+        changeInputInt("Estado", valCheck)
     });
 
-    $("#cliente_creditoAprobado").change(function () {
-        changeInputDecimal("creditoAprobado", $("#cliente_creditoAprobado").val())
+    $("#producto_estado_no").click(function () {
+        var valCheck = 0;
+        changeInputInt("Estado", valCheck)
     });
 
     function changeInputString(propiedad, valor) {
@@ -290,6 +292,28 @@ jQuery(function ($) {
             },
             success: function () { }
         });
+    }
+
+    function ChangeTipoProducto(tipoProducto) {
+        $.ajax({
+            url: "/Cliente/ChangeTipoProducto",
+            type: 'POST',
+            data: { tipoProducto: tipoProducto },
+            success: function () {
+
+            },
+            error: function () {
+                $.alert({
+                    title: 'Error',
+                    content: MENSAJE_ERROR,
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+        });
+
     }
 
     $("#producto_skuProveedor").change(function () {
@@ -315,13 +339,37 @@ jQuery(function ($) {
     $("#producto_unidad_alternativa").change(function () {
         changeInputString("unidad_alternativa", $("#producto_unidad_alternativa").val());
     });
-    
+
+    $("#producto_equivalencia").change(function () {
+        changeInputInt("equivalencia", $("#producto_equivalencia").val());
+    });
+
+    $("#producto_equivalenciaProveedor").change(function () {
+        changeInputInt("equivalenciaProveedor", $("#producto_equivalenciaProveedor").val());
+    });
+
+    $("#tipoProducto").change(function () {
+        ChangeTipoProducto($("#tipoProducto").val());
+    });
+
     $("#producto_exoneradoIgv").change(function () {
         var valor = 1;
         if (!$('#producto_exoneradoIgv').prop('checked')) {
             valor = 0;
         }
         changeInputBoolean('exoneradoIgv', valor)
+    });
+
+    $("#producto_precioSinIgv").change(function () {
+        changeInputDecimal("precioSinIgv", $("#producto_precioSinIgv").val());
+    });
+
+    $("#producto_precioProvinciaSinIgv").change(function () {
+        changeInputDecimal("precioProvinciaSinIgv", $("#producto_precioProvinciaSinIgv").val());
+    });
+
+    $("#producto_costoSinIgv").change(function () {
+        changeInputDecimal("costoSinIgv", $("#producto_costoSinIgv").val());
     });
 
     $("#producto_inafecto").change(function () {
@@ -370,6 +418,13 @@ jQuery(function ($) {
                 var producto = result;
                 $('body').loadingModal('hide')
                 $("#verIdProducto").html(producto.idProducto);
+
+                if (result.Estado == 1) {
+                    $("#verEstado").html('<span style="color: green; font-weight: bold;">Activo</span>');
+                } else {
+                    $("#verEstado").html('<span style="color: red; font-weight: bold;">Inactivo</span>');
+                }
+
                 $("#verImagen").attr("src", "data:image/png;base64," + producto.image);
                 $("#verSku").html(producto.sku);
                 $("#verSkuProveedor").html(producto.skuProveedor);
@@ -612,96 +667,6 @@ jQuery(function ($) {
         });
     });
     
-    $(document).on('click', "button.btnVerCliente", function () {
-        $('body').loadingModal({
-            text: 'Abriendo Cliente...'
-        });
-        $('body').loadingModal('show');
-
-        var arrrayClass = event.target.getAttribute("class").split(" ");
-        var idCliente = arrrayClass[0];
-        var codigoCliente = arrrayClass[1];
-
-        $.ajax({
-            url: "/Cliente/Show",
-            data: {
-                idCliente: idCliente
-            },
-            type: 'POST',
-            dataType: 'JSON',
-            error: function (detalle) {
-                $('body').loadingModal('hide');
-                mostrarMensajeErrorProceso();
-            },
-            success: function (result) {
-                var cliente = result.cliente;
-                idClienteView = idCliente;
-                $('body').loadingModal('hide')
-                $("#verCiudadNombre").html(cliente.ciudad.nombre);
-                $("#verCodigo").html(cliente.codigo);
-                $("#verRuc").html(cliente.ruc);
-                $("#verTipoDocumentoIdentidad").html(cliente.tipoDocumentoIdentidadToString);
-                $("#verNumeroDocumento").html(cliente.ruc);
-                $("#verNombreComercial").html(cliente.nombreComercial);
-                $("#verContacto").html(cliente.contacto1);
-                $("#verTelefonoContacto").html(cliente.telefonoContacto1);
-                $("#verEmailContacto").html(cliente.emailContacto1);
-                $("#verCorreoEnvioFactura").html(cliente.correoEnvioFactura);
-                if (cliente.bloqueado) {
-                    $("#verBloqueado").html("Sí");
-                }
-                else {
-                    $("#verBloqueado").html("No");
-                }
-
-                $("#verObservaciones").html(cliente.observaciones);
-
-                /*Plazo Crédito*/
-                $("#verPlazoCreditoSolicitado").html(cliente.plazoCreditoSolicitadoToString);
-                $("#verPlazoCreditoAprobado").html(cliente.tipoPagoFacturaToString);
-                $("#verSobrePlazo").html(cliente.sobrePlazo);               
-
-                /*Montos de Crédito*/
-                $("#verCreditoSolicitado").html(cliente.creditoSolicitado.toFixed(cantidadDecimales));
-                $("#verCreditoAprobado").html(cliente.creditoAprobado.toFixed(cantidadDecimales));
-                $("#verSobreGiro").html(cliente.sobreGiro.toFixed(cantidadDecimales));
-
-                $("#verObservacionesCredito").html(cliente.observacionesCredito);
-                $("#verFormaPagoFactura").html(cliente.formaPagoFacturaToString);
-
-                /*Datos Sunat*/
-                $("#verRazonSocialSunat").html(cliente.razonSocialSunat);       
-                $("#verNombreComercialSunat").html(cliente.nombreComercialSunat);
-                $("#verDireccionDomicilioLegalSunat").html(cliente.direccionDomicilioLegalSunat);
-
-
-
-                $("#verEstadoContribuyente").html(cliente.estadoContribuyente);
-                $("#verCondicionContribuyente").html(cliente.condicionContribuyente);
-
-                /*
-                $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);
-                $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
-                $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);*/
-                
-                $("#verHoraInicioPrimerTurnoEntrega").html(cliente.horaInicioPrimerTurnoEntregaFormat);
-                $("#verHoraFinPrimerTurnoEntrega").html(cliente.horaFinPrimerTurnoEntregaFormat);
-                $("#verHoraInicioSegundoTurnoEntrega").html(cliente.horaInicioSegundoTurnoEntregaFormat);
-                $("#verHoraFinSegundoTurnoEntrega").html(cliente.horaFinSegundoTurnoEntregaFormat);
-
-                /*Vendedores*/
-                $("#verResponsableComercial").html(cliente.responsableComercial.descripcion);
-                $("#verSupervisorComercial").html(cliente.supervisorComercial.descripcion);
-                $("#verAsistenteServicioCliente").html(cliente.asistenteServicioCliente.descripcion);
-
-        
-                $("#modalVerCliente").modal('show');
-                        
-            }
-        });
-    });
-    
-
     $("#btnEditarProducto").click(function () {
       //  desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
@@ -746,8 +711,8 @@ $(document).ready(function () {
         
         var fileInput = $(event.target);
         var maxSize = fileInput.data('max-size');
-        var maxSizeMb = fileInput.data('max-size-mb');
-
+        var maxSizeText = fileInput.data('max-size-text');
+        var imagenValida = true;
         if (fileInput.get(0).files.length) {
             var fileSize = fileInput.get(0).files[0].size; // in bytes
 
@@ -755,14 +720,12 @@ $(document).ready(function () {
                 $.alert({
                     title: "Imagen Inválida",
                     type: 'red',
-                    content: 'El tamaño del archivo debe ser como maximo ' + maxSizeMb + 'MB.',
+                    content: 'El tamaño del archivo debe ser como maximo ' + maxSizeText + '.',
                     buttons: {
                         OK: function () { }
                     }
                 });
-
-              
-                event.preventDefault();
+                imagenValida = false;
             }
 
 
@@ -775,52 +738,50 @@ $(document).ready(function () {
                     OK: function () { }
                 }
             });
-            event.preventDefault();
+            imagenValida = false;
         }
-    });
 
-    $('#imgProductUpload').change(function (event) {
-        
-        $('body').loadingModal({
-            text: '...'
-        });
-
-        var that = document.getElementById('imgProductUpload');
-        var file = that.files[0];
-        var form = new FormData();
-        var url = $(that).data("urlSetImage");
-        var reader = new FileReader();
-        var mime = file.type;
-
-        reader.onload = function (e) {
-            // get loaded data and render thumbnail.
-            document.getElementById("verImagen").src = e.target.result;
-            var img = new Image();
-
-            img.onload = function () {
-                var width = img.width;
-                var height = img.height;
-            };
-            img.src = e.target.result;
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                cache: false,
-                data: {
-                    imgBase: $("#verImagen").attr("src") 
-                },
-                success: function () { }
-
-            }).done(function () {
-                $('body').loadingModal('hide');
+        if (imagenValida) {
+            $('body').loadingModal({
+                text: '...'
             });
-        };
 
-        // read the image file as a data URL.
-        reader.readAsDataURL(file);
+            var that = document.getElementById('imgProductUpload');
+            var file = that.files[0];
+            var form = new FormData();
+            var url = $(that).data("urlSetImage");
+            var reader = new FileReader();
+            var mime = file.type;
 
-        form.append('image', file);
-        
+            reader.onload = function (e) {
+                // get loaded data and render thumbnail.
+                document.getElementById("verImagen").src = e.target.result;
+                var img = new Image();
+
+                img.onload = function () {
+                    var width = img.width;
+                    var height = img.height;
+                };
+                img.src = e.target.result;
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    cache: false,
+                    data: {
+                        imgBase: $("#verImagen").attr("src")
+                    },
+                    success: function () { }
+
+                }).done(function () {
+                    $('body').loadingModal('hide');
+                });
+            };
+
+            // read the image file as a data URL.
+            reader.readAsDataURL(file);
+
+            form.append('image', file);
+        }
     });
 });

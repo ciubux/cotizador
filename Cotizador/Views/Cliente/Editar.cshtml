@@ -604,42 +604,56 @@
 
         <fieldset>
             <legend>Horarios Entrega:</legend>
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(p => cliente.primerTurnoEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
-                    <div class="input-group col-xs-6 col-lg-8">
-                        <div class="input-group-addon" style="width:70px">
-                            <span class="input-group-text" id="basic-addon1">Desde:</span>
+            <div class="row">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(p => cliente.primerTurnoEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
+                        <div class="input-group col-xs-6 col-lg-8">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Desde:</span>
+                            </div>
+                            @Html.TextBoxFor(c => cliente.horaInicioPrimerTurnoEntregaFormat, htmlAttributes: new { @class = "form-control timepicker" })
                         </div>
-                        @Html.TextBoxFor(c => cliente.horaInicioPrimerTurnoEntregaFormat, htmlAttributes: new { @class = "form-control timepicker" })
-                    </div>
-                    <label for="horaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
-                    <div class="input-group col-xs-6 col-lg-8">
+                        <label for="horaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+                        <div class="input-group col-xs-6 col-lg-8">
 
-                        <div class="input-group-addon" style="width:70px">
-                            <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                            </div>
+                            @Html.TextBoxFor(c => cliente.horaFinPrimerTurnoEntregaFormat, htmlAttributes: new { @class = "form-control timepicker" })
                         </div>
-                        @Html.TextBoxFor(c => cliente.horaFinPrimerTurnoEntregaFormat, htmlAttributes: new { @class = "form-control timepicker" })
+                    </div>
+                </div>
+
+
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(p => cliente.segundoTurnoEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
+                        <div class="input-group col-xs-6 col-lg-8">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Desde:</span>
+                            </div>
+                            @Html.TextBoxFor(c => cliente.horaInicioSegundoTurnoEntregaFormat, htmlAttributes: new { @class = "form-control timepicker" })
+                        </div>
+                        <label for="horaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+                        <div class="input-group col-xs-6 col-lg-8">
+
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                            </div>
+                            @Html.TextBoxFor(c => cliente.horaFinSegundoTurnoEntregaFormat, htmlAttributes: new { @class = "form-control timepicker" })
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(p => cliente.segundoTurnoEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
-                    <div class="input-group col-xs-6 col-lg-8">
-                        <div class="input-group-addon" style="width:70px">
-                            <span class="input-group-text" id="basic-addon1">Desde:</span>
+            <div class="row">
+                <div class="col-sm-12 col-lg-12">
+                    <div class="form-group">
+                        @Html.LabelFor(p => cliente.observacionHorarioEntrega, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-2" })
+                        <div class="input-group col-xs-8 col-lg-6">
+                            @Html.TextAreaFor(c => cliente.observacionHorarioEntrega, htmlAttributes: new { @class = "form-control" })
                         </div>
-                        @Html.TextBoxFor(c => cliente.horaInicioSegundoTurnoEntregaFormat, htmlAttributes: new { @class = "form-control timepicker" })
-                    </div>
-                    <label for="horaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
-                    <div class="input-group col-xs-6 col-lg-8">
-
-                        <div class="input-group-addon" style="width:70px">
-                            <span class="input-group-text" id="basic-addon1">Hasta:</span>
-                        </div>
-                        @Html.TextBoxFor(c => cliente.horaFinSegundoTurnoEntregaFormat, htmlAttributes: new { @class = "form-control timepicker" })
                     </div>
                 </div>
             </div>

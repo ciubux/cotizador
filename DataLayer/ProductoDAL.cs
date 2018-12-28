@@ -413,6 +413,7 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "sku", producto.sku);
             InputParameterAdd.VarcharEmpty(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);
+            InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
             DataTable dataTable = Execute(objCommand);
@@ -471,7 +472,9 @@ namespace DataLayer
                 item.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
                 item.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
                 item.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
-	            //,usuario_creacion
+                item.Estado = Converter.GetInt(row, "estado");
+                item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
+                //,usuario_creacion
                 //,fecha_creacion
                 //,usuario_modificacion
                 //,fecha_modificacion
@@ -508,7 +511,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
-
+            InputParameterAdd.Int(objCommand, "tipo", (int) producto.tipoProducto);
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);
             InputParameterAdd.Decimal(objCommand, "costo", producto.costoSinIgv);
@@ -544,6 +547,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "tipo", (int)producto.tipoProducto);
 
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);

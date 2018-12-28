@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,6 +8,7 @@ namespace Model
 {
     public class Auditoria
     {
+        [Display(Name = "Estado:")]
         public int Estado { get; set; }
         public DateTime FechaRegistro { get; set; }
         public Guid IdUsuarioRegistro { get; set; }

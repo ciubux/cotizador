@@ -34,6 +34,9 @@ namespace Cotizador.Controllers
                 instanciarProductoBusqueda();
             }
 
+            this.Session["familia"] = "Todas";
+            this.Session["proveedor"] = "Todos";
+
             Producto productoSearch = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA];
 
             ViewBag.pagina = (int)Constantes.paginas.BusquedaProductos;
@@ -83,7 +86,7 @@ namespace Cotizador.Controllers
             else
             {
                 usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.modificaMaestroClientes)
+                if (!usuario.modificaMaestroClientes && !usuario.modificaProducto)
                 {
                     return RedirectToAction("Login", "Account");
                 }
@@ -139,6 +142,9 @@ namespace Cotizador.Controllers
             inStream.Close();
             producto.image = storeStream.GetBuffer();
 
+            this.Session["familia"] = "Todas";
+            this.Session["proveedor"] = "Todos";
+
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             producto.IdUsuarioRegistro = usuario.idUsuario;
             producto.usuario = usuario;
@@ -155,6 +161,11 @@ namespace Cotizador.Controllers
             producto.descripcion = String.Empty;
             producto.familia = "Todas";
             producto.proveedor = "Todos";
+            producto.Estado = 1;
+
+            this.Session["familia"] = "Todas";
+            this.Session["proveedor"] = "Todos";
+
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             producto.IdUsuarioRegistro = usuario.idUsuario;
             producto.usuario = usuario;
@@ -605,6 +616,11 @@ namespace Cotizador.Controllers
             } 
 
             this.ProductoSession = producto;
+        }
+
+        public void ChangeTipoProducto()
+        {
+            ProductoSession.tipoProducto = (Producto.TipoProducto)Int32.Parse(this.Request.Params["tipoProducto"]);
         }
 
         public ActionResult CancelarCreacionProducto()

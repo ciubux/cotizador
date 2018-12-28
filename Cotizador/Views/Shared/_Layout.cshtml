@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "87";
+    TempData["ScriptVersion"] = "97";
     
 }
 
@@ -252,7 +252,10 @@
                                     {
                                         <li id="linkMantenimientoProducto" class="@linkMantenimientoProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
                                         <li id="linkBusquedaProducto" class="@linkBusquedaProducto">@Html.ActionLink("Producto - Búsqueda", "List", "Producto")</li>
+                                        if (usuario.modificaProducto)
+                                        {
                                         <li id="linkCRProducto" class="@linkCRProducto">@Html.ActionLink("Producto - Crear/Modificar ", "Editar", "Producto")</li>
+                                        }
                                     }
                                 </ul>
                             </li>

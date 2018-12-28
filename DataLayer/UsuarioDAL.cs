@@ -114,6 +114,7 @@ namespace DataLayer
                 usuario.modificaResponsablePortafolio = Converter.GetBool(row, "define_responsable_portafolio");
                 usuario.modificaPedidoVentaFechaEntregaHasta = Converter.GetBool(row, "modifica_pedido_venta_fecha_entrega_hasta");
                 usuario.modificaCanales = Converter.GetBool(row, "modifica_canales");
+                usuario.modificaProducto = Converter.GetBool(row, "modifica_producto");
                 usuario.bloqueaClientes = Converter.GetBool(row, "bloquea_clientes");
                 usuario.modificaPedidoFechaEntregaExtendida = Converter.GetBool(row, "modifica_pedido_fecha_entrega_extendida");
                 usuario.modificaNegociacionMultiregional = Converter.GetBool(row, "modifica_negociacion_multiregional");
