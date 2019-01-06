@@ -802,7 +802,7 @@ namespace Cotizador.Controllers
 
                                 if (sheet.GetRow(row).GetCell(16) != null)
                                 {
-                                    item.creditoAprobado = Decimal.Parse(sheet.GetRow(row).GetCell(16).ToString());
+                                    //item.creditoAprobado = Decimal.Parse(sheet.GetRow(row).GetCell(16).ToString());
                                 }
 
                                 if (sheet.GetRow(row).GetCell(18) != null)

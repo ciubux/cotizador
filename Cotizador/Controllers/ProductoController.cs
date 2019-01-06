@@ -141,6 +141,7 @@ namespace Cotizador.Controllers
             storeStream.Flush();
             inStream.Close();
             producto.image = storeStream.GetBuffer();
+            producto.tipoProductoVista = (int) producto.tipoProducto;
 
             this.Session["familia"] = "Todas";
             this.Session["proveedor"] = "Todos";
@@ -162,6 +163,7 @@ namespace Cotizador.Controllers
             producto.familia = "Todas";
             producto.proveedor = "Todos";
             producto.Estado = 1;
+            producto.tipoProductoVista = 0;
 
             this.Session["familia"] = "Todas";
             this.Session["proveedor"] = "Todos";
@@ -620,7 +622,13 @@ namespace Cotizador.Controllers
 
         public void ChangeTipoProducto()
         {
-            ProductoSession.tipoProducto = (Producto.TipoProducto)Int32.Parse(this.Request.Params["tipoProducto"]);
+            int valor = Int32.Parse(this.Request.Params["tipoProducto"]);
+            if (valor > 0)
+            {
+                ProductoSession.tipoProducto = (Producto.TipoProducto) valor;
+            }
+
+            ProductoSession.tipoProductoVista = valor;
         }
 
         public ActionResult CancelarCreacionProducto()

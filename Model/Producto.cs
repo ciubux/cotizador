@@ -102,6 +102,9 @@ namespace Model
 
         public PrecioClienteProducto precioClienteProducto { get; set; }
 
+
+        public int tipoProductoVista { get; set; }
+
         [Display(Name = "Tipo:")]
         public TipoProducto tipoProducto { get; set; }
 
@@ -120,7 +123,14 @@ namespace Model
             [Display(Name = "Descuento")]
             Descuento = 6,
         }
-        
+
+        public String tipoProductoToString
+        {
+            get
+            {
+                return EnumHelper<TipoProducto>.GetDisplayValue(this.tipoProducto);
+            }
+        }
 
         public Usuario usuario { get; set; }
 

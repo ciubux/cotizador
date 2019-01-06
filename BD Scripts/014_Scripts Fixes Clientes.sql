@@ -895,5 +895,72 @@ END
 
 
 
+/* **** 9 **** */
+ALTER PROCEDURE [dbo].[ps_productos]
+@sku varchar(100),
+@skuProveedor varchar(100),
+@descripcion varchar(500),
+@familia varchar(200),
+@proveedor varchar(10),
+@tipo int,
+@estado int
+AS
+BEGIN
+
+IF @sku IS NULL OR @sku = ''
+BEGIN
+	SELECT 
+	 id_producto
+      ,sku
+      ,descripcion
+      ,sku_proveedor
+      ,imagen
+      ,precio
+      ,precio_provincia
+      ,costo
+      ,familia
+      ,proveedor
+      ,unidad
+      ,unidad_alternativa
+      ,equivalencia
+      ,unidad_proveedor
+      ,equivalencia_proveedor
+	  ,tipo 
+	   FROM PRODUCTO p
+	where p.sku_proveedor LIKE '%'+@skuProveedor+'%' 
+		  and p.descripcion LIKE '%'+@descripcion+'%' 
+		  and (@familia LIKE 'Todas' OR p.familia LIKE @familia) 
+		  and (@proveedor LIKE 'Todos' OR p.proveedor LIKE @proveedor) 
+		  and (@tipo = 0 OR tipo = @tipo) 
+		  and p.estado = @estado;
+END
+ELSE
+BEGIN 
+
+SELECT 
+	 id_producto
+      ,sku
+      ,descripcion
+      ,sku_proveedor
+      ,imagen
+      ,precio
+      ,precio_provincia
+      ,costo
+      ,familia
+      ,proveedor
+      ,unidad
+      ,unidad_alternativa
+      ,equivalencia
+      ,unidad_proveedor
+      ,equivalencia_proveedor
+	  ,tipo
+	   FROM PRODUCTO p
+	where p.sku LIKE @sku 
+		  and p.estado = @estado;
+	
+END
+END
+
+
 
 

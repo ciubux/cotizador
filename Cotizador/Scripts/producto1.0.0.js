@@ -296,7 +296,7 @@ jQuery(function ($) {
 
     function ChangeTipoProducto(tipoProducto) {
         $.ajax({
-            url: "/Cliente/ChangeTipoProducto",
+            url: "/Producto/ChangeTipoProducto",
             type: 'POST',
             data: { tipoProducto: tipoProducto },
             success: function () {
@@ -636,6 +636,7 @@ jQuery(function ($) {
                         '<td>  ' + list[i].skuProveedor + '  </td>' +
                         '<td>  ' + list[i].proveedor + ' </td>' +
                         '<td>  ' + list[i].familia + '</td>' +
+                        '<td>  ' + list[i].tipoProductoToString + '</td>' +
                         '<td>  ' + list[i].descripcion + '  </td>' +
                         '<td>  ' + list[i].unidad + '  </td>' +
                         '<td>  ' + list[i].unidad_alternativa + '  </td>' +

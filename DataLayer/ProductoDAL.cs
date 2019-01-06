@@ -414,6 +414,7 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
+            InputParameterAdd.Int(objCommand, "tipo", producto.tipoProductoVista);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
             DataTable dataTable = Execute(objCommand);
@@ -435,7 +436,8 @@ namespace DataLayer
                 item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
                 item.equivalencia = Converter.GetInt(row, "equivalencia");
                 item.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
-
+                item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
+                item.tipoProductoVista = (int)item.tipoProducto;
 
                 item.precioSinIgv = Converter.GetDecimal(row, "precio");
                 item.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
@@ -474,6 +476,7 @@ namespace DataLayer
                 item.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
                 item.Estado = Converter.GetInt(row, "estado");
                 item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
+                item.tipoProductoVista = (int)item.tipoProducto;
                 //,usuario_creacion
                 //,fecha_creacion
                 //,usuario_modificacion

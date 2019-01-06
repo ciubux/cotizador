@@ -2514,6 +2514,8 @@ $(document).ready(function () {
                                 OK: function () { }
                             }
                         });
+
+                        $('#btnBusqueda').click();
                     } else {
                         $.alert({
                             title: "Carga fallida",
