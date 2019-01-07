@@ -149,7 +149,7 @@ $("#btnAceptarFacturarPedido").click(function () {
         $("#documentoVenta_fechaVencimiento").focus();
         return false;
     }
-
+    
     if ($("#tipoPago").val() == 0) {
         $("#tipoPago").focus();
         $.alert({
@@ -162,7 +162,7 @@ $("#btnAceptarFacturarPedido").click(function () {
         });
         return false;
     }
-
+    
 
     if ($("#verNumeroReferenciaCliente").html().length > 20) {
         $("#numeroReferenciaCliente").focus();

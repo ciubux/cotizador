@@ -1782,7 +1782,11 @@ jQuery(function ($) {
                 var lista = cotizacion.cotizacionDetalleList;
                 for (var i = 0; i < cotizacion.cotizacionDetalleList.length; i++) {
 
-                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined'? '' : lista[i].observacion;
+                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+                    var precioUnitarioAnterior = lista[i].producto.precioClienteProducto.precioUnitario.toFixed(cantidadDecimales);
+                    if (lista[i].esPrecioAlternativo)
+                        precioUnitarioAnterior = lista[i].producto.precioClienteProducto.precioUnitarioAlternativo.toFixed(cantidadDecimales);
 
                     d += '<tr>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
@@ -1799,7 +1803,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
-                        '<td class="tdprecioUnitarioAnterior">' + lista[i].producto.precioClienteProducto.precioUnitario.toFixed(cantidadDecimales) + '</td>' +
+                        '<td class="tdprecioUnitarioAnterior">' + precioUnitarioAnterior + '</td>' +
                         '<td>' + observacion + '</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
                         '</tr>';

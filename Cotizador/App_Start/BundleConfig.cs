@@ -11,7 +11,7 @@ namespace Cotizador
 
             bundles.Add(new ScriptBundle("~/bundles/utiles").Include(
                          "~/Scripts/utiles1.1.7.js",
-                         "~/Scripts/utilesFacturacion1.1.4.js"
+                         "~/Scripts/utilesFacturacion1.1.5.js"
                          ));
 
             bundles.Add(new ScriptBundle("~/bundles/venta").Include(
@@ -36,17 +36,17 @@ namespace Cotizador
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/cotizacion").Include(
-                        "~/Scripts/cotizacion1.1.4.js"
+                        "~/Scripts/cotizacion1.1.5.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedido").Include(
                         "~/Scripts/pedidoGeneral1.1.6.js",
-                        "~/Scripts/pedido1.2.2.js"
+                        "~/Scripts/pedido1.2.4.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedidoCompra").Include(
                         "~/Scripts/pedidoGeneral1.1.6.js",
-                        "~/Scripts/pedidoCompra1.2.4.js"
+                        "~/Scripts/pedidoCompra1.2.5.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/pedidoAlmacen").Include(
@@ -55,7 +55,7 @@ namespace Cotizador
                        ));
 
             bundles.Add(new ScriptBundle("~/bundles/cliente").Include(
-                     "~/Scripts/cliente1.2.4.js"
+                     "~/Scripts/cliente1.2.5.js"
                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/producto").Include(
@@ -63,7 +63,7 @@ namespace Cotizador
                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
-                        "~/Scripts/guiaRemision1.2.3.js"
+                        "~/Scripts/guiaRemision1.3.2.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/notaIngreso").Include(

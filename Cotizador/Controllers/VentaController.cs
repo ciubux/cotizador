@@ -61,7 +61,16 @@ namespace Cotizador.Controllers
             return json;
         }
 
-
+        [HttpPost]
+        public void CreateVentaRefacturacion()
+        {
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            Venta venta = new Venta();
+            venta.guiaRemision = guiaRemision;
+            VentaBL ventaBL = new VentaBL();
+            ventaBL.InsertVentaRefacturacion(venta);
+            
+        }
 
 
 

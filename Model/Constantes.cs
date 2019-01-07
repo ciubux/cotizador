@@ -52,6 +52,7 @@ namespace Model
         /*CONSTANTES PARA VARIABLES DE SESION*/
 
         public static String VAR_SESSION_COTIZACION = "cotizacion";
+        public static String VAR_SESSION_COTIZACION_APROBADA = "cotizacionAprobada";
         public static String VAR_SESSION_COTIZACION_BUSQUEDA = "cotizacionBusqueda";
         public static String VAR_SESSION_COTIZACION_LISTA = "cotizacionList";
         public static String VAR_SESSION_COTIZACION_VER = "cotizacionVer";
@@ -284,6 +285,7 @@ namespace Model
         public static String SERVER_SMPTP = "smtp.office365.com";
         public static int PUERTO_SERVER_SMPTP = 587;
         public static String MAIL_ADMINISTRADOR = "c.cornejo@mpinstitucional.com";
+        public static String MAIL_SOPORTE_TI = "soporte.ti@mpinstitucional.com";
         public static String MAIL_CREDITOS = "creditos@mpinstitucional.com";
         public static String MAIL_COBRANZAS = "cobranzas@mpinstitucional.com";
 

@@ -1128,7 +1128,7 @@ namespace Cotizador.Controllers
             pedido.observaciones = this.Request.Params["observaciones"];
             pedido.observacionesGuiaRemision = this.Request.Params["observacionesGuiaRemision"];
             pedido.observacionesFactura = this.Request.Params["observacionesFactura"];
-
+            pedido.numeroGrupoPedido = Int32.Parse(this.Request.Params["pedidoNumeroGrupo"]);
             if (Logueado.modificaPedidoFechaEntregaExtendida) { 
                 if (this.Request.Params["fechaEntregaExtendida"] == null || this.Request.Params["fechaEntregaExtendida"].Equals(""))
                 {
@@ -1660,7 +1660,7 @@ namespace Cotizador.Controllers
             else
             {
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.modificaMaestroProductos)
+                if (!usuario.realizaCargaMasivaPedidos)
                 {
                     return RedirectToAction("Login", "Account");
                 }

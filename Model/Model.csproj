@@ -61,6 +61,7 @@
     <Compile Include="NotaIngreso.cs" />
     <Compile Include="ClienteAdjunto.cs" />
     <Compile Include="ArchivoAdjunto.cs" />
+    <Compile Include="PedidoGrupo.cs" />
     <Compile Include="Persona.cs" />
     <Compile Include="Producto.cs" />
     <Compile Include="SeguimientoNotaIngreso.cs" />

@@ -722,7 +722,7 @@ jQuery(function ($) {
 
                 $("#ver_guiaRemision_estadoDescripcion").html(guiaRemision.estadoDescripcion);
 
-
+                $("#btnRefacturar").hide();
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
@@ -731,6 +731,7 @@ jQuery(function ($) {
                     $("#btnExtornar").hide();
                     $("#btnImprimirGuiaRemision").hide();
                     $("#btnFacturarGuiaRemision").hide();
+                    $("#btnRefacturar").hide();
                 }
                 else {
                     $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:black")
@@ -784,6 +785,7 @@ jQuery(function ($) {
                         $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:green")
                         $("#btnAnularGuiaRemision").hide();
                         $("#btnFacturarGuiaRemision").hide();
+                        $("#btnRefacturar").show();
                     }
 
                    /* if (    guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_COMPRA.charCodeAt(0)
@@ -2196,9 +2198,44 @@ jQuery(function ($) {
         });
     });
 
+    $('#btnRefacturar').click(function () {
+        $.confirm({
+            title: 'Confirmación Refacturación',
+            content: '¿Está seguro de generar una nueva venta para la Guía de Remisión: ' + $("#ver_guiaRemision_serieNumeroDocumento").html() + "?",
+            type: 'orange',
+            buttons: {
+                confirm: {
+                    text: 'Sí',
+                    action: function () {
+                        $.ajax({
+                            url: "/Venta/CreateVentaRefacturacion",
+                            type: 'POST',
+                            error: function (resultado) {
+                                $.alert({
+                                    title: "Error",
+                                    content: "Se generó un error al generar la nueva Venta.",
+                                    type: 'red',
+                                    buttons: {
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            },
+                            success: function (resultado) {
+                                location.reload()
+                            }
+                        })
+                    }
+                },
+                cancel: {
+                    text: 'No',
+                    action: function () {
+                    }
+                }
+            }
+        })
 
-
-
+    });
 
 
     /*GENERACIÓN DE NOTA DE INGRESO*/

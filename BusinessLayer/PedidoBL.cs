@@ -30,13 +30,16 @@ namespace BusinessLayer
 
             }
             else {
-                DateTime horaActual = DateTime.Now;
-                DateTime horaLimite = new DateTime(horaActual.Year, horaActual.Month, horaActual.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Hour, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second);
-                if (horaActual >= horaLimite && pedido.ciudad.idCiudad == Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581"))//-- .esProvincia)
+                if (!pedido.usuario.apruebaPedidos)
                 {
-                    pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
-                    /*Constantes.HORA_CORTE_CREDITOS_LIMA.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second*/
-                    pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
+                    DateTime horaActual = DateTime.Now;
+                    DateTime horaLimite = new DateTime(horaActual.Year, horaActual.Month, horaActual.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Hour, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second);
+                    if (horaActual >= horaLimite && pedido.ciudad.idCiudad == Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581"))//-- .esProvincia)
+                    {
+                        pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
+                        /*Constantes.HORA_CORTE_CREDITOS_LIMA.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second*/
+                        pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
+                    }
                 }
             }
 
@@ -66,6 +69,9 @@ namespace BusinessLayer
                     if (!pedido.usuario.apruebaPedidos)
                     {
                         //Si cliente está bloqueado
+
+                        if (pedidoDetalle.producto.tipoProducto == Producto.TipoProducto.Bien)
+                        {
 
                             PrecioClienteProducto precioClienteProducto = pedidoDetalle.producto.precioClienteProducto;
 
@@ -147,7 +153,7 @@ namespace BusinessLayer
                                 }
 
                             }
-                        
+                        }
                     }
                 }
             }
@@ -440,7 +446,7 @@ namespace BusinessLayer
         {
 
             ProductoBL productoBL = new ProductoBL();
-            List<DocumentoDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistrados(pedido.cliente.idCliente, pedido.fechaPrecios, pedido.ciudad.esProvincia, pedido.incluidoIGV, familia, proveedor);
+            List<DocumentoDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistradosParaPedido(pedido.cliente.idCliente, pedido.fechaPrecios, pedido.ciudad.esProvincia, pedido.incluidoIGV, familia, proveedor);
 
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
             //Detalle de la cotizacion

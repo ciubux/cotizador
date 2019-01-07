@@ -465,6 +465,8 @@ namespace Model
             }
         }
 
+        public List<PedidoGrupo> pedidoGrupoList { get; set; }
+
         #region Criterios de Búsqueda
         [Display(Name = "Tipo Pedido:")]
         public tiposPedidoVentaBusqueda tipoPedidoVentaBusqueda { get; set; }

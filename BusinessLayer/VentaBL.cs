@@ -51,6 +51,14 @@ namespace BusinessLayer
             }
         }
 
+        public void InsertVentaRefacturacion(Venta venta)
+        {
+            using (var dal = new VentaDAL())
+            {
+                dal.InsertVentaRefacturacion(venta);
+            }
+        }
+
         public Transaccion GetPlantillaVenta(Transaccion transaccion, Usuario usuario)
         {
             using (var dal = new VentaDAL())

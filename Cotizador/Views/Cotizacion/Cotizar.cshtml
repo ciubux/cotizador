@@ -507,7 +507,14 @@ else
                     <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
                     @if (!cotizacion.esRecotizacion)
                     {
-                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioAnt" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
+                        if (cotizacionDetalle.esPrecioAlternativo)
+                        {
+                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioAnt" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitarioAlternativo </td>
+                        }
+                        else
+                        { 
+                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioAnt" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
+                        }
                     }
 
 
@@ -560,7 +567,7 @@ else
         <div class="row">
             <div class="col-sm-6 col-lg-9">
                 <div class="form-group">
-                    <label for="condicionesPago" class="control-label col-xs-2">Condiciones de Pago:</label>
+                    <label for="condicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
                     <div class="col-xs-8">
                         @Html.TextBoxFor(p => cotizacion.textoCondicionesPago, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
                         @if (cotizacion.esPagoContado)

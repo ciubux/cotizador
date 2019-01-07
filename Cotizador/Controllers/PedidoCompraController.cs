@@ -490,9 +490,13 @@ namespace Cotizador.Controllers
         public String SearchClientes()
         {
             String data = this.Request.Params["data[q]"];
-            ProveedorBL proveedorBL = new ProveedorBL();
+            /*ProveedorBL proveedorBL = new ProveedorBL();
             Pedido pedido = this.PedidoSession;
-           return proveedorBL.getProveedoresBusqueda(data, pedido.ciudad.idCiudad);
+           return proveedorBL.getProveedoresBusqueda(data, pedido.ciudad.idCiudad);*/
+
+            ClienteBL clienteBL = new ClienteBL();
+            Pedido pedido = this.PedidoSession;
+            return clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad);
         }
 
 

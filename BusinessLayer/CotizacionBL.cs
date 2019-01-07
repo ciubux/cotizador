@@ -10,7 +10,7 @@ namespace BusinessLayer
     public class CotizacionBL
     {
 
-        private void validarCotizacion(Cotizacion cotizacion)
+        private void validarCotizacion(Cotizacion cotizacion, Cotizacion cotizacionAprobada = null)
         {
             //Si no se consideran cantidades no se debe grabar el subtotal
             if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
@@ -29,24 +29,36 @@ namespace BusinessLayer
             cotizacion.seguimientoCotizacion.observacion = String.Empty;
             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada;
 
-            if (cotizacion.fechaEsModificada)
+
+            ///Se hay un cambio en las fechas y en la vigencia se realiza evaluación
+
+            if (cotizacionAprobada == null ||
+                cotizacionAprobada.fecha != cotizacion.fecha ||
+                cotizacionAprobada.fechaEsModificada != cotizacion.fechaEsModificada ||
+                cotizacionAprobada.fechaInicioVigenciaPrecios != cotizacion.fechaInicioVigenciaPrecios ||
+                cotizacionAprobada.fechaFinVigenciaPrecios != cotizacion.fechaFinVigenciaPrecios)
             {
-                if(!cotizacion.usuario.apruebaCotizaciones)
-                { 
-                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de la cotización.\n";
+
+
+                if (cotizacion.fechaEsModificada)
+                {
+                    if (!cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de la cotización.\n";
+                        cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                    }
+                }
+                else
+                {
+                    //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
+                    cotizacion.fecha = DateTime.Now;
+                }
+
+                if ((cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null) && !cotizacion.usuario.apruebaCotizaciones)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de inicio y/o fin de vigencia de precios.\n";
                     cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                 }
-            }
-            else
-            {
-                //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
-                cotizacion.fecha = DateTime.Now;
-            }
-
-            if ((cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null) && !cotizacion.usuario.apruebaCotizaciones)
-            {
-                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de inicio y/o fin de vigencia de precios.\n";
-                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
             }
 
 
@@ -165,11 +177,11 @@ namespace BusinessLayer
             }
         }
 
-        public void UpdateCotizacion(Cotizacion cotizacion)
+        public void UpdateCotizacion(Cotizacion cotizacion, Cotizacion cotizacionAprobada)
         {
             using (var dal = new CotizacionDAL())
             {
-                validarCotizacion(cotizacion);
+                validarCotizacion(cotizacion, cotizacionAprobada);
                 dal.UpdateCotizacion(cotizacion);
             }
         }

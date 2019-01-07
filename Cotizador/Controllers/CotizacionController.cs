@@ -397,6 +397,10 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
             return detalles.Count();
         }
+          
+
+
+
 
         public void updateObservaciones()
         {
@@ -821,15 +825,19 @@ namespace Cotizador.Controllers
             decimal precioNeto = Decimal.Parse(Request["precio"].ToString());
             decimal costo = Decimal.Parse(Request["costo"].ToString());
             decimal flete = Decimal.Parse(Request["flete"].ToString());
+
+            decimal precioUnitarioAnterior = 0;
             if (detalle.esPrecioAlternativo)
             {
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                 //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
                 detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * producto.equivalencia));
+                precioUnitarioAnterior = detalle.producto.precioClienteProducto.precioUnitarioAlternativo;
             }
             else
             {
                 detalle.precioNeto = precioNeto;
+                precioUnitarioAnterior = detalle.producto.precioClienteProducto.precioUnitario;
             }
             detalle.flete = flete;
             cotizacion.cotizacionDetalleList.Add(detalle);
@@ -881,7 +889,7 @@ namespace Cotizador.Controllers
                 subTotal = cotizacion.montoSubTotal.ToString(),
                 margen = detalle.margen,
                 precioUnitario = detalle.precioUnitario,
-                precioUnitarioAnt = detalle.producto.precioClienteProducto.precioUnitario,
+                precioUnitarioAnt = precioUnitarioAnterior,
                 observacion = detalle.observacion,
                 total = cotizacion.montoTotal.ToString()
             };
@@ -973,7 +981,9 @@ namespace Cotizador.Controllers
             cotizacion.aplicaSedes = aplicaSedes && !cotizacion.cliente.sedePrincipal ? false : aplicaSedes;
             cotizacion.usuario = usuario;
             CotizacionBL bl = new CotizacionBL();
-            bl.UpdateCotizacion(cotizacion);
+
+            Cotizacion cotizacionAprobada = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_APROBADA];
+            bl.UpdateCotizacion(cotizacion, cotizacionAprobada);
             long codigo = cotizacion.codigo;
             int estado = (int)cotizacion.seguimientoCotizacion.estado; 
             String observacion = cotizacion.seguimientoCotizacion.observacion;
@@ -1036,15 +1046,16 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Cotizacion cotizacionVer = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
             CotizacionBL cotizacionBL = new CotizacionBL();
+
             Cotizacion cotizacion = new Cotizacion();
             cotizacion.codigo = cotizacionVer.codigo;
             cotizacion.fechaModificacion = cotizacionVer.fechaModificacion;
             cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
             cotizacion.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            SeguimientoCotizacion.estadosSeguimientoCotizacion estadoAnteriorCotizacion = cotizacionVer.seguimientoCotizacion.estado;
+
             //Se cambia el estado de la cotizacion a Edición
-
-            SeguimientoCotizacion.estadosSeguimientoCotizacion estadoAnteriorCotizacion = cotizacion.seguimientoCotizacion.estado;
-
             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
             cotizacionBL.cambiarEstadoCotizacion(cotizacion);
 
@@ -1052,6 +1063,19 @@ namespace Cotizador.Controllers
             cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario, estadoAnteriorCotizacion);
 
 
+
+            Cotizacion cotizacionAprobada = null;
+            //Si la cotización se encuentra aprobada
+            if (estadoAnteriorCotizacion == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
+            {
+                cotizacionAprobada = new Cotizacion();
+                cotizacionAprobada.fecha = cotizacion.fecha;
+                cotizacionAprobada.fechaEsModificada = cotizacion.fechaEsModificada;
+                cotizacionAprobada.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios;
+                cotizacionAprobada.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios;
+            }
+
+            this.Session[Constantes.VAR_SESSION_COTIZACION_APROBADA] = cotizacionAprobada;
             this.Session[Constantes.VAR_SESSION_COTIZACION] = cotizacion;
         }
 

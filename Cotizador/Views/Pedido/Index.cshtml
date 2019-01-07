@@ -821,7 +821,7 @@
                     <div class="row">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
-                                <label for="verCondicionesPago" class="control-label col-xs-2">Condiciones de Pago:</label>
+                                <label for="verCondicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verCondicionesPago">
                                     </p>
@@ -1216,6 +1216,19 @@
                                 </div>
                    
                         }
+                    </div>
+
+
+                     <div class="row">
+                        <!--PEDIDO GRUPO-->
+                        <div class="col-sm-6 col-lg-4" >
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <select class="form-control" type="text" id="pedido_numeroGrupo" name="pedido_numeroGrupo"></select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!--Otros datos -->

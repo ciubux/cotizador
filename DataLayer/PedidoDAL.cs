@@ -398,7 +398,7 @@ namespace DataLayer
         public void ActualizarPedido(Pedido pedido)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pu_actualizarPedido");
+            var objCommand = GetSqlCommand("pu_actualizarPedido2");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaAdicional", pedido.numeroReferenciaAdicional);
@@ -406,6 +406,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);
             InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
+            InputParameterAdd.BigInt(objCommand, "numeroGrupoPedido", pedido.numeroGrupoPedido);
 
             ExecuteNonQuery(objCommand);
 
@@ -423,6 +424,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pi_pedidoAdjunto");
             InputParameterAdd.Guid(objCommand, "idPedido", pedidoAdjunto.idPedido);
+            InputParameterAdd.Guid(objCommand, "idArchivoAdjunto", pedidoAdjunto.idArchivoAdjunto);
             InputParameterAdd.Guid(objCommand, "idCliente", pedidoAdjunto.idCliente);
             InputParameterAdd.Varchar(objCommand, "nombre", pedidoAdjunto.nombre);
             InputParameterAdd.VarBinary(objCommand, "adjunto", pedidoAdjunto.adjunto);
@@ -431,7 +433,7 @@ namespace DataLayer
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             ExecuteNonQuery(objCommand);
 
-            pedidoAdjunto.idPedidoAdjunto = (Guid)objCommand.Parameters["@newId"].Value;
+            pedidoAdjunto.idArchivoAdjunto = (Guid)objCommand.Parameters["@newId"].Value;
         }
 
         public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle, Usuario usuario)
@@ -702,6 +704,7 @@ namespace DataLayer
             DataTable movimientoAlmacenDataTable = dataSet.Tables[3];
             DataTable pedidoAdjuntoDataTable = dataSet.Tables[4];
             DataTable solicitanteDataTable = dataSet.Tables[5];
+            DataTable pedidoGrupoDataTable = dataSet.Tables[6];
 
             //   DataTable dataTable = Execute(objCommand);
             //Datos de la cotizacion
@@ -1025,10 +1028,20 @@ namespace DataLayer
             foreach (DataRow row in pedidoAdjuntoDataTable.Rows)
             {
                 PedidoAdjunto pedidoAdjunto = new PedidoAdjunto();
-                pedidoAdjunto.idPedidoAdjunto = Converter.GetGuid(row, "id_pedido_adjunto");
+                pedidoAdjunto.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
                 pedidoAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
                 pedidoAdjunto.nombre = Converter.GetString(row, "nombre");
                 pedido.pedidoAdjuntoList.Add(pedidoAdjunto);
+            }
+
+            pedido.pedidoGrupoList = new List<PedidoGrupo>();
+
+            foreach (DataRow row in pedidoGrupoDataTable.Rows)
+            {
+                PedidoGrupo pedidoGrupo = new PedidoGrupo();
+                pedidoGrupo.numero = Converter.GetInt(row, "numero_grupo");
+                pedidoGrupo.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
+                pedido.pedidoGrupoList.Add(pedidoGrupo);
             }
 
             return pedido;
@@ -1346,7 +1359,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             foreach (DataRow row in pedidoAdjuntoDataTable.Rows)
             {
                 PedidoAdjunto pedidoAdjunto = new PedidoAdjunto();
-                pedidoAdjunto.idPedidoAdjunto = Converter.GetGuid(row, "id_pedido_adjunto");
+                pedidoAdjunto.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
                 pedidoAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
                 pedidoAdjunto.nombre = Converter.GetString(row, "nombre");
                 pedido.pedidoAdjuntoList.Add(pedidoAdjunto);

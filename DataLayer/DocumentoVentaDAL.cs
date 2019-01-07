@@ -80,7 +80,10 @@ namespace DataLayer
 
         public void InsertarDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pi_documentoVenta");     
+            var objCommand = GetSqlCommand("pi_documentoVenta");
+            //var objCommand = GetSqlCommand("pi_documentoVenta_vInafecto");
+            
+
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", documentoVenta.venta.guiaRemision.idMovimientoAlmacen);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
