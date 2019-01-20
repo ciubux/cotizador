@@ -208,28 +208,45 @@ namespace BusinessLayer
         {
 
             ProductoBL productoBL = new ProductoBL();
-            List<DocumentoDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistrados(cotizacion.cliente.idCliente, cotizacion.fechaPrecios, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, familia, proveedor);
+            List<CotizacionDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistrados(cotizacion.cliente.idCliente, cotizacion.fechaPrecios, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, familia, proveedor);
 
-            cotizacion.cotizacionDetalleList = new List<CotizacionDetalle>();
-            //Detalle de la cotizacion
-            foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
+            foreach (CotizacionDetalle cotizacionDetalle in documentoDetalleList)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
-                cotizacionDetalle.producto = new Producto();
+                cotizacionDetalle.visualizaCostos = usuario.visualizaCostos;
+                cotizacionDetalle.visualizaMargen = usuario.visualizaMargen;
                 cotizacionDetalle.cantidad = 1;
-                cotizacionDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
-                cotizacionDetalle.unidad = documentoDetalle.unidad;
-                cotizacionDetalle.producto = documentoDetalle.producto;
-                if(cotizacionDetalle.esPrecioAlternativo)
-                    cotizacionDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+                if (cotizacionDetalle.esPrecioAlternativo)
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia;
                 else
-                    cotizacionDetalle.precioNeto = documentoDetalle.precioNeto;
-                cotizacionDetalle.flete = documentoDetalle.flete;
-                cotizacionDetalle.observacion = documentoDetalle.observacion;
-                cotizacionDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
-                cotizacion.cotizacionDetalleList.Add(cotizacionDetalle);
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
             }
-            return cotizacion;
+            cotizacion.cotizacionDetalleList = documentoDetalleList;
+                /*
+                cotizacion.cotizacionDetalleList = new List<CotizacionDetalle>();
+                //Detalle de la cotizacion
+                foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
+                {
+                    CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
+                    cotizacionDetalle.producto = new Producto();
+                    cotizacionDetalle.cantidad = 1;
+                    cotizacionDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
+                    cotizacionDetalle.unidad = documentoDetalle.unidad;
+                    cotizacionDetalle.producto = documentoDetalle.producto;
+
+
+                    if(cotizacionDetalle.esPrecioAlternativo)
+                        cotizacionDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+                    else
+                        cotizacionDetalle.precioNeto = documentoDetalle.precioNeto;
+
+
+
+                    cotizacionDetalle.flete = documentoDetalle.flete;
+                    cotizacionDetalle.observacion = documentoDetalle.observacion;
+                    cotizacionDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
+                    cotizacion.cotizacionDetalleList.Add(cotizacionDetalle);
+                }*/
+                return cotizacion;
         }
 
 
@@ -274,65 +291,67 @@ namespace BusinessLayer
                         cotizacionDetalle.producto.image = storeStream.GetBuffer();
                     }
 
-                   
 
-
-
-
-            /*        //Si es RECOTIZACIÓN se calcula el nuevo precioNetoEquivalente a partir del precioSinIGV del producto
-                    if (cotizacion.esRecotizacion)
+                    if (cotizacionDetalle.porcentajeDescuento == 0 && cotizacionDetalle.precioNeto != cotizacionDetalle.producto.precioSinIgv)
                     {
-                        //Si es provincia se considera el precioProvincia como precioSinIgv
-                        if (cotizacion.ciudad.esProvincia)
-                        {
-                            cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
-                        }
-
-                        Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
-                        Decimal costo = cotizacionDetalle.producto.costoSinIgv;
-
-                        //Se agrega el igv al costo y al precio neto que se obtuvo directamente del producto
-                        if (cotizacion.incluidoIGV)
-                        {
-                            precioNeto = precioNeto + (precioNeto * Constantes.IGV);
-                            costo = costo + (costo * Constantes.IGV);
-                            cotizacionDetalle.producto.costoLista = costo;
-                            //Tambien se agrega el IGV al costo Anterior, dado que fue almacenado sin IGV
-                            cotizacionDetalle.costoAnterior = cotizacionDetalle.costoAnterior + (cotizacionDetalle.costoAnterior * Constantes.IGV);
-                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-                        }
-                        else
-                        {
-                            cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costo));
-                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-                        }
-
-
-                        //Se calcula el descuento para el nuevo precioNetoEquivalente
-                        if (cotizacionDetalle.porcentajeDescuento != 0)
-                        {
-                            precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (precioNeto * (100 - cotizacionDetalle.porcentajeDescuento)/100)));
-                        }
-
-                        
-                        cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-
-
-
-                        
-
-                        if (cotizacionDetalle.esPrecioAlternativo)
-                        {
-                            cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior / cotizacionDetalle.producto.equivalencia));
-                        }
-
-
-                      
+                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                     }
-                    else
-                    {*/
-                        //Si NO es recotizacion
-                        if (cotizacion.incluidoIGV)
+
+
+                    /*        //Si es RECOTIZACIÓN se calcula el nuevo precioNetoEquivalente a partir del precioSinIGV del producto
+                            if (cotizacion.esRecotizacion)
+                            {
+                                //Si es provincia se considera el precioProvincia como precioSinIgv
+                                if (cotizacion.ciudad.esProvincia)
+                                {
+                                    cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
+                                }
+
+                                Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
+                                Decimal costo = cotizacionDetalle.producto.costoSinIgv;
+
+                                //Se agrega el igv al costo y al precio neto que se obtuvo directamente del producto
+                                if (cotizacion.incluidoIGV)
+                                {
+                                    precioNeto = precioNeto + (precioNeto * Constantes.IGV);
+                                    costo = costo + (costo * Constantes.IGV);
+                                    cotizacionDetalle.producto.costoLista = costo;
+                                    //Tambien se agrega el IGV al costo Anterior, dado que fue almacenado sin IGV
+                                    cotizacionDetalle.costoAnterior = cotizacionDetalle.costoAnterior + (cotizacionDetalle.costoAnterior * Constantes.IGV);
+                                    cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
+                                }
+                                else
+                                {
+                                    cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costo));
+                                    cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
+                                }
+
+
+                                //Se calcula el descuento para el nuevo precioNetoEquivalente
+                                if (cotizacionDetalle.porcentajeDescuento != 0)
+                                {
+                                    precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (precioNeto * (100 - cotizacionDetalle.porcentajeDescuento)/100)));
+                                }
+
+
+                                cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
+
+
+
+
+
+                                if (cotizacionDetalle.esPrecioAlternativo)
+                                {
+                                    cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior / cotizacionDetalle.producto.equivalencia));
+                                }
+
+
+
+                            }
+                            else
+                            {*/
+                    //Si NO es recotizacion
+                    if (cotizacion.incluidoIGV)
                         {
                             //Se agrega el IGV al precioLista
                             decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;

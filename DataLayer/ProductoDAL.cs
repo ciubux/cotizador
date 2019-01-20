@@ -92,7 +92,7 @@ namespace DataLayer
             return idProducto;
         }
 
-        public Producto getProducto(Guid idProducto, Guid idCliente)
+        public Producto getProducto(Guid idProducto, Guid idCliente, Boolean esCompra = false)
         {
             var objCommand = GetSqlCommand("ps_getproducto");
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
@@ -112,18 +112,28 @@ namespace DataLayer
 
                 if (row["imagen"] != DBNull.Value){producto.image = (Byte[])(row["imagen"]);
                 }
+                producto.costoSinIgv = Converter.GetDecimal(row, "costo");
+                if (esCompra)
+                {
+                    producto.precioSinIgv = producto.costoSinIgv;
+                    producto.precioProvinciaSinIgv = producto.costoSinIgv;
+                }
+                else
+                {
+                    producto.precioSinIgv = Converter.GetDecimal(row, "precio");
+                    producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
+                }
+                
 
-                producto.precioSinIgv = Converter.GetDecimal(row, "precio");
-                producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
                 producto.familia = Converter.GetString(row, "familia");
-                producto.clase = Converter.GetString(row, "clase");
+               // producto.clase = Converter.GetString(row, "clase");
                 producto.proveedor = Converter.GetString(row, "proveedor");
                 producto.unidad = Converter.GetString(row, "unidad");
                 producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
                 producto.equivalencia = Converter.GetInt(row, "equivalencia");
                 producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 //Costo sin IGV
-                producto.costoSinIgv = Converter.GetDecimal(row, "costo");
+                
                 producto.precioClienteProducto = new PrecioClienteProducto();
                 producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
 
@@ -203,7 +213,7 @@ namespace DataLayer
             return producto;
         }
 
-        public List<DocumentoDetalle> obtenerProductosAPartirdePreciosRegistrados(Guid idCliente, DateTime fechaPrecios, String familia, String proveedor)
+        public List<CotizacionDetalle> obtenerProductosAPartirdePreciosRegistrados(Guid idCliente, DateTime fechaPrecios, String familia, String proveedor)
         {
             var objCommand = GetSqlCommand("ps_generarPlantillaCotizacion");
             InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
@@ -215,11 +225,11 @@ namespace DataLayer
             DataTable cotizacionDetalleDataTable = dataSet.Tables[1];
 
 
-            List<DocumentoDetalle> documentoDetalleList = new List<DocumentoDetalle>();
+            List<CotizacionDetalle> documentoDetalleList = new List<CotizacionDetalle>();
             //Detalle de la cotizacion
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
-                DocumentoDetalle cotizacionDetalle = new DocumentoDetalle();
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(false,false);
                 cotizacionDetalle.producto = new Producto();
 
 
@@ -236,8 +246,11 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
                 cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
 
+
+
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
+                cotizacionDetalle.producto.precioListaAnterior = Converter.GetDecimal(row, "precio_sin_igv_anterior");
 
 
                 cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
@@ -252,9 +265,14 @@ namespace DataLayer
                 Decimal precioNetoRecalculado = Converter.GetDecimal(row, "precio_neto_recalculado");
                 precioNetoRecalculado = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNetoRecalculado));
 
+                
                 cotizacionDetalle.producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+
+                //Revisar
+                cotizacionDetalle.costoAnterior = Converter.GetDecimal(row, "costo_sin_igv_anterior");
+                cotizacionDetalle.precioNetoAnterior = Converter.GetDecimal(row, "precio_neto_anterior");
 
 
                 if (row["fecha_fin_vigencia"] == DBNull.Value)
@@ -282,7 +300,7 @@ namespace DataLayer
                     //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                     //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
                     cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.equivalencia));
-                    
+                    cotizacionDetalle.producto.precioClienteProducto.precioUnitario = cotizacionDetalle.producto.precioClienteProducto.precioUnitario * cotizacionDetalle.producto.equivalencia;
                 }
                 else
                 {
@@ -362,9 +380,11 @@ namespace DataLayer
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
+
+                cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
                 cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
-                cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+                
 
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
@@ -543,6 +563,8 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "sku", producto.sku);
             InputParameterAdd.VarcharEmpty(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);
+            InputParameterAdd.Int(objCommand, "estado", producto.Estado);
+            InputParameterAdd.Int(objCommand, "tipo", producto.tipoProductoVista);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
             DataTable dataTable = Execute(objCommand);
@@ -564,13 +586,16 @@ namespace DataLayer
                 item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
                 item.equivalencia = Converter.GetInt(row, "equivalencia");
                 item.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
-
+                item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
+                item.tipoProductoVista = (int)item.tipoProducto;
 
                 item.precioSinIgv = Converter.GetDecimal(row, "precio");
                 item.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
                 item.costoSinIgv = Converter.GetDecimal(row, "costo");
 
                 item.image = Converter.GetBytes(row, "imagen");
+                item.Estado = Converter.GetInt(row, "estado");
+                item.FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion");
                 productoList.Add(item);
             }
       
@@ -601,7 +626,10 @@ namespace DataLayer
                 item.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
                 item.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
                 item.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
-	            //,usuario_creacion
+                item.Estado = Converter.GetInt(row, "estado");
+                item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
+                item.tipoProductoVista = (int)item.tipoProducto;
+                //,usuario_creacion
                 //,fecha_creacion
                 //,usuario_modificacion
                 //,fecha_modificacion
@@ -638,7 +666,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
-
+            InputParameterAdd.Int(objCommand, "tipo", (int) producto.tipoProducto);
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);
             InputParameterAdd.Decimal(objCommand, "costo", producto.costoSinIgv);
@@ -674,6 +702,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "tipo", (int)producto.tipoProducto);
 
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);

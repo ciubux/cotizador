@@ -158,22 +158,31 @@ namespace Cotizador.Controllers
             cliente.grupoCliente = new GrupoCliente();
             cliente.sedePrincipal = false;
             cliente.negociacionMultiregional = false;
+            cliente.observacionHorarioEntrega = "";
 
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 
         private void instanciarClienteBusqueda()
         {
+            this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA] = instanciarClienteBusquedaBasic();
+        }
+
+        private Cliente instanciarClienteBusquedaBasic()
+        {
             Cliente cliente = new Cliente();
             cliente.idCliente = Guid.Empty;
             cliente.ciudad = new Ciudad();
+            cliente.vendedoresAsignados = false;
+            cliente.sinPlazoCreditoAprobado = false;
+            cliente.bloqueado = false;
             cliente.codigo = String.Empty;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             cliente.IdUsuarioRegistro = usuario.idUsuario;
             cliente.usuario = usuario;
             cliente.grupoCliente = new GrupoCliente();
 
-            this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA] = cliente;
+            return cliente;
         }
 
         public void CleanBusqueda()
@@ -640,6 +649,11 @@ namespace Cotizador.Controllers
             ClienteSession.sinPlazoCreditoAprobado = Int32.Parse(this.Request.Params["sinPlazoCreditoAprobado"]) == 1;
         }
 
+        public void ChangeSinAsesorValidado()
+        {
+            ClienteSession.vendedoresAsignados = Int32.Parse(this.Request.Params["sinAsesorValidado"]) == 1;
+        }
+
         public String ConsultarSiExisteCliente()
         {
             Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
@@ -657,6 +671,208 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_CLIENTE] = clienteVer;
         }
 
+        [HttpPost]
+        public String UpdateByExcel(HttpPostedFileBase file)
+        {
+            /*     if (file.ContentLength > 0)
+                 {
+                     var fileName = Path.GetFileName(file.FileName);
+                     var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                     file.SaveAs(path);
+                 }
+                 */
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            try
+            {
+
+                HSSFWorkbook hssfwb;
+
+                ClienteBL clienteBL = new ClienteBL();
+
+                hssfwb = new HSSFWorkbook(file.InputStream);
+
+                ISheet sheet = hssfwb.GetSheetAt(0);
+                int row = 1;
+                int cantidad = sheet.LastRowNum;
+                List<Cliente> clientesTemp = new List<Cliente>();
+                string textoTemp = "";
+                //   cantidad = 2008;
+                //sheet.LastRowNum
+
+                GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
+                List<GrupoCliente> grupoClienteList = grupoClienteBL.getGruposCliente();
+
+                for (row = 1; row <= cantidad; row++)
+                {
+                    if (sheet.GetRow(row) != null && usuario.modificaMaestroClientes) //null is when the row only contains empty cells 
+                    {
+
+                        Cliente item = new Cliente();
+                        item = instanciarClienteBusquedaBasic();
+
+                        try
+                        {
+                            /* 0 codigo cliente
+                             * 6 grupo, 
+                             * 9 asesor comercial, 
+                             * 11 supervisor, 
+                             * 13 asistente servicio,   
+                             * 15 plazo credito aprobado
+                             * 16 monto credito aprobado
+                             * 18 cotiza multiregional
+                             * 19 sede principal
+                             * 20 Canal Multiregional
+                             * 21 Canal Lima
+                             * 22 Canal Provincia
+                             * 23 Canal PCP
+                             * 24 Canal Subdistribuidor
+                             * 25 Canal Ordon 
+                            */
+                            
+
+                            if (sheet.GetRow(row).GetCell(0) != null)
+                            {
+                                item.codigo = sheet.GetRow(row).GetCell(0).ToString();
+                                clientesTemp = clienteBL.getClientes(item);
+                                if (clientesTemp.Count == 1)
+                                {
+                                    item = clienteBL.getCliente(clientesTemp.ElementAt(0).idCliente);
+                                }
+                            }
+
+
+                            if (item.idCliente != Guid.Empty)
+                            {
+                                item.usuario = usuario;
+                                if (sheet.GetRow(row).GetCell(6) != null)
+                                {
+                                    textoTemp = sheet.GetRow(row).GetCell(6).ToString().ToUpper().Trim();
+                                    if (!textoTemp.Equals(item.grupoCliente.codigo))
+                                    {
+                                        foreach (GrupoCliente gc in grupoClienteList)
+                                        {
+                                            if (gc.codigo.Equals(textoTemp))
+                                            {
+                                                item.grupoCliente = gc;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (sheet.GetRow(row).GetCell(9) != null)
+                                {
+                                    textoTemp = sheet.GetRow(row).GetCell(9).ToString().ToUpper().Trim();
+                                    if (!textoTemp.Equals(item.responsableComercial.codigo))
+                                    {
+                                        foreach (Vendedor rc in usuario.responsableComercialList)
+                                        {
+                                            if (rc.codigo.Equals(textoTemp))
+                                            {
+                                                item.responsableComercial = rc;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (sheet.GetRow(row).GetCell(11) != null)
+                                {
+                                    textoTemp = sheet.GetRow(row).GetCell(11).ToString().ToUpper().Trim();
+                                    if (!textoTemp.Equals(item.supervisorComercial.codigo))
+                                    {
+                                        foreach (Vendedor sc in usuario.supervisorComercialList)
+                                        {
+                                            if (sc.codigo.Equals(textoTemp))
+                                            {
+                                                item.supervisorComercial = sc;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (sheet.GetRow(row).GetCell(13) != null)
+                                {
+                                    textoTemp = sheet.GetRow(row).GetCell(13).ToString().ToUpper().Trim();
+                                    if (!textoTemp.Equals(item.asistenteServicioCliente.codigo))
+                                    {
+                                        foreach (Vendedor aser in usuario.asistenteServicioClienteList)
+                                        {
+                                            if (aser.codigo.Equals(textoTemp))
+                                            {
+                                                item.asistenteServicioCliente = aser;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (sheet.GetRow(row).GetCell(16) != null)
+                                {
+                                    //item.creditoAprobado = Decimal.Parse(sheet.GetRow(row).GetCell(16).ToString());
+                                }
+
+                                if (sheet.GetRow(row).GetCell(18) != null)
+                                {
+                                    item.negociacionMultiregional = sheet.GetRow(row).GetCell(18).ToString().ToUpper().Equals("SI");
+                                }
+
+                                if (sheet.GetRow(row).GetCell(19) != null)
+                                {
+                                    item.sedePrincipal = sheet.GetRow(row).GetCell(19).ToString().ToUpper().Equals("SI");
+                                }
+
+                                if (sheet.GetRow(row).GetCell(20) != null)
+                                {
+                                    item.perteneceCanalMultiregional = sheet.GetRow(row).GetCell(20).ToString().ToUpper().Equals("SI");
+                                }
+
+                                if (sheet.GetRow(row).GetCell(21) != null)
+                                {
+                                    item.perteneceCanalLima = sheet.GetRow(row).GetCell(21).ToString().ToUpper().Equals("SI");
+                                }
+
+                                if (sheet.GetRow(row).GetCell(22) != null)
+                                {
+                                    item.perteneceCanalProvincias = sheet.GetRow(row).GetCell(22).ToString().ToUpper().Equals("SI");
+                                }
+
+                                if (sheet.GetRow(row).GetCell(23) != null)
+                                {
+                                    item.perteneceCanalPCP = sheet.GetRow(row).GetCell(23).ToString().ToUpper().Equals("SI");
+                                }
+
+                                if (sheet.GetRow(row).GetCell(24) != null)
+                                {
+                                    item.esSubDistribuidor = sheet.GetRow(row).GetCell(24).ToString().ToUpper().Equals("SI");
+                                }
+
+                                if (sheet.GetRow(row).GetCell(25) != null)
+                                {
+                                    item.perteneceCanalOrdon = sheet.GetRow(row).GetCell(25).ToString().ToUpper().Equals("SI");
+                                }
+
+                                clienteBL.updateClienteSunat(item);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                            LogBL logBL = new LogBL();
+                            logBL.insertLog(log);   
+                        }
+                    }
+                }
+
+                return "{\"success\":\"true\",\"message\":\"Se procesó el archivo correctamente.\"}";
+            }
+            catch (Exception ex)
+            {
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+
+                return "{\"success\":\"false\",\"message\":\"Error al cargar el fichero.\"}";
+            }
+        }
 
 
         #region carga de imagenes

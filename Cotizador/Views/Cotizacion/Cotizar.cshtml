@@ -288,13 +288,13 @@
                         <div class="radio radio-inline">
                             <label class="radio-label">
                                 @if (cotizacion.mostrarCodigoProveedor)
-                            {
-                                <input class="radio-input" checked type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorSi" value="1">@ViewBag.Si;
-                        }
-                        else
-                        {
-                            <input class="radio-input" type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorSi" value="1">@ViewBag.Si;
-                    }
+                                {
+                                    <input class="radio-input" checked type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorSi" value="1">@ViewBag.Si;
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorSi" value="1">@ViewBag.Si;
+                                }
 
                             </label>
                         </div>
@@ -420,10 +420,6 @@ else
                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
-                    @if (!cotizacion.esRecotizacion)
-                    {
-                        <th data-name="precioUnitarioAnterior" style="color: #B9371B" data-sortable="false" data-breakpoints="xs sm">Precio Unit Ant.</th>
-                    }
 
                     @if ((int)cotizacion.considerarCantidades == 1 || (int)cotizacion.considerarCantidades == 2)
     {
@@ -437,23 +433,42 @@ else
                 <th data-name="subTotal" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Sub Total</th>
                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
 }
+
                     <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+
+                    @if (!cotizacion.esRecotizacion)
+    {
+                <th data-name="precioUnitarioAnterior" style="color: #B9371B" data-sortable="false" data-breakpoints="xs sm">Precio neto Ant.</th>
+}
+
 
                     @if (cotizacion.esRecotizacion)
     {
                 <th data-name="precioNetoAnterior" data-visible="true" style="color: #B9371B">Precio neto ant</th>
-                <th data-name="precioNeto" data-visible="true" style="color: #B9371B">Var% precio neto</th>
-                <th data-name="varCosto" data-visible="true" style="color: #B9371B">Var% costo</th>
+}
+                    <th data-name="varPrecioNeto" data-visible="true" style="color: #B9371B">Var% precio neto</th>
+                    <th data-name="varPrecioLista" data-visible="true" style="color: #B9371B">Var% precio lista</th>
 
-if (ViewBag.debug == 1)
-{
+
+                    @if (cotizacion.usuario.visualizaCostos)
+                    {
+                        <th data-name="varCosto" data-visible="true" style="color: #B9371B">Var% costo</th>
+                    }
+                    else
+                    {
+                        <th data-name="varCosto" data-visible="false" style="color: #B9371B">Var% costo</th>
+                    }
+
+
+                    @if (ViewBag.debug == 1)
+    {
                 <th data-name="costoAnterior" data-visible="true">CostoAnterior</th>
 }
 else
 {
                 <th data-name="costoAnterior" data-visible="false">CostoAnterior</th>
 }
-}
+
                     <th class="ordenar" data-sortable="false" data-visible="false"></th>
 
 
@@ -463,34 +478,30 @@ else
 
                 @{int contador = 0;}
                 @foreach (var cotizacionDetalle in cotizacion.cotizacionDetalleList)
-            {
-                contador++;
-                <tr data-expanded="false">
+                {
+                    contador++;
+                    <tr data-expanded="false">
                     <td class="detalleCotizacion">  @cotizacionDetalle.producto.idProducto  </td>
                     <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
                     <td>  @cotizacionDetalle.producto.proveedor  </td>
                     <td>  @cotizacionDetalle.producto.sku  </td>
                     <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
                     @if (cotizacion.mostrarCodigoProveedor && (int)cotizacion.considerarCantidades == 2)
-                {
-                    <td>
+                    {
+                        <td>
                         @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
                         <br />
                         <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
-                    </td> }
-            else if (cotizacion.mostrarCodigoProveedor)
-            {
-                <td>  @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion   </td>}
-
-        else
-        {
-            <td>  @cotizacionDetalle.producto.descripcion   </td>}
-
-
-
-
-
-
+                        </td> 
+                    }
+                    else if (cotizacion.mostrarCodigoProveedor)
+                    {
+                        <td>@cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion   </td>
+                    }
+                    else
+                    {
+                        <td>@cotizacionDetalle.producto.descripcion   </td>
+                    }
 
                     <td>  @cotizacionDetalle.unidad  </td>
                     <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
@@ -505,57 +516,58 @@ else
 
                     <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
                     <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
-                    @if (!cotizacion.esRecotizacion)
-                    {
-                        if (cotizacionDetalle.esPrecioAlternativo)
-                        {
-                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioAnt" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitarioAlternativo </td>
-                        }
-                        else
-                        { 
-                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioAnt" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
-                        }
-                    }
-
-
 
                     <td class="@cotizacionDetalle.producto.idProducto detcantidad" style="text-align:right">@cotizacionDetalle.cantidad</td>
                     <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
                     <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
                     <!--class="@cotizacionDetalle.producto.idProducto detobservacion"-->
                     <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+
+                    @if (!cotizacion.esRecotizacion)
+                    {
+                        if (cotizacionDetalle.esPrecioAlternativo)
+                        {
+                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioAnt" style="text-align:right; color: #B9371B">@cotizacionDetalle.producto.precioClienteProducto.precioNetoAlternativo </td>
+                        }
+                        else
+                        { 
+                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioAnt" style="text-align:right; color: #B9371B">@cotizacionDetalle.producto.precioClienteProducto.precioNeto </td>
+                        }
+                    }
+
+
                     @if (cotizacion.esRecotizacion)
-                {
-                    <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
+                    {
+                            <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
+                    }
 
-                if (cotizacionDetalle.variacionPrecioAnterior != 0)
-                {
-                    <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.variacionPrecioAnterior %</td>
-            }
-            else
-            {
-                <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
-        }
+                    @if (cotizacionDetalle.variacionPrecioAnterior != 0)
+                    {
+                            <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.variacionPrecioAnterior %</td>
+                    }
+                    else
+                    {
+                        <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
+                    }
 
-        if (cotizacionDetalle.variacionCosto != 0)
-        {
-            <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.variacionCosto %</td>
-    }
-    else
-    {
-        <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
-}
+                    @if (cotizacionDetalle.variacionCosto != 0)
+                    {
+                        <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.variacionCosto %</td>
+                    }
+                    else
+                    {
+                        <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
+                    }
 
-    <!--font-weight:bold"-->
-    <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
-}
+                    <td class="@cotizacionDetalle.producto.idProducto detvarPrecioLista" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.variacionPrecioListaAnterior %</td>
+                
+                    <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
+                    
                     <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
 
 
-
-
-                </tr>
-        }
+                    </tr>
+                }
 
             </tbody>
         </table>

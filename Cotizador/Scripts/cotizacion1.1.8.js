@@ -13,6 +13,7 @@ jQuery(function ($) {
     */
     //CONSTANTES:
     var cantidadDecimales = 2;
+    var cantidadDecimalesPrecioNeto = 2;
     var IGV = 0.18;
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
@@ -687,9 +688,9 @@ jQuery(function ($) {
                         '<td>' + fechaInicioVigencia + '</td>' +
                         '<td>' + fechaFinVigencia + '</td>' +
                         '<td>' + producto.precioListaList[i].unidad + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].precioNeto).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].precioNeto).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].flete).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].precioUnitario).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
 
                         '</tr>');
                 }
@@ -741,7 +742,7 @@ jQuery(function ($) {
             alert("Tener en cuenta que al cambiar de unidad se recalcula el monto del flete.")
 
             var fleteDetalle = costoLista * flete / 100;
-            $("#fleteDetalle").val(fleteDetalle.toFixed(cantidadDecimales));
+            $("#fleteDetalle").val(fleteDetalle.toFixed(cantidadDecimalesPrecioNeto));
         }
     });
 
@@ -763,7 +764,7 @@ jQuery(function ($) {
 
     $("#fleteDetalle").change(function () {
         var precioUnitario = Number($('#precio').val()) + Number($('#fleteDetalle').val());
-        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimales));
+        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimalesPrecioNeto));
         calcularSubtotalProducto();
     });
 
@@ -787,11 +788,11 @@ jQuery(function ($) {
         var porcentajeDescuento = parseFloat($("#porcentajeDescuento").val());
 
         precio = precioLista * (100 - porcentajeDescuento) * 0.01;
-        precio = precio.toFixed(cantidadDecimales);
+        precio = precio.toFixed(cantidadDecimalesPrecioNeto);
 
 
         var precioUnitario = Number(precio) + Number($('#fleteDetalle').val());
-        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimales));
+        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimalesPrecioNeto));
 
 
         var considerarCantidades = $("#considerarCantidades").val();
@@ -932,9 +933,9 @@ jQuery(function ($) {
                         '<td>' + fechaInicioVigencia + '</td>' +
                         '<td>' + fechaFinVigencia + '</td>' +
                         '<td>' + precioListaList[i].unidad + '</td>' +
-                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
 
                         '</tr>');
                 }
@@ -1000,6 +1001,12 @@ jQuery(function ($) {
                         '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
                         '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
                 }
+                else {
+                    esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">' + detalle.precioNetoAnt + '</td>' +
+                        '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                        '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                        '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
+                }
 
                 var observacionesEnDescripcion = "";
                 if (considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES)
@@ -1027,7 +1034,7 @@ jQuery(function ($) {
 
                     '<td class="' + detalle.idProducto + ' detflete" style="text-align:right">' + flete.toFixed(2) + '</td>' +
                     '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detprecioUnitarioAnt" style="text-align:right">' + detalle.precioUnitarioAnt + '</td>' +
+                    
                     '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
                     '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
@@ -1048,8 +1055,8 @@ jQuery(function ($) {
                 $('#montoTotal').html(detalle.total);
                 $("#total").val(detalle.total);
                 var total = Number($("#total").val())
-                $('#montoFlete').html((total * flete / 100).toFixed(cantidadDecimales));
-                $('#montoTotalMasFlete').html((total + (total * flete / 100)).toFixed(cantidadDecimales));
+                $('#montoFlete').html((total * flete / 100).toFixed(cantidadDecimalesPrecioNeto));
+                $('#montoTotalMasFlete').html((total + (total * flete / 100)).toFixed(cantidadDecimalesPrecioNeto));
 
                 cargarTablaDetalle()
                 // $('#tablefoottable').footable();
@@ -1107,11 +1114,11 @@ jQuery(function ($) {
 
             var esPrecioAlternativo = Number($("#unidad").val());
             //Si es el precio estandar
-            nuevoPrecioInicial = Number(Number($("#precioUnitarioSinIGV").val()).toFixed(cantidadDecimales));
+            nuevoPrecioInicial = Number(Number($("#precioUnitarioSinIGV").val()).toFixed(cantidadDecimalesPrecioNeto));
 
             //Si NO es el precio estandar (si es el precio alternativo)
             if (esPrecioAlternativo == 1) {
-                var nuevoPrecioInicial = Number(Number($("#precioUnitarioAlternativoSinIGV").val()).toFixed(cantidadDecimales));
+                var nuevoPrecioInicial = Number(Number($("#precioUnitarioAlternativoSinIGV").val()).toFixed(cantidadDecimalesPrecioNeto));
             }
         }
         //En caso el calculo se realice al momento de editar un producto en la grilla
@@ -1122,7 +1129,7 @@ jQuery(function ($) {
         }
 
         var nuevoDescuento = 100 - (nuevoPrecioModificado * 100 / nuevoPrecioInicial);
-        $('#nuevoPrecio').val(nuevoPrecioModificado.toFixed(cantidadDecimales));
+        $('#nuevoPrecio').val(nuevoPrecioModificado.toFixed(cantidadDecimalesPrecioNeto));
         $('#nuevoDescuento').val(nuevoDescuento.toFixed(4));
     });
 
@@ -1150,7 +1157,7 @@ jQuery(function ($) {
             //Se recupera el precio calculado
             var precio = Number($("#nuevoPrecio").val());
             //Se asigna el precio calculculado en la columna precio
-            $("." + idproducto + ".detprecio").text(precio.toFixed(cantidadDecimales));
+            $("." + idproducto + ".detprecio").text(precio.toFixed(cantidadDecimalesPrecioNeto));
             //Se asigna el descuento en el campo descuento
             $("." + idproducto + ".detinporcentajedescuento").val($("#nuevoDescuento").val());
 
@@ -1784,9 +1791,15 @@ jQuery(function ($) {
 
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
 
-                    var precioUnitarioAnterior = lista[i].producto.precioClienteProducto.precioUnitario.toFixed(cantidadDecimales);
-                    if (lista[i].esPrecioAlternativo)
-                        precioUnitarioAnterior = lista[i].producto.precioClienteProducto.precioUnitarioAlternativo.toFixed(cantidadDecimales);
+                    var precioUnitarioAnterior = lista[i].producto.precioClienteProducto.precioNeto.toFixed(cantidadDecimalesPrecioNeto);
+                    //var costo = lista[i].producto.costoLista.toFixed(cantidadDecimales);
+                    if (lista[i].esPrecioAlternativo) {
+                        precioUnitarioAnterior = lista[i].producto.precioClienteProducto.precioNetoAlternativo.toFixed(cantidadDecimalesPrecioNeto);
+                       // costo = lista[i].producto.costoListaAlternativo.toFixed(cantidadDecimales)
+                    }
+
+
+
 
                     d += '<tr>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
@@ -1796,15 +1809,17 @@ jQuery(function ($) {
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
-                        '<td>' + lista[i].precioNeto.toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + lista[i].producto.costoLista.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + lista[i].precioNeto.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + lista[i].costoListaVisible.toFixed(cantidadDecimales)  + '</td>' +
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
-                        '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + lista[i].flete.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
                         '<td>' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
-                        '<td class="tdprecioUnitarioAnterior">' + precioUnitarioAnterior + '</td>' +
                         '<td>' + observacion + '</td>' +
+                        '<td class="tdprecioUnitarioAnterior">' + precioUnitarioAnterior + '</td>' +
+                        '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionPrecioAnterior + ' %</td>' +
+                        '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionCosto + ' %</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
                         '</tr>';
 
@@ -2457,7 +2472,7 @@ jQuery(function ($) {
 
     $("#flete").change(function () {
 
-        $("#flete").val(Number($("#flete").val()).toFixed(cantidadDecimales))
+        $("#flete").val(Number($("#flete").val()).toFixed(cantidadDecimalesPrecioNeto))
         var flete = $("#flete").val(); 
         if (flete > 100)
         {
@@ -2466,8 +2481,8 @@ jQuery(function ($) {
         }
 
         var total = Number($("#total").val());
-        $('#montoFlete').html("Flete: " + SIMBOLO_SOL + " " + (total * flete / 100).toFixed(cantidadDecimales));
-        $('#montoTotalMasFlete').html("Total más Flete: " + SIMBOLO_SOL + " " +  (total + (total * flete / 100)).toFixed(cantidadDecimales));
+        $('#montoFlete').html("Flete: " + SIMBOLO_SOL + " " + (total * flete / 100).toFixed(cantidadDecimalesPrecioNeto));
+        $('#montoTotalMasFlete').html("Total más Flete: " + SIMBOLO_SOL + " " + (total + (total * flete / 100)).toFixed(cantidadDecimalesPrecioNeto));
 
         
 
@@ -2918,14 +2933,14 @@ jQuery(function ($) {
         //Se obtiene el precio lista
         var precioLista = Number($("." + idproducto + ".detprecioLista").html());
         //Se calculo el precio con descuento 
-        var precio = Number((precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadDecimales));
+        var precio = Number((precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadDecimalesPrecioNeto));
         //Se asigna el precio calculculado en la columna precio
         $("." + idproducto + ".detprecio").html(precio);
         //se obtiene la cantidad
         var cantidad = Number($("." + idproducto + ".detincantidad").val());
         //Se define el precio Unitario 
         var precioUnitario = flete + precio
-        $("." + idproducto + ".detprecioUnitario").html(precioUnitario.toFixed(cantidadDecimales));
+        $("." + idproducto + ".detprecioUnitario").html(precioUnitario.toFixed(cantidadDecimalesPrecioNeto));
         //Se calcula el subtotal
         var subTotal = precioUnitario * cantidad;
         //Se asigna el subtotal 

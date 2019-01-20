@@ -37,7 +37,7 @@ namespace Cotizador.Controllers
 
         private void instanciarPedidoBusqueda()
         {
-            Pedido pedidoTmp = new Pedido(Pedido.tipos.Compra);
+            Pedido pedidoTmp = new Pedido(Pedido.ClasesPedido.Compra);
             DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now.AddDays(1);
             pedidoTmp.cotizacion = new Cotizacion();
@@ -376,7 +376,7 @@ namespace Cotizador.Controllers
 
         private void instanciarPedido()
         {
-            Pedido pedido = new Pedido(Pedido.tipos.Compra);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Compra);
             pedido.idPedido = Guid.Empty;
             pedido.numeroPedido = 0;
             pedido.numeroGrupoPedido = null;
@@ -421,7 +421,7 @@ namespace Cotizador.Controllers
 
             Pedido pedidoVer = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Compra);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Compra);
             pedido.idPedido = pedidoVer.idPedido;
             //    pedido.fechaModificacion = cotizacionVer.fechaModificacion;
             pedido.seguimientoPedido = new SeguimientoPedido();
@@ -545,7 +545,7 @@ namespace Cotizador.Controllers
 
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
             ProductoBL bl = new ProductoBL();
-            Producto producto = bl.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
+            Producto producto = bl.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente, true);
 
             Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista * (0) / 100));
             Decimal precioUnitario = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, fleteDetalle + producto.precioLista));
@@ -1291,7 +1291,7 @@ namespace Cotizador.Controllers
         {
            // Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ENTRADA];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Compra);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Compra);
             pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
@@ -1307,7 +1307,7 @@ namespace Cotizador.Controllers
         {
             Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Compra);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Compra);
             pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
@@ -1427,7 +1427,7 @@ namespace Cotizador.Controllers
         public String Show()
         {
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Compra);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Compra);
             pedido.idPedido = Guid.Parse(Request["idPedido"].ToString());
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             pedido = pedidoBL.GetPedido(pedido,usuario);

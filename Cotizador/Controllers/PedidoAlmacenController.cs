@@ -35,7 +35,7 @@ namespace Cotizador.Controllers
 
         public void UpdateStockConfirmado()
         {
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
             pedido.stockConfirmado = Int32.Parse(this.Request.Params["stockConfirmado"]) == 1;
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -48,7 +48,7 @@ namespace Cotizador.Controllers
 
         private void instanciarPedidoBusqueda()
         {
-            Pedido pedidoTmp = new Pedido(Pedido.tipos.Almacen);
+            Pedido pedidoTmp = new Pedido(Pedido.ClasesPedido.Almacen);
             DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now.AddDays(1);
             pedidoTmp.cotizacion = new Cotizacion();
@@ -385,7 +385,7 @@ namespace Cotizador.Controllers
 
         private void instanciarPedido()
         {
-            Pedido pedido = new Pedido(Pedido.tipos.Almacen);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Almacen);
             pedido.idPedido = Guid.Empty;
             pedido.numeroPedido = 0;
             pedido.numeroGrupoPedido = null;
@@ -430,7 +430,7 @@ namespace Cotizador.Controllers
 
             Pedido pedidoVer = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ALMACEN_VER];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Almacen);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Almacen);
             pedido.idPedido = pedidoVer.idPedido;
             //    pedido.fechaModificacion = cotizacionVer.fechaModificacion;
             pedido.seguimientoPedido = new SeguimientoPedido();
@@ -1298,7 +1298,7 @@ namespace Cotizador.Controllers
         {
            // Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ENTRADA];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Almacen);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Almacen);
             pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
@@ -1314,7 +1314,7 @@ namespace Cotizador.Controllers
         {
             Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ALMACEN];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Almacen);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Almacen);
             pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
@@ -1434,7 +1434,7 @@ namespace Cotizador.Controllers
         public String Show()
         {
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Almacen);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Almacen);
             pedido.idPedido = Guid.Parse(Request["idPedido"].ToString());
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             pedido = pedidoBL.GetPedido(pedido,usuario);

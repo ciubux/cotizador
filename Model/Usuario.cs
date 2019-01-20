@@ -132,6 +132,7 @@ namespace Model
         public bool modificaPedidoVentaFechaEntregaHasta { get; set; }
         public bool bloqueaClientes { get; set; }
         public bool modificaCanales { get; set; }
+        public bool modificaProducto { get; set; }
         public bool modificaPedidoFechaEntregaExtendida { get; set; }
         public bool modificaNegociacionMultiregional { get; set; }
 

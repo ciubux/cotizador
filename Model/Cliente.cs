@@ -78,6 +78,9 @@ namespace Model
 
         public String horaInicioPrimerTurnoEntrega { get; set; }
 
+        [Display(Name = "Observaciones Horario Entrega:")]
+        public String observacionHorarioEntrega { get; set; }
+
         public String canal { get; set; }
 
         public String horaInicioPrimerTurnoEntregaFormat { get
@@ -90,6 +93,27 @@ namespace Model
                 {
                     return String.Empty;
                 }
+            }
+        }
+
+        [Display(Name = "Nombre Cliente:")]
+        public String nombreCliente
+        {
+            get
+            {
+                String textNombre = this.nombreComercialSunat;
+
+                if (this.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC)
+                {
+                    textNombre = this.razonSocial + " (" + this.nombreComercial + ")";
+                }
+
+                if (this.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.DNI)
+                {
+                    textNombre = this.nombreComercial;
+                }
+
+                return textNombre;
             }
         }
 

@@ -190,7 +190,8 @@ namespace DataLayer
                 {
                     cliente.horaFinSegundoTurnoEntrega = "";
                 }
-
+                cliente.observacionHorarioEntrega = Converter.GetString(row, "observacion_horario_entrega");
+                if (cliente.observacionHorarioEntrega == null) cliente.observacionHorarioEntrega = "";
                 /*Vendedores*/
                 cliente.responsableComercial = new Vendedor();
                 cliente.responsableComercial.idVendedor = Converter.GetInt(row, "responsable_comercial_id_vendedor");
@@ -224,6 +225,7 @@ namespace DataLayer
 
                 cliente.grupoCliente = new GrupoCliente();
                 cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                cliente.grupoCliente.codigo = Converter.GetString(row, "codigo_grupo_cliente");
                 cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
             }
 
@@ -277,6 +279,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
             InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
             InputParameterAdd.Int(objCommand, "sinPlazoCreditoAprobado", cliente.sinPlazoCreditoAprobado ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "sinAsesorValidado", cliente.vendedoresAsignados ? 1 : 0);
             InputParameterAdd.Int(objCommand, "bloqueado", cliente.bloqueado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
             DataTable dataTable = Execute(objCommand);
@@ -331,8 +334,19 @@ namespace DataLayer
 
                 ClienteResultado.bloqueado = Converter.GetBool(row, "bloqueado");
 
+                ClienteResultado.perteneceCanalMultiregional = Converter.GetBool(row, "pertenece_canal_multiregional");
+                ClienteResultado.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
+                ClienteResultado.perteneceCanalProvincias = Converter.GetBool(row, "pertenece_canal_provincia");
+                ClienteResultado.perteneceCanalPCP = Converter.GetBool(row, "pertenece_canal_pcp");
+                ClienteResultado.perteneceCanalOrdon = Converter.GetBool(row, "pertenece_canal_ordon");
+                ClienteResultado.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
+
+                ClienteResultado.sedePrincipal = Converter.GetBool(row, "sede_principal");
+                ClienteResultado.negociacionMultiregional = Converter.GetBool(row, "negociacion_multiregional");
+
                 ClienteResultado.grupoCliente = new GrupoCliente();
                 ClienteResultado.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                ClienteResultado.grupoCliente.codigo = Converter.GetString(row, "codigo_grupo");
                 ClienteResultado.grupoCliente.nombre = Converter.GetString(row, "grupo");
 
                 clienteList.Add(ClienteResultado);
@@ -405,6 +419,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito);
             InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
 
+            InputParameterAdd.VarcharEmpty(objCommand, "observacionHorarioEntrega", cliente.observacionHorarioEntrega);
 
             InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados?1:0));
 
@@ -559,6 +574,7 @@ namespace DataLayer
                 DateTime horaFinSegundoTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
                 InputParameterAdd.DateTime(objCommand, "horaFinSegundoTurnoEntrega", horaFinSegundoTurnoEntrega);
             }
+            InputParameterAdd.VarcharEmpty(objCommand, "observacionHorarioEntrega", cliente.observacionHorarioEntrega);
 
             OutputParameterAdd.Int(objCommand, "existenCambiosCreditos");
             OutputParameterAdd.UniqueIdentifier(objCommand, "usuarioSolicitanteCredito");

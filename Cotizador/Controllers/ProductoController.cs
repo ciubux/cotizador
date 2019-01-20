@@ -34,6 +34,9 @@ namespace Cotizador.Controllers
                 instanciarProductoBusqueda();
             }
 
+            this.Session["familia"] = "Todas";
+            this.Session["proveedor"] = "Todos";
+
             Producto productoSearch = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA];
 
             ViewBag.pagina = (int)Constantes.paginas.BusquedaProductos;
@@ -83,7 +86,7 @@ namespace Cotizador.Controllers
             else
             {
                 usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.modificaMaestroClientes)
+                if (!usuario.modificaMaestroClientes && !usuario.modificaProducto)
                 {
                     return RedirectToAction("Login", "Account");
                 }
@@ -138,6 +141,10 @@ namespace Cotizador.Controllers
             storeStream.Flush();
             inStream.Close();
             producto.image = storeStream.GetBuffer();
+            producto.tipoProductoVista = (int) producto.tipoProducto;
+
+            this.Session["familia"] = "Todas";
+            this.Session["proveedor"] = "Todos";
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             producto.IdUsuarioRegistro = usuario.idUsuario;
@@ -155,6 +162,12 @@ namespace Cotizador.Controllers
             producto.descripcion = String.Empty;
             producto.familia = "Todas";
             producto.proveedor = "Todos";
+            producto.Estado = 1;
+            producto.tipoProductoVista = 0;
+
+            this.Session["familia"] = "Todas";
+            this.Session["proveedor"] = "Todos";
+
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             producto.IdUsuarioRegistro = usuario.idUsuario;
             producto.usuario = usuario;
@@ -605,6 +618,17 @@ namespace Cotizador.Controllers
             } 
 
             this.ProductoSession = producto;
+        }
+
+        public void ChangeTipoProducto()
+        {
+            int valor = Int32.Parse(this.Request.Params["tipoProducto"]);
+            if (valor > 0)
+            {
+                ProductoSession.tipoProducto = (Producto.TipoProducto) valor;
+            }
+
+            ProductoSession.tipoProductoVista = valor;
         }
 
         public ActionResult CancelarCreacionProducto()

@@ -13,9 +13,23 @@ namespace BusinessLayer
 
         public void UpdateVenta(Venta venta)
         {
-            using (var dal = new VentaDAL())
+
+
+            if (venta.guiaRemision.fechaEmision >= new DateTime(2019, 1, 1, 0, 0, 0))
             {
-                dal.UpdateVenta(venta);
+                using (var dal = new VentaDAL())
+                {
+                    dal.UpdateVenta(venta);
+                }
+            }
+            else {
+
+                /*using (var dal = new VentaDAL())
+                {
+                    dal.UpdateVenta(venta);
+                }*/
+
+                throw new Exception("No se puede editar una venta de un periodo anterior.");
             }
         }
 

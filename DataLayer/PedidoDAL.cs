@@ -35,7 +35,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
 
-            if (pedido.tipo == Pedido.tipos.Venta)
+            if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
                 InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
                 InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
@@ -46,7 +46,7 @@ namespace DataLayer
                 InputParameterAdd.Varchar(objCommand, "nombre", pedido.direccionEntrega.nombre); //puede ser null
                 InputParameterAdd.Varchar(objCommand, "observacionesDireccionEntrega", pedido.direccionEntrega.observaciones); //puede ser null
             }
-            else if (pedido.tipo == Pedido.tipos.Compra)
+            else if (pedido.clasePedido == Pedido.ClasesPedido.Compra)
             {
                 InputParameterAdd.Guid(objCommand, "idDireccionEntrega", null); //puede ser null
                 InputParameterAdd.Varchar(objCommand, "direccionEntrega", null);  //puede ser null
@@ -115,14 +115,14 @@ namespace DataLayer
             }
 
 
-            if (pedido.tipo == Pedido.tipos.Venta)
+            if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
                 InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
                 InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
                 InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
                 InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
             }
-            else if (pedido.tipo == Pedido.tipos.Compra)
+            else if (pedido.clasePedido == Pedido.ClasesPedido.Compra)
             {
                 InputParameterAdd.Guid(objCommand, "idSolicitante", null);
                 InputParameterAdd.Varchar(objCommand, "contactoPedido", null);  //puede ser null
@@ -162,19 +162,19 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
 
 
-            if (pedido.tipo == Pedido.tipos.Venta)
+            if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
                 InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedido).ToString());
                 InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
                 InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
             }
-            else if (pedido.tipo == Pedido.tipos.Compra)
+            else if (pedido.clasePedido == Pedido.ClasesPedido.Compra)
             {
                 InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedidoCompra).ToString());
                 InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", null);
                 InputParameterAdd.Varchar(objCommand, "observacionesFactura", null);
             }
-            else if (pedido.tipo == Pedido.tipos.Almacen)
+            else if (pedido.clasePedido == Pedido.ClasesPedido.Almacen)
             {
                 InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedidoAlmacen).ToString());
                 InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
@@ -182,7 +182,7 @@ namespace DataLayer
             }
            
             InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
-            InputParameterAdd.Char(objCommand, "tipo", ((char)pedido.tipo).ToString());
+            InputParameterAdd.Char(objCommand, "tipo", ((char)pedido.clasePedido).ToString());
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "numero");
@@ -224,7 +224,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
 
-            if (pedido.tipo == Pedido.tipos.Venta)
+            if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
                 InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
                 InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
@@ -235,7 +235,7 @@ namespace DataLayer
                 InputParameterAdd.Varchar(objCommand, "nombre", pedido.direccionEntrega.nombre); //puede ser null
                 InputParameterAdd.Varchar(objCommand, "observacionesDireccionEntrega", pedido.direccionEntrega.observaciones); //puede ser null
             }
-            else if (pedido.tipo == Pedido.tipos.Compra)
+            else if (pedido.clasePedido == Pedido.ClasesPedido.Compra)
             {
                 InputParameterAdd.Guid(objCommand, "idDireccionEntrega", null); //puede ser null
                 InputParameterAdd.Varchar(objCommand, "direccionEntrega", null);  //puede ser null
@@ -304,14 +304,14 @@ namespace DataLayer
             }
 
 
-            if (pedido.tipo == Pedido.tipos.Venta)
+            if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
                 InputParameterAdd.Guid(objCommand, "idSolicitante", pedido.solicitante.idSolicitante);
                 InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.solicitante.nombre);  //puede ser null
                 InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.solicitante.telefono);  //puede ser null
                 InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.solicitante.correo);  //puede ser null
             }
-            else if (pedido.tipo == Pedido.tipos.Compra)
+            else if (pedido.clasePedido == Pedido.ClasesPedido.Compra)
             {
                 InputParameterAdd.Guid(objCommand, "idSolicitante", null);
                 InputParameterAdd.Varchar(objCommand, "contactoPedido", null);  //puede ser null
@@ -348,19 +348,19 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCrediticioPedido", pedido.seguimientoCrediticioPedido.observacion);
-            if (pedido.tipo == Pedido.tipos.Venta)
+            if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
                 InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedido).ToString());
                 InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
                 InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
             }
-            else if (pedido.tipo == Pedido.tipos.Compra)
+            else if (pedido.clasePedido == Pedido.ClasesPedido.Compra)
             {
                 InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedidoCompra).ToString());
                 InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", null);
                 InputParameterAdd.Varchar(objCommand, "observacionesFactura", null);
             }
-            else if (pedido.tipo == Pedido.tipos.Almacen)
+            else if (pedido.clasePedido == Pedido.ClasesPedido.Almacen)
             {
                 InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedidoAlmacen).ToString());
                 InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
@@ -600,11 +600,11 @@ namespace DataLayer
             InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", pedido.buscarSedesGrupoCliente);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", pedido.idGrupoCliente);
 
-            switch (pedido.tipo)
+            switch (pedido.clasePedido)
             {
-                case Pedido.tipos.Venta: InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoVentaBusqueda).ToString()); break;
-                case Pedido.tipos.Compra: InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoCompraBusqueda).ToString()); break;
-                case Pedido.tipos.Almacen: InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoAlmacenBusqueda).ToString()); break;
+                case Pedido.ClasesPedido.Venta: InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoVentaBusqueda).ToString()); break;
+                case Pedido.ClasesPedido.Compra: InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoCompraBusqueda).ToString()); break;
+                case Pedido.ClasesPedido.Almacen: InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoAlmacenBusqueda).ToString()); break;
             }
 
             InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", new DateTime(pedido.fechaCreacionDesde.Year, pedido.fechaCreacionDesde.Month, pedido.fechaCreacionDesde.Day, 0, 0, 0));
@@ -613,7 +613,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta == null ? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaHasta.Value.Year, pedido.fechaEntregaHasta.Value.Month, pedido.fechaEntregaHasta.Value.Day, 23, 59, 59));
             InputParameterAdd.DateTime(objCommand, "fechaProgramacionDesde", pedido.fechaProgramacionDesde == null ? pedido.fechaProgramacionDesde : new DateTime(pedido.fechaProgramacionDesde.Value.Year, pedido.fechaProgramacionDesde.Value.Month, pedido.fechaProgramacionDesde.Value.Day, 0, 0, 0));  //pedido.fechaProgramacionDesde);
             InputParameterAdd.DateTime(objCommand, "fechaProgramacionHasta", pedido.fechaProgramacionHasta == null ? pedido.fechaProgramacionHasta : new DateTime(pedido.fechaProgramacionHasta.Value.Year, pedido.fechaProgramacionHasta.Value.Month, pedido.fechaProgramacionHasta.Value.Day, 0, 0, 0));  //pedido.fechaProgramacionDesde); //pedido.fechaProgramacionHasta);
-            InputParameterAdd.Char(objCommand, "tipo", ((char)pedido.tipo).ToString());
+            InputParameterAdd.Char(objCommand, "tipo", ((char)pedido.clasePedido).ToString());
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
             DataTable dataTable = Execute(objCommand);
@@ -622,7 +622,7 @@ namespace DataLayer
 
             foreach (DataRow row in dataTable.Rows)
             {
-                pedido = new Pedido(pedido.tipo);
+                pedido = new Pedido(pedido.clasePedido);
                 pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
                 pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
                 pedido.idPedido = Converter.GetGuid(row, "id_pedido");
@@ -756,10 +756,10 @@ namespace DataLayer
                 pedido.observacionesFactura = Converter.GetString(row, "observaciones_factura");
                 pedido.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
 
-                pedido.tipo = (Pedido.tipos)Char.Parse(Converter.GetString(row, "tipo"));
-                if (pedido.tipo == Pedido.tipos.Venta)
+                pedido.clasePedido = (Pedido.ClasesPedido)Char.Parse(Converter.GetString(row, "tipo"));
+                if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
                     pedido.tipoPedido = (Pedido.tiposPedido)Char.Parse(Converter.GetString(row, "tipo_pedido"));
-                else if (pedido.tipo == Pedido.tipos.Compra)
+                else if (pedido.clasePedido == Pedido.ClasesPedido.Compra)
                     pedido.tipoPedidoCompra = (Pedido.tiposPedidoCompra)Char.Parse(Converter.GetString(row, "tipo_pedido"));
                 else
                     pedido.tipoPedidoAlmacen = (Pedido.tiposPedidoAlmacen)Char.Parse(Converter.GetString(row, "tipo_pedido"));
@@ -1105,10 +1105,10 @@ namespace DataLayer
                 pedido.observacionesFactura = Converter.GetString(row, "observaciones_factura");
                 pedido.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
 
-                pedido.tipo = (Pedido.tipos)Char.Parse(Converter.GetString(row, "tipo"));
-                if (pedido.tipo == Pedido.tipos.Venta)
+                pedido.clasePedido = (Pedido.ClasesPedido)Char.Parse(Converter.GetString(row, "tipo"));
+                if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
                     pedido.tipoPedido = (Pedido.tiposPedido)Char.Parse(Converter.GetString(row, "tipo_pedido"));
-                else if (pedido.tipo == Pedido.tipos.Compra)
+                else if (pedido.clasePedido == Pedido.ClasesPedido.Compra)
                     pedido.tipoPedidoCompra = (Pedido.tiposPedidoCompra)Char.Parse(Converter.GetString(row, "tipo_pedido"));
                 else
                     pedido.tipoPedidoAlmacen = (Pedido.tiposPedidoAlmacen)Char.Parse(Converter.GetString(row, "tipo_pedido"));

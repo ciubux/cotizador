@@ -280,7 +280,7 @@ namespace BusinessLayer
                 try
                 {
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
-                    //Se recupera el tipo de pago registrado
+                    //Se recupera el clasePedido de pago registrado
                     documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
 
                     documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;

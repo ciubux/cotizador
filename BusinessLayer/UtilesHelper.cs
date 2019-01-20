@@ -35,6 +35,13 @@ namespace BusinessLayer
             { sheet.GetRow(fila - 1).GetCell(columna - 1).CellStyle = cellStyle; }
         }
 
+
+        public static void combinarCeldas(ISheet sheet, int filaInicio, int filaFin, string columnaInicio, string columnaFin)
+        {
+            NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(filaInicio - 1, filaFin - 1, columnas.FindIndex(x => x.StartsWith(columnaInicio)), columnas.FindIndex(x => x.StartsWith(columnaFin)));
+            sheet.AddMergedRegion(cra);
+        }
+
         public static void setValorCelda(ISheet sheet, int fila, string columna, string valor, HSSFCellStyle cellStyle = null)
         {
             sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);

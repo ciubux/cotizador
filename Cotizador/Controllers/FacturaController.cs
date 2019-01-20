@@ -91,7 +91,7 @@ namespace Cotizador.Controllers
                     documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
                 else
-                    throw new Exception("No se ha identificado el tipo de documento electrónico a crear.");
+                    throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
 
 
                 documentoVenta = documentoVentaBL.InsertarDocumentoVenta(documentoVenta);
@@ -267,7 +267,7 @@ namespace Cotizador.Controllers
                      documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
                 else
-                    throw new Exception("No se ha identificado el tipo de documento electrónico a crear.");
+                    throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
 
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
 
@@ -314,7 +314,7 @@ namespace Cotizador.Controllers
                      documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
                 else
-                    throw new Exception("No se ha identificado el tipo de documento electrónico a crear.");
+                    throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
 
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
 

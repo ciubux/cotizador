@@ -78,7 +78,7 @@ namespace DataLayer
                 {
                     ultimoDepartamento = ubigeoDTO;
                     ultimoDepartamento.codigo = departamentoTmp;
-                    ultimoDepartamento.tipo = 1;
+                    ultimoDepartamento.clasePedido = 1;
                     //Se instancia la lista para las provincias
                     ultimoDepartamento.ubigeoDTOList = new List<UbigeoDTO>();
                     //Se agrega a la lista de departamentos
@@ -91,7 +91,7 @@ namespace DataLayer
 
                     ultimaProvincia = ubigeoDTO;
                     ultimaProvincia.codigo = provinciaTmp;
-                    ultimaProvincia.tipo = 2;
+                    ultimaProvincia.clasePedido = 2;
                     //Se instancia la lista para los distritos
                     ultimaProvincia.ubigeoDTOList = new List<UbigeoDTO>();
                     //Se agrega a la lista de provincias
@@ -101,7 +101,7 @@ namespace DataLayer
                 {
                     //Se agrega a la lista de distritos
                     ubigeoDTO.codigo = distritoTmp;
-                    ubigeoDTO.tipo = 3;
+                    ubigeoDTO.clasePedido = 3;
                     ultimaProvincia.ubigeoDTOList.Add(ubigeoDTO);
                 }
             }

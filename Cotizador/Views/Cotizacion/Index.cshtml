@@ -374,22 +374,31 @@
                                 }
                                 else
                                 {
-                                   <th data-name="costo" data-visible="false" data-breakpoints="xs" style="width:60px">Costo</th>
+                                    <th data-name="costo" data-visible="false" data-breakpoints="xs" style="width:60px">Costo</th>
                                 }
-                                                                @if (cotizacion.usuario.visualizaMargen)
+                                @if (cotizacion.usuario.visualizaMargen)
                                 {
                                     <th data-name="margen" data-sortable="false" data-breakpoints="xs" style="width:60px">Mg %</th>
                                 }
                                 else
                                 {
-                                   <th data-name="margen" data-visible="false" data-breakpoints="xs" style="width:60px">Mg %</th>
+                                    <th data-name="margen" data-visible="false" data-breakpoints="xs" style="width:60px">Mg %</th>
                                 }
                                 <th data-name="flete" data-sortable="false" data-breakpoints="xs">Flete</th>
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs">Precio Unit.</th>
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs">Cant.</th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs">Sub Total</th>
-                                <th class="tdprecioUnitarioAnterior" data-name="precioUnitarioAnterior" data-sortable="false" data-visible="true" data-breakpoints="xs">Precio Unit Ant.</th>
                                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
+                                <th class="tdprecioUnitarioAnterior" data-name="precioUnitarioAnterior" data-sortable="false" data-visible="true" data-breakpoints="xs" style="color: #B9371B">Precio Neto Ant.</th>
+                                <th class="tdvarPrecioNeto" data-name="precioUnitarioAnterior" data-sortable="false" data-visible="true" data-breakpoints="xs" style="color: #B9371B">Var% precio neto</th>
+                                @if (cotizacion.usuario.visualizaCostos)
+                                {
+                                    <th class="tdvarCosto" data-name="precioUnitarioAnterior" data-sortable="false" data-visible="true" data-breakpoints="xs" style="color: #B9371B">Var% costo</th>
+                                }
+                                else
+                                {
+                                    <th class="tdvarCosto" data-name="precioUnitarioAnterior" data-sortable="false" data-visible="false" data-breakpoints="xs" style="color: #B9371B">Var% costo</th>
+                                }
                                 <th data-name="opciones" data-sortable="false" data-visible="true" data-breakpoints="xs"></th>
                             </tr>
                         </thead>

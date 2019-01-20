@@ -19,16 +19,20 @@ namespace Model
         public Decimal flete { get; set; }
         public Decimal precioUnitario { get; set; }
 
-        public Decimal precioUnitarioAlternativo { get {
-                if (equivalencia != 0)
+        public Decimal precioNetoAlternativo { get {
+                if (equivalencia != 0 )
                 {
-                    return precioUnitario / equivalencia;
+                    return precioNeto / equivalencia;
                 }
                 else
                 {
                     return 0;
                 }
-            } }
+            }
+        }
+
+        public Boolean esUnidadAlternativa { get; set; }
+
         public String numeroCotizacion { get; set; }
 
         public int equivalencia { get; set; }

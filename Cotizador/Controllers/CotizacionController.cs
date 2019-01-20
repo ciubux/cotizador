@@ -826,18 +826,18 @@ namespace Cotizador.Controllers
             decimal costo = Decimal.Parse(Request["costo"].ToString());
             decimal flete = Decimal.Parse(Request["flete"].ToString());
 
-            decimal precioUnitarioAnterior = 0;
+            decimal precioNetoAnterior = 0;
             if (detalle.esPrecioAlternativo)
             {
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                 //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
                 detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * producto.equivalencia));
-                precioUnitarioAnterior = detalle.producto.precioClienteProducto.precioUnitarioAlternativo;
+                precioNetoAnterior = detalle.producto.precioClienteProducto.precioNetoAlternativo;
             }
             else
             {
                 detalle.precioNeto = precioNeto;
-                precioUnitarioAnterior = detalle.producto.precioClienteProducto.precioUnitario;
+                precioNetoAnterior = detalle.producto.precioClienteProducto.precioNeto;
             }
             detalle.flete = flete;
             cotizacion.cotizacionDetalleList.Add(detalle);
@@ -889,7 +889,7 @@ namespace Cotizador.Controllers
                 subTotal = cotizacion.montoSubTotal.ToString(),
                 margen = detalle.margen,
                 precioUnitario = detalle.precioUnitario,
-                precioUnitarioAnt = precioUnitarioAnterior,
+                precioNetoAnt = precioNetoAnterior,
                 observacion = detalle.observacion,
                 total = cotizacion.montoTotal.ToString()
             };

@@ -46,7 +46,7 @@ namespace Cotizador.Controllers
         private void instanciarPedidoBusqueda()
         {
             
-            Pedido pedidoTmp = new Pedido(Pedido.tipos.Venta);
+            Pedido pedidoTmp = new Pedido(Pedido.ClasesPedido.Venta);
             DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now.AddDays(1);
             pedidoTmp.cotizacion = new Cotizacion();
@@ -412,7 +412,7 @@ namespace Cotizador.Controllers
 
         private void instanciarPedido()
         {
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = Guid.Empty;
             pedido.numeroPedido = 0;
             pedido.numeroGrupoPedido = null;
@@ -457,7 +457,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Pedido pedidoVer = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = pedidoVer.idPedido;
             //    pedido.fechaModificacion = cotizacionVer.fechaModificacion;
             pedido.seguimientoPedido = new SeguimientoPedido();
@@ -1387,7 +1387,7 @@ namespace Cotizador.Controllers
         {
            // Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
@@ -1403,7 +1403,7 @@ namespace Cotizador.Controllers
         {
             Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
@@ -1548,7 +1548,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             PedidoBL pedidoBL = new PedidoBL();
 
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = Guid.Parse(Request["idPedido"].ToString());
             pedido = pedidoBL.GetPedido(pedido,usuario);
             this.Session[Constantes.VAR_SESSION_PEDIDO_VER] = pedido;
@@ -1639,7 +1639,7 @@ namespace Cotizador.Controllers
 
         public void UpdateStockConfirmado()
         {
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
             pedido.stockConfirmado = Int32.Parse(this.Request.Params["stockConfirmado"]) == 1;
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1742,11 +1742,11 @@ namespace Cotizador.Controllers
             String direccionEntrega, String sedeMP, String ubigeo, String observaciones, 
             DateTime? fechaEntregaDesde, DateTime? fechaEntregaHasta,
             String inicioPrimerTurnoEntrega, String finPrimerTurnoEntrega, String inicioSegundoTurnoEntrega, String finSegundoTurnoEntrega,
-            String ordenCompra, Pedido.tipos tipoPedido, Pedido.tiposPedido tipoPedidoVenta, Pedido.tiposPedidoAlmacen tipoPedidoAlmacen, String facturaConsolidada,
+            String ordenCompra, Pedido.ClasesPedido tipoPedido, Pedido.tiposPedido tipoPedidoVenta, Pedido.tiposPedidoAlmacen tipoPedidoAlmacen, String facturaConsolidada,
             Int64 numeroGrupo
             )
         {
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.tipoPedido = tipoPedidoVenta;
             pedido.idPedido = Guid.Empty;
             pedido.numeroPedido = 0;
@@ -1876,27 +1876,27 @@ namespace Cotizador.Controllers
                 String facturaConsolidada = UtilesHelper.getValorCelda(sheet, 12, "B");
 
                 String tipoPedidoString = UtilesHelper.getValorCelda(sheet, 3, "E");
-                Pedido.tipos tipoPedido;
+                Pedido.ClasesPedido tipoPedido;
                 Pedido.tiposPedido tipoPedidoVenta = Pedido.tiposPedido.Venta;
                 Pedido.tiposPedidoAlmacen tipoPedidoTrasladoInterno = Pedido.tiposPedidoAlmacen.TrasladoInterno;
                 if (tipoPedidoString.Equals("Venta"))
                 {
-                    tipoPedido = Pedido.tipos.Venta;
+                    tipoPedido = Pedido.ClasesPedido.Venta;
                     tipoPedidoVenta = Pedido.tiposPedido.Venta;
                 }
                 else if (tipoPedidoString.Equals("Transferencia Gratuita"))
                 {
-                    tipoPedido = Pedido.tipos.Venta;
+                    tipoPedido = Pedido.ClasesPedido.Venta;
                     tipoPedidoVenta = Pedido.tiposPedido.TransferenciaGratuitaEntregada;
                 }
                 else
                 {
-                    tipoPedido = Pedido.tipos.Almacen;
+                    tipoPedido = Pedido.ClasesPedido.Almacen;
                     tipoPedidoTrasladoInterno = Pedido.tiposPedidoAlmacen.TrasladoInterno;
                 }
 
                 String sedeSolicitante = String.Empty;
-                if (tipoPedido == Pedido.tipos.Almacen)
+                if (tipoPedido == Pedido.ClasesPedido.Almacen)
                 {
                     sedeSolicitante = UtilesHelper.getValorCelda(sheet, 4, "E");
                 }
@@ -1915,8 +1915,9 @@ namespace Cotizador.Controllers
                 //Se considera la ultimafila más uno porque estamos trabajando con las posiciones físicas.
                 for (row = 16; row <= ultimaFila + 1; row++)
                 {
-                    try {
-                        //Se identifica el tipo de fila
+                    try
+                    {
+                        //Se identifica el clasePedido de fila
                         String tipoCabecera = UtilesHelper.getValorCelda(sheet, row, "C");
                         if (tipoCabecera.Equals("C"))
                         {

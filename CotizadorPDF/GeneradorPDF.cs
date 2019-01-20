@@ -165,7 +165,7 @@ namespace cotizadorPDF
                     String presentacion = det.unidad; //Se muestra la unidad seleccionada y que se encuentra en el detalle
                     String imagen = "";
                     String precioUnitarioAnterior = "";
-                    String precioUnitarioNuevo = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDosDecimales, det.precioUnitario);
+                    String precioUnitarioNuevo = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDecimalesPrecioNeto, det.precioUnitario);
 
 
                     String cantidad = "";

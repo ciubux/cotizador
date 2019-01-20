@@ -133,7 +133,7 @@ namespace Cotizador.Controllers
             transaccionExtorno.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
             transaccionExtorno.documentoVenta.movimientoAlmacen = notaIngreso;
             transaccionExtorno.documentoVenta.venta = null;
-            /*Se agrega el documento de referencia a la nota de crédito, los datos que se requieren son el tipo, serie, número y fecha*/
+            /*Se agrega el documento de referencia a la nota de crédito, los datos que se requieren son el clasePedido, serie, número y fecha*/
             transaccionExtorno.documentoReferencia = new DocumentoReferencia();
             transaccionExtorno.documentoReferencia.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(transaccionExtorno.documentoVenta.cPE_CABECERA_BE.TIP_CPE);
             String[] fechaEmisionArray = transaccionExtorno.documentoVenta.cPE_CABECERA_BE.FEC_EMI.Split('-');
@@ -158,7 +158,7 @@ namespace Cotizador.Controllers
 
             if (transaccionExtorno.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
             {
-                /*Si no existe error al recuperar la transacción, se define el tipo de nota de crédito
+                /*Si no existe error al recuperar la transacción, se define el clasePedido de nota de crédito
                  según lo seleccionado al momento de generar el extorno*/
                 transaccionExtorno.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)(int)notaIngreso.motivoExtornoGuiaRemision;
                 transaccionExtorno.documentoVenta.fechaEmision = DateTime.Now;
@@ -242,7 +242,7 @@ namespace Cotizador.Controllers
                 transaccion.documentoVenta.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
                 ////La fecha de vencimiento es identifica a la fecha de emisión
                 transaccion.documentoVenta.fechaVencimiento = transaccion.documentoVenta.fechaEmision.Value;
-                ////El tipo de pago es al contado
+                ////El clasePedido de pago es al contado
                 transaccion.documentoVenta.tipoPago = DocumentoVenta.TipoPago.Contado;
                 ////La forma de Pago es Efectivo
                 transaccion.documentoVenta.formaPago = DocumentoVenta.FormaPago.Efectivo;

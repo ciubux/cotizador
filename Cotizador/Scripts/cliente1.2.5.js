@@ -151,18 +151,16 @@ jQuery(function ($) {
         $("#cliente_plazoCredito").val("");
         $("#tipoPagoCliente").val("0");
         $("#formaPagoCliente").val("0");
+
+
+        $("#idGrupoCliente").val("");
+        $("#sinPlazoCreditos").removeAttr("checked");
+        $("#bloqueadoBusqueda").removeAttr("checked");
+        $("#sinAsesorValidado").removeAttr("checked");
     }
 
 
-    $("#btnLimpiarBusqueda").click(function () {
-        $.ajax({
-            url: "/Cliente/CleanBusqueda",
-            type: 'POST',
-            success: function () {
-                location.reload();
-            }
-        });
-    });
+    
 
     function ConfirmDialogReload(message) {
         $('<div></div>').appendTo('body')
@@ -414,20 +412,26 @@ jQuery(function ($) {
         
             $.each(e.originalEvent.clipboardData.items, function () {
                 this.getAsString(function (str) {
-                    //alert(str);
+                   // alert(str);
                     var lineas = str.split("\t");           
-                        
+
                     if (lineas.length <= 1)
                         return false;
-                    
-              //      if (lineas[1] == $("#cliente_ruc").val()) {
-                  //      $("#ncRUC").val(lineas[1]);
+                    if (lineas[1] == $("#cliente_ruc").val()) {
+                        $("#ncRUC").val(lineas[1]);
 
-                 //       $("#cliente_razonSocialSunat").val(lineas[0]);
+                        $("#cliente_razonSocialSunat").val(lineas[0]);
                         //$("#ncRUC").val(lineas[1]);
-                    var direccionDomicilioLegalSunat = lineas[0]+ " " + lineas[1] + " - " + lineas[2] + " - " + lineas[3];
+                        $("#cliente_nombreComercialSunat").val(lineas[2]);
+                        $("#cliente_direccionDomicilioLegalSunat").val(lineas[3]);
+                        $("#cliente_estadoContribuyente").val(lineas[5]);
+                        $("#cliente_condicionContribuyente").val(lineas[6]);
 
 
+                        changeInputString("razonSocialSunat", $("#cliente_razonSocialSunat").val())
+                        changeInputString("nombreComercialSunat", $("#cliente_nombreComercialSunat").val())
+
+                        var direccionDomicilioLegalSunat = $("#cliente_direccionDomicilioLegalSunat").val();
 
                         $('body').loadingModal({
                             text: 'Recuperando Ubicación Geográfica...'
@@ -454,10 +458,10 @@ jQuery(function ($) {
 
                         changeInputString("estadoContribuyente", $("#cliente_estadoContribuyente").val())
                         changeInputString("condicionContribuyente", $("#cliente_condicionContribuyente").val())
-                 /*   }
+                    }
                     else {
                         alert("El RUC que acaba de pegar no coincide con el RUC del cliente.");
-                    }*/
+                    }
                 });
             });
 
@@ -743,6 +747,10 @@ jQuery(function ($) {
 
     $("#cliente_sobreGiro").change(function () {
         changeInputDecimal("sobreGiro", $("#cliente_sobreGiro").val())
+    });
+
+    $("#cliente_observacionHorarioEntrega").change(function () {
+        changeInputString("observacionHorarioEntrega", $("#cliente_observacionHorarioEntrega").val())
     });
 
     /*
@@ -1736,10 +1744,6 @@ jQuery(function ($) {
        
     
 
-    $("input[name=cliente_bloqueadoBusqueda]").on("click", function () {
-        var valor = $("input[name=cliente_bloqueadoBusqueda]:checked").val();
-        changeInputBoolean('bloqueado', valor)
-    });
 
     $("#cliente_bloqueado").change(function () {
         var valor = 1;
@@ -1831,34 +1835,62 @@ jQuery(function ($) {
     
 
 
-    $("input[name=cliente_sinPlazoCreditoAprobado]").on("click", function () {
-        var sinPlazoCreditoAprobado = $("input[name=cliente_sinPlazoCreditoAprobado]:checked").val();
+    $("#sinAsesorValidado").change(function () {
+        var valCheck = 0;
+        if ($("#sinAsesorValidado").is(":checked")) {
+            valCheck = 1;
+        }
+
         $.ajax({
-            url: "/Cliente/ChangeSinPlazoCreditoAprobado",
+            url: "/Cliente/ChangeSinAsesorValidado",
             type: 'POST',
             data: {
-                sinPlazoCreditoAprobado: sinPlazoCreditoAprobado
+                sinAsesorValidado: valCheck
             },
             success: function () {
             }
         });
     });
 
+    $("#sinPlazoCreditos").change(function () {
+        var valCheck = 0;
+        if ($("#sinPlazoCreditos").is(":checked")) {
+            valCheck = 1;
+        }
+
+        $.ajax({
+            url: "/Cliente/ChangeSinPlazoCreditoAprobado",
+            type: 'POST',
+            data: {
+                sinPlazoCreditoAprobado: valCheck
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#bloqueadoBusqueda").change(function () {
+        var valCheck = 0;
+        if ($("#bloqueadoBusqueda").is(":checked")) {
+            valCheck = 1;
+        }
+        changeInputBoolean('bloqueado', valCheck);
+    });
+    
 
     $("#btnExportExcel").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
 
     $("#btnBusqueda").click(function () {
-
-
-
+        
         if ($("#cliente_textoBusqueda").val().length < 3 &&
             $("#idResponsableComercial").val() == 0 &&
             $("#idSupervisorComercial").val() == 0 &&
             $("#idAsistenteServicioCliente").val() == 0 &&
-            $("input[name=cliente_bloqueadoBusqueda]:checked").val() == 0 &&
-            $("input[name=cliente_sinPlazoCredito]:checked").val() == 0 &&
+            $("#bloqueadoBusqueda").is(":checked") == 0 &&
+            $("#sinPlazoCreditos").is(":checked") == 0 &&
+            $("#sinAsesorValidado").is(":checked") == 0 &&
             $("#cliente_codigo").val().trim().length == 0 &&
             $("#idGrupoCliente").val() == 0
             ) {
@@ -1905,8 +1937,17 @@ jQuery(function ($) {
                 for (var i = 0; i < clienteList.length; i++) {
 
                     var textoBloqueado = "";
+                    var textoVendedorValidado = "";
+
                     if (clienteList[i].bloqueado == true)
                         textoBloqueado = "Bloqueado";
+
+                    if (clienteList[i].vendedoresAsignados == true) {
+                        textoVendedorValidado = '<span class="green">Validado</span>';
+                    } else {
+                        textoVendedorValidado = '<span class="red">No validado</span>';
+                    }
+
 
 
                     var clienteRow = '<tr data-expanded="true">' +
@@ -1918,6 +1959,7 @@ jQuery(function ($) {
                         '<td>  ' + clienteList[i].ruc + '  </td>' +
                         '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
                         '<td>  ' + clienteList[i].grupoCliente.nombre + '  </td>' +
+                        '<td>  ' + textoVendedorValidado + '</td>' +
                         '<td>  ' + clienteList[i].responsableComercial.descripcion + '</td>' +
                         '<td>  ' + clienteList[i].supervisorComercial.descripcion + '</td>' +
                         '<td>  ' + clienteList[i].asistenteServicioCliente.descripcion + '</td>' +
@@ -1944,6 +1986,10 @@ jQuery(function ($) {
 
             }
         });
+    });
+
+    $("#btnImportarExcel").click(function () {
+        $("#modalActualizarExcel").modal('show');
     });
 
     var idClienteView = "";
@@ -1978,6 +2024,7 @@ jQuery(function ($) {
                 $("#verTipoDocumentoIdentidad").html(cliente.tipoDocumentoIdentidadToString);
                 $("#verNumeroDocumento").html(cliente.ruc);
                 $("#verNombreComercial").html(cliente.nombreComercial);
+                $("#verNombreCliente").html(cliente.nombreCliente);
                 $("#verContacto").html(cliente.contacto1);
                 $("#verTelefonoContacto").html(cliente.telefonoContacto1);
                 $("#verEmailContacto").html(cliente.emailContacto1);
@@ -2009,6 +2056,7 @@ jQuery(function ($) {
                 $("#verNombreComercialSunat").html(cliente.nombreComercialSunat);
                 $("#verDireccionDomicilioLegalSunat").html(cliente.direccionDomicilioLegalSunat);
 
+                $("#verObservacionHorarioEntrega").html(cliente.observacionHorarioEntrega);     
 
 
                 $("#verEstadoContribuyente").html(cliente.estadoContribuyente);
@@ -2055,6 +2103,12 @@ jQuery(function ($) {
                     $("#li_perteneceCanalPCP img").attr("src", "/images/check2.png");
                 } else {
                     $("#li_perteneceCanalPCP img").attr("src", "/images/equis.png");
+                }
+
+                if (cliente.perteneceCanalOrdon) {
+                    $("#li_perteneceCanalOrdon img").attr("src", "/images/check2.png");
+                } else {
+                    $("#li_perteneceCanalOrdon img").attr("src", "/images/equis.png");
                 }
 
                 if (cliente.esSubDistribuidor) {
@@ -2384,4 +2438,109 @@ jQuery(function ($) {
 
 
 
+});
+
+
+
+$(document).ready(function () {
+    $('#btnUpdateByExcel').click(function (event) {
+        var fileInput = $('#fileUploadExcel');
+        var maxSize = fileInput.data('max-size');
+        var maxSizeText = fileInput.data('max-size-text');
+        var imagenValida = true;
+        if (fileInput.get(0).files.length) {
+            var fileSize = fileInput.get(0).files[0].size; // in bytes
+
+            if (fileSize > maxSize) {
+                $.alert({
+                    title: "Archivo Inválido",
+                    type: 'red',
+                    content: 'El tamaño del archivo debe ser como maximo ' + maxSizeText + '.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                imagenValida = false;
+            }
+
+
+        } else {
+            $.alert({
+                title: "Archivo Inválido",
+                type: 'red',
+                content: 'Seleccione un archivo por favor.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            imagenValida = false;
+        }
+
+        if (imagenValida) {
+
+            var that = document.getElementById('fileUploadExcel');
+            var file = that.files[0];
+            var form = new FormData();
+            var url = $(that).data("urlSetFile");
+            var reader = new FileReader();
+            var mime = file.type;
+
+            // read the image file as a data URL.
+            reader.readAsDataURL(file);
+
+            form.append('file', file);
+
+            $('body').loadingModal({
+                text: '...'
+            });
+            $.ajax({
+                url: url,
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form,
+                dataType: 'JSON',
+                beforeSend: function () {
+                    //$.blockUI();
+                },
+                success: function (response) {
+                    if (response.success == "true") {
+                        $.alert({
+                            title: "Carga Exitosa!",
+                            type: 'green',
+                            content: response.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+
+                        $('#btnBusqueda').click();
+                    } else {
+                        $.alert({
+                            title: "Carga fallida",
+                            type: 'red',
+                            content: response.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                    $.alert({
+                        title: "Carga fallida",
+                        type: 'red',
+                        content: 'Ocurrió un error al subir el archivo.',
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+            }).done(function () {
+                $('body').loadingModal('hide')
+            });
+        }
+    });
 });
