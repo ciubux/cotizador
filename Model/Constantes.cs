@@ -81,6 +81,16 @@ namespace Model
         public static String VAR_SESSION_PRODUCTO_LISTA = "productoList";
         public static String VAR_SESSION_PRODUCTO_VER = "productoVer";
 
+        public static String VAR_SESSION_ORIGEN = "origen";
+        public static String VAR_SESSION_ORIGEN_BUSQUEDA = "origenBusqueda";
+        public static String VAR_SESSION_ORIGEN_LISTA = "origenList";
+        public static String VAR_SESSION_ORIGEN_VER = "origenVer";
+
+        public static String VAR_SESSION_SUBDISTRIBUIDOR = "subDistribuidor";
+        public static String VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA = "subDistribuidorBusqueda";
+        public static String VAR_SESSION_SUBDISTRIBUIDOR_LISTA = "subDistribuidorList";
+        public static String VAR_SESSION_SUBDISTRIBUIDOR_VER = "subDistribuidorVer";
+
         public static String VAR_SESSION_PROVEEDOR = "proveedor";
 
         public static String VAR_SESSION_GUIA = "guiaRemision";
@@ -276,7 +286,15 @@ namespace Model
             [Display(Name = "MANTENIMIENTO PRODUCTO")]
             MantenimientoProducto = 28,
             [Display(Name = "CREATE/UPDATE PRODUCTO")]
-            CUProducto = 29
+            CUProducto = 29,
+            [Display(Name = "BUSQUEDA ORIGEN")]
+            BusquedaOrigenes = 30,
+            [Display(Name = "CREATE/UPDATE ORIGEN")]
+            CUOrigen= 31,
+            [Display(Name = "BUSQUEDA SUBDISTRIBUIDOR")]
+            BusquedaSubDistribuidores = 32,
+            [Display(Name = "CREATE/UPDATE SUBDISTRIBUIDOR")]
+            CUSubDistribuidor = 33
         };
 
 

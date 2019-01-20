@@ -120,7 +120,7 @@ INSERT INTO CAMBIO
 			);
 
 UPDATE CAMBIO 
-SET fecha_fin_vigencia = @fechaInicioVigencia
+SET fecha_fin_vigencia = @fechaInicioVigencia, estado = 0
 WHERE id_catalogo_campo = @idCatalogoCampo and fecha_fin_vigencia is null and not id_registro = @idRegistro;
 
 END
@@ -141,17 +141,7 @@ END
 
 
 
-USE [cotizadormp]
-GO
-/****** Object:  StoredProcedure [dbo].[pi_clienteSunat]    Script Date: 6/01/2019 5:45:52 p. m. ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 
-
-
-/* Agregar observacion_horario_entrega */
 ALTER PROCEDURE [dbo].[pi_clienteSunat] 
 @idUsuario uniqueidentifier,
 @razonSocial  varchar(200),
@@ -398,5 +388,277 @@ EXEC  pi_cambio_dato @idUsuario, 1, 8, @newId, @sedePrincipal, @cdFechaInicioVig
 COMMIT
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ALTER PROCEDURE [dbo].[pu_clienteSunat] 
+@idCliente uniqueidentifier,
+@idUsuario uniqueidentifier,
+@razonSocial  varchar(200),
+@nombreComercial  varchar(200),
+@contacto1  varchar(100),
+@idCiudad uniqueidentifier,
+@correoEnvioFactura varchar(1000),
+@razonSocialSunat varchar(500),
+@nombreComercialSunat varchar(500),
+@direccionDomicilioLegalSunat varchar(1000),
+@estadoContribuyente varchar(50),
+@condicionContribuyente varchar(50),
+@ubigeo varchar(6),
+@formaPagoFactura int,
+
+/*Plazo credito*/
+@plazoCreditoSolicitado int,
+@tipoPagoFactura int,
+@sobrePlazo int, 
+/*Monto Crédito*/
+@creditoSolicitado decimal(12,2),
+@creditoAprobado decimal(12,2),
+@sobreGiro decimal(12,2),
+/*Vendedores*/
+@idResponsableComercial int,
+@idAsistenteServicioCliente int,
+@idSupervisorComercial int,
+
+@observacionesCredito varchar(1000),
+@observaciones varchar(1000),
+@vendedoresAsignados smallint,
+@bloqueado smallint,
+@perteneceCanalMultiregional smallint,
+@perteneceCanalLima smallint,
+@perteneceCanalProvincias smallint,
+@perteneceCanalPCP smallint,
+@esSubDistribuidor smallint,
+@idGrupoCliente int,
+@horaInicioPrimerTurnoEntrega datetime,
+@horaFinPrimerTurnoEntrega datetime,
+@horaInicioSegundoTurnoEntrega datetime,
+@horaFinSegundoTurnoEntrega datetime,
+/* Campos agregados  */
+@sedePrincipal bit,
+@negociacionMultiregional bit,
+@telefonoContacto1 varchar(50),
+@emailContacto1 varchar(50),
+@observacionHorarioEntrega varchar(1000), 
+
+@existenCambiosCreditos smallint OUTPUT,
+@usuarioSolicitanteCredito uniqueIdentifier OUTPUT,
+@correoUsuarioSolicitanteCredito VARCHAR(50) OUTPUT
+
+AS
+BEGIN
+
+
+DECLARE @ruc varchar(20); 
+DECLARE @nrAnterior bit; 
+DECLARE @idResponsableComercialAnterior int;  /* Agregado */
+DECLARE @idAsistenteServicioClienteAnterior int;  /* Agregado */
+DECLARE @idSupervisorComercialAnterior int;  /* Agregado */
+DECLARE @negociacionMultiregionalAnterior bit;  /* Agregado */
+DECLARE @sedePrincipalAnterior bit;  /* Agregado */
+DECLARE @plazoCreditoSolicitadoAnterior int;
+DECLARE @tipoPagoFacturaAnterior int;
+DECLARE @formaPagoFacturaAnterior int;
+DECLARE @creditoSolicitadoAnterior decimal(12,2);
+DECLARE @creditoAprobadoAnterior decimal(12,2);
+DECLARE @usuarioSolicitanteCreditoAnterior uniqueIdentifier;
+DECLARE @enviarCorreoCreditos int;
+DECLARE @enviarCorreoUsuarioNoCreditos int;
+DECLARE @defineMontoCredito smallint;
+DECLARE @definePlazoCredito smallint;
+
+
+SET NOCOUNT ON
+SET @existenCambiosCreditos = 0;
+SET @usuarioSolicitanteCredito = '00000000-0000-0000-0000-000000000000';
+SET @correoUsuarioSolicitanteCredito = '';
+
+IF (SELECT tipo_documento FROM CLIENTE where id_cliente = @idCliente) <> 6
+BEGIN 
+	SET @razonSocial = @nombreComercial;
+END
+
+
+
+SELECT @ruc = ruc, @nrAnterior = negociacion_multiregional ,
+@plazoCreditoSolicitadoAnterior = plazo_credito_solicitado,
+@tipoPagoFacturaAnterior = tipo_pago_factura,
+@formaPagoFacturaAnterior = forma_pago_factura,
+@idResponsableComercialAnterior = id_responsable_comercial,
+@idAsistenteServicioClienteAnterior = id_asistente_Servicio_cliente,
+@idSupervisorComercialAnterior = id_supervisor_comercial,
+@negociacionMultiregionalAnterior = negociacion_multiregional,
+@sedePrincipalAnterior = sede_principal,
+@creditoSolicitadoAnterior = credito_solicitado,
+@creditoAprobadoAnterior =credito_aprobado,
+@usuarioSolicitanteCreditoAnterior = usuario_solicitante_credito
+FROM CLIENTE WHERE id_cliente = @idCliente; /* Agregado */
+
+IF @plazoCreditoSolicitadoAnterior <>  @plazoCreditoSolicitado
+	OR @tipoPagoFacturaAnterior <> @tipoPagoFactura
+	OR @formaPagoFacturaAnterior <> @formaPagoFactura
+	OR @creditoSolicitadoAnterior <> @creditoSolicitado
+	OR @creditoAprobadoAnterior <> @creditoAprobado
+BEGIN 
+ 
+	SET @existenCambiosCreditos = 1;
+
+	/*Si no se indica el usuario solicitante entonces se recupera el ultimo solicitanteCredito en caso exista*/
+	/*IF @usuarioSolicitanteCredito = '00000000-0000-0000-0000-000000000000'
+	BEGIN 
+		SET @usuarioSolicitanteCredito = @usuarioSolicitanteCreditoAnterior
+	END */
+	
+	
+	SELECT @defineMontoCredito = ISNULL(define_monto_credito,0),
+	@definePlazoCredito = ISNULL(define_plazo_credito,0)
+	FROM USUARIO where id_usuario = @idUsuario
+
+	IF  @defineMontoCredito = 1 OR @definePlazoCredito = 1
+	BEGIN 
+		/*Si el usuario es aprobador de creditos se recupera el usuario solicitante anterior*/
+		SET @usuarioSolicitanteCredito = @usuarioSolicitanteCreditoAnterior;
+		SELECT @correoUsuarioSolicitanteCredito = ISNULL(email,'') FROM USUARIO 
+		WHERE id_usuario = @usuarioSolicitanteCreditoAnterior;
+
+	END 
+	ELSE
+	BEGIN
+		/*Si el usuario NO es aprobador de creditos se actualiza con el usuario actual*/
+		SELECT @usuarioSolicitanteCredito = @idUsuario,
+		@correoUsuarioSolicitanteCredito = email
+		FROM USUARIO 
+		WHERE id_usuario = @idUsuario;
+	END
+END 
+
+UPDATE CLIENTE SET [razon_Social] = @razonSocial
+		   ,[nombre_Comercial] = @nombreComercial   
+		   ,[id_ciudad] = @idCiudad
+		   ,[usuario_modificacion] = @idUsuario
+		   ,[fecha_modificacion] = GETDATE()
+		   ,correo_Envio_Factura = @correoEnvioFactura
+		   ,razon_Social_Sunat = @razonSocialSunat
+		   ,nombre_Comercial_Sunat = nombre_Comercial_Sunat
+		   ,direccion_Domicilio_Legal_Sunat = @direccionDomicilioLegalSunat
+		   ,estado_Contribuyente_sunat = @estadoContribuyente
+		   ,condicion_Contribuyente_sunat = @condicionContribuyente
+		   ,ubigeo = @ubigeo
+		   ,forma_pago_factura = @formaPagoFactura
+
+		   /*Plazo credito*/
+			,plazo_credito_solicitado = @plazoCreditoSolicitado
+			,tipo_pago_factura = @tipoPagoFactura
+			,sobre_plazo = @sobrePlazo
+			/*Monto Crédito*/
+			,credito_solicitado = @creditoSolicitado
+			,credito_aprobado = @creditoAprobado
+			,sobre_giro = @sobreGiro
+			/*Vendedores*/
+			,id_responsable_comercial = @idResponsableComercial
+			,id_asistente_Servicio_cliente = @idAsistenteServicioCliente
+			,id_supervisor_comercial = @idSupervisorComercial
+			,observaciones_credito = @observacionesCredito
+			,observaciones = @observaciones
+			,vendedores_asignados = @vendedoresAsignados
+			,bloqueado = @bloqueado
+			,pertenece_canal_multiregional = @perteneceCanalMultiregional
+			,pertenece_canal_lima = @perteneceCanalLima
+			,pertenece_canal_provincia = @perteneceCanalProvincias
+			,pertenece_canal_pcp =@perteneceCanalPCP
+			,es_sub_distribuidor = @esSubDistribuidor
+			,hora_inicio_primer_turno_entrega = @horaInicioPrimerTurnoEntrega
+			,hora_fin_primer_turno_entrega = @horaFinPrimerTurnoEntrega
+			,hora_inicio_segundo_turno_entrega = @horaInicioSegundoTurnoEntrega
+			,hora_fin_segundo_turno_entrega = @horaFinSegundoTurnoEntrega
+			,sede_principal = @sedePrincipal
+			,negociacion_multiregional = @negociacionMultiregional
+			,telefono_contacto1 = @telefonoContacto1
+			,email_contacto1 = @emailContacto1
+			,usuario_solicitante_credito = @usuarioSolicitanteCredito
+			,observacion_horario_entrega = @observacionHorarioEntrega
+     WHERE 
+          id_cliente = @idCliente;
+
+		  
+/* IF Agregado */
+IF @nrAnterior != @negociacionMultiregional 
+BEGIN
+	UPDATE CLIENTE 
+	SET negociacion_multiregional = @negociacionMultiregional
+	WHERE ruc like @ruc;
+	
+	IF @negociacionMultiregional = 'FALSE'
+	BEGIN
+		UPDATE CLIENTE 
+		SET sede_principal = 'FALSE'
+		WHERE ruc like @ruc;
+	END
+END
+
+DELETE CLIENTE_GRUPO_CLIENTE 
+where id_cliente = @idCliente;
+
+
+IF @idGrupoCliente > 0 
+BEGIN
+	INSERT INTO CLIENTE_GRUPO_CLIENTE 
+	VALUES (@idCliente, @idGrupoCliente, GETDATE(), 1, @idUsuario, GETDATE(), @idUsuario, GETDATE())
+END
+
+
+DECLARE @cdFechaInicioVigencia date;
+SET @cdFechaInicioVigencia = Convert(date, GETDATE(), 120);
+
+/* Responsable comercial */
+IF @idResponsableComercial != @idResponsableComercialAnterior 
+BEGIN
+	EXEC  pi_cambio_dato @idUsuario, 1, 2, @idCliente, @idResponsableComercial, @cdFechaInicioVigencia;
+END
+
+
+/* Asistente servicio cliente */
+IF @idAsistenteServicioCliente != @idAsistenteServicioClienteAnterior 
+BEGIN
+	EXEC  pi_cambio_dato @idUsuario, 1, 3, @idCliente, @idAsistenteServicioCliente, @cdFechaInicioVigencia;
+END
+
+
+/* Supervisor comercial */
+IF @idSupervisorComercial != @idSupervisorComercialAnterior 
+BEGIN
+	EXEC  pi_cambio_dato @idUsuario, 1, 4, @idCliente, @idSupervisorComercial, @cdFechaInicioVigencia;
+END
+
+
+/* Negociacion multiregional */
+IF @negociacionMultiregional != @negociacionMultiregionalAnterior 
+BEGIN
+	EXEC  pi_cambio_dato @idUsuario, 1, 7, @idCliente, @negociacionMultiregional, @cdFechaInicioVigencia;
+END
+
+
+/* sede principal */
+IF @sedePrincipal != @sedePrincipalAnterior 
+BEGIN
+	EXEC  pi_cambio_dato @idUsuario, 1, 8, @idCliente, @sedePrincipal, @cdFechaInicioVigencia;
+END
+
+
+
+END
 
 

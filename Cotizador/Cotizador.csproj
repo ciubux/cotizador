@@ -223,9 +223,11 @@
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
+    <Compile Include="Controllers\SubDistribuidorController.cs" />
     <Compile Include="Controllers\ParentController.cs" />
     <Compile Include="Controllers\PedidoAlmacenController.cs" />
     <Compile Include="Controllers\PedidoCompraController.cs" />
+    <Compile Include="Controllers\OrigenController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\SolicitanteController.cs" />
     <Compile Include="Controllers\DireccionEntregaController.cs" />
@@ -254,6 +256,8 @@
     <Compile Include="ExcelExport\GuiaRemisionSearch.cs" />
     <Compile Include="ExcelExport\CotizacionSearch.cs" />
     <Compile Include="ExcelExport\ClienteSearch.cs" />
+    <Compile Include="ExcelExport\SubDistribuidorSearch.cs" />
+    <Compile Include="ExcelExport\OrigenSearch.cs" />
     <Compile Include="ExcelExport\ProductoSearch.cs" />
     <Compile Include="ExcelExport\PedidoSearch.cs" />
     <Compile Include="Global.asax.cs">
@@ -264,6 +268,8 @@
     <Compile Include="Models\DTOsSearch\PedidoDTO.cs" />
     <Compile Include="Models\GrupoClienteViewModels.cs" />
     <Compile Include="Models\DescuentoViewModels.cs" />
+    <Compile Include="Models\SubDistribuidorViewModels.cs" />
+    <Compile Include="Models\OrigenViewModels.cs" />
     <Compile Include="Models\VendedorViewModels.cs" />
     <Compile Include="Models\CiudadViewModels.cs" />
     <Compile Include="Models\DepartamentoViewModels.cs" />
@@ -356,6 +362,8 @@
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
+    <Content Include="Scripts\subDistribuidor1.0.0.js" />
+    <Content Include="Scripts\origen1.0.0.js" />
     <Content Include="Scripts\producto1.0.0.js" />
     <Content Include="Scripts\cotizacion1.1.4.js" />
     <Content Include="Scripts\factura1.1.7.js" />
@@ -493,6 +501,12 @@
     <Content Include="Views\Shared\_Descuento.cshtml" />
     <Content Include="Views\Producto\List.cshtml" />
     <Content Include="Views\Producto\Editar.cshtml" />
+    <Content Include="Views\Origen\Editar.cshtml" />
+    <Content Include="Views\Origen\List.cshtml" />
+    <Content Include="Views\SubDistribuidor\Editar.cshtml" />
+    <Content Include="Views\SubDistribuidor\List.cshtml" />
+    <Content Include="Views\Shared\_Origen.cshtml" />
+    <Content Include="Views\Shared\_SubDistribuidor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
