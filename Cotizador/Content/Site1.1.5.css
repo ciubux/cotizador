@@ -315,6 +315,10 @@ input.label-input {
     background-repeat: no-repeat;
 }
 
+.botonSunat:before {
+    background-image: url(/images/logo_sunat.gif);
+}
+
 .botonExcel:before {
     background-image: url(/images/excel.png);
 }

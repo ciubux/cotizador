@@ -62,6 +62,14 @@ namespace Cotizador
                      "~/Scripts/producto1.0.0.js"
                      ));
 
+            bundles.Add(new ScriptBundle("~/bundles/origen").Include(
+                     "~/Scripts/origen1.0.0.js"
+                     ));
+
+            bundles.Add(new ScriptBundle("~/bundles/subDistribuidor").Include(
+                     "~/Scripts/subDistribuidor1.0.0.js"
+                     ));
+
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
                         "~/Scripts/guiaRemision1.2.3.js"
                         ));

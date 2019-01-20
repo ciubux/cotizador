@@ -20,6 +20,7 @@ namespace Model
             this.asistenteServicioCliente = new Vendedor();
             this.responsabelPortafolio = new Vendedor();
             this.supervisorComercial = new Vendedor();
+            this.origen = new Origen();
             this.tipoDocumentoIdentidad = DocumentoVenta.TiposDocumentoIdentidad.RUC;
             this.plazoCreditoSolicitado = DocumentoVenta.TipoPago.NoAsignado;
             this.horaInicioPrimerTurnoEntrega = "09:00:00";
@@ -57,17 +58,17 @@ namespace Model
         public Boolean sinPlazoCreditoAprobado { get; set; }
         [Display(Name = "Grupo Cliente:")]
         public GrupoCliente grupoCliente { get; set; }
-        [Display(Name = "Pertenece Canal Multiregional")]
+        [Display(Name = "Multiregional")]
         public Boolean perteneceCanalMultiregional { get; set; }
-        [Display(Name = "Pertenece Canal Lima")]
+        [Display(Name = "Lima")]
         public Boolean perteneceCanalLima { get; set; }
-        [Display(Name = "Pertenece Canal Provincia")]
+        [Display(Name = "Provincias")]
         public Boolean perteneceCanalProvincias { get; set; }
-        [Display(Name = "Pertenece Canal PCP")]
+        [Display(Name = "PCP")]
         public Boolean perteneceCanalPCP { get; set; }
         [Display(Name = "Pertenece Canal Ordon")]
         public Boolean perteneceCanalOrdon { get; set; }
-        [Display(Name = "es Sub Distribuidor:")]
+        [Display(Name = "Sub Distribuidor")]
         public Boolean esSubDistribuidor { get; set; }
 
         [Display(Name = "Cliente habilitado para negociacion multiregional")]
@@ -222,6 +223,12 @@ namespace Model
         public Usuario usuarioSolicitante { get; set; }
 
         public List<ClienteAdjunto> clienteAdjuntoList { get; set; }
+
+        [Display(Name = "Origen:")]
+        public Origen origen
+        {
+            get; set;
+        }
     }
 
 }

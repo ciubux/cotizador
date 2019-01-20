@@ -1,0 +1,26 @@
+﻿@model Cotizador.Models.SubDistribuidorViewModels
+
+@if (Model.Disabled)
+{
+    @Html.DropDownList(
+                Model.SubDistribuidorSelectId,
+                Model.SubDistribuidores, "Seleccione",
+                new
+                {
+                    id = Model.SubDistribuidorSelectId,
+                    @class = "form-control",
+                    @disabled = "disabled"
+                })
+}
+else
+{
+    @Html.DropDownList(
+            Model.SubDistribuidorSelectId,
+            Model.SubDistribuidores, "Seleccione",
+            new
+            {
+                id = Model.SubDistribuidorSelectId,
+                @class = "form-control"
+
+            })
+}
