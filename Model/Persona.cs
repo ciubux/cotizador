@@ -52,7 +52,7 @@ namespace Model
         [Display(Name = "Condición Contribuyente:")]
         public String condicionContribuyente { get; set; }
 
-        [Display(Name = "Correo Envío Factura:")]
+        [Display(Name = "E-mail Envío Factura:")]
         public String correoEnvioFactura { get; set; }
 
 
@@ -152,7 +152,7 @@ namespace Model
         [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }
 
-        [Display(Name = "Telefono Contacto Compras:")]
+        [Display(Name = "Telef. Contacto Compras:")]
         public String telefonoContacto1 { get; set; }
 
         [Display(Name = "E-mail Contacto Compras:")]

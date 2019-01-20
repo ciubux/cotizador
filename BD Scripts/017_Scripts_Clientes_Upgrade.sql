@@ -1,147 +1,11 @@
+/* **** 1 **** */
+ALTER TABLE cliente 
+ADD id_subdistribuidor INT,
+ id_origen INT;
 
-/* **** TABLAS LOG CAMBIOS **** */
-CREATE TABLE CATALOGO_TABLA(
-	id_catalogo_Tabla int IDENTITY(1,1) NOT NULL,
-	codigo char(4) NULL,
-	nombre varchar(250) NULL,
-	estado smallint NULL
-PRIMARY KEY CLUSTERED 
-(
-	id_catalogo_Tabla ASC
-)
-) ON [PRIMARY]
-GO
-
-
-
-
-
-
-CREATE TABLE CATALOGO_CAMPO(
-	id_catalogo_campo int IDENTITY(1,1) NOT NULL,
-	id_catalogo_tabla int not null,
-	codigo char(8) NULL,
-	nombre varchar(250) NULL,
-	estado smallint NULL
-PRIMARY KEY CLUSTERED 
-(
-	id_catalogo_campo ASC
-)
-) ON [PRIMARY]
-GO
-
-
-
-
-
-
-CREATE TABLE CAMBIO(
-	id_cambio uniqueidentifier  NOT NULL,
-	id_catalogo_tabla int null,
-	id_catalogo_campo int not null,
-	id_registro varchar(40),
-	valor varchar(1000) ,
-	estado smallint NULL,
-	fecha_inicio_vigencia date NOT NULL,
-	fecha_fin_vigencia date NULL,
-	usuario_modificacion uniqueidentifier NOT NULL,
-	fecha_modificacion datetime NOT NULL,
-	 CONSTRAINT [PK_CAMBIO] PRIMARY KEY CLUSTERED 
-(
-	id_cambio ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
-
-INSERT INTO CATALOGO_TABLA(codigo, nombre, estado) VALUES('0001', 'CLIENTE', 1);
-INSERT INTO CATALOGO_TABLA(codigo, nombre, estado) VALUES('0002', 'PRODUCTO', 1);
-
-
-
-
-
-INSERT INTO CATALOGO_CAMPO(id_catalogo_tabla, codigo, nombre, estado) VALUES(1, '00010001', 'id_grupo', 1);
-INSERT INTO CATALOGO_CAMPO(id_catalogo_tabla, codigo, nombre, estado) VALUES(1, '00010002', 'id_responsable_comercial', 1);
-INSERT INTO CATALOGO_CAMPO(id_catalogo_tabla, codigo, nombre, estado) VALUES(1, '00010003', 'id_asistente_servicio_cliente', 1);
-INSERT INTO CATALOGO_CAMPO(id_catalogo_tabla, codigo, nombre, estado) VALUES(1, '00010004', 'id_supervisor_comercial', 1);
-INSERT INTO CATALOGO_CAMPO(id_catalogo_tabla, codigo, nombre, estado) VALUES(1, '00010005', 'plazo_credito', 1);
-INSERT INTO CATALOGO_CAMPO(id_catalogo_tabla, codigo, nombre, estado) VALUES(1, '00010006', 'credito_aprobado', 1);
-INSERT INTO CATALOGO_CAMPO(id_catalogo_tabla, codigo, nombre, estado) VALUES(1, '00010007', 'negociacion_multiregional', 1);
-INSERT INTO CATALOGO_CAMPO(id_catalogo_tabla, codigo, nombre, estado) VALUES(1, '00010008', 'sede_principal', 1);
-
-
-
-
-
-
-
-
-CREATE PROCEDURE [dbo].[pi_cambio_dato] 
-
-@idUsuario uniqueidentifier,
-@idCatalogoTabla int,
-@idCatalogoCampo int,
-@idRegistro varchar(40),
-@valor varchar(1000),
-@fechaInicioVigencia date
-
-
-AS 
-BEGIN 
-
-DECLARE @newId uniqueidentifier;
-SET NOCOUNT ON
-SET @newId = NEWID();
-
-
-INSERT INTO CAMBIO
-           (id_cambio
-		   ,id_catalogo_tabla
-           ,id_catalogo_campo
-		   ,id_registro
-           ,valor
-           ,estado
-		   ,fecha_inicio_vigencia
-		   ,usuario_modificacion
-		   ,fecha_modificacion
-		   )
-     VALUES
-           (@newId,
-		    @idCatalogoTabla,
-		    @idCatalogoCampo,
-			@idRegistro,
-            @valor,
-            1, 
-			@fechaInicioVigencia,
-			@idUsuario,
-			GETDATE()
-			);
-
-UPDATE CAMBIO 
-SET fecha_fin_vigencia = @fechaInicioVigencia, estado = 0
-WHERE id_catalogo_campo = @idCatalogoCampo and fecha_fin_vigencia is null and not id_registro = @idRegistro;
-
-END
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
+ 
+/* **** 2 **** */
 ALTER PROCEDURE [dbo].[pi_clienteSunat] 
 @idUsuario uniqueidentifier,
 @razonSocial  varchar(200),
@@ -180,6 +44,9 @@ ALTER PROCEDURE [dbo].[pi_clienteSunat]
 @perteneceCanalProvincias smallint,
 @perteneceCanalPCP smallint,
 @esSubDistribuidor smallint,
+
+@idOrigen int,
+@idSubDistribuidor int,
 
 @idGrupoCliente int,
 @horaInicioPrimerTurnoEntrega datetime,
@@ -276,6 +143,8 @@ INSERT INTO CLIENTE
 			negociacion_multiregional,
 			telefono_contacto1,
 			email_contacto1,
+			id_origen,
+			id_subdistribuidor,
 			observacion_horario_entrega
 		   )
      VALUES
@@ -332,6 +201,8 @@ INSERT INTO CLIENTE
 			@negociacionMultiregional,
 			@telefonoContacto1,
 			@emailContacto1,
+			@idOrigen,
+			@idSubDistribuidor,
 			@observacionHorarioEntrega
 			);
 
@@ -366,24 +237,6 @@ BEGIN
 END
 
 
-DECLARE @cdFechaInicioVigencia date;
-SET @cdFechaInicioVigencia = Convert(date, GETDATE(), 120);
-
-/* Responsable comercial */
-EXEC  pi_cambio_dato @idUsuario, 1, 2, @newId, @idResponsableComercial, @cdFechaInicioVigencia;
-
-/* Asistente servicio cliente */
-EXEC  pi_cambio_dato @idUsuario, 1, 3, @newId, @idAsistenteServicioCliente, @cdFechaInicioVigencia;
-
-/* Supervisor comercial */
-EXEC  pi_cambio_dato @idUsuario, 1, 4, @newId, @idSupervisorComercial, @cdFechaInicioVigencia;
-
-/* Negociacion multiregional */
-EXEC  pi_cambio_dato @idUsuario, 1, 7, @newId, @negociacionMultiregional, @cdFechaInicioVigencia;
-
-/* sede principal */
-EXEC  pi_cambio_dato @idUsuario, 1, 8, @newId, @sedePrincipal, @cdFechaInicioVigencia;
-
 
 COMMIT
 
@@ -392,18 +245,7 @@ COMMIT
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+/* **** 3 **** */
 ALTER PROCEDURE [dbo].[pu_clienteSunat] 
 @idCliente uniqueidentifier,
 @idUsuario uniqueidentifier,
@@ -432,6 +274,9 @@ ALTER PROCEDURE [dbo].[pu_clienteSunat]
 @idResponsableComercial int,
 @idAsistenteServicioCliente int,
 @idSupervisorComercial int,
+
+@idOrigen int,
+@idSubDistribuidor int,
 
 @observacionesCredito varchar(1000),
 @observaciones varchar(1000),
@@ -590,6 +435,8 @@ UPDATE CLIENTE SET [razon_Social] = @razonSocial
 			,email_contacto1 = @emailContacto1
 			,usuario_solicitante_credito = @usuarioSolicitanteCredito
 			,observacion_horario_entrega = @observacionHorarioEntrega
+			,id_origen = @idOrigen
+			,id_subdistribuidor = @idSubDistribuidor
      WHERE 
           id_cliente = @idCliente;
 
@@ -620,45 +467,123 @@ BEGIN
 END
 
 
-DECLARE @cdFechaInicioVigencia date;
-SET @cdFechaInicioVigencia = Convert(date, GETDATE(), 120);
 
-/* Responsable comercial */
-IF @idResponsableComercial != @idResponsableComercialAnterior 
+END
+
+
+
+
+
+
+
+/* **** 4 **** */
+ALTER PROCEDURE [dbo].[ps_cliente] 
+@idCliente uniqueidentifier 
+AS
 BEGIN
-	EXEC  pi_cambio_dato @idUsuario, 1, 2, @idCliente, @idResponsableComercial, @cdFechaInicioVigencia;
+
+SELECT cl.id_cliente, cl.codigo, cl.razon_social,
+cl.nombre_comercial, cl.contacto1, cl.telefono_contacto1, cl.email_contacto1, cl.contacto2, cl.ruc,
+cl.domicilio_legal, 
+/*Si el cliente no tiene correo entonces se obtiene de algún pedido que tenga correo*/
+CASE cl.correo_envio_factura WHEN '' THEN 
+(SELECT TOP 1 correo_contacto_pedido FROM PEDIDO where id_cliente = cl.id_cliente
+AND correo_contacto_pedido IS NOT NULL AND correo_contacto_pedido NOT IN ( '','.') )
+ELSE cl.correo_envio_factura END AS correo_envio_factura, 
+
+cl.razon_social_sunat, cl.nombre_comercial_sunat, 
+cl.direccion_domicilio_legal_sunat, cl.estado_contribuyente_sunat, 
+cl.condicion_contribuyente_sunat,
+ub.codigo as codigo_ubigeo,
+ub.provincia, ub.departamento, ub.distrito, cl.plazo_credito,
+
+cl.forma_pago_factura, 
+cl.sede_principal, 
+cl.negociacion_multiregional, 
+cl.id_ciudad,
+ci.nombre as ciudad_nombre,
+cl.tipo_documento,
+/*PLAZO CREDITO*/
+cl.plazo_credito_solicitado, --plazo credito aprobado
+cl.tipo_pago_factura, --plazo credito aprobado
+cl.sobre_plazo,
+/*MONTO CREDITO*/
+cl.credito_solicitado,
+cl.credito_aprobado,
+cl.sobre_giro, 
+/*FLAG VENDEDORES*/
+cl.vendedores_asignados,
+
+/*Turnos entrega*/
+cl.hora_inicio_primer_turno_entrega,
+cl.hora_fin_primer_turno_entrega,
+cl.hora_inicio_segundo_turno_entrega,
+cl.hora_fin_segundo_turno_entrega,
+
+--VENDEDORES,
+verc.id_vendedor as responsable_comercial_id_vendedor,
+verc.codigo as responsable_comercial_codigo,
+verc.descripcion as responsable_comercial_descripcion,
+
+vesc.id_vendedor as supervisor_comercial_id_vendedor,
+vesc.codigo as supervisor_comercial_codigo,
+vesc.descripcion as supervisor_comercial_descripcion,
+
+veasc.id_vendedor as asistente_servicio_cliente_id_vendedor,
+veasc.codigo as asistente_servicio_cliente_codigo,
+veasc.descripcion as asistente_servicio_cliente_descripcion,
+
+cl.observaciones_credito, 
+cl.observaciones, 
+cl.bloqueado,
+
+cl.pertenece_canal_multiregional,
+cl.pertenece_canal_lima,
+cl.pertenece_canal_provincia,
+cl.pertenece_canal_pcp,
+cl.pertenece_canal_ordon,
+cl.es_sub_distribuidor,
+cl.observacion_horario_entrega,
+
+cl.id_subdistribuidor,
+sub.nombre nombre_subdistribuidor, 
+cl.id_origen,
+ori.nombre nombre_origen, 
+
+clgr.id_grupo_cliente ,
+gr.codigo as codigo_grupo_cliente,
+gr.grupo as grupo_nombre
+
+FROM CLIENTE AS cl 
+INNER JOIN CIUDAD AS ci ON cl.id_ciudad = ci.id_ciudad
+LEFT JOIN UBIGEO AS ub ON cl.ubigeo = ub.codigo
+LEFT JOIN VENDEDOR AS verc ON cl.id_responsable_comercial = verc.id_vendedor
+LEFT JOIN VENDEDOR AS vesc ON cl.id_supervisor_comercial = vesc.id_vendedor
+LEFT JOIN VENDEDOR AS veasc ON cl.id_asistente_servicio_cliente = veasc.id_vendedor
+LEFT JOIN CLIENTE_GRUPO_CLIENTE AS clgr ON clgr.id_cliente = cl.id_cliente
+LEFT JOIN GRUPO_CLIENTE AS gr ON gr.id_grupo_cliente = clgr.id_grupo_cliente 
+LEFT JOIN SUBDISTRIBUIDOR AS sub ON sub.id_subdistribuidor = cl.id_subdistribuidor 
+LEFT JOIN ORIGEN AS ori ON ori.id_origen = cl.id_origen 
+WHERE cl.estado = 1 AND cl.id_cliente = @idCliente 
+
+SELECT  arch.id_archivo_adjunto,  nombre--, arch.adjunto,
+FROM ARCHIVO_ADJUNTO arch
+WHERE id_cliente = @idCliente
+AND estado = 1
+AND informacion_cliente = 'TRUE';
+
 END
 
 
-/* Asistente servicio cliente */
-IF @idAsistenteServicioCliente != @idAsistenteServicioClienteAnterior 
-BEGIN
-	EXEC  pi_cambio_dato @idUsuario, 1, 3, @idCliente, @idAsistenteServicioCliente, @cdFechaInicioVigencia;
-END
-
-
-/* Supervisor comercial */
-IF @idSupervisorComercial != @idSupervisorComercialAnterior 
-BEGIN
-	EXEC  pi_cambio_dato @idUsuario, 1, 4, @idCliente, @idSupervisorComercial, @cdFechaInicioVigencia;
-END
-
-
-/* Negociacion multiregional */
-IF @negociacionMultiregional != @negociacionMultiregionalAnterior 
-BEGIN
-	EXEC  pi_cambio_dato @idUsuario, 1, 7, @idCliente, @negociacionMultiregional, @cdFechaInicioVigencia;
-END
-
-
-/* sede principal */
-IF @sedePrincipal != @sedePrincipalAnterior 
-BEGIN
-	EXEC  pi_cambio_dato @idUsuario, 1, 8, @idCliente, @sedePrincipal, @cdFechaInicioVigencia;
-END
 
 
 
-END
+
+
+
+
+
+
+
 
 

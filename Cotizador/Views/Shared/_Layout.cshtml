@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "100";
+    TempData["ScriptVersion"] = "102";
     
 }
 
@@ -69,6 +69,12 @@
                         var linkBusquedaProducto = "";
                         var linkCRProducto = "";
 
+                        var linkBusquedaOrigen = "";
+                        var linkCROrigen = "";
+
+                        var linkBusquedaSubDistribuidor = "";
+                        var linkCRSubDistribuidor = "";
+
                         var linkCrearFacturaConsolidada = "";
 
                         var linkBusquedaNotasIngreso = "";
@@ -105,7 +111,13 @@
                             //  case 27: linkBusquedaProducto = "ative"; linkMaestros = "active"; break;
                             case 28: linkMantenimientoProducto = "ative"; linkMaestros = "active"; break;
                             case 29: linkCRProducto = "ative"; linkMaestros = "active"; break;
-                                
+
+                            case 30: linkBusquedaOrigen = "ative"; linkMaestros = "active"; break;
+                            case 31: linkCROrigen = "ative"; linkMaestros = "active"; break;
+
+                            case 32: linkBusquedaSubDistribuidor = "ative"; linkMaestros = "active"; break;
+                            case 33: linkCRSubDistribuidor = "ative"; linkMaestros = "active"; break;
+
                             case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
                             case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
                             case 22: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
@@ -254,7 +266,25 @@
                                         <li id="linkBusquedaProducto" class="@linkBusquedaProducto">@Html.ActionLink("Producto - Búsqueda", "List", "Producto")</li>
                                         if (usuario.modificaProducto)
                                         {
-                                        <li id="linkCRProducto" class="@linkCRProducto">@Html.ActionLink("Producto - Crear/Modificar ", "Editar", "Producto")</li>
+                                            <li id="linkCRProducto" class="@linkCRProducto">@Html.ActionLink("Producto - Crear/Modificar ", "Editar", "Producto")</li>
+                                        }
+                                    }
+
+                                    @if (usuario.modificaMaestroProductos)
+                                    {
+                                        <li id="linkBusquedaOrigen" class="@linkBusquedaOrigen">@Html.ActionLink("Origen - Búsqueda", "List", "Origen")</li>
+                                        if (usuario.modificaProducto)
+                                        {
+                                            <li id="linkCROrigen" class="@linkCROrigen">@Html.ActionLink("Origen - Crear/Modificar ", "Editar", "Origen")</li>
+                                        }
+                                    }
+
+                                    @if (usuario.modificaMaestroProductos)
+                                    {
+                                        <li id="linkBusquedaSubDistribuidor" class="@linkBusquedaSubDistribuidor">@Html.ActionLink("Subdistribuidor - Búsqueda", "List", "SubDistribuidor")</li>
+                                        if (usuario.modificaProducto)
+                                        {
+                                            <li id="linkCRSubDistribuidor" class="@linkCRSubDistribuidor">@Html.ActionLink("Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
                                         }
                                     }
                                 </ul>
