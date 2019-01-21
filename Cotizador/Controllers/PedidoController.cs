@@ -387,6 +387,8 @@ namespace Cotizador.Controllers
                 pedidoDetalle.flete = documentoDetalle.flete;
                 pedidoDetalle.observacion = documentoDetalle.observacion;
                 pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
+                
+
                 pedidoDetalle.producto = documentoDetalle.producto;
                 if (documentoDetalle.esPrecioAlternativo)
                 {
@@ -400,6 +402,9 @@ namespace Cotizador.Controllers
                 //pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
                
                 pedidoDetalle.unidad = documentoDetalle.unidad;
+                pedidoDetalle.porcentajeDescuento = 100 - (pedidoDetalle.producto.precioClienteProducto.precioNeto * 100 / pedidoDetalle.producto.precioLista);
+
+
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
             }
             pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);

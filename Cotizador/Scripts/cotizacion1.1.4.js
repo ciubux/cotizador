@@ -1819,6 +1819,7 @@ jQuery(function ($) {
                         '<td>' + observacion + '</td>' +
                         '<td class="tdprecioUnitarioAnterior">' + precioUnitarioAnterior + '</td>' +
                         '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionPrecioAnterior + ' %</td>' +
+                        '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionPrecioListaAnterior + ' %</td>' +
                         '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionCosto + ' %</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
                         '</tr>';

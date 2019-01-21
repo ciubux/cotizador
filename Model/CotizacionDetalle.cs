@@ -57,7 +57,7 @@ namespace Model
             {
 
 
-                if (precioNetoAnterior != 0)
+                if (precioListaAnterior != 0)
                     _variacionPrecioListaAnterior = (this.precioLista / this.precioListaAnterior - 1) * 100;
                 else
                     _variacionPrecioListaAnterior = 0;

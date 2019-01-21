@@ -316,7 +316,7 @@ namespace DataLayer
                 precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 cotizacionDetalle.producto.precioClienteProducto = precioClienteProducto;
 
-
+                cotizacionDetalle.producto.precioListaAnterior = Converter.GetDecimal(row, "precio_sin_igv_anterior");
 
 
                 if (cotizacion.esRecotizacion)
