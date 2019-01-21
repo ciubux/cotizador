@@ -227,6 +227,17 @@ namespace DataLayer
                 cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
                 cliente.grupoCliente.codigo = Converter.GetString(row, "codigo_grupo_cliente");
                 cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
+
+
+                cliente.origen = new Origen();
+                cliente.origen.idOrigen = Converter.GetInt(row, "id_origen");
+                cliente.origen.codigo = Converter.GetString(row, "codigo_origen");
+                cliente.origen.nombre = Converter.GetString(row, "nombre_origen");
+
+                cliente.subDistribuidor = new SubDistribuidor();
+                cliente.subDistribuidor.idSubDistribuidor = Converter.GetInt(row, "id_subdistribuidor");
+                cliente.subDistribuidor.codigo = Converter.GetString(row, "codigo_subdistribuidor");
+                cliente.subDistribuidor.nombre = Converter.GetString(row, "nombre_subdistribuidor");
             }
 
             foreach (DataRow row in dataTableAdjunto.Rows)
@@ -436,6 +447,14 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente == null ? 0 : cliente.grupoCliente.idGrupoCliente);
 
+            if (!cliente.esSubDistribuidor)
+            {
+                cliente.subDistribuidor = null;
+            }
+
+            InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
+            InputParameterAdd.Int(objCommand, "idSubDistribuidor", cliente.subDistribuidor == null ? 0 : cliente.subDistribuidor.idSubDistribuidor);
+
             DateTime dtTmp = DateTime.Now;
             String[] horaTmp = cliente.horaInicioPrimerTurnoEntrega.Split(':');
             DateTime horaInicioPrimerTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
@@ -549,6 +568,14 @@ namespace DataLayer
 
             InputParameterAdd.Bit(objCommand, "sedePrincipal", cliente.sedePrincipal);
             InputParameterAdd.Bit(objCommand, "negociacionMultiregional", cliente.negociacionMultiregional);
+
+            if (!cliente.esSubDistribuidor)
+            {
+                cliente.subDistribuidor = null;
+            }
+
+            InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
+            InputParameterAdd.Int(objCommand, "idSubDistribuidor", cliente.subDistribuidor == null ? 0 : cliente.subDistribuidor.idSubDistribuidor);
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente==null?0: cliente.grupoCliente.idGrupoCliente);
             DateTime dtTmp = DateTime.Now;
