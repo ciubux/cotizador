@@ -94,7 +94,10 @@ namespace DataLayer
 
                 usuario.modificaMaestroClientes = Converter.GetBool(row, "modifica_maestro_clientes");
                 usuario.modificaMaestroProductos = Converter.GetBool(row, "modifica_maestro_productos");
-               
+
+                usuario.modificaSubDistribuidor = Converter.GetBool(row, "modifica_subdistribuidor");
+                usuario.modificaOrigen = Converter.GetBool(row, "modifica_origen");
+
                 usuario.creaNotasCredito = Converter.GetBool(row, "crea_notas_credito");
                 usuario.creaNotasDebito = Converter.GetBool(row, "crea_notas_debito");
                 usuario.realizaRefacturacion = Converter.GetBool(row, "realiza_refacturacion");

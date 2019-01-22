@@ -1714,6 +1714,13 @@ jQuery(function ($) {
 
     $("#idGrupoCliente").change(function () {
         var idGrupoCliente = $("#idGrupoCliente").val();
+        if (idGrupoCliente != undefined && idGrupoCliente != "") {
+            $("#cliente_habilitadoNegociacionGrupal").closest("label").show();
+        } else {
+            $("#cliente_habilitadoNegociacionGrupal").closest("label").hide();
+            $('#cliente_habilitadoNegociacionGrupal').prop('checked', false);
+            changeInputBoolean('habilitadoNegociacionGrupal', 0)
+        }
 
         $.ajax({
             url: "/Cliente/ChangeIdGrupoCliente",
@@ -2174,6 +2181,12 @@ jQuery(function ($) {
                 $("#verAsistenteServicioCliente").html(cliente.asistenteServicioCliente.descripcion);
 
                 $("#spnVerOrigen").html(cliente.origen.nombre);
+
+                if (cliente.habilitadoNegociacionGrupal) {
+                    $("#verHabilitadoNegociacionGrupal").show();
+                } else {
+                    $("#verHabilitadoNegociacionGrupal").hide();
+                }
 
                 $("#verGrupoCliente").html(cliente.grupoCliente.nombre);
                 $("#spn_vercliente_mp_registracotizaciones").html(cliente.ciudad.nombre);

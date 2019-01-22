@@ -89,7 +89,7 @@ namespace Cotizador.ExcelExport
                 int i = 0;
                 
 
-                UtilesHelper.setValorCelda(sheet, 1, "S", "Negociación Multireginal", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "S", "Negociación Multiregional", titleCellStyle);
                 UtilesHelper.combinarCeldas(sheet, 1, 1, "S", "T");
                 UtilesHelper.setValorCelda(sheet, 1, "U", "Canales", titleCellStyle);
                 UtilesHelper.combinarCeldas(sheet, 1, 1, "U", "Z");
