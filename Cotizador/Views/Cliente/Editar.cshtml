@@ -102,6 +102,17 @@
                                        selectedValue = cliente.grupoCliente.idGrupoCliente
                                    })
                     </div>
+                    <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                        @if (cliente.habilitadoNegociacionGrupal)
+                        {
+                            <input checked type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
+                        }
+                        Habilitado para negociación grupal
+                    </label>
                 </div>
             </div>
         </div>
@@ -792,7 +803,7 @@
 
                         <div class="col-sm-6 col-lg-4 hasCanalMultiregional" style="@displayCanalMultiregional">
                             <div class="form-group">
-                                <label for="cliente_negociacionMultiregional" class="control-label col-xs-10 col-sm-10 col-lg-10" style="color:cornflowerblue;">MP <span id="spn_vercliente_mp_registracotizaciones">@cliente.ciudad.nombre</span> Registra cotizaciones multiregionales para este RUC</label>
+                                <label for="cliente_sedePrincipal" class="control-label col-xs-10 col-sm-10 col-lg-10" style="color:cornflowerblue;">MP <span id="spn_vercliente_mp_registracotizaciones">@cliente.ciudad.nombre</span> Registra cotizaciones multiregionales para este RUC</label>
                                 <div class="col-xs-2 col-sm-2 col-lg-2">
                                     @if (cliente.sedePrincipal)
                                     {

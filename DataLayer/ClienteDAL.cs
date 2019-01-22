@@ -220,6 +220,7 @@ namespace DataLayer
                 cliente.perteneceCanalOrdon = Converter.GetBool(row, "pertenece_canal_ordon");
                 cliente.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
 
+                cliente.habilitadoNegociacionGrupal = Converter.GetBool(row, "habilitado_negociacion_grupal");
                 cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
                 cliente.negociacionMultiregional = Converter.GetBool(row, "negociacion_multiregional");
 
@@ -444,6 +445,7 @@ namespace DataLayer
 
             InputParameterAdd.Bit(objCommand, "sedePrincipal", cliente.sedePrincipal);
             InputParameterAdd.Bit(objCommand, "negociacionMultiregional", cliente.negociacionMultiregional);
+            InputParameterAdd.Bit(objCommand, "habilitadoNegociacionGrupal", cliente.habilitadoNegociacionGrupal);
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente == null ? 0 : cliente.grupoCliente.idGrupoCliente);
 
@@ -568,6 +570,7 @@ namespace DataLayer
 
             InputParameterAdd.Bit(objCommand, "sedePrincipal", cliente.sedePrincipal);
             InputParameterAdd.Bit(objCommand, "negociacionMultiregional", cliente.negociacionMultiregional);
+            InputParameterAdd.Bit(objCommand, "habilitadoNegociacionGrupal", cliente.habilitadoNegociacionGrupal);
 
             if (!cliente.esSubDistribuidor)
             {

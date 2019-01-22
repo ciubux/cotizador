@@ -79,6 +79,9 @@ namespace Model
         [Display(Name = "Registra cotizaciones multiregionales para este cliente")]
         public Boolean habilitadoSedePrincipal { get { return sedePrincipal; } }
 
+        [Display(Name = "Habilitado para negociación grupal")]
+        public Boolean habilitadoNegociacionGrupal { get; set; }
+
         public String horaInicioPrimerTurnoEntrega { get; set; }
 
         [Display(Name = "Observaciones Horario Entrega:")]
@@ -232,7 +235,7 @@ namespace Model
             get; set;
         }
 
-        [Display(Name = "Sub Distribuidor:")]
+        [Display(Name = "Categoría:")]
         public SubDistribuidor subDistribuidor
         {
             get; set;

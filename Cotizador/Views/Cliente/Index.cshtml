@@ -665,11 +665,40 @@
 
 
 
-                            <fieldset id="fieldset_negociacion_multiregional">
-                                <legend>Negociacion Multiregional:</legend>
+                            <fieldset id="fieldset_origen">
+                                <legend>Origen: <spn id="spnVerOrigen"></spn></legend>
+                            </fieldset>
+
+                            <fieldset id="fieldset_canales">
+                                <legend>Canales:</legend>
 
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-12">
+                                        <div class="form-group">
+                                            <ul class="list-unstyled">
+                                                <li id="li_perteneceCanalLima">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Lima</label>
+                                                </li>
+                                                <li id="li_perteneceCanalProvincias">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Provincia</label>
+                                                </li>
+                                                <li id="li_perteneceCanalPCP">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">PCP</label>
+                                                </li>
+                                                <li id="li_perteneceCanalMultiregional">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Multiregional</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="div_multiregional" style="padding-left: 50px; margin-top: -20px;">
+                                    <div class="col-sm-12 col-lg-12" >
                                         <div class="form-group">
                                             <ul class="list-unstyled">
                                                 <li id="li_negociacionMultiregional">
@@ -686,41 +715,21 @@
                                 </div>
                             </fieldset>
 
-                            <fieldset id="fieldset_canales">
-                                <legend>Canales:</legend>
+                            <fieldset id="div_subdistribuidor">
+                                <legend>Sub Distribuidor:</legend>
 
                                 <div class="row">
-                                    <div class="col-sm-12 col-lg-12">
+                                    <!--Responsable Comercial-->
+                                    <div class="col-sm-6 col-lg-4">
                                         <div class="form-group">
-                                            <ul class="list-unstyled">
-                                                <li id="li_perteneceCanalMultiregional">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
-                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Multiregional</label>
-                                                </li>
-                                                <li id="li_perteneceCanalLima">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
-                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Lima</label>
-                                                </li>
-                                                <li id="li_perteneceCanalProvincias">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
-                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Provincia</label>
-                                                </li>
-                                                <li id="li_perteneceCanalPCP">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
-                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">PCP</label>
-                                                </li>
-                                                <li id="li_esSubDistribuidor">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
-                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Sub Distribuidor</label>
-                                                </li>
-                                                <li id="li_perteneceCanalOrdon">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
-                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Ordon</label>
-                                                </li>
-                                            </ul>
+                                            @Html.LabelFor(c => cliente.subDistribuidor, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
+                                            <div class="col-xs-8">
+                                                <p class="form-control-static" id="verSubDistribuidor"></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </fieldset>
                         </div>
 
