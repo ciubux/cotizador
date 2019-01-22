@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "122";
+    TempData["ScriptVersion"] = "124";
     
 }
 
@@ -270,22 +270,16 @@
                                         }
                                     }
 
-                                    @if (usuario.modificaMaestroProductos)
+                                    @if (usuario.modificaOrigen)
                                     {
                                         <li id="linkBusquedaOrigen" class="@linkBusquedaOrigen">@Html.ActionLink("Origen - Búsqueda", "List", "Origen")</li>
-                                        if (usuario.modificaProducto)
-                                        {
-                                            <li id="linkCROrigen" class="@linkCROrigen">@Html.ActionLink("Origen - Crear/Modificar ", "Editar", "Origen")</li>
-                                        }
+                                        <li id="linkCROrigen" class="@linkCROrigen">@Html.ActionLink("Origen - Crear/Modificar ", "Editar", "Origen")</li>
                                     }
 
-                                    @if (usuario.modificaMaestroProductos)
+                                    @if (usuario.modificaSubDistribuidor)
                                     {
                                         <li id="linkBusquedaSubDistribuidor" class="@linkBusquedaSubDistribuidor">@Html.ActionLink("Subdistribuidor - Búsqueda", "List", "SubDistribuidor")</li>
-                                        if (usuario.modificaProducto)
-                                        {
-                                            <li id="linkCRSubDistribuidor" class="@linkCRSubDistribuidor">@Html.ActionLink("Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
-                                        }
+                                        <li id="linkCRSubDistribuidor" class="@linkCRSubDistribuidor">@Html.ActionLink("Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
                                     }
                                 </ul>
                             </li>
