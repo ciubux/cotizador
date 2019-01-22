@@ -1082,6 +1082,7 @@ jQuery(function ($) {
             $("#cliente_sedePrincipal").removeAttr("disabled");
         } else {
             $("#cliente_sedePrincipal").prop("checked", false);
+            changeInputBoolean('sedePrincipal', 0);
             $("#cliente_sedePrincipal").attr("disabled", "");
         }
 
@@ -1676,6 +1677,22 @@ jQuery(function ($) {
 
     $("#idCiudad").change(function () {
         var idCiudad = $("#idCiudad").val();
+        var textCiudad = $("#idCiudad option:selected").text();
+
+        if (textCiudad.trim().toUpperCase() == 'LIMA') {
+            $('#cliente_CanalLima').prop('checked', true);
+            $('#cliente_CanalProvincias').prop('checked', false);
+
+            changeInputBoolean('perteneceCanalLima', 1);
+            changeInputBoolean('perteneceCanalProvincias', 0);
+        } else {
+            $('#cliente_CanalProvincias').prop('checked', true);
+            $('#cliente_CanalLima').prop('checked', false);
+
+            changeInputBoolean('perteneceCanalLima', 0);
+            changeInputBoolean('perteneceCanalProvincias', 1);
+        }
+
 
         $("#spn_vercliente_mp_registracotizaciones").html($("#idCiudad option:selected").text());
 
@@ -1784,7 +1801,13 @@ jQuery(function ($) {
     });
 
        
-    
+    $("#cliente_habilitadoNegociacionGrupal").change(function () {
+        var valor = 1;
+        if (!$('#cliente_habilitadoNegociacionGrupal').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('habilitadoNegociacionGrupal', valor)
+    });
 
 
     $("#cliente_bloqueado").change(function () {
@@ -2150,13 +2173,16 @@ jQuery(function ($) {
                 $("#verSupervisorComercial").html(cliente.supervisorComercial.descripcion);
                 $("#verAsistenteServicioCliente").html(cliente.asistenteServicioCliente.descripcion);
 
+                $("#spnVerOrigen").html(cliente.origen.nombre);
 
                 $("#verGrupoCliente").html(cliente.grupoCliente.nombre);
                 $("#spn_vercliente_mp_registracotizaciones").html(cliente.ciudad.nombre);
                 
                 if (cliente.perteneceCanalMultiregional) {
+                    $("#div_multiregional").show();
                     $("#li_perteneceCanalMultiregional img").attr("src", "/images/check2.png");
                 } else {
+                    $("#div_multiregional").hide();
                     $("#li_perteneceCanalMultiregional img").attr("src", "/images/equis.png");
                 }
                 
@@ -2177,17 +2203,14 @@ jQuery(function ($) {
                 } else {
                     $("#li_perteneceCanalPCP img").attr("src", "/images/equis.png");
                 }
-
-                if (cliente.perteneceCanalOrdon) {
-                    $("#li_perteneceCanalOrdon img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_perteneceCanalOrdon img").attr("src", "/images/equis.png");
-                }
+                
 
                 if (cliente.esSubDistribuidor) {
-                    $("#li_esSubDistribuidor img").attr("src", "/images/check2.png");
+                    $("#div_subdistribuidor").show();
+                    $("#verSubDistribuidor").html(cliente.subDistribuidor.nombre);
                 } else {
-                    $("#li_esSubDistribuidor img").attr("src", "/images/equis.png");
+                    $("#div_subdistribuidor").hide();
+                    $("#verSubDistribuidor").html(cliente.subDistribuidor.nombre);
                 }
 
 
