@@ -17,6 +17,26 @@ namespace Cotizador.Controllers
 {
     public class SubDistribuidorController : ParentController
     {
+        public ActionResult GetSubDistribuidores(string subDistribuidorSelectId, string selectedValue = null, string disabled = null)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            SubDistribuidor obj = new SubDistribuidor();
+            obj.Estado = 1;
+
+            SubDistribuidorBL bL = new SubDistribuidorBL();
+            List<SubDistribuidor> list = bL.getSubDistribuidores(obj);
+
+            var model = new SubDistribuidorViewModels
+            {
+                Data = list,
+                SubDistribuidorSelectId = subDistribuidorSelectId,
+                SelectedValue = selectedValue,
+                Disabled = disabled == null || disabled != "disabled" ? false : true
+            };
+
+            return PartialView("_SubDistribuidor", model);
+        }
+
 
         [HttpGet]
         public ActionResult List()

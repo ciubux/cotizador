@@ -230,6 +230,17 @@ BEGIN
 	WHERE ruc like @ruc;
 END
 
+UPDATE CLIENTE 
+SET razon_Social_Sunat = @razonSocialSunat
+		,nombre_Comercial_Sunat = nombre_Comercial_Sunat
+		,direccion_Domicilio_Legal_Sunat = @direccionDomicilioLegalSunat
+		,estado_Contribuyente_sunat = @estadoContribuyente
+		,condicion_Contribuyente_sunat = @condicionContribuyente
+		,es_sub_distribuidor = @esSubDistribuidor
+		,id_subdistribuidor = @idSubDistribuidor
+		,ubigeo = @ubigeo
+WHERE ruc like @ruc;
+
 IF @idGrupoCliente > 0 
 BEGIN
 	INSERT INTO CLIENTE_GRUPO_CLIENTE 
@@ -239,6 +250,10 @@ END
 
 
 COMMIT
+
+
+
+
 
 
 
@@ -454,6 +469,17 @@ BEGIN
 		SET sede_principal = 'FALSE'
 		WHERE ruc like @ruc;
 	END
+
+	UPDATE CLIENTE 
+	SET razon_Social_Sunat = @razonSocialSunat
+		   ,nombre_Comercial_Sunat = nombre_Comercial_Sunat
+		   ,direccion_Domicilio_Legal_Sunat = @direccionDomicilioLegalSunat
+		   ,estado_Contribuyente_sunat = @estadoContribuyente
+		   ,condicion_Contribuyente_sunat = @condicionContribuyente
+		   ,es_sub_distribuidor = @esSubDistribuidor
+		   ,id_subdistribuidor = @idSubDistribuidor
+		   ,ubigeo = @ubigeo
+	WHERE ruc like @ruc;
 END
 
 DELETE CLIENTE_GRUPO_CLIENTE 
@@ -469,6 +495,9 @@ END
 
 
 END
+
+
+
 
 
 
@@ -547,8 +576,11 @@ cl.observacion_horario_entrega,
 
 cl.id_subdistribuidor,
 sub.nombre nombre_subdistribuidor, 
+sub.codigo codigo_subdistribuidor, 
 cl.id_origen,
 ori.nombre nombre_origen, 
+ori.codigo codigo_origen, 
+
 
 clgr.id_grupo_cliente ,
 gr.codigo as codigo_grupo_cliente,

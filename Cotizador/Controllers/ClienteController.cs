@@ -141,6 +141,7 @@ namespace Cotizador.Controllers
             this.ClienteSession.tipoPagoFactura = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPagoFactura"]);
         }
 
+
         public void ChangePlazoCreditoSolicitado()
         {
             this.ClienteSession.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["plazoCreditoSolicitado"]);
@@ -160,6 +161,7 @@ namespace Cotizador.Controllers
             cliente.negociacionMultiregional = false;
             cliente.observacionHorarioEntrega = "";
 
+            
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 
@@ -237,6 +239,12 @@ namespace Cotizador.Controllers
                 GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
                 grupoClienteList = grupoClienteBL.getGruposCliente();
                 this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+            }
+
+            ViewBag.esRuc = false;
+            if (cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC)
+            {
+                ViewBag.esRuc = true;
             }
 
             ViewBag.cliente = cliente;
@@ -622,10 +630,27 @@ namespace Cotizador.Controllers
             else
                 ClienteSession.supervisorComercial.idVendedor = Int32.Parse(this.Request.Params["idSupervisorComercial"]);
         }
-      /*  public void ChangeBloqueado()
+
+        public void ChangeIdSubDistribuidor()
         {
-            ClienteSession.bloqueado = Int32.Parse(this.Request.Params["bloqueado"]) == 1;
-        }*/
+            if (this.Request.Params["idSubDistribuidor"] == null || this.Request.Params["idSubDistribuidor"] == String.Empty)
+                ClienteSession.subDistribuidor.idSubDistribuidor = 0;
+            else
+                ClienteSession.subDistribuidor.idSubDistribuidor = Int32.Parse(this.Request.Params["idSubDistribuidor"]);
+        }
+
+        public void ChangeIdOrigen()
+        {
+            if (this.Request.Params["idOrigen"] == null || this.Request.Params["idOrigen"] == String.Empty)
+                ClienteSession.origen.idOrigen = 0;
+            else
+                ClienteSession.origen.idOrigen = Int32.Parse(this.Request.Params["idOrigen"]);
+        }
+
+        /*  public void ChangeBloqueado()
+          {
+              ClienteSession.bloqueado = Int32.Parse(this.Request.Params["bloqueado"]) == 1;
+          }*/
         public void ChangeInputBoolean()
         {
             Cliente cliente = this.ClienteSession;

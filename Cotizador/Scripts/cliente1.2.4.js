@@ -117,12 +117,24 @@ jQuery(function ($) {
             $("#labelClienteNombre").html("Nombres y Apellidos");
             $("#fieldSetDatosSunat").hide();
             $("#btnRecuperarDatosSunat").hide();
+            $("#divContinueEdit").removeAttr("disabled");
         }
         else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC.charCodeAt(0)) {
             $("#labelClienteNombre").html("Nombre Comercial");
-            $("#fieldSetDatosSunat").show();
-            $("#btnRecuperarDatosSunat").show();
-
+            $("#fieldSetDatosSunat").show(); 
+            
+            var rSunat = $("#cliente_razonSocialSunat").val();
+            if (rSunat.trim() == "") {
+                $("#btnRecuperarDatosSunat").show();
+                $("#divContinueEdit").attr("disabled", "disabled");
+                $("#cliente_ruc").removeAttr("disabled");
+                $("#tipoDocumentoIdentidad").removeAttr("disabled");
+            } else {
+                $("#btnRecuperarDatosSunat").hide();
+                $("#cliente_ruc").attr("disabled", "disabled");
+                $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
+                $("#divContinueEdit").removeAttr("disabled");
+            }
         }
 
     }
@@ -255,6 +267,10 @@ jQuery(function ($) {
                 $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);
                 $("#cliente_estadoContribuyente").val(cliente.estadoContribuyente);
                 $("#cliente_condicionContribuyente").val(cliente.condicionContribuyente);
+                $("#divContinueEdit").removeAttr("disabled");
+                $("#cliente_ruc").attr("disabled", "disabled");
+                $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
+                $("#btnRecuperarDatosSunat").hide();
             },
             error: function () {
                 $.alert({
@@ -523,7 +539,7 @@ jQuery(function ($) {
                     }
                 });
             }
-
+            /*
             if ($("#cliente_correoEnvioFactura").val().trim().length < 8) {
                 $.alert({
                     title: "Correo Electrónico Inválido",
@@ -535,7 +551,7 @@ jQuery(function ($) {
                 });
 
                 return false;
-            }
+            }*/
 
             if ($("#cliente_direccionDomicilioLegalSunat").val().length > 120) {
                 $.alert({
@@ -1073,7 +1089,31 @@ jQuery(function ($) {
 
     });
 
+    $("#idOrigen").change(function () {
+        var idOrigen = $("#idOrigen").val();
+        $.ajax({
+            url: "/Cliente/ChangeIdOrigen", type: 'POST',
+            data: {
+                idOrigen: idOrigen
+            },
+            error: function () { location.reload(); },
+            success: function () { }
+        });
 
+    });
+
+    $("#idSubDistribuidor").change(function () {
+        var idSubDistribuidor = $("#idSubDistribuidor").val();
+        $.ajax({
+            url: "/Cliente/ChangeIdSubDistribuidor", type: 'POST',
+            data: {
+                idSubDistribuidor: idSubDistribuidor
+            },
+            error: function () { location.reload(); },
+            success: function () { }
+        });
+    });
+    
 
     $("#cliente_ruc").change(function () {
         changeInputString("ruc", $("#cliente_ruc").val())
@@ -1639,6 +1679,8 @@ jQuery(function ($) {
     $("#idCiudad").change(function () {
         var idCiudad = $("#idCiudad").val();
 
+        $("#spn_vercliente_mp_registracotizaciones").html($("#idCiudad option:selected").text());
+
         $.ajax({
             url: "/Cliente/ChangeIdCiudad",
             type: 'POST',
@@ -1773,10 +1815,35 @@ jQuery(function ($) {
 
     $("#cliente_CanalMultireginal").change(function () {
         var valor = 1;
+        var valUpdate = true;
+
         if (!$('#cliente_CanalMultireginal').prop('checked')) {
             valor = 0;
+            
+            if ($('#cliente_negociacionMultiregional').prop('checked')) {
+                valUpdate = false;
+                $.alert({
+                    title: "Acción denegada",
+                    type: 'orange',
+                    content: 'No puede desactivar el canal multiregional mientras la negociación multiregional este activa.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+
+                $('#cliente_CanalMultireginal').prop('checked', true);
+            } else {
+                $(".hasCanalMultiregional").hide();
+            }
+
+            
+        } else {
+            $(".hasCanalMultiregional").show();
         }
-        changeInputBoolean('perteneceCanalMultiregional', valor)
+
+        if (valUpdate) {
+            changeInputBoolean('perteneceCanalMultiregional', valor);
+        }
     });
 
     $("#cliente_CanalLima").change(function () {
@@ -1807,7 +1874,13 @@ jQuery(function ($) {
         var valor = 1;
         if (!$('#cliente_esSubdistribuidor').prop('checked')) {
             valor = 0;
+            $("#divSubDistribuidor").hide();
         }
+
+        if (valor == 1) {
+            $("#divSubDistribuidor").show();
+        }
+
         changeInputBoolean('esSubDistribuidor', valor)
     });
 
