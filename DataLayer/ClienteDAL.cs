@@ -217,7 +217,6 @@ namespace DataLayer
                 cliente.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
                 cliente.perteneceCanalProvincias = Converter.GetBool(row, "pertenece_canal_provincia");
                 cliente.perteneceCanalPCP = Converter.GetBool(row, "pertenece_canal_pcp");
-                cliente.perteneceCanalOrdon = Converter.GetBool(row, "pertenece_canal_ordon");
                 cliente.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
 
                 cliente.habilitadoNegociacionGrupal = Converter.GetBool(row, "habilitado_negociacion_grupal");
@@ -350,16 +349,26 @@ namespace DataLayer
                 ClienteResultado.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
                 ClienteResultado.perteneceCanalProvincias = Converter.GetBool(row, "pertenece_canal_provincia");
                 ClienteResultado.perteneceCanalPCP = Converter.GetBool(row, "pertenece_canal_pcp");
-                ClienteResultado.perteneceCanalOrdon = Converter.GetBool(row, "pertenece_canal_ordon");
                 ClienteResultado.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
 
                 ClienteResultado.sedePrincipal = Converter.GetBool(row, "sede_principal");
                 ClienteResultado.negociacionMultiregional = Converter.GetBool(row, "negociacion_multiregional");
+                ClienteResultado.habilitadoNegociacionGrupal = Converter.GetBool(row, "habilitado_negociacion_grupal");
 
                 ClienteResultado.grupoCliente = new GrupoCliente();
                 ClienteResultado.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
                 ClienteResultado.grupoCliente.codigo = Converter.GetString(row, "codigo_grupo");
                 ClienteResultado.grupoCliente.nombre = Converter.GetString(row, "grupo");
+
+                ClienteResultado.origen = new Origen();
+                ClienteResultado.origen.idOrigen = Converter.GetInt(row, "id_origen");
+                ClienteResultado.origen.codigo = Converter.GetString(row, "codigo_origen");
+                ClienteResultado.origen.nombre = Converter.GetString(row, "nombre_origen");
+
+                ClienteResultado.subDistribuidor = new SubDistribuidor();
+                ClienteResultado.subDistribuidor.idSubDistribuidor = Converter.GetInt(row, "id_subdistribuidor");
+                ClienteResultado.subDistribuidor.codigo = Converter.GetString(row, "codigo_subdistribuidor");
+                ClienteResultado.subDistribuidor.nombre = Converter.GetString(row, "nombre_subdistribuidor");
 
                 clienteList.Add(ClienteResultado);
             }
