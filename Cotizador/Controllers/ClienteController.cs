@@ -723,6 +723,16 @@ namespace Cotizador.Controllers
                 GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
                 List<GrupoCliente> grupoClienteList = grupoClienteBL.getGruposCliente();
 
+                OrigenBL origenBl = new OrigenBL();
+                Origen origenSearch = new Origen();
+                origenSearch.Estado = 1;
+                List<Origen> origenList = origenBl.getOrigenes(origenSearch);
+
+                SubDistribuidorBL subDistribuidorBl = new SubDistribuidorBL();
+                SubDistribuidor subDistribuidorSearch = new SubDistribuidor();
+                subDistribuidorSearch.Estado = 1;
+                List<SubDistribuidor> subDistribuidorList = subDistribuidorBl.getSubDistribuidores(subDistribuidorSearch);
+
                 for (row = 1; row <= cantidad; row++)
                 {
                     if (sheet.GetRow(row) != null && usuario.modificaMaestroClientes) //null is when the row only contains empty cells 
@@ -735,21 +745,24 @@ namespace Cotizador.Controllers
                         {
                             /* 0 codigo cliente
                              * 6 grupo, 
-                             * 9 asesor comercial, 
-                             * 11 supervisor, 
-                             * 13 asistente servicio,   
-                             * 15 plazo credito aprobado
-                             * 16 monto credito aprobado
-                             * 18 cotiza multiregional
-                             * 19 sede principal
-                             * 20 Canal Multiregional
-                             * 21 Canal Lima
-                             * 22 Canal Provincia
-                             * 23 Canal PCP
-                             * 24 Canal Subdistribuidor
-                             * 25 Canal Ordon 
+                             * 8 origen,
+                             * 11 asesor comercial, 
+                             * 13 supervisor, 
+                             * 15 asistente servicio, 
+                             * 17 plazo credito aprobado
+                             * 18 monto credito aprobado
+                             * 
+                             * 20 Canal Lima
+                             * 21 Canal Provincia
+                             * 22 Canal PCP
+                             * 23 Canal Multiregional
+                             * 24 cotiza multiregional
+                             * 25 sede principal
+                             * 
+                             * 26 Es Subdistribuidor
+                             * 27 Código Categoría
                             */
-                            
+
 
                             if (sheet.GetRow(row).GetCell(0) != null)
                             {
@@ -765,6 +778,8 @@ namespace Cotizador.Controllers
                             if (item.idCliente != Guid.Empty)
                             {
                                 item.usuario = usuario;
+
+                                /* Grupo Cliente */
                                 if (sheet.GetRow(row).GetCell(6) != null)
                                 {
                                     textoTemp = sheet.GetRow(row).GetCell(6).ToString().ToUpper().Trim();
@@ -780,9 +795,26 @@ namespace Cotizador.Controllers
                                     }
                                 }
 
-                                if (sheet.GetRow(row).GetCell(9) != null)
+                                /* Origen */
+                                if (sheet.GetRow(row).GetCell(8) != null)
                                 {
-                                    textoTemp = sheet.GetRow(row).GetCell(9).ToString().ToUpper().Trim();
+                                    textoTemp = sheet.GetRow(row).GetCell(8).ToString().ToUpper().Trim();
+                                    if (!textoTemp.Equals(item.origen.codigo))
+                                    {
+                                        foreach (Origen og in origenList)
+                                        {
+                                            if (og.codigo.Equals(textoTemp))
+                                            {
+                                                item.origen = og;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                /* Asesor comercial */
+                                if (sheet.GetRow(row).GetCell(11) != null)
+                                {
+                                    textoTemp = sheet.GetRow(row).GetCell(11).ToString().ToUpper().Trim();
                                     if (!textoTemp.Equals(item.responsableComercial.codigo))
                                     {
                                         foreach (Vendedor rc in usuario.responsableComercialList)
@@ -795,9 +827,10 @@ namespace Cotizador.Controllers
                                     }
                                 }
 
-                                if (sheet.GetRow(row).GetCell(11) != null)
+                                /* Supervisor */
+                                if (sheet.GetRow(row).GetCell(13) != null)
                                 {
-                                    textoTemp = sheet.GetRow(row).GetCell(11).ToString().ToUpper().Trim();
+                                    textoTemp = sheet.GetRow(row).GetCell(13).ToString().ToUpper().Trim();
                                     if (!textoTemp.Equals(item.supervisorComercial.codigo))
                                     {
                                         foreach (Vendedor sc in usuario.supervisorComercialList)
@@ -810,9 +843,10 @@ namespace Cotizador.Controllers
                                     }
                                 }
 
-                                if (sheet.GetRow(row).GetCell(13) != null)
+                                /* Asistente Servicio */
+                                if (sheet.GetRow(row).GetCell(15) != null)
                                 {
-                                    textoTemp = sheet.GetRow(row).GetCell(13).ToString().ToUpper().Trim();
+                                    textoTemp = sheet.GetRow(row).GetCell(15).ToString().ToUpper().Trim();
                                     if (!textoTemp.Equals(item.asistenteServicioCliente.codigo))
                                     {
                                         foreach (Vendedor aser in usuario.asistenteServicioClienteList)
@@ -825,50 +859,92 @@ namespace Cotizador.Controllers
                                     }
                                 }
 
-                                if (sheet.GetRow(row).GetCell(16) != null)
+                                /* plazo credito aprobado */
+                                if (sheet.GetRow(row).GetCell(17) != null)
                                 {
-                                    //item.creditoAprobado = Decimal.Parse(sheet.GetRow(row).GetCell(16).ToString());
+                                    //item.creditoAprobado = Decimal.Parse(sheet.GetRow(row).GetCell(17).ToString());
                                 }
 
+                                /* monto credito aprobado */
                                 if (sheet.GetRow(row).GetCell(18) != null)
                                 {
-                                    item.negociacionMultiregional = sheet.GetRow(row).GetCell(18).ToString().ToUpper().Equals("SI");
+                                    //item.creditoAprobado = Decimal.Parse(sheet.GetRow(row).GetCell(18).ToString());
                                 }
 
-                                if (sheet.GetRow(row).GetCell(19) != null)
-                                {
-                                    item.sedePrincipal = sheet.GetRow(row).GetCell(19).ToString().ToUpper().Equals("SI");
-                                }
-
+                                /* Canal Lima */
                                 if (sheet.GetRow(row).GetCell(20) != null)
                                 {
-                                    item.perteneceCanalMultiregional = sheet.GetRow(row).GetCell(20).ToString().ToUpper().Equals("SI");
+                                    item.perteneceCanalLima = sheet.GetRow(row).GetCell(20).ToString().ToUpper().Equals("SI");
                                 }
 
+                                /* Canal Provincias */
                                 if (sheet.GetRow(row).GetCell(21) != null)
                                 {
-                                    item.perteneceCanalLima = sheet.GetRow(row).GetCell(21).ToString().ToUpper().Equals("SI");
+                                    item.perteneceCanalProvincias = sheet.GetRow(row).GetCell(21).ToString().ToUpper().Equals("SI");
                                 }
 
+                                /* Canal PCP */
                                 if (sheet.GetRow(row).GetCell(22) != null)
                                 {
-                                    item.perteneceCanalProvincias = sheet.GetRow(row).GetCell(22).ToString().ToUpper().Equals("SI");
+                                    item.perteneceCanalPCP = sheet.GetRow(row).GetCell(22).ToString().ToUpper().Equals("SI");
                                 }
 
+                                /* Canal Multiregional */
                                 if (sheet.GetRow(row).GetCell(23) != null)
                                 {
-                                    item.perteneceCanalPCP = sheet.GetRow(row).GetCell(23).ToString().ToUpper().Equals("SI");
+                                    item.perteneceCanalMultiregional = sheet.GetRow(row).GetCell(23).ToString().ToUpper().Equals("SI");
+
+                                    if (item.perteneceCanalMultiregional)
+                                    {
+                                        /* Negociacion Multiregional */
+                                        if (sheet.GetRow(row).GetCell(24) != null)
+                                        {
+                                            item.negociacionMultiregional = sheet.GetRow(row).GetCell(24).ToString().ToUpper().Equals("SI");
+                                        }
+
+                                        if (item.negociacionMultiregional) { 
+                                            /* Sede Principal */
+                                            if (sheet.GetRow(row).GetCell(25) != null)
+                                            {
+                                                item.sedePrincipal = sheet.GetRow(row).GetCell(25).ToString().ToUpper().Equals("SI");
+                                            }
+                                        } else
+                                        {
+                                            item.sedePrincipal = false;
+                                        }
+                                    } else
+                                    {
+                                        item.negociacionMultiregional = false;
+                                        item.sedePrincipal = false;
+                                    }
                                 }
 
-                                if (sheet.GetRow(row).GetCell(24) != null)
+
+                                /* Es SubDistribuidor */
+                                if (sheet.GetRow(row).GetCell(26) != null)
                                 {
-                                    item.esSubDistribuidor = sheet.GetRow(row).GetCell(24).ToString().ToUpper().Equals("SI");
+                                    item.esSubDistribuidor = sheet.GetRow(row).GetCell(26).ToString().ToUpper().Equals("SI");
+
+                                    if (item.esSubDistribuidor)
+                                    {
+                                        /* SubDistribuidor */
+                                        if (sheet.GetRow(row).GetCell(27) != null)
+                                        {
+                                            textoTemp = sheet.GetRow(row).GetCell(27).ToString().ToUpper().Trim();
+                                            if (!textoTemp.Equals(item.subDistribuidor.codigo))
+                                            {
+                                                foreach (SubDistribuidor sub in subDistribuidorList)
+                                                {
+                                                    if (sub.codigo.Equals(textoTemp))
+                                                    {
+                                                        item.subDistribuidor = sub;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
 
-                                if (sheet.GetRow(row).GetCell(25) != null)
-                                {
-                                    item.perteneceCanalOrdon = sheet.GetRow(row).GetCell(25).ToString().ToUpper().Equals("SI");
-                                }
 
                                 clienteBL.updateClienteSunat(item);
                             }

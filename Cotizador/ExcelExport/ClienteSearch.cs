@@ -136,7 +136,7 @@ namespace Cotizador.ExcelExport
                 
                 UtilesHelper.setValorCelda(sheet, 2, "AA", "Es SubDistribuidor", titleCellStyleEditable);
                 UtilesHelper.setValorCelda(sheet, 2, "AB", "Código", titleCellStyleEditable);
-                UtilesHelper.setValorCelda(sheet, 2, "AC", "Categoría", titleCellStyleEditable);
+                UtilesHelper.setValorCelda(sheet, 2, "AC", "Categoría", titleCellStyle);
 
                 i = 3;
 
