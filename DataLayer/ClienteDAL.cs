@@ -421,6 +421,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "ubigeo", cliente.ubigeo.Id);
             //InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
             InputParameterAdd.Int(objCommand, "formaPagoFactura", (int)cliente.formaPagoFactura);
+            InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", DateTime.Now.ToString("yyyy-MM-dd"));
             
             /*Plazo credito*/
             InputParameterAdd.Int(objCommand, "plazoCreditoSolicitado", (int)cliente.plazoCreditoSolicitado);
@@ -552,6 +553,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "ubigeo", cliente.ubigeo.Id);
             //InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
             InputParameterAdd.Int(objCommand, "formaPagoFactura", (int)cliente.formaPagoFactura);
+            InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", DateTime.Now.ToString("yyyy-MM-dd"));
 
             /*Plazo credito*/
             InputParameterAdd.Int(objCommand, "plazoCreditoSolicitado", (int)cliente.plazoCreditoSolicitado);
