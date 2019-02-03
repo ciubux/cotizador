@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "122";
+    TempData["ScriptVersion"] = "128";
 }
 
 <!DOCTYPE html>
@@ -34,6 +34,7 @@
                         var linkCotizaciones = "";
                         var linkBusquedaCotizaciones = "";
                         var linkMantenimientoCotizacion = "";
+                        var linkMantenimientoCotizacionGrupal = "";
 
                         var linkPedidos = "";
                         var linkBusquedaPedidos = "";
@@ -86,6 +87,7 @@
                         {
                             case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
                             case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active"; break;
+
                             case 2: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
                             case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
                             case 4: linkBusquedaGuiasRemision = "ative"; linkMovimientosAlmacen = "active"; break;
@@ -125,6 +127,9 @@
                             case 25: linkBusquedaPedidosAlmacen = "ative"; linkPedidos = "active"; break;
                             case 26: linkMantenimientoPedidoAlmacen = "ative"; linkPedidos = "active"; break;
 
+
+                            case 35: linkMantenimientoCotizacionGrupal = "ative"; linkCotizaciones = "active"; break;
+
                         }
                         var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
 
@@ -145,6 +150,10 @@
                                     @if (usuario.creaCotizaciones)
                                     {
                                         <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Cotización - Crear/Modificar", "Cotizar", "Cotizacion")</li>
+                                    }
+                                    @if (usuario.creaCotizacionesGrupales)
+                                    {
+                                        <li id="linkMantenimientoCotizacionGrupal" class="@linkMantenimientoCotizacionGrupal">@Html.ActionLink("Cotización Grupal - Crear/Modificar", "CotizarGrupo", "Cotizacion")</li>
                                     }
                                 </ul>
                             </li>
@@ -185,6 +194,10 @@
                                     @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
                                     {
                                         <li id="linkMantenimientoPedidoAlmacen" class="@linkMantenimientoPedidoAlmacen">@Html.ActionLink("Pedido Almacén - Crear/Modificar", "Pedir", "PedidoAlmacen")</li>
+                                    }
+                                    @if (usuario.apruebaPedidos || usuario.apruebaPedidosCompra || usuario.apruebaPedidosAlmacen)
+                                    {
+                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Aprobar Pedidos", "AprobarPedidos", "Pedido")</li>
                                     }
                                 </ul>
                             </li>
@@ -269,22 +282,16 @@
                                         }
                                     }
 
-                                    @if (usuario.modificaMaestroProductos)
+                                    @if (usuario.modificaOrigen)
                                     {
                                         <li id="linkBusquedaOrigen" class="@linkBusquedaOrigen">@Html.ActionLink("Origen - Búsqueda", "List", "Origen")</li>
-                                        if (usuario.modificaProducto)
-                                        {
-                                            <li id="linkCROrigen" class="@linkCROrigen">@Html.ActionLink("Origen - Crear/Modificar ", "Editar", "Origen")</li>
-                                        }
+                                        <li id="linkCROrigen" class="@linkCROrigen">@Html.ActionLink("Origen - Crear/Modificar ", "Editar", "Origen")</li>
                                     }
 
-                                    @if (usuario.modificaMaestroProductos)
+                                    @if (usuario.modificaSubDistribuidor)
                                     {
                                         <li id="linkBusquedaSubDistribuidor" class="@linkBusquedaSubDistribuidor">@Html.ActionLink("Subdistribuidor - Búsqueda", "List", "SubDistribuidor")</li>
-                                        if (usuario.modificaProducto)
-                                        {
-                                            <li id="linkCRSubDistribuidor" class="@linkCRSubDistribuidor">@Html.ActionLink("Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
-                                        }
+                                        <li id="linkCRSubDistribuidor" class="@linkCRSubDistribuidor">@Html.ActionLink("Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
                                     }
                                 </ul>
                             </li>

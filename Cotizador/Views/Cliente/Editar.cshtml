@@ -11,6 +11,11 @@
     string displayCanalMultiregional = "";
     string displaySearchSunat = "display: none;";
 
+    string hideNegociacionGrupal = "";
+    if (cliente.grupoCliente == null || cliente.grupoCliente.idGrupoCliente == 0) {
+        hideNegociacionGrupal = "display: none;";
+    }
+
     if (!cliente.esSubDistribuidor)
     {
         displaySubDistribuidor = "display: none;";
@@ -102,16 +107,16 @@
                                        selectedValue = cliente.grupoCliente.idGrupoCliente
                                    })
                     </div>
-                    <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                    <label class="radio-label" style="margin-left: 15px; margin-top: 5px; @hideNegociacionGrupal">
                         @if (cliente.habilitadoNegociacionGrupal)
-                        {
-                            <input checked type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
-                        }
-                        else
-                        {
-                            <input type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
-                        }
-                        Habilitado para negociación grupal
+    {
+                    <input checked type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
+}
+else
+{
+                    <input type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
+}
+                        Cliente de esta Sede hereda los precios cotizados al grupo
                     </label>
                 </div>
             </div>

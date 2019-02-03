@@ -733,22 +733,54 @@ jQuery(function ($) {
 
     $('#pedido_direccionEntrega').change(function () {
         toggleControlesDireccionEntrega();
-        var idDireccionEntrega = $('#pedido_direccionEntrega').val();
-        $.ajax({
-            url: "/Pedido/ChangeDireccionEntrega",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idDireccionEntrega: idDireccionEntrega
-            },
-            success: function (direccionEntrega) {
-                
-                $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);    
-                $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
-                $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
-                location.reload()
-            }
-        })
+
+       
+        if ($("#pedido_numeroPedido").val() != "") {
+            $.alert({
+                title: 'Advertencia',
+                type: 'orange',
+                content: 'Asegurese de modificar también las observaciones de guía y factura de ser necesario.',
+                buttons: {
+                    OK: function () {
+                        var idDireccionEntrega = $('#pedido_direccionEntrega').val();
+                        $.ajax({
+                            url: "/Pedido/ChangeDireccionEntrega",
+                            type: 'POST',
+                            dataType: 'JSON',
+                            data: {
+                                idDireccionEntrega: idDireccionEntrega
+                            },
+                            success: function (direccionEntrega) {
+
+                                $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);
+                                $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
+                                $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+            });
+        }
+
+        else {
+            var idDireccionEntrega = $('#pedido_direccionEntrega').val();
+            $.ajax({
+                url: "/Pedido/ChangeDireccionEntrega",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idDireccionEntrega: idDireccionEntrega
+                },
+                success: function (direccionEntrega) {
+
+                    $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);
+                    $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
+                    $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
+                    location.reload()
+                }
+            })
+        }
     });
 
 

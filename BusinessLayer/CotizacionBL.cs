@@ -221,32 +221,28 @@ namespace BusinessLayer
                     cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
             }
             cotizacion.cotizacionDetalleList = documentoDetalleList;
-                /*
-                cotizacion.cotizacionDetalleList = new List<CotizacionDetalle>();
-                //Detalle de la cotizacion
-                foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
-                {
-                    CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
-                    cotizacionDetalle.producto = new Producto();
-                    cotizacionDetalle.cantidad = 1;
-                    cotizacionDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
-                    cotizacionDetalle.unidad = documentoDetalle.unidad;
-                    cotizacionDetalle.producto = documentoDetalle.producto;
+            return cotizacion;
+        }
 
 
-                    if(cotizacionDetalle.esPrecioAlternativo)
-                        cotizacionDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
-                    else
-                        cotizacionDetalle.precioNeto = documentoDetalle.precioNeto;
+        public Cotizacion obtenerProductosAPartirdePreciosRegistradosParaGrupo(Cotizacion cotizacion, String familia, String proveedor, Usuario usuario)
+        {
 
+            ProductoBL productoBL = new ProductoBL();
+            List<CotizacionDetalle> documentoDetalleList = null;// productoBL.obtenerProductosAPartirdePreciosRegistradosParaGrupo(cotizacion.grupo.idGrupoCliente, cotizacion.fechaPrecios, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, familia, proveedor);
 
-
-                    cotizacionDetalle.flete = documentoDetalle.flete;
-                    cotizacionDetalle.observacion = documentoDetalle.observacion;
-                    cotizacionDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
-                    cotizacion.cotizacionDetalleList.Add(cotizacionDetalle);
-                }*/
-                return cotizacion;
+            foreach (CotizacionDetalle cotizacionDetalle in documentoDetalleList)
+            {
+                cotizacionDetalle.visualizaCostos = usuario.visualizaCostos;
+                cotizacionDetalle.visualizaMargen = usuario.visualizaMargen;
+                cotizacionDetalle.cantidad = 1;
+                if (cotizacionDetalle.esPrecioAlternativo)
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia;
+                else
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
+            }
+            cotizacion.cotizacionDetalleList = documentoDetalleList;
+            return cotizacion;
         }
 
 

@@ -795,6 +795,8 @@ namespace Cotizador.Controllers
                       documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidad;
                       documentoDetalle.cantidadPorAtender = documentoDetalle.cantidad;
                   }*/
+
+                /*
                 guiaRemision.observaciones = String.Empty;
                 bool existeOrdenCompra = false;
                 if (pedido.numeroReferenciaCliente != null && !pedido.numeroReferenciaCliente.Trim().Equals(String.Empty))
@@ -815,9 +817,12 @@ namespace Cotizador.Controllers
                     {
                         guiaRemision.observaciones = guiaRemision.observaciones + " / ";
                     }
+                    
                     guiaRemision.observaciones = guiaRemision.observaciones + pedido.observacionesGuiaRemision;
-                }
+                }*/
                 
+
+                guiaRemision.observaciones = pedido.observacionesGuiaRemision;                
                     
 
                 CiudadBL ciudadBL = new CiudadBL();

@@ -42,6 +42,10 @@ namespace Model
         public bool tomaPedidos { get; set; }
         public bool realizaCargaMasivaPedidos { get; set; }
         public bool apruebaPedidos { get { return apruebaPedidosLima || apruebaPedidosProvincias; } }
+
+        public bool apruebaPedidosCompra { get; set; }
+        public bool apruebaPedidosAlmacen { get; set; }
+
         public bool apruebaPedidosLima { get; set; }
         public bool apruebaPedidosProvincias { get; set; }
         public bool visualizaPedidosLima { get; set; }
@@ -109,6 +113,8 @@ namespace Model
         public String cotizacionSerializada { get; set; }
         public String pedidoSerializado { get; set; }
 
+        public bool creaCotizacionesGrupales { get; set; }
+        public bool apruebaCotizacionesGrupales { get; set; }
 
         public bool creaCotizacionesProvincias { get; set; }
         public bool tomaPedidosProvincias { get; set; }
@@ -133,6 +139,8 @@ namespace Model
         public bool bloqueaClientes { get; set; }
         public bool modificaCanales { get; set; }
         public bool modificaProducto { get; set; }
+        public bool modificaSubDistribuidor { get; set; }
+        public bool modificaOrigen { get; set; }
         public bool modificaPedidoFechaEntregaExtendida { get; set; }
         public bool modificaNegociacionMultiregional { get; set; }
 

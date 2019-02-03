@@ -170,10 +170,7 @@ namespace BusinessLayer
                         storeStream.Flush();
                         inStream.Close();
                         cotizacionDetalle.producto.image = storeStream.GetBuffer();
-                    }
-
-
-                  
+                    }                 
 
                     //Si es provincia se considera el precioProvincia
                     //cotizacion.ciudad.
@@ -213,31 +210,11 @@ namespace BusinessLayer
                         cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
                     }
 
-
-
-
-                    /*Inicio Logica de Recotizacion*/
-
-             /*       Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
-                    Decimal costo = cotizacionDetalle.producto.costoSinIgv;
-                    
-                    cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costo));
-                    cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-                    
-                    
-
-                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-                    */
                     if (cotizacionDetalle.esPrecioAlternativo)
                     {
                         cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior / cotizacionDetalle.producto.equivalencia));
                     }
-
-                   // cotizacionDetalle.porcentajeMargenMostrar
-
-
-
-
+                    
                 }
 
                 return documentoDetalleList;

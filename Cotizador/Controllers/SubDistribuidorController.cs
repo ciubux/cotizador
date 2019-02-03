@@ -90,11 +90,11 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.CUSubDistribuidor;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            /*if (!usuario.modificaMaestroClientes && !usuario.modificaProducto)
+            if (!usuario.modificaSubDistribuidor)
             {
                 return RedirectToAction("Login", "Account");
-            }*/
-            
+            }
+
 
 
             if (this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] == null && idSubDistribuidor == null)
@@ -167,10 +167,10 @@ namespace Cotizador.Controllers
         public ActionResult Index()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            /*if (!usuario.modificaMaestroProductos)
+            if (!usuario.modificaSubDistribuidor)
             {
                 return RedirectToAction("Login", "Account");
-            }*/
+            }
 
             return View();
 

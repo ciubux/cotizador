@@ -23,6 +23,7 @@ namespace Model
         public Int64 codigo { get; set; }
         public DateTime fecha { get; set; }
         public Boolean fechaEsModificada { get; set; }
+        public Boolean esTransitoria { get; set; }
 
         /* 0 indica días, 1 indica fecha */
         public int mostrarValidezOfertaEnDias { get; set; }
@@ -122,7 +123,7 @@ namespace Model
                 {
                     return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(DocumentoVenta.TipoPago.Contado);
                 } else {
-                    if (this.cliente != null)
+                    if (this.cliente != null && this.cliente.idCliente != Guid.Empty)
                     {
                         /*Se evalua si el solicitado es al contado*/
                         if (this.cliente.plazoCreditoSolicitado == DocumentoVenta.TipoPago.Contado)
@@ -139,6 +140,24 @@ namespace Model
                         {
                             return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.cliente.tipoPagoFactura) + ".";
                         }
+                    }
+                    else if (this.grupo != null && this.grupo.idGrupoCliente != 0)
+                    {
+                        if (this.grupo.plazoCreditoSolicitado == DocumentoVenta.TipoPago.Contado)
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.grupo.plazoCreditoSolicitado) + ".";
+                        }
+                        /*Si no es al contado y el pago aprobado es no asignado se muestra el mensaje que indica que está sujeto a evaluación*/
+                        else if (this.grupo.plazoCreditoAprobado == DocumentoVenta.TipoPago.NoAsignado)
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.grupo.plazoCreditoSolicitado) + ", sujeto a evaluación crediticia (aprobación pendiente).";
+                        }
+                        /*Si no es un caso anterior se muestra el plazo de credito aprobado*/
+                        else
+                        {
+                            return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.grupo.plazoCreditoAprobado) + ".";
+                        }
+
                     }
                     else
                     {

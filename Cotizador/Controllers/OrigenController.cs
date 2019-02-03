@@ -91,10 +91,10 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.CUOrigen;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            /*if (!usuario.modificaMaestroClientes && !usuario.modificaProducto)
+            if (!usuario.modificaOrigen)
             {
                 return RedirectToAction("Login", "Account");
-            }*/
+            }
             
 
 
@@ -168,10 +168,10 @@ namespace Cotizador.Controllers
         public ActionResult Index()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            /*if (!usuario.modificaMaestroProductos)
+            if (!usuario.modificaOrigen)
             {
                 return RedirectToAction("Login", "Account");
-            }*/
+            }
 
             return View();
 

@@ -77,7 +77,7 @@ namespace BusinessLayer
 
                             int evaluarVariacion = 0;
                             //¿Tiene precio registrado para facturación? y eliente es el mismo?
-                            if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty && precioClienteProducto.cliente.idCliente == pedido.cliente.idCliente)
+                            if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty)// && precioClienteProducto.cliente.idCliente == pedido.cliente.idCliente)
                             {
                                 if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
                                 {
@@ -158,20 +158,55 @@ namespace BusinessLayer
                 }
             }
 
-
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
                 pedidoAdjunto.usuario = pedido.usuario;
                 pedidoAdjunto.idCliente = pedido.cliente.idCliente;
             }
 
-
-            }
+        }
                 
         public void InsertPedido(Pedido pedido)
         {
             using (var dal = new PedidoDAL())
             {
+
+                String observacionesGuiaRemision = pedido.observacionesGuiaRemision;
+                String observacionesFactura = pedido.observacionesFactura;
+                String observacionesPedido = pedido.observaciones;
+
+                if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
+                {
+                    pedido.observacionesGuiaRemision = "O/C N° " + pedido.numeroReferenciaCliente + "";
+                }
+                if (pedido.direccionEntrega.nombre != null && pedido.direccionEntrega.nombre.Length > 0)
+                {
+                    if (pedido.direccionEntrega.codigoCliente != null && pedido.direccionEntrega.codigoCliente.Length > 0)
+                    {
+                        pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";
+                        pedido.observacionesFactura = pedido.observacionesFactura + pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";
+                        pedido.observaciones = pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";                        
+                    }
+                    else
+                    {
+                        pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + pedido.direccionEntrega.nombre;
+                        pedido.observacionesFactura = pedido.observacionesFactura + pedido.direccionEntrega.nombre;
+                        pedido.observaciones = pedido.direccionEntrega.nombre;
+                    }
+                }
+                if (observacionesPedido != null && !observacionesPedido.Equals(String.Empty))
+                {
+                    pedido.observaciones = pedido.observaciones + " / " + observacionesPedido;
+                }
+                if (observacionesGuiaRemision != null && !observacionesGuiaRemision.Equals(String.Empty))
+                {
+                    pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + " / " + observacionesGuiaRemision;
+                }
+                if (observacionesFactura != null && !observacionesFactura.Equals(String.Empty))
+                {
+                    pedido.observacionesFactura = pedido.observacionesFactura + " / " + observacionesFactura;
+                }
+
                 validarPedidoVenta(pedido);
                 dal.InsertPedido(pedido);
             }

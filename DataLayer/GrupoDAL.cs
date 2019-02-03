@@ -40,22 +40,25 @@ namespace DataLayer
             return grupoList;
         }
 
-        public GrupoCliente getGrupo(Guid idGrupo)
+        public GrupoCliente getGrupo(int idGrupoCliente)
         {
-            var objCommand = GetSqlCommand("ps_getgrupo");
-            InputParameterAdd.Guid(objCommand, "idGrupo", idGrupo);
+            var objCommand = GetSqlCommand("ps_grupoCliente");
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", idGrupoCliente);
             DataTable dataTable = Execute(objCommand);
-            GrupoCliente obj = new GrupoCliente();
+            GrupoCliente grupoCliente = new GrupoCliente();
 
             foreach (DataRow row in dataTable.Rows)
             {
-                obj.idGrupoCliente = Converter.GetInt(row, "id_grupo");
-                obj.codigo = Converter.GetString(row, "codigo");
-                obj.nombre = Converter.GetString(row, "nombre");
-                //obj.contacto = Converter.GetString(row, "contacto");
+                grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                grupoCliente.codigo = Converter.GetString(row, "codigo");
+                grupoCliente.nombre = Converter.GetString(row, "nombre");
+
+                grupoCliente.ciudad = new Ciudad();
+                grupoCliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                grupoCliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
             }
 
-            return obj;
+            return grupoCliente;
         }
 
 
@@ -72,6 +75,12 @@ namespace DataLayer
                 grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
                 grupoCliente.codigo = Converter.GetString(row, "codigo");
                 grupoCliente.nombre = Converter.GetString(row, "nombre");
+
+                grupoCliente.ciudad = new Ciudad();
+                grupoCliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                grupoCliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
+                grupoCliente.plazoCreditoAprobado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_aprobado");
+
                 grupoClienteList.Add(grupoCliente);
             }
 

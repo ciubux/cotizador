@@ -20,7 +20,7 @@ namespace Model
         public String codigoCliente { get; set; }
         [Display(Name = "Código MP Centro Costos:")]
         public String codigoMP { get; set; }
-        [Display(Name = "Centro Costos:")]
+        [Display(Name = "Sede Cliente:")]
         public String nombre { get; set; }
         [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }

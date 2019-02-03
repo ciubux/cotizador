@@ -15,11 +15,11 @@ namespace BusinessLayer
                 return grupoDAL.getGruposBusqueda(textoBusqueda);
             }
         }
-        public GrupoCliente getGrupo(Guid idGrupo)
+        public GrupoCliente getGrupo(int idGrupoCliente)
         {
             using (var grupoDAL = new GrupoClienteDAL())
             {
-                return grupoDAL.getGrupo(idGrupo);
+                return grupoDAL.getGrupo(idGrupoCliente);
             }
         }
 

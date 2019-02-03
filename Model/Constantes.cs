@@ -57,9 +57,11 @@ namespace Model
         public static String VAR_SESSION_COTIZACION_BUSQUEDA = "cotizacionBusqueda";
         public static String VAR_SESSION_COTIZACION_LISTA = "cotizacionList";
         public static String VAR_SESSION_COTIZACION_VER = "cotizacionVer";
+        public static String VAR_SESSION_COTIZACION_GRUPAL = "cotizacionGrupal";
 
         public static String VAR_SESSION_PEDIDO = "pedido";
         public static String VAR_SESSION_PEDIDO_BUSQUEDA = "pedidoBusqueda";
+        public static String VAR_SESSION_PEDIDO_APROBACION = "pedidoAprobacion";
         public static String VAR_SESSION_PEDIDO_LISTA = "pedidoList";
         public static String VAR_SESSION_PEDIDO_VER = "pedidoVer";
 
@@ -192,6 +194,7 @@ namespace Model
         public static int MILISEGUNDOS_AUTOGUARDADO = 5000;
         public static int DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION = 180;
         public static int DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO = 365;
+        //public static 
         public static String OBSERVACION = "* Condiciones de pago: al contado.\n" +
                                        "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
                                        "* (para productos no stockeables o primeras compras, consultar plazo).\n";
@@ -296,7 +299,13 @@ namespace Model
             [Display(Name = "BUSQUEDA SUBDISTRIBUIDOR")]
             BusquedaSubDistribuidores = 32,
             [Display(Name = "CREATE/UPDATE SUBDISTRIBUIDOR")]
-            CUSubDistribuidor = 33
+            CUSubDistribuidor = 33,
+            [Display(Name = "APROBAR PEDIDOS")]
+            AprobarPedidos = 34,
+            [Display(Name = "MANTENIMIENTO COTIZACION GRUPAL")]
+            MantenimientoCotizacionGrupal = 35,
+
+
         };
 
 

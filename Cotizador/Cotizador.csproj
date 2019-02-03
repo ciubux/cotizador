@@ -508,6 +508,8 @@
     <Content Include="Views\SubDistribuidor\List.cshtml" />
     <Content Include="Views\Shared\_Origen.cshtml" />
     <Content Include="Views\Shared\_SubDistribuidor.cshtml" />
+    <Content Include="Views\Pedido\AprobarPedidos.cshtml" />
+    <Content Include="Views\Cotizacion\CotizarGrupo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

@@ -55,6 +55,8 @@ namespace DataLayer
                 usuario.apruebaCotizacionesProvincias = Converter.GetBool(row, "aprueba_cotizaciones_provincias");
                 usuario.creaCotizaciones = Converter.GetBool(row, "crea_cotizaciones");
                 usuario.creaCotizacionesProvincias = Converter.GetBool(row, "crea_cotizaciones_provincias");
+                usuario.creaCotizacionesGrupales = Converter.GetBool(row, "crea_cotizaciones_grupales");
+                usuario.apruebaCotizacionesGrupales = Converter.GetBool(row, "aprueba_cotizaciones_grupales");
                 usuario.visualizaCotizaciones = Converter.GetBool(row, "visualiza_cotizaciones");
 
                 //Pedidos
@@ -94,7 +96,10 @@ namespace DataLayer
 
                 usuario.modificaMaestroClientes = Converter.GetBool(row, "modifica_maestro_clientes");
                 usuario.modificaMaestroProductos = Converter.GetBool(row, "modifica_maestro_productos");
-               
+
+                usuario.modificaSubDistribuidor = Converter.GetBool(row, "modifica_subdistribuidor");
+                usuario.modificaOrigen = Converter.GetBool(row, "modifica_origen");
+
                 usuario.creaNotasCredito = Converter.GetBool(row, "crea_notas_credito");
                 usuario.creaNotasDebito = Converter.GetBool(row, "crea_notas_debito");
                 usuario.realizaRefacturacion = Converter.GetBool(row, "realiza_refacturacion");

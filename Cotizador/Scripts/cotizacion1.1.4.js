@@ -124,7 +124,7 @@ jQuery(function ($) {
 
 
     function verificarSiExisteCliente() {
-        if ($("#idCliente").val().trim() != "" && $("#pagina").val() == 1)
+        if ($("#idCliente").val().trim() != "" && $("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION)
             $("#idCiudad").attr("disabled", "disabled");
     }
 
@@ -270,6 +270,26 @@ jQuery(function ($) {
 
     });
 
+    $("#cotizacion_esTransitoria").change(function () {
+        var valor = 1;
+        if (!$('#cotizacion_esTransitoria').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('esTransitoria', valor)
+    });
+
+    function changeInputBoolean(propiedad, valor) {
+        $.ajax({
+            url: "/Cotizacion/ChangeInputBoolean",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
 
 
     $("#mostrarValidezOfertaEnDias").change(function () {
@@ -379,7 +399,9 @@ jQuery(function ($) {
             data: {
                 idGrupoCliente: idGrupoCliente
             },
-            success: function () {
+            success: function (grupoCliente) {
+                $("#cotizacion_textoCondicionesPago").val(cliente.textoCondicionesPago);
+                $("#contacto").val(grupoCliente.contacto);
             }
         });
     });
@@ -547,24 +569,9 @@ jQuery(function ($) {
 
         indicarFamiliaTodas();
         indicarProveedorTodos();
-        //Para agregar un producto se debe seleccionar una ciudad
-        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar la sede MP previamente.");
+        if (!validarSeleccionClienteOGrupo()) {
             return false;
         }
-
-
-        //$("#modalAgregarProducto").show();
-     //   data - toggle="modal" data- target="#modalAgregarProducto"
-
-        //para agregar un producto se debe seleccionar un cliente
-        if ($("#idCliente").val().trim() == "") {
-            alert("Debe seleccionar un cliente previamente.");
-            $('#idCliente').trigger('chosen:activate');
-            return false;
-        }
-
-
         //Se limpia el mensaje de resultado de agregar producto
         $("#resultadoAgregarProducto").html("");
 
@@ -573,7 +580,6 @@ jQuery(function ($) {
 
         //Se limpian los campos
         limpiarCamposAgregarProductos();
-
 
         //Se agrega chosen al campo PRODUCTO
         $("#producto").chosen({ placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
@@ -1175,82 +1181,71 @@ jQuery(function ($) {
 
 
 
-    /**
-    * INTERFACE PARA CREAR CLIENTE
-    */
-
-    $("#btnSaveCliente").click(function () {
-
-        //ncRazonSocial
-
-        if ($("#ncRazonSocial").val().trim() == "" && $("#ncNombreComercial").val().trim() == "") {
-            alert("Debe ingresar la Razón Social o el Nombre Comercial.");
-            $('#ncRazonSocial').focus();
-            return false;
-        }
-
-        if ($("#ncRUC").val().trim() == "") {
-            alert("Debe ingresar el RUC.");
-            $('#ncRUC').focus();
-            return false;
-        }
-
-        var razonSocial = $("#ncRazonSocial").val();
-        var nombreComercial = $("#ncNombreComercial").val();
-        var ruc = $("#ncRUC").val();
-        var contacto = $("#ncContacto").val();
-        
-        $.ajax({
-            url: "/Cliente/Create",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                razonSocial: razonSocial,
-                nombreComercial: nombreComercial,
-                ruc: ruc,
-                contacto: contacto,
-                controller: "cotizacion"
-            },
-            error: function (detalle) {
-                alert("Se generó un error al intentar crear el cliente.");
-            },
-            success: function (resultado) {
-                alert("Se creó cliente con Código Temporal: " + resultado.codigoAlterno + ".");
-
-                location.reload();
-
-            }
-        });
-
-
-        $('#btnCancelCliente').click();
-
-    });
-
-
-
 
     ////////////GENERAR PLANTILLA DE COTIZACIÓN
+
+
+    function validarSeleccionClienteOGrupo() {
+        /*Se identifica si la cotización es a un cliente o a un grupo*/
+        if ($("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION) {
+            var idCiudad = $("#idCiudad").val();
+            if (idCiudad == "" || $("#idCiudad").val() == null) {
+                $.alert({
+                    title: "Seleccionar Sede",
+                    type: 'orange',
+                    content: 'Debe seleccionar la sede MP previamente.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                $("#idCiudad").focus();
+                $("#btnCancelarObtenerProductos").click();
+                return false;
+            }
+            var idCliente = $("#idCliente").val();
+            if (idCliente.trim() == "") {
+                $.alert({
+                    title: "Seleccionar Cliente",
+                    type: 'orange',
+                    content: 'Debe seleccionar un Cliente.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                $('#idCliente').trigger('chosen:activate');
+                $("#btnCancelarObtenerProductos").click();
+                return false;
+            }
+
+        }
+        else {
+            var idGrupoCliente = $("#idGrupoCliente").val();
+            if (idGrupoCliente.trim() == "") {
+                $.alert({
+                    title: "Seleccionar Grupo",
+                    type: 'orange',
+                    content: 'Debe seleccionar un Grupo.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                $('#idGrupoCliente').trigger('chosen:activate');
+                $("#btnCancelarObtenerProductos").click();
+                return false;
+            }
+
+        }
+        return true;
+    }
+
 
 
 
     $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
 
-        var idCiudad = $("#idCiudad").val();
-        if (idCiudad == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar la sede MP previamente.");
-            $("#idCiudad").focus();
-            $("#btnCancelarObtenerProductos").click();
+        if (!validarSeleccionClienteOGrupo()) {
             return false;
         }
-        var idCliente = $("#idCliente").val();
-        if (idCliente.trim() == "") {
-            alert("Debe seleccionar un cliente.");
-            $('#idCliente').trigger('chosen:activate');
-            $("#btnCancelarObtenerProductos").click();
-            return false;
-        }
-
 
         if (verificarSiExisteDetalle()) {
             alert("No deben existir productos agregados a la cotización.");
@@ -1259,7 +1254,33 @@ jQuery(function ($) {
 
         indicarFamiliaTodas();
         indicarProveedorTodos();
+    });
 
+
+
+
+    $("#btnObtenerProductosParaGrupo").click(function () {
+        var idGrupoCliente = $("#idGrupoCliente").val();
+        var fecha = $("#fechaPrecios").val();
+        var familia = $("#familiaBusquedaPrecios").val();
+        var proveedor = $("#proveedorBusquedaPrecios").val();
+
+        $.ajax({
+            url: "/Cotizacion/obtenerProductosAPartirdePreciosRegistradosParaGrupo",
+            data: {
+                idGrupoCliente: idGrupoCliente,
+                fecha: fecha,
+                familia: familia,
+                proveedor: proveedor
+            },
+            type: 'POST',
+            error: function () {
+                alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
+            },
+            success: function () {
+                window.location = '/Cotizacion/CotizarGrupo';
+            }
+        });
     });
 
 
@@ -1303,15 +1324,8 @@ jQuery(function ($) {
 
 
     function validarIngresoDatosObligatoriosCotizacion() {
-        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar la sede MP previamente.");
-            $("#idCiudad").focus();
-            return false;
-        }
 
-        if ($("#idCliente").val().trim() == "") {
-            alert("Debe seleccionar un cliente.");
-            $('#idCliente').trigger('chosen:activate');
+        if (!validarSeleccionClienteOGrupo()) {
             return false;
         }
 
@@ -1430,45 +1444,60 @@ jQuery(function ($) {
 
 
     function crearCotizacion(continuarLuego) {
+
         if (!validarIngresoDatosObligatoriosCotizacion())
             return false;
 
-        var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
+        if ($("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION) {
 
-        if (continuarLuego == 0 && sedePrincipal == 1) {
-            $.confirm({
-                title: 'Cliente Multiregional Identificado',
-                content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
-                type: 'orange',
-                buttons: {
-                    aplica: {
-                        text: 'SI',
-                        btnClass: 'btn-success',
-                        action: function () {
-                            $('#aplicaSedes').val("1");
-                            callCreate(continuarLuego);
-                        }
-                    },
-                    noAplica: {
-                        text: 'NO',
-                        btnClass: 'btn-danger',
-                        action: function () {
-                            callCreate(continuarLuego);
-                        }
-                    },
-                    cancelar: {
-                        text: 'Cancelar',
-                        btnClass: '',
-                        action: function () {
-                            activarBotonesFinalizarCreacion();
+            var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
+
+            if (continuarLuego == 0 && sedePrincipal == 1) {
+                $.confirm({
+                    title: 'Cliente Multiregional Identificado',
+                    content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
+                    type: 'orange',
+                    buttons: {
+                        aplica: {
+                            text: 'SI',
+                            btnClass: 'btn-success',
+                            action: function () {
+                                $('#aplicaSedes').val("1");
+                                callCreate(continuarLuego);
+                            }
+                        },
+                        noAplica: {
+                            text: 'NO',
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                callCreate(continuarLuego);
+                            }
+                        },
+                        cancelar: {
+                            text: 'Cancelar',
+                            btnClass: '',
+                            action: function () {
+                                activarBotonesFinalizarCreacion();
+                            }
                         }
                     }
-                }
-            });
-        } else {
+                });
+            } else {
+                callCreate(continuarLuego);
+            }
+        }
+        else {
+            //Espacio para mostrar mensaje de Cliente a los cuales se le aplicará la cotización Grupal
             callCreate(continuarLuego);
         }
     }
+
+
+
+
+
+
+
 
     function callCreate(continuarLuego) {
         $('body').loadingModal({
@@ -1738,14 +1767,41 @@ jQuery(function ($) {
                 $("#verCondicionesPago").html(cotizacion.textoCondicionesPago);
                 
                 $("#verIdCotizacion").val(cotizacion.idCotizacion);
+
+                
+
                 $("#verIdCliente").val(cotizacion.cliente.idCliente);
 
                 $("#verNumero").html(cotizacion.codigo);
                 
                 $("#verCiudad").html(cotizacion.ciudad.nombre);
-                $("#verCliente").html(cotizacion.cliente.razonSocial);
+
+                if (cotizacion.cliente.idCliente == GUID_EMPTY) {
+                    $("#labelCliente").hide();
+                    $("#labelGrupo").show();
+                    $("#verClienteGrupo").html(cotizacion.grupo.codigoNombre);
+                }
+                else {
+                    $("#labelCliente").show();
+                    $("#labelGrupo").hide();
+                    $("#verClienteGrupo").html(cotizacion.cliente.codigoRazonSocial);
+                }
+                
+
+
+                
+
+
                 $("#verContacto").html(cotizacion.contacto);
 
+                if (cotizacion.esTransitoria) {
+                    $("#esTransitoria").show();
+                }
+                else {
+                    $("#esTransitoria").hide();
+                }
+
+              
 
                 $("#verFechaCreacion").html(invertirFormatoFecha(cotizacion.fecha.substr(0, 10)));
                 $("#verValidezOferta").html(invertirFormatoFecha(cotizacion.fechaLimiteValidezOferta.substr(0, 10)));
@@ -1838,20 +1894,32 @@ jQuery(function ($) {
                     cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA ||
                     (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION && usuario.idUsuario == cotizacion.seguimientoCotizacion.usuario.idUsuario)
                 ) {
-                    $("#btnEditarCotizacion").show();
+                    if (cotizacion.cliente.idCliente == GUID_EMPTY) {
+                        $("#btnEditarCotizacion").hide();
+                        $("#btnEditarCotizacionGrupal").show();
+                    }
+                    else {
+                        $("#btnEditarCotizacion").show();
+                        $("#btnEditarCotizacionGrupal").hide();
+                    }
                     if (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION) {
                         $("#btnEditarCotizacion").html("Continuar Editando");
+                        $("#btnEditarCotizacionGrupal").html("Continuar Editando");
                     }
                     else
                     {
                         $("#btnEditarCotizacion").html("Editar");
+                        $("#btnEditarCotizacionGrupal").html("Editar");
                     }
                 }
                 else {
+                    $("#btnEditarCotizacionGrupal").hide();
                     $("#btnEditarCotizacion").hide();
                 }
 
 
+
+                
 
 
 
@@ -2172,6 +2240,38 @@ jQuery(function ($) {
 
     });
 
+
+    $("#btnEditarCotizacionGrupal").click(function () {
+        desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+        $.ajax({
+            url: "/Cotizacion/ConsultarSiExisteCotizacionGrupal",
+            type: 'POST',
+            async: false,
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.existe == "false") {
+
+                    $.ajax({
+                        url: "/Cotizacion/iniciarEdicionCotizacionGrupal",
+                        type: 'POST',
+
+                        error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
+                        success: function (fileName) {
+                            window.location = '/Cotizacion/CotizarGrupo';
+                        }
+                    });
+
+                    //window.location = '/Cotizacion/Cotizador';
+                }
+                else {
+                    mostrarMensajeCotizacionGrupalEnCurso(resultado);
+                }
+            }
+        });
+
+    });
+
     function mostrarMensajeCotizacionEnCurso(resultado) {
         if (resultado.numero == 0) {
             alert('Está creando una nueva cotización; para continuar por favor diríjase a la página "Crear/Modificar Cotización" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
@@ -2181,6 +2281,20 @@ jQuery(function ($) {
                 alert('Ya se encuentra editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización".');
             else
                 alert('Está editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
+        }
+        activarBotonesVer();
+
+    }
+
+    function mostrarMensajeCotizacionGrupalEnCurso(resultado) {
+        if (resultado.numero == 0) {
+            alert('Está creando una nueva cotización; para continuar por favor diríjase a la página "Crear/Modificar Cotización Grupal" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
+        }
+        else {
+            if (resultado.numero == $("#verNumero").html())
+                alert('Ya se encuentra editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización Grupal".');
+            else
+                alert('Está editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización Grupal" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
         }
         activarBotonesVer();
 

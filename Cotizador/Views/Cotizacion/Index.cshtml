@@ -242,6 +242,7 @@
                                 <label for="verNumero" class="control-label col-xs-4">Número:</label>
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verNumero"></p>
+                                    <p class="form-control-static" style="color: darkred" id="esTransitoria">Esta Cotización es Transitoria</p>
                                 </div>
                             </div>
                         </div>
@@ -257,9 +258,10 @@
                         <!--CLIENTE-->
                         <div class="col-sm-6 col-lg-3">
                             <div class="form-group">
-                                <label for="verCliente" class="control-label col-xs-4">Cliente:</label>
+                                <label for="verClienteGrupo" class="control-label col-xs-4" id="labelCliente">Cliente:</label>
+                                <label for="verClienteGrupo" class="control-label col-xs-4" id="labelGrupo">Grupo:</label>
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verCliente"></p>
+                                    <p class="form-control-static" id="verClienteGrupo"></p>
                                 </div>
                             </div>
                         </div>
@@ -482,6 +484,10 @@
                     @if (cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
                     {
                         <button type="button" id="btnEditarCotizacion" class="btn btn-primary">Editar</button>
+                    }
+                    @if (cotizacion.usuario.creaCotizacionesGrupales || cotizacion.usuario.apruebaCotizacionesGrupales)
+                    {
+                        <button type="button" id="btnEditarCotizacionGrupal" class="btn btn-primary">Editar</button>
                     }
                     @if (cotizacion.usuario.apruebaCotizaciones)
                     {
