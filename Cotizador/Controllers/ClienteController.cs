@@ -875,18 +875,27 @@ namespace Cotizador.Controllers
                                 if (sheet.GetRow(row).GetCell(20) != null)
                                 {
                                     item.perteneceCanalLima = sheet.GetRow(row).GetCell(20).ToString().ToUpper().Equals("SI");
+                                } else
+                                {
+                                    item.perteneceCanalLima = false;
                                 }
 
                                 /* Canal Provincias */
                                 if (sheet.GetRow(row).GetCell(21) != null)
                                 {
                                     item.perteneceCanalProvincias = sheet.GetRow(row).GetCell(21).ToString().ToUpper().Equals("SI");
+                                } else {
+                                    item.perteneceCanalProvincias = false;
                                 }
 
                                 /* Canal PCP */
                                 if (sheet.GetRow(row).GetCell(22) != null)
                                 {
                                     item.perteneceCanalPCP = sheet.GetRow(row).GetCell(22).ToString().ToUpper().Equals("SI");
+                                }
+                                else
+                                {
+                                    item.perteneceCanalPCP = false;
                                 }
 
                                 /* Canal Multiregional */
@@ -918,6 +927,12 @@ namespace Cotizador.Controllers
                                         item.sedePrincipal = false;
                                     }
                                 }
+                                else
+                                {
+                                    item.perteneceCanalMultiregional = false;
+                                    item.negociacionMultiregional = false;
+                                    item.sedePrincipal = false;
+                                }
 
 
                                 /* Es SubDistribuidor */
@@ -943,6 +958,10 @@ namespace Cotizador.Controllers
                                             }
                                         }
                                     }
+                                }
+                                else
+                                {
+                                    item.esSubDistribuidor = false;
                                 }
 
 
