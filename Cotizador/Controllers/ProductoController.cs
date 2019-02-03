@@ -70,6 +70,7 @@ namespace Cotizador.Controllers
             ProductoBL productoBL = new ProductoBL();
             Producto producto = productoBL.getProductoById(idProducto);
             producto.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             String resultado =  JsonConvert.SerializeObject(producto);
             this.Session[Constantes.VAR_SESSION_PRODUCTO_VER] = producto;
             return resultado;
