@@ -518,7 +518,8 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);
             InputParameterAdd.Decimal(objCommand, "costo", producto.costoSinIgv);
-            
+            InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", DateTime.Now.ToString("yyyy-MM-dd"));
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
 
             ExecuteNonQuery(objCommand);
@@ -534,7 +535,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pu_producto");
             InputParameterAdd.Guid(objCommand, "idProducto", producto.idProducto);
-            InputParameterAdd.Guid(objCommand, "idUsuario", producto.IdUsuarioRegistro);
+            InputParameterAdd.Guid(objCommand, "idUsuario", producto.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "sku", producto.sku);
             InputParameterAdd.Binary(objCommand, "imagen", producto.image);
             InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion);
@@ -551,6 +552,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
             InputParameterAdd.Int(objCommand, "tipo", (int)producto.tipoProducto);
+            InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", DateTime.Now.ToString("yyyy-MM-dd"));
 
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);
