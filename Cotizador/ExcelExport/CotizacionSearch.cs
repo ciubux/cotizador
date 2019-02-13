@@ -81,15 +81,16 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "A", "N°", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "B", "Creado por", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "C", "Fecha Última Edición", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "D", "Razón Social", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "E", "RUC", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "F", "Ciudad", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "G", "Total(No Inc. IGV)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "H", "Desc % (max)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "I", "Estado", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "J", "Total(Incl.IGV)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "K", "Modificado última vez por", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "L", "Comentario Estado", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "D", "Creado Para", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "E", "Razón Social", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "F", "Grupo", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "G", "Ciudad", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "H", "Total(No Inc. IGV)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "I", "Desc % (max)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "J", "Estado", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "K", "Total(Incl.IGV)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "L", "Modificado última vez por", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "M", "Comentario Estado", titleCellStyle);
                 
                     
 
@@ -103,15 +104,24 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "A", obj.codigo);
                     UtilesHelper.setValorCelda(sheet, i, "B", obj.usuario.nombre);
                     UtilesHelper.setValorCelda(sheet, i, "C", obj.fecha.ToString("dd/MM/yyyy HH:mm"));
-                    UtilesHelper.setValorCelda(sheet, i, "D", obj.cliente.razonSocial);
-                    UtilesHelper.setValorCelda(sheet, i, "E", obj.cliente.ruc);
-                    UtilesHelper.setValorCelda(sheet, i, "F", obj.ciudad.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "G", (double) obj.montoSubTotal);
-                    UtilesHelper.setValorCelda(sheet, i, "H", (double) obj.maximoPorcentajeDescuentoPermitido);
-                    UtilesHelper.setValorCelda(sheet, i, "I", obj.seguimientoCotizacion.estadoString);
-                    UtilesHelper.setValorCelda(sheet, i, "J", (double)obj.montoTotal);
-                    UtilesHelper.setValorCelda(sheet, i, "K", obj.seguimientoCotizacion.usuario.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "L", obj.seguimientoCotizacion.observacion);
+                    if (obj.cliente.idCliente == Guid.Empty)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "D", "Grupo");
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "D", "Cliente");
+                    }
+                    
+                    UtilesHelper.setValorCelda(sheet, i, "E", obj.cliente.razonSocial);
+                    UtilesHelper.setValorCelda(sheet, i, "F", obj.grupo.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "G", obj.ciudad.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "H", (double) obj.montoSubTotal);
+                    UtilesHelper.setValorCelda(sheet, i, "I", (double) obj.maximoPorcentajeDescuentoPermitido);
+                    UtilesHelper.setValorCelda(sheet, i, "J", obj.seguimientoCotizacion.estadoString);
+                    UtilesHelper.setValorCelda(sheet, i, "K", (double)obj.montoTotal);
+                    UtilesHelper.setValorCelda(sheet, i, "L", obj.seguimientoCotizacion.usuario.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "M", obj.seguimientoCotizacion.observacion);
 
                     i++;
                 }

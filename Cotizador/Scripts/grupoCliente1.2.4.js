@@ -10,7 +10,7 @@ jQuery(function ($) {
         $("#btnBusqueda").click();
         //cargarChosenCliente();
         mostrarCamposSegunTipoDocIdentidad();
-        verificarSiExisteCliente();
+        verificarSiExisteGrupoCliente();
 
         $('.timepicker').timepicker({
             timeFormat: 'HH:mm ',
@@ -28,15 +28,13 @@ jQuery(function ($) {
         
     });
 
-    function verificarSiExisteCliente() {
-        if ($("#idCliente").val().trim() != GUID_EMPTY) {
+    function verificarSiExisteGrupoCliente() {
+        if ($("#idGrupoCliente").val().trim() != 0) {
             $("#idCiudad").attr("disabled", "disabled");
-            $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
-            $("#cliente_ruc").attr("disabled", "disabled");
-            $("#btnFinalizarEdicionCliente").html('Finalizar Edición');            
+            $("#btnFinalizarEdicionGrupoCliente").html('Finalizar Edición');            
         }
         else {
-            $("#btnFinalizarEdicionCliente").html('Finalizar Creación');
+            $("#btnFinalizarEdicionGrupoCliente").html('Finalizar Creación');
         }
 
     }
@@ -90,7 +88,7 @@ jQuery(function ($) {
 
     function cambiarTipoDocumentoIdentidad(tipoDocumentoIdentidad) {
         $.ajax({
-            url: "/Cliente/changeTipoDocumentoIdentidad",
+            url: "/GrupoCliente/changeTipoDocumentoIdentidad",
             type: 'POST',
             data: { tipoDocumentoIdentidad: tipoDocumentoIdentidad },
             success: function () {
@@ -174,7 +172,7 @@ jQuery(function ($) {
 
     $("#btnLimpiarBusqueda").click(function () {
         $.ajax({
-            url: "/Cliente/CleanBusqueda",
+            url: "/GrupoCliente/CleanBusqueda",
             type: 'POST',
             success: function () {
                 location.reload();
@@ -253,7 +251,7 @@ jQuery(function ($) {
         }
 
         $.ajax({
-            url: "/Cliente/GetDatosSunat",
+            url: "/GrupoCliente/GetDatosSunat",
             type: 'POST',
             dataType: 'JSON',
             data: { ruc: ruc },
@@ -308,12 +306,12 @@ jQuery(function ($) {
             minTermLength: 5,
             afterTypeDelay: 300,
             cache: false,
-            url: "/Cliente/SearchClientes"
+            url: "/GrupoCliente/SearchClientes"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
 
-        //verificarSiExisteCliente();
+        //verificarSiExisteGrupoCliente();
     }
 
 
@@ -351,7 +349,7 @@ jQuery(function ($) {
         });
 
         $.ajax({
-            url: "/Cliente/GetCliente",
+            url: "/GrupoCliente/GetCliente",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -424,7 +422,7 @@ jQuery(function ($) {
 
 
 
-                verificarSiExisteCliente();
+                verificarSiExisteGrupoCliente();
                 mostrarCamposSegunTipoDocIdentidad();
             }
         });
@@ -455,7 +453,7 @@ jQuery(function ($) {
                             text: 'Recuperando Ubicación Geográfica...'
                         });
                         $.ajax({
-                            url: "/Cliente/ChangeDireccionDomicilioLegalSunat",
+                            url: "/GrupoCliente/ChangeDireccionDomicilioLegalSunat",
                             type: 'POST',
                             dataType: 'JSON',
                             data: {
@@ -487,7 +485,7 @@ jQuery(function ($) {
     });
 
 
-    function validacionDatosCliente()
+    function validacionDatosGrupoCliente()
     {
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             $.alert({
@@ -501,7 +499,7 @@ jQuery(function ($) {
             $("#idCiudad").focus()
             return false;
         }
-
+        /*
 
         var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
         var ruc = $("#cliente_ruc").val();
@@ -539,20 +537,7 @@ jQuery(function ($) {
                     }
                 });
             }
-            /*
-            if ($("#cliente_correoEnvioFactura").val().trim().length < 8) {
-                $.alert({
-                    title: "Correo Electrónico Inválido",
-                    type: 'orange',
-                    content: 'Se debe agregar el correo electrónico para el envío de factura',
-                    buttons: {
-                        OK: function () { $('#cliente_correoEnvioFactura').focus(); }
-                    }
-                });
-
-                return false;
-            }*/
-
+         
             if ($("#cliente_direccionDomicilioLegalSunat").val().length > 120) {
                 $.alert({
                     title: "Dirección Inválida",
@@ -596,12 +581,12 @@ jQuery(function ($) {
                     type: 'orange',
                     content: 'No existe Nombre Cliente, debe ingresar el Nombre del Cliente"',
                     buttons: {
-                        OK: function () { $('#cliente_nombreComercial').focus(); }
+                        OK: function () { $('#cliente_razonSocialSunat').focus(); }
                     }
                 });
                 return false;
             }
-        }
+        }*/
 
         if ($("#plazoCreditoSolicitado").is(':enabled')) {
 
@@ -635,34 +620,34 @@ jQuery(function ($) {
     }
 
 
-    $("#btnFinalizarEdicionCliente").click(function () {
+    $("#btnFinalizarEdicionGrupoCliente").click(function () {
         /*Si no tiene codigo el cliente se está creando*/
-        if ($("#cliente_codigo").val().length == 0) {
-            crearCliente();
+        if ($("#idGrupoCliente").val().length == 0) {
+            crearGrupoCliente();
         }
         else {
-            editarCliente();
+            editarGrupoCliente();
         }
     });
 
     
 
-    function crearCliente() {
-        if (!validacionDatosCliente())
+    function crearGrupoCliente() {
+        if (!validacionDatosGrupoCliente())
             return false;       
 
         $('body').loadingModal({
-            text: 'Creando Cliente...'
+            text: 'Creando Grupo Cliente...'
         });
         $.ajax({
-            url: "/Cliente/Create",
+            url: "/GrupoCliente/Create",
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
                 $('body').loadingModal('hide');
                 $.alert({
                     title: 'Error',
-                    content: 'Se generó un error al intentar crear el cliente.',
+                    content: 'Se generó un error al intentar crear el grupo cliente.',
                     type: 'red',
                     buttons: {
                         OK: function () { }
@@ -673,11 +658,11 @@ jQuery(function ($) {
                 $('body').loadingModal('hide');
                 $.alert({
                     title: TITLE_EXITO,
-                    content: 'El cliente se creó correctamente.',
+                    content: 'El grupo cliente se creó correctamente.',
                     type: 'green',
                     buttons: {
                         OK: function () {
-                            window.location = '/Cliente/Index';
+                            window.location = '/GrupoCliente/Index';
                         }
                     }
                 });
@@ -686,17 +671,17 @@ jQuery(function ($) {
 
     }
 
-    function editarCliente() {
+    function editarGrupoCliente() {
 
-        if (!validacionDatosCliente())
+        if (!validacionDatosGrupoCliente())
             return false;       
 
     
         $('body').loadingModal({
-            text: 'Editando Cliente...'
+            text: 'Editando Grupo Cliente...'
         });
         $.ajax({
-            url: "/Cliente/Update",
+            url: "/GrupoCliente/Update",
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
@@ -719,7 +704,7 @@ jQuery(function ($) {
                     type: 'green',
                     buttons: {
                         OK: function () {
-                            window.location = '/Cliente/Index';
+                            window.location = '/GrupoCliente/Index';
                         }
                     }
                 });
@@ -729,7 +714,7 @@ jQuery(function ($) {
 
     function changeInputInt(propiedad, valor) {
         $.ajax({
-            url: "/Cliente/ChangeInputInt",
+            url: "/GrupoCliente/ChangeInputInt",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -745,7 +730,7 @@ jQuery(function ($) {
 
     function changeInputDecimal(propiedad, valor) {
         $.ajax({
-            url: "/Cliente/ChangeInputDecimal",
+            url: "/GrupoCliente/ChangeInputDecimal",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -774,7 +759,7 @@ jQuery(function ($) {
     /*
     function changeInputTime(propiedad, valor) {
         $.ajax({
-            url: "/Cliente/ChangeInputTime",
+            url: "/GrupoCliente/ChangeInputTime",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -1053,7 +1038,7 @@ jQuery(function ($) {
 
     function changeInputString(propiedad, valor) {
         $.ajax({
-            url: "/Cliente/ChangeInputString",
+            url: "/GrupoCliente/ChangeInputString",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -1093,7 +1078,7 @@ jQuery(function ($) {
     $("#idOrigen").change(function () {
         var idOrigen = $("#idOrigen").val();
         $.ajax({
-            url: "/Cliente/ChangeIdOrigen", type: 'POST',
+            url: "/GrupoCliente/ChangeIdOrigen", type: 'POST',
             data: {
                 idOrigen: idOrigen
             },
@@ -1106,7 +1091,7 @@ jQuery(function ($) {
     $("#idSubDistribuidor").change(function () {
         var idSubDistribuidor = $("#idSubDistribuidor").val();
         $.ajax({
-            url: "/Cliente/ChangeIdSubDistribuidor", type: 'POST',
+            url: "/GrupoCliente/ChangeIdSubDistribuidor", type: 'POST',
             data: {
                 idSubDistribuidor: idSubDistribuidor
             },
@@ -1175,7 +1160,7 @@ jQuery(function ($) {
     $("#formaPagoCliente").change(function () {
         var formaPagoFactura = $("#formaPagoCliente").val();
         $.ajax({
-            url: "/Cliente/ChangeFormaPagoFactura",
+            url: "/GrupoCliente/ChangeFormaPagoFactura",
             type: 'POST',
             data: {
                 formaPagoFactura: formaPagoFactura
@@ -1187,7 +1172,7 @@ jQuery(function ($) {
     $("#tipoPagoCliente").change(function () {
         var tipoPagoFactura = $("#tipoPagoCliente").val();
         $.ajax({
-            url: "/Cliente/ChangeTipoPagoFactura",
+            url: "/GrupoCliente/ChangeTipoPagoFactura",
             type: 'POST',
             data: {
                 tipoPagoFactura: tipoPagoFactura
@@ -1200,7 +1185,7 @@ jQuery(function ($) {
     $("#plazoCreditoSolicitado").change(function () {
         var plazoCreditoSolicitado = $("#plazoCreditoSolicitado").val();
         $.ajax({
-            url: "/Cliente/ChangePlazoCreditoSolicitado",
+            url: "/GrupoCliente/ChangePlazoCreditoSolicitado",
             type: 'POST',
             data: {
                 plazoCreditoSolicitado: plazoCreditoSolicitado
@@ -1286,8 +1271,8 @@ jQuery(function ($) {
 
 
 
-    $("#btnCancelarCliente").click(function () {
-        ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Cliente/CancelarCreacionCliente', null)
+    $("#btnCancelarGrupoCliente").click(function () {
+        ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/GrupoCliente/CancelarCreacionGrupoCliente', null)
     })
 
 
@@ -1699,7 +1684,7 @@ jQuery(function ($) {
         $("#spn_vercliente_mp_registracotizaciones").html($("#idCiudad option:selected").text());
 
         $.ajax({
-            url: "/Cliente/ChangeIdCiudad",
+            url: "/GrupoCliente/ChangeIdCiudad",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1725,7 +1710,7 @@ jQuery(function ($) {
         }
 
         $.ajax({
-            url: "/Cliente/ChangeIdGrupoCliente",
+            url: "/GrupoCliente/ChangeIdGrupoCliente",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1775,7 +1760,7 @@ jQuery(function ($) {
     $("#idResponsableComercial").change(function () {
         var idResponsableComercial = $("#idResponsableComercial").val();
         $.ajax({
-            url: "/Cliente/ChangeIdResponsableComercial", type: 'POST', 
+            url: "/GrupoCliente/ChangeIdResponsableComercial", type: 'POST', 
             data: {
                 idResponsableComercial: idResponsableComercial
             },
@@ -1787,7 +1772,7 @@ jQuery(function ($) {
     $("#idSupervisorComercial").change(function () {
         var idSupervisorComercial = $("#idSupervisorComercial").val();
         $.ajax({
-            url: "/Cliente/ChangeIdSupervisorComercial", type: 'POST',
+            url: "/GrupoCliente/ChangeIdSupervisorComercial", type: 'POST',
             data: {
                 idSupervisorComercial: idSupervisorComercial
             },
@@ -1800,7 +1785,7 @@ jQuery(function ($) {
     $("#idAsistenteServicioCliente").change(function () {
         var idAsistenteServicioCliente = $("#idAsistenteServicioCliente").val();
         $.ajax({
-            url: "/Cliente/ChangeIdAsistenteServicioCliente", type: 'POST',
+            url: "/GrupoCliente/ChangeIdAsistenteServicioCliente", type: 'POST',
             data: {
                 idAsistenteServicioCliente: idAsistenteServicioCliente
             },
@@ -1916,7 +1901,7 @@ jQuery(function ($) {
 
     function changeInputBoolean(propiedad, valor) {
         $.ajax({
-            url: "/Cliente/ChangeInputBoolean",
+            url: "/GrupoCliente/ChangeInputBoolean",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -1928,7 +1913,7 @@ jQuery(function ($) {
 
     function changeInputBitBoolean(propiedad, valor) {
         $.ajax({
-            url: "/Cliente/ChangeInputBitBoolean",
+            url: "/GrupoCliente/ChangeInputBitBoolean",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -1947,7 +1932,7 @@ jQuery(function ($) {
         }
 
         $.ajax({
-            url: "/Cliente/ChangeSinAsesorValidado",
+            url: "/GrupoCliente/ChangeSinAsesorValidado",
             type: 'POST',
             data: {
                 sinAsesorValidado: valCheck
@@ -1964,7 +1949,7 @@ jQuery(function ($) {
         }
 
         $.ajax({
-            url: "/Cliente/ChangeSinPlazoCreditoAprobado",
+            url: "/GrupoCliente/ChangeSinPlazoCreditoAprobado",
             type: 'POST',
             data: {
                 sinPlazoCreditoAprobado: valCheck
@@ -2023,7 +2008,7 @@ jQuery(function ($) {
 
         $("#btnBusqueda").attr("disabled", "disabled");
         $.ajax({
-            url: "/Cliente/Search",
+            url: "/GrupoCliente/Search",
             type: 'POST',
             dataType: 'JSON',
             error: function () {
@@ -2109,7 +2094,7 @@ jQuery(function ($) {
         var codigoCliente = arrrayClass[1];
 
         $.ajax({
-            url: "/Cliente/Show",
+            url: "/GrupoCliente/Show",
             data: {
                 idCliente: idCliente
             },
@@ -2397,7 +2382,7 @@ jQuery(function ($) {
       //  desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
-            url: "/Cliente/ConsultarSiExisteCliente",
+            url: "/GrupoCliente/ConsultarSiExisteCliente",
             type: 'POST',
             async: false,
             dataType: 'JSON',
@@ -2405,11 +2390,11 @@ jQuery(function ($) {
                 if (resultado.existe == "false") {
 
                     $.ajax({
-                        url: "/Cliente/iniciarEdicionCliente",
+                        url: "/GrupoCliente/iniciarEdicionCliente",
                         type: 'POST',
                         error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del cliente."); },
                         success: function (fileName) {
-                            window.location = '/Cliente/Editar';
+                            window.location = '/GrupoCliente/Editar';
                         }
                     });
 
@@ -2473,7 +2458,7 @@ jQuery(function ($) {
         var data = new FormData($('#formularioConArchivos')[0]);
 
         $.ajax({
-            url: "/Cliente/ChangeFiles",
+            url: "/GrupoCliente/ChangeFiles",
             type: 'POST',
             enctype: 'multipart/form-data',
             contentType: false,
@@ -2499,7 +2484,7 @@ jQuery(function ($) {
         $("#files").val("");
         $("#nombreArchivos > li").remove().end();
         $.ajax({
-            url: "/Cliente/DescartarArchivos",
+            url: "/GrupoCliente/DescartarArchivos",
             type: 'POST',
             dataType: 'JSON',
             data: { nombreArchivo: nombreArchivo },
@@ -2530,7 +2515,7 @@ jQuery(function ($) {
         //var numeroPedido = arrrayClass[1];
 
         $.ajax({
-            url: "/Cliente/Descargar",
+            url: "/GrupoCliente/Descargar",
             type: 'POST',
             //  enctype: 'multipart/form-data',
             dataType: 'JSON',

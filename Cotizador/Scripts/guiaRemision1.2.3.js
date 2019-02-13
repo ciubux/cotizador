@@ -7,6 +7,8 @@ jQuery(function ($) {
     var TITLE_EXITO = 'Operación Realizada';
     var TITLE_MENSAJE_BUSQUEDA = "Ingresar datos solicitados";
 
+    var motivoTraslado = "";
+
     $(document).ready(function () {
         obtenerConstantes();
         verificarSiExisteNuevoTransportista();
@@ -709,6 +711,7 @@ jQuery(function ($) {
                 $("#ver_guiaRemision_pedido_cliente").html(guiaRemision.pedido.cliente.razonSocial);
                 $("#ver_guiaRemision_pedido_numeroReferenciaCliente").html(guiaRemision.pedido.numeroReferenciaCliente);
                 $("#ver_guiaRemision_motivoTraslado").html(guiaRemision.motivoTrasladoString);
+                motivoTraslado = guiaRemision.motivoTraslado;
                 $("#ver_guiaRemision_atencionParcial").html(guiaRemision.atencionParcial);
                 $("#ver_guiaRemision_pedido_ubigeoEntrega").html(guiaRemision.pedido.ubigeoEntrega.ToString);
                 $("#ver_guiaRemision_pedido_direccionEntrega").html(guiaRemision.pedido.direccionEntrega.descripcion);
@@ -2247,6 +2250,12 @@ jQuery(function ($) {
         if (documentosVentaString.length == 0) {
             $("#serieNumeroDocumentoVenta").val(documentosVenta);
             $("#divDocumentoVenta").hide();
+
+            if (motivoTraslado == MOTIVO_TRASLADO_SALIDA_PRESTAMO.charCodeAt(0) ||
+                motivoTraslado == MOTIVO_TRASLADO_SALIDA_COMODATO.charCodeAt(0))
+            {
+                $("#li_motivoExtornoGuiaRemision7").show();
+            }
         }
         else {
             var documentosVenta = documentosVentaString.split(";");
@@ -2271,6 +2280,9 @@ jQuery(function ($) {
                 $("#divDocumentoVenta").show();
                 $("#li_motivoExtornoGuiaRemision7").show();
             }
+
+
+
         }
 
 

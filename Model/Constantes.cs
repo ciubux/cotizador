@@ -27,6 +27,7 @@ namespace Model
         public static String UBIGEO_VACIO = "000000";
         public static int DIAS_DESDE_BUSQUEDA = 10;
         public static int ID_VENDEDOR_POR_ASIGNAR = 43;
+        public static int DIAS_MAX_COTIZACION_TRANSITORIA = 10;
 
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
 
@@ -79,6 +80,12 @@ namespace Model
         public static String VAR_SESSION_CLIENTE_BUSQUEDA = "clienteBusqueda";
         public static String VAR_SESSION_CLIENTE_LISTA = "clienteList";
         public static String VAR_SESSION_CLIENTE_VER = "clienteVer";
+
+
+        public static String VAR_SESSION_GRUPO_CLIENTE = "grupoCliente";
+        public static String VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA = "grupoClienteBusqueda";
+        public static String VAR_SESSION_GRUPO_CLIENTE_LISTA = "grupoClienteList";
+        public static String VAR_SESSION_GRUPO_CLIENTE_VER = "grupoClienteVer";
 
         public static String VAR_SESSION_PRODUCTO = "producto";
         public static String VAR_SESSION_PRODUCTO_BUSQUEDA = "productoBusqueda";
@@ -304,8 +311,11 @@ namespace Model
             AprobarPedidos = 34,
             [Display(Name = "MANTENIMIENTO COTIZACION GRUPAL")]
             MantenimientoCotizacionGrupal = 35,
-
-
+            /*GRUPOS CLIENTE*/
+            [Display(Name = "BUSQUEDA GRUPOS CLIENTE")]
+            BusquedaGrupoClientes = 36,
+            [Display(Name = "MANTENIMIENTO GRUPOS CLIENTE")]
+            MantenimientoGrupoCliente = 37
         };
 
 

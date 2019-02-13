@@ -1754,7 +1754,9 @@ jQuery(function ($) {
         var fecha = $("#fechaPrecios").val();
         var familia = $("#familiaBusquedaPrecios").val();
         var proveedor = $("#proveedorBusquedaPrecios").val();
-
+        $('body').loadingModal({
+            text: 'Obteniedo Productos y Precios...'
+        });
 
         $.ajax({
             url: "/Pedido/obtenerProductosAPartirdePreciosRegistrados",
@@ -1767,12 +1769,23 @@ jQuery(function ($) {
             },
             type: 'POST',
             error: function () {
-
+                $('body').loadingModal('hide')
                 alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
                 //window.location = '/Pedido/Cotizador';
             },
             success: function () {
-                window.location = '/Pedido/Pedir';
+                $('body').loadingModal('hide')
+                $.alert({
+                    title: '¡Atención!',
+                    type: 'orange',
+                    content: "Los productos importados no consideran los precios registrados para un grupo.",
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Pedido/Pedir';
+                        }
+                    }
+                });
+                
             }
         });
 

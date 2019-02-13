@@ -269,7 +269,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
-
+                cotizacionDetalle.producto.precioClienteProducto.flete = Converter.GetDecimal(row, "flete");
                 //Revisar
                 cotizacionDetalle.costoAnterior = Converter.GetDecimal(row, "costo_sin_igv_anterior");
                 cotizacionDetalle.precioNetoAnterior = Converter.GetDecimal(row, "precio_neto_anterior");
@@ -397,6 +397,7 @@ namespace DataLayer
 
                 cotizacionDetalle.producto.precioClienteProducto = new PrecioClienteProducto();
                 cotizacionDetalle.producto.precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                cotizacionDetalle.producto.precioClienteProducto.flete = Converter.GetDecimal(row, "flete");
                 cotizacionDetalle.producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");

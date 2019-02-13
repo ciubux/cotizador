@@ -363,6 +363,7 @@
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
+    <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\subDistribuidor1.0.0.js" />
     <Content Include="Scripts\origen1.0.0.js" />
     <Content Include="Scripts\producto1.0.0.js" />
@@ -510,6 +511,8 @@
     <Content Include="Views\Shared\_SubDistribuidor.cshtml" />
     <Content Include="Views\Pedido\AprobarPedidos.cshtml" />
     <Content Include="Views\Cotizacion\CotizarGrupo.cshtml" />
+    <Content Include="Views\GrupoCliente\Editar.cshtml" />
+    <Content Include="Views\GrupoCliente\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
@@ -519,7 +522,6 @@
     <Folder Include="Views\DireccionEntrega\" />
     <Folder Include="Views\DocumentoVenta\" />
     <Folder Include="Views\General\" />
-    <Folder Include="Views\GrupoCliente\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Mail\" />
     <Folder Include="Views\Parent\" />

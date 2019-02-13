@@ -198,7 +198,15 @@
                     <label for="fechaInicioVigenciaPrecios" class="control-label col-xs-4">Inicio Vigencia Precios:</label>
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaInicioVigenciaPreciosTmp" value="@ViewBag.fechaInicioVigenciaPrecios" />
-                        <input class="form-control" type="text" id="fechaInicioVigenciaPrecios" name="fechaInicioVigenciaPrecios">
+                        @if (cotizacion.esTransitoria)
+                        {
+                            <input class="form-control" disabled type="text" id="fechaInicioVigenciaPrecios" name="fechaInicioVigenciaPrecios">
+                        }
+                        else
+                        {
+                            <input class="form-control" type="text" id="fechaInicioVigenciaPrecios" name="fechaInicioVigenciaPrecios">
+                        }
+                        
                     </div>
                 </div>
             </div>

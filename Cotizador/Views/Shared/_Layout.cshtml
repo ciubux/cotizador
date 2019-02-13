@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "128";
+    TempData["ScriptVersion"] = "134";
 }
 
 <!DOCTYPE html>
@@ -64,7 +64,9 @@
 
                         var linkMaestros = "";
                         var linkBusquedaCliente = "";
+                        var linkBusquedaGrupoCliente = "";
                         var linkMantenimientoCliente = "";
+                        var linkMantenimientoGrupoCliente = "";
                         var linkMantenimientoProducto = "";
                         var linkBusquedaProducto = "";
                         var linkCRProducto = "";
@@ -272,6 +274,11 @@
                                         <li id="linkBusquedaCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Búsqueda", "Index", "Cliente")</li>
                                         <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
                                     }
+                                    @if (usuario.modificaMaestroClientes)
+                                    {
+                                        <li id="linkBusquedaGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Búsqueda", "Index", "GrupoCliente")</li>
+                                        <li id="linkMantenimientoGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Crear/Modificar", "Editar", "GrupoCliente")</li>
+                                    }
                                     @if (usuario.modificaMaestroProductos)
                                     {
                                         <li id="linkMantenimientoProducto" class="@linkMantenimientoProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
@@ -290,8 +297,8 @@
 
                                     @if (usuario.modificaSubDistribuidor)
                                     {
-                                        <li id="linkBusquedaSubDistribuidor" class="@linkBusquedaSubDistribuidor">@Html.ActionLink("Subdistribuidor - Búsqueda", "List", "SubDistribuidor")</li>
-                                        <li id="linkCRSubDistribuidor" class="@linkCRSubDistribuidor">@Html.ActionLink("Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
+                                        <li id="linkBusquedaSubDistribuidor" class="@linkBusquedaSubDistribuidor">@Html.ActionLink("Categoría Subdistribuidor - Búsqueda", "List", "SubDistribuidor")</li>
+                                        <li id="linkCRSubDistribuidor" class="@linkCRSubDistribuidor">@Html.ActionLink("Categoría Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
                                     }
                                 </ul>
                             </li>

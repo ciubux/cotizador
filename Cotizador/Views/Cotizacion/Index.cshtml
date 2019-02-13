@@ -126,6 +126,19 @@
                             Todas las sedes
                         </label>
                     }
+
+                    <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                        @if (cotizacion.buscarSoloCotizacionesGrupales)
+                        {
+                            <input checked type="checkbox" name="buscarSoloCotizacionesGrupales" id="buscarSoloCotizacionesGrupales" value="1">
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="buscarSoloCotizacionesGrupales" id="buscarSoloCotizacionesGrupales" value="1">
+                        }
+                        Solo Grupales
+                    </label>
+                   
                 </div>
             </div>
         </div>
@@ -185,8 +198,10 @@
                     <th data-name="codigo" data-visible="true">N°</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
                     <th data-name="fecha" data-sortable="true">Fecha Última Edición</th>
+                    <th data-name="esGrupal" data-sortable="true">Creado Para</th>
                     <th data-name="razonSocial" data-sortable="true">Razón Social</th>
-                    <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
+                    <!--<th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>-->
+                    <th data-name="grupo" data-sortable="false" data-breakpoints="xs">Grupo</th>
                     <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Ciudad</th>
                     <th data-name="subtotal" data-visible="false" data-sortable="true" data-breakpoints="xs">Sub Total</th>
                     <th data-name="igv" data-visible="false" data-sortable="true" data-breakpoints="xs">IGV</th>
@@ -489,14 +504,17 @@
                     {
                         <button type="button" id="btnEditarCotizacionGrupal" class="btn btn-primary">Editar</button>
                     }
-                    @if (cotizacion.usuario.apruebaCotizaciones)
+                    @if (cotizacion.usuario.apruebaCotizaciones || cotizacion.usuario.apruebaCotizacionesGrupales)
                     {
                         <button type="button" id="btnAprobarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
                     }
-                    @if (cotizacion.usuario.apruebaCotizaciones)
+                    @if (cotizacion.usuario.apruebaCotizaciones || cotizacion.usuario.apruebaCotizacionesGrupales)
                     {
                         <button type="button" id="btnDenegarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
-                    }
+                    }              
+
+
+
                     @if (cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
                     {
                         <button type="button" id="btnAceptarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Cliente Aceptó</button>

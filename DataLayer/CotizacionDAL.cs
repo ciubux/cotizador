@@ -275,12 +275,13 @@ namespace DataLayer
                 
 
                 //}
-                
+
 
                 cotizacion.ciudad = new Ciudad();
                 cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
                 cotizacion.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
+                cotizacion.grupo.ciudad = cotizacion.ciudad;
 
                 cotizacion.usuario = new Usuario();
                 cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");
@@ -318,7 +319,7 @@ namespace DataLayer
                 precioClienteProducto.flete = Converter.GetDecimal(row, "flete_vigente");
                 precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario_vigente");
                 precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia_vigente");
-
+                precioClienteProducto.esUnidadAlternativa = Converter.GetBool(row, "es_unidad_alternativa");
                 precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
 
@@ -425,6 +426,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(cotizacion.fechaDesde.Year, cotizacion.fechaDesde.Month, cotizacion.fechaDesde.Day, 0, 0, 0));
             InputParameterAdd.DateTime(objCommand, "fechaHasta", new DateTime(cotizacion.fechaHasta.Year, cotizacion.fechaHasta.Month, cotizacion.fechaHasta.Day, 23, 59, 59));
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
+            InputParameterAdd.Bit(objCommand, "buscarSoloCotizacionesGrupales", cotizacion.buscarSoloCotizacionesGrupales);
             DataTable dataTable = Execute(objCommand);
 
             List<Cotizacion> cotizacionList = new List<Cotizacion>();
@@ -461,6 +463,13 @@ namespace DataLayer
                 cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
+
+                cotizacion.grupo = new GrupoCliente();
+                cotizacion.grupo.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                cotizacion.grupo.codigo = Converter.GetString(row, "codigo_grupo");
+                cotizacion.grupo.nombre = Converter.GetString(row, "nombre_grupo");
+                cotizacion.grupo.contacto = Converter.GetString(row, "contacto_grupo");
+
 
                 cotizacion.usuario = new Usuario();
                 cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");

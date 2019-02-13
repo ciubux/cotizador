@@ -108,26 +108,26 @@ namespace Cotizador.Controllers
 
         public void ChangeInputInt()
         {
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            Cliente cliente = this.ClienteSession;
             PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(cliente, Int32.Parse(this.Request.Params["valor"]));
-            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+            this.ClienteSession = cliente;
         }
 
         public void ChangeInputDecimal()
         {
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            Cliente cliente = this.ClienteSession;
             PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(cliente, Decimal.Parse(this.Request.Params["valor"]));
-            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+            this.ClienteSession = cliente;
         }
 
         public void ChangeInputTime()
         {
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+            Cliente cliente = this.ClienteSession;
             PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(cliente, Int32.Parse(this.Request.Params["valor"]));
-            this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+            this.ClienteSession = cliente;
         }
 
 

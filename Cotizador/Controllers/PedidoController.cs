@@ -549,7 +549,8 @@ namespace Cotizador.Controllers
                 {
                     //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
                     pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
-                    pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = DateTime.Now;
+                    pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
+                    pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia = cotizacion.fechaFinVigenciaPrecios.HasValue ? cotizacion.fechaFinVigenciaPrecios.Value : cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_COTIZACION_TRANSITORIA);
                     //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
                     pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
                     pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
@@ -558,9 +559,18 @@ namespace Cotizador.Controllers
                 if (documentoDetalle.esPrecioAlternativo)
                 {
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+
+                    if (documentoDetalle.producto.precioClienteProducto != null &&
+                    documentoDetalle.producto.precioClienteProducto.esUnidadAlternativa)
+                    {
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.producto.equivalencia;
+                        pedidoDetalle.producto.precioClienteProducto.precioNeto = pedidoDetalle.producto.precioClienteProducto.precioNeto / documentoDetalle.producto.equivalencia;
+                    }
+
+
                     /**/
-                    pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.producto.equivalencia;
-                    pedidoDetalle.producto.precioClienteProducto.precioNeto = pedidoDetalle.producto.precioClienteProducto.precioNeto / documentoDetalle.producto.equivalencia;
+                    //      pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.producto.equivalencia;
+                    //      pedidoDetalle.producto.precioClienteProducto.precioNeto = pedidoDetalle.producto.precioClienteProducto.precioNeto / documentoDetalle.producto.equivalencia;
                 }
                 else
                 {
@@ -770,6 +780,7 @@ namespace Cotizador.Controllers
             Decimal porcentajeDescuento = 0;
             if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
             {
+                fleteDetalle = producto.precioClienteProducto.flete;
                 //Solo en caso de que el precioNetoEquivalente sea distinto a 0 se calcula el porcentaje de descuento
                 //si no se obtiene precioNetoEquivalente quiere decir que no hay precioRegistrado
                 if (producto.precioLista == 0)

@@ -523,9 +523,15 @@ namespace Cotizador.Controllers
         {
             Cotizacion cotizacion = this.CotizacionSession;
             GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
-            cotizacion.grupo = grupoClienteBL.getGrupo(int.Parse(this.Request.Params["idGrupoCliente"]));
-            cotizacion.contacto = cotizacion.grupo.contacto;
-
+            if (this.Request.Params["idGrupoCliente"] != null && this.Request.Params["idGrupoCliente"] != "")
+            {
+                cotizacion.grupo = grupoClienteBL.getGrupo(int.Parse(this.Request.Params["idGrupoCliente"]));
+                cotizacion.contacto = cotizacion.grupo.contacto;
+            }
+            else
+            {
+                cotizacion.grupo = new GrupoCliente();
+            }
             //Se crea un grupo vacío para no considerarlo al momento de grabar la cotización
             
             String resultado = "{" +
@@ -714,6 +720,20 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
         }
 
+        public void updateBuscarSoloCotizacionesGrupales()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            if (this.Request.Params["buscarSoloCotizacionesGrupales"] != null && Int32.Parse(this.Request.Params["buscarSoloCotizacionesGrupales"]) == 1)
+            {
+                cotizacion.buscarSoloCotizacionesGrupales = true;
+            }
+            else
+            {
+                cotizacion.buscarSoloCotizacionesGrupales = false;
+            }
+            this.CotizacionSession = cotizacion;
+        }
+
         #endregion
 
 
@@ -724,7 +744,7 @@ namespace Cotizador.Controllers
         {
             Cotizacion cotizacion = this.CotizacionSession;
             cotizacion.cliente = new Cliente();
-            cotizacion.grupo = new GrupoCliente();
+           // cotizacion.grupo = new GrupoCliente();
             Guid idCiudad = Guid.Empty;
             if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
             { 
@@ -875,6 +895,7 @@ namespace Cotizador.Controllers
                 //Solo en caso de que el precioNetoEquivalente sea distinto a 0 se calcula el porcentaje de descuento
                 //si no se obtiene precioNetoEquivalente quiere decir que no hay precioRegistrado
                 porcentajeDescuento = 100 - (producto.precioClienteProducto.precioNeto * 100 / producto.precioLista);
+                fleteDetalle = producto.precioClienteProducto.flete;
             }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);

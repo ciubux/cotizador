@@ -12,6 +12,10 @@ namespace BusinessLayer
 
         private void validarCotizacion(Cotizacion cotizacion, Cotizacion cotizacionAprobada = null)
         {
+
+
+
+
             //Si no se consideran cantidades no se debe grabar el subtotal
             if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
             {
@@ -29,6 +33,13 @@ namespace BusinessLayer
             cotizacion.seguimientoCotizacion.observacion = String.Empty;
             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada;
 
+
+            //Si es cotizacion Grupal y no es aprobador se debe ir a pendiente de aprobación
+            if ((cotizacion.cliente.idCliente == null || cotizacion.cliente.idCliente == Guid.Empty))
+            {
+                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Cotización Grupal.\n";
+                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+            }
 
             ///Se hay un cambio en las fechas y en la vigencia se realiza evaluación
 
@@ -89,14 +100,15 @@ namespace BusinessLayer
                     //¿Tiene precio registrado para facturación? y eliente es el mismo?
                     if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty && precioClienteProducto.cliente.idCliente == cotizacion.cliente.idCliente)
                     {
+                        DateTime hoy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
                         //Si el precio es igual pero la fecha de fin de vigencia es indefinida y se ha superado los dias de vigencia general.
                         //Se envia a evaluar Descuento
-                        if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
+                        if (precioClienteProducto.fechaFinVigencia == null && hoy > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
                         {
                             evaluarDescuento = 1;
                         }
-                        else if (precioClienteProducto.fechaFinVigencia != null && DateTime.Now > precioClienteProducto.fechaFinVigencia.Value)
+                        else if (precioClienteProducto.fechaFinVigencia != null && hoy > precioClienteProducto.fechaFinVigencia.Value)
                         {
                             evaluarDescuento = 4;
                         }

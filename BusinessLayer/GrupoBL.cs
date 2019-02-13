@@ -30,5 +30,23 @@ namespace BusinessLayer
                 return grupoDAL.getGruposCliente();
             }
         }
+
+
+        public GrupoCliente insertGrupoCliente(GrupoCliente grupoCliente)
+        {
+            using (var grupoClienteDAL = new GrupoClienteDAL())
+            { 
+                return grupoClienteDAL.insertGrupoCliente(grupoCliente);
+            }
+        }
+
+        public GrupoCliente updateGrupoCliente(GrupoCliente grupoCliente)
+        {
+            using (var grupoClienteDAL = new GrupoClienteDAL())
+            {
+                return grupoClienteDAL.insertGrupoCliente(grupoCliente);
+            }
+        }
+
     }
 }

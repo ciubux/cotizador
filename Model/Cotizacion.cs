@@ -74,7 +74,7 @@ namespace Model
 
         public bool buscarSedesGrupoCliente { get; set; }
 
-
+        public bool buscarSoloCotizacionesGrupales { get; set; }
         /*Campos utilizados para búsqueda*/
         public Usuario usuarioBusqueda { get; set; }
         public DateTime fechaDesde { get; set; }

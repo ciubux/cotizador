@@ -76,14 +76,16 @@ namespace BusinessLayer
                             PrecioClienteProducto precioClienteProducto = pedidoDetalle.producto.precioClienteProducto;
 
                             int evaluarVariacion = 0;
+
+                            DateTime hoy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                             //¿Tiene precio registrado para facturación? y eliente es el mismo?
                             if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty)// && precioClienteProducto.cliente.idCliente == pedido.cliente.idCliente)
                             {
-                                if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
+                                if (precioClienteProducto.fechaFinVigencia == null && hoy > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
                                 {
                                     evaluarVariacion = 1;
                                 }
-                                else if (precioClienteProducto.fechaFinVigencia != null && DateTime.Now > precioClienteProducto.fechaFinVigencia.Value)
+                                else if (precioClienteProducto.fechaFinVigencia != null && hoy > precioClienteProducto.fechaFinVigencia.Value)
                                 {
                                     evaluarVariacion = 4;
                                 }

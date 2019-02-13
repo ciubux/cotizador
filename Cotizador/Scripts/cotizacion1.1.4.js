@@ -18,6 +18,7 @@ jQuery(function ($) {
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
     var ESTADOS_TODOS = -1;
+    var DIAS_MAX_COTIZACION_TRANSITORIA = 10
 
     var ESTADO_PENDIENTE_APROBACION = 0;
     var ESTADO_APROBADA = 1;
@@ -137,6 +138,7 @@ jQuery(function ($) {
                 IGV = constantes.IGV;
                 SIMBOLO_SOL = constantes.SIMBOLO_SOL;
                 MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
+                DIAS_MAX_COTIZACION_TRANSITORIA = constantes.DIAS_MAX_COTIZACION_TRANSITORIA;
             }
         });
     }
@@ -272,9 +274,21 @@ jQuery(function ($) {
 
     $("#cotizacion_esTransitoria").change(function () {
         var valor = 1;
+
         if (!$('#cotizacion_esTransitoria').prop('checked')) {
             valor = 0;
+            $("#fechaInicioVigenciaPrecios").removeAttr("disabled");
         }
+        else {
+            $("#fechaInicioVigenciaPrecios").attr("disabled", "disabled");
+            var hoy = new Date();
+            $("#fechaInicioVigenciaPrecios").datepicker().datepicker("setDate", hoy);
+            hoy.setDate(hoy.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))
+            $("#fechaFinVigenciaPrecios").datepicker().datepicker("setDate", hoy);
+            $("#fechaInicioVigenciaPrecios").change();
+            $("#fechaFinVigenciaPrecios").change();
+        }
+
         changeInputBoolean('esTransitoria', valor)
     });
 
@@ -1278,7 +1292,20 @@ jQuery(function ($) {
                 alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
             },
             success: function () {
-                window.location = '/Cotizacion/CotizarGrupo';
+
+                $.alert({
+                    title: '¡Atención!',
+                    type: 'orange',
+                    content: "Los productos importados no consideran los precios registrados para un grupo.",
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Cotizacion/CotizarGrupo';
+
+                        }
+                    }
+                });
+
+               
             }
         });
     });
@@ -1290,7 +1317,10 @@ jQuery(function ($) {
         var fecha = $("#fechaPrecios").val();
         var familia = $("#familiaBusquedaPrecios").val();
         var proveedor = $("#proveedorBusquedaPrecios").val();
-
+        $('body').loadingModal({
+            text: 'Obteniedo Productos y Precios...'
+        });
+      
 
         $.ajax({
             url: "/Cotizacion/obtenerProductosAPartirdePreciosRegistrados",
@@ -1303,12 +1333,24 @@ jQuery(function ($) {
             },
             type: 'POST',
             error: function () {
-
+                $('body').loadingModal('hide')
                 alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
                 //window.location = '/Cotizacion/Cotizador';
             },
             success: function () {
-                window.location = '/Cotizacion/Cotizar';
+                $('body').loadingModal('hide')
+                $.alert({
+                    title: '¡Atención!',
+                    type: 'orange',
+                    content: "Los productos importados no consideran los precios registrados para un grupo.",
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Cotizacion/Cotizar';
+
+                        }
+                    }
+                });
+             
             }
         });
 
@@ -1385,15 +1427,51 @@ jQuery(function ($) {
 
         }
 
+
+
         var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
         if (fechaFinVigenciaPrecios.trim() != "") {
+
+          
             //Si la fecha de inicio de vigencia no es vacío se compara con la fecha de inicio de vigencia
             if (fechaInicioVigenciaPrecios.trim() != "") {
+                
                    //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
                 if (convertirFechaNumero(fechaFinVigenciaPrecios) < convertirFechaNumero(fechaInicioVigenciaPrecios)) {
                     alert("El fin de vigencia de precios debe ser mayor o igual al inicio de vigencia de precios.");
                     $("#fechaFinVigenciaPrecios").focus();
                     return false;
+                }
+
+                //Si es una cotización transitoria la fecha de fin de vigencia no puede ser mayor a la fecha de inicio de vigencia por más de 10 días
+                if ($('#cotizacion_esTransitoria').prop('checked')) {
+
+                    var fechaInicioTmp = fechaInicioVigenciaPrecios.split("/");
+                 
+                    var fechaInicioTmpMas10 = new Date(parseInt(fechaInicioTmp[2]), parseInt(fechaInicioTmp[1]) - 1, parseInt(fechaInicioTmp[0]), 0, 0, 0);
+                    //alert(fechaInicioTmpMas10 + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA));
+                    fechaInicioTmpMas10.setDate(fechaInicioTmpMas10.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))
+
+                //    alert(fechaInicioTmpMas10)
+                    var day = fechaInicioTmpMas10.getDate();
+                    if (fechaInicioTmpMas10.getDate() < 10)
+                        day = "0" + fechaInicioTmpMas10.getDate();
+
+                    var mesTmp = (fechaInicioTmpMas10.getMonth() + 1);
+
+                    var mes = mesTmp;
+                    if (mesTmp< 10)
+                        mes = "0"+mesTmp;
+
+                    var fechaInicioTmpMas10tmp = day + "/" + mes + "/" + fechaInicioTmpMas10.getFullYear()
+              /*      alert(fechaInicioTmpMas10tmp)
+                    alert(convertirFechaNumero(fechaInicioTmpMas10tmp))
+                    alert(convertirFechaNumero(fechaFinVigenciaPrecios))*/
+                    if (convertirFechaNumero(fechaInicioTmpMas10tmp) < convertirFechaNumero(fechaFinVigenciaPrecios)) {
+                        alert("El fin de vigencia de precios no puede ser mayor al inicio de vigencia de precios por más de 10 días en una cotización transitoria.");
+                        $("#fechaFinVigenciaPrecios").focus();
+                        return false;
+                    }
                 }
             }
             else
@@ -1403,6 +1481,7 @@ jQuery(function ($) {
                     $("#fechaFinVigenciaPrecios").focus();
                     return false;
                 }
+
             }
         }
         
@@ -1467,7 +1546,7 @@ jQuery(function ($) {
                             }
                         },
                         noAplica: {
-                            text: 'NO',
+                            text: 'NO, solo registrar precios para ' + $("#idCiudad option:selected").text(),
                             btnClass: 'btn-danger',
                             action: function () {
                                 callCreate(continuarLuego);
@@ -1939,36 +2018,66 @@ jQuery(function ($) {
 
 
 
-                /*APROBAR COTIZACIÓN*/
-                if (
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
-                        cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
-                    (
-                        usuario.apruebaCotizaciones && 
-                        usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
-                ) {
+                /*APROBAR DENEGAR COTIZACIÓN*/
 
-                    $("#btnAprobarCotizacion").show();
+                if (cotizacion.cliente.idCliente == GUID_EMPTY) {
+                    if (
+                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
+                            cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
+                        (
+                            usuario.apruebaCotizacionesGrupales &&
+                            usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                    ) {
+                        $("#btnAprobarCotizacion").show();
+                    }
+                    else {
+                        $("#btnAprobarCotizacion").hide();
+                    }
+
+                    if (
+                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
+                        (
+                            usuario.apruebaCotizacionesGrupales &&
+                            usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                    ) {
+
+                        $("#btnDenegarCotizacion").show();
+                    }
+                    else {
+                        $("#btnDenegarCotizacion").hide();
+                    }
                 }
                 else {
-                    $("#btnAprobarCotizacion").hide();
+                    if (
+                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
+                            cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
+                        (
+                            usuario.apruebaCotizaciones &&
+                            usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                    ) {
+
+                        $("#btnAprobarCotizacion").show();
+                    }
+                    else {
+                        $("#btnAprobarCotizacion").hide();
+                    }
+
+                    if (
+                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
+                        (
+                            usuario.apruebaCotizaciones &&
+                            usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                    ) {
+
+                        $("#btnDenegarCotizacion").show();
+                    }
+                    else {
+                        $("#btnDenegarCotizacion").hide();
+                    }
                 }
 
-
-
-                /*DENEGAR COTIZACIÓN*/
-                if (
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
-                    (
-                        usuario.apruebaCotizaciones && 
-                        usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
-                ) {
-
-                    $("#btnDenegarCotizacion").show();
-                }
-                else {
-                    $("#btnDenegarCotizacion").hide();
-                }
+                
+               
 
                 /*ACEPTAR COTIZACIÓN*/
                 if (
@@ -2101,6 +2210,7 @@ jQuery(function ($) {
     {
         $("#btnCancelarCotizacion").attr('disabled', 'disabled');
         $("#btnEditarCotizacion").attr('disabled', 'disabled');
+        $("#btnEditarCotizacionGrupal").attr('disabled', 'disabled');        
         $("#btnReCotizacion").attr('disabled', 'disabled');
         $("#btnAprobarCotizacion").attr('disabled', 'disabled');
         $("#btnDenegarCotizacion").attr('disabled', 'disabled');
@@ -2109,11 +2219,13 @@ jQuery(function ($) {
         $("#btnEliminarCotizacion").attr('disabled', 'disabled');
         $("#btnPDFCotizacion").attr('disabled', 'disabled');
         $("#btnGenerarPedido").attr('disabled', 'disabled');
+
     }
 
     function activarBotonesVer() {
         $("#btnCancelarCotizacion").removeAttr('disabled');
         $("#btnEditarCotizacion").removeAttr('disabled');
+        $("#btnEditarCotizacionGrupal").removeAttr('disabled');
         $("#btnReCotizacion").removeAttr('disabled');
         $("#btnAprobarCotizacion").removeAttr('disabled');
         $("#btnDenegarCotizacion").removeAttr('disabled');
@@ -3248,7 +3360,21 @@ jQuery(function ($) {
                             '<p><a id="' + idVerMas + '" class="' + cotizacionList[i].idCotizacion+' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>'+
                         '<p><a id="' + idVermenos + '" class="' + cotizacionList[i].idCotizacion+' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                      }
-         
+
+                    var grupo = '';
+                    var clienteRazonSocial = '';
+                    var clienteRUC = '';
+                    var creadoPara = '';
+                    grupo = cotizacionList[i].grupo.nombre;
+                    if (cotizacionList[i].cliente.idCliente == GUID_EMPTY) {
+                        creadoPara = 'Grupo';
+                        
+                    }
+                    else {
+                        creadoPara = 'Cliente';
+                        clienteRazonSocial = cotizacionList[i].cliente.razonSocial;
+                        clienteRUC = cotizacionList[i].cliente.ruc;
+                    }
 
                     var cotizacion = '<tr data-expanded="false">' +
                         '<td>' + cotizacionList[i].idCotizacion + '</td>' +
@@ -3256,8 +3382,10 @@ jQuery(function ($) {
                         '<td>' + cotizacionList[i].usuario.nombre + '</td>' +
                         //ToString("dd/MM/yyyy")
                         '<td>' + invertirFormatoFecha(cotizacionList[i].fecha.substr(0, 10)) + '</td>' +
-                        '<td>' + cotizacionList[i].cliente.razonSocial + '</td>' +
-                        '<td>' + cotizacionList[i].cliente.ruc + '</td>' +
+                        '<td>' + creadoPara + '</td>' +
+                        '<td>' + clienteRazonSocial + '</td>' +
+                        //'<td>' + clienteRUC + '</td>' +
+                        '<td>' + grupo + '</td>' +
                         '<td>' + cotizacionList[i].ciudad.nombre + '</td>' +
                         '<td>' + Number(cotizacionList[i].montoSubTotal).toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + Number(cotizacionList[i].montoIGV).toFixed(cantidadDecimales) + '</td>' +
@@ -3388,6 +3516,20 @@ jQuery(function ($) {
             }
         });
     });
+
+    $("#buscarSoloCotizacionesGrupales").change(function () {
+        var valor = $("input[name=buscarSoloCotizacionesGrupales]:checked").val();
+        $.ajax({
+            url: "/Cotizacion/updateBuscarSoloCotizacionesGrupales",
+            type: 'POST',
+            data: {
+                buscarSoloCotizacionesGrupales: valor
+            },
+            success: function () {
+            }
+        });
+    });
+    
 
 
     $("#btnCancelarComentario").click(function()

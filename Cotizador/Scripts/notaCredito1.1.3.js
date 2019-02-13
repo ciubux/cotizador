@@ -545,7 +545,7 @@ jQuery(function ($) {
             var precioUnitario = parseFloat($("." + arrId[0] + ".detprecioUnitario").html().trim());
             var precioUnitarioOriginal = parseFloat($("." + arrId[0] + ".detPrecioUnitarioOriginal").html().trim());
 
-            if ((precioUnitario > precioUnitarioOriginal) || precioUnitario == 0)
+            if ((precioUnitario > precioUnitarioOriginal))// || precioUnitario == 0)
                 precioUnitarioIncorrecto = true;
         });
 
