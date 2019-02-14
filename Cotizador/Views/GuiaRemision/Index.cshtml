@@ -684,6 +684,10 @@
                         <button type="button" id="btnExtornar" class="btn btn-danger">Extornar</button>
                         <button type="button" id="btnIngresar" class="btn btn-primary">Ingresar</button>
                     }
+                    @if (guiaRemision.usuario.realizaRefacturacion)
+                    {
+                        <button type="button" id="btnRefacturar" class="btn btn-danger">Refacturar</button>
+                    }
                     <button type="button" id="btnVerNotasIngresoExtornantes" class="btn btn-primary">Ver Notas Ingreso Extornantes</button>
                 </div>
             </div>

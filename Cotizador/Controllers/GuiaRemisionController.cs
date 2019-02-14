@@ -750,15 +750,15 @@ namespace Cotizador.Controllers
                 var tipo = Request.Params["tipo"];
 
                 Pedido pedido = null;
-                if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Venta)
+                if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Venta)
                 {
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
                 }
-                else if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Compra)
+                else if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Compra)
                 {
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
                 }
-                else if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Almacen)
+                else if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Almacen)
                 {
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ALMACEN_VER];
                 }
@@ -773,15 +773,15 @@ namespace Cotizador.Controllers
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
                 guiaRemision.pedido = pedido;
 
-                if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Venta)
+                if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Venta)
                 {
                     guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedido;
                 }
-                else if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Compra)
+                else if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Compra)
                 {
                     guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedidoCompra;
                 }
-                else if ((Pedido.tipos)Char.Parse(tipo) == Pedido.tipos.Almacen)
+                else if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Almacen)
                 {
                     guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedidoAlmacen;
                 }
@@ -795,6 +795,8 @@ namespace Cotizador.Controllers
                       documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidad;
                       documentoDetalle.cantidadPorAtender = documentoDetalle.cantidad;
                   }*/
+
+                /*
                 guiaRemision.observaciones = String.Empty;
                 bool existeOrdenCompra = false;
                 if (pedido.numeroReferenciaCliente != null && !pedido.numeroReferenciaCliente.Trim().Equals(String.Empty))
@@ -815,9 +817,12 @@ namespace Cotizador.Controllers
                     {
                         guiaRemision.observaciones = guiaRemision.observaciones + " / ";
                     }
+                    
                     guiaRemision.observaciones = guiaRemision.observaciones + pedido.observacionesGuiaRemision;
-                }
+                }*/
                 
+
+                guiaRemision.observaciones = pedido.observacionesGuiaRemision;                
                     
 
                 CiudadBL ciudadBL = new CiudadBL();
@@ -882,25 +887,25 @@ namespace Cotizador.Controllers
 
                 if (guiaRemision.notaIngresoAExtornar.motivoTraslado == NotaIngreso.motivosTraslado.Compra)
                 {
-                    guiaRemision.pedido.tipo = Pedido.tipos.Compra;
+                    guiaRemision.pedido.clasePedido = Pedido.ClasesPedido.Compra;
                     guiaRemision.pedido.tipoPedidoCompra = Pedido.tiposPedidoCompra.Compra;
                     guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.DevolucionCompra;
                 }
                 else if (guiaRemision.notaIngresoAExtornar.motivoTraslado == NotaIngreso.motivosTraslado.ComodatoRecibido)
                 {
-                    guiaRemision.pedido.tipo = Pedido.tipos.Compra;
+                    guiaRemision.pedido.clasePedido = Pedido.ClasesPedido.Compra;
                     guiaRemision.pedido.tipoPedido = Pedido.tiposPedido.ComodatoEntregado;
                     guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.DevolucionComodatoRecibido;
                 }
                 else if (guiaRemision.notaIngresoAExtornar.motivoTraslado == NotaIngreso.motivosTraslado.TransferenciaGratuitaRecibida)
                 {
-                    guiaRemision.pedido.tipo = Pedido.tipos.Compra;
+                    guiaRemision.pedido.clasePedido = Pedido.ClasesPedido.Compra;
                     guiaRemision.pedido.tipoPedido = Pedido.tiposPedido.TransferenciaGratuitaEntregada;
                     guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.DevolucionCompra;
                 }
                 else if (guiaRemision.notaIngresoAExtornar.motivoTraslado == NotaIngreso.motivosTraslado.PrestamoRecibido)
                 {
-                    guiaRemision.pedido.tipo = Pedido.tipos.Almacen;
+                    guiaRemision.pedido.clasePedido = Pedido.ClasesPedido.Almacen;
                     guiaRemision.pedido.tipoPedidoAlmacen = Pedido.tiposPedidoAlmacen.PrestamoRecibido;
                     guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.DevolucionPrestamoRecibido;
                 }

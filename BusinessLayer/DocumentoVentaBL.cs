@@ -99,7 +99,9 @@ namespace BusinessLayer
         {
             using (var dal = new DocumentoVentaDAL())
             {
-                return dal.SelectDocumentoVenta(documentoVenta);
+                documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
+                documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
+                return documentoVenta;
             }
         }
 
@@ -278,7 +280,7 @@ namespace BusinessLayer
                 try
                 {
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
-                    //Se recupera el tipo de pago registrado
+                    //Se recupera el clasePedido de pago registrado
                     documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
 
                     documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
@@ -337,10 +339,9 @@ namespace BusinessLayer
                                     "<p>ID Documento Venta: " + documentoVentaValidacion.idDocumentoVenta.ToString() + "</p>";
 
                                 MailService mailService = new MailService();
-                                mailService.enviar(new List<string>(){Constantes.MAIL_ADMINISTRADOR }, "SE GENERÓ FACTURA CONSOLIDADA "+ documentoVentaValidacion.cliente.razonSocialSunat,
+                                mailService.enviar(new List<string>(){ Constantes.MAIL_ADMINISTRADOR, Constantes.MAIL_SOPORTE_TI }, "SE GENERÓ FACTURA CONSOLIDADA "+ documentoVentaValidacion.cliente.razonSocialSunat,
                                     bodyMail, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, documentoVenta.usuario);
                             }
-
 
                             /*Se Identifica */
                             if (Int32.Parse(documentoVenta.cPE_CABECERA_BE.FRM_PAG) == (int)DocumentoVenta.FormaPago.Letra)
@@ -354,7 +355,7 @@ namespace BusinessLayer
                                     "<p>RUC: " + cPE_CABECERA_BE.NRO_DOC_RCT + "</p>";
 
                                 MailService mailService = new MailService();
-                                mailService.enviar(new List<string>() { Constantes.MAIL_ADMINISTRADOR,
+                                mailService.enviar(new List<string>() { Constantes.MAIL_ADMINISTRADOR, Constantes.MAIL_SOPORTE_TI,
                                 Constantes.MAIL_COBRANZAS
                                 }, "SE GENERÓ FACTURA " + documentoVenta.cPE_CABECERA_BE.SERIE+"-"+ documentoVenta.cPE_CABECERA_BE.CORRELATIVO+" - FORMA DE PAGO LETRA",
                                 bodyMail, Constantes.MAIL_COMUNICACION_FACTURAS,

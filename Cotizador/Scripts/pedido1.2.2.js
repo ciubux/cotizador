@@ -733,22 +733,54 @@ jQuery(function ($) {
 
     $('#pedido_direccionEntrega').change(function () {
         toggleControlesDireccionEntrega();
-        var idDireccionEntrega = $('#pedido_direccionEntrega').val();
-        $.ajax({
-            url: "/Pedido/ChangeDireccionEntrega",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idDireccionEntrega: idDireccionEntrega
-            },
-            success: function (direccionEntrega) {
-                
-                $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);    
-                $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
-                $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
-                location.reload()
-            }
-        })
+
+       
+        if ($("#pedido_numeroPedido").val() != "") {
+            $.alert({
+                title: 'Advertencia',
+                type: 'orange',
+                content: 'Asegurese de modificar también las observaciones de guía y factura de ser necesario.',
+                buttons: {
+                    OK: function () {
+                        var idDireccionEntrega = $('#pedido_direccionEntrega').val();
+                        $.ajax({
+                            url: "/Pedido/ChangeDireccionEntrega",
+                            type: 'POST',
+                            dataType: 'JSON',
+                            data: {
+                                idDireccionEntrega: idDireccionEntrega
+                            },
+                            success: function (direccionEntrega) {
+
+                                $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);
+                                $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
+                                $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+            });
+        }
+
+        else {
+            var idDireccionEntrega = $('#pedido_direccionEntrega').val();
+            $.ajax({
+                url: "/Pedido/ChangeDireccionEntrega",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idDireccionEntrega: idDireccionEntrega
+                },
+                success: function (direccionEntrega) {
+
+                    $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);
+                    $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
+                    $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
+                    location.reload()
+                }
+            })
+        }
     });
 
 
@@ -1722,7 +1754,9 @@ jQuery(function ($) {
         var fecha = $("#fechaPrecios").val();
         var familia = $("#familiaBusquedaPrecios").val();
         var proveedor = $("#proveedorBusquedaPrecios").val();
-
+        $('body').loadingModal({
+            text: 'Obteniedo Productos y Precios...'
+        });
 
         $.ajax({
             url: "/Pedido/obtenerProductosAPartirdePreciosRegistrados",
@@ -1735,12 +1769,23 @@ jQuery(function ($) {
             },
             type: 'POST',
             error: function () {
-
+                $('body').loadingModal('hide')
                 alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
                 //window.location = '/Pedido/Cotizador';
             },
             success: function () {
-                window.location = '/Pedido/Pedir';
+                $('body').loadingModal('hide')
+                $.alert({
+                    title: '¡Atención!',
+                    type: 'orange',
+                    content: "Los productos importados no consideran los precios registrados para un grupo.",
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Pedido/Pedir';
+                        }
+                    }
+                });
+                
             }
         });
 
@@ -2203,7 +2248,7 @@ jQuery(function ($) {
                 alert(detalle);
             },
             success: function (archivoAdjunto) {
-                var sampleArr = base64ToArrayBuffer(archivo.adjunto);
+                var sampleArr = base64ToArrayBuffer(archivoAdjunto.adjunto);
                 saveByteArray(nombreArchivo, sampleArr);
             }
         });
@@ -2547,6 +2592,28 @@ jQuery(function ($) {
               //  var usuario = resultado.usuario;
                 
                 $("#verIdPedido").val(pedido.idPedido);
+
+                $('#pedido_numeroGrupo')
+                    .find('option')
+                    .remove()
+                    .end()
+                    ;
+
+                $('#pedido_numeroGrupo').append($('<option>', {
+                    value: 0,
+                    text: "Seleccione Número Grupo"
+                }));
+
+                for (var m = 0; m < pedido.pedidoGrupoList.length; m++) {
+                    $('#pedido_numeroGrupo').append($('<option>', {
+                        value: pedido.pedidoGrupoList[m].numero,
+                        text: pedido.pedidoGrupoList[m].numeroToString + " Solicitado: " + pedido.pedidoGrupoList[m].fechaSolicitudToString 
+                    }));
+                }            
+
+                $('#pedido_numeroGrupo').val(pedido.numeroGrupoPedido);
+
+
 
                 $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
                 $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
@@ -3148,6 +3215,8 @@ jQuery(function ($) {
         var observaciones = $("#pedido_observaciones").val();
         var observacionesGuiaRemision = $("#pedido_observacionesGuiaRemision").val();
         var observacionesFactura = $("#pedido_observacionesFactura").val();
+
+        var pedidoNumeroGrupo = $("#pedido_numeroGrupo").val();
         
 
 
@@ -3164,7 +3233,8 @@ jQuery(function ($) {
                 fechaEntregaExtendida: fechaEntregaExtendida,
                 observaciones: observaciones,
                 observacionesGuiaRemision: observacionesGuiaRemision,
-                observacionesFactura: observacionesFactura
+                observacionesFactura: observacionesFactura,
+                pedidoNumeroGrupo: pedidoNumeroGrupo
             },
             dataType: 'JSON',
             error: function (detalle) {

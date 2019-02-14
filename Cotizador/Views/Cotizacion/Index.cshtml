@@ -126,6 +126,19 @@
                             Todas las sedes
                         </label>
                     }
+
+                    <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                        @if (cotizacion.buscarSoloCotizacionesGrupales)
+                        {
+                            <input checked type="checkbox" name="buscarSoloCotizacionesGrupales" id="buscarSoloCotizacionesGrupales" value="1">
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="buscarSoloCotizacionesGrupales" id="buscarSoloCotizacionesGrupales" value="1">
+                        }
+                        Solo Grupales
+                    </label>
+                   
                 </div>
             </div>
         </div>
@@ -185,8 +198,10 @@
                     <th data-name="codigo" data-visible="true">N°</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
                     <th data-name="fecha" data-sortable="true">Fecha Última Edición</th>
+                    <th data-name="esGrupal" data-sortable="true">Creado Para</th>
                     <th data-name="razonSocial" data-sortable="true">Razón Social</th>
-                    <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
+                    <!--<th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>-->
+                    <th data-name="grupo" data-sortable="false" data-breakpoints="xs">Grupo</th>
                     <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Ciudad</th>
                     <th data-name="subtotal" data-visible="false" data-sortable="true" data-breakpoints="xs">Sub Total</th>
                     <th data-name="igv" data-visible="false" data-sortable="true" data-breakpoints="xs">IGV</th>
@@ -242,6 +257,7 @@
                                 <label for="verNumero" class="control-label col-xs-4">Número:</label>
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verNumero"></p>
+                                    <p class="form-control-static" style="color: darkred" id="esTransitoria">Esta Cotización es Transitoria</p>
                                 </div>
                             </div>
                         </div>
@@ -257,9 +273,10 @@
                         <!--CLIENTE-->
                         <div class="col-sm-6 col-lg-3">
                             <div class="form-group">
-                                <label for="verCliente" class="control-label col-xs-4">Cliente:</label>
+                                <label for="verClienteGrupo" class="control-label col-xs-4" id="labelCliente">Cliente:</label>
+                                <label for="verClienteGrupo" class="control-label col-xs-4" id="labelGrupo">Grupo:</label>
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verCliente"></p>
+                                    <p class="form-control-static" id="verClienteGrupo"></p>
                                 </div>
                             </div>
                         </div>
@@ -374,22 +391,33 @@
                                 }
                                 else
                                 {
-                                   <th data-name="costo" data-visible="false" data-breakpoints="xs" style="width:60px">Costo</th>
+                                    <th data-name="costo" data-visible="false" data-breakpoints="xs" style="width:60px">Costo</th>
                                 }
-                                                                @if (cotizacion.usuario.visualizaMargen)
+                                @if (cotizacion.usuario.visualizaMargen)
                                 {
                                     <th data-name="margen" data-sortable="false" data-breakpoints="xs" style="width:60px">Mg %</th>
                                 }
                                 else
                                 {
-                                   <th data-name="margen" data-visible="false" data-breakpoints="xs" style="width:60px">Mg %</th>
+                                    <th data-name="margen" data-visible="false" data-breakpoints="xs" style="width:60px">Mg %</th>
                                 }
                                 <th data-name="flete" data-sortable="false" data-breakpoints="xs">Flete</th>
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs">Precio Unit.</th>
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs">Cant.</th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs">Sub Total</th>
-                                <th class="tdprecioUnitarioAnterior" data-name="precioUnitarioAnterior" data-sortable="false" data-visible="true" data-breakpoints="xs">Precio Unit Ant.</th>
                                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
+                                <th class="tdprecioUnitarioAnterior" data-name="precioUnitarioAnterior" data-sortable="false" data-visible="true" data-breakpoints="xs" style="color: #B9371B">Precio Neto Ant.</th>
+                                <th class="tdvarPrecioNeto" data-name="varPrecioNeto" data-sortable="false" data-visible="true" data-breakpoints="xs" style="color: #B9371B">Var% precio neto</th>
+                                <th class="tdvarPrecioNeto" data-name="varPrecioLista" data-sortable="false" data-visible="true" data-breakpoints="xs" style="color: #B9371B">Var% precio lista</th>
+
+                                @if (cotizacion.usuario.visualizaCostos)
+                                {
+                                    <th class="tdvarCosto" data-name="precioUnitarioAnterior" data-sortable="false" data-visible="true" data-breakpoints="xs" style="color: #B9371B">Var% costo</th>
+                                }
+                                else
+                                {
+                                    <th class="tdvarCosto" data-name="precioUnitarioAnterior" data-sortable="false" data-visible="false" data-breakpoints="xs" style="color: #B9371B">Var% costo</th>
+                                }
                                 <th data-name="opciones" data-sortable="false" data-visible="true" data-breakpoints="xs"></th>
                             </tr>
                         </thead>
@@ -399,7 +427,7 @@
                     <div class="row">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
-                                <label for="condicionesPago" class="control-label col-xs-2">Condiciones de Pago:</label>
+                                <label for="condicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verCondicionesPago">
                                     </p>
@@ -472,14 +500,21 @@
                     {
                         <button type="button" id="btnEditarCotizacion" class="btn btn-primary">Editar</button>
                     }
-                    @if (cotizacion.usuario.apruebaCotizaciones)
+                    @if (cotizacion.usuario.creaCotizacionesGrupales || cotizacion.usuario.apruebaCotizacionesGrupales)
+                    {
+                        <button type="button" id="btnEditarCotizacionGrupal" class="btn btn-primary">Editar</button>
+                    }
+                    @if (cotizacion.usuario.apruebaCotizaciones || cotizacion.usuario.apruebaCotizacionesGrupales)
                     {
                         <button type="button" id="btnAprobarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
                     }
-                    @if (cotizacion.usuario.apruebaCotizaciones)
+                    @if (cotizacion.usuario.apruebaCotizaciones || cotizacion.usuario.apruebaCotizacionesGrupales)
                     {
                         <button type="button" id="btnDenegarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
-                    }
+                    }              
+
+
+
                     @if (cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
                     {
                         <button type="button" id="btnAceptarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Cliente Aceptó</button>

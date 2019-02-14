@@ -58,6 +58,10 @@ namespace Cotizador
                      "~/Scripts/cliente1.2.4.js"
                      ));
 
+            bundles.Add(new ScriptBundle("~/bundles/grupoCliente").Include(
+                     "~/Scripts/grupoCliente1.2.4.js"
+                     ));
+
             bundles.Add(new ScriptBundle("~/bundles/producto").Include(
                      "~/Scripts/producto1.0.0.js"
                      ));

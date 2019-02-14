@@ -1,7 +1,7 @@
 ﻿@{
                 /**/
 
-                ViewBag.Title = "Búsqueda Pedidos Venta";
+                ViewBag.Title = "Búsqueda Pedidos Pendientes Aprobación";
                 Model.Pedido pedido = ViewBag.pedido;
                 Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
                 List<Model.Pedido> pedidoList = ViewBag.pedidoList;
@@ -266,17 +266,7 @@
 
         <div class="row" style="margin-top: 10px">
 
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    <label for="estado" class="control-label col-xs-4">Estado Atención:</label>
-                    <div class="col-xs-8">
-                        @Html.DropDownList("estado",
-                                                                             EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
-                                                                             new { @class = "form-control" }
-                                                                             )
-                    </div>
-                </div>
-            </div>
+
 
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">

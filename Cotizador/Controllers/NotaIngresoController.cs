@@ -264,15 +264,15 @@ namespace Cotizador.Controllers
             try
             {
                 Pedido pedido = null;
-                if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Venta)
+                if ((Pedido.ClasesPedido)Char.Parse(Request.Params["tipo"]) == Pedido.ClasesPedido.Venta)
                 {
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
                 }
-                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Compra)
+                else if ((Pedido.ClasesPedido)Char.Parse(Request.Params["tipo"]) == Pedido.ClasesPedido.Compra)
                 {
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
                 }
-                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Almacen)
+                else if ((Pedido.ClasesPedido)Char.Parse(Request.Params["tipo"]) == Pedido.ClasesPedido.Almacen)
                 {
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ALMACEN_VER];
                 }
@@ -288,15 +288,15 @@ namespace Cotizador.Controllers
 
 
 
-                if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Venta)
+                if ((Pedido.ClasesPedido)Char.Parse(Request.Params["tipo"]) == Pedido.ClasesPedido.Venta)
                 {
                     notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)(char)pedido.tipoPedido;
                 }
-                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Compra)
+                else if ((Pedido.ClasesPedido)Char.Parse(Request.Params["tipo"]) == Pedido.ClasesPedido.Compra)
                 {
                     notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)(char)pedido.tipoPedidoCompra;
                 }
-                else if ((Pedido.tipos)Char.Parse(Request.Params["tipo"]) == Pedido.tipos.Almacen)
+                else if ((Pedido.ClasesPedido)Char.Parse(Request.Params["tipo"]) == Pedido.ClasesPedido.Almacen)
                 {
                     notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)(char)pedido.tipoPedidoAlmacen;
                 }
@@ -396,25 +396,25 @@ namespace Cotizador.Controllers
 
                 if (notaIngreso.guiaRemisionAExtornar.motivoTraslado == GuiaRemision.motivosTraslado.Venta)
                 {
-                    notaIngreso.pedido.tipo = Pedido.tipos.Venta;
+                    notaIngreso.pedido.clasePedido = Pedido.ClasesPedido.Venta;
                     notaIngreso.pedido.tipoPedido = Pedido.tiposPedido.Venta;
                     notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.DevolucionVenta;
                 }
                 else if (notaIngreso.guiaRemisionAExtornar.motivoTraslado == GuiaRemision.motivosTraslado.ComodatoEntregado)
                 {
-                    notaIngreso.pedido.tipo = Pedido.tipos.Venta;
+                    notaIngreso.pedido.clasePedido = Pedido.ClasesPedido.Venta;
                     notaIngreso.pedido.tipoPedido = Pedido.tiposPedido.ComodatoEntregado;
                     notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.DevolucionComodatoEntregado;
                 }
                 else if (notaIngreso.guiaRemisionAExtornar.motivoTraslado == GuiaRemision.motivosTraslado.TransferenciaGratuitaEntregada)
                 {
-                    notaIngreso.pedido.tipo = Pedido.tipos.Venta;
+                    notaIngreso.pedido.clasePedido = Pedido.ClasesPedido.Venta;
                     notaIngreso.pedido.tipoPedido = Pedido.tiposPedido.TransferenciaGratuitaEntregada;
                     notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.DevolucionTransferenciaGratuitaEntregada;
                 }
                 else if (notaIngreso.guiaRemisionAExtornar.motivoTraslado == GuiaRemision.motivosTraslado.PrestamoEntregado)
                 {
-                    notaIngreso.pedido.tipo = Pedido.tipos.Almacen;
+                    notaIngreso.pedido.clasePedido = Pedido.ClasesPedido.Almacen;
                     notaIngreso.pedido.tipoPedidoAlmacen = Pedido.tiposPedidoAlmacen.PrestamoEntregado;
                     notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.DevolucionPrestamoEntregado;
                 }
@@ -477,7 +477,7 @@ namespace Cotizador.Controllers
 
 
                 
-                notaIngreso.pedido.tipo = Pedido.tipos.Almacen;
+                notaIngreso.pedido.clasePedido = Pedido.ClasesPedido.Almacen;
                 notaIngreso.pedido.tipoPedidoAlmacen = Pedido.tiposPedidoAlmacen.TrasladoInterno;
                 notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.TrasladoInterno;
                 

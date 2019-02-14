@@ -172,7 +172,15 @@ jQuery(function ($) {
     }
 
 
-    
+    $("#btnLimpiarBusqueda").click(function () {
+        $.ajax({
+            url: "/Cliente/CleanBusqueda",
+            type: 'POST',
+            success: function () {
+                location.reload();
+            }
+        });
+    });
 
     function ConfirmDialogReload(message) {
         $('<div></div>').appendTo('body')
@@ -428,26 +436,20 @@ jQuery(function ($) {
         
             $.each(e.originalEvent.clipboardData.items, function () {
                 this.getAsString(function (str) {
-                   // alert(str);
+                    //alert(str);
                     var lineas = str.split("\t");           
-
+                        
                     if (lineas.length <= 1)
                         return false;
-                    if (lineas[1] == $("#cliente_ruc").val()) {
-                        $("#ncRUC").val(lineas[1]);
+                    
+              //      if (lineas[1] == $("#cliente_ruc").val()) {
+                  //      $("#ncRUC").val(lineas[1]);
 
-                        $("#cliente_razonSocialSunat").val(lineas[0]);
+                 //       $("#cliente_razonSocialSunat").val(lineas[0]);
                         //$("#ncRUC").val(lineas[1]);
-                        $("#cliente_nombreComercialSunat").val(lineas[2]);
-                        $("#cliente_direccionDomicilioLegalSunat").val(lineas[3]);
-                        $("#cliente_estadoContribuyente").val(lineas[5]);
-                        $("#cliente_condicionContribuyente").val(lineas[6]);
+                    var direccionDomicilioLegalSunat = lineas[0]+ " " + lineas[1] + " - " + lineas[2] + " - " + lineas[3];
 
 
-                        changeInputString("razonSocialSunat", $("#cliente_razonSocialSunat").val())
-                        changeInputString("nombreComercialSunat", $("#cliente_nombreComercialSunat").val())
-
-                        var direccionDomicilioLegalSunat = $("#cliente_direccionDomicilioLegalSunat").val();
 
                         $('body').loadingModal({
                             text: 'Recuperando Ubicación Geográfica...'
@@ -474,10 +476,10 @@ jQuery(function ($) {
 
                         changeInputString("estadoContribuyente", $("#cliente_estadoContribuyente").val())
                         changeInputString("condicionContribuyente", $("#cliente_condicionContribuyente").val())
-                    }
+                 /*   }
                     else {
                         alert("El RUC que acaba de pegar no coincide con el RUC del cliente.");
-                    }
+                    }*/
                 });
             });
 
@@ -594,7 +596,7 @@ jQuery(function ($) {
                     type: 'orange',
                     content: 'No existe Nombre Cliente, debe ingresar el Nombre del Cliente"',
                     buttons: {
-                        OK: function () { $('#cliente_razonSocialSunat').focus(); }
+                        OK: function () { $('#cliente_nombreComercial').focus(); }
                     }
                 });
                 return false;
@@ -609,7 +611,7 @@ jQuery(function ($) {
                     type: 'orange',
                     content: 'Debe indicar el plazo de crédito Solicitado',
                     buttons: {
-                        OK: function () { $('#cliente_razonSocialSunat').focus(); }
+                        OK: function () { $('#plazoCreditoSolicitado').focus(); }
                     }
                 });
                 return false;

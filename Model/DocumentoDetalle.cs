@@ -73,7 +73,7 @@ namespace Model
         public Decimal precioNeto
         {
             get { if (esPrecioAlternativo)
-                    return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, _precioNeto / producto.equivalencia));
+                    return Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, _precioNeto / producto.equivalencia));
                 else
                     return _precioNeto;
             }
@@ -100,6 +100,23 @@ namespace Model
             
         }
 
+
+        public Decimal precioListaAnterior
+        {
+            get
+            {
+                Decimal precioListaTmp = 0;
+                if (esPrecioAlternativo)
+                    precioListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioListaAnterior / producto.equivalencia));
+                else
+                    precioListaTmp = producto.precioListaAnterior;
+
+                return precioListaTmp;
+
+            }
+
+        }
+
         //Se obtienes desde el producto
         public Decimal costoLista
         {
@@ -122,13 +139,13 @@ namespace Model
         private Decimal _flete;
         public Decimal flete
         {
-            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, _flete)); }
+            get { return Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, _flete)); }
             set { this._flete = value; }
         }
 
         public Decimal precioUnitario
         {
-            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, flete + precioNeto)); } 
+            get { return Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, flete + precioNeto)); } 
         }
         
         public bool validar { get; set; }

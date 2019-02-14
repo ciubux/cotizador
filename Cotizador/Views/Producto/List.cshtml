@@ -151,20 +151,26 @@
                             <th data-name="precio" data-visible="true" data-sortable="true">Precio Lima</th>
                             <th data-name="precioProvincia" data-visible="true" data-sortable="true">Precio Provincias</th>
 
+
                             @if (producto.usuario.visualizaCostos)
-                            {
-                                <th data-name="costo" data-visible="true" data-sortable="true">Costo</th>
-                            }
-                            else
-                            {
-                                <th data-name="costo" data-visible="false" data-sortable="true">Costo</th>
-                            }
+    {
+                        <th data-name="costo" data-visible="true" data-sortable="true">Costo</th>
+}
+else
+{
+                        <th data-name="costo" data-visible="false" data-sortable="true">Costo</th>
+}
+
+                            <th data-name="estado" data-visible="true" data-sortable="true">Estado</th>
+                            <th data-name="FechaModificacion" data-visible="true" data-sortable="true">Fecha Ult. Modificación</th>
+
                             <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
 </form>
+
 </div>
 
 <div class="modal fade" id="modalVerProducto" tabindex="-1">

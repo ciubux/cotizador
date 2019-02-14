@@ -76,13 +76,13 @@
                     <div class="col-xs-6">
                         <select class="form-control input-sm" id="idCliente" name="idCliente" required>
                             @if (ViewBag.existeCliente == 1)
-                        {
-                            <option selected value="@pedido.cliente.idCliente ">@pedido.cliente</option>
-                    }
-                    else
-                    {
-                        <option value=""></option>
-                }
+                            {
+                                <option selected value="@pedido.cliente.idCliente ">@pedido.cliente</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
                         </select>
                     </div>
 

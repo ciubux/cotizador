@@ -224,7 +224,6 @@
                             <div class="input-group-addon">
                                 <span class="input-group-text" id="basic-addon1">Nombre:</span>
                             </div>
-
                             @Html.TextBoxFor(p => pedido.direccionEntrega.nombre, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
                         </div>
                         <div class="input-group col-xs-4">
@@ -232,7 +231,9 @@
                                 <span class="input-group-text" id="basic-addon1">Código Cliente:</span>
                             </div>
                             @Html.TextBoxFor(p => pedido.direccionEntrega.codigoCliente, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+
                         </div>
+                        <span style="margin-left: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*El nombre y código cliente aparecerá en las observaciones de la guía y factura.</span>
                     </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
@@ -731,7 +732,7 @@
         <div class="row mostrarCondicionesPago">
             <div class="col-sm-6 col-lg-9">
                 <div class="form-group">
-                    <label for="condicionesPago" class="control-label col-xs-2">Condiciones de Pago:</label>
+                    <label for="condicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
                     <div class="col-xs-8">
                         @Html.TextBoxFor(p => pedido.textoCondicionesPago, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
                         @if (pedido.esPagoContado)

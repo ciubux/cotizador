@@ -240,8 +240,10 @@ jQuery(function ($) {
             data: {
                 idCliente: idCliente
             },
+            error: function (detalle){ },
             success: function (cliente)
             {
+                
                 if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_COMPRA)
                     $("#idCiudad").attr("disabled", "disabled");
 

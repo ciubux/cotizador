@@ -115,7 +115,8 @@ namespace Model
         {
             get
             {
-                return this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.DevolucionItem;
+                return this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.DevolucionItem; // || this.tipoNotaCredito == DocumentoVenta.TiposNotaCredito.AnulacionOperacion;
+                 
             }
         }
 

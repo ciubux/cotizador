@@ -29,6 +29,7 @@ namespace Cotizador.Controllers
                 {
                     case Constantes.paginas.BusquedaPedidos: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA]; break;
                     case Constantes.paginas.MantenimientoPedido: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO]; break;
+                    case Constantes.paginas.AprobarPedidos: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO]; break;
                 }
                 return pedido;
             }
@@ -37,6 +38,7 @@ namespace Cotizador.Controllers
                 {
                     case Constantes.paginas.BusquedaPedidos: this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = value; break;
                     case Constantes.paginas.MantenimientoPedido: this.Session[Constantes.VAR_SESSION_PEDIDO] = value; break;
+                    case Constantes.paginas.AprobarPedidos: this.Session[Constantes.VAR_SESSION_PEDIDO] = value; break;
                 }
             }
         }
@@ -46,7 +48,7 @@ namespace Cotizador.Controllers
         private void instanciarPedidoBusqueda()
         {
             
-            Pedido pedidoTmp = new Pedido(Pedido.tipos.Venta);
+            Pedido pedidoTmp = new Pedido(Pedido.ClasesPedido.Venta);
             DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now.AddDays(1);
             pedidoTmp.cotizacion = new Cotizacion();
@@ -82,7 +84,47 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = new List<Pedido>();
         }
 
-      
+
+        private void instanciarPedidoBusquedaAprobacion()
+        {
+
+            Pedido pedidoTmp = new Pedido(Pedido.ClasesPedido.Venta);
+            DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
+            DateTime fechaHasta = DateTime.Now.AddDays(1);
+            pedidoTmp.cotizacion = new Cotizacion();
+            pedidoTmp.solicitante = new Solicitante();
+            pedidoTmp.direccionEntrega = new DireccionEntrega();
+
+            pedidoTmp.fechaCreacionDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
+            pedidoTmp.fechaCreacionHasta = fechaHasta;
+            /*
+            pedidoTmp.fechaSolicitudDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
+            pedidoTmp.fechaSolicitudHasta = fechaHasta;*/
+
+            pedidoTmp.fechaEntregaDesde = null;// new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
+            pedidoTmp.fechaEntregaHasta = null;// DateTime.Now.AddDays(Constantes.DIAS_DESDE_BUSQUEDA);
+
+            pedidoTmp.fechaProgramacionDesde = null;// new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            pedidoTmp.fechaProgramacionHasta = null;// new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
+
+            pedidoTmp.buscarSedesGrupoCliente = false;
+
+            pedidoTmp.ciudad = new Ciudad();
+            pedidoTmp.cliente = new Cliente();
+            pedidoTmp.seguimientoPedido = new SeguimientoPedido();
+            pedidoTmp.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+            pedidoTmp.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
+            pedidoTmp.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Todos;
+
+            pedidoTmp.pedidoDetalleList = new List<PedidoDetalle>();
+            pedidoTmp.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            pedidoTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
+
+            this.Session[Constantes.VAR_SESSION_PEDIDO_APROBACION] = pedidoTmp;
+            this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = new List<Pedido>();
+        }
+
+
         public ActionResult Index(Guid? idPedido = null)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
@@ -180,6 +222,115 @@ namespace Cotizador.Controllers
             ViewBag.idPedido = idPedido;
             return View();
         }
+
+
+
+
+        public ActionResult AprobarPedidos(Guid? idPedido = null)
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.AprobarPedidos;
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.tomaPedidos && !usuario.apruebaPedidos && !usuario.visualizaPedidos)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
+
+            if (this.Session[Constantes.VAR_SESSION_PEDIDO_APROBACION] == null)
+            {
+                instanciarPedidoBusquedaAprobacion();
+            }
+
+            Pedido pedidoSearch = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_APROBACION];
+
+            //Si existe cotizacion se debe verificar si no existe cliente
+            if (this.Session[Constantes.VAR_SESSION_PEDIDO] != null)
+            {
+                Pedido pedidoEdicion = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+                if (pedidoEdicion.ciudad == null || pedidoEdicion.ciudad.idCiudad == null
+                    || pedidoEdicion.ciudad.idCiudad == Guid.Empty)
+                {
+                    this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
+                }
+
+            }
+
+            ViewBag.fechaCreacionDesde = pedidoSearch.fechaCreacionDesde.ToString(Constantes.formatoFecha);
+            ViewBag.fechaCreacionHasta = pedidoSearch.fechaCreacionHasta.ToString(Constantes.formatoFecha);
+
+            if (pedidoSearch.fechaEntregaDesde != null)
+                ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
+            else
+                ViewBag.fechaEntregaDesde = null;
+
+            if (pedidoSearch.fechaEntregaHasta != null)
+                ViewBag.fechaEntregaHasta = pedidoSearch.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
+            else
+                ViewBag.fechaEntregaHasta = null;
+
+
+            if (pedidoSearch.fechaProgramacionDesde != null)
+                ViewBag.fechaProgramacionDesde = pedidoSearch.fechaProgramacionDesde.Value.ToString(Constantes.formatoFecha);
+            else
+                ViewBag.fechaProgramacionDesde = null;
+
+            if (pedidoSearch.fechaProgramacionHasta != null)
+                ViewBag.fechaProgramacionHasta = pedidoSearch.fechaProgramacionHasta.Value.ToString(Constantes.formatoFecha);
+            else
+                ViewBag.fechaProgramacionHasta = null;
+
+
+
+
+            if (this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] == null)
+            {
+                this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = new List<Pedido>();
+            }
+
+
+            int existeCliente = 0;
+            //  if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
+            if (pedidoSearch.cliente.idCliente != Guid.Empty)
+            {
+                existeCliente = 1;
+            }
+
+            GuiaRemision guiaRemision = new GuiaRemision();
+            guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.Venta;
+
+            ViewBag.guiaRemision = guiaRemision;
+
+            ViewBag.pedido = pedidoSearch;
+            DocumentoVenta documentoVenta = new DocumentoVenta();
+            documentoVenta.tipoPago = DocumentoVenta.TipoPago.NoAsignado;
+            documentoVenta.formaPago = DocumentoVenta.FormaPago.NoAsignado;
+            documentoVenta.fechaEmision = DateTime.Now;
+            ViewBag.documentoVenta = documentoVenta;
+            ViewBag.fechaEmision = documentoVenta.fechaEmision.Value.ToString(Constantes.formatoFecha);
+            ViewBag.horaEmision = documentoVenta.fechaEmision.Value.ToString(Constantes.formatoHora);
+            ViewBag.pedidoList = this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA];
+            ViewBag.existeCliente = existeCliente;
+
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaPedidos;
+
+            ViewBag.idPedido = idPedido;
+            return View();
+        }
+
+
+
+
+
+
+
+
 
         public ActionResult CargarPedidos()
         {
@@ -363,7 +514,10 @@ namespace Cotizador.Controllers
             {
                 pedido.horaEntregaAdicionalHasta = cotizacion.cliente.horaFinSegundoTurnoEntregaFormat;
             }
-            
+
+
+            SolicitanteBL solicitanteBL = new SolicitanteBL();
+            pedido.cliente.solicitanteList = solicitanteBL.getSolicitantes(cotizacion.cliente.idCliente);
 
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
             pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(cotizacion.cliente.idCliente);
@@ -387,19 +541,53 @@ namespace Cotizador.Controllers
                 pedidoDetalle.flete = documentoDetalle.flete;
                 pedidoDetalle.observacion = documentoDetalle.observacion;
                 pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
+                
+
                 pedidoDetalle.producto = documentoDetalle.producto;
+
+                if (cotizacion.esTransitoria)
+                {
+                    //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
+                    pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
+                    pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
+                    pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia = cotizacion.fechaFinVigenciaPrecios.HasValue ? cotizacion.fechaFinVigenciaPrecios.Value : cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_COTIZACION_TRANSITORIA);
+                    //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
+                    pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
+                    pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
+                }
+              
                 if (documentoDetalle.esPrecioAlternativo)
                 {
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+
+                    if (documentoDetalle.producto.precioClienteProducto != null &&
+                    documentoDetalle.producto.precioClienteProducto.esUnidadAlternativa)
+                    {
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.producto.equivalencia;
+                        pedidoDetalle.producto.precioClienteProducto.precioNeto = pedidoDetalle.producto.precioClienteProducto.precioNeto / documentoDetalle.producto.equivalencia;
+                    }
+
+
                     /**/
-                    pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.producto.equivalencia;
-                    pedidoDetalle.producto.precioClienteProducto.precioNeto = pedidoDetalle.producto.precioClienteProducto.precioNeto / documentoDetalle.producto.equivalencia;
+                    //      pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.producto.equivalencia;
+                    //      pedidoDetalle.producto.precioClienteProducto.precioNeto = pedidoDetalle.producto.precioClienteProducto.precioNeto / documentoDetalle.producto.equivalencia;
                 }
                 else
+                {
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
+                }
+                
                 //pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
                
+
+
+
+
+
                 pedidoDetalle.unidad = documentoDetalle.unidad;
+                pedidoDetalle.porcentajeDescuento = 100 - (pedidoDetalle.producto.precioClienteProducto.precioNeto * 100 / pedidoDetalle.producto.precioLista);
+
+
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
             }
             pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
@@ -412,7 +600,7 @@ namespace Cotizador.Controllers
 
         private void instanciarPedido()
         {
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = Guid.Empty;
             pedido.numeroPedido = 0;
             pedido.numeroGrupoPedido = null;
@@ -457,7 +645,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Pedido pedidoVer = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = pedidoVer.idPedido;
             //    pedido.fechaModificacion = cotizacionVer.fechaModificacion;
             pedido.seguimientoPedido = new SeguimientoPedido();
@@ -592,6 +780,7 @@ namespace Cotizador.Controllers
             Decimal porcentajeDescuento = 0;
             if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
             {
+                fleteDetalle = producto.precioClienteProducto.flete;
                 //Solo en caso de que el precioNetoEquivalente sea distinto a 0 se calcula el porcentaje de descuento
                 //si no se obtiene precioNetoEquivalente quiere decir que no hay precioRegistrado
                 if (producto.precioLista == 0)
@@ -1128,7 +1317,7 @@ namespace Cotizador.Controllers
             pedido.observaciones = this.Request.Params["observaciones"];
             pedido.observacionesGuiaRemision = this.Request.Params["observacionesGuiaRemision"];
             pedido.observacionesFactura = this.Request.Params["observacionesFactura"];
-
+            pedido.numeroGrupoPedido = Int32.Parse(this.Request.Params["pedidoNumeroGrupo"]);
             if (Logueado.modificaPedidoFechaEntregaExtendida) { 
                 if (this.Request.Params["fechaEntregaExtendida"] == null || this.Request.Params["fechaEntregaExtendida"].Equals(""))
                 {
@@ -1387,7 +1576,7 @@ namespace Cotizador.Controllers
         {
            // Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
@@ -1403,7 +1592,7 @@ namespace Cotizador.Controllers
         {
             Pedido cotizacionSession = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             PedidoBL pedidoBL = new PedidoBL();
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = idPedido;
             //REVISAR
             pedido.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
@@ -1518,7 +1707,7 @@ namespace Cotizador.Controllers
                 pedido.idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
             }
 
-            pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido) Int32.Parse(this.Request.Params["estado"]);
+          //  pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido) Int32.Parse(this.Request.Params["estado"]);
             pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Int32.Parse(this.Request.Params["estadoCrediticio"]);
 
 
@@ -1548,7 +1737,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             PedidoBL pedidoBL = new PedidoBL();
 
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = Guid.Parse(Request["idPedido"].ToString());
             pedido = pedidoBL.GetPedido(pedido,usuario);
             this.Session[Constantes.VAR_SESSION_PEDIDO_VER] = pedido;
@@ -1639,7 +1828,7 @@ namespace Cotizador.Controllers
 
         public void UpdateStockConfirmado()
         {
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
             pedido.stockConfirmado = Int32.Parse(this.Request.Params["stockConfirmado"]) == 1;
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1660,7 +1849,7 @@ namespace Cotizador.Controllers
             else
             {
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.modificaMaestroProductos)
+                if (!usuario.realizaCargaMasivaPedidos)
                 {
                     return RedirectToAction("Login", "Account");
                 }
@@ -1742,11 +1931,11 @@ namespace Cotizador.Controllers
             String direccionEntrega, String sedeMP, String ubigeo, String observaciones, 
             DateTime? fechaEntregaDesde, DateTime? fechaEntregaHasta,
             String inicioPrimerTurnoEntrega, String finPrimerTurnoEntrega, String inicioSegundoTurnoEntrega, String finSegundoTurnoEntrega,
-            String ordenCompra, Pedido.tipos tipoPedido, Pedido.tiposPedido tipoPedidoVenta, Pedido.tiposPedidoAlmacen tipoPedidoAlmacen, String facturaConsolidada,
+            String ordenCompra, Pedido.ClasesPedido tipoPedido, Pedido.tiposPedido tipoPedidoVenta, Pedido.tiposPedidoAlmacen tipoPedidoAlmacen, String facturaConsolidada,
             Int64 numeroGrupo
             )
         {
-            Pedido pedido = new Pedido(Pedido.tipos.Venta);
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.tipoPedido = tipoPedidoVenta;
             pedido.idPedido = Guid.Empty;
             pedido.numeroPedido = 0;
@@ -1786,6 +1975,10 @@ namespace Cotizador.Controllers
             //  pedido.tasaIGV = Constantes.IGV;
             //pedido.flete = 0;
             // pedido.mostrarCodigoProveedor = true;
+
+
+
+            /*
             pedido.observacionesGuiaRemision = String.Empty;
             pedido.numeroReferenciaCliente = ordenCompra;
             if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
@@ -1818,6 +2011,10 @@ namespace Cotizador.Controllers
             {
                 pedido.observacionesFactura = pedido.observaciones;
             }
+            */
+            
+
+
 
             //observaciones + " CENTRO COSTOS: " + centroCostos+", CODIGO CENTRO COSTOS CLIENTE: " +codCentroCostosCliente +", CODIGO CENTRO COSTOS MP: " + codCentroCostosMP;
             
@@ -1876,27 +2073,27 @@ namespace Cotizador.Controllers
                 String facturaConsolidada = UtilesHelper.getValorCelda(sheet, 12, "B");
 
                 String tipoPedidoString = UtilesHelper.getValorCelda(sheet, 3, "E");
-                Pedido.tipos tipoPedido;
+                Pedido.ClasesPedido tipoPedido;
                 Pedido.tiposPedido tipoPedidoVenta = Pedido.tiposPedido.Venta;
                 Pedido.tiposPedidoAlmacen tipoPedidoTrasladoInterno = Pedido.tiposPedidoAlmacen.TrasladoInterno;
                 if (tipoPedidoString.Equals("Venta"))
                 {
-                    tipoPedido = Pedido.tipos.Venta;
+                    tipoPedido = Pedido.ClasesPedido.Venta;
                     tipoPedidoVenta = Pedido.tiposPedido.Venta;
                 }
                 else if (tipoPedidoString.Equals("Transferencia Gratuita"))
                 {
-                    tipoPedido = Pedido.tipos.Venta;
+                    tipoPedido = Pedido.ClasesPedido.Venta;
                     tipoPedidoVenta = Pedido.tiposPedido.TransferenciaGratuitaEntregada;
                 }
                 else
                 {
-                    tipoPedido = Pedido.tipos.Almacen;
+                    tipoPedido = Pedido.ClasesPedido.Almacen;
                     tipoPedidoTrasladoInterno = Pedido.tiposPedidoAlmacen.TrasladoInterno;
                 }
 
                 String sedeSolicitante = String.Empty;
-                if (tipoPedido == Pedido.tipos.Almacen)
+                if (tipoPedido == Pedido.ClasesPedido.Almacen)
                 {
                     sedeSolicitante = UtilesHelper.getValorCelda(sheet, 4, "E");
                 }
@@ -1915,8 +2112,9 @@ namespace Cotizador.Controllers
                 //Se considera la ultimafila más uno porque estamos trabajando con las posiciones físicas.
                 for (row = 16; row <= ultimaFila + 1; row++)
                 {
-                    try {
-                        //Se identifica el tipo de fila
+                    try
+                    {
+                        //Se identifica el clasePedido de fila
                         String tipoCabecera = UtilesHelper.getValorCelda(sheet, row, "C");
                         if (tipoCabecera.Equals("C"))
                         {

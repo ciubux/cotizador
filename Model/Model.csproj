@@ -57,12 +57,14 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Correo.cs" />
+    <Compile Include="GrupoClienteAdjunto.cs" />
     <Compile Include="Origen.cs" />
     <Compile Include="SubDistribuidor.cs" />
     <Compile Include="NotaIngresoValidacion.cs" />
     <Compile Include="NotaIngreso.cs" />
     <Compile Include="ClienteAdjunto.cs" />
     <Compile Include="ArchivoAdjunto.cs" />
+    <Compile Include="PedidoGrupo.cs" />
     <Compile Include="Persona.cs" />
     <Compile Include="Producto.cs" />
     <Compile Include="SeguimientoNotaIngreso.cs" />

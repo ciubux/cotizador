@@ -20,7 +20,7 @@ namespace Model
         private Decimal _precioAnterior;
         public Decimal precioNetoAnterior
         {
-            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, _precioAnterior)); }
+            get { return Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, _precioAnterior)); }
             set
             {
                 _precioAnterior = value;
@@ -46,6 +46,29 @@ namespace Model
 
             }
         }
+
+
+
+        private Decimal _variacionPrecioListaAnterior;
+        public Decimal variacionPrecioListaAnterior
+        {
+
+            get
+            {
+
+
+                if (precioListaAnterior != 0)
+                    _variacionPrecioListaAnterior = (this.precioLista / this.precioListaAnterior - 1) * 100;
+                else
+                    _variacionPrecioListaAnterior = 0;
+
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, _variacionPrecioListaAnterior));
+
+            }
+        }
+
+
+
         public Decimal costoAnterior { get; set; }
 
         //recupera la variacion del costo con respecto al costoAnterior para los calculos de recotizacion
@@ -55,7 +78,7 @@ namespace Model
             get
             {
 
-                if (precioNetoAnterior != 0)
+                if (costoAnterior != 0)
                     _variacionCosto = (this.costoLista / this.costoAnterior - 1) * 100;
                 else
                     _variacionCosto = 0;

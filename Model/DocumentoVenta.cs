@@ -93,11 +93,11 @@ namespace Model
         public TiposDocumentoIdentidad tipoDocumentoIdentidad { get; set; }
         public enum TiposDocumentoIdentidad
         {
-            [Display(Name = "REG.UNICO DE CONTRIBUYENTES (RUC)")]
+            [Display(Name = "RUC")]
             RUC = '6',
-            [Display(Name = "DOC.NACIONAL DE IDENTIDAD (DNI)")]
+            [Display(Name = "DNI")]
             DNI = '1',
-            [Display(Name = "CARNET DE EXTRANJERIA")]
+            [Display(Name = "C.E.")]
             Carnet = '4',
         };
         public String tipoDocumentoIdentidadString

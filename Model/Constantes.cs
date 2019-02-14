@@ -10,7 +10,8 @@ namespace Model
     public static class Constantes
     {
         /*FORMATOS*/
-        public static String formatoDosDecimales = "{0:0.00}";
+        public static String formatoDecimalesPrecioNeto = "{0:0.00}";
+        public static String formatoDosDecimales = "{0:0.00}";        
         public static String formatoUnDecimal = "{0:0.0}";
         public static String formatoCuatroDecimales = "{0:0.0000}";
         public static String formatoSeisDecimales = "{0:0.000000}";
@@ -26,6 +27,7 @@ namespace Model
         public static String UBIGEO_VACIO = "000000";
         public static int DIAS_DESDE_BUSQUEDA = 10;
         public static int ID_VENDEDOR_POR_ASIGNAR = 43;
+        public static int DIAS_MAX_COTIZACION_TRANSITORIA = 10;
 
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
 
@@ -52,12 +54,15 @@ namespace Model
         /*CONSTANTES PARA VARIABLES DE SESION*/
 
         public static String VAR_SESSION_COTIZACION = "cotizacion";
+        public static String VAR_SESSION_COTIZACION_APROBADA = "cotizacionAprobada";
         public static String VAR_SESSION_COTIZACION_BUSQUEDA = "cotizacionBusqueda";
         public static String VAR_SESSION_COTIZACION_LISTA = "cotizacionList";
         public static String VAR_SESSION_COTIZACION_VER = "cotizacionVer";
+        public static String VAR_SESSION_COTIZACION_GRUPAL = "cotizacionGrupal";
 
         public static String VAR_SESSION_PEDIDO = "pedido";
         public static String VAR_SESSION_PEDIDO_BUSQUEDA = "pedidoBusqueda";
+        public static String VAR_SESSION_PEDIDO_APROBACION = "pedidoAprobacion";
         public static String VAR_SESSION_PEDIDO_LISTA = "pedidoList";
         public static String VAR_SESSION_PEDIDO_VER = "pedidoVer";
 
@@ -75,6 +80,12 @@ namespace Model
         public static String VAR_SESSION_CLIENTE_BUSQUEDA = "clienteBusqueda";
         public static String VAR_SESSION_CLIENTE_LISTA = "clienteList";
         public static String VAR_SESSION_CLIENTE_VER = "clienteVer";
+
+
+        public static String VAR_SESSION_GRUPO_CLIENTE = "grupoCliente";
+        public static String VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA = "grupoClienteBusqueda";
+        public static String VAR_SESSION_GRUPO_CLIENTE_LISTA = "grupoClienteList";
+        public static String VAR_SESSION_GRUPO_CLIENTE_VER = "grupoClienteVer";
 
         public static String VAR_SESSION_PRODUCTO = "producto";
         public static String VAR_SESSION_PRODUCTO_BUSQUEDA = "productoBusqueda";
@@ -190,6 +201,7 @@ namespace Model
         public static int MILISEGUNDOS_AUTOGUARDADO = 5000;
         public static int DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION = 180;
         public static int DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO = 365;
+        //public static 
         public static String OBSERVACION = "* Condiciones de pago: al contado.\n" +
                                        "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
                                        "* (para productos no stockeables o primeras compras, consultar plazo).\n";
@@ -294,7 +306,16 @@ namespace Model
             [Display(Name = "BUSQUEDA SUBDISTRIBUIDOR")]
             BusquedaSubDistribuidores = 32,
             [Display(Name = "CREATE/UPDATE SUBDISTRIBUIDOR")]
-            CUSubDistribuidor = 33
+            CUSubDistribuidor = 33,
+            [Display(Name = "APROBAR PEDIDOS")]
+            AprobarPedidos = 34,
+            [Display(Name = "MANTENIMIENTO COTIZACION GRUPAL")]
+            MantenimientoCotizacionGrupal = 35,
+            /*GRUPOS CLIENTE*/
+            [Display(Name = "BUSQUEDA GRUPOS CLIENTE")]
+            BusquedaGrupoClientes = 36,
+            [Display(Name = "MANTENIMIENTO GRUPOS CLIENTE")]
+            MantenimientoGrupoCliente = 37
         };
 
 
@@ -302,6 +323,7 @@ namespace Model
         public static String SERVER_SMPTP = "smtp.office365.com";
         public static int PUERTO_SERVER_SMPTP = 587;
         public static String MAIL_ADMINISTRADOR = "c.cornejo@mpinstitucional.com";
+        public static String MAIL_SOPORTE_TI = "soporte.ti@mpinstitucional.com";
         public static String MAIL_CREDITOS = "creditos@mpinstitucional.com";
         public static String MAIL_COBRANZAS = "cobranzas@mpinstitucional.com";
 

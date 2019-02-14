@@ -10,8 +10,12 @@ namespace BusinessLayer
     public class CotizacionBL
     {
 
-        private void validarCotizacion(Cotizacion cotizacion)
+        private void validarCotizacion(Cotizacion cotizacion, Cotizacion cotizacionAprobada = null)
         {
+
+
+
+
             //Si no se consideran cantidades no se debe grabar el subtotal
             if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
             {
@@ -29,24 +33,43 @@ namespace BusinessLayer
             cotizacion.seguimientoCotizacion.observacion = String.Empty;
             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada;
 
-            if (cotizacion.fechaEsModificada)
+
+            //Si es cotizacion Grupal y no es aprobador se debe ir a pendiente de aprobación
+            if ((cotizacion.cliente.idCliente == null || cotizacion.cliente.idCliente == Guid.Empty))
             {
-                if(!cotizacion.usuario.apruebaCotizaciones)
-                { 
-                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de la cotización.\n";
-                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
-                }
-            }
-            else
-            {
-                //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
-                cotizacion.fecha = DateTime.Now;
+                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Cotización Grupal.\n";
+                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
             }
 
-            if ((cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null) && !cotizacion.usuario.apruebaCotizaciones)
+            ///Se hay un cambio en las fechas y en la vigencia se realiza evaluación
+
+            if (cotizacionAprobada == null ||
+                cotizacionAprobada.fecha != cotizacion.fecha ||
+                cotizacionAprobada.fechaEsModificada != cotizacion.fechaEsModificada ||
+                cotizacionAprobada.fechaInicioVigenciaPrecios != cotizacion.fechaInicioVigenciaPrecios ||
+                cotizacionAprobada.fechaFinVigenciaPrecios != cotizacion.fechaFinVigenciaPrecios)
             {
-                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de inicio y/o fin de vigencia de precios.\n";
-                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+
+
+                if (cotizacion.fechaEsModificada)
+                {
+                    if (!cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de la cotización.\n";
+                        cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                    }
+                }
+                else
+                {
+                    //Si la fecha no es modificada expresamente entonces toma la fecha del sistema
+                    cotizacion.fecha = DateTime.Now;
+                }
+
+                if ((cotizacion.fechaInicioVigenciaPrecios != null || cotizacion.fechaFinVigenciaPrecios != null) && !cotizacion.usuario.apruebaCotizaciones)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se modificó la fecha de inicio y/o fin de vigencia de precios.\n";
+                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                }
             }
 
 
@@ -77,14 +100,15 @@ namespace BusinessLayer
                     //¿Tiene precio registrado para facturación? y eliente es el mismo?
                     if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty && precioClienteProducto.cliente.idCliente == cotizacion.cliente.idCliente)
                     {
+                        DateTime hoy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
                         //Si el precio es igual pero la fecha de fin de vigencia es indefinida y se ha superado los dias de vigencia general.
                         //Se envia a evaluar Descuento
-                        if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
+                        if (precioClienteProducto.fechaFinVigencia == null && hoy > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
                         {
                             evaluarDescuento = 1;
                         }
-                        else if (precioClienteProducto.fechaFinVigencia != null && DateTime.Now > precioClienteProducto.fechaFinVigencia.Value)
+                        else if (precioClienteProducto.fechaFinVigencia != null && hoy > precioClienteProducto.fechaFinVigencia.Value)
                         {
                             evaluarDescuento = 4;
                         }
@@ -165,11 +189,11 @@ namespace BusinessLayer
             }
         }
 
-        public void UpdateCotizacion(Cotizacion cotizacion)
+        public void UpdateCotizacion(Cotizacion cotizacion, Cotizacion cotizacionAprobada)
         {
             using (var dal = new CotizacionDAL())
             {
-                validarCotizacion(cotizacion);
+                validarCotizacion(cotizacion, cotizacionAprobada);
                 dal.UpdateCotizacion(cotizacion);
             }
         }
@@ -196,27 +220,40 @@ namespace BusinessLayer
         {
 
             ProductoBL productoBL = new ProductoBL();
-            List<DocumentoDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistrados(cotizacion.cliente.idCliente, cotizacion.fechaPrecios, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, familia, proveedor);
+            List<CotizacionDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistrados(cotizacion.cliente.idCliente, cotizacion.fechaPrecios, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, familia, proveedor);
 
-            cotizacion.cotizacionDetalleList = new List<CotizacionDetalle>();
-            //Detalle de la cotizacion
-            foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
+            foreach (CotizacionDetalle cotizacionDetalle in documentoDetalleList)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
-                cotizacionDetalle.producto = new Producto();
+                cotizacionDetalle.visualizaCostos = usuario.visualizaCostos;
+                cotizacionDetalle.visualizaMargen = usuario.visualizaMargen;
                 cotizacionDetalle.cantidad = 1;
-                cotizacionDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
-                cotizacionDetalle.unidad = documentoDetalle.unidad;
-                cotizacionDetalle.producto = documentoDetalle.producto;
-                if(cotizacionDetalle.esPrecioAlternativo)
-                    cotizacionDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+                if (cotizacionDetalle.esPrecioAlternativo)
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia;
                 else
-                    cotizacionDetalle.precioNeto = documentoDetalle.precioNeto;
-                cotizacionDetalle.flete = documentoDetalle.flete;
-                cotizacionDetalle.observacion = documentoDetalle.observacion;
-                cotizacionDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
-                cotizacion.cotizacionDetalleList.Add(cotizacionDetalle);
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
             }
+            cotizacion.cotizacionDetalleList = documentoDetalleList;
+            return cotizacion;
+        }
+
+
+        public Cotizacion obtenerProductosAPartirdePreciosRegistradosParaGrupo(Cotizacion cotizacion, String familia, String proveedor, Usuario usuario)
+        {
+
+            ProductoBL productoBL = new ProductoBL();
+            List<CotizacionDetalle> documentoDetalleList = null;// productoBL.obtenerProductosAPartirdePreciosRegistradosParaGrupo(cotizacion.grupo.idGrupoCliente, cotizacion.fechaPrecios, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, familia, proveedor);
+
+            foreach (CotizacionDetalle cotizacionDetalle in documentoDetalleList)
+            {
+                cotizacionDetalle.visualizaCostos = usuario.visualizaCostos;
+                cotizacionDetalle.visualizaMargen = usuario.visualizaMargen;
+                cotizacionDetalle.cantidad = 1;
+                if (cotizacionDetalle.esPrecioAlternativo)
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia;
+                else
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
+            }
+            cotizacion.cotizacionDetalleList = documentoDetalleList;
             return cotizacion;
         }
 
@@ -262,65 +299,67 @@ namespace BusinessLayer
                         cotizacionDetalle.producto.image = storeStream.GetBuffer();
                     }
 
-                   
 
-
-
-
-            /*        //Si es RECOTIZACIÓN se calcula el nuevo precioNetoEquivalente a partir del precioSinIGV del producto
-                    if (cotizacion.esRecotizacion)
+                    if (cotizacionDetalle.porcentajeDescuento == 0 && cotizacionDetalle.precioNeto != cotizacionDetalle.producto.precioSinIgv)
                     {
-                        //Si es provincia se considera el precioProvincia como precioSinIgv
-                        if (cotizacion.ciudad.esProvincia)
-                        {
-                            cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
-                        }
-
-                        Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
-                        Decimal costo = cotizacionDetalle.producto.costoSinIgv;
-
-                        //Se agrega el igv al costo y al precio neto que se obtuvo directamente del producto
-                        if (cotizacion.incluidoIGV)
-                        {
-                            precioNeto = precioNeto + (precioNeto * Constantes.IGV);
-                            costo = costo + (costo * Constantes.IGV);
-                            cotizacionDetalle.producto.costoLista = costo;
-                            //Tambien se agrega el IGV al costo Anterior, dado que fue almacenado sin IGV
-                            cotizacionDetalle.costoAnterior = cotizacionDetalle.costoAnterior + (cotizacionDetalle.costoAnterior * Constantes.IGV);
-                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-                        }
-                        else
-                        {
-                            cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costo));
-                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-                        }
-
-
-                        //Se calcula el descuento para el nuevo precioNetoEquivalente
-                        if (cotizacionDetalle.porcentajeDescuento != 0)
-                        {
-                            precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (precioNeto * (100 - cotizacionDetalle.porcentajeDescuento)/100)));
-                        }
-
-                        
-                        cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-
-
-
-                        
-
-                        if (cotizacionDetalle.esPrecioAlternativo)
-                        {
-                            cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior / cotizacionDetalle.producto.equivalencia));
-                        }
-
-
-                      
+                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                     }
-                    else
-                    {*/
-                        //Si NO es recotizacion
-                        if (cotizacion.incluidoIGV)
+
+
+                    /*        //Si es RECOTIZACIÓN se calcula el nuevo precioNetoEquivalente a partir del precioSinIGV del producto
+                            if (cotizacion.esRecotizacion)
+                            {
+                                //Si es provincia se considera el precioProvincia como precioSinIgv
+                                if (cotizacion.ciudad.esProvincia)
+                                {
+                                    cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
+                                }
+
+                                Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
+                                Decimal costo = cotizacionDetalle.producto.costoSinIgv;
+
+                                //Se agrega el igv al costo y al precio neto que se obtuvo directamente del producto
+                                if (cotizacion.incluidoIGV)
+                                {
+                                    precioNeto = precioNeto + (precioNeto * Constantes.IGV);
+                                    costo = costo + (costo * Constantes.IGV);
+                                    cotizacionDetalle.producto.costoLista = costo;
+                                    //Tambien se agrega el IGV al costo Anterior, dado que fue almacenado sin IGV
+                                    cotizacionDetalle.costoAnterior = cotizacionDetalle.costoAnterior + (cotizacionDetalle.costoAnterior * Constantes.IGV);
+                                    cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
+                                }
+                                else
+                                {
+                                    cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costo));
+                                    cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
+                                }
+
+
+                                //Se calcula el descuento para el nuevo precioNetoEquivalente
+                                if (cotizacionDetalle.porcentajeDescuento != 0)
+                                {
+                                    precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (precioNeto * (100 - cotizacionDetalle.porcentajeDescuento)/100)));
+                                }
+
+
+                                cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
+
+
+
+
+
+                                if (cotizacionDetalle.esPrecioAlternativo)
+                                {
+                                    cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior / cotizacionDetalle.producto.equivalencia));
+                                }
+
+
+
+                            }
+                            else
+                            {*/
+                    //Si NO es recotizacion
+                    if (cotizacion.incluidoIGV)
                         {
                             //Se agrega el IGV al precioLista
                             decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;

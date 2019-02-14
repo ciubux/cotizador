@@ -13,10 +13,12 @@ jQuery(function ($) {
     */
     //CONSTANTES:
     var cantidadDecimales = 2;
+    var cantidadDecimalesPrecioNeto = 2;
     var IGV = 0.18;
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
     var ESTADOS_TODOS = -1;
+    var DIAS_MAX_COTIZACION_TRANSITORIA = 10
 
     var ESTADO_PENDIENTE_APROBACION = 0;
     var ESTADO_APROBADA = 1;
@@ -123,7 +125,7 @@ jQuery(function ($) {
 
 
     function verificarSiExisteCliente() {
-        if ($("#idCliente").val().trim() != "" && $("#pagina").val() == 1)
+        if ($("#idCliente").val().trim() != "" && $("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION)
             $("#idCiudad").attr("disabled", "disabled");
     }
 
@@ -136,6 +138,7 @@ jQuery(function ($) {
                 IGV = constantes.IGV;
                 SIMBOLO_SOL = constantes.SIMBOLO_SOL;
                 MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
+                DIAS_MAX_COTIZACION_TRANSITORIA = constantes.DIAS_MAX_COTIZACION_TRANSITORIA;
             }
         });
     }
@@ -269,6 +272,38 @@ jQuery(function ($) {
 
     });
 
+    $("#cotizacion_esTransitoria").change(function () {
+        var valor = 1;
+
+        if (!$('#cotizacion_esTransitoria').prop('checked')) {
+            valor = 0;
+            $("#fechaInicioVigenciaPrecios").removeAttr("disabled");
+        }
+        else {
+            $("#fechaInicioVigenciaPrecios").attr("disabled", "disabled");
+            var hoy = new Date();
+            $("#fechaInicioVigenciaPrecios").datepicker().datepicker("setDate", hoy);
+            hoy.setDate(hoy.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))
+            $("#fechaFinVigenciaPrecios").datepicker().datepicker("setDate", hoy);
+            $("#fechaInicioVigenciaPrecios").change();
+            $("#fechaFinVigenciaPrecios").change();
+        }
+
+        changeInputBoolean('esTransitoria', valor)
+    });
+
+    function changeInputBoolean(propiedad, valor) {
+        $.ajax({
+            url: "/Cotizacion/ChangeInputBoolean",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
 
 
     $("#mostrarValidezOfertaEnDias").change(function () {
@@ -378,7 +413,9 @@ jQuery(function ($) {
             data: {
                 idGrupoCliente: idGrupoCliente
             },
-            success: function () {
+            success: function (grupoCliente) {
+                $("#cotizacion_textoCondicionesPago").val(cliente.textoCondicionesPago);
+                $("#contacto").val(grupoCliente.contacto);
             }
         });
     });
@@ -546,24 +583,9 @@ jQuery(function ($) {
 
         indicarFamiliaTodas();
         indicarProveedorTodos();
-        //Para agregar un producto se debe seleccionar una ciudad
-        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar la sede MP previamente.");
+        if (!validarSeleccionClienteOGrupo()) {
             return false;
         }
-
-
-        //$("#modalAgregarProducto").show();
-     //   data - toggle="modal" data- target="#modalAgregarProducto"
-
-        //para agregar un producto se debe seleccionar un cliente
-        if ($("#idCliente").val().trim() == "") {
-            alert("Debe seleccionar un cliente previamente.");
-            $('#idCliente').trigger('chosen:activate');
-            return false;
-        }
-
-
         //Se limpia el mensaje de resultado de agregar producto
         $("#resultadoAgregarProducto").html("");
 
@@ -572,7 +594,6 @@ jQuery(function ($) {
 
         //Se limpian los campos
         limpiarCamposAgregarProductos();
-
 
         //Se agrega chosen al campo PRODUCTO
         $("#producto").chosen({ placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
@@ -687,9 +708,9 @@ jQuery(function ($) {
                         '<td>' + fechaInicioVigencia + '</td>' +
                         '<td>' + fechaFinVigencia + '</td>' +
                         '<td>' + producto.precioListaList[i].unidad + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].precioNeto).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(producto.precioListaList[i].precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].precioNeto).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].flete).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + Number(producto.precioListaList[i].precioUnitario).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
 
                         '</tr>');
                 }
@@ -741,7 +762,7 @@ jQuery(function ($) {
             alert("Tener en cuenta que al cambiar de unidad se recalcula el monto del flete.")
 
             var fleteDetalle = costoLista * flete / 100;
-            $("#fleteDetalle").val(fleteDetalle.toFixed(cantidadDecimales));
+            $("#fleteDetalle").val(fleteDetalle.toFixed(cantidadDecimalesPrecioNeto));
         }
     });
 
@@ -763,7 +784,7 @@ jQuery(function ($) {
 
     $("#fleteDetalle").change(function () {
         var precioUnitario = Number($('#precio').val()) + Number($('#fleteDetalle').val());
-        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimales));
+        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimalesPrecioNeto));
         calcularSubtotalProducto();
     });
 
@@ -787,11 +808,11 @@ jQuery(function ($) {
         var porcentajeDescuento = parseFloat($("#porcentajeDescuento").val());
 
         precio = precioLista * (100 - porcentajeDescuento) * 0.01;
-        precio = precio.toFixed(cantidadDecimales);
+        precio = precio.toFixed(cantidadDecimalesPrecioNeto);
 
 
         var precioUnitario = Number(precio) + Number($('#fleteDetalle').val());
-        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimales));
+        $('#precioUnitario').val(precioUnitario.toFixed(cantidadDecimalesPrecioNeto));
 
 
         var considerarCantidades = $("#considerarCantidades").val();
@@ -932,9 +953,9 @@ jQuery(function ($) {
                         '<td>' + fechaInicioVigencia + '</td>' +
                         '<td>' + fechaFinVigencia + '</td>' +
                         '<td>' + precioListaList[i].unidad + '</td>' +
-                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
 
                         '</tr>');
                 }
@@ -1000,6 +1021,12 @@ jQuery(function ($) {
                         '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
                         '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
                 }
+                else {
+                    esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">' + detalle.precioNetoAnt + '</td>' +
+                        '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                        '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                        '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
+                }
 
                 var observacionesEnDescripcion = "";
                 if (considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES)
@@ -1027,7 +1054,7 @@ jQuery(function ($) {
 
                     '<td class="' + detalle.idProducto + ' detflete" style="text-align:right">' + flete.toFixed(2) + '</td>' +
                     '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detprecioUnitarioAnt" style="text-align:right">' + detalle.precioUnitarioAnt + '</td>' +
+                    
                     '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
                     '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
@@ -1048,8 +1075,8 @@ jQuery(function ($) {
                 $('#montoTotal').html(detalle.total);
                 $("#total").val(detalle.total);
                 var total = Number($("#total").val())
-                $('#montoFlete').html((total * flete / 100).toFixed(cantidadDecimales));
-                $('#montoTotalMasFlete').html((total + (total * flete / 100)).toFixed(cantidadDecimales));
+                $('#montoFlete').html((total * flete / 100).toFixed(cantidadDecimalesPrecioNeto));
+                $('#montoTotalMasFlete').html((total + (total * flete / 100)).toFixed(cantidadDecimalesPrecioNeto));
 
                 cargarTablaDetalle()
                 // $('#tablefoottable').footable();
@@ -1107,11 +1134,11 @@ jQuery(function ($) {
 
             var esPrecioAlternativo = Number($("#unidad").val());
             //Si es el precio estandar
-            nuevoPrecioInicial = Number(Number($("#precioUnitarioSinIGV").val()).toFixed(cantidadDecimales));
+            nuevoPrecioInicial = Number(Number($("#precioUnitarioSinIGV").val()).toFixed(cantidadDecimalesPrecioNeto));
 
             //Si NO es el precio estandar (si es el precio alternativo)
             if (esPrecioAlternativo == 1) {
-                var nuevoPrecioInicial = Number(Number($("#precioUnitarioAlternativoSinIGV").val()).toFixed(cantidadDecimales));
+                var nuevoPrecioInicial = Number(Number($("#precioUnitarioAlternativoSinIGV").val()).toFixed(cantidadDecimalesPrecioNeto));
             }
         }
         //En caso el calculo se realice al momento de editar un producto en la grilla
@@ -1122,7 +1149,7 @@ jQuery(function ($) {
         }
 
         var nuevoDescuento = 100 - (nuevoPrecioModificado * 100 / nuevoPrecioInicial);
-        $('#nuevoPrecio').val(nuevoPrecioModificado.toFixed(cantidadDecimales));
+        $('#nuevoPrecio').val(nuevoPrecioModificado.toFixed(cantidadDecimalesPrecioNeto));
         $('#nuevoDescuento').val(nuevoDescuento.toFixed(4));
     });
 
@@ -1150,7 +1177,7 @@ jQuery(function ($) {
             //Se recupera el precio calculado
             var precio = Number($("#nuevoPrecio").val());
             //Se asigna el precio calculculado en la columna precio
-            $("." + idproducto + ".detprecio").text(precio.toFixed(cantidadDecimales));
+            $("." + idproducto + ".detprecio").text(precio.toFixed(cantidadDecimalesPrecioNeto));
             //Se asigna el descuento en el campo descuento
             $("." + idproducto + ".detinporcentajedescuento").val($("#nuevoDescuento").val());
 
@@ -1168,82 +1195,71 @@ jQuery(function ($) {
 
 
 
-    /**
-    * INTERFACE PARA CREAR CLIENTE
-    */
-
-    $("#btnSaveCliente").click(function () {
-
-        //ncRazonSocial
-
-        if ($("#ncRazonSocial").val().trim() == "" && $("#ncNombreComercial").val().trim() == "") {
-            alert("Debe ingresar la Razón Social o el Nombre Comercial.");
-            $('#ncRazonSocial').focus();
-            return false;
-        }
-
-        if ($("#ncRUC").val().trim() == "") {
-            alert("Debe ingresar el RUC.");
-            $('#ncRUC').focus();
-            return false;
-        }
-
-        var razonSocial = $("#ncRazonSocial").val();
-        var nombreComercial = $("#ncNombreComercial").val();
-        var ruc = $("#ncRUC").val();
-        var contacto = $("#ncContacto").val();
-        
-        $.ajax({
-            url: "/Cliente/Create",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                razonSocial: razonSocial,
-                nombreComercial: nombreComercial,
-                ruc: ruc,
-                contacto: contacto,
-                controller: "cotizacion"
-            },
-            error: function (detalle) {
-                alert("Se generó un error al intentar crear el cliente.");
-            },
-            success: function (resultado) {
-                alert("Se creó cliente con Código Temporal: " + resultado.codigoAlterno + ".");
-
-                location.reload();
-
-            }
-        });
-
-
-        $('#btnCancelCliente').click();
-
-    });
-
-
-
 
     ////////////GENERAR PLANTILLA DE COTIZACIÓN
+
+
+    function validarSeleccionClienteOGrupo() {
+        /*Se identifica si la cotización es a un cliente o a un grupo*/
+        if ($("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION) {
+            var idCiudad = $("#idCiudad").val();
+            if (idCiudad == "" || $("#idCiudad").val() == null) {
+                $.alert({
+                    title: "Seleccionar Sede",
+                    type: 'orange',
+                    content: 'Debe seleccionar la sede MP previamente.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                $("#idCiudad").focus();
+                $("#btnCancelarObtenerProductos").click();
+                return false;
+            }
+            var idCliente = $("#idCliente").val();
+            if (idCliente.trim() == "") {
+                $.alert({
+                    title: "Seleccionar Cliente",
+                    type: 'orange',
+                    content: 'Debe seleccionar un Cliente.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                $('#idCliente').trigger('chosen:activate');
+                $("#btnCancelarObtenerProductos").click();
+                return false;
+            }
+
+        }
+        else {
+            var idGrupoCliente = $("#idGrupoCliente").val();
+            if (idGrupoCliente.trim() == "") {
+                $.alert({
+                    title: "Seleccionar Grupo",
+                    type: 'orange',
+                    content: 'Debe seleccionar un Grupo.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                $('#idGrupoCliente').trigger('chosen:activate');
+                $("#btnCancelarObtenerProductos").click();
+                return false;
+            }
+
+        }
+        return true;
+    }
+
 
 
 
     $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
 
-        var idCiudad = $("#idCiudad").val();
-        if (idCiudad == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar la sede MP previamente.");
-            $("#idCiudad").focus();
-            $("#btnCancelarObtenerProductos").click();
+        if (!validarSeleccionClienteOGrupo()) {
             return false;
         }
-        var idCliente = $("#idCliente").val();
-        if (idCliente.trim() == "") {
-            alert("Debe seleccionar un cliente.");
-            $('#idCliente').trigger('chosen:activate');
-            $("#btnCancelarObtenerProductos").click();
-            return false;
-        }
-
 
         if (verificarSiExisteDetalle()) {
             alert("No deben existir productos agregados a la cotización.");
@@ -1252,7 +1268,46 @@ jQuery(function ($) {
 
         indicarFamiliaTodas();
         indicarProveedorTodos();
+    });
 
+
+
+
+    $("#btnObtenerProductosParaGrupo").click(function () {
+        var idGrupoCliente = $("#idGrupoCliente").val();
+        var fecha = $("#fechaPrecios").val();
+        var familia = $("#familiaBusquedaPrecios").val();
+        var proveedor = $("#proveedorBusquedaPrecios").val();
+
+        $.ajax({
+            url: "/Cotizacion/obtenerProductosAPartirdePreciosRegistradosParaGrupo",
+            data: {
+                idGrupoCliente: idGrupoCliente,
+                fecha: fecha,
+                familia: familia,
+                proveedor: proveedor
+            },
+            type: 'POST',
+            error: function () {
+                alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
+            },
+            success: function () {
+
+                $.alert({
+                    title: '¡Atención!',
+                    type: 'orange',
+                    content: "Los productos importados no consideran los precios registrados para un grupo.",
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Cotizacion/CotizarGrupo';
+
+                        }
+                    }
+                });
+
+               
+            }
+        });
     });
 
 
@@ -1262,7 +1317,10 @@ jQuery(function ($) {
         var fecha = $("#fechaPrecios").val();
         var familia = $("#familiaBusquedaPrecios").val();
         var proveedor = $("#proveedorBusquedaPrecios").val();
-
+        $('body').loadingModal({
+            text: 'Obteniedo Productos y Precios...'
+        });
+      
 
         $.ajax({
             url: "/Cotizacion/obtenerProductosAPartirdePreciosRegistrados",
@@ -1275,12 +1333,24 @@ jQuery(function ($) {
             },
             type: 'POST',
             error: function () {
-
+                $('body').loadingModal('hide')
                 alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
                 //window.location = '/Cotizacion/Cotizador';
             },
             success: function () {
-                window.location = '/Cotizacion/Cotizar';
+                $('body').loadingModal('hide')
+                $.alert({
+                    title: '¡Atención!',
+                    type: 'orange',
+                    content: "Los productos importados no consideran los precios registrados para un grupo.",
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Cotizacion/Cotizar';
+
+                        }
+                    }
+                });
+             
             }
         });
 
@@ -1296,15 +1366,8 @@ jQuery(function ($) {
 
 
     function validarIngresoDatosObligatoriosCotizacion() {
-        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar la sede MP previamente.");
-            $("#idCiudad").focus();
-            return false;
-        }
 
-        if ($("#idCliente").val().trim() == "") {
-            alert("Debe seleccionar un cliente.");
-            $('#idCliente').trigger('chosen:activate');
+        if (!validarSeleccionClienteOGrupo()) {
             return false;
         }
 
@@ -1364,15 +1427,51 @@ jQuery(function ($) {
 
         }
 
+
+
         var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
         if (fechaFinVigenciaPrecios.trim() != "") {
+
+          
             //Si la fecha de inicio de vigencia no es vacío se compara con la fecha de inicio de vigencia
             if (fechaInicioVigenciaPrecios.trim() != "") {
+                
                    //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
                 if (convertirFechaNumero(fechaFinVigenciaPrecios) < convertirFechaNumero(fechaInicioVigenciaPrecios)) {
                     alert("El fin de vigencia de precios debe ser mayor o igual al inicio de vigencia de precios.");
                     $("#fechaFinVigenciaPrecios").focus();
                     return false;
+                }
+
+                //Si es una cotización transitoria la fecha de fin de vigencia no puede ser mayor a la fecha de inicio de vigencia por más de 10 días
+                if ($('#cotizacion_esTransitoria').prop('checked')) {
+
+                    var fechaInicioTmp = fechaInicioVigenciaPrecios.split("/");
+                 
+                    var fechaInicioTmpMas10 = new Date(parseInt(fechaInicioTmp[2]), parseInt(fechaInicioTmp[1]) - 1, parseInt(fechaInicioTmp[0]), 0, 0, 0);
+                    //alert(fechaInicioTmpMas10 + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA));
+                    fechaInicioTmpMas10.setDate(fechaInicioTmpMas10.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))
+
+                //    alert(fechaInicioTmpMas10)
+                    var day = fechaInicioTmpMas10.getDate();
+                    if (fechaInicioTmpMas10.getDate() < 10)
+                        day = "0" + fechaInicioTmpMas10.getDate();
+
+                    var mesTmp = (fechaInicioTmpMas10.getMonth() + 1);
+
+                    var mes = mesTmp;
+                    if (mesTmp< 10)
+                        mes = "0"+mesTmp;
+
+                    var fechaInicioTmpMas10tmp = day + "/" + mes + "/" + fechaInicioTmpMas10.getFullYear()
+              /*      alert(fechaInicioTmpMas10tmp)
+                    alert(convertirFechaNumero(fechaInicioTmpMas10tmp))
+                    alert(convertirFechaNumero(fechaFinVigenciaPrecios))*/
+                    if (convertirFechaNumero(fechaInicioTmpMas10tmp) < convertirFechaNumero(fechaFinVigenciaPrecios)) {
+                        alert("El fin de vigencia de precios no puede ser mayor al inicio de vigencia de precios por más de 10 días en una cotización transitoria.");
+                        $("#fechaFinVigenciaPrecios").focus();
+                        return false;
+                    }
                 }
             }
             else
@@ -1382,6 +1481,7 @@ jQuery(function ($) {
                     $("#fechaFinVigenciaPrecios").focus();
                     return false;
                 }
+
             }
         }
         
@@ -1423,45 +1523,60 @@ jQuery(function ($) {
 
 
     function crearCotizacion(continuarLuego) {
+
         if (!validarIngresoDatosObligatoriosCotizacion())
             return false;
 
-        var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
+        if ($("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION) {
 
-        if (continuarLuego == 0 && sedePrincipal == 1) {
-            $.confirm({
-                title: 'Cliente Multiregional Identificado',
-                content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
-                type: 'orange',
-                buttons: {
-                    aplica: {
-                        text: 'SI',
-                        btnClass: 'btn-success',
-                        action: function () {
-                            $('#aplicaSedes').val("1");
-                            callCreate(continuarLuego);
-                        }
-                    },
-                    noAplica: {
-                        text: 'NO',
-                        btnClass: 'btn-danger',
-                        action: function () {
-                            callCreate(continuarLuego);
-                        }
-                    },
-                    cancelar: {
-                        text: 'Cancelar',
-                        btnClass: '',
-                        action: function () {
-                            activarBotonesFinalizarCreacion();
+            var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
+
+            if (continuarLuego == 0 && sedePrincipal == 1) {
+                $.confirm({
+                    title: 'Cliente Multiregional Identificado',
+                    content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
+                    type: 'orange',
+                    buttons: {
+                        aplica: {
+                            text: 'SI',
+                            btnClass: 'btn-success',
+                            action: function () {
+                                $('#aplicaSedes').val("1");
+                                callCreate(continuarLuego);
+                            }
+                        },
+                        noAplica: {
+                            text: 'NO, solo registrar precios para ' + $("#idCiudad option:selected").text(),
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                callCreate(continuarLuego);
+                            }
+                        },
+                        cancelar: {
+                            text: 'Cancelar',
+                            btnClass: '',
+                            action: function () {
+                                activarBotonesFinalizarCreacion();
+                            }
                         }
                     }
-                }
-            });
-        } else {
+                });
+            } else {
+                callCreate(continuarLuego);
+            }
+        }
+        else {
+            //Espacio para mostrar mensaje de Cliente a los cuales se le aplicará la cotización Grupal
             callCreate(continuarLuego);
         }
     }
+
+
+
+
+
+
+
 
     function callCreate(continuarLuego) {
         $('body').loadingModal({
@@ -1731,14 +1846,41 @@ jQuery(function ($) {
                 $("#verCondicionesPago").html(cotizacion.textoCondicionesPago);
                 
                 $("#verIdCotizacion").val(cotizacion.idCotizacion);
+
+                
+
                 $("#verIdCliente").val(cotizacion.cliente.idCliente);
 
                 $("#verNumero").html(cotizacion.codigo);
                 
                 $("#verCiudad").html(cotizacion.ciudad.nombre);
-                $("#verCliente").html(cotizacion.cliente.razonSocial);
+
+                if (cotizacion.cliente.idCliente == GUID_EMPTY) {
+                    $("#labelCliente").hide();
+                    $("#labelGrupo").show();
+                    $("#verClienteGrupo").html(cotizacion.grupo.codigoNombre);
+                }
+                else {
+                    $("#labelCliente").show();
+                    $("#labelGrupo").hide();
+                    $("#verClienteGrupo").html(cotizacion.cliente.codigoRazonSocial);
+                }
+                
+
+
+                
+
+
                 $("#verContacto").html(cotizacion.contacto);
 
+                if (cotizacion.esTransitoria) {
+                    $("#esTransitoria").show();
+                }
+                else {
+                    $("#esTransitoria").hide();
+                }
+
+              
 
                 $("#verFechaCreacion").html(invertirFormatoFecha(cotizacion.fecha.substr(0, 10)));
                 $("#verValidezOferta").html(invertirFormatoFecha(cotizacion.fechaLimiteValidezOferta.substr(0, 10)));
@@ -1782,7 +1924,17 @@ jQuery(function ($) {
                 var lista = cotizacion.cotizacionDetalleList;
                 for (var i = 0; i < cotizacion.cotizacionDetalleList.length; i++) {
 
-                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined'? '' : lista[i].observacion;
+                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+                    var precioUnitarioAnterior = lista[i].producto.precioClienteProducto.precioNeto.toFixed(cantidadDecimalesPrecioNeto);
+                    //var costo = lista[i].producto.costoLista.toFixed(cantidadDecimales);
+                    if (lista[i].esPrecioAlternativo) {
+                        precioUnitarioAnterior = lista[i].producto.precioClienteProducto.precioNetoAlternativo.toFixed(cantidadDecimalesPrecioNeto);
+                       // costo = lista[i].producto.costoListaAlternativo.toFixed(cantidadDecimales)
+                    }
+
+
+
 
                     d += '<tr>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
@@ -1792,15 +1944,18 @@ jQuery(function ($) {
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
-                        '<td>' + lista[i].precioNeto.toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + lista[i].producto.costoLista.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + lista[i].precioNeto.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + lista[i].costoListaVisible.toFixed(cantidadDecimales)  + '</td>' +
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
-                        '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + lista[i].flete.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
+                        '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
                         '<td>' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
-                        '<td class="tdprecioUnitarioAnterior">' + lista[i].producto.precioClienteProducto.precioUnitario.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
+                        '<td class="tdprecioUnitarioAnterior">' + precioUnitarioAnterior + '</td>' +
+                        '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionPrecioAnterior + ' %</td>' +
+                        '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionPrecioListaAnterior + ' %</td>' +
+                        '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionCosto + ' %</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
                         '</tr>';
 
@@ -1818,20 +1973,32 @@ jQuery(function ($) {
                     cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA ||
                     (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION && usuario.idUsuario == cotizacion.seguimientoCotizacion.usuario.idUsuario)
                 ) {
-                    $("#btnEditarCotizacion").show();
+                    if (cotizacion.cliente.idCliente == GUID_EMPTY) {
+                        $("#btnEditarCotizacion").hide();
+                        $("#btnEditarCotizacionGrupal").show();
+                    }
+                    else {
+                        $("#btnEditarCotizacion").show();
+                        $("#btnEditarCotizacionGrupal").hide();
+                    }
                     if (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION) {
                         $("#btnEditarCotizacion").html("Continuar Editando");
+                        $("#btnEditarCotizacionGrupal").html("Continuar Editando");
                     }
                     else
                     {
                         $("#btnEditarCotizacion").html("Editar");
+                        $("#btnEditarCotizacionGrupal").html("Editar");
                     }
                 }
                 else {
+                    $("#btnEditarCotizacionGrupal").hide();
                     $("#btnEditarCotizacion").hide();
                 }
 
 
+
+                
 
 
 
@@ -1851,36 +2018,66 @@ jQuery(function ($) {
 
 
 
-                /*APROBAR COTIZACIÓN*/
-                if (
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
-                        cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
-                    (
-                        usuario.apruebaCotizaciones && 
-                        usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
-                ) {
+                /*APROBAR DENEGAR COTIZACIÓN*/
 
-                    $("#btnAprobarCotizacion").show();
+                if (cotizacion.cliente.idCliente == GUID_EMPTY) {
+                    if (
+                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
+                            cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
+                        (
+                            usuario.apruebaCotizacionesGrupales &&
+                            usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                    ) {
+                        $("#btnAprobarCotizacion").show();
+                    }
+                    else {
+                        $("#btnAprobarCotizacion").hide();
+                    }
+
+                    if (
+                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
+                        (
+                            usuario.apruebaCotizacionesGrupales &&
+                            usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                    ) {
+
+                        $("#btnDenegarCotizacion").show();
+                    }
+                    else {
+                        $("#btnDenegarCotizacion").hide();
+                    }
                 }
                 else {
-                    $("#btnAprobarCotizacion").hide();
+                    if (
+                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
+                            cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
+                        (
+                            usuario.apruebaCotizaciones &&
+                            usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                    ) {
+
+                        $("#btnAprobarCotizacion").show();
+                    }
+                    else {
+                        $("#btnAprobarCotizacion").hide();
+                    }
+
+                    if (
+                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
+                        (
+                            usuario.apruebaCotizaciones &&
+                            usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                    ) {
+
+                        $("#btnDenegarCotizacion").show();
+                    }
+                    else {
+                        $("#btnDenegarCotizacion").hide();
+                    }
                 }
 
-
-
-                /*DENEGAR COTIZACIÓN*/
-                if (
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
-                    (
-                        usuario.apruebaCotizaciones && 
-                        usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
-                ) {
-
-                    $("#btnDenegarCotizacion").show();
-                }
-                else {
-                    $("#btnDenegarCotizacion").hide();
-                }
+                
+               
 
                 /*ACEPTAR COTIZACIÓN*/
                 if (
@@ -2013,6 +2210,7 @@ jQuery(function ($) {
     {
         $("#btnCancelarCotizacion").attr('disabled', 'disabled');
         $("#btnEditarCotizacion").attr('disabled', 'disabled');
+        $("#btnEditarCotizacionGrupal").attr('disabled', 'disabled');        
         $("#btnReCotizacion").attr('disabled', 'disabled');
         $("#btnAprobarCotizacion").attr('disabled', 'disabled');
         $("#btnDenegarCotizacion").attr('disabled', 'disabled');
@@ -2021,11 +2219,13 @@ jQuery(function ($) {
         $("#btnEliminarCotizacion").attr('disabled', 'disabled');
         $("#btnPDFCotizacion").attr('disabled', 'disabled');
         $("#btnGenerarPedido").attr('disabled', 'disabled');
+
     }
 
     function activarBotonesVer() {
         $("#btnCancelarCotizacion").removeAttr('disabled');
         $("#btnEditarCotizacion").removeAttr('disabled');
+        $("#btnEditarCotizacionGrupal").removeAttr('disabled');
         $("#btnReCotizacion").removeAttr('disabled');
         $("#btnAprobarCotizacion").removeAttr('disabled');
         $("#btnDenegarCotizacion").removeAttr('disabled');
@@ -2152,6 +2352,38 @@ jQuery(function ($) {
 
     });
 
+
+    $("#btnEditarCotizacionGrupal").click(function () {
+        desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+        $.ajax({
+            url: "/Cotizacion/ConsultarSiExisteCotizacionGrupal",
+            type: 'POST',
+            async: false,
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.existe == "false") {
+
+                    $.ajax({
+                        url: "/Cotizacion/iniciarEdicionCotizacionGrupal",
+                        type: 'POST',
+
+                        error: function (detalle) { alert("Ocurrió un problema al obtener el detalle de la cotización N° " + codigo + "."); },
+                        success: function (fileName) {
+                            window.location = '/Cotizacion/CotizarGrupo';
+                        }
+                    });
+
+                    //window.location = '/Cotizacion/Cotizador';
+                }
+                else {
+                    mostrarMensajeCotizacionGrupalEnCurso(resultado);
+                }
+            }
+        });
+
+    });
+
     function mostrarMensajeCotizacionEnCurso(resultado) {
         if (resultado.numero == 0) {
             alert('Está creando una nueva cotización; para continuar por favor diríjase a la página "Crear/Modificar Cotización" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
@@ -2161,6 +2393,20 @@ jQuery(function ($) {
                 alert('Ya se encuentra editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización".');
             else
                 alert('Está editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
+        }
+        activarBotonesVer();
+
+    }
+
+    function mostrarMensajeCotizacionGrupalEnCurso(resultado) {
+        if (resultado.numero == 0) {
+            alert('Está creando una nueva cotización; para continuar por favor diríjase a la página "Crear/Modificar Cotización Grupal" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
+        }
+        else {
+            if (resultado.numero == $("#verNumero").html())
+                alert('Ya se encuentra editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización Grupal".');
+            else
+                alert('Está editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización Grupal" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
         }
         activarBotonesVer();
 
@@ -2453,7 +2699,7 @@ jQuery(function ($) {
 
     $("#flete").change(function () {
 
-        $("#flete").val(Number($("#flete").val()).toFixed(cantidadDecimales))
+        $("#flete").val(Number($("#flete").val()).toFixed(cantidadDecimalesPrecioNeto))
         var flete = $("#flete").val(); 
         if (flete > 100)
         {
@@ -2462,8 +2708,8 @@ jQuery(function ($) {
         }
 
         var total = Number($("#total").val());
-        $('#montoFlete').html("Flete: " + SIMBOLO_SOL + " " + (total * flete / 100).toFixed(cantidadDecimales));
-        $('#montoTotalMasFlete').html("Total más Flete: " + SIMBOLO_SOL + " " +  (total + (total * flete / 100)).toFixed(cantidadDecimales));
+        $('#montoFlete').html("Flete: " + SIMBOLO_SOL + " " + (total * flete / 100).toFixed(cantidadDecimalesPrecioNeto));
+        $('#montoTotalMasFlete').html("Total más Flete: " + SIMBOLO_SOL + " " + (total + (total * flete / 100)).toFixed(cantidadDecimalesPrecioNeto));
 
         
 
@@ -2914,14 +3160,14 @@ jQuery(function ($) {
         //Se obtiene el precio lista
         var precioLista = Number($("." + idproducto + ".detprecioLista").html());
         //Se calculo el precio con descuento 
-        var precio = Number((precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadDecimales));
+        var precio = Number((precioLista * (100 - porcentajeDescuento) / 100).toFixed(cantidadDecimalesPrecioNeto));
         //Se asigna el precio calculculado en la columna precio
         $("." + idproducto + ".detprecio").html(precio);
         //se obtiene la cantidad
         var cantidad = Number($("." + idproducto + ".detincantidad").val());
         //Se define el precio Unitario 
         var precioUnitario = flete + precio
-        $("." + idproducto + ".detprecioUnitario").html(precioUnitario.toFixed(cantidadDecimales));
+        $("." + idproducto + ".detprecioUnitario").html(precioUnitario.toFixed(cantidadDecimalesPrecioNeto));
         //Se calcula el subtotal
         var subTotal = precioUnitario * cantidad;
         //Se asigna el subtotal 
@@ -3114,7 +3360,21 @@ jQuery(function ($) {
                             '<p><a id="' + idVerMas + '" class="' + cotizacionList[i].idCotizacion+' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>'+
                         '<p><a id="' + idVermenos + '" class="' + cotizacionList[i].idCotizacion+' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                      }
-         
+
+                    var grupo = '';
+                    var clienteRazonSocial = '';
+                    var clienteRUC = '';
+                    var creadoPara = '';
+                    grupo = cotizacionList[i].grupo.nombre;
+                    if (cotizacionList[i].cliente.idCliente == GUID_EMPTY) {
+                        creadoPara = 'Grupo';
+                        
+                    }
+                    else {
+                        creadoPara = 'Cliente';
+                        clienteRazonSocial = cotizacionList[i].cliente.razonSocial;
+                        clienteRUC = cotizacionList[i].cliente.ruc;
+                    }
 
                     var cotizacion = '<tr data-expanded="false">' +
                         '<td>' + cotizacionList[i].idCotizacion + '</td>' +
@@ -3122,8 +3382,10 @@ jQuery(function ($) {
                         '<td>' + cotizacionList[i].usuario.nombre + '</td>' +
                         //ToString("dd/MM/yyyy")
                         '<td>' + invertirFormatoFecha(cotizacionList[i].fecha.substr(0, 10)) + '</td>' +
-                        '<td>' + cotizacionList[i].cliente.razonSocial + '</td>' +
-                        '<td>' + cotizacionList[i].cliente.ruc + '</td>' +
+                        '<td>' + creadoPara + '</td>' +
+                        '<td>' + clienteRazonSocial + '</td>' +
+                        //'<td>' + clienteRUC + '</td>' +
+                        '<td>' + grupo + '</td>' +
                         '<td>' + cotizacionList[i].ciudad.nombre + '</td>' +
                         '<td>' + Number(cotizacionList[i].montoSubTotal).toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + Number(cotizacionList[i].montoIGV).toFixed(cantidadDecimales) + '</td>' +
@@ -3254,6 +3516,20 @@ jQuery(function ($) {
             }
         });
     });
+
+    $("#buscarSoloCotizacionesGrupales").change(function () {
+        var valor = $("input[name=buscarSoloCotizacionesGrupales]:checked").val();
+        $.ajax({
+            url: "/Cotizacion/updateBuscarSoloCotizacionesGrupales",
+            type: 'POST',
+            data: {
+                buscarSoloCotizacionesGrupales: valor
+            },
+            success: function () {
+            }
+        });
+    });
+    
 
 
     $("#btnCancelarComentario").click(function()

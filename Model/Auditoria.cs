@@ -15,6 +15,7 @@ namespace Model
         public DateTime FechaEdicion { get; set; }
         public Guid IdUsuarioEdicion { get; set; }
         public Usuario UsuarioRegistro { get; set; }
+        public Usuario usuario { get; set; }
 
         public string EstadoDesc => Estado == 1 ? "Activo" : "Inactivo";
 
@@ -30,6 +31,21 @@ namespace Model
         public string FechaRegistroDesc
         {
             get { return FechaRegistro.ToString("dd/MM/yyyy HH:mm:ss"); }
+        }
+
+        public string FechaRegistroFormatoFecha
+        {
+            get { return FechaRegistro.ToString(Constantes.formatoFecha); }
+        }
+
+        public string FechaEdicionDesc
+        {
+            get { return FechaEdicion.ToString("dd/MM/yyyy HH:mm:ss"); }
+        }
+
+        public string FechaEdicionFormatoFecha
+        {
+            get { return FechaEdicion.ToString(Constantes.formatoFecha); }
         }
     }
 }

@@ -7,6 +7,8 @@ jQuery(function ($) {
     var TITLE_EXITO = 'Operación Realizada';
     var TITLE_MENSAJE_BUSQUEDA = "Ingresar datos solicitados";
 
+    var motivoTraslado = "";
+
     $(document).ready(function () {
         obtenerConstantes();
         verificarSiExisteNuevoTransportista();
@@ -709,6 +711,7 @@ jQuery(function ($) {
                 $("#ver_guiaRemision_pedido_cliente").html(guiaRemision.pedido.cliente.razonSocial);
                 $("#ver_guiaRemision_pedido_numeroReferenciaCliente").html(guiaRemision.pedido.numeroReferenciaCliente);
                 $("#ver_guiaRemision_motivoTraslado").html(guiaRemision.motivoTrasladoString);
+                motivoTraslado = guiaRemision.motivoTraslado;
                 $("#ver_guiaRemision_atencionParcial").html(guiaRemision.atencionParcial);
                 $("#ver_guiaRemision_pedido_ubigeoEntrega").html(guiaRemision.pedido.ubigeoEntrega.ToString);
                 $("#ver_guiaRemision_pedido_direccionEntrega").html(guiaRemision.pedido.direccionEntrega.descripcion);
@@ -722,7 +725,7 @@ jQuery(function ($) {
 
                 $("#ver_guiaRemision_estadoDescripcion").html(guiaRemision.estadoDescripcion);
 
-
+                $("#btnRefacturar").hide();
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
@@ -731,6 +734,7 @@ jQuery(function ($) {
                     $("#btnExtornar").hide();
                     $("#btnImprimirGuiaRemision").hide();
                     $("#btnFacturarGuiaRemision").hide();
+                    $("#btnRefacturar").hide();
                 }
                 else {
                     $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:black")
@@ -784,6 +788,7 @@ jQuery(function ($) {
                         $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:green")
                         $("#btnAnularGuiaRemision").hide();
                         $("#btnFacturarGuiaRemision").hide();
+                        $("#btnRefacturar").show();
                     }
 
                    /* if (    guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_COMPRA.charCodeAt(0)
@@ -2196,9 +2201,44 @@ jQuery(function ($) {
         });
     });
 
+    $('#btnRefacturar').click(function () {
+        $.confirm({
+            title: 'Confirmación Refacturación',
+            content: '¿Está seguro de generar una nueva venta para la Guía de Remisión: ' + $("#ver_guiaRemision_serieNumeroDocumento").html() + "?",
+            type: 'orange',
+            buttons: {
+                confirm: {
+                    text: 'Sí',
+                    action: function () {
+                        $.ajax({
+                            url: "/Venta/CreateVentaRefacturacion",
+                            type: 'POST',
+                            error: function (resultado) {
+                                $.alert({
+                                    title: "Error",
+                                    content: "Se generó un error al generar la nueva Venta.",
+                                    type: 'red',
+                                    buttons: {
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            },
+                            success: function (resultado) {
+                                location.reload()
+                            }
+                        })
+                    }
+                },
+                cancel: {
+                    text: 'No',
+                    action: function () {
+                    }
+                }
+            }
+        })
 
-
-
+    });
 
 
     /*GENERACIÓN DE NOTA DE INGRESO*/
@@ -2210,6 +2250,12 @@ jQuery(function ($) {
         if (documentosVentaString.length == 0) {
             $("#serieNumeroDocumentoVenta").val(documentosVenta);
             $("#divDocumentoVenta").hide();
+
+            if (motivoTraslado == MOTIVO_TRASLADO_SALIDA_PRESTAMO.charCodeAt(0) ||
+                motivoTraslado == MOTIVO_TRASLADO_SALIDA_COMODATO.charCodeAt(0))
+            {
+                $("#li_motivoExtornoGuiaRemision7").show();
+            }
         }
         else {
             var documentosVenta = documentosVentaString.split(";");
@@ -2234,6 +2280,9 @@ jQuery(function ($) {
                 $("#divDocumentoVenta").show();
                 $("#li_motivoExtornoGuiaRemision7").show();
             }
+
+
+
         }
 
 

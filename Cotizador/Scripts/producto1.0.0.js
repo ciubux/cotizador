@@ -440,6 +440,8 @@ jQuery(function ($) {
                 $("#verEquivalencia").html(producto.equivalencia);
                 $("#verEquivalenciaProveedor").html(producto.equivalenciaProveedor);
                 $("#verUnidadEstandarInternacional").html(producto.unidadEstandarInternacional);
+                $("#verTipo").html(producto.tipoProductoToString);
+                
 
                 if (producto.exoneradoIgv) {
                     $("#verExoneradoIgv").html("Sí");
@@ -630,6 +632,13 @@ jQuery(function ($) {
 
                 for (var i = 0; i < list.length; i++) {
 
+                    var estado = "";
+                    if (list[i].Estado == 1) {
+                        estado = '<span style="color: green; font-weight: bold;">' + list[i].EstadoDesc+'</span>';
+                    } else {
+                        estado = '<span style="color: red; font-weight: bold;">' + list[i].EstadoDesc+'</span>';
+                    }
+
                     var ItemRow = '<tr data-expanded="true">' +
                         '<td>  ' + list[i].idProducto + '</td>' +
                         '<td>  ' + list[i].sku + '  </td>' +
@@ -646,6 +655,8 @@ jQuery(function ($) {
                         '<td>  ' + Number(list[i].precioSinIgv).toFixed(cantidadCuatroDecimales) + '  </td>' +
                         '<td>  ' + Number(list[i].precioProvinciaSinIgv).toFixed(cantidadCuatroDecimales) + '  </td>' +
                         '<td>  ' + Number(list[i].costoSinIgv).toFixed(cantidadCuatroDecimales) + '  </td>' +
+                        '<td>  ' + estado + '  </td>' +
+                        '<td>  ' + list[i].FechaEdicionFormatoFecha + '  </td>' +
                         '<td>' +
                         '<button type="button" class="' + list[i].idProducto + ' ' + list[i].sku + ' btnVerProducto btn btn-primary ">Ver</button>' +
                         '</td>' +

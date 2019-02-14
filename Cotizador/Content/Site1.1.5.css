@@ -115,7 +115,7 @@ textarea {
     }
     
     #modalVerCotizacion .modal-dialog {
-        width: 1300px;
+        width: 1400px;
     }
     #modalMostrarPrecios .modal-dialog {
         width: 900px;
@@ -185,6 +185,10 @@ textarea {
         width: 1200px;
     }
 
+    #modalVerGrupoCliente .modal-dialog {
+        width: 1200px;
+    }
+    
     #modalVerProducto .modal-dialog {
         width: 1000px;
     }

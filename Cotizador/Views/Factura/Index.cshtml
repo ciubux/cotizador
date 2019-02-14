@@ -627,33 +627,33 @@
 
                 <div class="pull-right">
                     @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
-                    {
-                        <button type="button" id="btnCancelarConfirmarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    }
+    {
+                <button type="button" id="btnCancelarConfirmarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+}
                     @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
-                    {
-                        <!--        <button type="button" id="btnActualizarEstado" class="btn btn-primary">Actualizar Estado</button>-->
-                    }
+    {
+                <!--        <button type="button" id="btnActualizarEstado" class="btn btn-primary">Actualizar Estado</button>-->
+}
                     @if (documentoVenta.usuario.creaDocumentosVenta)
-                    {
-                        <button type="button" id="btnSolicitarAnulacion" class="btn btn-danger">Solicitar Anulación</button>
-                    }
+    {
+                <button type="button" id="btnSolicitarAnulacion" class="btn btn-danger">Solicitar Anulación</button>
+}
                     @if (documentoVenta.usuario.apruebaAnulaciones)
-                    {
-                        <button type="button" id="btnIniciarAprobacion" class="btn btn-danger">Aprobar Anulación</button>
-                    }
+    {
+                <button type="button" id="btnIniciarAprobacion" class="btn btn-danger">Aprobar Anulación</button>
+}
                     @if (documentoVenta.usuario.creaNotasCredito)
-                    {
-                        <button type="button" id="btnIniciarNotaCredito" class="btn btn-danger">Generar Nota Crédito</button>
-                    }
+    {
+                <button type="button" id="btnIniciarNotaCredito" class="btn btn-danger">Generar Nota Crédito</button>
+}
                     @if (documentoVenta.usuario.creaNotasDebito)
-                    {
-                        <button type="button" id="btnIniciarNotaDebito" class="btn btn-danger">Generar Nota Débito</button>
-                    }
+    {
+                <button type="button" id="btnIniciarNotaDebito" class="btn btn-danger">Generar Nota Débito</button>
+}
                     @if (documentoVenta.usuario.realizaRefacturacion)
-                    {
-                        <button type="button" id="btnIniciarRefacturacion" class="btn btn-danger">Generar Factura Reemplazo</button>
-                    }
+    {
+                <!--           <button type="button" id="btnIniciarRefacturacion" class="btn btn-danger">Generar Factura Reemplazo</button>-->
+}
                 </div>
 
             </div>

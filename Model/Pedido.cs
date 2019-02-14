@@ -8,9 +8,9 @@ namespace Model
 {
     public class Pedido : Auditoria, IDocumento
     {
-        public Pedido(tipos tipo)
+        public Pedido(ClasesPedido tipo)
         {
-            this.tipo = tipo;
+            this.clasePedido = tipo;
             this.tipoPedido = tiposPedido.Venta;
             this.tipoPedidoCompra = tiposPedidoCompra.Compra;
             this.tipoPedidoAlmacen = tiposPedidoAlmacen.TrasladoInterno;
@@ -82,15 +82,15 @@ namespace Model
         [Display(Name = "Fecha de Entrega:")]
         public DateTime? fechaEntregaDesde { get; set; }
 
-        
+
         [Display(Name = "Fecha Máxima de Entrega:")]
         public DateTime? fechaEntregaHasta { get; set; }
 
         [Display(Name = "Fecha de Entrega Extendida:")]
         public DateTime? fechaEntregaExtendida { get; set; }
 
-        public string fechaEntregaExtendidaString => !fechaEntregaExtendida.HasValue ? "" : ((DateTime) fechaEntregaExtendida).ToString("dd/MM/yyyy");
-    
+        public string fechaEntregaExtendidaString => !fechaEntregaExtendida.HasValue ? "" : ((DateTime)fechaEntregaExtendida).ToString("dd/MM/yyyy");
+
 
         [Display(Name = "Hora de Entrega:")]
         public String horaEntregaDesde { get; set; }
@@ -222,7 +222,7 @@ namespace Model
 
         public String numeroPedidoString
         {
-            get { return this.numeroPedido == 0  ? "":this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
+            get { return this.numeroPedido == 0 ? "" : this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
         }
 
 
@@ -300,7 +300,7 @@ namespace Model
         public Boolean esPagoContado { get; set; }
 
         public List<GuiaRemision> guiaRemisionList { get; set; }
-    
+
 
         /*Implementación Interface*/
         public List<DocumentoDetalle> documentoDetalle
@@ -326,18 +326,19 @@ namespace Model
             }
         }
 
-       
-        public enum tipos
+
+        public enum ClasesPedido
         {
             [Display(Name = "Venta")]
-            Venta = 'V', 
+            Venta = 'V',
             [Display(Name = "Compra")]
             Compra = 'C',
             [Display(Name = "Almacen")]
             Almacen = 'A'
         }
+        
+        public ClasesPedido clasePedido { get; set; }
 
-        public tipos tipo { get; set; }
 
         [Display(Name = "Tipo Pedido:")]
         public tiposPedido tipoPedido { get; set; }
@@ -464,6 +465,8 @@ namespace Model
                 return EnumHelper<tiposPedidoAlmacen>.GetDisplayValue(this.tipoPedidoAlmacen);
             }
         }
+
+        public List<PedidoGrupo> pedidoGrupoList { get; set; }
 
         #region Criterios de Búsqueda
         [Display(Name = "Tipo Pedido:")]

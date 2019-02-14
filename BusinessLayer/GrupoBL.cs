@@ -15,11 +15,11 @@ namespace BusinessLayer
                 return grupoDAL.getGruposBusqueda(textoBusqueda);
             }
         }
-        public GrupoCliente getGrupo(Guid idGrupo)
+        public GrupoCliente getGrupo(int idGrupoCliente)
         {
             using (var grupoDAL = new GrupoClienteDAL())
             {
-                return grupoDAL.getGrupo(idGrupo);
+                return grupoDAL.getGrupo(idGrupoCliente);
             }
         }
 
@@ -30,5 +30,31 @@ namespace BusinessLayer
                 return grupoDAL.getGruposCliente();
             }
         }
+
+        public List<GrupoCliente> getGruposCliente(GrupoCliente grupoCliente)
+        {
+            using (var grupoDAL = new GrupoClienteDAL())
+            {
+                return grupoDAL.getGruposCliente(grupoCliente);
+            }
+        }
+
+
+        public GrupoCliente insertGrupoCliente(GrupoCliente grupoCliente)
+        {
+            using (var grupoClienteDAL = new GrupoClienteDAL())
+            { 
+                return grupoClienteDAL.insertGrupoCliente(grupoCliente);
+            }
+        }
+
+        public GrupoCliente updateGrupoCliente(GrupoCliente grupoCliente)
+        {
+            using (var grupoClienteDAL = new GrupoClienteDAL())
+            {
+                return grupoClienteDAL.updateGrupoCliente(grupoCliente);
+            }
+        }
+
     }
 }

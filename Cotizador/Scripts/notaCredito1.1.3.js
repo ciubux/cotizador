@@ -542,9 +542,10 @@ jQuery(function ($) {
             if ((cantidad > cantidadOriginal) || cantidad == 0)
                 cantidadIncorrecta = true;
 
-            var precioUnitario = $("." + arrId[0] + ".detprecioUnitario").html().trim();
-            var precioUnitarioOriginal = $("." + arrId[0] + ".detPrecioUnitarioOriginal").html().trim();
-            if ((precioUnitario > precioUnitarioOriginal) || precioUnitario == 0)
+            var precioUnitario = parseFloat($("." + arrId[0] + ".detprecioUnitario").html().trim());
+            var precioUnitarioOriginal = parseFloat($("." + arrId[0] + ".detPrecioUnitarioOriginal").html().trim());
+
+            if ((precioUnitario > precioUnitarioOriginal))// || precioUnitario == 0)
                 precioUnitarioIncorrecto = true;
         });
 

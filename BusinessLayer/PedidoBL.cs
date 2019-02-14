@@ -30,13 +30,16 @@ namespace BusinessLayer
 
             }
             else {
-                DateTime horaActual = DateTime.Now;
-                DateTime horaLimite = new DateTime(horaActual.Year, horaActual.Month, horaActual.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Hour, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second);
-                if (horaActual >= horaLimite && pedido.ciudad.idCiudad == Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581"))//-- .esProvincia)
+                if (!pedido.usuario.apruebaPedidos)
                 {
-                    pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
-                    /*Constantes.HORA_CORTE_CREDITOS_LIMA.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second*/
-                    pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
+                    DateTime horaActual = DateTime.Now;
+                    DateTime horaLimite = new DateTime(horaActual.Year, horaActual.Month, horaActual.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Hour, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second);
+                    if (horaActual >= horaLimite && pedido.ciudad.idCiudad == Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581"))//-- .esProvincia)
+                    {
+                        pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
+                        /*Constantes.HORA_CORTE_CREDITOS_LIMA.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second*/
+                        pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
+                    }
                 }
             }
 
@@ -67,17 +70,22 @@ namespace BusinessLayer
                     {
                         //Si cliente está bloqueado
 
+                        if (pedidoDetalle.producto.tipoProducto == Producto.TipoProducto.Bien)
+                        {
+
                             PrecioClienteProducto precioClienteProducto = pedidoDetalle.producto.precioClienteProducto;
 
                             int evaluarVariacion = 0;
+
+                            DateTime hoy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                             //¿Tiene precio registrado para facturación? y eliente es el mismo?
-                            if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty && precioClienteProducto.cliente.idCliente == pedido.cliente.idCliente)
+                            if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty)// && precioClienteProducto.cliente.idCliente == pedido.cliente.idCliente)
                             {
-                                if (precioClienteProducto.fechaFinVigencia == null && DateTime.Now > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
+                                if (precioClienteProducto.fechaFinVigencia == null && hoy > precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
                                 {
                                     evaluarVariacion = 1;
                                 }
-                                else if (precioClienteProducto.fechaFinVigencia != null && DateTime.Now > precioClienteProducto.fechaFinVigencia.Value)
+                                else if (precioClienteProducto.fechaFinVigencia != null && hoy > precioClienteProducto.fechaFinVigencia.Value)
                                 {
                                     evaluarVariacion = 4;
                                 }
@@ -147,11 +155,10 @@ namespace BusinessLayer
                                 }
 
                             }
-                        
+                        }
                     }
                 }
             }
-
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
@@ -159,13 +166,49 @@ namespace BusinessLayer
                 pedidoAdjunto.idCliente = pedido.cliente.idCliente;
             }
 
-
-            }
+        }
                 
         public void InsertPedido(Pedido pedido)
         {
             using (var dal = new PedidoDAL())
             {
+
+                String observacionesGuiaRemision = pedido.observacionesGuiaRemision;
+                String observacionesFactura = pedido.observacionesFactura;
+                String observacionesPedido = pedido.observaciones;
+
+                if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
+                {
+                    pedido.observacionesGuiaRemision = "O/C N° " + pedido.numeroReferenciaCliente + "";
+                }
+                if (pedido.direccionEntrega.nombre != null && pedido.direccionEntrega.nombre.Length > 0)
+                {
+                    if (pedido.direccionEntrega.codigoCliente != null && pedido.direccionEntrega.codigoCliente.Length > 0)
+                    {
+                        pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";
+                        pedido.observacionesFactura = pedido.observacionesFactura + pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";
+                        pedido.observaciones = pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";                        
+                    }
+                    else
+                    {
+                        pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + pedido.direccionEntrega.nombre;
+                        pedido.observacionesFactura = pedido.observacionesFactura + pedido.direccionEntrega.nombre;
+                        pedido.observaciones = pedido.direccionEntrega.nombre;
+                    }
+                }
+                if (observacionesPedido != null && !observacionesPedido.Equals(String.Empty))
+                {
+                    pedido.observaciones = pedido.observaciones + " / " + observacionesPedido;
+                }
+                if (observacionesGuiaRemision != null && !observacionesGuiaRemision.Equals(String.Empty))
+                {
+                    pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + " / " + observacionesGuiaRemision;
+                }
+                if (observacionesFactura != null && !observacionesFactura.Equals(String.Empty))
+                {
+                    pedido.observacionesFactura = pedido.observacionesFactura + " / " + observacionesFactura;
+                }
+
                 validarPedidoVenta(pedido);
                 dal.InsertPedido(pedido);
             }
@@ -440,7 +483,7 @@ namespace BusinessLayer
         {
 
             ProductoBL productoBL = new ProductoBL();
-            List<DocumentoDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistrados(pedido.cliente.idCliente, pedido.fechaPrecios, pedido.ciudad.esProvincia, pedido.incluidoIGV, familia, proveedor);
+            List<DocumentoDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistradosParaPedido(pedido.cliente.idCliente, pedido.fechaPrecios, pedido.ciudad.esProvincia, pedido.incluidoIGV, familia, proveedor);
 
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
             //Detalle de la cotizacion

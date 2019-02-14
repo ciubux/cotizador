@@ -659,7 +659,7 @@ namespace DataLayer
             foreach (DataRow row in pedidoAdjuntoDataTable.Rows)
             {
                 PedidoAdjunto pedidoAdjunto = new PedidoAdjunto();
-                pedidoAdjunto.idPedidoAdjunto = Converter.GetGuid(row, "id_pedido_adjunto");
+                pedidoAdjunto.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
                 pedidoAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
                 pedidoAdjunto.nombre = Converter.GetString(row, "nombre");
                 pedido.pedidoAdjuntoList.Add(pedidoAdjunto);
@@ -880,9 +880,25 @@ namespace DataLayer
 
             objCommand = GetSqlCommand("pu_venta");
             InputParameterAdd.Guid(objCommand, "idVenta", venta.idVenta);
-            InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Transacción.");
+            InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Venta Consolidada.");
             ExecuteNonQuery(objCommand);
 
+            this.Commit();
+        }
+
+
+        public void InsertVentaRefacturacion(Venta venta)
+        {
+            this.BeginTransaction(IsolationLevel.ReadCommitted);
+            var objCommand = GetSqlCommand("pi_ventaRefacturacion");
+            InputParameterAdd.Guid(objCommand, "idUsuario", venta.guiaRemision.usuario.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", venta.guiaRemision.idMovimientoAlmacen);
+            InputParameterAdd.DateTime(objCommand, "fecha", DateTime.Now);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");
+            OutputParameterAdd.BigInt(objCommand, "numeroVenta");            
+            ExecuteNonQuery(objCommand);
+            venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
+            venta.numero = (Int64)objCommand.Parameters["@numeroVenta"].Value;
             this.Commit();
         }
 

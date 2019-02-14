@@ -1,6 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "124";
-    
+    TempData["ScriptVersion"] = "152";
 }
 
 <!DOCTYPE html>
@@ -35,6 +34,7 @@
                         var linkCotizaciones = "";
                         var linkBusquedaCotizaciones = "";
                         var linkMantenimientoCotizacion = "";
+                        var linkMantenimientoCotizacionGrupal = "";
 
                         var linkPedidos = "";
                         var linkBusquedaPedidos = "";
@@ -64,7 +64,9 @@
 
                         var linkMaestros = "";
                         var linkBusquedaCliente = "";
+                        var linkBusquedaGrupoCliente = "";
                         var linkMantenimientoCliente = "";
+                        var linkMantenimientoGrupoCliente = "";
                         var linkMantenimientoProducto = "";
                         var linkBusquedaProducto = "";
                         var linkCRProducto = "";
@@ -87,6 +89,7 @@
                         {
                             case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
                             case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active"; break;
+
                             case 2: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
                             case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
                             case 4: linkBusquedaGuiasRemision = "ative"; linkMovimientosAlmacen = "active"; break;
@@ -126,6 +129,9 @@
                             case 25: linkBusquedaPedidosAlmacen = "ative"; linkPedidos = "active"; break;
                             case 26: linkMantenimientoPedidoAlmacen = "ative"; linkPedidos = "active"; break;
 
+
+                            case 35: linkMantenimientoCotizacionGrupal = "ative"; linkCotizaciones = "active"; break;
+
                         }
                         var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
 
@@ -146,6 +152,10 @@
                                     @if (usuario.creaCotizaciones)
                                     {
                                         <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Cotización - Crear/Modificar", "Cotizar", "Cotizacion")</li>
+                                    }
+                                    @if (usuario.creaCotizacionesGrupales)
+                                    {
+                                        <li id="linkMantenimientoCotizacionGrupal" class="@linkMantenimientoCotizacionGrupal">@Html.ActionLink("Cotización Grupal - Crear/Modificar", "CotizarGrupo", "Cotizacion")</li>
                                     }
                                 </ul>
                             </li>
@@ -186,6 +196,10 @@
                                     @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
                                     {
                                         <li id="linkMantenimientoPedidoAlmacen" class="@linkMantenimientoPedidoAlmacen">@Html.ActionLink("Pedido Almacén - Crear/Modificar", "Pedir", "PedidoAlmacen")</li>
+                                    }
+                                    @if (usuario.apruebaPedidos || usuario.apruebaPedidosCompra || usuario.apruebaPedidosAlmacen)
+                                    {
+                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Aprobar Pedidos", "AprobarPedidos", "Pedido")</li>
                                     }
                                 </ul>
                             </li>
@@ -260,6 +274,11 @@
                                         <li id="linkBusquedaCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Búsqueda", "Index", "Cliente")</li>
                                         <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
                                     }
+                                    @if (usuario.modificaMaestroClientes)
+                                    {
+                                        <li id="linkBusquedaGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Búsqueda", "Index", "GrupoCliente")</li>
+                                        <li id="linkMantenimientoGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Crear/Modificar", "Editar", "GrupoCliente")</li>
+                                    }
                                     @if (usuario.modificaMaestroProductos)
                                     {
                                         <li id="linkMantenimientoProducto" class="@linkMantenimientoProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
@@ -278,8 +297,8 @@
 
                                     @if (usuario.modificaSubDistribuidor)
                                     {
-                                        <li id="linkBusquedaSubDistribuidor" class="@linkBusquedaSubDistribuidor">@Html.ActionLink("Subdistribuidor - Búsqueda", "List", "SubDistribuidor")</li>
-                                        <li id="linkCRSubDistribuidor" class="@linkCRSubDistribuidor">@Html.ActionLink("Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
+                                        <li id="linkBusquedaSubDistribuidor" class="@linkBusquedaSubDistribuidor">@Html.ActionLink("Categoría Subdistribuidor - Búsqueda", "List", "SubDistribuidor")</li>
+                                        <li id="linkCRSubDistribuidor" class="@linkCRSubDistribuidor">@Html.ActionLink("Categoría Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
                                     }
                                 </ul>
                             </li>

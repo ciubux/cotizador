@@ -117,7 +117,7 @@ namespace Cotizador.Controllers
                 venta.documentoVenta.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
                 ////La fecha de vencimiento es identifica a la fecha de emisión
                 venta.documentoVenta.fechaVencimiento = venta.documentoVenta.fechaEmision.Value;
-                ////El tipo de pago es al contado
+                ////El clasePedido de pago es al contado
                 venta.documentoVenta.tipoPago = DocumentoVenta.TipoPago.Contado;
                 ////La forma de Pago es Efectivo
                 venta.documentoVenta.formaPago = DocumentoVenta.FormaPago.Efectivo;
