@@ -9,29 +9,15 @@ jQuery(function ($) {
     $(document).ready(function () {
         $("#btnBusqueda").click();
         //cargarChosenCliente();
-        mostrarCamposSegunTipoDocIdentidad();
         verificarSiExisteGrupoCliente();
-
-        $('.timepicker').timepicker({
-            timeFormat: 'HH:mm ',
-            interval: turnoTimepickerStep,
-            minTime: '6:00',
-            maxTime: '22:00',
-            startTime: '06:00',
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true,
-            change: function (time) {
-                $(this).change();
-            }
-        });
-        
     });
 
     function verificarSiExisteGrupoCliente() {
         if ($("#idGrupoCliente").val().trim() != 0) {
-            $("#idCiudad").attr("disabled", "disabled");
-            $("#btnFinalizarEdicionGrupoCliente").html('Finalizar Edición');            
+           
+            //$("#idCiudad").attr("disabled", "disabled");
+            $("#grupoCliente_codigo").attr("disabled", "disabled");
+            $("#btnFinalizarEdicionGrupoCliente").html('Finalizar Edición');
         }
         else {
             $("#btnFinalizarEdicionGrupoCliente").html('Finalizar Creación');
@@ -49,12 +35,12 @@ jQuery(function ($) {
 
         var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
 
-        if ($("#cliente_codigo").val().length > 0) {
+        if ($("#grupoCliente_codigo").val().length > 0) {
             $.confirm({
                 title: 'Confirmación',
                 content: '¿Está seguro de cambiar de tipo de Documento?',
                 type: 'orange',
-                buttons: {           
+                buttons: {
                     confirm: {
                         text: 'Sí',
                         btnClass: 'btn-red',
@@ -67,23 +53,23 @@ jQuery(function ($) {
                     cancel: {
                         text: 'No',
                         //btnClass: 'btn-blue',
-//                        keys: ['enter', 'shift'],
+                        //                        keys: ['enter', 'shift'],
                         action: function () {
                             location.reload();
                         }
                     }
                 },
-               
+
             });
 
-           
+
         }
         else {
             cambiarTipoDocumentoIdentidad(tipoDocumentoIdentidad);
             limpiarFormulario();
             mostrarCamposSegunTipoDocIdentidad();
         }
-        
+
     });
 
     function cambiarTipoDocumentoIdentidad(tipoDocumentoIdentidad) {
@@ -108,57 +94,15 @@ jQuery(function ($) {
 
     }
 
-    function mostrarCamposSegunTipoDocIdentidad() {
-        var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
-        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI.charCodeAt(0)
-            || tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA.charCodeAt(0)) {
-            $("#labelClienteNombre").html("Nombres y Apellidos");
-            $("#fieldSetDatosSunat").hide();
-            $("#btnRecuperarDatosSunat").hide();
-            $("#divContinueEdit").removeAttr("disabled");
-        }
-        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC.charCodeAt(0)) {
-            $("#labelClienteNombre").html("Nombre Comercial");
-            $("#fieldSetDatosSunat").show(); 
-            
-            var rSunat = $("#cliente_razonSocialSunat").val();
-            if (rSunat.trim() == "") {
-                $("#btnRecuperarDatosSunat").show();
-                $("#divContinueEdit").attr("disabled", "disabled");
-                $("#cliente_ruc").removeAttr("disabled");
-                $("#tipoDocumentoIdentidad").removeAttr("disabled");
-            } else {
-                $("#btnRecuperarDatosSunat").hide();
-                $("#cliente_ruc").attr("disabled", "disabled");
-                $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
-                $("#divContinueEdit").removeAttr("disabled");
-            }
-        }
-
-    }
-
 
     function limpiarFormulario() {
 
-        $("#cliente_ruc").val("");
-        $("#cliente_razonSocial").val("");
-        $("#cliente_nombreComercial").val("");
-        $("#cliente_domicilioLegal").val("");
-        $("#cliente_contacto1").val("");
-        $("#cliente_telefonoContacto1").val("");
-        $("#cliente_emailContacto1").val("");
-        $("#cliente_correoEnvioFactura").val("");
-        $("#cliente_razonSocialSunat").val("");
-        $("#cliente_nombreComercialSunat").val("");
-        $("#cliente_direccionDomicilioLegalSunat").val("");
-        $("#cliente_estadoContribuyente").val("");
-        $("#cliente_condicionContribuyente").val("");
+        $("#grupoCliente_nombre").val("");
+        $("#grupoCliente_contacto").val("");
+        $("#grupoCliente_telefonoContacto").val("");
+        $("#grupoCliente_emailContacto").val("");
 
-        $("#cliente_ubigeo_Departamento").val("");
-        $("#cliente_ubigeo_Provincia").val("");
-        $("#cliente_ubigeo_Distrito").val("");
-
-        $("#cliente_plazoCredito").val("");
+        $("#grupoCliente_plazoCredito").val("");
         $("#tipoPagoCliente").val("0");
         $("#formaPagoCliente").val("0");
 
@@ -228,63 +172,12 @@ jQuery(function ($) {
         document.body.scrollTop = default_scrollTop;
     };
 
-  
-   
 
 
 
-    $("#btnRecuperarDatosSunat").click(function () {
-
-        var ruc = $("#cliente_ruc").val();
-        
-        if (ruc.length != 11) {
-            $.alert({
-                title: "RUC Inválido",
-                type: 'orange',
-                content: 'Debe ingresar un número de RUC válido.',
-                buttons: {
-                    OK: function () { }
-                }
-            });
-            $('#cliente_ruc').focus();
-            return false;
-        }
-
-        $.ajax({
-            url: "/GrupoCliente/GetDatosSunat",
-            type: 'POST',
-            dataType: 'JSON',
-            data: { ruc: ruc },
-            success: function (cliente) {
-                $("#cliente_razonSocialSunat").val(cliente.razonSocialSunat);
-                $("#cliente_nombreComercial").val(cliente.nombreComercial);                
-                $("#cliente_nombreComercialSunat").val(cliente.nombreComercialSunat);
-                $("#cliente_direccionDomicilioLegalSunat").val(cliente.direccionDomicilioLegalSunat);
-                $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);
-                $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
-                $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);
-                $("#cliente_estadoContribuyente").val(cliente.estadoContribuyente);
-                $("#cliente_condicionContribuyente").val(cliente.condicionContribuyente);
-                $("#divContinueEdit").removeAttr("disabled");
-                $("#cliente_ruc").attr("disabled", "disabled");
-                $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
-                $("#btnRecuperarDatosSunat").hide();
-            },
-            error: function () {
-                $.alert({
-                    title: 'Error',
-                    content: MENSAJE_ERROR,
-                    type: 'red',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });       
-            }
-        });
-    });
 
 
-    
+
     /**
      * ################################ INICIO CONTROLES DE CLIENTE
      */
@@ -298,7 +191,7 @@ jQuery(function ($) {
                 $("#idCiudad").focus();
                 return false;
             }
-        });        
+        });
 
         $("#idCliente").ajaxChosen({
             dataType: "json",
@@ -338,155 +231,65 @@ jQuery(function ($) {
     }
 
 
+
     
 
-    $("#idCliente").change(function () {
-
-        var idCliente = $(this).val();
-
-         $('body').loadingModal({
-            text: 'Recuperando Datos del Cliente...'
-        });
-
-        $.ajax({
-            url: "/GrupoCliente/GetCliente",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idCliente: idCliente
-            },
-            success: function (cliente) {
-                limpiarFormulario();
-                
-                $('body').loadingModal('hide')
-
-                $("#cliente_codigo").val(cliente.codigo);
-                $("#cliente_ruc").val(cliente.ruc);
-                $("#cliente_razonSocial").val(cliente.razonSocial);
-                $("#cliente_nombreComercial").val(cliente.nombreComercial);
-                $("#cliente_domicilioLegal").val(cliente.domicilioLegal);
-                $("#cliente_contacto1").val(cliente.contacto1);         
-                $("#cliente_telefonoContacto1").val(cliente.telefonoContacto1);
-                $("#cliente_emailContacto1").val(cliente.emailContacto1);
-                $("#cliente_correoEnvioFactura").val(cliente.correoEnvioFactura);
-                $("#cliente_razonSocialSunat").val(cliente.razonSocialSunat);
-                $("#cliente_nombreComercialSunat").val(cliente.nombreComercialSunat);
-                $("#cliente_direccionDomicilioLegalSunat").val(cliente.direccionDomicilioLegalSunat);
-                $("#cliente_estadoContribuyente").val(cliente.estadoContribuyente);
-                $("#cliente_condicionContribuyente").val(cliente.condicionContribuyente);
-
-                $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);
-                $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
-                $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);
-
-                $("#tipoDocumentoIdentidad").val(cliente.tipoDocumentoIdentidad);
-                $("#formaPagoCliente").val(cliente.formaPagoFactura);
-
-                /*Plazos de Crédito*/
-                $("#plazoCreditoSolicitado").val(cliente.plazoCreditoSolicitado);
-                $("#tipoPagoCliente").val(cliente.tipoPagoFactura);
-                $("#cliente_sobrePlazo").val(cliente.sobrePlazo);
-
-                /*Montos de Crédito*/
-                $("#cliente_creditoSolicitado").val(cliente.creditoSolicitado);
-                $("#cliente_creditoAprobado").val(cliente.creditoAprobado);
-                $("#cliente_sobreGiro").val(cliente.sobreGiro);
-
-                /*Vendedores*/
-
-                if (cliente.usuario.defineResponsableComercial || !cliente.vendedoresAsignados)
-                {
-                    $("#idResponsableComercial").removeAttr("disabled");
-                }
-                else
-                {
-                    $("#idResponsableComercial").attr("disabled", "disabled");
-                }
-
-                if (cliente.vendedoresAsignados) {
-                    $("#spanVendedoresAsignados").show();
-                    $("#spanVendedoresNoAsignados").hide();
-                }
-                else {
-                    $("#spanVendedoresAsignados").hide();
-                    $("#spanVendedoresNoAsignados").show();
-                }
-
-                $("#idResponsableComercial").val(cliente.responsableComercial.idVendedor);
-                $("#idSupervisorComercial").val(cliente.supervisorComercial.idVendedor);
-                $("#idAsistenteServicioCliente").val(cliente.asistenteServicioCliente.idVendedor);
-
-                $("#cliente_observacionesCredito").val(cliente.observacionesCredito);
-                $("#cliente_observaciones").val(cliente.observaciones);
-
-
-
-
-                verificarSiExisteGrupoCliente();
-                mostrarCamposSegunTipoDocIdentidad();
-            }
-        });
-      
-    });
-    
- 
     $(window).on("paste", function (e) {
-        
-            $.each(e.originalEvent.clipboardData.items, function () {
-                this.getAsString(function (str) {
-                    //alert(str);
-                    var lineas = str.split("\t");           
-                        
-                    if (lineas.length <= 1)
-                        return false;
-                    
-              //      if (lineas[1] == $("#cliente_ruc").val()) {
-                  //      $("#ncRUC").val(lineas[1]);
 
-                 //       $("#cliente_razonSocialSunat").val(lineas[0]);
-                        //$("#ncRUC").val(lineas[1]);
-                    var direccionDomicilioLegalSunat = lineas[0]+ " " + lineas[1] + " - " + lineas[2] + " - " + lineas[3];
+        $.each(e.originalEvent.clipboardData.items, function () {
+            this.getAsString(function (str) {
+                //alert(str);
+                var lineas = str.split("\t");
+
+                if (lineas.length <= 1)
+                    return false;
+
+                //      if (lineas[1] == $("#grupoCliente_ruc").val()) {
+                //      $("#ncRUC").val(lineas[1]);
+
+                //       $("#grupoCliente_razonSocialSunat").val(lineas[0]);
+                //$("#ncRUC").val(lineas[1]);
+                var direccionDomicilioLegalSunat = lineas[0] + " " + lineas[1] + " - " + lineas[2] + " - " + lineas[3];
 
 
 
-                        $('body').loadingModal({
-                            text: 'Recuperando Ubicación Geográfica...'
-                        });
-                        $.ajax({
-                            url: "/GrupoCliente/ChangeDireccionDomicilioLegalSunat",
-                            type: 'POST',
-                            dataType: 'JSON',
-                            data: {
-                                direccionDomicilioLegalSunat: direccionDomicilioLegalSunat
-                            },
-                            erro: function () {
-                                $('body').loadingModal('hide')
-                            },
-
-                            success: function (resultado) {
-                                $('body').loadingModal('hide')
-                                $("#cliente_direccionDomicilioLegalSunat").val(resultado.direccionDomicilioLegalSunat);
-                                $("#cliente_ubigeo_Departamento").val(resultado.ubigeo.Departamento);
-                                $("#cliente_ubigeo_Provincia").val(resultado.ubigeo.Provincia);
-                                $("#cliente_ubigeo_Distrito").val(resultado.ubigeo.Distrito);
-                            }
-                        });
-
-                        changeInputString("estadoContribuyente", $("#cliente_estadoContribuyente").val())
-                        changeInputString("condicionContribuyente", $("#cliente_condicionContribuyente").val())
-                 /*   }
-                    else {
-                        alert("El RUC que acaba de pegar no coincide con el RUC del cliente.");
-                    }*/
+                $('body').loadingModal({
+                    text: 'Recuperando Ubicación Geográfica...'
                 });
-            });
+                $.ajax({
+                    url: "/GrupoCliente/ChangeDireccionDomicilioLegalSunat",
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        direccionDomicilioLegalSunat: direccionDomicilioLegalSunat
+                    },
+                    erro: function () {
+                        $('body').loadingModal('hide')
+                    },
 
-            
+                    success: function (resultado) {
+                        $('body').loadingModal('hide')
+                        $("#grupoCliente_direccionDomicilioLegalSunat").val(resultado.direccionDomicilioLegalSunat);
+                        $("#grupoCliente_ubigeo_Departamento").val(resultado.ubigeo.Departamento);
+                        $("#grupoCliente_ubigeo_Provincia").val(resultado.ubigeo.Provincia);
+                        $("#grupoCliente_ubigeo_Distrito").val(resultado.ubigeo.Distrito);
+                    }
+                });
+
+                changeInputString("estadoContribuyente", $("#grupoCliente_estadoContribuyente").val())
+                changeInputString("condicionContribuyente", $("#grupoCliente_condicionContribuyente").val())
+                /*   }
+                   else {
+                       alert("El RUC que acaba de pegar no coincide con el RUC del cliente.");
+                   }*/
+            });
+        });
+
+
     });
 
 
-    function validacionDatosGrupoCliente()
-    {
+    function validacionDatosGrupoCliente() {
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             $.alert({
                 title: "No selecionó Ciudad",
@@ -499,94 +302,9 @@ jQuery(function ($) {
             $("#idCiudad").focus()
             return false;
         }
-        /*
 
-        var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
-        var ruc = $("#cliente_ruc").val();
 
-        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI.charCodeAt(0))
-        {
-            if (ruc.length != 8) {
-                $.alert({
-                    title: "DNI Inválido", type: 'orange',
-                    content: 'El número de DNI debe tener 8 dígitos.',
-                    buttons: { OK: function () { $('#cliente_ruc').focus(); }
-                    }
-                });
-            }
-
-            if ($("#cliente_nombreComercial").val().length == 0) {
-                $.alert({
-                    title: "Nombre Cliente Inválido",
-                    type: 'orange',
-                    content: 'No existe Nombre Cliente, debe ingresar el Nombre del Cliente"',
-                    buttons: {
-                        OK: function () { $('#cliente_razonSocialSunat').focus(); }
-                    }
-                });
-                return false;
-            }
-        }
-        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC.charCodeAt(0)) {
-            if (ruc.length != 11) {
-                $.alert({
-                    title: "DNI Inválido", type: 'orange',
-                    content: 'El número de DNI debe tener 8 dígitos.',
-                    buttons: {
-                        OK: function () { $('#cliente_ruc').focus(); }
-                    }
-                });
-            }
-         
-            if ($("#cliente_direccionDomicilioLegalSunat").val().length > 120) {
-                $.alert({
-                    title: "Dirección Inválida",
-                    type: 'orange',
-                    content: 'La dirección del domicilio legal obtenido de Sunat debe contener solo 120 caracteres.',
-                    buttons: {
-                        OK: function () { $('#cliente_direccionDomicilioLegalSunat').focus(); }
-                    }
-                });
-
-                return false;
-            }
-
-            if ($("#cliente_razonSocialSunat").val().length == 0) {
-                $.alert({
-                    title: "No existe Razón Social",
-                    type: 'orange',
-                    content: 'No existe Razón Social, debe hacer clic en el botón "Obtener Datos Sunat"',
-                    buttons: {
-                        OK: function () { $('#cliente_razonSocialSunat').focus(); }
-                    }
-                });
-
-                return false;
-            }
-        }
-        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA.charCodeAt(0)) {
-            if (ruc.length > 12 || ruc.length < 0) {
-                $.alert({
-                    title: "Carnet Extranjería Inválido", type: 'orange',
-                    content: 'El número de Carnet Extranjería debe tener 12 caracteres como máximo.',
-                    buttons: {
-                        OK: function () { $('#cliente_ruc').focus(); }
-                    }
-                });
-            }
-
-            if ($("#cliente_nombreComercial").val().length == 0) {
-                $.alert({
-                    title: "Nombre Cliente Inválido",
-                    type: 'orange',
-                    content: 'No existe Nombre Cliente, debe ingresar el Nombre del Cliente"',
-                    buttons: {
-                        OK: function () { $('#cliente_razonSocialSunat').focus(); }
-                    }
-                });
-                return false;
-            }
-        }*/
+      
 
         if ($("#plazoCreditoSolicitado").is(':enabled')) {
 
@@ -603,17 +321,17 @@ jQuery(function ($) {
             }
         }
 
-      /*  if ($("#idResponsableComercial").val().trim() == 0) {
-            $.alert({
-                title: "Responsable Comercial Inválido",
-                type: 'orange',
-                content: 'Debe seleccionar al Responsable Comercial',
-                buttons: {
-                    OK: function () { $('#idResponsableComercial').focus(); }
-                }
-            });
-            return false;
-        }        */
+        /*  if ($("#idResponsableComercial").val().trim() == 0) {
+              $.alert({
+                  title: "Responsable Comercial Inválido",
+                  type: 'orange',
+                  content: 'Debe seleccionar al Responsable Comercial',
+                  buttons: {
+                      OK: function () { $('#idResponsableComercial').focus(); }
+                  }
+              });
+              return false;
+          }        */
 
         return true;
 
@@ -630,11 +348,11 @@ jQuery(function ($) {
         }
     });
 
-    
+
 
     function crearGrupoCliente() {
         if (!validacionDatosGrupoCliente())
-            return false;       
+            return false;
 
         $('body').loadingModal({
             text: 'Creando Grupo Cliente...'
@@ -674,9 +392,9 @@ jQuery(function ($) {
     function editarGrupoCliente() {
 
         if (!validacionDatosGrupoCliente())
-            return false;       
+            return false;
 
-    
+
         $('body').loadingModal({
             text: 'Editando Grupo Cliente...'
         });
@@ -724,8 +442,8 @@ jQuery(function ($) {
         });
     }
 
-    $("#cliente_sobrePlazo").change(function () {
-        changeInputInt("sobrePlazo", $("#cliente_sobrePlazo").val())
+    $("#grupoCliente_sobrePlazo").change(function () {
+        changeInputInt("sobrePlazo", $("#grupoCliente_sobrePlazo").val())
     });
 
     function changeInputDecimal(propiedad, valor) {
@@ -740,21 +458,18 @@ jQuery(function ($) {
         });
     }
 
-    $("#cliente_creditoSolicitado").change(function () {
-        changeInputDecimal("creditoSolicitado", $("#cliente_creditoSolicitado").val())
+    $("#grupoCliente_creditoSolicitado").change(function () {
+        changeInputDecimal("creditoSolicitado", $("#grupoCliente_creditoSolicitado").val())
     });
 
-    $("#cliente_creditoAprobado").change(function () {
-        changeInputDecimal("creditoAprobado", $("#cliente_creditoAprobado").val())
+    $("#grupoCliente_creditoAprobado").change(function () {
+        changeInputDecimal("creditoAprobado", $("#grupoCliente_creditoAprobado").val())
     });
 
-    $("#cliente_sobreGiro").change(function () {
-        changeInputDecimal("sobreGiro", $("#cliente_sobreGiro").val())
+    $("#grupoCliente_sobreGiro").change(function () {
+        changeInputDecimal("sobreGiro", $("#grupoCliente_sobreGiro").val())
     });
-
-    $("#cliente_observacionHorarioEntrega").change(function () {
-        changeInputString("observacionHorarioEntrega", $("#cliente_observacionHorarioEntrega").val())
-    });
+    
 
     /*
     function changeInputTime(propiedad, valor) {
@@ -771,9 +486,9 @@ jQuery(function ($) {
 
 
 
-    $("#cliente_horaInicioPrimerTurnoEntregaFormat").change(function () {
-        var hour = $("#cliente_horaInicioPrimerTurnoEntregaFormat").val().trim();
-        var hourPost = $("#cliente_horaFinPrimerTurnoEntregaFormat").val().trim();
+    $("#grupoCliente_horaInicioPrimerTurnoEntregaFormat").change(function () {
+        var hour = $("#grupoCliente_horaInicioPrimerTurnoEntregaFormat").val().trim();
+        var hourPost = $("#grupoCliente_horaFinPrimerTurnoEntregaFormat").val().trim();
         if (validateHourFormat(hour)) {
             changeInputString("horaInicioPrimerTurnoEntrega", hour);
 
@@ -804,17 +519,17 @@ jQuery(function ($) {
                     }
                 }
 
-                $("#cliente_horaFinPrimerTurnoEntregaFormat").val(txtHoruPost);
+                $("#grupoCliente_horaFinPrimerTurnoEntregaFormat").val(txtHoruPost);
                 changeInputString("horaFinPrimerTurnoEntrega", txtHoruPost);
 
-                $("#cliente_horaInicioSegundoTurnoEntregaFormat").val("");
+                $("#grupoCliente_horaInicioSegundoTurnoEntregaFormat").val("");
                 changeInputString("horaInicioSegundoTurnoEntrega", "");
 
-                $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").val("");
                 changeInputString("horaFinSegundoTurnoEntrega", "");
             }
         } else {
-            $("#cliente_horaInicioPrimerTurnoEntregaFormat").val("09:00");
+            $("#grupoCliente_horaInicioPrimerTurnoEntregaFormat").val("09:00");
             changeInputString("horaInicioPrimerTurnoEntrega", "09:00");
             $.alert({
                 title: "Hora Invalida",
@@ -827,10 +542,10 @@ jQuery(function ($) {
         }
     });
 
-    $("#cliente_horaFinPrimerTurnoEntregaFormat").change(function () {
-        var hourPrev = $("#cliente_horaInicioPrimerTurnoEntregaFormat").val().trim();
-        var hour = $("#cliente_horaFinPrimerTurnoEntregaFormat").val().trim();
-        var hourPost = $("#cliente_horaInicioSegundoTurnoEntregaFormat").val().trim();
+    $("#grupoCliente_horaFinPrimerTurnoEntregaFormat").change(function () {
+        var hourPrev = $("#grupoCliente_horaInicioPrimerTurnoEntregaFormat").val().trim();
+        var hour = $("#grupoCliente_horaFinPrimerTurnoEntregaFormat").val().trim();
+        var hourPost = $("#grupoCliente_horaInicioSegundoTurnoEntregaFormat").val().trim();
 
         if (validateHourFormat(hour)) {
             var valid = true;
@@ -859,27 +574,27 @@ jQuery(function ($) {
             }
 
             if (valid) {
-                changeInputString("horaFinPrimerTurnoEntrega", $("#cliente_horaFinPrimerTurnoEntregaFormat").val());
+                changeInputString("horaFinPrimerTurnoEntrega", $("#grupoCliente_horaFinPrimerTurnoEntregaFormat").val());
 
                 if (!validateHourFormat(hourPost) || !validateHoraPosterior(hour, hourPost)) {
-                    $("#cliente_horaInicioSegundoTurnoEntregaFormat").val("");
+                    $("#grupoCliente_horaInicioSegundoTurnoEntregaFormat").val("");
                     changeInputString("horaInicioSegundoTurnoEntrega", "");
 
-                    $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                    $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").val("");
                     changeInputString("horaFinSegundoTurnoEntrega", "");
                 }
             } else {
-                $("#cliente_horaFinPrimerTurnoEntregaFormat").val("18:00");
+                $("#grupoCliente_horaFinPrimerTurnoEntregaFormat").val("18:00");
                 changeInputString("horaFinPrimerTurnoEntrega", "18:00");
 
-                $("#cliente_horaInicioSegundoTurnoEntregaFormat").val("");
+                $("#grupoCliente_horaInicioSegundoTurnoEntregaFormat").val("");
                 changeInputString("horaInicioSegundoTurnoEntrega", "");
 
-                $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").val("");
                 changeInputString("horaFinSegundoTurnoEntrega", "");
             }
         } else {
-            $("#cliente_horaFinPrimerTurnoEntregaFormat").val("18:00");
+            $("#grupoCliente_horaFinPrimerTurnoEntregaFormat").val("18:00");
             changeInputString("horaFinPrimerTurnoEntrega", "18:00");
             $.alert({
                 title: "Hora Invalida",
@@ -893,12 +608,12 @@ jQuery(function ($) {
     });
 
 
-    $("#cliente_horaInicioSegundoTurnoEntregaFormat").change(function () {
-        
-        var hourPrev = $("#cliente_horaFinPrimerTurnoEntregaFormat").val().trim();
-        var hour = $("#cliente_horaInicioSegundoTurnoEntregaFormat").val().trim();
-        var hourPost = $("#cliente_horaFinSegundoTurnoEntregaFormat").val().trim();
-        
+    $("#grupoCliente_horaInicioSegundoTurnoEntregaFormat").change(function () {
+
+        var hourPrev = $("#grupoCliente_horaFinPrimerTurnoEntregaFormat").val().trim();
+        var hour = $("#grupoCliente_horaInicioSegundoTurnoEntregaFormat").val().trim();
+        var hourPost = $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").val().trim();
+
         if (validateHourFormat(hour)) {
             var valid = true;
             if (!validateHourFormat(hourPrev)) {
@@ -926,21 +641,21 @@ jQuery(function ($) {
             }
 
             if (valid) {
-                changeInputString("horaInicioSegundoTurnoEntrega", $("#cliente_horaInicioSegundoTurnoEntregaFormat").val());
+                changeInputString("horaInicioSegundoTurnoEntrega", $("#grupoCliente_horaInicioSegundoTurnoEntregaFormat").val());
 
                 if (!validateHourFormat(hourPost) || !validateHoraPosterior(hour, hourPost)) {
-                    $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                    $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").val("");
                     changeInputString("horaFinSegundoTurnoEntrega", "");
                 }
             } else {
-                $("#cliente_horaInicioSegundoTurnoEntregaFormat").val("");
+                $("#grupoCliente_horaInicioSegundoTurnoEntregaFormat").val("");
                 changeInputString("horaInicioSegundoTurnoEntrega", "");
 
-                $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").val("");
                 changeInputString("horaFinSegundoTurnoEntrega", "");
             }
         } else {
-            $("#cliente_horaInicioSegundoTurnoEntregaFormat").val("");
+            $("#grupoCliente_horaInicioSegundoTurnoEntregaFormat").val("");
             changeInputString("horaInicioSegundoTurnoEntrega", "");
             $.alert({
                 title: "Hora Invalida",
@@ -954,9 +669,9 @@ jQuery(function ($) {
     });
 
 
-    $("#cliente_horaFinSegundoTurnoEntregaFormat").change(function () {
-        var hourPrev = $("#cliente_horaInicioSegundoTurnoEntregaFormat").val().trim();
-        var hour = $("#cliente_horaFinSegundoTurnoEntregaFormat").val().trim();
+    $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").change(function () {
+        var hourPrev = $("#grupoCliente_horaInicioSegundoTurnoEntregaFormat").val().trim();
+        var hour = $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").val().trim();
 
         if (validateHourFormat(hour)) {
             var valid = true;
@@ -985,13 +700,13 @@ jQuery(function ($) {
             }
 
             if (valid) {
-                changeInputString("horaFinSegundoTurnoEntrega", $("#cliente_horaFinSegundoTurnoEntregaFormat").val());
+                changeInputString("horaFinSegundoTurnoEntrega", $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").val());
             } else {
-                $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+                $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").val("");
                 changeInputString("horaFinSegundoTurnoEntrega", "");
             }
         } else {
-            $("#cliente_horaFinSegundoTurnoEntregaFormat").val("");
+            $("#grupoCliente_horaFinSegundoTurnoEntregaFormat").val("");
             $.alert({
                 title: "Hora Invalida",
                 type: 'orange',
@@ -1006,7 +721,7 @@ jQuery(function ($) {
     function validateHoraPosterior(horaPrev, horaPost) {
         //var horaPrev = $("#" + idHoraPrev).val();
         //var horaPost = $("#" + idHoraPost).val();
-        
+
         horaPrev = horaPrev.split(":");
         horaPost = horaPost.split(":");
 
@@ -1050,111 +765,35 @@ jQuery(function ($) {
 
 
 
-   
 
-    $("#cliente_contacto1").change(function () {
-        changeInputString("contacto1", $("#cliente_contacto1").val());
+
+    $("#grupoCliente_contacto").change(function () {
+        changeInputString("contacto", $("#grupoCliente_contacto").val());
     });
 
-    $("#cliente_telefonoContacto1").change(function () {
-        changeInputString("telefonoContacto1", $("#cliente_telefonoContacto1").val());
+    $("#grupoCliente_telefonoContacto").change(function () {
+        changeInputString("telefonoContacto", $("#grupoCliente_telefonoContacto").val());
     });
 
-    $("#cliente_emailContacto1").change(function () {
-        changeInputString("emailContacto1", $("#cliente_emailContacto1").val());
+    $("#grupoCliente_emailContacto").change(function () {
+        changeInputString("emailContacto", $("#grupoCliente_emailContacto").val());
     });
 
-    $("#cliente_negociacionMultiregional").change(function () {
-        if ($("#cliente_negociacionMultiregional").is(":checked")) {
-            $("#cliente_sedePrincipal").removeAttr("disabled");
-        } else {
-            $("#cliente_sedePrincipal").prop("checked", false);
-            changeInputBoolean('sedePrincipal', 0);
-            $("#cliente_sedePrincipal").attr("disabled", "");
-        }
 
+    $("#grupoCliente_observacionesCredito").change(function () {
+        changeInputString("observacionesCredito", $("#grupoCliente_observacionesCredito").val())
     });
 
-    $("#idOrigen").change(function () {
-        var idOrigen = $("#idOrigen").val();
-        $.ajax({
-            url: "/GrupoCliente/ChangeIdOrigen", type: 'POST',
-            data: {
-                idOrigen: idOrigen
-            },
-            error: function () { location.reload(); },
-            success: function () { }
-        });
-
-    });
-
-    $("#idSubDistribuidor").change(function () {
-        var idSubDistribuidor = $("#idSubDistribuidor").val();
-        $.ajax({
-            url: "/GrupoCliente/ChangeIdSubDistribuidor", type: 'POST',
-            data: {
-                idSubDistribuidor: idSubDistribuidor
-            },
-            error: function () { location.reload(); },
-            success: function () { }
-        });
+    $("#grupoCliente_observaciones").change(function () {
+        changeInputString("observaciones", $("#grupoCliente_observaciones").val())
     });
     
-
-    $("#cliente_ruc").change(function () {
-        changeInputString("ruc", $("#cliente_ruc").val())
+    $("#grupoCliente_nombre").change(function () {
+        changeInputString("nombre", $("#grupoCliente_nombre").val())
     });
 
-    $("#cliente_razonSocial").change(function () {
-        changeInputString("razonSocial", $("#cliente_razonSocial").val())
-    });
-
-    $("#cliente_domicilioLegal").change(function () {
-        changeInputString("domicilioLegal", $("#cliente_domicilioLegal").val())
-    });
-
-    $("#cliente_nombreComercial").change(function () {
-        changeInputString("nombreComercial", $("#cliente_nombreComercial").val())
-    });
-
-    $("#cliente_correoEnvioFactura").change(function () {
-        changeInputString("correoEnvioFactura", $("#cliente_correoEnvioFactura").val())
-    });
-    
-    $("#cliente_razonSocialSunat").change(function () {
-        changeInputString("razonSocialSunat", $("#cliente_razonSocialSunat").val())
-    });
-
-    $("#cliente_nombreComercialSunat").change(function () {
-        changeInputString("nombreComercialSunat", $("#cliente_nombreComercialSunat").val())
-    });
-
-    $("#cliente_direccionDomicilioLegalSunat").change(function () {
-        changeInputString("direccionDomicilioLegalSunat", $("#cliente_direccionDomicilioLegalSunat").val())
-    });
-
-    $("#cliente_estadoContribuyente").change(function () {
-        changeInputString("estadoContribuyente", $("#cliente_direccliente_estadoContribuyentecionDomicilioLegalSunat").val())
-    });
-
-    $("#cliente_condicionContribuyente").change(function () {
-        changeInputString("condicionContribuyente", $("#cliente_direcclientecliente_condicionContribuyente_estadoContribuyentecionDomicilioLegalSunat").val())
-    });
-
-    $("#cliente_observacionesCredito").change(function () {
-        changeInputString("observacionesCredito", $("#cliente_observacionesCredito").val())
-    });
-
-    $("#cliente_observaciones").change(function () {
-        changeInputString("observaciones", $("#cliente_observaciones").val())
-    });
-
-    $("#cliente_textoBusqueda").change(function () {
-        changeInputString("textoBusqueda", $("#cliente_textoBusqueda").val())
-    });
-
-    $("#cliente_codigo").change(function () {
-        changeInputString("codigo", $("#cliente_codigo").val())
+    $("#grupoCliente_codigo").change(function () {
+        changeInputString("codigo", $("#grupoCliente_codigo").val())
     });
 
     $("#formaPagoCliente").change(function () {
@@ -1169,13 +808,13 @@ jQuery(function ($) {
         });
     });
 
-    $("#tipoPagoCliente").change(function () {
-        var tipoPagoFactura = $("#tipoPagoCliente").val();
+    $("#plazoCreditoAprobado").change(function () {
+        var plazoCreditoAprobado = $("#plazoCreditoAprobado").val();
         $.ajax({
-            url: "/GrupoCliente/ChangeTipoPagoFactura",
+            url: "/GrupoCliente/ChangePlazoCreditoAprobado",
             type: 'POST',
             data: {
-                tipoPagoFactura: tipoPagoFactura
+                plazoCreditoAprobado: plazoCreditoAprobado
             },
             success: function () { }
         });
@@ -1195,31 +834,6 @@ jQuery(function ($) {
     });
     
 
-
-
-
-
-    
-
-
-    
-
-    
-    
-
-    $("#btnCopiar").click(function () {
-        /* Get the text field */
-        var copyText = document.getElementById("myInput");
-
-        /* Select the text field */
-        copyText.select();
-
-        /* Copy the text inside the text field */
-        document.execCommand("Copy");
-
-        /* Alert the copied text */
-    //    alert("Copied the text: " + copyText.value);
-    }); 
 
 
 
@@ -1277,42 +891,9 @@ jQuery(function ($) {
 
 
     
-
-    
-
-
-
-
-    $('#modalAprobacion').on('shown.bs.modal', function (e) {
-        limpiarComentario();
-    });
-
-
-
-    
     var ft = null;
-
-
     
     
-    
-
-    //Mantener en Session cambio de Cliente
-    $("#cliente").change(function () {
-
-        $.ajax({
-            url: "/Pedido/updateCliente",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                cliente: $("#cliente").val()
-            },
-            success: function () { }
-        });
-    });
-
-
-
 
     /*####################################################
     EVENTOS DE LA GRILLA
@@ -1598,90 +1179,11 @@ jQuery(function ($) {
     #####################################################*/
 
   
-    $("#estadoCrediticio").change(function () {
-        var estado = $("#estadoCrediticio").val();
-        $.ajax({
-            url: "/Pedido/changeEstadoCrediticio",
-            type: 'POST',
-            data: {
-                estadoCrediticio: estado
-            },
-            success: function () {
-            }
-        });
-    });
-
-    $(document).on('change', "#ActualDepartamento", function () {
-        var ubigeoEntregaId = "000000";
-        if ($("#ActualDepartamento").val().trim().length > 0) {
-            ubigeoEntregaId = $("#ActualDepartamento").val() + "0000";
-        }
-        $.ajax({
-            url: "/Pedido/ChangeUbigeoEntrega",
-            type: 'POST',
-            data: {
-                ubigeoEntregaId: ubigeoEntregaId
-            },
-            success: function () {
-            }
-        });
-    });
-
-    $(document).on('change', "#ActualProvincia",function () {
-        var ubigeoEntregaId = $("#ActualDepartamento").val()+"0000";
-        if ($("#ActualProvincia").val().trim().length > 0) {
-            ubigeoEntregaId = $("#ActualProvincia").val()+"00";
-        }
-        $.ajax({
-            url: "/Pedido/ChangeUbigeoEntrega",
-            type: 'POST',
-            data: {
-                ubigeoEntregaId: ubigeoEntregaId
-            },
-            success: function () {
-            }
-        });
-    });
-
-    $(document).on('change', "#ActualDistrito",function () {
-        var ubigeoEntregaId = $("#ActualDepartamento").val() + $("#ActualProvincia").val() + "00";
-        if ($("#ActualDistrito").val().trim().length > 0) {
-            ubigeoEntregaId = $("#ActualDistrito").val();
-        }
-        $.ajax({
-            url: "/Pedido/ChangeUbigeoEntrega",
-            type: 'POST',
-            data: {
-                ubigeoEntregaId: ubigeoEntregaId
-            },
-            success: function () {
-            }
-        });
-        /*obtenerDireccionesEntrega
-        */
-    });
-
+    
 
     $("#idCiudad").change(function () {
         var idCiudad = $("#idCiudad").val();
         var textCiudad = $("#idCiudad option:selected").text();
-
-        if (textCiudad.trim().toUpperCase() == 'LIMA') {
-            $('#cliente_CanalLima').prop('checked', true);
-            $('#cliente_CanalProvincias').prop('checked', false);
-
-            changeInputBoolean('perteneceCanalLima', 1);
-            changeInputBoolean('perteneceCanalProvincias', 0);
-        } else {
-            $('#cliente_CanalProvincias').prop('checked', true);
-            $('#cliente_CanalLima').prop('checked', false);
-
-            changeInputBoolean('perteneceCanalLima', 0);
-            changeInputBoolean('perteneceCanalProvincias', 1);
-        }
-
-
-        $("#spn_vercliente_mp_registracotizaciones").html($("#idCiudad option:selected").text());
 
         $.ajax({
             url: "/GrupoCliente/ChangeIdCiudad",
@@ -1698,33 +1200,7 @@ jQuery(function ($) {
         });
     });  
 
-
-    $("#idGrupoCliente").change(function () {
-        var idGrupoCliente = $("#idGrupoCliente").val();
-        if (idGrupoCliente != undefined && idGrupoCliente != "") {
-            $("#cliente_habilitadoNegociacionGrupal").closest("label").show();
-        } else {
-            $("#cliente_habilitadoNegociacionGrupal").closest("label").hide();
-            $('#cliente_habilitadoNegociacionGrupal').prop('checked', false);
-            changeInputBoolean('habilitadoNegociacionGrupal', 0)
-        }
-
-        $.ajax({
-            url: "/GrupoCliente/ChangeIdGrupoCliente",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idGrupoCliente: idGrupoCliente
-            },
-            error: function (detalle) {
-                location.reload();
-            },
-            success: function (GrupoCliente) {
-            }
-        });
-    });  
-
-
+    
 
     $(document).on('click', "a.verMas", function () {
         var idCotizacion = event.target.getAttribute("class").split(" ")[0];
@@ -1753,151 +1229,7 @@ jQuery(function ($) {
         divVerMas.style.display = 'block';
         divVerMenos.style.display = 'none';
     });
-
-
-    /*VENDEDORES*/
-
-    $("#idResponsableComercial").change(function () {
-        var idResponsableComercial = $("#idResponsableComercial").val();
-        $.ajax({
-            url: "/GrupoCliente/ChangeIdResponsableComercial", type: 'POST', 
-            data: {
-                idResponsableComercial: idResponsableComercial
-            },
-            error: function () { location.reload();      },
-            success: function () {     }
-        });
-    });
-
-    $("#idSupervisorComercial").change(function () {
-        var idSupervisorComercial = $("#idSupervisorComercial").val();
-        $.ajax({
-            url: "/GrupoCliente/ChangeIdSupervisorComercial", type: 'POST',
-            data: {
-                idSupervisorComercial: idSupervisorComercial
-            },
-            error: function () { location.reload(); },
-            success: function () { }
-        });
-    });
-
-
-    $("#idAsistenteServicioCliente").change(function () {
-        var idAsistenteServicioCliente = $("#idAsistenteServicioCliente").val();
-        $.ajax({
-            url: "/GrupoCliente/ChangeIdAsistenteServicioCliente", type: 'POST',
-            data: {
-                idAsistenteServicioCliente: idAsistenteServicioCliente
-            },
-            error: function () { location.reload(); },
-            success: function () { }
-        });
-    });
-
-       
-    $("#cliente_habilitadoNegociacionGrupal").change(function () {
-        var valor = 1;
-        if (!$('#cliente_habilitadoNegociacionGrupal').prop('checked')) {
-            valor = 0;
-        }
-        changeInputBoolean('habilitadoNegociacionGrupal', valor)
-    });
-
-
-    $("#cliente_bloqueado").change(function () {
-        var valor = 1;
-        if (!$('#cliente_bloqueado').prop('checked')) {
-            valor = 0;
-        }
-        changeInputBoolean('bloqueado', valor)
-    });
-
-    $("#cliente_negociacionMultiregional").change(function () {
-        var valor = 1;
-        if (!$('#cliente_negociacionMultiregional').prop('checked')) {
-            valor = 0;
-        }
-        changeInputBoolean('negociacionMultiregional', valor)
-    });
-
-    $("#cliente_sedePrincipal").change(function () {
-        var valor = 1;
-        if (!$('#cliente_sedePrincipal').prop('checked')) {
-            valor = 0;
-        }
-        changeInputBoolean('sedePrincipal', valor)
-    });
-
-    $("#cliente_CanalMultireginal").change(function () {
-        var valor = 1;
-        var valUpdate = true;
-
-        if (!$('#cliente_CanalMultireginal').prop('checked')) {
-            valor = 0;
-            
-            if ($('#cliente_negociacionMultiregional').prop('checked')) {
-                valUpdate = false;
-                $.alert({
-                    title: "Acción denegada",
-                    type: 'orange',
-                    content: 'No puede desactivar el canal multiregional mientras la negociación multiregional este activa.',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });
-
-                $('#cliente_CanalMultireginal').prop('checked', true);
-            } else {
-                $(".hasCanalMultiregional").hide();
-            }
-
-            
-        } else {
-            $(".hasCanalMultiregional").show();
-        }
-
-        if (valUpdate) {
-            changeInputBoolean('perteneceCanalMultiregional', valor);
-        }
-    });
-
-    $("#cliente_CanalLima").change(function () {
-        var valor = 1;
-        if (!$('#cliente_CanalLima').prop('checked')) {
-            valor = 0;
-        }
-        changeInputBoolean('perteneceCanalLima', valor)
-    });
-
-    $("#cliente_CanalProvincias").change(function () {
-        var valor = 1;
-        if (!$('#cliente_CanalProvincia').prop('checked')) {
-            valor = 0;
-        }
-        changeInputBoolean('perteneceCanalProvincias', valor)
-    });
-
-    $("#cliente_CanalPCP").change(function () {
-        var valor = 1;
-        if (!$('#cliente_CanalPCP').prop('checked')) {
-            valor = 0;
-        }
-        changeInputBoolean('perteneceCanalPCP', valor)
-    });
-
-    $("#cliente_esSubdistribuidor").change(function () {
-        var valor = 1;
-        if (!$('#cliente_esSubdistribuidor').prop('checked')) {
-            valor = 0;
-            $("#divSubDistribuidor").hide();
-        }
-
-        if (valor == 1) {
-            $("#divSubDistribuidor").show();
-        }
-
-        changeInputBoolean('esSubDistribuidor', valor)
-    });
+    
 
     function changeInputBoolean(propiedad, valor) {
         $.ajax({
@@ -1974,29 +1306,23 @@ jQuery(function ($) {
 
     $("#btnBusqueda").click(function () {
         
-        if ($("#cliente_textoBusqueda").val().length < 3 &&
-            $("#idResponsableComercial").val() == 0 &&
-            $("#idSupervisorComercial").val() == 0 &&
-            $("#idAsistenteServicioCliente").val() == 0 &&
-            $("#bloqueadoBusqueda").is(":checked") == 0 &&
+        if ($("#grupoCliente_nombre").val().length < 3 &&
             $("#sinPlazoCreditos").is(":checked") == 0 &&
-            $("#sinAsesorValidado").is(":checked") == 0 &&
-            $("#cliente_codigo").val().trim().length == 0 &&
-            $("#idGrupoCliente").val() == 0
+            $("#grupoCliente_codigo").val().trim().length == 0 
             ) {
             $.alert({
                 title: 'Ingresar texto a buscar',
-                content: 'Debe ingresar el texto a buscar utilizando 3 o más caracteres en el campo "N° Doc / Razón Social / Nombre"',
+                content: 'Debe ingresar el texto a buscar utilizando 3 o más caracteres en el campo Nombre',
                 type: 'orange',
                 buttons: {
                     OK: function () {
 
-                        $("#cliente_textoBusqueda").focus();
+                        $("#grupoCliente_nombre").focus();
                     }
                 }
             });
-            $("#tableClientes > tbody").empty();
-            $("#tableClientes").footable({
+            $("#tableGruposCliente > tbody").empty();
+            $("#tableGruposCliente").footable({
                 "paging": {
                     "enabled": true
                 }
@@ -2015,53 +1341,32 @@ jQuery(function ($) {
                 $("#btnBusqueda").removeAttr("disabled");
             },
 
-            success: function (clienteList) {
+            success: function (list) {
                 $("#btnBusqueda").removeAttr("disabled");
-                $("#tableClientes > tbody").empty();
-                $("#tableClientes").footable({
+                $("#tableGruposCliente > tbody").empty();
+                $("#tableGruposCliente").footable({
                     "paging": {
                         "enabled": true
                     }
                 });
 
-                for (var i = 0; i < clienteList.length; i++) {
-
-                    var textoBloqueado = "";
-                    var textoVendedorValidado = "";
-
-                    if (clienteList[i].bloqueado == true)
-                        textoBloqueado = "Bloqueado";
-
-                    if (clienteList[i].vendedoresAsignados == true) {
-                        textoVendedorValidado = '<span class="green">Validado</span>';
-                    } else {
-                        textoVendedorValidado = '<span class="red">No validado</span>';
-                    }
+                for (var i = 0; i < list.length; i++) {
 
 
 
                     var clienteRow = '<tr data-expanded="true">' +
-                        '<td>  ' + clienteList[i].idPedido + '</td>' +
-                        '<td>  ' + clienteList[i].codigo + '  </td>' +
-                        '<td>  ' + clienteList[i].razonSocialSunat + '  </td>' +
-                        '<td>  ' + clienteList[i].nombreComercial + ' </td>' +
-                        '<td>  ' + clienteList[i].tipoDocumentoIdentidadToString + '</td>' +
-                        '<td>  ' + clienteList[i].ruc + '  </td>' +
-                        '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
-                        '<td>  ' + clienteList[i].grupoCliente.nombre + '  </td>' +
-                        '<td>  ' + textoVendedorValidado + '</td>' +
-                        '<td>  ' + clienteList[i].responsableComercial.descripcion + '</td>' +
-                        '<td>  ' + clienteList[i].supervisorComercial.descripcion + '</td>' +
-                        '<td>  ' + clienteList[i].asistenteServicioCliente.descripcion + '</td>' +
-                        '<td>  ' + clienteList[i].tipoPagoFacturaToString + '</td>' +
-                        '<td>  ' + clienteList[i].creditoAprobado.toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>  ' + textoBloqueado + '  </td>' +
+                        '<td>  ' + list[i].idGrupoCliente + '</td>' +
+                        '<td>  ' + list[i].codigo + '  </td>' +
+                        '<td>  ' + list[i].nombre + '  </td>' +
+                        '<td>  ' + list[i].ciudad.nombre + '  </td>' +
+                        '<td>  ' + list[i].plazoCreditoAprobadoToString + '</td>' +
+                        '<td>  ' + list[i].creditoAprobado.toFixed(cantidadDecimales) + '  </td>' +
                         '<td>' +
-                        '<button type="button" class="' + clienteList[i].idCliente + ' ' + clienteList[i].codigo + ' btnVerCliente btn btn-primary ">Ver</button>' +
+                        '<button type="button" class="' + list[i].idGrupoCliente + ' ' + list[i].codigo + ' btnVerGrupoCliente btn btn-primary ">Ver</button>' +
                         '</td>' +
                         '</tr>';
 
-                    $("#tableClientes").append(clienteRow);
+                    $("#tableGruposCliente").append(clienteRow);
 
                 }
 
@@ -2077,26 +1382,23 @@ jQuery(function ($) {
             }
         });
     });
+    
 
-    $("#btnImportarExcel").click(function () {
-        $("#modalActualizarExcel").modal('show');
-    });
-
-    var idClienteView = "";
-    $(document).on('click', "button.btnVerCliente", function () {
+    var idGrupoClienteView = "";
+    $(document).on('click', "button.btnVerGrupoCliente", function () {
         $('body').loadingModal({
-            text: 'Abriendo Cliente...'
+            text: 'Abriendo Grupo Cliente...'
         });
         $('body').loadingModal('show');
 
         var arrrayClass = event.target.getAttribute("class").split(" ");
-        var idCliente = arrrayClass[0];
-        var codigoCliente = arrrayClass[1];
+        var idGrupoCliente = arrrayClass[0];
+        var codigoGrupoCliente = arrrayClass[1];
 
         $.ajax({
             url: "/GrupoCliente/Show",
             data: {
-                idCliente: idCliente
+                idGrupoCliente: idGrupoCliente
             },
             type: 'POST',
             dataType: 'JSON',
@@ -2105,284 +1407,39 @@ jQuery(function ($) {
                 mostrarMensajeErrorProceso();
             },
             success: function (result) {
-                var cliente = result.cliente;
-                idClienteView = idCliente;
+                var obj = result;
+                idGrupoClienteView = idGrupoCliente;
                 $('body').loadingModal('hide')
-                $("#verCiudadNombre").html(cliente.ciudad.nombre);
-                $("#verCodigo").html(cliente.codigo);
-                $("#verRuc").html(cliente.ruc);
-                $("#verTipoDocumentoIdentidad").html(cliente.tipoDocumentoIdentidadToString);
-                $("#verNumeroDocumento").html(cliente.ruc);
-                $("#verNombreComercial").html(cliente.nombreComercial);
-                $("#verNombreCliente").html(cliente.nombreCliente);
-                $("#verContacto").html(cliente.contacto1);
-                $("#verTelefonoContacto").html(cliente.telefonoContacto1);
-                $("#verEmailContacto").html(cliente.emailContacto1);
-                $("#verCorreoEnvioFactura").html(cliente.correoEnvioFactura);
-                if (cliente.bloqueado) {
-                    $("#verBloqueado").html("Sí");
-                }
-                else {
-                    $("#verBloqueado").html("No");
-                }
-
-                $("#verObservaciones").html(cliente.observaciones);
+                $("#verCiudadNombre").html(obj.ciudad.nombre);
+                $("#verCodigo").html(obj.codigo);
+                $("#verNombre").html(obj.nombre);
+                $("#verContacto").html(obj.contacto);
+                $("#verTelefonoContacto").html(obj.telefonoContacto);
+                $("#verEmailContacto").html(obj.emailContacto);
+                $("#verObservaciones").html(obj.observaciones);
 
                 /*Plazo Crédito*/
-                $("#verPlazoCreditoSolicitado").html(cliente.plazoCreditoSolicitadoToString);
-                $("#verPlazoCreditoAprobado").html(cliente.tipoPagoFacturaToString);
-                $("#verSobrePlazo").html(cliente.sobrePlazo);               
-
+                $("#verPlazoCreditoSolicitado").html(obj.plazoCreditoSolicitadoToString);
+                $("#verPlazoCreditoAprobado").html(obj.plazoCreditoAprobadoToString);
+                
                 /*Montos de Crédito*/
-                $("#verCreditoSolicitado").html(cliente.creditoSolicitado.toFixed(cantidadDecimales));
-                $("#verCreditoAprobado").html(cliente.creditoAprobado.toFixed(cantidadDecimales));
-                $("#verSobreGiro").html(cliente.sobreGiro.toFixed(cantidadDecimales));
+                $("#verCreditoSolicitado").html(obj.creditoSolicitado.toFixed(cantidadDecimales));
+                $("#verCreditoAprobado").html(obj.creditoAprobado.toFixed(cantidadDecimales));
+                $("#verSobreGiro").html(obj.sobreGiro.toFixed(cantidadDecimales));
 
-                $("#verObservacionesCredito").html(cliente.observacionesCredito);
-                $("#verFormaPagoFactura").html(cliente.formaPagoFacturaToString);
-
-                /*Datos Sunat*/
-                $("#verRazonSocialSunat").html(cliente.razonSocialSunat);       
-                $("#verNombreComercialSunat").html(cliente.nombreComercialSunat);
-                $("#verDireccionDomicilioLegalSunat").html(cliente.direccionDomicilioLegalSunat);
-
-                $("#verObservacionHorarioEntrega").html(cliente.observacionHorarioEntrega);     
-
-
-                $("#verEstadoContribuyente").html(cliente.estadoContribuyente);
-                $("#verCondicionContribuyente").html(cliente.condicionContribuyente);
-
-                /*
-                $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);
-                $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
-                $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);*/
-                
-                $("#verHoraInicioPrimerTurnoEntrega").html(cliente.horaInicioPrimerTurnoEntregaFormat);
-                $("#verHoraFinPrimerTurnoEntrega").html(cliente.horaFinPrimerTurnoEntregaFormat);
-                $("#verHoraInicioSegundoTurnoEntrega").html(cliente.horaInicioSegundoTurnoEntregaFormat);
-                $("#verHoraFinSegundoTurnoEntrega").html(cliente.horaFinSegundoTurnoEntregaFormat);
-
-                /*Vendedores*/
-                $("#verResponsableComercial").html(cliente.responsableComercial.descripcion);
-                $("#verSupervisorComercial").html(cliente.supervisorComercial.descripcion);
-                $("#verAsistenteServicioCliente").html(cliente.asistenteServicioCliente.descripcion);
-
-                $("#spnVerOrigen").html(cliente.origen.nombre);
-
-                if (cliente.habilitadoNegociacionGrupal) {
-                    $("#verHabilitadoNegociacionGrupal").show();
-                } else {
-                    $("#verHabilitadoNegociacionGrupal").hide();
-                }
-
-                $("#verGrupoCliente").html(cliente.grupoCliente.nombre);
-                $("#spn_vercliente_mp_registracotizaciones").html(cliente.ciudad.nombre);
-                
-                if (cliente.perteneceCanalMultiregional) {
-                    $("#div_multiregional").show();
-                    $("#li_perteneceCanalMultiregional img").attr("src", "/images/check2.png");
-                } else {
-                    $("#div_multiregional").hide();
-                    $("#li_perteneceCanalMultiregional img").attr("src", "/images/equis.png");
-                }
-                
-                if (cliente.perteneceCanalLima) {
-                    $("#li_perteneceCanalLima img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_perteneceCanalLima img").attr("src", "/images/equis.png");
-                }
-
-                if (cliente.perteneceCanalProvincias) {
-                    $("#li_perteneceCanalProvincias img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_perteneceCanalProvincias img").attr("src", "/images/equis.png");
-                }
-
-                if (cliente.perteneceCanalPCP) {
-                    $("#li_perteneceCanalPCP img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_perteneceCanalPCP img").attr("src", "/images/equis.png");
-                }
-                
-
-                if (cliente.esSubDistribuidor) {
-                    $("#div_subdistribuidor").show();
-                    $("#verSubDistribuidor").html(cliente.subDistribuidor.nombre);
-                } else {
-                    $("#div_subdistribuidor").hide();
-                    $("#verSubDistribuidor").html(cliente.subDistribuidor.nombre);
-                }
-
-
-
-                if (cliente.negociacionMultiregional) {
-                    $("#li_negociacionMultiregional img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_negociacionMultiregional img").attr("src", "/images/equis.png");
-                }
-
-                if (cliente.sedePrincipal) {
-                    $("#li_sedePrincipal img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_sedePrincipal img").attr("src", "/images/equis.png");
-                }
-
-
-                $("#nombreArchivos > li").remove().end();
-
-
-                for (var i = 0; i < cliente.clienteAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + cliente.clienteAdjuntoList[i].nombre + '</a>';
-                    $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                }
-
-
-                $("#verNombreArchivos > li").remove().end();
-
-
-                for (var i = 0; i < cliente.clienteAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + cliente.clienteAdjuntoList[i].nombre + '</a>';
-                    //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                    $('#verNombreArchivos').append($('<li />').html(liHTML));
-                }     
-
-             //   $("#btnEditarCliente").show();
-
-                var preciosList = result.precios;
-                var margenText = "";
-
-                for (var i = 0; i < preciosList.length; i++) {
-                    var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
-                    var fechaFinVigencia = preciosList[i].precioCliente.fechaFinVigencia;
-
-                    if (fechaInicioVigencia == null)
-                        fechaInicioVigencia = "No Definida";
-                    else
-                        fechaInicioVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaInicioVigencia.substr(0, 10));
-
-                    if (fechaFinVigencia == null)
-                        fechaFinVigencia = "No Definida";
-                    else
-                        fechaFinVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaFinVigencia.substr(0, 10));
-
-                    margenText = "";
-                    if ($("#tableListaPrecios th.porcentajeMargen").length) {
-                        margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1)  + ' % </td>';
-                    }
-
-                    var preciosRow = '<tr data-expanded="true">' +
-                        '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
-                        '<td>  ' + preciosList[i].producto.proveedor  + '  </td>' +
-                        '<td>  ' + preciosList[i].producto.sku + '  </td>' +
-                        '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
-                        '<td>' + fechaInicioVigencia + '</td>' +
-                        '<td>' + fechaFinVigencia + '</td>' +
-                        '<td>  ' + preciosList[i].unidad + '</td>' +
-                        '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
-                        '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
-                        
-                        '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
-                         margenText +
-                        '<td>' +
-                        '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +
-                        '</td>' +
-                        '</tr>';
-
-                    $("#tableListaPrecios").append(preciosRow);
-
-                }
-
-                if (preciosList.length > 0) {
-                    $("#msgPreciosSinResultados").hide();
-                }
-                else {
-                    $("#msgPreciosSinResultados").show();
-                }
-                FooTable.init('#tableListaPrecios');
-                
-
-                
-                 //<td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
-                    
-                        
-                     //   $("#btnEditarCliente").show();
-                        
-                $("#modalVerCliente").modal('show');
-                        
-            }
-        });
-    });
-
-    $("#modalVerCliente").on('click', ".btnMostrarPrecios", function () {
-
-        var idProducto = $(this).attr("idProducto");
+                $("#verObservacionesCredito").html(obj.observacionesCredito);
         
-        //verIdCliente
-
-        $.ajax({
-            url: "/Precio/GetPreciosRegistradosCliente",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idProducto: idProducto,
-                idCliente: idClienteView
-            },
-            success: function (producto) {
-                $("#verProducto").html(producto.nombre);
-                $("#verCodigoProducto").html(producto.sku);
-
-
-                var precioListaList = producto.precioLista;
-
-                // var producto = $.parseJSON(respuesta);
-                $("#tableMostrarPrecios > tbody").empty();
-
-                FooTable.init('#tableMostrarPrecios');
-                for (var i = 0; i < precioListaList.length; i++) {
-                    var fechaInicioVigencia = precioListaList[i].fechaInicioVigencia;
-                    var fechaFinVigencia = precioListaList[i].fechaFinVigencia;
-
-                    if (fechaInicioVigencia == null)
-                        fechaInicioVigencia = "No Definida";
-                    else
-                        fechaInicioVigencia = invertirFormatoFecha(precioListaList[i].fechaInicioVigencia.substr(0, 10));
-
-                    if (fechaFinVigencia == null)
-                        fechaFinVigencia = "No Definida";
-                    else
-                        fechaFinVigencia = invertirFormatoFecha(precioListaList[i].fechaFinVigencia.substr(0, 10));
-
-                    var numeroCotizacion = precioListaList[i].numeroCotizacion;
-                    if (numeroCotizacion == null)
-                        numeroCotizacion = "No Identificado";
-
-                    $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
-
-                        '<td>' + numeroCotizacion + '</td>' +
-                        '<td>' + fechaInicioVigencia + '</td>' +
-                        '<td>' + fechaFinVigencia + '</td>' +
-                        '<td>' + precioListaList[i].unidad + '</td>' +
-                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadCuatroDecimales) + '</td>' +
-
-                        '</tr>');
-                    
-                }
+                $("#modalVerGrupoCliente").modal('show');                        
             }
         });
-        $("#modalMostrarPrecios").modal();
-
     });
 
-    $("#btnEditarCliente").click(function () {
+
+    $("#btnEditarGrupoCliente").click(function () {
       //  desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
-            url: "/GrupoCliente/ConsultarSiExisteCliente",
+            url: "/GrupoCliente/ConsultarSiExisteGrupoCliente",
             type: 'POST',
             async: false,
             dataType: 'JSON',
@@ -2390,9 +1447,9 @@ jQuery(function ($) {
                 if (resultado.existe == "false") {
 
                     $.ajax({
-                        url: "/GrupoCliente/iniciarEdicionCliente",
+                        url: "/GrupoCliente/iniciarEdicionGrupoCliente",
                         type: 'POST',
-                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del cliente."); },
+                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del grupo de cliente."); },
                         success: function (fileName) {
                             window.location = '/GrupoCliente/Editar';
                         }
@@ -2401,14 +1458,11 @@ jQuery(function ($) {
                 }
                 else {
                     if (resultado.codigo == 0) {
-                        alert('Está creando un nuevo cliente; para continuar por favor diríjase a la página "Crear/Modificar Cliente" y luego haga clic en el botón Cancelar.');
+                        alert('Está creando un nuevo grupo cliente; para continuar por favor diríjase a la página "Crear/Modificar Grupo Cliente" y luego haga clic en el botón Cancelar.');
                     }
                     
                     else {
-                        if (resultado.codigo == $("#verCodigo").html())
-                            alert('Ya se encuentra editando el cliente con código ' + resultado.codigo + '; para continuar por favor dirigase a la página "Crear/Modificar Cliente".');
-                        else
-                            alert('Está editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cliente" y luego haga clic en el botón Cancelar.');
+                        alert('Ya se encuentra editando el grupo cliente con código ' + resultado.codigo + '; para continuar por favor dirigase a la página "Crear/Modificar Grupo Cliente".');
                     }
                 }
             }

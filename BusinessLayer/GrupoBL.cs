@@ -31,6 +31,14 @@ namespace BusinessLayer
             }
         }
 
+        public List<GrupoCliente> getGruposCliente(GrupoCliente grupoCliente)
+        {
+            using (var grupoDAL = new GrupoClienteDAL())
+            {
+                return grupoDAL.getGruposCliente(grupoCliente);
+            }
+        }
+
 
         public GrupoCliente insertGrupoCliente(GrupoCliente grupoCliente)
         {
@@ -44,7 +52,7 @@ namespace BusinessLayer
         {
             using (var grupoClienteDAL = new GrupoClienteDAL())
             {
-                return grupoClienteDAL.insertGrupoCliente(grupoCliente);
+                return grupoClienteDAL.updateGrupoCliente(grupoCliente);
             }
         }
 
