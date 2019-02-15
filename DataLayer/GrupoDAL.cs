@@ -51,11 +51,27 @@ namespace DataLayer
             {
                 grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
                 grupoCliente.codigo = Converter.GetString(row, "codigo");
-                grupoCliente.nombre = Converter.GetString(row, "nombre");
+                grupoCliente.nombre = Converter.GetString(row, "grupo");
+                grupoCliente.Estado = Converter.GetInt(row, "estado");
 
+
+                grupoCliente.contacto = Converter.GetString(row, "contacto");
+                grupoCliente.telefonoContacto = Converter.GetString(row, "telefono_contacto");
+                grupoCliente.emailContacto = Converter.GetString(row, "email_contacto");
+                grupoCliente.observaciones = Converter.GetString(row, "observaciones");
+            
+                
                 grupoCliente.ciudad = new Ciudad();
                 grupoCliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                grupoCliente.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
                 grupoCliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
+                grupoCliente.plazoCreditoAprobado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_aprobado");
+
+                grupoCliente.creditoAprobado = Converter.GetDecimal(row, "credito_aprobado");
+                grupoCliente.creditoSolicitado = Converter.GetDecimal(row, "credito_solicitado");
+                grupoCliente.sobreGiro = Converter.GetDecimal(row, "sobre_giro");
+                grupoCliente.observacionesCredito = Converter.GetString(row, "observaciones_credito");
+
             }
 
             return grupoCliente;
@@ -87,6 +103,43 @@ namespace DataLayer
             return grupoClienteList;
         }
 
+        public List<GrupoCliente> getGruposCliente(GrupoCliente objSearch)
+        {
+            var objCommand = GetSqlCommand("ps_findGruposCliente");
+            InputParameterAdd.VarcharEmpty(objCommand, "codigo", objSearch.codigo);
+            InputParameterAdd.Guid(objCommand, "idCiudad", objSearch.ciudad.idCiudad);
+            InputParameterAdd.VarcharEmpty(objCommand, "grupo", objSearch.nombre);
+            InputParameterAdd.Int(objCommand, "sinPlazoCreditoAprobado", objSearch.sinPlazoCreditoAprobado ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "estado", objSearch.Estado);
+            DataTable dataTable = Execute(objCommand);
+            List<GrupoCliente> grupoClienteList = new List<GrupoCliente>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                GrupoCliente grupoCliente = new GrupoCliente();
+                grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                grupoCliente.codigo = Converter.GetString(row, "codigo");
+                grupoCliente.nombre = Converter.GetString(row, "grupo");
+                grupoCliente.Estado = Converter.GetInt(row, "estado");
+
+                grupoCliente.ciudad = new Ciudad();
+                grupoCliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                grupoCliente.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
+                grupoCliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
+                grupoCliente.plazoCreditoAprobado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_aprobado");
+
+                grupoCliente.creditoAprobado = Converter.GetDecimal(row, "credito_aprobado");
+                grupoCliente.creditoSolicitado = Converter.GetDecimal(row, "credito_solicitado");
+
+                grupoClienteList.Add(grupoCliente);
+            }
+
+            return grupoClienteList;
+        }
+
+
+
+
         public GrupoCliente insertGrupoCliente(GrupoCliente grupoCliente)
         {
             var objCommand = GetSqlCommand("pi_grupoCliente");
@@ -111,13 +164,14 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observaciones", grupoCliente.observaciones);
 
             InputParameterAdd.Varchar(objCommand, "codigo", grupoCliente.codigo);
+            //InputParameterAdd.Int(objCommand, "estado", grupoCliente.Estado);
 
             OutputParameterAdd.Int(objCommand, "newId");
             //OutputParameterAdd.Varchar(objCommand, "codigo", 4);
 
             ExecuteNonQuery(objCommand);
 
-            grupoCliente.idGrupoCliente = (int)objCommand.Parameters["@newId"].Value;
+      //      grupoCliente.idGrupoCliente = (int)objCommand.Parameters["@newId"].Value;
 
 
             foreach (GrupoClienteAdjunto grupoClienteAdjunto in grupoCliente.grupoClienteAdjuntoList)
@@ -143,6 +197,44 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
 
             grupoClienteAdjunto.idArchivoAdjunto = (Guid)objCommand.Parameters["@idArchivoAdjunto"].Value;
+        }
+
+
+        public GrupoCliente updateGrupoCliente(GrupoCliente grupoCliente)
+        {
+            var objCommand = GetSqlCommand("pu_grupoCliente");
+
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", grupoCliente.idGrupoCliente);
+            InputParameterAdd.Guid(objCommand, "idUsuario", grupoCliente.IdUsuarioRegistro);
+            InputParameterAdd.Varchar(objCommand, "grupo", grupoCliente.nombre);
+            InputParameterAdd.Varchar(objCommand, "contacto", grupoCliente.contacto);
+            InputParameterAdd.Varchar(objCommand, "telefonoContacto", grupoCliente.telefonoContacto);
+            InputParameterAdd.Varchar(objCommand, "emailContacto", grupoCliente.emailContacto);
+            InputParameterAdd.Guid(objCommand, "idCiudad", grupoCliente.ciudad.idCiudad);
+
+            /*Plazo credito*/
+            InputParameterAdd.Int(objCommand, "plazoCreditoSolicitado", (int)grupoCliente.plazoCreditoSolicitado);
+            InputParameterAdd.Int(objCommand, "plazoCreditoAprobado", (int)grupoCliente.plazoCreditoAprobado);
+            InputParameterAdd.Int(objCommand, "sobrePlazo", grupoCliente.sobrePlazo);
+            /*Monto Crédito*/
+            InputParameterAdd.Decimal(objCommand, "creditoSolicitado", grupoCliente.creditoSolicitado);
+            InputParameterAdd.Decimal(objCommand, "creditoAprobado", grupoCliente.creditoAprobado);
+            InputParameterAdd.Decimal(objCommand, "sobreGiro", grupoCliente.sobreGiro);
+
+            InputParameterAdd.Varchar(objCommand, "observacionesCredito", grupoCliente.observacionesCredito);
+            InputParameterAdd.Varchar(objCommand, "observaciones", grupoCliente.observaciones);
+
+            InputParameterAdd.Varchar(objCommand, "codigo", grupoCliente.codigo);
+            InputParameterAdd.Int(objCommand, "estado", grupoCliente.Estado);
+
+            //OutputParameterAdd.Varchar(objCommand, "codigo", 4);
+
+            ExecuteNonQuery(objCommand);
+            
+
+            
+            return grupoCliente;
+
         }
     }
 }

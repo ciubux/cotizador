@@ -69,19 +69,33 @@ namespace Cotizador.Controllers
 
             pedidoTmp.buscarSedesGrupoCliente = false;
 
+            pedidoTmp.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             pedidoTmp.ciudad = new Ciudad();
             pedidoTmp.cliente = new Cliente();
             pedidoTmp.seguimientoPedido = new SeguimientoPedido();
             pedidoTmp.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Todos;
+
+
+            //Si es un coordinador cargarán por defecto todos los pedidos pendientes de atención
+            if (pedidoTmp.usuario.creaGuias)
+            {
+                pedidoTmp.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.NoAtendidos;
+            }
+
             pedidoTmp.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
             pedidoTmp.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Todos;
 
             pedidoTmp.pedidoDetalleList = new List<PedidoDetalle>();
-            pedidoTmp.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+           
             pedidoTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
             
             this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedidoTmp;
             this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = new List<Pedido>();
+
+
+
+
+
         }
 
 

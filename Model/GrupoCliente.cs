@@ -17,13 +17,28 @@ namespace Model
         }
 
         public int idGrupoCliente { get; set; }
+
+        [Display(Name = "Código:")]
         public String codigo { get; set;  }
+
+        [Display(Name = "Nombre:")]
         public String nombre { get; set; }
+
+        [Display(Name = "Contacto:")]
         public String contacto { get; set; }
+
+        [Display(Name = "Telefono Contacto:")]
         public String telefonoContacto { get; set; }
+
+        [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }
+
+        [Display(Name = "Email Contacto:")]
         public String emailContacto { get; set; }
+
+        [Display(Name = "Sede MP (Principal):")]
         public Ciudad ciudad { get; set; }
+
         public override string ToString()
         {
             return "Grupo: " + this.nombre + " - Cod: " + this.codigo;
@@ -37,8 +52,24 @@ namespace Model
         [Display(Name = "Plazo Crédito (Solicitado):")]
         public DocumentoVenta.TipoPago plazoCreditoSolicitado { get; set; }
 
+        public String plazoCreditoSolicitadoToString
+        {
+            get
+            {
+                return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.plazoCreditoSolicitado);
+            }
+        }
+
         [Display(Name = "Plazo Crédito (Aprobado):")]
         public DocumentoVenta.TipoPago plazoCreditoAprobado { get; set; }
+
+        public String plazoCreditoAprobadoToString
+        {
+            get
+            {
+                return EnumHelper<DocumentoVenta.TipoPago>.GetDisplayValue(this.plazoCreditoAprobado);
+            }
+        }
 
         public Boolean existenCambiosCreditos { get; set; }
 
@@ -59,6 +90,7 @@ namespace Model
         [Display(Name = "Sobre Giro S/:")]
         public Decimal sobreGiro { get; set; }
 
+        [Display(Name = "Observaciones Crédito:")]
         public String observacionesCredito { get; set; }
 
         public List<GrupoClienteAdjunto> grupoClienteAdjuntoList { get; set; }

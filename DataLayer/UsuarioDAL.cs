@@ -125,6 +125,9 @@ namespace DataLayer
                 usuario.modificaNegociacionMultiregional = Converter.GetBool(row, "modifica_negociacion_multiregional");
                 usuario.buscaSedesGrupoCliente = Converter.GetBool(row, "busca_sedes_grupo_cliente");
                 
+                usuario.modificaGrupoClientes = Converter.GetBool(row, "modifica_grupo_clientes");
+
+                usuario.visualizaGrupoClientes = Converter.GetBool(row, "visualiza_grupo_cliente");
             }
 
             DataTable dataTableParametros = dataSet.Tables[1];

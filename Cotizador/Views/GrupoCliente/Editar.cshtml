@@ -2,6 +2,7 @@
     ViewBag.Title = "Crear/Modificar Grupo";
     Model.GrupoCliente grupoCliente = ViewBag.grupoCliente;
     var disabledLabel = "disabled = ''";
+
    
 }
 
@@ -58,7 +59,15 @@
                 <div class="form-group">
                     @Html.LabelFor(c => grupoCliente.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        @Html.TextBoxFor(c => grupoCliente.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                         @if (grupoCliente.idGrupoCliente > 0)
+                         {
+                            @Html.TextBoxFor(c => grupoCliente.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                         }
+                         else
+                         {
+                             @Html.TextBoxFor(c => grupoCliente.codigo, htmlAttributes: new { @class = "form-control"})
+                         }
+
                     </div>
                 </div>
             </div>
@@ -161,14 +170,14 @@
                                 @if (grupoCliente.usuario.apruebaPlazoCredito)
                                 {
 
-                                    @Html.DropDownList("tipoPagoCliente",
+                                    @Html.DropDownList("plazoCreditoAprobado",
                                                    EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), grupoCliente.plazoCreditoAprobado),
                                                    new { @class = "form-control" }
                                                    )
                                 }
                                 else
                                 {
-                                    @Html.DropDownList("tipoPagoCliente",
+                                    @Html.DropDownList("plazoCreditoAprobado",
                                                    EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), grupoCliente.plazoCreditoAprobado),
                                                    new { @class = "form-control", @disabled = "disabled" }
                                                    )
@@ -183,7 +192,7 @@
                     <div class="col-sm-6 col-lg-4">
                         <div class="form-group">
                             @Html.LabelFor(dv => grupoCliente.creditoSolicitado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
-                            <div class="grupoCliente-xs-8">
+                            <div class="col-xs-8 ">
                                 @if (grupoCliente.usuario.apruebaMontoCredito)
                                 {
                                     @Html.TextBoxFor(c => grupoCliente.creditoSolicitado, htmlAttributes: new { @class = "form-control", disabled = "disabled", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
@@ -254,7 +263,7 @@
 
                 </div>
 
-                <div class="row">
+                @*<div class="row">
                     <div class="col-sm-6 col-lg-8">
                         <div class="form-group">
                             <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
@@ -266,9 +275,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>*@
 
-                <div class="row">
+                @*<div class="row">
                     <div class="col-sm-6 col-lg-8">
                         <div class="form-group">
                             <label for="archivoAdjunto" class="control-label col-xs-2"></label>
@@ -285,7 +294,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>*@
 
             </fieldset>
 

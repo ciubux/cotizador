@@ -185,6 +185,10 @@ textarea {
         width: 1200px;
     }
 
+    #modalVerGrupoCliente .modal-dialog {
+        width: 1200px;
+    }
+    
     #modalVerProducto .modal-dialog {
         width: 1000px;
     }

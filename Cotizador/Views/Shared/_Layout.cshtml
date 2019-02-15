@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "134";
+    TempData["ScriptVersion"] = "153";
 }
 
 <!DOCTYPE html>
@@ -261,7 +261,8 @@
                             </li>
                         }
 
-                        if (usuario.modificaMaestroClientes || usuario.modificaMaestroProductos)
+                        if (usuario.modificaMaestroClientes || usuario.modificaMaestroProductos || usuario.modificaGrupoClientes
+                            || usuario.visualizaGrupoClientes)
                         {
                             <li class="@linkMaestros">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -274,9 +275,12 @@
                                         <li id="linkBusquedaCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Búsqueda", "Index", "Cliente")</li>
                                         <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
                                     }
-                                    @if (usuario.modificaMaestroClientes)
+                                    @if (usuario.modificaGrupoClientes || usuario.visualizaGrupoClientes)
                                     {
                                         <li id="linkBusquedaGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Búsqueda", "Index", "GrupoCliente")</li>
+                                    }
+                                    @if (usuario.modificaGrupoClientes)
+                                    {
                                         <li id="linkMantenimientoGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Crear/Modificar", "Editar", "GrupoCliente")</li>
                                     }
                                     @if (usuario.modificaMaestroProductos)
