@@ -112,31 +112,31 @@ jQuery(function ($) {
 
     function mostrarCamposSegunTipoDocIdentidad() {
         var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
-        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI.charCodeAt(0)
-            || tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA.charCodeAt(0)) {
+      
+        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI
+            || tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
             $("#labelClienteNombre").html("Nombres y Apellidos");
             $("#fieldSetDatosSunat").hide();
             $("#btnRecuperarDatosSunat").hide();
             $("#divContinueEdit").removeAttr("disabled");
+           
         }
-        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC.charCodeAt(0)) {
+        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC) {
             $("#labelClienteNombre").html("Nombre Comercial");
             $("#fieldSetDatosSunat").show(); 
+            $("#fieldSetDatosSunat").show();
             
             var rSunat = $("#cliente_razonSocialSunat").val();
             if (rSunat.trim() == "") {
-                $("#btnRecuperarDatosSunat").show();
                 $("#divContinueEdit").attr("disabled", "disabled");
                 $("#cliente_ruc").removeAttr("disabled");
                 $("#tipoDocumentoIdentidad").removeAttr("disabled");
             } else {
-                $("#btnRecuperarDatosSunat").hide();
                 $("#cliente_ruc").attr("disabled", "disabled");
                 $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
                 $("#divContinueEdit").removeAttr("disabled");
             }
         }
-
     }
 
 
@@ -270,7 +270,7 @@ jQuery(function ($) {
                 $("#divContinueEdit").removeAttr("disabled");
                 $("#cliente_ruc").attr("disabled", "disabled");
                 $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
-                $("#btnRecuperarDatosSunat").hide();
+               // $("#btnRecuperarDatosSunat").hide();
             },
             error: function () {
                 $.alert({
@@ -506,7 +506,7 @@ jQuery(function ($) {
         var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
         var ruc = $("#cliente_ruc").val();
 
-        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI.charCodeAt(0))
+        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI)
         {
             if (ruc.length != 8) {
                 $.alert({
@@ -529,7 +529,7 @@ jQuery(function ($) {
                 return false;
             }
         }
-        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC.charCodeAt(0)) {
+        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_RUC) {
             if (ruc.length != 11) {
                 $.alert({
                     title: "DNI Inválido", type: 'orange',
@@ -579,7 +579,7 @@ jQuery(function ($) {
                 return false;
             }
         }
-        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA.charCodeAt(0)) {
+        else if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
             if (ruc.length > 12 || ruc.length < 0) {
                 $.alert({
                     title: "Carnet Extranjería Inválido", type: 'orange',
@@ -629,6 +629,24 @@ jQuery(function ($) {
             });
             return false;
         }        */
+            //Si se ha seleccionado que es subdistribuidor se debe indicar la catergoría
+        if ($('#cliente_esSubdistribuidor').prop('checked') && $('#idSubDistribuidor').val() == "") {
+
+            $.alert({
+                title: "Categoría Sub Distribuidor no seleccionado",
+                type: 'orange',
+                content: 'Debe indicar la Categoría del Sub Distribuidor',
+                buttons: {
+                    OK: function () { $('#idSubDistribuidor').focus(); }
+                }
+            });
+            return false;
+        }
+      
+        
+        return false;
+
+
 
         return true;
 

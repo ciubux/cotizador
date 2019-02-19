@@ -10,7 +10,7 @@ namespace Model
     public static class Constantes
     {
         /*FORMATOS*/
-        public static String formatoDecimalesPrecioNeto = "{0:0.00}";
+        public static String formatoDecimalesPrecioNeto = "{0:0.0000}";
         public static String formatoDosDecimales = "{0:0.00}";        
         public static String formatoUnDecimal = "{0:0.0}";
         public static String formatoCuatroDecimales = "{0:0.0000}";
@@ -296,17 +296,17 @@ namespace Model
             [Display(Name = "BUSQUEDA PRODUCTOS")]
             BusquedaProductos = 27,
             [Display(Name = "MANTENIMIENTO PRODUCTO")]
-            MantenimientoProducto = 28,
+            CargaMasivaProductos = 28,
             [Display(Name = "CREATE/UPDATE PRODUCTO")]
-            CUProducto = 29,
+            MantenimientoProductos = 29,
             [Display(Name = "BUSQUEDA ORIGEN")]
             BusquedaOrigenes = 30,
             [Display(Name = "CREATE/UPDATE ORIGEN")]
-            CUOrigen= 31,
+            MantenimientoOrigen= 31,
             [Display(Name = "BUSQUEDA SUBDISTRIBUIDOR")]
             BusquedaSubDistribuidores = 32,
             [Display(Name = "CREATE/UPDATE SUBDISTRIBUIDOR")]
-            CUSubDistribuidor = 33,
+            MantenimientoSubDistribuidor = 33,
             [Display(Name = "APROBAR PEDIDOS")]
             AprobarPedidos = 34,
             [Display(Name = "MANTENIMIENTO COTIZACION GRUPAL")]

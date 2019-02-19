@@ -710,15 +710,15 @@ jQuery(function ($) {
     
 
     $("#pedido_numeroReferenciaCliente").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeNumeroReferenciaCliente",
-            type: 'POST',
-            data: {
-                numeroReferenciaCliente: $("#pedido_numeroReferenciaCliente").val()
-            },
-            success: function () { }
-        });
+        changeInputString("numeroReferenciaCliente", $("#pedido_numeroReferenciaCliente").val());
     });
+
+
+    $("#pedido_numeroRequerimiento").change(function () {
+        changeInputString("numeroRequerimiento", $("#pedido_numeroRequerimiento").val());
+    });
+
+
 
     $("#pedido_otrosCargos").change(function () {
         $.ajax({
@@ -2650,6 +2650,7 @@ jQuery(function ($) {
                 $("#verCliente").html(pedido.cliente.codigoRazonSocial);
                 $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
                 $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
+                $("#verNumeroRequerimiento").html(pedido.numeroRequerimiento);
                 $("#verFechaEntregaExtendida").val(pedido.fechaEntregaExtendidaString);
             
                 $("#verDireccionEntrega").html(pedido.direccionEntrega.descripcion);

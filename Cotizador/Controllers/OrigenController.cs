@@ -88,7 +88,7 @@ namespace Cotizador.Controllers
 
         public ActionResult Editar(int? idOrigen = null)
         {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.CUOrigen;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoOrigen;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             if (!usuario.modificaOrigen)
@@ -273,7 +273,7 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.BusquedaOrigenes: obj = (Origen)this.Session[Constantes.VAR_SESSION_ORIGEN_BUSQUEDA]; break;
-                    case Constantes.paginas.CUOrigen: obj = (Origen)this.Session[Constantes.VAR_SESSION_ORIGEN]; break;
+                    case Constantes.paginas.MantenimientoOrigen: obj = (Origen)this.Session[Constantes.VAR_SESSION_ORIGEN]; break;
                 }
                 return obj;
             }
@@ -282,7 +282,7 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.BusquedaOrigenes: this.Session[Constantes.VAR_SESSION_ORIGEN_BUSQUEDA] = value; break;
-                    case Constantes.paginas.CUOrigen: this.Session[Constantes.VAR_SESSION_ORIGEN] = value; break;
+                    case Constantes.paginas.MantenimientoOrigen: this.Session[Constantes.VAR_SESSION_ORIGEN] = value; break;
                 }
             }
         }

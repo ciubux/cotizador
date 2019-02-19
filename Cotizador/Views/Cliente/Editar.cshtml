@@ -28,11 +28,14 @@
 
     if (ViewBag.esRuc)
     {
+
+        displaySearchSunat = "";
+/*
         if (cliente.razonSocialSunat == null || cliente.razonSocialSunat.Trim() == "")
         {
             disabledSunat = "disabled=\"disabled\"";
             displaySearchSunat = "display: none;";
-        }
+        }*/
     }
 
 }
@@ -146,7 +149,7 @@ else
 
                     </div>
                     <div class="col-xs-3 row">
-                        <button id="btnRecuperarDatosSunat" style="@displaySearchSunat" type="button" class="btn btn-primary"><img src="~/images/logo_sunat.svg" style="height: 18px; background-color: #ffffff;" /></button>
+                        <button id="btnRecuperarDatosSunat" type="button" class="btn btn-primary"><img src="~/images/logo_sunat.svg" style="height: 18px; background-color: #ffffff;" /></button>
                     </div>
                 </div>
             </div>

@@ -40,6 +40,7 @@ namespace Model
 
         /*PERMISOS PEDIDO*/
         public bool tomaPedidos { get; set; }
+        public bool modificaPedidoFechaEntregaExtendida { get; set; }
         public bool realizaCargaMasivaPedidos { get; set; }
         public bool apruebaPedidos { get { return apruebaPedidosLima || apruebaPedidosProvincias; } }
 
@@ -119,8 +120,7 @@ namespace Model
         public bool creaCotizacionesProvincias { get; set; }
         public bool tomaPedidosProvincias { get; set; }
         public bool programaPedidos { get; set; }
-        public bool modificaMaestroClientes { get; set; }
-        public bool modificaMaestroProductos { get; set; }
+        
         public bool creaNotasCredito { get; set; }
         public bool creaNotasDebito { get; set; }
         public bool realizaRefacturacion { get; set; }
@@ -129,42 +129,65 @@ namespace Model
         public bool confirmaStock { get; set; }
         public bool tomaPedidosCompra { get; set; }
         public bool tomaPedidosAlmacen { get; set; }
+        public bool modificaPedidoVentaFechaEntregaHasta { get; set; }
+        
+
+
+
+        /*Grupo Clientes*/
+        public bool modificaGrupoClientes { get; set; }
+        public bool visualizaGrupoClientes { get; set; }
+
+        public bool buscaSedesGrupoCliente { get; set; }
+
+
+
+        /*Clientes*/
+
+        public bool modificaMaestroClientes { get; set; }
+        public bool bloqueaClientes { get; set; }
+        public bool modificaCanales { get; set; }
+        public bool modificaNegociacionMultiregional { get; set; }
         public bool apruebaPlazoCredito { get; set; }
         public bool apruebaMontoCredito { get; set; }
         public bool modificaResponsableComercial { get; set; }
         public bool modificaSupervisorComercial { get; set; }
         public bool modificaAsistenteAtencionCliente { get; set; }
         public bool modificaResponsablePortafolio { get; set; }
-        public bool modificaPedidoVentaFechaEntregaHasta { get; set; }
-        public bool bloqueaClientes { get; set; }
-        public bool modificaCanales { get; set; }
-        public bool modificaProducto { get; set; }
+        public bool realizaCargaMasivaCliente { get; set; }
+        public bool visualizaClientes { get; set; }
+
+        /*Productos*/
+        public bool visualizaProductos { get; set; }
+        public bool modificaMaestroProductos { get; set; }
+        //public bool modificaProducto { get; set; }
+        public bool realizaCargaMasivaProductos { get; set; }
+
+        /*SubDistribuidores*/
         public bool modificaSubDistribuidor { get; set; }
+        public bool visualizaSubDistribuidores { get; set; }
+
+        /*Origenes*/
         public bool modificaOrigen { get; set; }
-        public bool modificaPedidoFechaEntregaExtendida { get; set; }
-        public bool modificaNegociacionMultiregional { get; set; }
+        public bool visualizaOrigenes { get; set; }
 
-        public bool modificaGrupoClientes { get; set; }
-        public bool visualizaGrupoClientes { get; set; }
 
-        public bool buscaSedesGrupoCliente { get; set; }
+
+
+
+
         public List<Vendedor> vendedorList { get; set; }
-
-
         public List<Vendedor>  responsableComercialList {
             get { return this.vendedorList.Where(v => v.esResponsableComercial).ToList(); }
         }
-
         public List<Vendedor> asistenteServicioClienteList
         {
             get { return this.vendedorList.Where(v => v.esAsistenteServicioCliente).ToList(); }
         }
-
         public List<Vendedor> responsablePortafolioList
         {
             get { return this.vendedorList.Where(v => v.esResponsablePortafolio).ToList(); }
         }
-
         public List<Vendedor> supervisorComercialList
         {
             get { return this.vendedorList.Where(v => v.esSupervisorComercial).ToList(); }

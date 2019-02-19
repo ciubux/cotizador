@@ -94,11 +94,11 @@ namespace Model
         public enum TiposDocumentoIdentidad
         {
             [Display(Name = "RUC")]
-            RUC = '6',
+            RUC = 6,
             [Display(Name = "DNI")]
-            DNI = '1',
+            DNI = 1,
             [Display(Name = "C.E.")]
-            Carnet = '4',
+            Carnet = 4,
         };
         public String tipoDocumentoIdentidadString
         {

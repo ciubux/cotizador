@@ -64,18 +64,22 @@
 
                         var linkMaestros = "";
                         var linkBusquedaCliente = "";
-                        var linkBusquedaGrupoCliente = "";
                         var linkMantenimientoCliente = "";
+                        var linkBusquedaGrupoCliente = "";
                         var linkMantenimientoGrupoCliente = "";
-                        var linkMantenimientoProducto = "";
+
                         var linkBusquedaProducto = "";
-                        var linkCRProducto = "";
+                        var linkCargaMasivaProducto = "";
+                        var linkMantenimientoProducto = "";
 
                         var linkBusquedaOrigen = "";
-                        var linkCROrigen = "";
+                        var linkMantenimientoOrigen = "";
 
                         var linkBusquedaSubDistribuidor = "";
-                        var linkCRSubDistribuidor = "";
+                        var linkMantenimientoSubDistribuidor = "";
+
+
+
 
                         var linkCrearFacturaConsolidada = "";
 
@@ -111,15 +115,15 @@
 
                             case 17: linkBusquedaCliente = "ative"; linkMaestros = "active"; break;
                             case 18: linkMantenimientoCliente = "ative"; linkMaestros = "active"; break;
-                            //  case 27: linkBusquedaProducto = "ative"; linkMaestros = "active"; break;
-                            case 28: linkMantenimientoProducto = "ative"; linkMaestros = "active"; break;
-                            case 29: linkCRProducto = "ative"; linkMaestros = "active"; break;
+                            case 27: linkBusquedaProducto = "ative"; linkMaestros = "active"; break;
+                            case 28: linkCargaMasivaProducto = "ative"; linkMaestros = "active"; break;
+                            case 29: linkMantenimientoProducto = "ative"; linkMaestros = "active"; break;
 
                             case 30: linkBusquedaOrigen = "ative"; linkMaestros = "active"; break;
-                            case 31: linkCROrigen = "ative"; linkMaestros = "active"; break;
+                            case 31: linkMantenimientoOrigen = "ative"; linkMaestros = "active"; break;
 
                             case 32: linkBusquedaSubDistribuidor = "ative"; linkMaestros = "active"; break;
-                            case 33: linkCRSubDistribuidor = "ative"; linkMaestros = "active"; break;
+                            case 33: linkMantenimientoSubDistribuidor = "ative"; linkMaestros = "active"; break;
 
                             case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
                             case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
@@ -270,11 +274,15 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    @if (usuario.modificaMaestroClientes)
+                                    @if (usuario.modificaMaestroClientes || usuario.visualizaClientes)
                                     {
                                         <li id="linkBusquedaCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Búsqueda", "Index", "Cliente")</li>
+                                    }
+                                    @if (usuario.modificaMaestroClientes)
+                                    { 
                                         <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
                                     }
+
                                     @if (usuario.modificaGrupoClientes || usuario.visualizaGrupoClientes)
                                     {
                                         <li id="linkBusquedaGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Búsqueda", "Index", "GrupoCliente")</li>
@@ -283,26 +291,39 @@
                                     {
                                         <li id="linkMantenimientoGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Crear/Modificar", "Editar", "GrupoCliente")</li>
                                     }
+                                    
+
+                                    @if (usuario.modificaMaestroProductos || usuario.visualizaProductos || usuario.realizaCargaMasivaProductos)
+                                    {
+                                        <li id="linkBusquedaProducto" class="@linkBusquedaProducto">@Html.ActionLink("Producto - Búsqueda", "List", "Producto")</li>
+                                    }
                                     @if (usuario.modificaMaestroProductos)
                                     {
-                                        <li id="linkMantenimientoProducto" class="@linkMantenimientoProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
-                                        <li id="linkBusquedaProducto" class="@linkBusquedaProducto">@Html.ActionLink("Producto - Búsqueda", "List", "Producto")</li>
-                                        if (usuario.modificaProducto)
-                                        {
-                                            <li id="linkCRProducto" class="@linkCRProducto">@Html.ActionLink("Producto - Crear/Modificar ", "Editar", "Producto")</li>
-                                        }
+                                        <li id="linkMantenimientoProducto" class="@linkMantenimientoProducto">@Html.ActionLink("Producto - Crear/Modificar ", "Editar", "Producto")</li>
                                     }
+                                    @if (usuario.realizaCargaMasivaProductos)
+                                    {
+                                        <li id="linkCRProducto" class="@linkCargaMasivaProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
+                                    }
+                               
 
-                                    @if (usuario.modificaOrigen)
+                                    @if (usuario.modificaOrigen || usuario.visualizaOrigenes)
                                     {
                                         <li id="linkBusquedaOrigen" class="@linkBusquedaOrigen">@Html.ActionLink("Origen - Búsqueda", "List", "Origen")</li>
-                                        <li id="linkCROrigen" class="@linkCROrigen">@Html.ActionLink("Origen - Crear/Modificar ", "Editar", "Origen")</li>
+                                    }
+                                    @if (usuario.modificaOrigen)
+                                    {
+                                        <li id="linkCROrigen" class="@linkMantenimientoOrigen">@Html.ActionLink("Origen - Crear/Modificar ", "Editar", "Origen")</li>
                                     }
 
-                                    @if (usuario.modificaSubDistribuidor)
+
+                                    @if (usuario.modificaSubDistribuidor || usuario.visualizaSubDistribuidores)
                                     {
                                         <li id="linkBusquedaSubDistribuidor" class="@linkBusquedaSubDistribuidor">@Html.ActionLink("Categoría Subdistribuidor - Búsqueda", "List", "SubDistribuidor")</li>
-                                        <li id="linkCRSubDistribuidor" class="@linkCRSubDistribuidor">@Html.ActionLink("Categoría Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
+                                    }
+                                    @if (usuario.modificaSubDistribuidor)
+                                    {
+                                        <li id="linkCRSubDistribuidor" class="@linkMantenimientoSubDistribuidor">@Html.ActionLink("Categoría Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
                                     }
                                 </ul>
                             </li>

@@ -568,36 +568,17 @@ namespace Cotizador.Controllers
                     //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
                     pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
                     pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
+                    pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
                 }
               
                 if (documentoDetalle.esPrecioAlternativo)
                 {
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
-
-                    if (documentoDetalle.producto.precioClienteProducto != null &&
-                    documentoDetalle.producto.precioClienteProducto.esUnidadAlternativa)
-                    {
-                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.producto.equivalencia;
-                        pedidoDetalle.producto.precioClienteProducto.precioNeto = pedidoDetalle.producto.precioClienteProducto.precioNeto / documentoDetalle.producto.equivalencia;
-                    }
-
-
-                    /**/
-                    //      pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.producto.equivalencia;
-                    //      pedidoDetalle.producto.precioClienteProducto.precioNeto = pedidoDetalle.producto.precioClienteProducto.precioNeto / documentoDetalle.producto.equivalencia;
                 }
                 else
                 {
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
                 }
-                
-                //pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
-               
-
-
-
-
-
                 pedidoDetalle.unidad = documentoDetalle.unidad;
                 pedidoDetalle.porcentajeDescuento = 100 - (pedidoDetalle.producto.precioClienteProducto.precioNeto * 100 / pedidoDetalle.producto.precioLista);
 

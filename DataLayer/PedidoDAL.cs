@@ -183,6 +183,7 @@ namespace DataLayer
            
             InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
             InputParameterAdd.Char(objCommand, "tipo", ((char)pedido.clasePedido).ToString());
+            InputParameterAdd.Varchar(objCommand, "numero_requerimiento", pedido.numeroRequerimiento);
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "numero");
@@ -368,9 +369,8 @@ namespace DataLayer
             }
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
             InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
-           
+            InputParameterAdd.Varchar(objCommand, "numero_requerimiento", pedido.numeroRequerimiento);
             
-
 
             ExecuteNonQuery(objCommand);
 
@@ -748,6 +748,8 @@ namespace DataLayer
                 pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
                 pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
 
+                pedido.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
+
                 pedido.solicitante.nombre = pedido.contactoPedido;
                 pedido.solicitante.telefono = pedido.telefonoContactoPedido;
                 pedido.solicitante.correo = pedido.correoContactoPedido;
@@ -849,6 +851,7 @@ namespace DataLayer
                 pedido.seguimientoCrediticioPedido.usuario = new Usuario();
                 pedido.seguimientoCrediticioPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento_crediticio");
                 pedido.seguimientoCrediticioPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento_crediticio");
+
 
             }
 
@@ -1094,7 +1097,7 @@ namespace DataLayer
                 pedido.contactoPedido = Converter.GetString(row, "contacto_pedido");
                 pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
                 pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
-
+                pedido.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
                 pedido.esPagoContado = Converter.GetBool(row, "es_pago_contado");
 
                 pedido.solicitante.nombre = pedido.contactoPedido;

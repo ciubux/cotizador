@@ -87,7 +87,7 @@ namespace Cotizador.Controllers
 
         public ActionResult Editar(int? idSubDistribuidor = null)
         {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.CUSubDistribuidor;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoSubDistribuidor;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             if (!usuario.modificaSubDistribuidor)
@@ -272,7 +272,7 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.BusquedaSubDistribuidores: obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA]; break;
-                    case Constantes.paginas.CUSubDistribuidor: obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR]; break;
+                    case Constantes.paginas.MantenimientoSubDistribuidor: obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR]; break;
                 }
                 return obj;
             }
@@ -281,7 +281,7 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.BusquedaSubDistribuidores: this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA] = value; break;
-                    case Constantes.paginas.CUSubDistribuidor: this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] = value; break;
+                    case Constantes.paginas.MantenimientoSubDistribuidor: this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] = value; break;
                 }
             }
         }

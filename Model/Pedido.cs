@@ -133,6 +133,8 @@ namespace Model
         [Display(Name = "Ciudad Entrega:")]
         public Ubigeo ubigeoEntrega { get; set; }
 
+        [Display(Name = "Número Requerimiento:")]
+        public String numeroRequerimiento { get; set; }
 
 
         [Display(Name = "Fechas de Entrega:")]

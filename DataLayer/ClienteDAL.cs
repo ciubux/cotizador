@@ -148,7 +148,8 @@ namespace DataLayer
                 cliente.sobreGiro = Converter.GetDecimal(row, "sobre_giro");
 
                 cliente.vendedoresAsignados = Converter.GetBool(row, "vendedores_asignados");
-                cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
+                cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
+                //cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
 
                 /* horarios entrega */
                 DateTime horaTmp = Converter.GetDateTime(row, "hora_inicio_primer_turno_entrega");
@@ -341,7 +342,7 @@ namespace DataLayer
                 ClienteResultado.sobreGiro = Converter.GetDecimal(row, "sobre_giro");
 
                 ClienteResultado.vendedoresAsignados = Converter.GetBool(row, "vendedores_asignados");
-                ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
+                ///ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
 
                 ClienteResultado.bloqueado = Converter.GetBool(row, "bloqueado");
 

@@ -40,7 +40,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "password", usuario.password);
             DataSet dataSet = ExecuteDataSet(objCommand);
 
-            DataTable dataTableUsuario = dataSet.Tables[0];   
+            DataTable dataTableUsuario = dataSet.Tables[0];
 
             foreach (DataRow row in dataTableUsuario.Rows)
             {
@@ -89,7 +89,7 @@ namespace DataLayer
                 usuario.administraDocumentosVentaLima = Converter.GetBool(row, "administra_documentos_venta_lima");
                 usuario.administraDocumentosVentaProvincias = Converter.GetBool(row, "administra_documentos_venta_provincias");
                 usuario.visualizaDocumentosVenta = Converter.GetBool(row, "visualiza_documentos_venta");
-                usuario.apruebaAnulaciones = Converter.GetBool(row, "aprueba_anulaciones");          
+                usuario.apruebaAnulaciones = Converter.GetBool(row, "aprueba_anulaciones");
 
                 usuario.sedeMP = new Ciudad();
                 usuario.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
@@ -112,22 +112,29 @@ namespace DataLayer
                 usuario.tomaPedidosCompra = Converter.GetBool(row, "toma_pedidos_compra");
                 usuario.tomaPedidosAlmacen = Converter.GetBool(row, "toma_pedidos_almacen");
                 usuario.apruebaPlazoCredito = Converter.GetBool(row, "define_plazo_credito");
-                usuario.apruebaMontoCredito= Converter.GetBool(row, "define_monto_credito");
+                usuario.apruebaMontoCredito = Converter.GetBool(row, "define_monto_credito");
                 usuario.modificaResponsableComercial = Converter.GetBool(row, "define_responsable_comercial");
                 usuario.modificaSupervisorComercial = Converter.GetBool(row, "define_supervisor_comercial");
                 usuario.modificaAsistenteAtencionCliente = Converter.GetBool(row, "define_asistente_atencion_cliente");
                 usuario.modificaResponsablePortafolio = Converter.GetBool(row, "define_responsable_portafolio");
                 usuario.modificaPedidoVentaFechaEntregaHasta = Converter.GetBool(row, "modifica_pedido_venta_fecha_entrega_hasta");
                 usuario.modificaCanales = Converter.GetBool(row, "modifica_canales");
-                usuario.modificaProducto = Converter.GetBool(row, "modifica_producto");
+                //usuario.modificaProducto = Converter.GetBool(row, "modifica_producto");
                 usuario.bloqueaClientes = Converter.GetBool(row, "bloquea_clientes");
                 usuario.modificaPedidoFechaEntregaExtendida = Converter.GetBool(row, "modifica_pedido_fecha_entrega_extendida");
                 usuario.modificaNegociacionMultiregional = Converter.GetBool(row, "modifica_negociacion_multiregional");
                 usuario.buscaSedesGrupoCliente = Converter.GetBool(row, "busca_sedes_grupo_cliente");
-                
+
                 usuario.modificaGrupoClientes = Converter.GetBool(row, "modifica_grupo_clientes");
 
                 usuario.visualizaGrupoClientes = Converter.GetBool(row, "visualiza_grupo_cliente");
+                usuario.visualizaClientes = Converter.GetBool(row, "visualiza_clientes");
+                usuario.visualizaProductos = Converter.GetBool(row, "visualiza_productos");
+                usuario.visualizaSubDistribuidores = Converter.GetBool(row, "visualiza_subdistribuidores");
+                usuario.visualizaOrigenes = Converter.GetBool(row, "visualiza_origenes");
+                usuario.realizaCargaMasivaCliente = Converter.GetBool(row, "realiza_carga_masiva_clientes");
+                usuario.realizaCargaMasivaProductos = Converter.GetBool(row, "realiza_carga_masiva_productos");
+
             }
 
             DataTable dataTableParametros = dataSet.Tables[1];

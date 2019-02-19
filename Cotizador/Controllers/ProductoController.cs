@@ -78,7 +78,7 @@ namespace Cotizador.Controllers
 
         public ActionResult Editar(Guid? idProducto = null)
         {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.CUProducto;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoProductos;
             Usuario usuario = null;
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -87,7 +87,7 @@ namespace Cotizador.Controllers
             else
             {
                 usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.modificaMaestroClientes && !usuario.modificaProducto)
+                if (!usuario.modificaMaestroClientes && !usuario.modificaMaestroProductos)
                 {
                     return RedirectToAction("Login", "Account");
                 }
@@ -561,7 +561,7 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.BusquedaProductos: producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA]; break;
-                    case Constantes.paginas.CUProducto: producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO]; break;
+                    case Constantes.paginas.MantenimientoProductos: producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO]; break;
                 }
                 return producto;
             }
@@ -570,7 +570,7 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.BusquedaProductos: this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA] = value; break;
-                    case Constantes.paginas.CUProducto: this.Session[Constantes.VAR_SESSION_PRODUCTO] = value; break;
+                    case Constantes.paginas.MantenimientoProductos: this.Session[Constantes.VAR_SESSION_PRODUCTO] = value; break;
                 }
             }
         }
