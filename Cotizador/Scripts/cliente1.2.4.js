@@ -2202,6 +2202,7 @@ jQuery(function ($) {
 
                 if (cliente.habilitadoNegociacionGrupal) {
                     $("#verHabilitadoNegociacionGrupal").show();
+                    $("#verHabilitadoNegociacionGrupal").html("Este Cliente (" + cliente.codigo + ") hereda los precios del grupo.");
                 } else {
                     $("#verHabilitadoNegociacionGrupal").hide();
                 }

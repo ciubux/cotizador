@@ -9,6 +9,7 @@ namespace Model
     public class Cotizacion : IDocumento
     {
 
+
         public enum OpcionesConsiderarCantidades {
             [Display(Name = "Solo Observaciones")]
             Observaciones = 0,
@@ -17,13 +18,25 @@ namespace Model
             [Display(Name = "Cantidades y Observaciones")]
             Ambos =2};
 
+        public enum TiposCotizacion
+        {
+            [Display(Name = "Regular")]
+            Regular = 0,
+            [Display(Name = "Transitoria (No registra Precios)")]
+            Transitoria = 1,
+            [Display(Name = "Rutinaria (No registra Precios)")]
+            Rutinaria = 2
+        };
+
         public Guid idCotizacion { get; set; }
 
         [Display(Name = "Número Cotización:")]
         public Int64 codigo { get; set; }
         public DateTime fecha { get; set; }
         public Boolean fechaEsModificada { get; set; }
-        public Boolean esTransitoria { get; set; }
+
+        [Display(Name = "Tipo Cotización:")]
+        public TiposCotizacion tipoCotizacion { get; set; }
 
         /* 0 indica días, 1 indica fecha */
         public int mostrarValidezOfertaEnDias { get; set; }

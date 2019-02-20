@@ -239,6 +239,8 @@ namespace DataLayer
                 cliente.subDistribuidor.idSubDistribuidor = Converter.GetInt(row, "id_subdistribuidor");
                 cliente.subDistribuidor.codigo = Converter.GetString(row, "codigo_subdistribuidor");
                 cliente.subDistribuidor.nombre = Converter.GetString(row, "nombre_subdistribuidor");
+
+                
             }
 
             foreach (DataRow row in dataTableAdjunto.Rows)

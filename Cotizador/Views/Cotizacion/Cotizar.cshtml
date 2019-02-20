@@ -38,71 +38,71 @@
     <form class="form-horizontal">
         <div class="row">
             <!--NÚMERO COTIZACION-->
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="numero" class="control-label col-xs-4">Número:</label>
                     <div class="col-xs-8">
                         @if (cotizacion.codigo != 0)
-                    {
-                        <input class="form-control" disabled type="number" value="@cotizacion.codigo" min="0" id="numero" name="numero">
+                        {
+                                <input class="form-control" disabled type="number" value="@cotizacion.codigo" min="0" id="numero" name="numero">
                         }
                         else
                         {
-                            <input class="form-control" disabled type="number" value="" min="0" id="numero" name="numero">
-                        }
-                        <label class="radio-label" style="margin-top: 5px;">
-                            @if (cotizacion.esTransitoria)
-                            {
-                                <input checked type="checkbox" name="cotizacion_esTransitoria" id="cotizacion_esTransitoria" value="1">
-                            }
-                            else
-                            {
-                                <input type="checkbox" name="cotizacion_esTransitoria" id="cotizacion_esTransitoria" value="1">
-                            }
-                            Cotización Transitoria (No registra Precios)
-                        </label>
+                                <input class="form-control" disabled type="number" value="" min="0" id="numero" name="numero">
+                        }     
+
                     </div>
                     
                 </div>
             </div>
-            <!--CIUDAD-->
-            <div class="col-sm-6 col-lg-5">
+             <!--TIPO COTIZACION-->
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    @Html.LabelFor(p => cotizacion.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                    @Html.LabelFor(p => cotizacion.tipoCotizacion, htmlAttributes: new { @class = "control-label col-xs-4", @for = "tipoCotizacion" })
                     <div class="col-xs-8">
-                        @Html.Action("GetCiudades", "Ciudad",
-                                       new
-                                       {
-                                           ciudadSelectId = "idCiudad",
-                                           selectedValue = cotizacion.ciudad.idCiudad
-                                       })
+                        @Html.DropDownList("tipoCotizacion",
+                                EnumHelper.GetSelectList(typeof(Model.Cotizacion.TiposCotizacion), cotizacion.tipoCotizacion),
+                                new { @class = "form-control" }
+                                )
+
                     </div>
+
                 </div>
             </div>
 
         </div>
 
         <div class="row">
-
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => cotizacion.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                                    new
+                                    {
+                                        ciudadSelectId = "idCiudad",
+                                        selectedValue = cotizacion.ciudad.idCiudad
+                                    })
+                    </div>
+                </div>
+            </div>
             <!--CLIENTE-->
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="cliente" class="control-label col-xs-4">Cliente:</label>
 
                     <div class="col-xs-6">
                         <select class="form-control input-sm" id="idCliente" name="idCliente" required>
                             @if (ViewBag.existeCliente == 1)
-                        {
-                            <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
-                    }
-                    else
-                    {
-                        <option value=""></option>
-                }
+                            {
+                                <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
                         </select>
                     </div>
-
-
 
                     <div class="col-xs-2">
                         <button id="btnAgregarCliente" type="button" class="btn btn-primary bouton-image-add addBouton"></button>
@@ -111,7 +111,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="contacto" class="control-label col-xs-4">Dirigido a:</label>
 
@@ -130,7 +130,7 @@
 
         <div class="row">
             <!--FECHA DOCUMENTO-->
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="fecha" class="control-label col-xs-4">Fecha Última Edición:</label>
                     <div class="col-xs-4">
@@ -153,13 +153,13 @@
 
             </div>
 
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="fechaLimiteValidezOferta" class="control-label col-xs-4">Validez Oferta Hasta:</label>
 
 
 
-                    <div class="col-xs-3">
+                    <div class="col-xs-4">
                         <select class="form-control " id="mostrarValidezOfertaEnDias" name="mostrarValidezOfertaEnDias">
                             <option value="0">Días</option>
                             @if (cotizacion.mostrarValidezOfertaEnDias == 1)
@@ -193,12 +193,13 @@
 
         <div class="row">
             <!--FECHA VIGENCIA INICIO -->
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="fechaInicioVigenciaPrecios" class="control-label col-xs-4">Inicio Vigencia Precios:</label>
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaInicioVigenciaPreciosTmp" value="@ViewBag.fechaInicioVigenciaPrecios" />
-                        @if (cotizacion.esTransitoria)
+
+                        @if ((int)cotizacion.tipoCotizacion == 1 || (int)cotizacion.tipoCotizacion == 2)
                         {
                             <input class="form-control" disabled type="text" id="fechaInicioVigenciaPrecios" name="fechaInicioVigenciaPrecios">
                         }
@@ -206,31 +207,40 @@
                         {
                             <input class="form-control" type="text" id="fechaInicioVigenciaPrecios" name="fechaInicioVigenciaPrecios">
                         }
-                        
+
                     </div>
                 </div>
             </div>
 
             <!--FECHA VIGENCIA FIN -->
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="fechaFinVigenciaPrecios" class="control-label col-xs-4">Fin Vigencia Precios:</label>
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaFinVigenciaPreciosTmp" value="@ViewBag.fechaFinVigenciaPrecios" />
-                        <input class="form-control" type="text" id="fechaFinVigenciaPrecios" name="fechaFinVigenciaPrecios">
+
+                        @if ((int)cotizacion.tipoCotizacion == 2)
+                        {
+                            <input class="form-control" disabled type="text" id="fechaFinVigenciaPrecios" name="fechaFinVigenciaPrecios">
+                        }
+                        else
+                        {
+                            <input class="form-control" type="text" id="fechaFinVigenciaPrecios" name="fechaFinVigenciaPrecios">
+                        }
+                        
                     </div>
                 </div>
             </div>
         </div>
 
-
+        <!--
 
         <div class="row">
 
+            
 
-
-            <div class="col-sm-6 col-lg-5">
-                <!--IGV-->
+            <div class="col-sm-6 col-lg-4">
+                IGV
                 <div class="form-group">
                     <label for="igv" class="control-label col-xs-4">¿Precios unitarios incluyen IGV?:</label>
                     <div class="col-xs-8">
@@ -266,28 +276,15 @@
 
 
 
-            <!--CANTIDADES-->
-            <div class="col-sm-6 col-lg-5">
+          
 
-                <div class="form-group">
-                    <label for="considerarCantidades" class="control-label col-xs-4">¿Mostrar cantitades y/o observaciones?:</label>
-                    <div class="col-xs-8">
-                        @Html.DropDownList("considerarCantidades",
-                                                        EnumHelper.GetSelectList(typeof(Model.Cotizacion.OpcionesConsiderarCantidades), cotizacion.considerarCantidades),
-                                                        new { @class = "form-control" }
-                                                        )
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        </div>-->
 
         <div class="row">
 
             <!--FLETE-->
 
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="flete" class="control-label col-xs-4">
                         Recargo Flete %
@@ -300,7 +297,7 @@
             </div>
 
             <!--MOSTRAR CODIGO PROVEEDOR-->
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
 
                 <div class="form-group">
                     <label for="igv" class="control-label col-xs-4">¿Mostrar Cod. Proveedor?:</label>
@@ -330,6 +327,20 @@
                     }
                             </label>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+              <div class="col-sm-6 col-lg-4">
+
+                <div class="form-group">
+                    <label for="considerarCantidades" class="control-label col-xs-4">¿Mostrar cantitades y/o observaciones?:</label>
+                    <div class="col-xs-8">
+                        @Html.DropDownList("considerarCantidades",
+                                                        EnumHelper.GetSelectList(typeof(Model.Cotizacion.OpcionesConsiderarCantidades), cotizacion.considerarCantidades),
+                                                        new { @class = "form-control" }
+                                                        )
+
                     </div>
                 </div>
             </div>

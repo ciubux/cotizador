@@ -45,10 +45,11 @@ namespace Cotizador.Controllers
         }
 
 
-        private void instanciarCotizacionBusqueda()
+        public void instanciarCotizacionBusqueda()
         {
             Cotizacion cotizacionTmp = new Cotizacion();
             cotizacionTmp.esPagoContado = false;
+            cotizacionTmp.tipoCotizacion = Cotizacion.TiposCotizacion.Regular;
             cotizacionTmp.fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now;
             cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
@@ -179,9 +180,10 @@ namespace Cotizador.Controllers
 
 
 
-        private void instanciarCotizacion()
+        public void instanciarCotizacion()
         {
             Cotizacion cotizacionTmp = new Cotizacion();
+            cotizacionTmp.tipoCotizacion = Cotizacion.TiposCotizacion.Regular;
             cotizacionTmp.idCotizacion = Guid.Empty;
             cotizacionTmp.mostrarCodigoProveedor = true;
             cotizacionTmp.fecha = DateTime.Now;
@@ -769,8 +771,11 @@ namespace Cotizador.Controllers
 
 
 
+        public void changeTipoCotizacion()
+        {
 
-
+            this.CotizacionSession.tipoCotizacion = (Cotizacion.TiposCotizacion)int.Parse(Request["tipoCotizacion"].ToString());
+        }
 
         [HttpPost]
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
@@ -821,8 +826,6 @@ namespace Cotizador.Controllers
         public String GetCliente()
         {
             Cotizacion cotizacion = this.CotizacionSession;
-
-
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
             cotizacion.cliente = clienteBl.getCliente(idCliente);            
@@ -841,7 +844,6 @@ namespace Cotizador.Controllers
                 "}";
 
             this.CotizacionSession = cotizacion;
-
             return resultado;
         }
 

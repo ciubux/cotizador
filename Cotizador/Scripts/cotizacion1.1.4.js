@@ -272,25 +272,7 @@ jQuery(function ($) {
 
     });
 
-    $("#cotizacion_esTransitoria").change(function () {
-        var valor = 1;
 
-        if (!$('#cotizacion_esTransitoria').prop('checked')) {
-            valor = 0;
-            $("#fechaInicioVigenciaPrecios").removeAttr("disabled");
-        }
-        else {
-            $("#fechaInicioVigenciaPrecios").attr("disabled", "disabled");
-            var hoy = new Date();
-            $("#fechaInicioVigenciaPrecios").datepicker().datepicker("setDate", hoy);
-            hoy.setDate(hoy.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))
-            $("#fechaFinVigenciaPrecios").datepicker().datepicker("setDate", hoy);
-            $("#fechaInicioVigenciaPrecios").change();
-            $("#fechaFinVigenciaPrecios").change();
-        }
-
-        changeInputBoolean('esTransitoria', valor)
-    });
 
     function changeInputBoolean(propiedad, valor) {
         $.ajax({
@@ -1444,7 +1426,7 @@ jQuery(function ($) {
                 }
 
                 //Si es una cotización transitoria la fecha de fin de vigencia no puede ser mayor a la fecha de inicio de vigencia por más de 10 días
-                if ($('#cotizacion_esTransitoria').prop('checked')) {
+                if ($('#tipoDocumento') == 1) {
 
                     var fechaInicioTmp = fechaInicioVigenciaPrecios.split("/");
                  
@@ -1531,7 +1513,7 @@ jQuery(function ($) {
 
             var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
 
-            if (continuarLuego == 0 && sedePrincipal == 1) {
+            if (continuarLuego == 0 && sedePrincipal == 1 && $('#tipoDocumento') == 0) {
                 $.confirm({
                     title: 'Cliente Multiregional Identificado',
                     content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
@@ -2597,6 +2579,48 @@ jQuery(function ($) {
                 }
             }
         });
+    });
+
+    $("#tipoCotizacion").change(function () {
+        var tipoCotizacion = $("#tipoCotizacion").val();
+     
+        if (tipoCotizacion == 0) {
+            $("#fechaInicioVigenciaPrecios").removeAttr("disabled");
+        }
+        else if (tipoCotizacion == 2) {
+            //$("#fechaInicioVigenciaPrecios").removeAttr("disabled");
+            $("#fechaInicioVigenciaPrecios").attr("disabled", "disabled");
+            $("#fechaFinVigenciaPrecios").attr("disabled", "disabled");
+            $("#fechaInicioVigenciaPrecios").val("");
+            $("#fechaInicioVigenciaPrecios").change();
+            $("#fechaFinVigenciaPrecios").val("");
+            $("#fechaFinVigenciaPrecios").change();
+        }
+        else
+        {
+            $("#fechaInicioVigenciaPrecios").attr("disabled", "disabled");
+            var hoy = new Date();
+            $("#fechaInicioVigenciaPrecios").datepicker().datepicker("setDate", hoy);
+            hoy.setDate(hoy.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))
+            $("#fechaFinVigenciaPrecios").datepicker().datepicker("setDate", hoy);
+            $("#fechaInicioVigenciaPrecios").change();
+            $("#fechaFinVigenciaPrecios").change();
+        }
+
+      
+
+        
+        $.ajax({
+            url: "/Cotizacion/changeTipoCotizacion",
+            type: 'POST',
+            data: {
+                tipoCotizacion: tipoCotizacion
+            },
+            success: function (cantidad) {
+            }
+        });
+
+
     });
 
     //Mantener en Session cambio de Seleccion de IGV

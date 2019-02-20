@@ -565,7 +565,7 @@ namespace Cotizador.Controllers
 
                     pedidoDetalle.producto = documentoDetalle.producto;
 
-                    if (cotizacion.esTransitoria)
+                    if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Transitoria)
                     {
                         //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
                         pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
@@ -576,7 +576,18 @@ namespace Cotizador.Controllers
                         pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
                         pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
                     }
-              
+                    else if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Rutinaria)
+                    {
+                        //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
+                        pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
+                        //pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
+                        //pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia = cotizacion.fechaFinVigenciaPrecios.HasValue ? cotizacion.fechaFinVigenciaPrecios.Value : cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_COTIZACION_TRANSITORIA);
+                        //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
+                        pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
+                        pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
+                    }
+
                     if (documentoDetalle.esPrecioAlternativo)
                     {
                         pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
