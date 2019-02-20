@@ -841,4 +841,331 @@ VALUES(
 END
 
 
+/****** Object:  StoredProcedure [dbo].[pu_pedido]    Script Date: 20/02/2019 8:55:06 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 
+
+ALTER PROCEDURE [dbo].[pu_pedido] 
+@idPedido uniqueidentifier, 
+@numeroGrupo bigint, 
+@idCotizacion uniqueidentifier, 
+@idCiudad uniqueidentifier, 
+@idCliente uniqueidentifier, 
+@numeroReferenciaCliente varchar(100),
+@idDireccionEntrega uniqueidentifier,
+@direccionEntrega varchar(200),
+@contactoEntrega varchar(100),
+@telefonoContactoEntrega varchar(100),
+@codigoCliente varchar(30),
+@codigoMP varchar(30),
+@nombre varchar(250),
+@observacionesDireccionEntrega varchar(250),
+@fechaSolicitud  datetime,
+@fechaEntregaDesde datetime,
+@fechaEntregaHasta datetime,
+@horaEntregaDesde datetime,
+@horaEntregaHasta datetime,
+@horaEntregaAdicionalDesde datetime,
+@horaEntregaAdicionalHasta datetime,
+@idSolicitante uniqueIdentifier,
+@contactoPedido varchar(100),
+@telefonoContactoPedido varchar(100),
+@correoContactoPedido varchar(100),
+@incluidoIGV smallint, 
+@tasaIGV decimal(18,2), 
+@igv decimal(18,2), 
+@total decimal(18,2), 
+@observaciones varchar(500), 
+@idUsuario uniqueidentifier,
+@estado smallint,
+@estadoCrediticio smallint,
+@esPagoContado bit,
+@observacionSeguimientoPedido varchar(500),
+@observacionSeguimientoCrediticioPedido varchar(500),
+@tipoPedido char(1),
+@observacionesGuiaRemision varchar(200),
+@observacionesFactura varchar(200),
+@ubigeoEntrega char(6),
+@otrosCargos decimal(12,2),
+@numeroRequerimiento varchar(50)
+AS
+BEGIN
+
+DECLARE @countDireccionEntrega int;
+DECLARE @countSolicitante int;
+
+SET NOCOUNT ON
+
+IF @numeroGrupo IS NOT NULL 
+BEGIN
+	UPDATE PEDIDO SET numero_grupo = @numeroGrupo where id_pedido  =@idPedido;
+END
+
+
+IF @idDireccionEntrega = CAST(CAST(0 AS BINARY) AS UNIQUEIDENTIFIER)
+BEGIN 
+
+	IF @codigoCliente IS NULL
+	BEGIN 
+		SELECT @countDireccionEntrega = COUNT(*) FROM DIRECCION_ENTREGA
+		WHERE id_cliente = @idCliente 
+		AND estado = 1 
+		AND REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(@direccionEntrega), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  = 
+		REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(descripcion), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ') 
+	
+		IF @countDireccionEntrega = 1
+		BEGIN 
+			SELECT @idDireccionEntrega = id_direccion_entrega FROM DIRECCION_ENTREGA
+			WHERE id_cliente = @idCliente 
+			AND estado = 1 
+			AND REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(@direccionEntrega), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  = 
+			REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(descripcion), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ') 
+		END 
+	END
+	ELSE 
+	BEGIN 
+		SELECT @countDireccionEntrega = COUNT(*) FROM DIRECCION_ENTREGA
+		WHERE id_cliente = @idCliente 
+		AND estado = 1 
+		AND codigo_cliente = @codigoCliente
+	
+		IF @countDireccionEntrega = 1
+		BEGIN 
+			SELECT @idDireccionEntrega = id_direccion_entrega FROM DIRECCION_ENTREGA
+			WHERE id_cliente = @idCliente 
+			AND estado = 1 
+			AND codigo_cliente = @codigoCliente
+		END 
+	END
+END
+
+IF @idDireccionEntrega = CAST(CAST(0 AS BINARY) AS UNIQUEIDENTIFIER)
+BEGIN 
+	SET @idDireccionEntrega  = NEWID();
+	INSERT INTO DIRECCION_ENTREGA
+	(id_direccion_entrega, id_cliente, ubigeo, descripcion, contacto, telefono, estado, usuario_creacion,
+	fecha_creacion, usuario_modificacion, fecha_modificacion,
+	codigo_cliente, codigo_mp, nombre, observaciones)
+	 VALUES(@idDireccionEntrega, @idCliente, @ubigeoEntrega, 
+	@direccionEntrega,@contactoEntrega,@telefonoContactoEntrega,1,@idUsuario, 
+	GETDATE(), @idUsuario, GETDATE(), @codigoCliente, @codigoMP, @nombre, @observacionesDireccionEntrega);
+END 
+ELSE
+BEGIN
+	UPDATE DIRECCION_ENTREGA SET 
+	descripcion = @direccionEntrega, 
+	ubigeo = @ubigeoEntrega, 
+	contacto = @contactoEntrega,
+	telefono = @telefonoContactoEntrega,
+	usuario_modificacion = @idUsuario,
+	fecha_modificacion = GETDATE(), 
+	codigo_cliente = @codigoCliente,
+	codigo_mp = @codigoMP,
+	nombre =@nombre,
+	observaciones = @observacionesDireccionEntrega
+	where id_direccion_entrega = @idDireccionEntrega;
+END 
+
+
+IF @idSolicitante = CAST(CAST(0 AS BINARY) AS UNIQUEIDENTIFIER)
+BEGIN 
+	SELECT @countSolicitante = COUNT(*) FROM SOLICITANTE
+	WHERE id_cliente = @idCliente 
+	AND estado = 1 
+	AND REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(@contactoPedido), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')   = 
+	REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(nombre), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ') 
+	
+	IF @countSolicitante = 1
+	BEGIN 
+		SELECT @idSolicitante = id_solicitante FROM SOLICITANTE
+		WHERE id_cliente = @idCliente 
+		AND estado = 1 
+		AND REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(@contactoPedido), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')   = 
+		REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(nombre), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ') 
+	END 
+END
+
+
+IF @idSolicitante = CAST(CAST(0 AS BINARY) AS UNIQUEIDENTIFIER)
+BEGIN 
+	SET @idSolicitante  = NEWID();
+	INSERT INTO SOLICITANTE 
+	(id_solicitante, id_cliente, nombre, telefono, correo, estado, 
+	usuario_creacion, fecha_creacion, usuario_modificacion, fecha_modificacion)
+	VALUES(@idSolicitante, @idCliente, @contactoPedido, @telefonoContactoPedido, @correoContactoPedido,1,
+	@idUsuario,GETDATE(), @idUsuario, GETDATE());
+END 
+ELSE
+BEGIN
+	UPDATE SOLICITANTE SET 
+	nombre = @contactoPedido, 
+	telefono = @telefonoContactoPedido, 
+	correo = @correoContactoPedido,
+	usuario_modificacion = @idUsuario,
+	fecha_modificacion = GETDATE() 
+	where id_solicitante = @idSolicitante;
+END 
+
+
+UPDATE PEDIDO_DETALLE SET ESTADO = 0 ,
+[usuario_modificacion] = @idUsuario, [fecha_modificacion] = GETDATE()
+WHERE  id_pedido = @idPedido;
+
+
+UPDATE ARCHIVO_ADJUNTO SET estado = 0 where id_archivo_adjunto IN (
+SELECT id_archivo_adjunto FROM PEDIDO_ARCHIVO WHERE  id_pedido = @idPedido);
+
+UPDATE PEDIDO_ARCHIVO SET estado = 0 WHERE  id_pedido = @idPedido
+
+UPDATE [PEDIDO] SET
+id_cotizacion = @idCotizacion,
+[id_ciudad]  = @idCiudad
+,[id_cliente] = @idCliente 
+,numero_referencia_cliente = @numeroReferenciaCliente
+,ubigeo_entrega = @ubigeoEntrega
+,id_direccion_entrega = @idDireccionEntrega
+,direccion_entrega = @direccionEntrega
+,contacto_entrega = @contactoEntrega
+,telefono_contacto_entrega = @telefonoContactoEntrega
+,[fecha_solicitud] = @fechaSolicitud
+,[fecha_entrega_desde] = @fechaEntregaDesde
+,[fecha_entrega_hasta] = @fechaEntregaHasta
+,[hora_entrega_desde] = @horaEntregaDesde
+,[hora_entrega_hasta] = @horaEntregaHasta
+,[hora_entrega_adicional_desde] = @horaEntregaAdicionalDesde
+,[hora_entrega_adicional_hasta] = @horaEntregaAdicionalHasta
+,contacto_pedido = @contactoPedido
+,telefono_contacto_pedido = @telefonoContactoPedido
+,correo_contacto_pedido = @correoContactoPedido
+,incluido_igv = @incluidoIGV
+,tasa_igv = @tasaIGV
+,igv = @igv
+,total = @total
+,observaciones = @observaciones
+,tipo_pedido = @tipoPedido
+,observaciones_guia_remision = @observacionesGuiaRemision
+,observaciones_factura = @observacionesFactura
+,[estado] = 1
+,[usuario_modificacion] = @idUsuario
+,[fecha_modificacion] = GETDATE()
+,[otros_cargos] = @otrosCargos
+,id_solicitante = @idSolicitante
+,es_pago_contado = @esPagoContado
+,numero_requerimiento = @numeroRequerimiento
+ WHERE id_pedido = @idPedido;
+
+UPDATE SEGUIMIENTO_PEDIDO set estado = 0 where id_pedido = @idPedido;
+UPDATE SEGUIMIENTO_CREDITICIO_PEDIDO set estado = 0 where id_pedido = @idPedido;
+
+INSERT INTO SEGUIMIENTO_PEDIDO 
+(
+		id_seguimiento_pedido, 
+		id_usuario ,
+		id_pedido, 
+		estado_pedido,
+		observacion ,
+		estado ,
+		usuario_creacion ,
+		fecha_creacion ,
+		usuario_modifiacion ,
+		fecha_modificacion 
+)
+VALUES(
+			NEWID(),
+			@idUsuario,
+			@idPedido,
+			@estado,
+			@observacionSeguimientoPedido,
+			1,
+			@idUsuario,
+			GETDATE(),
+			@idUsuario,
+			GETDATE()
+);
+
+INSERT INTO SEGUIMIENTO_CREDITICIO_PEDIDO 
+(
+		id_seguimiento_crediticio_pedido, 
+		id_usuario ,
+		id_pedido, 
+		estado_pedido,
+		observacion ,
+		estado ,
+		usuario_creacion ,
+		fecha_creacion ,
+		usuario_modifiacion ,
+		fecha_modificacion 
+)
+VALUES(
+			NEWID(),
+			@idUsuario,
+			@idPedido,
+			@estadoCrediticio,
+			@observacionSeguimientoCrediticioPedido,
+			1,
+			@idUsuario,
+			GETDATE(),
+			@idUsuario,
+			GETDATE()
+);
+
+
+
+END
+
+
+
+-----------------------------------------------------------
+USE [cotizadormp]
+GO
+/****** Object:  StoredProcedure [dbo].[ps_getproductos_search]    Script Date: 20/02/2019 10:43:12 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[ps_getproductos_search] 
+/*@idProveedor uniqueidentifier,
+@idFamilia uniqueidentifier, */
+@textoBusqueda varchar(50),
+@proveedor varchar(5),
+@familia varchar(200),
+@considerarDescontinuados int,
+@tipoPedido char(1)
+AS
+BEGIN
+
+
+
+
+SELECT id_producto, REPLACE(sku,'"',' ') as sku,
+REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(descripcion, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  as descripcion
+FROM PRODUCTO 
+WHERE  (REPLACE(sku,'"',' ') LIKE '%'+REPLACE(@textoBusqueda,' ','%') +'%' OR REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(descripcion, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  LIKE '%'+REPLACE(@textoBusqueda,' ','%')+'%') 
+AND (estado = 1 OR @considerarDescontinuados = 1)
+AND (familia = @familia or @familia = 'Todas')
+AND (proveedor = @proveedor or @proveedor = 'Todos')
+AND (
+	@tipoPedido IS NULL 
+	OR (@tipoPedido = 'V' AND tipo IN (1,3,4,5) ) 
+	OR (@tipoPedido = 'G' AND tipo IN (1) ) 
+	OR (@tipoPedido = 'M' AND tipo = 2 ) 
+)
+
+
+
+/*AND 
+(id_proveedor = @idProveedor OR '00000000-0000-0000-0000-000000000000' = @idProveedor ) AND 
+(id_familia = @idFamilia OR '00000000-0000-0000-0000-000000000000' = @idFamilia )*/
+order by descripcion asc
+END
+
+
+SELECT * FROM PRODUCTO WHERE 
+SKU LIKE '%X' AND descripcion LIKE '%CMD%'
+
+UPDATE PRODUCTO set tipo = 2 where 
+SKU LIKE '%X' AND descripcion LIKE '%CMD%'

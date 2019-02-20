@@ -13,7 +13,7 @@ jQuery(function ($) {
     */
     //CONSTANTES:
     var cantidadDecimales = 2;
-    var cantidadDecimalesPrecioNeto = 4;
+    var cantidadDecimalesPrecioNeto = 2;
     var IGV = 0.18;
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;

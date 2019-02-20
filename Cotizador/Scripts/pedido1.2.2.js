@@ -260,6 +260,22 @@ jQuery(function ($) {
             },
             success: function (cliente)
             {
+
+                if (cliente.correoEnvioFactura == null || cliente.correoEnvioFactura == "") {
+                    $.alert({
+                        title: '¡Advertencia!',
+                        type: 'orange',
+                        content: "Cliente no cuenta con correo para enviarle la factura electrónica, edite el cliente e intente seleccionarlo nuevamente.",
+                        buttons: {
+                            OK: function () {
+                                window.location = '/Pedido/Pedir';
+                            }
+                        }
+                    });
+                    return false;
+                }
+
+
                 if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_VENTA)
                     $("#idCiudad").attr("disabled", "disabled");
 
@@ -1070,7 +1086,7 @@ jQuery(function ($) {
             minTermLength: 5,
             afterTypeDelay: 300,
             cache: false,
-            url: "/Producto/Search"
+            url: "/Pedido/SearchProductos"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
@@ -1611,7 +1627,45 @@ jQuery(function ($) {
 
             }, error: function (detalle) {
 
-                $("#resultadoAgregarProducto").html("Producto ya se encuentra en el detalle del pedido.");
+
+                $.alert({
+                    title: 'Error al agregar producto',
+                    content: detalle.responseText,
+                    type: 'orange',
+                    buttons: {
+
+                        OK: function () {
+                            window.location = '/Pedido/Pedir';
+                        }
+
+                        /*
+                        OK: {
+                           // text: 'SI',
+                            btnClass: 'btn-success',
+                            action: function () {
+                                $('#aplicaSedes').val("1");
+                                callCreate(continuarLuego);
+                            }
+                        },
+                        noAplica: {
+                            text: 'NO, solo registrar precios para ' + $("#idCiudad option:selected").text(),
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                callCreate(continuarLuego);
+                            }
+                        },
+                        cancelar: {
+                            text: 'Cancelar',
+                            btnClass: '',
+                            action: function () {
+                                activarBotonesFinalizarCreacion();
+                            }
+                        }*/
+                    }
+                });
+
+
+            //    $("#resultadoAgregarProducto").html("Producto ya se encuentra en el detalle del pedido.");
 
                 // alert($("#resultadoAgregarProducto").html(detalle.responseText).closest("title"));
 
