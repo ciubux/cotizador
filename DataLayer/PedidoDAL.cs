@@ -398,7 +398,7 @@ namespace DataLayer
         public void ActualizarPedido(Pedido pedido)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pu_actualizarPedido2");
+            var objCommand = GetSqlCommand("pu_actualizarPedido");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaAdicional", pedido.numeroReferenciaAdicional);
@@ -407,6 +407,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
             InputParameterAdd.BigInt(objCommand, "numeroGrupoPedido", pedido.numeroGrupoPedido);
+            InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", pedido.numeroRequerimiento);
 
             ExecuteNonQuery(objCommand);
 
