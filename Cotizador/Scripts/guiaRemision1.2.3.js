@@ -1169,6 +1169,9 @@ jQuery(function ($) {
         $("#verCodigo").html(pedido.cliente.codigo);
 
         $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
+
+
+
         $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
         var fecha = new Date();
         var month = fecha.getMonth() + 1;

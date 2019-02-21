@@ -1637,37 +1637,9 @@ jQuery(function ($) {
                         OK: function () {
                             window.location = '/Pedido/Pedir';
                         }
-
-                        /*
-                        OK: {
-                           // text: 'SI',
-                            btnClass: 'btn-success',
-                            action: function () {
-                                $('#aplicaSedes').val("1");
-                                callCreate(continuarLuego);
-                            }
-                        },
-                        noAplica: {
-                            text: 'NO, solo registrar precios para ' + $("#idCiudad option:selected").text(),
-                            btnClass: 'btn-danger',
-                            action: function () {
-                                callCreate(continuarLuego);
-                            }
-                        },
-                        cancelar: {
-                            text: 'Cancelar',
-                            btnClass: '',
-                            action: function () {
-                                activarBotonesFinalizarCreacion();
-                            }
-                        }*/
                     }
                 });
 
-
-            //    $("#resultadoAgregarProducto").html("Producto ya se encuentra en el detalle del pedido.");
-
-                // alert($("#resultadoAgregarProducto").html(detalle.responseText).closest("title"));
 
             }
 
@@ -2187,16 +2159,19 @@ jQuery(function ($) {
     }
 
 
-    function mostrarMensajeErrorProceso() {
+    function mostrarMensajeErrorProceso(texto) {
+
         $.alert({
-            //icon: 'fa fa-warning',
-            title: 'Error',
-            content: MENSAJE_ERROR,
-            type: 'red',
+            title: 'Error, contacte con TI',
+            content: texto,
+            type: 'orange',
             buttons: {
-                OK: function () { }
+
+                OK: function () {
+                   
+                }
             }
-        });       
+        });
     }
 
     /*CARGA Y DESCARGA DE ARCHIVOS*/
@@ -2337,7 +2312,7 @@ jQuery(function ($) {
             data: { continuarLuego: continuarLuego},
             error: function (detalle) {
                 $('body').loadingModal('hide');
-                mostrarMensajeErrorProceso();
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
@@ -2369,8 +2344,7 @@ jQuery(function ($) {
                     ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
                 }
                 else {
-                    //alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    mostrarMensajeErrorProceso();
+                    mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     window.location = '/Pedido/Index';
                 }
 
@@ -2393,7 +2367,7 @@ jQuery(function ($) {
             },
             error: function (detalle) {
                 $('body').loadingModal('hide')
-                mostrarMensajeErrorProceso();
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
@@ -2426,7 +2400,7 @@ jQuery(function ($) {
                 }
                 else {
                     //alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    mostrarMensajeErrorProceso();
+                    mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     window.location = '/Pedido/Index';
                 }
             }
@@ -2462,8 +2436,8 @@ jQuery(function ($) {
                 observacion: observacionEditable + "\n"+ observacion
             },
             type: 'POST',
-            error: function () {
-                mostrarMensajeErrorProceso();
+            error: function (detalle) {
+                mostrarMensajeErrorProceso(detalle.responseText);
                 $("#btnCancelarComentario").click();
             },
             success: function () {
@@ -2635,7 +2609,7 @@ jQuery(function ($) {
             error: function (detalle) {
                 //alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + ".");
                 $('body').loadingModal('hide');
-                mostrarMensajeErrorProceso();
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide');
@@ -2677,10 +2651,26 @@ jQuery(function ($) {
                 $("#idPedido").val(pedido.idPedido);
 
                 $("#verNumero").html(pedido.numeroPedidoString);
-                $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
-                $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
-                $("#verTipoPedido").html(pedido.tiposPedidoString);
+                if (pedido.numeroGrupoPedidoString == "") {
+                    $("#verNumero").html(pedido.numeroPedidoString);
+                }
+                else {
+                    $("#verNumero").html(pedido.numeroPedidoString + " (" + pedido.numeroGrupoPedidoString+")");
+                }
 
+                if (pedido.cotizacion.tipoCotizacion == 0) {
+                    $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
+                }
+                else if (pedido.cotizacion.tipoCotizacion == 1) {
+                    $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString + " (Transitoria)");
+                }
+                else if (pedido.cotizacion.tipoCotizacion == 2) {
+                    $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString + " (Rutinaria)");
+                }
+                
+
+
+                $("#verTipoPedido").html(pedido.tiposPedidoString);
                 $("#verResponsableComercial").html(pedido.cliente.responsableComercial.codigoDescripcion + " " + pedido.cliente.responsableComercial.usuario.email);
                 $("#verSupervisorComercial").html(pedido.cliente.supervisorComercial.codigoDescripcion + " " + pedido.cliente.supervisorComercial.usuario.email);
                 $("#verAsistenteServicioCliente").html(pedido.cliente.asistenteServicioCliente.codigoDescripcion + " " + pedido.cliente.asistenteServicioCliente.usuario.email);              
@@ -3294,7 +3284,7 @@ jQuery(function ($) {
             dataType: 'JSON',
             error: function (detalle) {
                 //alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + ".");
-                mostrarMensajeErrorProceso();
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $.alert({
@@ -4118,7 +4108,7 @@ jQuery(function ($) {
             },
             type: 'POST',
             error: function (detalle) {
-                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
 

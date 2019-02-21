@@ -506,15 +506,21 @@ namespace DataLayer
                 pedido.fechaModificacion = Converter.GetDateTime(row, "fecha_modificacion");
                 pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
                 pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
+                pedido.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
                 pedido.direccionEntrega = new DireccionEntrega();
                 pedido.direccionEntrega.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega");
                 pedido.direccionEntrega.descripcion = Converter.GetString(row, "direccion_entrega");
                 pedido.direccionEntrega.contacto = Converter.GetString(row, "contacto_entrega");
                 pedido.direccionEntrega.telefono = Converter.GetString(row, "telefono_contacto_entrega");
+                pedido.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
+                pedido.direccionEntrega.codigoMP = Converter.GetString(row, "direccion_entrega_codigo_mp");
+                pedido.direccionEntrega.codigoCliente = Converter.GetString(row, "direccion_entrega_codigo_cliente");
                 pedido.contactoPedido = Converter.GetString(row, "contacto_pedido");
                 pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
                 pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
                 pedido.fechaProgramacion = Converter.GetDateTime(row, "fecha_programacion");
+
+
                 pedido.observacionesFactura = Converter.GetString(row, "observaciones_factura");
                 pedido.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
                 pedido.tipoPedido = (Pedido.tiposPedido)Char.Parse( Converter.GetString(row, "tipo_pedido"));

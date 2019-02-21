@@ -183,7 +183,7 @@ namespace DataLayer
            
             InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
             InputParameterAdd.Char(objCommand, "tipo", ((char)pedido.clasePedido).ToString());
-            InputParameterAdd.Varchar(objCommand, "numero_requerimiento", pedido.numeroRequerimiento);
+            InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", pedido.numeroRequerimiento);
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "numero");
@@ -369,7 +369,7 @@ namespace DataLayer
             }
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
             InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
-            InputParameterAdd.Varchar(objCommand, "numero_requerimiento", pedido.numeroRequerimiento);
+            InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", pedido.numeroRequerimiento);
             
 
             ExecuteNonQuery(objCommand);
@@ -792,6 +792,7 @@ namespace DataLayer
                 pedido.cotizacion = new Cotizacion();
                 pedido.cotizacion.idCotizacion = Converter.GetGuid(row, "id_cotizacion");
                 pedido.cotizacion.codigo = Converter.GetLong(row, "cotizacion_codigo");
+                pedido.cotizacion.tipoCotizacion = (Cotizacion.TiposCotizacion)Converter.GetInt(row, "tipo_cotizacion");
 
                 pedido.cliente = new Cliente();
                 pedido.cliente.codigo = Converter.GetString(row, "codigo");
