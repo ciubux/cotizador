@@ -1160,9 +1160,6 @@ jQuery(function ($) {
                 '</tr>';
         }
 
-
-
-
         $("#verRazonSocialSunat").html(pedido.cliente.razonSocialSunat);
         $("#verRUC").html(pedido.cliente.ruc);
         $("#verDireccionDomicilioLegalSunat").html(pedido.cliente.direccionDomicilioLegalSunat);
