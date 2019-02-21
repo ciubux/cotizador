@@ -750,7 +750,7 @@ jQuery(function ($) {
     $('#pedido_direccionEntrega').change(function () {
         toggleControlesDireccionEntrega();
 
-       
+       /*
         if ($("#pedido_numeroPedido").val() != "") {
             $.alert({
                 title: 'Advertencia',
@@ -779,7 +779,7 @@ jQuery(function ($) {
             });
         }
 
-        else {
+        else {*/
             var idDireccionEntrega = $('#pedido_direccionEntrega').val();
             $.ajax({
                 url: "/Pedido/ChangeDireccionEntrega",
@@ -796,8 +796,11 @@ jQuery(function ($) {
                     location.reload()
                 }
             })
-        }
+        //}
     });
+
+
+
 
 
     $("#pedido_direccionEntrega_descripcion").change(function () {
