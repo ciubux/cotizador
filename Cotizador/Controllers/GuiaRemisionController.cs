@@ -1,5 +1,7 @@
 ﻿using BusinessLayer;
 using Cotizador.ExcelExport;
+using Cotizador.Models.DTOsSearch;
+using Cotizador.Models.DTOsShow;
 using Model;
 using Model.EXCEPTION;
 using Newtonsoft.Json;
@@ -236,7 +238,9 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_GUIA_LISTA] = guiaRemisionList;
             this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] = guiaRemision;
             //Se retorna la cantidad de elementos encontrados
-            return JsonConvert.SerializeObject(guiaRemisionList);
+
+            //String cotizacionListJson = JsonConvert.SerializeObject(ParserDTOsSearch.GuiaRemisionToGuiaRemisionDTO(guiaRemisionList));
+            return JsonConvert.SerializeObject(ParserDTOsSearch.GuiaRemisionToGuiaRemisionDTO(guiaRemisionList));
             //return pedidoList.Count();
         }
 
@@ -1098,7 +1102,8 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_GUIA_VER] = guiaRemision;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
-            string jsonGuiaRemision = JsonConvert.SerializeObject(guiaRemision);
+            //string jsonGuiaRemision = JsonConvert.SerializeObject(guiaRemision);
+            string jsonGuiaRemision = JsonConvert.SerializeObject(ParserDTOsShow.GuiaRemisionToGuiaRemisionDTO(guiaRemision));
             String json = "{\"usuario\":" + jsonUsuario + ", \"guiaRemision\":" + jsonGuiaRemision + "}";
             return json;
         }

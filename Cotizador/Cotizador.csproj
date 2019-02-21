@@ -283,8 +283,24 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DTOsSearch\ClienteDTO.cs" />
+    <Compile Include="Models\DTOsSearch\CotizacionDTO.cs" />
+    <Compile Include="Models\DTOsSearch\FacturaDTO.cs" />
+    <Compile Include="Models\DTOsSearch\GuiaRemisionDTO.cs" />
+    <Compile Include="Models\DTOsSearch\NotaIngresoDTO.cs" />
     <Compile Include="Models\DTOsSearch\ParserDTOsSearch.cs" />
+    <Compile Include="Models\DTOsSearch\PedidoAlmacenDTO.cs" />
+    <Compile Include="Models\DTOsSearch\PedidoCompraDTO.cs" />
     <Compile Include="Models\DTOsSearch\PedidoDTO.cs" />
+    <Compile Include="Models\DTOsShow\ClienteDTOshow.cs" />
+    <Compile Include="Models\DTOsShow\CotizacionDTOshow.cs" />
+    <Compile Include="Models\DTOsShow\FacturaDTOshow.cs" />
+    <Compile Include="Models\DTOsShow\GuiaRemisionDTOshow.cs" />
+    <Compile Include="Models\DTOsShow\NotaIngresoDTOshow.cs" />
+    <Compile Include="Models\DTOsShow\ParserDTOsShow.cs" />
+    <Compile Include="Models\DTOsShow\PedidoAlmacenDTOshow.cs" />
+    <Compile Include="Models\DTOsShow\PedidoCompraDTOshow.cs" />
+    <Compile Include="Models\DTOsShow\PedidoDTOshow.cs" />
     <Compile Include="Models\GrupoClienteViewModels.cs" />
     <Compile Include="Models\DescuentoViewModels.cs" />
     <Compile Include="Models\SubDistribuidorViewModels.cs" />

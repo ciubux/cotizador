@@ -14,6 +14,7 @@ using System.Web;
 using System.Web.Mvc;
 using Cotizador.Models.DTOsSearch;
 using NLog;
+using Cotizador.Models.DTOsShow;
 
 namespace Cotizador.Controllers
 {
@@ -1840,7 +1841,7 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = pedidoList;
             this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
 
-             String pedidoListString = JsonConvert.SerializeObject(ParserDTOsSearch.PedidoToPedidoDTO(pedidoList));
+             String pedidoListString = JsonConvert.SerializeObject(ParserDTOsSearch.PedidoVentaToPedidoVentaDTO(pedidoList));
              return pedidoListString;
             //return pedidoList.Count();
         }
@@ -1866,25 +1867,11 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PEDIDO_VER] = pedido;
             
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
-            string jsonPedido = JsonConvert.SerializeObject(pedido);
 
-  
+            string jsonPedido = JsonConvert.SerializeObject(ParserDTOsShow.PedidoVentaToPedidoVentaDTO(pedido));
 
             Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == pedido.ciudad.idCiudad).FirstOrDefault();
-            /*
-
-                        var seriesDocumentosElectronicosTmp = from s in ciudad.serieDocumentoElectronicoList
-                                                              group s.tipoDocumento by new { s.serie, s.esPrincipal }  into g
-                        select new { serie = g.Key, tiposDocumento = g.ToList() };
-
-                        List<SerieDocumentoElectronico> serieDocumentoElectronicoList = new List<SerieDocumentoElectronico>();
-                        foreach (var serieDocumentosElectronicoTmp  in seriesDocumentosElectronicosTmp)
-                        {
-                            SerieDocumentoElectronico serieDocumentosElectronico = new SerieDocumentoElectronico { serie = serieDocumentosElectronicoTmp.serie.serie, esPrincipal = serieDocumentosElectronicoTmp.serie.esPrincipal };
-                            serieDocumentoElectronicoList.Add(serieDocumentosElectronico);
-                        }
-
-                */
+          
             string jsonSeries = "[]";
             if (ciudad != null)
             {

@@ -2037,6 +2037,7 @@ jQuery(function ($) {
             return false;
         }
 
+
         $("#btnBusqueda").attr("disabled", "disabled");
         $.ajax({
             url: "/Cliente/Search",
@@ -2078,12 +2079,12 @@ jQuery(function ($) {
                         '<td>  ' + clienteList[i].nombreComercial + ' </td>' +
                         '<td>  ' + clienteList[i].tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + clienteList[i].ruc + '  </td>' +
-                        '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
-                        '<td>  ' + clienteList[i].grupoCliente.nombre + '  </td>' +
+                        '<td>  ' + clienteList[i].ciudad_nombre + '  </td>' +
+                        '<td>  ' + clienteList[i].grupoCliente_nombre + '  </td>' +
                         '<td>  ' + textoVendedorValidado + '</td>' +
-                        '<td>  ' + clienteList[i].responsableComercial.descripcion + '</td>' +
-                        '<td>  ' + clienteList[i].supervisorComercial.descripcion + '</td>' +
-                        '<td>  ' + clienteList[i].asistenteServicioCliente.descripcion + '</td>' +
+                        '<td>  ' + clienteList[i].responsableComercial_descripcion + '</td>' +
+                        '<td>  ' + clienteList[i].supervisorComercial_descripcion + '</td>' +
+                        '<td>  ' + clienteList[i].asistenteServicioCliente_descripcion + '</td>' +
                         '<td>  ' + clienteList[i].tipoPagoFacturaToString + '</td>' +
                         '<td>  ' + clienteList[i].creditoAprobado.toFixed(cantidadDecimales) + '  </td>' +
                         '<td>  ' + textoBloqueado + '  </td>' +

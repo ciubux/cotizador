@@ -73,3 +73,13 @@ C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL.Settings\obj\Debug\Framew
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb

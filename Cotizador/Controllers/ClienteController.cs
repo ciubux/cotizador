@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using Cotizador.ExcelExport;
+using Cotizador.Models.DTOsSearch;
 using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
@@ -280,7 +281,8 @@ namespace Cotizador.Controllers
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_CLIENTE_LISTA] = clienteList;
             //Se retorna la cantidad de elementos encontrados
-            return JsonConvert.SerializeObject(clienteList);
+            //return JsonConvert.SerializeObject(clienteList);
+            return JsonConvert.SerializeObject(ParserDTOsSearch.ClienteToClienteDTO(clienteList));
             //return pedidoList.Count();
         }
 

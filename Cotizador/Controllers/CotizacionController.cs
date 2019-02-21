@@ -13,6 +13,8 @@ using NPOI.SS.UserModel;
 using Newtonsoft.Json;
 using NPOI.HSSF.Model;
 using System.Reflection;
+using Cotizador.Models.DTOsSearch;
+using Cotizador.Models.DTOsShow;
 
 namespace Cotizador.Controllers
 {
@@ -153,7 +155,7 @@ namespace Cotizador.Controllers
         }
 
         /*Ejecución de la búsqueda de cotizaciones*/
-        public String SearchCotizaciones()
+        public String Search()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaCotizaciones;
             //Se recupera la cotizacion de la session
@@ -164,7 +166,8 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA] = cotizacionList;
             //Se retorna la cantidad de elementos encontrados
 
-            String cotizacionListJson = JsonConvert.SerializeObject(cotizacionList);
+            String cotizacionListJson = JsonConvert.SerializeObject(ParserDTOsSearch.CotizacionToCotizacionDTO(cotizacionList));
+            //String cotizacionListJson = JsonConvert.SerializeObject(cotizacionList);
             return cotizacionListJson;
             
         }
@@ -1265,7 +1268,8 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_COTIZACION_VER] = cotizacion;
 
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
-            string jsonCotizacion = JsonConvert.SerializeObject(cotizacion);
+
+            string jsonCotizacion = JsonConvert.SerializeObject(ParserDTOsShow.CotizaciontoCotizacionDTO(cotizacion));
 
             String json = "{\"usuario\":" + jsonUsuario + ", \"cotizacion\":" + jsonCotizacion + "}";
 

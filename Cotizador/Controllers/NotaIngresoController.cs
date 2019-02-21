@@ -1,5 +1,7 @@
 ﻿using BusinessLayer;
 using Cotizador.ExcelExport;
+using Cotizador.Models.DTOsSearch;
+using Cotizador.Models.DTOsShow;
 using Model;
 using Model.EXCEPTION;
 using Newtonsoft.Json;
@@ -218,7 +220,10 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_LISTA] = notaIngresoList;
             this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA] = notaIngreso;
             //Se retorna la cantidad de elementos encontrados
-            return JsonConvert.SerializeObject(notaIngresoList);
+            return JsonConvert.SerializeObject(ParserDTOsSearch.NotaIngresoToNotaIngresoDTO(notaIngresoList));
+            //return JsonConvert.SerializeObject(notaIngresoList);
+
+
             //return pedidoList.Count();
         }
 
@@ -657,7 +662,8 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_VER] = notaIngreso;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
-            string jsonNotaIngreso = JsonConvert.SerializeObject(notaIngreso);
+            //string jsonNotaIngreso = JsonConvert.SerializeObject(notaIngreso);
+            string jsonNotaIngreso = JsonConvert.SerializeObject(ParserDTOsShow.NotaIngresoToNotaIngreso(notaIngreso));
             String json = "{\"usuario\":" + jsonUsuario + ", \"notaIngreso\":" + jsonNotaIngreso + "}";
             return json;
         }
