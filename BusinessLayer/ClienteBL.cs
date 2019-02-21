@@ -268,7 +268,7 @@ namespace BusinessLayer
                 return clienteDAL.getClienteId(ruc, codigoSedeMP);
             }
         }
-
+        /*
         public Cliente insertCliente(Cliente cliente)
         {
             using (var clienteDAL = new ClienteDAL())
@@ -276,7 +276,7 @@ namespace BusinessLayer
                 return clienteDAL.insertCliente(cliente);
             }
         }
-
+        */
 
         public Cliente insertClienteSunat(Cliente cliente)
         {
@@ -305,7 +305,13 @@ namespace BusinessLayer
                 {
                     cliente.sedePrincipal = false;
                 }
-                return clienteDAL.insertClienteSunat(cliente);
+                
+
+                cliente =  clienteDAL.insertClienteSunat(cliente);
+
+                enviarNotificacionSolicitudCredito(cliente);
+
+                return cliente;
             }
         }
 
@@ -344,36 +350,46 @@ namespace BusinessLayer
 
                 cliente = clienteDAL.updateClienteSunat(cliente);
 
-                MailService mail = new MailService();
+               
                 /*Si existen cambios en la solicitud o aprobacion de créditos*/
                 if (cliente.existenCambiosCreditos)
                 {
-                    List<String> destinatarios = new List<String>();
-                    if (cliente.usuario.apruebaPlazoCredito || cliente.usuario.apruebaMontoCredito)
-                    {
-                        if (cliente.usuarioSolicitante != null && cliente.usuarioSolicitante.email != null && !cliente.usuarioSolicitante.email.Equals(String.Empty))
-                        {
-                            destinatarios.Add(cliente.usuarioSolicitante.email);
-                            String asunto = "APROBACIÓN de Crédito - " + cliente.razonSocial + " (" + cliente.codigo + ")";
-                            String bodyMail = String.Empty;
-                            bodyMail = @"</p>Estimados, </p>" +
-                                "</p>Se ha modificado el plazo de crédito aprobado, el monto de crédito aprobado o la forma de pago del cliente:" + cliente.razonSocial + "(" + cliente.codigo + ").</p>";
-                            mail.enviar(destinatarios, asunto, bodyMail, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
-                        }
-                    }
-                    else
-                    {
-                        //Enviar correo a Creditos
-                        destinatarios.Add(Constantes.MAIL_CREDITOS);
-                        String asunto = "SOLICITUD de Crédito - " + cliente.razonSocial + " (" + cliente.codigo + ")";
-                        String bodyMail = String.Empty;
-                        bodyMail = @"</p>Estimados, </p>" +
-                            "</p>Se ha modificado el plazo de crédito solicitado, el monto de crédito solicitado o la forma de pago del cliente: " + cliente.razonSocial + " (" + cliente.codigo + ").</p>";
-                        mail.enviar(destinatarios, asunto, bodyMail, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
-                    }
+                    enviarNotificacionSolicitudCredito(cliente);
                 }
 
                 return cliente;
+            }
+        }
+
+
+
+        private void enviarNotificacionSolicitudCredito(Cliente cliente)
+        {
+            MailService mail = new MailService();
+            List<String> destinatarios = new List<String>();
+            /*Si el usuario es aprobador de créditos y aplicó el cambio entonces se notifica al solicitante*/
+            if (cliente.usuario.apruebaPlazoCredito || cliente.usuario.apruebaMontoCredito)
+            {
+                if (cliente.usuarioSolicitante != null && cliente.usuarioSolicitante.email != null && !cliente.usuarioSolicitante.email.Equals(String.Empty))
+                {
+                    destinatarios.Add(cliente.usuarioSolicitante.email);
+                    String asunto = "APROBACIÓN de Crédito - " + cliente.razonSocial + " (" + cliente.codigo + ")";
+                    String bodyMail = String.Empty;
+                    bodyMail = @"</p>Estimados, </p>" +
+                        "</p>Se ha modificado el plazo de crédito aprobado, el monto de crédito aprobado o la forma de pago del cliente:" + cliente.razonSocial + "(" + cliente.codigo + ").</p>";
+                    mail.enviar(destinatarios, asunto, bodyMail, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+                }
+            }
+            /*Si el usuario NO es aprobador y aplicó el cambio entonces se notifica al aprobador de créditos*/
+            else
+            {
+                //Enviar correo a Creditos
+                destinatarios.Add(Constantes.MAIL_CREDITOS);
+                String asunto = "SOLICITUD de Crédito - " + cliente.razonSocial + " (" + cliente.codigo + ")";
+                String bodyMail = String.Empty;
+                bodyMail = @"</p>Estimados, </p>" +
+                    "</p>Se ha modificado el plazo de crédito solicitado, el monto de crédito solicitado o la forma de pago del cliente: " + cliente.razonSocial + " (" + cliente.codigo + ").</p>";
+                mail.enviar(destinatarios, asunto, bodyMail, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
             }
         }
 

@@ -1855,14 +1855,19 @@ jQuery(function ($) {
 
                 $("#verContacto").html(cotizacion.contacto);
 
-                if (cotizacion.esTransitoria) {
-                    $("#esTransitoria").show();
-                }
-                else {
+                
+                if (cotizacion.tipoCotizacion == 0) {
                     $("#esTransitoria").hide();
+                    $("#esRutinaria").hide();
                 }
-
-              
+                else if (cotizacion.tipoCotizacion == 1) {
+                    $("#esTransitoria").show();
+                    $("#esRutinaria").hide();
+                }
+                else if (cotizacion.tipoCotizacion == 2) {
+                    $("#esTransitoria").hide();
+                    $("#esRutinaria").show();
+                }
 
                 $("#verFechaCreacion").html(invertirFormatoFecha(cotizacion.fecha.substr(0, 10)));
                 $("#verValidezOferta").html(invertirFormatoFecha(cotizacion.fechaLimiteValidezOferta.substr(0, 10)));

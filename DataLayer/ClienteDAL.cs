@@ -379,6 +379,7 @@ namespace DataLayer
             return clienteList;
         }
 
+        /*
         public Cliente insertCliente(Cliente cliente)
         {
             var objCommand = GetSqlCommand("pi_cliente");
@@ -399,7 +400,7 @@ namespace DataLayer
 
             return cliente;
 
-        }
+        }*/
 
 
 
