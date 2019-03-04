@@ -191,6 +191,44 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        [HttpPost]
+        public String AddCliente()
+        {
+            int success = 1;
+            string message = "";
+            ClienteBL clienteBl = new ClienteBL();
+            GrupoCliente grupoCliente = this.GrupoClienteSession;
+            
+            Guid idCliente = Guid.Parse(this.Request.Params["idCliente"]);
+
+            foreach (Cliente cli in grupoCliente.miembros) { 
+                if (cli.idCliente == idCliente)
+                {
+                    success = 0;
+                    message = "El cliente ya es miembro del grupo.";
+                }
+            }
+
+            Cliente cliente = null;
+            if (success == 1)
+            {
+                cliente = clienteBl.getCliente(idCliente);
+
+                cliente.grupoCliente = grupoCliente;
+                cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                clienteBl.updateClienteSunat(cliente);
+
+                grupoCliente.miembros.Add(cliente);
+                cliente.grupoCliente = null;
+                message = "Se agregó el cliente al grupo.";
+                this.GrupoClienteSession = grupoCliente;
+            }
+
+            String clienteJson = JsonConvert.SerializeObject(cliente);
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\", \"cliente\":" + clienteJson + "}";
+        }
+
         public ActionResult CancelarCreacionGrupoCliente()
         {
             this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE] = null;
@@ -281,9 +319,16 @@ namespace Cotizador.Controllers
             GrupoClienteBL bl = new GrupoClienteBL();
             GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
             grupoCliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            String resultado = JsonConvert.SerializeObject(grupoCliente);
-            this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_VER] = grupoCliente;
 
+            List<DocumentoDetalle> listaPrecios = bl.getPreciosVigentesGrupoCliente(idGrupoCliente);
+            List<Cliente> clientes = bl.getClientesGrupo(idGrupoCliente);
+
+            grupoCliente.miembros = clientes;
+
+            String resultado = "{\"grupoCliente\":" + JsonConvert.SerializeObject(grupoCliente) + ", \"precios\":" + JsonConvert.SerializeObject(listaPrecios)  + "}";
+            
+            this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_VER] = grupoCliente;
+            
             return resultado;
         }
 
@@ -314,6 +359,55 @@ namespace Cotizador.Controllers
         public void ChangePlazoCreditoSolicitado()
         {
             this.GrupoClienteSession.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["plazoCreditoSolicitado"]);
+        }
+
+        public String SearchClientes()
+        {
+            String data = this.Request.Params["data[q]"];
+            ClienteBL clienteBL = new ClienteBL();
+
+            return clienteBL.getCLientesBusqueda(data);
+        }
+
+        [HttpPost]
+        public String QuitarClienteGrupo()
+        {
+            int success = 0;
+            string message = "";
+            ClienteBL clienteBl = new ClienteBL();
+            GrupoCliente grupoCliente = this.GrupoClienteSession;
+
+            Guid idCliente = Guid.Parse(this.Request.Params["idCliente"]);
+            int removeAt = -1;
+            foreach (Cliente cli in grupoCliente.miembros)
+            {
+                if (cli.idCliente == idCliente)
+                {
+                    success = 1;
+                    removeAt = grupoCliente.miembros.IndexOf(cli);
+                }
+            }
+
+            Cliente cliente = null;
+            if (success == 1)
+            {
+                cliente = clienteBl.getCliente(idCliente);
+
+                cliente.grupoCliente = null;
+                cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                clienteBl.updateClienteSunat(cliente);
+
+                grupoCliente.miembros.RemoveAt(removeAt);
+                message = "Se retiró el cliente del grupo.";
+                this.GrupoClienteSession = grupoCliente;
+            } else
+            {
+                message = "El cliente no existe o no es miembro del grupo.";
+            }
+
+            String clienteJson = JsonConvert.SerializeObject(cliente);
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }
     }
 }

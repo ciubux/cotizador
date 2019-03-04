@@ -741,6 +741,19 @@
                         </div>
 
                         <div id="cliente_precios" class="tab-pane fade">
+
+                            <div class="row">
+                                <!--Responsable Comercial-->
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkSoloCanasta">
+                                        <label class="onoffswitch-label" for="chkSoloCanasta"></label>
+                                    </div>
+
+                                    Mostrar Solo Canasta
+                                </div>
+                            </div>
+
                             <table id="tableListaPrecios" class="table" data-editing="false"
                                    data-editing-allow-add="false"
                                    data-editing-allow-delete="false"
@@ -749,6 +762,7 @@
                                 <thead>
                                     <tr>
                                         <th data-name="idProducto" data-visible="false"></th>
+                                        <th data-name="proveedor" data-sortable="false">Pertenece <br />Canasta</th>
                                         <th data-name="proveedor" data-sortable="false">Prov.</th>
                                         <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                                         <th data-name="producto" data-sortable="false">Producto / Descripción</th>

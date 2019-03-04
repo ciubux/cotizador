@@ -17,9 +17,8 @@ namespace DataLayer
         {
         }
 
-    
 
-
+        
         public List<GrupoCliente> getGruposBusqueda(String textoBusqueda)
         {
             var objCommand = GetSqlCommand("ps_getgrupos_search");

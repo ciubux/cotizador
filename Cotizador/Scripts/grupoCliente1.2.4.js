@@ -8,8 +8,10 @@ jQuery(function ($) {
 
     $(document).ready(function () {
         $("#btnBusqueda").click();
-        //cargarChosenCliente();
+        cargarChosenCliente();
         verificarSiExisteGrupoCliente();
+
+        FooTable.init('#tableMiembrosGrupoCliente');
     });
 
     function verificarSiExisteGrupoCliente() {
@@ -28,7 +30,6 @@ jQuery(function ($) {
     function mostrarCamposParaClienteConRUC() {
 
     }
-
 
     $("#tipoDocumentoIdentidad").change(function () {
 
@@ -1304,6 +1305,8 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    var idClienteView = "";
+
     $("#btnBusqueda").click(function () {
         /*
         if ($("#grupoCliente_nombre").val().length < 3 &&
@@ -1370,7 +1373,7 @@ jQuery(function ($) {
 
                 }
 
-                if (clienteList.length > 0) {
+                if (list.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
                     $("#divExportButton").show();
                 }
@@ -1394,6 +1397,7 @@ jQuery(function ($) {
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idGrupoCliente = arrrayClass[0];
         var codigoGrupoCliente = arrrayClass[1];
+        idGrupoClienteView = idGrupoCliente;
 
         $.ajax({
             url: "/GrupoCliente/Show",
@@ -1407,7 +1411,7 @@ jQuery(function ($) {
                 mostrarMensajeErrorProceso();
             },
             success: function (result) {
-                var obj = result;
+                var obj = result.grupoCliente;
                 idGrupoClienteView = idGrupoCliente;
                 $('body').loadingModal('hide')
                 $("#verCiudadNombre").html(obj.ciudad.nombre);
@@ -1428,15 +1432,92 @@ jQuery(function ($) {
                 $("#verSobreGiro").html(obj.sobreGiro.toFixed(cantidadDecimales));
 
                 $("#verObservacionesCredito").html(obj.observacionesCredito);
-        
+
+
+
+                var preciosList = result.precios;
+                var margenText = "";
+                $("#tableListaPrecios > tbody").empty();
+                for (var i = 0; i < preciosList.length; i++) {
+                    var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
+                    var fechaFinVigencia = preciosList[i].precioCliente.fechaFinVigencia;
+
+                    if (fechaInicioVigencia == null)
+                        fechaInicioVigencia = "No Definida";
+                    else
+                        fechaInicioVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaInicioVigencia.substr(0, 10));
+
+                    if (fechaFinVigencia == null)
+                        fechaFinVigencia = "No Definida";
+                    else
+                        fechaFinVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaFinVigencia.substr(0, 10));
+
+                    margenText = "";
+                    if ($("#tableListaPrecios th.porcentajeMargen").length) {
+                        margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1) + ' % </td>';
+                    }
+
+                    var preciosRow = '<tr data-expanded="true">' +
+                        '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
+                        '<td>  ' + preciosList[i].producto.proveedor + '  </td>' +
+                        '<td>  ' + preciosList[i].producto.sku + '  </td>' +
+                        '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
+                        '<td>' + fechaInicioVigencia + '</td>' +
+                        '<td>' + fechaFinVigencia + '</td>' +
+                        '<td>  ' + preciosList[i].unidad + '</td>' +
+                        '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
+                        '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
+                        '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
+
+                        '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
+                        '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                        margenText +
+                        '<td>' +
+                        '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +
+                        '</td>' +
+                        '</tr>';
+
+                    $("#tableListaPrecios").append(preciosRow);
+
+                }
+                
+                if (preciosList.length > 0) {
+                    $("#msgPreciosSinResultados").hide();
+                }
+                else {
+                    $("#msgPreciosSinResultados").show();
+                }
+
+                FooTable.init('#tableListaPrecios');
+
+                var clienteList = obj.miembros;
+                var margenText = "";
+
+                $("#tableMiembrosGrupo > tbody").empty();
+                for (var i = 0; i < clienteList.length; i++) {
+                    var clienteRow = '<tr data-expanded="true">' +
+                        '<td>  ' + clienteList[i].idPedido + '</td>' +
+                        '<td>  ' + clienteList[i].codigo + '  </td>' +
+                        '<td>  ' + clienteList[i].razonSocialSunat + '  </td>' +
+                        '<td>  ' + clienteList[i].nombreComercial + ' </td>' +
+                        '<td>  ' + clienteList[i].tipoDocumentoIdentidadToString + '</td>' +
+                        '<td>  ' + clienteList[i].ruc + '  </td>' +
+                        '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
+                        '</tr>';
+                    
+                    $("#tableMiembrosGrupo").append(clienteRow);
+
+                }
+                FooTable.init('#tableMiembrosGrupo');
+
                 $("#modalVerGrupoCliente").modal('show');                        
             }
         });
     });
 
-
     $("#btnEditarGrupoCliente").click(function () {
-      //  desactivarBotonesVer();
+        //  desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
             url: "/GrupoCliente/ConsultarSiExisteGrupoCliente",
@@ -1460,7 +1541,7 @@ jQuery(function ($) {
                     if (resultado.codigo == 0) {
                         alert('Está creando un nuevo grupo cliente; para continuar por favor diríjase a la página "Crear/Modificar Grupo Cliente" y luego haga clic en el botón Cancelar.');
                     }
-                    
+
                     else {
                         alert('Ya se encuentra editando el grupo cliente con código ' + resultado.codigo + '; para continuar por favor dirigase a la página "Crear/Modificar Grupo Cliente".');
                     }
@@ -1470,6 +1551,181 @@ jQuery(function ($) {
     });
 
 
+    $("#btnAgregarClienteGrupo").click(function () {
+      //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+
+        var idCliente = $("#idCliente").val();
+
+        if (idCliente == "") {
+            $.alert({
+                title: "Ocurrió un error",
+                type: 'red',
+                content: "Debe seleccionar un cliente",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+
+            return;
+        }
+
+        $.ajax({
+            url: "/GrupoCliente/AddCliente",
+            type: 'POST',
+            data: {
+                idCliente: idCliente
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    var cliente = resultado.cliente;
+                    var clienteRow = '<tr data-expanded="true">' +
+                        '<td>  ' + cliente.idCliente + '</td>' +
+                        '<td>  ' + cliente.codigo + '  </td>' +
+                        '<td>  ' + cliente.razonSocialSunat + '  </td>' +
+                        '<td>  ' + cliente.nombreComercial + ' </td>' +
+                        '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
+                        '<td>  ' + cliente.ruc + '  </td>' +
+                        '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+                        '<td><button type="button" class="btn btn-primary btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Quitar</button></td>' +
+                        '</tr>';
+
+                    $("#tableMiembrosGrupoCliente").append(clienteRow);
+                    FooTable.init('#tableMiembrosGrupoCliente');
+
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+
+                }
+                else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+
+    $("#fsMiembrosGrupo").on('click', ".btnQuitarClienteGrupo", function () {
+        //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+
+        var idCliente = $(this).attr("idCliente");
+        var that = this;
+        $.ajax({
+            url: "/GrupoCliente/QuitarClienteGrupo",
+            type: 'POST',
+            data: {
+                idCliente: idCliente
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.success == 1) {
+
+                    $(that).closest("tr").remove();
+                    FooTable.init('#tableMiembrosGrupoCliente');
+
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+
+                }
+                else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+
+    $("#modalVerCliente").on('click', ".btnMostrarPrecios", function () {
+
+        var idProducto = $(this).attr("idProducto");
+
+        //verIdCliente
+
+        $.ajax({
+            url: "/Precio/GetPreciosRegistradosGrupoCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idProducto: idProducto,
+                idGrupoCliente: idGrupoClienteView
+            },
+            success: function (producto) {
+                $("#verProducto").html(producto.nombre);
+                $("#verCodigoProducto").html(producto.sku);
+
+
+                var precioListaList = producto.precioLista;
+
+                // var producto = $.parseJSON(respuesta);
+                $("#tableMostrarPrecios > tbody").empty();
+
+                FooTable.init('#tableMostrarPrecios');
+                for (var i = 0; i < precioListaList.length; i++) {
+                    var fechaInicioVigencia = precioListaList[i].fechaInicioVigencia;
+                    var fechaFinVigencia = precioListaList[i].fechaFinVigencia;
+
+                    if (fechaInicioVigencia == null)
+                        fechaInicioVigencia = "No Definida";
+                    else
+                        fechaInicioVigencia = invertirFormatoFecha(precioListaList[i].fechaInicioVigencia.substr(0, 10));
+
+                    if (fechaFinVigencia == null)
+                        fechaFinVigencia = "No Definida";
+                    else
+                        fechaFinVigencia = invertirFormatoFecha(precioListaList[i].fechaFinVigencia.substr(0, 10));
+
+                    var numeroCotizacion = precioListaList[i].numeroCotizacion;
+                    if (numeroCotizacion == null)
+                        numeroCotizacion = "No Identificado";
+
+                    $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
+
+                        '<td>' + numeroCotizacion + '</td>' +
+                        '<td>' + fechaInicioVigencia + '</td>' +
+                        '<td>' + fechaFinVigencia + '</td>' +
+                        '<td>' + precioListaList[i].unidad + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadCuatroDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadCuatroDecimales) + '</td>' +
+
+                        '</tr>');
+
+                }
+            }
+        });
+        $("#modalMostrarPrecios").modal();
+
+    });
 
 
 

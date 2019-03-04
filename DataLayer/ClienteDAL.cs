@@ -52,6 +52,33 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+        public List<Cliente> getClientesGrupo(int idGrupo)
+        {
+            var objCommand = GetSqlCommand("ps_getClientesGrupo");
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", idGrupo);
+
+            DataTable dataTable = Execute(objCommand);
+            List<Cliente> list = new List<Cliente>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente ClienteResultado = new Cliente();
+                ClienteResultado.idCliente = Converter.GetGuid(row, "id_cliente");
+                ClienteResultado.codigo = Converter.GetString(row, "codigo");
+                ClienteResultado.ciudad = new Ciudad();
+                ClienteResultado.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                ClienteResultado.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
+
+                ClienteResultado.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                ClienteResultado.nombreComercial = Converter.GetString(row, "nombre_comercial");
+                ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
+                ClienteResultado.ruc = Converter.GetString(row, "ruc");
+
+
+                list.Add(ClienteResultado);
+            }
+            return list;
+        }
 
         public List<Cliente> getClientesBusqueda(String textoBusqueda, Guid idCiudad)
         {
@@ -79,6 +106,30 @@ namespace DataLayer
             return clienteList;
         }
 
+        public List<Cliente> getClientesBusqueda(String textoBusqueda)
+        {
+            var objCommand = GetSqlCommand("ps_getclientes_allsearch");
+            InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
+
+            DataTable dataTable = Execute(objCommand);
+            List<Cliente> clienteList = new List<Cliente>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente cliente = new Cliente
+                {
+                    idCliente = Converter.GetGuid(row, "id_cliente"),
+                    codigo = Converter.GetString(row, "codigo"),
+                    razonSocial = Converter.GetString(row, "razon_social"),
+                    nombreComercial = Converter.GetString(row, "nombre_comercial"),
+                    ruc = Converter.GetString(row, "ruc"),
+                    contacto1 = Converter.GetString(row, "contacto1"),
+                    contacto2 = Converter.GetString(row, "contacto2")
+                };
+                clienteList.Add(cliente);
+            }
+            return clienteList;
+        }
 
         public Guid getClienteId(String ruc, String codigoSedeMP)
         {

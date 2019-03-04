@@ -173,6 +173,5 @@ namespace Model
                 return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, _porcentajeMargen));
             }
         }
-
     }
 }
