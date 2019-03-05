@@ -243,15 +243,14 @@ namespace Cotizador.Controllers
                 return true;
         }
 
-        private void instanciarNotaIngreso()
+        private void instanciarNotaIngreso(Ciudad ciudad)
         {
             NotaIngreso notaIngreso = new NotaIngreso();
             notaIngreso.fechaEmision = DateTime.Now;
             notaIngreso.fechaTraslado = DateTime.Now;
             notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.Compra;
             notaIngreso.transportista = new Transportista();
-            notaIngreso.ciudadDestino = new Ciudad();
-            notaIngreso.ciudadDestino.idCiudad = Guid.Empty;
+            notaIngreso.ciudadDestino = ciudad;
             notaIngreso.pedido = new Pedido();
             notaIngreso.pedido.pedidoDetalleList = new List<PedidoDetalle>();
             notaIngreso.pedido.ciudad = new Ciudad();
@@ -259,6 +258,14 @@ namespace Cotizador.Controllers
             notaIngreso.ciudadDestino.transportistaList = new List<Transportista>();
             notaIngreso.seguimientoMovimientoAlmacenEntrada = new SeguimientoMovimientoAlmacenEntrada();
             //  notaIngreso.certificadoInscripcion = ".";
+
+            SerieDocumentoBL serieDocumentoBL = new SerieDocumentoBL();
+            notaIngreso.ciudadDestino.serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(ciudad.idCiudad);
+            notaIngreso.serieDocumentoElectronico = notaIngreso.ciudadDestino.serieDocumentoElectronicoList[0];
+            notaIngreso.serieDocumento = notaIngreso.serieDocumentoElectronico.serie;
+            notaIngreso.numeroDocumento = notaIngreso.serieDocumentoElectronico.siguienteNumeroNotaIngreso;
+        
+
             this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
 
         }
@@ -286,7 +293,7 @@ namespace Cotizador.Controllers
 
                 if (this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] == null)
                 {
-                    instanciarNotaIngreso();
+                    instanciarNotaIngreso(pedido.ciudad);
                 }
                 NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
                 notaIngreso.pedido = pedido;
@@ -326,14 +333,13 @@ namespace Cotizador.Controllers
                 CiudadBL ciudadBL = new CiudadBL();
 
 
-                Ciudad ciudadDestino = ciudadBL.getCiudad(pedido.ciudad.idCiudad);
-                ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
+                Ciudad ciudadDestino = ciudadBL.getCiudad(notaIngreso.ciudadDestino.idCiudad);
+                notaIngreso.ciudadDestino.nombre = ciudadDestino.nombre;
+                notaIngreso.ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
 
-                notaIngreso.ciudadDestino = ciudadDestino;
+               // notaIngreso.ciudadDestino = ciudadDestino;
 
                 notaIngreso.transportista = new Transportista();
-                notaIngreso.serieDocumento = ciudadDestino.serieNotaIngreso;
-                notaIngreso.numeroDocumento = ciudadDestino.siguienteNumeroNotaIngreso;
                 TransportistaBL transportistaBL = new TransportistaBL();
                 notaIngreso.ciudadDestino.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
 
@@ -355,12 +361,12 @@ namespace Cotizador.Controllers
             try
             {   /*IMPORTANTE: Se debe identificar si la guia esta facturada para ver si se genera nota de crédito*/
 
-
-                instanciarNotaIngreso();
+                GuiaRemision guiaRemisionAExtornar = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+                instanciarNotaIngreso(guiaRemisionAExtornar.ciudadOrigen);
                 NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
 
                 notaIngreso.motivoExtornoGuiaRemision = (NotaIngreso.MotivosExtornoGuiaRemision)Int32.Parse(Request.Params["motivoExtornoGuiaRemision"]);
-                notaIngreso.guiaRemisionAExtornar = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+                notaIngreso.guiaRemisionAExtornar = guiaRemisionAExtornar;
 
                 /*Si el motivo del extorno es devolución parcial se activa atención parcial para poder editar el detalle*/
                 notaIngreso.documentoDetalle = notaIngreso.guiaRemisionAExtornar.documentoDetalle;
@@ -430,14 +436,11 @@ namespace Cotizador.Controllers
                
                        
                 CiudadBL ciudadBL = new CiudadBL();
-                Ciudad ciudadDestino = ciudadBL.getCiudad(notaIngreso.guiaRemisionAExtornar.ciudadOrigen.idCiudad);
-                ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
-
-                notaIngreso.ciudadDestino = ciudadDestino;
+                Ciudad ciudadDestino = ciudadBL.getCiudad(notaIngreso.ciudadDestino.idCiudad);
+                notaIngreso.ciudadDestino.nombre = ciudadDestino.nombre;
+                notaIngreso.ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
 
                 notaIngreso.transportista = new Transportista();
-                notaIngreso.serieDocumento = ciudadDestino.serieNotaIngreso;
-                notaIngreso.numeroDocumento = ciudadDestino.siguienteNumeroNotaIngreso;
                 TransportistaBL transportistaBL = new TransportistaBL();
                 notaIngreso.ciudadDestino.transportistaList = transportistaBL.getTransportistas(notaIngreso.guiaRemisionAExtornar.ciudadOrigen.idCiudad);
 
@@ -458,11 +461,15 @@ namespace Cotizador.Controllers
             {   /*IMPORTANTE: Se debe identificar si la guia esta facturada para ver si se genera nota de crédito*/
 
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                instanciarNotaIngreso();
+                GuiaRemision guiaRemisionAIngresar = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+
+
+                instanciarNotaIngreso(usuario.sedeMP);
+
                 NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
 
                 //notaIngreso.motivoExtornoGuiaRemision = (NotaIngreso.MotivosExtornoGuiaRemision)Int32.Parse(Request.Params["motivoExtornoGuiaRemision"]);
-                notaIngreso.guiaRemisionAIngresar = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+                notaIngreso.guiaRemisionAIngresar = guiaRemisionAIngresar;
 
                 /*Si el motivo del extorno es devolución parcial se activa atención parcial para poder editar el detalle*/
                 notaIngreso.documentoDetalle = notaIngreso.guiaRemisionAIngresar.documentoDetalle;
@@ -492,14 +499,11 @@ namespace Cotizador.Controllers
 
                 CiudadBL ciudadBL = new CiudadBL();
                 /*Por Revisar*/
-                Ciudad ciudadDestino = ciudadBL.getCiudad(usuario.sedeMP.idCiudad);
-                ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
-
-                notaIngreso.ciudadDestino = ciudadDestino;
+                Ciudad ciudadDestino = ciudadBL.getCiudad(notaIngreso.ciudadDestino.idCiudad);
+                notaIngreso.ciudadDestino.nombre = ciudadDestino.nombre;
+                notaIngreso.ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
 
                 notaIngreso.transportista = new Transportista();
-                notaIngreso.serieDocumento = ciudadDestino.serieNotaIngreso;
-                notaIngreso.numeroDocumento = ciudadDestino.siguienteNumeroNotaIngreso;
                 TransportistaBL transportistaBL = new TransportistaBL();
                 notaIngreso.ciudadDestino.transportistaList = transportistaBL.getTransportistas(notaIngreso.guiaRemisionAIngresar.ciudadOrigen.idCiudad);
 
@@ -537,12 +541,6 @@ namespace Cotizador.Controllers
                     //instanciarNotaIngreso();
                 }
                 NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
-
-                SerieDocumentoBL serieDocumentoBL = new SerieDocumentoBL();
-                notaIngreso.ciudadDestino.serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(notaIngreso.ciudadDestino.idCiudad);
-                notaIngreso.serieDocumentoElectronico = notaIngreso.ciudadDestino.serieDocumentoElectronicoList[0];
-                notaIngreso.serieDocumento = notaIngreso.serieDocumentoElectronico.serie;
-                notaIngreso.numeroDocumento = notaIngreso.serieDocumentoElectronico.siguienteNumeroNotaIngreso;
 
                 ViewBag.fechaTrasladotmp = notaIngreso.fechaTraslado.ToString(Constantes.formatoFecha);
                 ViewBag.fechaEmisiontmp = notaIngreso.fechaEmision.ToString(Constantes.formatoFecha);
@@ -699,11 +697,12 @@ namespace Cotizador.Controllers
 
         public String UpdateSerieDocumento()
         {
-            String serieDocumento = this.Request.Params["serieDocumento"];
+            int serieDocumento = int.Parse(this.Request.Params["serieDocumento"]);
             NotaIngreso notaIngreso = this.NotaIngresoSession;
-            SerieDocumentoElectronico serieDocumentoElectronico = notaIngreso.ciudadDestino.serieDocumentoElectronicoList.Where(s => s.serie == serieDocumento).FirstOrDefault();
+            SerieDocumentoElectronico serieDocumentoElectronico = notaIngreso.ciudadDestino.serieDocumentoElectronicoList.Where(s => int.Parse(s.serie) == serieDocumento).FirstOrDefault();
             notaIngreso.serieDocumento = serieDocumentoElectronico.serie;
             notaIngreso.numeroDocumento = serieDocumentoElectronico.siguienteNumeroNotaIngreso;
+            notaIngreso.serieDocumentoElectronico = serieDocumentoElectronico;
             return notaIngreso.numeroDocumentoString;
         }
 

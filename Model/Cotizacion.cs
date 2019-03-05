@@ -20,12 +20,12 @@ namespace Model
 
         public enum TiposCotizacion
         {
-            [Display(Name = "Regular")]
-            Regular = 0,
+            [Display(Name = "Normal")]
+            Normal = 0,
             [Display(Name = "Transitoria (No registra Precios)")]
             Transitoria = 1,
-            [Display(Name = "Rutinaria (No registra Precios)")]
-            Rutinaria = 2
+            [Display(Name = "Trivial (No registra Precios)")]
+            Trivial = 2
         };
 
         public Guid idCotizacion { get; set; }

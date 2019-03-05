@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Email\PedidoSinAtencion.cs" />
     <Compile Include="ArchivoAdjuntoBL.cs" />
+    <Compile Include="PermisoBL.cs" />
     <Compile Include="SubDistribuidorBL.cs" />
     <Compile Include="OrigenBL.cs" />
     <Compile Include="SerieDocumentoBL.cs" />

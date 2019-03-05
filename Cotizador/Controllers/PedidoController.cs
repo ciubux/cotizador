@@ -568,6 +568,10 @@ namespace Cotizador.Controllers
 
                     if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Transitoria)
                     {
+                        if (pedidoDetalle.producto.precioClienteProducto == null)
+                        {
+                            pedidoDetalle.producto.precioClienteProducto = new PrecioClienteProducto();
+                        }
                         //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
                         pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
                         pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
@@ -576,8 +580,9 @@ namespace Cotizador.Controllers
                         pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
                         pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
                         pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
+                      
                     }
-                    else if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Rutinaria)
+                    else if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
                     {
                         //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
                         pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
@@ -2210,12 +2215,9 @@ namespace Cotizador.Controllers
 
                 String solicitante = UtilesHelper.getValorCelda(sheet, 5, "E");
 
-
-
                 List<Decimal> subTotales = new List<Decimal>();
                 List<String> ubigeos = new List<String>();
                 List<String> direccionesEntrega = new List<String>();
-
 
                 List<Pedido> pedidoList = new List<Pedido>();
                 Pedido ultimoPedido = new Pedido();

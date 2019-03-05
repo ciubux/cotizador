@@ -1,2 +1,5 @@
 2019-02-21 15:54:09.4620|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
 2019-02-21 15:58:29.1134|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-02-22 18:38:15.3595|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Producto ya se encuentra en la lista.
+2019-02-22 18:38:15.4294|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Producto ya se encuentra en la lista.
+2019-02-28 12:53:11.0394|ERROR|Cotizador.Controllers.ParentController|d.reducindo@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.

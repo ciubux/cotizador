@@ -242,6 +242,7 @@
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
+    <Compile Include="Controllers\PermisoController.cs" />
     <Compile Include="Controllers\SubDistribuidorController.cs" />
     <Compile Include="Controllers\ParentController.cs" />
     <Compile Include="Controllers\PedidoAlmacenController.cs" />
@@ -302,7 +303,8 @@
     <Compile Include="Models\DTOsShow\PedidoCompraDTOshow.cs" />
     <Compile Include="Models\DTOsShow\PedidoDTOshow.cs" />
     <Compile Include="Models\GrupoClienteViewModels.cs" />
-    <Compile Include="Models\DescuentoViewModels.cs" />
+    <Compile Include="Models\ProductoMultipleViewModels.cs" />
+    <Compile Include="Models\ProductoViewModels.cs" />
     <Compile Include="Models\SubDistribuidorViewModels.cs" />
     <Compile Include="Models\OrigenViewModels.cs" />
     <Compile Include="Models\VendedorViewModels.cs" />
@@ -548,6 +550,11 @@
     <Content Include="Views\Cotizacion\CotizarGrupo.cshtml" />
     <Content Include="Views\GrupoCliente\Editar.cshtml" />
     <Content Include="Views\GrupoCliente\Index.cshtml" />
+    <Content Include="Views\Shared\_Producto.cshtml" />
+    <Content Include="Views\Shared\_ProductoMultiple.cshtml" />
+    <Content Include="Views\Usuario\EditarPermisos.cshtml" />
+    <Content Include="Views\Permiso\AsignarPermisos.cshtml" />
+    <Content Include="Scripts\permiso1.0.0.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

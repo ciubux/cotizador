@@ -78,11 +78,12 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.cotizacionDetalleList = cotizacion.cotizacionDetalleList;
             cotizacionDTOshow.seguimientoCotizacion_usuario_idUsuario = cotizacion.seguimientoCotizacion.usuario.idUsuario;
             cotizacionDTOshow.montoTotal = cotizacion.montoTotal;
-            cotizacionDTOshow.seguimientoCotizacion_estado = cotizacion.seguimientoCotizacion.estado.ToString();
+            cotizacionDTOshow.seguimientoCotizacion_estado = cotizacion.seguimientoCotizacion.estado;
             cotizacionDTOshow.maximoPorcentajeDescuentoPermitido = cotizacion.maximoPorcentajeDescuentoPermitido;
             cotizacionDTOshow.grupo_codigoNombre = cotizacion.grupo.codigoNombre;
             cotizacionDTOshow.cliente_codigoRazonSocial = cotizacion.cliente.codigoRazonSocial;
             cotizacionDTOshow.tipoCotizacion = (int)cotizacion.tipoCotizacion;
+            cotizacionDTOshow.contacto = cotizacion.contacto;
             return cotizacionDTOshow;
         }
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Model;
+using System.Data.SqlClient;
 
 namespace DataLayer
 {
@@ -33,6 +34,65 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+
+        public List<Usuario> selectUsuarios()
+        {
+            var objCommand = GetSqlCommand("ps_usuarios");
+            DataTable dataTable = Execute(objCommand);
+            List<Usuario> usuarioList = new List<Usuario>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Usuario usuario = new Usuario();
+                usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                usuario.email = Converter.GetString(row, "email");
+                usuario.nombre = Converter.GetString(row, "nombre");
+                usuarioList.Add(usuario);
+            }
+
+            return usuarioList;
+        }
+
+        public List<Usuario> selectUsuariosPorPermiso(Permiso permiso)
+        {
+            var objCommand = GetSqlCommand("ps_usuariosPorPermiso");
+            InputParameterAdd.Int(objCommand, "idPermiso", permiso.idPermiso);
+            DataTable dataTable = Execute(objCommand);
+            List<Usuario> usuarioList = new List<Usuario>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Usuario usuario = new Usuario();
+                usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                usuario.email = Converter.GetString(row, "email");
+                usuario.nombre = Converter.GetString(row, "nombre");
+                usuarioList.Add(usuario);
+            }
+
+            return usuarioList;
+        }
+
+        public void updatePermiso(List<Usuario> usuarioLit, Permiso permiso, Usuario usuario)
+        {
+            var objCommand = GetSqlCommand("pu_usuarioPermiso");
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("idUsuarioList", typeof(Guid)));
+
+            // populate DataTable from your List here
+            foreach (var id in usuarioLit)
+                tvp.Rows.Add(id.idUsuario);            
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idUsuarioList", tvp);
+            // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            InputParameterAdd.Int(objCommand, "idPermiso", permiso.idPermiso);
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
+            ExecuteNonQuery(objCommand);      
+        }
+        
+
         public Usuario getUsuarioLogin(Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_usuario");
@@ -48,19 +108,21 @@ namespace DataLayer
                 usuario.cargo = Converter.GetString(row, "cargo");
                 usuario.nombre = Converter.GetString(row, "nombre");
                 usuario.contacto = Converter.GetString(row, "contacto");
+
                 //Cotizaciones
                 usuario.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
                 usuario.cotizacionSerializada = Converter.GetString(row, "cotizacion_serializada");
-                usuario.apruebaCotizacionesLima = Converter.GetBool(row, "aprueba_cotizaciones_lima");
+
+        /*        usuario.apruebaCotizacionesLima = Converter.GetBool(row, "aprueba_cotizaciones_lima");
                 usuario.apruebaCotizacionesProvincias = Converter.GetBool(row, "aprueba_cotizaciones_provincias");
                 usuario.creaCotizaciones = Converter.GetBool(row, "crea_cotizaciones");
                 usuario.creaCotizacionesProvincias = Converter.GetBool(row, "crea_cotizaciones_provincias");
                 usuario.creaCotizacionesGrupales = Converter.GetBool(row, "crea_cotizaciones_grupales");
                 usuario.apruebaCotizacionesGrupales = Converter.GetBool(row, "aprueba_cotizaciones_grupales");
                 usuario.visualizaCotizaciones = Converter.GetBool(row, "visualiza_cotizaciones");
-
+                */
                 //Pedidos
-                usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
+      /*          usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
                 usuario.realizaCargaMasivaPedidos = Converter.GetBool(row, "realiza_carga_masiva_pedidos");
 
                 usuario.apruebaPedidosLima = Converter.GetBool(row, "aprueba_pedidos_lima");
@@ -73,9 +135,9 @@ namespace DataLayer
                 usuario.bloqueaPedidos = Converter.GetBool(row, "bloquea_pedidos");
                 usuario.liberaPedidos = Converter.GetBool(row, "libera_pedidos");
                 usuario.visualizaCostos = Converter.GetBool(row, "visualiza_costos");
-
+                */
                 //Guia
-                usuario.creaGuias = Converter.GetBool(row, "crea_guias");
+     /*           usuario.creaGuias = Converter.GetBool(row, "crea_guias");
                 usuario.administraGuiasLima = Converter.GetBool(row, "administra_guias_lima");
                 usuario.administraGuiasProvincias = Converter.GetBool(row, "administra_guias_provincias");
                 usuario.visualizaGuias = Converter.GetBool(row, "visualiza_guias_remision");
@@ -90,11 +152,11 @@ namespace DataLayer
                 usuario.administraDocumentosVentaProvincias = Converter.GetBool(row, "administra_documentos_venta_provincias");
                 usuario.visualizaDocumentosVenta = Converter.GetBool(row, "visualiza_documentos_venta");
                 usuario.apruebaAnulaciones = Converter.GetBool(row, "aprueba_anulaciones");
-
+                */
                 usuario.sedeMP = new Ciudad();
                 usuario.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
 
-                usuario.modificaMaestroClientes = Converter.GetBool(row, "modifica_maestro_clientes");
+         /*       usuario.modificaMaestroClientes = Converter.GetBool(row, "modifica_maestro_clientes");
                 usuario.modificaMaestroProductos = Converter.GetBool(row, "modifica_maestro_productos");
 
                 usuario.modificaSubDistribuidor = Converter.GetBool(row, "modifica_subdistribuidor");
@@ -106,9 +168,9 @@ namespace DataLayer
 
                 usuario.visualizaMargen = Converter.GetBool(row, "visualiza_margen");
                 usuario.confirmaStock = Converter.GetBool(row, "confirma_stock");
-
+                */
                 usuario.esCliente = Converter.GetBool(row, "es_cliente");
-
+/*
                 usuario.tomaPedidosCompra = Converter.GetBool(row, "toma_pedidos_compra");
                 usuario.tomaPedidosAlmacen = Converter.GetBool(row, "toma_pedidos_almacen");
                 usuario.apruebaPlazoCredito = Converter.GetBool(row, "define_plazo_credito");
@@ -134,7 +196,8 @@ namespace DataLayer
                 usuario.visualizaOrigenes = Converter.GetBool(row, "visualiza_origenes");
                 usuario.realizaCargaMasivaCliente = Converter.GetBool(row, "realiza_carga_masiva_clientes");
                 usuario.realizaCargaMasivaProductos = Converter.GetBool(row, "realiza_carga_masiva_productos");
-
+                usuario.eliminaCotizacionesAceptadas = Converter.GetBool(row, "elimina_cotizaciones_aceptadas");
+                */
             }
 
             DataTable dataTableParametros = dataSet.Tables[1];
@@ -228,7 +291,22 @@ namespace DataLayer
             }
 
 
+            //Permisos de usuario
+            if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
+            {
+                DataTable dataTablePermisos = dataSet.Tables[10];
+                usuario.permisoList = new List<Permiso>();
 
+                foreach (DataRow row in dataTablePermisos.Rows)
+                {
+                    Permiso permiso = new Permiso();
+                    permiso.idPermiso = Converter.GetInt(row, "id_Permiso");
+                    permiso.codigo = Converter.GetString(row, "codigo");
+                    permiso.descripcion_corta = Converter.GetString(row, "descripcion_corta");
+                    permiso.descripcion_larga = Converter.GetString(row, "descripcion_larga");
+                    usuario.permisoList.Add(permiso);
+                }
+            }
 
 
             /*Si es usuario aprobador se recupera la lista de usuarios a los cuales puede aprobar cotizaciones*/
@@ -353,6 +431,24 @@ namespace DataLayer
                     Constantes.DESCUENTOS_LIST.Add(producto);
                 }
             }
+
+            if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
+            {
+                DataTable dataTableProductosCargos = dataSet.Tables[9];
+                Constantes.CARGOS_LIST = new List<Producto>();
+
+                foreach (DataRow row in dataTableProductosCargos.Rows)
+                {
+                    Producto producto = new Producto();
+                    producto.idProducto = Converter.GetGuid(row, "id_Producto");
+                    producto.sku = Converter.GetString(row, "sku");
+                    producto.descripcion = Converter.GetString(row, "descripcion");
+                    Constantes.CARGOS_LIST.Add(producto);
+                }
+            }
+
+          
+
 
             return usuario;
         }

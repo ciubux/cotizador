@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using Model;
 using System.Linq;
+using System.Data.SqlClient;
 
 namespace DataLayer
 {
@@ -215,7 +216,7 @@ namespace DataLayer
 
 
         
-        public Transaccion SelectPlantillaVenta(Transaccion transaccion, Usuario usuario, Guid? idProducto = null)
+        public Transaccion SelectPlantillaVenta(Transaccion transaccion, Usuario usuario, Guid? idProducto = null, List<Guid> idProductoList = null)
         {
             var objCommand = GetSqlCommand("ps_plantillaVenta");
             /*Si se cuenta con id Producto entonces quiere decir que es un descuento global*/
@@ -223,6 +224,25 @@ namespace DataLayer
             { 
                 objCommand = GetSqlCommand("ps_plantillaVentaDescuentoGlobal");
                 InputParameterAdd.Guid(objCommand, "idProducto", idProducto.Value);
+            }
+            else if(idProductoList != null)
+            {
+                DataTable tvp = new DataTable();
+                tvp.Columns.Add(new DataColumn("idProductoList", typeof(Guid)));
+
+                // populate DataTable from your List here
+                foreach (var id in idProductoList)
+                    tvp.Rows.Add(id);
+
+
+                objCommand = GetSqlCommand("ps_plantillaVentaCargos");
+
+                SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idProductoList", tvp);
+                // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
+                tvparam.SqlDbType = SqlDbType.Structured;
+                tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+                //InputParameterAdd.Varchar(objCommand, "idProductoList", tvparam);
             }
 
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", transaccion.documentoVenta.idDocumentoVenta);

@@ -391,12 +391,13 @@ jQuery(function ($) {
         var idGrupoCliente = $("#idGrupoCliente").val();
         $.ajax({
             url: "/Cotizacion/updateIdGrupoCliente",
+            dataType: 'JSON',
             type: 'POST',
             data: {
                 idGrupoCliente: idGrupoCliente
             },
             success: function (grupoCliente) {
-                $("#cotizacion_textoCondicionesPago").val(cliente.textoCondicionesPago);
+                $("#cotizacion_textoCondicionesPago").val(grupoCliente.textoCondicionesPago);
                 $("#contacto").val(grupoCliente.contacto);
             }
         });
@@ -1275,18 +1276,18 @@ jQuery(function ($) {
             },
             success: function () {
 
-                $.alert({
+           /*     $.alert({
                     title: '¡Atención!',
                     type: 'orange',
                     content: "Los productos importados no consideran los precios registrados para un grupo.",
                     buttons: {
-                        OK: function () {
+                        OK: function () {*/
                             window.location = '/Cotizacion/CotizarGrupo';
 
-                        }
+          /*              }
                     }
                 });
-
+                */
                
             }
         });
@@ -1321,17 +1322,18 @@ jQuery(function ($) {
             },
             success: function () {
                 $('body').loadingModal('hide')
-                $.alert({
-                    title: '¡Atención!',
-                    type: 'orange',
-                    content: "Los productos importados no consideran los precios registrados para un grupo.",
-                    buttons: {
-                        OK: function () {
-                            window.location = '/Cotizacion/Cotizar';
+                /*     $.alert({
+                title: '¡Atención!',
+                type: 'orange',
+                content: "Los productos importados no consideran los precios registrados para un grupo.",
+                buttons: {
+                    OK: function () {*/
+                window.location = '/Cotizacion/CotizarGrupo';
 
-                        }
+          /*              }
                     }
                 });
+                */
              
             }
         });
@@ -1577,7 +1579,9 @@ jQuery(function ($) {
             error: function (detalle) {
                 $('body').loadingModal('hide')
                 activarBotonesFinalizarCreacion();
-                alert("Se generó un error al intentar finalizar la creación de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                //alert("Se generó un error al intentar finalizar la creación de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                mostrarMensajeErrorProceso(detalle.responseText);            
+
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
@@ -1643,7 +1647,7 @@ jQuery(function ($) {
                         }
                     },
                     noAplica: {
-                        text: 'NO',
+                        text: 'NO, solo registrar precios para ' + $("#idCiudad option:selected").text(),
                         btnClass: 'btn-danger',
                         action: function () {
                             callUpdate(continuarLuego);
@@ -1680,7 +1684,9 @@ jQuery(function ($) {
             error: function (detalle) {
                 $('body').loadingModal('hide')
                 activarBotonesFinalizarCreacion();
-                alert("Se generó un error al intentar finalizar la edición de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                //alert("Se generó un error al intentar finalizar la creación de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                mostrarMensajeErrorProceso(detalle.responseText);
+
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
@@ -1855,15 +1861,15 @@ jQuery(function ($) {
 
                 if (cotizacion.tipoCotizacion == 0) {
                     $("#esTransitoria").hide();
-                    $("#esRutinaria").hide();
+                    $("#esTrivial").hide();
                 }
                 else if (cotizacion.tipoCotizacion == 1) {
                     $("#esTransitoria").show();
-                    $("#esRutinaria").hide();
+                    $("#esTrivial").hide();
                 }
                 else if (cotizacion.tipoCotizacion == 2) {
                     $("#esTransitoria").hide();
-                    $("#esRutinaria").show();
+                    $("#esTrivial").show();
                 }
 
                 $("#verFechaCreacion").html(invertirFormatoFecha(cotizacion.fecha.substr(0, 10)));
@@ -1958,7 +1964,7 @@ jQuery(function ($) {
                     cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION ||
                     cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA ||
                     cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA ||
-                    (cotizacion.seguimientoCotizacion_estado == ESTADO_EN_EDICION && usuario.idUsuario == cotizacion.seguimientoCotizacion.usuario.idUsuario)
+                    (cotizacion.seguimientoCotizacion_estado == ESTADO_EN_EDICION && usuario.idUsuario == cotizacion.seguimientoCotizacion_usuario_idUsuario)
                 ) {
                     if (cotizacion.cliente_idCliente == GUID_EMPTY) {
                         $("#btnEditarCotizacion").hide();
@@ -2105,6 +2111,7 @@ jQuery(function ($) {
 
                 if (
                     cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA
+                    && cotizacion.cliente_idCliente != GUID_EMPTY
                 ) {
 
                     $("#btnGenerarPedido").show();
@@ -2114,12 +2121,13 @@ jQuery(function ($) {
                     $("#btnGenerarPedido").hide();
                     //window.setInterval(mostrarPrecioUnitarioAnterior, 5000);
                 }
-
                 /*Eliminar Cotizacion*/
                 if (
-                    cotizacion.seguimientoCotizacion_estado != ESTADO_ACEPTADA &&
+                   ( cotizacion.seguimientoCotizacion_estado != ESTADO_ACEPTADA &&
                     cotizacion.seguimientoCotizacion_estado != ESTADO_RECHAZADA &&
-                    cotizacion.seguimientoCotizacion_estado != ESTADO_ELIMINADA
+                        cotizacion.seguimientoCotizacion_estado != ESTADO_ELIMINADA)
+                    || (cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA  &&
+                        usuario.eliminaCotizacionesAceptadas == true)
                 ) {
 
                     $("#btnEliminarCotizacion").show();
@@ -2573,6 +2581,7 @@ jQuery(function ($) {
      
         if (tipoCotizacion == 0) {
             $("#fechaInicioVigenciaPrecios").removeAttr("disabled");
+            $("#fechaFinVigenciaPrecios").removeAttr("disabled");
         }
         else if (tipoCotizacion == 2) {
             //$("#fechaInicioVigenciaPrecios").removeAttr("disabled");
@@ -2586,6 +2595,7 @@ jQuery(function ($) {
         else
         {
             $("#fechaInicioVigenciaPrecios").attr("disabled", "disabled");
+            $("#fechaFinVigenciaPrecios").removeAttr("disabled");
             var hoy = new Date();
             $("#fechaInicioVigenciaPrecios").datepicker().datepicker("setDate", hoy);
             hoy.setDate(hoy.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))

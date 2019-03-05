@@ -15,7 +15,7 @@ using System.Web.Mvc;
 
 namespace Cotizador.Controllers
 {
-    public class ClienteController : Controller
+    public class ClienteController : ParentController
     {
         private Cliente ClienteSession
         {
@@ -406,38 +406,55 @@ namespace Cotizador.Controllers
 
         public String Create()
         {
-            ClienteBL clienteBL = new ClienteBL();
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
-            cliente = clienteBL.insertClienteSunat(cliente);
-            if (cliente.codigo != null && !cliente.codigo.Equals(""))
+            try
             {
-                this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
-            }
-            String resultado = JsonConvert.SerializeObject(cliente);            
-            return resultado;
-        }
-
-
-        public String Update()
-        {
-            ClienteBL clienteBL = new ClienteBL();
-            Cliente cliente = this.ClienteSession;
-            if (cliente.idCliente == Guid.Empty)
-            {
+                ClienteBL clienteBL = new ClienteBL();
+                Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
                 cliente = clienteBL.insertClienteSunat(cliente);
                 if (cliente.codigo != null && !cliente.codigo.Equals(""))
                 {
                     this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
                 }
+                String resultado = JsonConvert.SerializeObject(cliente);
+                return resultado;
             }
-            else
+            catch (Exception e)
             {
-                cliente = clienteBL.updateClienteSunat(cliente);
-                this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+                logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+                throw e;
             }
-            String resultado = JsonConvert.SerializeObject(cliente);
-            //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
-            return resultado;
+
+        }
+
+
+        public String Update()
+        {
+            try
+            {
+                ClienteBL clienteBL = new ClienteBL();
+                Cliente cliente = this.ClienteSession;
+                if (cliente.idCliente == Guid.Empty)
+                {
+                    cliente = clienteBL.insertClienteSunat(cliente);
+                    if (cliente.codigo != null && !cliente.codigo.Equals(""))
+                    {
+                        this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+                    }
+                }
+                else
+                {
+                    cliente = clienteBL.updateClienteSunat(cliente);
+                    this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+                }
+                String resultado = JsonConvert.SerializeObject(cliente);
+                //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+                return resultado;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+                throw e;
+            }
         }
 
 

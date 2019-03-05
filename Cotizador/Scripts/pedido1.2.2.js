@@ -1804,16 +1804,16 @@ jQuery(function ($) {
             },
             success: function () {
                 $('body').loadingModal('hide')
-                $.alert({
+           /*     $.alert({
                     title: '¡Atención!',
                     type: 'orange',
                     content: "Los productos importados no consideran los precios registrados para un grupo.",
                     buttons: {
-                        OK: function () {
+                        OK: function () {*/
                             window.location = '/Pedido/Pedir';
-                        }
+               /*         }
                     }
-                });
+                });*/
                 
             }
         });
@@ -2669,7 +2669,7 @@ jQuery(function ($) {
                     $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Transitoria)");
                 }
                 else if (pedido.cotizacion_tipoCotizacion == 2) {
-                    $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Rutinaria)");
+                    $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Trivial)");
                 }
 
 

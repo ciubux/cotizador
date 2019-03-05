@@ -74,6 +74,12 @@ namespace Cotizador
                      "~/Scripts/subDistribuidor1.0.0.js"
                      ));
 
+            bundles.Add(new ScriptBundle("~/bundles/permiso").Include(
+                   "~/Scripts/permiso1.0.0.js"
+
+
+                   ));
+
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
                         "~/Scripts/guiaRemision1.2.3.js"
                         ));

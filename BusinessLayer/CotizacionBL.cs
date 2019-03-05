@@ -91,7 +91,9 @@ namespace BusinessLayer
                 //Si no es aprobador para que la cotización se cree como aprobada el porcentaje de descuento debe ser mayor o igual 
                 //al porcentaje Limite sin aprobacion
 
-                if (cotizacionDetalle.validar && (!cotizacion.usuario.apruebaCotizaciones || cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion))
+         
+
+                if ((cotizacionDetalle.validar && (!cotizacion.usuario.apruebaCotizaciones || cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion) ) || cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
                 {
                     PrecioClienteProducto precioClienteProducto = cotizacionDetalle.producto.precioClienteProducto;
 
@@ -120,14 +122,20 @@ namespace BusinessLayer
                             {
                                 if (cotizacionDetalle.precioUnitario != precioClienteProducto.precioUnitario)
                                 {
-                                    evaluarDescuento = 2;
+                                    if(cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
+                                        evaluarDescuento = 5;
+                                    else 
+                                        evaluarDescuento = 2;
                                 }
                             }
                             else
                             {
                                 if (cotizacionDetalle.precioUnitario != ( precioClienteProducto.precioUnitario / cotizacionDetalle.producto.equivalencia))
                                 {
-                                    evaluarDescuento = 2;
+                                    if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
+                                        evaluarDescuento = 5;
+                                    else
+                                        evaluarDescuento = 2;
                                 }
                             }
 
@@ -142,7 +150,7 @@ namespace BusinessLayer
 
                     if (evaluarDescuento > 0)
                     {
-                        if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION)
+                        if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION || cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
                         {
                             //Se evalua de donde proviene para indicar el mensaje exacto
                             switch (evaluarDescuento)
@@ -159,6 +167,9 @@ namespace BusinessLayer
                                 case 4:
                                     cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "Se aplicó un descuento superior al " + Constantes.PORCENTAJE_MAX_APROBACION + " % sobre el producto " + cotizacionDetalle.producto.sku + ". El precio unitario registrado en facturación tuvo vigencia hasta "+ precioClienteProducto.fechaFinVigencia.Value.ToString(Constantes.formatoFecha) + ".\n";
                                     break;
+                                case 5:
+                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "El precio unitario es distinto al precio registrado en facturación.\n";
+                                    break;
                             }
                             //cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                             //La cotización no quedará en estado Pendiente de aprobación, dado que requiere el comentario para que pase a estado Pendiente de Aprobación
@@ -174,6 +185,12 @@ namespace BusinessLayer
             if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
             {
                 cotizacion.seguimientoCotizacion.observacion = null;
+            }
+
+            //Si la cotización es Trivial entonces se debe aprobar automáticamente de no ser el caso se debe cancelar la creación
+            if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial && cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente)
+            {
+                throw new Exception("Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.");
             }
 
 

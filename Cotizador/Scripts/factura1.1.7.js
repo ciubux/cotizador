@@ -551,6 +551,8 @@ jQuery(function ($) {
         //$("#idDocumentoVenta").val(arrrayClass[0]);
         $("#serieNumeroFacturaParaNotaDebito").val($("#vpSERIE_CORRELATIVO").html());
         $("#modalGenerarNotaDebito").modal();
+        $("#divProductoCargo").hide();
+        
         //modalAnulacion.modal();
     });
 
@@ -1299,13 +1301,36 @@ jQuery(function ($) {
     });
 
 
+    $("input:radio[name=tipoNotaDebito]").change(function () {
+        var tipoNotaDebito = $('input:radio[name=tipoNotaDebito]:checked').val();
+        
+        if (tipoNotaDebito != TIPO_NOTA_DEBITO_AUMENTO_VALOR) {
+            $("#divProductoCargo").show();
+        }
+        else {
+            $("#divProductoCargo").hide();
+        }
+
+
+
+    });
+
 
     $("#btnContinuarGenerandoNotaDebito").click(function () {
 
         desactivarBotonesVer();
+        var cargos = [];
+        $('#ProductoSelectIds option').each(function (i) {
+            if (this.selected == true) {
+                cargos.push(this.value);
+            }
+        });
+
+        //PENDIENTE de validacion
+        //if (cargos.length)
+
         var tipoNotaDebito = $('input:radio[name=tipoNotaDebito]:checked').val();
         var idDocumentoVenta = $("#idDocumentoVenta").val();
-
 
         if (tipoNotaDebito == null) {
             mostrarMensajeErrorProceso("Debe seleccionar el Motivo de la Nota de Débito.");
@@ -1322,7 +1347,8 @@ jQuery(function ($) {
             data: {
 
                 idDocumentoVenta: idDocumentoVenta,
-                tipoNotaDebito: tipoNotaDebito
+                tipoNotaDebito: tipoNotaDebito,
+                cargos: cargos
             },
             error: function (error) {
                 mostrarMensajeErrorProceso(MENSAJE_ERROR);

@@ -543,7 +543,7 @@ namespace Cotizador.Controllers
         {
             //Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            var model = new DescuentoViewModels
+            var model = new ProductoViewModels
             {
                 Data = Constantes.DESCUENTOS_LIST,
                 ProductoSelectId = productoSelectId,
@@ -551,7 +551,22 @@ namespace Cotizador.Controllers
                 Disabled = disabled == null || disabled != "disabled" ? false : true
             };
 
-            return PartialView("_Descuento", model);
+            return PartialView("_Producto", model);
+        }
+
+        public ActionResult GetCargos(string productoSelectId, string selectedValue = null, string disabled = null)
+        {
+            //Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            var model = new ProductoMultipleViewModels
+            {
+                Data = Constantes.CARGOS_LIST,
+                ProductoSelectIds = new List<String> { productoSelectId },
+                SelectedValue = selectedValue,
+                Disabled = disabled == null || disabled != "disabled" ? false : true
+            };
+
+            return PartialView("_ProductoMultiple", model);
         }
         private Producto ProductoSession
         {

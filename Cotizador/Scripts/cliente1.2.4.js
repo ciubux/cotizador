@@ -111,6 +111,8 @@ jQuery(function ($) {
     }
 
     function mostrarCamposSegunTipoDocIdentidad() {
+
+
         var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
       
         if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI
@@ -126,7 +128,7 @@ jQuery(function ($) {
             $("#fieldSetDatosSunat").show(); 
             $("#fieldSetDatosSunat").show();
             
-            var rSunat = $("#cliente_razonSocialSunat").val();
+       /*     var rSunat = $("#cliente_razonSocialSunat").val();
             if (rSunat.trim() == "") {
                 $("#divContinueEdit").attr("disabled", "disabled");
                 $("#cliente_ruc").removeAttr("disabled");
@@ -135,8 +137,10 @@ jQuery(function ($) {
                 $("#cliente_ruc").attr("disabled", "disabled");
                 $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
                 $("#divContinueEdit").removeAttr("disabled");
-            }
+            }*/
         }
+
+
     }
 
 
@@ -675,15 +679,8 @@ jQuery(function ($) {
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
-                $('body').loadingModal('hide');
-                $.alert({
-                    title: 'Error',
-                    content: 'Se generó un error al intentar crear el cliente.',
-                    type: 'red',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });
+                $('body').loadingModal('hide')
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide');
@@ -716,15 +713,8 @@ jQuery(function ($) {
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
-                $('body').loadingModal('hide');
-                $.alert({
-                    title: 'Error',
-                    content: 'Se generó un error al intentar editar el cliente.',
-                    type: 'red',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });
+                $('body').loadingModal('hide')
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide');

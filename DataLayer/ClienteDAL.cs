@@ -440,7 +440,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
             InputParameterAdd.Decimal(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
 
-            InputParameterAdd.Char(objCommand, "tipoDocumento", ((char)cliente.tipoDocumentoIdentidad).ToString());
+            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)cliente.tipoDocumentoIdentidad);
 
             InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito);
             InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
@@ -463,13 +463,8 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente == null ? 0 : cliente.grupoCliente.idGrupoCliente);
 
-            if (!cliente.esSubDistribuidor)
-            {
-                cliente.subDistribuidor = null;
-            }
-
             InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
-            InputParameterAdd.Int(objCommand, "idSubDistribuidor", cliente.subDistribuidor == null ? 0 : cliente.subDistribuidor.idSubDistribuidor);
+            InputParameterAdd.Int(objCommand, "idSubDistribuidor", (!cliente.esSubDistribuidor) ? 0 : cliente.subDistribuidor.idSubDistribuidor);
 
             DateTime dtTmp = DateTime.Now;
             String[] horaTmp = cliente.horaInicioPrimerTurnoEntrega.Split(':');

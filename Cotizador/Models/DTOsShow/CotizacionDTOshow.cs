@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -35,7 +36,7 @@ namespace Cotizador.Models.DTOshow
         public List<Model.CotizacionDetalle> cotizacionDetalleList { get; set; }
        
         
-        public String seguimientoCotizacion_estado { get; set; }
+        public SeguimientoCotizacion.estadosSeguimientoCotizacion seguimientoCotizacion_estado { get; set; }
         public Decimal maximoPorcentajeDescuentoPermitido { get; set; }
         public String grupo_codigoNombre { get; set; }
         public String cliente_codigoRazonSocial { get; set; }

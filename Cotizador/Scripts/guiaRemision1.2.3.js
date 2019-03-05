@@ -1800,7 +1800,7 @@ jQuery(function ($) {
                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
                         '<td>  ' + guiaRemisionList[i].pedido_cliente_razonSocial + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido_liente_ruc + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido_cliente_ruc + '</td>' +
                         '<td>  ' + guiaRemisionList[i].ciudadOrigen_nombre + '</td>' +
                         '<td ' + styleEstado + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
                         '<td>' + guiaRemisionList[i].tipoExtornoToString + '</td>' +

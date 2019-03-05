@@ -520,3 +520,32 @@ $darkred: darken($red, 0.2);*/
 }
 
 
+
+#menuCategoriaPermisos {
+    min-height: 350px;
+}
+
+.menuUsuarios {
+    width: 100%;
+    min-height: 300px;
+}
+
+.divMenuUsuarios {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.menuUsuarios li {
+    list-style: none;
+    background-color: aliceblue;
+    border-bottom: 1px dotted Gray;
+}
+
+.menuUsuarios li.selected {
+    /*background-color: GoldenRod*/
+}
+
+.selected {
+    border: 1px solid #888;
+    background-color: cornflowerblue;
+}

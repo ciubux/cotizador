@@ -271,7 +271,8 @@ namespace DataLayer
                 cotizacion.grupo.codigo = Converter.GetString(row, "codigo_grupo");
                 cotizacion.grupo.nombre = Converter.GetString(row, "nombre_grupo");
                 cotizacion.grupo.contacto = Converter.GetString(row, "contacto_grupo");
-                
+                cotizacion.grupo.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
+                cotizacion.grupo.plazoCreditoAprobado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_aprobado");
 
                 //}
 

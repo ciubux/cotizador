@@ -172,6 +172,28 @@ namespace BusinessLayer
         {
             using (var dal = new PedidoDAL())
             {
+
+                String observacionesAdicionales = String.Empty;
+              if (pedido.direccionEntrega.nombre != null && pedido.direccionEntrega.nombre.Length > 0)
+              {
+                  if (pedido.direccionEntrega.codigoCliente != null && pedido.direccionEntrega.codigoCliente.Length > 0)
+                  {
+                        observacionesAdicionales = pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";
+                  }
+                  else
+                  {
+                        observacionesAdicionales = pedido.direccionEntrega.nombre;
+                  }                
+              }
+                if (pedido.observaciones != null && !pedido.observaciones.Equals(String.Empty))
+                {
+                    pedido.observaciones = pedido.observaciones + " / " + observacionesAdicionales;
+                }
+                else
+                {
+                    pedido.observaciones = observacionesAdicionales;
+                }
+
                 validarPedidoVenta(pedido);
                 dal.InsertPedido(pedido);
             }

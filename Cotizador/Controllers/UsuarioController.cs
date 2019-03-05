@@ -56,5 +56,8 @@ namespace Cotizador.Controllers
 
             return PartialView("_SelectUsuarioPedido", model);
         }
+
+       
+
     }
 }

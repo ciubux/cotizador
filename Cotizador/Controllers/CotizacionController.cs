@@ -15,10 +15,11 @@ using NPOI.HSSF.Model;
 using System.Reflection;
 using Cotizador.Models.DTOsSearch;
 using Cotizador.Models.DTOsShow;
+using NLog;
 
 namespace Cotizador.Controllers
 {
-    public class CotizacionController : Controller
+    public class CotizacionController : ParentController
     {
 
         private Cotizacion CotizacionSession
@@ -51,7 +52,7 @@ namespace Cotizador.Controllers
         {
             Cotizacion cotizacionTmp = new Cotizacion();
             cotizacionTmp.esPagoContado = false;
-            cotizacionTmp.tipoCotizacion = Cotizacion.TiposCotizacion.Regular;
+            cotizacionTmp.tipoCotizacion = Cotizacion.TiposCotizacion.Normal;
             cotizacionTmp.fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now;
             cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
@@ -186,7 +187,7 @@ namespace Cotizador.Controllers
         public void instanciarCotizacion()
         {
             Cotizacion cotizacionTmp = new Cotizacion();
-            cotizacionTmp.tipoCotizacion = Cotizacion.TiposCotizacion.Regular;
+            cotizacionTmp.tipoCotizacion = Cotizacion.TiposCotizacion.Normal;
             cotizacionTmp.idCotizacion = Guid.Empty;
             cotizacionTmp.mostrarCodigoProveedor = true;
             cotizacionTmp.fecha = DateTime.Now;
@@ -524,7 +525,7 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
         }
 
-        public void updateIdGrupoCliente()
+        public String updateIdGrupoCliente()
         {
             Cotizacion cotizacion = this.CotizacionSession;
             GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
@@ -544,10 +545,10 @@ namespace Cotizador.Controllers
                 "\"idGrupoCliente\":\"" + cotizacion.cliente.idCliente + "\"," +*/
                 "\"contacto\":\"" + cotizacion.grupo.contacto + "\"," +
                 "\"textoCondicionesPago\":\"" + cotizacion.textoCondicionesPago + "\"" +
-                "}";
-            
+                "}";           
 
             this.CotizacionSession = cotizacion;
+            return resultado;
         }
 
 
@@ -1059,48 +1060,56 @@ namespace Cotizador.Controllers
 
         public String Create()
         {
-
-            UsuarioBL usuarioBL = new UsuarioBL();
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
-            bool aplicaSedes = int.Parse(Request["aplicaSedes"].ToString()) == 1 ? true : false;
-            
-            Cotizacion cotizacion = this.CotizacionSession;
-            cotizacion.aplicaSedes = aplicaSedes && !cotizacion.cliente.sedePrincipal ? false : aplicaSedes;
-            cotizacion.usuario = usuario;
-            CotizacionBL bl = new CotizacionBL();
-
-            if (cotizacion.idCotizacion != Guid.Empty || cotizacion.codigo > 0)
+            try
             {
-                throw new System.Exception("Cotización ya se encuentra creada");
-            }
+                UsuarioBL usuarioBL = new UsuarioBL();
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
+                bool aplicaSedes = int.Parse(Request["aplicaSedes"].ToString()) == 1 ? true : false;
 
-            bl.InsertCotizacion(cotizacion);
-            long codigo = cotizacion.codigo;
-            int estado = (int)cotizacion.seguimientoCotizacion.estado;
-            String observacion = cotizacion.seguimientoCotizacion.observacion;
+                Cotizacion cotizacion = this.CotizacionSession;
+                cotizacion.aplicaSedes = aplicaSedes && !cotizacion.cliente.sedePrincipal ? false : aplicaSedes;
+                cotizacion.usuario = usuario;
+                CotizacionBL bl = new CotizacionBL();
 
-            if (continuarLuego == 1)
-            {
-                SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
-                estado = (int)estadosSeguimientoCotizacion;
-                observacion = "Se continuará editando luego";
-                updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
-            }
-            else
-            {
-                if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion)
+                if (cotizacion.idCotizacion != Guid.Empty || cotizacion.codigo > 0)
                 {
-                    estado = (int)SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                    throw new System.Exception("Cotización ya se encuentra creada");
                 }
 
+                bl.InsertCotizacion(cotizacion);
+                long codigo = cotizacion.codigo;
+                int estado = (int)cotizacion.seguimientoCotizacion.estado;
+                String observacion = cotizacion.seguimientoCotizacion.observacion;
+
+                if (continuarLuego == 1)
+                {
+                    SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
+                    estado = (int)estadosSeguimientoCotizacion;
+                    observacion = "Se continuará editando luego";
+                    updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
+                }
+                else
+                {
+                    if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion)
+                    {
+                        estado = (int)SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                    }
+
+                }
+                // cotizacion = null;
+                // this.CotizacionSession = null;
+                //usuarioBL.updateCotizacionSerializada(usuario, null);
+                var v = new { codigo = codigo, estado = estado, observacion = observacion };
+                String resultado = JsonConvert.SerializeObject(v);
+                return resultado;
             }
-            // cotizacion = null;
-            // this.CotizacionSession = null;
-            //usuarioBL.updateCotizacionSerializada(usuario, null);
-            var v = new { codigo = codigo, estado = estado, observacion = observacion };
-            String resultado = JsonConvert.SerializeObject(v);
-            return resultado;
+            catch (Exception e)
+            {
+                logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+                throw e;
+            }
+
         }
 
 
@@ -1111,6 +1120,7 @@ namespace Cotizador.Controllers
 
         public String Update()
         {
+            try { 
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -1148,6 +1158,12 @@ namespace Cotizador.Controllers
             var v = new { codigo = codigo, estado = estado, observacion = observacion };
             String resultado = JsonConvert.SerializeObject(v);
             return resultado;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+                throw e;
+            }
         }
 
 

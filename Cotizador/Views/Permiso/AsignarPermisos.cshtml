@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Asignar Permisos";
+    Model.CategoriaPermiso categoriaPermiso = ViewBag.categoriaPermiso;
+    Model.Permiso permiso = ViewBag.permiso;
+    List<Model.CategoriaPermiso> categoriaPermisoList = ViewBag.categoriaPermisoList;
+    List<Model.Usuario> usuarioSinPermisoList = ViewBag.usuarioSinPermisoList;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="idProducto" value="" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <form class="form-horizontal">
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <h4>Seleccione Permiso:</h4>
+                    <ul id="menuCategoriaPermisos">
+                        <!--                        <li class="ui-state-disabled"><div>Toys (n/a)</div></li>-->
+                        @foreach (Model.CategoriaPermiso categoriaPermisoItem in categoriaPermisoList)
+                    {
+                        {
+                            var selected = "";
+                            if (categoriaPermisoItem.permisoList.Where(p => p.idPermiso == permiso.idPermiso).FirstOrDefault() != null)
+                            {
+                                selected = "selected";
+                            }
+
+
+                            <li class="@selected">
+                                <div>@categoriaPermisoItem.descripcion</div><ul>
+                                    @foreach (Model.Permiso permisoin in categoriaPermisoItem.permisoList)
+                                {
+                                    if (permisoin.idPermiso == permiso.idPermiso)
+                                    {
+                                        <li class="selected"><div id=@permisoin.idPermiso>@permisoin.descripcion_corta - (@permisoin.codigo)</div></li>
+                                }
+                                else
+                                {
+                                    <li><div id=@permisoin.idPermiso>@permisoin.descripcion_corta - (@permisoin.codigo)</div></li>
+                            }
+
+                        }
+                                </ul>
+                            </li>
+                    }
+                }
+
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-8">
+
+                <h4 id="permisoSeleccionado">Asignación de usuarios al permiso: @permiso.descripcion_corta - (@permiso.codigo) </h4>
+                <div class="form-group">
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="divMenuUsuarios">
+                            <div class="form-group">
+                                <h5>Usuarios con Permiso:</h5>
+
+                                <ul id="usuariosConPermiso" class="menuUsuarios">
+                                    @foreach (Model.Usuario usuario in permiso.usuarioList)
+                                {
+                                    <li id=@usuario.idUsuario><div>@usuario.nombre  - (@usuario.email)</div></li>
+                            }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="divMenuUsuarios">
+                            <div class="form-group">
+                                <h5>Usuarios sin Permiso:</h5>
+                                <ul  class="menuUsuarios">
+                                    @foreach (Model.Usuario usuario in usuarioSinPermisoList)
+                                {
+                                    <li id=@usuario.idUsuario><div>@usuario.nombre  - (@usuario.email)</div></li>
+                            }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnCancelarAsignacionPermisos" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarAsignacionPermisos" type="button" class="btn btn-success">Guardar Cambios</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/permiso")
+}
