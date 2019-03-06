@@ -274,9 +274,7 @@ BEGIN
 	ORDER BY pe.id_categoria_permiso, pe.orden_permiso;
 END
 
-
-
-/****** Object:  StoredProcedure [dbo].[ps_usuario]    Script Date: 4/03/2019 8:51:04 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[ps_usuario]    Script Date: 6/03/2019 1:49:02 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -382,11 +380,17 @@ SELECT 'CPE_CABECERA_BE_COD_GPO' as codigo, CPE_CABECERA_BE_COD_GPO as valor FRO
 --USUARIOS A CARGO COTIZACION
 IF (@id_usuario IS NOT NULL)
 BEGIN
-	SELECT id_usuario,  us.nombre, es_provincia
-	FROM USUARIO us INNER JOIN 
-	CIUDAD ci ON us.id_ciudad = ci.id_ciudad
-	WHERE us.estado = 1 AND us.crea_cotizaciones_lima = 1
-	AND id_usuario != @id_usuario ;
+	SELECT distinct us.id_usuario,  us.nombre, es_provincia
+	FROM USUARIO us
+	INNER JOIN USUARIO_PERMISO up ON us.id_usuario = up.id_usuario
+	INNER JOIN PERMISO pe ON pe.id_permiso = up.id_permiso
+	 LEFT JOIN CIUDAD ci ON us.id_ciudad = ci.id_ciudad
+	WHERE us.estado = 1 AND us.id_usuario != @id_usuario
+	AND pe.codigo  IN ('P031','P012','P055','P054')
+	ORDER BY us.nombre
+
+
+
 END
 
 --USUARIOS A CARGO PEDIDO

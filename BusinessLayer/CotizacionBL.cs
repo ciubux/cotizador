@@ -514,10 +514,10 @@ namespace BusinessLayer
             using (var dal = new CotizacionDAL())
             {
                 //Si el usuario no es aprobador entonces solo buscará sus cotizaciones
-                if (!cotizacion.usuario.apruebaCotizaciones)
+           /*     if (!cotizacion.usuario.apruebaCotizaciones)
                 {
                     cotizacion.usuarioBusqueda = cotizacion.usuario;
-                }
+                }*/
   
                 cotizacionList = dal.SelectCotizaciones(cotizacion);
             }

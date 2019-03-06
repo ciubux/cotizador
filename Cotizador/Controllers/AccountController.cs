@@ -121,13 +121,13 @@ namespace Cotizador.Controllers
                                 usuario.sedesMPCotizaciones.Add(ciudad);
                             }
                         }
-                        foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
+                     /*   foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
                         {
                             if (!usuarioTmp.sedeMP.esProvincia)
                             {
                                 usuarioCreaCotizacionList.Add(usuarioTmp);
                             }
-                        }
+                        }*/
                     }
 
                     if (usuario.apruebaCotizacionesProvincias || usuario.creaCotizacionesProvincias)
@@ -139,7 +139,7 @@ namespace Cotizador.Controllers
                                 usuario.sedesMPCotizaciones.Add(ciudad);
                             }
                         }
-                        if (usuario.apruebaCotizacionesProvincias)
+                     /*   if (usuario.apruebaCotizacionesProvincias)
                         {
                             foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
                             {
@@ -148,7 +148,7 @@ namespace Cotizador.Controllers
                                     usuarioCreaCotizacionList.Add(usuarioTmp);
                                 }
                             }
-                        }
+                        }*/
                     }
 
                     
@@ -170,10 +170,10 @@ namespace Cotizador.Controllers
                             }
                         }
                     }
-                    else
+              /*      else
                     {
                         usuario.usuarioCreaCotizacionList = usuarioCreaCotizacionList;
-                    }
+                    }*/
 
                     #endregion
 

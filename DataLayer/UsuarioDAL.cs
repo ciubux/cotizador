@@ -310,7 +310,7 @@ namespace DataLayer
 
 
             /*Si es usuario aprobador se recupera la lista de usuarios a los cuales puede aprobar cotizaciones*/
-            if (usuario.apruebaCotizaciones)
+            if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
             {
                 DataTable dataTableUsuariosCreaCotizacion = dataSet.Tables[2];
                 List<Usuario> usuarioList = new List<Usuario>();

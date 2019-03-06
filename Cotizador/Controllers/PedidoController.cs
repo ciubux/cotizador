@@ -561,10 +561,16 @@ namespace Cotizador.Controllers
                     pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
                     pedidoDetalle.flete = documentoDetalle.flete;
                     pedidoDetalle.observacion = documentoDetalle.observacion;
-                    pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
+
+
+          
+                   // pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
                 
 
                     pedidoDetalle.producto = documentoDetalle.producto;
+
+                    
+
 
                     if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Transitoria)
                     {
@@ -593,6 +599,15 @@ namespace Cotizador.Controllers
                         pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
                         pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
                     }
+                    else
+                    {
+                        if(pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa)
+                        {
+                            pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.precioClienteProducto.equivalencia;
+                        }
+
+
+                    }
 
                     if (documentoDetalle.esPrecioAlternativo)
                     {
@@ -603,8 +618,8 @@ namespace Cotizador.Controllers
                         pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
                     }
                     pedidoDetalle.unidad = documentoDetalle.unidad;
-                    pedidoDetalle.porcentajeDescuento = 100 - (pedidoDetalle.producto.precioClienteProducto.precioNeto * 100 / pedidoDetalle.producto.precioLista);
 
+                    pedidoDetalle.porcentajeDescuento = 100 - (pedidoDetalle.precioNeto * 100 / pedidoDetalle.precioLista);
 
                     pedido.pedidoDetalleList.Add(pedidoDetalle);
                 }

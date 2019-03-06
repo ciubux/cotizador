@@ -145,6 +145,7 @@ namespace Cotizador.Controllers
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 UsuarioBL usuarioBL = new UsuarioBL();
                 usuarioBL.setPermiso(this.PermisoSession.usuarioList, this.PermisoSession, usuario);
+                this.Session[Constantes.VAR_SESSION_CAMBIO_ASIGNACION_PERMISOS] = false;
             }
             catch (Exception e)
             {

@@ -3,3 +3,5 @@
 2019-02-22 18:38:15.3595|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Producto ya se encuentra en la lista.
 2019-02-22 18:38:15.4294|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Producto ya se encuentra en la lista.
 2019-02-28 12:53:11.0394|ERROR|Cotizador.Controllers.ParentController|d.reducindo@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-03-05 18:01:56.9099|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Cannot insert the value NULL into column 'fecha_fin_vigencia', table 'cotizadormp.dbo.CAMBIO'; column does not allow nulls. INSERT fails.
+The statement has been terminated.

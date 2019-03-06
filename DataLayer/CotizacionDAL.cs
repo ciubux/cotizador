@@ -415,14 +415,16 @@ namespace DataLayer
             InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", cotizacion.buscarSedesGrupoCliente);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cotizacion.grupo.idGrupoCliente);
             //Si se busca por codigo y el usuario es aprobador de cotizaciones no se considera el usuario
-            if (cotizacion.usuario.apruebaCotizaciones && cotizacion.codigo > 0)
+        /*    if (cotizacion.codigo > 0)
             {
                 InputParameterAdd.Guid(objCommand, "id_usuario", Guid.Empty);
             }
             else
             {
                 InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
-            }
+            }*/
+
+            InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(cotizacion.fechaDesde.Year, cotizacion.fechaDesde.Month, cotizacion.fechaDesde.Day, 0, 0, 0));
             InputParameterAdd.DateTime(objCommand, "fechaHasta", new DateTime(cotizacion.fechaHasta.Year, cotizacion.fechaHasta.Month, cotizacion.fechaHasta.Day, 23, 59, 59));
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);

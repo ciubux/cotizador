@@ -3772,6 +3772,9 @@ jQuery(function ($) {
     /*Evento que se dispara cuando se hace clic en el boton EDITAR en la edición de la grilla*/
     $(document).on('click', "button.footable-show", function () {
 
+
+
+
         //Cambiar estilos a los botones
         $("button.footable-add").attr("class", "btn btn-default footable-add");
         $("button.footable-hide").attr("class", "btn btn-primary footable-hide");
@@ -3783,16 +3786,16 @@ jQuery(function ($) {
         $("#flete").attr('disabled', 'disabled');
         $("#btnOpenAgregarProducto").attr('disabled', 'disabled');
 
-        var codigo = $("#numero").val();
+        var codigo = $("#pedido_numeroPedido").val();
         if (codigo == "") {
             $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
             $("#btnFinalizarCreacionPedido").attr('disabled', 'disabled');
-            $("#btnCancelPedido").attr('disabled', 'disabled');
+            $("#btnCancelarPedido").attr('disabled', 'disabled');
         }
         else {
             $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
             $("#btnFinalizarEdicionPedido").attr('disabled', 'disabled');
-            $("#btnCancelPedido").attr('disabled', 'disabled');
+            $("#btnCancelarPedido").attr('disabled', 'disabled');
         }
 
         

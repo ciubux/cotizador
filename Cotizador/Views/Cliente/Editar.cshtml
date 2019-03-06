@@ -333,35 +333,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                            <div class="col-xs-8 col-sm-8 col-lg-8">
-
-                                @if (cliente.usuario.bloqueaClientes)
-                                {
-                                    if (cliente.bloqueado)
-                                    {
-                                        <input checked type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
-                                    }
-                                    else
-                                    {
-                                        <input type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
-                                    }
-                                }
-                                else
-                                {
-                                    if (cliente.bloqueado)
-                                    {
-                                        <input checked disabled type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
-                                    }
-                                    else
-                                    {
-                                        <input disabled type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
-                                    }
-                                }
-
-                            </div>
-                        </div>
+                    
                     </div>
                 </div>
 
@@ -528,6 +500,36 @@
                                 )
                             </div>
                         </div>
+
+                            <div class="form-group">
+                            @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                            <div class="col-xs-8 col-sm-8 col-lg-8">
+
+                                @if (cliente.usuario.bloqueaClientes)
+                                {
+                                    if (cliente.bloqueado)
+                                    {
+                                        <input checked type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
+                                    }
+                                }
+                                else
+                                {
+                                    if (cliente.bloqueado)
+                                    {
+                                        <input checked disabled type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
+                                    }
+                                    else
+                                    {
+                                        <input disabled type="checkbox" id="cliente_bloqueado" name="cliente_bloqueado" />
+                                    }
+                                }
+
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -538,7 +540,7 @@
                             <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
                             <div class="col-xs-3">
                                 <div class="upload-btn-wrapper">
-                                    <button class="btn btn-primary"></button>
+                                    <button class="btn btn-primary">Adjuntar Archivo</button>
                                     <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
                                 </div>
                             </div>

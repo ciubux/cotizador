@@ -1328,7 +1328,7 @@ jQuery(function ($) {
                 content: "Los productos importados no consideran los precios registrados para un grupo.",
                 buttons: {
                     OK: function () {*/
-                window.location = '/Cotizacion/CotizarGrupo';
+                window.location = '/Cotizacion/Cotizar';
 
           /*              }
                     }
@@ -1428,7 +1428,7 @@ jQuery(function ($) {
                 }
 
                 //Si es una cotización transitoria la fecha de fin de vigencia no puede ser mayor a la fecha de inicio de vigencia por más de 10 días
-                if ($('#tipoDocumento') == 1) {
+                if ($('#tipoCotizacion').val() == 1) {
 
                     var fechaInicioTmp = fechaInicioVigenciaPrecios.split("/");
                  
@@ -1512,10 +1512,10 @@ jQuery(function ($) {
             return false;
 
         if ($("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION) {
-
+            
             var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
 
-            if (continuarLuego == 0 && sedePrincipal == 1 && $('#tipoDocumento') == 0) {
+            if (continuarLuego == 0 && sedePrincipal == 1 && $('#tipoCotizacion').val() == 0) {
                 $.confirm({
                     title: 'Cliente Multiregional Identificado',
                     content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
@@ -1632,7 +1632,7 @@ jQuery(function ($) {
 
         var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
 
-        if (continuarLuego == 0 && sedePrincipal == 1) {
+        if (continuarLuego == 0 && sedePrincipal == 1 && $('#tipoCotizacion').val() == 0) {
             $.confirm({
                 title: 'Cliente Multiregional Identificado',
                 content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',

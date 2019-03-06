@@ -669,8 +669,7 @@ jQuery(function ($) {
 
     function crearCliente() {
         if (!validacionDatosCliente())
-            return false;       
-
+            return false;   
         $('body').loadingModal({
             text: 'Creando Cliente...'
         });
