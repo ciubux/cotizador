@@ -2276,14 +2276,7 @@ jQuery(function ($) {
                 var preciosList = result.precios;
                 var margenText = "";
                 var canastaText = "";
-
-                if (cliente.modificaCanasta == 1) {
-                    $('#lblChkCanasta').closest('.row').show();
-                    $('th.listaPreciosCanasta').removeAttr('data-visible');
-                } else {
-                    $('#lblChkCanasta').closest('.row').hide();
-                    $('th.listaPreciosCanasta').attr('data-visible', 'false');
-                }
+                var disabledCanasta = "";
 
                 $("#tableListaPrecios > tbody").empty();
 
@@ -2312,12 +2305,12 @@ jQuery(function ($) {
                     }
 
                     canastaText = "";
+                    if (cliente.modificaCanasta != 1) { 
+                        disabledCanasta = "disabled";
+                    }
+
                     if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
-                        if (cliente.modificaCanasta == 1) {
-                            canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + '>  </td>';
-                        } else {
-                            canastaText = '<td>-</td>';
-                        }
+                        canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanasta + '>  </td>';
                     } 
 
                     var preciosRow = '<tr data-expanded="true">' +

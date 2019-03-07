@@ -1460,6 +1460,8 @@ jQuery(function ($) {
                 var preciosList = result.precios;
                 var margenText = "";
                 var canastaText = "";
+                var disabledCanasta = "";
+                var editaCliente = parseInt($("#tableListaPrecios th.listaPreciosCanasta").attr("hasEdit"));
 
                 $("#tableListaPrecios > tbody").empty();
                 for (var i = 0; i < preciosList.length; i++) {
@@ -1487,8 +1489,14 @@ jQuery(function ($) {
                     }
 
                     canastaText = "";
+                    disabledCanasta = "";
+
+                    if (editaCliente != 1) {
+                        disabledCanasta = "disabled";
+                    }
+
                     if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
-                        canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + '>  </td>';
+                        canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanasta + '>  </td>';
                     }
 
                     var preciosRow = '<tr data-expanded="true">' +

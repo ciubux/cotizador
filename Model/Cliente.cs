@@ -246,7 +246,14 @@ namespace Model
             get
             {
                 int access = 0;
-                if (this.usuario != null) access = this.usuario.modificaCanastaCliente ? 1 : 0;
+                if (this.usuario != null)
+                {
+                    access = this.usuario.modificaCanastaCliente ? 1 : 0;
+                }
+                else
+                {
+                    return 0;
+                }
 
                 if (access == 0)
                 {
