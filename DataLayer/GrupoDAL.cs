@@ -17,9 +17,8 @@ namespace DataLayer
         {
         }
 
-    
 
-
+        
         public List<GrupoCliente> getGruposBusqueda(String textoBusqueda)
         {
             var objCommand = GetSqlCommand("ps_getgrupos_search");
@@ -181,6 +180,7 @@ namespace DataLayer
                 this.InsertGrupoClienteAdjunto(grupoClienteAdjunto);
             }
             
+            grupoCliente.idGrupoCliente = (int)objCommand.Parameters["@newId"].Value;
             return grupoCliente;
 
         }
@@ -228,6 +228,14 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", grupoCliente.Estado);
 
             //OutputParameterAdd.Varchar(objCommand, "codigo", 4);
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("idClienteList", typeof(Guid)));
+            foreach (Cliente cliente in grupoCliente.miembros)
+            {
+                dt.Rows.Add(cliente.idCliente);
+            }
+
 
             ExecuteNonQuery(objCommand);
             

@@ -504,6 +504,7 @@ namespace DataLayer
 
                 cotizacionDetalle.producto.precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia");
                 cotizacionDetalle.producto.precioClienteProducto.cliente = new Cliente();
+                cotizacionDetalle.producto.precioClienteProducto.estadoCanasta = Converter.GetInt(row, "estado_canasta") == 1 ? true : false;
                 cotizacionDetalle.producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
 
 
@@ -559,6 +560,114 @@ namespace DataLayer
             return documentoDetalleList;
         }
 
+        public List<DocumentoDetalle> getPreciosVigentesGrupoCliente(int idGrupoCliente)
+        {
+            var objCommand = GetSqlCommand("ps_productosVigentesGrupo");
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", idGrupoCliente);
+            DataTable cotizacionDetalleDataTable = Execute(objCommand);
+
+            List<DocumentoDetalle> documentoDetalleList = new List<DocumentoDetalle>();
+            //Detalle de la cotizacion
+            foreach (DataRow row in cotizacionDetalleDataTable.Rows)
+            {
+                DocumentoDetalle cotizacionDetalle = new DocumentoDetalle();
+                cotizacionDetalle.producto = new Producto();
+
+
+                //No se cuenta con IdCotizacionDetalle
+                cotizacionDetalle.cantidad = 1;
+                cotizacionDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                cotizacionDetalle.producto.sku = Converter.GetString(row, "sku");
+                cotizacionDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
+                cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
+
+
+                cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
+                cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
+                cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+
+                //El Precio sin igv es el precio lista
+                cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
+
+                cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+                cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
+
+                if (cotizacionDetalle.esPrecioAlternativo)
+                {
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioLista * cotizacionDetalle.producto.equivalencia;
+                }
+
+
+                cotizacionDetalle.producto.precioClienteProducto = new PrecioClienteProducto();
+                cotizacionDetalle.producto.precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                cotizacionDetalle.producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
+                cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
+                cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+
+
+                if (row["fecha_fin_vigencia"] == DBNull.Value)
+                    cotizacionDetalle.producto.precioClienteProducto.fechaFinVigencia = null;
+                else
+                    cotizacionDetalle.producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+
+                cotizacionDetalle.producto.precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia");
+                cotizacionDetalle.producto.precioClienteProducto.cliente = new Cliente();
+                //cotizacionDetalle.producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                cotizacionDetalle.producto.precioClienteProducto.estadoCanasta = Converter.GetInt(row, "estado_canasta") == 1 ? true : false;
+
+                cotizacionDetalle.precioCliente = new PrecioClienteProducto();
+                if (row["fecha_inicio_vigencia"] == DBNull.Value)
+                {
+                    cotizacionDetalle.precioCliente.fechaInicioVigencia = null;
+                }
+                else
+                {
+                    cotizacionDetalle.precioCliente.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                }
+
+                if (row["fecha_fin_vigencia"] == DBNull.Value)
+                {
+                    cotizacionDetalle.precioCliente.fechaFinVigencia = null;
+                }
+                else
+                {
+                    cotizacionDetalle.precioCliente.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+                }
+                //   cotizacionDetalle.porcentajeDescuento = Decimal.Parse(Request["porcentajeDescuento"].ToString());
+                ///   detalle.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
+
+                //cotizacionDetalle.porcentajeDescuento = cotizacionDetalle.producto.precioClienteProducto.precioNeto
+                //    75×25 / 100 = 18,75
+
+                // cotizacionDetalle
+
+                if (cotizacionDetalle.esPrecioAlternativo)
+                {
+
+
+                    //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
+                    //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
+                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.equivalencia));
+                }
+                else
+                {
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioClienteProducto.precioNeto;
+                }
+
+                //Se multiplica por la equivalente para que cuando se haga el recalculo a la hora de obtener el precioneto se recupere correctamente
+                //     cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.precioClienteProducto.equivalencia;
+                cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
+
+                cotizacionDetalle.observacion = null;
+
+                documentoDetalleList.Add(cotizacionDetalle);
+            }
+
+            return documentoDetalleList;
+        }
 
         public List<Producto> SelectProductos(Producto producto)
         {
@@ -693,7 +802,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", producto.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "sku", producto.sku);
             InputParameterAdd.Binary(objCommand, "imagen", producto.image);
-            InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion);
+            InputParameterAdd.Varchar(objCommand, "descripcion", null /*producto.descripcion*/);
             InputParameterAdd.Varchar(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);

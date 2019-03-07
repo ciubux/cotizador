@@ -41,9 +41,12 @@ namespace Model
 
         public Producto producto { get; set; }
 
-    /*    public String nombreVista
-        {
-            get { return codigo + "(" + nombre + ")"; }
-        }*/
+        public bool estadoCanasta { get; set; }
+
+        public GrupoCliente grupoCliente { get; set; }
+        /*    public String nombreVista
+            {
+                get { return codigo + "(" + nombre + ")"; }
+            }*/
     }
 }

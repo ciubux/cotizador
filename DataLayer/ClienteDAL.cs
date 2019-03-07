@@ -52,6 +52,33 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+        public List<Cliente> getClientesGrupo(int idGrupo)
+        {
+            var objCommand = GetSqlCommand("ps_getClientesGrupo");
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", idGrupo);
+
+            DataTable dataTable = Execute(objCommand);
+            List<Cliente> list = new List<Cliente>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente ClienteResultado = new Cliente();
+                ClienteResultado.idCliente = Converter.GetGuid(row, "id_cliente");
+                ClienteResultado.codigo = Converter.GetString(row, "codigo");
+                ClienteResultado.ciudad = new Ciudad();
+                ClienteResultado.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                ClienteResultado.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
+
+                ClienteResultado.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                ClienteResultado.nombreComercial = Converter.GetString(row, "nombre_comercial");
+                ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
+                ClienteResultado.ruc = Converter.GetString(row, "ruc");
+
+
+                list.Add(ClienteResultado);
+            }
+            return list;
+        }
 
         public List<Cliente> getClientesBusqueda(String textoBusqueda, Guid idCiudad)
         {
@@ -79,6 +106,50 @@ namespace DataLayer
             return clienteList;
         }
 
+        public List<Cliente> getClientesBusqueda(String textoBusqueda)
+        {
+            var objCommand = GetSqlCommand("ps_getclientes_allsearch");
+            InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
+
+            DataTable dataTable = Execute(objCommand);
+            List<Cliente> clienteList = new List<Cliente>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente cliente = new Cliente
+                {
+                    idCliente = Converter.GetGuid(row, "id_cliente"),
+                    codigo = Converter.GetString(row, "codigo"),
+                    razonSocial = Converter.GetString(row, "razon_social"),
+                    nombreComercial = Converter.GetString(row, "nombre_comercial"),
+                    ruc = Converter.GetString(row, "ruc"),
+                    contacto1 = Converter.GetString(row, "contacto1"),
+                    contacto2 = Converter.GetString(row, "contacto2")
+                };
+                clienteList.Add(cliente);
+            }
+            return clienteList;
+        }
+
+        public List<Cliente> getClientesBusquedaRUC(String textoBusqueda)
+        {
+            var objCommand = GetSqlCommand("ps_getclientesruc_allsearch");
+            InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
+
+            DataTable dataTable = Execute(objCommand);
+            List<Cliente> clienteList = new List<Cliente>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente cliente = new Cliente
+                {
+                    razonSocial = Converter.GetString(row, "razon_social"),
+                    ruc = Converter.GetString(row, "ruc")
+                };
+                clienteList.Add(cliente);
+            }
+            return clienteList;
+        }
 
         public Guid getClienteId(String ruc, String codigoSedeMP)
         {
@@ -108,6 +179,171 @@ namespace DataLayer
 
             foreach (DataRow row in dataTableCliente.Rows)
             {
+                cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                cliente.codigo = Converter.GetString(row, "codigo");
+                cliente.razonSocial = Converter.GetString(row, "razon_social");
+                cliente.nombreComercial = Converter.GetString(row, "nombre_comercial");
+                cliente.ruc = Converter.GetString(row, "ruc");
+                cliente.contacto1 = Converter.GetString(row, "contacto1");
+                cliente.telefonoContacto1 = Converter.GetString(row, "telefono_contacto1");
+                cliente.emailContacto1 = Converter.GetString(row, "email_contacto1");
+                cliente.contacto2 = Converter.GetString(row, "contacto2");
+                cliente.domicilioLegal = Converter.GetString(row, "domicilio_legal");
+                cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
+                cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                cliente.nombreComercialSunat = Converter.GetString(row, "nombre_comercial_sunat");
+                cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
+                cliente.estadoContribuyente = Converter.GetString(row, "estado_contribuyente_sunat");
+                cliente.condicionContribuyente = Converter.GetString(row, "condicion_contribuyente_sunat");
+
+                cliente.ubigeo = new Ubigeo();
+                cliente.ubigeo.Id = Converter.GetString(row, "codigo_ubigeo");
+                cliente.ubigeo.Departamento = Converter.GetString(row, "departamento");
+                cliente.ubigeo.Provincia = Converter.GetString(row, "provincia");
+                cliente.ubigeo.Distrito = Converter.GetString(row, "distrito");
+                cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
+
+                cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
+                cliente.ciudad = new Ciudad();
+                cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                cliente.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
+
+                /*Plazo Crédito*/
+                cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
+                cliente.sobrePlazo = Converter.GetInt(row, "sobre_plazo");
+
+                /*Monto Crédito*/
+                cliente.creditoSolicitado = Converter.GetDecimal(row, "credito_solicitado");
+                cliente.creditoAprobado = Converter.GetDecimal(row, "credito_aprobado");
+                cliente.sobreGiro = Converter.GetDecimal(row, "sobre_giro");
+
+                cliente.vendedoresAsignados = Converter.GetBool(row, "vendedores_asignados");
+                cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
+                //cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
+
+                /* horarios entrega */
+                DateTime horaTmp = Converter.GetDateTime(row, "hora_inicio_primer_turno_entrega");
+                if (horaTmp != null && !horaTmp.ToString("HH:mm:ss").Equals("00:00:00"))
+                {
+                    cliente.horaInicioPrimerTurnoEntrega = horaTmp.ToString("HH:mm:ss");
+                }
+                else
+                {
+                    cliente.horaInicioPrimerTurnoEntrega = "";
+                }
+
+                horaTmp = Converter.GetDateTime(row, "hora_fin_primer_turno_entrega");
+                if (horaTmp != null && !horaTmp.ToString("HH:mm:ss").Equals("00:00:00"))
+                {
+                    cliente.horaFinPrimerTurnoEntrega = horaTmp.ToString("HH:mm:ss");
+                }
+                else
+                {
+                    cliente.horaFinPrimerTurnoEntrega = "";
+                }
+
+                horaTmp = Converter.GetDateTime(row, "hora_inicio_segundo_turno_entrega");
+                if (horaTmp != null && !horaTmp.ToString("HH:mm:ss").Equals("00:00:00"))
+                {
+                    cliente.horaInicioSegundoTurnoEntrega = horaTmp.ToString("HH:mm:ss");
+                }
+                else
+                {
+                    cliente.horaInicioSegundoTurnoEntrega = "";
+                }
+
+                horaTmp = Converter.GetDateTime(row, "hora_fin_segundo_turno_entrega");
+                if (horaTmp != null && !horaTmp.ToString("HH:mm:ss").Equals("00:00:00"))
+                {
+                    cliente.horaFinSegundoTurnoEntrega = horaTmp.ToString("HH:mm:ss");
+                }
+                else
+                {
+                    cliente.horaFinSegundoTurnoEntrega = "";
+                }
+                cliente.observacionHorarioEntrega = Converter.GetString(row, "observacion_horario_entrega");
+                if (cliente.observacionHorarioEntrega == null) cliente.observacionHorarioEntrega = "";
+                /*Vendedores*/
+                cliente.responsableComercial = new Vendedor();
+                cliente.responsableComercial.idVendedor = Converter.GetInt(row, "responsable_comercial_id_vendedor");
+                cliente.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
+                cliente.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
+                cliente.responsableComercial.usuario = new Usuario();
+                cliente.responsableComercial.usuario.idUsuario = Converter.GetGuid(row, "responsable_comercial_id_usuario");
+
+                cliente.supervisorComercial = new Vendedor();
+                cliente.supervisorComercial.idVendedor = Converter.GetInt(row, "supervisor_comercial_id_vendedor");
+                cliente.supervisorComercial.codigo = Converter.GetString(row, "supervisor_comercial_codigo");
+                cliente.supervisorComercial.descripcion = Converter.GetString(row, "supervisor_comercial_descripcion");
+                cliente.supervisorComercial.usuario = new Usuario();
+                cliente.supervisorComercial.usuario.idUsuario = Converter.GetGuid(row, "supervisor_comercial_id_usuario");
+
+                cliente.asistenteServicioCliente = new Vendedor();
+                cliente.asistenteServicioCliente.idVendedor = Converter.GetInt(row, "asistente_servicio_cliente_id_vendedor");
+                cliente.asistenteServicioCliente.codigo = Converter.GetString(row, "asistente_servicio_cliente_codigo");
+                cliente.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
+                cliente.asistenteServicioCliente.usuario = new Usuario();
+                cliente.asistenteServicioCliente.usuario.idUsuario = Converter.GetGuid(row, "asistente_servicio_id_usuario");
+
+                cliente.observacionesCredito = Converter.GetString(row, "observaciones_credito");
+                cliente.observaciones = Converter.GetString(row, "observaciones");
+
+                cliente.bloqueado = Converter.GetBool(row, "bloqueado");
+
+                cliente.perteneceCanalMultiregional = Converter.GetBool(row, "pertenece_canal_multiregional");
+                cliente.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
+                cliente.perteneceCanalProvincias = Converter.GetBool(row, "pertenece_canal_provincia");
+                cliente.perteneceCanalPCP = Converter.GetBool(row, "pertenece_canal_pcp");
+                cliente.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
+
+                cliente.habilitadoNegociacionGrupal = Converter.GetBool(row, "habilitado_negociacion_grupal");
+                cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
+                cliente.negociacionMultiregional = Converter.GetBool(row, "negociacion_multiregional");
+
+                cliente.grupoCliente = new GrupoCliente();
+                cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                cliente.grupoCliente.codigo = Converter.GetString(row, "codigo_grupo_cliente");
+                cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
+
+
+                cliente.origen = new Origen();
+                cliente.origen.idOrigen = Converter.GetInt(row, "id_origen");
+                cliente.origen.codigo = Converter.GetString(row, "codigo_origen");
+                cliente.origen.nombre = Converter.GetString(row, "nombre_origen");
+
+                cliente.subDistribuidor = new SubDistribuidor();
+                cliente.subDistribuidor.idSubDistribuidor = Converter.GetInt(row, "id_subdistribuidor");
+                cliente.subDistribuidor.codigo = Converter.GetString(row, "codigo_subdistribuidor");
+                cliente.subDistribuidor.nombre = Converter.GetString(row, "nombre_subdistribuidor");
+
+                
+            }
+
+            foreach (DataRow row in dataTableAdjunto.Rows)
+            {
+                ClienteAdjunto clienteAdjunto = new ClienteAdjunto();
+                clienteAdjunto.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
+                clienteAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
+                clienteAdjunto.nombre = Converter.GetString(row, "nombre");
+                cliente.clienteAdjuntoList.Add(clienteAdjunto);
+            }          
+
+            return cliente;
+        }
+
+        public List<Cliente> getClientesByRUC(string ruc)
+        {
+            var objCommand = GetSqlCommand("ps_clientes_ruc");
+            InputParameterAdd.Varchar(objCommand, "ruc", ruc);
+            DataTable dataTable = Execute(objCommand);
+
+            List<Cliente> lista = new List<Cliente>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente cliente = new Cliente();
+
                 cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 cliente.codigo = Converter.GetString(row, "codigo");
                 cliente.razonSocial = Converter.GetString(row, "razon_social");
@@ -240,19 +476,10 @@ namespace DataLayer
                 cliente.subDistribuidor.codigo = Converter.GetString(row, "codigo_subdistribuidor");
                 cliente.subDistribuidor.nombre = Converter.GetString(row, "nombre_subdistribuidor");
 
-                
+                lista.Add(cliente);
             }
 
-            foreach (DataRow row in dataTableAdjunto.Rows)
-            {
-                ClienteAdjunto clienteAdjunto = new ClienteAdjunto();
-                clienteAdjunto.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
-                clienteAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
-                clienteAdjunto.nombre = Converter.GetString(row, "nombre");
-                cliente.clienteAdjuntoList.Add(clienteAdjunto);
-            }          
-
-            return cliente;
+            return lista;
         }
 
         public List<Cliente> getSedes(String ruc)

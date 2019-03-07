@@ -309,10 +309,10 @@
                     </div>
 
                     <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#cliente_datos">Datos Generales</a></li>
-                        <li><a data-toggle="tab" href="#cliente_crediticia">Información Crediticia</a></li>
-                        <li><a data-toggle="tab" href="#cliente_precios">Productos y Precios</a></li>
-                        <li><a data-toggle="tab" href="#cliente_comercial">Gestion Comercial</a></li>
+                        <li class="active"><a data-toggle="tab" id="showClienteinfo" href="#cliente_datos">Datos Generales</a></li>
+                        <li><a data-toggle="tab" id="showClientePagos" href="#cliente_crediticia">Información Crediticia</a></li>
+                        <li><a data-toggle="tab" id="showClientePrecios" href="#cliente_precios">Productos y Precios</a></li>
+                        <li><a data-toggle="tab" id="showInformacionComercial" href="#cliente_comercial">Gestion Comercial</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -626,17 +626,9 @@
                                             <div class="col-xs-4">
                                             </div>
                                             <div class="col-xs-8">
-                                                @if (cliente.vendedoresAsignados)
-                                                {
-
-                                                    <span id="spanVendedoresAsignados" style="color:forestgreen">Los Responsables Comerciales han sido validados.</span>
-                                                    <span id="spanVendedoresNoAsignados" style="color:darkred" hidden="hidden">No se ha culminado la validación de los Responsables Comerciales.</span>
-                                                }
-                                                else
-                                                {
                                                     <span id="spanVendedoresAsignados" style="color:forestgreen" hidden="hidden">Los Responsables Comerciales han sido validados.</span>
-                                                    <span id="spanVendedoresNoAsignados" style="color:darkred">No se ha culminado la validación de los Responsables Comerciales.</span>
-                                                }
+                                                    <span id="spanVendedoresNoAsignados" style="color:darkred" hidden="hidden">No se ha culminado la validación de los Responsables Comerciales.</span>
+
                                             </div>
                                         </div>
                                     </div>
@@ -746,6 +738,17 @@
                         </div>
 
                         <div id="cliente_precios" class="tab-pane fade">
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-6">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkSoloCanasta">
+                                        <label class="onoffswitch-label" for="chkSoloCanasta"></label>
+                                    </div>
+                                    <h5 id="lblChkCanasta" style="width: 80%; margin-left: 45px; margin-top: -22px; font-weight:bold; cursor:pointer;" class="text-muted">Ver solo canasta de compra habitual</h5>
+
+                                </div>
+                            </div>                            
+
                             <table id="tableListaPrecios" class="table" data-editing="false"
                                    data-editing-allow-add="false"
                                    data-editing-allow-delete="false"
@@ -754,6 +757,7 @@
                                 <thead>
                                     <tr>
                                         <th data-name="idProducto" data-visible="false"></th>
+                                        <th data-name="canasta" class="listaPreciosCanasta" data-sortable="false">Pertenece <br />Canasta<br />Habitual</th>
                                         <th data-name="proveedor" data-sortable="false">Prov.</th>
                                         <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                                         <th data-name="producto" data-sortable="false">Producto / Descripción</th>

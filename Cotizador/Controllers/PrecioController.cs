@@ -46,6 +46,29 @@ namespace Cotizador.Controllers
             return json;
         }
 
+        public String GetPreciosRegistradosGrupoCliente()
+        {
+            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+            int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
+
+
+
+            //Para recuperar el producto se envia si la sede seleccionada es provincia o no
+            PrecioClienteProductoBL precioClienteProductoBL = new PrecioClienteProductoBL();
+            ProductoBL productoBL = new ProductoBL();
+            List<PrecioClienteProducto> precioGrupoClienteProductoList = precioClienteProductoBL.getPreciosRegistradosGrupo(idProducto, idGrupoCliente);
+            Producto producto = productoBL.getProductoById(idProducto);
+            String nombreProducto = producto.descripcion;
+            String skuProducto = producto.sku;
+
+            String jsonPrecioLista = JsonConvert.SerializeObject(precioGrupoClienteProductoList);
+
+            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
+
+            return json;
+        }
+
+
         public String GetPreciosRegistradosCliente()
         {
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());

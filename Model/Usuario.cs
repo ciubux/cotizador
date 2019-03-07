@@ -135,6 +135,8 @@ namespace Model
         public bool modificaGrupoClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_GRUPO_CLIENTES)).FirstOrDefault() != null; } }
         public bool visualizaGrupoClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_GRUPO_CLIENTES)).FirstOrDefault() != null; } }
         public bool buscaSedesGrupoCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.BUSCA_SEDES_GRUPO_CLIENTE)).FirstOrDefault() != null; } }
+        public bool modificaCanastaGrupoCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_CANASTA_GRUPO_CLIENTE)).FirstOrDefault() != null; } }
+        public bool modificaMiembrosGrupoCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MIEMBROS_GRUPO_CLIENTE)).FirstOrDefault() != null; } }
 
         /*Clientes*/
 
@@ -150,6 +152,7 @@ namespace Model
         public bool modificaResponsablePortafolio { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.DEFINE_RESPONSABLE_PORTAFOLIO)).FirstOrDefault() != null; } }
         public bool realizaCargaMasivaCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_CARGA_MASIVA_CLIENTES)).FirstOrDefault() != null; } }
         public bool visualizaClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_CLIENTES)).FirstOrDefault() != null; } }
+        public bool modificaCanastaCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_CANASTA_CLIENTE)).FirstOrDefault() != null; } }
 
         /*Productos*/
         public bool visualizaProductos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PRODUCTOS)).FirstOrDefault() != null; } }

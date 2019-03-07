@@ -240,6 +240,35 @@ namespace Model
         {
             get; set;
         }
+
+        public int modificaCanasta 
+        {
+            get
+            {
+                int access = 0;
+                if (this.usuario != null) access = this.usuario.modificaCanastaCliente ? 1 : 0;
+
+                if (access == 0)
+                {
+                    if (this.asistenteServicioCliente != null && this.asistenteServicioCliente.usuario != null &&  this.asistenteServicioCliente.usuario.idUsuario == this.usuario.idUsuario)
+                    {
+                        access = 1;
+                    }
+
+                    if (this.responsableComercial != null && this.responsableComercial.usuario != null && this.responsableComercial.usuario.idUsuario == this.usuario.idUsuario)
+                    {
+                        access = 1;
+                    }
+
+                    if (this.supervisorComercial != null && this.supervisorComercial.usuario != null && this.supervisorComercial.usuario.idUsuario == this.usuario.idUsuario)
+                    {
+                        access = 1;
+                    }
+                }
+
+                return access;
+            }
+        }
     }
 
 }

@@ -14,6 +14,7 @@ namespace Model
             this.plazoCreditoSolicitado = DocumentoVenta.TipoPago.NoAsignado;
             this.plazoCreditoAprobado = DocumentoVenta.TipoPago.NoAsignado;
             this.grupoClienteAdjuntoList = new List<GrupoClienteAdjunto>();
+            this.miembros = new List<Cliente>();
         }
 
         public int idGrupoCliente { get; set; }
@@ -94,5 +95,7 @@ namespace Model
         public String observacionesCredito { get; set; }
 
         public List<GrupoClienteAdjunto> grupoClienteAdjuntoList { get; set; }
+
+        public List<Cliente> miembros { get; set; }
     }
 }

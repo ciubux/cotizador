@@ -83,6 +83,7 @@ namespace Model
 
 
         public static String VAR_SESSION_GRUPO_CLIENTE = "grupoCliente";
+        public static String VAR_SESSION_GRUPO_CLIENTE_MIEMBROS = "grupoClienteMiembros";
         public static String VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA = "grupoClienteBusqueda";
         public static String VAR_SESSION_GRUPO_CLIENTE_LISTA = "grupoClienteList";
         public static String VAR_SESSION_GRUPO_CLIENTE_VER = "grupoClienteVer";
@@ -307,7 +308,9 @@ namespace Model
         public const String VISUALIZA_ORIGENES = "P065";
         public const String VISUALIZA_CLIENTES = "P066";
         public const String ELIMINA_COTIZACIONES_ACEPTADAS = "P067";
-
+        public const String MODIFICA_CANASTA_CLIENTE = "P068";
+        public const String MODIFICA_CANASTA_GRUPO_CLIENTE = "P069";
+        public const String MODIFICA_MIEMBROS_GRUPO_CLIENTE = "P070";
 
 
 
@@ -407,7 +410,9 @@ namespace Model
             [Display(Name = "MANTENIMIENTO GRUPOS CLIENTE")]
             MantenimientoGrupoCliente = 37,
             [Display(Name = "ASIGNACION PERMISOS")]
-            AsignacionPermisos = 38
+            AsignacionPermisos = 38,
+            [Display(Name = "MIEMBROS GRUPO")]
+            MiembrosGrupoCliente = 39
         };
 
 

@@ -8,8 +8,11 @@ jQuery(function ($) {
 
     $(document).ready(function () {
         $("#btnBusqueda").click();
-        //cargarChosenCliente();
+        cargarChosenCliente();
+        cargarChosenClienteRuc();
         verificarSiExisteGrupoCliente();
+
+        FooTable.init('#tableMiembrosGrupoCliente');
     });
 
     function verificarSiExisteGrupoCliente() {
@@ -28,7 +31,6 @@ jQuery(function ($) {
     function mostrarCamposParaClienteConRUC() {
 
     }
-
 
     $("#tipoDocumentoIdentidad").change(function () {
 
@@ -185,12 +187,7 @@ jQuery(function ($) {
     function cargarChosenCliente() {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-                alert("Debe seleccionar la sede MP previamente.");
-                $("#idCliente").trigger('chosen:close');
-                $("#idCiudad").focus();
-                return false;
-            }
+            
         });
 
         $("#idCliente").ajaxChosen({
@@ -202,12 +199,25 @@ jQuery(function ($) {
             url: "/GrupoCliente/SearchClientes"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
-            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
-
-        //verificarSiExisteGrupoCliente();
+            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });   
     }
 
+    function cargarChosenClienteRuc() {
+        $("#rucCliente").chosen({ placeholder_text_single: "Buscar RUC", no_results_text: "No se encontró RUC" }).on('chosen:showing_dropdown', function (evt, params) {
 
+        });
+
+        $("#rucCliente").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/GrupoCliente/SearchClientesRuc"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar RUC", no_results_text: "No se encontró RUC" });
+    }
 
 
 
@@ -374,13 +384,26 @@ jQuery(function ($) {
             },
             success: function (resultado) {
                 $('body').loadingModal('hide');
-                $.alert({
+                var idGrupoCliente = resultado.idGrupoCliente;
+                
+                $.confirm({
                     title: TITLE_EXITO,
-                    content: 'El grupo cliente se creó correctamente.',
+                    content: 'El grupo cliente se creó correctamente. ¿Desea agregar miembros?',
                     type: 'green',
                     buttons: {
-                        OK: function () {
-                            window.location = '/GrupoCliente/Index';
+                        aplica: {
+                            text: 'Si, ir a agregar miembros',
+                            btnClass: 'btn-success',
+                            action: function () {
+                                window.location = '/GrupoCliente/Miembros?idGrupoCliente=' + idGrupoCliente;
+                            }
+                        },
+                        noAplica: {
+                            text: 'Ahora no',
+                            btnClass: 'btn-primary',
+                            action: function () {
+                                window.location = '/GrupoCliente/Index';
+                            }
                         }
                     }
                 });
@@ -1304,6 +1327,8 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    var idClienteView = "";
+
     $("#btnBusqueda").click(function () {
         /*
         if ($("#grupoCliente_nombre").val().length < 3 &&
@@ -1370,7 +1395,7 @@ jQuery(function ($) {
 
                 }
 
-                if (clienteList.length > 0) {
+                if (list.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
                     $("#divExportButton").show();
                 }
@@ -1394,6 +1419,7 @@ jQuery(function ($) {
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idGrupoCliente = arrrayClass[0];
         var codigoGrupoCliente = arrrayClass[1];
+        idGrupoClienteView = idGrupoCliente;
 
         $.ajax({
             url: "/GrupoCliente/Show",
@@ -1407,7 +1433,7 @@ jQuery(function ($) {
                 mostrarMensajeErrorProceso();
             },
             success: function (result) {
-                var obj = result;
+                var obj = result.grupoCliente;
                 idGrupoClienteView = idGrupoCliente;
                 $('body').loadingModal('hide')
                 $("#verCiudadNombre").html(obj.ciudad.nombre);
@@ -1428,15 +1454,236 @@ jQuery(function ($) {
                 $("#verSobreGiro").html(obj.sobreGiro.toFixed(cantidadDecimales));
 
                 $("#verObservacionesCredito").html(obj.observacionesCredito);
-        
+
+
+
+                var preciosList = result.precios;
+                var margenText = "";
+                var canastaText = "";
+
+                $("#tableListaPrecios > tbody").empty();
+                for (var i = 0; i < preciosList.length; i++) {
+                    var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
+                    var fechaFinVigencia = preciosList[i].precioCliente.fechaFinVigencia;
+
+                    var checkedCanasta = "";
+                    if (preciosList[i].producto.precioClienteProducto.estadoCanasta) {
+                        checkedCanasta = "checked";
+                    }
+
+                    if (fechaInicioVigencia == null)
+                        fechaInicioVigencia = "No Definida";
+                    else
+                        fechaInicioVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaInicioVigencia.substr(0, 10));
+
+                    if (fechaFinVigencia == null)
+                        fechaFinVigencia = "No Definida";
+                    else
+                        fechaFinVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaFinVigencia.substr(0, 10));
+
+                    margenText = "";
+                    if ($("#tableListaPrecios th.porcentajeMargen").length) {
+                        margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1) + ' % </td>';
+                    }
+
+                    canastaText = "";
+                    if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
+                        canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + '>  </td>';
+                    }
+
+                    var preciosRow = '<tr data-expanded="true">' +
+                        '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
+                        canastaText +
+                        '<td>  ' + preciosList[i].producto.proveedor + '  </td>' +
+                        '<td>  ' + preciosList[i].producto.sku + '  </td>' +
+                        '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
+                        '<td>' + fechaInicioVigencia + '</td>' +
+                        '<td>' + fechaFinVigencia + '</td>' +
+                        '<td>  ' + preciosList[i].unidad + '</td>' +
+                        '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
+                        '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
+                        '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
+
+                        '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
+                        '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                        margenText +
+                        '<td>' +
+                        '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +
+                        '</td>' +
+                        '</tr>';
+
+                    $("#tableListaPrecios").append(preciosRow);
+
+                }
+                
+                if (preciosList.length > 0) {
+                    $("#msgPreciosSinResultados").hide();
+                }
+                else {
+                    $("#msgPreciosSinResultados").show();
+                }
+
+                FooTable.init('#tableListaPrecios');
+
+                $("#chkSoloCanasta").prop("checked", false);
+                $("#lblChkCanasta").addClass("text-muted");
+
+                var clienteList = obj.miembros;
+                var margenText = "";
+
+                $("#tableMiembrosGrupo > tbody").empty();
+                for (var i = 0; i < clienteList.length; i++) {
+                    var clienteRow = '<tr data-expanded="true">' +
+                        '<td>  ' + clienteList[i].idPedido + '</td>' +
+                        '<td>  ' + clienteList[i].codigo + '  </td>' +
+                        '<td>  ' + clienteList[i].razonSocialSunat + '  </td>' +
+                        '<td>  ' + clienteList[i].nombreComercial + ' </td>' +
+                        '<td>  ' + clienteList[i].tipoDocumentoIdentidadToString + '</td>' +
+                        '<td>  ' + clienteList[i].ruc + '  </td>' +
+                        '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
+                        '</tr>';
+                    
+                    $("#tableMiembrosGrupo").append(clienteRow);
+
+                }
+                FooTable.init('#tableMiembrosGrupo');
+
+
                 $("#modalVerGrupoCliente").modal('show');                        
             }
         });
     });
 
 
+    $("#modalVerGrupoCliente").on('change', ".chkCanasta", function () {
+        var idProducto = $(this).attr("idProducto");
+
+        if ($(this).is(":checked")) {
+            $.ajax({
+                url: "/GrupoCliente/AgregarProductoACanasta",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idProducto: idProducto
+                },
+                success: function (resultado) {
+                    if (resultado.success == 1) {
+                        $.alert({
+                            title: "Operación exitosa",
+                            type: 'green',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+
+                    }
+                    else {
+                        $.alert({
+                            title: "Ocurrió un error",
+                            type: 'red',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: "/GrupoCliente/RetirarProductoDeCanasta",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idProducto: idProducto
+                },
+                success: function (resultado) {
+                    if (resultado.success == 1) {
+                        $.alert({
+                            title: "Operación exitosa",
+                            type: 'green',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+
+                        if ($("#chkSoloCanasta").is(":checked")) {
+                            $("#tableListaPrecios tbody tr").hide();
+                            $(".chkCanasta:checked").closest("tr").show();
+                        }
+                    }
+                    else {
+                        $.alert({
+                            title: "Ocurrió un error",
+                            type: 'red',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+
+    $("#chkSoloCanasta").change(function () {
+        if ($(this).is(":checked")) {
+
+            $("#tableListaPrecios tbody tr").hide();
+            $(".chkCanasta:checked").closest("tr").show();
+            $("#lblChkCanasta").removeClass("text-muted");
+        } else {
+            $("#tableListaPrecios tbody tr").show();
+            $("#lblChkCanasta").addClass("text-muted");
+        }
+    });
+
+    $("#lblChkCanasta").click(function () {
+        if ($("#chkSoloCanasta").is(":checked")) {
+            $("#chkSoloCanasta").prop("checked", false);
+            $("#tableListaPrecios tbody tr").show();
+            $("#lblChkCanasta").addClass("text-muted");
+        } else {
+            $("#chkSoloCanasta").prop("checked", true);
+            $("#tableListaPrecios tbody tr").hide();
+            $(".chkCanasta:checked").closest("tr").show();
+            $("#lblChkCanasta").removeClass("text-muted");
+        }
+    });
+
+    
+    $("#showGrupoMiembros, #showGrupoPrecio").click(function () {
+        setTimeout(function () {
+            //alert();
+            if ($("#showGrupoMiembros").closest("li").hasClass("active") || $("#showGrupoPrecio").closest("li").hasClass("active")) {
+                $("#btnEditarGrupoCliente").hide();
+            } else {
+                $("#btnEditarGrupoCliente").show();
+            }
+        }, 500);
+    });
+
+    $("#showInformacionComercial, #showGrupoPagos, #showGrupoPrecio").click(function () {
+        setTimeout(function () {
+            if ($("#showInformacionComercial").closest("li").hasClass("active")
+                || $("#showGrupoPagos").closest("li").hasClass("active")) {
+                $("#btnEditarGrupoCliente").show();
+            } 
+        }, 500);
+    });
+    
+    $("#btnMiembrosGrupoCliente").click(function () {
+        window.location = '/GrupoCliente/Miembros?idGrupoCliente=' + idGrupoClienteView;
+    });
+
+
     $("#btnEditarGrupoCliente").click(function () {
-      //  desactivarBotonesVer();
+        //  desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
             url: "/GrupoCliente/ConsultarSiExisteGrupoCliente",
@@ -1460,7 +1707,7 @@ jQuery(function ($) {
                     if (resultado.codigo == 0) {
                         alert('Está creando un nuevo grupo cliente; para continuar por favor diríjase a la página "Crear/Modificar Grupo Cliente" y luego haga clic en el botón Cancelar.');
                     }
-                    
+
                     else {
                         alert('Ya se encuentra editando el grupo cliente con código ' + resultado.codigo + '; para continuar por favor dirigase a la página "Crear/Modificar Grupo Cliente".');
                     }
@@ -1470,6 +1717,283 @@ jQuery(function ($) {
     });
 
 
+    $("#btnAgregarClienteGrupo").click(function () {
+      //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+
+        var idCliente = $("#idCliente").val();
+        var idGrupoCliente = $("#idGrupoCliente").val();
+
+        if (idCliente == "") {
+            $.alert({
+                title: "Ocurrió un error",
+                type: 'red',
+                content: "Debe seleccionar un cliente",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+
+            return;
+        }
+
+        $.ajax({
+            url: "/GrupoCliente/AddCliente",
+            type: 'POST',
+            data: {
+                idCliente: idCliente,
+                idGrupoCliente: idGrupoCliente
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    var cliente = resultado.cliente;
+                    var clienteRow = '<tr data-expanded="true">' +
+                        '<td>  ' + cliente.idCliente + '</td>' +
+                        '<td>  ' + cliente.codigo + '  </td>' +
+                        '<td>  ' + cliente.razonSocialSunat + '  </td>' +
+                        '<td>  ' + cliente.nombreComercial + ' </td>' +
+                        '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
+                        '<td>  ' + cliente.ruc + '  </td>' +
+                        '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+                        '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
+                        '</tr>';
+
+                    $("#tableMiembrosGrupoCliente").append(clienteRow);
+                    //$("#tableMiembrosGrupoCliente tbody tr.footable-empty").remove();
+                    FooTable.init('#tableMiembrosGrupoCliente');
+
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+
+                }
+                else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+
+    $("#btnAgregarClientesGrupoRUC").click(function () {
+        //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+
+        var ruc = $("#rucCliente").val();
+        var idGrupoCliente = $("#idGrupoCliente").val();
+
+        if (ruc == "") {
+            $.alert({
+                title: "Ocurrió un error",
+                type: 'red',
+                content: "Debe seleccionar un RUC",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+
+            return;
+        }
+
+        $.ajax({
+            url: "/GrupoCliente/AddClientesRUC",
+            type: 'POST',
+            data: {
+                ruc: ruc,
+                idGrupoCliente: idGrupoCliente
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    var list = resultado.agregados;
+                    for (var i = 0; i < list.length; i++) {
+                        cliente = list[i];
+                        var clienteRow = '<tr data-expanded="true">' +
+                            '<td>  ' + cliente.idCliente + '</td>' +
+                            '<td>  ' + cliente.codigo + '  </td>' +
+                            '<td>  ' + cliente.razonSocialSunat + '  </td>' +
+                            '<td>  ' + cliente.nombreComercial + ' </td>' +
+                            '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
+                            '<td>  ' + cliente.ruc + '  </td>' +
+                            '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+                            '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
+                            '</tr>';
+
+                        $("#tableMiembrosGrupoCliente").append(clienteRow);    
+                    } 
+
+                    FooTable.init('#tableMiembrosGrupoCliente');
+
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+
+                }
+                else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+
+    $("body").on('click', ".btnQuitarClienteGrupo", function () {
+        //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+        var that = this;
+        var codCliente = $(this).closest("tr").find("td:nth-child(2)").html();
+        var nomCliente = $(this).closest("tr").find("td:nth-child(3)").html();
+        $.confirm({
+            title: 'Confirmar operación',
+            content: 'Esta seguro que desea remover el cliente: ' + codCliente + ' - ' + nomCliente,
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'SI',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        var idCliente = $(that).attr("idCliente");
+                        var idGrupoCliente = $("#idGrupoCliente").val();
+                        $.ajax({
+                            url: "/GrupoCliente/QuitarClienteGrupo",
+                            type: 'POST',
+                            data: {
+                                idCliente: idCliente,
+                                idGrupoCliente: idGrupoCliente
+                            },
+                            type: 'POST',
+                            dataType: 'JSON',
+                            success: function (resultado) {
+                                if (resultado.success == 1) {
+
+                                    $(that).closest("tr").remove();
+                                    FooTable.init('#tableMiembrosGrupoCliente');
+
+                                    $.alert({
+                                        title: "Operación exitosa",
+                                        type: 'green',
+                                        content: resultado.message,
+                                        buttons: {
+                                            OK: function () { }
+                                        }
+                                    });
+
+                                }
+                                else {
+                                    $.alert({
+                                        title: "Ocurrió un error",
+                                        type: 'red',
+                                        content: resultado.message,
+                                        buttons: {
+                                            OK: function () { }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                },
+                noAplica: {
+                    text: 'NO',
+                    btnClass: 'btn-danger',
+                    action: function () {
+                    }
+                }
+            }
+        });
+
+        
+    });
+
+
+    $("#modalVerGrupoCliente").on('click', ".btnMostrarPrecios", function () {
+
+        var idProducto = $(this).attr("idProducto");
+
+        //verIdCliente
+
+        $.ajax({
+            url: "/Precio/GetPreciosRegistradosGrupoCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idProducto: idProducto,
+                idGrupoCliente: idGrupoClienteView
+            },
+            success: function (producto) {
+                $("#verProducto").html(producto.nombre);
+                $("#verCodigoProducto").html(producto.sku);
+
+
+                var precioListaList = producto.precioLista;
+
+                // var producto = $.parseJSON(respuesta);
+                $("#tableMostrarPrecios > tbody").empty();
+
+                FooTable.init('#tableMostrarPrecios');
+                for (var i = 0; i < precioListaList.length; i++) {
+                    var fechaInicioVigencia = precioListaList[i].fechaInicioVigencia;
+                    var fechaFinVigencia = precioListaList[i].fechaFinVigencia;
+
+                    if (fechaInicioVigencia == null)
+                        fechaInicioVigencia = "No Definida";
+                    else
+                        fechaInicioVigencia = invertirFormatoFecha(precioListaList[i].fechaInicioVigencia.substr(0, 10));
+
+                    if (fechaFinVigencia == null)
+                        fechaFinVigencia = "No Definida";
+                    else
+                        fechaFinVigencia = invertirFormatoFecha(precioListaList[i].fechaFinVigencia.substr(0, 10));
+
+                    var numeroCotizacion = precioListaList[i].numeroCotizacion;
+                    if (numeroCotizacion == null)
+                        numeroCotizacion = "No Identificado";
+
+                    $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
+
+                        '<td>' + numeroCotizacion + '</td>' +
+                        '<td>' + fechaInicioVigencia + '</td>' +
+                        '<td>' + fechaFinVigencia + '</td>' +
+                        '<td>' + precioListaList[i].unidad + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadCuatroDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadCuatroDecimales) + '</td>' +
+
+                        '</tr>');
+
+                }
+            }
+        });
+        $("#modalMostrarPrecios").modal();
+
+    });
 
 
 

@@ -550,6 +550,7 @@
     <Content Include="Views\Cotizacion\CotizarGrupo.cshtml" />
     <Content Include="Views\GrupoCliente\Editar.cshtml" />
     <Content Include="Views\GrupoCliente\Index.cshtml" />
+    <Content Include="Views\GrupoCliente\Miembros.cshtml" />
     <Content Include="Views\Shared\_Producto.cshtml" />
     <Content Include="Views\Shared\_ProductoMultiple.cshtml" />
     <Content Include="Views\Usuario\EditarPermisos.cshtml" />

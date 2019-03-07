@@ -410,6 +410,7 @@ jQuery(function ($) {
                 }
 
                 if (cliente.vendedoresAsignados) {
+             
                     $("#spanVendedoresAsignados").show();
                     $("#spanVendedoresNoAsignados").hide();
                 }
@@ -2102,6 +2103,8 @@ jQuery(function ($) {
     $("#btnImportarExcel").click(function () {
         $("#modalActualizarExcel").modal('show');
     });
+    
+    
 
     var idClienteView = "";
     $(document).on('click', "button.btnVerCliente", function () {
@@ -2272,6 +2275,17 @@ jQuery(function ($) {
 
                 var preciosList = result.precios;
                 var margenText = "";
+                var canastaText = "";
+
+                if (cliente.modificaCanasta == 1) {
+                    $('#lblChkCanasta').closest('.row').show();
+                    $('th.listaPreciosCanasta').removeAttr('data-visible');
+                } else {
+                    $('#lblChkCanasta').closest('.row').hide();
+                    $('th.listaPreciosCanasta').attr('data-visible', 'false');
+                }
+
+                $("#tableListaPrecios > tbody").empty();
 
                 for (var i = 0; i < preciosList.length; i++) {
                     var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
@@ -2292,8 +2306,23 @@ jQuery(function ($) {
                         margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1)  + ' % </td>';
                     }
 
+                    var checkedCanasta = "";
+                    if (preciosList[i].producto.precioClienteProducto.estadoCanasta) {
+                        checkedCanasta = "checked";
+                    }
+
+                    canastaText = "";
+                    if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
+                        if (cliente.modificaCanasta == 1) {
+                            canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + '>  </td>';
+                        } else {
+                            canastaText = '<td>-</td>';
+                        }
+                    } 
+
                     var preciosRow = '<tr data-expanded="true">' +
                         '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
+                        canastaText +
                         '<td>  ' + preciosList[i].producto.proveedor  + '  </td>' +
                         '<td>  ' + preciosList[i].producto.sku + '  </td>' +
                         '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
@@ -2324,18 +2353,150 @@ jQuery(function ($) {
                     $("#msgPreciosSinResultados").show();
                 }
                 FooTable.init('#tableListaPrecios');
-                
 
+                $("#chkSoloCanasta").prop("checked", false);
+                $("#lblChkCanasta").addClass("text-muted");
                 
                  //<td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
                     
                         
-                     //   $("#btnEditarCliente").show();
+                if (cliente.vendedoresAsignados) {
+
+                    $("#spanVendedoresAsignados").show();
+                    $("#spanVendedoresNoAsignados").hide();
+                }
+                else {
+                    $("#spanVendedoresAsignados").hide();
+                    $("#spanVendedoresNoAsignados").show();
+                }
                         
                 $("#modalVerCliente").modal('show');
                         
             }
         });
+    });
+
+
+    $("#modalVerCliente").on('change', ".chkCanasta", function () {
+        var idProducto = $(this).attr("idProducto");
+       
+        if ($(this).is(":checked")) {
+            $.ajax({
+                url: "/Cliente/AgregarProductoACanasta",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idProducto: idProducto,
+                    idCliente: idClienteView
+                },
+                success: function (resultado) {
+                    if (resultado.success == 1) {
+                        $.alert({
+                            title: "Operación exitosa",
+                            type: 'green',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+
+                    }
+                    else {
+                        $.alert({
+                            title: "Ocurrió un error",
+                            type: 'red',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: "/Cliente/RetirarProductoDeCanasta",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idProducto: idProducto,
+                    idCliente: idClienteView
+                },
+                success: function (resultado) {
+                    if (resultado.success == 1) {
+                        $.alert({
+                            title: "Operación exitosa",
+                            type: 'green',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+
+                        if ($("#chkSoloCanasta").is(":checked")) {
+                            $("#tableListaPrecios tbody tr").hide();
+                            $(".chkCanasta:checked").closest("tr").show();
+                        }
+                    }
+                    else {
+                        $.alert({
+                            title: "Ocurrió un error",
+                            type: 'red',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+
+    $("#chkSoloCanasta").change(function () {
+        if ($(this).is(":checked")) {
+
+            $("#tableListaPrecios tbody tr").hide();
+            $(".chkCanasta:checked").closest("tr").show();
+            $("#lblChkCanasta").removeClass("text-muted");
+        } else {
+            $("#tableListaPrecios tbody tr").show();
+            $("#lblChkCanasta").addClass("text-muted");
+        }
+    });
+
+    $("#lblChkCanasta").click(function () {
+        if ($("#chkSoloCanasta").is(":checked")) {
+            $("#chkSoloCanasta").prop("checked", false);
+            $("#tableListaPrecios tbody tr").show();
+            $("#lblChkCanasta").addClass("text-muted");
+        } else {
+            $("#chkSoloCanasta").prop("checked", true);
+            $("#tableListaPrecios tbody tr").hide();
+            $(".chkCanasta:checked").closest("tr").show();
+            $("#lblChkCanasta").removeClass("text-muted");
+        }
+    });
+
+    $("#showClientePrecios").click(function () {
+        setTimeout(function () {
+            if ($("#showClientePrecios").closest("li").hasClass("active")) {
+                $("#btnEditarCliente").hide();
+            } else {
+                $("#btnEditarCliente").show();
+            }
+        }, 500);
+    });
+
+    $("#showInformacionComercial, #showClientePagos, #showClienteinfo").click(function () {
+        setTimeout(function () {
+            if ($("#showInformacionComercial").closest("li").hasClass("active")
+                || $("#showClientePagos").closest("li").hasClass("active")
+                || $("#showClienteinfo").closest("li").hasClass("active")) {
+                $("#btnEditarCliente").show();
+            }
+        }, 500);
     });
 
     $("#modalVerCliente").on('click', ".btnMostrarPrecios", function () {

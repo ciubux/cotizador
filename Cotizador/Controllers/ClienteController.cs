@@ -315,7 +315,62 @@ namespace Cotizador.Controllers
         }
 
 
-        
+        [HttpPost]
+        public String AgregarProductoACanasta()
+        {
+            int success = 1;
+            string message = "";
+            ClienteBL clienteBl = new ClienteBL();
+            Cliente cliente = (Cliente) this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+
+            Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (cliente.modificaCanasta == 1)
+            {
+                if (clienteBl.agregarProductoCanasta(cliente.idCliente, idProducto, usuario))
+                {
+                    message = "Se agregó el producto a la canasta.";
+                }
+                else
+                {
+                    success = 0;
+                    message = "No se pudo agregar el producto a la canasta.";
+                }
+            }
+            
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
+
+
+        [HttpPost]
+        public String RetirarProductoDeCanasta()
+        {
+            int success = 1;
+            string message = "";
+            ClienteBL clienteBl = new ClienteBL();
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+
+            Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (cliente.modificaCanasta == 1)
+            {
+                if (clienteBl.retiraProductoCanasta(cliente.idCliente, idProducto, usuario))
+                {
+                    message = "Se retiró el producto de la canasta.";
+                }
+                else
+                {
+                    success = 0;
+                    message = "No se pudo retirar el producto de la canasta.";
+                }
+            }
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
 
 
         public String ChangeDireccionDomicilioLegalSunat()
@@ -580,7 +635,7 @@ namespace Cotizador.Controllers
             }
 
             // clienteBL.mergeClienteStaging();
-            row = row;
+            
             return RedirectToAction("Index", "Cotizacion");
 
         }
