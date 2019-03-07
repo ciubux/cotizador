@@ -2,6 +2,8 @@
     ViewBag.Title = "Búsqueda Grupos";
     Model.GrupoCliente grupoCliente = ViewBag.grupoCliente;
     List<Model.GrupoCliente> grupoClienteList = ViewBag.grupoClienteList;
+
+    int editaCanasta = grupoCliente.usuario.modificaCanastaGrupoCliente ? 1 : 0;
 }
 
 <div class="page-header">
@@ -316,8 +318,7 @@
 
                         <div id="grupo_precio" class="tab-pane fade">
                             <div class="row">
-                                @if (grupoCliente.usuario.modificaCanastaGrupoCliente)
-                                {
+                                
                                 <div class="col-sm-6 col-lg-6">
                                     <div class="onoffswitch">
                                         <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkSoloCanasta">
@@ -326,8 +327,6 @@
                                     <h5 id="lblChkCanasta" style="width: 80%; margin-left: 45px; margin-top: -22px; font-weight:bold; cursor:pointer;" class="text-muted">Ver solo canasta de compra habitual</h5>
 
                                 </div>
-                                }
-                                
                             </div>
 
                             <table id="tableListaPrecios" class="table" data-editing="false"
@@ -338,10 +337,9 @@
                                 <thead>
                                     <tr>
                                         <th data-name="idProducto" data-visible="false"></th>
-                                        @if (grupoCliente.usuario.modificaCanastaGrupoCliente)
-                                        {
-                                        <th data-name="canasta" class="listaPreciosCanasta" data-sortable="false">Pertenece <br />Canasta<br />Habitual</th>
-                                        }
+                                       
+                                        <th data-name="canasta" class="listaPreciosCanasta" data-sortable="false" hasEdit="@editaCanasta" >Pertenece <br />Canasta<br />Habitual</th>
+                                        
                                         <th data-name="proveedor" data-sortable="false">Prov.</th>
                                         <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                                         <th data-name="producto" data-sortable="false">Producto / Descripción</th>
