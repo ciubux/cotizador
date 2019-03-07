@@ -212,6 +212,25 @@ namespace BusinessLayer
             }
         }
 
+        public String getCLientesBusquedaRUC(String textoBusqueda)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                List<Cliente> clienteList = clienteDAL.getClientesBusquedaRUC(textoBusqueda);
+                String resultado = "{\"q\":\"" + textoBusqueda + "\",\"results\":[";
+                Boolean existeCliente = false;
+                foreach (Cliente cliente in clienteList)
+                {
+                    resultado += "{\"id\":\"" + cliente.ruc + "\",\"text\":\"" + cliente.ToStringRUC() + "\"},";
+                    existeCliente = true;
+                }
+                if (existeCliente)
+                    resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+                else
+                    resultado = resultado.Substring(0, resultado.Length) + "]}";
+                return resultado;
+            }
+        }
 
         public List<Cliente> getCLientesBusquedaCotizacion(String textoBusqueda,Guid idCiudad)
         {
@@ -233,6 +252,16 @@ namespace BusinessLayer
                 }
 
                 return clie;
+            }
+        }
+
+        public List<Cliente> getClientesByRUC(string ruc)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                List<Cliente> lista = clienteDAL.getClientesByRUC(ruc);
+
+                return lista;
             }
         }
 

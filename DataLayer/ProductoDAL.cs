@@ -613,8 +613,8 @@ namespace DataLayer
 
                 cotizacionDetalle.producto.precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia");
                 cotizacionDetalle.producto.precioClienteProducto.cliente = new Cliente();
-                cotizacionDetalle.producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-
+                //cotizacionDetalle.producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                cotizacionDetalle.producto.precioClienteProducto.estadoCanasta = Converter.GetInt(row, "estado_canasta") == 1 ? true : false;
 
                 cotizacionDetalle.precioCliente = new PrecioClienteProducto();
                 if (row["fecha_inicio_vigencia"] == DBNull.Value)
@@ -654,7 +654,6 @@ namespace DataLayer
                 {
                     cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioClienteProducto.precioNeto;
                 }
-
 
                 //Se multiplica por la equivalente para que cuando se haga el recalculo a la hora de obtener el precioneto se recupere correctamente
                 //     cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.precioClienteProducto.equivalencia;

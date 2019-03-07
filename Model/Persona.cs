@@ -85,6 +85,17 @@ namespace Model
             }
         }
 
+        public string ToStringRUC()
+        {
+            if (this.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC)
+            {
+                return "RUC: " + this.ruc + "  - R. Social: " + this.razonSocial;
+            }
+
+            return "";
+        }
+
+
         public string codigoRazonSocial
         {
             get { return this.codigo + " - " + this.razonSocial; }

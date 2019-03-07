@@ -513,6 +513,7 @@
     <Content Include="Views\Cotizacion\CotizarGrupo.cshtml" />
     <Content Include="Views\GrupoCliente\Editar.cshtml" />
     <Content Include="Views\GrupoCliente\Index.cshtml" />
+    <Content Include="Views\GrupoCliente\Miembros.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

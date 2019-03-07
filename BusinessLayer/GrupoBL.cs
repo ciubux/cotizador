@@ -103,5 +103,23 @@ namespace BusinessLayer
             }
         }
 
+        public bool agregarProductoCanasta(int idGrupoCliente, Guid idProducto, Usuario usuario)
+        {
+            using (var dal = new PrecioClienteProductoDAL())
+            {
+
+                return dal.agregaProductoCanastaGrupoCliente(idGrupoCliente, idProducto, usuario.idUsuario);
+            }
+        }
+
+
+        public bool retiraProductoCanasta(int idGrupoCliente, Guid idProducto, Usuario usuario)
+        {
+            using (var dal = new PrecioClienteProductoDAL())
+            {
+
+                return dal.retiraProductoCanastaGrupoCliente(idGrupoCliente, idProducto, usuario.idUsuario);
+            }
+        }
     }
 }

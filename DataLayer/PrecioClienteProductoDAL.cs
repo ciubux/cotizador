@@ -93,6 +93,32 @@ namespace DataLayer
 
             return true;
         }
+        
+        public bool agregaProductoCanastaGrupoCliente(int idGrupoCliente, Guid idProducto, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pi_canastaGrupoClienteProducto");
+
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", idGrupoCliente);
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
+
+        public bool retiraProductoCanastaGrupoCliente(int idGrupoCliente, Guid idProducto, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pd_canastaGrupoClienteProducto");
+
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", idGrupoCliente);
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
+
         public List<PrecioClienteProducto> getPreciosRegistradosGrupo(Guid idProducto, int idGrupoCliente)
         {
             var objCommand = GetSqlCommand("ps_getprecioGrupoClienteProducto");

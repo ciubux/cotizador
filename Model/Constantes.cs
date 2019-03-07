@@ -83,6 +83,7 @@ namespace Model
 
 
         public static String VAR_SESSION_GRUPO_CLIENTE = "grupoCliente";
+        public static String VAR_SESSION_GRUPO_CLIENTE_MIEMBROS = "grupoClienteMiembros";
         public static String VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA = "grupoClienteBusqueda";
         public static String VAR_SESSION_GRUPO_CLIENTE_LISTA = "grupoClienteList";
         public static String VAR_SESSION_GRUPO_CLIENTE_VER = "grupoClienteVer";
@@ -315,7 +316,9 @@ namespace Model
             [Display(Name = "BUSQUEDA GRUPOS CLIENTE")]
             BusquedaGrupoClientes = 36,
             [Display(Name = "MANTENIMIENTO GRUPOS CLIENTE")]
-            MantenimientoGrupoCliente = 37
+            MantenimientoGrupoCliente = 37,
+            [Display(Name = "MIEMBROS GRUPO")]
+            MiembrosGrupoCliente = 38
         };
 
 

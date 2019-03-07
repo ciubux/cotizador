@@ -152,6 +152,34 @@ namespace Cotizador.Controllers
 
         }
 
+
+        public ActionResult Miembros(int? idGrupoCliente)
+        {
+            GrupoClienteBL bl = new GrupoClienteBL();
+            GrupoCliente grupoCliente = new GrupoCliente();
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (idGrupoCliente != null && idGrupoCliente > 0)
+            {
+                grupoCliente = bl.getGrupo(idGrupoCliente.Value);
+                if (grupoCliente.idGrupoCliente == 0)
+                {
+                    return RedirectToAction("Index", "GrupoCliente");
+                }
+
+                grupoCliente.IdUsuarioRegistro = usuario.idUsuario;
+                grupoCliente.usuario = usuario;
+                grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
+            } else
+            {
+                return RedirectToAction("Index", "GrupoCliente");
+            }
+
+            ViewBag.grupoCliente = grupoCliente;
+            return View();
+        }
+
+
         [HttpPost]
         public String Create()
         {
@@ -197,9 +225,14 @@ namespace Cotizador.Controllers
             int success = 1;
             string message = "";
             ClienteBL clienteBl = new ClienteBL();
-            GrupoCliente grupoCliente = this.GrupoClienteSession;
-            
+            GrupoClienteBL bl = new GrupoClienteBL();
+
+
             Guid idCliente = Guid.Parse(this.Request.Params["idCliente"]);
+            int idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+
+            GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
+            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
 
             foreach (Cliente cli in grupoCliente.miembros) { 
                 if (cli.idCliente == idCliente)
@@ -221,12 +254,86 @@ namespace Cotizador.Controllers
                 grupoCliente.miembros.Add(cliente);
                 cliente.grupoCliente = null;
                 message = "Se agregó el cliente al grupo.";
-                this.GrupoClienteSession = grupoCliente;
             }
 
             String clienteJson = JsonConvert.SerializeObject(cliente);
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\", \"cliente\":" + clienteJson + "}";
+        }
+
+        [HttpPost]
+        public String AddClientesRUC()
+        {
+            int success = 1;
+            string message = "";
+            ClienteBL clienteBl = new ClienteBL();
+            GrupoClienteBL bl = new GrupoClienteBL();
+
+            int encontrados = 0;
+            int agregados = 0;
+            int existentes = 0;
+            bool existe = false;
+            string ruc = this.Request.Params["ruc"].ToString();
+            int idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+
+            GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
+            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
+
+            List<Cliente> lista = clienteBl.getClientesByRUC(ruc);
+            List<Cliente> listaAgregados = new List<Cliente>();
+
+            encontrados = lista.Count;
+
+
+            foreach (Cliente cli in lista)
+            {
+                existe = false;
+                foreach (Cliente miembro in grupoCliente.miembros)
+                {
+                    if (miembro.idCliente == cli.idCliente)
+                    {
+                        existe = true;
+                    }
+                }
+
+                if (existe)
+                {
+                    existentes = existentes + 1;
+                } else
+                {
+                    cli.grupoCliente = grupoCliente;
+                    cli.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                    clienteBl.updateClienteSunat(cli);
+                    cli.grupoCliente = null;
+                    grupoCliente.miembros.Add(cli);
+
+                    listaAgregados.Add(cli);
+                }
+            }
+
+            agregados = encontrados - existentes;
+
+            
+            message = "Se encontraron " + encontrados.ToString() + " clientes con el RUC ingresado";
+
+            if (agregados == encontrados)
+            {
+                message = message + ". Se agregaron todos satisfactoriamente al grupo.";
+            } else
+            {
+                if (existentes == encontrados)
+                {
+                    message = message + ". Todos ya pertenecían al grupo.";
+                } else
+                {
+                    message = message + ", " + existentes.ToString() + " ya pertenecían al grupo. Se agregaron " + agregados.ToString() + " clientes al grupo.";
+                }
+            }
+            
+
+            String clientesJson = JsonConvert.SerializeObject(listaAgregados);
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\", \"agregados\":" + clientesJson + "}";
         }
 
         public ActionResult CancelarCreacionGrupoCliente()
@@ -368,6 +475,13 @@ namespace Cotizador.Controllers
 
             return clienteBL.getCLientesBusqueda(data);
         }
+        public String SearchClientesRuc()
+        {
+            String data = this.Request.Params["data[q]"];
+            ClienteBL clienteBL = new ClienteBL();
+
+            return clienteBL.getCLientesBusquedaRUC(data);
+        }
 
         [HttpPost]
         public String QuitarClienteGrupo()
@@ -375,9 +489,15 @@ namespace Cotizador.Controllers
             int success = 0;
             string message = "";
             ClienteBL clienteBl = new ClienteBL();
-            GrupoCliente grupoCliente = this.GrupoClienteSession;
+            GrupoClienteBL bl = new GrupoClienteBL();
+
 
             Guid idCliente = Guid.Parse(this.Request.Params["idCliente"]);
+            int idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+
+            GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
+            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
+
             int removeAt = -1;
             foreach (Cliente cli in grupoCliente.miembros)
             {
@@ -399,13 +519,63 @@ namespace Cotizador.Controllers
 
                 grupoCliente.miembros.RemoveAt(removeAt);
                 message = "Se retiró el cliente del grupo.";
-                this.GrupoClienteSession = grupoCliente;
             } else
             {
                 message = "El cliente no existe o no es miembro del grupo.";
             }
 
             String clienteJson = JsonConvert.SerializeObject(cliente);
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
+
+        [HttpPost]
+        public String AgregarProductoACanasta()
+        {
+            int success = 1;
+            string message = "";
+            GrupoClienteBL bl = new GrupoClienteBL();
+            GrupoCliente grupoCliente = (GrupoCliente)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_VER];
+
+            Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (bl.agregarProductoCanasta(grupoCliente.idGrupoCliente, idProducto, usuario))
+            {
+                message = "Se agregó el producto a la canasta.";
+            }
+            else
+            {
+                success = 0;
+                message = "No se pudo agregar el producto a la canasta.";
+            }
+
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
+
+
+        [HttpPost]
+        public String RetirarProductoDeCanasta()
+        {
+            int success = 1;
+            string message = "";
+            GrupoClienteBL bl = new GrupoClienteBL();
+            GrupoCliente grupoCliente = (GrupoCliente)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_VER];
+
+            Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (bl.retiraProductoCanasta(grupoCliente.idGrupoCliente, idProducto, usuario))
+            {
+                message = "Se retiró el producto de la canasta.";
+            }
+            else
+            {
+                success = 0;
+                message = "No se pudo retirar el producto de la canasta.";
+            }
+
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }

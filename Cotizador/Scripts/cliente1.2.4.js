@@ -2283,7 +2283,7 @@ jQuery(function ($) {
 
                 var preciosList = result.precios;
                 var margenText = "";
-                //$("#tableClientes > tbody").empty();
+                $("#tableListaPrecios > tbody").empty();
 
                 for (var i = 0; i < preciosList.length; i++) {
                     var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
@@ -2342,8 +2342,9 @@ jQuery(function ($) {
                     $("#msgPreciosSinResultados").show();
                 }
                 FooTable.init('#tableListaPrecios');
-                
 
+                $("#chkSoloCanasta").prop("checked", false);
+                $("#lblChkCanasta").addClass("text-muted");
                 
                  //<td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
                     
@@ -2413,6 +2414,10 @@ jQuery(function ($) {
                             }
                         });
 
+                        if ($("#chkSoloCanasta").is(":checked")) {
+                            $("#tableListaPrecios tbody tr").hide();
+                            $(".chkCanasta:checked").closest("tr").show();
+                        }
                     }
                     else {
                         $.alert({
@@ -2432,13 +2437,48 @@ jQuery(function ($) {
 
     $("#chkSoloCanasta").change(function () {
         if ($(this).is(":checked")) {
+
             $("#tableListaPrecios tbody tr").hide();
             $(".chkCanasta:checked").closest("tr").show();
+            $("#lblChkCanasta").removeClass("text-muted");
         } else {
             $("#tableListaPrecios tbody tr").show();
+            $("#lblChkCanasta").addClass("text-muted");
         }
     });
 
+    $("#lblChkCanasta").click(function () {
+        if ($("#chkSoloCanasta").is(":checked")) {
+            $("#chkSoloCanasta").prop("checked", false);
+            $("#tableListaPrecios tbody tr").show();
+            $("#lblChkCanasta").addClass("text-muted");
+        } else {
+            $("#chkSoloCanasta").prop("checked", true);
+            $("#tableListaPrecios tbody tr").hide();
+            $(".chkCanasta:checked").closest("tr").show();
+            $("#lblChkCanasta").removeClass("text-muted");
+        }
+    });
+
+    $("#showClientePrecios").click(function () {
+        setTimeout(function () {
+            if ($("#showClientePrecios").closest("li").hasClass("active")) {
+                $("#btnEditarCliente").hide();
+            } else {
+                $("#btnEditarCliente").show();
+            }
+        }, 500);
+    });
+
+    $("#showInformacionComercial, #showClientePagos, #showClienteinfo").click(function () {
+        setTimeout(function () {
+            if ($("#showInformacionComercial").closest("li").hasClass("active")
+                || $("#showClientePagos").closest("li").hasClass("active")
+                || $("#showClienteinfo").closest("li").hasClass("active")) {
+                $("#btnEditarCliente").show();
+            }
+        }, 500);
+    });
 
     $("#modalVerCliente").on('click', ".btnMostrarPrecios", function () {
 

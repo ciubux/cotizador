@@ -9,6 +9,7 @@ jQuery(function ($) {
     $(document).ready(function () {
         $("#btnBusqueda").click();
         cargarChosenCliente();
+        cargarChosenClienteRuc();
         verificarSiExisteGrupoCliente();
 
         FooTable.init('#tableMiembrosGrupoCliente');
@@ -186,12 +187,7 @@ jQuery(function ($) {
     function cargarChosenCliente() {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-                alert("Debe seleccionar la sede MP previamente.");
-                $("#idCliente").trigger('chosen:close');
-                $("#idCiudad").focus();
-                return false;
-            }
+            
         });
 
         $("#idCliente").ajaxChosen({
@@ -203,12 +199,25 @@ jQuery(function ($) {
             url: "/GrupoCliente/SearchClientes"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
-            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
-
-        //verificarSiExisteGrupoCliente();
+            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });   
     }
 
+    function cargarChosenClienteRuc() {
+        $("#rucCliente").chosen({ placeholder_text_single: "Buscar RUC", no_results_text: "No se encontró RUC" }).on('chosen:showing_dropdown', function (evt, params) {
 
+        });
+
+        $("#rucCliente").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/GrupoCliente/SearchClientesRuc"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar RUC", no_results_text: "No se encontró RUC" });
+    }
 
 
 
@@ -375,13 +384,26 @@ jQuery(function ($) {
             },
             success: function (resultado) {
                 $('body').loadingModal('hide');
-                $.alert({
+                var idGrupoCliente = resultado.idGrupoCliente;
+                
+                $.confirm({
                     title: TITLE_EXITO,
-                    content: 'El grupo cliente se creó correctamente.',
+                    content: 'El grupo cliente se creó correctamente. ¿Desea agregar miembros?',
                     type: 'green',
                     buttons: {
-                        OK: function () {
-                            window.location = '/GrupoCliente/Index';
+                        aplica: {
+                            text: 'Si, ir a agregar miembros',
+                            btnClass: 'btn-success',
+                            action: function () {
+                                window.location = '/GrupoCliente/Miembros?idGrupoCliente=' + idGrupoCliente;
+                            }
+                        },
+                        noAplica: {
+                            text: 'Ahora no',
+                            btnClass: 'btn-primary',
+                            action: function () {
+                                window.location = '/GrupoCliente/Index';
+                            }
                         }
                     }
                 });
@@ -1442,6 +1464,11 @@ jQuery(function ($) {
                     var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
                     var fechaFinVigencia = preciosList[i].precioCliente.fechaFinVigencia;
 
+                    var checkedCanasta = "";
+                    if (preciosList[i].producto.precioClienteProducto.estadoCanasta) {
+                        checkedCanasta = "checked";
+                    }
+
                     if (fechaInicioVigencia == null)
                         fechaInicioVigencia = "No Definida";
                     else
@@ -1459,6 +1486,7 @@ jQuery(function ($) {
 
                     var preciosRow = '<tr data-expanded="true">' +
                         '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
+                        '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + '>  </td>' +
                         '<td>  ' + preciosList[i].producto.proveedor + '  </td>' +
                         '<td>  ' + preciosList[i].producto.sku + '  </td>' +
                         '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
@@ -1491,6 +1519,9 @@ jQuery(function ($) {
 
                 FooTable.init('#tableListaPrecios');
 
+                $("#chkSoloCanasta").prop("checked", false);
+                $("#lblChkCanasta").addClass("text-muted");
+
                 var clienteList = obj.miembros;
                 var margenText = "";
 
@@ -1511,10 +1542,138 @@ jQuery(function ($) {
                 }
                 FooTable.init('#tableMiembrosGrupo');
 
+
                 $("#modalVerGrupoCliente").modal('show');                        
             }
         });
     });
+
+
+    $("#modalVerGrupoCliente").on('change', ".chkCanasta", function () {
+        var idProducto = $(this).attr("idProducto");
+
+        if ($(this).is(":checked")) {
+            $.ajax({
+                url: "/GrupoCliente/AgregarProductoACanasta",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idProducto: idProducto
+                },
+                success: function (resultado) {
+                    if (resultado.success == 1) {
+                        $.alert({
+                            title: "Operación exitosa",
+                            type: 'green',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+
+                    }
+                    else {
+                        $.alert({
+                            title: "Ocurrió un error",
+                            type: 'red',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: "/GrupoCliente/RetirarProductoDeCanasta",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idProducto: idProducto
+                },
+                success: function (resultado) {
+                    if (resultado.success == 1) {
+                        $.alert({
+                            title: "Operación exitosa",
+                            type: 'green',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+
+                        if ($("#chkSoloCanasta").is(":checked")) {
+                            $("#tableListaPrecios tbody tr").hide();
+                            $(".chkCanasta:checked").closest("tr").show();
+                        }
+                    }
+                    else {
+                        $.alert({
+                            title: "Ocurrió un error",
+                            type: 'red',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+
+    $("#chkSoloCanasta").change(function () {
+        if ($(this).is(":checked")) {
+
+            $("#tableListaPrecios tbody tr").hide();
+            $(".chkCanasta:checked").closest("tr").show();
+            $("#lblChkCanasta").removeClass("text-muted");
+        } else {
+            $("#tableListaPrecios tbody tr").show();
+            $("#lblChkCanasta").addClass("text-muted");
+        }
+    });
+
+    $("#lblChkCanasta").click(function () {
+        if ($("#chkSoloCanasta").is(":checked")) {
+            $("#chkSoloCanasta").prop("checked", false);
+            $("#tableListaPrecios tbody tr").show();
+            $("#lblChkCanasta").addClass("text-muted");
+        } else {
+            $("#chkSoloCanasta").prop("checked", true);
+            $("#tableListaPrecios tbody tr").hide();
+            $(".chkCanasta:checked").closest("tr").show();
+            $("#lblChkCanasta").removeClass("text-muted");
+        }
+    });
+
+    
+    $("#showGrupoMiembros, #showGrupoPrecio").click(function () {
+        setTimeout(function () {
+            //alert();
+            if ($("#showGrupoMiembros").closest("li").hasClass("active") || $("#showGrupoPrecio").closest("li").hasClass("active")) {
+                $("#btnEditarGrupoCliente").hide();
+            } else {
+                $("#btnEditarGrupoCliente").show();
+            }
+        }, 500);
+    });
+
+    $("#showInformacionComercial, #showGrupoPagos, #showGrupoPrecio").click(function () {
+        setTimeout(function () {
+            if ($("#showInformacionComercial").closest("li").hasClass("active")
+                || $("#showGrupoPagos").closest("li").hasClass("active")) {
+                $("#btnEditarGrupoCliente").show();
+            } 
+        }, 500);
+    });
+    
+    $("#btnMiembrosGrupoCliente").click(function () {
+        window.location = '/GrupoCliente/Miembros?idGrupoCliente=' + idGrupoClienteView;
+    });
+
 
     $("#btnEditarGrupoCliente").click(function () {
         //  desactivarBotonesVer();
@@ -1556,6 +1715,7 @@ jQuery(function ($) {
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
 
         var idCliente = $("#idCliente").val();
+        var idGrupoCliente = $("#idGrupoCliente").val();
 
         if (idCliente == "") {
             $.alert({
@@ -1574,7 +1734,8 @@ jQuery(function ($) {
             url: "/GrupoCliente/AddCliente",
             type: 'POST',
             data: {
-                idCliente: idCliente
+                idCliente: idCliente,
+                idGrupoCliente: idGrupoCliente
             },
             type: 'POST',
             dataType: 'JSON',
@@ -1589,10 +1750,11 @@ jQuery(function ($) {
                         '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + cliente.ruc + '  </td>' +
                         '<td>  ' + cliente.ciudad.nombre + '  </td>' +
-                        '<td><button type="button" class="btn btn-primary btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Quitar</button></td>' +
+                        '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                         '</tr>';
 
                     $("#tableMiembrosGrupoCliente").append(clienteRow);
+                    //$("#tableMiembrosGrupoCliente tbody tr.footable-empty").remove();
                     FooTable.init('#tableMiembrosGrupoCliente');
 
                     $.alert({
@@ -1620,24 +1782,54 @@ jQuery(function ($) {
     });
 
 
-    $("#fsMiembrosGrupo").on('click', ".btnQuitarClienteGrupo", function () {
+    $("#btnAgregarClientesGrupoRUC").click(function () {
         //  desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
 
-        var idCliente = $(this).attr("idCliente");
-        var that = this;
+        var ruc = $("#rucCliente").val();
+        var idGrupoCliente = $("#idGrupoCliente").val();
+
+        if (ruc == "") {
+            $.alert({
+                title: "Ocurrió un error",
+                type: 'red',
+                content: "Debe seleccionar un RUC",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+
+            return;
+        }
+
         $.ajax({
-            url: "/GrupoCliente/QuitarClienteGrupo",
+            url: "/GrupoCliente/AddClientesRUC",
             type: 'POST',
             data: {
-                idCliente: idCliente
+                ruc: ruc,
+                idGrupoCliente: idGrupoCliente
             },
             type: 'POST',
             dataType: 'JSON',
             success: function (resultado) {
                 if (resultado.success == 1) {
+                    var list = resultado.agregados;
+                    for (var i = 0; i < list.length; i++) {
+                        cliente = list[i];
+                        var clienteRow = '<tr data-expanded="true">' +
+                            '<td>  ' + cliente.idCliente + '</td>' +
+                            '<td>  ' + cliente.codigo + '  </td>' +
+                            '<td>  ' + cliente.razonSocialSunat + '  </td>' +
+                            '<td>  ' + cliente.nombreComercial + ' </td>' +
+                            '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
+                            '<td>  ' + cliente.ruc + '  </td>' +
+                            '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+                            '<td><button type="button" class="btn btn-primary btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Quitar</button></td>' +
+                            '</tr>';
 
-                    $(that).closest("tr").remove();
+                        $("#tableMiembrosGrupoCliente").append(clienteRow);    
+                    } 
+
                     FooTable.init('#tableMiembrosGrupoCliente');
 
                     $.alert({
@@ -1662,6 +1854,75 @@ jQuery(function ($) {
                 }
             }
         });
+    });
+
+
+    $("body").on('click', ".btnQuitarClienteGrupo", function () {
+        //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+        var that = this;
+        var codCliente = $(this).closest("tr").find("td:nth-child(2)").html();
+        var nomCliente = $(this).closest("tr").find("td:nth-child(3)").html();
+        $.confirm({
+            title: 'Confirmar operación',
+            content: 'Esta seguro que desea remover el cliente: ' + codCliente + ' - ' + nomCliente,
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'SI',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        var idCliente = $(that).attr("idCliente");
+                        var idGrupoCliente = $("#idGrupoCliente").val();
+                        $.ajax({
+                            url: "/GrupoCliente/QuitarClienteGrupo",
+                            type: 'POST',
+                            data: {
+                                idCliente: idCliente,
+                                idGrupoCliente: idGrupoCliente
+                            },
+                            type: 'POST',
+                            dataType: 'JSON',
+                            success: function (resultado) {
+                                if (resultado.success == 1) {
+
+                                    $(that).closest("tr").remove();
+                                    FooTable.init('#tableMiembrosGrupoCliente');
+
+                                    $.alert({
+                                        title: "Operación exitosa",
+                                        type: 'green',
+                                        content: resultado.message,
+                                        buttons: {
+                                            OK: function () { }
+                                        }
+                                    });
+
+                                }
+                                else {
+                                    $.alert({
+                                        title: "Ocurrió un error",
+                                        type: 'red',
+                                        content: resultado.message,
+                                        buttons: {
+                                            OK: function () { }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                },
+                noAplica: {
+                    text: 'NO',
+                    btnClass: 'btn-danger',
+                    action: function () {
+                    }
+                }
+            }
+        });
+
+        
     });
 
 
