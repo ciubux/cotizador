@@ -260,6 +260,22 @@ jQuery(function ($) {
             },
             success: function (cliente)
             {
+
+                if (cliente.correoEnvioFactura == null || cliente.correoEnvioFactura == "") {
+                    $.alert({
+                        title: '¡Advertencia!',
+                        type: 'orange',
+                        content: "Cliente no cuenta con correo para enviarle la factura electrónica, edite el cliente e intente seleccionarlo nuevamente.",
+                        buttons: {
+                            OK: function () {
+                                window.location = '/Pedido/Pedir';
+                            }
+                        }
+                    });
+                    return false;
+                }
+
+
                 if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_VENTA)
                     $("#idCiudad").attr("disabled", "disabled");
 
@@ -734,7 +750,7 @@ jQuery(function ($) {
     $('#pedido_direccionEntrega').change(function () {
         toggleControlesDireccionEntrega();
 
-       
+       /*
         if ($("#pedido_numeroPedido").val() != "") {
             $.alert({
                 title: 'Advertencia',
@@ -763,7 +779,7 @@ jQuery(function ($) {
             });
         }
 
-        else {
+        else {*/
             var idDireccionEntrega = $('#pedido_direccionEntrega').val();
             $.ajax({
                 url: "/Pedido/ChangeDireccionEntrega",
@@ -780,8 +796,11 @@ jQuery(function ($) {
                     location.reload()
                 }
             })
-        }
+        //}
     });
+
+
+
 
 
     $("#pedido_direccionEntrega_descripcion").change(function () {
@@ -1070,7 +1089,7 @@ jQuery(function ($) {
             minTermLength: 5,
             afterTypeDelay: 300,
             cache: false,
-            url: "/Producto/Search"
+            url: "/Pedido/SearchProductos"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
@@ -1611,9 +1630,19 @@ jQuery(function ($) {
 
             }, error: function (detalle) {
 
-                $("#resultadoAgregarProducto").html("Producto ya se encuentra en el detalle del pedido.");
 
-                // alert($("#resultadoAgregarProducto").html(detalle.responseText).closest("title"));
+                $.alert({
+                    title: 'Error al agregar producto',
+                    content: detalle.responseText,
+                    type: 'orange',
+                    buttons: {
+
+                        OK: function () {
+                            window.location = '/Pedido/Pedir';
+                        }
+                    }
+                });
+
 
             }
 
@@ -1775,16 +1804,16 @@ jQuery(function ($) {
             },
             success: function () {
                 $('body').loadingModal('hide')
-                $.alert({
+           /*     $.alert({
                     title: '¡Atención!',
                     type: 'orange',
                     content: "Los productos importados no consideran los precios registrados para un grupo.",
                     buttons: {
-                        OK: function () {
+                        OK: function () {*/
                             window.location = '/Pedido/Pedir';
-                        }
+               /*         }
                     }
-                });
+                });*/
                 
             }
         });
@@ -2133,16 +2162,19 @@ jQuery(function ($) {
     }
 
 
-    function mostrarMensajeErrorProceso() {
+    function mostrarMensajeErrorProceso(texto) {
+
         $.alert({
-            //icon: 'fa fa-warning',
-            title: 'Error',
-            content: MENSAJE_ERROR,
-            type: 'red',
+            title: 'Error, contacte con TI',
+            content: texto,
+            type: 'orange',
             buttons: {
-                OK: function () { }
+
+                OK: function () {
+                   
+                }
             }
-        });       
+        });
     }
 
     /*CARGA Y DESCARGA DE ARCHIVOS*/
@@ -2283,7 +2315,7 @@ jQuery(function ($) {
             data: { continuarLuego: continuarLuego},
             error: function (detalle) {
                 $('body').loadingModal('hide');
-                mostrarMensajeErrorProceso();
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
@@ -2315,8 +2347,7 @@ jQuery(function ($) {
                     ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
                 }
                 else {
-                    //alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    mostrarMensajeErrorProceso();
+                    mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     window.location = '/Pedido/Index';
                 }
 
@@ -2339,7 +2370,7 @@ jQuery(function ($) {
             },
             error: function (detalle) {
                 $('body').loadingModal('hide')
-                mostrarMensajeErrorProceso();
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
@@ -2372,7 +2403,7 @@ jQuery(function ($) {
                 }
                 else {
                     //alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    mostrarMensajeErrorProceso();
+                    mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     window.location = '/Pedido/Index';
                 }
             }
@@ -2408,8 +2439,8 @@ jQuery(function ($) {
                 observacion: observacionEditable + "\n"+ observacion
             },
             type: 'POST',
-            error: function () {
-                mostrarMensajeErrorProceso();
+            error: function (detalle) {
+                mostrarMensajeErrorProceso(detalle.responseText);
                 $("#btnCancelarComentario").click();
             },
             success: function () {
@@ -2570,6 +2601,7 @@ jQuery(function ($) {
      
     });
 
+
     function showPedido(idPedido) {
         $.ajax({
             url: "/Pedido/Show",
@@ -2581,7 +2613,7 @@ jQuery(function ($) {
             error: function (detalle) {
                 //alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + ".");
                 $('body').loadingModal('hide');
-                mostrarMensajeErrorProceso();
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide');
@@ -2589,8 +2621,8 @@ jQuery(function ($) {
                 var pedido = resultado.pedido;
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
 
-              //  var usuario = resultado.usuario;
-                
+                //  var usuario = resultado.usuario;
+
                 $("#verIdPedido").val(pedido.idPedido);
 
                 $('#pedido_numeroGrupo')
@@ -2607,9 +2639,9 @@ jQuery(function ($) {
                 for (var m = 0; m < pedido.pedidoGrupoList.length; m++) {
                     $('#pedido_numeroGrupo').append($('<option>', {
                         value: pedido.pedidoGrupoList[m].numero,
-                        text: pedido.pedidoGrupoList[m].numeroToString + " Solicitado: " + pedido.pedidoGrupoList[m].fechaSolicitudToString 
+                        text: pedido.pedidoGrupoList[m].numeroToString + " Solicitado: " + pedido.pedidoGrupoList[m].fechaSolicitudToString
                     }));
-                }            
+                }
 
                 $('#pedido_numeroGrupo').val(pedido.numeroGrupoPedido);
 
@@ -2618,18 +2650,35 @@ jQuery(function ($) {
                 $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
                 $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
                 $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
-                 //Important
+                //Important
 
                 $("#idPedido").val(pedido.idPedido);
 
                 $("#verNumero").html(pedido.numeroPedidoString);
-                $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
-                $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
+                if (pedido.numeroGrupoPedidoString == "") {
+                    $("#verNumero").html(pedido.numeroPedidoString);
+                }
+                else {
+                    $("#verNumero").html(pedido.numeroPedidoString + " (" + pedido.numeroGrupoPedidoString + ")");
+                }
+
+                if (pedido.cotizacion_tipoCotizacion == 0) {
+                    $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString);
+                }
+                else if (pedido.cotizacion_tipoCotizacion == 1) {
+                    $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Transitoria)");
+                }
+                else if (pedido.cotizacion_tipoCotizacion == 2) {
+                    $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Trivial)");
+                }
+
+
+
                 $("#verTipoPedido").html(pedido.tiposPedidoString);
 
-                $("#verResponsableComercial").html(pedido.cliente.responsableComercial.codigoDescripcion + " " + pedido.cliente.responsableComercial.usuario.email);
-                $("#verSupervisorComercial").html(pedido.cliente.supervisorComercial.codigoDescripcion + " " + pedido.cliente.supervisorComercial.usuario.email);
-                $("#verAsistenteServicioCliente").html(pedido.cliente.asistenteServicioCliente.codigoDescripcion + " " + pedido.cliente.asistenteServicioCliente.usuario.email);              
+                $("#verResponsableComercial").html(pedido.cliente_responsableComercial_codigoDescripcion + " " + pedido.cliente_responsableComercial_usuario_email);
+                $("#verSupervisorComercial").html(pedido.cliente_supervisorComercial_codigoDescripcion + " " + pedido.cliente_supervisorComercial_usuario_email);
+                $("#verAsistenteServicioCliente").html(pedido.cliente_asistenteServicioCliente_codigoDescripcion + " " + pedido.cliente_asistenteServicioCliente_usuario_email);
 
                 /*if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
                     $("#divReferenciaCliente").hide();
@@ -2637,27 +2686,27 @@ jQuery(function ($) {
                     $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
                 }
                 else {*/
-                    $("#divReferenciaCliente").show();
-                    $("#divCiudadSolicitante").hide();
+                $("#divReferenciaCliente").show();
+                $("#divCiudadSolicitante").hide();
                 //}
 
                 $("#verCondicionesPago").html(pedido.textoCondicionesPago);
-                
+
                 $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
 
-                $("#verCiudad").html(pedido.ciudad.nombre);                
-                $("#verIdCliente").val(pedido.cliente.idCliente);
-                $("#verCliente").html(pedido.cliente.codigoRazonSocial);
+                $("#verCiudad").html(pedido.ciudad_nombre);
+                $("#verIdCliente").val(pedido.cliente_idCliente);
+                $("#verCliente").html(pedido.cliente_codigoRazonSocial);
                 $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
                 $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
                 $("#verNumeroRequerimiento").html(pedido.numeroRequerimiento);
                 $("#verFechaEntregaExtendida").val(pedido.fechaEntregaExtendidaString);
-            
-                $("#verDireccionEntrega").html(pedido.direccionEntrega.descripcion);
-                $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
-                $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
 
-                $("#verUsuarioCreacion").html(pedido.usuario.nombre);
+                $("#verDireccionEntrega").html(pedido.direccionEntrega_descripcion);
+                $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega_telefono);
+                $("#verContactoEntrega").html(pedido.direccionEntrega_contacto);
+
+                $("#verUsuarioCreacion").html(pedido.usuario_nombre);
                 $("#verFechaHoraRegistro").html(pedido.fechaHoraRegistro);
 
                 $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
@@ -2665,20 +2714,20 @@ jQuery(function ($) {
                 $("#verContactoPedido").html(pedido.contactoPedido);
                 $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
 
-               
+
 
 
                 $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
 
-                $("#verEstado").html(pedido.seguimientoPedido.estadoString);
-                $("#verModificadoPor").html(pedido.seguimientoPedido.usuario.nombre);
-                $("#verObservacionEstado").html(pedido.seguimientoPedido.observacion);
+                $("#verEstado").html(pedido.seguimientoPedido_estadoString);
+                $("#verModificadoPor").html(pedido.seguimientoPedido_usuario_nombre);
+                $("#verObservacionEstado").html(pedido.seguimientoPedido_observacion);
 
-                $("#verEstadoCrediticio").html(pedido.seguimientoCrediticioPedido.estadoString);
-                $("#verModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido.usuario.nombre);
-                $("#verObservacionEstadoCrediticio").html(pedido.seguimientoCrediticioPedido.observacion);
-                
-          
+                $("#verEstadoCrediticio").html(pedido.seguimientoCrediticioPedido_estadoString);
+                $("#verModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido_usuario_nombre);
+                $("#verObservacionEstadoCrediticio").html(pedido.seguimientoCrediticioPedido_observacion);
+
+
                 $("#verObservaciones").html(pedido.observaciones);
                 $("#verObservacionesFactura").html(pedido.observacionesFactura);
                 $("#verObservacionesGuiaRemision").html(pedido.observacionesGuiaRemision);
@@ -2687,11 +2736,11 @@ jQuery(function ($) {
                 $("#verMontoTotal").html(Number(pedido.montoTotal).toFixed(cantidadDecimales));
                 $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
 
-          /*      $("#verMontoSubTotalVenta").html(Number(pedido.venta.subTotal).toFixed(cantidadDecimales));
-                $("#verMontoIGVVenta").html(Number(pedido.venta.igv).toFixed(cantidadDecimales));
-                $("#verMontoTotalVenta").html(Number(pedido.venta.total).toFixed(cantidadDecimales));
-*/
-              //  nombreArchivos
+                /*      $("#verMontoSubTotalVenta").html(Number(pedido.venta.subTotal).toFixed(cantidadDecimales));
+                      $("#verMontoIGVVenta").html(Number(pedido.venta.igv).toFixed(cantidadDecimales));
+                      $("#verMontoTotalVenta").html(Number(pedido.venta.total).toFixed(cantidadDecimales));
+      */
+                //  nombreArchivos
 
                 $("#nombreArchivos > li").remove().end();
 
@@ -2699,7 +2748,7 @@ jQuery(function ($) {
                 for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
                     var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
                     $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                }   
+                }
 
 
                 $("#verNombreArchivos > li").remove().end();
@@ -2709,9 +2758,9 @@ jQuery(function ($) {
                     var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
                     //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
                     $('#verNombreArchivos').append($('<li />').html(liHTML));
-                }     
+                }
 
-              
+
                 $("#tableDetallePedido > tbody").empty();
 
                 FooTable.init('#tableDetallePedido');
@@ -2723,7 +2772,7 @@ jQuery(function ($) {
                 var lista = pedido.pedidoDetalleList;
                 for (var i = 0; i < lista.length; i++) {
 
-                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined'? '' : lista[i].observacion;
+                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
 
                     d += '<tr>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
@@ -2737,7 +2786,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
-                 //       '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
+                        //       '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
                         '<td>' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
@@ -2749,16 +2798,16 @@ jQuery(function ($) {
 
 
 
-                $("#verRazonSocialSunat").html(pedido.cliente.razonSocialSunat);
-                $("#verRUC").html(pedido.cliente.ruc);
-                $("#verDireccionDomicilioLegalSunat").html(pedido.cliente.direccionDomicilioLegalSunat);
-                $("#verCodigo").html(pedido.cliente.codigo);
+                $("#verRazonSocialSunat").html(pedido.cliente_razonSocialSunat);
+                $("#verRUC").html(pedido.cliente_ruc);
+                $("#verDireccionDomicilioLegalSunat").html(pedido.cliente_direccionDomicilioLegalSunat);
+                $("#verCodigo").html(pedido.cliente_codigo);
 
                 $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
-                $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
+                $("#verCorreoEnvioFactura").html(pedido.cliente_correoEnvioFactura);
 
 
-                               
+
                 if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
                     //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
                     || pedido.tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
@@ -2829,7 +2878,7 @@ jQuery(function ($) {
 
                         plantilla = plantilla.replace("#serieNumero", notaIngresoList[j].serieNumeroGuia);
                         plantilla = plantilla.replace("#fechaEmisionNotaIngreso", invertirFormatoFecha(notaIngresoList[j].fechaEmision.substr(0, 10)));
-                   
+
                         plantilla = plantilla.replace("tableDetalleNotaIngreso", "tableDetalleNotaIngreso" + j);
 
                         $("#formVerNotasIngreso").append(plantilla);
@@ -2839,20 +2888,20 @@ jQuery(function ($) {
                     }
 
                 }
-                
 
 
-              //  
-               // sleep
+
+                //  
+                // sleep
                 $("#tableDetallePedido").append(d);
 
-                if (pedido.seguimientoPedido.estado != ESTADO_PROGRAMADO
-                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO
-                    && pedido.seguimientoPedido.estado != ESTADO_FACTURADO
-                    && pedido.seguimientoPedido.estado != ESTADO_FACTURADO_PARCIALMENTE
-                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO_PARCIALMENTE) {
+                if (pedido.seguimientoPedido_estado != ESTADO_PROGRAMADO
+                    && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO
+                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO
+                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO_PARCIALMENTE
+                    && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO_PARCIALMENTE) {
                     $("#btnEditarPedido").show();
-                    if (pedido.seguimientoPedido.estado == ESTADO_EN_EDICION) {
+                    if (pedido.seguimientoPedido_estado == ESTADO_EN_EDICION) {
                         $("#btnEditarPedido").html("Continuar Editando");
                     }
                     else {
@@ -2865,9 +2914,9 @@ jQuery(function ($) {
                 }
 
                 //ACTUALIZAR PEDIDO
-                if ( pedido.seguimientoPedido.estado != ESTADO_EN_EDICION                   
-                    && pedido.seguimientoPedido.estado != ESTADO_DENEGADO
-                    && pedido.seguimientoPedido.estado != ESTADO_ELIMINADO) {
+                if (pedido.seguimientoPedido_estado != ESTADO_EN_EDICION
+                    && pedido.seguimientoPedido_estado != ESTADO_DENEGADO
+                    && pedido.seguimientoPedido_estado != ESTADO_ELIMINADO) {
                     $("#btnActualizarPedido").show();
                 }
                 else {
@@ -2876,14 +2925,14 @@ jQuery(function ($) {
 
 
                 /**/
-                if (pedido.seguimientoPedido.estado == ESTADO_ATENDIDO) {
-                    $("#pedido_observacionesGuiaRemision").attr("disabled","disabled");
+                if (pedido.seguimientoPedido_estado == ESTADO_ATENDIDO) {
+                    $("#pedido_observacionesGuiaRemision").attr("disabled", "disabled");
                 }
                 else {
                     $("#pedido_observacionesGuiaRemision").removeAttr("disabled");
                 }
 
-                if (pedido.seguimientoPedido.estado == ESTADO_FACTURADO) {
+                if (pedido.seguimientoPedido_estado == ESTADO_FACTURADO) {
                     $("#pedido_observacionesFactura").attr("disabled", "disabled");
                 }
                 else {
@@ -2895,8 +2944,8 @@ jQuery(function ($) {
 
                 //APROBAR PEDIDO
                 if (
-                    (pedido.seguimientoPedido.estado == ESTADO_PENDIENTE_APROBACION ||
-                        pedido.seguimientoPedido.estado == ESTADO_DENEGADO)
+                    (pedido.seguimientoPedido_estado == ESTADO_PENDIENTE_APROBACION ||
+                        pedido.seguimientoPedido_estado == ESTADO_DENEGADO)
                 ) {
 
                     $("#btnAprobarIngresoPedido").show();
@@ -2907,8 +2956,7 @@ jQuery(function ($) {
 
 
                 //DENEGAR PEDIDO
-                if (pedido.seguimientoPedido.estado == ESTADO_PENDIENTE_APROBACION)
-                {
+                if (pedido.seguimientoPedido_estado == ESTADO_PENDIENTE_APROBACION) {
 
                     $("#btnDenegarIngresoPedido").show();
                 }
@@ -2918,8 +2966,8 @@ jQuery(function ($) {
 
                 //LIBERAR PEDIDO
                 if (
-                    pedido.seguimientoCrediticioPedido.estado == ESTADO_PENDIENTE_LIBERACION ||
-                    pedido.seguimientoCrediticioPedido.estado == ESTADO_BLOQUEADO
+                    pedido.seguimientoCrediticioPedido_estado == ESTADO_PENDIENTE_LIBERACION ||
+                    pedido.seguimientoCrediticioPedido_estado == ESTADO_BLOQUEADO
                 ) {
 
                     $("#btnLiberarPedido").show();
@@ -2930,15 +2978,15 @@ jQuery(function ($) {
 
                 //BLOQUEAR PEDIDO
                 if (
-                    (pedido.seguimientoCrediticioPedido.estado == ESTADO_PENDIENTE_LIBERACION ||
-                        pedido.seguimientoCrediticioPedido.estado == ESTADO_LIBERADO)
-                    && pedido.seguimientoPedido.estado != ESTADO_ELIMINADO
-                    && pedido.seguimientoPedido.estado != ESTADO_EN_EDICION
-                    && pedido.seguimientoPedido.estado != ESTADO_DENEGADO
-                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO
-                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO_PARCIALMENTE
-                    && pedido.seguimientoPedido.estado != ESTADO_FACTURADO
-                    && pedido.seguimientoPedido.estado != ESTADO_FACTURADO_PARCIALMENTE
+                    (pedido.seguimientoCrediticioPedido_estado == ESTADO_PENDIENTE_LIBERACION ||
+                        pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO)
+                    && pedido.seguimientoPedido_estado != ESTADO_ELIMINADO
+                    && pedido.seguimientoPedido_estado != ESTADO_EN_EDICION
+                    && pedido.seguimientoPedido_estado != ESTADO_DENEGADO
+                    && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO
+                    && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO_PARCIALMENTE
+                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO
+                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO_PARCIALMENTE
 
                 ) {
 
@@ -2950,8 +2998,8 @@ jQuery(function ($) {
 
 
                 //PROGRAMAR PEDIDO
-                if (pedido.seguimientoPedido.estado == ESTADO_INGRESADO
-                    || pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE
+                if (pedido.seguimientoPedido_estado == ESTADO_INGRESADO
+                    || pedido.seguimientoPedido_estado == ESTADO_ATENDIDO_PARCIALMENTE
                 ) {
 
                     $("#btnProgramarPedido").show();
@@ -2965,13 +3013,13 @@ jQuery(function ($) {
                 $("#btnIngresarPedidoVenta").hide();
                 $("#btnVerAtenciones").hide();
                 $("#btnVerIngresos").hide();
-                
 
-                if ((pedido.seguimientoPedido.estado == ESTADO_INGRESADO ||
-                    pedido.seguimientoPedido.estado == ESTADO_PROGRAMADO ||
-                    pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE
-                    )&&
-                    pedido.seguimientoCrediticioPedido.estado == ESTADO_LIBERADO
+
+                if ((pedido.seguimientoPedido_estado == ESTADO_INGRESADO ||
+                    pedido.seguimientoPedido_estado == ESTADO_PROGRAMADO ||
+                    pedido.seguimientoPedido_estado == ESTADO_ATENDIDO_PARCIALMENTE
+                ) &&
+                    pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO
                 ) {
                     if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
                         //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
@@ -2981,18 +3029,18 @@ jQuery(function ($) {
                     ) {
                         $("#btnAtenderPedidoVenta").show();
 
-                       
-                        
+
+
                     }
                     else {
                         $("#btnIngresarPedidoVenta").show();
 
-                       
+
                     }
                 }
 
-                if (pedido.seguimientoPedido.estado == ESTADO_RECIBIDO
-                    || pedido.seguimientoPedido.estado == ESTADO_RECIBIDO_PARCIALMENTE
+                if (pedido.seguimientoPedido_estado == ESTADO_RECIBIDO
+                    || pedido.seguimientoPedido_estado == ESTADO_RECIBIDO_PARCIALMENTE
                 ) {
                     $("#btnVerIngresos").show();
                 }
@@ -3000,10 +3048,10 @@ jQuery(function ($) {
                     $("#btnVerIngresos").hide();
                 }
 
-                if (pedido.seguimientoPedido.estado == ESTADO_ATENDIDO
-                    || pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE
-                    || pedido.seguimientoPedido.estado == ESTADO_FACTURADO
-                    || pedido.seguimientoPedido.estado == ESTADO_FACTURADO_PARCIALMENTE
+                if (pedido.seguimientoPedido_estado == ESTADO_ATENDIDO
+                    || pedido.seguimientoPedido_estado == ESTADO_ATENDIDO_PARCIALMENTE
+                    || pedido.seguimientoPedido_estado == ESTADO_FACTURADO
+                    || pedido.seguimientoPedido_estado == ESTADO_FACTURADO_PARCIALMENTE
                 ) {
                     $("#btnVerAtenciones").show();
                 }
@@ -3012,8 +3060,7 @@ jQuery(function ($) {
                 }
 
                 //CANCELAR PROGRAMACION
-                if (pedido.seguimientoPedido.estado == ESTADO_PROGRAMADO)
-                {
+                if (pedido.seguimientoPedido_estado == ESTADO_PROGRAMADO) {
                     $("#btnCancelarProgramacionPedido").show();
                 }
                 else {
@@ -3022,31 +3069,31 @@ jQuery(function ($) {
 
 
                 //PROGRAMAR PEDIDO
-                if ((pedido.seguimientoPedido.estado == ESTADO_ATENDIDO)
-                    && (pedido.documentoVenta.numero == "" || pedido.documentoVenta.numero == null )
-                    ) {
+                if ((pedido.seguimientoPedido_estado == ESTADO_ATENDIDO)
+                    && (pedido.documentoVenta_numero == "" || pedido.documentoVenta_numero == null)
+                ) {
                     $("#btnEditarVenta").show();
-                   // $("#btnFacturarPedido").show();
+                    // $("#btnFacturarPedido").show();
                 }
                 else {
                     $("#btnEditarVenta").hide();
-                   // $("#btnFacturarPedido").hide();
+                    // $("#btnFacturarPedido").hide();
                 }
 
 
-                
 
 
 
 
 
-                if (pedido.seguimientoPedido.estado != ESTADO_ATENDIDO
-                    && pedido.seguimientoPedido.estado != ESTADO_ATENDIDO_PARCIALMENTE
-                    && pedido.seguimientoPedido.estado != ESTADO_ELIMINADO
-                    && pedido.seguimientoPedido.estado != ESTADO_FACTURADO
-                    && pedido.seguimientoPedido.estado != ESTADO_FACTURADO_PARCIALMENTE
-                    && pedido.seguimientoPedido.estado != ESTADO_RECIBIDO
-                    && pedido.seguimientoPedido.estado != ESTADO_RECIBIDO_PARCIALMENTE
+
+                if (pedido.seguimientoPedido_estado != ESTADO_ATENDIDO
+                    && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO_PARCIALMENTE
+                    && pedido.seguimientoPedido_estado != ESTADO_ELIMINADO
+                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO
+                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO_PARCIALMENTE
+                    && pedido.seguimientoPedido_estado != ESTADO_RECIBIDO
+                    && pedido.seguimientoPedido_estado != ESTADO_RECIBIDO_PARCIALMENTE
                 ) {
 
                     $("#btnEliminarPedido").show();
@@ -3054,34 +3101,13 @@ jQuery(function ($) {
                 else {
                     $("#btnEliminarPedido").hide();
                 }
-
-
-            
-                
-                
-
-                /*PDF
-                if (
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
-                        cotizacion.seguimientoCotizacion.estado == ESTADO_ACEPTADA ||
-                        cotizacion.seguimientoCotizacion.estado == ESTADO_RECHAZADA
-                    )
-                ) {
-
-                    $("#btnPDFCotizacion").show();
-                }
-                else {
-                    $("#btnPDFCotizacion").hide();
-                }
-                */
-
-
                 $("#modalVerPedido").modal('show');
 
                 //  window.location = '/Pedido/Index';
             }
         });
     }
+
 
 
 
@@ -3240,7 +3266,7 @@ jQuery(function ($) {
             dataType: 'JSON',
             error: function (detalle) {
                 //alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + ".");
-                mostrarMensajeErrorProceso();
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $.alert({
@@ -3746,6 +3772,9 @@ jQuery(function ($) {
     /*Evento que se dispara cuando se hace clic en el boton EDITAR en la edición de la grilla*/
     $(document).on('click', "button.footable-show", function () {
 
+
+
+
         //Cambiar estilos a los botones
         $("button.footable-add").attr("class", "btn btn-default footable-add");
         $("button.footable-hide").attr("class", "btn btn-primary footable-hide");
@@ -3757,16 +3786,16 @@ jQuery(function ($) {
         $("#flete").attr('disabled', 'disabled');
         $("#btnOpenAgregarProducto").attr('disabled', 'disabled');
 
-        var codigo = $("#numero").val();
+        var codigo = $("#pedido_numeroPedido").val();
         if (codigo == "") {
             $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
             $("#btnFinalizarCreacionPedido").attr('disabled', 'disabled');
-            $("#btnCancelPedido").attr('disabled', 'disabled');
+            $("#btnCancelarPedido").attr('disabled', 'disabled');
         }
         else {
             $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
             $("#btnFinalizarEdicionPedido").attr('disabled', 'disabled');
-            $("#btnCancelPedido").attr('disabled', 'disabled');
+            $("#btnCancelarPedido").attr('disabled', 'disabled');
         }
 
         
@@ -4064,7 +4093,7 @@ jQuery(function ($) {
             },
             type: 'POST',
             error: function (detalle) {
-                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
 

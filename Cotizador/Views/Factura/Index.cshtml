@@ -905,6 +905,21 @@
                         </div>
                     </div>
 
+                    <div id="divProductoCargo" class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4" for="idProducto">Cargo a Aplicar:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("GetCargos", "Producto",
+                                     new
+                                     {
+                                         productoSelectId = "idProducto"
+                                     })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </form>
             </div>

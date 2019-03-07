@@ -54,13 +54,15 @@ namespace DataLayer
         }
 
 
-        public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia)
+        public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null)
         {
             var objCommand = GetSqlCommand("ps_getproductos_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
             InputParameterAdd.Varchar(objCommand, "proveedor", proveedor);
             InputParameterAdd.Varchar(objCommand, "familia", familia);
             InputParameterAdd.Int(objCommand, "considerarDescontinuados", considerarDescontinuados ? 1 : 0);
+            InputParameterAdd.Char(objCommand, "tipoPedido", tipoPedido == null? null: ((Char)tipoPedido).ToString());
+
             DataTable dataTable = Execute(objCommand);
             List<Producto> lista = new List<Producto>();
 

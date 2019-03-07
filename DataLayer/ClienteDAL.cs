@@ -269,16 +269,22 @@ namespace DataLayer
                 cliente.responsableComercial.idVendedor = Converter.GetInt(row, "responsable_comercial_id_vendedor");
                 cliente.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
                 cliente.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
+                cliente.responsableComercial.usuario = new Usuario();
+                cliente.responsableComercial.usuario.idUsuario = Converter.GetGuid(row, "responsable_comercial_id_usuario");
 
                 cliente.supervisorComercial = new Vendedor();
                 cliente.supervisorComercial.idVendedor = Converter.GetInt(row, "supervisor_comercial_id_vendedor");
                 cliente.supervisorComercial.codigo = Converter.GetString(row, "supervisor_comercial_codigo");
                 cliente.supervisorComercial.descripcion = Converter.GetString(row, "supervisor_comercial_descripcion");
+                cliente.supervisorComercial.usuario = new Usuario();
+                cliente.supervisorComercial.usuario.idUsuario = Converter.GetGuid(row, "supervisor_comercial_id_usuario");
 
                 cliente.asistenteServicioCliente = new Vendedor();
                 cliente.asistenteServicioCliente.idVendedor = Converter.GetInt(row, "asistente_servicio_cliente_id_vendedor");
                 cliente.asistenteServicioCliente.codigo = Converter.GetString(row, "asistente_servicio_cliente_codigo");
                 cliente.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
+                cliente.asistenteServicioCliente.usuario = new Usuario();
+                cliente.asistenteServicioCliente.usuario.idUsuario = Converter.GetGuid(row, "asistente_servicio_id_usuario");
 
                 cliente.observacionesCredito = Converter.GetString(row, "observaciones_credito");
                 cliente.observaciones = Converter.GetString(row, "observaciones");
@@ -310,6 +316,8 @@ namespace DataLayer
                 cliente.subDistribuidor.idSubDistribuidor = Converter.GetInt(row, "id_subdistribuidor");
                 cliente.subDistribuidor.codigo = Converter.GetString(row, "codigo_subdistribuidor");
                 cliente.subDistribuidor.nombre = Converter.GetString(row, "nombre_subdistribuidor");
+
+                
             }
 
             foreach (DataRow row in dataTableAdjunto.Rows)
@@ -598,6 +606,7 @@ namespace DataLayer
             return clienteList;
         }
 
+        /*
         public Cliente insertCliente(Cliente cliente)
         {
             var objCommand = GetSqlCommand("pi_cliente");
@@ -618,7 +627,7 @@ namespace DataLayer
 
             return cliente;
 
-        }
+        }*/
 
 
 
@@ -658,7 +667,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
             InputParameterAdd.Decimal(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
 
-            InputParameterAdd.Char(objCommand, "tipoDocumento", ((char)cliente.tipoDocumentoIdentidad).ToString());
+            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)cliente.tipoDocumentoIdentidad);
 
             InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito);
             InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
@@ -681,13 +690,8 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente == null ? 0 : cliente.grupoCliente.idGrupoCliente);
 
-            if (!cliente.esSubDistribuidor)
-            {
-                cliente.subDistribuidor = null;
-            }
-
             InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
-            InputParameterAdd.Int(objCommand, "idSubDistribuidor", cliente.subDistribuidor == null ? 0 : cliente.subDistribuidor.idSubDistribuidor);
+            InputParameterAdd.Int(objCommand, "idSubDistribuidor", (!cliente.esSubDistribuidor) ? 0 : cliente.subDistribuidor.idSubDistribuidor);
 
             DateTime dtTmp = DateTime.Now;
             String[] horaTmp = cliente.horaInicioPrimerTurnoEntrega.Split(':');

@@ -1459,6 +1459,8 @@ jQuery(function ($) {
 
                 var preciosList = result.precios;
                 var margenText = "";
+                var canastaText = "";
+
                 $("#tableListaPrecios > tbody").empty();
                 for (var i = 0; i < preciosList.length; i++) {
                     var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
@@ -1484,9 +1486,14 @@ jQuery(function ($) {
                         margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1) + ' % </td>';
                     }
 
+                    canastaText = "";
+                    if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
+                        canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + '>  </td>';
+                    }
+
                     var preciosRow = '<tr data-expanded="true">' +
                         '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
-                        '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + '>  </td>' +
+                        canastaText +
                         '<td>  ' + preciosList[i].producto.proveedor + '  </td>' +
                         '<td>  ' + preciosList[i].producto.sku + '  </td>' +
                         '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
@@ -1824,7 +1831,7 @@ jQuery(function ($) {
                             '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                             '<td>  ' + cliente.ruc + '  </td>' +
                             '<td>  ' + cliente.ciudad.nombre + '  </td>' +
-                            '<td><button type="button" class="btn btn-primary btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Quitar</button></td>' +
+                            '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                             '</tr>';
 
                         $("#tableMiembrosGrupoCliente").append(clienteRow);    
@@ -1926,7 +1933,7 @@ jQuery(function ($) {
     });
 
 
-    $("#modalVerCliente").on('click', ".btnMostrarPrecios", function () {
+    $("#modalVerGrupoCliente").on('click', ".btnMostrarPrecios", function () {
 
         var idProducto = $(this).attr("idProducto");
 

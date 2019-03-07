@@ -40,6 +40,7 @@
     <Compile Include="Anotations\Columna.cs" />
     <Compile Include="DALConverter\UbigeoConvertTo.cs" />
     <Compile Include="ArchivoDAL.cs" />
+    <Compile Include="PermisoDAL.cs" />
     <Compile Include="OrigenDAL.cs" />
     <Compile Include="SubDistribuidorDAL.cs" />
     <Compile Include="SerieDocumentoDAL.cs" />

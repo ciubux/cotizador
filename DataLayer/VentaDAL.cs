@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using Model;
 using System.Linq;
+using System.Data.SqlClient;
 
 namespace DataLayer
 {
@@ -215,7 +216,7 @@ namespace DataLayer
 
 
         
-        public Transaccion SelectPlantillaVenta(Transaccion transaccion, Usuario usuario, Guid? idProducto = null)
+        public Transaccion SelectPlantillaVenta(Transaccion transaccion, Usuario usuario, Guid? idProducto = null, List<Guid> idProductoList = null)
         {
             var objCommand = GetSqlCommand("ps_plantillaVenta");
             /*Si se cuenta con id Producto entonces quiere decir que es un descuento global*/
@@ -223,6 +224,25 @@ namespace DataLayer
             { 
                 objCommand = GetSqlCommand("ps_plantillaVentaDescuentoGlobal");
                 InputParameterAdd.Guid(objCommand, "idProducto", idProducto.Value);
+            }
+            else if(idProductoList != null)
+            {
+                DataTable tvp = new DataTable();
+                tvp.Columns.Add(new DataColumn("idProductoList", typeof(Guid)));
+
+                // populate DataTable from your List here
+                foreach (var id in idProductoList)
+                    tvp.Rows.Add(id);
+
+
+                objCommand = GetSqlCommand("ps_plantillaVentaCargos");
+
+                SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idProductoList", tvp);
+                // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
+                tvparam.SqlDbType = SqlDbType.Structured;
+                tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+                //InputParameterAdd.Varchar(objCommand, "idProductoList", tvparam);
             }
 
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", transaccion.documentoVenta.idDocumentoVenta);
@@ -506,15 +526,21 @@ namespace DataLayer
                 pedido.fechaModificacion = Converter.GetDateTime(row, "fecha_modificacion");
                 pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
                 pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
+                pedido.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
                 pedido.direccionEntrega = new DireccionEntrega();
                 pedido.direccionEntrega.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega");
                 pedido.direccionEntrega.descripcion = Converter.GetString(row, "direccion_entrega");
                 pedido.direccionEntrega.contacto = Converter.GetString(row, "contacto_entrega");
                 pedido.direccionEntrega.telefono = Converter.GetString(row, "telefono_contacto_entrega");
+                pedido.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
+                pedido.direccionEntrega.codigoMP = Converter.GetString(row, "direccion_entrega_codigo_mp");
+                pedido.direccionEntrega.codigoCliente = Converter.GetString(row, "direccion_entrega_codigo_cliente");
                 pedido.contactoPedido = Converter.GetString(row, "contacto_pedido");
                 pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
                 pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
                 pedido.fechaProgramacion = Converter.GetDateTime(row, "fecha_programacion");
+
+
                 pedido.observacionesFactura = Converter.GetString(row, "observaciones_factura");
                 pedido.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
                 pedido.tipoPedido = (Pedido.tiposPedido)Char.Parse( Converter.GetString(row, "tipo_pedido"));

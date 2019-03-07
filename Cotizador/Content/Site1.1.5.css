@@ -578,4 +578,34 @@ border-color: #49E845;
     background-color: #27A1CA;
     box-shadow: 3px 6px 18px 0px rgba(0, 0, 0, 0.2);
 }
-/* END ñSWITCH */
+/* END SWITCH */
+
+
+#menuCategoriaPermisos {
+    min-height: 350px;
+}
+
+.menuUsuarios {
+    width: 100%;
+    min-height: 300px;
+}
+
+.divMenuUsuarios {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.menuUsuarios li {
+    list-style: none;
+    background-color: aliceblue;
+    border-bottom: 1px dotted Gray;
+}
+
+.menuUsuarios li.selected {
+    /*background-color: GoldenRod*/
+}
+
+.selected {
+    border: 1px solid #888;
+    background-color: cornflowerblue;
+}

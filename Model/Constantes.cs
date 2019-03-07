@@ -10,7 +10,7 @@ namespace Model
     public static class Constantes
     {
         /*FORMATOS*/
-        public static String formatoDecimalesPrecioNeto = "{0:0.0000}";
+        public static String formatoDecimalesPrecioNeto = "{0:0.00}";
         public static String formatoDosDecimales = "{0:0.00}";        
         public static String formatoUnDecimal = "{0:0.0}";
         public static String formatoCuatroDecimales = "{0:0.0000}";
@@ -147,7 +147,13 @@ namespace Model
         public static String VAR_SESSION_NOTA_DEBITO_VER = "notaDebitoVer";
 
         public static String VAR_SESSION_PAGINA = "pagina";
+        
+
+        public static String VAR_SESSION_USUARIO_LISTA = "usuarioList";
         public static String VAR_SESSION_USUARIO = "usuario";
+
+        public static String VAR_SESSION_ASIGNACION_PERMISOS = "AsignacionPermisos";
+        public static String VAR_SESSION_CAMBIO_ASIGNACION_PERMISOS = "CambioAsignacionPermisos";
 
         public static Decimal VARIACION_PRECIO_ITEM_PEDIDO = 0.01M;
 
@@ -171,6 +177,7 @@ namespace Model
         public static String PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = "";
 
         public static List<Producto> DESCUENTOS_LIST;
+        public static List<Producto> CARGOS_LIST;
 
         public static String USER_EOL {
             get { return AMBIENTE_EOL.Equals("TEST") ? USER_EOL_TEST : USER_EOL_PROD; }
@@ -226,6 +233,91 @@ namespace Model
         public static String EOL_RPTA_BE_CODIGO_FALLO_CONEXION_EOL_STR = "Fallo conexión a EOL.";
 
         public static String ASUNTO_ANULACION_FACTURA = "MP INSTITUCIONAL S.A.C. / Anulación Facturación Electrónica ";
+
+
+
+
+        /// <summary>
+        /// Códigos de Permisos
+        /// </summary>
+        /// 
+        public const String ADMINISTRA_PERMISOS = "P001";
+        public const String APRUEBA_COTIZACIONES_LIMA = "P002";
+        public const String APRUEBA_COTIZACIONES_PROVINCIAS = "P003";
+        public const String APRUEBA_PEDIDOS_LIMA = "P004";
+        public const String APRUEBA_PEDIDOS_PROVINCIAS = "P005";
+        public const String CREA_GUIAS = "P006";
+        public const String ADMINISTRA_GUIAS_LIMA = "P007";
+        public const String ADMINISTRA_GUIAS_PROVINCIAS = "P008";
+        public const String CREA_DOCUMENTOS_VENTA = "P009";
+        public const String ADMINISTRA_DOCUMENTOS_VENTA_LIMA = "P010";
+        public const String ADMINISTRA_DOCUMENTOS_VENTA_PROVINCIAS = "P011";
+        public const String CREA_COTIZACIONES_PROVINCIAS = "P012";
+        public const String TOMA_PEDIDOS_PROVINCIAS = "P013";
+        public const String PROGRAMA_PEDIDOS = "P014";
+        public const String MODIFICA_MAESTRO_CLIENTES = "P015";
+        public const String MODIFICA_MAESTRO_PRODUCTOS = "P016";
+        public const String VISUALIZA_DOCUMENTOS_VENTA = "P017";
+        public const String VISUALIZA_PEDIDOS_LIMA = "P018";
+        public const String VISUALIZA_GUIAS_REMISION = "P019";
+        public const String VISUALIZA_COTIZACIONES = "P020";
+        public const String LIBERA_PEDIDOS = "P021";
+        public const String BLOQUEA_PEDIDOS = "P022";
+        public const String APRUEBA_ANULACIONES = "P023";
+        public const String CREA_NOTAS_CREDITO = "P024";
+        public const String VISUALIZA_PEDIDOS_PROVINCIAS = "P025";
+        public const String VISUALIZA_COSTOS = "P026";
+        public const String CREA_NOTAS_DEBITO = "P027";
+        public const String REALIZA_REFACTURACION = "P028";
+        public const String VISUALIZA_MARGEN = "P029";
+        public const String CONFIRMA_STOCK = "P030";
+        public const String CREA_COTIZACIONES_LIMA = "P031";
+        public const String TOMA_PEDIDOS_LIMA = "P032";
+        public const String TOMA_PEDIDOS_COMPRA = "P033";
+        public const String TOMA_PEDIDOS_ALMACEN = "P034";
+        public const String DEFINE_PLAZO_CREDITO = "P035";
+        public const String DEFINE_MONTO_CREDITO = "P036";
+        public const String DEFINE_RESPONSABLE_COMERCIAL = "P037";
+        public const String DEFINE_SUPERVISOR_COMERCIAL = "P038";
+        public const String DEFINE_ASISTENTE_ATENCION_CLIENTE = "P039";
+        public const String DEFINE_RESPONSABLE_PORTAFOLIO = "P040";
+        public const String MODIFICA_PEDIDO_VENTA_FECHA_ENTREGA_HASTA = "P041";
+        public const String BLOQUEA_CLIENTES = "P042";
+        public const String MODIFICA_CANALES = "P043";
+        public const String REALIZA_CARGA_MASIVA_PEDIDOS = "P044";
+        public const String MODIFICA_PEDIDO_FECHA_ENTREGA_EXTENDIDA = "P045";
+        public const String CREA_FACTURA_CONSOLIDADA_MULTIREGIONAL = "P046";
+        public const String CREA_FACTURA_CONSOLIDADA_LOCAL = "P047";
+        public const String VISUALIZA_GUIAS_PENDIENTES_FACTURACION = "P048";
+        public const String MODIFICA_NEGOCIACION_MULTIREGIONAL = "P049";
+        public const String BUSCA_SEDES_GRUPO_CLIENTE = "P050";
+        public const String MODIFICA_PRODUCTO = "P051";
+        public const String APRUEBA_PEDIDOS_COMPRA = "P052";
+        public const String APRUEBA_PEDIDOS_ALMACEN = "P053";
+        public const String CREA_COTIZACIONES_GRUPO_CLIENTE = "P054";
+        public const String CREA_COTIZACIONES_GRUPALES = "P055";
+        public const String APRUEBA_COTIZACIONES_GRUPALES = "P056";
+        public const String MODIFICA_SUBDISTRIBUIDOR = "P057";
+        public const String MODIFICA_ORIGEN = "P058";
+        public const String REALIZA_CARGA_MASIVA_PRODUCTOS = "P059";
+        public const String REALIZA_CARGA_MASIVA_CLIENTES = "P060";
+        public const String MODIFICA_GRUPO_CLIENTES = "P061";
+        public const String VISUALIZA_GRUPO_CLIENTES = "P062";
+        public const String VISUALIZA_PRODUCTOS = "P063";
+        public const String VISUALIZA_SUBDISTRIBUIDORES = "P064";
+        public const String VISUALIZA_ORIGENES = "P065";
+        public const String VISUALIZA_CLIENTES = "P066";
+        public const String ELIMINA_COTIZACIONES_ACEPTADAS = "P067";
+        public const String MODIFICA_CANASTA_CLIENTE = "P068";
+        public const String MODIFICA_CANASTA_GRUPO_CLIENTE = "P069";
+        public const String MODIFICA_MIEMBROS_GRUPO_CLIENTE = "P070";
+
+
+
+
+
+
+
 
         public enum paginas {
             /*COTIZACION*/
@@ -317,8 +409,10 @@ namespace Model
             BusquedaGrupoClientes = 36,
             [Display(Name = "MANTENIMIENTO GRUPOS CLIENTE")]
             MantenimientoGrupoCliente = 37,
+            [Display(Name = "ASIGNACION PERMISOS")]
+            AsignacionPermisos = 38,
             [Display(Name = "MIEMBROS GRUPO")]
-            MiembrosGrupoCliente = 38
+            MiembrosGrupoCliente = 39
         };
 
 

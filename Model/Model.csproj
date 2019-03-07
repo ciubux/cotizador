@@ -59,6 +59,8 @@
     <Compile Include="Correo.cs" />
     <Compile Include="GrupoClienteAdjunto.cs" />
     <Compile Include="Origen.cs" />
+    <Compile Include="CategoriaPermiso.cs" />
+    <Compile Include="Permiso.cs" />
     <Compile Include="SubDistribuidor.cs" />
     <Compile Include="NotaIngresoValidacion.cs" />
     <Compile Include="NotaIngreso.cs" />

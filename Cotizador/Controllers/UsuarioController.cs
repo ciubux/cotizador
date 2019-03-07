@@ -19,8 +19,8 @@ namespace Cotizador.Controllers
         {
             Usuario usuarioSession = ((Usuario)this.Session["usuario"]);
             List<Usuario> usuarioList = new List<Usuario>();
-            if (usuarioSession.apruebaCotizaciones)
-            { 
+         /*   if (usuarioSession.apruebaCotizaciones)
+            { */
                 List<Usuario> usuarioListTmp = usuarioSession.usuarioCreaCotizacionList;
                 
                 Usuario usuarioTodos = new Usuario { nombre = "Todos", idUsuario = Guid.Empty };
@@ -30,7 +30,7 @@ namespace Cotizador.Controllers
                 {
                     usuarioList.Add(usuario);
                 }
-            }
+         //   }
             var model = usuarioList;
 
             return PartialView("_SelectUsuarioCotizacion", model);
@@ -56,5 +56,8 @@ namespace Cotizador.Controllers
 
             return PartialView("_SelectUsuarioPedido", model);
         }
+
+       
+
     }
 }

@@ -775,6 +775,8 @@ jQuery(function ($) {
 
         showMovimientoAlmacen(idMovimientoAlmacen);
     });
+    
+
 
     function showMovimientoAlmacen(idMovimientoAlmacen) {
         $.ajax({
@@ -799,10 +801,10 @@ jQuery(function ($) {
 
 
 
-                $("#idPedido").val(notaIngreso.pedido.idPedido);
+                $("#idPedido").val(notaIngreso.pedido_idPedido);
                 $("#idMovimientoAlmacen").val(notaIngreso.idMovimientoAlmacen);
-                $("#ver_notaIngreso_ciudadDestino_nombre").html(notaIngreso.ciudadDestino.nombre);
-                $("#ver_notaIngreso_ciudadDestino_direccionPuntoLlegada").html(notaIngreso.ciudadDestino.direccionPuntoLlegada);
+                $("#ver_notaIngreso_ciudadDestino_nombre").html(notaIngreso.ciudadDestino_nombre);
+                $("#ver_notaIngreso_ciudadDestino_direccionPuntoLlegada").html(notaIngreso.ciudadDestino_direccionPuntoLlegada);
 
                 $("#ver_notaIngreso_fechaTraslado").html(invertirFormatoFecha(notaIngreso.fechaTraslado.substr(0, 10)));
                 $("#ver_notaIngreso_fechaEmision").html(invertirFormatoFecha(notaIngreso.fechaEmision.substr(0, 10)));
@@ -814,9 +816,9 @@ jQuery(function ($) {
 
 
                 //   $("#ver_notaIngreso_numeroDocumento").html(guiaRemision.numeroDocumentoString);
-                $("#ver_notaIngreso_pedido_numeroPedido").html(notaIngreso.pedido.numeroPedidoString);
-                $("#ver_notaIngreso_pedido_cliente").html(notaIngreso.pedido.cliente.razonSocial);
-                $("#ver_notaIngreso_pedido_numeroReferenciaCliente").html(notaIngreso.pedido.numeroReferenciaCliente);
+                $("#ver_notaIngreso_pedido_numeroPedido").html(notaIngreso.pedido_numeroPedidoString);
+                $("#ver_notaIngreso_pedido_cliente").html(notaIngreso.pedido_cliente_razonSocial);
+                $("#ver_notaIngreso_pedido_numeroReferenciaCliente").html(notaIngreso.pedido_numeroReferenciaCliente);
                 $("#ver_notaIngreso_motivoTraslado").html(notaIngreso.motivoTrasladoString);
                 $("#ver_notaIngreso_atencionParcial").html(notaIngreso.atencionParcial);
 
@@ -891,11 +893,10 @@ jQuery(function ($) {
                         $("#ver_notaIngreso_guiaRemisionAIngresar_serieNumeroGuia").html(notaIngreso.guiaRemisionAIngresar.serieNumeroGuia);
                         $("#btnExtornar").hide();
                     }
-                    else
-                    {
+                    else {
                         $("#fieldsetDocumentoExtornado").show();
                         $("#fieldsetDetalleExtorno").show();
-                        $("#fieldsetDocumentosReferencia").hide();        
+                        $("#fieldsetDocumentosReferencia").hide();
                         $("#fieldsetDocumentoIngresado").hide();
                         $("#ver_notaIngreso_guiaRemisionAExtornar_serieNumeroGuia").html(notaIngreso.guiaRemisionAExtornar.serieNumeroGuia);
                         $("#ver_notaIngreso_motivoExtornoGuiaRemisionToString").html(notaIngreso.motivoExtornoGuiaRemisionToString);
@@ -912,13 +913,13 @@ jQuery(function ($) {
                         $("#ver_notaIngreso_estadoDescripcion").attr("style", "color:green")
                         $("#btnAnularNotaIngreso").hide();
                     }
-                    
+
                 }
 
 
 
 
-                
+
 
                 if (notaIngreso.atencionParcial) {
                     $("#ver_notaIngreso_atencionParcial").html("Ingreso Parcial");
@@ -927,8 +928,8 @@ jQuery(function ($) {
                     $("#ver_notaIngreso_atencionParcial").html("Ingreso Final");
                 }
 
-              
-                
+
+
 
 
                 //invertirFormatoFecha(pedido.fechaMaximaEntrega.substr(0, 10)));
@@ -976,12 +977,6 @@ jQuery(function ($) {
             }
         });
     }
-
-
-
-
-
-    
 
 
     
@@ -2359,15 +2354,16 @@ jQuery(function ($) {
 
 
     /*####################################################
-    EVENTOS BUSQUEDA GUIAS
+    EVENTOS BUSQUEDA NOTAS INGRESO
     #####################################################*/
+
 
 
 
     $("#btnBusqueda").click(function () {
         //sede MP
         var idCiudad = $("#idCiudad").val();
-        var idCliente = $("#idCliente").val(); 
+        var idCliente = $("#idCliente").val();
 
         var numeroDocumento = $("#notaIngreso_numeroDocumento").val();
         var numeroPedido = $("#notaIngreso_pedido_numeroPedido").val();
@@ -2389,7 +2385,7 @@ jQuery(function ($) {
                 numeroGuiaReferencia: numeroGuiaReferencia,
                 fechaTrasladoDesde: fechaTrasladoDesde,
                 fechaTrasladoHasta: fechaTrasladoHasta
-          //      estado: estado
+                //      estado: estado
             },
             error: function () {
                 $("#btnBusqueda").removeAttr("disabled");
@@ -2407,17 +2403,16 @@ jQuery(function ($) {
 
                 for (var i = 0; i < guiaRemisionList.length; i++) {
 
-                    var guiaRemision = "";                    
+                    var guiaRemision = "";
 
                     var styleEstado = "";
                     if (guiaRemisionList[i].estaAnulado == 1) {
                         styleEstado = "style='color: red'";
                     }
-                    else if (guiaRemisionList[i].estaFacturado == 1){
+                    else if (guiaRemisionList[i].estaFacturado == 1) {
                         styleEstado = "style='color: green'";
                     }
-                    else
-                    {
+                    else {
                         styleEstado = "style='color: black'";
                     }
 
@@ -2436,25 +2431,25 @@ jQuery(function ($) {
                     else {
                         noEntregadoLectura = '<input disabled type="checkbox"></input>'
                     }
-                    
-                     var guiaRemision = '<tr data-expanded="false">'+
-                         '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].serieNumeroNotaIngreso + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].pedido.numeroPedidoString + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].motivoTrasladoString + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].usuario.nombre + '</td>' +
-                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
-                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].pedido.cliente.razonSocial + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
-                         '<td>  ' + guiaRemisionList[i].ciudadDestino.nombre + '</td>' +
-                         '<td ' + styleEstado + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
-                         '<td>' + guiaRemisionList[i].tipoExtornoToString + '</td>' +
-                         '<td>' + noEntregado + '</td>' +
-                         '<td>' + noEntregadoLectura + '</td>' +
-                         '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerNotaIngreso btn btn-primary ">Ver</button></td > ' +
-                         '</tr>';                
-                    
+
+                    var guiaRemision = '<tr data-expanded="false">' +
+                        '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].serieNumeroNotaIngreso + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido_numeroPedidoString + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].motivoTrasladoString + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].usuario_nombre + '</td>' +
+                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido_cliente_razonSocial + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido_cliente_ruc + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].ciudadDestino_nombre + '</td>' +
+                        '<td ' + styleEstado + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
+                        '<td>' + guiaRemisionList[i].tipoExtornoToString + '</td>' +
+                        '<td>' + noEntregado + '</td>' +
+                        '<td>' + noEntregadoLectura + '</td>' +
+                        '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerNotaIngreso btn btn-primary ">Ver</button></td > ' +
+                        '</tr>';
+
                     $("#tableGuiasRemision").append(guiaRemision);
                 }
 
@@ -2464,9 +2459,11 @@ jQuery(function ($) {
                     $("#divExportButton").show();
                 }
                 else {
+
                     $("#msgBusquedaSinResultados").show();
                     $("#divExportButton").hide();
                 }
+
             }
         });
     });

@@ -1,0 +1,11 @@
+﻿@model Cotizador.Models.ProductoMultipleViewModels
+
+@Html.ListBoxFor(
+            x => Model.ProductoSelectIds,
+            Model.Productos,
+            new
+            {
+        //id = Model.ProductoSelectId,
+            @class = "form-control",
+             multiple = "multiple"
+            })

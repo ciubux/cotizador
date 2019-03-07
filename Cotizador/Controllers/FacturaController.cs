@@ -477,11 +477,11 @@ namespace Cotizador.Controllers
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            foreach (DocumentoVenta documentoVenta in documentoVentaList)
+    /*        foreach (DocumentoVenta documentoVenta in documentoVentaList)
             {
                 documentoVenta.usuario.apruebaAnulaciones = usuario.apruebaAnulaciones;
                 documentoVenta.usuario.creaNotasCredito = usuario.creaNotasCredito;
-            }
+            }*/
 
 
             //Se coloca en session el resultado de la búsqueda

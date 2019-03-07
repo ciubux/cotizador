@@ -29,7 +29,7 @@ namespace Cotizador.Controllers
 
 
 
-        public String iniciarCreacion()
+        public String iniciarCreacion(String[] cargos)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             VentaBL ventaBL = new VentaBL();
@@ -48,7 +48,26 @@ namespace Cotizador.Controllers
             transaccion.documentoReferencia.serie = transaccion.documentoVenta.cPE_CABECERA_BE.SERIE;
             transaccion.documentoReferencia.numero = transaccion.documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
 
-            transaccion = ventaBL.GetPlantillaVenta(transaccion, usuario);
+            DocumentoVenta.TiposNotaDebito tiposNotaDebito = (DocumentoVenta.TiposNotaDebito)Int32.Parse(Request["tipoNotaDebito"].ToString());
+
+            if (tiposNotaDebito != DocumentoVenta.TiposNotaDebito.AumentoValor)
+            {
+                List<Guid> idProductoList = new List<Guid>();
+                foreach (String cargo in cargos)
+                {
+                    idProductoList.Add(Guid.Parse(cargo));
+                }
+                transaccion = ventaBL.GetPlantillaVentaCargos(transaccion, usuario, idProductoList);
+            }
+            else
+            {
+                transaccion = ventaBL.GetPlantillaVenta(transaccion, usuario);
+            }
+
+            
+
+
+            
             if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
             {
                 transaccion.tipoNotaDebito = (DocumentoVenta.TiposNotaDebito)Int32.Parse(Request["tipoNotaDebito"].ToString());

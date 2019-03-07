@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Cotizador.Models
 {
-    public class DescuentoViewModels
+    public class ProductoViewModels
     {
         public string ProductoSelectId { get; set; }
         public string SelectedValue { get; set; }

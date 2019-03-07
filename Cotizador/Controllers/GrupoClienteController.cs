@@ -159,7 +159,7 @@ namespace Cotizador.Controllers
             GrupoCliente grupoCliente = new GrupoCliente();
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (idGrupoCliente != null && idGrupoCliente > 0)
+            if (usuario.modificaMiembrosGrupoCliente && idGrupoCliente != null && idGrupoCliente > 0)
             {
                 grupoCliente = bl.getGrupo(idGrupoCliente.Value);
                 if (grupoCliente.idGrupoCliente == 0)
@@ -231,6 +231,14 @@ namespace Cotizador.Controllers
             Guid idCliente = Guid.Parse(this.Request.Params["idCliente"]);
             int idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
 
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaMiembrosGrupoCliente)
+            {
+                return "";
+            }
+
+
             GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
             grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
 
@@ -248,7 +256,7 @@ namespace Cotizador.Controllers
                 cliente = clienteBl.getCliente(idCliente);
 
                 cliente.grupoCliente = grupoCliente;
-                cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                cliente.usuario = usuario;
                 clienteBl.updateClienteSunat(cliente);
 
                 grupoCliente.miembros.Add(cliente);
@@ -276,6 +284,13 @@ namespace Cotizador.Controllers
             string ruc = this.Request.Params["ruc"].ToString();
             int idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
 
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaMiembrosGrupoCliente)
+            {
+                return "";
+            }
+
             GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
             grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
 
@@ -302,7 +317,7 @@ namespace Cotizador.Controllers
                 } else
                 {
                     cli.grupoCliente = grupoCliente;
-                    cli.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                    cli.usuario = usuario;
                     clienteBl.updateClienteSunat(cli);
                     cli.grupoCliente = null;
                     grupoCliente.miembros.Add(cli);
@@ -508,13 +523,20 @@ namespace Cotizador.Controllers
                 }
             }
 
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaMiembrosGrupoCliente)
+            {
+                success = 0;
+            }
+
             Cliente cliente = null;
             if (success == 1)
             {
                 cliente = clienteBl.getCliente(idCliente);
 
                 cliente.grupoCliente = null;
-                cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                cliente.usuario = usuario;
                 clienteBl.updateClienteSunat(cliente);
 
                 grupoCliente.miembros.RemoveAt(removeAt);
@@ -540,16 +562,18 @@ namespace Cotizador.Controllers
             Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (bl.agregarProductoCanasta(grupoCliente.idGrupoCliente, idProducto, usuario))
-            {
-                message = "Se agregó el producto a la canasta.";
-            }
-            else
-            {
-                success = 0;
-                message = "No se pudo agregar el producto a la canasta.";
-            }
 
+            if (usuario.modificaCanastaGrupoCliente) { 
+                if (bl.agregarProductoCanasta(grupoCliente.idGrupoCliente, idProducto, usuario))
+                {
+                    message = "Se agregó el producto a la canasta.";
+                }
+                else
+                {
+                    success = 0;
+                    message = "No se pudo agregar el producto a la canasta.";
+                }
+            }
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }
@@ -566,16 +590,18 @@ namespace Cotizador.Controllers
             Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (bl.retiraProductoCanasta(grupoCliente.idGrupoCliente, idProducto, usuario))
+            if (usuario.modificaCanastaGrupoCliente)
             {
-                message = "Se retiró el producto de la canasta.";
+                if (bl.retiraProductoCanasta(grupoCliente.idGrupoCliente, idProducto, usuario))
+                {
+                    message = "Se retiró el producto de la canasta.";
+                }
+                else
+                {
+                    success = 0;
+                    message = "No se pudo retirar el producto de la canasta.";
+                }
             }
-            else
-            {
-                success = 0;
-                message = "No se pudo retirar el producto de la canasta.";
-            }
-
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }

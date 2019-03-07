@@ -1,5 +1,7 @@
 ﻿using BusinessLayer;
 using Cotizador.ExcelExport;
+using Cotizador.Models.DTOsSearch;
+using Cotizador.Models.DTOsShow;
 using Model;
 using Model.EXCEPTION;
 using Newtonsoft.Json;
@@ -236,7 +238,9 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_GUIA_LISTA] = guiaRemisionList;
             this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] = guiaRemision;
             //Se retorna la cantidad de elementos encontrados
-            return JsonConvert.SerializeObject(guiaRemisionList);
+
+            //String cotizacionListJson = JsonConvert.SerializeObject(ParserDTOsSearch.GuiaRemisionToGuiaRemisionDTO(guiaRemisionList));
+            return JsonConvert.SerializeObject(ParserDTOsSearch.GuiaRemisionToGuiaRemisionDTO(guiaRemisionList));
             //return pedidoList.Count();
         }
 
@@ -763,9 +767,6 @@ namespace Cotizador.Controllers
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ALMACEN_VER];
                 }
 
-
-
-
                 if (this.Session[Constantes.VAR_SESSION_GUIA] == null)
                 {
                     instanciarGuiaRemision();
@@ -788,41 +789,47 @@ namespace Cotizador.Controllers
 
 
                 guiaRemision.transportista = new Transportista();
-                // guiaRemision.ciudadOrigen = pedido.ciudad;
 
-                /*  foreach (DocumentoDetalle documentoDetalle in guiaRemision.pedido.documentoDetalle)
-                  {
-                      documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidad;
-                      documentoDetalle.cantidadPorAtender = documentoDetalle.cantidad;
-                  }*/
 
-                /*
-                guiaRemision.observaciones = String.Empty;
-                bool existeOrdenCompra = false;
-                if (pedido.numeroReferenciaCliente != null && !pedido.numeroReferenciaCliente.Trim().Equals(String.Empty))
+                String observacionesGuiaRemisionAdicional = String.Empty;
+
+                if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Venta)
                 {
-                    if (pedido.numeroReferenciaCliente.Contains("O/C"))
+
+                    //Pedido cuenta con orden de compra
+                    if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
                     {
-                        guiaRemision.observaciones = pedido.numeroReferenciaCliente.Trim();
+                        observacionesGuiaRemisionAdicional = "O/C N° " + pedido.numeroReferenciaCliente + " ";
+                    }
+                    //Pedido cuenta con numero requerimiento
+                    if (pedido.numeroRequerimiento != null && pedido.numeroRequerimiento.Length > 0)
+                    {
+                        observacionesGuiaRemisionAdicional = observacionesGuiaRemisionAdicional + "NR: " + pedido.numeroRequerimiento + " ";
+                    }
+                    //Direccion Entrega tiene nombre y codigo 
+                    if (pedido.direccionEntrega.nombre != null && pedido.direccionEntrega.nombre.Length > 0)
+                    {
+                        if (pedido.direccionEntrega.codigoCliente != null && pedido.direccionEntrega.codigoCliente.Length > 0)
+                        {
+                            observacionesGuiaRemisionAdicional = observacionesGuiaRemisionAdicional + pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";
+                        }
+                        else
+                        {
+                            observacionesGuiaRemisionAdicional = observacionesGuiaRemisionAdicional + pedido.direccionEntrega.nombre;
+                        }
+                    }
+
+                    if (pedido.observacionesGuiaRemision != null && !pedido.observacionesGuiaRemision.Equals(String.Empty))
+                    {
+                        guiaRemision.observaciones = observacionesGuiaRemisionAdicional + " / " + pedido.observacionesGuiaRemision;
                     }
                     else
                     {
-                        guiaRemision.observaciones = "O/C N° " + pedido.numeroReferenciaCliente.Trim();
+                        guiaRemision.observaciones = observacionesGuiaRemisionAdicional;
                     }
-                    existeOrdenCompra = true;
-                }
-                if (pedido.observacionesGuiaRemision != null && !pedido.observacionesGuiaRemision.Trim().Equals(String.Empty))
-                {
-                    if (existeOrdenCompra)
-                    {
-                        guiaRemision.observaciones = guiaRemision.observaciones + " / ";
-                    }
-                    
-                    guiaRemision.observaciones = guiaRemision.observaciones + pedido.observacionesGuiaRemision;
-                }*/
-                
 
-                guiaRemision.observaciones = pedido.observacionesGuiaRemision;                
+                }
+    
                     
 
                 CiudadBL ciudadBL = new CiudadBL();
@@ -1095,7 +1102,8 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_GUIA_VER] = guiaRemision;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
-            string jsonGuiaRemision = JsonConvert.SerializeObject(guiaRemision);
+            //string jsonGuiaRemision = JsonConvert.SerializeObject(guiaRemision);
+            string jsonGuiaRemision = JsonConvert.SerializeObject(ParserDTOsShow.GuiaRemisionToGuiaRemisionDTO(guiaRemision));
             String json = "{\"usuario\":" + jsonUsuario + ", \"guiaRemision\":" + jsonGuiaRemision + "}";
             return json;
         }

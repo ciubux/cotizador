@@ -22,3 +22,12 @@ C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\obj\Release\Framework.DAL.p
 C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\bin\Release\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\bin\Release\Model.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Framework.DAL\bin\Release\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\bin\Release\Framework.DAL.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\bin\Release\Framework.DAL.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\bin\Release\Model.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\bin\Release\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\bin\Release\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\obj\Release\Framework.DAL.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\obj\Release\Framework.DAL.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\obj\Release\Framework.DAL.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\obj\Release\Framework.DAL.pdb

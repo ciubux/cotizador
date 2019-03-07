@@ -304,15 +304,20 @@
                                 <div class="col-sm-8 col-lg-10">
                                 </div>
                                 <div class="col-sm-4 col-lg-2">
+                                    @if (grupoCliente.usuario.modificaMiembrosGrupoCliente)
+                                    {
                                     <div class="form-group right" style="padding-right: 10px;">
                                         <button type="button" id="btnMiembrosGrupoCliente" class="btn btn-primary ">Editar Miembros</button>
                                     </div>
+                                    }
                                 </div>
                             </div>
                         </div>
 
                         <div id="grupo_precio" class="tab-pane fade">
                             <div class="row">
+                                @if (grupoCliente.usuario.modificaCanastaGrupoCliente)
+                                {
                                 <div class="col-sm-6 col-lg-6">
                                     <div class="onoffswitch">
                                         <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkSoloCanasta">
@@ -321,6 +326,8 @@
                                     <h5 id="lblChkCanasta" style="width: 80%; margin-left: 45px; margin-top: -22px; font-weight:bold; cursor:pointer;" class="text-muted">Ver solo canasta de compra habitual</h5>
 
                                 </div>
+                                }
+                                
                             </div>
 
                             <table id="tableListaPrecios" class="table" data-editing="false"
@@ -331,7 +338,10 @@
                                 <thead>
                                     <tr>
                                         <th data-name="idProducto" data-visible="false"></th>
-                                        <th data-name="canasta" data-sortable="false">Pertenece <br />Canasta<br />Habitual</th>
+                                        @if (grupoCliente.usuario.modificaCanastaGrupoCliente)
+                                        {
+                                        <th data-name="canasta" class="listaPreciosCanasta" data-sortable="false">Pertenece <br />Canasta<br />Habitual</th>
+                                        }
                                         <th data-name="proveedor" data-sortable="false">Prov.</th>
                                         <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                                         <th data-name="producto" data-sortable="false">Producto / Descripción</th>

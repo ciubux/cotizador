@@ -30,25 +30,33 @@ namespace BusinessLayer
 
             }
             else {
+                //if (!pedido.usuario.apruebaPedidos && !pedido.cliente.perteneceCanalMultiregional)
                 if (!pedido.usuario.apruebaPedidos)
                 {
                     DateTime horaActual = DateTime.Now;
                     DateTime horaLimite = new DateTime(horaActual.Year, horaActual.Month, horaActual.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Hour, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second);
-                    if (horaActual >= horaLimite && pedido.ciudad.idCiudad == Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581"))//-- .esProvincia)
+                    //if (horaActual >= horaLimite && pedido.ciudad.idCiudad == Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581"))//-- .esProvincia)
+                    if (pedido.ciudad.idCiudad == Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581"))//-- .esProvincia)
                     {
                         pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
-                        /*Constantes.HORA_CORTE_CREDITOS_LIMA.Day, Constantes.HORA_CORTE_CREDITOS_LIMA.Minute, Constantes.HORA_CORTE_CREDITOS_LIMA.Second*/
                         pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
-                    }
+                   }
                 }
-            }
 
+                /*
+                if (!pedido.usuario.apruebaPedidos && !pedido.cliente.perteneceCanalMultiregional)
+                {
+                    pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
+                }*/
+
+            }
+           
 
 
             if (pedido.cliente.bloqueado)
             {
-                pedido.seguimientoPedido.observacion = "El cliente se encuentra BLOQUEADO."; // Agregar quien bloquea
-                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                pedido.seguimientoCrediticioPedido.observacion = "El cliente se encuentra BLOQUEADO."; // Agregar quien bloquea
+                pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.BLoqueado;
             }
             
 
@@ -173,40 +181,25 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
 
-                String observacionesGuiaRemision = pedido.observacionesGuiaRemision;
-                String observacionesFactura = pedido.observacionesFactura;
-                String observacionesPedido = pedido.observaciones;
-
-                if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
+                String observacionesAdicionales = String.Empty;
+              if (pedido.direccionEntrega.nombre != null && pedido.direccionEntrega.nombre.Length > 0)
+              {
+                  if (pedido.direccionEntrega.codigoCliente != null && pedido.direccionEntrega.codigoCliente.Length > 0)
+                  {
+                        observacionesAdicionales = pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";
+                  }
+                  else
+                  {
+                        observacionesAdicionales = pedido.direccionEntrega.nombre;
+                  }                
+              }
+                if (pedido.observaciones != null && !pedido.observaciones.Equals(String.Empty))
                 {
-                    pedido.observacionesGuiaRemision = "O/C N° " + pedido.numeroReferenciaCliente + "";
+                    pedido.observaciones = pedido.observaciones + " / " + observacionesAdicionales;
                 }
-                if (pedido.direccionEntrega.nombre != null && pedido.direccionEntrega.nombre.Length > 0)
+                else
                 {
-                    if (pedido.direccionEntrega.codigoCliente != null && pedido.direccionEntrega.codigoCliente.Length > 0)
-                    {
-                        pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";
-                        pedido.observacionesFactura = pedido.observacionesFactura + pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";
-                        pedido.observaciones = pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";                        
-                    }
-                    else
-                    {
-                        pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + pedido.direccionEntrega.nombre;
-                        pedido.observacionesFactura = pedido.observacionesFactura + pedido.direccionEntrega.nombre;
-                        pedido.observaciones = pedido.direccionEntrega.nombre;
-                    }
-                }
-                if (observacionesPedido != null && !observacionesPedido.Equals(String.Empty))
-                {
-                    pedido.observaciones = pedido.observaciones + " / " + observacionesPedido;
-                }
-                if (observacionesGuiaRemision != null && !observacionesGuiaRemision.Equals(String.Empty))
-                {
-                    pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + " / " + observacionesGuiaRemision;
-                }
-                if (observacionesFactura != null && !observacionesFactura.Equals(String.Empty))
-                {
-                    pedido.observacionesFactura = pedido.observacionesFactura + " / " + observacionesFactura;
+                    pedido.observaciones = observacionesAdicionales;
                 }
 
                 validarPedidoVenta(pedido);

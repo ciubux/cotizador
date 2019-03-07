@@ -111,6 +111,8 @@ jQuery(function ($) {
     }
 
     function mostrarCamposSegunTipoDocIdentidad() {
+
+
         var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
       
         if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI
@@ -126,7 +128,7 @@ jQuery(function ($) {
             $("#fieldSetDatosSunat").show(); 
             $("#fieldSetDatosSunat").show();
             
-            var rSunat = $("#cliente_razonSocialSunat").val();
+       /*     var rSunat = $("#cliente_razonSocialSunat").val();
             if (rSunat.trim() == "") {
                 $("#divContinueEdit").attr("disabled", "disabled");
                 $("#cliente_ruc").removeAttr("disabled");
@@ -135,8 +137,10 @@ jQuery(function ($) {
                 $("#cliente_ruc").attr("disabled", "disabled");
                 $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
                 $("#divContinueEdit").removeAttr("disabled");
-            }
+            }*/
         }
+
+
     }
 
 
@@ -665,8 +669,7 @@ jQuery(function ($) {
 
     function crearCliente() {
         if (!validacionDatosCliente())
-            return false;       
-
+            return false;   
         $('body').loadingModal({
             text: 'Creando Cliente...'
         });
@@ -675,15 +678,8 @@ jQuery(function ($) {
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
-                $('body').loadingModal('hide');
-                $.alert({
-                    title: 'Error',
-                    content: 'Se generó un error al intentar crear el cliente.',
-                    type: 'red',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });
+                $('body').loadingModal('hide')
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide');
@@ -716,15 +712,8 @@ jQuery(function ($) {
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
-                $('body').loadingModal('hide');
-                $.alert({
-                    title: 'Error',
-                    content: 'Se generó un error al intentar editar el cliente.',
-                    type: 'red',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });
+                $('body').loadingModal('hide')
+                mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide');
@@ -2037,6 +2026,7 @@ jQuery(function ($) {
             return false;
         }
 
+
         $("#btnBusqueda").attr("disabled", "disabled");
         $.ajax({
             url: "/Cliente/Search",
@@ -2078,12 +2068,12 @@ jQuery(function ($) {
                         '<td>  ' + clienteList[i].nombreComercial + ' </td>' +
                         '<td>  ' + clienteList[i].tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + clienteList[i].ruc + '  </td>' +
-                        '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
-                        '<td>  ' + clienteList[i].grupoCliente.nombre + '  </td>' +
+                        '<td>  ' + clienteList[i].ciudad_nombre + '  </td>' +
+                        '<td>  ' + clienteList[i].grupoCliente_nombre + '  </td>' +
                         '<td>  ' + textoVendedorValidado + '</td>' +
-                        '<td>  ' + clienteList[i].responsableComercial.descripcion + '</td>' +
-                        '<td>  ' + clienteList[i].supervisorComercial.descripcion + '</td>' +
-                        '<td>  ' + clienteList[i].asistenteServicioCliente.descripcion + '</td>' +
+                        '<td>  ' + clienteList[i].responsableComercial_descripcion + '</td>' +
+                        '<td>  ' + clienteList[i].supervisorComercial_descripcion + '</td>' +
+                        '<td>  ' + clienteList[i].asistenteServicioCliente_descripcion + '</td>' +
                         '<td>  ' + clienteList[i].tipoPagoFacturaToString + '</td>' +
                         '<td>  ' + clienteList[i].creditoAprobado.toFixed(cantidadDecimales) + '  </td>' +
                         '<td>  ' + textoBloqueado + '  </td>' +
@@ -2204,6 +2194,7 @@ jQuery(function ($) {
 
                 if (cliente.habilitadoNegociacionGrupal) {
                     $("#verHabilitadoNegociacionGrupal").show();
+                    $("#verHabilitadoNegociacionGrupal").html("Este Cliente (" + cliente.codigo + ") hereda los precios del grupo.");
                 } else {
                     $("#verHabilitadoNegociacionGrupal").hide();
                 }
@@ -2283,6 +2274,16 @@ jQuery(function ($) {
 
                 var preciosList = result.precios;
                 var margenText = "";
+                var canastaText = "";
+
+                if (cliente.modificaCanasta == 1) {
+                    $('#lblChkCanasta').closest('.row').show();
+                    $('th.listaPreciosCanasta').removeAttr('data-visible');
+                } else {
+                    $('#lblChkCanasta').closest('.row').hide();
+                    $('th.listaPreciosCanasta').attr('data-visible', 'false');
+                }
+
                 $("#tableListaPrecios > tbody").empty();
 
                 for (var i = 0; i < preciosList.length; i++) {
@@ -2309,9 +2310,18 @@ jQuery(function ($) {
                         checkedCanasta = "checked";
                     }
 
+                    canastaText = "";
+                    if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
+                        if (cliente.modificaCanasta == 1) {
+                            canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + '>  </td>';
+                        } else {
+                            canastaText = '<td>-</td>';
+                        }
+                    } 
+
                     var preciosRow = '<tr data-expanded="true">' +
                         '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
-                        '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + '>  </td>' +
+                        canastaText +
                         '<td>  ' + preciosList[i].producto.proveedor  + '  </td>' +
                         '<td>  ' + preciosList[i].producto.sku + '  </td>' +
                         '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +

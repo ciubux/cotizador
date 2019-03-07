@@ -145,19 +145,18 @@
 
 
         <div class="row">
-            @if (cotizacion.usuario.apruebaCotizaciones)
-            {
-                <div class="col-sm-6 col-lg-5">
-                    <!--USUARIO-->
-                    <div class="form-group">
-                        <label for="Usuario" class="control-label col-xs-4">Usuario:</label>
-                        <div class="col-xs-8">
-                            @Html.Action("usuariosCotizacionList", "Usuario")
-                        </div>
+        
+            <div class="col-sm-6 col-lg-5">
+                <!--USUARIO-->
+                <div class="form-group">
+                    <label for="Usuario" class="control-label col-xs-4">Usuario:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("usuariosCotizacionList", "Usuario")
                     </div>
-
                 </div>
-            }
+            </div>
+
+
             <!--ESTADO-->
             <div class="col-sm-6 col-lg-5">
                 <div class="form-group">
@@ -258,6 +257,7 @@
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verNumero"></p>
                                     <p class="form-control-static" style="color: darkred" id="esTransitoria">Esta Cotización es Transitoria</p>
+                                    <p class="form-control-static" style="color: darkred" id="esTrivial">Esta Cotización es Trivial</p>
                                 </div>
                             </div>
                         </div>

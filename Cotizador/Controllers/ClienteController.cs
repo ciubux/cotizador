@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using Cotizador.ExcelExport;
+using Cotizador.Models.DTOsSearch;
 using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
@@ -14,7 +15,7 @@ using System.Web.Mvc;
 
 namespace Cotizador.Controllers
 {
-    public class ClienteController : Controller
+    public class ClienteController : ParentController
     {
         private Cliente ClienteSession
         {
@@ -280,7 +281,8 @@ namespace Cotizador.Controllers
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_CLIENTE_LISTA] = clienteList;
             //Se retorna la cantidad de elementos encontrados
-            return JsonConvert.SerializeObject(clienteList);
+            //return JsonConvert.SerializeObject(clienteList);
+            return JsonConvert.SerializeObject(ParserDTOsSearch.ClienteToClienteDTO(clienteList));
             //return pedidoList.Count();
         }
 
@@ -322,15 +324,19 @@ namespace Cotizador.Controllers
             Cliente cliente = (Cliente) this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
 
             Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
-            
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (clienteBl.agregarProductoCanasta(cliente.idCliente, idProducto, usuario))
+
+            if (cliente.modificaCanasta == 1)
             {
-                message = "Se agregó el producto a la canasta.";
-            } else
-            {
-                success = 0;
-                message = "No se pudo agregar el producto a la canasta.";
+                if (clienteBl.agregarProductoCanasta(cliente.idCliente, idProducto, usuario))
+                {
+                    message = "Se agregó el producto a la canasta.";
+                }
+                else
+                {
+                    success = 0;
+                    message = "No se pudo agregar el producto a la canasta.";
+                }
             }
             
 
@@ -349,16 +355,19 @@ namespace Cotizador.Controllers
             Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (clienteBl.retiraProductoCanasta(cliente.idCliente, idProducto, usuario))
-            {
-                message = "Se retiró el producto de la canasta.";
-            }
-            else
-            {
-                success = 0;
-                message = "No se pudo retirar el producto de la canasta.";
-            }
 
+            if (cliente.modificaCanasta == 1)
+            {
+                if (clienteBl.retiraProductoCanasta(cliente.idCliente, idProducto, usuario))
+                {
+                    message = "Se retiró el producto de la canasta.";
+                }
+                else
+                {
+                    success = 0;
+                    message = "No se pudo retirar el producto de la canasta.";
+                }
+            }
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }
@@ -452,38 +461,55 @@ namespace Cotizador.Controllers
 
         public String Create()
         {
-            ClienteBL clienteBL = new ClienteBL();
-            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
-            cliente = clienteBL.insertClienteSunat(cliente);
-            if (cliente.codigo != null && !cliente.codigo.Equals(""))
+            try
             {
-                this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
-            }
-            String resultado = JsonConvert.SerializeObject(cliente);            
-            return resultado;
-        }
-
-
-        public String Update()
-        {
-            ClienteBL clienteBL = new ClienteBL();
-            Cliente cliente = this.ClienteSession;
-            if (cliente.idCliente == Guid.Empty)
-            {
+                ClienteBL clienteBL = new ClienteBL();
+                Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
                 cliente = clienteBL.insertClienteSunat(cliente);
                 if (cliente.codigo != null && !cliente.codigo.Equals(""))
                 {
                     this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
                 }
+                String resultado = JsonConvert.SerializeObject(cliente);
+                return resultado;
             }
-            else
+            catch (Exception e)
             {
-                cliente = clienteBL.updateClienteSunat(cliente);
-                this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+                logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+                throw e;
             }
-            String resultado = JsonConvert.SerializeObject(cliente);
-            //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
-            return resultado;
+
+        }
+
+
+        public String Update()
+        {
+            try
+            {
+                ClienteBL clienteBL = new ClienteBL();
+                Cliente cliente = this.ClienteSession;
+                if (cliente.idCliente == Guid.Empty)
+                {
+                    cliente = clienteBL.insertClienteSunat(cliente);
+                    if (cliente.codigo != null && !cliente.codigo.Equals(""))
+                    {
+                        this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+                    }
+                }
+                else
+                {
+                    cliente = clienteBL.updateClienteSunat(cliente);
+                    this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+                }
+                String resultado = JsonConvert.SerializeObject(cliente);
+                //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+                return resultado;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+                throw e;
+            }
         }
 
 

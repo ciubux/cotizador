@@ -670,7 +670,6 @@ jQuery(function ($) {
 
         showMovimientoAlmacen(idMovimientoAlmacen);
     });
-
     function showMovimientoAlmacen(idMovimientoAlmacen) {
         $.ajax({
             url: "/GuiaRemision/Show",
@@ -692,10 +691,10 @@ jQuery(function ($) {
 
 
 
-                $("#idPedido").val(guiaRemision.pedido.idPedido);
+                $("#idPedido").val(guiaRemision.pedido_idPedido);
                 $("#idMovimientoAlmacen").val(guiaRemision.idMovimientoAlmacen);
-                $("#ver_guiaRemision_ciudadOrigen_nombre").html(guiaRemision.ciudadOrigen.nombre);
-                $("#ver_guiaRemision_ciudadOrigen_direccionPuntoPartida").html(guiaRemision.ciudadOrigen.direccionPuntoPartida);
+                $("#ver_guiaRemision_ciudadOrigen_nombre").html(guiaRemision.ciudadOrigen_nombre);
+                $("#ver_guiaRemision_ciudadOrigen_direccionPuntoPartida").html(guiaRemision.ciudadOrigen_direccionPuntoPartida);
 
                 $("#ver_guiaRemision_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10)));
                 $("#ver_guiaRemision_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
@@ -707,18 +706,18 @@ jQuery(function ($) {
 
 
                 //   $("#ver_guiaRemision_numeroDocumento").html(guiaRemision.numeroDocumentoString);
-                $("#ver_guiaRemision_pedido_numeroPedido").html(guiaRemision.pedido.numeroPedidoString);
-                $("#ver_guiaRemision_pedido_cliente").html(guiaRemision.pedido.cliente.razonSocial);
-                $("#ver_guiaRemision_pedido_numeroReferenciaCliente").html(guiaRemision.pedido.numeroReferenciaCliente);
+                $("#ver_guiaRemision_pedido_numeroPedido").html(guiaRemision.pedido_numeroPedidoString);
+                $("#ver_guiaRemision_pedido_cliente").html(guiaRemision.pedido_cliente_razonSocial);
+                $("#ver_guiaRemision_pedido_numeroReferenciaCliente").html(guiaRemision.pedido_numeroReferenciaCliente);
                 $("#ver_guiaRemision_motivoTraslado").html(guiaRemision.motivoTrasladoString);
                 motivoTraslado = guiaRemision.motivoTraslado;
                 $("#ver_guiaRemision_atencionParcial").html(guiaRemision.atencionParcial);
-                $("#ver_guiaRemision_pedido_ubigeoEntrega").html(guiaRemision.pedido.ubigeoEntrega.ToString);
-                $("#ver_guiaRemision_pedido_direccionEntrega").html(guiaRemision.pedido.direccionEntrega.descripcion);
-                $("#ver_guiaRemision_transportista_descripcion").html(guiaRemision.transportista.descripcion);
-                $("#ver_guiaRemision_transportista_ruc").html(guiaRemision.transportista.ruc);
-                $("#ver_guiaRemision_transportista_brevete").html(guiaRemision.transportista.brevete);
-                $("#ver_guiaRemision_transportista_direccion").html(guiaRemision.transportista.direccion);
+                $("#ver_guiaRemision_pedido_ubigeoEntrega").html(guiaRemision.pedido_ubigeoEntrega.ToString);
+                $("#ver_guiaRemision_pedido_direccionEntrega").html(guiaRemision.pedido_direccionEntrega_descripcion);
+                $("#ver_guiaRemision_transportista_descripcion").html(guiaRemision.transportista_descripcion);
+                $("#ver_guiaRemision_transportista_ruc").html(guiaRemision.transportista_ruc);
+                $("#ver_guiaRemision_transportista_brevete").html(guiaRemision.transportista_brevete);
+                $("#ver_guiaRemision_transportista_direccion").html(guiaRemision.transportista_direccion);
                 $("#ver_guiaRemision_placaVehiculo").html(guiaRemision.placaVehiculo);
                 //$("#ver_guiaRemision_certificadoInscripcion").html(guiaRemision.certificadoInscripcion);
                 $("#ver_guiaRemision_observaciones").html(guiaRemision.observaciones);
@@ -726,6 +725,7 @@ jQuery(function ($) {
                 $("#ver_guiaRemision_estadoDescripcion").html(guiaRemision.estadoDescripcion);
 
                 $("#btnRefacturar").hide();
+
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
@@ -791,15 +791,15 @@ jQuery(function ($) {
                         $("#btnRefacturar").show();
                     }
 
-                   /* if (    guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_COMPRA.charCodeAt(0)
-                        || guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_PRESTAMO_RECIBIDO.charCodeAt(0)
-                        || guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_COMODATO_RECIBIDO.charCodeAt(0)
-                        || guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_TRANSFERENCIA_GRATUITA_RECIBIDA.charCodeAt(0)
-                    )
-                    {
-                        $("#btnExtornar").hide();
-                    }*/
-                  
+                    /* if (    guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_COMPRA.charCodeAt(0)
+                         || guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_PRESTAMO_RECIBIDO.charCodeAt(0)
+                         || guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_COMODATO_RECIBIDO.charCodeAt(0)
+                         || guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_TRANSFERENCIA_GRATUITA_RECIBIDA.charCodeAt(0)
+                     )
+                     {
+                         $("#btnExtornar").hide();
+                     }*/
+
                 }
 
 
@@ -827,7 +827,7 @@ jQuery(function ($) {
                     && guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_TRANSFERENCIA_GRATUITA.charCodeAt(0)
                 ) {
                     $("#btnFacturarGuiaRemision").hide();
-                   
+
                     $("#btnIngresar").hide();
 
                     if (guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_COMODATO.charCodeAt(0)
@@ -839,7 +839,7 @@ jQuery(function ($) {
                     $("#btnAnularGuiaRemision").hide();
                     $("#btnIngresar").hide();
                 }
-                
+
 
                 if (guiaRemision.atencionParcial) {
                     $("#ver_guiaRemision_atencionParcial").html("Atención Parcial");
@@ -848,7 +848,7 @@ jQuery(function ($) {
                     $("#ver_guiaRemision_atencionParcial").html("Atención Final");
                 }
 
-               
+
                 $("#tableDetalleGuia > tbody").empty();
 
                 FooTable.init('#tableDetalleGuia');
@@ -882,7 +882,7 @@ jQuery(function ($) {
             }
         });
     }
-    
+
     
 
     $("#btnCancelarGuiaRemision").click(function () {
@@ -1160,15 +1160,15 @@ jQuery(function ($) {
                 '</tr>';
         }
 
-
-
-
         $("#verRazonSocialSunat").html(pedido.cliente.razonSocialSunat);
         $("#verRUC").html(pedido.cliente.ruc);
         $("#verDireccionDomicilioLegalSunat").html(pedido.cliente.direccionDomicilioLegalSunat);
         $("#verCodigo").html(pedido.cliente.codigo);
 
         $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
+
+
+
         $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
         var fecha = new Date();
         var month = fecha.getMonth() + 1;
@@ -1794,14 +1794,14 @@ jQuery(function ($) {
                     var guiaRemision = '<tr data-expanded="false">' +
                         '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
                         '<td>  ' + guiaRemisionList[i].serieNumeroGuia + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido.numeroPedidoString + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido_numeroPedidoString + '</td>' +
                         '<td>  ' + guiaRemisionList[i].motivoTrasladoString + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].usuario.nombre + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].usuario_nombre + '</td>' +
                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido.cliente.razonSocial + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].ciudadOrigen.nombre + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido_cliente_razonSocial + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido_cliente_ruc + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].ciudadOrigen_nombre + '</td>' +
                         '<td ' + styleEstado + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
                         '<td>' + guiaRemisionList[i].tipoExtornoToString + '</td>' +
                         '<td>' + noEntregado + '</td>' +
@@ -1817,13 +1817,16 @@ jQuery(function ($) {
                     $("#msgBusquedaSinResultados").hide();
                     $("#divExportButton").show();
                 }
-                else { 
+                else {
+
                     $("#msgBusquedaSinResultados").show();
                     $("#divExportButton").hide();
                 }
+
             }
         });
     });
+
 
 
 

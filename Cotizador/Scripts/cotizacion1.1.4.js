@@ -13,7 +13,7 @@ jQuery(function ($) {
     */
     //CONSTANTES:
     var cantidadDecimales = 2;
-    var cantidadDecimalesPrecioNeto = 4;
+    var cantidadDecimalesPrecioNeto = 2;
     var IGV = 0.18;
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
@@ -272,25 +272,7 @@ jQuery(function ($) {
 
     });
 
-    $("#cotizacion_esTransitoria").change(function () {
-        var valor = 1;
 
-        if (!$('#cotizacion_esTransitoria').prop('checked')) {
-            valor = 0;
-            $("#fechaInicioVigenciaPrecios").removeAttr("disabled");
-        }
-        else {
-            $("#fechaInicioVigenciaPrecios").attr("disabled", "disabled");
-            var hoy = new Date();
-            $("#fechaInicioVigenciaPrecios").datepicker().datepicker("setDate", hoy);
-            hoy.setDate(hoy.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))
-            $("#fechaFinVigenciaPrecios").datepicker().datepicker("setDate", hoy);
-            $("#fechaInicioVigenciaPrecios").change();
-            $("#fechaFinVigenciaPrecios").change();
-        }
-
-        changeInputBoolean('esTransitoria', valor)
-    });
 
     function changeInputBoolean(propiedad, valor) {
         $.ajax({
@@ -409,12 +391,13 @@ jQuery(function ($) {
         var idGrupoCliente = $("#idGrupoCliente").val();
         $.ajax({
             url: "/Cotizacion/updateIdGrupoCliente",
+            dataType: 'JSON',
             type: 'POST',
             data: {
                 idGrupoCliente: idGrupoCliente
             },
             success: function (grupoCliente) {
-                $("#cotizacion_textoCondicionesPago").val(cliente.textoCondicionesPago);
+                $("#cotizacion_textoCondicionesPago").val(grupoCliente.textoCondicionesPago);
                 $("#contacto").val(grupoCliente.contacto);
             }
         });
@@ -1293,18 +1276,18 @@ jQuery(function ($) {
             },
             success: function () {
 
-                $.alert({
+           /*     $.alert({
                     title: '¡Atención!',
                     type: 'orange',
                     content: "Los productos importados no consideran los precios registrados para un grupo.",
                     buttons: {
-                        OK: function () {
+                        OK: function () {*/
                             window.location = '/Cotizacion/CotizarGrupo';
 
-                        }
+          /*              }
                     }
                 });
-
+                */
                
             }
         });
@@ -1339,17 +1322,18 @@ jQuery(function ($) {
             },
             success: function () {
                 $('body').loadingModal('hide')
-                $.alert({
-                    title: '¡Atención!',
-                    type: 'orange',
-                    content: "Los productos importados no consideran los precios registrados para un grupo.",
-                    buttons: {
-                        OK: function () {
-                            window.location = '/Cotizacion/Cotizar';
+                /*     $.alert({
+                title: '¡Atención!',
+                type: 'orange',
+                content: "Los productos importados no consideran los precios registrados para un grupo.",
+                buttons: {
+                    OK: function () {*/
+                window.location = '/Cotizacion/Cotizar';
 
-                        }
+          /*              }
                     }
                 });
+                */
              
             }
         });
@@ -1444,7 +1428,7 @@ jQuery(function ($) {
                 }
 
                 //Si es una cotización transitoria la fecha de fin de vigencia no puede ser mayor a la fecha de inicio de vigencia por más de 10 días
-                if ($('#cotizacion_esTransitoria').prop('checked')) {
+                if ($('#tipoCotizacion').val() == 1) {
 
                     var fechaInicioTmp = fechaInicioVigenciaPrecios.split("/");
                  
@@ -1528,10 +1512,10 @@ jQuery(function ($) {
             return false;
 
         if ($("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION) {
-
+            
             var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
 
-            if (continuarLuego == 0 && sedePrincipal == 1) {
+            if (continuarLuego == 0 && sedePrincipal == 1 && $('#tipoCotizacion').val() == 0) {
                 $.confirm({
                     title: 'Cliente Multiregional Identificado',
                     content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
@@ -1595,7 +1579,9 @@ jQuery(function ($) {
             error: function (detalle) {
                 $('body').loadingModal('hide')
                 activarBotonesFinalizarCreacion();
-                alert("Se generó un error al intentar finalizar la creación de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                //alert("Se generó un error al intentar finalizar la creación de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                mostrarMensajeErrorProceso(detalle.responseText);            
+
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
@@ -1646,7 +1632,7 @@ jQuery(function ($) {
 
         var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
 
-        if (continuarLuego == 0 && sedePrincipal == 1) {
+        if (continuarLuego == 0 && sedePrincipal == 1 && $('#tipoCotizacion').val() == 0) {
             $.confirm({
                 title: 'Cliente Multiregional Identificado',
                 content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
@@ -1661,7 +1647,7 @@ jQuery(function ($) {
                         }
                     },
                     noAplica: {
-                        text: 'NO',
+                        text: 'NO, solo registrar precios para ' + $("#idCiudad option:selected").text(),
                         btnClass: 'btn-danger',
                         action: function () {
                             callUpdate(continuarLuego);
@@ -1698,7 +1684,9 @@ jQuery(function ($) {
             error: function (detalle) {
                 $('body').loadingModal('hide')
                 activarBotonesFinalizarCreacion();
-                alert("Se generó un error al intentar finalizar la edición de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                //alert("Se generó un error al intentar finalizar la creación de la cotización. Si estuvo actualizando, vuelva a buscar la cotización, es posible que este siendo modificada por otro usuario.");
+                mostrarMensajeErrorProceso(detalle.responseText);
+
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
@@ -1814,6 +1802,7 @@ jQuery(function ($) {
         return Number(fecha)
     }
 
+
     $(document).on('click', "button.btnVerCotizacion", function () {
 
         $('body').loadingModal({
@@ -1823,8 +1812,8 @@ jQuery(function ($) {
 
         activarBotonesVer();
         var codigo = event.target.getAttribute("class").split(" ")[0];
-      //  $("#tableDetalleCotizacion > tbody").empty();
-     
+        //  $("#tableDetalleCotizacion > tbody").empty();
+
 
         $.ajax({
             url: "/Cotizacion/Show",
@@ -1844,43 +1833,44 @@ jQuery(function ($) {
                 var usuario = resultado.usuario;
 
                 $("#verCondicionesPago").html(cotizacion.textoCondicionesPago);
-                
+
                 $("#verIdCotizacion").val(cotizacion.idCotizacion);
 
-                
 
-                $("#verIdCliente").val(cotizacion.cliente.idCliente);
+
+                $("#verIdCliente").val(cotizacion.cliente_idCliente);
 
                 $("#verNumero").html(cotizacion.codigo);
-                
-                $("#verCiudad").html(cotizacion.ciudad.nombre);
 
-                if (cotizacion.cliente.idCliente == GUID_EMPTY) {
+                $("#verCiudad").html(cotizacion.ciudad_nombre);
+
+                if (cotizacion.cliente_idCliente == GUID_EMPTY) {
                     $("#labelCliente").hide();
                     $("#labelGrupo").show();
-                    $("#verClienteGrupo").html(cotizacion.grupo.codigoNombre);
+                    $("#verClienteGrupo").html(cotizacion.grupo_codigoNombre);
                 }
                 else {
                     $("#labelCliente").show();
                     $("#labelGrupo").hide();
-                    $("#verClienteGrupo").html(cotizacion.cliente.codigoRazonSocial);
+                    $("#verClienteGrupo").html(cotizacion.cliente_codigoRazonSocial);
                 }
                 
-
-
-                
-
 
                 $("#verContacto").html(cotizacion.contacto);
 
-                if (cotizacion.esTransitoria) {
-                    $("#esTransitoria").show();
-                }
-                else {
-                    $("#esTransitoria").hide();
-                }
 
-              
+                if (cotizacion.tipoCotizacion == 0) {
+                    $("#esTransitoria").hide();
+                    $("#esTrivial").hide();
+                }
+                else if (cotizacion.tipoCotizacion == 1) {
+                    $("#esTransitoria").show();
+                    $("#esTrivial").hide();
+                }
+                else if (cotizacion.tipoCotizacion == 2) {
+                    $("#esTransitoria").hide();
+                    $("#esTrivial").show();
+                }
 
                 $("#verFechaCreacion").html(invertirFormatoFecha(cotizacion.fecha.substr(0, 10)));
                 $("#verValidezOferta").html(invertirFormatoFecha(cotizacion.fechaLimiteValidezOferta.substr(0, 10)));
@@ -1894,10 +1884,10 @@ jQuery(function ($) {
                     $("#verFechaFinVigenciaPrecios").html("No Definida");
                 else
                     $("#verFechaFinVigenciaPrecios").html(invertirFormatoFecha(cotizacion.fechaFinVigenciaPrecios.substr(0, 10)));
-                
-                $("#verEstado").html(cotizacion.seguimientoCotizacion.estadoString);
-                $("#verModificadoPor").html(cotizacion.seguimientoCotizacion.usuario.nombre);
-                $("#verObservacionEstado").html(cotizacion.seguimientoCotizacion.observacion);
+
+                $("#verEstado").html(cotizacion.seguimientoCotizacion_estadoString);
+                $("#verModificadoPor").html(cotizacion.seguimientoCotizacion_usuario_nombre);
+                $("#verObservacionEstado").html(cotizacion.seguimientoCotizacion_observacion);
 
                 if (cotizacion.considerarCantidades != CANT_SOLO_OBSERVACIONES) {
                     $("#montosTotalesDiv").show();
@@ -1907,7 +1897,7 @@ jQuery(function ($) {
 
                 $("#verObservaciones").html(cotizacion.observaciones);
                 if (cotizacion.aplicaSedes === true) {
-                    $("#verSedesAplica").html("Esta cotización aplicará también para las sedes: " + cotizacion.cliente.sedeListWebString.replace(new RegExp('<br>', 'g'), ', '));
+                    $("#verSedesAplica").html("Esta cotización aplicará también para las sedes: " + cotizacion.cliente_sedeListWebString.replace(new RegExp('<br>', 'g'), ', '));
                 }
                 $("#verMontoSubTotal").html(cotizacion.montoSubTotal);
                 $("#verMontoIGV").html(cotizacion.montoIGV);
@@ -1917,6 +1907,7 @@ jQuery(function ($) {
                 $("#tableDetalleCotizacion > tbody").empty();
 
                 //FooTable.init('#tableDetalleCotizacion');
+
 
 
 
@@ -1930,8 +1921,9 @@ jQuery(function ($) {
                     //var costo = lista[i].producto.costoLista.toFixed(cantidadDecimales);
                     if (lista[i].esPrecioAlternativo) {
                         precioUnitarioAnterior = lista[i].producto.precioClienteProducto.precioNetoAlternativo.toFixed(cantidadDecimalesPrecioNeto);
-                       // costo = lista[i].producto.costoListaAlternativo.toFixed(cantidadDecimales)
+                        // costo = lista[i].producto.costoListaAlternativo.toFixed(cantidadDecimales)
                     }
+
 
 
 
@@ -1945,12 +1937,13 @@ jQuery(function ($) {
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].precioNeto.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
-                        '<td>' + lista[i].costoListaVisible.toFixed(cantidadDecimales)  + '</td>' +
+                        '<td>' + lista[i].costoListaVisible.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].flete.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
                         '<td>' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
+
                         '<td>' + observacion + '</td>' +
                         '<td class="tdprecioUnitarioAnterior">' + precioUnitarioAnterior + '</td>' +
                         '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionPrecioAnterior + ' %</td>' +
@@ -1960,20 +1953,20 @@ jQuery(function ($) {
                         '</tr>';
 
                 }
-              //  
-               // sleep
+                //  
+                // sleep
                 $("#tableDetalleCotizacion").append(d);
 
 
 
                 /*EDITAR COTIZACIÓN*/
                 if (
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA ||
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION && usuario.idUsuario == cotizacion.seguimientoCotizacion.usuario.idUsuario)
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION ||
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA ||
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA ||
+                    (cotizacion.seguimientoCotizacion_estado == ESTADO_EN_EDICION && usuario.idUsuario == cotizacion.seguimientoCotizacion_usuario_idUsuario)
                 ) {
-                    if (cotizacion.cliente.idCliente == GUID_EMPTY) {
+                    if (cotizacion.cliente_idCliente == GUID_EMPTY) {
                         $("#btnEditarCotizacion").hide();
                         $("#btnEditarCotizacionGrupal").show();
                     }
@@ -1981,12 +1974,11 @@ jQuery(function ($) {
                         $("#btnEditarCotizacion").show();
                         $("#btnEditarCotizacionGrupal").hide();
                     }
-                    if (cotizacion.seguimientoCotizacion.estado == ESTADO_EN_EDICION) {
+                    if (cotizacion.seguimientoCotizacion_estado == ESTADO_EN_EDICION) {
                         $("#btnEditarCotizacion").html("Continuar Editando");
                         $("#btnEditarCotizacionGrupal").html("Continuar Editando");
                     }
-                    else
-                    {
+                    else {
                         $("#btnEditarCotizacion").html("Editar");
                         $("#btnEditarCotizacionGrupal").html("Editar");
                     }
@@ -1995,18 +1987,11 @@ jQuery(function ($) {
                     $("#btnEditarCotizacionGrupal").hide();
                     $("#btnEditarCotizacion").hide();
                 }
-
-
-
-                
-
-
-
                 /*RECOTIZAR*/
                 if (
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_ACEPTADA ||
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_RECHAZADA
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA ||
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA ||
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_RECHAZADA
                 ) {
 
                     $("#btnReCotizacion").show();
@@ -2020,10 +2005,10 @@ jQuery(function ($) {
 
                 /*APROBAR DENEGAR COTIZACIÓN*/
 
-                if (cotizacion.cliente.idCliente == GUID_EMPTY) {
+                if (cotizacion.cliente_idCliente == GUID_EMPTY) {
                     if (
-                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
-                            cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
+                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION ||
+                            cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA) &&
                         (
                             usuario.apruebaCotizacionesGrupales &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
@@ -2035,26 +2020,32 @@ jQuery(function ($) {
                     }
 
                     if (
-                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
+
+
+                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION) &&
                         (
                             usuario.apruebaCotizacionesGrupales &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
                     ) {
+
 
                         $("#btnDenegarCotizacion").show();
                     }
                     else {
                         $("#btnDenegarCotizacion").hide();
                     }
+
                 }
                 else {
                     if (
-                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION ||
-                            cotizacion.seguimientoCotizacion.estado == ESTADO_DENEGADA) &&
+                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION ||
+                            cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA) &&
                         (
                             usuario.apruebaCotizaciones &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
                     ) {
+
+
 
                         $("#btnAprobarCotizacion").show();
                     }
@@ -2063,7 +2054,7 @@ jQuery(function ($) {
                     }
 
                     if (
-                        (cotizacion.seguimientoCotizacion.estado == ESTADO_PENDIENTE_APROBACION) &&
+                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION) &&
                         (
                             usuario.apruebaCotizaciones &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
@@ -2075,14 +2066,11 @@ jQuery(function ($) {
                         $("#btnDenegarCotizacion").hide();
                     }
                 }
-
                 
-               
-
                 /*ACEPTAR COTIZACIÓN*/
                 if (
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
-                        cotizacion.seguimientoCotizacion.estado == ESTADO_RECHAZADA
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA ||
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_RECHAZADA
                 ) {
 
                     $("#btnAceptarCotizacion").show();
@@ -2094,7 +2082,7 @@ jQuery(function ($) {
 
                 /*RECHAZAR COTIZACIÓN*/
                 if (
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA)
+                    (cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA)
                 ) {
 
                     $("#btnRechazarCotizacion").show();
@@ -2106,9 +2094,9 @@ jQuery(function ($) {
 
                 /*PDF*/
                 if (
-                    (cotizacion.seguimientoCotizacion.estado == ESTADO_APROBADA ||
-                        cotizacion.seguimientoCotizacion.estado == ESTADO_ACEPTADA ||
-                        cotizacion.seguimientoCotizacion.estado == ESTADO_RECHAZADA
+                    (cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA ||
+                        cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA ||
+                        cotizacion.seguimientoCotizacion_estado == ESTADO_RECHAZADA
                     )
                 ) {
 
@@ -2119,11 +2107,13 @@ jQuery(function ($) {
                 }
 
                 FooTable.init('#tableDetalleCotizacion');
-                
+
 
                 if (
-                    cotizacion.seguimientoCotizacion.estado == ESTADO_ACEPTADA 
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA
+                    && cotizacion.cliente_idCliente != GUID_EMPTY
                 ) {
+
                     $("#btnGenerarPedido").show();
                     //window.setInterval(ocultarPrecioUnitarioAnterior, 5000);                    
                 }
@@ -2131,12 +2121,13 @@ jQuery(function ($) {
                     $("#btnGenerarPedido").hide();
                     //window.setInterval(mostrarPrecioUnitarioAnterior, 5000);
                 }
-
                 /*Eliminar Cotizacion*/
                 if (
-                    cotizacion.seguimientoCotizacion.estado != ESTADO_ACEPTADA &&
-                    cotizacion.seguimientoCotizacion.estado != ESTADO_RECHAZADA &&
-                    cotizacion.seguimientoCotizacion.estado != ESTADO_ELIMINADA
+                   ( cotizacion.seguimientoCotizacion_estado != ESTADO_ACEPTADA &&
+                    cotizacion.seguimientoCotizacion_estado != ESTADO_RECHAZADA &&
+                        cotizacion.seguimientoCotizacion_estado != ESTADO_ELIMINADA)
+                    || (cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA  &&
+                        usuario.eliminaCotizacionesAceptadas == true)
                 ) {
 
                     $("#btnEliminarCotizacion").show();
@@ -2145,23 +2136,9 @@ jQuery(function ($) {
                     $("#btnEliminarCotizacion").hide();
                 }
 
-
-
-                /*
-                $("#tableDetalleCotizacion").footable({
-                    "paging": {
-                        "enabled": false
-                    }
-                });*/
+                
                 $("#modalVerCotizacion").modal('show');
-
                 
-                
-
-
-               // FooTable.init('#tableDetalleCotizacion')
-                //$('#tablefoottable').footable()
-                //  window.location = '/Cotizacion/Index';
             }
         });
     });
@@ -2597,6 +2574,50 @@ jQuery(function ($) {
                 }
             }
         });
+    });
+
+    $("#tipoCotizacion").change(function () {
+        var tipoCotizacion = $("#tipoCotizacion").val();
+     
+        if (tipoCotizacion == 0) {
+            $("#fechaInicioVigenciaPrecios").removeAttr("disabled");
+            $("#fechaFinVigenciaPrecios").removeAttr("disabled");
+        }
+        else if (tipoCotizacion == 2) {
+            //$("#fechaInicioVigenciaPrecios").removeAttr("disabled");
+            $("#fechaInicioVigenciaPrecios").attr("disabled", "disabled");
+            $("#fechaFinVigenciaPrecios").attr("disabled", "disabled");
+            $("#fechaInicioVigenciaPrecios").val("");
+            $("#fechaInicioVigenciaPrecios").change();
+            $("#fechaFinVigenciaPrecios").val("");
+            $("#fechaFinVigenciaPrecios").change();
+        }
+        else
+        {
+            $("#fechaInicioVigenciaPrecios").attr("disabled", "disabled");
+            $("#fechaFinVigenciaPrecios").removeAttr("disabled");
+            var hoy = new Date();
+            $("#fechaInicioVigenciaPrecios").datepicker().datepicker("setDate", hoy);
+            hoy.setDate(hoy.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))
+            $("#fechaFinVigenciaPrecios").datepicker().datepicker("setDate", hoy);
+            $("#fechaInicioVigenciaPrecios").change();
+            $("#fechaFinVigenciaPrecios").change();
+        }
+
+      
+
+        
+        $.ajax({
+            url: "/Cotizacion/changeTipoCotizacion",
+            type: 'POST',
+            data: {
+                tipoCotizacion: tipoCotizacion
+            },
+            success: function (cantidad) {
+            }
+        });
+
+
     });
 
     //Mantener en Session cambio de Seleccion de IGV
@@ -3306,6 +3327,8 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+
+
     $("#btnBusquedaCotizaciones").click(function () {
         var idCiudad = $("#idCiudad").val();
         var idCliente = $("#idCliente").val();
@@ -3315,9 +3338,9 @@ jQuery(function ($) {
         var estado = $("#estado").val();
 
 
-        $("#btnBusquedaCotizaciones").attr("disabled","disabled");
+        $("#btnBusquedaCotizaciones").attr("disabled", "disabled");
         $.ajax({
-            url: "/Cotizacion/SearchCotizaciones",
+            url: "/Cotizacion/Search",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -3333,7 +3356,7 @@ jQuery(function ($) {
             },
             success: function (cotizacionList) {
                 $("#btnBusquedaCotizaciones").removeAttr("disabled");
-              
+
                 $("#tableCotizaciones > tbody").empty();
                 //FooTable.init('#tableCotizaciones');
                 $("#tableCotizaciones").footable({
@@ -3346,77 +3369,62 @@ jQuery(function ($) {
 
                 for (var i = 0; i < cotizacionList.length; i++) {
 
-                    var observacion = cotizacionList[i].seguimientoCotizacion.observacion == null ? "" : cotizacionList[i].seguimientoCotizacion.observacion;
+                    var observacion = cotizacionList[i].seguimientoCotizacion_observacion == null ? "" : cotizacionList[i].seguimientoCotizacion_observacion;
 
-                    if (cotizacionList[i].seguimientoCotizacion.observacion != null && cotizacionList[i].seguimientoCotizacion.observacion.length > 20) {
+                    if (cotizacionList[i].seguimientoCotizacion_observacion != null && cotizacionList[i].seguimientoCotizacion_observacion.length > 20) {
                         var idComentarioCorto = cotizacionList[i].idCotizacion + "corto";
                         var idComentarioLargo = cotizacionList[i].idCotizacion + "largo";
                         var idVerMas = cotizacionList[i].idCotizacion + "verMas";
                         var idVermenos = cotizacionList[i].idCotizacion + "verMenos";
-                        var comentario = cotizacionList[i].seguimientoCotizacion.observacion.substr(0, 20) + "...";
+                        var comentario = cotizacionList[i].seguimientoCotizacion_observacion.substr(0, 20) + "...";
 
-                        observacion = '<div id="'+idComentarioCorto+'" style="display:block;">'+comentario+'</div>'+
-                        '<div id="' + idComentarioLargo + '" style="display:none;">' + cotizacionList[i].seguimientoCotizacion.observacion+'</div>'+
-                            '<p><a id="' + idVerMas + '" class="' + cotizacionList[i].idCotizacion+' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>'+
-                        '<p><a id="' + idVermenos + '" class="' + cotizacionList[i].idCotizacion+' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
-                     }
+                        observacion = '<div id="' + idComentarioCorto + '" style="display:block;">' + comentario + '</div>' +
+                            '<div id="' + idComentarioLargo + '" style="display:none;">' + cotizacionList[i].seguimientoCotizacion_observacion + '</div>' +
+                            '<p><a id="' + idVerMas + '" class="' + cotizacionList[i].idCotizacion + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
+                            '<p><a id="' + idVermenos + '" class="' + cotizacionList[i].idCotizacion + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
+                    }
+
 
                     var grupo = '';
                     var clienteRazonSocial = '';
                     var clienteRUC = '';
                     var creadoPara = '';
-                    grupo = cotizacionList[i].grupo.nombre;
-                    if (cotizacionList[i].cliente.idCliente == GUID_EMPTY) {
+                    grupo = cotizacionList[i].grupo_nombre;
+                    if (cotizacionList[i].cliente_idCliente == GUID_EMPTY) {
                         creadoPara = 'Grupo';
-                        
+
                     }
                     else {
                         creadoPara = 'Cliente';
-                        clienteRazonSocial = cotizacionList[i].cliente.razonSocial;
-                        clienteRUC = cotizacionList[i].cliente.ruc;
+                        clienteRazonSocial = cotizacionList[i].cliente_razonSocial;
+                        clienteRUC = cotizacionList[i].cliente_ruc;
                     }
 
                     var cotizacion = '<tr data-expanded="false">' +
                         '<td>' + cotizacionList[i].idCotizacion + '</td>' +
                         '<td>' + cotizacionList[i].codigo + '</td>' +
-                        '<td>' + cotizacionList[i].usuario.nombre + '</td>' +
+                        '<td>' + cotizacionList[i].usuario_nombre + '</td>' +
                         //ToString("dd/MM/yyyy")
                         '<td>' + invertirFormatoFecha(cotizacionList[i].fecha.substr(0, 10)) + '</td>' +
+
+
                         '<td>' + creadoPara + '</td>' +
                         '<td>' + clienteRazonSocial + '</td>' +
                         //'<td>' + clienteRUC + '</td>' +
                         '<td>' + grupo + '</td>' +
-                        '<td>' + cotizacionList[i].ciudad.nombre + '</td>' +
+                        '<td>' + cotizacionList[i].ciudad_nombre + '</td>' +
                         '<td>' + Number(cotizacionList[i].montoSubTotal).toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + Number(cotizacionList[i].montoIGV).toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + Number(cotizacionList[i].montoTotal).toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + Number(cotizacionList[i].maximoPorcentajeDescuentoPermitido).toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + Number(cotizacionList[i].minimoMargen).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + cotizacionList[i].seguimientoCotizacion.estadoString + '</td>' +
-                        '<td>' + cotizacionList[i].seguimientoCotizacion.usuario.nombre + '</td>' +
+                        '<td>' + cotizacionList[i].seguimientoCotizacion_estadoString + '</td>' +
+                        '<td>' + cotizacionList[i].seguimientoCotizacion_usuario_nombre + '</td>' +
                         '<td>' + observacion + '</td>' +
                         '<td><button type="button" class="' + cotizacionList[i].codigo + ' btnVerCotizacion btn btn-primary ">Ver</button></td></tr>';
                     //ToString("dd/MM/yyyy")
-                    $("#tableCotizaciones").append(cotizacion);
-                    /*+
-                        '<td>' + cotizacionList[i].idCotizacion + '</td>' +
-                        '<td>' + cotizacionList[i].codigo + '</td>' +
-                        '<td>' + cotizacionList[i].usuario.nombre + '</td>' +
-                    
-                        '<td>' + cotizacionList[i].fecha + '</td>' +
-                        '<td>' + cotizacionList[i].cliente.razonSocial + '</td>' +
-                        '<td>' + cotizacionList[i].cliente.ruc + '</td>' +
-                        '<td>' + cotizacionList[i].ciudad.nombre + '</td>' +
-                        '<td>' + cotizacionList[i].montoSubTotal + '</td>' +
-                        '<td>' + cotizacionList[i].montoIGV + '</td>' +
-                        '<td>' + cotizacionList[i].montoTotal + '</td>' +
-                        '<td>' + cotizacionList[i].maximoPorcentajeDescuentoPermitido + '</td>' +
-                        '<td>' + cotizacionList[i].seguimientoCotizacion.estadoString + '</td>' +
-                        '<td>' + cotizacionList[i].seguimientoCotizacion.usuario.nombre + '</td>' +
-                        '<td>asas</td>' +
-                        '<td><button type="button" class="' + cotizacionList[i].codigo + ' btnVerCotizacion btn btn-primary ">Ver</button></td></tr>');
-                    */
-                    }
+                    $("#tableCotizaciones").append(cotizacion);                  
+                }
 
                 if (cotizacionList.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
@@ -3426,8 +3434,8 @@ jQuery(function ($) {
                     $("#msgBusquedaSinResultados").show();
                     $("#divExportButton").hide();
                 }
-               
-              //  location.reload();
+
+                //  location.reload();
             }
         });
     });

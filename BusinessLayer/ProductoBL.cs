@@ -9,14 +9,14 @@ namespace BusinessLayer
 {
     public class ProductoBL
     {
-        public String getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia)
+        public String getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null)
         {
 
 
             List<Producto> productoList = new List<Producto>();
             using (var dal = new ProductoDAL())
             {
-                productoList = dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados, proveedor, familia);
+                productoList = dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados, proveedor, familia, tipoPedido);
             }
 
 

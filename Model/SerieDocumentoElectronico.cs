@@ -12,6 +12,9 @@ namespace Model
         [Display(Name = "Serie:")]
         public String serie { get; set; }
 
+
+        public int serieFormatInt { get { return int.Parse(serie); } }
+
         [Display(Name = "Número:")]
         public int siguienteNumeroBoleta { get; set; }
 
