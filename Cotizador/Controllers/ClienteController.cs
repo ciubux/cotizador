@@ -247,7 +247,7 @@ namespace Cotizador.Controllers
             {
                 ViewBag.esRuc = true;
             }
-
+            ViewBag.pagina = (int)Constantes.paginas.MantenimientoCliente;
             ViewBag.cliente = cliente;
             ViewBag.gruposCliente = grupoClienteList;
             return View();
@@ -309,7 +309,12 @@ namespace Cotizador.Controllers
             Cliente cliente = clienteBl.getCliente(idCliente);
             cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(idCliente);
-            String resultado = "{\"cliente\":" + JsonConvert.SerializeObject(cliente) + ", \"precios\":" + JsonConvert.SerializeObject(listaPrecios) + "}";
+            DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
+            List<DireccionEntrega> direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
+
+            String resultado = "{\"cliente\":" + JsonConvert.SerializeObject(cliente) + ", \"precios\":" + JsonConvert.SerializeObject(listaPrecios) + 
+                        ", \"direccionEntregaList\":" + JsonConvert.SerializeObject(direccionEntregaList) + "}";
+
             this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = cliente;
             return resultado;
         }

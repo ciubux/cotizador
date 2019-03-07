@@ -122,11 +122,11 @@
             </div>
 
 
-            <div class="col-sm-12 col-lg-8">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <div class="col-xs-1">
+                    <div class="col-xs-2">
                     </div>
-                    <div class="col-xs-11">
+                    <div class="col-xs-10">
                         <div class="row">
                             @if (cliente.sinPlazoCreditoAprobado)
                             {
@@ -160,6 +160,61 @@
                             }
                             <label for="sinAsesorValidado" class="control-label">Solo con asesor pendiente de validación</label>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <div class="col-xs-4">
+                        <label class="control-label">Canales:</label>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="row">
+                            @if (cliente.perteneceCanalLima)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalLima" id="cliente_CanalLima" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_perteneceCanalLima" id="cliente_CanalLima" value="1">
+                            }
+                            <label for="cliente_perteneceCanalLima" class="control-label">Lima</label>
+                        </div>
+                        <div class="row">
+                            @if (cliente.perteneceCanalProvincias)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalProvincias" id="cliente_CanalProvincias" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_perteneceCanalProvincias" id="cliente_CanalProvincias" value="1">
+                            }
+                            <label for="cliente_perteneceCanalProvincias" class="control-label">Provincias</label>
+                        </div>
+                        <div class="row">
+                            @if (cliente.perteneceCanalMultiregional)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalMultiregional" id="cliente_CanalMultireginal" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_perteneceCanalMultiregional" id="cliente_CanalMultireginal" value="1">
+                            }
+                            <label for="cliente_perteneceCanalMultiregional" class="control-label">Multiregional</label>
+                        </div>
+                        <div class="row">
+                            @if (cliente.perteneceCanalPCP)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalPCP" id="cliente_CanalPCP" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_perteneceCanalPCP" id="cliente_CanalPCP" value="1">
+                            }
+                            <label for="cliente_perteneceCanalPCP" class="control-label">PCP</label>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -313,6 +368,7 @@
                         <li><a data-toggle="tab" id="showClientePagos" href="#cliente_crediticia">Información Crediticia</a></li>
                         <li><a data-toggle="tab" id="showClientePrecios" href="#cliente_precios">Productos y Precios</a></li>
                         <li><a data-toggle="tab" id="showInformacionComercial" href="#cliente_comercial">Gestion Comercial</a></li>
+                        <li><a data-toggle="tab" id="showDireccionesEntrega" href="#cliente_direccionesEntrega">Direcciones Entrega</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -509,8 +565,6 @@
                             </fieldset>
                         </div>
 
-
-
                         <div id="cliente_crediticia" class="tab-pane fade">
                             <div class="row">
                                 <div class="col-sm-6 col-lg-4">
@@ -613,9 +667,6 @@
                             </div>
 
                         </div>
-
-
-
 
                         <div id="cliente_comercial" class="tab-pane fade">
                             <fieldset>
@@ -775,6 +826,31 @@
                                             <th data-name="porcentajeMargen" class="porcentajeMargen" data-sortable="false" data-breakpoints="xs sm">Margen</th>
                                         }
                                         <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div id="cliente_direccionesEntrega" class="tab-pane fade">           
+
+                            <table id="tableListaDireccionesEntrega" class="table" data-editing="false"
+                                   data-editing-allow-add="false"
+                                   data-editing-allow-delete="false"
+                                   data-editing-allow-edit="false"
+                                   data-show-toggle="false">
+                                <thead>
+                                    <tr>
+                                        <th data-name="idDireccionEntrega" data-visible="false"></th>
+                                        <th data-name="departamento" data-sortable="false">Departamento</th>
+                                        <th data-name="provincia" data-sortable="false">Provincia</th>
+                                        <th data-name="distrito" data-sortable="false">Distrito</th>
+                                        <th data-name="direccionEntrega" data-sortable="false">Dirección Entrega</th>
+                                        <th data-name="contacto" data-sortable="false" data-breakpoints="xs">Nombre Contacto</th>
+                                        <th data-name="telefono" data-sortable="false">Telefono Contacto</th>
+                                        <th data-name="codigoCliente" data-sortable="false">Código Cliente</th>
+                                        <th data-name="nombre" data-sortable="false">Nombre</th>
+                                        <th data-name="codigoMP" data-sortable="false" data-breakpoints="xs">Código MP</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

@@ -179,6 +179,7 @@ namespace DataLayer
 
             foreach (DataRow row in dataTableCliente.Rows)
             {
+                cliente.IdUsuarioRegistro = Converter.GetGuid(row, "usuario_creacion");
                 cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 cliente.codigo = Converter.GetString(row, "codigo");
                 cliente.razonSocial = Converter.GetString(row, "razon_social");

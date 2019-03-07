@@ -1687,20 +1687,22 @@ jQuery(function ($) {
         var idCiudad = $("#idCiudad").val();
         var textCiudad = $("#idCiudad option:selected").text();
 
-        if (textCiudad.trim().toUpperCase() == 'LIMA') {
-            $('#cliente_CanalLima').prop('checked', true);
-            $('#cliente_CanalProvincias').prop('checked', false);
+        if ($("#pagina").val() == PAGINA_MantenimientoCliente) {            
 
-            changeInputBoolean('perteneceCanalLima', 1);
-            changeInputBoolean('perteneceCanalProvincias', 0);
-        } else {
-            $('#cliente_CanalProvincias').prop('checked', true);
-            $('#cliente_CanalLima').prop('checked', false);
+            if (textCiudad.trim().toUpperCase() == 'LIMA') {
+                $('#cliente_CanalLima').prop('checked', true);
+                $('#cliente_CanalProvincias').prop('checked', false);
 
-            changeInputBoolean('perteneceCanalLima', 0);
-            changeInputBoolean('perteneceCanalProvincias', 1);
+                changeInputBoolean('perteneceCanalLima', 1);
+                changeInputBoolean('perteneceCanalProvincias', 0);
+            } else {
+                $('#cliente_CanalProvincias').prop('checked', true);
+                $('#cliente_CanalLima').prop('checked', false);
+
+                changeInputBoolean('perteneceCanalLima', 0);
+                changeInputBoolean('perteneceCanalProvincias', 1);
+            }
         }
-
 
         $("#spn_vercliente_mp_registracotizaciones").html($("#idCiudad option:selected").text());
 
@@ -1892,11 +1894,12 @@ jQuery(function ($) {
 
     $("#cliente_CanalProvincias").change(function () {
         var valor = 1;
-        if (!$('#cliente_CanalProvincia').prop('checked')) {
+        if (!$('#cliente_CanalProvincias').prop('checked')) {
             valor = 0;
         }
         changeInputBoolean('perteneceCanalProvincias', valor)
     });
+
 
     $("#cliente_CanalPCP").change(function () {
         var valor = 1;
@@ -2273,6 +2276,11 @@ jQuery(function ($) {
 
              //   $("#btnEditarCliente").show();
 
+                /**
+                 * PRECIOS
+                 */
+
+
                 var preciosList = result.precios;
                 var margenText = "";
                 var canastaText = "";
@@ -2347,8 +2355,55 @@ jQuery(function ($) {
                 }
                 FooTable.init('#tableListaPrecios');
 
+
                 $("#chkSoloCanasta").prop("checked", false);
                 $("#lblChkCanasta").addClass("text-muted");
+
+
+                /**
+                 * DIRECCIONES
+                 */
+
+                $("#tableListaDireccionesEntrega > tbody").empty();
+                var direccionEntregaList = result.direccionEntregaList;
+                for (var i = 0; i < direccionEntregaList.length; i++) {
+                    var contacto = direccionEntregaList[i].contacto == null ? "" : direccionEntregaList[i].contacto;
+                    var telefono = direccionEntregaList[i].telefono == null ? "" : direccionEntregaList[i].telefono;
+                    var codigoCliente = direccionEntregaList[i].codigoCliente == null ? "" : direccionEntregaList[i].codigoCliente;
+                    var nombre = direccionEntregaList[i].nombre == null ? "" : direccionEntregaList[i].nombre;
+                    var codigoMP = direccionEntregaList[i].codigoMP == null ? "" : direccionEntregaList[i].codigoMP;
+                    var departamento = direccionEntregaList[i].ubigeo.Departamento == null ? "" : direccionEntregaList[i].ubigeo.Departamento;
+                    var provincia = direccionEntregaList[i].ubigeo.Provincia == null ? "" : direccionEntregaList[i].ubigeo.Provincia;
+                    var distrito = direccionEntregaList[i].ubigeo.Distrito == null ? "" : direccionEntregaList[i].ubigeo.Distrito;
+
+                    var direccionEntregaRow = '<tr data-expanded="true">' +
+                        '<td>  ' + direccionEntregaList[i].idDireccionEntrega + '</td>' +
+                        '<td>  ' + departamento + '  </td>' +
+                        '<td>  ' + provincia + '  </td>' +
+                        '<td>  ' + distrito + '  </td>' +
+                        '<td>  ' + direccionEntregaList[i].descripcion + '  </td>' +
+                        '<td>  ' + contacto + '  </td>' +
+                        '<td>  ' + telefono + '  </td>' +
+                        '<td>  ' + codigoCliente + '  </td>' +
+                        '<td>  ' + nombre + '  </td>' +
+                        '<td>  ' + codigoMP + '  </td>' +
+                        '</tr>';
+
+                    $("#tableListaDireccionesEntrega").append(direccionEntregaRow);
+
+                }
+
+                FooTable.init('#tableListaDireccionesEntrega');
+
+
+
+
+
+
+
+
+
+
                 
                  //<td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
                     

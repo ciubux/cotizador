@@ -14,3 +14,5 @@ Nombre del parámetro: index
 2019-03-07 09:12:15.7531|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Error getting value from 'modificaCanasta' on 'Model.Cliente'.
 2019-03-07 09:14:20.5973|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Error getting value from 'modificaCanasta' on 'Model.Cliente'.
 2019-03-07 09:15:40.7355|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Error getting value from 'modificaCanasta' on 'Model.Cliente'.
+2019-03-07 17:12:40.0435|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (43996872, 15526227-2108-4113-b46a-1c8ab5c0e581, 1).
+The statement has been terminated.

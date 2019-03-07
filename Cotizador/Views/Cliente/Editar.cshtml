@@ -605,12 +605,26 @@
                         <div class="form-group">
                             @Html.LabelFor(c => cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
                             <div class="col-xs-8">
-                                @Html.Action("GetResponsablesComerciales", "Vendedor",
-                                              new
-                                              {
-                                                  vendedorSelectId = "idResponsableComercial",
-                                                  selectedValue = cliente.responsableComercial.idVendedor,
-                                              })
+                                @if (cliente.usuario.modificaResponsableComercial || (cliente.IdUsuarioRegistro == cliente.usuario.idUsuario && cliente.responsableComercial.idVendedor == Model.Constantes.ID_VENDEDOR_POR_ASIGNAR))
+                                {
+                                            @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                            new
+                                            {
+                                                vendedorSelectId = "idResponsableComercial",
+                                                selectedValue = cliente.responsableComercial.idVendedor
+                                            })
+                                }
+                                else
+                                {
+                                     @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                            new
+                                            {
+                                                vendedorSelectId = "idResponsableComercial",
+                                                selectedValue = cliente.responsableComercial.idVendedor,
+                                                disabled = "disabled"
+                                            })
+
+                                }
 
                             </div>
                         </div>
@@ -844,7 +858,8 @@
                 </fieldset>
             }
 
-
+            @if (cliente.usuario.asignaSubdistribuidor)
+            {
                 <fieldset>
                     <legend>SubDistribución:</legend>
 
@@ -870,17 +885,17 @@
                                 @Html.LabelFor(c => cliente.subDistribuidor, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4", @for = "idSubDistribuidor" })
                                 <div class="col-xs-8 col-sm-8 col-lg-8">
                                     @Html.Action("GetSubDistribuidores", "SubDistribuidor",
-                                            new
-                                            {
-                                                subDistribuidorSelectId = "idSubDistribuidor",
-                                                selectedValue = cliente.subDistribuidor.idSubDistribuidor,
-                                            })
+                             new
+                             {
+                                 subDistribuidorSelectId = "idSubDistribuidor",
+                                 selectedValue = cliente.subDistribuidor.idSubDistribuidor,
+                             })
                                 </div>
                             </div>
                         </div>
                     </div>
                 </fieldset>
-            
+            }
         </fieldset>
 
         <div class="row">

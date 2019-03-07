@@ -143,6 +143,7 @@ namespace Model
         public bool modificaMaestroClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_CLIENTES)).FirstOrDefault() != null; } }
         public bool bloqueaClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.BLOQUEA_CLIENTES)).FirstOrDefault() != null; } }
         public bool modificaCanales { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_CANALES)).FirstOrDefault() != null; } }
+        public bool asignaSubdistribuidor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ASIGNA_SUBDISTRIBUIDOR)).FirstOrDefault() != null; } }
         public bool modificaNegociacionMultiregional { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_NEGOCIACION_MULTIREGIONAL)).FirstOrDefault() != null; } }
         public bool apruebaPlazoCredito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.DEFINE_PLAZO_CREDITO)).FirstOrDefault() != null; } }
         public bool apruebaMontoCredito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.DEFINE_MONTO_CREDITO)).FirstOrDefault() != null; } }
