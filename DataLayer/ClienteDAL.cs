@@ -195,6 +195,7 @@ namespace DataLayer
                 cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
                 cliente.estadoContribuyente = Converter.GetString(row, "estado_contribuyente_sunat");
                 cliente.condicionContribuyente = Converter.GetString(row, "condicion_contribuyente_sunat");
+                cliente.IdUsuarioRegistro = Converter.GetGuid(row, "usuario_creacion");
 
                 cliente.ubigeo = new Ubigeo();
                 cliente.ubigeo.Id = Converter.GetString(row, "codigo_ubigeo");
