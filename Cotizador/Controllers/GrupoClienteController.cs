@@ -230,6 +230,7 @@ namespace Cotizador.Controllers
 
             Guid idCliente = Guid.Parse(this.Request.Params["idCliente"]);
             int idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            int heredaPrecios = int.Parse(this.Request.Params["heredaPrecios"]);
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -257,6 +258,7 @@ namespace Cotizador.Controllers
 
                 cliente.grupoCliente = grupoCliente;
                 cliente.usuario = usuario;
+                cliente.habilitadoNegociacionGrupal = heredaPrecios == 1 ? true : false;
                 clienteBl.updateClienteSunat(cliente);
 
                 grupoCliente.miembros.Add(cliente);
@@ -283,6 +285,7 @@ namespace Cotizador.Controllers
             bool existe = false;
             string ruc = this.Request.Params["ruc"].ToString();
             int idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            int heredaPrecios = int.Parse(this.Request.Params["heredaPrecios"]);
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -318,6 +321,7 @@ namespace Cotizador.Controllers
                 {
                     cli.grupoCliente = grupoCliente;
                     cli.usuario = usuario;
+                    cli.habilitadoNegociacionGrupal = heredaPrecios == 1 ? true : false;
                     clienteBl.updateClienteSunat(cli);
                     cli.grupoCliente = null;
                     grupoCliente.miembros.Add(cli);

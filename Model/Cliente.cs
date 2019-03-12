@@ -245,28 +245,52 @@ namespace Model
         {
             get
             {
-                int access = 0;
-                if (this.usuario != null) access = this.usuario.modificaCanastaCliente ? 1 : 0;
+                if (this.usuario == null) return 0;
 
-                if (access == 0)
+                return this.usuario.modificaCanastaCliente || this.isOwner ? 1 : 0;
+            }
+        }
+
+        public int modificaGrupo
+        {
+            get
+            {
+                if (this.usuario == null) return 0;
+
+                return this.usuario.modificaMiembrosGrupoCliente || this.isOwner ? 1 : 0;
+            }
+        }
+
+        public bool isOwner
+        {
+            get
+            {
+                if (this.usuario == null) return false;
+
+                if (this.asistenteServicioCliente != null && this.asistenteServicioCliente.usuario != null && this.asistenteServicioCliente.usuario.idUsuario == this.usuario.idUsuario)
                 {
-                    if (this.asistenteServicioCliente != null && this.asistenteServicioCliente.usuario != null &&  this.asistenteServicioCliente.usuario.idUsuario == this.usuario.idUsuario)
-                    {
-                        access = 1;
-                    }
-
-                    if (this.responsableComercial != null && this.responsableComercial.usuario != null && this.responsableComercial.usuario.idUsuario == this.usuario.idUsuario)
-                    {
-                        access = 1;
-                    }
-
-                    if (this.supervisorComercial != null && this.supervisorComercial.usuario != null && this.supervisorComercial.usuario.idUsuario == this.usuario.idUsuario)
-                    {
-                        access = 1;
-                    }
+                    return true;
                 }
 
-                return access;
+                if (this.responsableComercial != null && this.responsableComercial.usuario != null && this.responsableComercial.usuario.idUsuario == this.usuario.idUsuario)
+                {
+                    return true;
+                }
+
+                if (this.supervisorComercial != null && this.supervisorComercial.usuario != null && this.supervisorComercial.usuario.idUsuario == this.usuario.idUsuario)
+                {
+                    return true;
+                }
+
+                if (this.IdUsuarioRegistro == this.usuario.idUsuario
+                    && (this.asistenteServicioCliente == null || this.asistenteServicioCliente.usuario == null)
+                    && (this.responsableComercial == null || this.responsableComercial.usuario == null)
+                    && (this.supervisorComercial == null || this.supervisorComercial.usuario == null))
+                {
+                    return true;
+                }
+
+                return false;
             }
         }
     }

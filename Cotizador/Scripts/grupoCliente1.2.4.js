@@ -1731,6 +1731,10 @@ jQuery(function ($) {
 
         var idCliente = $("#idCliente").val();
         var idGrupoCliente = $("#idGrupoCliente").val();
+        var heredaPrecios = 0;
+        if ($("#cliente_habilitadoNegociacionGrupal").is(":checked")) {
+            heredaPrecios = 1;
+        }
 
         if (idCliente == "") {
             $.alert({
@@ -1745,11 +1749,16 @@ jQuery(function ($) {
             return;
         }
 
+        $('body').loadingModal({
+            text: 'Agregando Cliente'
+        });
+
         $.ajax({
             url: "/GrupoCliente/AddCliente",
             type: 'POST',
             data: {
                 idCliente: idCliente,
+                heredaPrecios: heredaPrecios,
                 idGrupoCliente: idGrupoCliente
             },
             type: 'POST',
@@ -1792,6 +1801,10 @@ jQuery(function ($) {
                         }
                     });
                 }
+                $('body').loadingModal('hide');
+            },
+            error: function () {
+                $('body').loadingModal('hide');
             }
         });
     });
@@ -1803,6 +1816,14 @@ jQuery(function ($) {
 
         var ruc = $("#rucCliente").val();
         var idGrupoCliente = $("#idGrupoCliente").val();
+        var heredaPrecios = 0;
+        if ($("#clientes_habilitadosNegociacionGrupal").is(":checked")) {
+            heredaPrecios = 1;
+        }
+        
+        $('body').loadingModal({
+            text: 'Agregando Clientes del RUC'
+        });
 
         if (ruc == "") {
             $.alert({
@@ -1822,6 +1843,7 @@ jQuery(function ($) {
             type: 'POST',
             data: {
                 ruc: ruc,
+                heredaPrecios: heredaPrecios,
                 idGrupoCliente: idGrupoCliente
             },
             type: 'POST',
@@ -1867,6 +1889,10 @@ jQuery(function ($) {
                         }
                     });
                 }
+                $('body').loadingModal('hide');
+            },
+            error: function () {
+                $('body').loadingModal('hide');
             }
         });
     });
