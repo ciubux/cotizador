@@ -28,6 +28,7 @@ namespace Model
         public static int DIAS_DESDE_BUSQUEDA = 10;
         public static int ID_VENDEDOR_POR_ASIGNAR = 43;
         public static int DIAS_MAX_COTIZACION_TRANSITORIA = 10;
+        public static Guid ID_SEDE_LIMA = Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581");
 
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
 

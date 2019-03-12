@@ -16,3 +16,7 @@ Nombre del parámetro: index
 2019-03-07 09:15:40.7355|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Error getting value from 'modificaCanasta' on 'Model.Cliente'.
 2019-03-07 17:12:40.0435|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (43996872, 15526227-2108-4113-b46a-1c8ab5c0e581, 1).
 The statement has been terminated.
+2019-03-08 17:56:14.0954|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Procedure or function 'pi_clienteAdjunto' expects parameter '@checksum', which was not supplied.
+2019-03-08 17:57:45.8083|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Procedure or function 'pi_clienteAdjunto' expects parameter '@checksum', which was not supplied.
+2019-03-11 18:08:23.4496|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / La conversión especificada no es válida.
+2019-03-11 18:08:34.4708|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / La conversión especificada no es válida.

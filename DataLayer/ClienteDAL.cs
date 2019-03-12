@@ -327,6 +327,7 @@ namespace DataLayer
                 clienteAdjunto.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
                 clienteAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
                 clienteAdjunto.nombre = Converter.GetString(row, "nombre");
+                clienteAdjunto.checksum = Converter.GetLong(row, "checksum");
                 cliente.clienteAdjuntoList.Add(clienteAdjunto);
             }          
 
@@ -748,11 +749,10 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", clienteAdjunto.idCliente);
             InputParameterAdd.Varchar(objCommand, "nombre", clienteAdjunto.nombre);
             InputParameterAdd.VarBinary(objCommand, "adjunto", clienteAdjunto.adjunto);
-
             InputParameterAdd.Guid(objCommand, "idUsuario", clienteAdjunto.usuario.idUsuario);
+            InputParameterAdd.BigInt(objCommand, "checksum", clienteAdjunto.checksum);
             OutputParameterAdd.UniqueIdentifier(objCommand, "idArchivoAdjunto");
             ExecuteNonQuery(objCommand);
-
             clienteAdjunto.idArchivoAdjunto = (Guid)objCommand.Parameters["@idArchivoAdjunto"].Value;
         }
 
