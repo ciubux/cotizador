@@ -556,6 +556,57 @@ namespace Cotizador.Controllers
         }
 
         [HttpPost]
+        public String UpdateMiembro()
+        {
+            int success = 0;
+            string message = "";
+            ClienteBL clienteBl = new ClienteBL();
+            GrupoClienteBL bl = new GrupoClienteBL();
+
+
+            Guid idCliente = Guid.Parse(this.Request.Params["idCliente"]);
+            int idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            int heredaPrecios = int.Parse(this.Request.Params["heredaPrecios"]);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaMiembrosGrupoCliente)
+            {
+                return "";
+            }
+
+
+            GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
+            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
+
+            foreach (Cliente cli in grupoCliente.miembros)
+            {
+                if (cli.idCliente == idCliente)
+                {
+                    success = 1;
+                }
+            }
+
+            Cliente cliente = null;
+            if (success == 1)
+            {
+                cliente = clienteBl.getCliente(idCliente);
+
+                cliente.usuario = usuario;
+                cliente.habilitadoNegociacionGrupal = heredaPrecios == 1 ? true : false;
+                clienteBl.updateClienteSunat(cliente);
+                
+                message = "Se actualizó el cliente.";
+            } else
+            {
+                message = "El cliente no es miembro del grupo.";
+            }
+            String clienteJson = JsonConvert.SerializeObject(cliente);
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\", \"cliente\":" + clienteJson + "}";
+        }
+
+        [HttpPost]
         public String AgregarProductoACanasta()
         {
             int success = 1;

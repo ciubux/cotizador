@@ -1765,6 +1765,10 @@ jQuery(function ($) {
             dataType: 'JSON',
             success: function (resultado) {
                 if (resultado.success == 1) {
+                    var checkedHeredaPrecios = "";
+                    if (heredaPrecios == 1) {
+                        checkedHeredaPrecios = "checked";
+                    }
                     var cliente = resultado.cliente;
                     var clienteRow = '<tr data-expanded="true">' +
                         '<td>  ' + cliente.idCliente + '</td>' +
@@ -1774,6 +1778,7 @@ jQuery(function ($) {
                         '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + cliente.ruc + '  </td>' +
                         '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+                        '<td>  <input type="checkbox" class="chkMiembroHeredaPrecios' + checkedHeredaPrecios + ' value="1"> </td>' + 
                         '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                         '</tr>';
 
@@ -1850,6 +1855,11 @@ jQuery(function ($) {
             dataType: 'JSON',
             success: function (resultado) {
                 if (resultado.success == 1) {
+                    var checkedHeredaPrecios = "";
+                    if (heredaPrecios == 1) {
+                        checkedHeredaPrecios = "checked";
+                    }
+
                     var list = resultado.agregados;
                     for (var i = 0; i < list.length; i++) {
                         cliente = list[i];
@@ -1861,6 +1871,7 @@ jQuery(function ($) {
                             '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                             '<td>  ' + cliente.ruc + '  </td>' +
                             '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+                            '<td>  <input type="checkbox" class="chkMiembroHeredaPrecios' + checkedHeredaPrecios + ' value="1"> </td>' + 
                             '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                             '</tr>';
 
@@ -1897,6 +1908,61 @@ jQuery(function ($) {
         });
     });
 
+
+    $("body").on('change', ".chkMiembroHeredaPrecios", function () {
+        //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+
+        var idCliente = $(this).closest("tr").attr("idCliente");
+        var idGrupoCliente = $("#idGrupoCliente").val();
+        var heredaPrecios = 0;
+        if ($(this).is(":checked")) {
+            heredaPrecios = 1;
+        }
+        
+        $('body').loadingModal({
+            text: 'Editanto Hereda Precios Grupo'
+        });
+
+        $.ajax({
+            url: "/GrupoCliente/UpdateMiembro",
+            type: 'POST',
+            data: {
+                idCliente: idCliente,
+                heredaPrecios: heredaPrecios,
+                idGrupoCliente: idGrupoCliente
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+
+                }
+                else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+                $('body').loadingModal('hide');
+            },
+            error: function () {
+                $('body').loadingModal('hide');
+            }
+        });
+    });
 
     $("body").on('click', ".btnQuitarClienteGrupo", function () {
         //  desactivarBotonesVer();

@@ -110,9 +110,12 @@ namespace Cotizador
 
             bundles.Add(new ScriptBundle("~/bundles/confirm").Include(
                     "~/Scripts/jquery-confirm.js"
-                    ));          
+                    ));
 
 
+            bundles.Add(new ScriptBundle("~/bundles/alertaValidacion").Include(
+                     "~/Scripts/AlertaValidacion1.0.0.js"
+                     ));
 
             //"~/Scripts/jquery-{version}.js"
 

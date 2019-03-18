@@ -1,5 +1,8 @@
 ﻿@{
-    TempData["ScriptVersion"] = "200";
+    TempData["ScriptVersion"] = "208";
+
+    var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
+    int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
 }
 
 <!DOCTYPE html>
@@ -141,7 +144,7 @@
 
                             case 38: linkAsignacionPermisos = "ative"; linkMaestros = "active"; break;
                         }
-                        var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
+                        
 
 
 
@@ -348,6 +351,14 @@
         </div>
     </div>
     <div class="container body-content">
+        @if (usuario != null && usuario.alertasList != null && usuario.alertasList.Count > 0) {
+        <a href="@Url.Action("Pendientes", "Validacion")" style="text-decoration: none;">
+            <div class="alert alert-warning">
+                Tienes @usuario.alertasList.Count.ToString() cambios por validar
+            </div>
+        </a>
+        
+        }
         <p></p>
         @RenderBody()
         <hr />

@@ -447,7 +447,9 @@ namespace DataLayer
                 }
             }
 
-          
+
+            AlertaValidacionDAL alertaDal = new AlertaValidacionDAL();
+            usuario.alertasList = alertaDal.getAlertasPorUsuario(usuario);
 
 
             return usuario;

@@ -97,5 +97,46 @@ namespace Model
         public List<GrupoClienteAdjunto> grupoClienteAdjuntoList { get; set; }
 
         public List<Cliente> miembros { get; set; }
+
+
+        public int modificaMiembros
+        {
+            get
+            {
+                if (this.usuario == null) return 0;
+
+                return this.usuario.modificaMiembrosGrupoCliente || this.isOwner ? 1 : 0;
+            }
+        }
+
+        public bool isOwner
+        {
+            get
+            {
+                if (this.usuario == null) return false;
+
+                foreach(Cliente miembro in miembros)
+                {
+                    if(miembro.ciudad.idCiudad == this.ciudad.idCiudad)
+                    {
+                        miembro.usuario = this.usuario;
+                        if (miembro.isOwner)
+                        {
+                            return true;
+                        }
+
+                        if (this.IdUsuarioRegistro == this.usuario.idUsuario
+                            && (miembro.asistenteServicioCliente == null || miembro.asistenteServicioCliente.usuario == null)
+                            && (miembro.responsableComercial == null || miembro.responsableComercial.usuario == null)
+                            && (miembro.supervisorComercial == null || miembro.supervisorComercial.usuario == null))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                
+                return false;
+            }
+        }
     }
 }

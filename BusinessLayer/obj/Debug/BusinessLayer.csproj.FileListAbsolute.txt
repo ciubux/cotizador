@@ -180,3 +180,5 @@ C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.c
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.pdb
+D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.dll
+D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.xml

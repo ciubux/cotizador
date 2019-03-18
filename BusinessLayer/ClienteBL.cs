@@ -397,10 +397,43 @@ namespace BusinessLayer
                     cliente.sedePrincipal = false;
                 }
                 
+                Cliente clientePrev = clienteDAL.getCliente(cliente.idCliente);
 
                 cliente = clienteDAL.updateClienteSunat(cliente);
+                
+                if ((cliente.usuario == null || !cliente.usuario.modificaMiembrosGrupoCliente) && cliente.grupoCliente.idGrupoCliente != clientePrev.grupoCliente.idGrupoCliente)
+                {
+                    AlertaValidacion alerta = new AlertaValidacion();
+                    alerta.idRegistro = cliente.idCliente.ToString();
+                    alerta.nombreTabla = "CLIENTE";
+                    alerta.Estado = 0;
+                    alerta.UsuarioCreacion = cliente.usuario;
+                    alerta.IdUsuarioCreacion = cliente.usuario.idUsuario;
+                    alerta.tipo = AlertaValidacion.CAMBIA_GRUPO_CLIENTE;
+                    alerta.data = new DataAlertaValidacion();
 
-               
+                    if (clientePrev.grupoCliente.idGrupoCliente != 0)
+                    {
+                        alerta.data.PrevData = clientePrev.grupoCliente.codigoNombre;
+                    } else {
+                        alerta.data.PrevData = "Sin grupo asignado";
+                    }
+
+                    if (cliente.grupoCliente.idGrupoCliente != 0)
+                    {
+                        alerta.data.PostData = cliente.grupoCliente.codigoNombre;
+                    }
+                    else
+                    {
+                        alerta.data.PostData = "Sin grupo asignado";
+                    }
+
+                    alerta.data.ObjData = cliente.codigoRazonSocial;
+
+                    AlertaValidacionDAL alertaDal = new AlertaValidacionDAL();
+                    alertaDal.insertAlertaValidacion(alerta);
+                }
+            
                 /*Si existen cambios en la solicitud o aprobacion de créditos*/
                 if (cliente.existenCambiosCreditos)
                 {
