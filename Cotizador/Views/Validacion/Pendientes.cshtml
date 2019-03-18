@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Validaciones de cambios pendientes";
+    List<Model.AlertaValidacion> alertas = ViewBag.alertas;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <form class="form-horizontal">
+        <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+            <button id="btnActualizarPagina" type="button" class="btn btn-primary ">Actualizar Lista</button>
+        </div>
+
+        <table id="tableValidaciones" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                data-editing-allow-add="false"
+                data-editing-allow-delete="false"
+                data-editing-allow-edit="false"
+                data-sorting="true"
+                data-show-toggle="false">
+            <thead>
+                <tr>
+                    <th data-name="codigo" data-visible="true">Descripcion</th>
+                    <th data-name="fechaCreacion" data-visible="true">Fecha</th>
+                    <th data-name="usuario" data-visible="true">Usuario</th>
+                    <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(Model.AlertaValidacion obj in alertas)
+                {
+                <tr idAlertaValidacion="@obj.IdAlertaValidacion">
+                    <td>@obj.CambioDesc</td>
+                    <td>@obj.FechaCreacionDesc </td>
+                    <td>@obj.UsuarioCreacion.nombre </td>
+                    <td>
+                        <button type="button" class="btn btn-primary btnValidarAlerta" >Validar</button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/alertaValidacion")
+}
