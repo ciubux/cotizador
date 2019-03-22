@@ -109,11 +109,36 @@ namespace Model
             }
         }
 
+        public int modificaCanasta
+        {
+            get
+            {
+                if (this.usuario == null) return 0;
+
+                return this.usuario.modificaCanastaGrupoCliente || this.isOwner ? 1 : 0;
+            }
+        }
+
+        public int editaGrupo
+        {
+            get
+            {
+                if (this.usuario == null) return 0;
+
+                return this.usuario.modificaGrupoClientes || this.isOwner ? 1 : 0;
+            }
+        }
+
         public bool isOwner
         {
             get
             {
                 if (this.usuario == null) return false;
+
+                if (this.IdUsuarioRegistro == usuario.idUsuario)
+                {
+                    return true;
+                }
 
                 foreach(Cliente miembro in miembros)
                 {
@@ -134,7 +159,7 @@ namespace Model
                         }
                     }
                 }
-                
+
                 return false;
             }
         }

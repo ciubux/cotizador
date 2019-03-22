@@ -1410,6 +1410,10 @@ jQuery(function ($) {
     
 
     var idGrupoClienteView = "";
+    var editGrupoCliente = 0;
+    var editaMiembros = 0;
+
+
     $(document).on('click', "button.btnVerGrupoCliente", function () {
         $('body').loadingModal({
             text: 'Abriendo Grupo Cliente...'
@@ -1461,7 +1465,12 @@ jQuery(function ($) {
                 var margenText = "";
                 var canastaText = "";
                 var disabledCanasta = "";
-                var editaCliente = parseInt($("#tableListaPrecios th.listaPreciosCanasta").attr("hasEdit"));
+
+                disabledCanasta = "";
+
+                if (obj.modificaCanasta != 1) {
+                    disabledCanasta = "disabled";
+                }
 
                 $("#tableListaPrecios > tbody").empty();
                 for (var i = 0; i < preciosList.length; i++) {
@@ -1489,12 +1498,7 @@ jQuery(function ($) {
                     }
 
                     canastaText = "";
-                    disabledCanasta = "";
-
-                    if (editaCliente != 1) {
-                        disabledCanasta = "disabled";
-                    }
-
+                    
                     if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
                         canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanasta + '>  </td>';
                     }
@@ -1530,6 +1534,22 @@ jQuery(function ($) {
                 }
                 else {
                     $("#msgPreciosSinResultados").show();
+                }
+                
+                if (obj.editaGrupo != 1) {
+                    editGrupoCliente = 0;
+                    $("#btnEditarGrupoCliente").hide();
+                } else {
+                    editGrupoCliente = 1;
+                    $("#btnEditarGrupoCliente").show();
+                }
+                
+                if (obj.modificaMiembros != 1) {
+                    editaMiembros = 0;
+                    $("#btnMiembrosGrupoCliente").hide();
+                } else {
+                    editaMiembros = 1;
+                    $("#btnMiembrosGrupoCliente").show();
                 }
 
                 FooTable.init('#tableListaPrecios');
@@ -1671,7 +1691,9 @@ jQuery(function ($) {
             if ($("#showGrupoMiembros").closest("li").hasClass("active") || $("#showGrupoPrecio").closest("li").hasClass("active")) {
                 $("#btnEditarGrupoCliente").hide();
             } else {
-                $("#btnEditarGrupoCliente").show();
+                if (editGrupoCliente == 1) {
+                    $("#btnEditarGrupoCliente").show();
+                }
             }
         }, 500);
     });
@@ -1680,7 +1702,9 @@ jQuery(function ($) {
         setTimeout(function () {
             if ($("#showInformacionComercial").closest("li").hasClass("active")
                 || $("#showGrupoPagos").closest("li").hasClass("active")) {
-                $("#btnEditarGrupoCliente").show();
+                if (editGrupoCliente == 1) {
+                    $("#btnEditarGrupoCliente").show();
+                }
             } 
         }, 500);
     });

@@ -68,7 +68,7 @@ namespace Model
 
         public bool esCliente { get; set; }
 
-
+        public bool esVendedor { get; set; }
 
 
         /// <summary>

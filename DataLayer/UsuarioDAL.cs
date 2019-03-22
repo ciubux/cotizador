@@ -412,6 +412,11 @@ namespace DataLayer
                     vendedor.usuario = new Usuario();
                     vendedor.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
                     vendedorList.Add(vendedor);
+
+                    if (vendedor.usuario.idUsuario == usuario.idUsuario)
+                    {
+                        usuario.esVendedor = true;
+                    }
                 }
                 usuario.vendedorList = vendedorList;
                 

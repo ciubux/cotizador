@@ -65,11 +65,18 @@ namespace Model
                 {
                     return "Se cambio el Grupo del cliente \"" + this.data.ObjData + "\" de \"" + this.data.PrevData + "\" por \"" + this.data.PostData + "\" ";
                 }
+
+                if (this.tipo == AlertaValidacion.CREA_GRUPO_CLIENTE)
+                {
+                    return "Se creó el Grupo Cliente \"" + this.data.ObjData + "\" ";
+                }
                 return "";
             }
             
         }
 
+
         public static String CAMBIA_GRUPO_CLIENTE = "CAMBIA_GRUPO_CLIENTE";
+        public static String CREA_GRUPO_CLIENTE = "CREA_GRUPO_CLIENTE";
     }
 }

@@ -288,3 +288,43 @@ UPDATE ALERTA_VALIDACION
 END
 
 
+
+/* **** 8 **** */
+ALTER PROCEDURE [dbo].[ps_grupoCliente]
+@idGrupoCliente int
+AS
+BEGIN
+
+
+	SELECT 
+	  gc.id_grupo_cliente
+      ,gc.codigo
+      ,gc.grupo
+      ,gc.codigo_negociacion_compra
+      ,gc.id_responsable_comercial
+      ,gc.canal
+      ,gc.fecha_resgistro
+      ,gc.observaciones
+      ,gc.estado
+      ,gc.contacto
+      ,gc.plazo_credito_solicitado
+      ,gc.plazo_credito_aprobado
+      ,gc.id_ciudad
+      ,gc.telefono_contacto
+      ,gc.email_contacto
+      ,gc.credito_solicitado
+      ,gc.credito_aprobado
+      ,gc.sobre_giro
+      ,gc.sobre_plazo
+      ,gc.observaciones_credito
+	  ,gc.usuario_creacion
+	  ,ci.id_ciudad
+	  ,ci.nombre as ciudad_nombre
+	   FROM GRUPO_CLIENTE gc
+	   left join CIUDAD ci on ci.id_ciudad = gc.id_ciudad
+
+	where gc.id_grupo_cliente = @idGrupoCliente;
+
+END
+
+
