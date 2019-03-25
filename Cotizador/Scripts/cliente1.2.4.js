@@ -9,8 +9,10 @@ jQuery(function ($) {
     $(document).ready(function () {
         $("#btnBusqueda").click();
         //cargarChosenCliente();
+        verificiarSiFechaVentasEsModificada();
         mostrarCamposSegunTipoDocIdentidad();
         verificarSiExisteCliente();
+ 
 
         $('.timepicker').timepicker({
             timeFormat: 'HH:mm ',
@@ -25,8 +27,56 @@ jQuery(function ($) {
                 $(this).change();
             }
         });
-        
+
     });
+
+    var fechaDesde = $("#fechaVentasDesdetmp").val();
+    $("#fechaVentasDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaDesde);
+
+
+    function verificiarSiFechaVentasEsModificada() {
+        if ($('#chkFechaVentasEsModificada').prop('checked')) {
+            $("#fechaVentasDesde").removeAttr("disabled");
+        }
+        else {
+            $("#fechaVentasDesde").attr('disabled', 'disabled');
+        }
+    }
+
+    $('#chkFechaVentasEsModificada').change(function () {
+        var fechaEsModificada = 1;
+        if ($('#chkFechaVentasEsModificada').prop('checked')) {
+            $("#fechaVentasDesde").removeAttr("disabled");
+
+            //$("#fechaVentasDesde").datepicker().datepicker("setDate", new Date());
+        }
+        else {
+            $("#fechaVentasDesde").attr('disabled', 'disabled');
+            $("#fechaVentasDesde").val("");
+            fechaEsModificada = 0;
+        }
+        $("#fechaVentasDesde").change();
+        changeInputBoolean("fechaVentasEsModificada", fechaEsModificada)
+    });
+
+    $('#fechaVentasDesde').change(function () {
+        changeInputDate("fechaVentasDesde", $("#fechaVentasDesde").val())
+    });
+
+    function changeInputDate(propiedad, valor) {
+        $.ajax({
+            url: "/Cliente/ChangeInputDate",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+
+
 
     function verificarSiExisteCliente() {
         if ($("#idCliente").val().trim() != GUID_EMPTY) {
@@ -435,8 +485,10 @@ jQuery(function ($) {
         });
       
     });
-    
- 
+
+
+
+ /*
     $(window).on("paste", function (e) {
         
             $.each(e.originalEvent.clipboardData.items, function () {
@@ -481,15 +533,14 @@ jQuery(function ($) {
 
                         changeInputString("estadoContribuyente", $("#cliente_estadoContribuyente").val())
                         changeInputString("condicionContribuyente", $("#cliente_condicionContribuyente").val())
-                 /*   }
-                    else {
-                        alert("El RUC que acaba de pegar no coincide con el RUC del cliente.");
-                    }*/
+                
                 });
             });
 
             
     });
+    */
+
 
 
     function validacionDatosCliente()
@@ -2375,7 +2426,7 @@ jQuery(function ($) {
                     var departamento = direccionEntregaList[i].ubigeo.Departamento == null ? "" : direccionEntregaList[i].ubigeo.Departamento;
                     var provincia = direccionEntregaList[i].ubigeo.Provincia == null ? "" : direccionEntregaList[i].ubigeo.Provincia;
                     var distrito = direccionEntregaList[i].ubigeo.Distrito == null ? "" : direccionEntregaList[i].ubigeo.Distrito;
-
+                    var direccionDomicilioLegal = direccionEntregaList[i].direccionDomicilioLegal == null ? "" : direccionEntregaList[i].direccionDomicilioLegal;
                     var direccionEntregaRow = '<tr data-expanded="true">' +
                         '<td>  ' + direccionEntregaList[i].idDireccionEntrega + '</td>' +
                         '<td>  ' + departamento + '  </td>' +
@@ -2387,6 +2438,7 @@ jQuery(function ($) {
                         '<td>  ' + codigoCliente + '  </td>' +
                         '<td>  ' + nombre + '  </td>' +
                         '<td>  ' + codigoMP + '  </td>' +
+                        '<td>' + direccionDomicilioLegal + '  </td>' +
                         '</tr>';
 
                     $("#tableListaDireccionesEntrega").append(direccionEntregaRow);
@@ -2680,6 +2732,10 @@ jQuery(function ($) {
 
         }
     });*/
+
+    $("#cliente_sku").change(function () {
+        changeInputString("sku", $("#cliente_sku").val())
+    });
 
 
     $('input:file[multiple]').change(function (e) {       

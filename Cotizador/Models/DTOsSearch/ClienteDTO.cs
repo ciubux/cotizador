@@ -32,7 +32,10 @@ namespace Cotizador.Models.DTOs
 
         public decimal creditoAprobado{ get; set; }
         public bool bloqueado { get; set; }
-        
+
+        public bool vendedoresAsignados { get; set; }
+
+
 
 
 

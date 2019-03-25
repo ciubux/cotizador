@@ -1740,6 +1740,46 @@ COMMIT
 
 
 
+USE [cotizadormp]
+GO
+/****** Object:  StoredProcedure [dbo].[ps_clientes]    Script Date: 12/03/2019 12:10:38 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+ALTER PROCEDURE [dbo].[ps_clientes] 
+@codigo varchar(4),
+@idCiudad uniqueIdentifier,
+@textoBusqueda varchar(50),
+@idResponsableComercial int,
+@idSupervisorComercial int,
+@idAsistenteServicioCliente int,
+@sinPlazoCreditoAprobado int, 
+@sinAsesorValidado int, 
+@bloqueado int,
+@idGrupoCliente int, 
+@perteneceCanalLima int,
+@perteneceCanalProvincias int,
+@perteneceCanalMultiregional int,
+@perteneceCanalPCP int
+AS
+BEGIN
+
+IF @codigo IS NULL OR @codigo = ''
+BEGIN
+	SELECT 
+	cl.id_cliente, 
+	cl.codigo,
+	cl.sede_principal, 
+	cl.negociacion_multiregional, 
+	cl.pertenece_canal_multiregional,
+	cl.pertenece_canal_lima,
+	cl.pertenece_canal_provincia,
+	cl.pertenece_canal_pcp,
+	cl.pertenece_canal_ordon,
+	cl.es_sub_distribuidor,
 
 
 
@@ -1747,4 +1787,166 @@ COMMIT
 
 
 
+	ci.id_ciudad,
+	ci.nombre as ciudad_nombre, 
+	
+	CASE cl.tipo_documento WHEN 6 
+		THEN ISNULL(cl.razon_social_sunat,cl.razon_social)
+	ELSE '' END razon_social_sunat,
+
+
+	CASE cl.tipo_documento WHEN 1 
+		THEN cl.razon_social
+	WHEN 4
+		THEN cl.razon_social
+	ELSE ISNULL(cl.nombre_comercial,'')  END nombre_comercial,
+	
+
+	cl.tipo_documento, 
+	cl.ruc,
+		--VENDEDORES,
+	verc.codigo as responsable_comercial_codigo,
+	ISNULL(verc.descripcion,'') as responsable_comercial_descripcion,
+
+	vesc.codigo as supervisor_comercial_codigo,
+	ISNULL(vesc.descripcion,'') as supervisor_comercial_descripcion,
+
+	veasc.codigo as asistente_servicio_cliente_codigo,
+	ISNULL(veasc.descripcion,'') as asistente_servicio_cliente_descripcion,
+
+	cl.habilitado_negociacion_grupal,
+
+	cl.id_subdistribuidor,
+	sub.nombre nombre_subdistribuidor, 
+	sub.codigo codigo_subdistribuidor, 
+	cl.id_origen,
+	ori.nombre nombre_origen, 
+	ori.codigo codigo_origen, 
+
+
+	cl.tipo_pago_factura, --plazo credito aprobado
+	cl.credito_aprobado,
+	cl.bloqueado,
+	cgc.id_grupo_cliente,
+	gc.codigo as codigo_grupo,
+	ISNULL(gc.grupo,'-') grupo
+	FROM CLIENTE AS cl
+	INNER JOIN CIUDAD AS ci ON cl.id_ciudad = ci.id_ciudad 
+	--LEFT JOIN UBIGEO AS ub ON cl.ubigeo = ub.codigo
+	LEFT JOIN VENDEDOR AS verc ON cl.id_responsable_comercial = verc.id_vendedor
+	LEFT JOIN VENDEDOR AS vesc ON cl.id_supervisor_comercial = vesc.id_vendedor
+	LEFT JOIN VENDEDOR AS veasc ON cl.id_asistente_servicio_cliente = veasc.id_vendedor
+	LEFT JOIN CLIENTE_GRUPO_CLIENTE  AS cgc ON cl.id_cliente = cgc.id_cliente
+	LEFT JOIN GRUPO_CLIENTE AS gc ON gc.id_grupo_cliente = cgc.id_grupo_cliente
+	LEFT JOIN SUBDISTRIBUIDOR AS sub ON sub.id_subdistribuidor = cl.id_subdistribuidor 
+	LEFT JOIN ORIGEN AS ori ON ori.id_origen = cl.id_origen 
+
+
+	WHERE 
+	(
+	(REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(cl.nombre_comercial, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  LIKE '%'+@textoBusqueda+'%' OR
+	cl.ruc LIKE '%'+@textoBusqueda+'%' OR
+	REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(cl.razon_social, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  LIKE '%'+@textoBusqueda+'%'
+	OR REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(cl.razon_social_sunat, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  LIKE '%'+@textoBusqueda+'%'
+	)
+	OR @textoBusqueda IS NULL
+	OR @textoBusqueda = ''
+	)
+	AND (cl.id_responsable_comercial = @idResponsableComercial OR @idResponsableComercial = 0)
+	AND (cl.id_supervisor_comercial = @idSupervisorComercial OR @idSupervisorComercial = 0)
+	AND (cl.id_asistente_servicio_cliente = @idAsistenteServicioCliente OR @idAsistenteServicioCliente = 0)
+	AND (cl.bloqueado = 1 OR @bloqueado = 0 )
+	AND (@sinAsesorValidado = 0 OR cl.vendedores_asignados = 0) 
+	AND cl.estado > 0
+
+	AND (cl.id_ciudad = @idCiudad OR @idCiudad = '00000000-0000-0000-0000-000000000000')
+	AND (@idGrupoCliente = 0 OR @idGrupoCliente = cgc.id_grupo_cliente)
+	AND (@sinPlazoCreditoAprobado = 0 OR 
+	(@sinPlazoCreditoAprobado = 1 AND cl.tipo_pago_factura IS NULL	) OR 
+	(@sinPlazoCreditoAprobado = 1 AND cl.tipo_pago_factura = 0	))
+	AND (
+	(pertenece_canal_lima = @perteneceCanalLima)
+	OR (pertenece_canal_provincia = @perteneceCanalProvincias )
+	OR (pertenece_canal_multiregional = @perteneceCanalMultiregional)
+	OR (pertenece_canal_pcp = @perteneceCanalPCP  )
+	OR (@perteneceCanalLima = 1 AND @perteneceCanalProvincias = 1 AND @perteneceCanalMultiregional = 1  AND @perteneceCanalPCP =1)
+	)
+
+	/*
+AND (cl.id_cliente IN (SELECT id_cliente FROM VENTA where estado = 1) 
+	or CAST(cl.fecha_creacion AS DATE) >= '2018-09-01' OR cl.id_cliente 
+	IN ( '9C9E1FFD-A7D0-4628-B4B6-3292C8C42246', '8B7894B2-202E-4958-9967-0CA4B82FC85E')
+
+	)*/
+
+END
+ELSE
+BEGIN 
+
+	SELECT 
+	cl.id_cliente, 
+	cl.codigo,
+	ci.id_ciudad,
+	cl.sede_principal, 
+	cl.negociacion_multiregional, 
+	cl.pertenece_canal_multiregional,
+	cl.pertenece_canal_lima,
+	cl.pertenece_canal_provincia,
+	cl.pertenece_canal_pcp,
+	cl.pertenece_canal_ordon,
+	cl.es_sub_distribuidor,
+
+
+
+
+
+
+
+
+	ci.nombre as ciudad_nombre, 
+	
+	CASE cl.tipo_documento WHEN 6 
+		THEN cl.razon_social_sunat
+		ELSE '' END razon_social_sunat,
+
+	CASE cl.tipo_documento WHEN 1 
+		THEN cl.razon_social
+	WHEN 4
+		THEN cl.razon_social
+	ELSE ISNULL(cl.nombre_comercial,'')  END nombre_comercial,
+	
+	cl.tipo_documento, 
+	cl.ruc,
+		--VENDEDORES,
+	verc.codigo as responsable_comercial_codigo,
+	ISNULL(verc.descripcion,'') as responsable_comercial_descripcion,
+
+	vesc.codigo as supervisor_comercial_codigo,
+	ISNULL(vesc.descripcion,'') as supervisor_comercial_descripcion,
+
+	veasc.codigo as asistente_servicio_cliente_codigo,
+	ISNULL(veasc.descripcion,'') as asistente_servicio_cliente_descripcion,
+
+	cl.tipo_pago_factura, --plazo credito aprobado
+	cl.credito_aprobado,
+	cl.bloqueado,
+	cgc.id_grupo_cliente,
+	ISNULL(gc.grupo,'-') grupo,
+	gc.codigo as codigo_grupo
+	FROM CLIENTE AS cl
+	INNER JOIN CIUDAD AS ci ON cl.id_ciudad = ci.id_ciudad 
+	--LEFT JOIN UBIGEO AS ub ON cl.ubigeo = ub.codigo
+	LEFT JOIN VENDEDOR AS verc ON cl.id_responsable_comercial = verc.id_vendedor
+	LEFT JOIN VENDEDOR AS vesc ON cl.id_supervisor_comercial = vesc.id_vendedor
+	LEFT JOIN VENDEDOR AS veasc ON cl.id_asistente_servicio_cliente = veasc.id_vendedor
+	LEFT JOIN CLIENTE_GRUPO_CLIENTE  AS cgc ON cl.id_cliente = cgc.id_cliente
+	LEFT JOIN GRUPO_CLIENTE AS gc ON gc.id_grupo_cliente = cgc.id_grupo_cliente
+	WHERE cl.codigo = @codigo AND cl.estado > 0
+	/*AND (cl.id_cliente IN (SELECT id_cliente FROM VENTA where estado = 1) 
+	or CAST(cl.fecha_creacion AS DATE) >= '2018-09-01'  OR cl.id_cliente = '9C9E1FFD-A7D0-4628-B4B6-3292C8C42246'
+	)*/
+END
+
+
+END
 

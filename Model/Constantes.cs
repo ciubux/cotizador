@@ -127,6 +127,11 @@ namespace Model
         public static String VAR_SESSION_VENTA_LISTA = "ventaList";
         public static String VAR_SESSION_VENTA_VER = "ventaVer";
 
+        public static String VAR_SESSION_COMPRA = "compra";
+        public static String VAR_SESSION_COMPRA_BUSQUEDA = "compraBusqueda";
+        public static String VAR_SESSION_COMPRA_LISTA = "compraList";
+        public static String VAR_SESSION_COMPRA_VER = "compraVer";
+
         public static String VAR_SESSION_FACTURA = "factura";
         public static String VAR_SESSION_FACTURA_BUSQUEDA = "facturaBusqueda";
         public static String VAR_SESSION_FACTURA_LISTA = "facturaList";
@@ -147,6 +152,27 @@ namespace Model
         public static String VAR_SESSION_NOTA_DEBITO_LISTA = "notaDebitoList";
         public static String VAR_SESSION_NOTA_DEBITO_VER = "notaDebitoVer";
 
+        public static String VAR_SESSION_FACTURA_COMPRA = "facturaCompra";
+        public static String VAR_SESSION_FACTURA_COMPRA_BUSQUEDA = "facturaCompraBusqueda";
+        public static String VAR_SESSION_FACTURA_COMPRA_LISTA = "facturaCompraList";
+        public static String VAR_SESSION_FACTURA_COMPRA_VER = "facturaCompraVer";
+
+        public static String VAR_SESSION_BOLETA_COMPRA = "boletaCompra";
+        public static String VAR_SESSION_BOLETA_COMPRA_BUSQUEDA = "boletaCompraBusqueda";
+        public static String VAR_SESSION_BOLETA_COMPRA_LISTA = "boletaCompraList";
+        public static String VAR_SESSION_BOLETA_COMPRA_VER = "boletaCompraVer";
+
+        public static String VAR_SESSION_NOTA_CREDITO_COMPRA = "notaCreditoCompra";
+        public static String VAR_SESSION_NOTA_CREDITO_COMPRA_BUSQUEDA = "notaCreditoCompraBusqueda";
+        public static String VAR_SESSION_NOTA_CREDITO_COMPRA_LISTA = "notaCreditoCompraList";
+        public static String VAR_SESSION_NOTA_CREDITO_COMPRA_VER = "notaCreditoCompraVer";
+
+        public static String VAR_SESSION_NOTA_DEBITO_COMPRA = "notaDebitoCompra";
+        public static String VAR_SESSION_NOTA_DEBITO_COMPRA_BUSQUEDA = "notaDebitoCompraBusqueda";
+        public static String VAR_SESSION_NOTA_DEBITO_COMPRA_LISTA = "notaDebitoCompraList";
+        public static String VAR_SESSION_NOTA_DEBITO_COMPRA_VER = "notaDebitoCompraVer";
+
+
         public static String VAR_SESSION_PAGINA = "pagina";
         
 
@@ -157,8 +183,6 @@ namespace Model
         public static String VAR_SESSION_CAMBIO_ASIGNACION_PERMISOS = "CambioAsignacionPermisos";
 
         public static Decimal VARIACION_PRECIO_ITEM_PEDIDO = 0.01M;
-
-
 
 
         public static String USER_EOL_TEST = "";
@@ -251,6 +275,7 @@ namespace Model
         public const String ADMINISTRA_GUIAS_LIMA = "P007";
         public const String ADMINISTRA_GUIAS_PROVINCIAS = "P008";
         public const String CREA_DOCUMENTOS_VENTA = "P009";
+        public const String CREA_DOCUMENTOS_COMPRA = "P009";
         public const String ADMINISTRA_DOCUMENTOS_VENTA_LIMA = "P010";
         public const String ADMINISTRA_DOCUMENTOS_VENTA_PROVINCIAS = "P011";
         public const String CREA_COTIZACIONES_PROVINCIAS = "P012";

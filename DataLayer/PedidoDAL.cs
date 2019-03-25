@@ -617,6 +617,7 @@ namespace DataLayer
             InputParameterAdd.Char(objCommand, "tipo", ((char)pedido.clasePedido).ToString());
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
+            InputParameterAdd.Varchar(objCommand, "sku", pedido.sku);
             DataTable dataTable = Execute(objCommand);
 
             List<Pedido> pedidoList = new List<Pedido>();
@@ -1160,7 +1161,7 @@ namespace DataLayer
                 pedido.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
                 pedido.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
                 pedido.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
-
+                pedido.cliente.habilitadoModificarDireccionEntrega = Converter.GetBool(row, "habilitado_modificar_direccion_entrega");
 
 
                 pedido.ciudad = new Ciudad();

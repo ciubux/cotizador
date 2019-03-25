@@ -37,6 +37,7 @@ namespace Cotizador.Models.DTOshow
         public String motivoExtornoGuiaRemisionToString { get; set; }
         public String sustentoExtorno { get; set; }
         public String usuario_nombre { get; set; }
+        public Model.NotaIngreso.motivosTraslado motivoTraslado { get; set; }
         public bool estaFacturado { get; set; }
         public List<Model.DocumentoDetalle> documentoDetalle { get; set; }
 

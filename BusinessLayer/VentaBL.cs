@@ -13,24 +13,10 @@ namespace BusinessLayer
 
         public void UpdateVenta(Venta venta)
         {
-
-
-            if (venta.guiaRemision.fechaEmision >= new DateTime(2019, 1, 1, 0, 0, 0))
+            using (var dal = new VentaDAL())
             {
-                using (var dal = new VentaDAL())
-                {
-                    dal.UpdateVenta(venta);
-                }
-            }
-            else {
-
-                /*using (var dal = new VentaDAL())
-                {
-                    dal.UpdateVenta(venta);
-                }*/
-
-                throw new Exception("No se puede editar una venta de un periodo anterior.");
-            }
+                dal.UpdateVenta(venta);
+            }           
         }
 
         public void InsertTransaccionNotaCredito(Transaccion transaccion)
@@ -187,7 +173,7 @@ namespace BusinessLayer
         }
 
 
-        public void procesarVenta(Venta venta)
+        public void procesarVenta(Transaccion venta)
         {
             foreach (PedidoDetalle pedidoDetalle in venta.pedido.pedidoDetalleList)
             {

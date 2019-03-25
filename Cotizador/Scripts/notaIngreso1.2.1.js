@@ -395,6 +395,10 @@ jQuery(function ($) {
         });
     }
 
+    $("#notaIngreso_sku").change(function () {
+        changeInputString("sku", $("#notaIngreso_sku").val())
+    });
+
 
     $("#notaIngreso_serieGuiaReferencia").change(function () {
         changeInputString("serieGuiaReferencia", $("#notaIngreso_serieGuiaReferencia").val())
@@ -809,10 +813,11 @@ jQuery(function ($) {
                 $("#ver_notaIngreso_fechaTraslado").html(invertirFormatoFecha(notaIngreso.fechaTraslado.substr(0, 10)));
                 $("#ver_notaIngreso_fechaEmision").html(invertirFormatoFecha(notaIngreso.fechaEmision.substr(0, 10)));
                 $("#ver_notaIngreso_serieNumeroDocumento").html(notaIngreso.serieNumeroNotaIngreso);
-                /*
+
+                
                 $("#facturarver_notaIngreso_fechaTraslado").html(invertirFormatoFecha(notaIngreso.fechaTraslado.substr(0, 10)));
                 $("#facturarver_notaIngreso_fechaEmision").html(invertirFormatoFecha(notaIngreso.fechaEmision.substr(0, 10)));
-                $("#facturarver_notaIngreso_serieNumeroDocumento").html(notaIngreso.serieNumeroGuia);*/
+                $("#facturarver_notaIngreso_serieNumeroDocumento").html(notaIngreso.serieNumeroNotaIngreso);
 
 
                 //   $("#ver_notaIngreso_numeroDocumento").html(guiaRemision.numeroDocumentoString);
@@ -840,6 +845,7 @@ jQuery(function ($) {
                     $("#btnAnularNotaIngreso").hide();
                     $("#btnExtornar").hide();
                     $("#btnImprimirNotaIngreso").hide();
+                    $("#btnFacturarNotaIngreso").hide();
                 }
                 else {
                     $("#ver_notaIngreso_estadoDescripcion").attr("style", "color:black")
@@ -854,6 +860,7 @@ jQuery(function ($) {
 
                         $("#fieldsetTipoExtorno").hide();
                         $("#btnVerGuiasRemisionExtornantes").hide();
+                        $("#btnFacturarNotaIngreso").show();
                     }
                     /*Si la nota de ingreso ha sido extornada parcialmente, se puede extornar para culminar con el extorno, no se puede anular y tampoco facturar*/
                     else {
@@ -869,6 +876,7 @@ jQuery(function ($) {
                         else {
                             $("#btnExtornar").hide();
                         }
+                          $("#btnFacturarNotaIngreso").hide();
                     }
 
 
@@ -968,7 +976,12 @@ jQuery(function ($) {
                       }
             
                   */
-
+                if (notaIngreso.motivoTraslado != MOTIVO_TRASLADO_ENTRADA_COMPRA.charCodeAt(0)
+                    && notaIngreso.motivoTraslado != MOTIVO_TRASLADO_ENTRADA_TRANSFERENCIA_GRATUITA.charCodeAt(0)
+                ) {
+                 //   alert(notaIngreso.motivoTraslado)
+                    $("#btnFacturarNotaIngreso").hide();
+                }
 
 
                 $("#modalVerNotaIngreso").modal('show');
@@ -1072,207 +1085,6 @@ jQuery(function ($) {
     }
 
    
-
-
-    $("#btnFacturarGuiaRemision").click(function () {
-
-        var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
-        $.ajax({
-            url: "/Venta/Show",
-            data: {
-                idMovimientoAlmacen: idMovimientoAlmacen
-            },
-            type: 'POST',
-            dataType: 'JSON',
-            error: function (detalle) {
-                mostrarMensajeErrorProceso();
-            },
-            success: function (resultado) {
-                //var cotizacion = $.parseJSON(respuesta);
-
-                var venta = resultado.venta;
-                var pedido = resultado.venta.pedido;
-                var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
-
-                //  var usuario = resultado.usuario;
-
-
-                $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
-                $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
-                $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
-                //Important
-
-                $("#idPedido").val(pedido.idPedido);
-
-                $("#verNumero").html(pedido.numeroPedidoString);
-                $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
-                $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
-                $("#verTipoPedido").html(pedido.tiposPedidoString);
-
-                $("#verUsuarioNombre").html(pedido.usuario.nombre);
-                $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
-
-                if (pedido.tipoPedido == "84") {
-                    $("#divReferenciaCliente").hide();
-                    $("#divCiudadSolicitante").show();
-                    $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
-                }
-                else {
-                    $("#divReferenciaCliente").show();
-                    $("#divCiudadSolicitante").hide();
-                }
-
-
-                $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
-
-                $("#verCiudad").html(pedido.ciudad.nombre);
-                $("#idClienteFacturacion").val(pedido.cliente.idCliente);
-                $("#verCliente").html(pedido.cliente.razonSocial);
-                $("#verClienteCodigo").html(pedido.cliente.codigo);
-                $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
-                $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
-                $("#verObservacionesPedido").html(pedido.observaciones);
-
-                $("#nombreArchivos > li").remove().end();
-
-
-                for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargarDesdeVenta">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
-                    $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                }    
-
-                
-
-
-                $("#verDireccionEntrega").html(pedido.direccionEntrega.descripcion);
-                $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
-                $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
-
-                $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
-
-                $("#verContactoPedido").html(pedido.contactoPedido);
-                $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
-
-                $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
-
-                $("#verEstado").html(pedido.seguimientoPedido.estadoString);
-                $("#verModificadoPor").html(pedido.seguimientoPedido.usuario.nombre);
-                $("#verObservacionEstado").html(pedido.seguimientoPedido.observacion);
-
-                $("#verEstadoCrediticio").html(pedido.seguimientoCrediticioPedido.estadoString);
-                $("#verModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido.usuario.nombre);
-                $("#verObservacionEstadoCreiditicio").html(pedido.seguimientoCrediticioPedido.observacion);
-
-
-                $("#verObservaciones").html(pedido.observaciones);
-                $("#verMontoSubTotal").html(Number(pedido.montoSubTotal).toFixed(cantidadDecimales));
-                $("#verMontoIGV").html(Number(pedido.montoIGV).toFixed(cantidadDecimales));
-                $("#verMontoTotal").html(Number(pedido.montoTotal).toFixed(cantidadDecimales));
-                $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
-
-                $("#verMontoSubTotalVenta").html(Number(venta.subTotal).toFixed(cantidadDecimales));
-                $("#verMontoIGVVenta").html(Number(venta.igv).toFixed(cantidadDecimales));
-                $("#verMontoTotalVenta").html(Number(venta.total).toFixed(cantidadDecimales));
-
-
-
-
-
-                $("#tableDetallePedido > tbody").empty();
-
-                FooTable.init('#tableDetallePedido');
-
-            //    $("#formVerGuiasRemision").html("");
-
-                var d = '';
-                var lista = pedido.pedidoDetalleList;
-                for (var i = 0; i < lista.length; i++) {
-
-                    var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
-
-                    d += '<tr>' +
-                        '<td>' + lista[i].producto.proveedor + '</td>' +
-                        '<td>' + lista[i].producto.sku + '</td>' +
-                        '<td>' + lista[i].producto.descripcion + '</td>' +
-                        '<td>' + lista[i].unidad + '</td>' +
-                        '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
-                        '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
-                        '<td>' + lista[i].precioNeto.toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
-                        '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
-           //             '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + lista[i].cantidad + '</td>' +
-                   //     '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
-                        '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
-                        '<td>' + observacion + '</td>' +
-                        '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
-
-
-                        '</tr>';
-
-
-
-                }
-
-
-
-
-                $("#verRazonSocialSunat").html(pedido.cliente.razonSocialSunat);
-                $("#verRUC").html(pedido.cliente.ruc);
-                $("#verDireccionDomicilioLegalSunat").html(pedido.cliente.direccionDomicilioLegalSunat);
-                $("#verCodigo").html(pedido.cliente.codigo);
-
-                $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
-                $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
-
-
-                $("#documentoVenta_fechaEmision").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
-                $("#documentoVenta_fechaVencimiento").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
-                $("#documentoVenta_horaEmision").val(getHoraActual());
-
-
-
-                $("#tipoPago").val(pedido.cliente.tipoPagoFactura);
-                calcularFechaVencimiento();
-                $("#formaPago").val(pedido.cliente.formaPagoFactura);
-
-
-
-                $('#documentoVenta_serie')
-                    .find('option')
-                    .remove()
-                    .end()
-                    ;
-
-                for (var i = 0; i < serieDocumentoElectronicoList.length; i++) {
-                    $('#documentoVenta_serie').append($('<option>', {
-                        value: serieDocumentoElectronicoList[i].serie,
-                        text: serieDocumentoElectronicoList[i].serie
-                    }));
-                }
-
-
-
-                
-
-
-
-
-                //  
-                // sleep
-                $("#tableDetallePedido").append(d);
-
-
-                $("#modalFacturar").modal('show');
-
-                //  window.location = '/Pedido/Index';
-            }
-        });
-
-
-    })
 
 
     $(document).on('click', "button.btnMostrarPrecios", function () {
@@ -1498,7 +1310,7 @@ jQuery(function ($) {
 
     $("#btnAceptarFacturarPedido").click(function () {
         if ($("#verRazonSocialSunat").html() == "") {
-            alert("No se han obtenido los datos del cliente desde SUNAT.");
+            alert("No se han obtenido los datos del proveedor desde SUNAT.");
             return false;
         }
 
@@ -1527,7 +1339,7 @@ jQuery(function ($) {
         }
 
 
-     if ($("#verNumeroReferenciaCliente").html().length > 20) {
+        if ($("#verNumeroReferenciaCliente").html().length > 20) {
             $("#numeroReferenciaCliente").focus();
             $.alert({
                 title: 'Validación',
@@ -1539,7 +1351,8 @@ jQuery(function ($) {
             return false;
         }  
 
-        var serie = $("#documentoVenta_serie").val();
+         var serie = $("#documentoVenta_serie").val();
+         var numero = $("#documentoVenta_numero").val();
         var fechaEmision = $("#documentoVenta_fechaEmision").val();
         var horaEmision = $("#documentoVenta_horaEmision").val();
         var fechaVencimiento = $("#documentoVenta_fechaVencimiento").val();
@@ -1547,14 +1360,11 @@ jQuery(function ($) {
         var tipoPago = $("#tipoPago").val();
         var formaPago = $("#formaPago").val();
         var numeroReferenciaCliente = $("#verNumeroReferenciaCliente").html(); 
-
-       
-
         desactivarBotonesFacturar();
         
 
         $('body').loadingModal({
-            text: 'Creando Factura...'
+            text: 'Registrando Factura...'
         });
 
 
@@ -1563,7 +1373,7 @@ jQuery(function ($) {
 
 
         $.ajax({
-            url: "/Factura/Create",
+            url: "/DocumentoCompra/Create",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -2851,6 +2661,223 @@ jQuery(function ($) {
 
     });
 
+
+
+    /*FACTURACION NOTA DE INGRESO*/
+
+    $("#btnFacturarNotaIngreso").click(function () {
+
+        var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
+        //alert(idMovimientoAlmacen);
+        $.ajax({
+            url: "/Compra/Show",
+            data: {
+                idMovimientoAlmacen: idMovimientoAlmacen
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso();
+            },
+            success: function (resultado) {
+                mostrarModalFacturar(resultado);
+            }
+        });
+
+    })
+
+
+
+    function mostrarModalFacturar(resultado) {
+        //var cotizacion = $.parseJSON(respuesta);
+   
+        var venta = resultado.compra;
+        var pedido = resultado.compra.pedido;
+        var guiaRemision = resultado.compra.notaIngreso;
+        var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
+
+        //  var usuario = resultado.usuario;
+
+
+        $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+        $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
+        $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+        //Important
+
+        $("#idPedido").val(pedido.idPedido);
+
+        $("#verNumero").html(pedido.numeroPedidoString);
+        $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
+        $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
+        $("#verTipoPedido").html(pedido.tiposPedidoCompraString);
+
+        $("#verUsuarioNombre").html(pedido.usuario.nombre);
+        $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
+
+
+
+        if (pedido.tipoPedidoCompra == "84") {
+            $("#divReferenciaCliente").hide();
+            $("#divCiudadSolicitante").show();
+            $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+        }
+        else {
+            $("#divReferenciaCliente").show();
+            $("#divCiudadSolicitante").hide();
+        }
+        
+        $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
+
+        $("#verCiudad").html(pedido.ciudad.nombre);
+        $("#idClienteFacturacion").val(pedido.cliente.idCliente);
+        $("#verCliente").html(pedido.cliente.razonSocial);
+        $("#verClienteCodigo").html(pedido.cliente.codigo);
+        $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
+        $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
+        $("#verObservacionesPedido").html(pedido.observaciones);
+
+        if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_RUC) {
+            $("#modalFacturarTitle").html("<b>Crear Factura</b>");
+            $("#descripcionDatosDocumento").html("<b>Datos de la Factura</b>");
+            $("#observacionesDocumento").html("Observaciones Factura:");
+            $("#btnAceptarFacturarPedido").html("Generar Factura");
+            $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_RUC);
+        }
+        else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_DNI) {
+            $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
+            $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
+            $("#observacionesDocumento").html("Observaciones Boleta:");
+            $("#btnAceptarFacturarPedido").html("Generar Boleta");
+            $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_DNI);
+        }
+        else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
+            $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
+            $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
+            $("#observacionesDocumento").html("Observaciones Boleta:");
+            $("#btnAceptarFacturarPedido").html("Generar Boleta");
+            $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA);
+        }
+
+
+        $("#nombreArchivos > li").remove().end();
+
+
+        for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
+            var liHTML = '<a href="javascript:mostrar();" class="descargarDesdeVenta">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
+            $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+        }
+        
+
+        $("#verDireccionEntrega").html(pedido.direccionEntrega.descripcion);
+        $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
+        $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
+
+        $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
+
+        $("#verContactoPedido").html(pedido.contactoPedido);
+        $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
+
+        $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
+
+        /*    $("#verEstado").html(pedido.seguimientoPedido.estadoString);
+            $("#verModificadoPor").html(pedido.seguimientoPedido.usuario.nombre);
+            $("#verObservacionEstado").html(pedido.seguimientoPedido.observacion);
+    
+            $("#verEstadoCrediticio").html(pedido.seguimientoCrediticioPedido.estadoString);
+            $("#verModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido.usuario.nombre);
+            $("#verObservacionEstadoCreiditicio").html(pedido.seguimientoCrediticioPedido.observacion);
+            *//*
+
+        $("#facturarver_guiaRemision_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10)));
+        $("#facturarver_guiaRemision_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
+        $("#facturarver_guiaRemision_serieNumeroDocumento").html(guiaRemision.serieNumeroGuia);*/
+
+        $("#verObservaciones").html(pedido.observaciones);
+        $("#verMontoSubTotal").html(Number(pedido.montoSubTotal).toFixed(cantidadDecimales));
+        $("#verMontoIGV").html(Number(pedido.montoIGV).toFixed(cantidadDecimales));
+        $("#verMontoTotal").html(Number(pedido.montoTotal).toFixed(cantidadDecimales));
+        $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
+
+        $("#verMontoSubTotalVenta").html(Number(venta.subTotal).toFixed(cantidadDecimales));
+        $("#verMontoIGVVenta").html(Number(venta.igv).toFixed(cantidadDecimales));
+        $("#verMontoTotalVenta").html(Number(venta.total).toFixed(cantidadDecimales));
+        
+
+
+
+        $("#tableDetallePedido > tbody").empty();
+
+        FooTable.init('#tableDetallePedido');
+
+        //    $("#formVerGuiasRemision").html("");
+
+        var d = '';
+        var lista = pedido.pedidoDetalleList;
+        for (var i = 0; i < lista.length; i++) {
+
+            var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+            d += '<tr>' +
+                '<td>' + lista[i].producto.proveedor + '</td>' +
+                '<td>' + lista[i].producto.sku + '</td>' +
+                '<td>' + lista[i].producto.descripcion + '</td>' +
+                '<td>' + lista[i].unidad + '</td>' +
+                '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
+                '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
+                '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
+                '<td>' + lista[i].precioNeto.toFixed(cantidadCuatroDecimales) + '</td>' +
+                '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
+                '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
+                //             '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
+                '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
+                '<td>' + lista[i].cantidad + '</td>' +
+                //     '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
+                '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
+                '<td>' + observacion + '</td>' +
+                '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
+                '</tr>';
+        }
+
+        $("#verRazonSocialSunat").html(pedido.cliente.razonSocialSunat);
+        $("#verRUC").html(pedido.cliente.ruc);
+        $("#verDireccionDomicilioLegalSunat").html(pedido.cliente.direccionDomicilioLegalSunat);
+        $("#verCodigo").html(pedido.cliente.codigo);
+
+        $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
+     
+
+        $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
+        var fecha = new Date();
+        var month = fecha.getMonth() + 1;
+        var day = fecha.getDate();
+
+        var fechaHoy = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + fecha.getFullYear();
+
+        //$("#documentoVenta_fechaEmision").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
+        $("#documentoVenta_fechaEmision").val(fechaHoy);
+        $("#documentoVenta_fechaVencimiento").val(invertirFormatoFecha(venta.notaIngreso.fechaEmision.substr(0, 10)));
+        $("#documentoVenta_horaEmision").val(getHoraActual());
+
+        $("#tipoPago").val(pedido.cliente.tipoPagoFactura);
+        //$("#tipoPago").attr("disabled", "disabled");
+        calcularFechaVencimiento();
+        $("#formaPago").val(pedido.cliente.formaPagoFactura);
+      /*  $('#documentoVenta_serie')
+            .find('option')
+            .remove()
+            .end()
+            ;
+
+        for (var i = 0; i < serieDocumentoElectronicoList.length; i++) {
+            $('#documentoVenta_serie').append($('<option>', {
+                value: serieDocumentoElectronicoList[i].serie,
+                text: serieDocumentoElectronicoList[i].serie
+            }));
+        }*/
+
+        $("#tableDetallePedido").append(d);
+        $("#modalFacturar").modal('show');
+    }
 
 
 

@@ -256,7 +256,9 @@ namespace DataLayer
                 cotizacion.cliente = new Cliente();
                 cotizacion.cliente.codigo = Converter.GetString(row, "codigo");
                 cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                
+                cotizacion.cliente.habilitadoModificarDireccionEntrega = Converter.GetBool(row, "habilitado_modificar_direccion_entrega");
+
+
                 cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
                 cotizacion.cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
@@ -429,6 +431,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaHasta", new DateTime(cotizacion.fechaHasta.Year, cotizacion.fechaHasta.Month, cotizacion.fechaHasta.Day, 23, 59, 59));
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
             InputParameterAdd.Bit(objCommand, "buscarSoloCotizacionesGrupales", cotizacion.buscarSoloCotizacionesGrupales);
+            InputParameterAdd.Varchar(objCommand, "sku", cotizacion.sku);
             DataTable dataTable = Execute(objCommand);
 
             List<Cotizacion> cotizacionList = new List<Cotizacion>();

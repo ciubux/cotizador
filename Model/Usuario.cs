@@ -118,6 +118,7 @@ namespace Model
 
         /*PERMISOS FACTURA ELECTRONICA*/
         public bool creaDocumentosVenta { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_DOCUMENTOS_VENTA)).FirstOrDefault() != null; } }
+        public bool creaDocumentosCompra { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_DOCUMENTOS_COMPRA)).FirstOrDefault() != null; } }
         public bool creaFacturaConsolidadaMultiregional { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_FACTURA_CONSOLIDADA_MULTIREGIONAL)).FirstOrDefault() != null; } }
         public bool visualizaGuiasPendienteFacturacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_GUIAS_PENDIENTES_FACTURACION)).FirstOrDefault() != null; } }
         public bool creaFacturaConsolidadaLocal { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_FACTURA_CONSOLIDADA_LOCAL)).FirstOrDefault() != null; } }
@@ -171,6 +172,8 @@ namespace Model
 
         /*Administra Permisos*/
         public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }
+
+        public bool modificaDireccionEntrega { get; set; }
 
     }
 }

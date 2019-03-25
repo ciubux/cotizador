@@ -13,6 +13,7 @@ namespace Cotizador.Models
         public string SelectedValue { get; set; }
 
         public List<Ubigeo> Data { get; set; }
+        public Boolean Disabled { get; set; }
 
         public IEnumerable<SelectListItem> Distritos
         {

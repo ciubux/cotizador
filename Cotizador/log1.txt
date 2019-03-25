@@ -20,3 +20,11 @@ The statement has been terminated.
 2019-03-08 17:57:45.8083|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Procedure or function 'pi_clienteAdjunto' expects parameter '@checksum', which was not supplied.
 2019-03-11 18:08:23.4496|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / La conversión especificada no es válida.
 2019-03-11 18:08:34.4708|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / La conversión especificada no es válida.
+2019-03-12 11:00:26.6103|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE_SUNAT' with unique index 'IDX_CLIENTE_SUNAT_RUC'. The duplicate key value is (<NULL>).
+The statement has been terminated.
+2019-03-12 11:09:46.5229|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Could not find stored procedure 'pu_usuarioPermiso'.
+2019-03-13 16:38:20.9961|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-03-13 16:42:12.1814|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-03-13 16:43:28.7627|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-03-13 16:43:46.8531|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-03-13 16:44:39.9858|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.

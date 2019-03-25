@@ -201,6 +201,7 @@ namespace Cotizador.Models.DTOsShow
             notaingresoDTOshow.usuario_nombre = notaIngreso.usuario.nombre;
             notaingresoDTOshow.estaFacturado = notaIngreso.estaFacturado;
             notaingresoDTOshow.documentoDetalle = notaIngreso.documentoDetalle;
+            notaingresoDTOshow.motivoTraslado = notaIngreso.motivoTraslado;
             return notaingresoDTOshow;
 
         }

@@ -74,6 +74,8 @@ namespace DataLayer
                 ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
                 ClienteResultado.ruc = Converter.GetString(row, "ruc");
 
+                ClienteResultado.habilitadoNegociacionGrupal = Converter.GetBool(row, "habilitado_negociacion_grupal");
+
 
                 list.Add(ClienteResultado);
             }
@@ -196,6 +198,7 @@ namespace DataLayer
                 cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
                 cliente.estadoContribuyente = Converter.GetString(row, "estado_contribuyente_sunat");
                 cliente.condicionContribuyente = Converter.GetString(row, "condicion_contribuyente_sunat");
+                cliente.IdUsuarioRegistro = Converter.GetGuid(row, "usuario_creacion");
 
                 cliente.ubigeo = new Ubigeo();
                 cliente.ubigeo.Id = Converter.GetString(row, "codigo_ubigeo");
@@ -222,7 +225,7 @@ namespace DataLayer
                 cliente.vendedoresAsignados = Converter.GetBool(row, "vendedores_asignados");
                 cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
                 //cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
-
+                cliente.habilitadoModificarDireccionEntrega = Converter.GetBool(row, "habilitado_modificar_direccion_entrega");
                 /* horarios entrega */
                 DateTime horaTmp = Converter.GetDateTime(row, "hora_inicio_primer_turno_entrega");
                 if (horaTmp != null && !horaTmp.ToString("HH:mm:ss").Equals("00:00:00"))
@@ -525,6 +528,14 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "sinAsesorValidado", cliente.vendedoresAsignados ? 1 : 0);
             InputParameterAdd.Int(objCommand, "bloqueado", cliente.bloqueado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
+            InputParameterAdd.Int(objCommand, "perteneceCanalLima", cliente.perteneceCanalLima?1:0);
+            InputParameterAdd.Int(objCommand, "perteneceCanalProvincias", cliente.perteneceCanalProvincias ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "perteneceCanalMultiregional", cliente.perteneceCanalMultiregional ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "perteneceCanalPCP", cliente.perteneceCanalPCP ? 1 : 0);
+            InputParameterAdd.Varchar(objCommand, "sku", cliente.sku);
+            if (cliente.fechaVentasDesde != null)
+                InputParameterAdd.DateTime(objCommand, "fechaVentasDesde", cliente.fechaVentasDesde.Value);
+
             DataTable dataTable = Execute(objCommand);
 
             List<Cliente> clienteList = new List<Cliente>();

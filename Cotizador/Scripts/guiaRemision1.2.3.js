@@ -386,6 +386,10 @@ jQuery(function ($) {
         });
     }
 
+    $("#guiaRemision_sku").change(function () {
+        changeInputString("sku", $("#guiaRemision_sku").val())
+    });
+
     $("#guiaRemision_placaVehiculo").change(function () {
         changeInputString("placaVehiculo", $("#guiaRemision_placaVehiculo").val())
     });

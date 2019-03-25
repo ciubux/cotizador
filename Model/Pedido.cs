@@ -550,5 +550,12 @@ namespace Model
 
         #endregion
 
+
+        /**
+         * Utilizado para búsqueda
+         */
+        [Display(Name = "SKU:")]
+        public String sku { get; set; }
+
     }
 }

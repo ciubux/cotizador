@@ -24,5 +24,10 @@ namespace Model
         public String nombre { get; set; }
         [Display(Name = "Observaciones:")]
         public String observaciones { get; set; }
+        public String direccionDomicilioLegal { get; set; }
+
+        public String direccionConSede { get {
+                return descripcion +" "+ (nombre == null ? "" : "(" + nombre+ (codigoCliente == null ? "" : "/" + codigoCliente )+ ")");
+            } }
     }
 }

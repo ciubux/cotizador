@@ -238,6 +238,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
+    <Compile Include="Controllers\DocumentoCompra.cs" />
     <Compile Include="Controllers\GrupoClienteController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
@@ -270,6 +271,7 @@
     <Compile Include="Controllers\UbigeoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\VendedorController.cs" />
+    <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="ExcelExport\FacturaSearch.cs" />
     <Compile Include="ExcelExport\NotaIngresoSearch.cs" />
@@ -556,6 +558,9 @@
     <Content Include="Views\Usuario\EditarPermisos.cshtml" />
     <Content Include="Views\Permiso\AsignarPermisos.cshtml" />
     <Content Include="Scripts\permiso1.0.0.js" />
+    <Content Include="Views\DocumentoCompra\Crear.cshtml" />
+    <Content Include="Views\DocumentoCompra\Index.cshtml" />
+    <Content Include="Views\DocumentoCompra\PreLoad.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

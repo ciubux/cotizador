@@ -929,7 +929,9 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
         changeInputString("observacionesGuiaRemision", $("#pedido_observacionesGuiaRemision").val())
     });
 
-
+    $("#pedido_sku").change(function () {
+        changeInputString("sku", $("#pedido_sku").val())
+    });
     
 
     $("#pedido_contactoPedido").change(function () {

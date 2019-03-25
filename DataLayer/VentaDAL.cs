@@ -19,7 +19,7 @@ namespace DataLayer
         {
         }
 
-        public void InsertTransaccionNotaCredito(Venta transaccionExtorno)
+        public void InsertTransaccionNotaCredito(Transaccion transaccionExtorno)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
             var objCommand = GetSqlCommand("pi_ventaNotaCredito");
@@ -109,7 +109,7 @@ namespace DataLayer
         }
 
 
-        public void InsertVentaDetalle(Venta venta)
+        public void InsertVentaDetalle(Transaccion venta)
         {
             foreach (PedidoDetalle documentoDetalle in venta.pedido.pedidoDetalleList)
             {

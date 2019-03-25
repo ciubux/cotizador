@@ -123,5 +123,11 @@ namespace Model
 
         public List<MovimientoAlmacen> movimientoAlmacenExtornanteList = new List<MovimientoAlmacen>();
 
+        /**
+         * Utilizado para búsqueda
+         */
+        [Display(Name = "SKU:")]
+        public String sku { get; set; }
+
     }
 }

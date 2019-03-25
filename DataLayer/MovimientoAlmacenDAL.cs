@@ -6,6 +6,7 @@ using System.Data;
 using Model;
 using System.Linq;
 using Model.EXCEPTION;
+using System.Data.SqlClient;
 
 namespace DataLayer
 {
@@ -19,10 +20,28 @@ namespace DataLayer
         {
         }
 
-        public DocumentoVenta obtenerResumenConsolidadoAtenciones(String idMovimientoAlmacenList)
+        public DocumentoVenta obtenerResumenConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList)
         {
             var objCommand = GetSqlCommand("ps_resumenConsolidadoAtenciones");
-            InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
+
+
+            
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("idMovimientoAlmacenList", typeof(Guid)));
+
+            // populate DataTable from your List here
+            foreach (var id in idMovimientoAlmacenList)
+                tvp.Rows.Add(id);
+            
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idMovimientoAlmacenList", tvp);
+            // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+                //InputParameterAdd.Varchar(objCommand, "idProductoList", tvparam);
+           
+
+            //InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable documentoVentaDataTable = dataSet.Tables[0];
         //    DataTable documentoVentaDetalleDataTable = dataSet.Tables[1];
@@ -56,10 +75,31 @@ namespace DataLayer
         }
 
 
-        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(String idMovimientoAlmacenList, Dictionary<String,Boolean> mostrarUnidadAlternativaList)
+        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList, Dictionary<String,Boolean> mostrarUnidadAlternativaList)
         {
             var objCommand = GetSqlCommand("ps_detalleConsolidadoAtenciones");
-            InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
+
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("idMovimientoAlmacenList", typeof(Guid)));
+
+            // populate DataTable from your List here
+            foreach (var id in idMovimientoAlmacenList)
+                tvp.Rows.Add(id);
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idMovimientoAlmacenList", tvp);
+            // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            //InputParameterAdd.Varchar(objCommand, "idProductoList", tvparam);
+
+
+            //InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
+            //DataSet dataSet = ExecuteDataSet(objCommand);
+
+
+            //InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
             DataTable guiaRemisionDataTable = Execute(objCommand);
 
             List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
@@ -85,6 +125,7 @@ namespace DataLayer
                     guiaRemision.pedido = new Pedido();
                     guiaRemision.pedido.numeroPedido = Converter.GetInt(row, "numero_pedido");
                     guiaRemision.pedido.numeroGrupoPedido = Converter.GetInt(row, "numero_grupo_pedido");
+                    guiaRemision.pedido.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
                     guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
                     guiaRemision.numeroDocumento = Converter.GetInt(row, "numero_documento");
                     guiaRemision.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
@@ -788,6 +829,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "facturado", guiaRemision.estaFacturado ? 1 : 0);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", guiaRemision.pedido.numeroPedido);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)guiaRemision.motivoTrasladoBusqueda).ToString());
+            InputParameterAdd.Varchar(objCommand, "sku", guiaRemision.sku);
 
             DataTable dataTable = Execute(objCommand);           
 
@@ -1085,6 +1127,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "numeroGuiaReferencia", notaIngreso.numeroGuiaReferencia);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", notaIngreso.pedido.numeroPedido);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)notaIngreso.motivoTrasladoBusqueda).ToString());
+            InputParameterAdd.Varchar(objCommand, "sku", notaIngreso.sku);
             DataTable dataTable = Execute(objCommand);
 
 

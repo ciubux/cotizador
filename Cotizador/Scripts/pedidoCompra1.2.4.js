@@ -828,6 +828,10 @@ jQuery(function ($) {
         });
     }
 
+    $("#pedido_sku").change(function () {
+        changeInputString("sku", $("#pedido_sku").val())
+    });
+
     $("#pedido_horaEntregaDesde").change(function () {
 
         var horaEntregaDesde = $("#pedido_horaEntregaDesde").val();

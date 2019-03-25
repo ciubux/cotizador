@@ -145,8 +145,8 @@ namespace BusinessLayer
                                 }
                                 else
                                 {
-                                    if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioLista + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
-                           pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioLista - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                                    if (pedidoDetalle.precioUnitario > pedidoDetalle.precioLista + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
+                           pedidoDetalle.precioUnitario < pedidoDetalle.precioLista - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
                                     {
                                         if (evaluarVariacion == 1)
                                         {
@@ -163,12 +163,8 @@ namespace BusinessLayer
                                             pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. No se encontró precio unitario en precios registrados en facturación.\n";
                                             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                                         }
-
                                     }
-
-
                                 }
-
                             }
                         }
                     }

@@ -467,6 +467,11 @@ namespace Cotizador.Controllers
                 this.FacturaSession.guiaRemision.numeroDocumento = int.Parse(this.Request.Params["numeroGuiaRemision"]);
             }
 
+        
+            this.FacturaSession.sku = this.Request.Params["sku"];
+        
+
+
 
             this.FacturaSession.estadoDocumentoSunatBusqueda = (DocumentoVenta.EstadosDocumentoSunatBusqueda)Int32.Parse(this.Request.Params["estadoDocumentoSunatBusqueda"]);
             this.FacturaSession.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(this.Request.Params["tipoDocumento"]);

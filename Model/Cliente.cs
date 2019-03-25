@@ -89,6 +89,8 @@ namespace Model
 
         public String canal { get; set; }
 
+        public Boolean habilitadoModificarDireccionEntrega { get; set; }
+
         public String horaInicioPrimerTurnoEntregaFormat { get
             {
                 if (horaInicioPrimerTurnoEntrega != null && horaInicioPrimerTurnoEntrega.Length >= 5)
@@ -255,27 +257,58 @@ namespace Model
                     return 0;
                 }
 
-                if (access == 0)
-                {
-                    if (this.asistenteServicioCliente != null && this.asistenteServicioCliente.usuario != null &&  this.asistenteServicioCliente.usuario.idUsuario == this.usuario.idUsuario)
-                    {
-                        access = 1;
-                    }
-
-                    if (this.responsableComercial != null && this.responsableComercial.usuario != null && this.responsableComercial.usuario.idUsuario == this.usuario.idUsuario)
-                    {
-                        access = 1;
-                    }
-
-                    if (this.supervisorComercial != null && this.supervisorComercial.usuario != null && this.supervisorComercial.usuario.idUsuario == this.usuario.idUsuario)
-                    {
-                        access = 1;
-                    }
-                }
-
-                return access;
+                return this.usuario.modificaCanastaCliente || this.isOwner ? 1 : 0;
             }
         }
+
+        public int modificaGrupo
+        {
+            get
+            {
+                if (this.usuario == null) return 0;
+
+                return this.usuario.modificaMiembrosGrupoCliente || this.isOwner ? 1 : 0;
+            }
+        }
+
+        public bool isOwner
+        {
+            get
+            {
+                if (this.usuario == null) return false;
+
+                if (this.asistenteServicioCliente != null && this.asistenteServicioCliente.usuario != null && this.asistenteServicioCliente.usuario.idUsuario == this.usuario.idUsuario)
+                {
+                    return true;
+                }
+
+                if (this.responsableComercial != null && this.responsableComercial.usuario != null && this.responsableComercial.usuario.idUsuario == this.usuario.idUsuario)
+                {
+                    return true;
+                }
+
+                if (this.supervisorComercial != null && this.supervisorComercial.usuario != null && this.supervisorComercial.usuario.idUsuario == this.usuario.idUsuario)
+                {
+                    return true;
+                }
+
+                if (this.IdUsuarioRegistro == this.usuario.idUsuario
+                    && (this.asistenteServicioCliente == null || this.asistenteServicioCliente.usuario == null)
+                    && (this.responsableComercial == null || this.responsableComercial.usuario == null)
+                    && (this.supervisorComercial == null || this.supervisorComercial.usuario == null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+        [Display(Name = "SKU:")]
+        public String sku { get; set; }
+        [Display(Name = "Fecha Ventas Desde:")]
+        public DateTime? fechaVentasDesde { get; set; }
+
+        public Boolean fechaVentasEsModificada { get; set; }
     }
 
 }

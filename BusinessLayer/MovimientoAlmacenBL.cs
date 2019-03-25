@@ -21,7 +21,7 @@ namespace BusinessLayer
         }
 
 
-        public DocumentoVenta obtenerResumenConsolidadoAtenciones(String idMovimientoAlmacenList)
+        public DocumentoVenta obtenerResumenConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList)
         {
             using (var dal = new MovimientoALmacenDAL())
             {
@@ -29,7 +29,7 @@ namespace BusinessLayer
             }
         }
 
-        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(String idMovimientoAlmacenList, Dictionary<String,Boolean> mostrarUnidadAlternativaList = null)
+        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList, Dictionary<String,Boolean> mostrarUnidadAlternativaList = null)
         {
             using (var dal = new MovimientoALmacenDAL())
             {
