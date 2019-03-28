@@ -18,11 +18,35 @@ namespace Model
         public Decimal precioNeto { get; set; }
         public Decimal flete { get; set; }
         public Decimal precioUnitario { get; set; }
+
+        public Decimal precioNetoAlternativo { get {
+                if (equivalencia != 0 )
+                {
+                    return precioNeto / equivalencia;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        public Boolean esUnidadAlternativa { get; set; }
+
         public String numeroCotizacion { get; set; }
 
-    /*    public String nombreVista
-        {
-            get { return codigo + "(" + nombre + ")"; }
-        }*/
+        public int equivalencia { get; set; }
+
+        public Cliente cliente { get; set; }
+
+        public Producto producto { get; set; }
+
+        public bool estadoCanasta { get; set; }
+
+        public GrupoCliente grupoCliente { get; set; }
+        /*    public String nombreVista
+            {
+                get { return codigo + "(" + nombre + ")"; }
+            }*/
     }
 }

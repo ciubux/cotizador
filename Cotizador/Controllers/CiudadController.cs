@@ -4,12 +4,15 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BusinessLayer;
+using Cotizador.Models;
 using Model;
 
 namespace Cotizador.Controllers
 {
     public class CiudadController : Controller
     {
+
+        CiudadBL ciudadBL = new CiudadBL();
         // GET: Ciudad
         public ActionResult Index()
         {
@@ -23,59 +26,76 @@ namespace Cotizador.Controllers
         }
 
 
-        public ActionResult list()
+        public ActionResult GetCiudades(string ciudadSelectId, string selectedValue = null)
         {
-            CiudadBL ciudadBL = new CiudadBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            List<Ciudad> ciudadListTmp = ciudadBL.getCiudades();
+            List<Ciudad> ciudades = usuario.sedesMP;
 
-            List<Ciudad> ciudadList = new List<Ciudad>();
-            Ciudad ciudadDeshabiltiad = new Ciudad { idCiudad = Guid.Empty, nombre = "Seleccione Ciudad", orden = 0 };
-            ciudadList.Add(ciudadDeshabiltiad);
-
-            foreach (Ciudad ciudad in ciudadListTmp)
+            if ((int)(Constantes.paginas.BusquedaCotizaciones) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoCotizacion) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]
+                )
             {
-                ciudadList.Add(ciudad);
+                ciudades = usuario.sedesMPCotizaciones;
+            }
+            else if ((int)(Constantes.paginas.BusquedaPedidos) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoPedido) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]
+                )
+            {
+                ciudades = usuario.sedesMPPedidos;
+            }
+            else if ((int)(Constantes.paginas.BusquedaGuiasRemision) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoGuiaRemision) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]
+                )
+            {
+                ciudades = usuario.sedesMPGuiasRemision;
+            }
+            else if ((int)(Constantes.paginas.BusquedaFacturas) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoFactura) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.BusquedaBoletas) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoBoleta) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.BusquedaFacturas) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoFactura) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]||
+                (int)(Constantes.paginas.BusquedaFacturas) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
+                (int)(Constantes.paginas.MantenimientoFactura) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]
+                )
+            {
+                ciudades = usuario.sedesMPDocumentosVenta;
             }
 
-            List<Guid> ciudadDeshabilitadas = new List<Guid>();
-            ciudadDeshabilitadas.Add(ciudadDeshabiltiad.idCiudad);
-            ViewBag.List = ciudadDeshabilitadas;
-            var model = ciudadList;
+           /* if (ciudades.Count == 1)
+            {
+                selectedValue = ciudades[0].idCiudad.ToString();
+            }*/
 
-            return PartialView("_SelectCiudad", model);
+            var model = new CiudadViewModels
+            {
+                Data = ciudades,
+                CiudadSelectId = ciudadSelectId,
+                SelectedValue = selectedValue
+            };
+
+            return PartialView("_Ciudad", model);
+        }
+
+        public ActionResult GetCiudadesASolicitar(string ciudadSelectId, string selectedValue = null)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            List<Ciudad> ciudades = usuario.sedesMP;
+            var model = new CiudadViewModels
+            {
+                Data = ciudades,
+                CiudadSelectId = ciudadSelectId,
+                SelectedValue = selectedValue
+            };
+
+            return PartialView("_Ciudad", model);
         }
 
 
-        public ActionResult listBusqueda()
-        {
-            CiudadBL ciudadBL = new CiudadBL();
-
-            List<Ciudad> ciudadListTmp = ciudadBL.getCiudades();
-
-            List<Ciudad> ciudadList = new List<Ciudad>();
-            Ciudad ciudadDeshabiltiad = new Ciudad { idCiudad = Guid.Empty, nombre = "Seleccione Ciudad", orden = 0 };
-            ciudadList.Add(ciudadDeshabiltiad);
-
-            foreach (Ciudad ciudad in ciudadListTmp)
-            {
-                ciudadList.Add(ciudad);
-            }
-
-            List<Guid> ciudadDeshabilitadas = new List<Guid>();
-            ciudadDeshabilitadas.Add(ciudadDeshabiltiad.idCiudad);
-            ViewBag.List = ciudadDeshabilitadas;
-            var model = ciudadList;
-
-            return PartialView("_SelectCiudadBusqueda", model);
-        }
-
-
-
-
-
-        // GET: Ciudad/Create
-        public ActionResult Create()
+            // GET: Ciudad/Create
+            public ActionResult Create()
         {
             return View();
         }

@@ -1,0 +1,1679 @@
+﻿@{
+    ViewBag.Title = "Búsqueda Notas Ingreso";
+    Model.NotaIngreso notaIngreso = ViewBag.notaIngreso;
+    List<Model.NotaIngreso> notaIngresoList = ViewBag.notaIngresoList;
+    Model.Pedido pedido = ViewBag.pedido;
+    Model.DocumentoVenta documentoVenta = ViewBag.documentoVenta;
+
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" id="idClienteFacturacion" value="" />
+
+
+    <form class="form-horizontal">
+
+        <div class="row">
+            <!--NÚMERO/SERIE GUIA-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => notaIngreso.numeroDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
+
+                    <div class="col-xs-8">
+                        @if (notaIngreso.numeroDocumento > 0)
+                        {
+                            @Html.TextBoxFor(p => notaIngreso.numeroDocumento, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(p => notaIngreso.numeroDocumento, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!--NUMERO PEDIDO-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => notaIngreso.pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+
+                    <div class="col-xs-8">
+                        @if (notaIngreso.pedido.numeroPedido > 0)
+                        {
+                            @Html.TextBoxFor(p => notaIngreso.pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(p => notaIngreso.pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => notaIngreso.numeroGuiaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+
+                    <div class="col-xs-8">
+                        @if (notaIngreso.numeroGuiaReferencia > 0)
+                        {
+                            @Html.TextBoxFor(p => notaIngreso.numeroGuiaReferencia, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(p => notaIngreso.numeroGuiaReferencia, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <!--CIUDAD-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => notaIngreso.ciudadDestino, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                                                               new
+                                                               {
+                                                                   ciudadSelectId = "idCiudad",
+                                                                   selectedValue = notaIngreso.ciudadDestino.idCiudad
+                                                               })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <!--Cliente-->
+                <div class="form-group">
+                    <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
+
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            @if (ViewBag.existeCliente == 1)
+                            {
+                                <option selected value="@notaIngreso.pedido.cliente.idCliente">@notaIngreso.pedido.cliente</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--CODIGO GRUPO CLIENTE-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetGruposCliente", "GrupoCliente",
+                                new
+                                {
+                                    grupoClienteSelectId = "idGrupoCliente",
+                                    selectedValue = notaIngreso.pedido.idGrupoCliente
+                                })
+                    </div>
+                    @if (notaIngreso.usuario.buscaSedesGrupoCliente)
+                    {
+                        <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                            @if (notaIngreso.pedido.buscarSedesGrupoCliente)
+                            {
+                                <input checked type="checkbox" name="buscarSedesGrupoCliente" id="buscarSedesGrupoCliente" value="1">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="buscarSedesGrupoCliente" id="buscarSedesGrupoCliente" value="1">
+                            }
+                            Todas las sedes
+                        </label>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+            <!--FECHA-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => notaIngreso.fechaTrasladoDesde, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        <input type="hidden" id="fechaTrasladoDesdetmp" value="@ViewBag.fechaTrasladoDesde" />
+                        <input class="form-control" type="text" id="notaIngreso_fechaTrasladoDesde" name="notaIngreso_fechaTrasladoDesde">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => notaIngreso.fechaTrasladoHasta, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        <input type="hidden" id="fechaTrasladoHastatmp" value="@ViewBag.fechaTrasladoHasta" />
+                        <input class="form-control" type="text" id="notaIngreso_fechaTrasladoHasta" name="notaIngreso_fechaTrasladoHasta">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="motivoTraslado" class="control-label col-xs-4">Motivo Traslado:</label>
+                    <div class="col-xs-8">
+                        @Html.DropDownList("motivoTraslado",
+                                   EnumHelper.GetSelectList(typeof(Model.NotaIngreso.motivosTrasladoBusqueda), notaIngreso.motivoTrasladoBusqueda),
+                                   new { @class = "form-control" }
+                                   )
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-sm-6 col-lg-4" hidden="hidden">
+                <div class="form-group">
+                    <label for="notaIngreso_estaFacturado" class="control-label col-xs-4">¿Considerar Facturados?:</label>
+                    <div class="col-xs-8">
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (notaIngreso.estaFacturado)
+                                {
+                                    <input class="radio-input" checked type="radio" name="notaIngreso_estaFacturado" id="facturadosi" value="1">@ViewBag.Si;
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="notaIngreso_estaFacturado" id="facturadosi" value="1">@ViewBag.Si;
+                                }
+
+                            </label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (!notaIngreso.estaFacturado)
+                                {
+                                    <input class="radio-input" checked type="radio" name="notaIngreso_estaFacturado" id="facturadono" value="0">@ViewBag.No;
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="notaIngreso_estaFacturado" id="facturadono" value="0">@ViewBag.No;
+                                }
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="notaIngreso_estaAnulado" class="control-label col-xs-4">¿Considerar Anulados?:</label>
+                    <div class="col-xs-8">
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (notaIngreso.estaAnulado)
+                                {
+                                    <input class="radio-input" checked type="radio" name="notaIngreso_estaAnulado" id="anuladosi" value="1">@ViewBag.Si;
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="notaIngreso_estaAnulado" id="anuladosi" value="1">@ViewBag.Si;
+                                }
+
+                            </label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (!notaIngreso.estaAnulado)
+                                {
+                                    <input class="radio-input" checked type="radio" name="notaIngreso_estaAnulado" id="anuladono" value="0">@ViewBag.No;
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="notaIngreso_estaAnulado" id="anuladono" value="0">@ViewBag.No;
+                                }
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+        <!--ESTADO-
+        <div class="row">
+
+
+            <div class="col-sm-6 col-lg-5">
+                <div class="form-group">
+                    <label for="estado" class="control-label col-xs-4">Estado:</label>
+                    <div class="col-xs-8">
+                        @Html.DropDownList("estado",
+                                 EnumHelper.GetSelectList(typeof(Model.SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida), notaIngreso.seguimientoMovimientoAlmacenSalida.estado),
+                                 new { @class = "form-control" }
+                                 )
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+        <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+            <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+            <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+        </div>
+
+        <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "NotaIngreso")">Exportar</button>
+        </div>
+
+        <table id="tableGuiasRemision" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+               data-editing-allow-add="false"
+               data-editing-allow-delete="false"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar edición"
+               data-editing-add-text="Descartar cambios">
+            <thead>
+                <tr>
+                    <th data-name="idMovimientoAlmacen" data-visible="false"></th>
+                    <!--   <th data-name="numero" data-visible="true">N° Mov.</th>-->
+                    <th data-name="numeroGuia" data-visible="true">N° Nota Ingreso</th>
+                    <th data-name="numeroPedido" data-visible="true">N° Pedido</th>
+                    <th data-name="motivoTraslado" data-visible="true">Motivo Traslado</th>
+                    <th data-name="usuario" data-visible="true">Creado por</th>
+                    <!--  <th data-name="fecha" data-sortable="true">Fecha Creación</th>-->
+                    <th data-name="fechaEmisión" data-sortable="true" data-breakpoints="xs">Fecha Emisión</th>
+                    <th data-name="fechaTraslado" data-sortable="true" data-breakpoints="xs">Fecha Traslado</th>
+                    <th data-name="razonSocial" data-sortable="true">Razón Social</th>
+                    <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
+                    <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Sede MP</th>
+                    <!--  <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
+                    <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>-->
+                    <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
+                    <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
+                    <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
+                    <th data-name="extornada" data-sortable="true" data-breakpoints="xs">¿Extornada?</th>
+                    @if (notaIngreso.usuario.creaGuias)
+                    {
+                        <th data-name="noEntregado" data-visible="false">No Entregado</th>
+                        <th data-name="noEntregado" data-visible="false">No Entregado</th>
+                    }
+                    @if (!notaIngreso.usuario.creaGuias)
+                    {
+                        <th data-name="noEntregado" data-visible="false">No Entregado</th>
+                        <th data-name="noEntregado" data-visible="false">No Entregado</th>
+                    }
+
+                    <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        @if (notaIngresoList.Count == 0)
+        {
+            <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
+                <p class="pagination-centered" style=" font-size: medium" align="center">
+                    La búsqueda no obtuvo resultados.
+                </p>
+            </div>
+        }
+
+
+
+    </form>
+</div>
+
+
+<div class="modal fade" id="modalVerNotaIngreso" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerNotaIngresoTitle"><b>Información de Nota Ingreso</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <input type="hidden" id="idMovimientoAlmacen" value="@ViewBag.idMovimientoAlmacen" />
+
+                    <div class="row">
+                        <!--SEDE MP-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(g => notaIngreso.ciudadDestino, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_notaIngreso_ciudadDestino_nombre"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-8">
+                            <!--Dirección Origen-->
+                            <div class="form-group">
+                                @Html.LabelFor(g => notaIngreso.ciudadDestino.direccionPuntoLlegada, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="ver_notaIngreso_ciudadDestino_direccionPuntoLlegada"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!--fecha Movimiento-->
+                            <div class="form-group">
+                                @Html.LabelFor(g => notaIngreso.fechaTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_notaIngreso_fechaTraslado"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!--Serie Numero Guia-->
+                            <div class="form-group">
+                                @Html.LabelFor(g => notaIngreso.serieDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_notaIngreso_serieNumeroDocumento"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!--Estado-->
+                            <div class="form-group">
+                                <label for="ver_notaIngreso_estadoDescripcion" class="control-label col-xs-4">Estado:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_notaIngreso_estadoDescripcion"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--NUMEROS PEDIDO-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                            <!--Numero Pedido-->
+                            <div class="form-group">
+                                <input type="hidden" id="idPedido" />
+                                @Html.LabelFor(g => notaIngreso.pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_notaIngreso_pedido_numeroPedido"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!-- Cliente-->
+                            <div class="form-group">
+                                @Html.LabelFor(g => notaIngreso.pedido.cliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_notaIngreso_pedido_cliente"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!--Numero Referencia Cliente-->
+                            <div class="form-group">
+                                @Html.LabelFor(g => notaIngreso.pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_notaIngreso_pedido_numeroReferenciaCliente"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--MOTIVO DE TRASLADO-->
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!--fecha Emisión-->
+                            <div class="form-group">
+                                @Html.LabelFor(g => notaIngreso.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_notaIngreso_fechaEmision"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(g => notaIngreso.motivoTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_notaIngreso_motivoTraslado"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="notaIngreso_atencionParcial" class="control-label col-xs-4">Tipo de Atención:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="ver_notaIngreso_atencionParcial"></p>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!--Datos del documento Extornado-->
+                    <fieldset id="fieldsetDocumentoExtornado">
+                        <legend>Documento Extornado:</legend>
+                        <!--GUIA REMISIÓN A EXTORNAR-->
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => notaIngreso.guiaRemisionAExtornar.serieNumeroGuia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="ver_notaIngreso_guiaRemisionAExtornar_serieNumeroGuia"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset id="fieldsetDocumentoIngresado">
+                        <legend>Documento Ingresado:</legend>
+                        <!--GUIA REMISIÓN A EXTORNAR-->
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => notaIngreso.guiaRemisionAIngresar.serieNumeroGuia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="ver_notaIngreso_guiaRemisionAIngresar_serieNumeroGuia"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!--Datos del extorno realizado-->
+                    <fieldset id="fieldsetDetalleExtorno">
+                        <legend>Detalle del Extorno:</legend>
+                        <div class="row">
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => notaIngreso.motivoExtornoGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="ver_notaIngreso_motivoExtornoGuiaRemisionToString"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => notaIngreso.sustentoExtorno, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="ver_notaIngreso_sustentoExtorno"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+
+
+
+                    <!--Sino es extornante Datos de los documentos de referencia (Estos campos no existen en la Guía de Remisión)-->
+                    <fieldset id="fieldsetDocumentosReferencia">
+                        <legend>Documentos de referencia:</legend>
+                        <!--GUIA REMISIÓN REFERENCIA-->
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <!--Numero Pedido-->
+                                <div class="form-group">
+                                    @Html.LabelFor(p => notaIngreso.serieGuiaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="ver_notaIngreso_serieGuiaReferencia"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <!--Numero Pedido-->
+                                <div class="form-group">
+                                    @Html.LabelFor(p => notaIngreso.numeroGuiaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="ver_notaIngreso_numeroGuiaReferencia"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--DOCUMENTO VENTA REFERENCIA-->
+                        <div class="row">
+
+                            <div class="col-sm-6 col-lg-4">
+                                <!--Serie-->
+                                <div class="form-group">
+                                    @Html.LabelFor(g => notaIngreso.tipoDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="ver_notaIngreso_tipoDocumentoVentaReferencia"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <!--Numero Pedido-->
+                                <div class="form-group">
+                                    @Html.LabelFor(p => notaIngreso.serieDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="ver_notaIngreso_serieDocumentoVentaReferencia"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <!--Numero Pedido-->
+                                <div class="form-group">
+                                    @Html.LabelFor(p => notaIngreso.numeroDocumentoVentaReferencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="ver_notaIngreso_numeroDocumentoVentaReferencia"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+
+
+
+
+                    <table id="tableDetalleGuia" class="table" data-editing="false">
+                        <thead>
+                            <tr>
+                                <th data-name="idProducto" data-visible="false"></th>
+                                <th data-name="sku" data-sortable="false">Código</th>
+                                <th data-name="cantidadPedido" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Cantidad Pedido</th>
+                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cantidad</th>
+                                <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                                <th data-name="producto" data-sortable="false">Producto</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <!--Dirección Destino-->
+                            <div class="form-group">
+                                @Html.LabelFor(g => notaIngreso.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="ver_notaIngreso_observaciones"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <!--Si está extornado-->
+            <div class="row" id="divTipoExtorno">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input type="hidden" id="notaIngreso_tipoExtorno" />
+                            <p class="form-control-static" style="color:darkred; font-weight: bold" id="ver_notaIngreso_tipoExtorno"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+
+                <div class="pull-right">
+                    <button type="button" id="btnCancelarVerNotaIngreso" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    @if (notaIngreso.usuario.creaGuias)
+                    {
+                        <button type="button" id="btnImprimirNotaIngreso" class="btn btn-success">Imprimir</button>
+                    }
+                    @if (notaIngreso.usuario.creaGuias)
+                    {
+                        <button type="button" id="btnAnularNotaIngreso" class="btn btn-danger" data-toggle='modal' data-target='#modalAnulacion'>Anular</button>
+                        <button type="button" id="btnExtornar" class="btn btn-danger">Extornar</button>
+                    }
+                    <button type="button" id="btnVerGuiasRemisionExtornantes" class="btn btn-primary">Ver Guías Remisión Extornantes</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="modalAnulacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAprobacionTitle"><b>Anular Nota Ingreso</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <div class="row">
+
+
+                        <div class="col-sm-6 col-lg-12">
+
+                            <!--MOTIVO ANULACION-->
+                            <div class="form-group">
+                                <label for="comentarioAnulado" class="control-label col-xs-3">Comentario:</label>
+
+                                <div class="col-xs-9">
+                                    <textarea class="form-control" rows="5" id="comentarioAnulado" name="comentarioAnulado"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarAnulacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAceptarAnulacion" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalFacturar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalFacturarTitle"><b>Crear Factura</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <fieldset>
+                        <legend id="divpedido_direccionEntrega">Datos del Pedido:</legend>
+                        <!--NUMEROS PEDIDO-->
+                        <div class="row">
+                            <!--NÚMERO PEDIDO-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verNumero"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--NUMERO PEDIDO GRUPO
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                            @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verNumeroGrupo"></p>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                            <!--NUMERO COTIZACION-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verCotizacionCodigo"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.tipoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verTipoPedido"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--CREADO POR-->
+                        <div class="row">
+                            <!--NOMBRE-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="estado" class="control-label col-xs-4">Creado Por</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verUsuarioNombre"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--FECHA HORA SOLICITUD PEDIDO-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="estado" class="control-label col-xs-4">Fecha Solicitud:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verFechaHoraSolicitud"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div class="row">
+                            <!--CIUDAD-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verCiudad"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--CLIENTE-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.cliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verCliente"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.cliente.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verClienteCodigo"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+
+
+
+
+
+
+
+                        <div class="row">
+                            <!--NUMERO REFERENCIA CLIENTE-->
+                            <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verNumeroReferenciaCliente"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4" id="divCiudadSolicitante">
+                                <div class="form-group">
+                                    <label for="estado" class="control-label col-xs-4">Sede MP Solicitante:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verCiudadSolicitante"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--NUMERO REFERENCIA ADICIONAL-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.numeroReferenciaAdicional, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verNumeroReferenciaAdicional"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <!--OBSERVACIOENS DEL PEDIDO-->
+                            <div class="col-sm-6 col-lg-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(g => pedido.observaciones, htmlAttributes: new { @class = "control-label col-xs-2", style = "color: darkred" })
+                                    <div class="col-xs-10">
+                                        <p class="form-control-static" id="verObservacionesPedido"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="archivoAdjunto" class="control-label col-xs-4">Archivos Adjuntos:</label>
+                                    <div class="col-xs-8">
+                                        <ul id="nombreArchivos"></ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+
+
+
+                    </fieldset>
+
+                    <fieldset>
+                        <legend id="divpedido_direccionEntrega">Datos de la Guía Remisión:</legend>
+
+                        <div class="row">
+
+                            <div class="col-sm-6 col-lg-4">
+                                <!--Serie Numero Guia-->
+                                <div class="form-group">
+                                    @Html.LabelFor(g => notaIngreso.serieDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="facturarver_notaIngreso_serieNumeroDocumento"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <!--fecha Emisión-->
+                                <div class="form-group">
+                                    @Html.LabelFor(g => notaIngreso.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="facturarver_notaIngreso_fechaEmision"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <!--fecha Movimiento-->
+                                <div class="form-group">
+                                    @Html.LabelFor(g => notaIngreso.fechaTraslado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="facturarver_notaIngreso_fechaTraslado"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--DIRECCION ENTREGA-->
+                        <div class="row">
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.ubigeoEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verUbigeoEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--DIRECCION ENTREGA -->
+                            <div class="col-sm-6 col-lg-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                    <div class="col-xs-10">
+                                        <p class="form-control-static" id="verDireccionEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+
+                    <fieldset>
+                        <legend>Datos de Factura:</legend>
+                        <!--DATOS DEL CLIENTE-->
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-8">
+                                <div class="form-group">
+                                    <label for="verRazonSocialSunat" class="control-label col-xs-2">Razón Social:</label>
+                                    <div class="col-xs-10">
+                                        <p class="form-control-static" id="verRazonSocialSunat"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="verRUC" class="control-label col-xs-4">RUC:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verRUC"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-8">
+                                <div class="form-group">
+                                    <label for="verDireccionDomicilioLegalSunat" class="control-label col-xs-2">Domicilio Legal:</label>
+                                    <div class="col-xs-10">
+                                        <p class="form-control-static" id="verDireccionDomicilioLegalSunat"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="verCodigo" class="control-label col-xs-4">Código Cliente:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verCodigo"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-8">
+                                <div class="form-group">
+                                    <label for="verCorreoEnvioFactura" class="control-label col-xs-2">Correo Envío Factura:</label>
+                                    <div class="col-xs-10">
+                                        <p class="form-control-static" id="verCorreoEnvioFactura"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(dv => documentoVenta.serie, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                    <div class="col-xs-8">
+                                        <select class="form-control" id="documentoVenta_serie" name="documentoVenta_serie" required></select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(dv => documentoVenta.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                    <div class="col-xs-8">
+                                        <!--<input type="hidden" id="fechaEmision" value="" />
+                                        <input type="hidden" id="fechaEntregaHastaProgramacion" value="" />-->
+                                        <input type="hidden" id="documentoVenta_fechaEmisiontmp" value="@ViewBag.fechaEmision" />
+                                        <input class="form-control" type="text" id="documentoVenta_fechaEmision" name="documentoVenta_fechaEmision">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(dv => documentoVenta.horaEmision, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="time" id="documentoVenta_horaEmision" name="documentoVenta_horaEmision" value="@ViewBag.horaEmision">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(dv => documentoVenta.tipoPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                    <div class="col-xs-8">
+                                        @Html.DropDownList("tipoPago",
+                                              EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), documentoVenta.tipoPago),
+                                              new { @class = "form-control" }
+                                              )
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(dv => documentoVenta.formaPago, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                    <div class="col-xs-8">
+                                        @Html.DropDownList("formaPago",
+                                              EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.FormaPago), documentoVenta.formaPago),
+                                              new { @class = "form-control" }
+                                              )
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(dv => documentoVenta.fechaVencimiento, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                    <div class="col-xs-8">
+                                        <!--<input type="hidden" id="fechaEmision" value="" />
+                                        <input type="hidden" id="fechaEntregaHastaProgramacion" value="" />-->
+                                        <input type="hidden" id="documentoVenta_fechaVencimientotmp" value="" />
+                                        <input class="form-control" type="text" id="documentoVenta_fechaVencimiento" name="documentoVenta_fechaVencimiento">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                    </fieldset>
+
+
+
+
+                    <table id="tableDetallePedido" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="false"
+                           data-editing-allow-delete="false"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar edición"
+                           data-editing-add-text="Descartar cambios">
+                        <thead>
+                            <tr>
+                                <th data-name="proveedor" data-sortable="false">Prov.</th>
+                                <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
+                                <th data-name="producto" data-sortable="false">Producto / Descripción</th>
+                                <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                                <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
+                                <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+                                <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                                <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+                                <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                                <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
+                                <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+
+
+                                <!--     <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>-->
+
+
+                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
+                                <!--           <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>-->
+                                <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
+                                <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
+
+                                <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <div class="row" style="margin-right: 10px">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
+                                @Html.LabelFor(dv => documentoVenta.observaciones, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(dv => documentoVenta.observaciones, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3" id="montosTotalesDiv">
+
+                            <!--              <div class="form-group">
+                                               <div class="pull-right">
+                                                   <span class="totales">Subtotal: S/ </span>
+                                                   <span class="totales" id="verMontoSubTotal"></span>
+                                               </div>
+                                           </div>
+                                           <div class="form-group">
+                                               <div class="pull-right">
+                                                   <span class="totales">IGV 18%: S/ </span>
+                                                   <span class="totales" id="verMontoIGV"></span>
+                                               </div>
+                                           </div>
+                                           <div class="form-group">
+                                               <div class="pull-right">
+                                                   <span class="totales">TOTAL: S/ </span>
+                                                   <span class="totales" id="verMontoTotal"></span>
+                                               </div>
+                                           </div>-->
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">Subtotal Venta: S/ </span>
+                                    <span class="totales" id="verMontoSubTotalVenta"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">IGV 18% Venta: S/ </span>
+                                    <span class="totales" id="verMontoIGVVenta"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">TOTAL Venta: S/ </span>
+                                    <span class="totales" id="verMontoTotalVenta"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnEditarCliente" class="btn btn-primary">Editar Cliente</button>
+                <button type="button" id="btnEditarVenta" class="btn btn-danger">Editar Venta</button>
+                <button type="button" id="btnAceptarFacturarPedido" class="btn btn-success">Generar Factura</button>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalVistaPreviaFactura" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVistaPreviaFacturaTitle"><b>Vista Previa Factura</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <!--FECHA HORA EMISIÓN -  SERIE CORRELATIVO-->
+                    <div class="row">
+                        <!--Fecha Emisión-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpFechaEmision" class="control-label col-xs-2">FECHA EMISIÓN:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="vpFEC_EMI_HOR_EMI"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--NUMERO FACTURA-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpSERIE_CORRELATIVO" class="control-label col-xs-4">FACTURA:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpSERIE_CORRELATIVO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <!--NOMBRE COMERCIAL CLIENTE-->
+                    <div class="row">
+                        <!--Razón Social-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpRazonSocial" class="control-label col-xs-2">SEÑOR(ES):</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="vpNOM_RCT"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--DIRECCION - ORDEN DE COMPRA-->
+                    <div class="row">
+                        <!--Dirección-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpRazonSocial" class="control-label col-xs-2 resaltarDatosFactura2">DIRECCIÓN:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static " id="vpDIR_DES_RCT"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpNRO_ORD_COM" class="control-label col-xs-4 resaltarDatosFactura2">REFERENCIA:</label>
+                                <div class="col-xs-8 ">
+                                    <p class="form-control-static" id="vpNRO_ORD_COM"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--RUC - NRO GUIA-->
+                    <div class="row">
+                        <!--RUC-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpNRO_DOC_RCT" class="control-label col-xs-2">R.U.C.:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="vpNRO_DOC_RCT"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--GUIA REMISION-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpNRO_GRE" class="control-label col-xs-4 resaltarDatosFactura2">N° DE NOTA I.</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpNRO_GRE"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--OBSERVACIONES-->
+                    <div class="row">
+                        <!--OBSERVACIONES-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpOBSERVACIONES" class="control-label col-xs-2 resaltarDatosFactura2">OBSERV:</label>
+                                <div class="col-xs-10 ">
+                                    <p class="form-control-static" id="vpOBSERVACIONES"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--CODIGO CLIENTE-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpCODIGO_CLIENTE" class="control-label col-xs-4">CODIGO CLIENTE:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpCODIGO_CLIENTE"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!--CONDICIONES DE PAGO FECHA DE VENCIMIENTO-->
+                    <div class="row">
+                        <!--CONDICIONES DE PAGO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpCOND_PAGO" class="control-label col-xs-4">COND. PAGO:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpCOND_PAGO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--FECHA DE VENCIMIENTO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpFEC_VCTO" class="control-label col-xs-4">VENCIMIENTO:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpFEC_VCTO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--CODIGO VENDEDOR-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpCODIGO_VEND" class="control-label col-xs-4">CODIGO VEND.:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpCODIGO_VEND"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <table id="tableDetalleFacturaVistaPrevia" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="false"
+                           data-editing-allow-delete="false"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar edición"
+                           data-editing-add-text="Descartar cambios">
+                        <thead>
+                            <tr>
+                                <th data-name="posicion" data-sortable="false">N°.</th>
+                                <th data-name="codigo" data-sortable="false">CODIGO</th>
+                                <th data-name="cantidad" data-sortable="false" data-breakpoints="xs">CANTIDAD</th>
+                                <th data-name="unidad" data-sortable="false">UNIDAD</th>
+                                <th data-name="descripcion" data-sortable="false" data-breakpoints="xs">DESCRIPCIÓN</th>
+                                <th data-name="valorUnitario" data-sortable="false" data-breakpoints="xs sm">VALOR UNITARIO</th>
+                                <th data-name="valorVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">VALOR VENTA</th>
+                                <th data-name="igv" data-visible="true" data-sortable="false" data-breakpoints="xs sm">IGV</th>
+                                <th data-name="precioUnitario" data-visible="true" data-sortable="false" data-breakpoints="xs sm">PRECIO UNITARIO</th>
+                                <th data-name="precioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">PRECIO VENTA</th>
+                                <th data-name="porcentajeIGV" data-visible="true" data-sortable="false" data-breakpoints="xs sm">% IGV</th>
+                                <th data-name="tipoOperacion" data-visible="true" data-sortable="false" data-breakpoints="xs sm">TIP OP</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <div class="row" style="margin-right: 10px">
+
+                        <div class="col-sm-6 col-lg-9"></div>
+                        <div class="col-sm-6 col-lg-3" id="montosTotalesConfirmacionDiv">
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. GRAVADA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_GRV"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. INAFECTA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_INF"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. EXONERADA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_EXR"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. GRATUITA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_GRT"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">SUB TOTAL: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_VAL_VTA"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">IGV: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_TRB_IGV"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">TOTAL: S/ </span>
+                                    <span class="totales" id="pvMNT_TOT_PRC_VTA"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="idDocumentoVenta" />
+                <button type="button" id="btnCancelarConfirmarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnConfirmarFacturarPedido" class="btn btn-success">Confirmar Generación Factura</button>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<!--MODAL MOSTRAR PRECIOS-->
+<div class="modal fade" id="modalMostrarPrecios" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación </b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <table id="tableMostrarPrecios" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar Edición Detalle"
+                           data-editing-add-text="Descartar Cambios Detalle">
+                        <thead>
+                            <tr>
+                                <th data-name="idProducto" data-visible="true">Número Cotización</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Unidad</th>
+                                <th data-name="idProducto" data-visible="true">Precio Neto</th>
+                                <th data-name="idProducto" data-visible="true">Flete</th>
+                                <th data-name="idProducto" data-visible="true">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelCalculadora" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveDescuento" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="modalVerGuiasRemision" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerNotasIngresoTitle"><b>Guías de Remisión Extornantes</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" id="formVerGuiasRemision"></form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarVerGuiasRemision" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="plantillaVerGuiaRemision" style="display:none;">
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verSerieNumeroGuia" class="control-label col-xs-4">Número Guía Remisión:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verSerieNumeroGuiaRemision">#serieNumero</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verFechaGuia" class="control-label col-xs-4">Fecha Emisión Guía Remisión:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaGuiaRemision">#fechaEmisionGuiaRemision</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verSerieNumeroFactura" class="control-label col-xs-4">Número Factura:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verSerieNumeroGuia">#serieNumeroFactura</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verFechaFactura" class="control-label col-xs-4">Fecha Emisión Factura:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaNotaIngreso">#fechaEmisionFactura</p>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+
+    <table id="tableDetalleGuiaRemision" class="table" data-editing="false">
+        <thead>
+            <tr>
+                <th data-name="sku" data-sortable="false">Código</th>
+                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm" style="width: 70px">Cantidad</th>
+                <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                <th data-name="producto" data-sortable="false">Producto</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/notaIngreso")
+}

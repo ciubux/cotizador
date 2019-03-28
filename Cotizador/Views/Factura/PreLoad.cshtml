@@ -1,0 +1,57 @@
+﻿
+
+<div class="container">
+<form action="/Factura/Load" method="post" enctype="multipart/form-data" id="form1">
+
+    <table>
+        <tr>
+            <td>
+                <label class="control-label col-xs-6" for="file">Archivo Facturas:</label>
+            </td>
+            <td>
+                <input class="form-control" type="file" name="file" id="file" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="control-label col-xs-6" for="cantidad">Cantidad Registros:</label>
+            </td>
+            <td>
+                <input class="form-control" type="number" value="0" name="cantidad" id="cantidad" />
+            </td>
+        </tr>
+        <tr>
+            <td><label class="control-label col-xs-6" for="formato">Formato:</label></td>
+            <td><textarea class="form-control" rows="15" cols="100">
+Columna A=PlazaId
+Columna B=Plaza
+Columna C=Id
+Columna D=Nombre / Razón Social
+Columna E=RUC/DNI
+Columna F=Cód. Ve.
+Columna G=Nombre Comercial
+Columna H=Domicilio Legal
+Columna I=Distrito
+Columna J=Dirección de Despacho
+Columna K=Distrito
+Columna L=Rubro
+            
+*Fila1 es Cabecera
+</textarea></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button type="submit" class="form-control" form="form1" value="Submit">Cargar Facturas</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+
+
+
+
+</div>
+

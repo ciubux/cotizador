@@ -1,0 +1,9 @@
+﻿@model Cotizador.Models.CiudadViewModels 
+@Html.DropDownList(
+    Model.CiudadSelectId,
+    Model.Ciudades, "Seleccione la sede MP",
+    new
+    {
+        id = Model.CiudadSelectId,
+        @class = "form-control"
+    })

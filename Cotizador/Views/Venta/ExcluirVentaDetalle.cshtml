@@ -1,0 +1,26 @@
+﻿</br>
+@using (Html.BeginForm("ExcluirVentaDetalle", "Venta", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <table>
+        <tr>
+            <td>
+                <label class="control-label col-xs-6" for="file">Archivo Excel:</label>
+            </td>
+            <td>
+                <input class="form-control" type="file" name="file" id="file" />
+            </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td>
+                <button type="submit" class="form-control" value="Submit">Cargar</button>
+            </td>
+        </tr>
+        <tr>
+            <td> <label class="control-label col-xs-6">   </label></td>
+            <td><textarea class="form-control" rows="20" cols="50">@ViewBag.id_venta_detalle</textarea> </td>
+        </tr>
+
+    </table>
+}

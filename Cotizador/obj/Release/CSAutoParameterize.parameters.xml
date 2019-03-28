@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
-  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Cadena de conexión que usa la aplicación en web.config para obtener acceso a la base de datos." defaultValue="Server=tcp:mpinstitucionalbdtest.database.windows.net,1433;Initial Catalog=MPInstitucionalBDTest;Persist Security Info=False;User ID=cesar;Password=D0wnl0@D;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=60;" tags="SqlConnectionString">
+  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Cadena de conexión que usa la aplicación en web.config para obtener acceso a la base de datos." defaultValue="Server=DESKTOP-8GTDQ82\ZAS_DESARROLLO;Initial Catalog=cotizadormp; Persist Security Info=False;User ID=app;Password=123456;MultipleActiveResultSets=False;Connection Timeout=60;" tags="SqlConnectionString">
     <parameterEntry kind="XmlFile" scope="C:\\Users\\cesar\\Documents\\MP2\\cotizador\\Cotizador\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
   </parameter>
 </parameters>

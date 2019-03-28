@@ -1,0 +1,3 @@
+2019-02-20 11:45:59.7440|ERROR|Cotizador.Controllers.PedidoController|Producto ya se encuentra en la lista
+2019-02-20 11:57:29.5888|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Producto ya se encuentra en la lista.
+2019-02-20 12:00:15.3600|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Producto ya se encuentra en la lista.

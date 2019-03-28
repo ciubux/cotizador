@@ -9,20 +9,51 @@ namespace BusinessLayer
 {
     public class ProductoBL
     {
-        public List<Producto> getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Guid idCliente, Guid idGrupo)
+        public String getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null)
+        {
+
+
+            List<Producto> productoList = new List<Producto>();
+            using (var dal = new ProductoDAL())
+            {
+                productoList = dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados, proveedor, familia, tipoPedido);
+            }
+
+
+            String resultado = "{\"q\":\"" + textoBusqueda + "\",\"results\":[";
+            Boolean existe = false;
+            foreach (Producto prod in productoList)
+            {
+                resultado += "{\"id\":\"" + prod.idProducto + "\",\"text\":\"" + prod.ToString() + "\"},";
+                existe = true;
+            }
+
+            if (existe)
+                resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+            else
+                resultado = resultado.Substring(0, resultado.Length) + "]}";
+
+
+            return resultado;
+        }
+
+
+
+        public Guid getProductoId(String sku)
         {
             using (var dal = new ProductoDAL())
             {
-                return dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados, proveedor, familia, idCliente, idGrupo);
+                return dal.getProductoId(sku);
             }
         }
 
-        public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente)
+
+        public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente, Boolean esCompra = false)
         {
             using (var dal = new ProductoDAL())
             {
-                Producto producto = dal.getProducto(idProducto, idCliente);
-                //Si es provincia, se considera el precio de provincia
+                Producto producto = dal.getProducto(idProducto, idCliente, esCompra);
+                //Si es Provincia automaticamente se considera el precioProvincia como precioSinIGV
                 if (esProvincia)
                 {
                     producto.precioSinIgv = producto.precioProvinciaSinIgv;
@@ -40,11 +71,12 @@ namespace BusinessLayer
                     producto.image = storeStream.GetBuffer();
                 }
 
-                //Se agrega el flete al precioLista
-                //EL PRECIO LISTA NO INCLUTE FLETE
-                producto.precioLista = producto.precioSinIgv;// + (producto.precioSinIgv * Flete / 100);
-
+                //El precioSinIGV se convierte en precioLista
+                producto.precioLista = producto.precioSinIgv;
+                //El costoLista es el costo sin IGV
                 producto.costoLista = producto.costoSinIgv;
+
+                //En caso que se requiera hacer calculo incluido IGV entonces se agrega el IGV al precioSinGIV y al costoSinIGV/
                 if (incluidoIGV)
                 {
                     //Se agrega el IGV al costoLista
@@ -52,18 +84,219 @@ namespace BusinessLayer
                     //Se agrega el IGV al precioLista
                     producto.precioLista = producto.precioLista + (producto.precioLista * Constantes.IGV);
 
-
-                    if (producto.precioNeto != null)
-                        producto.precioNeto = producto.precioNeto + (producto.precioNeto * Constantes.IGV);
+                    //Si el precioNetoEquivalente es distinto de null 
+                    //es null cuando se obtiene de un precioRegistrado
+                    if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                    {
+                        producto.precioClienteProducto.precioNeto = producto.precioClienteProducto.precioNeto + (producto.precioClienteProducto.precioNeto * Constantes.IGV);
+                        producto.precioClienteProducto.precioUnitario = producto.precioClienteProducto.precioUnitario + (producto.precioClienteProducto.precioUnitario * Constantes.IGV);
+                    }
                 }
 
+                //Se aplica formato al costo de Lista y al precio Lista a dos decimales
                 producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista));
                 producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioLista));
-
-
+                //Se aplica formato al precioUnitario obtenido desde precioRegistrados
+                if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                {
+                    producto.precioClienteProducto.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.precioClienteProducto.precioNeto));
+                }
                 return producto;
             }
         }
+
+
+
+
+        public List<Producto> getProductos(Producto producto)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.SelectProductos(producto);
+            }
+        }
+
+        public Producto getProductoById(Guid idProducto) 
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                Producto producto = productoDAL.GetProductoById(idProducto); 
+                if (producto.image == null)
+                {
+                    FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                    MemoryStream storeStream = new MemoryStream();
+                    storeStream.SetLength(inStream.Length);
+                    inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                    storeStream.Flush();
+                    inStream.Close();
+                    producto.image = storeStream.GetBuffer();
+                }
+                return producto;
+            }
+        }
+
+        public Producto insertProducto(Producto producto)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.insertProducto(producto);
+            }
+        }
+
+        public Producto updateProducto(Producto producto)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.updateProducto(producto);
+            }
+        }
+
+
+        public List<CotizacionDetalle> obtenerProductosAPartirdePreciosRegistrados(Guid idCliente, DateTime fechaPrecios, Boolean esProvincia, Boolean incluidoIGV, String familia, String proveedor)
+        {
+            using (var dal = new ProductoDAL())
+            {
+                List<CotizacionDetalle> documentoDetalleList = dal.obtenerProductosAPartirdePreciosRegistrados(idCliente, fechaPrecios, familia, proveedor);
+
+                foreach (CotizacionDetalle cotizacionDetalle in documentoDetalleList)
+                {
+
+                    if (cotizacionDetalle.producto.image == null)
+                    {
+                        FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                        MemoryStream storeStream = new MemoryStream();
+                        storeStream.SetLength(inStream.Length);
+                        inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                        storeStream.Flush();
+                        inStream.Close();
+                        cotizacionDetalle.producto.image = storeStream.GetBuffer();
+                    }                 
+
+                    //Si es provincia se considera el precioProvincia
+                    //cotizacion.ciudad.
+                    if (esProvincia)
+                    {
+                        cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
+                    }
+
+                    if (cotizacionDetalle.esPrecioAlternativo)
+                    {
+                        cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia;
+                        cotizacionDetalle.porcentajeDescuento = 100 - ((cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia) * 100 / cotizacionDetalle.producto.precioSinIgv);
+                    }
+                    else
+                    { 
+                        cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
+                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto  * 100 / cotizacionDetalle.producto.precioSinIgv);
+                    }
+
+
+                    if (incluidoIGV)
+                    {
+                        //Se agrega el IGV al precioLista
+                        decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;
+                        decimal precioLista = precioSinIgv + (precioSinIgv * Constantes.IGV);
+                        cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioLista));
+                        //Se agrega el IGV al costoLista
+                        decimal costoSinIgv = cotizacionDetalle.producto.costoSinIgv;
+                        decimal costoLista = costoSinIgv + (costoSinIgv * Constantes.IGV);
+                        cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoLista));
+                    }
+                    else
+                    {
+                        //Se agrega el IGV al precioLista
+                        cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioSinIgv));
+                        //Se agrega el IGV al costoLista
+                        cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
+                    }
+
+                    if (cotizacionDetalle.esPrecioAlternativo)
+                    {
+                        cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior / cotizacionDetalle.producto.equivalencia));
+                    }
+                    
+                }
+
+                return documentoDetalleList;
+            }
+            
+        }
+
+
+
+        public List<DocumentoDetalle> obtenerProductosAPartirdePreciosRegistradosParaPedido(Guid idCliente, DateTime fechaPrecios, Boolean esProvincia, Boolean incluidoIGV, String familia, String proveedor)
+        {
+            using (var dal = new ProductoDAL())
+            {
+                List<DocumentoDetalle> documentoDetalleList = dal.obtenerProductosAPartirdePreciosRegistradosParaPedido(idCliente, fechaPrecios, familia, proveedor);
+
+                foreach (DocumentoDetalle cotizacionDetalle in documentoDetalleList)
+                {
+
+                    if (cotizacionDetalle.producto.image == null)
+                    {
+                        FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                        MemoryStream storeStream = new MemoryStream();
+                        storeStream.SetLength(inStream.Length);
+                        inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                        storeStream.Flush();
+                        inStream.Close();
+                        cotizacionDetalle.producto.image = storeStream.GetBuffer();
+                    }
+
+
+
+
+                    //Si es provincia se considera el precioProvincia
+                    //cotizacion.ciudad.
+                    if (esProvincia)
+                    {
+                        cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
+                    }
+
+                    if (cotizacionDetalle.esPrecioAlternativo)
+                    {
+                        cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia;
+                        cotizacionDetalle.porcentajeDescuento = 100 - ((cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia) * 100 / cotizacionDetalle.producto.precioSinIgv);
+                    }
+                    else
+                    {
+                        cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
+                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
+                    }
+
+
+
+
+
+
+                    if (incluidoIGV)
+                    {
+                        //Se agrega el IGV al precioLista
+                        decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;
+                        decimal precioLista = precioSinIgv + (precioSinIgv * Constantes.IGV);
+                        cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioLista));
+                        //Se agrega el IGV al costoLista
+                        decimal costoSinIgv = cotizacionDetalle.producto.costoSinIgv;
+                        decimal costoLista = costoSinIgv + (costoSinIgv * Constantes.IGV);
+                        cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoLista));
+                    }
+                    else
+                    {
+                        //Se agrega el IGV al precioLista
+                        cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioSinIgv));
+                        //Se agrega el IGV al costoLista
+                        cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
+                    }
+
+
+                }
+
+                return documentoDetalleList;
+            }
+
+        }
+
 
 
         public void setProductoStaging(ProductoStaging productoStaging)

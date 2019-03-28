@@ -1,0 +1,356 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Producto";
+    Model.Producto producto = ViewBag.producto;
+    var disabledLabel = "disabled = ''";
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal">
+
+        <div class="row">
+            <input type="hidden" id="idProducto" name="idProducto" value="@producto.idProducto" />
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="row text-center">
+                    <img id="verImagen"
+                         style="height:150px;"
+                         class="image-fluid"
+                         accept="image/x-png,image/gif,image/jpeg"
+                         src="data:image/png;base64,@Convert.ToBase64String(producto.image)">
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-center align-self-center">
+                            <label for="imgProductUpload" class="btn btn-primary btn-load-image">Cambiar Imagen</label>
+                        </div>
+                        <div>
+                            <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">
+                                Solo puede subir imágenes de hasta 200KB de tamaño y con extensiones: .jpg, .png y .gif
+                            </span>
+                        </div>
+                    </div>
+                    <input type="file"
+                           id="imgProductUpload"
+                           style="display:none;"
+                           accept="image/x-png,image/gif,image/jpeg"
+                           class="hiddenfileinput"
+                           data-max-size="204800"
+                           data-max-size-text="200KB"
+                           data-url-set-image="@Url.Action("ChangeImage", "Producto")">
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-8">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(c => producto.sku, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(c => producto.sku, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(c => producto.Estado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                <div class="radio radio-inline">
+                                    <label class="radio-label">
+                                        @if (producto.Estado == 1)
+                                        {
+                                            <input class="radio-input" checked type="radio" name="producto_estado" id="producto_estado_si" value="1"><span>Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <input class="radio-input" type="radio" name="producto_estado" id="producto_estado_si" value="1"><span>Activo</span>
+                                        }
+
+                                    </label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <label class="radio-label">
+                                        @if (producto.Estado == 0)
+                                        {
+                                            <input class="radio-input" checked type="radio" name="producto_estado" id="producto_estado_no" value="0"><span>Inactivo</span>
+                                        }
+                                        else
+                                        {
+                                            <input class="radio-input" type="radio" name="producto_estado" id="producto_estado_no" value="0"><span>Inactivo</span>
+                                        }
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!--Descripcion-->
+                    <div class="col-sm-12 col-lg-12">
+                        <div class="form-group">
+                            @Html.LabelFor(dv => producto.descripcion, htmlAttributes: new { @class = "control-label col-xs-2 col-lg-2" })
+                            <div class="col-xs-10">
+                                @Html.TextBoxFor(c => producto.descripcion, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!--Familia-->
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(c => producto.familia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-6">
+                                @Html.Action("list", "Familia")
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(c => producto.tipoProducto, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.DropDownList("tipoProducto",
+                                        EnumHelper.GetSelectList(typeof(Model.Producto.TipoProducto), producto.tipoProducto),
+                                        new { @class = "form-control" }
+                                        )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!--Proveedor-->
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(c => producto.proveedor, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-6">
+                                @Html.Action("list", "Proveedor")
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(c => producto.skuProveedor, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            <div class="col-xs-8">
+                                @Html.TextBoxFor(c => producto.skuProveedor, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-12">
+                <div class="form-group">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row">
+                <!--Unidad-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => producto.unidad, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                        <div class="col-xs-6 col-sm-6 col-lg-8">
+                            @Html.TextBoxFor(c => producto.unidad, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <!--Unidad Alternativa-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => producto.unidad_alternativa, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                        <div class="col-xs-6 col-sm-6 col-lg-8">
+                            @Html.TextBoxFor(c => producto.unidad_alternativa, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <!--Equivalencia-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => producto.equivalencia, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                        <div class="col-xs-6 col-sm-6 col-lg-8">
+                            @Html.TextBoxFor(c => producto.equivalencia, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row">
+                <!--Unidad-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+
+
+                    </div>
+                </div>
+
+                <!--Unidad Proveedor-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => producto.unidadProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                        <div class="col-xs-6 col-sm-6 col-lg-8">
+                            @Html.TextBoxFor(c => producto.unidadProveedor, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <!--Equivalencia-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => producto.equivalenciaProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                        <div class="col-xs-6 col-sm-6 col-lg-8">
+                            @Html.TextBoxFor(c => producto.equivalenciaProveedor, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row">
+                <!--Unidad-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4" for="verEquivalencia">Código SUNAT:</label>
+                        <div class="col-xs-6 col-sm-6 col-lg-8">
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--Unidad Estandar internacional-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => producto.unidadEstandarInternacional, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                        <div class="col-xs-6 col-sm-6 col-lg-8">
+                            @Html.TextBoxFor(c => producto.unidadEstandarInternacional, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <!--Equivalencia-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4" for="verEquivalencia">Unidad Alt. SUNAT:</label>
+                        <div class="col-xs-6 col-sm-6 col-lg-8">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="row">
+                <!--COSTO-->
+                <div class="col-sm-6 col-lg-4">
+                    @if (producto.usuario.visualizaCostos)
+                    {
+                        <div class="form-group">
+                            @Html.LabelFor(c => producto.costoSinIgv, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                            <div class="col-xs-6 col-sm-6 col-lg-8">
+                                @Html.TextBoxFor(c => producto.costoSinIgv, htmlAttributes: new { @class = "form-control", @type = "number", @step = "0.01" })
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!--Precio Lima-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => producto.precioSinIgv, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                        <div class="col-xs-6 col-sm-6 col-lg-8">
+                            @Html.TextBoxFor(c => producto.precioSinIgv, htmlAttributes: new { @class = "form-control", @type = "number", @step = "0.01" })
+                        </div>
+                    </div>
+                </div>
+
+                <!--Precio Provincias-->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => producto.precioProvinciaSinIgv, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                        <div class="col-xs-6 col-sm-6 col-lg-8">
+                            @Html.TextBoxFor(c => producto.precioProvinciaSinIgv, htmlAttributes: new { @class = "form-control", @type = "number", @step = "0.01" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4"></div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => producto.exoneradoIgv, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                        @if (producto.exoneradoIgv)
+                        {
+                            <input checked type="checkbox" id="producto_exoneradoIgv" name="producto_exoneradoIgv" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="producto_exoneradoIgv" name="producto_exoneradoIgv" />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => producto.inafecto, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                        @if (producto.inafecto)
+                        {
+                            <input checked type="checkbox" id="producto_inafecto" name="producto_inafecto" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="producto_inafecto" name="producto_inafecto" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+
+            <div class="pull-right">
+                <button type="button" id="btnCancelarProducto" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionProducto" type="button" class="btn btn-success">Finalizar Creación</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/producto")
+}

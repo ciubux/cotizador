@@ -76,7 +76,9 @@ namespace Framework.DAL
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw ex;             
+
+
             }
 
             finally

@@ -23,6 +23,10 @@ namespace Cotizador.Controllers
         }
 
 
+        public void ChangeFamilia()
+        {
+            this.Session["familia"] = this.Request.Params["familia"];
+        }
         public ActionResult list()
         {
             List<Familia> familiaListTmp = (List<Familia>)this.Session["familiaList"];
@@ -40,7 +44,7 @@ namespace Cotizador.Controllers
                 familiaList.Add(familia);
             }
             var model = familiaList;
-
+            ViewBag.selectFamilia = this.Session["familia"];
             return PartialView("_SelectFamilia", model);
         }
 

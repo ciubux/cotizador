@@ -1,94 +1,994 @@
-﻿
+﻿@{
+    ViewBag.Title = "Búsqueda Clientes";
+    Model.Cliente cliente = ViewBag.cliente;
+    List<Model.Cliente> clienteList = ViewBag.clienteList;
+}
 
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
 <div class="container">
-<form action="/Home/LoadClientesFile" method="post" enctype="multipart/form-data" id="form1">
+    <input type="hidden" id="idPedido" value="" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
 
-    <table>
-        <tr>
-            <td>
-                <label class="control-label col-xs-6" for="file">Archivo Clientes:</label>
-            </td>
-            <td>
-                <input class="form-control" type="file" name="file" id="file" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label class="control-label col-xs-6" for="cantidadRegistros">Cantidad Registros:</label>
-            </td>
-            <td>
-                <input class="form-control" type="number" value="0" name="cantidadRegistros" id="cantidadRegistros" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label class="control-label col-xs-6" for="sede">Sede:</label>
-            </td>
-            <td>
-                <select id="sede" name="sede">
-                    <option value="A">AREQUIPA</option>
-                    <option value="C">CHICLAYO</option>
-                    <option value="Q">CUSCO</option>
-                    <option value="H">HUANCAYO</option>
-                    <option value="L">LIMA</option>
-                    <option value="P">PIURA</option>
-                    <option value="O">TARAPOTO</option>
-                    <option value="T">TRUJILLO</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td><label class="control-label col-xs-6" for="formato">Formato:</label></td>
-            <td>
-                <!--
-                                       <textarea class="form-control" rows="15" cols="100">
-    Columna A=PlazaId
-    Columna B=Plaza
-    Columna C=Id
-    Columna D=Nombre / Razón Social
-    Columna E=RUC/DNI
-    Columna F=Cód. Ve.
-    Columna G=Nombre Comercial
-    Columna H=Domicilio Legal
-    Columna I=Distrito
-    Columna J=Dirección de Despacho
-    Columna K=Distrito
-    Columna L=Rubro
+    <form class="form-horizontal">
 
-    *Fila1 es Cabecera
-    </textarea>
+        <div class="row">
+            <!--codigo-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(c => cliente.codigo, htmlAttributes: new { @class = "form-control" })
+                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el código los otros criterios no serán considerados en la búsqueda. </span>
+                    </div>
+                </div>
+            </div>
 
-                        -->
-
-
-                <textarea class="form-control" rows="15" cols="100">
-Columna C=Codigo
-Columna D=Nombre / Razón Social
-Columna F=RUC/DNI
-Columna G=Domicilio Legal
-Columna H=Distrito
-Columna J=Cód. Ve.
-Columna M=Dirección de Despacho
-Columna T=Nombre Comercial
-Columna U=Rubro
-            
-*Fila1 es Cabecera
-</textarea>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <button type="submit" class="form-control" form="form1" value="Submit">Cargar Clientes</button>
-            </td>
-        </tr>
-    </table>
-</form>
+            <!--CIUDAD-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                                                                                  new
+                                                                                  {
+                                                                                      ciudadSelectId = "idCiudad",
+                                                                                      selectedValue = cliente.ciudad.idCiudad
+                                                                                  })
+                    </div>
+                </div>
+            </div>
 
 
 
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.textoBusqueda, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(c => cliente.textoBusqueda, htmlAttributes: new { @class = "form-control" })
+                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si desea obtener todos los clientes ingrese 3 veces símbolo porcentaje: %%% </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Responsable Comercial-->
+        <div class="row">
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                       new
+                                       {
+                                           vendedorSelectId = "idResponsableComercial",
+                                           selectedValue = cliente.responsableComercial.idVendedor,
+                                       })
+
+                    </div>
+                </div>
+            </div>
+            <!--Supervisor Comercial-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.supervisorComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idSupervisorComercial" })
+                    <div class="col-xs-8">
+
+                        @Html.Action("GetSupervisoresComerciales", "Vendedor",
+                                 new
+                                 {
+                                     vendedorSelectId = "idSupervisorComercial",
+                                     selectedValue = cliente.supervisorComercial.idVendedor,
+                                 })
+
+                    </div>
+                </div>
+            </div>
+            <!--Asistente Servicio al Cliente-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.asistenteServicioCliente, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idSupervisorComercial" })
+                    <div class="col-xs-8">
+
+                        @Html.Action("GetAsistentesServicioCliente", "Vendedor",
+                                      new
+                                      {
+                                          vendedorSelectId = "idAsistenteServicioCliente",
+                                          selectedValue = cliente.asistenteServicioCliente.idVendedor,
+                                      })
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
+        <div class="row">
+            <!--CODIGO GRUPO CLIENTE-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.grupoCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetGruposCliente", "GrupoCliente",
+                                     new
+                                     {
+                                         grupoClienteSelectId = "idGrupoCliente",
+                                         selectedValue = cliente.grupoCliente.idGrupoCliente
+                                     })
+                    </div>
+                </div>
+            </div>
 
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <div class="col-xs-2">
+                    </div>
+                    <div class="col-xs-10">
+                        <div class="row">
+                            @if (cliente.sinPlazoCreditoAprobado)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_sinPlazoCreditoAprobado" id="sinPlazoCreditos" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_sinPlazoCreditoAprobado" id="sinPlazoCreditos" value="1">
+                            }
+                            <label for="sinPlazoCreditos" class="control-label">Solo sin plazo crédito aprobado</label>
+                        </div>
+                        <div class="row">
+                            @if (cliente.bloqueado)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_bloqueadoBusqueda" id="bloqueadoBusqueda" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_bloqueadoBusqueda" id="bloqueadoBusqueda" value="1">
+                            }
+                            <label for="bloqueadoBusqueda" class="control-label">Solo bloqueados</label>
+                        </div>
+                        <div class="row">
+                            @if (cliente.vendedoresAsignados)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_sinAsesorValidado" id="sinAsesorValidado" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_sinAsesorValidado" id="sinAsesorValidado" value="1">
+                            }
+                            <label for="sinAsesorValidado" class="control-label">Solo con asesor pendiente de validación</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <div class="col-xs-4">
+                        <label class="control-label">Canales:</label>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="row">
+                            @if (cliente.perteneceCanalLima)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalLima" id="cliente_CanalLima" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_perteneceCanalLima" id="cliente_CanalLima" value="1">
+                            }
+                            <label for="cliente_perteneceCanalLima" class="control-label">Lima</label>
+                        </div>
+                        <div class="row">
+                            @if (cliente.perteneceCanalProvincias)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalProvincias" id="cliente_CanalProvincias" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_perteneceCanalProvincias" id="cliente_CanalProvincias" value="1">
+                            }
+                            <label for="cliente_perteneceCanalProvincias" class="control-label">Provincias</label>
+                        </div>
+                        <div class="row">
+                            @if (cliente.perteneceCanalMultiregional)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalMultiregional" id="cliente_CanalMultireginal" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_perteneceCanalMultiregional" id="cliente_CanalMultireginal" value="1">
+                            }
+                            <label for="cliente_perteneceCanalMultiregional" class="control-label">Multiregional</label>
+                        </div>
+                        <div class="row">
+                            @if (cliente.perteneceCanalPCP)
+                            {
+                                <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalPCP" id="cliente_CanalPCP" value="1">
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="checkbox" name="cliente_perteneceCanalPCP" id="cliente_CanalPCP" value="1">
+                            }
+                            <label for="cliente_perteneceCanalPCP" class="control-label">PCP</label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+            @if (cliente.usuario.realizaCargaMasivaCliente)
+            {
+                <button id="btnImportarExcel" type="button" class="btn btn-primary  bouton-image botonExcel">Actualizar desde Excel</button>
+            }
+            <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+            <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+        </div>
+
+        <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Cliente")">Exportar</button>
+
+        </div>
+
+        <table id="tableClientes" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+               data-editing-allow-add="false"
+               data-editing-allow-delete="false"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar edición"
+               data-editing-add-text="Descartar cambios">
+            <thead>
+                <tr>
+                    <th data-name="idCliente" data-visible="false"></th>
+                    <th data-name="codigo" data-visible="true">Código</th>
+                    <th data-name="razonSocial" data-visible="true" data-sortable="true">Razón Social</th>
+                    <th data-name="nombreComercial" data-visible="true" data-sortable="true">Nombre Comercial</th>
+                    <th data-name="tipoDocumento" data-visible="true" data-sortable="true">Tipo Doc.</th>
+                    <th data-name="numeroDocumento" data-visible="true" data-sortable="true">N° Doc.</th>
+                    <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
+                    <th data-name="grupo" data-sortable="false" data-breakpoints="xs">Grupo</th>
+                    <th data-name="vendedorAsignado" data-visible="true" data-sortable="true">¿Asesor Validado?</th>
+                    <th data-name="asesorComercial" data-visible="true" data-sortable="true">Asesor Comercial</th>
+                    <th data-name="supervisorComercial" data-visible="true" data-sortable="true">Supervisor Comercial</th>
+                    <th data-name="asistenteServicioCliente" data-visible="true" data-sortable="true">Asistente Servicio Cliente</th>
+                    <th data-name="plazoCreditoAprobado" data-visible="true" data-sortable="true">Plazo Crédito Aprobado</th>
+                    <th data-name="montoCreditoAprobado" data-visible="true" data-sortable="true">Crédito Aprobado (S/)</th>
+                    <th data-name="bloqueado" data-visible="true" data-sortable="true">¿Bloqueado?</th>
+                    <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </form>
 </div>
 
+
+
+<div class="modal fade" id="modalVerCliente" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerCliente"><b>Información de Cliente</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="verIdCliente" />
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => cliente.ciudad, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCiudadNombre"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => cliente.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigo"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => cliente.nombreCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verNombreCliente"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <!--Tipo Documento Identidad-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(dv => cliente.tipoDocumentoIdentidad, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verTipoDocumentoIdentidad"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Número Documento-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="cliente_ruc" class="control-label col-xs-4">Número. Documento:</label>
+                                <div class="col-xs-6">
+                                    <p class="form-control-static" id="verNumeroDocumento"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Número Documento-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="cliente_grupo" class="control-label col-xs-4">Grupo Cliente:</label>
+                                <div class="col-xs-6">
+                                    <p class="form-control-static" id="verGrupoCliente"></p>
+                                </div>
+                                <label id="verHabilitadoNegociacionGrupal" class="radio-label" style="font-size:12px; color:forestgreen; margin-left: 15px;margin-top: 5px;">
+                                   
+                                </label>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" id="showClienteinfo" href="#cliente_datos">Datos Generales</a></li>
+                        <li><a data-toggle="tab" id="showClientePagos" href="#cliente_crediticia">Información Crediticia</a></li>
+                        <li><a data-toggle="tab" id="showClientePrecios" href="#cliente_precios">Productos y Precios</a></li>
+                        <li><a data-toggle="tab" id="showInformacionComercial" href="#cliente_comercial">Gestion Comercial</a></li>
+                        <li><a data-toggle="tab" id="showDireccionesEntrega" href="#cliente_direccionesEntrega">Direcciones Entrega</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="cliente_datos" class="tab-pane fade in active">
+
+
+                            <!--Razon SOcial Cliente-->
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-lg-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.razonSocialSunat, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-2 col-lg-2" })
+                                        <div class="col-xs-8 col-sm-10 col-lg-10">
+                                            <p class="form-control-static" id="verRazonSocialSunat"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--NombreComercial SUNAT-->
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-lg-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.nombreComercialSunat, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-2 col-lg-2" })
+                                        <div class="col-xs-8 col-sm-10 col-lg-10">
+                                            <p class="form-control-static" id="verNombreComercialSunat"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--DOMICILIO LEGAL CLIENTE-->
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-lg-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.direccionDomicilioLegalSunat, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-2 col-lg-2" })
+                                        <div class="col-xs-8 col-sm-10 col-lg-10">
+                                            <p class="form-control-static" id="verDireccionDomicilioLegalSunat"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            @Html.TextBoxFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            @Html.TextBoxFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            @Html.TextBoxFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--ESTADO CONTRIBUYENTE CLIENTE-->
+
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.estadoContribuyente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verEstadoContribuyente"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--DONDICIÓN CONTRIBUYENTE CLIENTE-->
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.condicionContribuyente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verCondicionContribuyente"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!--Nombre COmercial CLIENTE-->
+                                <div class="col-sm-6 col-lg-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.nombreComercial, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-2", @id = "labelClienteNombre" })
+                                        <div class="col-xs-8 col-sm-8 col-lg-10">
+                                            <p class="form-control-static" id="verNombreComercial"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.contacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                        <div class="col-xs-8 col-sm-8 col-lg-8">
+                                            <p class="form-control-static" id="verContacto"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--CORREO CLIENTE-->
+                            <div class="row">
+
+                                <div class="col-sm-6 col-lg-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.correoEnvioFactura, htmlAttributes: new { @class = "control-label col-xs-4  col-sm-4 col-lg-2" })
+                                        <div class="col-xs-8 col-sm-8 col-lg-10">
+                                            <p class="form-control-static" id="verCorreoEnvioFactura"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                        <div class="col-xs-8 col-sm-8 col-lg-8">
+                                            <p class="form-control-static" id="verTelefonoContacto"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(p => cliente.observaciones, htmlAttributes: new { @class = "control-label  col-xs-4  col-sm-4 col-lg-2" })
+                                        <div class="col-xs-8 col-sm-8 col-lg-10">
+                                            <p class="form-control-static" id="verObservaciones"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                        <div class="col-xs-8 col-sm-8 col-lg-8">
+                                            <p class="form-control-static" id="verEmailContacto"></p>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+
+
+
+                            <fieldset>
+                                <legend>Horarios Entrega:</legend>
+
+
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-12 col-lg-4">Primer Turno de Entrega:</label>
+                                            <div class="col-xs-8">
+                                                <p class="form-control-static" id="primerTurnoEntrega"><span id="verHoraInicioPrimerTurnoEntrega"></span> - <span id="verHoraFinPrimerTurnoEntrega"></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-12 col-lg-4">Segundo Turno de Entrega:</label>
+                                            <div class="col-xs-8">
+                                                <p class="form-control-static" id="primerTurnoEntrega"><span id="verHoraInicioSegundoTurnoEntrega"></span> - <span id="verHoraFinSegundoTurnoEntrega"></span></p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(dv => cliente.observacionHorarioEntrega, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                            <div class="col-xs-8">
+                                                <p class="form-control-static" id="verObservacionHorarioEntrega"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div id="cliente_crediticia" class="tab-pane fade">
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(dv => cliente.plazoCreditoSolicitado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verPlazoCreditoSolicitado"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(dv => cliente.tipoPagoFactura, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verPlazoCreditoAprobado"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(dv => cliente.sobrePlazo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verSobrePlazo"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Monto Crédito-->
+                            <div class="row">
+
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(dv => cliente.creditoSolicitado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verCreditoSolicitado"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(dv => cliente.creditoAprobado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verCreditoAprobado"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(dv => cliente.sobreGiro, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verSobreGiro"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Observaciones Crédito-->
+                            <div class="row">
+
+                                <div class="col-sm-6 col-lg-8">
+                                    <div class="form-group">
+                                        @Html.LabelFor(p => cliente.observacionesCredito, htmlAttributes: new { @class = "control-label  col-xs-4  col-sm-4 col-lg-2" })
+                                        <div class="col-xs-8 col-sm-8 col-lg-10">
+                                            <p class="form-control-static" id="verObservacionesCredito"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(dv => cliente.formaPagoFactura, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verFormaPagoFactura"></p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                        <div class="col-xs-8 col-sm-8 col-lg-8">
+                                            <p class="form-control-static" id="verBloqueado"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row" style="margin-right: 10px">
+                                <div class="col-sm-6 col-lg-8">
+                                    <div class="form-group">
+                                        <label for="verNombreArchivos" class="control-label col-xs-2">Archivos Adjuntos:</label>
+                                        <div class="col-xs-10">
+                                            <ul id="verNombreArchivos"><li></li></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="cliente_comercial" class="tab-pane fade">
+                            <fieldset>
+                                <legend>Responsables Comerciales Asignados:</legend>
+                                <div class="row">
+                                    <div class="col-sm-6 col-lg-4">
+                                        <div class="form-group">
+                                            <div class="col-xs-4">
+                                            </div>
+                                            <div class="col-xs-8">
+                                                    <span id="spanVendedoresAsignados" style="color:forestgreen" hidden="hidden">Los Responsables Comerciales han sido validados.</span>
+                                                    <span id="spanVendedoresNoAsignados" style="color:darkred" hidden="hidden">No se ha culminado la validación de los Responsables Comerciales.</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!--Responsable Comercial-->
+                                    <div class="col-sm-6 col-lg-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(c => cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
+                                            <div class="col-xs-8">
+                                                <p class="form-control-static" id="verResponsableComercial"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Supervisor Comercial-->
+                                    <div class="col-sm-6 col-lg-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(c => cliente.supervisorComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idSupervisorComercial" })
+                                            <div class="col-xs-8">
+                                                <p class="form-control-static" id="verSupervisorComercial"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Asistente Servicio al Cliente-->
+                                    <div class="col-sm-6 col-lg-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(c => cliente.asistenteServicioCliente, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idSupervisorComercial" })
+                                            <div class="col-xs-8">
+                                                <p class="form-control-static" id="verAsistenteServicioCliente"></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+
+
+
+                            <fieldset id="fieldset_origen">
+                                <legend>Origen: <spn id="spnVerOrigen"></spn></legend>
+                            </fieldset>
+
+                            <fieldset id="fieldset_canales">
+                                <legend>Canales:</legend>
+
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-12">
+                                        <div class="form-group">
+                                            <ul class="list-unstyled">
+                                                <li id="li_perteneceCanalLima">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Lima</label>
+                                                </li>
+                                                <li id="li_perteneceCanalProvincias">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Provincia</label>
+                                                </li>
+                                                <li id="li_perteneceCanalPCP">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">PCP</label>
+                                                </li>
+                                                <li id="li_perteneceCanalMultiregional">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Multiregional</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="div_multiregional" style="padding-left: 50px; margin-top: -20px;">
+                                    <div class="col-sm-12 col-lg-12" >
+                                        <div class="form-group">
+                                            <ul class="list-unstyled">
+                                                <li id="li_negociacionMultiregional">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check2.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">Ruc Habilitado para negociacion multiregional</label>
+                                                </li>
+                                                <li id="li_sedePrincipal">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/images/check.png" style="height: 20px;" />
+                                                    &nbsp;&nbsp; <label for="cliente_habilitadoSedePrincipal">MP <span id="spn_vercliente_mp_registracotizaciones"></span> Registra cotizaciones multiregionales para este RUC</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset id="div_subdistribuidor">
+                                <legend>Sub Distribuidor:</legend>
+
+                                <div class="row">
+                                    <!--Responsable Comercial-->
+                                    <div class="col-sm-6 col-lg-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(c => cliente.subDistribuidor, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
+                                            <div class="col-xs-8">
+                                                <p class="form-control-static" id="verSubDistribuidor"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </div>
+
+                        <div id="cliente_precios" class="tab-pane fade">
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-6">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkSoloCanasta">
+                                        <label class="onoffswitch-label" for="chkSoloCanasta"></label>
+                                    </div>
+                                    <h5 id="lblChkCanasta" style="width: 80%; margin-left: 45px; margin-top: -22px; font-weight:bold; cursor:pointer;" class="text-muted">Ver solo canasta de compra habitual</h5>
+
+                                </div>
+                            </div>                            
+
+                            <table id="tableListaPrecios" class="table" data-editing="false"
+                                   data-editing-allow-add="false"
+                                   data-editing-allow-delete="false"
+                                   data-editing-allow-edit="false"
+                                   data-show-toggle="false">
+                                <thead>
+                                    <tr>
+                                        <th data-name="idProducto" data-visible="false"></th>
+                                        <th data-name="canasta" class="listaPreciosCanasta" data-sortable="false">Pertenece <br />Canasta<br />Habitual</th>
+                                        <th data-name="proveedor" data-sortable="false">Prov.</th>
+                                        <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
+                                        <th data-name="producto" data-sortable="false">Producto / Descripción</th>
+                                        <th data-name="fechaInicioVigencia" data-sortable="false">Fecha Inicio Vigencia</th>
+                                        <th data-name="fechaFinVigencia" data-sortable="false">Fecha Fin Vigencia</th>
+                                        <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                                        <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
+                                        <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+                                        <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                                        <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+                                        <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
+                                        <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+                                        @if (cliente.usuario.visualizaMargen)
+                                        {
+                                            <th data-name="porcentajeMargen" class="porcentajeMargen" data-sortable="false" data-breakpoints="xs sm">Margen</th>
+                                        }
+                                        <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div id="cliente_direccionesEntrega" class="tab-pane fade">           
+
+                            <table id="tableListaDireccionesEntrega" class="table" data-editing="false"
+                                   data-editing-allow-add="false"
+                                   data-editing-allow-delete="false"
+                                   data-editing-allow-edit="false"
+                                   data-show-toggle="false">
+                                <thead>
+                                    <tr>
+                                        <th data-name="idDireccionEntrega" data-visible="false"></th>
+                                        <th data-name="departamento" data-sortable="false">Departamento</th>
+                                        <th data-name="provincia" data-sortable="false">Provincia</th>
+                                        <th data-name="distrito" data-sortable="false">Distrito</th>
+                                        <th data-name="direccionEntrega" data-sortable="false">Dirección Entrega</th>
+                                        <th data-name="contacto" data-sortable="false" data-breakpoints="xs">Nombre Contacto</th>
+                                        <th data-name="telefono" data-sortable="false">Telefono Contacto</th>
+                                        <th data-name="codigoCliente" data-sortable="false">Código Cliente</th>
+                                        <th data-name="nombre" data-sortable="false">Nombre</th>
+                                        <th data-name="codigoMP" data-sortable="false" data-breakpoints="xs">Código MP</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
+                        <p class="pagination-centered" style=" font-size: medium" align="center">
+                            No existen precios vigentes.
+                        </p>
+                    </div>
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" id="btnCancelarVerCliente" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnEditarCliente" class="btn btn-primary ">Editar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!--MODAL IMPORTAR-->
+<div class="modal fade" id="modalActualizarExcel" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalActualizarExcel"><b>Actualizar clientes desde excel </b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-3">Subir Archivo:</label>
+                                <div class="col-xs-9">
+                                    <input id="fileUploadExcel" name="file" type="file" data-url-set-file="@Url.Action("UpdateByExcel", "Cliente")"
+                                           class="btn btn-primary" data-max-size="2097152" data-max-size-text="2MB"
+                                           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button id="btnUpdateByExcel" type="button" class="btn btn-primary" data-dismiss="modal">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--MODAL MOSTRAR PRECIOS-->
+<div class="modal fade" id="modalMostrarPrecios" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación </b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <table id="tableMostrarPrecios" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar Edición Detalle"
+                           data-editing-add-text="Descartar Cambios Detalle">
+                        <thead>
+                            <tr>
+                                <th data-name="idProducto" data-visible="true">Número Cotización</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Unidad</th>
+                                <th data-name="idProducto" data-visible="true">Precio Neto</th>
+                                <th data-name="idProducto" data-visible="true">Flete</th>
+                                <th data-name="idProducto" data-visible="true">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/cliente")
+}

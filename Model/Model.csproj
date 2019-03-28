@@ -30,15 +30,76 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="MVC Foolproof Validation">
       <HintPath>..\packages\foolproof.0.9.4517\lib\MVC Foolproof Validation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auditoria.cs" />
+    <Compile Include="Cliente.cs" />
+    <Compile Include="Connected Services\ServiceSunatPadron\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Correo.cs" />
+    <Compile Include="GrupoClienteAdjunto.cs" />
+    <Compile Include="Origen.cs" />
+    <Compile Include="CategoriaPermiso.cs" />
+    <Compile Include="Permiso.cs" />
+    <Compile Include="SubDistribuidor.cs" />
+    <Compile Include="NotaIngresoValidacion.cs" />
+    <Compile Include="NotaIngreso.cs" />
+    <Compile Include="ClienteAdjunto.cs" />
+    <Compile Include="ArchivoAdjunto.cs" />
+    <Compile Include="PedidoGrupo.cs" />
+    <Compile Include="Persona.cs" />
+    <Compile Include="Producto.cs" />
+    <Compile Include="SeguimientoNotaIngreso.cs" />
+    <Compile Include="Solicitante.cs" />
+    <Compile Include="GuiaRemisionValidacion.cs" />
+    <Compile Include="MovimientoAlmacenJson.cs" />
+    <Compile Include="PedidoAdjunto.cs" />
+    <Compile Include="SerieDocumentoElectronico.cs" />
+    <Compile Include="Connected Services\ServiceReferencePSE\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentoDetalle.cs" />
+    <Compile Include="DTO\UbigeoDTO.cs" />
+    <Compile Include="DireccionEntrega.cs" />
+    <Compile Include="EXCEPTION\DuplicateNumberDocumentException.cs" />
+    <Compile Include="GuiaRemision.cs" />
+    <Compile Include="HelperDocumento.cs" />
+    <Compile Include="IDocumento.cs" />
+    <Compile Include="MovimientoAlmacen.cs" />
+    <Compile Include="SeguimientoGuiaRemision.cs" />
+    <Compile Include="SeguimientoCrediticioPedido.cs" />
+    <Compile Include="Transportista.cs" />
+    <Compile Include="Ubigeo.cs" />
+    <Compile Include="DocumentoVenta.cs" />
+    <Compile Include="DocumentoReferencia.cs" />
+    <Compile Include="Usuario.cs" />
+    <Compile Include="Vendedor.cs" />
+    <Compile Include="Transaccion.cs" />
+    <Compile Include="Venta.cs" />
+    <Compile Include="VentaDetalle.cs" />
+    <Compile Include="MovimientoDetalle.cs" />
     <Compile Include="PedidoDetalle.cs" />
     <Compile Include="Pedido.cs" />
     <Compile Include="EnumHelper.cs" />
@@ -47,17 +108,16 @@
     <Compile Include="PrecioStaging.cs" />
     <Compile Include="PrecioListaStaging.cs" />
     <Compile Include="FacturaStaging.cs" />
-    <Compile Include="Grupo.cs" />
+    <Compile Include="GrupoCliente.cs" />
     <Compile Include="Constantes.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="ProductoJson.cs" />
+    <Compile Include="DocumentoDetalleJson.cs" />
     <Compile Include="ProductoStaging.cs" />
     <Compile Include="ClienteStaging.cs" />
     <Compile Include="PrecioWS.cs" />
     <Compile Include="TipoCambio.cs" />
     <Compile Include="AutoGuardadoCotizacion.cs" />
     <Compile Include="Unidad.cs" />
-    <Compile Include="Producto.cs" />
     <Compile Include="Familia.cs" />
     <Compile Include="Proveedor.cs" />
     <Compile Include="Categoria.cs" />
@@ -65,10 +125,93 @@
     <Compile Include="PrecioClienteProducto.cs" />
     <Compile Include="CotizacionDetalle.cs" />
     <Compile Include="Cotizacion.cs" />
-    <Compile Include="Cliente.cs" />
     <Compile Include="Ciudad.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Usuario.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Connected Services\ServiceReferencePSE\Model.ServiceReferencePSE.CPE_DOC_TRIBUTARO_BE.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ServiceReferencePSE\Model.ServiceReferencePSE.CPE_RESPUESTA_BE.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ServiceReferencePSE\Model.ServiceReferencePSE.RPTA_BE.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ServiceReferencePSE\Model.ServiceReferencePSE.RPTA_DOC_TRIB_BE.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE.wsdl" />
+    <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServiceSunatPadron\Model.ServiceSunatPadron.ClienteSunat.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ServiceSunatPadron\wsSunatPadron.wsdl" />
+    <None Include="Connected Services\ServiceSunatPadron\wsSunatPadron.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServiceSunatPadron\wsSunatPadron1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServiceSunatPadron\wsSunatPadron2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\ServiceReferencePSE\" />
+    <WCFMetadataStorage Include="Connected Services\ServiceSunatPadron\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ServiceReferencePSE\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ServiceReferencePSE\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ServiceReferencePSE\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ServiceSunatPadron\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ServiceSunatPadron\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ServiceSunatPadron\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTO\JSON\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

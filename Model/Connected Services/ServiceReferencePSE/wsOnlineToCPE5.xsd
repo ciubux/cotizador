@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfCPE_DOC_BAJA">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CPE_DOC_BAJA" nillable="true" type="tns:CPE_DOC_BAJA" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCPE_DOC_BAJA" nillable="true" type="tns:ArrayOfCPE_DOC_BAJA" />
+  <xs:complexType name="CPE_DOC_BAJA">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="NRO_DOC" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIP_DOC" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIP_CPE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FEC_EMI" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SERIE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CORRELATIVO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MTVO_BAJA" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CPE_DOC_BAJA" nillable="true" type="tns:CPE_DOC_BAJA" />
+</xs:schema>

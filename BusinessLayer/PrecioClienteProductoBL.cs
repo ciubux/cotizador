@@ -22,7 +22,16 @@ namespace BusinessLayer
             }
         }
 
+        public List<PrecioClienteProducto> getPreciosRegistradosGrupo(Guid idProducto, int idGrupoCliente)
+        {
+            using (var dal = new PrecioClienteProductoDAL())
+            {
+                List<PrecioClienteProducto> precioGrupoClienteProductoList = dal.getPreciosRegistradosGrupo(idProducto, idGrupoCliente);
 
-   
+
+                return precioGrupoClienteProductoList;
+            }
+        }
+
     }
 }
