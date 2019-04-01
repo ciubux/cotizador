@@ -1096,10 +1096,734 @@ END
 
 
 /* **** 11 **** */
+ALTER PROCEDURE [dbo].[pi_producto] 
+@sku  varchar(100),
+@descripcion  varchar(500),
+@skuProveedor  varchar(100),
+@estado  int,
+@imagen image,
+@precio numeric(18,2),
+@precioProvincia numeric(18,2),
+@costo numeric(18,2),
+@familia varchar(200),
+@proveedor varchar(10),
+@unidad varchar(200),
+@unidadAlternativa varchar(200),
+@equivalencia int,
+@idUsuario uniqueidentifier,
+@unidadProveedor varchar(300),
+@equivalenciaProveedor int,
+@unidadEstandarInternacional varchar(3),
+@exoneradoIgv smallint,
+@inafecto smallint,
+@tipo int,
+@fechaInicioVigencia date,
+@esCargaMasiva smallint,
+@newId uniqueidentifier OUTPUT 
+
+AS
+BEGIN
+
+SET NOCOUNT ON
+SET @newId = NEWID();
+
+
+	INSERT INTO PRODUCTO
+           (id_producto
+			,sku 
+			,descripcion
+			,sku_proveedor
+			,estado
+			,imagen
+			,precio
+			,precio_provincia
+			,costo
+			,familia
+			,proveedor
+			,unidad
+			,unidad_alternativa
+			,equivalencia
+			,usuario_creacion
+			,fecha_creacion
+			,usuario_modificacion
+			,fecha_modificacion
+			,unidad_proveedor
+			,equivalencia_proveedor
+			,unidad_estandar_internacional
+			,exonerado_igv
+			,inafecto
+			,tipo
+			,carga_masiva
+			,fecha_inicio_vigencia
+		   )
+     VALUES
+           (@newId,
+		    @sku,
+			@descripcion,
+			@skuProveedor,
+			@estado,
+			@imagen,
+			@precio,
+			@precioProvincia,
+			@costo,
+			@familia,
+			@proveedor,
+			@unidad,
+			@unidadAlternativa,
+			@equivalencia,
+			@idUsuario,
+			GETDATE(),
+			@idUsuario,
+			GETDATE(),
+			@unidadProveedor,
+			@equivalenciaProveedor,
+			@unidadEstandarInternacional,
+			@exoneradoIgv,
+			@inafecto,
+			@tipo,
+			@esCargaMasiva,
+			@fechaInicioVigencia
+			);
+
+END
+
 
 
 
 /* **** 12 **** */
+ALTER PROCEDURE [dbo].[pi_clienteSunat] 
+@idUsuario uniqueidentifier,
+@razonSocial  varchar(200),
+@nombreComercial  varchar(200),
+@ruc  varchar(20),
+@contacto1  varchar(100),
+@idCiudad uniqueidentifier,
+@correoEnvioFactura varchar(1000),
+@razonSocialSunat varchar(500),
+@nombreComercialSunat varchar(500),
+@direccionDomicilioLegalSunat varchar(1000),
+@estadoContribuyente varchar(50),
+@condicionContribuyente varchar(50),
+@ubigeo varchar(6),
+@formaPagoFactura int,
+/*Plazo credito*/
+@plazoCreditoSolicitado int,
+@tipoPagoFactura int,
+@sobrePlazo int, 
+/*Monto Crédito*/
+@creditoSolicitado decimal(12,2),
+@creditoAprobado decimal(12,2),
+@sobreGiro decimal(12,2),
+/*Vendedores*/
+@idResponsableComercial int,
+@idAsistenteServicioCliente int,
+@idSupervisorComercial int,
+
+@tipoDocumento char(1),
+@observacionesCredito varchar(1000),
+@observaciones varchar(1000),
+@vendedoresAsignados smallint,
+@bloqueado smallint,
+@perteneceCanalMultiregional smallint,
+@perteneceCanalLima smallint,
+@perteneceCanalProvincias smallint,
+@perteneceCanalPCP smallint,
+@esSubDistribuidor smallint,
+
+@idOrigen int,
+@idSubDistribuidor int,
+
+@idGrupoCliente int,
+@horaInicioPrimerTurnoEntrega datetime,
+@horaFinPrimerTurnoEntrega datetime,
+@horaInicioSegundoTurnoEntrega datetime,
+@horaFinSegundoTurnoEntrega datetime,
+
+
+/* Campos agregados  */
+@habilitadoNegociacionGrupal bit,
+@sedePrincipal bit,
+@negociacionMultiregional bit,
+@telefonoContacto1 varchar(50),
+@emailContacto1 varchar(50),
+
+@observacionHorarioEntrega varchar(1000), 
+@fechaInicioVigencia date,
+
+@esCargaMasiva smallint,
+
+@newId uniqueidentifier OUTPUT, 
+@codigoAlterno int OUTPUT,
+@codigo VARCHAR(4) OUTPUT
+
+AS
+BEGIN TRAN
+
+
+
+Select @codigo = siguiente_codigo_cliente FROM CIUDAD where id_ciudad = @idCiudad;
+
+
+SET NOCOUNT ON
+SET @newId = NEWID();
+SET @codigoAlterno = NEXT VALUE FOR SEQ_CODIGO_ALTERNO_CLIENTE;
+
+IF @tipoDocumento <> 6
+BEGIN 
+	SET @razonSocial = @nombreComercial;
+END
+ELSE
+BEGIN
+	SET @razonSocial = @razonSocialSunat;
+END
+
+
+INSERT INTO CLIENTE
+           ([id_cliente]
+		   ,[codigo_alterno]
+           ,[razon_Social]
+		   ,[nombre_Comercial]
+           ,[ruc]
+           ,[contacto1]
+		   ,[id_ciudad]
+		   ,estado
+		   ,[usuario_creacion]
+		   ,[fecha_creacion]
+		   ,[usuario_modificacion]
+		   ,[fecha_modificacion]
+		   ,correo_Envio_Factura
+		   ,razon_Social_Sunat
+		   ,nombre_Comercial_Sunat
+		   ,direccion_Domicilio_Legal_Sunat
+		   ,estado_Contribuyente_sunat
+		   ,condicion_Contribuyente_sunat
+		   ,ubigeo
+		   ,direccion_despacho
+		   ,forma_pago_factura
+		   ,tipo_documento
+		   ,codigo,
+		   /*Plazo credito*/
+			plazo_credito_solicitado,
+			tipo_pago_factura,
+			sobre_plazo, 
+			/*Monto Crédito*/
+			credito_solicitado,
+			credito_aprobado,
+			sobre_giro, 
+			/*Vendedores*/
+			id_responsable_comercial,
+			id_asistente_servicio_cliente,
+			id_supervisor_comercial,
+			observaciones_credito,
+			observaciones,
+			vendedores_asignados,
+			bloqueado,
+			pertenece_canal_multiregional,
+			pertenece_canal_lima,
+			pertenece_canal_provincia,
+			pertenece_canal_pcp,
+			es_sub_distribuidor,
+			hora_inicio_primer_turno_entrega,
+			hora_fin_primer_turno_entrega,
+			hora_inicio_segundo_turno_entrega,
+			hora_fin_segundo_turno_entrega,
+			es_proveedor,
+			sede_principal,
+			negociacion_multiregional,
+			habilitado_negociacion_grupal,
+			telefono_contacto1,
+			email_contacto1,
+			id_origen,
+			id_subdistribuidor,
+			fecha_inicio_vigencia,
+			observacion_horario_entrega,
+			id_grupo_cliente,
+			carga_masiva
+		   )
+     VALUES
+           (@newId,
+		    @codigoAlterno,
+		    @razonSocial,
+			@nombreComercial,
+            @ruc,
+            @contacto1, 
+			@idCiudad,
+			1,
+			@idUsuario,
+			GETDATE(),
+			@idUsuario,
+			GETDATE(),
+			@correoEnvioFactura,
+			@razonSocialSunat,
+			@nombreComercialSunat,
+			@direccionDomicilioLegalSunat,
+			@estadoContribuyente,
+			@condicionContribuyente,
+			@ubigeo,
+			@direccionDomicilioLegalSunat,
+		--	@tipoPagoFactura,
+			@formaPagoFactura,
+			@tipoDocumento,
+			@codigo,--codigo
+			@plazoCreditoSolicitado,
+			@tipoPagoFactura,
+			@sobrePlazo, 
+			/*Monto Crédito*/
+			@creditoSolicitado,
+			@creditoAprobado,
+			@sobreGiro, 
+			/*Vendedores*/
+			@idResponsableComercial,
+			@idAsistenteServicioCliente ,
+			@idSupervisorComercial,
+			@observacionesCredito,
+			@observaciones,
+			@vendedoresAsignados,
+			@bloqueado ,
+			@perteneceCanalMultiregional ,
+			@perteneceCanalLima ,
+			@perteneceCanalProvincias ,
+			@perteneceCanalPCP ,
+			@esSubDistribuidor, 
+			@horaInicioPrimerTurnoEntrega,
+			@horaFinPrimerTurnoEntrega,
+			@horaInicioSegundoTurnoEntrega,
+			@horaFinSegundoTurnoEntrega,
+			1, --ES PROVEEDOR
+			@sedePrincipal,
+			@negociacionMultiregional,
+			@habilitadoNegociacionGrupal,
+			@telefonoContacto1,
+			@emailContacto1,
+			@idOrigen,
+			@idSubDistribuidor,
+			@fechaInicioVigencia,
+			@observacionHorarioEntrega,
+			@idGrupoCliente,
+			@esCargaMasiva
+			);
+
+INSERT INTO SOLICITANTE 
+(id_solicitante, id_cliente, nombre, telefono, correo, estado, 
+usuario_creacion, fecha_creacion, usuario_modificacion, fecha_modificacion)
+VALUES
+(newid(), @newId, @contacto1, @telefonoContacto1, @emailContacto1,1,
+@idUsuario,GETDATE(), @idUsuario, GETDATE())
+
+
+IF @codigo = 'LY99'
+BEGIN
+	UPDATE CIUDAD set siguiente_codigo_cliente = 'LV01'	where id_ciudad = @idCiudad;
+END 
+ELSE 
+BEGIN
+	UPDATE CIUDAD set siguiente_codigo_cliente = 
+	CONCAT( LEFT(siguiente_codigo_cliente,2),
+	FORMAT (CAST(SUBSTRing (siguiente_codigo_cliente,3,2) AS INT) + 1 , '00' ))
+	where id_ciudad = @idCiudad
+END
+
+
+	
+IF @negociacionMultiregional = 'FALSE'
+BEGIN
+	UPDATE CLIENTE 
+	SET sede_principal = 'FALSE',
+	fecha_inicio_vigencia = @fechaInicioVigencia
+	WHERE ruc like @ruc;
+END
+
+UPDATE CLIENTE 
+SET   negociacion_multiregional = @negociacionMultiregional, pertenece_canal_multiregional = @perteneceCanalMultiregional
+        ,razon_Social_Sunat = @razonSocialSunat
+		,nombre_Comercial_Sunat = nombre_Comercial_Sunat
+		,direccion_Domicilio_Legal_Sunat = @direccionDomicilioLegalSunat
+		,estado_Contribuyente_sunat = @estadoContribuyente
+		,condicion_Contribuyente_sunat = @condicionContribuyente
+		,es_sub_distribuidor = @esSubDistribuidor
+		,id_subdistribuidor = @idSubDistribuidor
+		,ubigeo = @ubigeo
+		,fecha_inicio_vigencia = @fechaInicioVigencia
+WHERE ruc like @ruc;
+
+IF @idGrupoCliente > 0 
+BEGIN
+	INSERT INTO CLIENTE_GRUPO_CLIENTE 
+	VALUES (@newId, @idGrupoCliente, GETDATE(), 1, @idUsuario, GETDATE(), @idUsuario, GETDATE())
+END
+
+
+COMMIT
+
+
+
+
+
+
+
+/* **** 13 **** */
+ALTER PROCEDURE [dbo].[pu_producto] 
+@idProducto uniqueidentifier,
+@idUsuario uniqueidentifier,
+@sku  varchar(100),
+@descripcion  varchar(500),
+@skuProveedor  varchar(100),
+@estado  int,
+@imagen image,
+@precio numeric(18,2),
+@precioProvincia numeric(18,2),
+@costo numeric(18,2),
+@familia varchar(200),
+@proveedor varchar(10),
+@unidad varchar(200),
+@unidadAlternativa varchar(200),
+@equivalencia int,
+@unidadProveedor varchar(300),
+@equivalenciaProveedor int,
+@unidadEstandarInternacional varchar(3),
+@exoneradoIgv smallint,
+@inafecto smallint,
+@fechaInicioVigencia date,
+@tipo int,
+@esCargaMasiva smallint
+
+AS
+BEGIN
+
+	UPDATE PRODUCTO  
+	SET sku = @sku 
+		,descripcion = @descripcion
+		,sku_proveedor = @skuProveedor
+		,estado = @estado
+		,imagen = @imagen
+		,precio = @precio
+		,precio_provincia = @precioProvincia
+		,costo = @costo
+		,familia = @familia
+		,proveedor = @proveedor
+		,unidad = @unidad
+		,unidad_alternativa = @unidadAlternativa
+		,equivalencia = @equivalencia
+		,usuario_modificacion = @idUsuario
+		,fecha_modificacion = GETDATE()
+		,unidad_proveedor = @unidadProveedor
+		,equivalencia_proveedor = @equivalenciaProveedor
+		,unidad_estandar_internacional = @unidadEstandarInternacional
+		,exonerado_igv = @exoneradoIgv
+		,inafecto = @inafecto
+		,fecha_inicio_vigencia = @fechaInicioVigencia
+		,tipo = @tipo
+		,carga_masiva = @esCargaMasiva
+	WHERE id_producto like @idProducto;
+	
+END
+
+
+
+
+
+
+
+/* **** 14 **** */
+ALTER PROCEDURE [dbo].[pu_clienteSunat] 
+@idCliente uniqueidentifier,
+@idUsuario uniqueidentifier,
+@razonSocial  varchar(200),
+@nombreComercial  varchar(200),
+@contacto1  varchar(100),
+@idCiudad uniqueidentifier,
+@correoEnvioFactura varchar(1000),
+@razonSocialSunat varchar(500),
+@nombreComercialSunat varchar(500),
+@direccionDomicilioLegalSunat varchar(1000),
+@estadoContribuyente varchar(50),
+@condicionContribuyente varchar(50),
+@ubigeo varchar(6),
+@formaPagoFactura int,
+
+/*Plazo credito*/
+@plazoCreditoSolicitado int,
+@tipoPagoFactura int,
+@sobrePlazo int, 
+/*Monto Crédito*/
+@creditoSolicitado decimal(12,2),
+@creditoAprobado decimal(12,2),
+@sobreGiro decimal(12,2),
+/*Vendedores*/
+@idResponsableComercial int,
+@idAsistenteServicioCliente int,
+@idSupervisorComercial int,
+
+@idOrigen int,
+@idSubDistribuidor int,
+
+@observacionesCredito varchar(1000),
+@observaciones varchar(1000),
+@vendedoresAsignados smallint,
+@bloqueado smallint,
+@perteneceCanalMultiregional smallint,
+@perteneceCanalLima smallint,
+@perteneceCanalProvincias smallint,
+@perteneceCanalPCP smallint,
+@esSubDistribuidor smallint,
+@idGrupoCliente int,
+@horaInicioPrimerTurnoEntrega datetime,
+@horaFinPrimerTurnoEntrega datetime,
+@horaInicioSegundoTurnoEntrega datetime,
+@horaFinSegundoTurnoEntrega datetime,
+/* Campos agregados  */
+@habilitadoNegociacionGrupal bit,
+@sedePrincipal bit,
+@negociacionMultiregional bit,
+@telefonoContacto1 varchar(50),
+@emailContacto1 varchar(50),
+@observacionHorarioEntrega varchar(1000), 
+@fechaInicioVigencia date,
+@esCargaMasiva smallint,
+
+@existenCambiosCreditos smallint OUTPUT,
+@usuarioSolicitanteCredito uniqueIdentifier OUTPUT,
+@correoUsuarioSolicitanteCredito VARCHAR(50) OUTPUT
+
+AS
+BEGIN
+
+
+DECLARE @ruc varchar(20); 
+DECLARE @nrAnterior bit; 
+DECLARE @idResponsableComercialAnterior int;  /* Agregado */
+DECLARE @idAsistenteServicioClienteAnterior int;  /* Agregado */
+DECLARE @idSupervisorComercialAnterior int;  /* Agregado */
+DECLARE @negociacionMultiregionalAnterior bit;  /* Agregado */
+DECLARE @sedePrincipalAnterior bit;  /* Agregado */
+DECLARE @plazoCreditoSolicitadoAnterior int;
+DECLARE @tipoPagoFacturaAnterior int;
+DECLARE @formaPagoFacturaAnterior int;
+DECLARE @creditoSolicitadoAnterior decimal(12,2);
+DECLARE @creditoAprobadoAnterior decimal(12,2);
+DECLARE @usuarioSolicitanteCreditoAnterior uniqueIdentifier;
+DECLARE @enviarCorreoCreditos int;
+DECLARE @enviarCorreoUsuarioNoCreditos int;
+DECLARE @defineMontoCredito smallint;
+DECLARE @definePlazoCredito smallint;
+
+DECLARE @countSolicitante int;
+DECLARE @idSolicitante uniqueIdentifier;
+
+
+SET NOCOUNT ON
+SET @existenCambiosCreditos = 0;
+SET @usuarioSolicitanteCredito = '00000000-0000-0000-0000-000000000000';
+SET @correoUsuarioSolicitanteCredito = '';
+
+IF (SELECT tipo_documento FROM CLIENTE where id_cliente = @idCliente) <> 6
+BEGIN 
+	SET @razonSocial = @nombreComercial;
+END
+
+
+
+SELECT @ruc = ruc, @nrAnterior = negociacion_multiregional ,
+@plazoCreditoSolicitadoAnterior = plazo_credito_solicitado,
+@tipoPagoFacturaAnterior = tipo_pago_factura,
+@formaPagoFacturaAnterior = forma_pago_factura,
+@idResponsableComercialAnterior = id_responsable_comercial,
+@idAsistenteServicioClienteAnterior = id_asistente_Servicio_cliente,
+@idSupervisorComercialAnterior = id_supervisor_comercial,
+@negociacionMultiregionalAnterior = negociacion_multiregional,
+@sedePrincipalAnterior = sede_principal,
+@creditoSolicitadoAnterior = credito_solicitado,
+@creditoAprobadoAnterior =credito_aprobado,
+@usuarioSolicitanteCreditoAnterior = usuario_solicitante_credito
+FROM CLIENTE WHERE id_cliente = @idCliente; /* Agregado */
+
+IF @plazoCreditoSolicitadoAnterior <>  @plazoCreditoSolicitado
+	OR @tipoPagoFacturaAnterior <> @tipoPagoFactura
+	OR @formaPagoFacturaAnterior <> @formaPagoFactura
+	OR @creditoSolicitadoAnterior <> @creditoSolicitado
+	OR @creditoAprobadoAnterior <> @creditoAprobado
+BEGIN 
+ 
+	SET @existenCambiosCreditos = 1;
+
+	/*Si no se indica el usuario solicitante entonces se recupera el ultimo solicitanteCredito en caso exista*/
+	/*IF @usuarioSolicitanteCredito = '00000000-0000-0000-0000-000000000000'
+	BEGIN 
+		SET @usuarioSolicitanteCredito = @usuarioSolicitanteCreditoAnterior
+	END */
+	
+	
+	SELECT @defineMontoCredito = ISNULL(define_monto_credito,0),
+	@definePlazoCredito = ISNULL(define_plazo_credito,0)
+	FROM USUARIO where id_usuario = @idUsuario
+
+	IF  @defineMontoCredito = 1 OR @definePlazoCredito = 1
+	BEGIN 
+		/*Si el usuario es aprobador de creditos se recupera el usuario solicitante anterior*/
+		SET @usuarioSolicitanteCredito = @usuarioSolicitanteCreditoAnterior;
+		SELECT @correoUsuarioSolicitanteCredito = ISNULL(email,'') FROM USUARIO 
+		WHERE id_usuario = @usuarioSolicitanteCreditoAnterior;
+
+	END 
+	ELSE
+	BEGIN
+		/*Si el usuario NO es aprobador de creditos se actualiza con el usuario actual*/
+		SELECT @usuarioSolicitanteCredito = @idUsuario,
+		@correoUsuarioSolicitanteCredito = email
+		FROM USUARIO 
+		WHERE id_usuario = @idUsuario;
+	END
+END 
+
+UPDATE CLIENTE SET [razon_Social] = @razonSocial
+		   ,[nombre_Comercial] = @nombreComercial   
+		   ,[id_ciudad] = @idCiudad
+		   ,[usuario_modificacion] = @idUsuario
+		   ,[fecha_modificacion] = GETDATE()
+		   ,correo_Envio_Factura = @correoEnvioFactura
+		   ,razon_Social_Sunat = @razonSocialSunat
+		   ,nombre_Comercial_Sunat = nombre_Comercial_Sunat
+		   ,direccion_Domicilio_Legal_Sunat = @direccionDomicilioLegalSunat
+		   ,estado_Contribuyente_sunat = @estadoContribuyente
+		   ,condicion_Contribuyente_sunat = @condicionContribuyente
+		   ,ubigeo = @ubigeo
+		   ,forma_pago_factura = @formaPagoFactura
+		   ,contacto1 =@contacto1
+		   /*Plazo credito*/
+			,plazo_credito_solicitado = @plazoCreditoSolicitado
+			,tipo_pago_factura = @tipoPagoFactura
+			,sobre_plazo = @sobrePlazo
+			/*Monto Crédito*/
+			,credito_solicitado = @creditoSolicitado
+			,credito_aprobado = @creditoAprobado
+			,sobre_giro = @sobreGiro
+			/*Vendedores*/
+			,id_responsable_comercial = @idResponsableComercial
+			,id_asistente_Servicio_cliente = @idAsistenteServicioCliente
+			,id_supervisor_comercial = @idSupervisorComercial
+			,observaciones_credito = @observacionesCredito
+			,observaciones = @observaciones
+			,vendedores_asignados = @vendedoresAsignados
+			,bloqueado = @bloqueado
+			,pertenece_canal_multiregional = @perteneceCanalMultiregional
+			,pertenece_canal_lima = @perteneceCanalLima
+			,pertenece_canal_provincia = @perteneceCanalProvincias
+			,pertenece_canal_pcp =@perteneceCanalPCP
+			,es_sub_distribuidor = @esSubDistribuidor
+			,hora_inicio_primer_turno_entrega = @horaInicioPrimerTurnoEntrega
+			,hora_fin_primer_turno_entrega = @horaFinPrimerTurnoEntrega
+			,hora_inicio_segundo_turno_entrega = @horaInicioSegundoTurnoEntrega
+			,hora_fin_segundo_turno_entrega = @horaFinSegundoTurnoEntrega
+			,sede_principal = @sedePrincipal
+			,negociacion_multiregional = @negociacionMultiregional
+			,habilitado_negociacion_grupal = @habilitadoNegociacionGrupal
+			,telefono_contacto1 = @telefonoContacto1
+			,email_contacto1 = @emailContacto1
+			,usuario_solicitante_credito = @usuarioSolicitanteCredito
+			,observacion_horario_entrega = @observacionHorarioEntrega
+			,id_origen = @idOrigen
+			,id_subdistribuidor = @idSubDistribuidor
+			,fecha_inicio_vigencia = @fechaInicioVigencia
+			,id_grupo_cliente = @idGrupoCliente
+			,carga_masiva = @esCargaMasiva
+     WHERE 
+          id_cliente = @idCliente;
+
+		  
+/* IF Agregado */
+
+	
+	IF @negociacionMultiregional = 'FALSE'
+	BEGIN
+		UPDATE CLIENTE 
+		SET sede_principal = 'FALSE',
+		fecha_inicio_vigencia = @fechaInicioVigencia	
+		WHERE ruc like @ruc;
+	END
+
+	UPDATE CLIENTE 
+	SET negociacion_multiregional = @negociacionMultiregional, pertenece_canal_multiregional = @perteneceCanalMultiregional
+	       ,razon_Social_Sunat = @razonSocialSunat
+		   ,nombre_Comercial_Sunat = nombre_Comercial_Sunat
+		   ,direccion_Domicilio_Legal_Sunat = @direccionDomicilioLegalSunat
+		   ,estado_Contribuyente_sunat = @estadoContribuyente
+		   ,condicion_Contribuyente_sunat = @condicionContribuyente
+		   ,ubigeo = @ubigeo
+		   ,es_sub_distribuidor = @esSubDistribuidor
+		   ,id_subdistribuidor = @idSubDistribuidor
+		   ,fecha_inicio_vigencia = @fechaInicioVigencia
+	WHERE ruc like @ruc;
+
+
+DELETE CLIENTE_GRUPO_CLIENTE 
+where id_cliente = @idCliente;
+
+
+IF @idGrupoCliente > 0 
+BEGIN
+	INSERT INTO CLIENTE_GRUPO_CLIENTE 
+	VALUES (@idCliente, @idGrupoCliente, GETDATE(), 1, @idUsuario, GETDATE(), @idUsuario, GETDATE())
+END
+
+
+
+SELECT @countSolicitante = COUNT(*) FROM SOLICITANTE
+WHERE id_cliente = @idCliente 
+AND estado = 1 
+AND REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(@contacto1), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')   = 
+REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(nombre), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ') 
+	
+IF @countSolicitante = 1
+BEGIN 
+	SELECT @idSolicitante = id_solicitante FROM SOLICITANTE
+	WHERE id_cliente = @idCliente 
+	AND estado = 1 
+	AND REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(@contacto1), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')   = 
+	REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(UPPER(nombre), 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ') 
+END 
+
+
+IF @idSolicitante = CAST(CAST(0 AS BINARY) AS UNIQUEIDENTIFIER)
+BEGIN 
+	SET @idSolicitante  = NEWID();
+	INSERT INTO SOLICITANTE 
+	(id_solicitante, id_cliente, nombre, telefono, correo, estado, 
+	usuario_creacion, fecha_creacion, usuario_modificacion, fecha_modificacion)
+	VALUES(@idSolicitante, @idCliente, @contacto1, @telefonoContacto1, @emailContacto1,1,
+	@idUsuario,GETDATE(), @idUsuario, GETDATE());
+END 
+ELSE
+BEGIN
+	UPDATE SOLICITANTE SET 
+	nombre = @contacto1, 
+	telefono = @telefonoContacto1, 
+	correo = @emailContacto1,
+	usuario_modificacion = @idUsuario,
+	fecha_modificacion = GETDATE() 
+	where id_solicitante = @idSolicitante;
+END 
+
+
+
+
+
+
+END
+
+
+
+
+
+
+
+/* **** 15 **** */
+
+
+
+
+/* **** 16 **** */
+
+
 
 
 

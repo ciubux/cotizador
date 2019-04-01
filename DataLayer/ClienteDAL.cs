@@ -713,6 +713,8 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente == null ? 0 : cliente.grupoCliente.idGrupoCliente);
 
+            InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(cliente.CargaMasiva ? 1 : 0));
+
             InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
             InputParameterAdd.Int(objCommand, "idSubDistribuidor", (!cliente.esSubDistribuidor) ? 0 : cliente.subDistribuidor.idSubDistribuidor);
 
@@ -792,7 +794,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
             InputParameterAdd.Varchar(objCommand, "telefonoContacto1", cliente.telefonoContacto1);
             InputParameterAdd.Varchar(objCommand, "emailContacto1", cliente.emailContacto1);
-            InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);            
+            InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
             InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura);
             InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat);
             InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercialSunat);
@@ -827,6 +829,8 @@ namespace DataLayer
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalProvincias", (short)(cliente.perteneceCanalProvincias ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalPCP", (short)(cliente.perteneceCanalPCP ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "esSubDistribuidor", (short)(cliente.esSubDistribuidor ? 1 : 0));
+
+            InputParameterAdd.SmallInt(objCommand, "@esCargaMasiva", (short)(cliente.CargaMasiva ? 1 : 0));
 
             InputParameterAdd.Bit(objCommand, "sedePrincipal", cliente.sedePrincipal);
             InputParameterAdd.Bit(objCommand, "negociacionMultiregional", cliente.negociacionMultiregional);

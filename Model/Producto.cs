@@ -8,13 +8,16 @@ namespace Model
 {
     public class Producto : Auditoria
     {
+        public const string NOMBRE_TABLA = "PRODUCTO";
+
         public Producto()
         {
             this.tipoProducto = TipoProducto.Bien;
+            this.CargaMasiva = false;
         }
 
 
-       public Guid idProducto { get; set; }
+        public Guid idProducto { get; set; }
 
         [Display(Name = "Código (SKU):")]
         public String sku { get; set; }

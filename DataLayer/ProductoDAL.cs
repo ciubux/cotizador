@@ -783,6 +783,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);
             InputParameterAdd.Decimal(objCommand, "costo", producto.costoSinIgv);
             InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", DateTime.Now.ToString("yyyy-MM-dd"));
+            InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(producto.CargaMasiva ? 1 : 0));
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
 
@@ -817,6 +818,8 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
             InputParameterAdd.Int(objCommand, "tipo", (int)producto.tipoProducto);
             InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", DateTime.Now.ToString("yyyy-MM-dd"));
+
+            InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(producto.CargaMasiva ? 1 : 0));
 
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);
