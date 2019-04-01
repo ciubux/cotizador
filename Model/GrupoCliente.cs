@@ -135,16 +135,14 @@ namespace Model
             {
                 if (this.usuario == null) return false;
 
-                if (this.IdUsuarioRegistro == usuario.idUsuario)
-                {
-                    return true;
-                }
+                bool existeMiembroPrincipal = false;
 
-                foreach(Cliente miembro in miembros)
+                foreach(Cliente miembro in this.miembros)
                 {
                     if(miembro.ciudad.idCiudad == this.ciudad.idCiudad)
                     {
-                        miembro.usuario = this.usuario;
+                        existeMiembroPrincipal = true;
+                        miembro.usuario = this.usuario; 
                         if (miembro.isOwner)
                         {
                             return true;
@@ -158,6 +156,11 @@ namespace Model
                             return true;
                         }
                     }
+                }
+
+                if (!existeMiembroPrincipal && this.IdUsuarioRegistro == usuario.idUsuario)
+                {
+                    return true;
                 }
 
                 return false;

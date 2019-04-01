@@ -173,12 +173,10 @@ namespace Cotizador.Controllers
 
             grupoCliente = bl.getGrupo(idGrupoCliente.Value);
             grupoCliente.usuario = usuario;
+            grupoCliente.IdUsuarioRegistro = usuario.idUsuario;
+            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
 
-            if (usuario.modificaMiembrosGrupoCliente || grupoCliente.isOwner)
-            {
-                grupoCliente.IdUsuarioRegistro = usuario.idUsuario;
-                grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
-            } else
+            if (!usuario.modificaMiembrosGrupoCliente && !grupoCliente.isOwner)
             {
                 return RedirectToAction("Index", "GrupoCliente");
             }

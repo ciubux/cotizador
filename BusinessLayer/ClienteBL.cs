@@ -401,7 +401,8 @@ namespace BusinessLayer
 
                 cliente = clienteDAL.updateClienteSunat(cliente);
                 
-                if ((cliente.usuario == null || !cliente.usuario.modificaMiembrosGrupoCliente) && cliente.grupoCliente.idGrupoCliente != clientePrev.grupoCliente.idGrupoCliente)
+                if ((cliente.usuario == null || !cliente.usuario.modificaMiembrosGrupoCliente) && 
+                    ((cliente.grupoCliente == null && clientePrev.grupoCliente != null) || (cliente.grupoCliente != null && clientePrev.grupoCliente == null) || cliente.grupoCliente.idGrupoCliente != clientePrev.grupoCliente.idGrupoCliente))
                 {
                     AlertaValidacion alerta = new AlertaValidacion();
                     alerta.idRegistro = cliente.idCliente.ToString();
@@ -412,20 +413,20 @@ namespace BusinessLayer
                     alerta.tipo = AlertaValidacion.CAMBIA_GRUPO_CLIENTE;
                     alerta.data = new DataAlertaValidacion();
 
-                    if (clientePrev.grupoCliente.idGrupoCliente != 0)
+                    if (clientePrev.grupoCliente != null && clientePrev.grupoCliente.idGrupoCliente != 0)
                     {
                         alerta.data.PrevData = clientePrev.grupoCliente.codigoNombre;
                     } else {
-                        alerta.data.PrevData = "Sin grupo asignado";
+                        alerta.data.PrevData = AlertaValidacion.NO_DATA_TEXT;
                     }
 
-                    if (cliente.grupoCliente.idGrupoCliente != 0)
+                    if (cliente.grupoCliente != null && cliente.grupoCliente.idGrupoCliente != 0)
                     {
                         alerta.data.PostData = cliente.grupoCliente.codigoNombre;
                     }
                     else
                     {
-                        alerta.data.PostData = "Sin grupo asignado";
+                        alerta.data.PostData = AlertaValidacion.NO_DATA_TEXT;
                     }
 
                     alerta.data.ObjData = cliente.codigoRazonSocial;

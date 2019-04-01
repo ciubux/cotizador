@@ -63,6 +63,16 @@ namespace Model
             get {
                 if (this.tipo == AlertaValidacion.CAMBIA_GRUPO_CLIENTE)
                 {
+                    if (this.data.PrevData.Equals(AlertaValidacion.NO_DATA_TEXT))
+                    {
+                        return "Se asignó al cliente \"" + this.data.ObjData + "\" el grupo  \"" + this.data.PostData + "\"";
+                    }
+
+                    if (this.data.PostData.Equals(AlertaValidacion.NO_DATA_TEXT))
+                    {
+                        return "Se removió el cliente \"" + this.data.ObjData + "\" del grupo  \"" + this.data.PrevData + "\"";
+                    }
+
                     return "Se cambio el Grupo del cliente \"" + this.data.ObjData + "\" de \"" + this.data.PrevData + "\" por \"" + this.data.PostData + "\" ";
                 }
 
@@ -78,5 +88,8 @@ namespace Model
 
         public static String CAMBIA_GRUPO_CLIENTE = "CAMBIA_GRUPO_CLIENTE";
         public static String CREA_GRUPO_CLIENTE = "CREA_GRUPO_CLIENTE";
+
+
+        public static String NO_DATA_TEXT = "NO DATA";
     }
 }
