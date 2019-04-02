@@ -948,7 +948,7 @@ FROM CAMBIO_PROGRAMADO cp
 INNER JOIN CATALOGO_CAMPO cc on cc.id_catalogo_campo = cp.[id_catalogo_campo] 
 INNER JOIN CATALOGO_TABLA ct on ct.id_catalogo_tabla = ct.[id_catalogo_tabla] 
 WHERE DATEDIFF(day, cp.fecha_inicio_vigencia, getdate()) > 0 and cp.estado = 1
-ORDER BY cp.fecha_inicio_vigencia asc;
+ORDER BY cp.fecha_inicio_vigencia asc, cp.id_catalogo_tabla asc, cp.id_registro asc ;
 
 
 END

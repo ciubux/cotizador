@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace Model
@@ -201,6 +203,45 @@ namespace Model
             {
                 return EnumHelper<TipoProducto>.GetDisplayValue(this.tipoProducto);
             }
+        }
+
+        public static List<CampoPersistir> obtenerCampos(List<LogCampo> campos) 
+        {
+            List<CampoPersistir> lista = new List<CampoPersistir>();
+
+            Producto obj = new Producto();
+            foreach(LogCampo campo in campos) 
+            {
+               
+                if (campo.puedePersistir)
+                {
+                    CampoPersistir cp = new CampoPersistir();
+                    cp.campo = campo;
+                    switch(campo.nombre)
+                    {
+                        case "precio": cp.nombre = Producto.nombreAtributo("precioSinIgv"); break;
+                        case "precio_provincia": cp.nombre = Producto.nombreAtributo("precioProvinciaSinIgv"); break;
+                        case "costo": cp.nombre = Producto.nombreAtributo("costoSinIgv"); break;
+                    }
+
+                    lista.Add(cp);
+                }
+            }
+
+            return lista;
+        }
+
+        public static string nombreAtributo(string atributo)
+        {
+            MemberInfo property = typeof(Producto).GetProperty(atributo);
+            var dd = property.GetCustomAttribute(typeof(DisplayAttribute)) as DisplayAttribute;
+            string name = "";
+            if (dd != null)
+            {
+                name = dd.Name;
+            }
+
+            return name;
         }
 
         /*     public Guid idFamilia { get; set; }

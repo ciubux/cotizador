@@ -65,6 +65,7 @@
     <Compile Include="DireccionEntregaBL.cs" />
     <Compile Include="DocumentoVentaBL.cs" />
     <Compile Include="MovimientoAlmacenBL.cs" />
+    <Compile Include="LogCampoBL.cs" />
     <Compile Include="UtilesHelper.cs" />
     <Compile Include="VentaBL.cs" />
     <Compile Include="TransportistaBL.cs" />

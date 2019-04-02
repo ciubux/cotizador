@@ -215,6 +215,12 @@ namespace Cotizador.Controllers
                 }
             }
 
+            LogCampoBL logCamboBl = new LogCampoBL();
+            List<LogCampo> campos = logCamboBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);
+
+            List<CampoPersistir> persitirCampos = Producto.obtenerCampos(campos);
+            
+
             return View();
 
         }
