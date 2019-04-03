@@ -95,6 +95,41 @@ namespace Cotizador.Controllers
                 mail.enviar(new List<string> { "ti@mpinstitucional.com" }, "ERROR al revisar pedidos pendientes", ex.Message + ex.InnerException, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
             }
         }
-        
+
+        public void AplicarCambiosProgramados()
+        {
+            LogCambioBL logCambioBL = new LogCambioBL();
+
+            List<LogCambio> logs = logCambioBL.getCambiosAplicar();
+
+            List<LogCambio> registroLog = new List<LogCambio>();
+            string idRegistro = "";
+            string tabla = "";
+            DateTime fiv = new DateTime();
+
+            foreach (LogCambio log in logs)
+            {
+                if(!tabla.Equals(log.tabla.nombre) || !idRegistro.Equals(log.idRegistro) || fiv != log.fechaInicioVigencia)
+                {
+                    if (registroLog.Count > 0)
+                    {
+                        logCambioBL.traspasarCambios(registroLog);
+                    }
+                    registroLog = new List<LogCambio>();
+                    idRegistro = log.idRegistro;
+                    tabla = log.tabla.nombre;
+                    fiv = log.fechaInicioVigencia;
+                }
+
+                registroLog.Add(log);
+            }
+            
+            if (registroLog.Count > 0)
+            {
+                logCambioBL.traspasarCambios(registroLog);
+            }
+
+            logCambioBL.limpiarCambiosProgramados();
+        }
     }
 }

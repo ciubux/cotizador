@@ -803,7 +803,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", producto.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "sku", producto.sku);
             InputParameterAdd.Binary(objCommand, "imagen", producto.image);
-            InputParameterAdd.Varchar(objCommand, "descripcion", null /*producto.descripcion*/);
+            InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion);
             InputParameterAdd.Varchar(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);

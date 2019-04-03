@@ -57,6 +57,7 @@
     <Compile Include="Email\PedidoSinAtencion.cs" />
     <Compile Include="ArchivoAdjuntoBL.cs" />
     <Compile Include="AlertaValidacionBL.cs" />
+    <Compile Include="LogCambioBL.cs" />
     <Compile Include="PermisoBL.cs" />
     <Compile Include="SubDistribuidorBL.cs" />
     <Compile Include="OrigenBL.cs" />

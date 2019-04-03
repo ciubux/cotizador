@@ -135,7 +135,7 @@ SELECT
 	 @exoneradoIgvPrev = exonerado_igv, @inafectoPrev = inafecto, @tipoPrev = tipo
 FROM DELETED;
 
-IF @cargaMasiva = 1 
+IF @cargaMasiva = 0 
 BEGIN
 
 	IF @sku <> @skuPrev OR (@sku IS NULL AND @skuPrev IS NOT NULL) OR (@skuPrev IS NULL AND @sku IS NOT NULL) 
@@ -544,7 +544,7 @@ from DELETED;
 
 
 
-IF @cargaMasiva = 1 
+IF @cargaMasiva = 0 
 BEGIN
 
 	IF @codigo <> @codigoPrev OR (@codigo IS NULL AND @codigoPrev IS NOT NULL) OR (@codigoPrev IS NULL AND @codigo IS NOT NULL) 
@@ -946,8 +946,8 @@ SELECT cp.[id_cambio_programado]
 	  ,cp.[fecha_modificacion]
 FROM CAMBIO_PROGRAMADO cp
 INNER JOIN CATALOGO_CAMPO cc on cc.id_catalogo_campo = cp.[id_catalogo_campo] 
-INNER JOIN CATALOGO_TABLA ct on ct.id_catalogo_tabla = ct.[id_catalogo_tabla] 
-WHERE DATEDIFF(day, cp.fecha_inicio_vigencia, getdate()) > 0 and cp.estado = 1
+INNER JOIN CATALOGO_TABLA ct on ct.id_catalogo_tabla = cc.[id_catalogo_tabla] 
+WHERE DATEDIFF(day, cp.fecha_inicio_vigencia, getdate()) >= 0 and  cp.estado = 1
 ORDER BY cp.fecha_inicio_vigencia asc, cp.id_catalogo_tabla asc, cp.id_registro asc ;
 
 
@@ -975,6 +975,9 @@ BEGIN
 
 DECLARE @idCambioProgramado uniqueidentifier 
 DECLARE @repiteDato smallint
+DECLARE @idRegistro varchar(40)
+DECLARE @idCatalogoCampo int
+DECLARE @fechaInicioVigencia date
 DECLARE @cambiosCursor CURSOR
 
 SET @cambiosCursor = CURSOR FOR
@@ -997,7 +1000,7 @@ BEGIN
 		,[usuario_modificacion]
 		,[fecha_modificacion])
 	 SELECT 
-		NEWID() 
+		[id_cambio_programado]
 		,[id_catalogo_tabla]
 		,[id_catalogo_campo]
 		,[id_registro]
@@ -1009,6 +1012,19 @@ BEGIN
 	FROM CAMBIO_PROGRAMADO 
 	WHERE [id_cambio_programado] = @idCambioProgramado AND (@repiteDato = 0 OR (@repiteDato = 1 and persiste_cambio = 1));
 
+	set @idCatalogoCampo = 0;
+
+	SELECT @idCatalogoCampo = [id_catalogo_campo], @fechaInicioVigencia = [fecha_inicio_vigencia], @idRegistro = [id_registro]
+	FROM CAMBIO
+	WHERE id_cambio = @idCambioProgramado;
+
+	IF @idCatalogoCampo > 0 
+	BEGIN
+		UPDATE CAMBIO 
+		SET estado = 0
+		WHERE id_catalogo_campo = @idCatalogoCampo and fecha_inicio_vigencia = @fechaInicioVigencia and id_registro = @idRegistro and not id_cambio = @idCambioProgramado;
+	END
+	
 	DELETE FROM CAMBIO_PROGRAMADO
 	WHERE [id_cambio_programado] = @idCambioProgramado;
 
@@ -1818,13 +1834,49 @@ END
 
 /* **** 15 **** */
 
+INSERT INTO CATALOGO_CAMPO ([id_catalogo_tabla],[nombre],[estado],[puede_persistir])
+VALUES (2,'precio_provincia_original',1,0);
+INSERT INTO CATALOGO_CAMPO ([id_catalogo_tabla],[nombre],[estado],[puede_persistir])
+VALUES (2,'unidad_conteo',1,0);
+INSERT INTO CATALOGO_CAMPO ([id_catalogo_tabla],[nombre],[estado],[puede_persistir])
+VALUES (2,'unidad_estandar_internacional',1,0);
+INSERT INTO CATALOGO_CAMPO ([id_catalogo_tabla],[nombre],[estado],[puede_persistir])
+VALUES (2,'unidad_alternativa_internacional',1,0);
+INSERT INTO CATALOGO_CAMPO ([id_catalogo_tabla],[nombre],[estado],[puede_persistir])
+VALUES (2,'equivalencia_unidad_conteo_estandar',1,0);
+INSERT INTO CATALOGO_CAMPO ([id_catalogo_tabla],[nombre],[estado],[puede_persistir])
+VALUES (2,'equivalencia_unidad_conteo_alternativa',1,0);
+INSERT INTO CATALOGO_CAMPO ([id_catalogo_tabla],[nombre],[estado],[puede_persistir])
+VALUES (2,'exonerado_igv',1,0);
+INSERT INTO CATALOGO_CAMPO ([id_catalogo_tabla],[nombre],[estado],[puede_persistir])
+VALUES (2,'inafecto',1,0);
+INSERT INTO CATALOGO_CAMPO ([id_catalogo_tabla],[nombre],[estado],[puede_persistir])
+VALUES (2,'tipo',1,0);
+INSERT INTO CATALOGO_CAMPO ([id_catalogo_tabla],[nombre],[estado],[puede_persistir])
+VALUES (2,'codigo_sunat',1,0);
 
 
 
 /* **** 16 **** */
+CREATE PROCEDURE pd_limpiar_cambios_programados_pasados
+AS
+BEGIN
+
+DELETE FROM CAMBIO_PROGRAMADO
+WHERE DATEDIFF(day, fecha_inicio_vigencia, getdate()) >= 0;
+
+
+END
 
 
 
+/* **** 17 **** */
+
+
+
+
+
+/* **** 18 **** */
 
 
 

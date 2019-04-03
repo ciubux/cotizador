@@ -51,7 +51,7 @@ namespace DataLayer
                 obj.persisteCambio = Converter.GetInt(row, "persiste_cambio") == 1 ? true : false;
 
                 obj.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
-
+                obj.idUsuarioModificacion = Converter.GetGuid(row, "usuario_modificacion");
 
                 lista.Add(obj);
             }
@@ -59,20 +59,19 @@ namespace DataLayer
             return lista;
         }
 
-        public bool traspasarCambios(List<LogCambio> logs, List<bool> repiteDato)
+        public bool traspasarCambios(List<LogCambio> logs)
         {
             var objCommand = GetSqlCommand("pp_transferir_cambio");
 
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
             tvp.Columns.Add(new DataColumn("REPITE_DATO", typeof(int)));
-
-            int i = 0;
+            
             foreach (LogCambio item in logs)
             {
                 DataRow rowObj = tvp.NewRow();
                 rowObj["ID"] = item.idCambio;
-                rowObj["REPITE_DATO"] = repiteDato.ElementAt<bool>(i) ? 1 : 0;
+                rowObj["REPITE_DATO"] = item.repiteDato ? 1 : 0;
                 tvp.Rows.Add(rowObj);
             }
 
@@ -97,13 +96,23 @@ namespace DataLayer
 
             InputParameterAdd.Varchar(objCommand, "idRegistro", log.idRegistro);
             InputParameterAdd.Varchar(objCommand, "valor", log.valor);
-            InputParameterAdd.Date(objCommand, "fechaInicioVigencia", log.fechaInicioVigencia);
-            
+            InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", log.fechaInicioVigencia.ToString("yyyy-MM-dd"));
 
             ExecuteNonQuery(objCommand);
             
             return log;
         }
+
+        /* Elimina el log de cambios programdos con fecha de inicio de vigencia de hoy al pasado y sin enviarlos al log de cambios pasados */
+        public bool limpiarCambiosProgramados()
+        {
+            var objCommand = GetSqlCommand("pd_limpiar_cambios_programados_pasados");
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
+        
     }
 }
 

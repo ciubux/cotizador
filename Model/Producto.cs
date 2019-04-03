@@ -61,7 +61,8 @@ namespace Model
         [Display(Name = "Unidad SUNAT:")]
         public String unidadEstandarInternacional { get; set; }
 
-
+        [Display(Name = "Unidad Alternativa SUNAT:")]
+        public String unidadAlternativaInternacional { get; set; }
 
 
 
@@ -175,8 +176,9 @@ namespace Model
 
         public int tipoProductoVista { get; set; }
 
+        public string monedaProveedor { get; set; }
 
-
+        public string monedaMP { get; set; }
 
 
 
@@ -241,9 +243,135 @@ namespace Model
                 name = dd.Name;
             }
 
-            return name;
+            return name.Replace(":", "");
         }
 
+
+        public List<LogCambio> obtenerLogProgramado(List<LogCampo> campos, List<CampoPersistir> persistir)
+        {
+            List<LogCambio> lista = new List<LogCambio>();
+
+            Producto obj = new Producto();
+            foreach (LogCampo campo in campos)
+            {
+                LogCambio lc = null;
+
+                switch (campo.nombre)
+                {
+                    case "precio": lc = instanciarLogCambio(campo, persistir); lc.valor = this.precioSinIgv.ToString();  break;
+                    case "costo": lc = instanciarLogCambio(campo, persistir); lc.valor = this.costoSinIgv.ToString(); break;
+                    case "precio_provincia": lc = instanciarLogCambio(campo, persistir); lc.valor = this.precioProvinciaSinIgv.ToString(); break;
+                    case "sku": lc = instanciarLogCambio(campo, persistir); lc.valor = this.sku; break;
+                }
+
+                if (lc != null)
+                {
+                    lista.Add(lc);
+                }
+            }
+
+            return lista;
+        }
+
+        public List<LogCambio> aplicarCambios(List<LogCambio> cambios)
+        {
+            List<LogCambio> lista = new List<LogCambio>();
+
+            Producto obj = new Producto();
+            foreach (LogCambio cambio in cambios)
+            {
+
+                switch (cambio.campo.nombre)
+                {
+                    case "precio":
+                        if (this.precioSinIgv == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        } else
+                        {
+                            this.precioSinIgv = decimal.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "costo":
+                        if (this.costoSinIgv == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.costoSinIgv = decimal.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "precio_provincia":
+                        if (this.precioProvinciaSinIgv == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.precioProvinciaSinIgv = decimal.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "sku":
+                        if (this.sku == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.sku = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                }
+            }
+
+            return lista;
+        }
+        private LogCambio instanciarLogCambio(LogCampo campo, List<CampoPersistir> persistir)
+        {
+            LogCambio cambio = new LogCambio();
+            cambio.idRegistro = this.idProducto.ToString();
+            cambio.estado = true;
+            cambio.fechaInicioVigencia = this.fechaInicioVigencia;
+            cambio.idCampo = campo.idCampo;
+            cambio.idTabla = campo.idTabla;
+            cambio.persisteCambio = this.persisteCampo(campo, persistir);
+            cambio.idUsuarioModificacion = this.usuario.idUsuario;
+
+            return cambio;
+        }
+        
+        private bool persisteCampo(LogCampo campo, List<CampoPersistir> persistir)
+        {
+            foreach (CampoPersistir cp in persistir)
+            {
+                if (cp.campo.nombre.Equals(campo.nombre))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         /*     public Guid idFamilia { get; set; }
     public Guid idProveedor { get; set; }
     public Guid idUnidad { get; set; }*/

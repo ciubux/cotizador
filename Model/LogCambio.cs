@@ -21,6 +21,7 @@ namespace Model
         public DateTime fechaInicioVigencia { get; set; }
         public Guid idUsuarioModificacion { get; set; }
 
+        public bool repiteDato { get; set; }
     }
 }
 

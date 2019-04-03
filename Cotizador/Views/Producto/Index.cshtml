@@ -19,7 +19,8 @@
             </tr>
             <tr>
                 <td><label class="control-label col-xs-6" for="formato">Formato:</label></td>
-                <td><textarea class="form-control" rows="15" cols="80">
+                <td>
+                    <textarea class="form-control" rows="15" cols="80">
 Columna B=Proveedor
 Columna C=SKU
 Columna D=SKU Proveedor
@@ -32,7 +33,33 @@ Columna W=Precio Lima
 Columna Z=Precio Provincias
 
 *Fila1 es Cabecera
-        </textarea></td>
+        </textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label class="control-label col-xs-6" for="cantidadLineas">Fecha Inicio <br />Vigencia</label>
+                </td>
+                <td>
+                    <input id="fechaInicioVigenciatmp" type="hidden" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+                    <input class="form-control" type="text" id="fechaInicioVigencia" name="fechaInicioVigencia">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label col-xs-6" for="cantidadLineas">Persistir columnas:</label>
+                </td>
+                <td>
+                    @foreach (Model.CampoPersistir camp in ViewBag.persitirCampos)
+                    {
+                        <label class="radio-label" style="margin-left: 1px; margin-top: 5px;">
+                            <input type="checkbox" name="persiste_@camp.campo.nombre" id="persiste_@camp.campo.nombre" value="1">
+                            <span>@camp.nombre</span>
+                        </label>
+                        <br />
+                    }
+                </td>
             </tr>
             <tr>
                 <td></td>
@@ -42,5 +69,10 @@ Columna Z=Precio Provincias
             </tr>
         </table>
     </form>
-    
+
 </div>
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/producto")
+}
