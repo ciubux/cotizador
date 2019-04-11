@@ -43,7 +43,8 @@ namespace DataLayer
                     codigoCliente = Converter.GetString(row, "codigo_cliente"),
                     codigoMP = Converter.GetString(row, "codigo_mp"),
                     observaciones = Converter.GetString(row, "observaciones"),
-                    nombre = Converter.GetString(row, "nombre")
+                    nombre = Converter.GetString(row, "nombre"),
+                    direccionDomicilioLegal = Converter.GetString(row, "direccionDomicilioLegal")
                 };
                 lista.Add(obj);
             }

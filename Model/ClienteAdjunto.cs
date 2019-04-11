@@ -8,5 +8,6 @@ namespace Model
     public class ClienteAdjunto : ArchivoAdjunto
     {
         public Guid idCliente { get; set; }
+        
     }
 }

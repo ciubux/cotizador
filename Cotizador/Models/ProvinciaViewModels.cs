@@ -16,6 +16,7 @@ namespace Cotizador.Models
         public string DistritoDivId { get; set; }
         public string UrlDistritosPorProvincia { get; set; }
         public string SelectedValue { get; set; }
+        public Boolean Disabled { get; set; }
 
         public List<Ubigeo> Data { get; set; }
 

@@ -61,6 +61,7 @@ namespace Cotizador.Controllers
             ViewBag.cliente = clienteSearch;
             ViewBag.Si = Constantes.MENSAJE_SI;
             ViewBag.No = Constantes.MENSAJE_NO;
+            ViewBag.fechaVentasDesde = clienteSearch.fechaVentasDesde == null ? null : clienteSearch.fechaVentasDesde.Value.ToString(Constantes.formatoFecha);
             return View();
 
         }
@@ -131,6 +132,23 @@ namespace Cotizador.Controllers
             this.ClienteSession = cliente;
         }
 
+        public void ChangeInputDate()
+        {
+            Cliente cliente = this.ClienteSession;
+            PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
+
+            if (this.Request.Params["valor"] == null || this.Request.Params["valor"] == "")
+            {
+                propertyInfo.SetValue(cliente, null);
+            }
+            else
+            {
+                String[] fechaVentasDesde = this.Request.Params["valor"].Split('/');
+                propertyInfo.SetValue(cliente, new DateTime(Int32.Parse(fechaVentasDesde[2]), Int32.Parse(fechaVentasDesde[1]), Int32.Parse(fechaVentasDesde[0]), 0, 0, 0));
+            }
+            this.ClienteSession = cliente;
+        }
+
 
         public void ChangeFormaPagoFactura()
         {
@@ -184,7 +202,10 @@ namespace Cotizador.Controllers
             cliente.IdUsuarioRegistro = usuario.idUsuario;
             cliente.usuario = usuario;
             cliente.grupoCliente = new GrupoCliente();
-
+            cliente.perteneceCanalLima = true;
+            cliente.perteneceCanalProvincias = true;
+            cliente.perteneceCanalMultiregional = true;
+            cliente.perteneceCanalPCP = true;
             return cliente;
         }
 

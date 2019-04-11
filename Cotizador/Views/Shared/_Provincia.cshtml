@@ -1,12 +1,31 @@
 ﻿@model Cotizador.Models.ProvinciaViewModels
 
+
+
+@if (Model.Disabled)
+{
+    @Html.DropDownList(
+        Model.ProvinciaSelectId,
+        Model.Provincias, "Seleccione la provincia",
+        new
+        {
+            id = Model.ProvinciaSelectId,
+            @class = "form-control",
+            @disabled = "disabled",
+            onchange = $"onChangeProvincia('{Model.DepartamentoSelectId}','{Model.ProvinciaSelectId}','{Model.DistritoSelectId}','" +
+                       $"{Model.DistritoDivId}','{Model.UrlDistritosPorProvincia}');"
+        })
+}
+else
+{
 @Html.DropDownList(
-    Model.ProvinciaSelectId,
-    Model.Provincias, "Seleccione la provincia",
-    new
-    {
-        id = Model.ProvinciaSelectId,
-        @class = "form-control",
-        onchange = $"onChangeProvincia('{Model.DepartamentoSelectId}','{Model.ProvinciaSelectId}','{Model.DistritoSelectId}','" +
-                   $"{Model.DistritoDivId}','{Model.UrlDistritosPorProvincia}');"
-    })
+        Model.ProvinciaSelectId,
+        Model.Provincias, "Seleccione la provincia",
+        new
+        {
+            id = Model.ProvinciaSelectId,
+            @class = "form-control",
+            onchange = $"onChangeProvincia('{Model.DepartamentoSelectId}','{Model.ProvinciaSelectId}','{Model.DistritoSelectId}','" +
+                       $"{Model.DistritoDivId}','{Model.UrlDistritosPorProvincia}');"
+        })
+}

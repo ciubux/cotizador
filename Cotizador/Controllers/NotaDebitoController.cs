@@ -16,7 +16,7 @@ namespace Cotizador.Controllers
    
         public ActionResult Crear()
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_DEBITO];
+            Transaccion venta = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_DEBITO];
             ViewBag.venta = venta;
             ViewBag.tipoNotaDebito = (int)venta.tipoNotaDebito;           
 

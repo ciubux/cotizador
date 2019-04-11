@@ -11,5 +11,6 @@ namespace Model
         public Usuario usuario { get; set; }
         public Byte[] adjunto { get; set; }
         public String nombre { get; set; }
+        public long checksum { get; set; }
     }
 }

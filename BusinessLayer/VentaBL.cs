@@ -5,7 +5,6 @@ using System;
 using Model;
 using System.IO;
 
-
 namespace BusinessLayer
 {
     public class VentaBL
@@ -14,24 +13,10 @@ namespace BusinessLayer
 
         public void UpdateVenta(Venta venta)
         {
-
-
-            if (venta.guiaRemision.fechaEmision >= new DateTime(2019, 1, 1, 0, 0, 0))
+            using (var dal = new VentaDAL())
             {
-                using (var dal = new VentaDAL())
-                {
-                    dal.UpdateVenta(venta);
-                }
-            }
-            else {
-
-                /*using (var dal = new VentaDAL())
-                {
-                    dal.UpdateVenta(venta);
-                }*/
-
-                throw new Exception("No se puede editar una venta de un periodo anterior.");
-            }
+                dal.UpdateVenta(venta);
+            }           
         }
 
         public void InsertTransaccionNotaCredito(Transaccion transaccion)
@@ -188,7 +173,7 @@ namespace BusinessLayer
         }
 
 
-        public void procesarVenta(Venta venta)
+        public void procesarVenta(Transaccion venta)
         {
             foreach (PedidoDetalle pedidoDetalle in venta.pedido.pedidoDetalleList)
             {
@@ -224,14 +209,6 @@ namespace BusinessLayer
                     pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.costoSinIgv));
                 }
             }
-
-        }
-        public void ExcelPrueba(List<Guid> id_venta_detalle, Usuario usuario,List<string> responsable_comercial, List<string> supervisor_comercial ,List<string> asistente_servicio, List<string> canal_multiregional, List<string> canal_lima, List<string> canal_provincia, List<string> canal_pcp, List<int> origen)
-        {
-            VentaDAL ventaDAL = new VentaDAL();
-
-            ventaDAL.ExcelPrueba(id_venta_detalle, usuario, responsable_comercial, supervisor_comercial, asistente_servicio, canal_multiregional, canal_lima, canal_provincia, canal_pcp, origen);
-
 
         }
 

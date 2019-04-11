@@ -83,14 +83,14 @@ C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\obj\Debug\Framew
 C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.dll
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csprojAssemblyReference.cache
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CoreCompileInputs.cache
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
-C:\Users\Administrador\Desktop\cotizador-devInvoice (7)\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\PROYECTO BIEN\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb

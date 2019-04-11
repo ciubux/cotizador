@@ -19,7 +19,7 @@ namespace DataLayer
         {
         }
 
-        public void InsertTransaccionNotaCredito(Venta transaccionExtorno)
+        public void InsertTransaccionNotaCredito(Transaccion transaccionExtorno)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
             var objCommand = GetSqlCommand("pi_ventaNotaCredito");
@@ -109,7 +109,7 @@ namespace DataLayer
         }
 
 
-        public void InsertVentaDetalle(Venta venta)
+        public void InsertVentaDetalle(Transaccion venta)
         {
             foreach (PedidoDetalle documentoDetalle in venta.pedido.pedidoDetalleList)
             {
@@ -926,31 +926,6 @@ namespace DataLayer
             venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
             venta.numero = (Int64)objCommand.Parameters["@numeroVenta"].Value;
             this.Commit();
-        }
-
-        public void ExcelPrueba(List<Guid> id_venta_detalle, Usuario usuario, List<string> responsable_comercial, List<string> supervisor_comercial, List<string> asistente_servicio, List<string> canal_multiregional, List<string> canal_lima, List<string> canal_provincia, List<string> canal_pcp, List<int> origen)
-        {
-            int y = 0;
-            this.BeginTransaction(IsolationLevel.ReadCommitted);
-            foreach (var x in id_venta_detalle)
-            {
-                var objCommand = GetSqlCommand("sp_loadventadetalle");
-                InputParameterAdd.Guid(objCommand, "id_venta_detalle",x);
-                InputParameterAdd.Guid(objCommand, "usuario", usuario.idUsuario);
-                InputParameterAdd.Varchar(objCommand, "responsable_comercial", responsable_comercial[y]);
-                InputParameterAdd.Varchar(objCommand, "supervisor_comercial", supervisor_comercial[y]);
-                InputParameterAdd.Varchar(objCommand, "asistente_servicio", asistente_servicio[y]);
-                InputParameterAdd.Varchar(objCommand, "canal_multiregional", canal_multiregional[y]);
-                InputParameterAdd.Varchar(objCommand, "canal_lima", canal_lima[y]);
-                InputParameterAdd.Varchar(objCommand, "canal_provincia", canal_provincia[y]);
-                InputParameterAdd.Varchar(objCommand, "canal_pcp", canal_pcp[y]);
-                InputParameterAdd.Int(objCommand, "origen", origen[y]);
-                y++;
-
-                ExecuteNonQuery(objCommand);
-            }
-            this.Commit();
-
         }
 
     }

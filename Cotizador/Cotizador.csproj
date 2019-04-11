@@ -56,7 +56,7 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\..\NPOI 2.2.1 binary package (2)\NPOI 2.2.1 binary package\Release\Net40\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
@@ -98,22 +98,22 @@
       <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
-      <HintPath>..\..\..\NPOI 2.2.1 binary package (2)\NPOI 2.2.1 binary package\Release\Net40\NPOI.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\..\NPOI 2.2.1 binary package (2)\NPOI 2.2.1 binary package\Release\Net40\NPOI.OOXML.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OOXML.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\..\NPOI 2.2.1 binary package (2)\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXml4Net.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\..\NPOI 2.2.1 binary package (2)\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXmlFormats.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
-    <Reference Include="Spire.License">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.pdf-fe\Bin\NET4.0\Spire.License.dll</HintPath>
+    <Reference Include="Spire.License, Version=1.3.7.46, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.PDF.5.4.1\lib\net46\Spire.License.dll</HintPath>
     </Reference>
-    <Reference Include="Spire.Pdf">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.pdf-fe\Bin\NET4.0\Spire.Pdf.dll</HintPath>
+    <Reference Include="Spire.Pdf, Version=5.4.1.2046, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.PDF.5.4.1\lib\net46\Spire.Pdf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -238,6 +238,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
+    <Compile Include="Controllers\DocumentoCompra.cs" />
     <Compile Include="Controllers\GrupoClienteController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
@@ -270,6 +271,7 @@
     <Compile Include="Controllers\UbigeoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\VendedorController.cs" />
+    <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="ExcelExport\FacturaSearch.cs" />
     <Compile Include="ExcelExport\NotaIngresoSearch.cs" />
@@ -556,7 +558,9 @@
     <Content Include="Views\Usuario\EditarPermisos.cshtml" />
     <Content Include="Views\Permiso\AsignarPermisos.cshtml" />
     <Content Include="Scripts\permiso1.0.0.js" />
-    <Content Include="Views\Venta\ExcluirVentaDetalle.cshtml" />
+    <Content Include="Views\DocumentoCompra\Crear.cshtml" />
+    <Content Include="Views\DocumentoCompra\Index.cshtml" />
+    <Content Include="Views\DocumentoCompra\PreLoad.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

@@ -286,6 +286,22 @@ jQuery(function ($) {
         });
     }
 
+    $("#cotizacion_sku").change(function () {
+        changeInputString("sku", $("#cotizacion_sku").val())
+    });
+
+    function changeInputString(propiedad, valor) {
+        $.ajax({
+            url: "/Cotizacion/ChangeInputString",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
 
 
     $("#mostrarValidezOfertaEnDias").change(function () {
@@ -1768,21 +1784,21 @@ jQuery(function ($) {
 
 
 
-
+    /*
     $("#btnCopiar").click(function () {
-        /* Get the text field */
+        // Get the text field 
         var copyText = document.getElementById("myInput");
 
-        /* Select the text field */
+        //Select the text field 
         copyText.select();
 
-        /* Copy the text inside the text field */
+        // Copy the text inside the text field 
         document.execCommand("Copy");
 
-        /* alert the copied text */
+        // alert the copied text
     //    alert("Copied the text: " + copyText.value);
     }); 
-
+    */
 
 
 

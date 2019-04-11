@@ -100,7 +100,7 @@ namespace BusinessLayer
 
                     int evaluarDescuento = 0;
                     //¿Tiene precio registrado para facturación? y eliente es el mismo?
-                    if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty && precioClienteProducto.cliente.idCliente == cotizacion.cliente.idCliente)
+                    if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty)// && precioClienteProducto.cliente.idCliente == cotizacion.cliente.idCliente)
                     {
                         DateTime hoy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
@@ -130,7 +130,9 @@ namespace BusinessLayer
                             }
                             else
                             {
-                                if (cotizacionDetalle.precioUnitario != ( precioClienteProducto.precioUnitario / cotizacionDetalle.producto.equivalencia))
+                                if (cotizacionDetalle.precioUnitario !=
+                                    Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, precioClienteProducto.precioUnitario / cotizacionDetalle.producto.equivalencia))
+)
                                 {
                                     if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
                                         evaluarDescuento = 5;
@@ -316,8 +318,15 @@ namespace BusinessLayer
                         cotizacionDetalle.producto.image = storeStream.GetBuffer();
                     }
 
+                    Decimal precioSinIGV = cotizacionDetalle.producto.precioSinIgv;
+                    //Es precio alternativo
+                    if (cotizacionDetalle.esPrecioAlternativo)
+                    {
+                        precioSinIGV = cotizacionDetalle.producto.precioAlternativoSinIgv;
+                    }
 
-                    if (cotizacionDetalle.porcentajeDescuento == 0 && cotizacionDetalle.precioNeto != cotizacionDetalle.producto.precioSinIgv)
+
+                    if (cotizacionDetalle.porcentajeDescuento == 0 && cotizacionDetalle.precioNeto != precioSinIGV)
                     {
                         cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                     }

@@ -155,6 +155,9 @@ jQuery(function ($) {
      * ################################ INICIO CONTROLES DE CLIENTE
      */
 
+
+    $("#pedido_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
+
     function cargarChosenCliente() {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
@@ -186,28 +189,45 @@ jQuery(function ($) {
         //Si cliente esta Seleccionado se habilitan la seleccion para la direccion de entrega
 
     //    if ($("#idCliente").val() == "") {
+        var varTmp = $('#pedido_cliente_habilitadoModificarDireccionEntrega').val();
+        var habilitadoModificarDireccionEntrega = varTmp == 'True' || varTmp == 'true';
 
-            if ($("#idCliente").val().trim() == "") {
-                $("#ActualDepartamento").attr('disabled', 'disabled');
-                $('#ActualProvincia').attr('disabled', 'disabled');
-                $('#ActualDistrito').attr('disabled', 'disabled');
-                $("#pedido_direccionEntrega").attr('disabled', 'disabled');
-                $("#pedido_solicitante").attr('disabled', 'disabled');
-                $("#btnAgregarDireccion").attr("disabled", "disabled");
-                $("#btnAgregarSolicitante").attr("disabled", "disabled");
-            }
-            else {
-                $("#idCiudad").attr('disabled', 'disabled');
-
+        if ($("#idCliente").val().trim() != "") {
+            //$("#idCiudad").attr('disabled', 'disabled');
+            if (habilitadoModificarDireccionEntrega) {
                 $('#ActualDepartamento').removeAttr('disabled');
                 $('#ActualProvincia').removeAttr('disabled');
                 $('#ActualDistrito').removeAttr('disabled');
                 $("#pedido_direccionEntrega").removeAttr('disabled');
                 $("#btnAgregarDireccion").removeAttr('disabled');
-                $("#pedido_solicitante").removeAttr('disabled');
-                $("#btnAgregarSolicitante").removeAttr('disabled');
+            }
+            else {
+                $("#ActualDepartamento").attr('disabled', 'disabled');
+                $('#ActualProvincia').attr('disabled', 'disabled');
+                $('#ActualDistrito').attr('disabled', 'disabled');
+                $("#pedido_direccionEntrega").attr('disabled', 'disabled');
+                $("#btnAgregarDireccion").attr('disabled', 'disabled');
+            }
+          
+            $("#pedido_solicitante").removeAttr('disabled');
+            $("#btnAgregarSolicitante").removeAttr('disabled');
+        }
+        else {
+            $("#ActualDepartamento").attr('disabled', 'disabled');
+            $('#ActualProvincia').attr('disabled', 'disabled');
+            $('#ActualDistrito').attr('disabled', 'disabled');
+            $("#pedido_direccionEntrega").attr('disabled', 'disabled');
+            $("#pedido_solicitante").attr('disabled', 'disabled');
+            $("#btnAgregarDireccion").attr("disabled", "disabled");
+            $("#btnAgregarSolicitante").attr("disabled", "disabled");
+
+
             }
             toggleControlesDireccionEntrega();
+
+
+        
+
     //    }
     }
 
@@ -215,19 +235,36 @@ jQuery(function ($) {
 
 
     function toggleControlesDireccionEntrega() {
+        //alert("W");
         var idDireccionEntrega = $('#pedido_direccionEntrega').val();
-        if (idDireccionEntrega == "") {
-            $("#pedido_direccionEntrega_descripcion").attr('disabled', 'disabled');
-            $("#pedido_direccionEntrega_contacto").attr('disabled', 'disabled');
-            $("#pedido_direccionEntrega_telefono").attr('disabled', 'disabled');
-
-        }
-        else {
-            /*  $("#pedido_direccionEntrega_telefono").val($('#pedido_direccionEntrega').find(":selected").attr("telefono"));*/
+        var varTmp = $('#pedido_cliente_habilitadoModificarDireccionEntrega').val();
+        var habilitadoModificarDireccionEntrega = varTmp == 'True' || varTmp == 'true';
+        if (idDireccionEntrega != "" && habilitadoModificarDireccionEntrega) {
             $("#pedido_direccionEntrega_descripcion").removeAttr("disabled");
             $("#pedido_direccionEntrega_contacto").removeAttr("disabled");
             $("#pedido_direccionEntrega_telefono").removeAttr("disabled");
+
+
         }
+        else {
+            $("#pedido_direccionEntrega_descripcion").attr('disabled', 'disabled');
+            $("#pedido_direccionEntrega_contacto").attr('disabled', 'disabled');
+            $("#pedido_direccionEntrega_telefono").attr('disabled', 'disabled');
+        }
+
+        if (habilitadoModificarDireccionEntrega) {
+            $("#btnAgregarDireccion").show();
+            $("#ActualDepartamento").removeAttr("disabled");
+            $("#ActualDepartamento").removeAttr("disabled");
+            $("#ActualDistrito").removeAttr("disabled");
+        }
+        else {
+            $("#btnAgregarDireccion").hide();
+            $("#ActualDepartamento").attr("disabled");
+            $("#ActualDepartamento").attr("disabled");
+            $("#ActualDistrito").attr("disabled");
+        }
+
     }
     
     function toggleControlesSolicitante() {
@@ -260,6 +297,8 @@ jQuery(function ($) {
             },
             success: function (cliente)
             {
+                $("#pedido_cliente_habilitadoModificarDireccionEntrega").val(cliente.habilitadoModificarDireccionEntrega)
+
 
                 if (cliente.correoEnvioFactura == null || cliente.correoEnvioFactura == "") {
                     $.alert({
@@ -274,8 +313,8 @@ jQuery(function ($) {
                     });
                     return false;
                 }
-
-
+             
+                
                 if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_VENTA)
                     $("#idCiudad").attr("disabled", "disabled");
 
@@ -285,11 +324,16 @@ jQuery(function ($) {
                 ////Direccion Entrega
                 var direccionEntregaListTmp = cliente.direccionEntregaList;
 
+
+
+
                 $('#pedido_direccionEntrega')
                     .find('option')
                     .remove()
                     .end()
                     ;
+
+                window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000);    
               
                 $('#pedido_direccionEntrega').append($('<option>', {
                     value: "",
@@ -300,16 +344,27 @@ jQuery(function ($) {
                 for (var i = 0; i < direccionEntregaListTmp.length; i++) {
                     $('#pedido_direccionEntrega').append($('<option>', {
                         value: direccionEntregaListTmp[i].idDireccionEntrega,
-                        text: direccionEntregaListTmp[i].descripcion
+                        text: direccionEntregaListTmp[i].direccionConSede
                     }));
                 }
+                //$('#pedido_direccionEntrega').trigger('liszt:updated');
+                $('#pedido_direccionEntrega').prop('disabled', false)
+                
+
+            /*    window.setInterval($("#pedido_direccionEntrega").trigger("liszt:updated"), 15000);  
+                window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000); */
+                $("#pedido_direccionEntrega").trigger("liszt:updated")
+                $("#pedido_direccionEntrega").trigger("chosen:updated")
+                $('#pedido_direccionEntrega').prop('disabled', false)
+
 
                 //Se limpia controles de Ubigeo
                 $("#ActualDepartamento").val("");
                 $("#ActualProvincia").val("");
                 $("#ActualDistrito").val("");
+               
                 toggleControlesUbigeo();
-
+             
                 $("#pedido_textoCondicionesPago").val(cliente.textoCondicionesPago);
 
 
@@ -341,6 +396,40 @@ jQuery(function ($) {
                 $("#pedido_horaEntregaHasta").val(cliente.horaFinPrimerTurnoEntregaFormat);
                 $("#pedido_horaEntregaAdicionalDesde").val(cliente.horaInicioSegundoTurnoEntregaFormat);
                 $("#pedido_horaEntregaAdicionalHasta").val(cliente.horaFinSegundoTurnoEntregaFormat);
+
+                $("#pedido_direccionEntrega_descripcion").val("")
+                $("#pedido_direccionEntrega_contacto").val("")
+                $("#pedido_direccionEntrega_telefono").val("")
+                $("#pedido_direccionEntrega_nombre").val("")
+                $("#pedido_direccionEntrega_codigoCliente").val("")
+                $("#pedido_direccionEntrega_direccionDomicilioLegal").val("")  
+                $("#ActualDepartamento").val("");
+                $("#ActualProvincia").val("");
+                $("#ActualDistrito").val("");
+                
+               // alert("asas")
+            //    return;
+                location.reload();
+
+                //window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 5000);     
+                //$("#pedido_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
+                //$("#pedido_direccionEntrega").trigger("chosen:updated");
+          /*      $('#pedido_direccionEntrega')
+                    .val(1)
+                    .trigger('liszt:update')
+                    .removeClass('chzn-done');
+                */
+              /*  $('#test_chzn').remove();
+
+
+                $("#test").chosen({
+                    width: "220px",
+                    no_results_text: "test"
+                });*/
+              //  $('#pedido_direccionEntrega').chosen("destroy").chosen();
+           //     window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000);     
+             //   $("#pedido_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
+                //location.reload();
             }
         });
       
@@ -723,7 +812,10 @@ jQuery(function ($) {
         });
     });  
 
-    
+
+    $("#pedido_sku").change(function () {
+        changeInputString("sku", $("#pedido_sku").val())
+    });
 
     $("#pedido_numeroReferenciaCliente").change(function () {
         changeInputString("numeroReferenciaCliente", $("#pedido_numeroReferenciaCliente").val());
@@ -790,9 +882,9 @@ jQuery(function ($) {
                 },
                 success: function (direccionEntrega) {
 
-                    $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);
+               /*     $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);
                     $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
-                    $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
+                    $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);*/
                     location.reload()
                 }
             })

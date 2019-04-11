@@ -378,21 +378,21 @@ namespace Cotizador.Controllers
         {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA];
 
-            String idMovimientoAlmacenList = " '";
+        //    String idMovimientoAlmacenList = " '";
             List<Guid> movimientoAlmacenIdList = new List<Guid>();
 
             foreach (MovimientoAlmacenJson movimientoAlmacenJson in MovimientoAlmacenJsonList)
             {
 
-                idMovimientoAlmacenList = idMovimientoAlmacenList + movimientoAlmacenJson.idMovimientoAlmacen+"','";
+          //      idMovimientoAlmacenList = idMovimientoAlmacenList + movimientoAlmacenJson.idMovimientoAlmacen+"','";
                 movimientoAlmacenIdList.Add(Guid.Parse(movimientoAlmacenJson.idMovimientoAlmacen));
             }
 
-            idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
+       //     idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
 
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS] = movimientoAlmacenIdList;            
-            DocumentoVenta documentoVenta = movimientoAlmacenBL.obtenerResumenConsolidadoAtenciones(idMovimientoAlmacenList);
+            DocumentoVenta documentoVenta = movimientoAlmacenBL.obtenerResumenConsolidadoAtenciones(movimientoAlmacenIdList);
             this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO] = documentoVenta;
             String resultado = JsonConvert.SerializeObject(documentoVenta);
             return resultado;
@@ -404,17 +404,17 @@ namespace Cotizador.Controllers
 
         public String validarPreciosVentaConsolidada()
         {
-            String idMovimientoAlmacenList = " '";
+        //    String idMovimientoAlmacenList = " '";
             List<Guid> movimientoAlmacenIdList = new List<Guid>();
 
-            List<Guid> guidMovimientoAlmacenList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
-            foreach (Guid idMovimientoAlmacen in guidMovimientoAlmacenList)
+            List<Guid> idMovimientoAlmacenList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
+        /*    foreach (Guid idMovimientoAlmacen in guidMovimientoAlmacenList)
             {
 
                 idMovimientoAlmacenList = idMovimientoAlmacenList + idMovimientoAlmacen + "','";
             }
             idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
-
+            */
 
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             List<GuiaRemision> guiaRemisionList = movimientoAlmacenBL.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList);
@@ -499,16 +499,16 @@ namespace Cotizador.Controllers
             }
 
 
-            String idMovimientoAlmacenList = " '";
+       //     String idMovimientoAlmacenList = " '";
             List<Guid> movimientoAlmacenIdList = new List<Guid>();
 
-            List<Guid> guidMovimientoAlmacenList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
-            foreach (Guid idMovimientoAlmacen in guidMovimientoAlmacenList)
+            List<Guid> idMovimientoAlmacenList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
+       /*     foreach (Guid idMovimientoAlmacen in guidMovimientoAlmacenList)
             {
 
                 idMovimientoAlmacenList = idMovimientoAlmacenList + idMovimientoAlmacen + "','";
-            }
-            idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
+            }*/
+        //    idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
 
 
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
@@ -550,7 +550,7 @@ namespace Cotizador.Controllers
 
                 /*Cabecera, Sub total*/
                 int rTotal = (guiaRemisionList.Count) + 4;
-                int cTotal = 9 + (documentoVenta.ventaDetalleList.Count()*2);
+                int cTotal = 10 + (documentoVenta.ventaDetalleList.Count()*2);
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -562,7 +562,7 @@ namespace Cotizador.Controllers
                     }
                 }
 
-                int i = 10;
+                int i = 11;
                 foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
                 {
                  
@@ -597,6 +597,7 @@ namespace Cotizador.Controllers
                 UtilesHelper.setValorCelda(sheet, 2, "G", "Provincia", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 2, "H", "Departamento", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 2, "I", "Observaciones", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "J", "Número Requerimiento", titleCellStyle);
 
 
 
@@ -619,8 +620,9 @@ namespace Cotizador.Controllers
                     UtilesHelper.setValorCelda(sheet, i, "G", guiaRemision.ubigeoEntrega.Provincia);
                     UtilesHelper.setValorCelda(sheet, i, "H", guiaRemision.ubigeoEntrega.Departamento);
                     UtilesHelper.setValorCelda(sheet, i, "I", guiaRemision.observaciones);
+                    UtilesHelper.setValorCelda(sheet, i, "J", guiaRemision.pedido.numeroRequerimiento);
 
-                    int ic = 10;
+                    int ic = 11;
                     foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
                     {
 
@@ -643,7 +645,7 @@ namespace Cotizador.Controllers
 
 
                 int flag = 0;
-                for (int cf = 9; cf < cTotal; cf++)
+                for (int cf = 10; cf < cTotal; cf++)
                 {
                     sheet.GetRow(i - 1).GetCell(cf).CellStyle = titleCellStyle;
                     sheet.GetRow(i - 1).GetCell(cf).SetCellType(CellType.Formula);
@@ -659,7 +661,7 @@ namespace Cotizador.Controllers
                 }
                 i++;
                 flag = 0;
-                for (int cf = 9; cf < cTotal; cf++)
+                for (int cf = 10; cf < cTotal; cf++)
                 {
                     sheet.GetRow(i - 1).GetCell(cf).CellStyle = titleCellStyle;
                

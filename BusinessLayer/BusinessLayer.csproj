@@ -31,19 +31,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\..\NPOI 2.2.1 binary package (2)\NPOI 2.2.1 binary package\Release\Net40\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
-      <HintPath>..\..\..\NPOI 2.2.1 binary package (2)\NPOI 2.2.1 binary package\Release\Net40\NPOI.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\..\NPOI 2.2.1 binary package (2)\NPOI 2.2.1 binary package\Release\Net40\NPOI.OOXML.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OOXML.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\..\NPOI 2.2.1 binary package (2)\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXml4Net.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\..\NPOI 2.2.1 binary package (2)\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXmlFormats.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocumentoCompraBL.cs" />
     <Compile Include="Email\PedidoSinAtencion.cs" />
     <Compile Include="ArchivoAdjuntoBL.cs" />
     <Compile Include="PermisoBL.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="DocumentoVentaBL.cs" />
     <Compile Include="MovimientoAlmacenBL.cs" />
     <Compile Include="UtilesHelper.cs" />
+    <Compile Include="CompraBL.cs" />
     <Compile Include="VentaBL.cs" />
     <Compile Include="TransportistaBL.cs" />
     <Compile Include="PedidoBL.cs" />

@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using NPOI.XSSF.UserModel;
-using NPOI.SS.UserModel;
-
 
 namespace Cotizador.Controllers
 {
@@ -46,7 +43,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             venta = ventaBL.GetVenta(venta, usuario);
             this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
-
+            
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonVenta = JsonConvert.SerializeObject(venta);
 
@@ -72,7 +69,7 @@ namespace Cotizador.Controllers
             venta.guiaRemision = guiaRemision;
             VentaBL ventaBL = new VentaBL();
             ventaBL.InsertVentaRefacturacion(venta);
-
+            
         }
 
 
@@ -82,7 +79,7 @@ namespace Cotizador.Controllers
         public String generarVentaConsolidada(List<DocumentoDetalleJson> documentoDetalleJsonList)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            List<Guid> guiaRemisionIdList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
+            List<Guid> guiaRemisionIdList =  (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
 
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA];
 
@@ -101,12 +98,12 @@ namespace Cotizador.Controllers
             foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
             {
                 DocumentoDetalleJson documentoDetalleJson = documentoDetalleJsonList.Where(d => Guid.Parse(d.idProducto) == ventaDetalle.producto.idProducto).FirstOrDefault();
-                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos,usuario.visualizaMargen);
                 //pedidoDetalle.producto = new Producto();
                 pedidoDetalle.producto = ventaDetalle.producto;
                 pedidoDetalle.cantidad = documentoDetalleJson.cantidad;
                 ///Importante definir como null para que se recupere del producto al momento de insertar
-                pedidoDetalle.unidadInternacional = null;
+                pedidoDetalle.unidadInternacional = null; 
 
                 pedidoDetalle.producto.equivalencia = ventaDetalle.producto.equivalencia;
                 pedidoDetalle.esPrecioAlternativo = documentoDetalleJson.esUnidadAlternativa == 1;
@@ -132,7 +129,7 @@ namespace Cotizador.Controllers
 
             ventaBL.InsertVentaConsolidada(venta);
 
-            ventaBL.GetVentaConsolidada(venta, usuario);
+            ventaBL.GetVentaConsolidada(venta,usuario);
 
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.calcularMontosTotales(venta.pedido);
@@ -152,9 +149,9 @@ namespace Cotizador.Controllers
 
             }
 
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
-            return json;
-        }
+             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
+             return json;
+         }
 
         [HttpPost]
         public String obtenerVentaConsolidada(List<DocumentoDetalleJson> documentoDetalleJsonList)
@@ -187,7 +184,7 @@ namespace Cotizador.Controllers
             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
             return json;
         }
-
+        
 
 
 
@@ -248,8 +245,8 @@ namespace Cotizador.Controllers
 
 
 
-        public String Descargar()
-        {/*
+            public String Descargar()
+           {/*
            
 
             Pedido pedido = venta.pedido; ;
@@ -324,7 +321,7 @@ namespace Cotizador.Controllers
                 }*/
                 Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
                 Pedido pedido = venta.pedido;
-
+                    
 
 
                 int existeCliente = 0;
@@ -381,7 +378,7 @@ namespace Cotizador.Controllers
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
 
-
+       
 
 
         public String Update()
@@ -397,7 +394,7 @@ namespace Cotizador.Controllers
 
             long numeroPedido = venta.pedido.numeroPedido;
             String numeroPedidoString = venta.pedido.numeroPedidoString;
-
+        
 
             var v = new { numeroPedido = numeroPedidoString };
             String resultado = JsonConvert.SerializeObject(v);
@@ -405,66 +402,7 @@ namespace Cotizador.Controllers
             //String resultado = "{ \"codigo\":\"" + numeroPedido + "\", \"estado\":\"" + estado + "\", \"observacion\":\"" + observacion + "\" }";
             return resultado;
         }
-        [HttpGet]
-        public ActionResult ExcluirVentaDetalle()
-        {
 
-            return View("ExcluirVentaDetalle");
-        }
-
-
-     
-
-        [HttpPost]
-        public ActionResult ExcluirVentaDetalle(HttpPostedFileBase file)
-        {
-        Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            
-            VentaBL ventaBL = new VentaBL();
-            try
-            {
-                XSSFWorkbook hssfwb = new XSSFWorkbook(file.InputStream);
-
-                ISheet sheet = hssfwb.GetSheetAt(0);
-
-                int ultimaFila = sheet.LastRowNum;
-
-                //Excel prueba = new Excel();
-                List <Guid> id_venta_detalle = new List<Guid>();
-                List<String> responsable_comercial = new List<String>();
-                List<String> supervisor_comercial = new List<String>();
-                List<String> asistente_servicio = new List<String>();
-                List<String> canal_multiregional = new List<String>();
-                List<String> canal_lima = new List<String>();
-                List<String> canal_provincia = new List<String>();
-                List<String> canal_pcp = new List<String>();
-                List<int> origen = new List<int>();
-                for (int row = 2; row <= ultimaFila + 1; row++)
-                {
-                    id_venta_detalle.Add(Guid.Parse(UtilesHelper.getValorCelda(sheet, row, "A")));
-                    responsable_comercial.Add(UtilesHelper.getValorCelda(sheet, row, "B"));
-                    supervisor_comercial.Add((UtilesHelper.getValorCelda(sheet, row, "C")));
-                    asistente_servicio.Add((UtilesHelper.getValorCelda(sheet, row, "D")));
-                    canal_multiregional.Add((UtilesHelper.getValorCelda(sheet, row, "E")));
-                    canal_lima.Add((UtilesHelper.getValorCelda(sheet, row, "F")));
-                    canal_provincia.Add((UtilesHelper.getValorCelda(sheet, row, "G")));
-                    canal_pcp.Add((UtilesHelper.getValorCelda(sheet, row, "H")));
-                    origen.Add((UtilesHelper.getValorCeldaInt(sheet, row, "I")));
-                }
-                ventaBL.ExcelPrueba(id_venta_detalle, usuario, responsable_comercial, supervisor_comercial, asistente_servicio, canal_multiregional, canal_lima, canal_provincia, canal_pcp,origen);
-
-                ViewBag.id_venta_detalle = "ID: "+string.Join(Environment.NewLine+"ID: ", id_venta_detalle.ToArray());
-
-                return View();
-            }
-            catch (Exception ex)
-            {
-                ViewBag.id_venta_detalle = "Error en el almacenamiento de ID's";
-                return View("ExcluirVentaDetalle");
-            }
-
-        }
-       
 
     }
 }

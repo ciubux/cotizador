@@ -57,7 +57,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Correo.cs" />
+    <Compile Include="DocumentoCompra.cs" />
     <Compile Include="GrupoClienteAdjunto.cs" />
+    <Compile Include="IDocumentoPago.cs" />
     <Compile Include="Origen.cs" />
     <Compile Include="CategoriaPermiso.cs" />
     <Compile Include="Permiso.cs" />
@@ -97,8 +99,8 @@
     <Compile Include="Usuario.cs" />
     <Compile Include="Vendedor.cs" />
     <Compile Include="Transaccion.cs" />
+    <Compile Include="Compra.cs" />
     <Compile Include="Venta.cs" />
-    <Compile Include="VentaDetalle.cs" />
     <Compile Include="MovimientoDetalle.cs" />
     <Compile Include="PedidoDetalle.cs" />
     <Compile Include="Pedido.cs" />
@@ -127,6 +129,7 @@
     <Compile Include="Cotizacion.cs" />
     <Compile Include="Ciudad.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VentaDetalle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

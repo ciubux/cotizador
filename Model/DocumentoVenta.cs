@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Model
 {
-    public class DocumentoVenta : Auditoria
+    public class DocumentoVenta : Auditoria, IDocumentoPago
     {
 
         public DocumentoVenta()
@@ -446,5 +446,12 @@ namespace Model
         public int idGrupoCliente { get; set; }
 
         public bool buscarSedesGrupoCliente { get; set; }
+
+
+        /**
+         * Utilizado para búsqueda
+         */
+        [Display(Name = "SKU:")]
+        public String sku { get; set; }
     }
 }

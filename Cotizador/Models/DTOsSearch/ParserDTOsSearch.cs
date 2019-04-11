@@ -29,7 +29,7 @@ namespace Cotizador.Models.DTOsSearch
                 clienteDTO.supervisorComercial_descripcion = clienteTmp.supervisorComercial.descripcion;
                 clienteDTO.asistenteServicioCliente_descripcion = clienteTmp.asistenteServicioCliente.descripcion;
                 clienteDTO.creditoAprobado = clienteTmp.creditoAprobado;
-
+                clienteDTO.vendedoresAsignados = clienteTmp.vendedoresAsignados;
                 clienteDTO.tipoPagoFacturaToString = clienteTmp.tipoPagoFactura.ToString();
 
                 clienteDTO.bloqueado = clienteTmp.bloqueado;

@@ -1563,5 +1563,13 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
         }
 
+        public void ChangeInputString()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            PropertyInfo propertyInfo = cotizacion.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(cotizacion, this.Request.Params["valor"]);
+            this.CotizacionSession = cotizacion;
+        }
+
     }
 }

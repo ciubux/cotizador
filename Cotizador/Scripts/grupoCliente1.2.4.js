@@ -1455,14 +1455,14 @@ jQuery(function ($) {
 
                 $("#verObservacionesCredito").html(obj.observacionesCredito);
 
-
+                
 
                 var preciosList = result.precios;
                 var margenText = "";
                 var canastaText = "";
                 var disabledCanasta = "";
                 var editaCliente = parseInt($("#tableListaPrecios th.listaPreciosCanasta").attr("hasEdit"));
-
+             
                 $("#tableListaPrecios > tbody").empty();
                 for (var i = 0; i < preciosList.length; i++) {
                     var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
@@ -1524,14 +1524,14 @@ jQuery(function ($) {
                     $("#tableListaPrecios").append(preciosRow);
 
                 }
-                
+             
                 if (preciosList.length > 0) {
                     $("#msgPreciosSinResultados").hide();
                 }
                 else {
                     $("#msgPreciosSinResultados").show();
                 }
-
+              
                 FooTable.init('#tableListaPrecios');
 
                 $("#chkSoloCanasta").prop("checked", false);
@@ -1539,9 +1539,14 @@ jQuery(function ($) {
 
                 var clienteList = obj.miembros;
                 var margenText = "";
-
+               
                 $("#tableMiembrosGrupo > tbody").empty();
                 for (var i = 0; i < clienteList.length; i++) {
+                    var textoHeredaPrecios = 'No';
+                    if (clienteList[i].habilitadoNegociacionGrupal) {
+                        textoHeredaPrecios = 'Si';
+                    }
+
                     var clienteRow = '<tr data-expanded="true">' +
                         '<td>  ' + clienteList[i].idPedido + '</td>' +
                         '<td>  ' + clienteList[i].codigo + '  </td>' +
@@ -1550,13 +1555,14 @@ jQuery(function ($) {
                         '<td>  ' + clienteList[i].tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + clienteList[i].ruc + '  </td>' +
                         '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
+                        '<td>  ' + textoHeredaPrecios+ '  </td>' +
                         '</tr>';
                     
                     $("#tableMiembrosGrupo").append(clienteRow);
 
                 }
                 FooTable.init('#tableMiembrosGrupo');
-
+                alert("s")
 
                 $("#modalVerGrupoCliente").modal('show');                        
             }
@@ -1731,6 +1737,10 @@ jQuery(function ($) {
 
         var idCliente = $("#idCliente").val();
         var idGrupoCliente = $("#idGrupoCliente").val();
+        var heredaPrecios = 0;
+        if ($("#cliente_habilitadoNegociacionGrupal").is(":checked")) {
+            heredaPrecios = 1;
+        }
 
         if (idCliente == "") {
             $.alert({
@@ -1745,11 +1755,16 @@ jQuery(function ($) {
             return;
         }
 
+        $('body').loadingModal({
+            text: 'Agregando Cliente'
+        });
+
         $.ajax({
             url: "/GrupoCliente/AddCliente",
             type: 'POST',
             data: {
                 idCliente: idCliente,
+                heredaPrecios: heredaPrecios,
                 idGrupoCliente: idGrupoCliente
             },
             type: 'POST',
@@ -1757,6 +1772,11 @@ jQuery(function ($) {
             success: function (resultado) {
                 if (resultado.success == 1) {
                     var cliente = resultado.cliente;
+                    var textoHeredaPrecios = 'No';
+                    if (cliente.habilitadoNegociacionGrupal) {
+                        textoHeredaPrecios = 'Si';
+                    }
+
                     var clienteRow = '<tr data-expanded="true">' +
                         '<td>  ' + cliente.idCliente + '</td>' +
                         '<td>  ' + cliente.codigo + '  </td>' +
@@ -1765,6 +1785,7 @@ jQuery(function ($) {
                         '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + cliente.ruc + '  </td>' +
                         '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+                        '<td>  ' + textoHeredaPrecios + '  </td>' +
                         '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                         '</tr>';
 
@@ -1792,6 +1813,10 @@ jQuery(function ($) {
                         }
                     });
                 }
+                $('body').loadingModal('hide');
+            },
+            error: function () {
+                $('body').loadingModal('hide');
             }
         });
     });
@@ -1803,6 +1828,14 @@ jQuery(function ($) {
 
         var ruc = $("#rucCliente").val();
         var idGrupoCliente = $("#idGrupoCliente").val();
+        var heredaPrecios = 0;
+        if ($("#clientes_habilitadosNegociacionGrupal").is(":checked")) {
+            heredaPrecios = 1;
+        }
+        
+        $('body').loadingModal({
+            text: 'Agregando Clientes del RUC'
+        });
 
         if (ruc == "") {
             $.alert({
@@ -1822,6 +1855,7 @@ jQuery(function ($) {
             type: 'POST',
             data: {
                 ruc: ruc,
+                heredaPrecios: heredaPrecios,
                 idGrupoCliente: idGrupoCliente
             },
             type: 'POST',
@@ -1867,6 +1901,10 @@ jQuery(function ($) {
                         }
                     });
                 }
+                $('body').loadingModal('hide');
+            },
+            error: function () {
+                $('body').loadingModal('hide');
             }
         });
     });
