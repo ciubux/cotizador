@@ -176,8 +176,10 @@ namespace Model
 
         public int tipoProductoVista { get; set; }
 
+        [Display(Name = "Moneda Proveedor:")]
         public string monedaProveedor { get; set; }
 
+        [Display(Name = "Moneda MP:")]
         public string monedaMP { get; set; }
 
 
@@ -207,26 +209,65 @@ namespace Model
             }
         }
 
-        public static List<CampoPersistir> obtenerCampos(List<LogCampo> campos) 
+        public static List<CampoPersistir> obtenerCampos(List<LogCampo> campos, bool soloPersistentes = false) 
         {
             List<CampoPersistir> lista = new List<CampoPersistir>();
 
             Producto obj = new Producto();
-            foreach(LogCampo campo in campos) 
+            foreach (LogCampo campo in campos)
             {
-               
+                CampoPersistir cp = new CampoPersistir();
+                cp.campo = campo;
+                switch (campo.nombre)
+                {
+                    case "sku_proveedor": cp.nombre = Producto.nombreAtributo("skuProveedor"); break;
+                    case "precio": cp.nombre = Producto.nombreAtributo("precioSinIgv"); break;
+                    case "precio_provincia": cp.nombre = Producto.nombreAtributo("precioProvinciaSinIgv"); break;
+                    case "costo": cp.nombre = Producto.nombreAtributo("costoSinIgv"); break;
+                    case "sku": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    case "descripcion": cp.nombre = Producto.nombreAtributo("descripcion"); break;
+                    case "familia": cp.nombre = Producto.nombreAtributo("familia"); break;
+                    case "proveedor": cp.nombre = Producto.nombreAtributo("proveedor"); break;
+                    case "unidad": cp.nombre = Producto.nombreAtributo("unidad"); break;
+                    case "unidad_alternativa": cp.nombre = Producto.nombreAtributo("unidad_alternativa"); break;
+                    case "equivalencia": cp.nombre = Producto.nombreAtributo("equivalencia"); break;
+                    case "equivalencia_proveedor": cp.nombre = Producto.nombreAtributo("equivalenciaProveedor"); break;
+                    case "moneda_compra": cp.nombre = Producto.nombreAtributo("monedaProveedor"); break;
+                    case "moneda_venta": cp.nombre = Producto.nombreAtributo("monedaMP"); break;
+                    case "unidad_proveedor": cp.nombre = Producto.nombreAtributo("unidadProveedor"); break;
+                    case "unidad_estandar_internacional": cp.nombre = Producto.nombreAtributo("unidadEstandarInternacional"); break;
+                    case "unidad_alternativa_internacional": cp.nombre = Producto.nombreAtributo("unidadAlternativaInternacional"); break;
+                    case "inafecto": cp.nombre = Producto.nombreAtributo("inafecto"); break;
+                    case "tipo": cp.nombre = Producto.nombreAtributo("tipoProducto"); break;
+                        
+                    default: cp.nombre = "[NOT_FOUND]"; break;
+
+                    /* TO DO: Evaluar si se usan
+                    case "unidad_conteo": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    case "equivalencia_unidad_conteo_estandar": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    case "equivalencia_unidad_conteo_alternativa": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    case "exonerado_igv": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    case "codigo_sunat": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    case "costo_original": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    case "precio_original": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    case "clase": cp.nombre = Producto.nombreAtributo("clase"); break;
+                    case "fecha_ingreso": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    case "fecha_fin": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    case "marca": cp.nombre = Producto.nombreAtributo("marca"); break;
+                    case "precio_provincia_original": cp.nombre = Producto.nombreAtributo("sku"); break;
+                    */
+                }
+
                 if (campo.puedePersistir)
                 {
-                    CampoPersistir cp = new CampoPersistir();
-                    cp.campo = campo;
-                    switch(campo.nombre)
-                    {
-                        case "precio": cp.nombre = Producto.nombreAtributo("precioSinIgv"); break;
-                        case "precio_provincia": cp.nombre = Producto.nombreAtributo("precioProvinciaSinIgv"); break;
-                        case "costo": cp.nombre = Producto.nombreAtributo("costoSinIgv"); break;
-                    }
+                    cp.persiste = true;
+                }
 
-                    lista.Add(cp);
+                if (!cp.nombre.Equals("[NOT_FOUND]")) { 
+                    if (!soloPersistentes || (cp.persiste && soloPersistentes))
+                    {
+                        lista.Add(cp);
+                    }
                 }
             }
 
@@ -247,21 +288,46 @@ namespace Model
         }
 
 
-        public List<LogCambio> obtenerLogProgramado(List<LogCampo> campos, List<CampoPersistir> persistir)
+        public List<LogCambio> obtenerLogProgramado(List<CampoPersistir> campos, bool soloRegistro = false, bool soloPersiste = false)
         {
             List<LogCambio> lista = new List<LogCambio>();
 
             Producto obj = new Producto();
-            foreach (LogCampo campo in campos)
+            foreach (CampoPersistir campo in campos)
             {
                 LogCambio lc = null;
 
                 switch (campo.nombre)
                 {
-                    case "precio": lc = instanciarLogCambio(campo, persistir); lc.valor = this.precioSinIgv.ToString();  break;
-                    case "costo": lc = instanciarLogCambio(campo, persistir); lc.valor = this.costoSinIgv.ToString(); break;
-                    case "precio_provincia": lc = instanciarLogCambio(campo, persistir); lc.valor = this.precioProvinciaSinIgv.ToString(); break;
-                    case "sku": lc = instanciarLogCambio(campo, persistir); lc.valor = this.sku; break;
+                    case "precio": lc = instanciarLogCambio(campo); lc.valor = this.precioSinIgv.ToString();  break;
+                    case "costo": lc = instanciarLogCambio(campo); lc.valor = this.costoSinIgv.ToString(); break;
+                    case "precio_provincia": lc = instanciarLogCambio(campo); lc.valor = this.precioProvinciaSinIgv.ToString(); break;
+                    case "sku": lc = instanciarLogCambio(campo); lc.valor = this.sku; break;
+                    case "sku_proveedor": lc = instanciarLogCambio(campo); lc.valor = this.skuProveedor; break;
+                    case "descripcion": lc = instanciarLogCambio(campo); lc.valor = this.descripcion; break;
+                    case "familia": lc = instanciarLogCambio(campo); lc.valor = this.familia; break;
+                    case "proveedor": lc = instanciarLogCambio(campo); lc.valor = this.proveedor; break;
+                    case "unidad": lc = instanciarLogCambio(campo); lc.valor = this.unidad; break;
+                    case "unidad_alternativa": lc = instanciarLogCambio(campo); lc.valor = this.unidad_alternativa; break;
+                    case "equivalencia": lc = instanciarLogCambio(campo); lc.valor = this.equivalencia.ToString(); break;
+                    case "equivalencia_proveedor": lc = instanciarLogCambio(campo); lc.valor = this.equivalenciaProveedor.ToString(); break;
+                    case "moneda_compra": lc = instanciarLogCambio(campo); lc.valor = this.monedaProveedor; break;
+                    case "moneda_venta": lc = instanciarLogCambio(campo); lc.valor = this.monedaMP; break;
+                    case "unidad_proveedor": lc = instanciarLogCambio(campo); lc.valor = this.unidadProveedor; break;
+                    case "unidad_estandar_internacional": lc = instanciarLogCambio(campo); lc.valor = this.unidadEstandarInternacional; break;
+                    case "unidad_alternativa_internacional": lc = instanciarLogCambio(campo); lc.valor = this.unidadAlternativaInternacional; break;
+                    case "inafecto": lc = instanciarLogCambio(campo); lc.valor = this.inafecto.ToString(); break;
+                    case "tipo": lc = instanciarLogCambio(campo); lc.valor = this.tipoProducto.ToString(); break;
+                }
+
+                if (soloRegistro && !campo.registra)
+                {
+                    lc = null;
+                }
+
+                if (soloPersiste && !campo.persiste)
+                {
+                    lc = null;
                 }
 
                 if (lc != null)
@@ -342,20 +408,245 @@ namespace Model
                             lista.Add(cambio);
                         }
                         break;
+                    case "sku_proveedor":
+                        if (this.skuProveedor == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.skuProveedor = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "descripcion":
+                        if (this.descripcion == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.descripcion = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "familia":
+                        if (this.familia == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.familia = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "proveedor":
+                        if (this.proveedor == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.proveedor = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "unidad":
+                        if (this.unidad == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.unidad = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "unidad_alternativa":
+                        if (this.unidad_alternativa == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.unidad_alternativa = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "equivalencia":
+                        if (this.equivalencia == int.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.equivalencia = int.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "equivalencia_proveedor":
+                        if (this.equivalenciaProveedor == int.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.equivalenciaProveedor = int.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "moneda_compra":
+                        if (this.monedaProveedor == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.monedaProveedor = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "moneda_venta":
+                        if (this.monedaMP == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.monedaMP = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "unidad_proveedor":
+                        if (this.unidadProveedor == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.unidadProveedor = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "unidad_estandar_internacional":
+                        if (this.unidadEstandarInternacional == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.unidadEstandarInternacional = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "unidad_alternativa_internacional":
+                        if (this.unidadAlternativaInternacional == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.unidadAlternativaInternacional = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "inafecto":
+                        if (this.inafecto == bool.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.inafecto = bool.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "tipo":
+                        if (this.tipoProducto == (TipoProducto) int.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.tipoProducto = (TipoProducto) int.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
                 }
             }
 
             return lista;
         }
-        private LogCambio instanciarLogCambio(LogCampo campo, List<CampoPersistir> persistir)
+        private LogCambio instanciarLogCambio(CampoPersistir campo)
         {
             LogCambio cambio = new LogCambio();
             cambio.idRegistro = this.idProducto.ToString();
             cambio.estado = true;
             cambio.fechaInicioVigencia = this.fechaInicioVigencia;
-            cambio.idCampo = campo.idCampo;
-            cambio.idTabla = campo.idTabla;
-            cambio.persisteCambio = this.persisteCampo(campo, persistir);
+            cambio.idCampo = campo.campo.idCampo;
+            cambio.idTabla = campo.campo.idTabla;
+            cambio.persisteCambio = campo.persiste;
             cambio.idUsuarioModificacion = this.usuario.idUsuario;
 
             return cambio;

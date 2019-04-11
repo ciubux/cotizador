@@ -408,6 +408,15 @@ jQuery(function ($) {
         changeInputBoolean('inafecto', valor)
     });
 
+    $(".chk_campo_registra").change(function () {
+        if ($(this).prop('checked')) {
+            $(this).closest("tr").find(".chk_campo_persiste").removeAttr("disabled");
+        } else {
+            $(this).closest("tr").find(".chk_campo_persiste").attr("disabled", "disabled");
+            $(this).closest("tr").find(".chk_campo_persiste").prop('checked', false);
+        }
+
+    });
     
     
 

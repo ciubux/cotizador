@@ -751,6 +751,8 @@ namespace DataLayer
                 item.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
                 item.costoSinIgv = Converter.GetDecimal(row, "costo");
 
+                item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+
                 item.image = Converter.GetBytes(row, "imagen");
                 
             }

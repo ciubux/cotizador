@@ -85,5 +85,39 @@ namespace BusinessLayer
                 return true;
             }
         }
+
+        public bool aplicarLogCambios()
+        {
+            List<LogCambio> logs = this.getCambiosAplicar();
+
+            List<LogCambio> registroLog = new List<LogCambio>();
+            string idRegistro = "";
+            string tabla = "";
+            DateTime fiv = new DateTime();
+
+            foreach (LogCambio log in logs)
+            {
+                if (!tabla.Equals(log.tabla.nombre) || !idRegistro.Equals(log.idRegistro) || fiv != log.fechaInicioVigencia)
+                {
+                    if (registroLog.Count > 0)
+                    {
+                        this.traspasarCambios(registroLog);
+                    }
+                    registroLog = new List<LogCambio>();
+                    idRegistro = log.idRegistro;
+                    tabla = log.tabla.nombre;
+                    fiv = log.fechaInicioVigencia;
+                }
+
+                registroLog.Add(log);
+            }
+
+            if (registroLog.Count > 0)
+            {
+                this.traspasarCambios(registroLog);
+            }
+
+            return this.limpiarCambiosProgramados();
+        }
     }
 }

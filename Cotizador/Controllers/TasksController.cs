@@ -100,36 +100,7 @@ namespace Cotizador.Controllers
         {
             LogCambioBL logCambioBL = new LogCambioBL();
 
-            List<LogCambio> logs = logCambioBL.getCambiosAplicar();
-
-            List<LogCambio> registroLog = new List<LogCambio>();
-            string idRegistro = "";
-            string tabla = "";
-            DateTime fiv = new DateTime();
-
-            foreach (LogCambio log in logs)
-            {
-                if(!tabla.Equals(log.tabla.nombre) || !idRegistro.Equals(log.idRegistro) || fiv != log.fechaInicioVigencia)
-                {
-                    if (registroLog.Count > 0)
-                    {
-                        logCambioBL.traspasarCambios(registroLog);
-                    }
-                    registroLog = new List<LogCambio>();
-                    idRegistro = log.idRegistro;
-                    tabla = log.tabla.nombre;
-                    fiv = log.fechaInicioVigencia;
-                }
-
-                registroLog.Add(log);
-            }
-            
-            if (registroLog.Count > 0)
-            {
-                logCambioBL.traspasarCambios(registroLog);
-            }
-
-            logCambioBL.limpiarCambiosProgramados();
+            logCambioBL.aplicarLogCambios();
         }
     }
 }

@@ -293,17 +293,25 @@ namespace Cotizador.Controllers
                 LogCampoBL logCambioBl = new LogCampoBL();
                 List<LogCampo> campos = logCambioBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);
 
-                List<CampoPersistir> persitirCampos = Producto.obtenerCampos(campos);
-                List<CampoPersistir> persistir = new List<CampoPersistir>();
+                List<CampoPersistir> registrarCampos = Producto.obtenerCampos(campos);
+                //List<CampoPersistir> registrarCampos = new List<CampoPersistir>();
 
-                foreach (CampoPersistir cp in persitirCampos)
+                foreach (CampoPersistir cp in registrarCampos)
                 {
-                    if (Request["persiste_" + cp.campo.nombre] != null)
+                    cp.registra = false;
+                    cp.persiste = false;
+                    if (Request["registra_" + cp.campo.nombre] != null)
                     {
-                        int select = Int32.Parse(Request["persiste_" + cp.campo.nombre].ToString());
+                        int select = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
                         if (select == 1)
                         {
-                            persistir.Add(cp);
+                            cp.registra = true;
+                            
+                            if (Request["persiste_" + cp.campo.nombre] != null)
+                            {
+                                int persiste = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
+                                cp.persiste = persiste == 1 ? true : false;                                
+                            }
                         }
                     }
                 }
@@ -312,6 +320,9 @@ namespace Cotizador.Controllers
                 String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
                 DateTime fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
 
+                int nFIV = (fechaInicioVigencia.Year * 10000) + (fechaInicioVigencia.Month * 100) + fechaInicioVigencia.Day;
+                int nFT = (DateTime.Now.Year * 10000) + (DateTime.Now.Month * 100) + DateTime.Now.Day;
+                int nFR = 0;
                 HSSFWorkbook hssfwb;
 
                 ProductoBL productoBL = new ProductoBL();
@@ -537,14 +548,48 @@ namespace Cotizador.Controllers
                             }
 
                             Guid idRegistro = productoBL.getProductoId(productoStaging.sku);
+                            
 
-                            if (idRegistro != Guid.Empty)
+                            if (idRegistro == Guid.Empty)
                             {
-                                productoStaging.idProducto = idRegistro;
-                                productoStaging.usuario = usuario;
-                                productoStaging.fechaInicioVigencia = fechaInicioVigencia;
+                                //TO DO: Realizar nuevo registro en el proceso de aplicar cambios 
+                                idRegistro = Guid.NewGuid();
+                            }
+
+                            productoStaging.idProducto = idRegistro;
+                            productoStaging.usuario = usuario;
+                            productoStaging.fechaInicioVigencia = fechaInicioVigencia;
+
+                            if (nFIV >= nFT)
+                            {
                                 LogCambioBL logCambiobl = new LogCambioBL();
-                                logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(campos, persistir));
+                                logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                                if (nFIV == nFT)
+                                {
+                                    logCambiobl.aplicarLogCambios();
+                                }
+                            } else
+                            {
+                                Producto existente = productoBL.getProductoById(idRegistro);
+                                
+                                if (existente.fechaInicioVigencia == null)
+                                {
+                                    nFR = (existente.fechaInicioVigencia.Year * 10000) + (existente.fechaInicioVigencia.Month * 100) + existente.fechaInicioVigencia.Day;
+                                } else
+                                {
+                                    nFR = int.MinValue;
+                                }
+
+                                if (nFR <= nFIV)
+                                {
+                                    LogCambioBL logCambiobl = new LogCambioBL();
+                                    logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                                    logCambiobl.aplicarLogCambios();
+                                } else
+                                {
+                                    //Registrar todo log
+
+                                }
                             }
 
                         }

@@ -15,5 +15,6 @@ namespace Model
         public String nombre { get; set; }
 
         public bool puedePersistir { get; set; }
+        
     }
 }
