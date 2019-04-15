@@ -620,6 +620,44 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    $("#btnCargarProductos").click(function () {
+        var listaTextosCampos = "";
+        $(".chk_campo_registra").each(function () {
+            if (!$(this).prop('checked')) {
+                if (listaTextosCampos != "") listaTextosCampos = listaTextosCampos + "<br/>";
+                listaTextosCampos = listaTextosCampos + $(this).closest("tr").find("td.nombreCampo").html();
+            }
+        });
+
+        if (listaTextosCampos != "") {
+            $.confirm({
+                title: 'Registro Parcial',
+                content: '<div><div class="col-sm-12"><b>Los siguientes campos no se seleccionaron: </b></div><br/><div class="col-sm-12">' + listaTextosCampos + '</div><br/><div class="col-sm-12"><b>¿Desea continuar? </b></div></div>',
+                type: 'orange',
+                buttons: {
+                    aplica: {
+                        text: 'SI',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            $("#formCargarProductos").submit();
+                        }
+                    },
+                    cancelar: {
+                        text: 'Cancelar',
+                        btnClass: '',
+                        action: function () {
+                        }
+                    }
+                }
+            });
+        } else {
+            $("#formCargarProductos").submit();
+        }
+        
+    });
+
+    
+
     $("#btnBusqueda").click(function () {
 
         

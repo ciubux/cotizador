@@ -25,6 +25,19 @@ namespace BusinessLayer
             }
         }
 
+        public bool insertLogCambios(List<LogCambio> cambios)
+        {
+            using (var dal = new LogCambioDAL())
+            {
+                foreach (LogCambio cambio in cambios)
+                {
+                    dal.insertLog(cambio);
+                }
+
+                return true;
+            }
+        }
+
         public List<LogCambio> getCambiosAplicar()
         {
             using (var dal = new LogCambioDAL())
@@ -53,17 +66,44 @@ namespace BusinessLayer
                     ProductoDAL prodDal = new ProductoDAL();
                     Guid idRegistro = Guid.Parse(logs.ElementAt<LogCambio>(0).idRegistro);
                     Producto prod = prodDal.GetProductoById(idRegistro);
-                    if (prod.idProducto != null && prod.idProducto != Guid.Empty)
-                    {
-                        aplicados = prod.aplicarCambios(logs);   
+                    if (prod.idProducto == null || prod.idProducto == Guid.Empty)
+                    {   
+                        string sku = "";
+                        foreach (LogCambio cambio in logs)
+                        {
+                            if (cambio.campo.nombre.Equals("sku"))
+                            {
+                                sku = cambio.valor;
+                            }
+                        }
+
+                        if (!sku.Equals(""))
+                        {
+                            prod.idProducto = prodDal.getProductoId(prod.sku);
+                            prod = prodDal.GetProductoById(prod.idProducto);
+                        }
                     }
+
+                    aplicados = prod.aplicarCambios(logs);
                     prod.CargaMasiva = true;
                     prod.fechaInicioVigencia = logs.ElementAt<LogCambio>(0).fechaInicioVigencia;
 
                     prod.usuario = new Usuario();
                     prod.usuario.idUsuario = logs.ElementAt<LogCambio>(0).idUsuarioModificacion;
 
-                    prodDal.updateProducto(prod);
+                    if (prod.idProducto != null && prod.idProducto != Guid.Empty)
+                    {
+                        prodDal.updateProducto(prod);
+                    } else
+                    {
+                        prodDal.insertProducto(prod);
+                        foreach (LogCambio cambio in logs)
+                        {
+                            cambio.idRegistro = prod.idProducto.ToString();
+                        }
+
+                    }
+
                     break;
             }
             

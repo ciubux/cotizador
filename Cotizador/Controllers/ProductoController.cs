@@ -287,8 +287,8 @@ namespace Cotizador.Controllers
                  }
                  */
 
-            try
-            {
+            //try
+            //{
                 Usuario usuario = (Usuario)this.Session["usuario"];
                 LogCampoBL logCambioBl = new LogCampoBL();
                 List<LogCampo> campos = logCambioBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);
@@ -316,13 +316,16 @@ namespace Cotizador.Controllers
                     }
                 }
 
-                
+                LogCambioBL logCambiobl = new LogCambioBL();
+
+
                 String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
                 DateTime fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
 
                 int nFIV = (fechaInicioVigencia.Year * 10000) + (fechaInicioVigencia.Month * 100) + fechaInicioVigencia.Day;
                 int nFT = (DateTime.Now.Year * 10000) + (DateTime.Now.Month * 100) + DateTime.Now.Day;
                 int nFR = 0;
+                bool isNew = false;
                 HSSFWorkbook hssfwb;
 
                 ProductoBL productoBL = new ProductoBL();
@@ -343,11 +346,12 @@ namespace Cotizador.Controllers
                 {
                     if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                     {
+                        isNew = false;
 
                         Producto productoStaging = new Producto();
                         int paso = 1;
-                        try
-                        {
+                        //try
+                        //{
 
 
                             if (sheet.GetRow(row).GetCell(0+ posicionInicial) == null)
@@ -554,6 +558,7 @@ namespace Cotizador.Controllers
                             {
                                 //TO DO: Realizar nuevo registro en el proceso de aplicar cambios 
                                 idRegistro = Guid.NewGuid();
+                                isNew = true;
                             }
 
                             productoStaging.idProducto = idRegistro;
@@ -562,17 +567,17 @@ namespace Cotizador.Controllers
 
                             if (nFIV >= nFT)
                             {
-                                LogCambioBL logCambiobl = new LogCambioBL();
-                                logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
-                                if (nFIV == nFT)
+                                if (isNew)
                                 {
-                                    logCambiobl.aplicarLogCambios();
+                                    logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                                } else {
+                                    logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
                                 }
                             } else
                             {
                                 Producto existente = productoBL.getProductoById(idRegistro);
                                 
-                                if (existente.fechaInicioVigencia == null)
+                                if (existente.fechaInicioVigencia != null)
                                 {
                                     nFR = (existente.fechaInicioVigencia.Year * 10000) + (existente.fechaInicioVigencia.Month * 100) + existente.fechaInicioVigencia.Day;
                                 } else
@@ -582,17 +587,30 @@ namespace Cotizador.Controllers
 
                                 if (nFR <= nFIV)
                                 {
-                                    LogCambioBL logCambiobl = new LogCambioBL();
-                                    logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
-                                    logCambiobl.aplicarLogCambios();
+                                    if (isNew)
+                                    {
+                                        logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                                    }
+                                    else
+                                    {
+                                        logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
+                                    }
                                 } else
                                 {
-                                    //Registrar todo log
-
+                                    if (isNew)
+                                    {
+                                        //Registrar
+                                        productoBL.insertProducto(productoStaging);
+                                    } else
+                                    {
+                                        //Registrar log
+                                        logCambiobl.insertLogCambios(productoStaging.obtenerLogProgramado(registrarCampos));
+                                    }
                                 }
                             }
 
-                        }
+
+                        /*}
                         catch (Exception ex)
                         {
 
@@ -602,12 +620,17 @@ namespace Cotizador.Controllers
                             logBL.insertLog(log);
 
 
-                        }
+                        }*/
                     }
                 }
-                
+
+                if (nFIV <= nFT)
+                {
+                    logCambiobl.aplicarLogCambios();
+                }
+
                 return View("CargaCorrecta");
-            }
+            /*}
             catch (Exception ex)
             {
                 Usuario usuario = (Usuario)this.Session["usuario"];
@@ -615,7 +638,7 @@ namespace Cotizador.Controllers
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
                 return View("CargaIncorrecta");
-            }
+            }*/
         }
 
 

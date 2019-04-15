@@ -103,6 +103,23 @@ namespace DataLayer
             return log;
         }
 
+        public LogCambio insertLog(LogCambio log)
+        {
+            var objCommand = GetSqlCommand("pi_cambio_dato_directo");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", log.idUsuarioModificacion);
+            InputParameterAdd.Int(objCommand, "idCatalogoTabla", log.idTabla);
+            InputParameterAdd.Int(objCommand, "idCatalogoCampo", log.idCampo);
+
+            InputParameterAdd.Varchar(objCommand, "idRegistro", log.idRegistro);
+            InputParameterAdd.Varchar(objCommand, "valor", log.valor);
+            InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", log.fechaInicioVigencia.ToString("yyyy-MM-dd"));
+
+            ExecuteNonQuery(objCommand);
+
+            return log;
+        }
+
         /* Elimina el log de cambios programdos con fecha de inicio de vigencia de hoy al pasado y sin enviarlos al log de cambios pasados */
         public bool limpiarCambiosProgramados()
         {
