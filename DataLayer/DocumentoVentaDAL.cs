@@ -310,7 +310,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precioSinIGV", pedidoDetalle.producto.precioSinIgv);
             //Siempre se almacena el costo sin igv de la unidad estandar
             InputParameterAdd.Decimal(objCommand, "costoSinIGV", pedidoDetalle.producto.costoSinIgv);
-            InputParameterAdd.Decimal(objCommand, "equivalencia", pedidoDetalle.producto.equivalencia);
+            InputParameterAdd.Decimal(objCommand, "equivalencia", pedidoDetalle.ProductoPresentacion.Equivalencia);
             InputParameterAdd.Varchar(objCommand, "unidad", pedidoDetalle.unidad);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", pedidoDetalle.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "precioNetoEquivalente", pedidoDetalle.precioNeto);
@@ -399,7 +399,7 @@ namespace DataLayer
 
                 //No se cuenta con IdCotizacionDetalle
                 cotizacionDetalle.cantidad = 1;
-                cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                 cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
 
@@ -411,7 +411,7 @@ namespace DataLayer
     
                 //if (cotizacionDetalle.esPrecioAlternativo)
                // {
-                    cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.producto.equivalencia;
+                    cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.ProductoPresentacion.Equivalencia;
                     cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                 /*}
                 else
@@ -636,6 +636,7 @@ namespace DataLayer
 
 
                 documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                documentoVenta.fechaVencimiento = Converter.GetDateTime(row, "fecha_vencimiento");
                 documentoVenta.estadoDocumentoSunat = (DocumentoVenta.EstadosDocumentoSunat)Converter.GetInt(row, "estado");
                 
 
@@ -652,6 +653,8 @@ namespace DataLayer
                 documentoVenta.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 documentoVenta.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 documentoVenta.cliente.ruc = Converter.GetString(row, "ruc");
+                documentoVenta.cliente.responsableComercial = new Vendedor();
+                documentoVenta.cliente.responsableComercial.codigo =  Converter.GetString(row, "codigo_responsable_comercial");
 
                 documentoVenta.ciudad = new Ciudad();
                 documentoVenta.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");

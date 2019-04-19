@@ -53,7 +53,11 @@ namespace Model
         [Display(Name = "Bloqueado:")]
         public Boolean bloqueado { get; set; }
 
-      //  public Boolean sinPlazoCredito { get; set; }
+
+        [Display(Name = "Exonerado de Validación de Liberación:")]
+        public Boolean exoneradoValidacionLiberacionCrediticia { get; set; }
+
+        //  public Boolean sinPlazoCredito { get; set; }
 
         public Boolean sinMontoCreditoAprobado { get; set; }
 

@@ -153,6 +153,8 @@ C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Debug\BusinessLayer.c
 C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Debug\BusinessLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\BusinessLayer.dll.config
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\BusinessLayer.pdb
@@ -176,7 +178,5 @@ C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Model.dll.confi
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\ServiceLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\NPOI.xml
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.pdb

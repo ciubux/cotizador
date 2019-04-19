@@ -480,59 +480,34 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult obtenerDetalleAtenciones()
         {
-            //GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA];
-
-            String serieUnidadesAlternativas = Request["serieUnidadesAlternativas"].ToString();
-
-
+            String serieIdProductoPresentacion = Request["serieIdProductoPresentacion"].ToString();
             DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO];
 
-
-            Dictionary<String, Boolean> mostrarUnidadAlternativaList = new Dictionary<string, bool>();
-
-            //List<bool> mostrarUnidadAlternativaList = new List<bool>();
+            Dictionary<String, int> mostrarUnidadAlternativaList = new Dictionary<string, int>();
             int u = 0;
-            foreach (char mostrarUnidadAlternativa in serieUnidadesAlternativas.ToCharArray())
+            foreach (char idProductoPresentacion in serieIdProductoPresentacion.ToCharArray())
             {
-                mostrarUnidadAlternativaList.Add(documentoVenta.ventaDetalleList[u].producto.sku, mostrarUnidadAlternativa == '1');
+                mostrarUnidadAlternativaList.Add(documentoVenta.ventaDetalleList[u].producto.sku, Int32.Parse(idProductoPresentacion.ToString()));
                 u++;
             }
-
-
-       //     String idMovimientoAlmacenList = " '";
+            
             List<Guid> movimientoAlmacenIdList = new List<Guid>();
 
             List<Guid> idMovimientoAlmacenList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
-       /*     foreach (Guid idMovimientoAlmacen in guidMovimientoAlmacenList)
-            {
-
-                idMovimientoAlmacenList = idMovimientoAlmacenList + idMovimientoAlmacen + "','";
-            }*/
-        //    idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
-
-
+ 
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             List<GuiaRemision> guiaRemisionList = movimientoAlmacenBL.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList, mostrarUnidadAlternativaList);
 
-            
-
-
-      
 
             HSSFWorkbook wb;
-          //  Dictionary<String, ICellStyle> styles = CreateExcelStyles(wb);
             HSSFSheet sheet;
             {
                 wb = HSSFWorkbook.Create(InternalWorkbook.CreateWorkbook());
-
-
                 HSSFFont titleFont = (HSSFFont)wb.CreateFont();
                 titleFont.FontHeightInPoints = (short)11;
                 titleFont.FontName = "Arial";
                 titleFont.Color = IndexedColors.Black.Index;
                 titleFont.IsBold = true;
-              //  HSSFColor color = new HSSFColor(); // (new byte[] { 184, 212, 249 });
-           //     color.RGB.SetValue(new byte[] { 184, 212, 249 },0);
                 HSSFCellStyle titleCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 titleCellStyle.SetFont(titleFont);
                 titleCellStyle.FillPattern = FillPattern.SolidForeground;
@@ -544,13 +519,12 @@ namespace Cotizador.Controllers
         
                 // create sheet
                 sheet = (HSSFSheet)wb.CreateSheet("Atenciones");
-               
-                /*guiaRemision,fecha_emision, ma.direccion_entrega, ub.distrito, 
-                 * ub.provincia,  ub.departamento, ma.observaciones,*/
+
+                int cantidadColumnasDescripcion = 13;
 
                 /*Cabecera, Sub total*/
                 int rTotal = (guiaRemisionList.Count) + 4;
-                int cTotal = 10 + (documentoVenta.ventaDetalleList.Count()*2);
+                int cTotal = cantidadColumnasDescripcion + (documentoVenta.ventaDetalleList.Count()*2);
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -562,12 +536,12 @@ namespace Cotizador.Controllers
                     }
                 }
 
-                int i = 11;
+                int i = cantidadColumnasDescripcion + 1;
                 foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
                 {
                  
                     //¿Es alternativo?
-                    if (mostrarUnidadAlternativaList[ventaDetalle.producto.sku])
+                    if (mostrarUnidadAlternativaList[ventaDetalle.producto.sku] > 0)
                     {
                         UtilesHelper.setValorCelda(sheet, 1, i, ventaDetalle.producto.sku + " - " + ventaDetalle.producto.unidad_alternativa, titleCellStyle);
                     }
@@ -592,22 +566,18 @@ namespace Cotizador.Controllers
                 UtilesHelper.setValorCelda(sheet, 2, "B", "N° Pedido:", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 2, "C", "N° Grupo Pedido:", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 2, "D", "Fecha", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 2, "E", "Dirección Entrega", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 2, "F", "Distrito", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 2, "G", "Provincia", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 2, "H", "Departamento", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 2, "I", "Observaciones", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 2, "J", "Número Requerimiento", titleCellStyle);
-
-
-
-
+                UtilesHelper.setValorCelda(sheet, 2, "E", "Número Requerimiento", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "F", "Centro de Costos", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "G", "Dirección Entrega", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "H", "Distrito", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "I", "Provincia", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "J", "Departamento", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "K", "Observaciones", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "L", "Persona de contacto", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "M", "N° de teléfono / celular", titleCellStyle);
 
 
                 i = 3;
-
-              /*  for (int iii = 0; iii<50;iii++)
-                { */
 
                 foreach (GuiaRemision guiaRemision in guiaRemisionList)
                 {
@@ -615,14 +585,27 @@ namespace Cotizador.Controllers
                     UtilesHelper.setValorCelda(sheet, i, "B", guiaRemision.pedido.numeroPedidoString);
                     UtilesHelper.setValorCelda(sheet, i, "C", guiaRemision.pedido.numeroGrupoPedidoString);
                     UtilesHelper.setValorCelda(sheet, i, "D", guiaRemision.fechaEmision, dateFormatStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "E", guiaRemision.direccionEntrega);
-                    UtilesHelper.setValorCelda(sheet, i, "F", guiaRemision.ubigeoEntrega.Distrito);
-                    UtilesHelper.setValorCelda(sheet, i, "G", guiaRemision.ubigeoEntrega.Provincia);
-                    UtilesHelper.setValorCelda(sheet, i, "H", guiaRemision.ubigeoEntrega.Departamento);
-                    UtilesHelper.setValorCelda(sheet, i, "I", guiaRemision.observaciones);
-                    UtilesHelper.setValorCelda(sheet, i, "J", guiaRemision.pedido.numeroRequerimiento);
+                    UtilesHelper.setValorCelda(sheet, i, "E", guiaRemision.pedido.numeroRequerimiento);
+                    String nombreCentroCostos = guiaRemision.pedido.direccionEntrega.nombre;
+                    String codigoCentroCostos = guiaRemision.pedido.direccionEntrega.codigoCliente;
 
-                    int ic = 11;
+                    String centroCostos = "";
+                    if (nombreCentroCostos == null)
+                        centroCostos = codigoCentroCostos;
+                    else
+                        centroCostos = codigoCentroCostos == null ? nombreCentroCostos : nombreCentroCostos + " (" + codigoCentroCostos + ")";
+
+
+                    UtilesHelper.setValorCelda(sheet, i, "F", centroCostos);
+
+                    UtilesHelper.setValorCelda(sheet, i, "G", guiaRemision.direccionEntrega);
+                    UtilesHelper.setValorCelda(sheet, i, "H", guiaRemision.ubigeoEntrega.Distrito);
+                    UtilesHelper.setValorCelda(sheet, i, "I", guiaRemision.ubigeoEntrega.Provincia);
+                    UtilesHelper.setValorCelda(sheet, i, "J", guiaRemision.ubigeoEntrega.Departamento);
+                    UtilesHelper.setValorCelda(sheet, i, "K", guiaRemision.observaciones);
+                    UtilesHelper.setValorCelda(sheet, i, "L", guiaRemision.pedido.direccionEntrega.contacto);
+                    UtilesHelper.setValorCelda(sheet, i, "M", guiaRemision.pedido.direccionEntrega.telefono);
+                    int ic = cantidadColumnasDescripcion + 1; 
                     foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
                     {
 
@@ -645,7 +628,7 @@ namespace Cotizador.Controllers
 
 
                 int flag = 0;
-                for (int cf = 10; cf < cTotal; cf++)
+                for (int cf = cantidadColumnasDescripcion; cf < cTotal; cf++)
                 {
                     sheet.GetRow(i - 1).GetCell(cf).CellStyle = titleCellStyle;
                     sheet.GetRow(i - 1).GetCell(cf).SetCellType(CellType.Formula);
@@ -661,7 +644,7 @@ namespace Cotizador.Controllers
                 }
                 i++;
                 flag = 0;
-                for (int cf = 10; cf < cTotal; cf++)
+                for (int cf = cantidadColumnasDescripcion; cf < cTotal; cf++)
                 {
                     sheet.GetRow(i - 1).GetCell(cf).CellStyle = titleCellStyle;
                

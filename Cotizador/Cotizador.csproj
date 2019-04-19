@@ -238,7 +238,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
-    <Compile Include="Controllers\DocumentoCompra.cs" />
+    <Compile Include="Controllers\DocumentoCompraController.cs" />
+    <Compile Include="Controllers\DomicilioLegalController.cs" />
     <Compile Include="Controllers\GrupoClienteController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Models\DTOsShow\PedidoAlmacenDTOshow.cs" />
     <Compile Include="Models\DTOsShow\PedidoCompraDTOshow.cs" />
     <Compile Include="Models\DTOsShow\PedidoDTOshow.cs" />
+    <Compile Include="Models\DomicilioLegalViewModels.cs" />
     <Compile Include="Models\GrupoClienteViewModels.cs" />
     <Compile Include="Models\ProductoMultipleViewModels.cs" />
     <Compile Include="Models\ProductoViewModels.cs" />
@@ -402,6 +404,7 @@
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
+    <Content Include="Scripts\documentoCompra1.1.1.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\subDistribuidor1.0.0.js" />
     <Content Include="Scripts\origen1.0.0.js" />

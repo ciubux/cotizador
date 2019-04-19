@@ -1228,13 +1228,21 @@ jQuery(function ($) {
 
                 //Se agrega el precio estandar
                 var options = "<option value='0' selected>" + producto.unidad + "</option>";
+
+                for (var i = 0; i < producto.productoPresentacionList.length; i++) {
+                    var reg = producto.productoPresentacionList[i];
+                    options = options + "<option value='" + reg.IdProductoPresentacion + "'  precioUnitarioAlternativoSinIGV='" + reg.PrecioSinIGV + "' costoAlternativoSinIGV='" + reg.CostoSinIGV + "' stock='" + reg.Stock + "' >" + reg.Presentacion + "</option>";
+                }
+
+                /*
                 if (producto.unidad_alternativa != "") {
                     //Se agrega el precio alternativo
                     options = options + "<option value='1'>" + producto.unidad_alternativa + "</option>";
-                }
+                }*/
 
                 //Limpieza de campos
                 $("#costoLista").val(Number(producto.costoLista));
+                //alert($("#costoLista").val());
                 $("#precioLista").val(Number(producto.precioLista));
                 $("#unidad").html(options);
                 $("#proveedor").val(producto.proveedor);
@@ -1247,6 +1255,7 @@ jQuery(function ($) {
                 $('#fleteDetalle').val(producto.fleteDetalle);
                 $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(10));
                 $("#cantidad").val(1);
+                $("#stock").val(producto.Stock);
 
                 $("#tableMostrarPrecios > tbody").empty();
 
@@ -1312,19 +1321,23 @@ jQuery(function ($) {
 
         //0 es precio estandar 
         //1 es precio alternativo
-        var esPrecioAlternativo = Number($("#unidad").val());
-        $("#esPrecioAlternativo").val(esPrecioAlternativo);
+        var codigoPrecioAlternativo = Number($("#unidad").val());
+        //var esPrecioAlternativo = Number($("#unidad").val());
+        //$("#esPrecioAlternativo").val(esPrecioAlternativo);
 
         var precioLista = 0;
         var costoLista = 0;
 
-        if (esPrecioAlternativo == 0) {
+        if (codigoPrecioAlternativo == 0) {
             precioLista = Number($("#precioUnitarioSinIGV").val());
             costoLista = Number($("#costoSinIGV").val());
         }
         else {
-            precioLista = Number($("#precioUnitarioAlternativoSinIGV").val());
-            costoLista = Number($("#costoAlternativoSinIGV").val());
+            //precioLista = Number($("#precioUnitarioAlternativoSinIGV").val());
+            //costoLista = Number($("#costoAlternativoSinIGV").val());
+
+            precioLista = $("#unidad option:selected").attr("precioUnitarioAlternativoSinIGV");
+            costoLista = $("#unidad option:selected").attr("costoAlternativoSinIGV");
         }
 
         if ($("input[name=igv]:checked").val() == 1) {
@@ -1598,14 +1611,17 @@ jQuery(function ($) {
         var precio = $("#precio").val();
         var precioLista = $("#precioLista").val();
         var costoLista = $("#costoLista").val();
-        var esPrecioAlternativo = Number($("#unidad").val());
+        var esPrecioAlternativo = 0;
+        var idProductoPresentacion = Number($("#unidad").val());
+        if (idProductoPresentacion > 0)
+            esPrecioAlternativo = 1;    
         var subtotal = $("#subtotal").val();
         var incluidoIGV = $("input[name=igv]:checked").val();
         var proveedor = $("#proveedor").val();
         var flete = Number($("#fleteDetalle").val());
         var observacion = $("#observacionProducto").val();
         var costo = $("#costoLista").val();
-
+        
 
         $.ajax({
             url: "/Pedido/AddProducto",
@@ -1617,6 +1633,7 @@ jQuery(function ($) {
                 precio: precio,
                 costo: costo,
                 esPrecioAlternativo: esPrecioAlternativo,
+                idProductoPresentacion: idProductoPresentacion,
                 flete: flete,
                 subtotal: subtotal,
                 observacion: observacion
@@ -2792,6 +2809,7 @@ jQuery(function ($) {
                 $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
                 $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
                 $("#verNumeroRequerimiento").html(pedido.numeroRequerimiento);
+                
                 $("#verFechaEntregaExtendida").val(pedido.fechaEntregaExtendidaString);
 
                 $("#verDireccionEntrega").html(pedido.direccionEntrega_descripcion);

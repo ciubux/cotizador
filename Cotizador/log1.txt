@@ -28,3 +28,22 @@ The statement has been terminated.
 2019-03-13 16:43:28.7627|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
 2019-03-13 16:43:46.8531|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
 2019-03-13 16:44:39.9858|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-04-01 10:17:34.8270|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-01 10:42:26.2355|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-01 10:45:48.3777|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-01 10:47:35.9151|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-07 22:29:44.7306|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-04-07 23:04:17.9008|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-04-09 13:04:47.1940|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 13:07:47.3721|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 13:08:23.0791|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 13:14:53.8153|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 15:35:15.6641|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / La cadena de entrada no tiene el formato correcto.
+2019-04-09 15:35:41.7693|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / La cadena de entrada no tiene el formato correcto.
+2019-04-09 15:37:52.9355|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / La cadena de entrada no tiene el formato correcto.
+2019-04-09 15:41:09.9108|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / La cadena de entrada no tiene el formato correcto.
+2019-04-09 15:43:33.1799|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 15:43:55.2818|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 15:44:44.4552|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 15:45:48.6926|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 15:47:13.6946|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.

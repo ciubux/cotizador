@@ -152,15 +152,10 @@ namespace Model
         public static String VAR_SESSION_NOTA_DEBITO_LISTA = "notaDebitoList";
         public static String VAR_SESSION_NOTA_DEBITO_VER = "notaDebitoVer";
 
-        public static String VAR_SESSION_FACTURA_COMPRA = "facturaCompra";
-        public static String VAR_SESSION_FACTURA_COMPRA_BUSQUEDA = "facturaCompraBusqueda";
-        public static String VAR_SESSION_FACTURA_COMPRA_LISTA = "facturaCompraList";
-        public static String VAR_SESSION_FACTURA_COMPRA_VER = "facturaCompraVer";
-
-        public static String VAR_SESSION_BOLETA_COMPRA = "boletaCompra";
-        public static String VAR_SESSION_BOLETA_COMPRA_BUSQUEDA = "boletaCompraBusqueda";
-        public static String VAR_SESSION_BOLETA_COMPRA_LISTA = "boletaCompraList";
-        public static String VAR_SESSION_BOLETA_COMPRA_VER = "boletaCompraVer";
+        public static String VAR_SESSION_DOCUMENTO_COMPRA = "documentoCompra";
+        public static String VAR_SESSION_DOCUMENTO_COMPRA_BUSQUEDA = "documentoCompraBusqueda";
+        public static String VAR_SESSION_DOCUMENTO_COMPRA_LISTA = "documentoCompraList";
+        public static String VAR_SESSION_DOCUMENTO_COMPRA_VER = "documentoCompraVer";
 
         public static String VAR_SESSION_NOTA_CREDITO_COMPRA = "notaCreditoCompra";
         public static String VAR_SESSION_NOTA_CREDITO_COMPRA_BUSQUEDA = "notaCreditoCompraBusqueda";
@@ -275,7 +270,6 @@ namespace Model
         public const String ADMINISTRA_GUIAS_LIMA = "P007";
         public const String ADMINISTRA_GUIAS_PROVINCIAS = "P008";
         public const String CREA_DOCUMENTOS_VENTA = "P009";
-        public const String CREA_DOCUMENTOS_COMPRA = "P009";
         public const String ADMINISTRA_DOCUMENTOS_VENTA_LIMA = "P010";
         public const String ADMINISTRA_DOCUMENTOS_VENTA_PROVINCIAS = "P011";
         public const String CREA_COTIZACIONES_PROVINCIAS = "P012";
@@ -338,8 +332,8 @@ namespace Model
         public const String MODIFICA_CANASTA_GRUPO_CLIENTE = "P069";
         public const String MODIFICA_MIEMBROS_GRUPO_CLIENTE = "P070";
         public const String ASIGNA_SUBDISTRIBUIDOR = "P071";
-
-
+        public const String VISUALIZA_DOCUMENTOS_COMPRA = "P009";
+        public const String CREA_DOCUMENTOS_COMPRA = "P009";
 
 
 
@@ -438,7 +432,12 @@ namespace Model
             [Display(Name = "ASIGNACION PERMISOS")]
             AsignacionPermisos = 38,
             [Display(Name = "MIEMBROS GRUPO")]
-            MiembrosGrupoCliente = 39
+            MiembrosGrupoCliente = 39,
+
+            /*DOCUMENTOS DE VENTA*/
+            [Display(Name = "BUSQUEDA DOCUMENTOS COMPRA")]
+            BusquedaDocumentosCompra = 40
+
         };
 
 

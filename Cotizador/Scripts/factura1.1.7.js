@@ -918,10 +918,13 @@ jQuery(function ($) {
 
                         '<td>  ' + facturaList[i].usuario.nombre + '</td>' +
                         '<td>  ' + invertirFormatoFecha(facturaList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td>  ' + invertirFormatoFecha(facturaList[i].fechaVencimiento.substr(0, 10)) + '</td>' +
+                        '<td>  ' + facturaList[i].cliente.codigo + '</td>' +
                         '<td>  ' + facturaList[i].cliente.razonSocial + '</td>' +
                         '<td>  ' + facturaList[i].cliente.ruc + '</td>' +
                         '<td>  ' + facturaList[i].ciudad.nombre + '</td>' +
                         '<td>  ' + facturaList[i].total + '</td>' +
+                        '<td>' + facturaList[i].cliente.responsableComercial.codigo + '</td>' +
                         '<td ' + styleEstado + ' > ' + facturaList[i].estadoDocumentoSunatString + '</td>' +
                         '<td>  ' + facturaList[i].comentarioSolicitudAnulacion + '</td>' +
 

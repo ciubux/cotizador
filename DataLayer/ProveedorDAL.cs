@@ -92,8 +92,8 @@ namespace DataLayer
                 obj.ubigeo.Provincia = Converter.GetString(row, "provincia");
                 obj.ubigeo.Distrito = Converter.GetString(row, "distrito");
                 obj.plazoCredito = Converter.GetString(row, "plazo_credito");
-                obj.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
-                obj.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
+                obj.tipoPagoFactura = (DocumentoCompra.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                obj.formaPagoFactura = (DocumentoCompra.FormaPago)Converter.GetInt(row, "forma_pago_factura");
                 obj.ciudad = new Ciudad();
                 obj.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
             }

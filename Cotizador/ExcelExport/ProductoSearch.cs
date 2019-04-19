@@ -106,7 +106,7 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "E", obj.descripcion);
                     UtilesHelper.setValorCelda(sheet, i, "F", obj.unidad);
                     UtilesHelper.setValorCelda(sheet, i, "G", obj.unidad_alternativa);
-                    UtilesHelper.setValorCelda(sheet, i, "H", obj.equivalencia);
+                    UtilesHelper.setValorCelda(sheet, i, "H", obj.equivalenciaAlternativa);
                     UtilesHelper.setValorCelda(sheet, i, "I", obj.unidadProveedor);
                     UtilesHelper.setValorCelda(sheet, i, "J", obj.equivalenciaProveedor);
                     UtilesHelper.setValorCelda(sheet, i, "K", (double) obj.precioSinIgv);

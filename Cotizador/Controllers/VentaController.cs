@@ -103,17 +103,24 @@ namespace Cotizador.Controllers
                 pedidoDetalle.producto = ventaDetalle.producto;
                 pedidoDetalle.cantidad = documentoDetalleJson.cantidad;
                 ///Importante definir como null para que se recupere del producto al momento de insertar
-                pedidoDetalle.unidadInternacional = null; 
+                pedidoDetalle.unidadInternacional = null;
 
-                pedidoDetalle.producto.equivalencia = ventaDetalle.producto.equivalencia;
+
+                
+
+
+
                 pedidoDetalle.esPrecioAlternativo = documentoDetalleJson.esUnidadAlternativa == 1;
 
                 if (pedidoDetalle.esPrecioAlternativo)
                 {
+                    pedidoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    pedidoDetalle.ProductoPresentacion.Equivalencia = ventaDetalle.producto.ProductoPresentacionList[0].Equivalencia;
+
                     pedidoDetalle.unidad = ventaDetalle.producto.unidad_alternativa;
                     //////REVISAR QUE LA CANTIDAD DEBE SER SIEMPRE ENTERO
                     pedidoDetalle.cantidad = Convert.ToInt32(ventaDetalle.sumCantidadUnidadAlternativa);
-                    pedidoDetalle.precioNeto = (ventaDetalle.sumPrecioUnitario * pedidoDetalle.producto.equivalencia) / pedidoDetalle.cantidad;
+                    pedidoDetalle.precioNeto = (ventaDetalle.sumPrecioUnitario * pedidoDetalle.ProductoPresentacion.Equivalencia) / pedidoDetalle.cantidad;
                 }
                 else
                 {

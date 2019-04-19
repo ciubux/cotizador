@@ -66,6 +66,8 @@ C:\Users\cesar\Documents\MP2\cotizador_2\Model\bin\Debug\EntityFramework.SqlServ
 C:\Users\cesar\Documents\MP2\cotizador_2\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\Model\obj\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Model\obj\Debug\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\Model\bin\Debug\Model.dll.config
 C:\Users\cesar\Documents\MP2\cotizador_3\Model\bin\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Model\bin\Debug\Model.pdb
@@ -74,7 +76,5 @@ C:\Users\cesar\Documents\MP2\cotizador_3\Model\bin\Debug\EntityFramework.SqlServ
 C:\Users\cesar\Documents\MP2\cotizador_3\Model\bin\Debug\System.Web.Mvc.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Model\bin\Debug\EntityFramework.xml
 C:\Users\cesar\Documents\MP2\cotizador_3\Model\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\cesar\Documents\MP2\cotizador_3\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador_3\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\Model\obj\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Model\obj\Debug\Model.pdb

@@ -386,6 +386,7 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.pedidoGrupoList = pedido.pedidoGrupoList;
             pedidoDTOshow.numeroGrupoPedido = pedido.numeroGrupoPedido;
             pedidoDTOshow.cotizacion_tipoCotizacion = (int)pedido.cotizacion.tipoCotizacion;
+            pedidoDTOshow.numeroRequerimiento = pedido.numeroRequerimiento;
             return pedidoDTOshow;
         }
     }

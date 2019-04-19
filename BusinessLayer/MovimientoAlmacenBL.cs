@@ -29,7 +29,7 @@ namespace BusinessLayer
             }
         }
 
-        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList, Dictionary<String,Boolean> mostrarUnidadAlternativaList = null)
+        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList, Dictionary<String,int> mostrarUnidadAlternativaList = null)
         {
             using (var dal = new MovimientoALmacenDAL())
             {

@@ -204,6 +204,11 @@ textarea {
     #modalVerHistorialCrediticioPedido .modal-dialog {
         width: 900px;
     }
+
+
+    #modalEdicionDireccionEntrega .modal-dialog {
+        width: 900px;
+    }
 }
 
 

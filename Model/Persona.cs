@@ -30,11 +30,6 @@ namespace Model
         [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }
 
-        [Display(Name = "Domicilio Legal:")]
-        public String domicilioLegal { get; set; }
-
-        public List<DireccionEntrega> direccionEntregaList { get; set; }
-
         public List<Solicitante> solicitanteList { get; set; }
 
         [Display(Name = "Razón Social:")]
@@ -168,5 +163,17 @@ namespace Model
 
         [Display(Name = "E-mail Contacto Compras:")]
         public String emailContacto1 { get; set; }
+
+
+        /*Domicilio Legal*/
+
+        [Display(Name = "Domicilio Legal:")]
+        public String domicilioLegal { get; set; }
+
+        public List<DomicilioLegal> domicilioLegalList { get; set; }
+
+        /*Dirección Entrega*/
+        public List<DireccionEntrega> direccionEntregaList { get; set; }
+
     }
 }

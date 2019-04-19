@@ -992,9 +992,10 @@ jQuery(function ($) {
 
                 //Se agrega el precio estandar
                 var options = "<option value='0' selected>" + producto.unidad + "</option>";
-                if (producto.unidad_alternativa != "") {
-                    //Se agrega el precio alternativo
-                    options = options + "<option value='1'>" + producto.unidad_alternativa + "</option>";
+
+                for (var i = 0; i < producto.productoPresentacionList.length; i++) {
+                    var reg = producto.productoPresentacionList[i];
+                    options = options + "<option value='" + reg.IdProductoPresentacion + "'  precioUnitarioAlternativoSinIGV='" + reg.PrecioSinIGV + "' costoAlternativoSinIGV='" + reg.CostoSinIGV + "' >" + reg.Presentacion + "</option>";
                 }
 
                 //Limpieza de campos
@@ -1087,8 +1088,11 @@ jQuery(function ($) {
             costoLista = Number($("#costoSinIGV").val());
         }
         else {
-            precioLista = Number($("#precioUnitarioAlternativoSinIGV").val());
-            costoLista = Number($("#costoAlternativoSinIGV").val());
+            //precioLista = Number($("#precioUnitarioAlternativoSinIGV").val());
+            //costoLista = Number($("#costoAlternativoSinIGV").val());
+
+            precioLista = $("#unidad option:selected").attr("precioUnitarioAlternativoSinIGV");
+            costoLista = $("#unidad option:selected").attr("costoAlternativoSinIGV");
         }
 
         if ($("input[name=igv]:checked").val() == 1) {
@@ -1362,7 +1366,10 @@ jQuery(function ($) {
         var precio = $("#precio").val();
         var precioLista = $("#precioLista").val();
         var costoLista = $("#costoLista").val();
-        var esPrecioAlternativo = Number($("#unidad").val());
+        var esPrecioAlternativo = 0;
+        var idProductoPresentacion = Number($("#unidad").val());
+        if (idProductoPresentacion > 0)
+            esPrecioAlternativo = 1;    
         var subtotal = $("#subtotal").val();
         var incluidoIGV = $("input[name=igv]:checked").val();
         var proveedor = $("#proveedor").val();
@@ -1381,6 +1388,7 @@ jQuery(function ($) {
                 precio: precio,
                 costo: costo,
                 esPrecioAlternativo: esPrecioAlternativo,
+                idProductoPresentacion: idProductoPresentacion,
                 flete: flete,
                 subtotal: subtotal,
                 observacion: observacion

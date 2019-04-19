@@ -20,29 +20,262 @@ namespace DataLayer
         {
         }
 
-
-        public List<DocumentoCompra> SelectDocumentosVentaPorProcesar()
+        public void InsertarDocumentoCompra(DocumentoCompra documentoCompra)
         {
-            List<DocumentoCompra> documentoCompraList = new List<DocumentoCompra>();
-
-            var objCommand = GetSqlCommand("ps_documentosVentaPorProcesar");
-            DataTable dataTable = Execute(objCommand);
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                DocumentoCompra documentoCompra = new DocumentoCompra();
-                documentoCompra.idDocumentoCompra = Converter.GetInt(row, "id_documento_compra"); 
-                documentoCompra.serie = Converter.GetString(row, "SERIE");
-                documentoCompra.numero = Converter.GetString(row, "CORRELATIVO");
-                documentoCompra.estadoDocumentoSunat = (DocumentoCompra.EstadosDocumentoSunat)Converter.GetInt(row, "estado");
-                documentoCompra.tipoDocumento = (DocumentoCompra.TipoDocumento) Converter.GetInt(row, "tipo_documento");
-                
-                documentoCompraList.Add(documentoCompra); 
-            }
-            return documentoCompraList;
+            var objCommand = GetSqlCommand("pi_documentoCompra");
+            InputParameterAdd.Guid(objCommand, "idCompra", documentoCompra.compra.idCompra);
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", documentoCompra.compra.notaIngreso.idMovimientoAlmacen);
+            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoCompra.tipoDocumento);
+            InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoCompra.fechaEmision);
+            InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoCompra.fechaVencimiento);
+            InputParameterAdd.Int(objCommand, "tipoPago", (int)documentoCompra.tipoPago);
+            InputParameterAdd.Int(objCommand, "formaPago", (int)documentoCompra.formaPago);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoCompra.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "serie", documentoCompra.serie);
+            InputParameterAdd.Varchar(objCommand, "numero", documentoCompra.numero);
+            ///InputParameterAdd.Guid(objCommand, "idDocumentoCompraReferencia", Guid.Empty);
+            InputParameterAdd.Varchar(objCommand, "observaciones", documentoCompra.observaciones);
+            InputParameterAdd.Varchar(objCommand, "codigoProveedor", documentoCompra.proveedor.codigo);
+            OutputParameterAdd.Int(objCommand, "idDocumentoCompra");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idCompraSalida");
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+            ExecuteNonQuery(objCommand);
+            documentoCompra.idDocumentoCompra = (Int32)objCommand.Parameters["@idDocumentoCompra"].Value;
+            documentoCompra.compra.idCompra = (Guid)objCommand.Parameters["@idCompraSalida"].Value;
+            documentoCompra.tiposErrorValidacion = (DocumentoCompra.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
+            documentoCompra.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
 
 
+        public DocumentoCompra SelectDocumentoCompra(DocumentoCompra documentoCompra)
+        {
+
+            var objCommand = GetSqlCommand("ps_documentoCompra");
+            InputParameterAdd.Int(objCommand, "idDocumentoCompra", documentoCompra.idDocumentoCompra);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable cpeCabeceraCompraTable = dataSet.Tables[0];
+            DataTable cpeDetalleCompraTable = dataSet.Tables[1];
+            DataTable cpeDatAdicCompraTable = dataSet.Tables[2];
+            DataTable cpeDocRefCompraTable = dataSet.Tables[3];
+
+
+            //Se obtienen todas las columnas de la tabla 
+            var columnasCabecera = cpeCabeceraCompraTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+            var columnnasDetalle = cpeDetalleCompraTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+            var columnnasDatAdic = cpeDatAdicCompraTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+            var columnnasDocRef = cpeDocRefCompraTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+
+            documentoCompra.cPE_CABECERA_COMPRA = new CPE_CABECERA_COMPRA();
+            documentoCompra.cPE_DETALLE_COMPRAList = new List<CPE_DETALLE_COMPRA>();
+            documentoCompra.cPE_DAT_ADIC_COMPRAList = new List<CPE_DAT_ADIC_COMPRA>();
+            documentoCompra.cPE_DOC_REF_COMPRAList = new List<CPE_DOC_REF_COMPRA>();
+            documentoCompra.cPE_ANTICIPO_COMPRAList = new List<CPE_ANTICIPO_COMPRA>();
+            documentoCompra.cPE_FAC_GUIA_COMPRAList = new List<CPE_FAC_GUIA_COMPRA>();
+            documentoCompra.cPE_DOC_ASOC_COMPRAList = new List<CPE_DOC_ASOC_COMPRA>();
+
+
+            foreach (DataRow row in cpeCabeceraCompraTable.Rows)
+            {
+
+                documentoCompra.solicitadoAnulacion = Converter.GetBool(row, "SOLICITUD_ANULACION");
+                documentoCompra.permiteAnulacion = Converter.GetBool(row, "permite_anulacion");
+
+
+                foreach (String column in columnasCabecera)
+                {
+
+
+                    if (!column.ToUpper().Equals("id_cpe_cabecera_compra".ToUpper()) &&
+                        !column.ToUpper().Equals("estado".ToUpper()) &&
+                        !column.ToUpper().Equals("usuario_creacion".ToUpper()) &&
+                        !column.ToUpper().Equals("usuario_modificacion".ToUpper()) &&
+                        !column.ToUpper().Equals("fecha_creacion".ToUpper()) &&
+                        !column.ToUpper().Equals("fecha_modificacion".ToUpper()) &&
+                        !column.ToUpper().Equals("ESTADO_SUNAT".ToUpper()) &&
+                        !column.ToUpper().Equals("CODIGO".ToUpper()) &&
+                        !column.ToUpper().Equals("COD_ESTD_SUNAT".ToUpper()) &&
+                        !column.ToUpper().Equals("DESCRIPCION".ToUpper()) &&
+                        !column.ToUpper().Equals("DETALLE".ToUpper()) &&
+                        !column.ToUpper().Equals("NUM_CPE".ToUpper()) &&
+                        !column.ToUpper().Equals("SOLICITUD_ANULACION".ToUpper()) &&
+                        !column.ToUpper().Equals("ENVIADO_A_EOL".ToUpper()) &&
+                        !column.ToUpper().Equals("AMBIENTE_PRODUCCION".ToUpper()) &&
+                        !column.ToUpper().Equals("id_compra".ToUpper()) &&
+                        !column.ToUpper().Equals("COMENTARIO_SOLICITUD_ANULACION".ToUpper()) &&
+                        !column.ToUpper().Equals("COMENTARIO_APROBACION_ANULACION".ToUpper()) &&
+                        !column.ToUpper().Equals("permite_anulacion".ToUpper()) &&
+                        !column.ToUpper().Equals("observaciones_adicionales".ToUpper()) &&
+                        !column.ToUpper().Equals("fecha_solicitud_anulacion".ToUpper()) &&
+                        !column.ToUpper().Equals("fecha_aprobacion_anulacion".ToUpper()) &&
+                        !column.ToUpper().Equals("usuario_solicitud_anulacion".ToUpper()) &&
+                        !column.ToUpper().Equals("usuario_aprobacion_anulacion".ToUpper()) &&
+                        !column.ToUpper().Equals("aprobado".ToUpper()) &&
+                        !column.ToUpper().Equals("usuario_aprobacion".ToUpper()) &&
+                        !column.ToUpper().Equals("fecha_aprobacion".ToUpper()) &&
+                        !column.ToUpper().Equals("observaciones".ToUpper())
+
+                        )
+                    {
+                        documentoCompra.cPE_CABECERA_COMPRA.GetType().GetProperty(column).SetValue(documentoCompra.cPE_CABECERA_COMPRA, Converter.GetString(row, column));
+                    }
+                }
+            }
+
+            foreach (DataRow row in cpeDetalleCompraTable.Rows)
+            {
+                CPE_DETALLE_COMPRA cPE_DETALLE_COMPRA = new CPE_DETALLE_COMPRA();
+                foreach (String column in columnnasDetalle)
+                {
+                    if (!column.ToUpper().Equals("id_cpe_detalle_compra".ToUpper()) && !column.ToUpper().Equals("id_cpe_cabecera_compra".ToUpper()) && !column.ToUpper().Equals("estado".ToUpper()))
+                    {
+                        cPE_DETALLE_COMPRA.GetType().GetProperty(column).SetValue(cPE_DETALLE_COMPRA, Converter.GetString(row, column));
+                    }
+                }
+                documentoCompra.cPE_DETALLE_COMPRAList.Add(cPE_DETALLE_COMPRA);
+
+            }
+
+
+            foreach (DataRow row in cpeDatAdicCompraTable.Rows)
+            {
+                CPE_DAT_ADIC_COMPRA cPE_DAT_ADIC_COMPRA = new CPE_DAT_ADIC_COMPRA();
+                foreach (String column in columnnasDatAdic)
+                {
+                    if (!column.ToUpper().Equals("id_cpe_dat_adic_compra".ToUpper()) && !column.ToUpper().Equals("id_cpe_cabecera_compra".ToUpper()))
+                    {
+                        cPE_DAT_ADIC_COMPRA.GetType().GetProperty(column).SetValue(cPE_DAT_ADIC_COMPRA, Converter.GetString(row, column));
+                    }
+                }
+                documentoCompra.cPE_DAT_ADIC_COMPRAList.Add(cPE_DAT_ADIC_COMPRA);
+
+            }
+
+            foreach (DataRow row in cpeDocRefCompraTable.Rows)
+            {
+                CPE_DOC_REF_COMPRA cPE_DOC_REF_COMPRA = new CPE_DOC_REF_COMPRA();
+                foreach (String column in columnnasDocRef)
+                {
+                    if (!column.ToUpper().Equals("id_cpe_doc_ref_compra".ToUpper()) && !column.ToUpper().Equals("id_cpe_cabecera_compra".ToUpper()))
+                    {
+                        cPE_DOC_REF_COMPRA.GetType().GetProperty(column).SetValue(cPE_DOC_REF_COMPRA, Converter.GetString(row, column));
+                    }
+                }
+                documentoCompra.cPE_DOC_REF_COMPRAList.Add(cPE_DOC_REF_COMPRA);
+
+            }
+
+
+
+            return documentoCompra;
+        }
+
+        public List<DocumentoCompra> SelectDocumentosCompra(DocumentoCompra documentoCompra)
+        {
+
+            List<DocumentoCompra> facturaList = new List<DocumentoCompra>();
+
+            var objCommand = GetSqlCommand("ps_documentosCompra");
+            if (!documentoCompra.numero.Equals("0"))
+            {
+                InputParameterAdd.Varchar(objCommand, "numero", documentoCompra.numero.PadLeft(8, '0'));
+            }
+            else
+            {
+                InputParameterAdd.Varchar(objCommand, "numero", String.Empty);
+            }
+
+            InputParameterAdd.Guid(objCommand, "idProveedor", documentoCompra.proveedor.idProveedor);
+            InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", documentoCompra.buscarSedesGrupoCliente);
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", documentoCompra.idGrupoCliente);
+            InputParameterAdd.Guid(objCommand, "idCiudad", documentoCompra.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoCompra.usuario.idUsuario);
+            InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(documentoCompra.fechaEmisionDesde.Year, documentoCompra.fechaEmisionDesde.Month, documentoCompra.fechaEmisionDesde.Day, 0, 0, 0));
+            InputParameterAdd.DateTime(objCommand, "fechaHasta", new DateTime(documentoCompra.fechaEmisionHasta.Year, documentoCompra.fechaEmisionHasta.Month, documentoCompra.fechaEmisionHasta.Day, 23, 59, 59));
+            InputParameterAdd.Int(objCommand, "soloSolicitudAnulacion", documentoCompra.solicitadoAnulacion ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "estado", (int)documentoCompra.estadoDocumentoSunatBusqueda);
+            InputParameterAdd.BigInt(objCommand, "numeroPedido", documentoCompra.pedido.numeroPedido);
+            InputParameterAdd.BigInt(objCommand, "numeroGuiaRemision", documentoCompra.guiaRemision.numeroDocumento);
+            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoCompra.tipoDocumento);
+            InputParameterAdd.Varchar(objCommand, "sku", documentoCompra.sku);
+
+
+
+            //   InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
+            DataTable dataTable = Execute(objCommand);
+
+            List<Pedido> pedidoList = new List<Pedido>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                documentoCompra = new DocumentoCompra();
+                documentoCompra.idDocumentoCompra = Converter.GetInt(row, "id_documento_compra");
+                //documentoCompra.cPE_CABECERA_BE = new CPE_CABECERA_BE();
+                documentoCompra.serie = Converter.GetString(row, "SERIE");
+                documentoCompra.numero = Converter.GetString(row, "CORRELATIVO");
+                documentoCompra.total = Converter.GetDecimal(row, "MNT_TOT_PRC_VTA");
+
+                documentoCompra.pedido = new Pedido();
+                documentoCompra.pedido.numeroPedido = Converter.GetLong(row, "numero");
+
+
+
+                documentoCompra.tipoDocumento = (DocumentoCompra.TipoDocumento)Converter.GetInt(row, "TIP_CPE");
+                if (documentoCompra.tipoDocumento == DocumentoCompra.TipoDocumento.BoletaVenta
+                    || documentoCompra.tipoDocumento == DocumentoCompra.TipoDocumento.Factura)
+                {
+                    documentoCompra.notaIngreso = new NotaIngreso();
+                    documentoCompra.notaIngreso.serieDocumento = Converter.GetString(row, "serie_documento");
+                    documentoCompra.notaIngreso.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                }
+                else if (documentoCompra.tipoDocumento == DocumentoCompra.TipoDocumento.NotaCrédito)
+                {
+                    documentoCompra.guiaRemision = new GuiaRemision();
+                    documentoCompra.guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
+                    documentoCompra.guiaRemision.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                }
+
+
+                documentoCompra.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                documentoCompra.fechaVencimiento = Converter.GetDateTime(row, "fecha_vencimiento");
+                documentoCompra.estadoDocumentoSunat = (DocumentoCompra.EstadosDocumentoSunat)Converter.GetInt(row, "estado");
+
+
+
+
+
+
+                documentoCompra.usuario = new Usuario();
+                documentoCompra.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                documentoCompra.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+
+                documentoCompra.proveedor = new Proveedor();
+                documentoCompra.proveedor.codigo = Converter.GetString(row, "codigo");
+                documentoCompra.proveedor.idProveedor = Converter.GetGuid(row, "id_cliente");
+                documentoCompra.proveedor.razonSocial = Converter.GetString(row, "razon_social");
+                documentoCompra.proveedor.ruc = Converter.GetString(row, "ruc");
+
+                documentoCompra.ciudad = new Ciudad();
+                documentoCompra.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                documentoCompra.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+
+                documentoCompra.solicitadoAnulacion = Converter.GetBool(row, "solicitud_anulacion");
+                documentoCompra.comentarioSolicitudAnulacion = Converter.GetString(row, "comentario_solicitud_anulacion");
+                documentoCompra.comentarioSolicitudAnulacion = documentoCompra.comentarioSolicitudAnulacion == null ? String.Empty : documentoCompra.comentarioSolicitudAnulacion;
+                documentoCompra.comentarioAprobacionAnulacion = Converter.GetString(row, "comentario_aprobacion_anulacion");
+                documentoCompra.comentarioAprobacionAnulacion = documentoCompra.comentarioAprobacionAnulacion == null ? String.Empty : documentoCompra.comentarioAprobacionAnulacion;
+
+                documentoCompra.permiteAnulacion = Converter.GetBool(row, "permite_anulacion");
+
+                facturaList.Add(documentoCompra);
+            }
+            return facturaList;
+        }
+
+
+
+
+        
         public void anularDocumentoCompra(DocumentoCompra documentoCompra)
         {
             var objCommand = GetSqlCommand("pu_solicitarAnulacionDocumentoCompra");
@@ -77,37 +310,18 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
-
-        public void InsertarDocumentoCompra(DocumentoCompra documentoCompra)
+        public void UpdateRespuestaDocumentoCompra(DocumentoCompra documentoCompra)
         {
-            var objCommand = GetSqlCommand("pi_documentoCompra");
-            //var objCommand = GetSqlCommand("pi_documentoCompra_vInafecto");
-            
-
-            InputParameterAdd.Guid(objCommand, "idVenta", documentoCompra.venta.idVenta);
-            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", documentoCompra.venta.guiaRemision.idMovimientoAlmacen);
-            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoCompra.tipoDocumento);
-            InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoCompra.fechaEmision);
-            InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoCompra.fechaVencimiento);
-            InputParameterAdd.Int(objCommand, "tipoPago", (int)documentoCompra.tipoPago);
-            InputParameterAdd.Int(objCommand, "formaPago", (int)documentoCompra.formaPago);
+            var objCommand = GetSqlCommand("pu_documentoCompra");
+            InputParameterAdd.Int(objCommand, "idDocumentoCompra", documentoCompra.idDocumentoCompra);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoCompra.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "serie", documentoCompra.serie);
-            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", null);
-            InputParameterAdd.Guid(objCommand, "idDocumentoCompraReferencia", Guid.Empty);
-            InputParameterAdd.Varchar(objCommand, "observaciones", documentoCompra.observaciones);
-            InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoCompra.cliente.codigo);
-            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoCompra");
-            OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaSalida");
-            OutputParameterAdd.Int(objCommand, "tipoError");
-            OutputParameterAdd.Varchar(objCommand, "descripcionError",500);       
             ExecuteNonQuery(objCommand);
-            documentoCompra.idDocumentoCompra = (Int32)objCommand.Parameters["@idDocumentoCompra"].Value;            
-            documentoCompra.venta.idVenta = (Guid)objCommand.Parameters["@idVentaSalida"].Value;
-            documentoCompra.tiposErrorValidacion =  (DocumentoCompra.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
-            documentoCompra.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
 
+      
+
+
+        /*
         public void InsertarDocumentoCompraNotaCreditoDebito(DocumentoCompra documentoCompra)
         {
             var objCommand = GetSqlCommand("pi_documentoCompraNotaCreditoDebito");
@@ -135,17 +349,7 @@ namespace DataLayer
         }
 
 
-        public void UpdateSiguienteNumeroFactura(DocumentoCompra documentoCompra)
-        {
-            var objCommand = GetSqlCommand("pu_siguienteNumeroFactura");
-
-            InputParameterAdd.Guid(objCommand, "idVenta", documentoCompra.venta.idVenta);
-            InputParameterAdd.Int(objCommand, "idDocumentoCompra", documentoCompra.idDocumentoCompra);
-            InputParameterAdd.Varchar(objCommand, "serie", documentoCompra.serie.Substring(1,3));
-            InputParameterAdd.Guid(objCommand, "idPedido", documentoCompra.venta.pedido.idPedido);
-            InputParameterAdd.Guid(objCommand, "idUsuario", documentoCompra.usuario.idUsuario);
-            ExecuteNonQuery(objCommand);
-        }
+      
 
         public DocumentoCompra UpdateSiguienteNumeroFacturaConsolidada(DocumentoCompra documentoCompra, String idMovimientoAlmacenList)
         {
@@ -220,18 +424,7 @@ namespace DataLayer
         }
 
 
-        public void UpdateRespuestaDocumentoCompra(DocumentoCompra documentoCompra)
-        {
-            var objCommand = GetSqlCommand("pu_documentoCompra");
-            InputParameterAdd.Int(objCommand, "idDocumentoCompra", documentoCompra.idDocumentoCompra);
-            InputParameterAdd.Varchar(objCommand, "CODIGO", documentoCompra.cPE_RESPUESTA_BE.CODIGO);
-            InputParameterAdd.Varchar(objCommand, "COD_ESTD_SUNAT", documentoCompra.cPE_RESPUESTA_BE.COD_ESTD_SUNAT);
-            InputParameterAdd.Varchar(objCommand, "DESCRIPCION", documentoCompra.cPE_RESPUESTA_BE.DESCRIPCION);
-            InputParameterAdd.Varchar(objCommand, "DETALLE", documentoCompra.cPE_RESPUESTA_BE.DETALLE);
-            InputParameterAdd.Varchar(objCommand, "NUM_CPE", documentoCompra.cPE_RESPUESTA_BE.NUM_CPE);
-            InputParameterAdd.Guid(objCommand, "idUsuario", documentoCompra.usuario.idUsuario);
-            ExecuteNonQuery(objCommand);
-        }
+       
 
 
         public void insertEstadoDocumentoCompra(DocumentoCompra documentoCompra)
@@ -355,37 +548,7 @@ namespace DataLayer
             foreach (DataRow row in cotizacionDataTable.Rows)
             {
 
-               //No se cuenta con IdCotizacion
-         /*       cotizacion.fecha = DateTime.Now;
-                cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
-                cotizacion.fechaInicioVigenciaPrecios = null;
-                cotizacion.fechaFinVigenciaPrecios = null;
-                cotizacion.incluidoIgv = false;
-                cotizacion.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Cantidades;
-                cotizacion.mostrarValidezOfertaEnDias = 1;
-                cotizacion.flete = 0;
-                cotizacion.igv = Constantes.IGV;
-                cotizacion.contacto = Converter.GetString(row, "contacto");
-                cotizacion.observaciones = Constantes.OBSERVACION;
-                cotizacion.mostrarCodigoProveedor = true;
-                cotizacion.fechaModificacion = DateTime.Now;
-
-
-                ///Falta agregar la búsqueda con Grupo
-                cotizacion.grupo = new Grupo();
-                Guid idCliente = cotizacion.cliente.idCliente;
-                cotizacion.cliente = new Cliente();
-                cotizacion.cliente.codigo = Converter.GetString(row, "codigo");
-                cotizacion.cliente.idCliente = idCliente;
-                cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
-                cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
-
-
-                cotizacion.ciudad = new Ciudad();
-                cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
-                cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
-                */
+       
             }
 
 
@@ -413,13 +576,7 @@ namespace DataLayer
                // {
                     cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.producto.equivalencia;
                     cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
-                /*}
-                else
-                {
-                    cotizacionDetalle.precioNetoEquivalente = Converter.GetDecimal(row, "precio_neto");
-                    cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.producto.precioSinIgv * 100 / cotizacionDetalle.precioNetoEquivalente);
-                }*/
-
+               
 
                 cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
@@ -447,228 +604,7 @@ namespace DataLayer
 
 
 
-        public DocumentoCompra SelectDocumentoCompra(DocumentoCompra documentoCompra)
-        {
-
-            var objCommand = GetSqlCommand("ps_documentoCompra");
-            InputParameterAdd.Int(objCommand, "idDocumentoCompra", documentoCompra.idDocumentoCompra);
-            DataSet dataSet = ExecuteDataSet(objCommand);
-            DataTable cpeCabeceraBETable = dataSet.Tables[0];
-            DataTable cpeDetalleBETable = dataSet.Tables[1];
-            DataTable cpeDatAdicBETable = dataSet.Tables[2];
-            DataTable cpeDocRefBETable = dataSet.Tables[3];
-
-
-            //Se obtienen todas las columnas de la tabla 
-            var columnasCabecera = cpeCabeceraBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
-            var columnnasDetalle = cpeDetalleBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
-            var columnnasDatAdic = cpeDatAdicBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
-            var columnnasDocRef = cpeDocRefBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
-
-            documentoCompra.cPE_CABECERA_BE = new CPE_CABECERA_BE();
-            documentoCompra.cPE_DETALLE_BEList = new List<CPE_DETALLE_BE>();
-            documentoCompra.cPE_DAT_ADIC_BEList = new List<CPE_DAT_ADIC_BE>();
-            documentoCompra.cPE_DOC_REF_BEList = new List<CPE_DOC_REF_BE>();
-            documentoCompra.cPE_ANTICIPO_BEList = new List<CPE_ANTICIPO_BE>();
-            documentoCompra.cPE_FAC_GUIA_BEList = new List<CPE_FAC_GUIA_BE>();
-            documentoCompra.cPE_DOC_ASOC_BEList = new List<CPE_DOC_ASOC_BE>();
-
-
-            foreach (DataRow row in cpeCabeceraBETable.Rows)
-            {
-
-                documentoCompra.solicitadoAnulacion = Converter.GetBool(row, "SOLICITUD_ANULACION");
-                documentoCompra.permiteAnulacion = Converter.GetBool(row, "permite_anulacion");
-
-
-                foreach (String column in columnasCabecera)
-                {
-                   
-
-                    if (!column.Equals("id_cpe_cabecera_be") && 
-                        !column.Equals("estado") &&
-                        !column.Equals("usuario_creacion") &&
-                        !column.Equals("usuario_modificacion") &&
-                        !column.Equals("fecha_creacion") &&
-                        !column.Equals("fecha_modificacion") &&
-                        !column.Equals("ESTADO_SUNAT") &&
-                        !column.Equals("CODIGO") &&
-                        !column.Equals("COD_ESTD_SUNAT") &&
-                        !column.Equals("DESCRIPCION") &&
-                        !column.Equals("DETALLE") &&
-                        !column.Equals("NUM_CPE") &&
-                        !column.Equals("SOLICITUD_ANULACION") &&
-                        !column.Equals("ENVIADO_A_EOL") &&
-                        !column.Equals("AMBIENTE_PRODUCCION") &&
-                        !column.Equals("id_venta") &&
-                        !column.Equals("COMENTARIO_SOLICITUD_ANULACION") &&
-                        !column.Equals("COMENTARIO_APROBACION_ANULACION") &&
-                        !column.Equals("permite_anulacion") &&
-                        !column.Equals("observaciones_adicionales") &&
-                        !column.Equals("fecha_solicitud_anulacion") &&
-                        !column.Equals("fecha_aprobacion_anulacion") &&
-                        !column.Equals("usuario_solicitud_anulacion") &&
-                        !column.Equals("usuario_aprobacion_anulacion") &&
-                        !column.Equals("aprobado") &&
-                        !column.Equals("usuario_aprobacion") &&
-                        !column.Equals("fecha_aprobacion") &&
-                        !column.Equals("observaciones")
-                        
-                        )
-                    {
-                        documentoCompra.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoCompra.cPE_CABECERA_BE, Converter.GetString(row, column));
-                    }
-                }
-            }
-
-            foreach (DataRow row in cpeDetalleBETable.Rows)
-            {
-                CPE_DETALLE_BE cPE_DETALLE_BE = new CPE_DETALLE_BE();
-                foreach (String column in columnnasDetalle)
-                {
-                    if (!column.Equals("id_cpe_detalle_be") && !column.Equals("id_cpe_cabecera_be") && !column.Equals("estado"))
-                    {
-                        cPE_DETALLE_BE.GetType().GetProperty(column).SetValue(cPE_DETALLE_BE, Converter.GetString(row, column));
-                    }
-                }
-                documentoCompra.cPE_DETALLE_BEList.Add(cPE_DETALLE_BE);
-
-            }
-
-
-            foreach (DataRow row in cpeDatAdicBETable.Rows)
-            {
-                CPE_DAT_ADIC_BE cPE_DAT_ADIC_BE = new CPE_DAT_ADIC_BE();
-                foreach (String column in columnnasDatAdic)
-                {
-                    if (!column.Equals("id_cpe_dat_adic_be") && !column.Equals("id_cpe_cabecera_be") )
-                    {
-                        cPE_DAT_ADIC_BE.GetType().GetProperty(column).SetValue(cPE_DAT_ADIC_BE, Converter.GetString(row, column));
-                    }
-                }
-                documentoCompra.cPE_DAT_ADIC_BEList.Add(cPE_DAT_ADIC_BE);
-
-            }
-
-            foreach (DataRow row in cpeDocRefBETable.Rows)
-            {
-                CPE_DOC_REF_BE cPE_DOC_REF_BE = new CPE_DOC_REF_BE();
-                foreach (String column in columnnasDocRef)
-                {
-                    if (!column.Equals("id_cpe_doc_ref_be") && !column.Equals("id_cpe_cabecera_be"))
-                    {
-                        cPE_DOC_REF_BE.GetType().GetProperty(column).SetValue(cPE_DOC_REF_BE, Converter.GetString(row, column));
-                    }
-                }
-                documentoCompra.cPE_DOC_REF_BEList.Add(cPE_DOC_REF_BE);
-
-            }
-            
-
-
-            return documentoCompra;
-        }
-
-        public List<DocumentoCompra> SelectDocumentosVenta(DocumentoCompra documentoCompra)
-        {
-
-            List<DocumentoCompra> facturaList = new List<DocumentoCompra>();
-
-            var objCommand = GetSqlCommand("ps_facturas");
-            if (!documentoCompra.numero.Equals("0"))
-            {
-                InputParameterAdd.Varchar(objCommand, "numero", documentoCompra.numero.PadLeft(8, '0'));
-            }
-            else
-            {
-                InputParameterAdd.Varchar(objCommand, "numero", String.Empty);
-            }
-
-            InputParameterAdd.Guid(objCommand, "idCliente", documentoCompra.cliente.idCliente);
-            InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", documentoCompra.buscarSedesGrupoCliente);
-            InputParameterAdd.Int(objCommand, "idGrupoCliente", documentoCompra.idGrupoCliente);
-            InputParameterAdd.Guid(objCommand, "idCiudad", documentoCompra.ciudad.idCiudad);
-            InputParameterAdd.Guid(objCommand, "idUsuario", documentoCompra.usuario.idUsuario);
-            InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(documentoCompra.fechaEmisionDesde.Year, documentoCompra.fechaEmisionDesde.Month, documentoCompra.fechaEmisionDesde.Day, 0, 0, 0));
-            InputParameterAdd.DateTime(objCommand, "fechaHasta", new DateTime(documentoCompra.fechaEmisionHasta.Year, documentoCompra.fechaEmisionHasta.Month, documentoCompra.fechaEmisionHasta.Day, 23, 59, 59)); 
-            InputParameterAdd.Int(objCommand, "soloSolicitudAnulacion", documentoCompra.solicitadoAnulacion?1:0);
-            InputParameterAdd.Int(objCommand, "estado", (int)documentoCompra.estadoDocumentoSunatBusqueda);
-            InputParameterAdd.BigInt(objCommand, "numeroPedido", documentoCompra.pedido.numeroPedido);
-            InputParameterAdd.BigInt(objCommand, "numeroGuiaRemision", documentoCompra.guiaRemision.numeroDocumento);
-            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoCompra.tipoDocumento);
-            InputParameterAdd.Varchar(objCommand, "sku", documentoCompra.sku);
-
-
-
-            //   InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
-            DataTable dataTable = Execute(objCommand);
-
-            List<Pedido> pedidoList = new List<Pedido>();
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                documentoCompra = new DocumentoCompra();
-                documentoCompra.idDocumentoCompra = Converter.GetInt(row, "id_documento_venta");
-                //documentoCompra.cPE_CABECERA_BE = new CPE_CABECERA_BE();
-                documentoCompra.serie = Converter.GetString(row, "SERIE");
-                documentoCompra.numero = Converter.GetString(row, "CORRELATIVO");
-                documentoCompra.total = Converter.GetDecimal(row, "MNT_TOT_PRC_VTA");
-
-                documentoCompra.pedido = new Pedido();
-                documentoCompra.pedido.numeroPedido = Converter.GetLong(row, "numero");
-                
-               
-
-                documentoCompra.tipoDocumento = (DocumentoCompra.TipoDocumento)Converter.GetInt(row, "TIP_CPE");
-                if (documentoCompra.tipoDocumento == DocumentoCompra.TipoDocumento.BoletaVenta
-                    || documentoCompra.tipoDocumento == DocumentoCompra.TipoDocumento.Factura)
-                {
-                    documentoCompra.guiaRemision = new GuiaRemision();
-                    documentoCompra.guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
-                    documentoCompra.guiaRemision.numeroDocumento = Converter.GetLong(row, "numero_documento");
-                }
-                else if (documentoCompra.tipoDocumento == DocumentoCompra.TipoDocumento.NotaCrédito)
-                {
-                    documentoCompra.notaIngreso = new NotaIngreso();
-                    documentoCompra.notaIngreso.serieDocumento = Converter.GetString(row, "serie_documento");
-                    documentoCompra.notaIngreso.numeroDocumento = Converter.GetLong(row, "numero_documento");
-                }
-
-
-                documentoCompra.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
-                documentoCompra.estadoDocumentoSunat = (DocumentoCompra.EstadosDocumentoSunat)Converter.GetInt(row, "estado");
-                
-
-
-
-
-
-                documentoCompra.usuario = new Usuario();
-                documentoCompra.usuario.nombre = Converter.GetString(row, "nombre_usuario");
-                documentoCompra.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
-
-                documentoCompra.cliente = new Cliente();
-                documentoCompra.cliente.codigo = Converter.GetString(row, "codigo");
-                documentoCompra.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                documentoCompra.cliente.razonSocial = Converter.GetString(row, "razon_social");
-                documentoCompra.cliente.ruc = Converter.GetString(row, "ruc");
-
-                documentoCompra.ciudad = new Ciudad();
-                documentoCompra.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                documentoCompra.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
-
-                documentoCompra.solicitadoAnulacion = Converter.GetBool(row, "solicitud_anulacion");
-                documentoCompra.comentarioSolicitudAnulacion = Converter.GetString(row, "comentario_solicitud_anulacion");
-                documentoCompra.comentarioSolicitudAnulacion = documentoCompra.comentarioSolicitudAnulacion == null ? String.Empty : documentoCompra.comentarioSolicitudAnulacion;
-                documentoCompra.comentarioAprobacionAnulacion = Converter.GetString(row, "comentario_aprobacion_anulacion");
-                documentoCompra.comentarioAprobacionAnulacion = documentoCompra.comentarioAprobacionAnulacion == null ? String.Empty : documentoCompra.comentarioAprobacionAnulacion;
-
-                documentoCompra.permiteAnulacion = Converter.GetBool(row, "permite_anulacion");
-
-                facturaList.Add(documentoCompra);
-            }
-            return facturaList;
-        }
+      
 
 
         public void insertSeguimientoPedido(Pedido pedido)
@@ -685,19 +621,7 @@ namespace DataLayer
 
          //   DateTime fechaModifiacionActual = (DateTime)objCommand.Parameters["@fechaModificacionActual"].Value;
 
-/*
-            DateTime date1 = new DateTime(fechaModifiacionActual.Year, fechaModifiacionActual.Month, fechaModifiacionActual.Day, fechaModifiacionActual.Hour, fechaModifiacionActual.Minute, fechaModifiacionActual.Second);
-            DateTime date2 = new DateTime(cotizacion.fechaModificacion.Year, cotizacion.fechaModificacion.Month, cotizacion.fechaModificacion.Day, cotizacion.fechaModificacion.Hour, cotizacion.fechaModificacion.Minute, cotizacion.fechaModificacion.Second);
+        }*/
 
-            int result = DateTime.Compare(date1, date2);
-            if (result != 0)
-            {
-                //No se puede actualizar la cotización si las fechas son distintas
-                throw new Exception("CotizacionDesactualizada");
-            }
-
-    */
-        }
-        
     }
 }

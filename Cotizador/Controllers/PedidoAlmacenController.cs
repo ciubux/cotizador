@@ -367,7 +367,7 @@ namespace Cotizador.Controllers
                 pedidoDetalle.observacion = documentoDetalle.observacion;
                 pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
                 if(documentoDetalle.esPrecioAlternativo)
-                    pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+                    pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.ProductoPresentacion.Equivalencia;
                 else
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
                // pedidoDetalle.precioNetoAnterior = documentoDetalle.precioNetoAnterior;
@@ -575,10 +575,10 @@ namespace Cotizador.Controllers
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
                 "\"familia\":\"" + producto.familia + "\"," +
                 "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
-                "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
+             //   "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                 "\"precioLista\":\"" + producto.precioLista + "\"," +
                 "\"costoSinIGV\":\"" + producto.costoSinIgv + "\"," +
-                "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
+            //    "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
                 "\"fleteDetalle\":\"" + fleteDetalle + "\"," +
                 "\"precioUnitario\":\"" + precioUnitario + "\"," +
                 "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
@@ -612,6 +612,8 @@ namespace Cotizador.Controllers
             detalle.cantidad = Int32.Parse(Request["cantidad"].ToString());
             detalle.porcentajeDescuento = Decimal.Parse(Request["porcentajeDescuento"].ToString());
             detalle.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
+            int idProductoPresentacion = Int16.Parse(Request["idProductoPresentacion"].ToString());
+
             detalle.observacion = Request["observacion"].ToString();
             decimal precioNeto = Decimal.Parse(Request["precio"].ToString());
             decimal costo = Decimal.Parse(Request["costo"].ToString());
@@ -620,12 +622,13 @@ namespace Cotizador.Controllers
             {
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                 //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * producto.equivalencia));
+                ProductoPresentacion productoPresentacion = producto.getProductoPresentacion(idProductoPresentacion);
+                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * detalle.ProductoPresentacion.Equivalencia));
 
                 //Si es el precio Alternativo se debe modificar el precio_cliente_producto para que compare con el precio
                 //de la unidad alternativa en lugar del precio de la unidad estandar
                 detalle.producto.precioClienteProducto.precioUnitario =
-                    detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
+                    detalle.producto.precioClienteProducto.precioUnitario / detalle.ProductoPresentacion.Equivalencia;
 
 
             }

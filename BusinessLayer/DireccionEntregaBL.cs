@@ -15,5 +15,37 @@ namespace BusinessLayer
                 return dal.getDireccionesEntrega(ubigeo, idCLiente);
             }
         }
+
+        public DireccionEntrega getDireccionEntregaPorCodigo(int codigo)
+        {
+            using (var dal = new DireccionEntregaDAL())
+            {
+                return dal.getDireccionEntregaPorCodigo(codigo);
+            }
+        }
+
+        public void deleteDireccionEntrega(DireccionEntrega direccion)
+        {
+            using (var dal = new DireccionEntregaDAL())
+            {
+                dal.deleteDireccionEntrega(direccion);
+            }
+        }
+
+        public void updateDireccionEntrega(DireccionEntrega direccion)
+        {
+            using (var dal = new DireccionEntregaDAL())
+            {
+                dal.updateDireccionEntrega(direccion);
+            }
+        }
+
+        public void insertDireccionEntrega(DireccionEntrega direccion)
+        {
+            using (var dal = new DireccionEntregaDAL())
+            {
+                dal.insertDireccionEntrega(direccion);
+            }
+        }
     }
 }

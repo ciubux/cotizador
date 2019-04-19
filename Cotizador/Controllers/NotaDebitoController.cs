@@ -33,7 +33,7 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             VentaBL ventaBL = new VentaBL();
-            Transaccion transaccion = new Transaccion();
+            Transaccion transaccion = new Venta();
             
             transaccion.documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
             transaccion.documentoVenta.venta = null;
@@ -174,9 +174,9 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             try
             {
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_DEBITO];
+                Transaccion venta = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_DEBITO];
                 DocumentoVenta documentoVenta = new DocumentoVenta();
-                documentoVenta.venta = venta;
+                documentoVenta.venta = (Venta)venta;
                 documentoVenta.idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
                 documentoVenta.cliente = venta.cliente;
                 documentoVenta.usuario = usuario;

@@ -295,8 +295,6 @@ namespace cotizadorPDF
 
                 PdfSolidBrush brushColorBlue = new PdfSolidBrush(Color.Blue);
 
-
-
                 int countPages = doc.Pages.Count;
 
 
@@ -310,178 +308,33 @@ namespace cotizadorPDF
                 int xPage2a = 0;
                 String reiniciarY = "";
 
-                //Si son dos paginas entonces se obtiene la página y se obtiene cuantos registros
-                //existen luego de la posición 10
-                if (countPages == 2)
+
+
+                if (y < 600)
                 {
-                    y = margenTop;
-
-                    if (cot.cotizacionDetalleList.Count > 10)
-                    {
-                        y = y + (54 * (cot.cotizacionDetalleList.Count - 10));
-                    }
-
-                    sectionTotales = doc.Pages[1];
-                    sectionObervaciones = doc.Pages[1];
-                    sectionFirma = doc.Pages[1];
-                    xPage2 = margenLeft;
+                    sectionTotales = doc.Pages[countPages-1];
+                    sectionObervaciones = doc.Pages[countPages-1];
+                    sectionFirma = doc.Pages[countPages-1];
                 }
                 else
                 {
-                    if (countPages < 2)
-                    {
-                        if (cot.cotizacionDetalleList.Count > 5)
-                        {
+                    SizeF size = page.Size;
+                    PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
 
-                            SizeF size = page.Size;
-                            PdfPageBase page2 = doc.Pages.Add(size, new PdfMargins(0));
-
-                            switch (cot.cotizacionDetalleList.Count)
-                            {
-                                case 6:
-                                    reiniciarY = "FIRMA";
-                                    sectionTotales = page;
-                                    sectionObervaciones = page;
-                                    sectionFirma = page2; break;
-                                case 7:
-                                    reiniciarY = "OBSERVACIONES";
-                                    sectionTotales = page;
-                                    sectionObervaciones = page2;
-                                    sectionFirma = page2; break;
-                                case 8:
-                                    reiniciarY = "OBSERVACIONES";
-                                    sectionTotales = page;
-                                    sectionObervaciones = page2;
-                                    sectionFirma = page2; break;
-                                case 9:
-                                    reiniciarY = "OBSERVACIONES";
-                                    sectionTotales = page;
-                                    sectionObervaciones = page2;
-                                    sectionFirma = page2; break;
-                                case 10:
-                                    reiniciarY = "TOTALES";
-                                    sectionTotales = page2;
-                                    sectionObervaciones = page2;
-                                    sectionFirma = page2; break;
-
-                            }
-                        }
-                    }
+                    sectionTotales = doc.Pages[countPages];
+                    sectionObervaciones = doc.Pages[countPages];
+                    sectionFirma = doc.Pages[countPages];
+                    //Si es una nueva pagina se inicia en el margen top
+                    //Y se agrega 150 porque en la siguiente instrucción se restán 150 para que no haya mucho margen entre
+                    //el fin de la tabla y la observación.
+                    y =  margenTop +150;
                 }
 
-
-                if (countPages == 3)
+                if (countPages > 1)
                 {
-                    y = margenTop;
-
-                    if (cot.cotizacionDetalleList.Count > 24)
-                    {
-                        y = y + (52 * (cot.cotizacionDetalleList.Count - 24));
-                    }
-
-                    sectionTotales = doc.Pages[2];
-                    sectionObervaciones = doc.Pages[2];
-                    sectionFirma = doc.Pages[2];
                     xPage2 = margenLeft;
+                    y = y - 150;
                 }
-                else
-                {
-                    if (cot.cotizacionDetalleList.Count > 18)
-                    {
-
-                        SizeF size = page.Size;
-                        PdfPageBase page2 =  doc.Pages[1];
-                        PdfPageBase page3 = doc.Pages.Add(size, new PdfMargins(0));
-
-                        switch (cot.cotizacionDetalleList.Count)
-                        {
-                            case 20:
-                                reiniciarY = "FIRMA";
-                                sectionTotales = page2;
-                                sectionObervaciones = page2;
-                                sectionFirma = page3; break;
-                            case 21:
-                                reiniciarY = "OBSERVACIONES";
-                                sectionTotales = page2;
-                                sectionObervaciones = page2;
-                                sectionFirma = page3; break;
-                            case 22:
-                                reiniciarY = "OBSERVACIONES";
-                                sectionTotales = page2;
-                                sectionObervaciones = page3;
-                                sectionFirma = page3; break;
-                            case 23:
-                                reiniciarY = "OBSERVACIONES";
-                                sectionTotales = page2;
-                                sectionObervaciones = page3;
-                                sectionFirma = page3; break;
-                            case 24:
-                                reiniciarY = "TOTALES";
-                                sectionTotales = page3;
-                                sectionObervaciones = page3;
-                                sectionFirma = page3; break;
-
-                        }
-                    }
-                }
-
-                /*
-
-
-                if (countPages == 4)
-                {
-                    y = margenTop;
-
-                    if (cot.cotizacionDetalleList.Count > 38)
-                    {
-                        y = y + (60 * (cot.cotizacionDetalleList.Count - 38));
-                    }
-
-                    sectionTotales = doc.Pages[3];
-                    sectionObervaciones = doc.Pages[3];
-                    sectionFirma = doc.Pages[3];
-                    xPage2 = margenLeft;
-                }
-                else
-                {
-                    if (cot.cotizacionDetalleList.Count > 35)
-                    {
-
-                        SizeF size = page.Size;
-                        PdfPageBase page2 = doc.Pages.Add(size, new PdfMargins(0));
-
-                        switch (cot.cotizacionDetalleList.Count)
-                        {
-                            case 36:
-                                reiniciarY = "FIRMA";
-                                sectionTotales = page;
-                                sectionObervaciones = page;
-                                sectionFirma = page2; break;
-                            case 37:
-                                reiniciarY = "OBSERVACIONES";
-                                sectionTotales = page;
-                                sectionObervaciones = page2;
-                                sectionFirma = page2; break;
-                            case 38:
-                                reiniciarY = "OBSERVACIONES";
-                                sectionTotales = page;
-                                sectionObervaciones = page2;
-                                sectionFirma = page2; break;
-                            case 39:
-                                reiniciarY = "OBSERVACIONES";
-                                sectionTotales = page;
-                                sectionObervaciones = page2;
-                                sectionFirma = page2; break;
-                            case 40:
-                                reiniciarY = "TOTALES";
-                                sectionTotales = page2;
-                                sectionObervaciones = page2;
-                                sectionFirma = page2; break;
-
-                        }
-                    }
-                }
-                */
                
                 //Si es distinto de solo observaciones
                 if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)

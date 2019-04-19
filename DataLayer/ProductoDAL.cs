@@ -38,6 +38,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "monedaMP", productoStaging.monedaMP); //(y)
             InputParameterAdd.Varchar(objCommand, "unidadSunat", productoStaging.unidadSunat); //(y)
             InputParameterAdd.Varchar(objCommand, "unidadAlternativaSunat", productoStaging.unidadAlternativaSunat); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidadProveedorSunat", productoStaging.unidadProveedorSunat); //(y)
             ExecuteNonQuery(objCommand);
         }
 
@@ -103,6 +104,7 @@ namespace DataLayer
 
             DataTable productoDataSet = dataSet.Tables[0];
             DataTable preciosDataSet = dataSet.Tables[1];
+            DataTable productoPresentacionDataSet = dataSet.Tables[2];
 
 
             Producto producto = new Producto();
@@ -132,7 +134,7 @@ namespace DataLayer
                 producto.proveedor = Converter.GetString(row, "proveedor");
                 producto.unidad = Converter.GetString(row, "unidad");
                 producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
-                producto.equivalencia = Converter.GetInt(row, "equivalencia");
+                producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
                 producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 //Costo sin IGV
                 
@@ -141,12 +143,15 @@ namespace DataLayer
 
                 producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
 
+                producto.Stock = Converter.GetInt(row, "stock");
+
                 /*Obtenido a partir de precio Lista*/
                 if (row["precio_neto"] != DBNull.Value)
                 {
                     producto.precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto");
                     producto.precioClienteProducto.flete = Converter.GetDecimal(row, "flete");
-                    producto.precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia");
+                    producto.precioClienteProducto.equivalencia = Converter.GetDecimal(row, "precio_cliente_producto_equivalencia");
+//                    producto.equivalencia = producto.precioClienteProducto.equivalencia;
                     producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                     producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                     producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
@@ -212,6 +217,21 @@ namespace DataLayer
             producto.precioListaList = precioListaList;
 
 
+            foreach (DataRow row in productoPresentacionDataSet.Rows)
+            {
+                ProductoPresentacion productoPresentacion = new ProductoPresentacion();
+                productoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "idProductoPresentacion");
+                productoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                productoPresentacion.Presentacion = Converter.GetString(row, "presentacion");
+                productoPresentacion.PrecioLimaSinIGV = Converter.GetDecimal(row, "precio_lima_sin_igv");
+                productoPresentacion.PrecioProvinciasSinIGV = Converter.GetDecimal(row, "precio_provincias_sin_igv");
+                productoPresentacion.CostoSinIGV = Converter.GetInt(row, "costo_sin_igv");
+                productoPresentacion.PrecioSinIGV = productoPresentacion.PrecioLimaSinIGV;
+                productoPresentacion.UnidadInternacional = Converter.GetString(row, "unidad_internacional");
+                productoPresentacion.Stock = Converter.GetInt(row, "stock");
+                producto.ProductoPresentacionList.Add(productoPresentacion);
+            }           
+
             return producto;
         }
 
@@ -254,9 +274,15 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
                 cotizacionDetalle.producto.precioListaAnterior = Converter.GetDecimal(row, "precio_sin_igv_anterior");
 
-
-                cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+                if (cotizacionDetalle.esPrecioAlternativo)
+                {
+                    cotizacionDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                }
+
+                
+                
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
 
 
@@ -273,7 +299,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
                 cotizacionDetalle.producto.precioClienteProducto.flete = Converter.GetDecimal(row, "flete");
                 //Revisar
-                cotizacionDetalle.costoAnterior = Converter.GetDecimal(row, "costo_sin_igv_anterior");
+                cotizacionDetalle.producto.costoListaAnterior = Converter.GetDecimal(row, "costo_sin_igv_anterior");
                 cotizacionDetalle.precioNetoAnterior = Converter.GetDecimal(row, "precio_neto_anterior");
 
 
@@ -282,7 +308,7 @@ namespace DataLayer
                 else
                     cotizacionDetalle.producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
 
-                cotizacionDetalle.producto.precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia");
+                cotizacionDetalle.producto.precioClienteProducto.equivalencia = Converter.GetDecimal(row, "equivalencia");
                 cotizacionDetalle.producto.precioClienteProducto.cliente = new Cliente();
                 cotizacionDetalle.producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
 
@@ -301,8 +327,14 @@ namespace DataLayer
 
                     //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                     //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.equivalencia));
-                    cotizacionDetalle.producto.precioClienteProducto.precioUnitario = cotizacionDetalle.producto.precioClienteProducto.precioUnitario * cotizacionDetalle.producto.equivalencia;
+                  //  cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.ProductoPresentacion.Equivalencia));
+                  //  cotizacionDetalle.producto.precioClienteProducto.precioUnitario = cotizacionDetalle.producto.precioClienteProducto.precioUnitario * cotizacionDetalle.ProductoPresentacion.Equivalencia;
+
+
+                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.precioClienteProducto.equivalencia));
+                    cotizacionDetalle.producto.precioClienteProducto.precioUnitario = cotizacionDetalle.producto.precioClienteProducto.precioUnitario * cotizacionDetalle.producto.precioClienteProducto.equivalencia;
+
+
                 }
                 else
                 {
@@ -334,7 +366,7 @@ namespace DataLayer
                     {
                         //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                         //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                        cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNetoRecalculado* cotizacionDetalle.producto.equivalencia));
+                        cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNetoRecalculado* cotizacionDetalle.ProductoPresentacion.Equivalencia));
 
                     }
                     else
@@ -392,8 +424,15 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
 
 
-                cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+
+                if (cotizacionDetalle.esPrecioAlternativo)
+                {
+                    cotizacionDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                }
+
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
 
 
@@ -429,7 +468,7 @@ namespace DataLayer
 
                     //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                     //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.equivalencia));
+                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.ProductoPresentacion.Equivalencia));
                 }
                 else
                 {
@@ -480,13 +519,15 @@ namespace DataLayer
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
                 
-                cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
 
                 if (cotizacionDetalle.esPrecioAlternativo)
                 {
-                    cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioLista * cotizacionDetalle.producto.equivalencia;
+                    cotizacionDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioLista * cotizacionDetalle.ProductoPresentacion.Equivalencia;
+                    cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
                 }
 
 
@@ -540,7 +581,7 @@ namespace DataLayer
 
                     //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                     //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.equivalencia));
+                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.ProductoPresentacion.Equivalencia));
                 }
                 else
                 {
@@ -590,14 +631,15 @@ namespace DataLayer
 
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
-
-                cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
 
                 if (cotizacionDetalle.esPrecioAlternativo)
                 {
-                    cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioLista * cotizacionDetalle.producto.equivalencia;
+                    cotizacionDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioLista * cotizacionDetalle.ProductoPresentacion.Equivalencia;
                 }
 
 
@@ -650,7 +692,7 @@ namespace DataLayer
 
                     //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                     //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.equivalencia));
+                    cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.ProductoPresentacion.Equivalencia));
                 }
                 else
                 {
@@ -696,7 +738,7 @@ namespace DataLayer
                 item.unidad = Converter.GetString(row, "unidad");
                 item.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
                 item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
-                item.equivalencia = Converter.GetInt(row, "equivalencia");
+                item.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
                 item.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
                 item.tipoProductoVista = (int)item.tipoProducto;
@@ -732,7 +774,7 @@ namespace DataLayer
                 item.unidad = Converter.GetString(row, "unidad");
                 item.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
                 item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
-                item.equivalencia = Converter.GetInt(row, "equivalencia");
+                item.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
                 item.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 item.Estado = Converter.GetInt(row, "estado");
                 item.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
@@ -773,7 +815,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "unidadAlternativa", producto.unidad_alternativa);
             InputParameterAdd.Varchar(objCommand, "unidadProveedor", producto.unidadProveedor);
             InputParameterAdd.Varchar(objCommand, "unidadEstandarInternacional", producto.unidadEstandarInternacional);
-            InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalencia);
+            InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalenciaAlternativa);
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
@@ -810,7 +852,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "unidadAlternativa", producto.unidad_alternativa);
             InputParameterAdd.Varchar(objCommand, "unidadProveedor", producto.unidadProveedor);
             InputParameterAdd.Varchar(objCommand, "unidadEstandarInternacional", producto.unidadEstandarInternacional);
-            InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalencia);
+            InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalenciaAlternativa);
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);

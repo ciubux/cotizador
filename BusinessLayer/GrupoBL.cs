@@ -50,7 +50,7 @@ namespace BusinessLayer
                     if (pedidoDetalle.esPrecioAlternativo)
                     {
                         pedidoDetalle.producto.precioClienteProducto.precioUnitario =
-                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.equivalencia;
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.ProductoPresentacion.Equivalencia;
                     }
 
                     pedidoDetalle.porcentajeDescuento = (1 - (pedidoDetalle.precioNeto / (pedidoDetalle.precioLista == 0 ? 1 : pedidoDetalle.precioLista))) * 100;

@@ -20,7 +20,7 @@ namespace Cotizador.Controllers
 
         public void iniciarEdicionCompra()
         {
-            Venta ventaVer = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+            Venta ventaVer = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA_VER];
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -30,7 +30,7 @@ namespace Cotizador.Controllers
             Pedido pedido = venta.pedido;
             pedido.ciudadASolicitar = new Ciudad();
 
-            this.Session[Constantes.VAR_SESSION_VENTA] = venta;
+            this.Session[Constantes.VAR_SESSION_COMPRA] = venta;
         }
 
 
@@ -105,7 +105,7 @@ namespace Cotizador.Controllers
                 ///Importante definir como null para que se recupere del producto al momento de insertar
                 pedidoDetalle.unidadInternacional = null; 
 
-                pedidoDetalle.producto.equivalencia = ventaDetalle.producto.equivalencia;
+                pedidoDetalle.ProductoPresentacion.Equivalencia = ventaDetalle.ProductoPresentacion.Equivalencia;
                 pedidoDetalle.esPrecioAlternativo = documentoDetalleJson.esUnidadAlternativa == 1;
 
                 if (pedidoDetalle.esPrecioAlternativo)
@@ -113,7 +113,7 @@ namespace Cotizador.Controllers
                     pedidoDetalle.unidad = ventaDetalle.producto.unidad_alternativa;
                     //////REVISAR QUE LA CANTIDAD DEBE SER SIEMPRE ENTERO
                     pedidoDetalle.cantidad = Convert.ToInt32(ventaDetalle.sumCantidadUnidadAlternativa);
-                    pedidoDetalle.precioNeto = (ventaDetalle.sumPrecioUnitario * pedidoDetalle.producto.equivalencia) / pedidoDetalle.cantidad;
+                    pedidoDetalle.precioNeto = (ventaDetalle.sumPrecioUnitario * pedidoDetalle.ProductoPresentacion.Equivalencia) / pedidoDetalle.cantidad;
                 }
                 else
                 {
@@ -134,7 +134,7 @@ namespace Cotizador.Controllers
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.calcularMontosTotales(venta.pedido);
 
-            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
+            this.Session[Constantes.VAR_SESSION_COMPRA_VER] = venta;
 
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonVenta = JsonConvert.SerializeObject(venta);
@@ -161,7 +161,7 @@ namespace Cotizador.Controllers
 
             //GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA];
 
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA_VER];
 
             VentaBL ventaBL = new VentaBL();
             ventaBL.GetVentaConsolidada(venta, usuario);
@@ -188,7 +188,7 @@ namespace Cotizador.Controllers
 
         public void iniciarEdicionVentaConsolidada()
         {
-            this.Session[Constantes.VAR_SESSION_VENTA] = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+            this.Session[Constantes.VAR_SESSION_COMPRA] = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA_VER];
         }
 
 
@@ -199,9 +199,9 @@ namespace Cotizador.Controllers
            {
 
             String nombreArchivo = Request["nombreArchivo"].ToString();
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA];
             if (venta == null)
-                venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+                venta = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA_VER];
 
 
             Pedido pedido = venta.pedido;
@@ -254,7 +254,7 @@ namespace Cotizador.Controllers
 
                     instanciarPedido();
                 }*/
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
+                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA];
                 Pedido pedido = venta.pedido;
                     
 
@@ -300,7 +300,7 @@ namespace Cotizador.Controllers
         [HttpPost]
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA];
 
             IDocumento documento = (Pedido)venta.pedido;
             List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
@@ -309,7 +309,7 @@ namespace Cotizador.Controllers
             pedidoBL.calcularMontosTotales((Pedido)documento);
             venta.pedido = (Pedido)documento;
 
-            this.Session[Constantes.VAR_SESSION_VENTA] = venta;
+            this.Session[Constantes.VAR_SESSION_COMPRA] = venta;
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
 
@@ -321,7 +321,7 @@ namespace Cotizador.Controllers
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA];
             venta.usuario = usuario;
             VentaBL bl = new VentaBL();
             bl.UpdateVenta(venta);

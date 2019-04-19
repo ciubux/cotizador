@@ -502,11 +502,23 @@ namespace Cotizador.Controllers
                             //AD
                             if (sheet.GetRow(row).GetCell(29 + posicionInicial) == null)
                             {
+                                productoStaging.unidadProveedorSunat = "";
+                            }
+                            else
+                            {
+                                productoStaging.unidadProveedorSunat = sheet.GetRow(row).GetCell(29 + posicionInicial).ToString();
+                            }
+
+
+                            paso = 18;
+                            //AD
+                            if (sheet.GetRow(row).GetCell(30 + posicionInicial) == null)
+                            {
                                 productoStaging.unidadAlternativaSunat = "";
                             }
                             else
                             {
-                                productoStaging.unidadAlternativaSunat = sheet.GetRow(row).GetCell(29 + posicionInicial).ToString();
+                                productoStaging.unidadAlternativaSunat = sheet.GetRow(row).GetCell(30 + posicionInicial).ToString();
                             }
 
                             productoBL.setProductoStaging(productoStaging);

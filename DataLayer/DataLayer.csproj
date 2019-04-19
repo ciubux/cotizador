@@ -41,6 +41,7 @@
     <Compile Include="DALConverter\UbigeoConvertTo.cs" />
     <Compile Include="ArchivoDAL.cs" />
     <Compile Include="DocumentoCompraDAL.cs" />
+    <Compile Include="DomicilioLegalDAL.cs" />
     <Compile Include="PermisoDAL.cs" />
     <Compile Include="OrigenDAL.cs" />
     <Compile Include="SubDistribuidorDAL.cs" />

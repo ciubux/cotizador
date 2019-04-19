@@ -44,6 +44,23 @@ namespace Cotizador.Controllers
             return usuario.email + " / " + texto;
         }
 
+        protected bool tieneAcceso()
+        {
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return false;
+            }
+            else
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.creaDocumentosCompra && !usuario.visualizaDocumentosCompra)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
 
 
     }

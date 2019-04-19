@@ -568,7 +568,7 @@ namespace Cotizador.Controllers
                 
 
                     pedidoDetalle.producto = documentoDetalle.producto;
-
+                    
                     
 
 
@@ -611,7 +611,8 @@ namespace Cotizador.Controllers
 
                     if (documentoDetalle.esPrecioAlternativo)
                     {
-                        pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+                        pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.ProductoPresentacion.Equivalencia;
+                        pedidoDetalle.ProductoPresentacion = documentoDetalle.ProductoPresentacion;
                     }
                     else
                     {
@@ -902,6 +903,11 @@ namespace Cotizador.Controllers
                 }
 
                 String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
+                String jsonProductoPresentacion = JsonConvert.SerializeObject(producto.ProductoPresentacionList);
+
+
+
+
 
                 String resultado = "{" +
                     "\"id\":\"" + producto.idProducto + "\"," +
@@ -912,15 +918,15 @@ namespace Cotizador.Controllers
                     "\"proveedor\":\"" + producto.proveedor + "\"," +
                     "\"familia\":\"" + producto.familia + "\"," +
                     "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
-                    "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
+             //       "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                     "\"precioLista\":\"" + producto.precioLista + "\"," +
                     "\"costoSinIGV\":\"" + producto.costoSinIgv + "\"," +
-                    "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
+             //       "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
                     "\"fleteDetalle\":\"" + fleteDetalle + "\"," +
                     "\"precioUnitario\":\"" + precioUnitario + "\"," +
                     "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
                     "\"precioListaList\":" + jsonPrecioLista + "," +
-
+                    "\"productoPresentacionList\":" + jsonProductoPresentacion + "," +
                     "\"costoLista\":\"" + producto.costoLista + "\"" +
                     "}";
                 return resultado;
@@ -974,15 +980,25 @@ namespace Cotizador.Controllers
                 detalle.cantidad = Int32.Parse(Request["cantidad"].ToString());
                 detalle.porcentajeDescuento = Decimal.Parse(Request["porcentajeDescuento"].ToString());
                 detalle.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
+
+                int idProductoPresentacion = Int16.Parse(Request["idProductoPresentacion"].ToString());
+
                 detalle.observacion = Request["observacion"].ToString();
                 decimal precioNeto = Decimal.Parse(Request["precio"].ToString());
                 decimal costo = Decimal.Parse(Request["costo"].ToString());
                 decimal flete = Decimal.Parse(Request["flete"].ToString());
+
+
+                detalle.unidad = detalle.producto.unidad;
+
                 if (detalle.esPrecioAlternativo)
                 {
+                    ProductoPresentacion productoPresentacion = producto.getProductoPresentacion(idProductoPresentacion);
+                    detalle.unidad = productoPresentacion.Presentacion;
+                    detalle.ProductoPresentacion = productoPresentacion;
                     //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                     //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                    detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * producto.equivalencia));
+                    detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * detalle.ProductoPresentacion.Equivalencia));
 
                     //Si es el precio Alternativo se debe modificar el precio_cliente_producto para que compare con el precio
                     //de la unidad alternativa en lugar del precio de la unidad estandar
@@ -990,7 +1006,7 @@ namespace Cotizador.Controllers
                     //  detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
 
                     detalle.producto.precioClienteProducto.precioUnitario =
-                   detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
+                   detalle.producto.precioClienteProducto.precioUnitario / detalle.producto.precioClienteProducto.equivalencia;
 
                 }
                 else
@@ -1007,12 +1023,7 @@ namespace Cotizador.Controllers
                 pedidoBL.calcularMontosTotales(pedido);
 
 
-                detalle.unidad = detalle.producto.unidad;
-                //si esPrecioAlternativo  se mostrará la unidad alternativa
-                if (detalle.esPrecioAlternativo)
-                {
-                    detalle.unidad = detalle.producto.unidad_alternativa;
-                }
+
 
                 var nombreProducto = detalle.producto.descripcion;
                /* if (pedido.mostrarCodigoProveedor)
@@ -2006,7 +2017,7 @@ namespace Cotizador.Controllers
 
             detalle.cantidad = cantidad;          
             detalle.esPrecioAlternativo = esUnidadAlternativa == 1;
-            detalle.porcentajeDescuento = 100 - (precioNeto * 100 / detalle.precioLista);
+
 
             detalle.observacion = String.Empty;
             //decimal precioNeto = Decimal.Parse(Request["precio"].ToString());
@@ -2014,21 +2025,28 @@ namespace Cotizador.Controllers
             decimal flete = 0;// Decimal.Parse(Request["flete"].ToString());
             if (detalle.esPrecioAlternativo)
             {
+                detalle.ProductoPresentacion = new ProductoPresentacion();
+                detalle.ProductoPresentacion.Equivalencia = detalle.producto.ProductoPresentacionList[0].Equivalencia;
+
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                 //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * producto.equivalencia));
+                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * detalle.ProductoPresentacion.Equivalencia));
 
                 //Si es el precio Alternativo se debe modificar el precio_cliente_producto para que compare con el precio
                 //de la unidad alternativa en lugar del precio de la unidad estandar
                 //detalle.producto.precioClienteProducto.precioUnitario =
                 //  detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
                 detalle.producto.precioClienteProducto.precioUnitario =
-                detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
+                detalle.producto.precioClienteProducto.precioUnitario / detalle.ProductoPresentacion.Equivalencia;
+
+                
             }
             else
             {
                 detalle.precioNeto = precioNeto;
             }
+            detalle.porcentajeDescuento = 100 - (precioNeto * 100 / detalle.precioLista);
+
             detalle.flete = flete;
             pedido.pedidoDetalleList.Add(detalle);
 
@@ -2057,11 +2075,11 @@ namespace Cotizador.Controllers
 
 
         private Pedido instanciarPedidoCargaMasiva(String ruc, String nombreSolicitante, 
-            String codCentroCostosCliente, String codCentroCostosMP, String centroCostos,
-            String direccionEntrega, String sedeMP, String ubigeo, String observaciones, 
+            String numeroRequerimiento,
+            DireccionEntrega direccionEntrega, String observaciones, 
             DateTime? fechaEntregaDesde, DateTime? fechaEntregaHasta,
             String inicioPrimerTurnoEntrega, String finPrimerTurnoEntrega, String inicioSegundoTurnoEntrega, String finSegundoTurnoEntrega,
-            String ordenCompra, Pedido.ClasesPedido tipoPedido, Pedido.tiposPedido tipoPedidoVenta, Pedido.tiposPedidoAlmacen tipoPedidoAlmacen, String facturaConsolidada,
+            String numeroOrdenCompra, Pedido.ClasesPedido tipoPedido, Pedido.tiposPedido tipoPedidoVenta, Pedido.tiposPedidoAlmacen tipoPedidoAlmacen, String facturaConsolidada,
             Int64 numeroGrupo
             )
         {
@@ -2071,26 +2089,30 @@ namespace Cotizador.Controllers
             pedido.numeroPedido = 0;
             pedido.numeroGrupoPedido = numeroGrupo;
             pedido.cotizacion = new Cotizacion();
-            pedido.ubigeoEntrega = new Ubigeo();
-            pedido.ubigeoEntrega.Id = ubigeo;
+            pedido.observaciones = observaciones;
+          //  pedido.ubigeoEntrega = new Ubigeo();
+           // pedido.ubigeoEntrega.Id = ubigeo;
 
-            ClienteBL clienteBL = new ClienteBL();
+            //ClienteBL clienteBL = new ClienteBL();
 
-            Guid idCliente = clienteBL.getClienteId(ruc, sedeMP);
-            
-
-            //pedido.ciudad = new Ciudad();
+       /*     Guid idCliente = clienteBL.getClienteId(ruc, sedeMP);
             pedido.cliente = clienteBL.getCliente(idCliente);
-            pedido.ciudad = pedido.cliente.ciudad;
-  
+            pedido.ciudad = pedido.cliente.ciudad;*/
+            
             pedido.ciudadASolicitar = new Ciudad();
-            pedido.numeroReferenciaCliente = null;
-            pedido.direccionEntrega = new DireccionEntrega();
-            pedido.direccionEntrega.descripcion = direccionEntrega;
-            pedido.direccionEntrega.codigoCliente = codCentroCostosCliente;
-            pedido.direccionEntrega.codigoMP= codCentroCostosMP;
-            pedido.direccionEntrega.nombre = centroCostos;
+            pedido.numeroReferenciaCliente = numeroOrdenCompra;
 
+            DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
+            pedido.direccionEntrega = direccionEntregaBL.getDireccionEntregaPorCodigo(direccionEntrega.codigo);
+            
+            pedido.ubigeoEntrega = pedido.direccionEntrega.ubigeo;
+            pedido.contactoPedido = pedido.direccionEntrega.contacto;
+            pedido.telefonoContactoPedido = pedido.direccionEntrega.telefono;
+            pedido.cliente = pedido.direccionEntrega.cliente;
+            pedido.ciudad = pedido.direccionEntrega.cliente.ciudad;
+
+
+            pedido.numeroRequerimiento = numeroRequerimiento;
             pedido.solicitante = new Solicitante();
             pedido.solicitante.nombre = nombreSolicitante;         
 
@@ -2102,52 +2124,6 @@ namespace Cotizador.Controllers
             pedido.contactoPedido = String.Empty;
             pedido.telefonoContactoPedido = String.Empty;
             pedido.incluidoIGV = false;
-            //  pedido.tasaIGV = Constantes.IGV;
-            //pedido.flete = 0;
-            // pedido.mostrarCodigoProveedor = true;
-
-
-
-            /*
-            pedido.observacionesGuiaRemision = String.Empty;
-            pedido.numeroReferenciaCliente = ordenCompra;
-            if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
-            {
-                pedido.observacionesGuiaRemision = "O/C N° " + pedido.numeroReferenciaCliente + "";
-            }
-            if (centroCostos != null && centroCostos.Length > 0)
-            {
-                if (codCentroCostosCliente != null && codCentroCostosCliente.Length > 0)
-                {
-                    pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + centroCostos + " (" + codCentroCostosCliente + ")";
-                    pedido.observaciones = centroCostos + " (" + codCentroCostosCliente + ")";
-                }
-                else
-                {
-                    pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + centroCostos;
-                    pedido.observaciones = centroCostos;
-                }                
-            }
-            if (observaciones != null && !observaciones.Equals(String.Empty))
-            {
-                pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + " / " + observaciones;
-                pedido.observaciones = pedido.observaciones + " / " + observaciones;
-            }
-
-        //    pedido.observacionesGuiaRemision = pedido.observacionesGuiaRemision + observaciones;
-        //    pedido.observaciones = pedido.observaciones + observaciones;
-
-            if (facturaConsolidada.Equals("NO"))
-            {
-                pedido.observacionesFactura = pedido.observaciones;
-            }
-            */
-            
-
-
-
-            //observaciones + " CENTRO COSTOS: " + centroCostos+", CODIGO CENTRO COSTOS CLIENTE: " +codCentroCostosCliente +", CODIGO CENTRO COSTOS MP: " + codCentroCostosMP;
-            
 
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             pedido.seguimientoPedido = new SeguimientoPedido();
@@ -2166,15 +2142,14 @@ namespace Cotizador.Controllers
         {
             try
             {
-
                 PedidoBL pedidoBL = new PedidoBL();
+                //Se obtiene el número de Grupo
                 Int64 numeroGrupo =  pedidoBL.GetSiguienteNumeroGrupoPedido();
 
-
                 XSSFWorkbook hssfwb = new XSSFWorkbook(file.InputStream);
-
                 ISheet sheet = hssfwb.GetSheetAt(0);
                 int row = 1;
+                //Si se ha ingresado la última fila  entonces  se considera ese valor como límite
                 int ultimaFila = Int32.Parse(Request["ultimaFila"].ToString());
                 if (ultimaFila == 0)
                 {
@@ -2187,7 +2162,6 @@ namespace Cotizador.Controllers
 
 
                 /*Datos de Cliente y Solicitud*/
-
                 DateTime? fechaSolicitud = UtilesHelper.getValorCeldaDate(sheet, 2, "B");
                 String razonSocial = UtilesHelper.getValorCelda(sheet, 3, "B");
                 String ruc = UtilesHelper.getValorCelda(sheet,4,"B");
@@ -2231,39 +2205,56 @@ namespace Cotizador.Controllers
                 String solicitante = UtilesHelper.getValorCelda(sheet, 5, "E");
 
                 List<Decimal> subTotales = new List<Decimal>();
-                List<String> ubigeos = new List<String>();
-                List<String> direccionesEntrega = new List<String>();
+                //List<String> ubigeos = new List<String>();
+                List<DireccionEntrega> direccionEntregaList = new List<DireccionEntrega>();
 
                 List<Pedido> pedidoList = new List<Pedido>();
                 Pedido ultimoPedido = new Pedido();
+
+                List<Exception> exceptionList = new List<Exception>();
+
                 //Se considera la ultimafila más uno porque estamos trabajando con las posiciones físicas.
                 for (row = 16; row <= ultimaFila + 1; row++)
                 {
                     try
                     {
                         //Se identifica el clasePedido de fila
-                        String tipoCabecera = UtilesHelper.getValorCelda(sheet, row, "C");
+                        String tipoCabecera = UtilesHelper.getValorCelda(sheet, row, "D");
                         if (tipoCabecera.Equals("C"))
                         {
                             //Si es cabecera se instancia el pedido
-                            String codigoCentroCostosCliente = UtilesHelper.getValorCelda(sheet, row, "A");
+                            DireccionEntrega direccionEntrega = new DireccionEntrega();
+                            direccionEntrega.codigo = UtilesHelper.getValorCeldaInt(sheet, row, "A");
+
+                            /*String codigoCentroCostosCliente = UtilesHelper.getValorCelda(sheet, row, "A");
                             String codigoCentroCostosMP = UtilesHelper.getValorCelda(sheet, row, "B");
                             String nombreCentroCostos = UtilesHelper.getValorCelda(sheet, row, "D");
                             String direccionEntrega = UtilesHelper.getValorCelda(sheet, row, "E");
-                            String observaciones = UtilesHelper.getValorCelda(sheet, row, "F");
-                            String sedeMP = UtilesHelper.getValorCelda(sheet, row, "G");
-                            String ubigeo = UtilesHelper.getValorCelda(sheet, row, "H");
-                            DateTime? fechaEntregaHasta = UtilesHelper.getValorCeldaDate(sheet, row, "M");
-                            if (fechaEntregaHasta == null )
+                            */
+                            String numeroRequerimiento = UtilesHelper.getValorCelda(sheet, row, "C");
+                            String observaciones = UtilesHelper.getValorCelda(sheet, row, "G");
+                            
+
+                            /*String sedeMP = UtilesHelper.getValorCelda(sheet, row, "G");
+                            String ubigeo = UtilesHelper.getValorCelda(sheet, row, "H");*/
+
+                            DateTime? fechaEntregaDesde = UtilesHelper.getValorCeldaDate(sheet, row, "N");
+                            DateTime? fechaEntregaHasta = UtilesHelper.getValorCeldaDate(sheet, row, "O");
+
+                            if (fechaEntregaDesde == null || fechaEntregaDesde == default(DateTime))
+                            {
+                                fechaEntregaDesde = fechaEntregaDesdeGeneral;
+                            }
+                            if (fechaEntregaHasta == null || fechaEntregaHasta == default(DateTime))
                             {
                                 fechaEntregaHasta = fechaEntregaHastaGeneral;
                             }
-
-                            Decimal subtotal = UtilesHelper.getValorCeldaDecimal(sheet, row, "I");
-                            fechaEntregaHasta = fechaEntregaHastaGeneral;
+                            //Se agrega el subTotal solo para realizar una validación
+                            Decimal subtotal = UtilesHelper.getValorCeldaDecimal(sheet, row, "J");
                             subTotales.Add(subtotal);
-                            ubigeos.Add(ubigeo);
-                            direccionesEntrega.Add(direccionEntrega);
+                            //fechaEntregaHasta = fechaEntregaHastaGeneral;
+                            //  ubigeos.Add(ubigeo);
+                            direccionEntregaList.Add(direccionEntrega);
 
                             /*String inicioPrimerTurnoEntrega = UtilesHelper.getValorCelda(sheet, 9, "B");
                             String finPrimerTurnoEntrega = UtilesHelper.getValorCelda(sheet, 9, "C");
@@ -2271,8 +2262,8 @@ namespace Cotizador.Controllers
                             String finSegundoTurnoEntrega = UtilesHelper.getValorCelda(sheet, 10, "C");*/
 
                             Pedido pedido = this.instanciarPedidoCargaMasiva(ruc, solicitante,
-                                codigoCentroCostosCliente, codigoCentroCostosMP, nombreCentroCostos,
-                                direccionEntrega, sedeMP, ubigeo, observaciones, fechaEntregaDesdeGeneral, fechaEntregaHasta,
+                                numeroRequerimiento,
+                                direccionEntrega, observaciones, fechaEntregaDesdeGeneral, fechaEntregaHasta,
                                 inicioPrimerTurnoEntrega, finPrimerTurnoEntrega, inicioSegundoTurnoEntrega, finSegundoTurnoEntrega,
                                 numeroOrdenCompra, tipoPedido, tipoPedidoVenta, tipoPedidoTrasladoInterno, facturaConsolidada,
                                 numeroGrupo);
@@ -2282,10 +2273,10 @@ namespace Cotizador.Controllers
                         else if(tipoCabecera.Equals("D"))
                         {
 
-                            String skuMP = UtilesHelper.getValorCelda(sheet, row, "D");
-                            int unidadAlternativa = UtilesHelper.getValorCeldaInt(sheet, row, "F");
-                            int cantidad = UtilesHelper.getValorCeldaInt(sheet, row, "G");
-                            decimal precioNeto = UtilesHelper.getValorCeldaDecimal(sheet, row, "H");
+                            String skuMP = UtilesHelper.getValorCelda(sheet, row, "E");
+                            int unidadAlternativa = UtilesHelper.getValorCeldaInt(sheet, row, "G");
+                            int cantidad = UtilesHelper.getValorCeldaInt(sheet, row, "H");
+                            decimal precioNeto = UtilesHelper.getValorCeldaDecimal(sheet, row, "I");
 
                             if (cantidad > 0 && precioNeto > 0)
                             {
@@ -2301,33 +2292,20 @@ namespace Cotizador.Controllers
                         Log log = new Log(ex.ToString() + " paso:", TipoLog.Error, usuario);
                         LogBL logBL = new LogBL();
                         logBL.insertLog(log);
-
-
+                        throw ex;
                     }
                 }
 
                 String numerosPedido = String.Empty;
-
-
                 int contadorPedidos = 0;
 
                 foreach (Pedido pedido in pedidoList)
                 {
-
                     pedidoBL.InsertPedido(pedido);
                     numerosPedido = numerosPedido + pedido.numeroPedidoString;
-
                     if (pedido.montoSubTotal != subTotales[contadorPedidos])
                     {
                         numerosPedido = numerosPedido + "[Diferencia subtotal] ";
-                    }
-                    if (!pedido.ubigeoEntrega.Id.Equals(ubigeos[contadorPedidos]))
-                    {
-                        numerosPedido = numerosPedido + "[Diferencia ubigeo] ";
-                    }
-                    if (!pedido.direccionEntrega.descripcion.Equals(direccionesEntrega[contadorPedidos]))
-                    {
-                        numerosPedido = numerosPedido + "[Diferencia dirección entrega] ";
                     }
 
                     numerosPedido = numerosPedido + ",";
@@ -2337,7 +2315,7 @@ namespace Cotizador.Controllers
                 }
 
                 ViewBag.numerosPedido = numerosPedido.Substring(0, numerosPedido.Length - 1);
-
+                ViewBag.numeroGrupo = numeroGrupo;
             }
             catch (Exception ex)
             {
@@ -2345,7 +2323,8 @@ namespace Cotizador.Controllers
                 Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
-                return View("CargaIncorrecta");
+                throw ex;
+                //return View("CargaIncorrecta");
             }
 
             return View();

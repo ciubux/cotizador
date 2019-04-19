@@ -1048,15 +1048,15 @@
                         <div class="row">
                             <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
-                                    @Html.LabelFor(dv => documentoVenta.serieDocumentoElectronico, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                                    @Html.LabelFor(dv => documentoVenta.serieNumero, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                                     <div class="col-xs-3">
-                                        <input class="form-control" type="text"  id="documentoVenta_serie" name="documentoVenta_serie" />
+                                        <input class="form-control" id="documentoVenta_serie" name="documentoVenta_serie" />
                                     </div>
                                     <div class="col-xs-1">
                                         -
                                     </div>
                                     <div class="col-xs-4">
-                                        <input class="form-control" type="text"  id="documentoVenta_numero" name="documentoVenta_numero" />
+                                        <input class="form-control" type="number" min="0"  id="documentoVenta_numero" name="documentoVenta_numero" />
                                     </div>
                                 </div>
                             </div>
@@ -1235,7 +1235,7 @@
                 <button type="button" id="btnCancelarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" id="btnEditarCliente" class="btn btn-primary">Editar Proveedor</button>
                 <button type="button" id="btnEditarVenta" class="btn btn-danger">Editar Compra</button>
-                <button type="button" id="btnAceptarFacturarPedido" class="btn btn-success">Registrar Factura</button>
+                <button type="button" id="btnAceptarFacturarNotaIngreso" class="btn btn-success">Registrar Factura</button>
             </div>
 
 
@@ -1499,9 +1499,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <input type="hidden" id="idDocumentoVenta" />
+                <input type="hidden" id="idDocumentoCompra" />
                 <button type="button" id="btnCancelarConfirmarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnConfirmarFacturarPedido" class="btn btn-success">Confirmar Generación Factura</button>
+                <button type="button" id="btnConfirmarFacturaCompra" class="btn btn-success">Confirmar Generación Factura</button>
             </div>
 
 

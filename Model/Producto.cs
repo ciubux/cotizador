@@ -11,10 +11,11 @@ namespace Model
         public Producto()
         {
             this.tipoProducto = TipoProducto.Bien;
+            this.ProductoPresentacionList = new List<ProductoPresentacion>();
         }
 
 
-       public Guid idProducto { get; set; }
+        public Guid idProducto { get; set; }
 
         [Display(Name = "Código (SKU):")]
         public String sku { get; set; }
@@ -22,7 +23,7 @@ namespace Model
         public String skuProveedor { get; set; }
         [Display(Name = "Descripción:")]
         public String descripcion { get; set; }
-        public Byte[] image { get; set; }     
+        public Byte[] image { get; set; }
         [Display(Name = "Proveedor:")]
         public String proveedor { get; set; }
         [Display(Name = "Familia:")]
@@ -57,25 +58,8 @@ namespace Model
         public String unidadEstandarInternacional { get; set; }
 
 
-
-
-
-
-
         public Decimal precioLista { get; set; }
-        public Decimal precioListaAnterior { get; set; }        
-
-
-
-
-
-
-
-
-
-
-
-
+        public Decimal precioListaAnterior { get; set; }
 
 
         [Display(Name = "Unidad de Venta:")]
@@ -98,30 +82,39 @@ namespace Model
 
         [Display(Name = "Unidad Proveedor:")]
         public String unidadProveedor { get; set; }
+
+
+        /// <summary>
+        /// El campo equivalencia puede contener la equivalencia con respecto a la unidad de proveedor o alternativa
+        /// En caso que la unidad se la estandar entonces la equivalencia debe ser 1
+        /// </summary>
+   //     public decimal equivalencia { get; set; }
+
+
         // private int _equivalencia;
         [Display(Name = "Equivalencia Und. Alt.:")]
-        public int equivalencia { get; set; }
+        public int equivalenciaAlternativa { get; set; }
 
         [Display(Name = "Equivalencia Und. Prov.:")]
         public int equivalenciaProveedor { get; set; }
 
-       
+
 
         [Display(Name = "Precio Lima:")]
-        public Decimal precioSinIgv { get;set;}
+        public Decimal precioSinIgv { get; set; }
 
 
         [Display(Name = "Precio Provincias:")]
         public Decimal precioProvinciaSinIgv { get; set; }
 
-        [Display(Name = "Precio Alternativo:")]
-        public Decimal precioAlternativoSinIgv
-        {
-            get
-            {
-                return Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, precioSinIgv / (equivalencia==0?1:equivalencia )));
-            }
-        }
+        /*     [Display(Name = "Precio Alternativo:")]
+             public Decimal precioAlternativoSinIgv
+             {
+                 get
+                 {
+                     return Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, precioSinIgv / (equivalencia==0?1:equivalencia )));
+                 }
+             }*/
 
         public List<PrecioClienteProducto> precioListaList { get; set; }
 
@@ -135,7 +128,7 @@ namespace Model
         ///<return>
         ///Retorna el costo del producto en la unidad estándar
         ///</return>
-        public Decimal costoSinIgv { get;set; }
+        public Decimal costoSinIgv { get; set; }
 
         ///<summary>
         ///Costo sin IGV del producto calculado en la unidad alternativa, no permite setear el valor.
@@ -143,13 +136,13 @@ namespace Model
         ///<return>
         ///Retorna el costo del producto calculado en la unidad alternativa en formato de dos decimales.
         ///</return>
-        public Decimal costoAlternativoSinIgv
+     /*   public Decimal costoAlternativoSinIgv
         {
             get
             {
                 return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoSinIgv / (equivalencia == 0 ? 1 : equivalencia)));
             }
-        }
+        }*/
 
         ///<summary>
         ///Costo del producto en la unidad estándar calculado con IGV o sin IGV dependiendo de la opción seleccionada, se utiliza en DocumentoDetalle
@@ -158,6 +151,8 @@ namespace Model
         ///Retorna el costo del producto en la unidad estándar calculado con IGV o sin IGV dependiendo de la opción seleccionada
         ///</return>
         public Decimal costoLista { get; set; }
+
+        public Decimal costoListaAnterior { get; set; }
 
 
         public override string ToString()
@@ -169,12 +164,6 @@ namespace Model
 
 
         public int tipoProductoVista { get; set; }
-
-
-
-
-
-
 
         [Display(Name = "Tipo:")]
         public TipoProducto tipoProducto { get; set; }
@@ -200,10 +189,19 @@ namespace Model
             }
         }
 
-        /*     public Guid idFamilia { get; set; }
-    public Guid idProveedor { get; set; }
-    public Guid idUnidad { get; set; }*/
-        /*  public String clase { get; set; }
-public String marca { get; set; }*/
+        public List<ProductoPresentacion> ProductoPresentacionList { get; set; }
+
+        public ProductoPresentacion getProductoPresentacion(int idProductoPresentacion) {
+            if (ProductoPresentacionList != null)
+            {
+                return ProductoPresentacionList.Where(p => p.IdProductoPresentacion == idProductoPresentacion).FirstOrDefault();
+            }
+            return null;
+        }
+        public String UnidadConteo { get; set; }
+        public int EquivalenciaUnidadAlternativaUnidadConteo { get; set; }
+        public int EquivalenciaUnidadStandarUnidadConteo { get; set; }
+        public int EquivalenciaUnidadProveedorUnidadConteo { get; set; }
+        public int Stock { get; set; }
     }
 }

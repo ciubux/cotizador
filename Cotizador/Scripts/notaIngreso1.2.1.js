@@ -367,7 +367,6 @@ jQuery(function ($) {
         });
     });
 
-
  
 
 
@@ -563,7 +562,7 @@ jQuery(function ($) {
         $("#btnEditarCliente").attr('disabled', 'disabled');
         $("#btnEditarVenta").attr('disabled', 'disabled');
         $("#btnAceptarFacturarPedido").attr('disabled', 'disabled');
-        $("#btnConfirmarFacturarPedido").attr('disabled', 'disabled');
+        $("#btnConfirmarFacturaCompra").attr('disabled', 'disabled');
         $("#btnCancelarConfirmarFacturarPedido").attr('disabled', 'disabled');
     }
 
@@ -572,7 +571,7 @@ jQuery(function ($) {
         $("#btnEditarCliente").removeAttr('disabled');
         $("#btnEditarVenta").removeAttr('disabled');
         $("#btnAceptarFacturarPedido").removeAttr('disabled');
-        $("#btnConfirmarFacturarPedido").removeAttr('disabled');
+        $("#btnConfirmarFacturaCompra").removeAttr('disabled');
         $("#btnCancelarConfirmarFacturarPedido").removeAttr('disabled');
     }
 
@@ -1308,7 +1307,7 @@ jQuery(function ($) {
     }
 
 
-    $("#btnAceptarFacturarPedido").click(function () {
+    $("#btnAceptarFacturarNotaIngreso").click(function () {
         if ($("#verRazonSocialSunat").html() == "") {
             alert("No se han obtenido los datos del proveedor desde SUNAT.");
             return false;
@@ -1351,8 +1350,47 @@ jQuery(function ($) {
             return false;
         }  
 
-         var serie = $("#documentoVenta_serie").val();
-         var numero = $("#documentoVenta_numero").val();
+        if ($("#tipoPago").val() == 0) {
+            $("#tipoPago").focus();
+            $.alert({
+                title: 'Validación',
+                type: 'orange',
+                content: 'La Condición de Pago NO ASIGNADO es inválido. Conctate con el área de Créditos para que apruebe la Condición de Pago.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }
+
+        if ($("#documentoVenta_serie").val().trim().length != 4) {
+            $("#documentoVenta_serie").focus();
+            $.alert({
+                title: 'Validación',
+                type: 'orange',
+                content: 'La serie del documento debe tener 4 caracteres',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }  
+
+        if ($("#documentoVenta_numero").val().length == 0 || $("#documentoVenta_numero").val() < 0) {
+            $("#documentoVenta_numero").focus();
+            $.alert({
+                title: 'Validación',
+                type: 'orange',
+                content: 'Debe ingresar el número de documento',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }  
+
+        var serie = $("#documentoVenta_serie").val();
+        var numero = $("#documentoVenta_numero").val();
         var fechaEmision = $("#documentoVenta_fechaEmision").val();
         var horaEmision = $("#documentoVenta_horaEmision").val();
         var fechaVencimiento = $("#documentoVenta_fechaVencimiento").val();
@@ -1385,6 +1423,7 @@ jQuery(function ($) {
                 formaPago: formaPago,
                 observaciones: observaciones,
                 serie: serie,
+                numero: numero,
                 numeroReferenciaCliente: numeroReferenciaCliente
             },
             error: function (resultado) {
@@ -1392,52 +1431,48 @@ jQuery(function ($) {
                 mostrarMensajeErrorProceso(MENSAJE_ERROR);
                 activarBotonesFacturar();
             },
-            success: function (documentoVenta) {
+            success: function (documentoCompra) {
                 $('body').loadingModal('hide')
-
-                if (documentoVenta.cPE_RESPUESTA_BE.CODIGO == "001") {
-                    $("#idDocumentoVenta").val(documentoVenta.idDocumentoVenta);
+                if (documentoCompra.cPE_RESPUESTA_COMPRA.CODIGO == "001") {
+                    $("#idDocumentoCompra").val(documentoCompra.idDocumentoCompra);
                     /*FECHA HORA EMISIÓN -  SERIE CORRELATIVO*/
-                    $("#vpFEC_EMI_HOR_EMI").html(documentoVenta.cPE_CABECERA_BE.FEC_EMI + ' ' + documentoVenta.cPE_CABECERA_BE.HOR_EMI) 
-                    $("#vpSERIE_CORRELATIVO").html(documentoVenta.cPE_CABECERA_BE.SERIE + ' ' + documentoVenta.cPE_CABECERA_BE.CORRELATIVO);
+                    $("#vpFEC_EMI_HOR_EMI").html(documentoCompra.cPE_CABECERA_COMPRA.FEC_EMI + ' ' + documentoCompra.cPE_CABECERA_COMPRA.HOR_EMI) 
+                    $("#vpSERIE_CORRELATIVO").html(documentoCompra.cPE_CABECERA_COMPRA.SERIE + ' ' + documentoCompra.cPE_CABECERA_COMPRA.CORRELATIVO);
 
                     /*NOMBRE COMERCIAL CLIENTE*/
-                    $("#vpNOM_RCT").html(documentoVenta.cPE_CABECERA_BE.NOM_RCT);
+                    $("#vpNOM_RCT").html(documentoCompra.cPE_CABECERA_COMPRA.NOM_RCT);
 
                     /*DIRECCION - ORDEN DE COMPRA*/
-                    $("#vpDIR_DES_RCT").html(documentoVenta.cPE_CABECERA_BE.DIR_DES_RCT);
-                    $("#vpNRO_ORD_COM").html(documentoVenta.cPE_CABECERA_BE.NRO_ORD_COM);
+                    $("#vpDIR_DES_RCT").html(documentoCompra.cPE_CABECERA_COMPRA.DIR_DES_RCT);
+                    $("#vpNRO_ORD_COM").html(documentoCompra.cPE_CABECERA_COMPRA.NRO_ORD_COM);
 
                     /*RUC - NRO GUIA*/
-                    $("#vpNRO_DOC_RCT").html(documentoVenta.cPE_CABECERA_BE.NRO_DOC_RCT);
-                    $("#vpNRO_GRE").html(documentoVenta.cPE_CABECERA_BE.NRO_GRE);
-
+                    $("#vpNRO_DOC_RCT").html(documentoCompra.cPE_CABECERA_COMPRA.NRO_DOC_RCT);
+                    $("#vpNRO_GRE").html(documentoCompra.cPE_CABECERA_COMPRA.NRO_GRE);
                     /*OBSERVACIONES*/ /*CODIGO CLIENTE*/
                     $("#vpOBSERVACIONES").html($("#documentoVenta_observaciones").val());                    
-                    $("#vpCODIGO_CLIENTE").html(documentoVenta.cliente.codigo);
+                    $("#vpCODIGO_CLIENTE").html(documentoCompra.proveedor.codigo);
 
-
-                    $("#vpCOND_PAGO").html(documentoVenta.tipoPagoString);
-                    $("#vpFEC_VCTO").html(documentoVenta.cPE_CABECERA_BE.FEC_VCTO);
+                    $("#vpCOND_PAGO").html(documentoCompra.tipoPagoString);
+                    $("#vpFEC_VCTO").html(documentoCompra.cPE_CABECERA_COMPRA.FEC_VCTO);
                     
 
-                    $("#vpMNT_TOT_GRV").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRV);
-                    $("#vpMNT_TOT_GRV_NAC").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRV_NAC);
-                    $("#vpMNT_TOT_INF").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_INF);
-                    $("#vpMNT_TOT_EXR").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_EXR);
-                    $("#vpMNT_TOT_GRT").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRT);
-                    $("#vpMNT_TOT_VAL_VTA").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_VAL_VTA);
-                    $("#vpMNT_TOT_TRB_IGV").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_TRB_IGV);
-                    $("#pvMNT_TOT_PRC_VTA").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_PRC_VTA);
+                    $("#vpMNT_TOT_GRV").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_GRV);
+                    $("#vpMNT_TOT_GRV_NAC").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_GRV_NAC);
+                    $("#vpMNT_TOT_INF").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_INF);
+                    $("#vpMNT_TOT_EXR").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_EXR);
+                    $("#vpMNT_TOT_GRT").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_GRT);
+                    $("#vpMNT_TOT_VAL_VTA").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_VAL_VTA);
+                    $("#vpMNT_TOT_TRB_IGV").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_TRB_IGV);
+                    $("#pvMNT_TOT_PRC_VTA").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_PRC_VTA);
                    
 
                     $("#modalVistaPreviaFactura").modal();
 
-
                     $("#tableDetalleFacturaVistaPrevia > tbody").empty();
                     //FooTable.init('#tableCotizaciones');
                     $("#tableDetalleFacturaVistaPrevia").footable();
-                    var lineasFactura = documentoVenta.cPE_DETALLE_BEList;
+                    var lineasFactura = documentoCompra.cPE_DETALLE_COMPRAList;
 
                     for (var i = 0; i < lineasFactura.length; i++) {
 
@@ -1475,11 +1510,11 @@ jQuery(function ($) {
                     //documentoVenta.CPE_CABECERA_BE
                     
                         
-                  
+                   
                     activarBotonesFacturar();
                 }
                 else {
-                    mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + documentoVenta.cPE_RESPUESTA_BE.DETALLE);
+                    mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + documentoVenta.cPE_RESPUESTA_COMPRA.DETALLE);
                     //$("#btnAceptarFacturarPedido").removeAttr("disabled");
                     activarBotonesFacturar();
                 }
@@ -1495,7 +1530,7 @@ jQuery(function ($) {
     });
 
 
-    $("#btnConfirmarFacturarPedido").click(function () {
+    $("#btnConfirmarFacturaCompra").click(function () {
 
         
         if ($("#verRazonSocialSunat").html() == "") {
@@ -1548,14 +1583,14 @@ jQuery(function ($) {
 
 
         var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
-        var idDocumentoVenta = $("#idDocumentoVenta").val();
+        var idDocumentoCompra = $("#idDocumentoCompra").val();
 
         $.ajax({
-            url: "/Factura/ConfirmarCreacion",
+            url: "/DocumentoCompra/ConfirmarCreacion",
             type: 'POST',
             dataType: 'JSON',
             data: {
-                idDocumentoVenta: idDocumentoVenta
+                idDocumentoCompra: idDocumentoCompra
             },
             error: function (resultado) {
                 $('body').loadingModal('hide')
@@ -1565,7 +1600,7 @@ jQuery(function ($) {
             success: function (resultado) {
                 $('body').loadingModal('hide')
 
-                if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
+                if (resultado.CPE_RESPUESTA_COMPRA.CODIGO == "001") {
                     $.alert({
                         //icon: 'fa fa-warning',
                         title: TITLE_EXITO,
@@ -1578,7 +1613,7 @@ jQuery(function ($) {
                     activarBotonesFacturar();
                 }
                 else {
-                    mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE);
+                    mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_COMPRA.DETALLE);
                     //$("#btnAceptarFacturarPedido").removeAttr("disabled");
                     activarBotonesFacturar();
                 }
@@ -2706,6 +2741,7 @@ jQuery(function ($) {
 
         $("#idPedido").val(pedido.idPedido);
 
+
         $("#verNumero").html(pedido.numeroPedidoString);
         $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
         $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
@@ -2713,13 +2749,16 @@ jQuery(function ($) {
 
         $("#verUsuarioNombre").html(pedido.usuario.nombre);
         $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
-
+       
+        $("#documentoVenta_serie").val($("#ver_notaIngreso_serieDocumentoVentaReferencia").html());
+        $("#documentoVenta_numero").val($("#ver_notaIngreso_numeroDocumentoVentaReferencia").html());
+       // $("#ver_notaIngreso_tipoDocumentoVentaReferencia").html(notaIngreso.tipoDocumentoVentaReferenciaString);
 
 
         if (pedido.tipoPedidoCompra == "84") {
             $("#divReferenciaCliente").hide();
             $("#divCiudadSolicitante").show();
-            $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+            $("#verCiudadSolicitante").html(pedido.proveedor.ciudad.nombre);
         }
         else {
             $("#divReferenciaCliente").show();
@@ -2727,37 +2766,37 @@ jQuery(function ($) {
         }
         
         $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
-
+     
         $("#verCiudad").html(pedido.ciudad.nombre);
-        $("#idClienteFacturacion").val(pedido.cliente.idCliente);
-        $("#verCliente").html(pedido.cliente.razonSocial);
-        $("#verClienteCodigo").html(pedido.cliente.codigo);
+        $("#idClienteFacturacion").val(pedido.proveedor.idCliente);
+        $("#verCliente").html(pedido.proveedor.razonSocial);
+        $("#verClienteCodigo").html(pedido.proveedor.codigo);
         $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
         $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
         $("#verObservacionesPedido").html(pedido.observaciones);
 
-        if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_RUC) {
+        if (pedido.proveedor.tipoDocumento == CONS_TIPO_DOC_CLIENTE_RUC) {
             $("#modalFacturarTitle").html("<b>Crear Factura</b>");
             $("#descripcionDatosDocumento").html("<b>Datos de la Factura</b>");
             $("#observacionesDocumento").html("Observaciones Factura:");
             $("#btnAceptarFacturarPedido").html("Generar Factura");
             $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_RUC);
         }
-        else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_DNI) {
+        else if (pedido.proveedor.tipoDocumento == CONS_TIPO_DOC_CLIENTE_DNI) {
             $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
             $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
             $("#observacionesDocumento").html("Observaciones Boleta:");
             $("#btnAceptarFacturarPedido").html("Generar Boleta");
             $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_DNI);
         }
-        else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
+        else if (pedido.proveedor.tipoDocumento == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
             $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
             $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
             $("#observacionesDocumento").html("Observaciones Boleta:");
             $("#btnAceptarFacturarPedido").html("Generar Boleta");
             $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA);
         }
-
+      
 
         $("#nombreArchivos > li").remove().end();
 
@@ -2838,15 +2877,15 @@ jQuery(function ($) {
                 '</tr>';
         }
 
-        $("#verRazonSocialSunat").html(pedido.cliente.razonSocialSunat);
-        $("#verRUC").html(pedido.cliente.ruc);
-        $("#verDireccionDomicilioLegalSunat").html(pedido.cliente.direccionDomicilioLegalSunat);
-        $("#verCodigo").html(pedido.cliente.codigo);
+        $("#verRazonSocialSunat").html(pedido.proveedor.razonSocialSunat);
+        $("#verRUC").html(pedido.proveedor.ruc);
+        $("#verDireccionDomicilioLegalSunat").html(pedido.proveedor.direccionDomicilioLegalSunat);
+        $("#verCodigo").html(pedido.proveedor.codigo);
 
         $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
      
 
-        $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
+        $("#verCorreoEnvioFactura").html(pedido.proveedor.correoEnvioFactura);
         var fecha = new Date();
         var month = fecha.getMonth() + 1;
         var day = fecha.getDate();
@@ -2858,10 +2897,10 @@ jQuery(function ($) {
         $("#documentoVenta_fechaVencimiento").val(invertirFormatoFecha(venta.notaIngreso.fechaEmision.substr(0, 10)));
         $("#documentoVenta_horaEmision").val(getHoraActual());
 
-        $("#tipoPago").val(pedido.cliente.tipoPagoFactura);
+        $("#tipoPago").val(pedido.proveedor.tipoPagoFactura);
         //$("#tipoPago").attr("disabled", "disabled");
         calcularFechaVencimiento();
-        $("#formaPago").val(pedido.cliente.formaPagoFactura);
+        $("#formaPago").val(pedido.proveedor.formaPagoFactura);
       /*  $('#documentoVenta_serie')
             .find('option')
             .remove()

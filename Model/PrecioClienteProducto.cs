@@ -35,7 +35,7 @@ namespace Model
 
         public String numeroCotizacion { get; set; }
 
-        public int equivalencia { get; set; }
+        public Decimal equivalencia { get; set; }
 
         public Cliente cliente { get; set; }
 

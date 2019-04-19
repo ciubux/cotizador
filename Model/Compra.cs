@@ -9,9 +9,11 @@ namespace Model
 {
     public class Compra : Transaccion
     {
-        public int idCompra { get; set; }
+        public Guid idCompra { get; set; }
         public MovimientoAlmacen notaIngreso { get; set; }
         public DocumentoCompra documentoCompra { get; set; }
+
+        private new MovimientoAlmacen guiaRemision { get; set; }
     }
 }
 

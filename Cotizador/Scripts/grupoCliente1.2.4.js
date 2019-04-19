@@ -941,7 +941,7 @@ jQuery(function ($) {
                 editRow: function (row) {
                     var values = row.val();
                     var idProducto = values.idProducto;
-                    alert(idProducto);
+                    
                 },
                 deleteRow: function (row) {
                     //  if (confirm('¿Esta seguro de eliminar el producto?')) {
@@ -1562,7 +1562,7 @@ jQuery(function ($) {
 
                 }
                 FooTable.init('#tableMiembrosGrupo');
-                alert("s")
+                
 
                 $("#modalVerGrupoCliente").modal('show');                        
             }

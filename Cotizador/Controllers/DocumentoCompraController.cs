@@ -16,88 +16,72 @@ using System.Web.Mvc;
 
 namespace Cotizador.Controllers
 {
-    public class DocumentoCompraController : Controller
+    public class DocumentoCompraController : ParentController
     {
-        // GET: Factura
-        private DocumentoCompra FacturaSession
+
+
+        private DocumentoCompra documentoCompraSession
         {
             get
             {
-                DocumentoCompra factura = null;
+                DocumentoCompra documentoCompra = null;
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
-                    case Constantes.paginas.BusquedaFacturas: factura = (DocumentoCompra)this.Session[Constantes.VAR_SESSION_FACTURA_BUSQUEDA]; break;
-                    case Constantes.paginas.MantenimientoFactura: factura = (DocumentoCompra)this.Session[Constantes.VAR_SESSION_FACTURA]; break;
+                    case Constantes.paginas.BusquedaDocumentosCompra: documentoCompra = (DocumentoCompra)this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_BUSQUEDA]; break;
                 }
-                return factura;
+                return documentoCompra;
             }
             set
             {
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
-                    case Constantes.paginas.BusquedaFacturas: this.Session[Constantes.VAR_SESSION_FACTURA_BUSQUEDA] = value; break;
-                    case Constantes.paginas.MantenimientoFactura: this.Session[Constantes.VAR_SESSION_FACTURA] = value; break;
+                    case Constantes.paginas.BusquedaDocumentosCompra: this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_BUSQUEDA] = value; break;
                 }
             }
         }
 
 
+        [HttpPost]
         public String Create()
         {
-
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             try
             {
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
-
-
-
-                DocumentoCompra DocumentoCompra = new DocumentoCompra();
-
+                Compra compra = (Compra)this.Session[Constantes.VAR_SESSION_COMPRA_VER];
+                DocumentoCompra documentoCompra = new DocumentoCompra();
                 String[] fecha = this.Request.Params["fechaEmision"].Split('/');
                 String[] hora = this.Request.Params["horaEmision"].Split(':');
-                DocumentoCompra.serie = this.Request.Params["serie"];
-                DocumentoCompra.cliente = venta.pedido.cliente;
-                DocumentoCompra.venta = venta;
-
-
-                DocumentoCompra.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
-
+                documentoCompra.serie = this.Request.Params["serie"];
+                documentoCompra.numero = this.Request.Params["numero"];
+                documentoCompra.proveedor = compra.pedido.proveedor;
+                documentoCompra.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
                 fecha = this.Request.Params["fechaVencimiento"].Split('/');
-                DocumentoCompra.fechaVencimiento = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+                documentoCompra.fechaVencimiento = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+                documentoCompra.tipoPago = (DocumentoCompra.TipoPago)Int32.Parse(this.Request.Params["tipoPago"]);
+                documentoCompra.formaPago = (DocumentoCompra.FormaPago)Int32.Parse(this.Request.Params["formaPago"]);
+                documentoCompra.usuario = usuario;
+                documentoCompra.compra = compra;
 
-                DocumentoCompra.tipoPago = (DocumentoCompra.TipoPago)Int32.Parse(this.Request.Params["tipoPago"]);
-                DocumentoCompra.formaPago = (DocumentoCompra.FormaPago)Int32.Parse(this.Request.Params["formaPago"]);
-                DocumentoCompra.usuario = usuario;
-
-
-
-
-                //DocumentoCompra.MovimentoALmacen = new 
-              //  DocumentoCompra.venta = new Venta();
-                DocumentoCompra.venta.guiaRemision = new GuiaRemision();
-                DocumentoCompra.venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(this.Request.Params["idMovimientoAlmacen"]);
-
-           //     DocumentoCompra.venta.pedido = pedido;
-
-                DocumentoCompra.venta.pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
-                DocumentoCompra.observaciones = this.Request.Params["observaciones"];
+                documentoCompra.compra.notaIngreso = new NotaIngreso();
+                documentoCompra.compra.notaIngreso.idMovimientoAlmacen = Guid.Parse(this.Request.Params["idMovimientoAlmacen"]);
+                documentoCompra.compra.pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
+                documentoCompra.observaciones = this.Request.Params["observaciones"];
 
                 DocumentoCompraBL DocumentoCompraBL = new DocumentoCompraBL();
 
-                if (DocumentoCompra.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
-                    DocumentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.Factura;
-                else if (DocumentoCompra.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
-                    DocumentoCompra.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
-                    DocumentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.BoletaVenta;
+                if (documentoCompra.compra.pedido.proveedor.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
+                    documentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.Factura;
+                else if (documentoCompra.compra.pedido.proveedor.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
+                    documentoCompra.compra.pedido.proveedor.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
+                    documentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.BoletaVenta;
                 else
                     throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
 
 
-                DocumentoCompra = DocumentoCompraBL.InsertarDocumentoCompra(DocumentoCompra);
+                documentoCompra = DocumentoCompraBL.InsertarDocumentoCompra(documentoCompra);
               
 
-                return JsonConvert.SerializeObject(DocumentoCompra);
+                return JsonConvert.SerializeObject(documentoCompra);
             }
             catch (Exception ex)
             {
@@ -108,6 +92,52 @@ namespace Cotizador.Controllers
             }
         }
 
+        public String ConfirmarCreacion()
+        {
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            try
+            {
+                Compra compra = (Compra)this.Session[Constantes.VAR_SESSION_COMPRA_VER];
+                DocumentoCompra documentoCompra = new DocumentoCompra();
+                documentoCompra.compra = compra;
+                documentoCompra.idDocumentoCompra = int.Parse(this.Request.Params["idDocumentoCompra"]);
+                documentoCompra.proveedor = compra.pedido.proveedor;
+                documentoCompra.usuario = usuario;
+
+                if (documentoCompra.compra.pedido.proveedor.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
+                    documentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.Factura;
+                else if (documentoCompra.compra.pedido.proveedor.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
+                     documentoCompra.compra.pedido.proveedor.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
+                    documentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.BoletaVenta;
+                else
+                    throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
+
+                DocumentoCompraBL DocumentoCompraBL = new DocumentoCompraBL();
+
+
+                CPE_RESPUESTA_COMPRA cPE_RESPUESTA_COMPRA = DocumentoCompraBL.procesarCPE(documentoCompra);
+
+                var otmp = new
+                {
+                    CPE_RESPUESTA_COMPRA = cPE_RESPUESTA_COMPRA,
+                    serieNumero = documentoCompra.serieNumero,
+                    idDocumentoCompra = documentoCompra.idDocumentoCompra
+                };
+
+                return JsonConvert.SerializeObject(otmp);
+            }
+            catch (Exception ex)
+            {
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+                return ex.ToString();
+            }
+        }
+
+
+        [HttpPost]
         public String Show()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -124,11 +154,11 @@ namespace Cotizador.Controllers
 
                 if (DocumentoCompra.tipoDocumento == DocumentoCompra.TipoDocumento.NotaCrédito)
                 {
-                    DocumentoCompra.tipoNotaCredito = (DocumentoCompra.TiposNotaCredito)Int32.Parse(DocumentoCompra.cPE_CABECERA_BE.COD_TIP_NC);
+                    DocumentoCompra.tipoNotaCredito = (DocumentoCompra.TiposNotaCredito)Int32.Parse(DocumentoCompra.cPE_CABECERA_COMPRA.COD_TIP_NC);
                 }
                 else if (DocumentoCompra.tipoDocumento == DocumentoCompra.TipoDocumento.NotaDébito)
                 {
-                    DocumentoCompra.tipoNotaDebito = (DocumentoCompra.TiposNotaDebito)Int32.Parse(DocumentoCompra.cPE_CABECERA_BE.COD_TIP_ND);
+                    DocumentoCompra.tipoNotaDebito = (DocumentoCompra.TiposNotaDebito)Int32.Parse(DocumentoCompra.cPE_CABECERA_COMPRA.COD_TIP_ND);
                 }
 
 
@@ -146,44 +176,109 @@ namespace Cotizador.Controllers
         }
 
 
-
- /*       public String iniciarRefacturacion()
+        public String Search()
         {
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            VentaBL ventaBL = new VentaBL();
-            Transaccion transaccion = new Transaccion();
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaDocumentosCompra;
 
-            transaccion.DocumentoCompra = (DocumentoCompra)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
-            transaccion.DocumentoCompra.venta = null;
-            transaccion.DocumentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.Factura;
-            transaccion.DocumentoCompra.idDocumentoCompra = Guid.Parse(Request["idDocumentoCompra"].ToString());
+            String[] desde = this.Request.Params["fechaEmisionDesde"].Split('/');
+            this.documentoCompraSession.fechaEmisionDesde = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
 
-            transaccion.documentoReferencia = new DocumentoReferencia();
-            transaccion.documentoReferencia.tipoDocumento = (DocumentoCompra.TipoDocumento)Int32.Parse(transaccion.DocumentoCompra.cPE_CABECERA_BE.TIP_CPE);
-            String[] fechaEmisionArray = transaccion.DocumentoCompra.cPE_CABECERA_BE.FEC_EMI.Split('-');
-            transaccion.documentoReferencia.fechaEmision = new DateTime(Int32.Parse(fechaEmisionArray[0]), Int32.Parse(fechaEmisionArray[1]), Int32.Parse(fechaEmisionArray[2]));
-            
-            transaccion.documentoReferencia.serie = transaccion.DocumentoCompra.cPE_CABECERA_BE.SERIE;
-            transaccion.documentoReferencia.numero = transaccion.DocumentoCompra.cPE_CABECERA_BE.CORRELATIVO;
+            String[] hasta = this.Request.Params["fechaEmisionHasta"].Split('/');
+            this.documentoCompraSession.fechaEmisionHasta = new DateTime(Int32.Parse(hasta[2]), Int32.Parse(hasta[1]), Int32.Parse(hasta[0]));
 
-            transaccion = ventaBL.GetPlantillaVenta(transaccion, usuario);
-            if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+
+            if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
             {
-               // venta.tipoNotaCredito = (DocumentoCompra.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
-                transaccion.DocumentoCompra.fechaEmision = DateTime.Now;
-                transaccion.DocumentoCompra.fechaVencimiento = transaccion.DocumentoCompra.fechaEmision.Value;
-                //venta.DocumentoCompra.formaPago
-                //Temporal
-                Pedido pedido = transaccion.pedido;
-                pedido.ciudadASolicitar = new Ciudad();
-
-                PedidoBL pedidoBL = new PedidoBL();
-                pedidoBL.calcularMontosTotales(pedido);
-                this.Session[Constantes.VAR_SESSION_FACTURA] = transaccion;
+                this.documentoCompraSession.numero = "0";
             }
-            return JsonConvert.SerializeObject(transaccion);
+            else
+            {
+                this.documentoCompraSession.numero = this.Request.Params["numero"];
+            }
 
-        }*/
+
+            if (this.Request.Params["numeroPedido"] == null || this.Request.Params["numeroPedido"].Trim().Length == 0)
+            {
+                this.documentoCompraSession.pedido.numeroPedido = 0;
+            }
+            else
+            {
+                this.documentoCompraSession.pedido.numeroPedido = int.Parse(this.Request.Params["numeroPedido"]);
+            }
+
+
+            if (this.Request.Params["numeroGuiaRemision"] == null || this.Request.Params["numeroGuiaRemision"].Trim().Length == 0)
+            {
+                this.documentoCompraSession.guiaRemision.numeroDocumento = 0;
+            }
+            else
+            {
+                this.documentoCompraSession.guiaRemision.numeroDocumento = int.Parse(this.Request.Params["numeroGuiaRemision"]);
+            }
+
+
+            this.documentoCompraSession.sku = this.Request.Params["sku"];
+
+
+
+
+            this.documentoCompraSession.estadoDocumentoSunatBusqueda = (DocumentoCompra.EstadosDocumentoSunatBusqueda)Int32.Parse(this.Request.Params["estadoDocumentoSunatBusqueda"]);
+            this.documentoCompraSession.tipoDocumento = (DocumentoCompra.TipoDocumento)Int32.Parse(this.Request.Params["tipoDocumento"]);
+
+            DocumentoCompraBL documentoCompraBL = new DocumentoCompraBL();
+
+            List<DocumentoCompra> documentoCompraList = documentoCompraBL.GetDocumentosCompra(this.documentoCompraSession);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+
+
+            //Se coloca en session el resultado de la búsqueda
+            this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_LISTA] = documentoCompraList;
+            //Se retorna la cantidad de elementos encontrados
+
+            return JsonConvert.SerializeObject(documentoCompraList);
+            //return pedidoList.Count();
+        }
+
+
+    /*       public String iniciarRefacturacion()
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                VentaBL ventaBL = new VentaBL();
+                Transaccion transaccion = new Transaccion();
+
+                transaccion.DocumentoCompra = (DocumentoCompra)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
+                transaccion.DocumentoCompra.venta = null;
+                transaccion.DocumentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.Factura;
+                transaccion.DocumentoCompra.idDocumentoCompra = Guid.Parse(Request["idDocumentoCompra"].ToString());
+
+                transaccion.documentoReferencia = new DocumentoReferencia();
+                transaccion.documentoReferencia.tipoDocumento = (DocumentoCompra.TipoDocumento)Int32.Parse(transaccion.DocumentoCompra.cPE_CABECERA_COMPRA.TIP_CPE);
+                String[] fechaEmisionArray = transaccion.DocumentoCompra.cPE_CABECERA_COMPRA.FEC_EMI.Split('-');
+                transaccion.documentoReferencia.fechaEmision = new DateTime(Int32.Parse(fechaEmisionArray[0]), Int32.Parse(fechaEmisionArray[1]), Int32.Parse(fechaEmisionArray[2]));
+
+                transaccion.documentoReferencia.serie = transaccion.DocumentoCompra.cPE_CABECERA_COMPRA.SERIE;
+                transaccion.documentoReferencia.numero = transaccion.DocumentoCompra.cPE_CABECERA_COMPRA.CORRELATIVO;
+
+                transaccion = ventaBL.GetPlantillaVenta(transaccion, usuario);
+                if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+                {
+                    // venta.tipoNotaCredito = (DocumentoCompra.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
+                    transaccion.DocumentoCompra.fechaEmision = DateTime.Now;
+                    transaccion.DocumentoCompra.fechaVencimiento = transaccion.DocumentoCompra.fechaEmision.Value;
+                    //venta.DocumentoCompra.formaPago
+                    //Temporal
+                    Pedido pedido = transaccion.pedido;
+                    pedido.ciudadASolicitar = new Ciudad();
+
+                    PedidoBL pedidoBL = new PedidoBL();
+                    pedidoBL.calcularMontosTotales(pedido);
+                    this.Session[Constantes.VAR_SESSION_FACTURA] = transaccion;
+                }
+                return JsonConvert.SerializeObject(transaccion);
+
+            }*/
 
         [HttpPost]
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
@@ -201,7 +296,7 @@ namespace Cotizador.Controllers
 
         public void ChangeBuscarSedesGrupoCliente()
         {
-            DocumentoCompra factura = this.FacturaSession;
+            DocumentoCompra factura = this.documentoCompraSession;
             if (this.Request.Params["buscarSedesGrupoCliente"] != null && Int32.Parse(this.Request.Params["buscarSedesGrupoCliente"]) == 1)
             {
                 factura.buscarSedesGrupoCliente = true;
@@ -211,7 +306,7 @@ namespace Cotizador.Controllers
                 factura.buscarSedesGrupoCliente = false;
             }
 
-            this.FacturaSession = factura;
+            this.documentoCompraSession = factura;
         }
 
         public void ChangeInputString()
@@ -248,50 +343,7 @@ namespace Cotizador.Controllers
 
 
 
-        public String ConfirmarCreacion()
-        {
-
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            try
-            {
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
-                DocumentoCompra DocumentoCompra = new DocumentoCompra();
-                DocumentoCompra.venta = venta;
-                DocumentoCompra.idDocumentoCompra  = int.Parse(this.Request.Params["idDocumentoCompra"]);
-                DocumentoCompra.cliente = venta.pedido.cliente;
-                DocumentoCompra.usuario = usuario;
-
-                if (DocumentoCompra.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
-                    DocumentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.Factura;
-                else if (DocumentoCompra.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
-                     DocumentoCompra.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
-                    DocumentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.BoletaVenta;
-                else
-                    throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
-
-                DocumentoCompraBL DocumentoCompraBL = new DocumentoCompraBL();
-
-
-                CPE_RESPUESTA_BE cPE_RESPUESTA_BE = DocumentoCompraBL.procesarCPE(DocumentoCompra);
-
-                var otmp = new
-                {
-                    CPE_RESPUESTA_BE = cPE_RESPUESTA_BE,
-                    serieNumero = DocumentoCompra.serieNumero,
-                    idDocumentoCompra = DocumentoCompra.idDocumentoCompra
-                };
-
-                return JsonConvert.SerializeObject(otmp);
-            }
-            catch (Exception ex)
-            {
-                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
-                LogBL logBL = new LogBL();
-                logBL.insertLog(log);
-                return ex.ToString();
-            }
-        }
-
+      
 
         public String ConfirmarCreacionFacturaConsolidada()
         {
@@ -301,31 +353,31 @@ namespace Cotizador.Controllers
             {
                 List<Guid> movimientoAlmacenIdList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
 
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
-                DocumentoCompra DocumentoCompra = new DocumentoCompra();
-                DocumentoCompra.venta = venta;
-                DocumentoCompra.idDocumentoCompra = int.Parse(this.Request.Params["idDocumentoCompra"]);
-                DocumentoCompra.cliente = venta.pedido.cliente;
-                DocumentoCompra.usuario = usuario;
+                Compra compra = (Compra)this.Session[Constantes.VAR_SESSION_COMPRA_VER];
+                DocumentoCompra documentoCompra = new DocumentoCompra();
+                documentoCompra.compra = compra;
+                documentoCompra.idDocumentoCompra = int.Parse(this.Request.Params["idDocumentoCompra"]);
+                documentoCompra.proveedor = compra.pedido.proveedor;
+                documentoCompra.usuario = usuario;
 
-                if (DocumentoCompra.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
-                    DocumentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.Factura;
-                else if (DocumentoCompra.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
-                     DocumentoCompra.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
-                    DocumentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.BoletaVenta;
+                if (documentoCompra.compra.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
+                    documentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.Factura;
+                else if (documentoCompra.compra.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
+                     documentoCompra.compra.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
+                    documentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.BoletaVenta;
                 else
                     throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
 
                 DocumentoCompraBL DocumentoCompraBL = new DocumentoCompraBL();
 
 
-                CPE_RESPUESTA_BE cPE_RESPUESTA_BE = DocumentoCompraBL.procesarCPE(DocumentoCompra, movimientoAlmacenIdList);
+                CPE_RESPUESTA_COMPRA cPE_RESPUESTA_COMPRA = DocumentoCompraBL.procesarCPE(documentoCompra, movimientoAlmacenIdList);
 
                 var otmp = new
                 {
-                    CPE_RESPUESTA_BE = cPE_RESPUESTA_BE,
-                    serieNumero = DocumentoCompra.serieNumero,
-                    idDocumentoCompra = DocumentoCompra.idDocumentoCompra
+                    CPE_RESPUESTA_BE = cPE_RESPUESTA_COMPRA,
+                    serieNumero = documentoCompra.serieNumero,
+                    idDocumentoCompra = documentoCompra.idDocumentoCompra
                 };
 
 
@@ -354,7 +406,7 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaFacturas;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaDocumentosCompra;
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -362,24 +414,26 @@ namespace Cotizador.Controllers
             }
             else
             {
-                /*
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.tomaPedidos && !usuario.apruebaPedidos)
+                if (!usuario.creaDocumentosCompra && !usuario.visualizaDocumentosCompra)
                 {
                     return RedirectToAction("Login", "Account");
-                }*/
+                }
             }
 
-            if (this.FacturaSession == null)
+
+
+
+            if (this.documentoCompraSession == null)
             {
-                instanciarfacturaBusqueda();
+                instanciarDocumentoCompraBusqueda();
             }
 
             
            
              int existeCliente = 0;
             //  if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
-            if (this.FacturaSession.cliente.idCliente != Guid.Empty)
+            if (this.documentoCompraSession.proveedor.idProveedor != Guid.Empty)
             {
                 existeCliente = 1;
             }
@@ -387,12 +441,12 @@ namespace Cotizador.Controllers
             GuiaRemision guiaRemision = new GuiaRemision();
             guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.Venta;
 
-            ViewBag.DocumentoCompra = this.FacturaSession;
-            ViewBag.fechaEmisionDesde = this.FacturaSession.fechaEmisionDesde.ToString(Constantes.formatoFecha);
-            ViewBag.fechaEmisionHasta = this.FacturaSession.fechaEmisionHasta.ToString(Constantes.formatoFecha);
-            ViewBag.DocumentoCompraList = this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+            ViewBag.DocumentoCompra = this.documentoCompraSession;
+            ViewBag.fechaEmisionDesde = this.documentoCompraSession.fechaEmisionDesde.ToString(Constantes.formatoFecha);
+            ViewBag.fechaEmisionHasta = this.documentoCompraSession.fechaEmisionHasta.ToString(Constantes.formatoFecha);
+            ViewBag.DocumentoCompraList = this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_LISTA];
             ViewBag.existeCliente = existeCliente;
-            ViewBag.pagina = (int)Constantes.paginas.BusquedaFacturas;
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaDocumentosCompra;
 
             ViewBag.Si = Constantes.MENSAJE_SI;
             ViewBag.No = Constantes.MENSAJE_NO;
@@ -413,7 +467,7 @@ namespace Cotizador.Controllers
 
         public void CleanBusqueda()
         {
-            instanciarfacturaBusqueda();
+            instanciarDocumentoCompraBusqueda();
         }
 
 
@@ -426,76 +480,8 @@ namespace Cotizador.Controllers
             Facturasearch excel = new Facturasearch();
             return excel.generateExcel(list);
         }*/
-
-        public String Search()
-        {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaFacturas;
-
-            String[] desde = this.Request.Params["fechaEmisionDesde"].Split('/');
-            this.FacturaSession.fechaEmisionDesde = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
-
-            String[] hasta = this.Request.Params["fechaEmisionHasta"].Split('/');
-            this.FacturaSession.fechaEmisionHasta = new DateTime(Int32.Parse(hasta[2]), Int32.Parse(hasta[1]), Int32.Parse(hasta[0]));
-            
-
-            if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
-            {
-                this.FacturaSession.numero = "0";
-            }
-            else
-            {
-                this.FacturaSession.numero = this.Request.Params["numero"];
-            }
-
-
-            if (this.Request.Params["numeroPedido"] == null || this.Request.Params["numeroPedido"].Trim().Length == 0)
-            {
-                this.FacturaSession.pedido.numeroPedido = 0;
-            }
-            else
-            {
-                this.FacturaSession.pedido.numeroPedido = int.Parse(this.Request.Params["numeroPedido"]);
-            }
-
-
-            if (this.Request.Params["numeroGuiaRemision"] == null || this.Request.Params["numeroGuiaRemision"].Trim().Length == 0)
-            {
-                this.FacturaSession.guiaRemision.numeroDocumento = 0;
-            }
-            else
-            {
-                this.FacturaSession.guiaRemision.numeroDocumento = int.Parse(this.Request.Params["numeroGuiaRemision"]);
-            }
-
-        
-            this.FacturaSession.sku = this.Request.Params["sku"];
-        
-
-
-
-            this.FacturaSession.estadoDocumentoSunatBusqueda = (DocumentoCompra.EstadosDocumentoSunatBusqueda)Int32.Parse(this.Request.Params["estadoDocumentoSunatBusqueda"]);
-            this.FacturaSession.tipoDocumento = (DocumentoCompra.TipoDocumento)Int32.Parse(this.Request.Params["tipoDocumento"]);
-
-            DocumentoCompraBL DocumentoCompraBL = new DocumentoCompraBL();
-
-            List<DocumentoCompra> DocumentoCompraList = DocumentoCompraBL.GetFacturas(this.FacturaSession);
-
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-
-    /*        foreach (DocumentoCompra DocumentoCompra in DocumentoCompraList)
-            {
-                DocumentoCompra.usuario.apruebaAnulaciones = usuario.apruebaAnulaciones;
-                DocumentoCompra.usuario.creaNotasCredito = usuario.creaNotasCredito;
-            }*/
-
-
-            //Se coloca en session el resultado de la búsqueda
-            this.Session[Constantes.VAR_SESSION_FACTURA_LISTA] = DocumentoCompraList;
-            //Se retorna la cantidad de elementos encontrados
-
-            return JsonConvert.SerializeObject(DocumentoCompraList);
-            //return pedidoList.Count();
-        }
+        /*
+       */
 
 
         public String SolicitarAnulacion()
@@ -548,11 +534,11 @@ namespace Cotizador.Controllers
             DocumentoCompra DocumentoCompra = DocumentoCompraList.Where(d => d.idDocumentoCompra == idDocumentoCompra).FirstOrDefault();
             //DocumentoCompra.tipoDocumento = DocumentoCompra.TipoDocumento.Factura;
             DocumentoCompra = DocumentoCompraBL.GetDocumentoCompra(DocumentoCompra);
-            DocumentoCompra = DocumentoCompraBL.descargarArchivoDocumentoCompra(DocumentoCompra);
+         //   DocumentoCompra = DocumentoCompraBL.descargarArchivoDocumentoCompra(DocumentoCompra);
 
             try {
-                DocumentoCompra.cpeFile = Encoding.GetEncoding(28591).GetBytes(DocumentoCompra.rPTA_DOC_TRIB_BE.DOC_TRIB_XML);
-                DocumentoCompra.cdrFile = Encoding.GetEncoding(28591).GetBytes(DocumentoCompra.rPTA_DOC_TRIB_BE.DOC_TRIB_RPTA);
+                DocumentoCompra.cpeFile = Encoding.GetEncoding(28591).GetBytes(DocumentoCompra.rPTA_DOC_TRIB_COMPRA.DOC_TRIB_XML);
+                DocumentoCompra.cdrFile = Encoding.GetEncoding(28591).GetBytes(DocumentoCompra.rPTA_DOC_TRIB_COMPRA.DOC_TRIB_RPTA);
             }
             catch (Exception e)
             {
@@ -562,14 +548,14 @@ namespace Cotizador.Controllers
 
             var documentos = new
             {
-                pdf = DocumentoCompra.rPTA_DOC_TRIB_BE.DOC_TRIB_PDF,
+                pdf = DocumentoCompra.rPTA_DOC_TRIB_COMPRA.DOC_TRIB_PDF,
                 cpe = DocumentoCompra.cpeFile,
                 cdr = DocumentoCompra.cdrFile,
                 nombreArchivo = 
-                        DocumentoCompra.cPE_CABECERA_BE.NRO_DOC_EMI+"-"+ 
-                        DocumentoCompra.cPE_CABECERA_BE.TIP_CPE+"-"+
-                        DocumentoCompra.cPE_CABECERA_BE.SERIE + "-" +
-                        DocumentoCompra.cPE_CABECERA_BE.CORRELATIVO
+                        DocumentoCompra.cPE_CABECERA_COMPRA.NRO_DOC_EMI+"-"+ 
+                        DocumentoCompra.cPE_CABECERA_COMPRA.TIP_CPE+"-"+
+                        DocumentoCompra.cPE_CABECERA_COMPRA.SERIE + "-" +
+                        DocumentoCompra.cPE_CABECERA_COMPRA.CORRELATIVO
             };
 
             return JsonConvert.SerializeObject(documentos);
@@ -577,39 +563,39 @@ namespace Cotizador.Controllers
         }
 
 
-        private void instanciarfacturaBusqueda()
+        private void instanciarDocumentoCompraBusqueda()
         {
-            DocumentoCompra DocumentoCompra = new DocumentoCompra();
+            DocumentoCompra documentoCompra = new DocumentoCompra();
             DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now.AddDays(1);
-            DocumentoCompra.fechaEmisionDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
-            DocumentoCompra.fechaEmisionHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
-            DocumentoCompra.buscarSedesGrupoCliente = false;
+            documentoCompra.fechaEmisionDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
+            documentoCompra.fechaEmisionHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
+            documentoCompra.buscarSedesGrupoCliente = false;
 
-            DocumentoCompra.tipoNotaCredito = DocumentoCompra.TiposNotaCredito.AnulacionOperacion;
+            documentoCompra.tipoNotaCredito = DocumentoCompra.TiposNotaCredito.AnulacionOperacion;
 
-            DocumentoCompra.estadoDocumentoSunatBusqueda = DocumentoCompra.EstadosDocumentoSunatBusqueda.TodosAceptados;
+            documentoCompra.estadoDocumentoSunatBusqueda = DocumentoCompra.EstadosDocumentoSunatBusqueda.TodosAceptados;
 
-            DocumentoCompra.serie = "0";
-            DocumentoCompra.numero = "0";
-            DocumentoCompra.pedido = new Pedido();
-            DocumentoCompra.guiaRemision = new GuiaRemision();
-            DocumentoCompra.solicitadoAnulacion = false;
+            documentoCompra.serie = "0";
+            documentoCompra.numero = "0";
+            documentoCompra.pedido = new Pedido();
+            documentoCompra.guiaRemision = new GuiaRemision();
+            documentoCompra.solicitadoAnulacion = false;
 
-            DocumentoCompra.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            documentoCompra.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            DocumentoCompra.cliente = new Cliente();
-            DocumentoCompra.cliente.idCliente = Guid.Empty;
+            documentoCompra.proveedor = new Proveedor();
+            documentoCompra.proveedor.idProveedor = Guid.Empty;
 
-            if (DocumentoCompra.usuario.sedesMPDocumentosVenta.Count == 1)
+            if (documentoCompra.usuario.sedesMPDocumentosVenta.Count == 1)
             {
-                DocumentoCompra.ciudad = DocumentoCompra.usuario.sedesMPDocumentosVenta[0];
+                documentoCompra.ciudad = documentoCompra.usuario.sedesMPDocumentosVenta[0];
                 //DocumentoCompra.ciudad.idCiudad = Guid.Empty;
             }
             else
             {
-                DocumentoCompra.ciudad = new Ciudad();
-                DocumentoCompra.ciudad.idCiudad = Guid.Empty;
+                documentoCompra.ciudad = new Ciudad();
+                documentoCompra.ciudad.idCiudad = Guid.Empty;
             }
 
 
@@ -621,8 +607,8 @@ namespace Cotizador.Controllers
 
 
             //pedidoTmp.usuarioBusqueda = pedidoTmp.usuario;
-            this.Session[Constantes.VAR_SESSION_FACTURA_BUSQUEDA] = DocumentoCompra;
-            this.Session[Constantes.VAR_SESSION_FACTURA_LISTA] = new List<DocumentoCompra>();
+            this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_BUSQUEDA] = documentoCompra;
+            this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_LISTA] = new List<DocumentoCompra>();
 
             /*
             DocumentoCompra.tipoPago = DocumentoCompra.TipoPago.Contado;
@@ -634,26 +620,26 @@ namespace Cotizador.Controllers
         }
 
        
-
+        /*
         public String GetCliente()
         {
-            DocumentoCompra factura = this.FacturaSession;
+            DocumentoCompra factura = this.documentoCompraSession;
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
-            factura.cliente = clienteBl.getCliente(idCliente);
-            String resultado = JsonConvert.SerializeObject(factura.cliente);
-            this.FacturaSession = factura;
+            factura.proveedor = clienteBl.getCliente(idCliente);
+            String resultado = JsonConvert.SerializeObject(factura.proveedor);
+            this.documentoCompraSession = factura;
             return resultado;
-        }
+        }*/
 
         public String GetGrupoCliente()
         {
-            DocumentoCompra factura = this.FacturaSession;
+            DocumentoCompra factura = this.documentoCompraSession;
             int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
 
             factura.idGrupoCliente = idGrupoCliente;
 
-            this.FacturaSession = factura;
+            this.documentoCompraSession = factura;
             return "";
         }
 
@@ -666,25 +652,25 @@ namespace Cotizador.Controllers
             }
             CiudadBL ciudadBL = new CiudadBL();
             Ciudad ciudad = ciudadBL.getCiudad(idCiudad);
-            this.FacturaSession.ciudad = ciudad;
+            this.documentoCompraSession.ciudad = ciudad;
             return JsonConvert.SerializeObject(ciudad);
         }
 
         public void ChangeFechaEmisionDesde()
         {
             String[] desde = this.Request.Params["fechaEmisionDesde"].Split('/');
-            this.FacturaSession.fechaEmisionDesde = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
+            this.documentoCompraSession.fechaEmisionDesde = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
         }
 
         public void ChangeFechaEmisionHasta()
         {
             String[] desde = this.Request.Params["fechaEmisionHasta"].Split('/');
-            this.FacturaSession.fechaEmisionHasta = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
+            this.documentoCompraSession.fechaEmisionHasta = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
         }
 
         public void ChangeSolicitadoAnulacion()
         {
-            this.FacturaSession.solicitadoAnulacion = Int32.Parse(this.Request.Params["solicitadoAnulacion"]) == 1;
+            this.documentoCompraSession.solicitadoAnulacion = Int32.Parse(this.Request.Params["solicitadoAnulacion"]) == 1;
         }
 
         

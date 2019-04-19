@@ -2593,17 +2593,29 @@ jQuery(function ($) {
             /*Si la equivalencia es 1 quiere decir que no cuenta con unidad alternativa*/
             if (ventaDetalleList[i].producto.equivalencia == 1) {
                 unidad = "<select class='form-control selectUnidad'  sku='" + ventaDetalleList[i].producto.sku + "'  idProducto='" + ventaDetalleList[i].producto.idProducto + "'  >" +
-                    "<option esUnidadAlternativa='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>" +
+                    "<option esUnidadAlternativa='0' idProductoPresentacion='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>" +
                     "</select > ";
                 cantidad = ventaDetalleList[i].sumCantidadUnidadEstandar;
             }
             else {
                 unidad = "<select class='form-control selectUnidad'  sku='" + ventaDetalleList[i].producto.sku + "'  idProducto='" + ventaDetalleList[i].producto.idProducto + "'  >" +
-                    "<option esUnidadAlternativa='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>" +
-                    "<option esUnidadAlternativa='1' cantidad='" + ventaDetalleList[i].sumCantidadUnidadAlternativa + "'> " + ventaDetalleList[i].producto.unidad_alternativa + "</option>" +
-                    "</select > ";
+                    "<option esUnidadAlternativa='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>";
+
+                var listTmp = ventaDetalleList[i].producto.ProductoPresentacionList;
+                //alert(listTmp.length)
+                for (var j = 0; j < listTmp.length; j++) {
+                    unidad = unidad + "<option esUnidadAlternativa='1'  idProductoPresentacion = '" + listTmp[j].IdProductoPresentacion + "' cantidad='" + listTmp[j].Cantidad + "'> " + listTmp[j].Presentacion + "</option>";
+                }
+                  //  "<option esUnidadAlternativa='1' cantidad='" + ventaDetalleList[i].sumCantidadUnidadAlternativa + "'> " + ventaDetalleList[i].producto.unidad_alternativa + "</option>" +
+
+                unidad = unidad + "</select > ";
                 cantidad = ventaDetalleList[i].sumCantidadUnidadEstandar;
             }
+
+
+
+         
+
 
             var ventaDetalle = '<tr data-expanded="false">' +
                 '<td>  ' + ventaDetalleList[i].producto.idProducto + '</td>' +
@@ -2871,7 +2883,7 @@ jQuery(function ($) {
 
         $("#tableReporteDetalladoConfirmacion > tbody").empty();
         $("#tableReporteDetalladoConfirmacion").footable();
-
+        
         for (var i = 0; i < ventaDetalleList.length; i++) {
 
             var unidad = "";
@@ -2879,15 +2891,22 @@ jQuery(function ($) {
             /*Si la equivalencia es 1 quiere decir que no cuenta con unidad alternativa*/
             if (ventaDetalleList[i].producto.equivalencia == 1) {
                 unidad = "<select class='form-control selectUnidadReporteDetallado'  sku='" + ventaDetalleList[i].producto.sku + "'  idProducto='" + ventaDetalleList[i].producto.idProducto + "'  >" +
-                    "<option esUnidadAlternativa='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>" +
+                    "<option esUnidadAlternativa='0' idProductoPresentacion = '0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>" +
                     "</select > ";
                 cantidad = ventaDetalleList[i].sumCantidadUnidadEstandar;
             }
             else {
                 unidad = "<select class='form-control selectUnidadReporteDetallado'  sku='" + ventaDetalleList[i].producto.sku + "'  idProducto='" + ventaDetalleList[i].producto.idProducto + "'  >" +
-                    "<option esUnidadAlternativa='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>" +
-                    "<option esUnidadAlternativa='1' cantidad='" + ventaDetalleList[i].sumCantidadUnidadAlternativa + "'> " + ventaDetalleList[i].producto.unidad_alternativa + "</option>" +
-                    "</select > ";
+                    "<option esUnidadAlternativa='0' idProductoPresentacion = '0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>";
+
+                var listTmp = ventaDetalleList[i].producto.ProductoPresentacionList;
+                //alert(listTmp.length)
+                for (var j = 0; j < listTmp.length; j++) 
+                {
+                    unidad = unidad + "<option esUnidadAlternativa='1'  idProductoPresentacion = '" + listTmp[j].IdProductoPresentacion + "' cantidad='" + listTmp[j].Cantidad + "'> " + listTmp[j].Presentacion + "</option>";
+                }
+                
+                unidad = unidad + "</select > ";
                 cantidad = ventaDetalleList[i].sumCantidadUnidadEstandar;
             }
 
@@ -2909,11 +2928,11 @@ jQuery(function ($) {
     $("#btnContinuarReporteDetallado").click(function () {
 
 
-        var serieUnidadesAlternativas = "";
+        var serieIdProductoPresentacion = "";
 
         var $j_object = $(".selectUnidadReporteDetallado");
         $.each($j_object, function (key, value) {
-            serieUnidadesAlternativas = serieUnidadesAlternativas + $(this).find('option:selected').attr("esUnidadAlternativa");
+            serieIdProductoPresentacion = serieIdProductoPresentacion + $(this).find('option:selected').attr("idProductoPresentacion");
         });
 
 
@@ -2940,7 +2959,7 @@ jQuery(function ($) {
         
 
 
-        window.open('/GuiaRemision/obtenerDetalleAtenciones?serieUnidadesAlternativas=' + serieUnidadesAlternativas);
+        window.open('/GuiaRemision/obtenerDetalleAtenciones?serieIdProductoPresentacion=' + serieIdProductoPresentacion);
         /*
         $.ajax({
             url: "/GuiaRemision/obtenerDetalleAtenciones",

@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    interface IDocumentoPago
+    public interface IDocumentoPago
     {
         DateTime? fechaEmision { get; set; }
         DateTime horaEmision { get; set; }
         DateTime fechaVencimiento { get; set; }
+        String serie { get; set; }
+        String numero { get; set; }
     }
 }

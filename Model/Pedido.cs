@@ -42,6 +42,8 @@ namespace Model
         }
 
 
+
+
         public Guid idPedido { get; set; }
         [Display(Name = "Número Pedido:")]
         public Int64 numeroPedido { get; set; }
@@ -254,6 +256,8 @@ namespace Model
 
 
         public DocumentoVenta documentoVenta { get; set; }
+
+        public IDocumentoPago documentoPago { get; set; }
 
         [Display(Name = "Stock Confirmado:")]
         public Boolean stockConfirmado { get; set; }

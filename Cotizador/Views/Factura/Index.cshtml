@@ -271,21 +271,24 @@
                     <th data-name="serieNumeroFactura" data-visible="true">Doc. Venta</th>
                     <th data-name="numeroPedido" data-visible="true">Pedido</th>
                     <th data-name="serieNumeroGuia" data-visible="true">Movimiento Almacén</th>
-                    <th data-name="usuario" data-visible="true">Creada Por</th>
+                    <th data-name="usuario" data-visible="true">Creado Por</th>
                     <th data-name="fechaEmision" data-sortable="true" data-breakpoints="xs">Fecha Emisión</th>
+                    <th data-name="fechaVencimiento" data-sortable="true" data-breakpoints="xs">Fecha Vencimiento</th>
+                    <th data-name="codigoCliente" data-sortable="true">Cod. Cliente</th>
                     <th data-name="razonSocial" data-sortable="true">Razón Social</th>
                     <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
                     <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
                     <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
+                    <th data-name="asesorComercial" data-sortable="true" data-breakpoints="xs">Cod. Asesor Comercial</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
                     @if (documentoVenta.usuario.apruebaAnulaciones)
-                    {
-                        <th data-name="comentarioSolicitudAnulacion" data-visible="true" data-sortable="true" data-breakpoints="xs">Comentario Solicitud Anulación</th>
-                    }
-                    else
-                    {
-                        <th data-name="comentarioSolicitudAnulacion" data-visible="false" data-sortable="true" data-breakpoints="xs">Comentario Solicitud Anulación</th>
-                    }
+    {
+                <th data-name="comentarioSolicitudAnulacion" data-visible="true" data-sortable="true" data-breakpoints="xs">Comentario Solicitud Anulación</th>
+}
+else
+{
+                <th data-name="comentarioSolicitudAnulacion" data-visible="false" data-sortable="true" data-breakpoints="xs">Comentario Solicitud Anulación</th>
+}
                     <th data-name="opciones" data-sortable="false" data-breakpoints="xs"></th>
                 </tr>
             </thead>

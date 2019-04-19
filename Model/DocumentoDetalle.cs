@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Model
 {
-    public class DocumentoDetalle 
+    public class DocumentoDetalle
     {
 
       
@@ -73,9 +73,13 @@ namespace Model
         public Decimal precioNeto
         {
             get { if (esPrecioAlternativo)
-                    return Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, _precioNeto / producto.equivalencia));
+                {
+                    return Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, _precioNeto / ProductoPresentacion.Equivalencia));
+                }
                 else
+                {
                     return _precioNeto;
+                }
             }
 
             set {
@@ -90,9 +94,13 @@ namespace Model
             {
                 Decimal precioListaTmp = 0;
                 if (esPrecioAlternativo)
-                    precioListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioLista / producto.equivalencia));
+                {
+                    precioListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioLista / ProductoPresentacion.Equivalencia));
+                }
                 else
+                {
                     precioListaTmp = producto.precioLista;
+                }
 
                 return precioListaTmp;
                 
@@ -107,7 +115,7 @@ namespace Model
             {
                 Decimal precioListaTmp = 0;
                 if (esPrecioAlternativo)
-                    precioListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioListaAnterior / producto.equivalencia));
+                    precioListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioListaAnterior / ProductoPresentacion.Equivalencia));
                 else
                     precioListaTmp = producto.precioListaAnterior;
 
@@ -124,7 +132,7 @@ namespace Model
             {
                 Decimal costoListaTmp = 0;
                 if (esPrecioAlternativo)
-                    costoListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista / producto.equivalencia));
+                    costoListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista / ProductoPresentacion.Equivalencia));
                 else
                     costoListaTmp = producto.costoLista;
 
@@ -132,9 +140,25 @@ namespace Model
             }
         }
 
-       
+        public Decimal costoListaAnterior
+        {
+            get
+            {
+                Decimal costoListaTmp = 0;
+                if (esPrecioAlternativo)
+                    costoListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoListaAnterior / ProductoPresentacion.Equivalencia));
+                else
+                    costoListaTmp = producto.costoListaAnterior;
+
+                return costoListaTmp;
+
+            }
+
+        }
+
+
         //Obtiene y define el precioAnterior para los calculos de recotizacion
-       
+
 
         private Decimal _flete;
         public Decimal flete
@@ -173,5 +197,7 @@ namespace Model
                 return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, _porcentajeMargen));
             }
         }
+
+       public ProductoPresentacion ProductoPresentacion { get; set; }
     }
 }

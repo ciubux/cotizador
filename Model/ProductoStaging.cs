@@ -33,6 +33,7 @@ namespace Model
 
         public String unidadSunat { get; set; }
         public String unidadAlternativaSunat { get; set; }
+        public String unidadProveedorSunat { get; set; }
 
     }
 }

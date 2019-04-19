@@ -9,16 +9,16 @@ namespace Model
     public class DireccionEntrega : Auditoria
     {
         public Guid idDireccionEntrega { get; set; }
-        [Display(Name = "Dirección de Entrega:")]
+        [Display(Name = "Dirección Entrega:")]
         public String descripcion { get; set; }
-        [Display(Name = "Contacto de Entrega:")]
+        [Display(Name = "Contacto Entrega:")]
         public String contacto { get; set; }
-        [Display(Name = "Telefono Contacto de Entrega:")]
+        [Display(Name = "Teléfono Contacto Entrega:")]
         public String telefono { get; set; }
         public Ubigeo ubigeo { get; set; }
-        [Display(Name = "Código Cliente Centro Costos:")]
+        [Display(Name = "Código Cliente:")]
         public String codigoCliente { get; set; }
-        [Display(Name = "Código MP Centro Costos:")]
+        [Display(Name = "Código MP:")]
         public String codigoMP { get; set; }
         [Display(Name = "Sede Cliente:")]
         public String nombre { get; set; }
@@ -29,5 +29,18 @@ namespace Model
         public String direccionConSede { get {
                 return descripcion +" "+ (nombre == null ? "" : "(" + nombre+ (codigoCliente == null ? "" : "/" + codigoCliente )+ ")");
             } }
+        [Display(Name = "Email Recepción Facturas:")]
+        public String emailRecepcionFacturas { get; set; }
+
+        [Display(Name = "Domicilio Legal:")]
+        public DomicilioLegal domicilioLegal { get; set; }
+
+
+        [Display(Name = "Cliente:")]
+        public Cliente cliente { get; set; }
+
+        [Display(Name = "Codigo:")]
+        public int codigo { get; set; }
+
     }
 }

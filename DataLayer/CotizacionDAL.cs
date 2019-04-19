@@ -173,7 +173,16 @@ namespace DataLayer
             //InputParameterAdd.Decimal(objCommand, "precioProvinciaSinIGV", cotizacionDetalle.producto.precioProvinciaSinIgv);
             //Siempre se almacena el costo sin igv de la unidad estandar
             InputParameterAdd.Decimal(objCommand, "costoSinIGV", cotizacionDetalle.producto.costoSinIgv);
-            InputParameterAdd.Decimal(objCommand, "equivalencia", cotizacionDetalle.producto.equivalencia);
+
+            if (cotizacionDetalle.esPrecioAlternativo)
+            {
+                InputParameterAdd.Decimal(objCommand, "equivalencia", cotizacionDetalle.ProductoPresentacion.Equivalencia);
+            }
+            else
+            {
+                InputParameterAdd.Decimal(objCommand, "equivalencia", 1);
+            }         
+
             InputParameterAdd.Varchar(objCommand, "unidad", cotizacionDetalle.unidad);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", cotizacionDetalle.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "precioNeto", cotizacionDetalle.precioNeto);
@@ -182,6 +191,16 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "flete", cotizacionDetalle.flete);
             InputParameterAdd.Varchar(objCommand, "observaciones", cotizacionDetalle.observacion);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
+
+            if (cotizacionDetalle.esPrecioAlternativo)
+            {
+                InputParameterAdd.Decimal(objCommand, "idProductoPresentacion", cotizacionDetalle.ProductoPresentacion.IdProductoPresentacion);
+            }
+            else
+            {
+                InputParameterAdd.Decimal(objCommand, "idProductoPresentacion", 1);
+            }
+
             ExecuteNonQuery(objCommand);
 
             cotizacionDetalle.idCotizacionDetalle = (Guid)objCommand.Parameters["@newId"].Value;
@@ -215,7 +234,7 @@ namespace DataLayer
             DataTable cotizacionDataTable = dataSet.Tables[0];
             DataTable cotizacionDetalleDataTable = dataSet.Tables[1];
 
-            //Cabecera de Cotizacion
+            //CABECERA DE COTIZACIÓN
             foreach (DataRow row in cotizacionDataTable.Rows)
             {
                 cotizacion.idCotizacion = Converter.GetGuid(row,"id_cotizacion");
@@ -240,25 +259,11 @@ namespace DataLayer
                 cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
                 cotizacion.esPagoContado = Converter.GetBool(row, "es_pago_contado");
                 cotizacion.tipoCotizacion = (Cotizacion.TiposCotizacion)Converter.GetInt(row, "tipo_cotizacion");
-
-                /*
-                if (row["id_cliente"] == DBNull.Value)
-                {
-                    cotizacion.cliente = new Cliente();
-
-                    cotizacion.grupo = new GrupoCliente();
-                    cotizacion.grupo.codigo = Converter.GetString(row, "codigo_grupo");
-                    cotizacion.grupo.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
-                    cotizacion.grupo.nombre = Converter.GetString(row, "nombre_grupo");
-                }
-                else
-                {*/
+                //CLIENTE
                 cotizacion.cliente = new Cliente();
                 cotizacion.cliente.codigo = Converter.GetString(row, "codigo");
                 cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 cotizacion.cliente.habilitadoModificarDireccionEntrega = Converter.GetBool(row, "habilitado_modificar_direccion_entrega");
-
-
                 cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
                 cotizacion.cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
@@ -268,6 +273,7 @@ namespace DataLayer
                     ClienteDAL dalCliente = new ClienteDAL();
                     cotizacion.cliente.sedeList = dalCliente.getSedes(cotizacion.cliente.ruc);
                 }
+                //GRUPO CLIENTE
                 cotizacion.grupo = new GrupoCliente();
                 cotizacion.grupo.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
                 cotizacion.grupo.codigo = Converter.GetString(row, "codigo_grupo");
@@ -275,23 +281,19 @@ namespace DataLayer
                 cotizacion.grupo.contacto = Converter.GetString(row, "contacto_grupo");
                 cotizacion.grupo.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
                 cotizacion.grupo.plazoCreditoAprobado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_aprobado");
-
-                //}
-
-
+                //CIUDAD
                 cotizacion.ciudad = new Ciudad();
                 cotizacion.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
                 cotizacion.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
                 cotizacion.grupo.ciudad = cotizacion.ciudad;
-
+                //USUARIO
                 cotizacion.usuario = new Usuario();
                 cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 cotizacion.usuario.cargo = Converter.GetString(row, "cargo");
                 cotizacion.usuario.contacto = Converter.GetString(row, "contacto_usuario");
                 cotizacion.usuario.email = Converter.GetString(row, "email");           
-
-                //Estado de la Cotizacion
+                //ESTADO
                 cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
                 cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Converter.GetInt(row, "estado_seguimiento");
                 cotizacion.seguimientoCotizacion.observacion = Converter.GetString(row, "observacion_seguimiento");
@@ -303,89 +305,23 @@ namespace DataLayer
 
 
             cotizacion.cotizacionDetalleList = new List<CotizacionDetalle>();
-            //Detalle de la cotizacion
+            //DETALLE DE COTIZACIÓN
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
                 CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                 cotizacionDetalle.producto = new Producto();
                 cotizacionDetalle.idCotizacionDetalle = Converter.GetGuid(row, "id_cotizacion_detalle");
                 cotizacionDetalle.cantidad = Converter.GetInt(row, "cantidad");
-                cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                 cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
-
-                PrecioClienteProducto precioClienteProducto = new PrecioClienteProducto();
-
-                precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto_vigente");
-                precioClienteProducto.flete = Converter.GetDecimal(row, "flete_vigente");
-                precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario_vigente");
-                precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia_vigente");
-                precioClienteProducto.esUnidadAlternativa = Converter.GetBool(row, "es_unidad_alternativa");
-                precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
-                precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
-
-                precioClienteProducto.fechaFinVigencia = Converter.GetDateTimeNullable(row, "fecha_fin_vigencia");
-                precioClienteProducto.cliente = new Cliente();
-                precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                cotizacionDetalle.producto.precioClienteProducto = precioClienteProducto;
-
-                cotizacionDetalle.producto.precioListaAnterior = Converter.GetDecimal(row, "precio_sin_igv_anterior");
-
-
-                if (cotizacion.esRecotizacion)
+                ///En caso corresponda a una presentación que no es la estandar se debe instanciar el objeto ProductoPresentacion
+                if (cotizacionDetalle.esPrecioAlternativo)
                 {
-                    //Si es recotizacion entonces el precio Lista y precio lista provincia y el costo  Lista son los tomados desde el producto
-                    cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "producto_precio");
-                    cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "producto_precio_provincia");
-                    cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "producto_costo");
-
-                    //El precio neto ahora será el precio neto anterior                    
-                    cotizacionDetalle.precioNetoAnterior = Converter.GetDecimal(row, "precio_neto");
-                    //El precio neto se calcula en la capa de negocio
-                    cotizacionDetalle.costoAnterior = Converter.GetDecimal(row, "costo_sin_igv");
-
-
-                    //Si la unidad es alternativa el costo obtenido desde el detalle se múltiplica por la equivalencia, 
-                    //dado que la capa de negocio se encarga de hacer los calculos y espera siempre el costo estándar
-                    /*    if (cotizacionDetalle.esPrecioAlternativo)
-                        {
-                            cotizacionDetalle.costoAnterior = Converter.GetDecimal(row, "costo_sin_igv") * cotizacionDetalle.producto.equivalencia;
-                        }
-                        else
-                        {
-                            cotizacionDetalle.costoAnterior = Converter.GetDecimal(row, "costo_sin_igv");
-                        }*/
-
-
-
+                    cotizacionDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                    cotizacionDetalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
                 }
-                else
-                {
-                    //Si NO es recotizacion se consideran los precios y el costo de lo guardado
-                    cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
-                    cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
-
-                    //Si la unidad es alternativa se múltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el precio estándar
-
-                    if (cotizacionDetalle.esPrecioAlternativo)
-                    {
-                        cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.producto.equivalencia;
-                    }
-                    else
-                    {
-                        cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
-                    }
-
-                    //El precio neto ahora será el precio neto anterior                    
-                    cotizacionDetalle.precioNetoAnterior = Converter.GetDecimal(row, "precio_neto_anterior");
-                    //El precio neto se calcula en la capa de negocio
-                    cotizacionDetalle.costoAnterior = Converter.GetDecimal(row, "costo_sin_igv_anterior");
-
-                }
-
-  
-                
 
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
                 cotizacionDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
@@ -393,14 +329,72 @@ namespace DataLayer
                 cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 cotizacionDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
-
-
                 cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
-
-               
                 cotizacionDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
-
                 cotizacionDetalle.observacion = Converter.GetString(row, "observaciones");
+
+
+                /*Precio Cliente Producto*/
+                PrecioClienteProducto precioClienteProducto = new PrecioClienteProducto();
+                precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto_vigente");
+                precioClienteProducto.flete = Converter.GetDecimal(row, "flete_vigente");
+                precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario_vigente");
+                precioClienteProducto.equivalencia = Converter.GetDecimal(row, "equivalencia_vigente");
+                precioClienteProducto.esUnidadAlternativa = Converter.GetBool(row, "es_unidad_alternativa");
+                precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
+                precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                precioClienteProducto.fechaFinVigencia = Converter.GetDateTimeNullable(row, "fecha_fin_vigencia");
+                precioClienteProducto.cliente = new Cliente();
+                precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                cotizacionDetalle.producto.precioClienteProducto = precioClienteProducto;
+
+
+
+                
+                //SI ES UNA RECOTIZACIÓN
+                if (cotizacion.esRecotizacion)
+                {
+                    //Si es recotizacion entonces el precio Lista, precio lista provincia y el costo  Lista son los tomados desde el producto
+                    cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "producto_precio");
+                    cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "producto_precio_provincia");
+                    cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "producto_costo");
+
+
+                    //El precio neto ahora será el precio neto anterior                    
+                    /*
+                    cotizacionDetalle.precioNetoAnterior = Converter.GetDecimal(row, "precio_neto");
+                    cotizacionDetalle.producto.precioListaAnterior = Converter.GetDecimal(row, "precio_sin_igv_anterior");
+                    cotizacionDetalle.producto.costoListaAnterior = Converter.GetDecimal(row, "costo_sin_igv");
+                    */
+                    cotizacionDetalle.precioNetoAnterior = Converter.GetDecimal(row, "precio_neto");
+                    cotizacionDetalle.producto.costoListaAnterior = Converter.GetDecimal(row, "costo_sin_igv");
+                    cotizacionDetalle.producto.precioListaAnterior = Converter.GetDecimal(row, "precio_sin_igv");
+                    
+                }
+                else
+                {
+                    //Si NO es recotizacion se considera el precio lista y el costo lista registrado en la cotización
+                    cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
+                    cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+                    
+
+                    cotizacionDetalle.precioNetoAnterior = Converter.GetDecimal(row, "precio_neto_anterior");
+                    cotizacionDetalle.producto.costoListaAnterior = Converter.GetDecimal(row, "costo_sin_igv_anterior");
+                    cotizacionDetalle.producto.precioListaAnterior = Converter.GetDecimal(row, "precio_sin_igv_anterior");
+
+
+                    //Si la unidad es alternativa se múltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el precio estándar
+                    //En el caso de recotización el precioNeto es obtenido de la cotización origen
+                    if (cotizacionDetalle.esPrecioAlternativo)
+                    {
+                        cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.ProductoPresentacion.Equivalencia;
+                    }
+                    else
+                    {
+                        cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                    }
+                    
+                }
 
                 cotizacion.cotizacionDetalleList.Add(cotizacionDetalle);
             }

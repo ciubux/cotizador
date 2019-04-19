@@ -121,7 +121,10 @@ namespace DataLayer
                 InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion);
                 InputParameterAdd.Varchar(objCommand, "unidadInternacional", documentoDetalle.unidadInternacional);
                 InputParameterAdd.Decimal(objCommand, "precioUnitario", documentoDetalle.precioUnitario);
-                InputParameterAdd.Int(objCommand, "equivalencia", documentoDetalle.producto.equivalencia);
+                if(documentoDetalle.esPrecioAlternativo)
+                    InputParameterAdd.Decimal(objCommand, "equivalencia", documentoDetalle.ProductoPresentacion.Equivalencia);
+                else
+                    InputParameterAdd.Decimal(objCommand, "equivalencia",1);
                 InputParameterAdd.Varchar(objCommand, "unidad", documentoDetalle.unidad);
                 InputParameterAdd.Int(objCommand, "esPrecioAlternativo", documentoDetalle.esPrecioAlternativo ? 1 : 0);
 
@@ -303,7 +306,7 @@ namespace DataLayer
                     pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
                     pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
                     pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
-                    pedidoDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                    pedidoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
 
                     pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                     pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
@@ -320,7 +323,7 @@ namespace DataLayer
 
                     if (pedidoDetalle.esPrecioAlternativo)
                     {
-                        pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.producto.equivalencia;
+                        pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.ProductoPresentacion.Equivalencia;
                     }
                     else
                     {
@@ -429,7 +432,7 @@ namespace DataLayer
                     pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
                     pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
                     pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
-                    pedidoDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                    pedidoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
                     pedidoDetalle.cantidadOriginal = pedidoDetalle.cantidad;
                     pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                     pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
@@ -445,7 +448,7 @@ namespace DataLayer
 
                     if (pedidoDetalle.esPrecioAlternativo)
                     {
-                        pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.producto.equivalencia;
+                        pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.ProductoPresentacion.Equivalencia;
                     }
                     else
                     {
@@ -622,8 +625,8 @@ namespace DataLayer
                 pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
                 pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
                 pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
-                pedidoDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
                 pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+                
                 pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
 
                 pedidoDetalle.precioUnitarioOriginal = Converter.GetDecimal(row, "precio_unitario_original");
@@ -636,7 +639,12 @@ namespace DataLayer
 
                 if (pedidoDetalle.esPrecioAlternativo)
                 {
-                    pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.producto.equivalencia;
+
+                    pedidoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    pedidoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+
+                    pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.ProductoPresentacion.Equivalencia;
+                    
                 }
                 else
                 {
@@ -806,7 +814,7 @@ namespace DataLayer
                 pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
                 pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
                 pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
-                pedidoDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                
                 pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                 pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
 
@@ -820,13 +828,23 @@ namespace DataLayer
 
                 if (pedidoDetalle.esPrecioAlternativo)
                 {
-                    pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.producto.equivalencia;
-                    pedidoDetalle.porcentajeDescuento = 100 - ((pedidoDetalle.precioNeto * pedidoDetalle.producto.equivalencia) * 100 / pedidoDetalle.producto.precioSinIgv);
+                    pedidoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    pedidoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+
+                    pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.ProductoPresentacion.Equivalencia;
+                    if (pedidoDetalle.producto.precioSinIgv != 0)
+                    {
+                        pedidoDetalle.porcentajeDescuento = 100 - ((pedidoDetalle.precioNeto * pedidoDetalle.ProductoPresentacion.Equivalencia) * 100 / pedidoDetalle.producto.precioSinIgv);
+                    }
+                    
                 }
                 else
                 {
                     pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
-                    pedidoDetalle.porcentajeDescuento = 100 - (pedidoDetalle.precioNeto * 100 / pedidoDetalle.producto.precioSinIgv);
+                    if (pedidoDetalle.producto.precioSinIgv != 0)
+                    {
+                        pedidoDetalle.porcentajeDescuento = 100 - (pedidoDetalle.precioNeto * 100 / pedidoDetalle.producto.precioSinIgv);
+                    }
                 }               
 
                 pedidoDetalle.unidad = Converter.GetString(row, "unidad");

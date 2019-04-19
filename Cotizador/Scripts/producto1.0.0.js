@@ -340,8 +340,8 @@ jQuery(function ($) {
         changeInputString("unidad_alternativa", $("#producto_unidad_alternativa").val());
     });
 
-    $("#producto_equivalencia").change(function () {
-        changeInputInt("equivalencia", $("#producto_equivalencia").val());
+    $("#producto_equivalenciaAlternativa").change(function () {
+        changeInputInt("equivalenciaAlternativa", $("#producto_equivalenciaAlternativa").val());
     });
 
     $("#producto_equivalenciaProveedor").change(function () {
@@ -424,7 +424,6 @@ jQuery(function ($) {
                 } else {
                     $("#verEstado").html('<span style="color: red; font-weight: bold;">Inactivo</span>');
                 }
-
                 $("#verImagen").attr("src", "data:image/png;base64," + producto.image);
                 $("#verSku").html(producto.sku);
                 $("#verSkuProveedor").html(producto.skuProveedor);
@@ -437,12 +436,12 @@ jQuery(function ($) {
                 $("#verCosto").html(Number(producto.costoSinIgv).toFixed(cantidadCuatroDecimales));
                 $("#verPrecio").html(Number(producto.precioSinIgv).toFixed(cantidadCuatroDecimales));
                 $("#verPrecioProvincia").html(Number(producto.precioProvinciaSinIgv).toFixed(cantidadCuatroDecimales));
-                $("#verEquivalencia").html(producto.equivalencia);
+                $("#verEquivalenciaAlternativa").html(producto.equivalenciaAlternativa);
                 $("#verEquivalenciaProveedor").html(producto.equivalenciaProveedor);
                 $("#verUnidadEstandarInternacional").html(producto.unidadEstandarInternacional);
                 $("#verTipo").html(producto.tipoProductoToString);
                 
-
+                
                 if (producto.exoneradoIgv) {
                     $("#verExoneradoIgv").html("Sí");
                 }
@@ -457,7 +456,7 @@ jQuery(function ($) {
                     $("#verInafecto").html("No");
                 }
                 
-
+                
                 $("#modalVerProducto").modal('show');        
             }
         });
@@ -649,7 +648,7 @@ jQuery(function ($) {
                         '<td>  ' + list[i].descripcion + '  </td>' +
                         '<td>  ' + list[i].unidad + '  </td>' +
                         '<td>  ' + list[i].unidad_alternativa + '  </td>' +
-                        '<td>  ' + list[i].equivalencia + '</td>' +
+                        '<td>  ' + list[i].equivalenciaAlternativa + '</td>' +
                         '<td>  ' + list[i].unidadProveedor + '</td>' +
                         '<td>  ' + list[i].equivalenciaProveedor + '</td>' +
                         '<td>  ' + Number(list[i].precioSinIgv).toFixed(cantidadCuatroDecimales) + '  </td>' +

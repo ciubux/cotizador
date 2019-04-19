@@ -332,9 +332,12 @@ namespace Cotizador.Controllers
             List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(idCliente);
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
             List<DireccionEntrega> direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
+            DomicilioLegalBL domicilioLegalBL = new DomicilioLegalBL();
+            List<DomicilioLegal> domicilioLegalList = domicilioLegalBL.getDomiciliosLegalesPorCliente(cliente);
 
             String resultado = "{\"cliente\":" + JsonConvert.SerializeObject(cliente) + ", \"precios\":" + JsonConvert.SerializeObject(listaPrecios) + 
-                        ", \"direccionEntregaList\":" + JsonConvert.SerializeObject(direccionEntregaList) + "}";
+                        ", \"direccionEntregaList\":" + JsonConvert.SerializeObject(direccionEntregaList) + 
+                        ", \"domicilioLegalList\":" + JsonConvert.SerializeObject(domicilioLegalList) + "}";
 
             this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = cliente;
             return resultado;

@@ -42,14 +42,22 @@ namespace BusinessLayer
                            pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
                       }
                    }*/
-                pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
-                if (pedido.ciudad.idCiudad == Constantes.ID_SEDE_LIMA)//-- .esProvincia)
+                if (!pedido.cliente.exoneradoValidacionLiberacionCrediticia)
                 {
-                    pedido.seguimientoCrediticioPedido.observacion = "Si tiene alguna duda sobre el estado pendiente de liberación o requiere liberar el pedido con urgencia contactar con Tatiana Cuentas / Angélica Huachín";
+
+                    pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
+                    if (pedido.ciudad.idCiudad == Constantes.ID_SEDE_LIMA)//-- .esProvincia)
+                    {
+                        pedido.seguimientoCrediticioPedido.observacion = "Si tiene alguna duda sobre el estado pendiente de liberación o requiere liberar el pedido con urgencia contactar con Tatiana Cuentas / Angélica Huachín";
+                    }
+                    else
+                    {
+                        pedido.seguimientoCrediticioPedido.observacion = "Si tiene alguna duda sobre el estado pendiente de liberación o requiere liberar el pedido con urgencia contactar con Ana Felipe / Angélica Huachín";
+                    }
                 }
                 else
                 {
-                    pedido.seguimientoCrediticioPedido.observacion = "Si tiene alguna duda sobre el estado pendiente de liberación o requiere liberar el pedido con urgencia contactar con Ana Felipe / Angélica Huachín";
+                    pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
                 }
                 /*
                 if (!pedido.usuario.apruebaPedidos && !pedido.cliente.perteneceCanalMultiregional)
@@ -492,9 +500,14 @@ namespace BusinessLayer
                 pedidoDetalle.unidad = documentoDetalle.unidad;
                 pedidoDetalle.producto = documentoDetalle.producto;
                 if (pedidoDetalle.esPrecioAlternativo)
-                    pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.producto.equivalencia;
+                {
+                    pedidoDetalle.ProductoPresentacion = documentoDetalle.ProductoPresentacion;
+                    pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.ProductoPresentacion.Equivalencia;
+                }
                 else
+                {
                     pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
+                }
                 pedidoDetalle.flete = documentoDetalle.flete;
                 pedidoDetalle.observacion = documentoDetalle.observacion;
                 pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
@@ -562,7 +575,7 @@ namespace BusinessLayer
                     if (pedidoDetalle.esPrecioAlternativo)
                     {
                         pedidoDetalle.producto.precioClienteProducto.precioUnitario =
-                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.equivalencia;
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.ProductoPresentacion.Equivalencia;
                     }
                 }
             }
@@ -620,7 +633,7 @@ namespace BusinessLayer
                     if (pedidoDetalle.esPrecioAlternativo)
                     {
                         pedidoDetalle.producto.precioClienteProducto.precioUnitario =
-                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.equivalencia;
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.ProductoPresentacion.Equivalencia;
                     }
                 }
             }

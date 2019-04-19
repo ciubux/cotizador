@@ -127,6 +127,7 @@ namespace Model
         public bool administraDocumentosVentaLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_DOCUMENTOS_VENTA_LIMA)).FirstOrDefault() != null; } }
         public bool administraDocumentosVentaProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_DOCUMENTOS_VENTA_PROVINCIAS)).FirstOrDefault() != null; } }
         public bool visualizaDocumentosVenta { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOS_VENTA)).FirstOrDefault() != null; } }
+        public bool visualizaDocumentosCompra { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOS_COMPRA)).FirstOrDefault() != null; } }
         public bool creaNotasCredito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_CREDITO)).FirstOrDefault() != null; } }
         public bool creaNotasDebito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_DEBITO)).FirstOrDefault() != null; } }
         public bool realizaRefacturacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_REFACTURACION)).FirstOrDefault() != null; } }

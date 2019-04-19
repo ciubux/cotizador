@@ -38,13 +38,15 @@ namespace DataLayer
             tvparam.SqlDbType = SqlDbType.Structured;
             tvparam.TypeName = "dbo.UniqueIdentifierList";
 
-                //InputParameterAdd.Varchar(objCommand, "idProductoList", tvparam);
-           
+            //InputParameterAdd.Varchar(objCommand, "idProductoList", tvparam);
+
 
             //InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
             DataSet dataSet = ExecuteDataSet(objCommand);
+
             DataTable documentoVentaDataTable = dataSet.Tables[0];
-        //    DataTable documentoVentaDetalleDataTable = dataSet.Tables[1];
+            DataTable productoDataTable = dataSet.Tables[1];
+            
 
             DocumentoVenta documentoVenta = new DocumentoVenta();
             documentoVenta.ventaDetalleList = new List<VentaDetalle>();
@@ -56,51 +58,92 @@ namespace DataLayer
                 ventaDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 ventaDetalle.producto.sku = Converter.GetString(row, "sku");
                 ventaDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
-                ventaDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+
                 ventaDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+
+                if (ventaDetalle.esPrecioAlternativo)
+                {
+                    ventaDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    ventaDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                }
+                
+                
 
                 ventaDetalle.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
 
                 //  ventaDetalle.sumCantidad =  Converter.GetDecimal(row, "sum_cantidad");
                 ventaDetalle.sumCantidadUnidadAlternativa = Converter.GetDecimal(row, "sum_cantidad_unidad_alternativa");
+
+
                 ventaDetalle.producto.unidad = Converter.GetString(row, "unidad");
                 ventaDetalle.sumCantidadUnidadEstandar = Converter.GetDecimal(row, "sum_cantidad_unidad_estandar");
+
+
+
+
                 ventaDetalle.sumPrecioNeto = Converter.GetDecimal(row, "sum_precio_neto");
                 ventaDetalle.sumPrecioUnitario = Converter.GetDecimal(row, "sum_precio_unitario");
 
                 documentoVenta.ventaDetalleList.Add(ventaDetalle);
             }
 
+
+
+            Guid idProductoActual = Guid.Empty;
+
+            List<Producto> productoList = new List<Producto>();
+            Producto producto = new Producto();
+            foreach (DataRow row in productoDataTable.Rows)
+            {
+                Guid idProducto = Converter.GetGuid(row, "id_producto");
+                if (idProducto != idProductoActual)
+                {
+                    idProductoActual = idProducto;
+                    producto = new Producto();
+                    producto.idProducto = idProducto;
+                    producto.ProductoPresentacionList = new List<ProductoPresentacion>();
+                    productoList.Add(producto);
+                }
+                ProductoPresentacion productoPresentacion = new ProductoPresentacion();
+                productoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                productoPresentacion.Presentacion = Converter.GetString(row, "presentacion");
+                productoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+                producto.ProductoPresentacionList.Add(productoPresentacion);
+            }
+          
+
+            foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
+            {
+                Producto productoTmp = productoList.Where(p => p.idProducto == ventaDetalle.producto.idProducto).FirstOrDefault();
+                if (productoTmp != null)
+                {
+                    ventaDetalle.producto.ProductoPresentacionList = productoTmp.ProductoPresentacionList;
+                    foreach (ProductoPresentacion productoPresentacion in ventaDetalle.producto.ProductoPresentacionList)
+                    {
+                        productoPresentacion.Cantidad = Convert.ToInt32(ventaDetalle.sumCantidadUnidadEstandar * productoPresentacion.Equivalencia);
+                    }
+                }
+            }
+
             return documentoVenta;
         }
 
 
-        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList, Dictionary<String,Boolean> mostrarUnidadAlternativaList)
+        public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList, Dictionary<String,int> mostrarUnidadAlternativaList)
         {
             var objCommand = GetSqlCommand("ps_detalleConsolidadoAtenciones");
-
-
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("idMovimientoAlmacenList", typeof(Guid)));
-
-            // populate DataTable from your List here
             foreach (var id in idMovimientoAlmacenList)
                 tvp.Rows.Add(id);
-
             SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idMovimientoAlmacenList", tvp);
-            // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
             tvparam.SqlDbType = SqlDbType.Structured;
             tvparam.TypeName = "dbo.UniqueIdentifierList";
 
-            //InputParameterAdd.Varchar(objCommand, "idProductoList", tvparam);
+            DataSet dataSet = ExecuteDataSet(objCommand);
 
-
-            //InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
-            //DataSet dataSet = ExecuteDataSet(objCommand);
-
-
-            //InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
-            DataTable guiaRemisionDataTable = Execute(objCommand);
+            DataTable guiaRemisionDataTable = dataSet.Tables[0];
+            DataTable productoDataTable = dataSet.Tables[1];
 
             List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
 
@@ -121,6 +164,7 @@ namespace DataLayer
                     guiaRemision = new GuiaRemision();
                     guiaRemision.idMovimientoAlmacen = idMovimientoAlmacenActual;
                     guiaRemisionList.Add(guiaRemision);
+
                     guiaRemision.documentoDetalle = new List<DocumentoDetalle>();
                     guiaRemision.pedido = new Pedido();
                     guiaRemision.pedido.numeroPedido = Converter.GetInt(row, "numero_pedido");
@@ -134,7 +178,15 @@ namespace DataLayer
                     guiaRemision.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
                     guiaRemision.ubigeoEntrega.Provincia = Converter.GetString(row, "provincia");
                     guiaRemision.ubigeoEntrega.Departamento = Converter.GetString(row, "departamento");
-                    guiaRemision.observaciones = Converter.GetString(row, "observaciones");               
+                    guiaRemision.observaciones = Converter.GetString(row, "observaciones");
+                    guiaRemision.pedido.direccionEntrega = new DireccionEntrega();
+                    guiaRemision.pedido.direccionEntrega.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega");
+                    guiaRemision.pedido.direccionEntrega.codigo = Converter.GetInt(row, "direccion_entrega_codigo");
+                    guiaRemision.pedido.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
+                    guiaRemision.pedido.direccionEntrega.codigoCliente = Converter.GetString(row, "direccion_entrega_codigo_cliente");
+                    guiaRemision.pedido.direccionEntrega.contacto = Converter.GetString(row, "direccion_entrega_contacto");
+                    guiaRemision.pedido.direccionEntrega.telefono = Converter.GetString(row, "direccion_entrega_telefono");
+
                 }
 
                 DocumentoDetalle documentoDetalle = new DocumentoDetalle();
@@ -142,7 +194,7 @@ namespace DataLayer
                 documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 documentoDetalle.producto.sku = Converter.GetString(row, "sku");
                 documentoDetalle.producto.unidad = Converter.GetString(row, "producto_unidad");
-                documentoDetalle.producto.equivalencia = Converter.GetInt(row, "equivalencia");
+              //  documentoDetalle.ProductoPresentacion.Equivalencia = Converter.GetInt(row, "equivalencia");
 
                 //Boolean mostrarUnidadAlternativa = false;
                 documentoDetalle.esPrecioAlternativo = false;
@@ -150,21 +202,25 @@ namespace DataLayer
 
                 if (mostrarUnidadAlternativaList != null)
                 {
-                    documentoDetalle.esPrecioAlternativo = mostrarUnidadAlternativaList[documentoDetalle.producto.sku];
-
-                   // documentoDetalle.esPrecioAlternativo = mostrarUnidadAlternativaList.GetEnumerator() [i];
+                    int idProductoPresentacion = mostrarUnidadAlternativaList[documentoDetalle.producto.sku];
+                    
+                    if(idProductoPresentacion > 0 )
+                    {
+                        documentoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                        documentoDetalle.ProductoPresentacion.IdProductoPresentacion = idProductoPresentacion;
+                        documentoDetalle.esPrecioAlternativo = true;
+                    }
                 }
-
-                //documentoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
 
                 if (documentoDetalle.esPrecioAlternativo)
                 {
+                    //Esto es temporal, Se convierte a false el flag para que no se recalcule
                     documentoDetalle.esPrecioAlternativo = false;
                     documentoDetalle.unidad = Converter.GetString(row, "unidad_alternativa");
                     documentoDetalle.cantidadDecimal = Converter.GetDecimal(row, "cantidad_alternativa");
-
+                    
                     /*  if (documentoDetalle.esPrecioAlternativo)
-                          documentoDetalle.precioNeto = (Converter.GetDecimal(row, "precio_neto_alternativo") * documentoDetalle.producto.equivalencia);
+                          documentoDetalle.precioNeto = (Converter.GetDecimal(row, "precio_neto_alternativo") * documentoDetalle.ProductoPresentacion.Equivalencia);
                       else*/
                     
                     documentoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto_alternativo");
@@ -173,7 +229,7 @@ namespace DataLayer
                     documentoDetalle.unidad = Converter.GetString(row, "unidad");
                     documentoDetalle.cantidadDecimal = Converter.GetDecimal(row, "cantidad");
                     /*if (documentoDetalle.esPrecioAlternativo)
-                        documentoDetalle.precioNeto = (Converter.GetDecimal(row, "precio_neto") * documentoDetalle.producto.equivalencia);
+                        documentoDetalle.precioNeto = (Converter.GetDecimal(row, "precio_neto") * documentoDetalle.ProductoPresentacion.Equivalencia);
                     else*/
                         documentoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
                 } 
@@ -181,6 +237,9 @@ namespace DataLayer
                 guiaRemision.documentoDetalle.Add(documentoDetalle);
                 i++;
             }
+
+
+
 
             return guiaRemisionList;
         }
@@ -502,7 +561,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precioSinIGV", pedidoDetalle.producto.precioSinIgv);
             //Siempre se almacena el costo sin igv de la unidad estandar
             InputParameterAdd.Decimal(objCommand, "costoSinIGV", pedidoDetalle.producto.costoSinIgv);
-            InputParameterAdd.Decimal(objCommand, "equivalencia", pedidoDetalle.producto.equivalencia);
+            InputParameterAdd.Decimal(objCommand, "equivalencia", pedidoDetalle.ProductoPresentacion.Equivalencia);
             InputParameterAdd.Varchar(objCommand, "unidad", pedidoDetalle.unidad);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", pedidoDetalle.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "precioNetoEquivalente", pedidoDetalle.precioNeto);
@@ -591,7 +650,7 @@ namespace DataLayer
 
                 //No se cuenta con IdCotizacionDetalle
                 cotizacionDetalle.cantidad = 1;
-                cotizacionDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
+                cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                 cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
 
@@ -603,7 +662,7 @@ namespace DataLayer
     
                 //if (cotizacionDetalle.esPrecioAlternativo)
                // {
-                    cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.producto.equivalencia;
+                    cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.ProductoPresentacion.Equivalencia;
                     cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                 /*}
                 else

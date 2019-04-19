@@ -145,7 +145,7 @@
                             <th data-name="descripcion" data-visible="true" data-sortable="true">Descripción</th>
                             <th data-name="unidad" data-sortable="false" data-breakpoints="xs">Unidad</th>
                             <th data-name="unidadAlternativa" data-sortable="false" data-breakpoints="xs">Unidad Alternativa</th>
-                            <th data-name="equivalencia" data-visible="true" data-sortable="true">Equivalencia</th>
+                            <th data-name="equivalenciaAlternativa" data-visible="true" data-sortable="true">Equivalencia Alternativa</th>
                             <th data-name="unidadProveedor" data-visible="true" data-sortable="true">Unidad Proveedor</th>
                             <th data-name="equivalenciaProveedor" data-visible="true" data-sortable="true">Equivalencia Proveedor</th>
                             <th data-name="precio" data-visible="true" data-sortable="true">Precio Lima</th>
@@ -311,9 +311,9 @@ else
                         <!--Equivalencia-->
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
-                                @Html.LabelFor(c => producto.equivalencia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                @Html.LabelFor(c => producto.equivalenciaAlternativa, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-6">
-                                    <p class="form-control-static" id="verEquivalencia"></p>
+                                    <p class="form-control-static" id="verEquivalenciaAlternativa"></p>
                                 </div>
                             </div>
                         </div>

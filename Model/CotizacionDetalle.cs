@@ -12,6 +12,7 @@ namespace Model
             this.visualizaCostos = visualizaCostos;
             this.visualizaMargen = visualizaMargen;
             this.validar = true;
+          //  this.ProductoPresentacion = new ProductoPresentacion();
         }
 
         public Guid idCotizacionDetalle { get; set; }
@@ -69,7 +70,7 @@ namespace Model
 
 
 
-        public Decimal costoAnterior { get; set; }
+        //public Decimal costoAnterior { get; set; }
 
         //recupera la variacion del costo con respecto al costoAnterior para los calculos de recotizacion
         private Decimal _variacionCosto;
@@ -78,8 +79,8 @@ namespace Model
             get
             {
 
-                if (costoAnterior != 0)
-                    _variacionCosto = (this.costoLista / this.costoAnterior - 1) * 100;
+                if (costoListaAnterior != 0)
+                    _variacionCosto = (this.costoLista / this.costoListaAnterior - 1) * 100;
                 else
                     _variacionCosto = 0;
 

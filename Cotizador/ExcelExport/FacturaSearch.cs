@@ -63,7 +63,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 4;
-                int cTotal = 12 + 2;
+                int cTotal = 15 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -83,13 +83,15 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "C", "Motivo Almacén", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "D", "Creado por", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "E", "Fecha Emisión", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "F", "Razón Social", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "G", "RUC", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "H", "Sede MP", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "I", "Total", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "J", "Estado", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "K", "Comentario Solicitud Anulación", titleCellStyle);
-
+                UtilesHelper.setValorCelda(sheet, 1, "F", "Fecha Vencimiento", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "G", "Cód. Cliente", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "H", "Razón Social", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "I", "RUC", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "J", "Sede MP", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "K", "Total", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "L", "Cód. Asesor Comercial", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "M", "Estado", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "N", "Comentario Solicitud Anulación", titleCellStyle);
 
 
                 i = 2;
@@ -113,13 +115,16 @@ namespace Cotizador.ExcelExport
 
                     UtilesHelper.setValorCelda(sheet, i, "C", movimientoAlmacen);
                     UtilesHelper.setValorCelda(sheet, i, "D", obj.usuario.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "E", ((DateTime) obj.fechaEmision).ToString("dd/MM/yyyy HH:mm"));
-                    UtilesHelper.setValorCelda(sheet, i, "F", obj.cliente.razonSocial);
-                    UtilesHelper.setValorCelda(sheet, i, "G", obj.cliente.ruc);
-                    UtilesHelper.setValorCelda(sheet, i, "H", obj.ciudad.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "I", (double) obj.total);
-                    UtilesHelper.setValorCelda(sheet, i, "J", obj.estadoDocumentoSunatString);
-                    UtilesHelper.setValorCelda(sheet, i, "K", obj.comentarioSolicitudAnulacion);
+                    UtilesHelper.setValorCelda(sheet, i, "E", ((DateTime) obj.fechaEmision).ToString("dd/MM/yyyy"));
+                    UtilesHelper.setValorCelda(sheet, i, "F", ((DateTime)obj.fechaVencimiento).ToString("dd/MM/yyyy"));
+                    UtilesHelper.setValorCelda(sheet, i, "G", obj.cliente.codigo);
+                    UtilesHelper.setValorCelda(sheet, i, "H", obj.cliente.razonSocial);
+                    UtilesHelper.setValorCelda(sheet, i, "I", obj.cliente.ruc);
+                    UtilesHelper.setValorCelda(sheet, i, "J", obj.ciudad.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "K", (double) obj.total);
+                    UtilesHelper.setValorCelda(sheet, i, "L", obj.cliente.responsableComercial.codigo);
+                    UtilesHelper.setValorCelda(sheet, i, "M", obj.estadoDocumentoSunatString);
+                    UtilesHelper.setValorCelda(sheet, i, "N", obj.comentarioSolicitudAnulacion);
                     
                     i++;
                 }

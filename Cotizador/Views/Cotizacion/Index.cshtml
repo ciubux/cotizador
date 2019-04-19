@@ -497,6 +497,12 @@
                     {
                         <button type="button" id="btnReCotizacion" class="btn btn-primary">Recotizar</button>
                     }
+                    @if (cotizacion.usuario.creaCotizacionesGrupales || cotizacion.usuario.apruebaCotizacionesGrupales)
+                    {
+                        <button type="button" id="btnReCotizacionGrupal" class="btn btn-primary">Recotizar</button>
+                    }
+
+
                     @if (cotizacion.usuario.visualizaCotizaciones || cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
                     {
                         <button type="button" id="btnPDFCotizacion" class="btn btn-primary bouton-image pdfBoton">PDF</button>

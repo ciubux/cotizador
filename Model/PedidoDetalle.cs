@@ -11,6 +11,7 @@ namespace Model
         {
             this.visualizaCostos = visualizaCostos;
             this.visualizaMargen = visualizaMargen;
+            //this.ProductoPresentacion = new ProductoPresentacion();
         }
 
         public Guid idPedidoDetalle { get; set; }
@@ -21,7 +22,7 @@ namespace Model
             get
             {
                 if (esPrecioAlternativo)
-                    return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, _precioNeto / producto.equivalencia));
+                    return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, _precioNeto / ProductoPresentacion.Equivalencia));
                 else
                     return _precioNeto;
             }
@@ -37,7 +38,7 @@ namespace Model
         {
             set
             {
-                Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, this._precioNeto = value * producto.equivalencia));
+                Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, this._precioNeto = value * ProductoPresentacion.Equivalencia));
             }
 
         }

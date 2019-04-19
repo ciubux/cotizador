@@ -466,7 +466,7 @@ namespace Cotizador.Controllers
                     if (recalcularIGV)
                     {
                         cotizacionDetalle.precioNetoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.precioNetoAnterior + cotizacionDetalle.precioNetoAnterior * Constantes.IGV));
-                        cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior + cotizacionDetalle.costoAnterior * Constantes.IGV));
+                        cotizacionDetalle.producto.costoListaAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoListaAnterior + cotizacionDetalle.producto.costoListaAnterior * Constantes.IGV));
                     }
                 }
                 else
@@ -476,7 +476,7 @@ namespace Cotizador.Controllers
                     if (recalcularIGV)
                     {
                         cotizacionDetalle.precioNetoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.precioNetoAnterior / (1 + Constantes.IGV)));
-                        cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior / (1 + Constantes.IGV)));
+                        cotizacionDetalle.producto.costoListaAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoListaAnterior / (1 + Constantes.IGV)));
                     }
                 }
 
@@ -905,6 +905,7 @@ namespace Cotizador.Controllers
             }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
+            String jsonProductoPresentacion = JsonConvert.SerializeObject(producto.ProductoPresentacionList);
 
             String resultado = "{" +
                 "\"id\":\"" + producto.idProducto + "\"," +
@@ -915,14 +916,15 @@ namespace Cotizador.Controllers
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
                 "\"familia\":\"" + producto.familia + "\"," +
                 "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
-                "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
+             //   "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                 "\"precioLista\":\"" + producto.precioLista + "\"," +
                 "\"costoSinIGV\":\"" + producto.costoSinIgv + "\"," +
-                "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
+            //    "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
                 "\"fleteDetalle\":\"" + fleteDetalle + "\"," +
                 "\"precioUnitario\":\"" + precioUnitario + "\"," +
                 "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
                 "\"precioListaList\":" + jsonPrecioLista + "," +
+                "\"productoPresentacionList\":" + jsonProductoPresentacion + "," +
                 "\"costoLista\":\"" + producto.costoLista + "\"" +
                 "}";
 
@@ -956,39 +958,54 @@ namespace Cotizador.Controllers
             detalle.cantidad = Int32.Parse(Request["cantidad"].ToString());
             detalle.porcentajeDescuento = Decimal.Parse(Request["porcentajeDescuento"].ToString());
             detalle.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
+            int idProductoPresentacion = Int16.Parse(Request["idProductoPresentacion"].ToString());
+
+
             detalle.observacion = Request["observacion"].ToString();
             decimal precioNeto = Decimal.Parse(Request["precio"].ToString());
             decimal costo = Decimal.Parse(Request["costo"].ToString());
             decimal flete = Decimal.Parse(Request["flete"].ToString());
 
             decimal precioNetoAnterior = 0;
+            detalle.unidad = detalle.producto.unidad;
+            //si esPrecioAlternativo  se mostrará la unidad alternativa
+
             if (detalle.esPrecioAlternativo)
             {
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                 //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * producto.equivalencia));
+                detalle.ProductoPresentacion = producto.getProductoPresentacion(idProductoPresentacion);
+
+
+                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * detalle.ProductoPresentacion.Equivalencia));
+
+
                 precioNetoAnterior = detalle.producto.precioClienteProducto.precioNetoAlternativo;
+
+
+
+
+                ProductoPresentacion productoPresentacion = producto.getProductoPresentacion(idProductoPresentacion);
+
+
+                detalle.unidad = productoPresentacion.Presentacion;
             }
             else
             {
                 detalle.precioNeto = precioNeto;
                 precioNetoAnterior = detalle.producto.precioClienteProducto.precioNeto;
             }
+
+
             detalle.flete = flete;
+            detalle.precioNetoAnterior = precioNetoAnterior;
             cotizacion.cotizacionDetalleList.Add(detalle);
 
             //Calcula los montos totales de la cabecera de la cotizacion
             HelperDocumento.calcularMontosTotales(cotizacion);
 
            
-            detalle.unidad = detalle.producto.unidad;
-            //si esPrecioAlternativo  se mostrará la unidad alternativa
-            if (detalle.esPrecioAlternativo)
-            {
-                detalle.unidad = detalle.producto.unidad_alternativa;
-//                if(detalle.producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
 
-            }
 
             var nombreProducto = detalle.producto.descripcion;
             if (cotizacion.mostrarCodigoProveedor)
@@ -1026,7 +1043,11 @@ namespace Cotizador.Controllers
                 precioUnitario = detalle.precioUnitario,
                 precioNetoAnt = precioNetoAnterior,
                 observacion = detalle.observacion,
-                total = cotizacion.montoTotal.ToString()
+                total = cotizacion.montoTotal.ToString(),
+                varprecioNetoAnterior = detalle.variacionPrecioAnterior,
+                variacionPrecioListaAnterior = detalle.variacionPrecioListaAnterior,
+                variacionCosto = detalle.variacionCosto,
+                costoListaAnterior = detalle.costoListaAnterior
             };
 
 
@@ -1329,19 +1350,31 @@ namespace Cotizador.Controllers
 
 
 
-        public void recotizacion()
+        public void recotizarCliente()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoCotizacion;
+            Cotizacion cotizacion = recotizar(Int64.Parse(Request["numero"].ToString()), Boolean.Parse(this.Request.Params["mantenerPorcentajeDescuento"]));
+            this.CotizacionSession = cotizacion;
+        }
+
+        public void recotizarGrupo()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoCotizacionGrupal;
+            Cotizacion cotizacion = recotizar(Int64.Parse(Request["numero"].ToString()), Boolean.Parse(this.Request.Params["mantenerPorcentajeDescuento"]));
+            this.CotizacionSession = cotizacion;
+        }
+
+        private Cotizacion recotizar(Int64 numeroCotizacion,Boolean mantenerPorcentajeDescuento)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             CotizacionBL cotizacionBL = new CotizacionBL();
             Cotizacion cotizacion = new Cotizacion();
-            cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
-
-
-            Boolean mantenerPorcentajeDescuento = Boolean.Parse(this.Request.Params["mantenerPorcentajeDescuento"]);
+            cotizacion.codigo = numeroCotizacion;
 
             
+
             cotizacion.esRecotizacion = true;
-            
+
             cotizacion = cotizacionBL.GetReCotizacion(cotizacion, usuario, mantenerPorcentajeDescuento);
             cotizacion.usuario = (Usuario)this.Session["usuario"];
             //Se seta el codigo y estadoAprobacion en 0 porque una recotización es una nueva cotización
@@ -1351,14 +1384,13 @@ namespace Cotizador.Controllers
             cotizacion.fechaInicioVigenciaPrecios = null;
             cotizacion.fechaFinVigenciaPrecios = null;
             cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
-            
 
 
+            return cotizacion;
 
-            this.Session["cotizacion"] = cotizacion;
+           
+
         }
-
-
         
 
 

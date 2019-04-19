@@ -131,7 +131,7 @@ namespace BusinessLayer
                             else
                             {
                                 if (cotizacionDetalle.precioUnitario !=
-                                    Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, precioClienteProducto.precioUnitario / cotizacionDetalle.producto.equivalencia))
+                                    Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, precioClienteProducto.precioUnitario / cotizacionDetalle.ProductoPresentacion.Equivalencia))
 )
                                 {
                                     if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
@@ -247,7 +247,7 @@ namespace BusinessLayer
                 cotizacionDetalle.visualizaMargen = usuario.visualizaMargen;
                 cotizacionDetalle.cantidad = 1;
                 if (cotizacionDetalle.esPrecioAlternativo)
-                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia;
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.ProductoPresentacion.Equivalencia;
                 else
                     cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
             }
@@ -268,7 +268,7 @@ namespace BusinessLayer
                 cotizacionDetalle.visualizaMargen = usuario.visualizaMargen;
                 cotizacionDetalle.cantidad = 1;
                 if (cotizacionDetalle.esPrecioAlternativo)
-                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.producto.equivalencia;
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto * cotizacionDetalle.ProductoPresentacion.Equivalencia;
                 else
                     cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
             }
@@ -322,7 +322,7 @@ namespace BusinessLayer
                     //Es precio alternativo
                     if (cotizacionDetalle.esPrecioAlternativo)
                     {
-                        precioSinIGV = cotizacionDetalle.producto.precioAlternativoSinIgv;
+                        precioSinIGV = cotizacionDetalle.producto.precioSinIgv / cotizacionDetalle.ProductoPresentacion.Equivalencia;
                     }
 
 
@@ -332,59 +332,6 @@ namespace BusinessLayer
                     }
 
 
-                    /*        //Si es RECOTIZACIÓN se calcula el nuevo precioNetoEquivalente a partir del precioSinIGV del producto
-                            if (cotizacion.esRecotizacion)
-                            {
-                                //Si es provincia se considera el precioProvincia como precioSinIgv
-                                if (cotizacion.ciudad.esProvincia)
-                                {
-                                    cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
-                                }
-
-                                Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
-                                Decimal costo = cotizacionDetalle.producto.costoSinIgv;
-
-                                //Se agrega el igv al costo y al precio neto que se obtuvo directamente del producto
-                                if (cotizacion.incluidoIGV)
-                                {
-                                    precioNeto = precioNeto + (precioNeto * Constantes.IGV);
-                                    costo = costo + (costo * Constantes.IGV);
-                                    cotizacionDetalle.producto.costoLista = costo;
-                                    //Tambien se agrega el IGV al costo Anterior, dado que fue almacenado sin IGV
-                                    cotizacionDetalle.costoAnterior = cotizacionDetalle.costoAnterior + (cotizacionDetalle.costoAnterior * Constantes.IGV);
-                                    cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-                                }
-                                else
-                                {
-                                    cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costo));
-                                    cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-                                }
-
-
-                                //Se calcula el descuento para el nuevo precioNetoEquivalente
-                                if (cotizacionDetalle.porcentajeDescuento != 0)
-                                {
-                                    precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (precioNeto * (100 - cotizacionDetalle.porcentajeDescuento)/100)));
-                                }
-
-
-                                cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
-
-
-
-
-
-                                if (cotizacionDetalle.esPrecioAlternativo)
-                                {
-                                    cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior / cotizacionDetalle.producto.equivalencia));
-                                }
-
-
-
-                            }
-                            else
-                            {*/
-                    //Si NO es recotizacion
                     if (cotizacion.incluidoIGV)
                         {
                             //Se agrega el IGV al precioLista
@@ -402,7 +349,7 @@ namespace BusinessLayer
                             cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
                         }
 
-                 //   }
+                
                     
                 }
 
@@ -453,6 +400,8 @@ namespace BusinessLayer
                             cotizacionDetalle.producto.precioSinIgv = cotizacionDetalle.producto.precioProvinciaSinIgv;
                         }
 
+
+
                         Decimal precioNeto = cotizacionDetalle.producto.precioSinIgv;
                         Decimal costo = cotizacionDetalle.producto.costoSinIgv;
 
@@ -463,7 +412,7 @@ namespace BusinessLayer
                             costo = costo + (costo * Constantes.IGV);
                             cotizacionDetalle.producto.costoLista = costo;
                             //Tambien se agrega el IGV al costo Anterior, dado que fue almacenado sin IGV
-                            cotizacionDetalle.costoAnterior = cotizacionDetalle.costoAnterior + (cotizacionDetalle.costoAnterior * Constantes.IGV);
+                            cotizacionDetalle.producto.costoListaAnterior = cotizacionDetalle.producto.costoListaAnterior + (cotizacionDetalle.producto.costoListaAnterior * Constantes.IGV);
                             cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
                         }
                         else
@@ -483,19 +432,28 @@ namespace BusinessLayer
                         else
                         {
 
-                            cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNetoAnterior * 100 / cotizacionDetalle.producto.precioLista);
-                            precioNeto = cotizacionDetalle.precioNetoAnterior; // Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (precioNeto * (100 - cotizacionDetalle.porcentajeDescuento) / 100)));
-
+                            if (cotizacionDetalle.esPrecioAlternativo)
+                            {
+                                cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNetoAnterior * 100 / (cotizacionDetalle.producto.precioLista / cotizacionDetalle.ProductoPresentacion.Equivalencia));
+                                precioNeto = cotizacionDetalle.precioNetoAnterior * cotizacionDetalle.ProductoPresentacion.Equivalencia; 
+                            }
+                            else
+                            {
+                                cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNetoAnterior * 100 / cotizacionDetalle.producto.precioLista);
+                                precioNeto = cotizacionDetalle.precioNetoAnterior; 
+                            }
+                            
                         }
 
 
                         cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
 
-                        if (cotizacionDetalle.esPrecioAlternativo)
+                 /*       if (cotizacionDetalle.esPrecioAlternativo)
                         {
-                            cotizacionDetalle.costoAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.costoAnterior / cotizacionDetalle.producto.equivalencia));
+                            cotizacionDetalle.producto.costoListaAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoListaAnterior / cotizacionDetalle.ProductoPresentacion.Equivalencia));
+                            cotizacionDetalle.producto.precioListaAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioListaAnterior / cotizacionDetalle.ProductoPresentacion.Equivalencia));
                         }
-
+                        */
 
 
                     }                 

@@ -22,7 +22,7 @@ namespace Cotizador.Models
                 return Data.Select(c => new SelectListItem
                 {
                     Value = c.idCiudad.ToString(),
-                    Text = c.nombre,
+                    Text = c.nombre + " (" + c.sede + ")",
                     Selected = SelectedValue != null && SelectedValue == c.idCiudad.ToString()
                 });
             }

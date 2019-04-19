@@ -120,7 +120,7 @@ namespace BusinessLayer
         {
             using (var dal = new CompraDAL())
             {
-                compra = new Compra();// dal.SelectCompra(compra, usuario);
+                compra = dal.SelectCompra(compra, usuario);
                 //Se agrega comentarios recuperados de los datos registrados en el pedido
                 String observacionesFacturaAdicional = String.Empty;
 

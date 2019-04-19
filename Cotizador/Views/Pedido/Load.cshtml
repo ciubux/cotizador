@@ -1,34 +1,66 @@
-﻿<div class="container">
-    <form action="/Pedido/Load" method="post" enctype="multipart/form-data" id="form1">
-        <table>
-            <tr>
-                <td>
-                    <label class="control-label col-xs-6" for="file">Archivo Pedido:</label>
-                </td>
-                <td>
-                    <input class="form-control" type="file" name="file" id="file" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label col-xs-6" for="ultimaFila">Última Fila:</label>
-                </td>
-                <td>
-                    <input class="form-control" type="number" value="0" name="ultimaFila" id="ultimaFila" />
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <button type="submit" class="form-control" form="form1" value="Submit">Cargar Pedidos</button>
-                </td>
-            </tr>
-            <tr>
-                <td> <label class="control-label col-xs-6" >Pedidos Creados:</label></td>
-                <td><textarea class="form-control" rows="15" cols="80">@ViewBag.numerosPedido</textarea> </td>
-            </tr>
+﻿<div class="page-header">
+    <h3>Carga Masiva Pedidos Venta</h3>
+</div>
+<div class="container">
+    <form class="form-horizontal" action="/Pedido/Load" method="post" enctype="multipart/form-data" id="form1">
 
-        </table>
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="file" class="control-label col-xs-4">Excel (xlsx):</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="file" name="file" id="file" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="file" class="control-label col-xs-4">Última Fila:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="number" value="0" name="ultimaFila" id="ultimaFila" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4"></label>
+                    <div class="col-xs-8">
+                        <button type="submit" class="btn btn-primary" form="form1" value="Submit">Cargar Pedidos</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (ViewBag.numerosPedido != null && ViewBag.numerosPedido.Length > 0)
+        {
+            <div class="row">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Número Grupo</label>
+                        <div class="col-xs-8">
+                            @ViewBag.numeroGrupo
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Números Pedidos</label>
+                        <div class="col-xs-8">
+                            @ViewBag.numerosPedido
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+
     </form>
     
 </div>

@@ -6,6 +6,341 @@ jQuery(function ($) {
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
 
+
+    var columns = new Array(
+        { name: "idDireccionEntrega", title: "idDireccionEntrega" },
+        { name: "idCliente" },
+        { name: "idCiudad" },
+        { name: "idDomicilioLegal" },
+        { name: "codigoUbigeo" },
+        { name: "codigo" },
+        { name: "sede" },
+        { name: "ubigeo" },
+        { name: "direccionEntrega" },
+        { name: "contacto" },
+        { name: "telefono" },
+        { name: "codigoCliente" },
+        { name: "nombre" },
+        { name: "codigoMP" },
+        { name: "emailRecepcionFacturas" },
+        { name: "direccionDomicilioLegal" }       
+    );
+
+    var columnas = '[{ "name": "idDireccionEntrega", "title": "idDireccionEntrega" },' +
+        '{ "name": "idCliente" },' +
+        '{ "name": "idCiudad" },' +
+        '{ "name": "idDomicilioLegal" },' +
+        '{ "name": "codigoUbigeo" },' +
+        '{ "name": "codigo" },' +
+        '{ "name": "sede" },' +
+        '{ "name": "ubigeo" },' +
+        '{ "name": "direccionEntrega" },' +
+        '{ "name": "contacto" },' +
+        '{ "name": "telefono" },' +
+        '{ "name": "codigoCliente" },' +
+        '{ "name": "nombre" },' +
+        '{ "name": "codigoMP" },' +
+        '{ "name": "emailRecepcionFacturas" },' +
+        '{ "name": "direccionDomicilioLegal" }    ]';
+
+    var $modal = $('#modalEdicionDireccionEntrega'),
+        $editor = $('#editorDireccionEntrega'),
+        $editorTitle = $('#modalEdicionDireccionEntregaTitle'),
+        ft = FooTable.init('#tableListaDireccionesEntrega',
+          //  { "columns": columns },
+            {
+            editing: {
+                enabled: true,
+                addRow: function (row) {
+                    $editor.find('#idDireccionEntrega').val("");
+                    $modal.removeData('row');
+                    $editor[0].reset();
+                    $editorTitle.text('Agregando Dirección Entrega');
+                    $modal.modal('show');
+                },
+                editRow: function (row) {
+                    $('body').loadingModal({
+                        text: 'Cargando Dirección Entrega'
+                    });
+
+                    var values = row.val();
+                    $editor.find('#idDireccionEntrega').val(values.idDireccionEntrega.trim());
+                    $editor.find('#direccionEntrega_codigo').val(values.codigo.trim());
+                    //$editor.find('#idCliente').val(values.idCliente.trim());
+                    //$editor.find('#direccionEntrega_cliente_ciudad_sede').val(values.cliente.ciudad.sede.trim());  
+
+
+                    $editor.find('#idCiudad').val(values.idCiudad.trim());
+
+                    $editor.find('#Departamento').val(values.codigoUbigeo.trim().substr(0, 2))
+                    $("#Departamento").change();
+                    window.setTimeout(function () {
+                        $editor.find('#Provincia').val(values.codigoUbigeo.trim().substr(0, 4));
+                        $("#Provincia").change();
+                    }, 2500);
+                    window.setTimeout(function () {
+                        $editor.find('#Distrito').val(values.codigoUbigeo.trim().substr(0, 6));
+                        $('body').loadingModal('hide');
+                    }, 5000);
+                    $editor.find('#direccionEntrega_descripcion').val(values.direccionEntrega.trim());
+                    $editor.find('#direccionEntrega_contacto').val(values.contacto.trim());
+                    $editor.find('#direccionEntrega_telefono').val(values.telefono.trim());
+                    $editor.find('#direccionEntrega_emailRecepcionFacturas').val(values.emailRecepcionFacturas.trim());
+                    $editor.find('#direccionEntrega_codigoCliente').val(values.codigoCliente.trim());
+                    $editor.find('#direccionEntrega_nombre').val(values.nombre.trim());
+                    $editor.find('#direccionEntrega_idDomicilioLegal').val(values.idDomicilioLegal.trim());
+                    $modal.data('row', row);
+                    $editorTitle.text('Editando Dirección Entrega: ' + values.direccionEntrega);
+                    $modal.modal('show');
+                },
+                deleteRow: function (row) {
+
+                    var values = row.val();
+
+                    $.confirm({
+                        title: 'Confirmación',
+                        content: '¿Está seguro de eliminar la Dirección de Entrega: ' + values.direccionEntrega.trim() + '?',
+                        type: 'orange',
+                        buttons: {
+                            confirm: {
+                                text: 'Sí',
+                                btnClass: 'btn-red',
+                                action: function () {
+                                    var values = row.val();
+                                    var idDireccionEntrega = values.idDireccionEntrega.trim();
+                                    $('body').loadingModal({
+                                        text: 'Creando Dirección Entrega'
+                                    });
+
+                                    $.ajax({
+                                        url: "/DireccionEntrega/Delete",
+                                        type: 'POST',
+                                        data: {
+                                            idDireccionEntrega: idDireccionEntrega
+                                        },
+                                        error: function (detalle) {
+                                            $('body').loadingModal('hide')
+                                            mostrarMensajeErrorProceso(detalle.responseText);
+                                        },
+                                        success: function () {
+                                            row.delete();
+                                            $.alert({
+                                                title: "Operación exitosa",
+                                                type: 'green',
+                                                content: "Se eliminó la dirección correctamente.",
+                                                buttons: {
+                                                    OK: function () { }
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            },
+                            cancel: {
+                                text: 'No',
+                                action: function () {
+                                }
+                            }
+                        },
+                    });
+                }
+            }
+        }),
+        // this example does not send data to the server so this variable holds the integer to use as an id for newly
+        // generated rows. In production this value would be returned from the server upon a successful ajax call.
+        uid = 10;
+
+
+
+    $editor.on('submit', function (e) {
+        
+        if (this.checkValidity && !this.checkValidity()) return; // if validation fails exit early and do nothing.
+        e.preventDefault(); // stop the default post back from a form submit
+        var codigoUbigeo = $editor.find('#Distrito').val();
+
+        var departamento = $('#Departamento option:selected').text();
+        var provincia = $('#Provincia option:selected').text();
+        var distrito = $('#Distrito option:selected').text();
+    
+        var direccionEntrega = $editor.find('#direccionEntrega_descripcion').val();
+        var idDomicilioLegal = $editor.find('#direccionEntrega_idDomicilioLegal').val();
+        var domicilioLegal = $editor.find('#direccionEntrega_idDomicilioLegal option:selected').text();
+        //$('#idCiudad').change();
+        var sede = $editor.find('#idCiudad option:selected').text();
+      //  alert(sede)
+       // return;
+        sede = sede.split("(")[1].substr(0,3);
+        var idDireccionEntrega = $editor.find('#idDireccionEntrega').val();
+     //   alert("asa1")
+        var idCiudad = $editor.find('#idCiudad').val();
+     //   alert("asa2")
+        var contacto = $editor.find('#direccionEntrega_contacto').val();
+     //   alert("asa3")
+        var telefono = $editor.find('#direccionEntrega_telefono').val();
+     
+        var codigoCliente = $editor.find('#direccionEntrega_codigoCliente').val();
+        var nombre = $editor.find('#direccionEntrega_nombre').val();
+        var codigo = $editor.find('#direccionEntrega_codigo').val();
+        var emailRecepcionFacturas = $editor.find('#direccionEntrega_emailRecepcionFacturas').val();
+
+      
+        if (idCiudad == null || idCiudad == "") {
+            $.alert({
+                title: "Validación",
+                type: 'orange',
+                content: "Debe seleccionar la Sede MP",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#Distrito").focus();
+            return;
+        }
+
+        if (codigoUbigeo == null || codigoUbigeo == "") {
+            $.alert({
+                title: "Validación",
+                type: 'orange',
+                content: "Debe seleccionar el Departamento, Provincia y Distrito",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#Distrito").focus();
+            return;
+        }
+
+        if (direccionEntrega == null || direccionEntrega.trim().length < 5) {
+            $.alert({
+                title: "Validación",
+                type: 'orange',
+                content: "Debe ingresar una dirección válida",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#direccionEntrega_descripcion").focus();
+            return;
+        }
+
+        if (idDomicilioLegal == null || idDomicilioLegal == "") {
+            $.alert({
+                title: "Validación",
+                type: 'orange',
+                content: "Debe seleccionar el Domicilio Legal",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#direccionEntrega_idDomicilioLegal").focus();
+            return;
+        }
+
+
+                        
+
+        var row = $modal.data('row'),
+            values = {
+                idDireccionEntrega: idDireccionEntrega,
+               // idCliente: idCliente,
+                idCiudad: idCiudad,
+                idDomicilioLegal: idDomicilioLegal,
+                codigoUbigeo: codigoUbigeo,
+                codigo: codigo,
+                sede: sede,
+                ubigeo: departamento + ' - ' + provincia + ' - ' + distrito,
+                direccionEntrega: direccionEntrega,
+                contacto: contacto,
+                telefono: telefono,
+                codigoCliente: codigoCliente,
+                nombre: nombre,
+                emailRecepcionFacturas: emailRecepcionFacturas,
+                direccionDomicilioLegal: domicilioLegal
+            };
+
+        if (row instanceof FooTable.Row) {
+            $('body').loadingModal({
+                text: 'Modificando Dirección Entrega'
+            });
+            $.ajax({
+                url: "/DireccionEntrega/Update",
+                type: 'POST',
+                data: {
+                    idDireccionEntrega: idDireccionEntrega,
+                    ubigeo: codigoUbigeo,
+                    direccion: direccionEntrega,
+                    contacto: contacto,
+                    telefono: telefono,
+                    emailRecepcionFacturas: emailRecepcionFacturas,
+                    codigoCliente: codigoCliente,
+                    nombre: nombre,
+                    idDomicilioLegal: idDomicilioLegal,
+                    departamento: departamento,
+                    provincia: provincia,
+                    distrito, distrito
+                },
+                error: function (detalle) {
+                    $('body').loadingModal('hide')
+                    mostrarMensajeErrorProceso(detalle.responseText);
+                },
+                success: function () {
+                    row.val(values);
+
+                    $modal.modal('hide');
+                }
+            });
+
+        } else {
+            $('body').loadingModal({
+                text: 'Creando Dirección Entrega'
+            });
+            $.ajax({
+                url: "/DireccionEntrega/Create",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    ubigeo: codigoUbigeo,
+                    direccion: direccionEntrega,
+                    contacto: contacto,
+                    telefono: telefono,
+                    emailRecepcionFacturas: emailRecepcionFacturas,
+                    codigoCliente: codigoCliente,
+                    nombre: nombre,
+                    idDomicilioLegal: idDomicilioLegal,
+                    departamento: departamento,
+                    provincia: provincia,
+                    distrito, distrito
+                },
+                error: function (detalle) {
+                    $('body').loadingModal('hide')
+                    mostrarMensajeErrorProceso(detalle.responseText);
+                },
+                success: function (direccion) {
+                    values.id = uid++;
+                    values.idDireccionEntrega = direccion.idDireccionEntrega;
+                    values.codigo = direccion.codigo;
+                    ft.rows.add(values);
+                    $modal.modal('hide');
+                }
+            });
+
+
+
+        }
+    });
+
+
+
+    function loadDireccionesEntrega(arrayDireccionEntrega) {
+
+        ft.rows.load(arrayDireccionEntrega, false);
+    }
+    
+
+
+
+
+
     $(document).ready(function () {
         $("#btnBusqueda").click();
         //cargarChosenCliente();
@@ -86,6 +421,8 @@ jQuery(function ($) {
             $("#btnFinalizarEdicionCliente").html('Finalizar Edición');            
         }
         else {
+            //Si recién se está creando el cliente, el usuario puede seleccionar el responsable comercial
+            $("#idResponsableComercial").removeAttr("disabled");
             $("#btnFinalizarEdicionCliente").html('Finalizar Creación');
         }
 
@@ -1362,11 +1699,6 @@ jQuery(function ($) {
 
 
     
-    var ft = null;
-
-
-    
-    
     
 
     //Mantener en Session cambio de Cliente
@@ -1394,59 +1726,7 @@ jQuery(function ($) {
     /**
      * Se definen los eventos de la grilla
      */
-    function cargarTablaDetalle() {
-        var $modal = $('#tableDetallePedido'),
-            $editor = $('#tableDetallePedido'),
-            $editorTitle = $('#tableDetallePedido');
 
-     
-        ft = FooTable.init('#tableDetallePedido', {
-            editing: {
-                enabled: true,
-                addRow: function () {
-                    ConfirmDialogReload(MENSAJE_CANCELAR_EDICION);
-                },
-                editRow: function (row) {
-                    var values = row.val();
-                    var idProducto = values.idProducto;
-                    alert(idProducto);
-                },
-                deleteRow: function (row) {
-                    //  if (confirm('¿Esta seguro de eliminar el producto?')) {
-                    var values = row.val();
-                    var idProducto = values.idProducto;
-                    /*
-                                                $.ajax({
-                                                    url: "/Pedido/DelProducto",
-                                                    type: 'POST',
-                                                    data: {
-                                                        idProducto: idProducto
-                                                    },
-                                                    success: function (total) {
-                                                */
-                    row.delete();
-                }
-            }
-        });
-        
-        /*.bind({
-            'footable_sorted': function (e) {
-                /*    var rows = $('#details tbody tr.data');
-        
-                    rows.each(function () {
-                        var personid = $(this).data('row-person');
-        
-                        var detail = $('#details tbody tr.descriptions[data-detail-person="' + personid + '"]');
-                        $(detail).insertAfter($(this));
-                    });
-                alert("asas");
-            }
-        });*/
-    }
-    cargarTablaDetalle();
-
-
- 
 
 
  //   $('#tablefoottable').footable()
@@ -1683,7 +1963,7 @@ jQuery(function ($) {
         });
     });
 
-    $(document).on('change', "#ActualDepartamento", function () {
+ /*   $(document).on('change', "#ActualDepartamento", function () {
         var ubigeoEntregaId = "000000";
         if ($("#ActualDepartamento").val().trim().length > 0) {
             ubigeoEntregaId = $("#ActualDepartamento").val() + "0000";
@@ -1729,9 +2009,8 @@ jQuery(function ($) {
             success: function () {
             }
         });
-        /*obtenerDireccionesEntrega
-        */
-    });
+       
+    });*/
 
 
     $("#idCiudad").change(function () {
@@ -2157,11 +2436,14 @@ jQuery(function ($) {
     $("#btnImportarExcel").click(function () {
         $("#modalActualizarExcel").modal('show');
     });
+
+
     
     
 
     var idClienteView = "";
-    $(document).on('click', "button.btnVerCliente", function () {
+    $(document).on('click', "button.btnVerCliente", function (e) {
+        e.preventDefault();
         $('body').loadingModal({
             text: 'Abriendo Cliente...'
         });
@@ -2325,11 +2607,6 @@ jQuery(function ($) {
                     $('#verNombreArchivos').append($('<li />').html(liHTML));
                 }     
 
-             //   $("#btnEditarCliente").show();
-
-                /**
-                 * PRECIOS
-                 */
 
 
                 var preciosList = result.precios;
@@ -2415,7 +2692,9 @@ jQuery(function ($) {
                  * DIRECCIONES
                  */
 
-                $("#tableListaDireccionesEntrega > tbody").empty();
+                var arrayDireccionEntrega = new Array();
+
+            //    $("#tableListaDireccionesEntrega > tbody").empty();
                 var direccionEntregaList = result.direccionEntregaList;
                 for (var i = 0; i < direccionEntregaList.length; i++) {
                     var contacto = direccionEntregaList[i].contacto == null ? "" : direccionEntregaList[i].contacto;
@@ -2423,43 +2702,81 @@ jQuery(function ($) {
                     var codigoCliente = direccionEntregaList[i].codigoCliente == null ? "" : direccionEntregaList[i].codigoCliente;
                     var nombre = direccionEntregaList[i].nombre == null ? "" : direccionEntregaList[i].nombre;
                     var codigoMP = direccionEntregaList[i].codigoMP == null ? "" : direccionEntregaList[i].codigoMP;
+                    var ubigeo = direccionEntregaList[i].ubigeo.Id == null ? "000000" : direccionEntregaList[i].ubigeo.Id;
                     var departamento = direccionEntregaList[i].ubigeo.Departamento == null ? "" : direccionEntregaList[i].ubigeo.Departamento;
                     var provincia = direccionEntregaList[i].ubigeo.Provincia == null ? "" : direccionEntregaList[i].ubigeo.Provincia;
                     var distrito = direccionEntregaList[i].ubigeo.Distrito == null ? "" : direccionEntregaList[i].ubigeo.Distrito;
                     var direccionDomicilioLegal = direccionEntregaList[i].direccionDomicilioLegal == null ? "" : direccionEntregaList[i].direccionDomicilioLegal;
+                    var emailRecepcionFacturas = direccionEntregaList[i].emailRecepcionFacturas == null ? "" : direccionEntregaList[i].emailRecepcionFacturas;
+
                     var direccionEntregaRow = '<tr data-expanded="true">' +
-                        '<td>  ' + direccionEntregaList[i].idDireccionEntrega + '</td>' +
-                        '<td>  ' + departamento + '  </td>' +
-                        '<td>  ' + provincia + '  </td>' +
-                        '<td>  ' + distrito + '  </td>' +
-                        '<td>  ' + direccionEntregaList[i].descripcion + '  </td>' +
-                        '<td>  ' + contacto + '  </td>' +
-                        '<td>  ' + telefono + '  </td>' +
-                        '<td>  ' + codigoCliente + '  </td>' +
-                        '<td>  ' + nombre + '  </td>' +
-                        '<td>  ' + codigoMP + '  </td>' +
-                        '<td>' + direccionDomicilioLegal + '  </td>' +
+                        '<td>' + direccionEntregaList[i].idDireccionEntrega + '</td>' +
+                        '<td>' + direccionEntregaList[i].cliente.idCliente + '</td>' +
+                        '<td>' + direccionEntregaList[i].cliente.ciudad.idCiudad + '</td>' +
+                        '<td>' + direccionEntregaList[i].domicilioLegal.idDomicilioLegal + '</td>' +
+                        '<td>' + ubigeo + '</td>' +
+
+                        '<td>' + direccionEntregaList[i].codigo + '</td>' +
+                        '<td>' + direccionEntregaList[i].cliente.ciudad.sede + '</td>' +
+                        '<td>' + departamento + ' - ' + provincia + ' - ' + distrito + '</td>' +
+                        '<td>' + direccionEntregaList[i].descripcion + '</td>' +
+                        '<td>' + contacto + '</td>' +
+                        '<td>' + telefono + '</td>' +
+                        '<td>' + codigoCliente + '</td>' +
+                        '<td>' + nombre + '</td>' +
+                        '<td>' + codigoMP + '</td>' +
+                        '<td>' + emailRecepcionFacturas + '</td>' +
+                        '<td>' + direccionDomicilioLegal + '</td>' +
+
                         '</tr>';
 
-                    $("#tableListaDireccionesEntrega").append(direccionEntregaRow);
+                    //var rowtmp = $modal.data('row'),
+                    var values = {
+                        idDireccionEntrega: direccionEntregaList[i].idDireccionEntrega,
+                        idCliente: direccionEntregaList[i].cliente.idCliente,
+                        idCiudad: direccionEntregaList[i].cliente.ciudad.idCiudad,
+                        idDomicilioLegal: direccionEntregaList[i].domicilioLegal.idDomicilioLegal,
+                        codigoUbigeo: ubigeo,
+                        codigo: direccionEntregaList[i].codigo,
+                        sede: direccionEntregaList[i].cliente.ciudad.sede,
+                        ubigeo: departamento + ' - ' + provincia + ' - ' + distrito,
+                        direccionEntrega: direccionEntregaList[i].descripcion,
+                        contacto: contacto,
+                        telefono: telefono,
+                        codigoCliente: codigoCliente,
+                        nombre: nombre,
+                        emailRecepcionFacturas: emailRecepcionFacturas,
+                        direccionDomicilioLegal: direccionDomicilioLegal
+                    };
 
+                    arrayDireccionEntrega.push(values);
                 }
 
-                FooTable.init('#tableListaDireccionesEntrega');
+                loadDireccionesEntrega(arrayDireccionEntrega);
 
 
+                $("#direccionEntrega_idDomicilioLegal").find('option')
+                .remove()
+                .end()
+                    ;
 
+                $('#direccionEntrega_idDomicilioLegal').append($('<option>', {
+                    value: "",
+                    text: "Seleccione Domicilio Legal"
+                }));
 
+                var domicilioLegalList = result.domicilioLegalList;
 
+                for (var i = 0; i < domicilioLegalList.length; i++) {
 
+                    //var ubigeo = domicilioLegalList[i].direccionEntrega.ubigeo;
+                    $('#direccionEntrega_idDomicilioLegal').append($('<option>', {
+                        value: domicilioLegalList[i].idDomicilioLegal,
+                        text: domicilioLegalList[i].direccion // + " " + ubigeo.Departamento + " - " + ubigeo.Provincia + " - " + ubigeo.Distrito
+                    }));
+                }
 
-
-
-
-                
-                 //<td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
-                    
-                        
+             
                 if (cliente.vendedoresAsignados) {
 
                     $("#spanVendedoresAsignados").show();
@@ -2474,6 +2791,22 @@ jQuery(function ($) {
                         
             }
         });
+    });
+
+    
+
+
+
+
+    $('#editorDireccionEntrega1').on('submit', function (e) {
+      
+        /*
+        if (idDireccionEntrega == null || idDireccionEntrega == "") {
+         
+        }
+        else {
+          
+        }*/
     });
 
 

@@ -125,10 +125,10 @@ namespace BusinessLayer
                 String observacionesFacturaAdicional = String.Empty;
 
                 //Pedido cuenta con orden de compra
-                if (venta.pedido.numeroReferenciaCliente != null && venta.pedido.numeroReferenciaCliente.Length > 0)
+           /*     if (venta.pedido.numeroReferenciaCliente != null && venta.pedido.numeroReferenciaCliente.Length > 0)
                 {
                     observacionesFacturaAdicional = "O/C N° " + venta.pedido.numeroReferenciaCliente + " ";
-                }
+                }*/
                 //Pedido cuenta con numero requerimiento
                 if (venta.pedido.numeroRequerimiento != null && venta.pedido.numeroRequerimiento.Length > 0)
                 {

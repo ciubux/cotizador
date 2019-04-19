@@ -555,14 +555,7 @@ else
 
                     @if (!cotizacion.esRecotizacion)
                     {
-                        if (cotizacionDetalle.esPrecioAlternativo)
-                        {
-                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioAnt" style="text-align:right; color: #B9371B">@cotizacionDetalle.producto.precioClienteProducto.precioNetoAlternativo </td>
-                        }
-                        else
-                        { 
-                            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioAnt" style="text-align:right; color: #B9371B">@cotizacionDetalle.producto.precioClienteProducto.precioNeto </td>
-                        }
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioUnitario </td>
                     }
 
 
@@ -580,6 +573,10 @@ else
                         <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
                     }
 
+
+                    <td class="@cotizacionDetalle.producto.idProducto detvarPrecioLista" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.variacionPrecioListaAnterior %</td>
+                
+                        
                     @if (cotizacionDetalle.variacionCosto != 0)
                     {
                         <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.variacionCosto %</td>
@@ -589,9 +586,7 @@ else
                         <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
                     }
 
-                    <td class="@cotizacionDetalle.producto.idProducto detvarPrecioLista" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.variacionPrecioListaAnterior %</td>
-                
-                    <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoListaAnterior</td>
                     
                     <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
 

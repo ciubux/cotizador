@@ -59,7 +59,7 @@ namespace Model
 
                     if (documentoDetalle.esPrecioAlternativo)
                     {
-                        documentoDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, cotizacionDetalleJson.precio * documentoDetalle.producto.equivalencia));
+                        documentoDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, cotizacionDetalleJson.precio * documentoDetalle.ProductoPresentacion.Equivalencia));
                     }
                     else
                     {

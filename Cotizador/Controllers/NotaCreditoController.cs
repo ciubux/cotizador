@@ -39,7 +39,7 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             VentaBL ventaBL = new VentaBL();
-            Transaccion transaccion = new Transaccion();
+            Transaccion transaccion = new Venta();
             
             transaccion.documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
             transaccion.documentoVenta.venta = null;
@@ -121,7 +121,7 @@ namespace Cotizador.Controllers
 
             /*Con el id de la factura a extornar se obtiene todo del documento de pago*/
             DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-            Transaccion transaccionExtorno = new Transaccion();
+            Transaccion transaccionExtorno = new Venta();
             transaccionExtorno.documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
 
             /*Se recupera el sustento y las ovservaciones de la guía*/
@@ -288,9 +288,9 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             try
             {
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
+                Transaccion venta = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
                 DocumentoVenta documentoVenta = new DocumentoVenta();
-                documentoVenta.venta = venta;
+                documentoVenta.venta = (Venta)venta;
                 documentoVenta.idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
                 documentoVenta.cliente = venta.cliente;
                 documentoVenta.usuario = usuario;

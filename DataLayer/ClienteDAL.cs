@@ -321,7 +321,7 @@ namespace DataLayer
                 cliente.subDistribuidor.codigo = Converter.GetString(row, "codigo_subdistribuidor");
                 cliente.subDistribuidor.nombre = Converter.GetString(row, "nombre_subdistribuidor");
 
-                
+                cliente.exoneradoValidacionLiberacionCrediticia = Converter.GetBool(row, "exonerado_validacion_liberacion_crediticia");
             }
 
             foreach (DataRow row in dataTableAdjunto.Rows)
@@ -332,7 +332,8 @@ namespace DataLayer
                 clienteAdjunto.nombre = Converter.GetString(row, "nombre");
                 clienteAdjunto.checksum = Converter.GetLong(row, "checksum");
                 cliente.clienteAdjuntoList.Add(clienteAdjunto);
-            }          
+            }
+
 
             return cliente;
         }
