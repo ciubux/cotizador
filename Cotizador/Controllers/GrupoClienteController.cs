@@ -18,8 +18,15 @@ namespace Cotizador.Controllers
         {
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaGrupoClientes;
+            
 
-            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null )
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!usuario.visualizaGrupoClientes && !usuario.esVendedor)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -121,7 +128,7 @@ namespace Cotizador.Controllers
             else
             {
                 usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.modificaMaestroClientes)
+                if (!usuario.modificaGrupoClientes && !usuario.esVendedor)
                 {
                     return RedirectToAction("Login", "Account");
                 }
@@ -130,7 +137,6 @@ namespace Cotizador.Controllers
 
             if (this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE] == null || idGrupoCliente == 0)
             {
-
                 instanciarGrupoCliente();
             }
 
@@ -159,18 +165,18 @@ namespace Cotizador.Controllers
             GrupoCliente grupoCliente = new GrupoCliente();
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (usuario.modificaMiembrosGrupoCliente && idGrupoCliente != null && idGrupoCliente > 0)
+            
+            if (idGrupoCliente == null || idGrupoCliente == 0)
             {
-                grupoCliente = bl.getGrupo(idGrupoCliente.Value);
-                if (grupoCliente.idGrupoCliente == 0)
-                {
-                    return RedirectToAction("Index", "GrupoCliente");
-                }
+                return RedirectToAction("Index", "GrupoCliente");
+            }
 
-                grupoCliente.IdUsuarioRegistro = usuario.idUsuario;
-                grupoCliente.usuario = usuario;
-                grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
-            } else
+            grupoCliente = bl.getGrupo(idGrupoCliente.Value);
+            grupoCliente.usuario = usuario;
+            grupoCliente.IdUsuarioRegistro = usuario.idUsuario;
+            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
+
+            if (!usuario.modificaMiembrosGrupoCliente && !grupoCliente.isOwner)
             {
                 return RedirectToAction("Index", "GrupoCliente");
             }
@@ -183,6 +189,13 @@ namespace Cotizador.Controllers
         [HttpPost]
         public String Create()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaGrupoClientes && !usuario.esVendedor)
+            {
+                return "";
+            }
+
             GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
             GrupoCliente grupoCliente = this.GrupoClienteSession;
             grupoCliente = grupoClienteBL.insertGrupoCliente(grupoCliente);
@@ -200,6 +213,12 @@ namespace Cotizador.Controllers
             GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
             GrupoCliente grupoCliente = this.GrupoClienteSession;
 
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaGrupoClientes && !grupoCliente.isOwner)
+            {
+                return "";
+            }
 
             /*if (grupoCliente.idGrupoCliente == 0)
             {
@@ -233,15 +252,15 @@ namespace Cotizador.Controllers
             int heredaPrecios = int.Parse(this.Request.Params["heredaPrecios"]);
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
+            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
+            grupoCliente.usuario = usuario;
 
-            if (!usuario.modificaMiembrosGrupoCliente)
+            if (!usuario.modificaMiembrosGrupoCliente && !grupoCliente.isOwner)
             {
                 return "";
             }
-
-
-            GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
-            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
+            
 
             foreach (Cliente cli in grupoCliente.miembros) { 
                 if (cli.idCliente == idCliente)
@@ -288,15 +307,15 @@ namespace Cotizador.Controllers
             int heredaPrecios = int.Parse(this.Request.Params["heredaPrecios"]);
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
+            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
+            grupoCliente.usuario = usuario;
 
-            if (!usuario.modificaMiembrosGrupoCliente)
+            if (!usuario.modificaMiembrosGrupoCliente && !grupoCliente.isOwner)
             {
                 return "";
             }
-
-            GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
-            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
-
+            
             List<Cliente> lista = clienteBl.getClientesByRUC(ruc);
             List<Cliente> listaAgregados = new List<Cliente>();
 
@@ -516,6 +535,7 @@ namespace Cotizador.Controllers
 
             GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
             grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
+            
 
             int removeAt = -1;
             foreach (Cliente cli in grupoCliente.miembros)
@@ -528,11 +548,13 @@ namespace Cotizador.Controllers
             }
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            grupoCliente.usuario = usuario;
 
-            if (!usuario.modificaMiembrosGrupoCliente)
+            if (!usuario.modificaMiembrosGrupoCliente && !grupoCliente.isOwner)
             {
                 success = 0;
             }
+            
 
             Cliente cliente = null;
             if (success == 1)
@@ -553,6 +575,57 @@ namespace Cotizador.Controllers
             String clienteJson = JsonConvert.SerializeObject(cliente);
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
+
+        [HttpPost]
+        public String UpdateMiembro()
+        {
+            int success = 0;
+            string message = "";
+            ClienteBL clienteBl = new ClienteBL();
+            GrupoClienteBL bl = new GrupoClienteBL();
+
+
+            Guid idCliente = Guid.Parse(this.Request.Params["idCliente"]);
+            int idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            int heredaPrecios = int.Parse(this.Request.Params["heredaPrecios"]);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
+            grupoCliente.miembros = bl.getClientesGrupo(grupoCliente.idGrupoCliente);
+            grupoCliente.usuario = usuario;
+
+            if (!usuario.modificaMiembrosGrupoCliente && !grupoCliente.isOwner)
+            {
+                return "";
+            }
+            
+
+            foreach (Cliente cli in grupoCliente.miembros)
+            {
+                if (cli.idCliente == idCliente)
+                {
+                    success = 1;
+                }
+            }
+
+            Cliente cliente = null;
+            if (success == 1)
+            {
+                cliente = clienteBl.getCliente(idCliente);
+
+                cliente.usuario = usuario;
+                cliente.habilitadoNegociacionGrupal = heredaPrecios == 1 ? true : false;
+                clienteBl.updateClienteSunat(cliente);
+                
+                message = "Se actualizó el cliente.";
+            } else
+            {
+                message = "El cliente no es miembro del grupo.";
+            }
+            String clienteJson = JsonConvert.SerializeObject(cliente);
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\", \"cliente\":" + clienteJson + "}";
         }
 
         [HttpPost]

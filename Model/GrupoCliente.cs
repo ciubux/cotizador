@@ -97,5 +97,74 @@ namespace Model
         public List<GrupoClienteAdjunto> grupoClienteAdjuntoList { get; set; }
 
         public List<Cliente> miembros { get; set; }
+
+
+        public int modificaMiembros
+        {
+            get
+            {
+                if (this.usuario == null) return 0;
+
+                return this.usuario.modificaMiembrosGrupoCliente || this.isOwner ? 1 : 0;
+            }
+        }
+
+        public int modificaCanasta
+        {
+            get
+            {
+                if (this.usuario == null) return 0;
+
+                return this.usuario.modificaCanastaGrupoCliente || this.isOwner ? 1 : 0;
+            }
+        }
+
+        public int editaGrupo
+        {
+            get
+            {
+                if (this.usuario == null) return 0;
+
+                return this.usuario.modificaGrupoClientes || this.isOwner ? 1 : 0;
+            }
+        }
+
+        public bool isOwner
+        {
+            get
+            {
+                if (this.usuario == null) return false;
+
+                bool existeMiembroPrincipal = false;
+
+                foreach(Cliente miembro in this.miembros)
+                {
+                    if(miembro.ciudad.idCiudad == this.ciudad.idCiudad)
+                    {
+                        existeMiembroPrincipal = true;
+                        miembro.usuario = this.usuario; 
+                        if (miembro.isOwner)
+                        {
+                            return true;
+                        }
+
+                        if (this.IdUsuarioRegistro == this.usuario.idUsuario
+                            && (miembro.asistenteServicioCliente == null || miembro.asistenteServicioCliente.usuario == null)
+                            && (miembro.responsableComercial == null || miembro.responsableComercial.usuario == null)
+                            && (miembro.supervisorComercial == null || miembro.supervisorComercial.usuario == null))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                if (!existeMiembroPrincipal && this.IdUsuarioRegistro == usuario.idUsuario)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
     }
 }

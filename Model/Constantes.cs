@@ -412,7 +412,9 @@ namespace Model
             [Display(Name = "ASIGNACION PERMISOS")]
             AsignacionPermisos = 38,
             [Display(Name = "MIEMBROS GRUPO")]
-            MiembrosGrupoCliente = 39
+            MiembrosGrupoCliente = 39,
+            [Display(Name = "VALIDACIONES PENDIENTES")]
+            AlertasValidacionPendientes = 40
         };
 
 

@@ -69,11 +69,33 @@ namespace DataLayer
                 ClienteResultado.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 ClienteResultado.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
 
+                ClienteResultado.responsableComercial = new Vendedor();
+                ClienteResultado.responsableComercial.idVendedor = Converter.GetInt(row, "responsable_comercial_id_vendedor");
+                ClienteResultado.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
+                ClienteResultado.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
+                ClienteResultado.responsableComercial.usuario = new Usuario();
+                ClienteResultado.responsableComercial.usuario.idUsuario = Converter.GetGuid(row, "responsable_comercial_id_usuario");
+
+                ClienteResultado.supervisorComercial = new Vendedor();
+                ClienteResultado.supervisorComercial.idVendedor = Converter.GetInt(row, "supervisor_comercial_id_vendedor");
+                ClienteResultado.supervisorComercial.codigo = Converter.GetString(row, "supervisor_comercial_codigo");
+                ClienteResultado.supervisorComercial.descripcion = Converter.GetString(row, "supervisor_comercial_descripcion");
+                ClienteResultado.supervisorComercial.usuario = new Usuario();
+                ClienteResultado.supervisorComercial.usuario.idUsuario = Converter.GetGuid(row, "supervisor_comercial_id_usuario");
+
+                ClienteResultado.asistenteServicioCliente = new Vendedor();
+                ClienteResultado.asistenteServicioCliente.idVendedor = Converter.GetInt(row, "asistente_servicio_cliente_id_vendedor");
+                ClienteResultado.asistenteServicioCliente.codigo = Converter.GetString(row, "asistente_servicio_cliente_codigo");
+                ClienteResultado.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
+                ClienteResultado.asistenteServicioCliente.usuario = new Usuario();
+                ClienteResultado.asistenteServicioCliente.usuario.idUsuario = Converter.GetGuid(row, "asistente_servicio_id_usuario");
+
                 ClienteResultado.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
                 ClienteResultado.nombreComercial = Converter.GetString(row, "nombre_comercial");
                 ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
                 ClienteResultado.ruc = Converter.GetString(row, "ruc");
 
+                ClienteResultado.habilitadoNegociacionGrupal = Converter.GetBool(row, "habilitado_negociacion_grupal");
 
                 list.Add(ClienteResultado);
             }
@@ -691,6 +713,8 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente == null ? 0 : cliente.grupoCliente.idGrupoCliente);
 
+            InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(cliente.CargaMasiva ? 1 : 0));
+
             InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
             InputParameterAdd.Int(objCommand, "idSubDistribuidor", (!cliente.esSubDistribuidor) ? 0 : cliente.subDistribuidor.idSubDistribuidor);
 
@@ -770,7 +794,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
             InputParameterAdd.Varchar(objCommand, "telefonoContacto1", cliente.telefonoContacto1);
             InputParameterAdd.Varchar(objCommand, "emailContacto1", cliente.emailContacto1);
-            InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);            
+            InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
             InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura);
             InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat);
             InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercialSunat);
@@ -805,6 +829,8 @@ namespace DataLayer
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalProvincias", (short)(cliente.perteneceCanalProvincias ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalPCP", (short)(cliente.perteneceCanalPCP ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "esSubDistribuidor", (short)(cliente.esSubDistribuidor ? 1 : 0));
+
+            InputParameterAdd.SmallInt(objCommand, "@esCargaMasiva", (short)(cliente.CargaMasiva ? 1 : 0));
 
             InputParameterAdd.Bit(objCommand, "sedePrincipal", cliente.sedePrincipal);
             InputParameterAdd.Bit(objCommand, "negociacionMultiregional", cliente.negociacionMultiregional);
@@ -867,3 +893,5 @@ namespace DataLayer
 
     }
 }
+
+

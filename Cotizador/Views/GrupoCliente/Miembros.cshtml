@@ -3,7 +3,7 @@
     Model.GrupoCliente grupoCliente = ViewBag.grupoCliente;
     var disabledLabel = "disabled = ''";
 
-   
+    var itemHeredaChecked = "";
 }
 
 <div class="page-header">
@@ -77,13 +77,20 @@
                             <th data-name="tipoDocumento" data-visible="true" data-sortable="true">Tipo Doc.</th>
                             <th data-name="numeroDocumento" data-visible="true" data-sortable="true">N° Doc.</th>
                             <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
+                            <th data-name="heredaPrecios" data-sortable="false" data-breakpoints="xs">Hereda precios<br /> del grupo</th>
                             <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (Model.Cliente cliente in grupoCliente.miembros)
                         {
-                            <tr data-expanded="true">
+                            {
+                                itemHeredaChecked = "";
+                                if (cliente.habilitadoNegociacionGrupal) {
+                                    itemHeredaChecked = "checked";
+                                }
+                            }
+                            <tr data-expanded="true" idCliente="@cliente.idCliente">
                                 <td>  @cliente.idCliente </td>
                                 <td>  @cliente.codigo </td>
                                 <td>  @cliente.razonSocialSunat </td>
@@ -91,6 +98,7 @@
                                 <td>  @cliente.tipoDocumentoIdentidadToString </td>
                                 <td>  @cliente.ruc </td>
                                 <td>  @cliente.ciudad.nombre </td>
+                                <td>  <input type="checkbox" class="chkMiembroHeredaPrecios" @itemHeredaChecked value="1"> </td>
                                 <td>
                                     <button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="@cliente.idCliente">Remover</button>
                                 </td>

@@ -95,6 +95,12 @@ namespace Cotizador.Controllers
                 mail.enviar(new List<string> { "ti@mpinstitucional.com" }, "ERROR al revisar pedidos pendientes", ex.Message + ex.InnerException, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
             }
         }
-        
+
+        public void AplicarCambiosProgramados()
+        {
+            LogCambioBL logCambioBL = new LogCambioBL();
+
+            logCambioBL.aplicarLogCambios();
+        }
     }
 }

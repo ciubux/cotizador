@@ -242,6 +242,7 @@
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
+    <Compile Include="Controllers\ValidacionController.cs" />
     <Compile Include="Controllers\PermisoController.cs" />
     <Compile Include="Controllers\SubDistribuidorController.cs" />
     <Compile Include="Controllers\ParentController.cs" />
@@ -401,6 +402,7 @@
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
+    <Content Include="Scripts\AlertaValidacion1.0.0.js" />
     <Content Include="Scripts\subDistribuidor1.0.0.js" />
     <Content Include="Scripts\origen1.0.0.js" />
     <Content Include="Scripts\producto1.0.0.js" />
@@ -556,6 +558,7 @@
     <Content Include="Views\Usuario\EditarPermisos.cshtml" />
     <Content Include="Views\Permiso\AsignarPermisos.cshtml" />
     <Content Include="Scripts\permiso1.0.0.js" />
+    <Content Include="Views\Validacion\Pendientes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

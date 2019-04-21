@@ -1410,6 +1410,10 @@ jQuery(function ($) {
     
 
     var idGrupoClienteView = "";
+    var editGrupoCliente = 0;
+    var editaMiembros = 0;
+
+
     $(document).on('click', "button.btnVerGrupoCliente", function () {
         $('body').loadingModal({
             text: 'Abriendo Grupo Cliente...'
@@ -1461,7 +1465,12 @@ jQuery(function ($) {
                 var margenText = "";
                 var canastaText = "";
                 var disabledCanasta = "";
-                var editaCliente = parseInt($("#tableListaPrecios th.listaPreciosCanasta").attr("hasEdit"));
+
+                disabledCanasta = "";
+
+                if (obj.modificaCanasta != 1) {
+                    disabledCanasta = "disabled";
+                }
 
                 $("#tableListaPrecios > tbody").empty();
                 for (var i = 0; i < preciosList.length; i++) {
@@ -1489,12 +1498,7 @@ jQuery(function ($) {
                     }
 
                     canastaText = "";
-                    disabledCanasta = "";
-
-                    if (editaCliente != 1) {
-                        disabledCanasta = "disabled";
-                    }
-
+                    
                     if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
                         canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanasta + '>  </td>';
                     }
@@ -1530,6 +1534,22 @@ jQuery(function ($) {
                 }
                 else {
                     $("#msgPreciosSinResultados").show();
+                }
+                
+                if (obj.editaGrupo != 1) {
+                    editGrupoCliente = 0;
+                    $("#btnEditarGrupoCliente").hide();
+                } else {
+                    editGrupoCliente = 1;
+                    $("#btnEditarGrupoCliente").show();
+                }
+                
+                if (obj.modificaMiembros != 1) {
+                    editaMiembros = 0;
+                    $("#btnMiembrosGrupoCliente").hide();
+                } else {
+                    editaMiembros = 1;
+                    $("#btnMiembrosGrupoCliente").show();
                 }
 
                 FooTable.init('#tableListaPrecios');
@@ -1671,7 +1691,9 @@ jQuery(function ($) {
             if ($("#showGrupoMiembros").closest("li").hasClass("active") || $("#showGrupoPrecio").closest("li").hasClass("active")) {
                 $("#btnEditarGrupoCliente").hide();
             } else {
-                $("#btnEditarGrupoCliente").show();
+                if (editGrupoCliente == 1) {
+                    $("#btnEditarGrupoCliente").show();
+                }
             }
         }, 500);
     });
@@ -1680,7 +1702,9 @@ jQuery(function ($) {
         setTimeout(function () {
             if ($("#showInformacionComercial").closest("li").hasClass("active")
                 || $("#showGrupoPagos").closest("li").hasClass("active")) {
-                $("#btnEditarGrupoCliente").show();
+                if (editGrupoCliente == 1) {
+                    $("#btnEditarGrupoCliente").show();
+                }
             } 
         }, 500);
     });
@@ -1765,6 +1789,10 @@ jQuery(function ($) {
             dataType: 'JSON',
             success: function (resultado) {
                 if (resultado.success == 1) {
+                    var checkedHeredaPrecios = "";
+                    if (heredaPrecios == 1) {
+                        checkedHeredaPrecios = "checked";
+                    }
                     var cliente = resultado.cliente;
                     var clienteRow = '<tr data-expanded="true">' +
                         '<td>  ' + cliente.idCliente + '</td>' +
@@ -1774,6 +1802,7 @@ jQuery(function ($) {
                         '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + cliente.ruc + '  </td>' +
                         '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+                        '<td>  <input type="checkbox" class="chkMiembroHeredaPrecios' + checkedHeredaPrecios + ' value="1"> </td>' + 
                         '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                         '</tr>';
 
@@ -1850,6 +1879,11 @@ jQuery(function ($) {
             dataType: 'JSON',
             success: function (resultado) {
                 if (resultado.success == 1) {
+                    var checkedHeredaPrecios = "";
+                    if (heredaPrecios == 1) {
+                        checkedHeredaPrecios = "checked";
+                    }
+
                     var list = resultado.agregados;
                     for (var i = 0; i < list.length; i++) {
                         cliente = list[i];
@@ -1861,6 +1895,7 @@ jQuery(function ($) {
                             '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                             '<td>  ' + cliente.ruc + '  </td>' +
                             '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+                            '<td>  <input type="checkbox" class="chkMiembroHeredaPrecios' + checkedHeredaPrecios + ' value="1"> </td>' + 
                             '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                             '</tr>';
 
@@ -1897,6 +1932,61 @@ jQuery(function ($) {
         });
     });
 
+
+    $("body").on('change', ".chkMiembroHeredaPrecios", function () {
+        //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+
+        var idCliente = $(this).closest("tr").attr("idCliente");
+        var idGrupoCliente = $("#idGrupoCliente").val();
+        var heredaPrecios = 0;
+        if ($(this).is(":checked")) {
+            heredaPrecios = 1;
+        }
+        
+        $('body').loadingModal({
+            text: 'Editanto Hereda Precios Grupo'
+        });
+
+        $.ajax({
+            url: "/GrupoCliente/UpdateMiembro",
+            type: 'POST',
+            data: {
+                idCliente: idCliente,
+                heredaPrecios: heredaPrecios,
+                idGrupoCliente: idGrupoCliente
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+
+                }
+                else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+                $('body').loadingModal('hide');
+            },
+            error: function () {
+                $('body').loadingModal('hide');
+            }
+        });
+    });
 
     $("body").on('click', ".btnQuitarClienteGrupo", function () {
         //  desactivarBotonesVer();

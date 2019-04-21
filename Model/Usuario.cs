@@ -42,6 +42,9 @@ namespace Model
 
         public List<Usuario> usuarioCreaGuiaList { get; set; }
         public List<Usuario> usuarioCreaDocumentoVentaList { get; set; }
+
+        public List<AlertaValidacion> alertasList { get; set; }
+
         public String cotizacionSerializada { get; set; }
         public String pedidoSerializado { get; set; }
 
@@ -65,7 +68,7 @@ namespace Model
 
         public bool esCliente { get; set; }
 
-
+        public bool esVendedor { get; set; }
 
 
         /// <summary>

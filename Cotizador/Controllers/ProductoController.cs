@@ -215,6 +215,12 @@ namespace Cotizador.Controllers
                 }
             }
 
+            LogCampoBL logCamboBl = new LogCampoBL();
+            List<LogCampo> campos = logCamboBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);
+
+            List<CampoPersistir> persitirCampos = Producto.obtenerCampos(campos);
+
+            ViewBag.persitirCampos = persitirCampos;
             return View();
 
         }
@@ -281,13 +287,48 @@ namespace Cotizador.Controllers
                  }
                  */
 
-            try
-            {
+            //try
+            //{
+                Usuario usuario = (Usuario)this.Session["usuario"];
+                LogCampoBL logCambioBl = new LogCampoBL();
+                List<LogCampo> campos = logCambioBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);
 
+                List<CampoPersistir> registrarCampos = Producto.obtenerCampos(campos);
+                //List<CampoPersistir> registrarCampos = new List<CampoPersistir>();
+
+                foreach (CampoPersistir cp in registrarCampos)
+                {
+                    cp.registra = false;
+                    cp.persiste = false;
+                    if (Request["registra_" + cp.campo.nombre] != null)
+                    {
+                        int select = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
+                        if (select == 1)
+                        {
+                            cp.registra = true;
+                            
+                            if (Request["persiste_" + cp.campo.nombre] != null)
+                            {
+                                int persiste = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
+                                cp.persiste = persiste == 1 ? true : false;                                
+                            }
+                        }
+                    }
+                }
+
+                LogCambioBL logCambiobl = new LogCambioBL();
+
+
+                String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
+                DateTime fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+
+                int nFIV = (fechaInicioVigencia.Year * 10000) + (fechaInicioVigencia.Month * 100) + fechaInicioVigencia.Day;
+                int nFT = (DateTime.Now.Year * 10000) + (DateTime.Now.Month * 100) + DateTime.Now.Day;
+                int nFR = 0;
+                bool isNew = false;
                 HSSFWorkbook hssfwb;
 
                 ProductoBL productoBL = new ProductoBL();
-                productoBL.truncateProductoStaging();
 
                 hssfwb = new HSSFWorkbook(file.InputStream);
 
@@ -305,11 +346,12 @@ namespace Cotizador.Controllers
                 {
                     if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                     {
+                        isNew = false;
 
-                        ProductoStaging productoStaging = new ProductoStaging();
+                        Producto productoStaging = new Producto();
                         int paso = 1;
-                        try
-                        {
+                        //try
+                        //{
 
 
                             if (sheet.GetRow(row).GetCell(0+ posicionInicial) == null)
@@ -338,23 +380,23 @@ namespace Cotizador.Controllers
                             paso = 3;
                             if (sheet.GetRow(row).GetCell(2 + posicionInicial) == null)
                             {
-                                productoStaging.codigo = null;
+                                productoStaging.sku = null;
                             }
                             else
                             {
                                 //C
-                                productoStaging.codigo = sheet.GetRow(row).GetCell(2 + posicionInicial).ToString();
+                                productoStaging.sku = sheet.GetRow(row).GetCell(2 + posicionInicial).ToString();
                             }
 
                             paso = 4;
                             //D
                             if (sheet.GetRow(row).GetCell(3 + posicionInicial) == null)
                             {
-                                productoStaging.codigoProveedor = null;
+                                productoStaging.skuProveedor = null;
                             }
                             else
                             {
-                                productoStaging.codigoProveedor = sheet.GetRow(row).GetCell(3 + posicionInicial).ToString();
+                                productoStaging.skuProveedor = sheet.GetRow(row).GetCell(3 + posicionInicial).ToString();
                             }
 
                             paso = 5;
@@ -396,11 +438,11 @@ namespace Cotizador.Controllers
                             //H
                             if (sheet.GetRow(row).GetCell(7 + posicionInicial) == null)
                             {
-                                productoStaging.unidad = null;
+                                productoStaging.unidad_alternativa = null;
                             }
                             else
                             {
-                                productoStaging.unidadAlternativa = sheet.GetRow(row).GetCell(7 + posicionInicial).ToString();
+                                productoStaging.unidad_alternativa = sheet.GetRow(row).GetCell(7 + posicionInicial).ToString();
                             }
 
                             paso = 9;
@@ -444,11 +486,11 @@ namespace Cotizador.Controllers
                             try
                             {
                                 Double? costo = sheet.GetRow(row).GetCell(19 + posicionInicial).NumericCellValue;
-                                productoStaging.costo = Convert.ToDecimal(costo);
+                                productoStaging.costoSinIgv = Convert.ToDecimal(costo);
                             }
                             catch (Exception e)
                             {
-                                productoStaging.costo = 0;
+                                productoStaging.costoSinIgv = 0;
                             }
 
                             paso = 13;
@@ -467,11 +509,11 @@ namespace Cotizador.Controllers
                             {
                                 //Y
                                 Double? precioLima = sheet.GetRow(row).GetCell(24 + posicionInicial).NumericCellValue;
-                                productoStaging.precioLima = Convert.ToDecimal(precioLima);
+                                productoStaging.precioSinIgv = Convert.ToDecimal(precioLima);
                             }
                             catch (Exception e)
                             {
-                                productoStaging.precioLima = 0;
+                                productoStaging.precioSinIgv = 0;
                             }
 
                             paso = 15;
@@ -479,11 +521,11 @@ namespace Cotizador.Controllers
                             {
                                 //AB
                                 Double? precioProvincias = sheet.GetRow(row).GetCell(27 + posicionInicial).NumericCellValue;
-                                productoStaging.precioProvincias = Convert.ToDecimal(precioProvincias);
+                                productoStaging.precioProvinciaSinIgv = Convert.ToDecimal(precioProvincias);
                             }
                             catch (Exception e)
                             {
-                                productoStaging.precioProvincias = 0;
+                                productoStaging.precioProvinciaSinIgv = 0;
                             }
 
 
@@ -491,42 +533,104 @@ namespace Cotizador.Controllers
                             //AC
                             if (sheet.GetRow(row).GetCell(28 + posicionInicial) == null)
                             {
-                                productoStaging.unidadSunat = "";
+                                productoStaging.unidadEstandarInternacional = "";
                             }
                             else
                             {
-                                productoStaging.unidadSunat = sheet.GetRow(row).GetCell(28 + posicionInicial).ToString();
+                                productoStaging.unidadEstandarInternacional = sheet.GetRow(row).GetCell(28 + posicionInicial).ToString();
                             }
 
                             paso = 17;
                             //AD
                             if (sheet.GetRow(row).GetCell(29 + posicionInicial) == null)
                             {
-                                productoStaging.unidadAlternativaSunat = "";
+                                productoStaging.unidadAlternativaInternacional = "";
                             }
                             else
                             {
-                                productoStaging.unidadAlternativaSunat = sheet.GetRow(row).GetCell(29 + posicionInicial).ToString();
+                                productoStaging.unidadAlternativaInternacional = sheet.GetRow(row).GetCell(29 + posicionInicial).ToString();
                             }
 
-                            productoBL.setProductoStaging(productoStaging);
-                        }
+                            Guid idRegistro = productoBL.getProductoId(productoStaging.sku);
+                            
+
+                            if (idRegistro == Guid.Empty)
+                            {
+                                //TO DO: Realizar nuevo registro en el proceso de aplicar cambios 
+                                idRegistro = Guid.NewGuid();
+                                isNew = true;
+                            }
+
+                            productoStaging.idProducto = idRegistro;
+                            productoStaging.usuario = usuario;
+                            productoStaging.fechaInicioVigencia = fechaInicioVigencia;
+
+                            if (nFIV >= nFT)
+                            {
+                                if (isNew)
+                                {
+                                    logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                                } else {
+                                    logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
+                                }
+                            } else
+                            {
+                                Producto existente = productoBL.getProductoById(idRegistro);
+                                
+                                if (existente.fechaInicioVigencia != null)
+                                {
+                                    nFR = (existente.fechaInicioVigencia.Year * 10000) + (existente.fechaInicioVigencia.Month * 100) + existente.fechaInicioVigencia.Day;
+                                } else
+                                {
+                                    nFR = int.MinValue;
+                                }
+
+                                if (nFR <= nFIV)
+                                {
+                                    if (isNew)
+                                    {
+                                        logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                                    }
+                                    else
+                                    {
+                                        logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
+                                    }
+                                } else
+                                {
+                                    if (isNew)
+                                    {
+                                        //Registrar
+                                        productoBL.insertProducto(productoStaging);
+                                    } else
+                                    {
+                                        //Registrar log
+                                        logCambiobl.insertLogCambios(productoStaging.obtenerLogProgramado(registrarCampos));
+                                    }
+                                }
+                            }
+
+
+                        /*}
                         catch (Exception ex)
                         {
 
-                            Usuario usuario = (Usuario)this.Session["usuario"];
+                           
                             Log log = new Log(ex.ToString() + " paso:" + paso, TipoLog.Error, usuario);
                             LogBL logBL = new LogBL();
                             logBL.insertLog(log);
 
 
-                        }
+                        }*/
                     }
                 }
-                productoBL.mergeProductoStaging();
-                row = row;
+
+                if (nFIV <= nFT)
+                {
+                    logCambiobl.aplicarLogCambios();
+                }
+
                 return View("CargaCorrecta");
-            }
+            /*}
             catch (Exception ex)
             {
                 Usuario usuario = (Usuario)this.Session["usuario"];
@@ -534,7 +638,7 @@ namespace Cotizador.Controllers
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
                 return View("CargaIncorrecta");
-            }
+            }*/
         }
 
 
