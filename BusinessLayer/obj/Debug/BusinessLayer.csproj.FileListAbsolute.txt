@@ -180,3 +180,7 @@ C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\NPOI.xml
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.pdb
+D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.dll
+D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Newtonsoft.Json.xml

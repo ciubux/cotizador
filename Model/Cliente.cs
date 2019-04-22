@@ -8,6 +8,8 @@ namespace Model
 {
     public class Cliente : Persona
     {
+        public const string NOMBRE_TABLA = "CLIENTE";
+
         public Cliente()
         {
             //Cada vez que se instancia un cliente se instancia con al menos una dirección de entrega
@@ -29,6 +31,7 @@ namespace Model
             this.horaFinPrimerTurnoEntrega = "18:00:00";
             this.horaInicioSegundoTurnoEntrega = "";
             this.horaFinSegundoTurnoEntrega = "";
+            this.CargaMasiva = false;
             this.clienteAdjuntoList = new List<ClienteAdjunto>();
         }
 

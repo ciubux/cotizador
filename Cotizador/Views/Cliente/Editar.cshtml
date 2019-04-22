@@ -100,41 +100,56 @@
 
             <!--CODIGO GRUPO CLIENTE-->
             <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(c => cliente.grupoCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        
-                        @*<p class="form-control-static" id="verGrupoCliente"></p>*@
-                        
-                        @Html.Action("GetGruposCliente", "GrupoCliente",
-                                   new
-                                   {
-                                       grupoClienteSelectId = "idGrupoCliente",
-                                       selectedValue = cliente.grupoCliente.idGrupoCliente
-                                   })
-                    </div>
-                    <label class="radio-label" style="margin-left: 15px; margin-top: 5px; @hideNegociacionGrupal">
-                        @if (cliente.habilitadoNegociacionGrupal)
-                        {
-                            <input checked type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
-                        }
-                        else
-                        {
-                            <input type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
-                        }
-                        
+                @if (cliente.modificaGrupo == 1)
+                {
+                    <div class="form-group">
+                        @Html.LabelFor(c => cliente.grupoCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
 
-                        @if(cliente.codigo != String.Empty)
-                        {
+                            @*<p class="form-control-static" id="verGrupoCliente"></p>*@
+
+                            @Html.Action("GetGruposCliente", "GrupoCliente",
+                                        new
+                                        {
+                                            grupoClienteSelectId = "idGrupoCliente",
+                                            selectedValue = cliente.grupoCliente.idGrupoCliente
+                                        })
+                        </div>
+                        <label class="radio-label" style="margin-left: 15px; margin-top: 5px; @hideNegociacionGrupal">
+                            @if (cliente.habilitadoNegociacionGrupal)
+                            {
+                                <input checked type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
+                            }
+
+
+                            @if (cliente.codigo != String.Empty)
+                            {
+                                <span>Este Cliente (@cliente.codigo) hereda los precios del grupo.</span>
+                            }
+                            else
+                            {
+                                <span>Este Cliente heredará los precios del grupo.</span>
+                            }
+
+                        </label>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label for="cliente_grupo" class="control-label col-xs-4">Grupo Cliente:</label>
+                        <div class="col-xs-6">
+                            <p class="form-control-static" id="verGrupoCliente">@cliente.grupoCliente.nombre</p>
+                        </div>
+                        <label id="verHabilitadoNegociacionGrupal" class="radio-label" style="font-size:12px; color:forestgreen; margin-left: 15px;margin-top: 5px;">
                             <span>Este Cliente (@cliente.codigo) hereda los precios del grupo.</span>
-                        }
-                        else
-                        {
-                            <span>Este Cliente heredará los precios del grupo.</span>
-                        }
-                        
-                    </label>
-                </div>
+                        </label>
+                    </div>
+                }
             </div>
         </div>
 

@@ -433,11 +433,11 @@ namespace Model
             AsignacionPermisos = 38,
             [Display(Name = "MIEMBROS GRUPO")]
             MiembrosGrupoCliente = 39,
-
+            [Display(Name = "VALIDACIONES PENDIENTES")]
+            AlertasValidacionPendientes = 40,
             /*DOCUMENTOS DE VENTA*/
             [Display(Name = "BUSQUEDA DOCUMENTOS COMPRA")]
-            BusquedaDocumentosCompra = 40
-
+            BusquedaDocumentosCompra = 41
         };
 
 

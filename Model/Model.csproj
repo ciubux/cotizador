@@ -49,7 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlertaValidacion.cs" />
     <Compile Include="Auditoria.cs" />
+    <Compile Include="CampoPersistir.cs" />
+    <Compile Include="LogCambio.cs" />
+    <Compile Include="LogTabla.cs" />
+    <Compile Include="LogCampo.cs" />
+    <Compile Include="DataAlertaValidacion.cs" />
     <Compile Include="Cliente.cs" />
     <Compile Include="Connected Services\ServiceSunatPadron\Reference.cs">
       <AutoGen>True</AutoGen>

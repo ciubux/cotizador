@@ -1,5 +1,10 @@
 ﻿@{
-    TempData["ScriptVersion"] = "210";
+
+    TempData["ScriptVersion"] = "218";
+
+    var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
+    int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
+
 }
 
 <!DOCTYPE html>
@@ -146,7 +151,7 @@
 
 
                         }
-                        var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
+                        
 
 
 
@@ -297,11 +302,11 @@
                                         <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
                                     }
 
-                                    @if (usuario.modificaGrupoClientes || usuario.visualizaGrupoClientes)
+                                    @if (usuario.modificaGrupoClientes || usuario.visualizaGrupoClientes || usuario.esVendedor)
                                     {
                                         <li id="linkBusquedaGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Búsqueda", "Index", "GrupoCliente")</li>
                                     }
-                                    @if (usuario.modificaGrupoClientes)
+                                    @if (usuario.modificaGrupoClientes || usuario.esVendedor)
                                     {
                                         <li id="linkMantenimientoGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Crear/Modificar", "Editar", "GrupoCliente")</li>
                                     }
@@ -358,6 +363,14 @@
         </div>
     </div>
     <div class="container body-content">
+        @if (usuario != null && usuario.alertasList != null && usuario.alertasList.Count > 0) {
+        <a href="@Url.Action("Pendientes", "Validacion")" style="text-decoration: none;">
+            <div class="alert alert-warning">
+                Tienes @usuario.alertasList.Count.ToString() cambios por validar
+            </div>
+        </a>
+        
+        }
         <p></p>
         @RenderBody()
         <hr />

@@ -91,7 +91,26 @@ namespace BusinessLayer
         {
             using (var grupoClienteDAL = new GrupoClienteDAL())
             { 
-                return grupoClienteDAL.insertGrupoCliente(grupoCliente);
+                GrupoCliente gc = grupoClienteDAL.insertGrupoCliente(grupoCliente);
+
+                if ((gc.usuario == null || !gc.usuario.modificaGrupoClientes))
+                {
+                    AlertaValidacion alerta = new AlertaValidacion();
+                    alerta.idRegistro = gc.idGrupoCliente.ToString();
+                    alerta.nombreTabla = "GRUPO_CLIENTE";
+                    alerta.Estado = 0;
+                    alerta.UsuarioCreacion = gc.usuario;
+                    alerta.IdUsuarioCreacion = gc.usuario.idUsuario;
+                    alerta.tipo = AlertaValidacion.CREA_GRUPO_CLIENTE;
+                    alerta.data = new DataAlertaValidacion();
+                    
+                    alerta.data.ObjData = gc.codigoNombre;
+
+                    AlertaValidacionDAL alertaDal = new AlertaValidacionDAL();
+                    alertaDal.insertAlertaValidacion(alerta);
+                }
+
+                return gc;
             }
         }
 

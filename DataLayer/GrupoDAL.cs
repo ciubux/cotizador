@@ -71,6 +71,7 @@ namespace DataLayer
                 grupoCliente.sobreGiro = Converter.GetDecimal(row, "sobre_giro");
                 grupoCliente.observacionesCredito = Converter.GetString(row, "observaciones_credito");
 
+                grupoCliente.IdUsuarioRegistro = Converter.GetGuid(row, "usuario_creacion");
             }
 
             return grupoCliente;

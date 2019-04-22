@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,6 +46,8 @@
     <Compile Include="ArchivoDAL.cs" />
     <Compile Include="DocumentoCompraDAL.cs" />
     <Compile Include="DomicilioLegalDAL.cs" />
+    <Compile Include="AlertaValidacionDAL.cs" />
+    <Compile Include="LogCambioDAL.cs" />
     <Compile Include="PermisoDAL.cs" />
     <Compile Include="OrigenDAL.cs" />
     <Compile Include="SubDistribuidorDAL.cs" />
@@ -51,6 +57,7 @@
     <Compile Include="DocumentoVentaDAL.cs" />
     <Compile Include="MovimientoAlmacenDAL.cs" />
     <Compile Include="CompraDAL.cs" />
+    <Compile Include="LogCampoDAL.cs" />
     <Compile Include="VentaDAL.cs" />
     <Compile Include="TransportistaDAL.cs" />
     <Compile Include="PedidoDAL.cs" />

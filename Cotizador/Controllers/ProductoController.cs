@@ -215,6 +215,12 @@ namespace Cotizador.Controllers
                 }
             }
 
+            LogCampoBL logCamboBl = new LogCampoBL();
+            List<LogCampo> campos = logCamboBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);
+
+            List<CampoPersistir> persitirCampos = Producto.obtenerCampos(campos);
+
+            ViewBag.persitirCampos = persitirCampos;
             return View();
 
         }
@@ -308,11 +314,11 @@ namespace Cotizador.Controllers
 
                         ProductoStaging productoStaging = new ProductoStaging();
                         int paso = 1;
-                        try
-                        {
+                      /*  try
+                        {*/
 
 
-                            if (sheet.GetRow(row).GetCell(0+ posicionInicial) == null)
+                            if (sheet.GetRow(row).GetCell(0 + posicionInicial) == null)
                             {
                                 productoStaging.familia = "No proporcionada";
                             }
@@ -522,7 +528,7 @@ namespace Cotizador.Controllers
                             }
 
                             productoBL.setProductoStaging(productoStaging);
-                        }
+                        /*}
                         catch (Exception ex)
                         {
 
@@ -532,7 +538,7 @@ namespace Cotizador.Controllers
                             logBL.insertLog(log);
 
 
-                        }
+                        }*/
                     }
                 }
                 productoBL.mergeProductoStaging();
@@ -547,6 +553,373 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
                 return View("CargaIncorrecta");
             }
+        }
+
+
+
+
+        [HttpPost]
+        public ActionResult Load1(HttpPostedFileBase file)
+        {
+            
+            Usuario usuario = (Usuario)this.Session["usuario"];
+            LogCampoBL logCambioBl = new LogCampoBL();
+            List<LogCampo> campos = logCambioBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);
+
+            List<CampoPersistir> registrarCampos = Producto.obtenerCampos(campos);
+            //List<CampoPersistir> registrarCampos = new List<CampoPersistir>();
+
+            foreach (CampoPersistir cp in registrarCampos)
+            {
+                cp.registra = false;
+                cp.persiste = false;
+                if (Request["registra_" + cp.campo.nombre] != null)
+                {
+                    int select = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
+                    if (select == 1)
+                    {
+                        cp.registra = true;
+                            
+                        if (Request["persiste_" + cp.campo.nombre] != null)
+                        {
+                            int persiste = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
+                            cp.persiste = persiste == 1 ? true : false;                                
+                        }
+                    }
+                }
+            }
+
+            LogCambioBL logCambiobl = new LogCambioBL();
+
+
+            String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
+            DateTime fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+
+            int nFIV = (fechaInicioVigencia.Year * 10000) + (fechaInicioVigencia.Month * 100) + fechaInicioVigencia.Day;
+            int nFT = (DateTime.Now.Year * 10000) + (DateTime.Now.Month * 100) + DateTime.Now.Day;
+            int nFR = 0;
+            bool isNew = false;
+            HSSFWorkbook hssfwb;
+
+            ProductoBL productoBL = new ProductoBL();
+
+            hssfwb = new HSSFWorkbook(file.InputStream);
+
+            ISheet sheet = hssfwb.GetSheetAt(0);
+            int row = 1;
+            int cantidad = Int32.Parse(Request["cantidadLineas"].ToString());
+            if (cantidad == 0)
+                cantidad = sheet.LastRowNum;
+
+            //   cantidad = 2008;
+            //sheet.LastRowNum
+            int posicionInicial = 2;
+
+            for (row = 1; row <= cantidad; row++)
+            {
+                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+                    isNew = false;
+
+                    Producto productoStaging = new Producto();
+                    int paso = 1;
+                    //try
+                    //{
+
+
+                        if (sheet.GetRow(row).GetCell(0+ posicionInicial) == null)
+                        {
+                            productoStaging.familia = "No proporcionada";
+                        }
+                        else
+                        {
+                            //A
+                            productoStaging.familia = sheet.GetRow(row).GetCell(0 + posicionInicial).ToString();
+                        }
+
+
+                        paso = 2;
+                        if (sheet.GetRow(row).GetCell(1 + posicionInicial) == null)
+                        {
+                            productoStaging.proveedor = null;
+                        }
+                        else
+                        {
+                            //B
+                            productoStaging.proveedor = sheet.GetRow(row).GetCell(1 + posicionInicial).ToString();
+                        }
+
+
+                        paso = 3;
+                        if (sheet.GetRow(row).GetCell(2 + posicionInicial) == null)
+                        {
+                            productoStaging.sku = null;
+                        }
+                        else
+                        {
+                            //C
+                            productoStaging.sku = sheet.GetRow(row).GetCell(2 + posicionInicial).ToString();
+                        }
+
+                        paso = 4;
+                        //D
+                        if (sheet.GetRow(row).GetCell(3 + posicionInicial) == null)
+                        {
+                            productoStaging.skuProveedor = null;
+                        }
+                        else
+                        {
+                            productoStaging.skuProveedor = sheet.GetRow(row).GetCell(3 + posicionInicial).ToString();
+                        }
+
+                        paso = 5;
+                        //E
+                        if (sheet.GetRow(row).GetCell(4 + posicionInicial) == null)
+                        {
+                            productoStaging.unidad = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidad = sheet.GetRow(row).GetCell(4 + posicionInicial).ToString();
+                        }
+
+                        paso = 6;
+                        //F
+                        if (sheet.GetRow(row).GetCell(5 + posicionInicial) == null)
+                        {
+                            productoStaging.unidadProveedor = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidadProveedor = sheet.GetRow(row).GetCell(5 + posicionInicial).ToString();
+                        }
+
+
+                        paso = 7;
+                        //G
+                        if (sheet.GetRow(row).GetCell(6 + posicionInicial) == null)
+                        {
+                            productoStaging.equivalenciaProveedor = 0;
+                        }
+                        else
+                        {
+                            productoStaging.equivalenciaProveedor = Int32.Parse(sheet.GetRow(row).GetCell(6 + posicionInicial).ToString());
+                        }
+
+
+                        paso = 8;
+                        //H
+                        if (sheet.GetRow(row).GetCell(7 + posicionInicial) == null)
+                        {
+                            productoStaging.unidad_alternativa = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidad_alternativa = sheet.GetRow(row).GetCell(7 + posicionInicial).ToString();
+                        }
+
+                        paso = 9;
+                        //J
+                        if (sheet.GetRow(row).GetCell(8 + posicionInicial) == null)
+                        {
+                            productoStaging.equivalenciaAlternativa = 1;
+                        }
+                        else
+                        {
+                            productoStaging.equivalenciaAlternativa = Int32.Parse(sheet.GetRow(row).GetCell(8 + posicionInicial).ToString());
+                        }
+
+                        paso = 10;
+                        //K
+                        if (sheet.GetRow(row).GetCell(9 + posicionInicial) == null)
+                        {
+                            productoStaging.descripcion = null;
+                        }
+                        else
+                        {
+                            productoStaging.descripcion = sheet.GetRow(row).GetCell(9 + posicionInicial).ToString();
+                        }
+
+
+                        paso = 11;
+                        //S
+                        try
+                        {
+                            productoStaging.monedaProveedor = sheet.GetRow(row).GetCell(18 + posicionInicial).ToString();
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.monedaProveedor = "S";
+                        }
+
+
+
+                        paso = 12;
+                        //T
+                        try
+                        {
+                            Double? costo = sheet.GetRow(row).GetCell(19 + posicionInicial).NumericCellValue;
+                            productoStaging.costoSinIgv = Convert.ToDecimal(costo);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.costoSinIgv = 0;
+                        }
+
+                        paso = 13;
+                        try
+                        {
+                            //X
+                            productoStaging.monedaMP = sheet.GetRow(row).GetCell(23 + posicionInicial).ToString();
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.monedaMP = "S";
+                        }
+
+                        paso = 14;
+                        try
+                        {
+                            //Y
+                            Double? precioLima = sheet.GetRow(row).GetCell(24 + posicionInicial).NumericCellValue;
+                            productoStaging.precioSinIgv = Convert.ToDecimal(precioLima);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.precioSinIgv = 0;
+                        }
+
+                        paso = 15;
+                        try
+                        {
+                            //AB
+                            Double? precioProvincias = sheet.GetRow(row).GetCell(27 + posicionInicial).NumericCellValue;
+                            productoStaging.precioProvinciaSinIgv = Convert.ToDecimal(precioProvincias);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.precioProvinciaSinIgv = 0;
+                        }
+
+
+                        paso = 16;
+                        //AC
+                        if (sheet.GetRow(row).GetCell(28 + posicionInicial) == null)
+                        {
+                            productoStaging.unidadEstandarInternacional = "";
+                        }
+                        else
+                        {
+                            productoStaging.unidadEstandarInternacional = sheet.GetRow(row).GetCell(28 + posicionInicial).ToString();
+                        }
+
+                        paso = 17;
+                        //AD
+                        if (sheet.GetRow(row).GetCell(29 + posicionInicial) == null)
+                        {
+                            productoStaging.unidadProveedorInternacional = "";
+                        }
+                        else
+                        {
+                            productoStaging.unidadProveedorInternacional = sheet.GetRow(row).GetCell(29 + posicionInicial).ToString();
+                        }
+
+
+                        paso = 18;
+                        //AD
+                        if (sheet.GetRow(row).GetCell(30 + posicionInicial) == null)
+                        {
+                            productoStaging.unidadAlternativaInternacional = "";
+                        }
+                        else
+                        {
+                            productoStaging.unidadAlternativaInternacional = sheet.GetRow(row).GetCell(30 + posicionInicial).ToString();
+                        }
+
+                //        productoBL.setProductoStaging(productoStaging);
+
+                       
+
+                        Guid idRegistro = productoBL.getProductoId(productoStaging.sku);
+                            
+
+                        if (idRegistro == Guid.Empty)
+                        {
+                            //TO DO: Realizar nuevo registro en el proceso de aplicar cambios 
+                            idRegistro = Guid.NewGuid();
+                            isNew = true;
+                        }
+
+                        productoStaging.idProducto = idRegistro;
+                        productoStaging.usuario = usuario;
+                        productoStaging.fechaInicioVigencia = fechaInicioVigencia;
+
+                        if (nFIV >= nFT)
+                        {
+                            if (isNew)
+                            {
+                                logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                            } else {
+                                logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
+                            }
+                        } else
+                        {
+                            Producto existente = productoBL.getProductoById(idRegistro);
+                                
+                            if (existente.fechaInicioVigencia != null)
+                            {
+                                nFR = (existente.fechaInicioVigencia.Year * 10000) + (existente.fechaInicioVigencia.Month * 100) + existente.fechaInicioVigencia.Day;
+                            } else
+                            {
+                                nFR = int.MinValue;
+                            }
+
+                            if (nFR <= nFIV)
+                            {
+                                if (isNew)
+                                {
+                                    logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                                }
+                                else
+                                {
+                                    logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
+                                }
+                            } else
+                            {
+                                if (isNew)
+                                {
+                                    //Registrar
+                                    productoBL.insertProducto(productoStaging);
+                                } else
+                                {
+                                    //Registrar log
+                                    logCambiobl.insertLogCambios(productoStaging.obtenerLogProgramado(registrarCampos));
+                                }
+                            }
+                        }
+
+
+             /*       }
+                    catch (Exception ex)
+                    {
+
+                           
+                        Log log = new Log(ex.ToString() + " paso:" + paso, TipoLog.Error, usuario);
+                        LogBL logBL = new LogBL();
+                        logBL.insertLog(log);
+
+
+                    }*/
+                }
+            }
+
+            if (nFIV <= nFT)
+            {
+                logCambiobl.aplicarLogCambios();
+            }
+
+            return View("CargaCorrecta");
+
         }
 
 

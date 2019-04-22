@@ -307,12 +307,9 @@
                                 <div class="col-sm-8 col-lg-10">
                                 </div>
                                 <div class="col-sm-4 col-lg-2">
-                                    @if (grupoCliente.usuario.modificaMiembrosGrupoCliente)
-                                    {
                                     <div class="form-group right" style="padding-right: 10px;">
                                         <button type="button" id="btnMiembrosGrupoCliente" class="btn btn-primary ">Editar Miembros</button>
                                     </div>
-                                    }
                                 </div>
                             </div>
                         </div>
@@ -370,10 +367,7 @@
             <div class="modal-footer">
                 <div class="pull-right">
                     <button type="button" id="btnCancelarVerGrupoCliente" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    @if (grupoCliente.usuario.modificaGrupoClientes)
-                    {
-                        <button type="button" id="btnEditarGrupoCliente" class="btn btn-primary ">Editar</button>
-                    }
+                    <button type="button" id="btnEditarGrupoCliente" class="btn btn-primary ">Editar</button>
                 </div>
             </div>
 

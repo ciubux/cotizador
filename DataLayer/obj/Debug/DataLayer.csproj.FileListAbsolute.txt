@@ -126,3 +126,7 @@ C:\Users\cesar\Documents\MP2\cotizador_3\DataLayer\bin\Debug\Model.pdb
 C:\Users\cesar\Documents\MP2\cotizador_3\DataLayer\bin\Debug\Model.dll.config
 C:\Users\cesar\Documents\MP2\cotizador_3\DataLayer\obj\Debug\DataLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\DataLayer\obj\Debug\DataLayer.pdb
+D:\Repo\freelos\cotizador\DataLayer\bin\Debug\Newtonsoft.Json.dll
+D:\Repo\freelos\cotizador\DataLayer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\cesar\Documents\MP2\cotizador_3\DataLayer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\DataLayer\bin\Debug\Newtonsoft.Json.xml

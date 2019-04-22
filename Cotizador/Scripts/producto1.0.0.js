@@ -5,14 +5,42 @@ jQuery(function ($) {
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
 
+
+    /**
+        * ######################## INICIO CONTROLES DE FECHAS
+        */
+    $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '< Ant',
+        nextText: 'Sig >',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+
+    var fecha = $("#fechaInicioVigenciatmp").val();
+    $("#fechaInicioVigencia").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
+
     $(document).ready(function () {
+
         $("#btnBusqueda").click();
         //cargarChosenCliente();
         verificarSiExisteCliente();
     });
 
     function verificarSiExisteCliente() {
-        if ($("#idProducto").val().trim() != GUID_EMPTY) {
+        var id = $("#idProducto").val();
+        if (id.trim() != GUID_EMPTY) {
             //$("#idCiudad").attr("disabled", "disabled");
             //$("#tipoDocumentoIdentidad").attr("disabled", "disabled");
             //$("#cliente_ruc").attr("disabled", "disabled");
@@ -380,6 +408,15 @@ jQuery(function ($) {
         changeInputBoolean('inafecto', valor)
     });
 
+    $(".chk_campo_registra").change(function () {
+        if ($(this).prop('checked')) {
+            $(this).closest("tr").find(".chk_campo_persiste").removeAttr("disabled");
+        } else {
+            $(this).closest("tr").find(".chk_campo_persiste").attr("disabled", "disabled");
+            $(this).closest("tr").find(".chk_campo_persiste").prop('checked', false);
+        }
+
+    });
     
     
 
@@ -581,6 +618,44 @@ jQuery(function ($) {
     $("#btnExportExcel").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
+
+    $("#btnCargarProductos").click(function () {
+        var listaTextosCampos = "";
+        $(".chk_campo_registra").each(function () {
+            if (!$(this).prop('checked')) {
+                if (listaTextosCampos != "") listaTextosCampos = listaTextosCampos + "<br/>";
+                listaTextosCampos = listaTextosCampos + $(this).closest("tr").find("td.nombreCampo").html();
+            }
+        });
+
+        if (listaTextosCampos != "") {
+            $.confirm({
+                title: 'Registro Parcial',
+                content: '<div><div class="col-sm-12"><b>Los siguientes campos no se seleccionaron: </b></div><br/><div class="col-sm-12">' + listaTextosCampos + '</div><br/><div class="col-sm-12"><b>¿Desea continuar? </b></div></div>',
+                type: 'orange',
+                buttons: {
+                    aplica: {
+                        text: 'SI',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            $("#formCargarProductos").submit();
+                        }
+                    },
+                    cancelar: {
+                        text: 'Cancelar',
+                        btnClass: '',
+                        action: function () {
+                        }
+                    }
+                }
+            });
+        } else {
+            $("#formCargarProductos").submit();
+        }
+        
+    });
+
+    
 
     $("#btnBusqueda").click(function () {
 
