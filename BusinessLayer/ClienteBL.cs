@@ -288,11 +288,13 @@ namespace BusinessLayer
                     pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.precioSinIgv));
                     pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.costoSinIgv));
 
-                    if (pedidoDetalle.esPrecioAlternativo)
+
+
+              /*      if (pedidoDetalle.esPrecioAlternativo)
                     {
                         pedidoDetalle.producto.precioClienteProducto.precioUnitario =
                         pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.ProductoPresentacion.Equivalencia;
-                    }
+                    }*/
 
                     pedidoDetalle.porcentajeDescuento = (1 - (pedidoDetalle.precioNeto / (pedidoDetalle.precioLista == 0 ? 1 : pedidoDetalle.precioLista)))*100;
                     pedidoDetalle.porcentajeMargen = (1 - (pedidoDetalle.costoLista / (pedidoDetalle.precioNeto == 0 ? 1 : pedidoDetalle.precioNeto))) * 100;

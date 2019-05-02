@@ -53,7 +53,7 @@
             <div class="col-sm-6 col-lg-4">
                 <!--fecha Emision-->
                 <div class="form-group">
-                    @Html.LabelFor(g => notaIngreso.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <label for="fechaEmisiontmp" class="control-label col-xs-4">Fecha Ingreso:</label>
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaEmisiontmp" value="@ViewBag.fechaEmisiontmp" />
                         <input class="form-control" type="text" id="notaIngreso_fechaEmision" name="notaIngreso_fechaEmision">

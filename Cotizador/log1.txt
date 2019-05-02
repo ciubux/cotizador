@@ -50,3 +50,7 @@ The statement has been terminated.
 2019-04-21 09:01:05.8025|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / @@esCargaMasiva is not a parameter for procedure pu_clienteSunat.
 2019-04-21 09:02:01.3815|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / @@esCargaMasiva is not a parameter for procedure pu_clienteSunat.
 2019-04-21 09:03:37.6585|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-25 23:20:05.4178|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
+2019-04-25 23:22:37.1131|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
+2019-04-25 23:23:01.5061|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
+2019-04-25 23:24:46.7005|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.

@@ -59,7 +59,7 @@ namespace BusinessLayer
                     producto.precioSinIgv = producto.precioProvinciaSinIgv;
                     foreach (ProductoPresentacion productoPresentacion in producto.ProductoPresentacionList)
                     {
-                        productoPresentacion.PrecioSinIGV = producto.precioProvinciaSinIgv;
+                        productoPresentacion.PrecioSinIGV = productoPresentacion.PrecioProvinciasSinIGV;
                     }
                 }
 

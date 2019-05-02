@@ -7,12 +7,14 @@ jQuery(function ($) {
     var TITLE_EXITO = 'Operación Realizada';
 
     $(document).ready(function () {
+        console.log("Hello world!");
         $("#btnBusqueda").click();
         cargarChosenCliente();
         cargarChosenClienteRuc();
         verificarSiExisteGrupoCliente();
-
+       
         FooTable.init('#tableMiembrosGrupoCliente');
+        console.log("Hello world!");
     });
 
     function verificarSiExisteGrupoCliente() {
@@ -349,6 +351,7 @@ jQuery(function ($) {
 
 
     $("#btnFinalizarEdicionGrupoCliente").click(function () {
+        
         /*Si no tiene codigo el cliente se está creando*/
         if ($("#idGrupoCliente").val() == 0) {
             crearGrupoCliente();
@@ -1465,10 +1468,9 @@ jQuery(function ($) {
                 var margenText = "";
                 var canastaText = "";
                 var disabledCanasta = "";
-<<<<<<< HEAD
+
                 var editaCliente = parseInt($("#tableListaPrecios th.listaPreciosCanasta").attr("hasEdit"));
-             
-=======
+           
 
                 disabledCanasta = "";
 
@@ -1476,7 +1478,6 @@ jQuery(function ($) {
                     disabledCanasta = "disabled";
                 }
 
->>>>>>> yrving/dev
                 $("#tableListaPrecios > tbody").empty();
                 for (var i = 0; i < preciosList.length; i++) {
                     var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
@@ -1540,9 +1541,7 @@ jQuery(function ($) {
                 else {
                     $("#msgPreciosSinResultados").show();
                 }
-<<<<<<< HEAD
-              
-=======
+
                 
                 if (obj.editaGrupo != 1) {
                     editGrupoCliente = 0;
@@ -1560,7 +1559,7 @@ jQuery(function ($) {
                     $("#btnMiembrosGrupoCliente").show();
                 }
 
->>>>>>> yrving/dev
+
                 FooTable.init('#tableListaPrecios');
 
                 $("#chkSoloCanasta").prop("checked", false);
@@ -1822,11 +1821,8 @@ jQuery(function ($) {
                         '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + cliente.ruc + '  </td>' +
                         '<td>  ' + cliente.ciudad.nombre + '  </td>' +
-<<<<<<< HEAD
                         '<td>  ' + textoHeredaPrecios + '  </td>' +
-=======
                         '<td>  <input type="checkbox" class="chkMiembroHeredaPrecios' + checkedHeredaPrecios + ' value="1"> </td>' + 
->>>>>>> yrving/dev
                         '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                         '</tr>';
 

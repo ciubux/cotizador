@@ -37,7 +37,7 @@ namespace Cotizador.Controllers
                     if (pedido.cliente != null)
                     {
                         var urlVerPedido = this.Url.Action("Index", "Pedido", new { idPedido = pedido.idPedido }, this.Request.Url.Scheme);
-                        urlVerPedido = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=" + pedido.idPedido.ToString();
+                        urlVerPedido = "http://zasmp.azurewebsites.net/Pedido?idPedido=" + pedido.idPedido.ToString();
                         PedidoSinAtencion emailTemplate = new PedidoSinAtencion();
                         emailTemplate.urlVerPedido = urlVerPedido;
 

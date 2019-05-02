@@ -153,8 +153,8 @@ C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Debug\BusinessLayer.c
 C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Debug\BusinessLayer.pdb
-C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
+D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.dll
+D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.xml
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\BusinessLayer.dll.config
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\BusinessLayer.pdb
@@ -169,6 +169,7 @@ C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\NPOI.OpenXml4Ne
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\NPOI.OpenXmlFormats.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\ServiceLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Newtonsoft.Json.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\DataLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\DataLayer.dll.config
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Framework.DAL.pdb
@@ -178,9 +179,8 @@ C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Model.dll.confi
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\ServiceLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\NPOI.xml
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\obj\Debug\BusinessLayer.pdb
-D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.dll
-D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.xml
-C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Newtonsoft.Json.dll
-C:\Users\cesar\Documents\MP2\cotizador_3\BusinessLayer\bin\Debug\Newtonsoft.Json.xml

@@ -543,7 +543,7 @@ namespace DataLayer
                 else
                     cotizacionDetalle.producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
 
-                cotizacionDetalle.producto.precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia");
+                cotizacionDetalle.producto.precioClienteProducto.equivalencia = Converter.GetDecimal(row, "equivalencia");
                 cotizacionDetalle.producto.precioClienteProducto.cliente = new Cliente();
                 cotizacionDetalle.producto.precioClienteProducto.estadoCanasta = Converter.GetInt(row, "estado_canasta") == 1 ? true : false;
                 cotizacionDetalle.producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");

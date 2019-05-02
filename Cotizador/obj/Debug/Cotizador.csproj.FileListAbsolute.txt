@@ -752,8 +752,6 @@ D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
-C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\ApplicationInsights.config
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\csc.exe
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -893,5 +891,7 @@ C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\es\Microsoft.Owin.Securit
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\obj\Debug\Cotizador.pdb

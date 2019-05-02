@@ -22,14 +22,20 @@ namespace BusinessLayer
             //Cambio Temporal
             pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
 
+
+
+           
             if (pedido.tipoPedido != Pedido.tiposPedido.Venta)
             {
                 pedido.montoIGV = 0;
                 pedido.montoTotal = 0;
                 pedido.montoSubTotal = 0;
 
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                pedido.seguimientoPedido.observacion = "Los pedidos de Transferencia Gratuita y Comodato requieren aprobación.";
             }
-            else {
+            else
+            {
                 //if (!pedido.usuario.apruebaPedidos && !pedido.cliente.perteneceCanalMultiregional)
                 /*   if (!pedido.usuario.apruebaPedidos)
                    {

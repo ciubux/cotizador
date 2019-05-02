@@ -306,9 +306,14 @@ namespace DataLayer
                     pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
                     pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
                     pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
-                    pedidoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
 
                     pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+                    if (pedidoDetalle.esPrecioAlternativo)
+                    {
+                        pedidoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                        pedidoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                    }
+
                     pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
 
                     pedidoDetalle.precioUnitarioOriginal = Converter.GetDecimal(row, "precio_unitario_original");
@@ -432,9 +437,18 @@ namespace DataLayer
                     pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
                     pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
                     pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
-                    pedidoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
-                    pedidoDetalle.cantidadOriginal = pedidoDetalle.cantidad;
                     pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+
+                    if (pedidoDetalle.esPrecioAlternativo)
+                    {
+                        pedidoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                        pedidoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                    }
+
+
+                    
+                    pedidoDetalle.cantidadOriginal = pedidoDetalle.cantidad;
+                    
                     pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
 
                     pedidoDetalle.precioUnitarioOriginal = Converter.GetDecimal(row, "precio_unitario_original");

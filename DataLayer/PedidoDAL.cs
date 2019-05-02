@@ -1665,6 +1665,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
                 if (pedidoDetalle.esPrecioAlternativo)
                 {
+                    pedidoDetalle.ProductoPresentacion = new ProductoPresentacion();
                     pedidoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
                 }
 

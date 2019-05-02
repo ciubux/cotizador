@@ -2658,12 +2658,14 @@ jQuery(function ($) {
                         '<td>' + fechaInicioVigencia + '</td>' +
                         '<td>' + fechaFinVigencia + '</td>' +
                         '<td>  ' + preciosList[i].unidad + '</td>' +
+                        '<td>  ' + preciosList[i].producto.precioClienteProducto.equivalencia.toFixed(cantidadDecimales) + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
                         '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
                         '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
                         
                         '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
                         '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+
                         '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
                          margenText +
                         '<td>' +

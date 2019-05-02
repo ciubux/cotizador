@@ -308,13 +308,14 @@ namespace cotizadorPDF
                 int xPage2a = 0;
                 String reiniciarY = "";
 
-
+                xPage2 = margenLeft;
 
                 if (y < 600)
                 {
                     sectionTotales = doc.Pages[countPages-1];
                     sectionObervaciones = doc.Pages[countPages-1];
                     sectionFirma = doc.Pages[countPages-1];
+                    y = y + 35;
                 }
                 else
                 {
@@ -329,13 +330,14 @@ namespace cotizadorPDF
                     //el fin de la tabla y la observación.
                     y =  margenTop +150;
                 }
-
+                countPages = doc.Pages.Count;
                 if (countPages > 1)
                 {
-                    xPage2 = margenLeft;
+
                     y = y - 150;
                 }
-               
+
+                
                 //Si es distinto de solo observaciones
                 if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                 {

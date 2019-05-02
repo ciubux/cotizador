@@ -77,39 +77,13 @@
                             <th data-name="tipoDocumento" data-visible="true" data-sortable="true">Tipo Doc.</th>
                             <th data-name="numeroDocumento" data-visible="true" data-sortable="true">N° Doc.</th>
                             <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
-<<<<<<< HEAD
-                            <th data-name="heredaPrecios" data-sortable="false" data-breakpoints="xs">Hereda Precios</th>
-=======
                             <th data-name="heredaPrecios" data-sortable="false" data-breakpoints="xs">Hereda precios<br /> del grupo</th>
->>>>>>> yrving/dev
                             <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (Model.Cliente cliente in grupoCliente.miembros)
                         {
-<<<<<<< HEAD
-                        <tr data-expanded="true">
-                            <td>  @cliente.idCliente </td>
-                            <td>  @cliente.codigo </td>
-                            <td>  @cliente.razonSocialSunat </td>
-                            <td>  @cliente.nombreComercial </td>
-                            <td>  @cliente.tipoDocumentoIdentidadToString </td>
-                            <td>  @cliente.ruc </td>
-                            <td>  @cliente.ciudad.nombre </td>
-                            @if (cliente.habilitadoNegociacionGrupal)
-                            {
-                                <td>Si</td>
-                            }
-                            else
-                            {
-                                <td>No</td>
-                            }
-                            <td>
-                                <button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="@cliente.idCliente">Remover</button>
-                            </td>
-                        </tr>
-=======
                             {
                                 itemHeredaChecked = "";
                                 if (cliente.habilitadoNegociacionGrupal) {
@@ -129,7 +103,7 @@
                                     <button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="@cliente.idCliente">Remover</button>
                                 </td>
                             </tr>
->>>>>>> yrving/dev
+
                         }
                     </tbody>
                 </table>

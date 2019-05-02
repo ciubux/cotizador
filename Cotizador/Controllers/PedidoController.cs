@@ -1004,9 +1004,11 @@ namespace Cotizador.Controllers
                     //de la unidad alternativa en lugar del precio de la unidad estandar
                     //detalle.producto.precioClienteProducto.precioUnitario =
                     //  detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
-
-                    detalle.producto.precioClienteProducto.precioUnitario =
-                   detalle.producto.precioClienteProducto.precioUnitario / detalle.producto.precioClienteProducto.equivalencia;
+                    if (detalle.producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                    {
+                        detalle.producto.precioClienteProducto.precioUnitario =
+                       detalle.producto.precioClienteProducto.precioUnitario / detalle.producto.precioClienteProducto.equivalencia;
+                    }
 
                 }
                 else

@@ -1147,14 +1147,15 @@ jQuery(function ($) {
 
         //En caso el calculo se realice al momento de agregar un producto
         if (modalAgregarProductoIsShown) {
-
             var esPrecioAlternativo = Number($("#unidad").val());
             //Si es el precio estandar
             nuevoPrecioInicial = Number(Number($("#precioUnitarioSinIGV").val()).toFixed(cantidadDecimalesPrecioNeto));
-
+            
             //Si NO es el precio estandar (si es el precio alternativo)
-            if (esPrecioAlternativo == 1) {
-                var nuevoPrecioInicial = Number(Number($("#precioUnitarioAlternativoSinIGV").val()).toFixed(cantidadDecimalesPrecioNeto));
+            if (esPrecioAlternativo >= 1) {
+                var nuevoPrecioInicial = Number(Number($("#unidad option:selected").attr("precioUnitarioAlternativoSinIGV")).toFixed(cantidadDecimalesPrecioNeto));
+                //costoLista = $("#unidad option:selected").attr("costoAlternativoSinIGV");
+                //var nuevoPrecioInicial = Number(Number($("#precioUnitarioAlternativoSinIGV").val()).toFixed(cantidadDecimalesPrecioNeto));
             }
         }
         //En caso el calculo se realice al momento de editar un producto en la grilla

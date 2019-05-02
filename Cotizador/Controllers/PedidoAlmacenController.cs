@@ -565,6 +565,8 @@ namespace Cotizador.Controllers
             }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
+            String jsonProductoPresentacion = JsonConvert.SerializeObject(producto.ProductoPresentacionList);
+
 
             String resultado = "{" +
                 "\"id\":\"" + producto.idProducto + "\"," +
@@ -583,7 +585,7 @@ namespace Cotizador.Controllers
                 "\"precioUnitario\":\"" + precioUnitario + "\"," +
                 "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
                 "\"precioListaList\":" + jsonPrecioLista + "," +
-
+                "\"productoPresentacionList\":" + jsonProductoPresentacion + "," +
                 "\"costoLista\":\"" + producto.costoLista + "\"" +
                 "}";
             return resultado;
@@ -623,6 +625,8 @@ namespace Cotizador.Controllers
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                 //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
                 ProductoPresentacion productoPresentacion = producto.getProductoPresentacion(idProductoPresentacion);
+                detalle.unidad = productoPresentacion.Presentacion;
+                detalle.ProductoPresentacion = productoPresentacion;
                 detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * detalle.ProductoPresentacion.Equivalencia));
 
                 //Si es el precio Alternativo se debe modificar el precio_cliente_producto para que compare con el precio
