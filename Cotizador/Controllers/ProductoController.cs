@@ -277,7 +277,7 @@ namespace Cotizador.Controllers
         }
 
         [HttpPost]
-        public ActionResult Load(HttpPostedFileBase file)
+        public ActionResult Load1(HttpPostedFileBase file)
         {
             /*     if (file.ContentLength > 0)
                  {
@@ -559,7 +559,7 @@ namespace Cotizador.Controllers
 
 
         [HttpPost]
-        public ActionResult Load1(HttpPostedFileBase file)
+        public ActionResult Load(HttpPostedFileBase file)
         {
             
             Usuario usuario = (Usuario)this.Session["usuario"];
@@ -590,6 +590,7 @@ namespace Cotizador.Controllers
             }
 
             LogCambioBL logCambiobl = new LogCambioBL();
+            ParametroBL parametrobl = new ParametroBL();
 
 
             String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
@@ -614,6 +615,8 @@ namespace Cotizador.Controllers
             //   cantidad = 2008;
             //sheet.LastRowNum
             int posicionInicial = 2;
+
+            Decimal tipoCambio = parametrobl.getParametroDecimal("TIPO_CAMBIO");
 
             for (row = 1; row <= cantidad; row++)
             {
@@ -745,7 +748,7 @@ namespace Cotizador.Controllers
                         //S
                         try
                         {
-                            productoStaging.monedaProveedor = sheet.GetRow(row).GetCell(18 + posicionInicial).ToString();
+                            productoStaging.monedaProveedor = sheet.GetRow(row).GetCell(18 + posicionInicial).ToString().Trim();
                         }
                         catch (Exception e)
                         {
@@ -759,18 +762,18 @@ namespace Cotizador.Controllers
                         try
                         {
                             Double? costo = sheet.GetRow(row).GetCell(19 + posicionInicial).NumericCellValue;
-                            productoStaging.costoSinIgv = Convert.ToDecimal(costo);
+                            productoStaging.costoOriginal = Convert.ToDecimal(costo);
                         }
                         catch (Exception e)
                         {
-                            productoStaging.costoSinIgv = 0;
+                            productoStaging.costoOriginal = 0;
                         }
 
                         paso = 13;
                         try
                         {
                             //X
-                            productoStaging.monedaMP = sheet.GetRow(row).GetCell(23 + posicionInicial).ToString();
+                            productoStaging.monedaMP = sheet.GetRow(row).GetCell(23 + posicionInicial).ToString().Trim();
                         }
                         catch (Exception e)
                         {
@@ -782,11 +785,11 @@ namespace Cotizador.Controllers
                         {
                             //Y
                             Double? precioLima = sheet.GetRow(row).GetCell(24 + posicionInicial).NumericCellValue;
-                            productoStaging.precioSinIgv = Convert.ToDecimal(precioLima);
+                            productoStaging.precioOriginal = Convert.ToDecimal(precioLima);
                         }
                         catch (Exception e)
                         {
-                            productoStaging.precioSinIgv = 0;
+                            productoStaging.precioOriginal = 0;
                         }
 
                         paso = 15;
@@ -794,11 +797,11 @@ namespace Cotizador.Controllers
                         {
                             //AB
                             Double? precioProvincias = sheet.GetRow(row).GetCell(27 + posicionInicial).NumericCellValue;
-                            productoStaging.precioProvinciaSinIgv = Convert.ToDecimal(precioProvincias);
+                            productoStaging.precioProvinciasOriginal = Convert.ToDecimal(precioProvincias);
                         }
                         catch (Exception e)
                         {
-                            productoStaging.precioProvinciaSinIgv = 0;
+                            productoStaging.precioProvinciasOriginal = 0;
                         }
 
 
@@ -849,6 +852,35 @@ namespace Cotizador.Controllers
                             idRegistro = Guid.NewGuid();
                             isNew = true;
                         }
+
+                        // estos productos no se toman en cuenta?:'SG7A08','YXDM600'
+
+                        if (productoStaging.monedaProveedor == "D")
+                        {
+                            productoStaging.costoSinIgv = (productoStaging.costoOriginal / productoStaging.equivalenciaProveedor) * tipoCambio;
+                        } else
+                        {
+                            productoStaging.costoSinIgv = productoStaging.costoOriginal / productoStaging.equivalenciaProveedor;
+                        }
+
+                        if (productoStaging.monedaMP == "D")
+                        {
+                            productoStaging.precioSinIgv = productoStaging.precioOriginal * tipoCambio;
+                        }
+                        else
+                        {
+                            productoStaging.precioSinIgv = productoStaging.precioOriginal;
+                        }
+
+                        if (productoStaging.monedaMP == "D")
+                        {
+                            productoStaging.precioProvinciaSinIgv = productoStaging.precioProvinciasOriginal * tipoCambio;
+                        }
+                        else
+                        {
+                            productoStaging.precioProvinciaSinIgv = productoStaging.precioProvinciasOriginal;
+                        }
+
 
                         productoStaging.idProducto = idRegistro;
                         productoStaging.usuario = usuario;

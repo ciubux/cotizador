@@ -1465,10 +1465,7 @@ jQuery(function ($) {
                 var margenText = "";
                 var canastaText = "";
                 var disabledCanasta = "";
-<<<<<<< HEAD
                 var editaCliente = parseInt($("#tableListaPrecios th.listaPreciosCanasta").attr("hasEdit"));
-             
-=======
 
                 disabledCanasta = "";
 
@@ -1476,7 +1473,6 @@ jQuery(function ($) {
                     disabledCanasta = "disabled";
                 }
 
->>>>>>> yrving/dev
                 $("#tableListaPrecios > tbody").empty();
                 for (var i = 0; i < preciosList.length; i++) {
                     var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
@@ -1540,9 +1536,6 @@ jQuery(function ($) {
                 else {
                     $("#msgPreciosSinResultados").show();
                 }
-<<<<<<< HEAD
-              
-=======
                 
                 if (obj.editaGrupo != 1) {
                     editGrupoCliente = 0;
@@ -1559,8 +1552,7 @@ jQuery(function ($) {
                     editaMiembros = 1;
                     $("#btnMiembrosGrupoCliente").show();
                 }
-
->>>>>>> yrving/dev
+                
                 FooTable.init('#tableListaPrecios');
 
                 $("#chkSoloCanasta").prop("checked", false);
@@ -1822,11 +1814,7 @@ jQuery(function ($) {
                         '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + cliente.ruc + '  </td>' +
                         '<td>  ' + cliente.ciudad.nombre + '  </td>' +
-<<<<<<< HEAD
-                        '<td>  ' + textoHeredaPrecios + '  </td>' +
-=======
                         '<td>  <input type="checkbox" class="chkMiembroHeredaPrecios' + checkedHeredaPrecios + ' value="1"> </td>' + 
->>>>>>> yrving/dev
                         '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                         '</tr>';
 

@@ -606,9 +606,10 @@ border-color: #49E845;
     border-bottom: 1px dotted Gray;
 }
 
+/*
 .menuUsuarios li.selected {
-    /*background-color: GoldenRod*/
-}
+    background-color: GoldenRod;
+}*/
 
 .selected {
     border: 1px solid #888;

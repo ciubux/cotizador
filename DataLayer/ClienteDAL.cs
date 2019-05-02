@@ -541,7 +541,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_clientes");
             InputParameterAdd.Varchar(objCommand, "codigo", cliente.codigo);
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
-            InputParameterAdd.Varchar(objCommand, "textoBusqueda", cliente.textoBusqueda);
+            InputParameterAdd.VarcharEmpty(objCommand, "textoBusqueda", cliente.textoBusqueda);
             InputParameterAdd.Int(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
             InputParameterAdd.Int(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
             InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
@@ -553,7 +553,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "perteneceCanalProvincias", cliente.perteneceCanalProvincias ? 1 : 0);
             InputParameterAdd.Int(objCommand, "perteneceCanalMultiregional", cliente.perteneceCanalMultiregional ? 1 : 0);
             InputParameterAdd.Int(objCommand, "perteneceCanalPCP", cliente.perteneceCanalPCP ? 1 : 0);
-            InputParameterAdd.Varchar(objCommand, "sku", cliente.sku);
+            InputParameterAdd.VarcharEmpty(objCommand, "sku", cliente.sku);
             if (cliente.fechaVentasDesde != null)
                 InputParameterAdd.DateTime(objCommand, "fechaVentasDesde", cliente.fechaVentasDesde.Value);
 

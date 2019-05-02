@@ -22,7 +22,7 @@ namespace Model
 
         public Guid idProducto { get; set; }
 
-        [Display(Name = "Código (SKU):")]
+        [Display(Name = "SKU MP:")]
         public String sku { get; set; }
         [Display(Name = "SKU Prov.:")]
         public String skuProveedor { get; set; }
@@ -288,7 +288,7 @@ namespace Model
             }
             return null;
         }
-        public String UnidadConteo { get; set; }
+        
         public int EquivalenciaUnidadAlternativaUnidadConteo { get; set; }
         public int EquivalenciaUnidadStandarUnidadConteo { get; set; }
         public int EquivalenciaUnidadProveedorUnidadConteo { get; set; }
@@ -336,7 +336,7 @@ namespace Model
                     case "equivalencia_unidad_estandar_unidad_conteo": cp.nombre = Producto.nombreAtributo("equivalenciaUnidadEstandarUnidadConteo"); break;
                     case "equivalencia_unidad_proveedor_unidad_conteo": cp.nombre = Producto.nombreAtributo("equivalenciaUnidadProveedorUnidadConteo"); break;
                     case "tipo_cambio": cp.nombre = Producto.nombreAtributo("tipoCambio"); break;
-
+                    case "estado": cp.nombre = Producto.nombreAtributo("estado"); break;
 
                     default: cp.nombre = "[NOT_FOUND]"; break;
 
@@ -421,6 +421,8 @@ namespace Model
                     case "unidad_proveedor_internacional": lc = instanciarLogCambio(campo); lc.valor = this.unidadProveedorInternacional; break;
                     case "codigo_sunat": lc = instanciarLogCambio(campo); lc.valor = this.codigoSunat; break;
                     case "exonerado_igv": lc = instanciarLogCambio(campo); lc.valor = this.exoneradoIgv.ToString(); break;
+
+                    case "estado": lc = instanciarLogCambio(campo); lc.valor = this.Estado.ToString(); break;
                 }
 
                 if (soloRegistro && !campo.registra)
@@ -898,6 +900,21 @@ namespace Model
                         else
                         {
                             this.exoneradoIgv = bool.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "estado":
+                        if (this.Estado == int.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.Estado = int.Parse(cambio.valor);
                             lista.Add(cambio);
                         }
                         break;
