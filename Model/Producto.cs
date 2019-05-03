@@ -288,10 +288,7 @@ namespace Model
             }
             return null;
         }
-        
-        public int EquivalenciaUnidadAlternativaUnidadConteo { get; set; }
-        public int EquivalenciaUnidadStandarUnidadConteo { get; set; }
-        public int EquivalenciaUnidadProveedorUnidadConteo { get; set; }
+
         public int Stock { get; set; }
 
         public static List<CampoPersistir> obtenerCampos(List<LogCampo> campos, bool soloPersistentes = false) 
@@ -336,7 +333,7 @@ namespace Model
                     case "equivalencia_unidad_estandar_unidad_conteo": cp.nombre = Producto.nombreAtributo("equivalenciaUnidadEstandarUnidadConteo"); break;
                     case "equivalencia_unidad_proveedor_unidad_conteo": cp.nombre = Producto.nombreAtributo("equivalenciaUnidadProveedorUnidadConteo"); break;
                     case "tipo_cambio": cp.nombre = Producto.nombreAtributo("tipoCambio"); break;
-                    case "estado": cp.nombre = Producto.nombreAtributo("estado"); break;
+                    case "estado": cp.nombre = Producto.nombreAtributo("Estado"); break;
 
                     default: cp.nombre = "[NOT_FOUND]"; break;
 
@@ -947,6 +944,21 @@ namespace Model
                 }
             }
             return false;
+        }
+
+        public static bool esCampoActualizableCargaMasiva(string campo)
+        {
+            switch (campo)
+            {
+                case "precio": return false; break;
+                case "precio_provincia": return false; break;
+                case "costo": return false; break;
+                case "tipo_cambio": return false; break;
+                
+                default: return true; break;
+            }
+
+            return true;
         }
         /*     public Guid idFamilia { get; set; }
     public Guid idProveedor { get; set; }

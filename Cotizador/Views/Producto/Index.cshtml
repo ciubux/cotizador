@@ -2,6 +2,7 @@
     ViewBag.Title = "Carga Masiva de Productos";
 }
 
+
 <div class="page-header">
     <h3>@ViewBag.Title</h3>
 </div>
@@ -16,7 +17,8 @@
                         <p>
                             <b>FORMATO</b>
                             <ul>
-                                <li>La carga masiva permite registrar productos nuevos y actualizar productos existentes, desde un archivo Excel.</li>
+                                <li>La carga masiva permite registrar productos nuevos y actualizar productos existentes, desde un archivo Excel. 
+                                Puede descargar productos en formato de actualización en el <a target="_blank" href="@Url.Action("List", "Producto")">formulario de búsqueda productos.</a></li>
                             </ul>
                         </p>
                         <p>
@@ -49,9 +51,9 @@
                 <div class="row">
                     <div class="col-sm-12 col-lg-12">
                         <!--Items-->
-                        <label class="control-label col-xs-3" for="file">Cantidad <br /> Registros:</label>
+                        <label class="control-label col-xs-3" for="file">Tipo cambio:</label>
                         <div class="col-xs-3">
-                            <input class="form-control" type="number" value="0" name="cantidadLineas" id="cantidadLineas" />
+                            <input class="form-control" type="number" value="@ViewBag.tipoCambio" name="tipo_cambio" id="tipoCambio" />
                         </div>
 
                         <!--Fecha Inicio Vigencia-->
@@ -63,10 +65,19 @@
                     </div>
                 </div>
                 <br />
-                <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
-                    <button id="btnCargarProductos" type="button" class="btn btn-primary">Cargar Productos</button>
-                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <!--Items-->
+                        <label class="control-label col-xs-3" for="file">Cantidad <br /> Registros:</label>
+                        <div class="col-xs-3">
+                            <input class="form-control" type="number" value="0" name="cantidadLineas" id="cantidadLineas" />
+                        </div>
 
+                        <div class="col-xs-6 text-right">
+                            <button id="btnCargarProductos" type="button" class="btn btn-primary">Cargar Productos</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-sm-12 col-lg-6">
                 <table class="table" style="margin-top: 10px;">
@@ -80,11 +91,12 @@
                     <tbody>
                         @foreach (Model.CampoPersistir camp in ViewBag.persitirCampos)
                         {
+                            string uploadAttr = BusinessLayer.ProductoBL.esCampoActualizableCargaMasiva(camp.campo.nombre) ? "checked" : "disabled";
                             <tr>
                                 <td class="nombreCampo">@camp.nombre</td>
-                                <td><input type="checkbox" checked class="chk_campo_registra" name="registra_@camp.campo.nombre" id="registra_@camp.campo.nombre" value="1"></td>
+                                <td><input type="checkbox" @uploadAttr class="chk_campo_registra" name="registra_@camp.campo.nombre" id="registra_@camp.campo.nombre" value="1"></td>
                                 <td>
-                                    @if (camp.persiste)
+                                    @if (BusinessLayer.ProductoBL.esCampoActualizableCargaMasiva(camp.campo.nombre) && camp.persiste)
                                     {
                                         <input type="checkbox" class="chk_campo_persiste" name="persiste_@camp.campo.nombre" id="persiste_@camp.campo.nombre" value="1">
                                     }
@@ -95,10 +107,10 @@
                 </table>
             </div>
         </div>
-        
 
 
-        
+
+
     </form>
 
 </div>

@@ -176,7 +176,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 4;
-                int cTotal = 14 + 2;
+                int cTotal = 34 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)

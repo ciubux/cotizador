@@ -310,6 +310,11 @@ jQuery(function ($) {
         changeInputInt("Estado", valCheck)
     });
 
+    $("#producto_estado_todos").click(function () {
+        var valCheck = -1;
+        changeInputInt("Estado", valCheck)
+    });
+
     function changeInputString(propiedad, valor) {
         $.ajax({
             url: "/Producto/ChangeInputString",
@@ -615,9 +620,10 @@ jQuery(function ($) {
 
 
     
-    $("#btnExportExcel").click(function () {
+    $("#btnExportExcel, #btnExportUploadExcel").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
+    
 
     $("#btnCargarProductos").click(function () {
         var listaTextosCampos = "";

@@ -47,6 +47,14 @@ namespace BusinessLayer
             }
         }
 
+        
+        public Guid getAllProductoId(String sku)
+        {
+            using (var dal = new ProductoDAL())
+            {
+                return dal.getAllProductoId(sku);
+            }
+        }
 
         public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente, Boolean esCompra = false)
         {
@@ -325,6 +333,11 @@ namespace BusinessLayer
             {
                 productoDAL.mergeProductoStaging();
             }
+        }
+
+        public static bool esCampoActualizableCargaMasiva(string campo)
+        {
+            return Producto.esCampoActualizableCargaMasiva(campo);
         }
     }
 }
