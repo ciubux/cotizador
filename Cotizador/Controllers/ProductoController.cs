@@ -979,18 +979,22 @@ namespace Cotizador.Controllers
 
                         if (nFIV >= nFT)
                         {
+                            //Fecha Inicio vigencia es mayor o igual a la fecha actual
                             if (isNew)
                             {
+                                //Si es un nuevo registro se guarda el log con todos los campos
                                 logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
                             } else {
                                 logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
                             }
                         } else
                         {
+                            //Fecha Inicio vigencia es menor a la fecha actual
                             Producto existente = productoBL.getProductoById(idRegistro);
-                                
+                            
                             if (existente.fechaInicioVigencia != null)
                             {
+                                //En caso exista y tenga una fecha de inicio de vigencia se toma la fecha de inicio de vigencia del registro existente
                                 nFR = (existente.fechaInicioVigencia.Year * 10000) + (existente.fechaInicioVigencia.Month * 100) + existente.fechaInicioVigencia.Day;
                             } else
                             {
@@ -999,6 +1003,7 @@ namespace Cotizador.Controllers
 
                             if (nFR <= nFIV)
                             {
+                                //Si la fecha del registro es menor a la fecha de inicio de vigencia se manda todo al log programado
                                 if (isNew)
                                 {
                                     logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
@@ -1009,6 +1014,7 @@ namespace Cotizador.Controllers
                                 }
                             } else
                             {
+                                //Si la fecha del registro es mayor a la fecha de inicio de vigencia se manda todo al log normal
                                 if (isNew)
                                 {
                                     //Registrar
@@ -1025,13 +1031,9 @@ namespace Cotizador.Controllers
                     }
                     catch (Exception ex)
                     {
-
-                           
                         Log log = new Log(ex.ToString() + " paso:" + pos, TipoLog.Error, usuario);
                         LogBL logBL = new LogBL();
                         logBL.insertLog(log);
-
-
                     }
                 }
             }
@@ -1042,9 +1044,78 @@ namespace Cotizador.Controllers
             }
 
             return View("CargaCorrecta");
-
         }
 
+
+        public ActionResult ActualizarTodosPorTipoCambio()
+        {
+
+            // Obtener productos con moneda compra y/o venta en dolares 
+            // Actualizar tipo de cambio, hacer calculo y mandar al log programado
+            // aplicar log programado
+
+            Usuario usuario = (Usuario)this.Session["usuario"];
+            LogCampoBL logCambioBl = new LogCampoBL();
+            List<LogCampo> campos = logCambioBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);
+
+            List<CampoPersistir> registrarCampos = Producto.obtenerCampos(campos);
+            //List<CampoPersistir> registrarCampos = new List<CampoPersistir>();
+            int select = 0;
+            foreach (CampoPersistir cp in registrarCampos)
+            {
+                cp.registra = false;
+                cp.persiste = false;
+                if (Request["registra_" + cp.campo.nombre] != null || !Producto.esCampoActualizableCargaMasiva(cp.campo.nombre))
+                {
+
+                    if (!Producto.esCampoActualizableCargaMasiva(cp.campo.nombre))
+                    {
+                        select = 1;
+                    }
+                    else
+                    {
+                        select = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
+                    }
+
+                    if (select == 1)
+                    {
+                        cp.registra = true;
+
+                        if (Request["persiste_" + cp.campo.nombre] != null)
+                        {
+                            int persiste = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
+                            cp.persiste = persiste == 1 ? true : false;
+                        }
+                    }
+                }
+            }
+
+            LogCambioBL logCambiobl = new LogCambioBL();
+            ParametroBL parametrobl = new ParametroBL();
+
+            //Decimal tipoCambio = parametrobl.getParametroDecimal("TIPO_CAMBIO");
+            Decimal tipoCambio = Decimal.Parse(this.Request.Params["tipo_cambio"].ToString());
+            String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
+            DateTime fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+
+            int nFIV = (fechaInicioVigencia.Year * 10000) + (fechaInicioVigencia.Month * 100) + fechaInicioVigencia.Day;
+            int nFT = (DateTime.Now.Year * 10000) + (DateTime.Now.Month * 100) + DateTime.Now.Day;
+
+            HSSFWorkbook hssfwb;
+
+            ProductoBL productoBL = new ProductoBL();
+
+            //   cantidad = 2008;
+            //sheet.LastRowNum
+
+            if (nFIV <= nFT)
+            {
+                logCambiobl.aplicarLogCambios();
+            }
+
+
+            return View("CargaCorrecta");
+        }
 
 
         public ActionResult GetDescuentos(string productoSelectId, string selectedValue = null, string disabled = null)
