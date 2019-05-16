@@ -567,6 +567,8 @@
     <Content Include="Views\DocumentoCompra\Index.cshtml" />
     <Content Include="Views\DocumentoCompra\PreLoad.cshtml" />
     <Content Include="Views\Validacion\Pendientes.cshtml" />
+    <Content Include="Views\Usuario\_SelectUsuarioPedidoAlmacen.cshtml" />
+    <Content Include="Views\Usuario\_SelectUsuarioPedidoCompra.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

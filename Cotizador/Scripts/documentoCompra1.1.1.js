@@ -923,15 +923,13 @@ jQuery(function ($) {
                         '<td>  ' + documentoCompraList[i].total + '</td>' +
                         '<td ' + styleEstado + ' > ' + documentoCompraList[i].estadoDocumentoSunatString + '</td>' +
                         '<td>  ' + documentoCompraList[i].comentarioSolicitudAnulacion + '</td>' +
-                        '<td> <button type="button"  class="' + documentoCompraList[i].idDocumentoCompra + ' ' + documentoCompraList[i].serieNumero + ' btnVerDocumentoVenta btn btn-primary">Ver</button>' +
+                        '<td> <button type="button"  class="' + documentoCompraList[i].idDocumentoCompra + ' ' + documentoCompraList[i].serieNumero + ' btnVerDocumentoCompra btn btn-primary">Ver</button>' +
                         '<button type="button"  class="' + documentoCompraList[i].idDocumentoCompra + ' ' + documentoCompraList[i].serieNumero + ' btnDescargarPDF btn btn-primary bouton-image pdfBoton">PDF</button>' +
-                        '<button type="button"  class="' + documentoCompraList[i].idDocumentoCompra + ' ' + documentoCompraList[i].serieNumero + ' btnActualizarEstado  btn btn-success">Act. Estado</button >' +
                         '</tr>';                               
 
                     $("#tableFacturas").append(rowDocumentoCompra);
                 }
-
-                alert('d')
+                
                 if (documentoCompraList.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
                     $("#divExportButton").show();
@@ -1016,50 +1014,36 @@ jQuery(function ($) {
 
 
 
-
-
-
-
-
-
-
-    $(document).on('click', "button.btnVerDocumentoVenta", function () {
+    $(document).on('click', "button.btnVerDocumentoCompra", function () {
 
         $('body').loadingModal({
-            text: 'Abriendo Documento de Venta...'
+            text: 'Abriendo Documento de Compra...'
         });
         $('body').loadingModal('show');
 
         activarBotonesVer();
         var arrrayClass = event.target.getAttribute("class").split(" ");
-        var idDocumentoVenta = arrrayClass[0];
- 
+        var idDocumentoCompra = arrrayClass[0];
 
-     /*   $('body').loadingModal({
-            text: 'Creando Factura...'
-        });
-        */
-
-       
         $.ajax({
             url: "/DocumentoCompra/Show",
             type: 'POST',
             dataType: 'JSON',
             data: {
-                idDocumentoVenta: idDocumentoVenta
+                idDocumentoCompra: idDocumentoCompra
             },
             error: function (resultado) {
                 $('body').loadingModal('hide');
-                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                mostrarMensajeErrorProceso(resultado.responseText);
                 activarBotonesFacturar();
             },
-            success: function (documentoVenta) {
+            success: function (documentoCompra) {
                 $('body').loadingModal('hide');
                 /*Solicitar Anulación */
-                if (documentoVenta.solicitadoAnulacion == false
-                    && 
-                    (documentoVenta.estadoDocumentoSunat == '102'
-                        ||  documentoVenta.estadoDocumentoSunat == '103')
+                if (documentoCompra.solicitadoAnulacion == false
+                    &&
+                    (documentoCompra.estadoDocumentoSunat == '102'
+                        || documentoCompra.estadoDocumentoSunat == '103')
                 ) {
                     $('#btnSolicitarAnulacion').show();
 
@@ -1067,141 +1051,139 @@ jQuery(function ($) {
                 else {
                     $('#btnSolicitarAnulacion').hide();
                 }
-                
+
                 /*Aprobar anulacion*/
-                if (documentoVenta.solicitadoAnulacion == true && (documentoVenta.estadoDocumentoSunat == '102'
-                    || documentoVenta.estadoDocumentoSunat == '103')
-                    )   
-                {
+                if (documentoCompra.solicitadoAnulacion == true && (documentoCompra.estadoDocumentoSunat == '102'
+                    || documentoCompra.estadoDocumentoSunat == '103')
+                ) {
                     $('#btnIniciarAprobacion').show();
                 }
-                else
-                {
+                else {
                     $('#btnIniciarAprobacion').hide();
                 }
 
 
                 //Nota de Crédito
-            if ((documentoVenta.estadoDocumentoSunat == '102'
-                || documentoVenta.estadoDocumentoSunat == '103')
-                && (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA //|| 
-                //documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA
+                if ((documentoCompra.estadoDocumentoSunat == '102'
+                    || documentoCompra.estadoDocumentoSunat == '103')
+                    && (documentoCompra.tipoDocumento == CONS_TIPO_DOC_FACTURA //|| 
+                        //documentoCompra.tipoDocumento == CONS_TIPO_DOC_BOLETA
                     )
-                && documentoVenta.solicitadoAnulacion == false
+                    && documentoCompra.solicitadoAnulacion == false
                 ) {
-                $('#btnIniciarNotaCredito').show();
-            }
-            else {
-                $('#btnIniciarNotaCredito').hide();
+                    $('#btnIniciarNotaCredito').show();
+                }
+                else {
+                    $('#btnIniciarNotaCredito').hide();
                 }
 
 
-            if ((documentoVenta.estadoDocumentoSunat == '102'
-                || documentoVenta.estadoDocumentoSunat == '103')
-                && (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA //||
-                //documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA
-            )
-                && documentoVenta.solicitadoAnulacion == false
-            ) {
-                $('#btnIniciarNotaDebito').show();
-            }
-            else {
-                $('#btnIniciarNotaDebito').hide();
-            }
+                if ((documentoCompra.estadoDocumentoSunat == '102'
+                    || documentoCompra.estadoDocumentoSunat == '103')
+                    && (documentoCompra.tipoDocumento == CONS_TIPO_DOC_FACTURA //||
+                        //documentoCompra.tipoDocumento == CONS_TIPO_DOC_BOLETA
+                    )
+                    && documentoCompra.solicitadoAnulacion == false
+                ) {
+                    $('#btnIniciarNotaDebito').show();
+                }
+                else {
+                    $('#btnIniciarNotaDebito').hide();
+                }
 
 
-            if ((documentoVenta.estadoDocumentoSunat == '102'
-                || documentoVenta.estadoDocumentoSunat == '103')
-                && (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA //||
-                    //documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA
-                )
-                && documentoVenta.solicitadoAnulacion == false
-            ) {
-                $('#btnIniciarRefacturacion').show();
-            }
-            else {
-                $('#btnIniciarRefacturacion').hide();
-            }
+                if ((documentoCompra.estadoDocumentoSunat == '102'
+                    || documentoCompra.estadoDocumentoSunat == '103')
+                    && (documentoCompra.tipoDocumento == CONS_TIPO_DOC_FACTURA //||
+                        //documentoCompra.tipoDocumento == CONS_TIPO_DOC_BOLETA
+                    )
+                    && documentoCompra.solicitadoAnulacion == false
+                ) {
+                    $('#btnIniciarRefacturacion').show();
+                }
+                else {
+                    $('#btnIniciarRefacturacion').hide();
+                }
 
-            
 
-            if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO
-                    || documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_DEBITO) {
+
+                if (documentoCompra.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO
+                    || documentoCompra.tipoDocumento == CONS_TIPO_DOC_NOTA_DEBITO) {
 
                     $('.datosNotaCreditoDebito').show();
-                    if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO) {
-                        $("#pvMOTIVO").html(documentoVenta.tipoNotaCreditoString);
+                    if (documentoCompra.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO) {
+                        $("#pvMOTIVO").html(documentoCompra.tipoNotaCreditoString);
                     }
                     else {
-                        $("#pvMOTIVO").html(documentoVenta.tipoNotaDebitoString);
+                        $("#pvMOTIVO").html(documentoCompra.tipoNotaDebitoString);
                     }
-                    $("#pvDES_MTVO_NC_ND").html(documentoVenta.cPE_CABECERA_BE.DES_MTVO_NC_ND);
+                    $("#pvDES_MTVO_NC_ND").html(documentoCompra.cPE_CABECERA_COMPRA.DES_MTVO_NC_ND);
 
                     /*Documento Referencia*/
 
-                    $("#vpREFERENCIA_FECHA_EMISION").html(documentoVenta.cPE_DOC_REF_BEList[0].FEC_DOC_REF);
-                    var numeroReferencia = documentoVenta.cPE_DOC_REF_BEList[0].NUM_SERIE_CPE_REF + "-"
-                        + documentoVenta.cPE_DOC_REF_BEList[0].NUM_CORRE_CPE_REF;
+                    $("#vpREFERENCIA_FECHA_EMISION").html(documentoCompra.cPE_DOC_REF_COMPRAList[0].FEC_DOC_REF);
+                    var numeroReferencia = documentoCompra.cPE_DOC_REF_COMPRAList[0].NUM_SERIE_CPE_REF + "-"
+                        + documentoCompra.cPE_DOC_REF_COMPRAList[0].NUM_CORRE_CPE_REF;
                     $("#vpREFERENCIA_SERIE_CORRELATIVO").html(numeroReferencia);
                 }
                 else {
 
                     $('.datosNotaCreditoDebito').hide();
                 }
-           
-                $("#idDocumentoVenta").val(documentoVenta.idDocumentoVenta);
+
+                $("#iddocumentoCompra").val(documentoCompra.iddocumentoCompra);
                 /*FECHA HORA EMISIÓN -  SERIE CORRELATIVO*/
-                $("#vpFEC_EMI_HOR_EMI").html(documentoVenta.cPE_CABECERA_BE.FEC_EMI + ' ' + documentoVenta.cPE_CABECERA_BE.HOR_EMI)
-                $("#vpSERIE_CORRELATIVO").html(documentoVenta.cPE_CABECERA_BE.SERIE + ' ' + documentoVenta.cPE_CABECERA_BE.CORRELATIVO);
+                $("#vpFEC_EMI_HOR_EMI").html(documentoCompra.cPE_CABECERA_COMPRA.FEC_EMI)
+                $("#vpSERIE_CORRELATIVO").html(documentoCompra.cPE_CABECERA_COMPRA.SERIE + ' ' + documentoCompra.cPE_CABECERA_COMPRA.CORRELATIVO);
 
                 /*NOMBRE COMERCIAL CLIENTE*/
-                $("#vpNOM_RCT").html(documentoVenta.cPE_CABECERA_BE.NOM_RCT);
+                $("#vpNOM_RCT").html(documentoCompra.cPE_CABECERA_COMPRA.NOM_RCT);
 
                 /*DIRECCION - ORDEN DE COMPRA*/
-                $("#vpDIR_DES_RCT").html(documentoVenta.cPE_CABECERA_BE.DIR_DES_RCT);
-                $("#vpNRO_ORD_COM").html(documentoVenta.cPE_CABECERA_BE.NRO_ORD_COM);
+                $("#vpDIR_DES_RCT").html(documentoCompra.cPE_CABECERA_COMPRA.DIR_DES_RCT);
+                $("#vpNRO_ORD_COM").html(documentoCompra.cPE_CABECERA_COMPRA.NRO_ORD_COM);
 
                 /*RUC - NRO GUIA*/
-                $("#vpNRO_DOC_RCT").html(documentoVenta.cPE_CABECERA_BE.NRO_DOC_RCT);
-                $("#vpNRO_GRE").html(documentoVenta.cPE_CABECERA_BE.NRO_GRE);
+                $("#vpNRO_DOC_RCT").html(documentoCompra.cPE_CABECERA_COMPRA.NRO_DOC_RCT);
+                $("#vpNRO_GRE").html(documentoCompra.cPE_CABECERA_COMPRA.NRO_GRE);
 
                 /*OBSERVACIONES*/ /*CODIGO CLIENTE*/
-                if (documentoVenta.cPE_DAT_ADIC_BEList.length > 0) {
-                    $("#vpCODIGO_CLIENTE").html(documentoVenta.cPE_DAT_ADIC_BEList[0].TXT_DESC_ADIC_SUNAT);
-                    if (documentoVenta.cPE_DAT_ADIC_BEList.length > 1) {
-                        $("#vpOBSERVACIONES").html(documentoVenta.cPE_DAT_ADIC_BEList[1].TXT_DESC_ADIC_SUNAT);
+                if (documentoCompra.cPE_DAT_ADIC_COMPRAList.length > 0) {
+                    $("#vpCODIGO_CLIENTE").html(documentoCompra.cPE_DAT_ADIC_COMPRAList[0].TXT_DESC_ADIC_SUNAT);
+                    if (documentoCompra.cPE_DAT_ADIC_COMPRAList.length > 1) {
+                        $("#vpOBSERVACIONES").html(documentoCompra.cPE_DAT_ADIC_COMPRAList[1].TXT_DESC_ADIC_SUNAT);
                     }
                 }
                 else {
                     $("#vpCODIGO_CLIENTE").html("");
-                    $("#vpOBSERVACIONES").html("");  
-                }           
-                $("#vpCORREO").html(documentoVenta.cPE_CABECERA_BE.CORREO_ENVIO);
-                $("#vpCOND_PAGO").html(documentoVenta.tipoPagoString);
-                $("#vpFEC_VCTO").html(documentoVenta.cPE_CABECERA_BE.FEC_VCTO);
+                    $("#vpOBSERVACIONES").html("");
+                }
+                $("#vpCORREO").html(documentoCompra.cPE_CABECERA_COMPRA.CORREO_ENVIO);
+                $("#vpCOND_PAGO").html(documentoCompra.tipoPagoString);
+                $("#vpFEC_VCTO").html(documentoCompra.cPE_CABECERA_COMPRA.FEC_VCTO);
 
-                $("#vpMNT_TOT_GRV").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRV);
-                $("#vpMNT_TOT_GRV_NAC").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRV_NAC);
-                $("#vpMNT_TOT_INF").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_INF);
-                $("#vpMNT_TOT_EXR").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_EXR);
-                $("#vpMNT_TOT_GRT").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_GRT);
-                $("#vpMNT_TOT_VAL_VTA").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_VAL_VTA);
-                $("#vpMNT_TOT_TRB_IGV").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_TRB_IGV);
-                $("#pvMNT_TOT_PRC_VTA").html(documentoVenta.cPE_CABECERA_BE.MNT_TOT_PRC_VTA);
+                $("#vpMNT_TOT_GRV").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_GRV);
+                $("#vpMNT_TOT_GRV_NAC").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_GRV_NAC);
+                $("#vpMNT_TOT_INF").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_INF);
+                $("#vpMNT_TOT_EXR").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_EXR);
+                $("#vpMNT_TOT_GRT").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_GRT);
+                $("#vpMNT_TOT_VAL_VTA").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_VAL_VTA);
+                $("#vpMNT_TOT_TRB_IGV").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_TRB_IGV);
+                $("#pvMNT_TOT_PRC_VTA").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_PRC_VTA);
 
                 $("#modalVerFactura").modal();
 
-              
+
                 $("#tableDetalleFacturaVistaPrevia > tbody").empty();
                 //FooTable.init('#tableCotizaciones');
                 $("#tableDetalleFacturaVistaPrevia").footable();
-                var lineasFactura = documentoVenta.cPE_DETALLE_BEList;
+                var lineasFactura = documentoCompra.cPE_DETALLE_COMPRAList;
 
                 for (var i = 0; i < lineasFactura.length; i++) {
 
                     var lineaFactura = "";
 
-               
+
 
                     var lineaFactura = '<tr data-expanded="false">' +
                         '<td>  ' + lineasFactura[i].LIN_ITM + '</td>' +
@@ -1228,7 +1210,7 @@ jQuery(function ($) {
 
     $("input:radio[name=tipoNotaCredito]").change(function () {
         var tipoNotaCredito = $('input:radio[name=tipoNotaCredito]:checked').val();
-       
+
         if (tipoNotaCredito == TIPO_NOTA_CREDITO_DESCUENTO_GLOBAL) {
             $("#divProductoDescuento").show();
         }
@@ -1236,6 +1218,13 @@ jQuery(function ($) {
             $("#divProductoDescuento").hide();
         }
     });
+
+
+
+
+
+
+
 
   
     $("#btnContinuarGenerandoNotaCredito").click(function () {

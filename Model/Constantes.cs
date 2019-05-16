@@ -332,8 +332,9 @@ namespace Model
         public const String MODIFICA_CANASTA_GRUPO_CLIENTE = "P069";
         public const String MODIFICA_MIEMBROS_GRUPO_CLIENTE = "P070";
         public const String ASIGNA_SUBDISTRIBUIDOR = "P071";
-        public const String VISUALIZA_DOCUMENTOS_COMPRA = "P009";
-        public const String CREA_DOCUMENTOS_COMPRA = "P009";
+        public const String CREA_DOCUMENTOS_COMPRA = "P072";
+        public const String VISUALIZA_DOCUMENTOS_COMPRA = "P073";
+        
 
 
 

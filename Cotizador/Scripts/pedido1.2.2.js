@@ -2807,6 +2807,11 @@ jQuery(function ($) {
                 $("#verCiudad").html(pedido.ciudad_nombre);
                 $("#verIdCliente").val(pedido.cliente_idCliente);
                 $("#verCliente").html(pedido.cliente_codigoRazonSocial);
+
+
+                $("#verGrupoCliente").html(pedido.grupoCliente_nombre == null ? "" : pedido.grupoCliente_nombre);
+                
+
                 $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
                 $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
                 $("#verNumeroRequerimiento").html(pedido.numeroRequerimiento);
@@ -4313,13 +4318,14 @@ jQuery(function ($) {
                             '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                     }
                     
-
+                    var grupoCliente = pedidoList[i].grupoCliente_nombre == null ? "" : pedidoList[i].grupoCliente_nombre;
                     var pedido = '<tr data-expanded="true">' +
                         '<td>  ' + pedidoList[i].idPedido+'</td>' +
                         '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + '  </td>' +
                         '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +
                         '<td>  ' + pedidoList[i].cliente_razonSocial + '</td>' +
+                        '<td>  ' + grupoCliente + '</td>' +
                         '<td>  ' + pedidoList[i].numeroReferenciaCliente+'  </td>' +
                         '<td>  ' + pedidoList[i].usuario_nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].fechaHoraRegistro + '</td>' +
