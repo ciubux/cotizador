@@ -653,3 +653,9 @@ border-color: #49E845;
 .closebtn:hover {
     color: black;
 }
+
+
+.lnkAction:hover {
+    background-color: #D3EFFF;
+    border-radius: 5px;
+}

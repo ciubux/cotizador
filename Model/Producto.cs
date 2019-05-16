@@ -960,6 +960,21 @@ namespace Model
 
             return true;
         }
+
+        public static bool esCampoCalculado(string campo)
+        {
+            switch (campo)
+            {
+                case "precio": return true; break;
+                case "precio_provincia": return true; break;
+                case "costo": return true; break;
+
+                default: return false; break;
+            }
+
+            return false;
+        }
+
         /*     public Guid idFamilia { get; set; }
     public Guid idProveedor { get; set; }
     public Guid idUnidad { get; set; }*/

@@ -618,8 +618,18 @@ jQuery(function ($) {
         });
     }
 
-
     
+    $("#lnkActualizarTodos").click(function () {
+        $("#tipoCambioTC").val($("#tipoCambio").val());
+        $("#fechaInicioVigenciaTC").val($("#fechaInicioVigencia").val());
+    });
+
+
+    $("#btnActualizarTipoCambio").click(function () {
+        $("#formActualizarTipoCambio").submit();
+    });
+    
+
     $("#btnExportExcel, #btnExportUploadExcel").click(function () {
         window.location.href = $(this).attr("actionLink");
     });

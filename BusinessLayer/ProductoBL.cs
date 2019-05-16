@@ -335,9 +335,44 @@ namespace BusinessLayer
             }
         }
 
+        public void actualizaTipoCambioCatalogo(Decimal tipoCambio, List<CampoPersistir> campos, DateTime fechaInicioVigencia, Guid idUsuario)
+        {
+
+            using (var dal = new ProductoDAL())
+            {
+                bool aplicaCosto = false;
+                bool aplicaPrecio = false;
+                bool aplicaPrecioProvincias = false;
+
+                foreach(CampoPersistir cp in campos) {
+                    if (cp.registra && cp.campo.nombre == "costo")
+                    {
+                        aplicaCosto = true;
+                    }
+
+                    if (cp.registra && cp.campo.nombre == "precio")
+                    {
+                        aplicaPrecio = true;
+                    }
+
+                    if (cp.registra && cp.campo.nombre == "precio_provincia")
+                    {
+                        aplicaPrecioProvincias = true;
+                    }
+                }
+
+                dal.actualizarTipoCambioCatalogo(tipoCambio, aplicaCosto, aplicaPrecio, aplicaPrecioProvincias, fechaInicioVigencia, idUsuario);
+            }
+        }
+
         public static bool esCampoActualizableCargaMasiva(string campo)
         {
             return Producto.esCampoActualizableCargaMasiva(campo);
+        }
+
+        public static bool esCampoCalculado(string campo)
+        {
+            return Producto.esCampoCalculado(campo);
         }
     }
 }

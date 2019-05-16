@@ -585,6 +585,7 @@ namespace Cotizador.Controllers
             {
                 cp.registra = false;
                 cp.persiste = false;
+                //si ha sido seleccionado o es un campo no actualizable en la carga masiva debe agregarse a la lista de cmapos a registrar
                 if (Request["registra_" + cp.campo.nombre] != null || !Producto.esCampoActualizableCargaMasiva(cp.campo.nombre))
                 {
                     
@@ -1003,7 +1004,7 @@ namespace Cotizador.Controllers
 
                             if (nFR <= nFIV)
                             {
-                                //Si la fecha del registro es menor a la fecha de inicio de vigencia se manda todo al log programado
+                                //Si la fecha de inicio de vigencia del registro es menor a la fecha de inicio de vigencia se manda todo al log programado
                                 if (isNew)
                                 {
                                     logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
@@ -1014,7 +1015,7 @@ namespace Cotizador.Controllers
                                 }
                             } else
                             {
-                                //Si la fecha del registro es mayor a la fecha de inicio de vigencia se manda todo al log normal
+                                //Si la fecha de inicio de vigencia del registro es mayor a la fecha de inicio de vigencia se manda todo al log normal
                                 if (isNew)
                                 {
                                     //Registrar
@@ -1043,6 +1044,7 @@ namespace Cotizador.Controllers
                 logCambiobl.aplicarLogCambios();
             }
 
+            ViewBag.tipoCarga = "archivo";
             return View("CargaCorrecta");
         }
 
@@ -1059,37 +1061,25 @@ namespace Cotizador.Controllers
             List<LogCampo> campos = logCambioBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);
 
             List<CampoPersistir> registrarCampos = Producto.obtenerCampos(campos);
-            //List<CampoPersistir> registrarCampos = new List<CampoPersistir>();
+            List<CampoPersistir> camposHalitados = new List<CampoPersistir>();
             int select = 0;
             foreach (CampoPersistir cp in registrarCampos)
             {
                 cp.registra = false;
                 cp.persiste = false;
-                if (Request["registra_" + cp.campo.nombre] != null || !Producto.esCampoActualizableCargaMasiva(cp.campo.nombre))
+                if (Request["registra_tc_" + cp.campo.nombre] != null && Producto.esCampoCalculado(cp.campo.nombre))
                 {
-
-                    if (!Producto.esCampoActualizableCargaMasiva(cp.campo.nombre))
-                    {
-                        select = 1;
-                    }
-                    else
-                    {
-                        select = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
-                    }
-
+                    select = Int32.Parse(Request["registra_tc_" + cp.campo.nombre].ToString());
+                    
                     if (select == 1)
                     {
                         cp.registra = true;
-
-                        if (Request["persiste_" + cp.campo.nombre] != null)
-                        {
-                            int persiste = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
-                            cp.persiste = persiste == 1 ? true : false;
-                        }
+                        cp.persiste = true;
+                        camposHalitados.Add(cp);
                     }
                 }
             }
-
+            
             LogCambioBL logCambiobl = new LogCambioBL();
             ParametroBL parametrobl = new ParametroBL();
 
@@ -1100,23 +1090,19 @@ namespace Cotizador.Controllers
 
             int nFIV = (fechaInicioVigencia.Year * 10000) + (fechaInicioVigencia.Month * 100) + fechaInicioVigencia.Day;
             int nFT = (DateTime.Now.Year * 10000) + (DateTime.Now.Month * 100) + DateTime.Now.Day;
-
-            HSSFWorkbook hssfwb;
-
+            
             ProductoBL productoBL = new ProductoBL();
 
-            //   cantidad = 2008;
-            //sheet.LastRowNum
+            productoBL.actualizaTipoCambioCatalogo(tipoCambio, camposHalitados, fechaInicioVigencia, usuario.idUsuario);
 
             if (nFIV <= nFT)
             {
                 logCambiobl.aplicarLogCambios();
             }
 
-
+            ViewBag.tipoCarga = "tipo_cambio";
             return View("CargaCorrecta");
         }
-
 
         public ActionResult GetDescuentos(string productoSelectId, string selectedValue = null, string disabled = null)
         {

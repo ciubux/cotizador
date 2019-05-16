@@ -406,6 +406,195 @@ SELECT id_producto FROM PRODUCTO where sku = @sku;
 END
 
 
+
+/* **** 6 **** */
+CREATE PROCEDURE [dbo].[pi_cambio_dato_programado_forprocedures] 
+
+@idUsuario uniqueidentifier,
+@nombreCatalogoTabla varchar(250),
+@nombreCatalogoCampo varchar(250),
+@persisteCambio smallint,
+@idRegistro varchar(40),
+@valor varchar(1000),
+@fechaInicioVigencia date
+
+AS 
+BEGIN 
+
+DECLARE @newId uniqueidentifier;
+
+SET NOCOUNT ON
+SET @newId = NEWID();
+DECLARE @idCatalogoTabla int;
+DECLARE @idCatalogoCampo int;
+
+SET @idCatalogoTabla = 0;
+
+SELECT @idCatalogoTabla = tab.id_catalogo_Tabla, @idCatalogoCampo = camp.id_catalogo_campo 
+FROM CATALOGO_CAMPO camp 
+INNER JOIN CATALOGO_TABLA tab ON tab.id_catalogo_Tabla = camp.id_catalogo_tabla 
+WHERE camp.nombre like @nombreCatalogoCampo and tab.nombre like @nombreCatalogoTabla AND camp.estado = 1; 
+
+IF @idCatalogoTabla > 0  
+BEGIN 
+	INSERT INTO CAMBIO_PROGRAMADO
+           (id_cambio_programado
+		   ,id_catalogo_tabla
+           ,id_catalogo_campo
+		   ,id_registro
+           ,valor
+		   ,persiste_cambio
+           ,estado
+		   ,fecha_inicio_vigencia
+		   ,usuario_modificacion
+		   ,fecha_modificacion
+		   )
+     VALUES
+           (@newId,
+		    @idCatalogoTabla,
+		    @idCatalogoCampo,
+			@idRegistro,
+            @valor,
+			@persisteCambio,
+            1, 
+			@fechaInicioVigencia,
+			@idUsuario,
+			GETDATE()
+			);
+
+
+	UPDATE CAMBIO_PROGRAMADO
+	SET estado = 0
+	WHERE id_catalogo_campo = @idCatalogoCampo and fecha_inicio_vigencia = @fechaInicioVigencia and id_registro = @idRegistro and not id_cambio_programado = @newId;
+END 
+
+
+END
+
+
+
+
+/* **** 7 **** */
+CREATE PROCEDURE pp_actualiza_tipo_cambio_producto
+@aplicaCosto smallint, 
+@aplicaPrecio smallint, 
+@aplicaPrecioProvincia smallint, 
+@tipoCambio decimal(6,4), 
+@idUsuario uniqueidentifier,
+@fechaInicioVigencia date
+
+AS
+BEGIN
+
+
+DECLARE @c_id_producto uniqueidentifier
+DECLARE @c_fiv date  
+DECLARE @c_co numeric(18,2)
+DECLARE @c_po numeric(18,2)
+DECLARE @c_ppo numeric(18,2)
+DECLARE @c_ep int
+
+DECLARE @n_costo numeric(18,2)
+DECLARE @n_precio numeric(18,2)
+DECLARE @n_precioP numeric(18,2)
+declare @tempPrice as varchar(20)
+
+DECLARE db_cursor CURSOR FOR 
+SELECT id_producto , fecha_inicio_vigencia, costo_original, precio_original, precio_provincia_original, equivalencia_proveedor FROM producto 
+WHERE (moneda_venta = 'D' AND (@aplicaPrecioProvincia = 1 OR @aplicaPrecio = 1)) OR (moneda_compra = 'D' AND @aplicaCosto = 1);
+
+
+OPEN db_cursor  
+FETCH NEXT FROM db_cursor INTO @c_id_producto, @c_fiv, @c_co, @c_po, @c_ppo, @c_ep
+
+WHILE @@FETCH_STATUS = 0  
+BEGIN  
+    SET @n_costo = 0
+	SET @n_precio = 0
+	SET @n_precioP = 0
+
+	IF @aplicaCosto = 1 
+	BEGIN 
+		SET @n_costo = @c_co
+		IF @c_ep > 0 
+		BEGIN
+			SET @n_costo = @c_co / @c_ep
+		END
+		SET @n_costo = @n_costo * @tipoCambio
+	END
+
+	IF @aplicaPrecio = 1 
+	BEGIN 
+		SET @n_precio = @c_po * @tipoCambio
+	END
+
+	IF @aplicaPrecioProvincia = 1 
+	BEGIN 
+		SET @n_precioP = @c_ppo * @tipoCambio
+	END
+
+	
+	IF @c_fiv IS NULL OR @fechaInicioVigencia >= @c_fiv 
+	BEGIN 
+		-- Registrar en log programado
+		IF @aplicaCosto = 1 
+		BEGIN
+			set @tempPrice = cast(@n_costo as varchar(20));
+			EXEC  pi_cambio_dato_programado_forprocedures  @idUsuario, 'PRODUCTO', 'costo', 1, @c_id_producto,  @tempPrice, @fechaInicioVigencia ;
+		END 
+
+		IF @aplicaPrecio = 1 
+		BEGIN
+			set @tempPrice = cast(@n_precio as varchar(20));
+			EXEC  pi_cambio_dato_programado_forprocedures  @idUsuario, 'PRODUCTO', 'precio', 1, @c_id_producto,  @tempPrice, @fechaInicioVigencia ;
+		END 
+
+		IF @aplicaPrecioProvincia = 1 
+		BEGIN
+			set @tempPrice = cast(@n_precioP as varchar(20));
+			EXEC  pi_cambio_dato_programado_forprocedures  @idUsuario, 'PRODUCTO', 'precio_provincia', 1, @c_id_producto,  @tempPrice, @fechaInicioVigencia ;
+		END 
+
+		set @tempPrice = cast(@tipoCambio as varchar(20));
+		EXEC  pi_cambio_dato_programado_forprocedures  @idUsuario, 'PRODUCTO', 'tipo_cambio', 1, @c_id_producto,  @tempPrice, @fechaInicioVigencia ;
+	END 
+	ELSE 
+	BEGIN
+		-- Registrar log anterior
+		IF @aplicaCosto = 1 
+		BEGIN
+			set @tempPrice = cast(@n_costo as varchar(20));
+			EXEC  pi_cambio_dato  @idUsuario, 'PRODUCTO', 'costo', @c_id_producto,  @tempPrice, @fechaInicioVigencia ;
+		END 
+
+		IF @aplicaPrecio = 1 
+		BEGIN
+			set @tempPrice = cast(@n_precio as varchar(20));
+			EXEC  pi_cambio_dato  @idUsuario, 'PRODUCTO', 'precio', @c_id_producto,  @tempPrice, @fechaInicioVigencia ;
+		END 
+
+		IF @aplicaPrecioProvincia = 1 
+		BEGIN
+			set @tempPrice = cast(@n_precioP as varchar(20));
+			EXEC  pi_cambio_dato  @idUsuario, 'PRODUCTO', 'precio_provincia', @c_id_producto,  @tempPrice, @fechaInicioVigencia ;
+		END 
+
+		set @tempPrice = cast(@tipoCambio as varchar(20));
+		EXEC  pi_cambio_dato  @idUsuario, 'PRODUCTO', 'tipo_cambio', @c_id_producto,  @tempPrice, @fechaInicioVigencia ;
+	END
+
+	FETCH NEXT FROM db_cursor INTO @c_id_producto, @c_fiv, @c_co, @c_po, @c_ppo, @c_ep
+END 
+
+CLOSE db_cursor  
+DEALLOCATE db_cursor 
+
+
+END
+ 
+ 
+ 
+ 
 /* **** 6 **** */
 ALTER TRIGGER ti_producto ON PRODUCTO
 AFTER INSERT AS

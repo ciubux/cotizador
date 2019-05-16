@@ -54,7 +54,7 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
-
+        
         public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null)
         {
             var objCommand = GetSqlCommand("ps_getproductos_search");
@@ -829,8 +829,8 @@ namespace DataLayer
                 //,fecha_creacion
                 //,usuario_modificacion
                 //,fecha_modificacion
-                item.monedaProveedor = Converter.GetString(row, "monedaCompra");
-                item.monedaMP = Converter.GetString(row, "monedaVenta");
+                item.monedaProveedor = Converter.GetString(row, "moneda_compra");
+                item.monedaMP = Converter.GetString(row, "moneda_venta");
                 item.tipoCambio = Converter.GetDecimal(row, "tipo_cambio");
 
                 item.precioSinIgv = Converter.GetDecimal(row, "precio");
@@ -953,6 +953,20 @@ namespace DataLayer
 
             return producto;
 
+        }
+
+        public void actualizarTipoCambioCatalogo(Decimal tipoCambio, bool aplicaCosto, bool aplicaPrecio, bool aplicaPrecioProvincias, DateTime fechaInicioVigencia, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pp_actualiza_tipo_cambio_productos");
+            InputParameterAdd.Int(objCommand, "aplicaCosto", aplicaCosto ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "aplicaPrecio", aplicaPrecio  ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "aplicaPrecioProvincia", aplicaPrecioProvincias ? 1 : 0);
+            InputParameterAdd.Decimal(objCommand, "tipoCambio", tipoCambio);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", fechaInicioVigencia);
+
+            ExecuteNonQuery(objCommand);
+            
         }
     }
 }
