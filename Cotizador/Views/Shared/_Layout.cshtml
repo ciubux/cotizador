@@ -298,7 +298,7 @@
                                         <li id="linkBusquedaCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Búsqueda", "Index", "Cliente")</li>
                                     }
                                     @if (usuario.modificaMaestroClientes)
-                                    { 
+                                    {
                                         <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
                                     }
 
@@ -310,7 +310,7 @@
                                     {
                                         <li id="linkMantenimientoGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Crear/Modificar", "Editar", "GrupoCliente")</li>
                                     }
-                                    
+
 
                                     @if (usuario.modificaMaestroProductos || usuario.visualizaProductos || usuario.realizaCargaMasivaProductos)
                                     {
@@ -324,7 +324,7 @@
                                     {
                                         <li id="linkCRProducto" class="@linkCargaMasivaProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
                                     }
-                               
+
 
                                     @if (usuario.modificaOrigen || usuario.visualizaOrigenes)
                                     {
@@ -343,6 +343,15 @@
                                     @if (usuario.modificaSubDistribuidor)
                                     {
                                         <li id="linkCRSubDistribuidor" class="@linkMantenimientoSubDistribuidor">@Html.ActionLink("Categoría Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
+                                    }
+
+                                    @if (usuario.modificaRol || usuario.visualizaRoles)
+                                    {
+                                        <li id="linkBusquedaRol" class="@linkBusquedaOrigen">@Html.ActionLink("Rol - Búsqueda", "List", "Rol")</li>
+                                    }
+                                    @if (usuario.modificaRol)
+                                    {
+                                        <li id="linkCRRol" class="@linkMantenimientoOrigen">@Html.ActionLink("Rol - Crear/Modificar ", "Editar", "Rol")</li>
                                     }
 
                                     @if (usuario.administraPermisos)

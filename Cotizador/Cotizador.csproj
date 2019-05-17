@@ -244,6 +244,7 @@
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
+    <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\ValidacionController.cs" />
     <Compile Include="Controllers\PermisoController.cs" />
     <Compile Include="Controllers\SubDistribuidorController.cs" />
@@ -308,6 +309,7 @@
     <Compile Include="Models\DTOsShow\PedidoDTOshow.cs" />
     <Compile Include="Models\DomicilioLegalViewModels.cs" />
     <Compile Include="Models\GrupoClienteViewModels.cs" />
+    <Compile Include="Models\RolViewModels.cs" />
     <Compile Include="Models\ProductoMultipleViewModels.cs" />
     <Compile Include="Models\ProductoViewModels.cs" />
     <Compile Include="Models\SubDistribuidorViewModels.cs" />
@@ -408,6 +410,7 @@
     <Content Include="Scripts\documentoCompra1.1.1.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
+    <Content Include="Scripts\rol1.0.0 .js" />
     <Content Include="Scripts\subDistribuidor1.0.0.js" />
     <Content Include="Scripts\origen1.0.0.js" />
     <Content Include="Scripts\producto1.0.0.js" />
@@ -567,6 +570,8 @@
     <Content Include="Views\DocumentoCompra\Index.cshtml" />
     <Content Include="Views\DocumentoCompra\PreLoad.cshtml" />
     <Content Include="Views\Validacion\Pendientes.cshtml" />
+    <Content Include="Views\Rol\Editar.cshtml" />
+    <Content Include="Views\Rol\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

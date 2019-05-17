@@ -83,6 +83,10 @@ namespace Cotizador
 
                    ));
 
+            bundles.Add(new ScriptBundle("~/bundles/rol").Include(
+                     "~/Scripts/rol1.0.0.js"
+                     ));
+
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
                         "~/Scripts/guiaRemision1.2.3.js"
                         ));

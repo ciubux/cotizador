@@ -166,6 +166,11 @@ namespace Model
         public static String VAR_SESSION_NOTA_DEBITO_COMPRA_BUSQUEDA = "notaDebitoCompraBusqueda";
         public static String VAR_SESSION_NOTA_DEBITO_COMPRA_LISTA = "notaDebitoCompraList";
         public static String VAR_SESSION_NOTA_DEBITO_COMPRA_VER = "notaDebitoCompraVer";
+        
+        public static String VAR_SESSION_ROL = "rol";
+        public static String VAR_SESSION_ROL_BUSQUEDA = "rolBusqueda";
+        public static String VAR_SESSION_ROL_LISTA = "rolList";
+        public static String VAR_SESSION_ROL_VER = "rolVer";
 
 
         public static String VAR_SESSION_PAGINA = "pagina";
@@ -334,9 +339,9 @@ namespace Model
         public const String ASIGNA_SUBDISTRIBUIDOR = "P071";
         public const String VISUALIZA_DOCUMENTOS_COMPRA = "P009";
         public const String CREA_DOCUMENTOS_COMPRA = "P009";
-
-
-
+        
+        public const String MODIFICA_ROL = "P110";
+        public const String VISUALIZA_ROLES = "P111";
 
 
         public enum paginas {
@@ -437,7 +442,13 @@ namespace Model
             AlertasValidacionPendientes = 40,
             /*DOCUMENTOS DE VENTA*/
             [Display(Name = "BUSQUEDA DOCUMENTOS COMPRA")]
-            BusquedaDocumentosCompra = 41
+            BusquedaDocumentosCompra = 41,
+
+            /*ROLES*/
+            [Display(Name = "BUSQUEDA ROLES")]
+            BusquedaRoles = 101,
+            [Display(Name = "MANTENIMIENTO ROL")]
+            MantenimientoRol = 102
         };
 
 

@@ -179,6 +179,11 @@ namespace Model
 
         public bool modificaDireccionEntrega { get; set; }
 
+        /*Roles*/
+        public bool modificaRol { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ORIGEN)).FirstOrDefault() != null; } }
+        public bool visualizaRoles { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_ORIGENES)).FirstOrDefault() != null; } }
+
+
     }
 }
 
