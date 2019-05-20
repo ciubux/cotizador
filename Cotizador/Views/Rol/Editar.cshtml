@@ -1,6 +1,9 @@
 ﻿@{
-    ViewBag.Title = "Crear/Modificar Origen";
-    Model.Origen origen = ViewBag.origen;
+    ViewBag.Title = "Crear/Modificar Rol";
+    Model.Rol rol = ViewBag.rol;
+    List<Model.Permiso> permisos = ViewBag.permisos;
+
+    int idCategoriaTemp = 0;
 }
 
 <div class="page-header">
@@ -12,23 +15,23 @@
     <input type="hidden" value="@ViewBag.debug" />
     <form class="form-horizontal">
         <div class="row">
-            <input type="hidden" id="idOrigen" name="idOrigen" value="@origen.idOrigen" />
+            <input type="hidden" id="idRol" name="idRol" value="@rol.idRol" />
 
             <div class="row">
                 <div class="col-sm-12 col-lg-4">
                     <div class="form-group">
-                        @Html.LabelFor(dv => origen.codigo, htmlAttributes: new { @class = "control-label col-xs-2 col-lg-6" })
+                        @Html.LabelFor(dv => rol.codigo, htmlAttributes: new { @class = "control-label col-xs-2 col-lg-6" })
                         <div class="col-xs-6">
-                            @Html.TextBoxFor(c => origen.codigo, htmlAttributes: new { @class = "form-control" })
+                            @Html.TextBoxFor(c => rol.codigo, htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-sm-12 col-lg-8">
                     <div class="form-group">
-                        @Html.LabelFor(dv => origen.nombre, htmlAttributes: new { @class = "control-label col-xs-3" })
+                        @Html.LabelFor(dv => rol.nombre, htmlAttributes: new { @class = "control-label col-xs-3" })
                         <div class="col-xs-9">
-                            @Html.TextBoxFor(c => origen.nombre, htmlAttributes: new { @class = "form-control" })
+                            @Html.TextBoxFor(c => rol.nombre, htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
@@ -36,30 +39,30 @@
 
             <div class="col-sm-6 col-lg-6">
                 <div class="form-group">
-                    @Html.LabelFor(c => origen.Estado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    @Html.LabelFor(c => rol.Estado, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         <div class="radio radio-inline">
                             <label class="radio-label">
-                                @if (origen.Estado == 1)
+                                @if (rol.Estado == 1)
                                 {
-                                    <input class="radio-input" checked type="radio" name="origen_estado" id="origen_estado_si" value="1"><span>Activo</span>
+                                    <input class="radio-input" checked type="radio" name="rol_estado" id="rol_estado_si" value="1"><span>Activo</span>
                                 }
                                 else
                                 {
-                                    <input class="radio-input" type="radio" name="origen_estado" id="origen_estado_si" value="1"><span>Activo</span>
+                                    <input class="radio-input" type="radio" name="rol_estado" id="rol_estado_si" value="1"><span>Activo</span>
                                 }
 
                             </label>
                         </div>
                         <div class="radio radio-inline">
                             <label class="radio-label">
-                                @if (origen.Estado == 0)
+                                @if (rol.Estado == 0)
                                 {
-                                    <input class="radio-input" checked type="radio" name="origen_estado" id="origen_estado_no" value="0"><span>Inactivo</span>
+                                    <input class="radio-input" checked type="radio" name="rol_estado" id="rol_estado_no" value="0"><span>Inactivo</span>
                                 }
                                 else
                                 {
-                                    <input class="radio-input" type="radio" name="origen_estado" id="origen_estado_no" value="0"><span>Inactivo</span>
+                                    <input class="radio-input" type="radio" name="rol_estado" id="rol_estado_no" value="0"><span>Inactivo</span>
                                 }
                             </label>
                         </div>
@@ -68,18 +71,44 @@
             </div>
         </div>
 
+
+        <div class="row">
+
+            @foreach (Model.Permiso per in permisos)
+            {
+
+                if (idCategoriaTemp != per.categoriaPermiso.idCategoriaPermiso)
+                {
+                    idCategoriaTemp = per.categoriaPermiso.idCategoriaPermiso;
+                    string titulo = "</div><br/><div class=\"row\"><div class=\"col-sm-12 col-lg-12 col-xs-12\"><h3>" + per.categoriaPermiso.descripcion + "</h3></div>";
+
+                    @Html.Raw(titulo)
+                }
+
+                string itemChecked = rol.TienePermiso(per.idPermiso) ? "checked" : "";
+                
+
+                <div class="col-sm-12 col-lg-4 col-xs-6">
+                    <label class="radio-label" for="permiso_@per.idPermiso">
+                        <input type="checkbox" @itemChecked  class="chk-permiso" name="permiso_@per.idPermiso" id="permiso_@per.idPermiso" value="1">
+                        <span>@per.descripcion_corta - (@per.codigo)</span>
+                    </label>
+                </div>
+            }
+        </div>
+
         <div class="row">
             <div class="pull-right">
-                <button type="button" id="btnCancelarOrigen" class="btn btn-danger">Cancelar</button>
-                <button id="btnFinalizarEdicionOrigen" type="button" class="btn btn-success">Finalizar Creación</button>
+                <button type="button" id="btnCancelarRol" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionRol" type="button" class="btn btn-success">Finalizar Creación</button>
             </div>
         </div>
 
-    </form>
+</form>
 </div>
 
 
 
 @section Scripts {
-    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/origen")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/rol")
 }

@@ -179,6 +179,11 @@ namespace Model
         public static String VAR_SESSION_USUARIO_LISTA = "usuarioList";
         public static String VAR_SESSION_USUARIO = "usuario";
 
+
+        public static String VAR_SESSION_PERMISO_LISTA = "permisoList";
+
+        
+
         public static String VAR_SESSION_ASIGNACION_PERMISOS = "AsignacionPermisos";
         public static String VAR_SESSION_CAMBIO_ASIGNACION_PERMISOS = "CambioAsignacionPermisos";
 
@@ -340,10 +345,10 @@ namespace Model
         public const String VISUALIZA_DOCUMENTOS_COMPRA = "P009";
         public const String CREA_DOCUMENTOS_COMPRA = "P009";
         
-        public const String MODIFICA_ROL = "P110";
-        public const String VISUALIZA_ROLES = "P111";
+        public const String MODIFICA_ROL = "P810";
+        public const String VISUALIZA_ROLES = "P811";
 
-
+       
         public enum paginas {
             /*COTIZACION*/
             [Display(Name = "BUSQUEDA COTIZACION")]

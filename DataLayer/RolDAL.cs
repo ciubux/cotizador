@@ -87,7 +87,7 @@ namespace DataLayer
             
 
             DataTable tvp = new DataTable();
-            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
 
             foreach (Permiso item in obj.permisos)
             {
@@ -98,7 +98,7 @@ namespace DataLayer
 
             SqlParameter tvparam = objCommand.Parameters.AddWithValue("@permisos", tvp);
             tvparam.SqlDbType = SqlDbType.Structured;
-            tvparam.TypeName = "dbo.UniqueIdentifierList";
+            tvparam.TypeName = "dbo.IntegerList";
 
             OutputParameterAdd.Int(objCommand, "newId");
 
@@ -121,7 +121,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
 
             DataTable tvp = new DataTable();
-            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
 
             foreach (Permiso item in obj.permisos)
             {
@@ -132,9 +132,8 @@ namespace DataLayer
 
             SqlParameter tvparam = objCommand.Parameters.AddWithValue("@permisos", tvp);
             tvparam.SqlDbType = SqlDbType.Structured;
-            tvparam.TypeName = "dbo.UniqueIdentifierList";
-
-            OutputParameterAdd.Int(objCommand, "newId");
+            tvparam.TypeName = "dbo.IntegerList";
+            
 
             ExecuteNonQuery(objCommand);
 

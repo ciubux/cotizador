@@ -1,7 +1,6 @@
 ﻿@{
     ViewBag.Title = "Roles";
     Model.Rol rol = ViewBag.rol;
-    List<Model.Rol> list = ViewBag.RolList;
 }
 
 <div class="page-header">
@@ -22,11 +21,11 @@
                             <label class="radio-label">
                                 @if (rol.Estado == 1)
                                 {
-                                    <input class="radio-input" checked type="radio" name="origen_estado" id="origen_estado_si" value="1"><span>Activo</span>
+                                    <input class="radio-input" checked type="radio" name="rol_estado" id="rol_estado_si" value="1"><span>Activo</span>
                                 }
                                 else
                                 {
-                                    <input class="radio-input" type="radio" name="origen_estado" id="origen_estado_si" value="1"><span>Activo</span>
+                                    <input class="radio-input" type="radio" name="rol_estado" id="rol_estado_si" value="1"><span>Activo</span>
                                 }
 
                             </label>
@@ -35,11 +34,11 @@
                             <label class="radio-label">
                                 @if (rol.Estado == 0)
                                 {
-                                    <input class="radio-input" checked type="radio" name="origen_estado" id="origen_estado_no" value="0"><span>Inactivo</span>
+                                    <input class="radio-input" checked type="radio" name="rol_estado" id="rol_estado_no" value="0"><span>Inactivo</span>
                                 }
                                 else
                                 {
-                                    <input class="radio-input" type="radio" name="origen_estado" id="origen_estado_no" value="0"><span>Inactivo</span>
+                                    <input class="radio-input" type="radio" name="rol_estado" id="rol_estado_no" value="0"><span>Inactivo</span>
                                 }
                             </label>
                         </div>
@@ -54,10 +53,10 @@
         </div>
 
         @*<div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
-            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Origen")">Exportar</button>
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Rol")">Exportar</button>
         </div>*@
 
-        <table id="tableOrigenes" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+        <table id="tableRoles" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
                 data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                 data-editing-allow-add="false"
                 data-editing-allow-delete="false"
@@ -68,7 +67,7 @@
                 data-editing-add-text="Descartar cambios">
             <thead>
                 <tr>
-                    <th data-name="idOrigen" data-visible="false"></th>
+                    <th data-name="idRol" data-visible="false"></th>
                     <th data-name="codigo" data-visible="true">Código</th>
                     <th data-name="nombre" data-visible="true" data-sortable="true">Nombre</th>
 

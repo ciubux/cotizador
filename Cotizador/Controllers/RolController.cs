@@ -95,8 +95,12 @@ namespace Cotizador.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            
 
+
+            PermisoBL permisobl = new PermisoBL();
+            List<Permiso> permisos = new List<Permiso>();
+            permisos = permisobl.getPermisos();
+            this.Session[Constantes.VAR_SESSION_PERMISO_LISTA] = permisos;
 
             if (this.Session[Constantes.VAR_SESSION_ROL] == null && idRol == null)
             {
@@ -116,7 +120,9 @@ namespace Cotizador.Controllers
             }
             
 
-            ViewBag.origen = obj;
+            ViewBag.rol = obj;
+            ViewBag.permisos = permisos;
+
             return View();
 
         }
@@ -148,7 +154,7 @@ namespace Cotizador.Controllers
             obj.IdUsuarioRegistro = usuario.idUsuario;
             obj.usuario = usuario;
 
-            this.Session[Constantes.VAR_SESSION_ROL] = obj;
+            this.Session[Constantes.VAR_SESSION_ROL_BUSQUEDA] = obj;
         }
 
 
@@ -205,6 +211,12 @@ namespace Cotizador.Controllers
         {
             RolBL bL = new RolBL();
             Rol obj = (Rol)this.Session[Constantes.VAR_SESSION_ROL];
+
+            PermisoBL permisobl = new PermisoBL();
+            List<Permiso> permisos = new List<Permiso>();
+            permisos = permisobl.getPermisos();
+
+            
 
             obj = bL.insertRol(obj);
             this.Session[Constantes.VAR_SESSION_ROL] = null;
@@ -264,6 +276,42 @@ namespace Cotizador.Controllers
             this.RolSession = obj;
         }
 
+        public void ChangePermiso()
+        {
+            Rol obj = (Rol)this.RolSession;
+
+            int valor = Int32.Parse(this.Request.Params["valor"]);
+            int permiso = Int32.Parse(this.Request.Params["permiso"].ToString().Replace("permiso_", ""));
+            
+            List<Permiso> listaPermisos = (List<Permiso>) this.Session[Constantes.VAR_SESSION_PERMISO_LISTA];
+
+            if (valor == 0)
+            {
+                //Remove
+                foreach (Permiso per in obj.permisos)
+                {
+                    if (permiso == per.idPermiso)
+                    {
+                        obj.permisos.Remove(per);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                //ADD
+                foreach (Permiso per in listaPermisos)
+                {
+                    if (permiso == per.idPermiso)
+                    {
+                        obj.permisos.Add(per);
+                        break;
+                    }
+                }
+            }
+
+            this.RolSession = obj;
+        }
 
         private Rol RolSession
         {

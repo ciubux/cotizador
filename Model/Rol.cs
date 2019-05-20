@@ -8,6 +8,11 @@ namespace Model
 {
     public class Rol : Auditoria
     {
+        public Rol() 
+        {
+            this.permisos = new List<Permiso>();
+        }
+
         public int idRol { get; set; }
         [Display(Name = "Código:")]
         public String codigo { get; set; }
@@ -19,6 +24,15 @@ namespace Model
         public override string ToString()
         {
             return "Rol: " + this.nombre + " - Cod: " + this.codigo;
+        }
+
+        public bool TienePermiso(int idPermiso)
+        {
+            foreach (Permiso per in this.permisos)
+            {
+                if (per.idPermiso == idPermiso) return true;
+            }
+            return false;
         }
     }
 }
