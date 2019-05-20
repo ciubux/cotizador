@@ -1,0 +1,143 @@
+/* **** 1 **** */
+CREATE TYPE IntegerList AS TABLE(
+	[ID] int NULL
+);
+
+/* **** 2 **** */
+CREATE PROCEDURE pi_rol 
+@idUsuario uniqueidentifier,
+@codigo  varchar(100),
+@nombre  varchar(100),
+@estado int,
+@permisos IntegerList readonly,
+@newId int OUTPUT 
+
+AS
+BEGIN
+
+DECLARE @idPermiso int 
+DECLARE @permisosCursor CURSOR
+
+INSERT INTO ROL
+           ([codigo]
+           ,[nombre]
+           ,[estado]
+           ,[usuario_creacion]
+           ,[fecha_creacion]
+           ,[usuario_modificacion]
+           ,[fecha_modificacion])
+     VALUES
+           (@codigo
+           ,@nombre
+           ,@estado
+           ,@idUsuario
+           ,GETDATE()
+           ,@idUsuario
+           ,GETDATE());
+
+SET NOCOUNT ON
+SET @newId = SCOPE_IDENTITY();
+
+SET @permisosCursor = CURSOR FOR
+SELECT ID
+FROM @permisos
+
+OPEN @permisosCursor
+FETCH NEXT
+FROM @permisosCursor INTO @idPermiso
+WHILE @@FETCH_STATUS = 0
+BEGIN
+	INSERT INTO ROL_PERMISO
+			   ([id_rol]
+			   ,[id_permiso]
+			   ,[usuario_modificacion]
+			   ,[fecha_modificacion])
+		 VALUES
+			   (@newId
+			   ,@idPermiso
+			   ,@idUsuario
+               ,GETDATE());
+
+
+
+    FETCH NEXT
+	FROM @permisosCursor INTO @idPermiso
+END
+
+END
+
+
+
+/* **** 3 **** */
+CREATE PROCEDURE ps_roles
+@estado int
+AS
+BEGIN
+
+	SELECT 
+	id_rol
+    ,codigo
+    ,nombre
+    ,estado
+	FROM ROL r
+	where r.estado = @estado
+	ORDER BY nombre asc;
+
+END
+
+
+
+
+/* **** 4 **** */
+CREATE PROCEDURE ps_rol
+@idRol int
+AS
+BEGIN
+	SELECT 
+	 id_rol
+      ,codigo
+      ,nombre
+      ,estado
+	   FROM ROL r
+	where r.id_rol = @idRol;
+
+
+	SELECT 
+	pe.id_permiso
+    ,pe.codigo
+    ,pe.descripcion_corta
+    ,pe.descripcion_larga
+	,pe.orden_permiso
+	,pe.id_categoria_permiso
+	,cp.descripcion descripcion_categoria
+	FROM PERMISO pe
+	INNER JOIN ROL_PERMISO rp 
+	on rp.id_permiso = pe.id_permiso
+	INNER JOIN CATEGORIA_PERMISO cp
+	ON pe.id_categoria_permiso = cp.id_categoria_permiso
+	WHERE pe.estado = 1
+	ORDER BY pe.id_categoria_permiso, pe.orden_permiso;
+
+END
+
+
+
+/* **** 5 **** */
+
+
+
+
+/* **** 6 **** */
+
+
+
+
+/* **** 7 **** */
+
+
+
+
+
+/* **** 8 **** */
+
+
