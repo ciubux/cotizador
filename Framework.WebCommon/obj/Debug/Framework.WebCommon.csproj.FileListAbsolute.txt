@@ -18,14 +18,49 @@ C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\bin\Debug\Framew
 C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
 C:\Users\cesar\Documents\projects\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
-D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
-D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
-D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
-D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
-D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
 C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
 C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
+D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojAssemblyReference.cache
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice ORIGINAL\cotizador-devInvoice\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice ORIGINAL\cotizador-devInvoice\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice ORIGINAL\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\cotizador-devInvoice ORIGINAL\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice ORIGINAL\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\NUEO\2\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\NUEO\2\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\NUEO\2\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\NUEO\2\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\NUEO\2\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\NUEO\2\cotizador-devInvoice\cotizador-devInvoice\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb

@@ -15,13 +15,13 @@ namespace Cotizador.Controllers
             return View();
         }
 
-        public ActionResult list()
+        public ActionResult usuariosCotizacionList()
         {
             Usuario usuarioSession = ((Usuario)this.Session["usuario"]);
             List<Usuario> usuarioList = new List<Usuario>();
-            if (usuarioSession.esAprobador)
-            { 
-                List<Usuario> usuarioListTmp = usuarioSession.usuarioList;
+         /*   if (usuarioSession.apruebaCotizaciones)
+            { */
+                List<Usuario> usuarioListTmp = usuarioSession.usuarioCreaCotizacionList;
                 
                 Usuario usuarioTodos = new Usuario { nombre = "Todos", idUsuario = Guid.Empty };
                 usuarioList.Add(usuarioTodos);
@@ -30,10 +30,34 @@ namespace Cotizador.Controllers
                 {
                     usuarioList.Add(usuario);
                 }
-            }
+         //   }
             var model = usuarioList;
 
-            return PartialView("_SelectUsuario", model);
+            return PartialView("_SelectUsuarioCotizacion", model);
         }
+
+        public ActionResult usuariosPedidoList()
+        {
+            Usuario usuarioSession = ((Usuario)this.Session["usuario"]);
+            List<Usuario> usuarioList = new List<Usuario>();
+      //      if (usuarioSession.apruebaPedidos)
+       //     {
+                List<Usuario> usuarioListTmp = usuarioSession.usuarioTomaPedidoList;
+
+                Usuario usuarioTodos = new Usuario { nombre = "Todos", idUsuario = Guid.Empty };
+                usuarioList.Add(usuarioTodos);
+                usuarioList.Add(usuarioSession);
+                foreach (Usuario usuario in usuarioListTmp)
+                {
+                    usuarioList.Add(usuario);
+                }
+        ///    }
+            var model = usuarioList;
+
+            return PartialView("_SelectUsuarioPedido", model);
+        }
+
+       
+
     }
 }

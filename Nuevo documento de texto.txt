@@ -1,0 +1,25 @@
+Fecha 
+
+--Se agrega columna a tabla PEDIDO (indicará si es venta, compra, almacen)
+
+ALTER TABLE PEDIDO ADD tipo char(1);
+UPDATE PEDIDO SET tipo = 'V';
+
+
+--Se agregó columna tipo
+
+UPDATE PROCEDURE pi_pedido
+CREATE PROCEDURE pi_pedidoCompra
+
+--Se agregó columna tipo en el filtro
+UPDATE PROCEDURE ps_pedidos
+CREATE PROCEDURE ps_pedidosCompra
+
+CREATE PROCEDURE pi_movimientoAlmacenEntrada
+
+---DUDAS ¿El número de pedido será el mismo para todos los pedidos?, se tiene el número de la orden de compra tambien
+---¿Se creará la tabla Proveedor?
+
+
+ALTER TABLE SERIE_DOCUMENTO_ELECTRONICO ADD siguiente_numero_guia_remision int
+ALTER TABLE SERIE_DOCUMENTO_ELECTRONICO ADD siguiente_numero_nota_ingreso int

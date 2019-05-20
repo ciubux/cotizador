@@ -1,0 +1,1484 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Pedido Compra";
+    Model.Pedido pedido = ViewBag.pedido;
+    Model.DireccionEntrega direccionEntrega = ViewBag.direccionEntrega;
+    Model.Solicitante solicitante = ViewBag.solicitante;
+    // Model.pedido.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
+    // @model Enum;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="idPedido" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal" enctype="multipart/form-data" id="formularioConArchivos" method="post">
+        <input type="hidden" id="considerarCantidades" name="considerarCantidades" value="2" />
+
+        <div class="row">
+            <!--NÚMERO PEDIDO-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @if (pedido.numeroPedido != 0)
+                    {
+                        @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+            }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.tipoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.DropDownList("pedido_tipoPedido",
+                                           EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedidoCompra), pedido.tipoPedidoCompra),
+                                           new { @class = "form-control" }
+                                           )
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="row">
+            <!--CIUDAD-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                                                       new
+                                                       {
+                                                           ciudadSelectId = "idCiudad",
+                                                           selectedValue = pedido.ciudad.idCiudad
+                                                       })
+                    </div>
+                </div>
+            </div>
+            <!--CLIENTE-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="idCliente" class="control-label col-xs-4">Proveedor:</label>
+
+                    <div class="col-xs-6">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            @if (ViewBag.existeCliente == 1)
+                            {
+                                <option selected value="@pedido.cliente.idCliente ">@pedido.cliente</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <button id="btnAgregarCliente" type="button" class="btn btn-primary bouton-image-add addBouton"></button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--NUMERO REFERENCIA -->
+            <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <!--CIUDAD-->
+            <div class="col-sm-6 col-lg-4" id="divCiudadASolicitar">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.ciudadASolicitar, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudadASolicitar" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudadesASolicitar", "Ciudad",
+                                                       new
+                                                       {
+                                                           ciudadSelectId = "idCiudadASolicitar",
+                                                           selectedValue = pedido.ciudadASolicitar.idCiudad
+                                                       })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
+        <fieldset>
+            <legend id="divpedido_direccionEntrega">Datos de Entrega:</legend>
+
+            <div class="row mostrarDatosParaGuia">
+                <!--ENTREGAR EN-->
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.DropDownList("pedido_direccionEntrega",
+                                                                 new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "descripcion", pedido.direccionEntrega.idDireccionEntrega, null),
+                                                                 "Seleccione Dirección de Entrega",
+                                                                 new { @class = "form-control" })
+                        </div>
+                        <div class="col-xs-2 col-lg-1">
+                            <button id="btnAgregarDireccion" type="button" class="btn btn-primary bouton-image-add addDireccion" data-toggle="modal" data-target="#modalAgregarDireccion"></button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+            <div class="row mostrarDatosParaGuia">
+                <!--CONTACTO ENTREGA -->
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "control-label col-xs-2" })
+                        <div class="input-group col-xs-6">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Nombre:</span>
+                            </div>
+
+                            @Html.TextBoxFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="input-group col-xs-4">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Teléfono:</span>
+                            </div>
+                            @Html.TextBoxFor(p => pedido.direccionEntrega.telefono, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <div class="input-group col-xs-12">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Dirección:</span>
+                            </div>
+                            @Html.TextBoxFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="row mostrarDatosParaGuia">
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => pedido.ubigeoEntrega.Departamento, new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            <!--class="control-departamento-width" style="display:flex">-->
+                            @Html.Action("GetDepartamentos", "Ubigeo",
+                                                                        new
+                                                                        {
+                                                                            departamentoSelectId = "ActualDepartamento",
+                                                                            provinciaSelectId = "ActualProvincia",
+                                                                            distritoSelectId = "ActualDistrito",
+                                                                            provinciaDivId = "dvProvincias",
+                                                                            distritoDivId = "dvDistritos",
+                                                                            selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2)
+                                                                        })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => pedido.ubigeoEntrega.Provincia, new { @class = "control-label col-xs-4" })
+                        <div id="dvProvincias" class="col-xs-8">
+                            <!-- class="control-provincia-width" style="display:flex">-->
+                            @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
+                                                                    new
+                                                                    {
+                                                                        departamentoSelectId = "ActualDepartamento",
+                                                                        provinciaSelectId = "ActualProvincia",
+                                                                        distritoSelectId = "ActualDistrito",
+                                                                        distritoDivId = "dvDistritos",
+                                                                        codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                                                        selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4)
+                                                                    })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => pedido.ubigeoEntrega.Distrito, new { @class = "control-label col-xs-4" })
+                        <div id="dvDistritos" class="col-xs-8">
+                            <!-- class="control-distrito-width" style="display:flex">-->
+                            @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
+                        {
+                            distritoSelectId = "ActualDistrito",
+                            codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                            codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
+                            selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6)
+                        })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="row">
+                <!--FECHA ENTREGA -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.rangoFechasEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
+                        <div class="input-group col-xs-6 col-lg-8">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Desde:</span>
+                            </div>
+                            <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesde" />
+                            <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde">
+                        </div>
+                        <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+                        <div class="input-group col-xs-6 col-lg-8">
+
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                            </div>
+                            <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHasta" />
+                            <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta">
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--HORA ENTREGA -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.rangoHoraEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
+                        <div class="input-group col-xs-6 col-lg-8">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Desde:</span>
+                            </div>
+                            <input class="form-control" type="time" id="pedido_horaEntregaDesde" name="pedido_horaEntregaDesde" value="@pedido.horaEntregaDesde">
+                        </div>
+                        <label for="horaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+                        <div class="input-group col-xs-6 col-lg-8">
+
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                            </div>
+                            <input class="form-control" type="time" id="pedido_horaEntregaHasta" name="pedido_horaEntregaHasta" value="@pedido.horaEntregaHasta">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Datos de la Solicitud:</legend>
+
+            <div class="row mostrarDatosParaGuia">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.solicitante, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.DropDownList("pedido_solicitante",
+                                                    new SelectList(pedido.cliente.solicitanteList as IEnumerable<Model.Solicitante>, "idSolicitante", "nombre", pedido.solicitante.idSolicitante, null),
+                                                    "Seleccione Solicitante",
+                                                    new { @class = "form-control" })
+                        </div>
+                        <div class="col-xs-2 col-lg-1">
+                            <button id="btnAgregarSolicitante" type="button" class="btn btn-primary bouton-image-add addBouton" data-toggle="modal" data-target="#modalAgregarSolicitante"></button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="row mostrarDatosParaGuia">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        <label for="pedido_solicitante_nombre" class="control-label col-xs-2">Datos de Solicitante:</label>
+                        <div class="input-group col-xs-6">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Nombre:</span>
+                            </div>
+                            @Html.TextBoxFor(p => pedido.solicitante.nombre, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="input-group col-xs-4">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Teléfono:</span>
+                            </div>
+                            @Html.TextBoxFor(p => pedido.solicitante.telefono, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="input-group col-xs-12">
+                        <div class="input-group-addon">
+                            <span class="input-group-text" id="basic-addon1">E-mail:</span>
+                        </div>
+                        @Html.TextBoxFor(p => pedido.solicitante.correo, htmlAttributes: new { @class = "form-control" })
+
+                    </div>
+                    <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Correo del Cliente a donde se le notificará sobre la atención de su Pedido.</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <!--FECHA SOLICITUD -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="fechaSolicitud" class="control-label col-xs-6 col-lg-4">Fecha de Solicitud:</label>
+                        <div class="input-group col-xs-8 col-lg-8">
+
+                            <input type="hidden" id="fechaSolicitudTmp" value="@ViewBag.fechaSolicitud" />
+                            <input class="form-control" type="text" id="fechaSolicitud" name="fechaSolicitud">
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--HORA SOLICITUD -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="fechaEntrega" class="control-label col-xs-6 col-lg-4">Hora de Solicitud:</label>
+                        <!-- <div class="input-group col-xs-6 col-lg-8">
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Hora:</span>
+                        </div>
+
+                    </div>-->
+                        <div class="input-group col-xs-8 col-lg-8">
+                            <input class="form-control" type="time" id="horaSolicitud" name="horaSolicitud" value="@ViewBag.horaSolicitud">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+
+
+
+                <div class="col-sm-6 col-lg-4">
+                    <!--IGV-->
+                    <div class="form-group">
+                        <label for="igv" class="control-label col-xs-4">¿Precios unitarios incluyen IGV?:</label>
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (pedido.incluidoIGV)
+                                {
+                                    <input class="radio-input" disabled checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                            }
+                            else
+                            {
+                                <input class="radio-input" disabled type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                        }
+
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (!pedido.incluidoIGV)
+                                {
+                                    <input class="radio-input" disabled checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                            }
+                            else
+                            {
+                                <input class="radio-input" disabled type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                        }
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--FLETE-->
+                <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.otrosCargos, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(p => pedido.otrosCargos, htmlAttributes: new { @class = "form-control", type = "number", step = ".1" })
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </fieldset>
+
+
+
+        <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
+            <!--
+        <div class="pull-left">
+            @if (pedido.usuario.apruebaPedidos)
+            {
+                <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
+
+                if (pedido.mostrarCosto)
+                {
+                    <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                }
+                else
+                {
+                    <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                }
+            }
+        </div>
+
+        <div class="pull-left">
+            <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
+        </div>
+        -->
+
+            <div class="pull-right">
+                <button id="btnOpenAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
+            </div>
+
+        </div>
+
+        <table id="tableDetallePedido" class="table" data-editing="true"
+               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+               data-editing-allow-add="true"
+               data-editing-allow-delete="true"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar Edición Detalle"
+               data-editing-add-text="Descartar Cambios Detalle">
+            <thead>
+                <tr>
+                    <th data-name="idProducto" data-visible="false"></th>
+
+                    @if (ViewBag.debug == 1)
+                {
+                    <th data-name="esPrecioAlternativo" data-visible="true">EsPrecioAlternativo</th>
+            }
+            else
+            {
+                <th data-name="esPrecioAlternativo" data-visible="false">EsPrecioAlternativo</th>
+        }
+                    <th data-name="proveedor" data-sortable="false">Prov.</th>
+                    <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
+                    <th data-name="producto" data-sortable="false">Producto / Descripción</th>
+                    <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                    <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
+                    <!--<th data-name="valorUnitario" data-sortable="true" data-breakpoints="xs sm">Costo Unitario</th>-->
+                    <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+
+                    @if (ViewBag.debug == 1)
+                {
+                    <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+            }
+            else
+            {
+                <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+        }
+
+                    <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+
+                    @if (pedido.mostrarCosto || ViewBag.debug == 1)
+                {
+                    <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
+            }
+            else
+            {
+                <th data-name="costo" data-visible="false">Costo</th>
+        }
+                    @if (pedido.usuario.visualizaMargen)
+                {
+                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+            }
+            else
+            {
+                <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+        }
+                    <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
+                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Reg. Fact.</th>
+                    <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
+                    <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
+                    <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
+                    <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+
+
+                    <th class="ordenar" data-sortable="false" data-visible="false"></th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @{int contador = 0;}
+                @foreach (var cotizacionDetalle in pedido.pedidoDetalleList)
+            {
+                contador++;
+                <tr data-expanded="true">
+                    <td>  @cotizacionDetalle.producto.idProducto  </td>
+                    <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
+                    <td>  @cotizacionDetalle.producto.proveedor  </td>
+                    <td>  @cotizacionDetalle.producto.sku  </td>
+                    <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
+
+                    <td>
+                        @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
+                        <br />
+                        <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
+                    </td>
+
+
+
+
+                    <td>  @cotizacionDetalle.unidad  </td>
+                    <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
+                    <td class="@cotizacionDetalle.producto.idProducto detprecioLista" style="text-align:right">@cotizacionDetalle.precioLista</td>
+
+                    <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@cotizacionDetalle.porcentajeDescuento %</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@cotizacionDetalle.porcentajeDescuentoMostrar %</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoLista  </td>
+
+                    <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
+
+                    <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
+
+
+
+
+                    @if (cotizacionDetalle.producto.precioClienteProducto.precioUnitario == 0)
+                {
+                    if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioLista - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+              && cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioLista + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                    {
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
+
+                }
+                else
+                {
+                    <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
+            }
+
+        }
+        else
+        {
+            if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+      && cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+            {
+                <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
+
+        }
+        else
+        {
+            <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
+    }
+}
+                    <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
+
+
+
+                    <td class="@cotizacionDetalle.producto.idProducto detcantidad" style="text-align:right">@cotizacionDetalle.cantidad</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
+                    <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+
+                    <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
+
+
+
+
+                </tr>
+        }
+
+            </tbody>
+        </table>
+
+        @{ var esRecotizacion = @pedido.esRePedido ? 1 : 0;}
+
+        <input type="hidden" id="esRecotizacion" value="@esRecotizacion" />
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <div class="col-xs-8">
+                        @Html.TextAreaFor(p => pedido.observaciones, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6 col-lg-3">
+
+
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales">Subtotal: S/ </span>
+                        <span class="totales" id="montoSubTotal">@pedido.montoSubTotal</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales">IGV 18%: S/ </span>
+                        <span class="totales" id="montoIGV">@pedido.montoIGV</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <input type="hidden" id="total" value="@pedido.montoTotal" />
+                        <span class="totales">TOTAL: S/ </span>
+                        <span class="totales" id="montoTotal">@pedido.montoTotal</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row mostrarDatosParaGuia">
+            <!--OBSERVACIONES-->
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "form-control" })
+                        <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
+                    <div class="col-xs-3">
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2"></label>
+                    <div class="col-xs-8">
+                        <ul id="nombreArchivos">
+                            @foreach (Model.PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
+                        {
+                            <li>
+                                <a href="javascript:mostrar();" class="descargar">@pedidoAdjunto.nombre</a>
+                                <a href="javascript:mostrar();"><img src="~/images/icon-close.png" id="@pedidoAdjunto.nombre" class="btnDeleteArchivo" /></a>
+                            </li>
+                    }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="pull-left">
+                <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar</button>
+            </div>
+
+
+            <div class="pull-right">
+                <button type="button" id="btnCancelarPedido" class="btn btn-danger">Cancelar</button>
+                @if (pedido.numeroPedido > 0)
+            {
+                <button id="btnFinalizarEdicionPedido" type="button" class="btn btn-success">Finalizar Edición</button>
+        }
+        else
+        {
+            <button id="btnFinalizarCreacionPedido" type="button" class="btn btn-success">Finalizar Creación</button>
+    }
+            </div>
+        </div>
+
+
+    </form>
+</div>
+
+
+
+<!-- MODAL AGREGAR PRODUCTO -->
+<div class="modal fade" id="modalAgregarProducto" tabindex="-1">
+    <!-- <div class="modal fade" id="modalAgregarProducto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+       -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--CABECERA-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarProductoTitle"><b>Agregar Producto</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+            <!--CUERPO-->
+            <div class="modal-body">
+
+                @if (ViewBag.debug == 1)
+                {
+                    <span>precioUnitarioSinIGV</span> <input class="form-control" type="text" id="precioUnitarioSinIGV" value="0" />
+                    <span>precioUnitarioAlternativoSinIGV</span><input class="form-control" type="text" id="precioUnitarioAlternativoSinIGV" value="0" />
+                    <span>costoSinIGV</span><input class="form-control" type="text" id="costoSinIGV" value="0" />
+                    <span>costoAlternativoSinIGV</span><input class="form-control" type="text" id="costoAlternativoSinIGV" value="0" />
+                    <span>esPrecioAlternativo</span><input class="form-control" type="text" id="esPrecioAlternativo" value="0" />
+                }
+                else
+                {
+                    <input type="hidden" id="precioUnitarioSinIGV" value="0" />
+                    <input type="hidden" id="precioUnitarioAlternativoSinIGV" value="0" />
+                    <input type="hidden" id="costoSinIGV" value="0" />
+                    <input type="hidden" id="costoAlternativoSinIGV" value="0" />
+                    <input type="hidden" id="esPrecioAlternativo" value="0" />
+                }
+
+
+
+                <form class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+
+
+                            <!--Familia-->
+                            <div class="form-group">
+                                <label for="familia" class="control-label col-xs-3">Familia:</label>
+                                <div class="col-xs-9">
+                                    @Html.Action("list", "Familia")
+                                </div>
+                            </div>
+
+
+                            <!--Proveedor-->
+                            <div class="form-group">
+                                <label for="proveedor" class="control-label col-xs-3">Proveedor:</label>
+                                <div class="col-xs-9">
+                                    @Html.Action("list", "Proveedor")
+                                </div>
+                            </div>
+
+
+
+                            <!--PRODUCTO-->
+                            <div class="form-group">
+                                <label for="producto" class="control-label col-xs-3">Producto:</label>
+                                <div class="col-xs-9">
+                                    <select class="form-control" id="producto" name="producto">
+                                        <option value=""></option>
+                                    </select>
+                                    <!--  <label><input type="checkbox" id="considerarDescontinuados" />Considerar Descontinuados</label>-->
+                                </div>
+                            </div>
+
+
+
+                            <!--PRESENTACIÓN-->
+                            <div class="form-group">
+                                <label for="unidad" class="control-label col-xs-3">Presentación:</label>
+                                <div class="col-xs-9">
+                                    <select class="form-control" id="unidad" name="unidad"></select>
+                                </div>
+                            </div>
+
+                            <!--PRECIO LISTA-->
+                            <div class="form-group">
+                                <label for="precioLista" class="control-label col-xs-3">Precio Lista:</label>
+                                <div class="col-xs-9">
+
+                                    <input class="form-control" type="text" value="" id="precioLista" name="precioLista" disabled>
+                                    <!--  <span style="margin-right: 20px; color: red; font-weight: normal " class="has-error" id="mensajeFlete"></span>
+                                    -->
+                                </div>
+                            </div>
+
+
+                            <!--DESCUENTO-->
+
+                            <div class="form-group">
+                                <label for="porcentajeDescuento" class="control-label col-xs-3">Dscto % al P. Lista:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" type="number" step=".1" value="" id="porcentajeDescuento" name="porcentajeDescuento">
+                                </div>
+                                <div class="col-xs-2">
+                                    <button id="btnCalcularDescuento" type="button" class="btn btn-primary bouton-image monBouton" data-toggle="modal" data-target="#modalCalculadora"></button>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button id="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios" data-toggle="modal" data-target="#modalMostrarPrecios"></button>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+
+                        <!--IMAGEN-->
+                        <div class="col-sm-6 col-lg-6 ">
+                            <div class="form-group modal-add-image" style="height:180px">
+                                <img id="imgProducto" src="images/NoDisponible.gif">
+                            </div>
+
+                            <div class="form-group" id="observacionProductoDiv">
+                                <label for="observacionProducto" class="control-label col-xs-3">Observaciones:</label>
+                                <div class="col-xs-9">
+                                    <textarea rows="5" cols="35" id="observacionProducto" name="observacionProducto"> </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+                    <div class="row">
+
+
+
+
+                        @if (pedido.mostrarCosto)
+                        {
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group" id="costodiv">
+                                    <label for="costo" class="control-label col-xs-3">Costo:</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="number" id="costoLista" disabled name="costoLista">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (ViewBag.debug == 1)
+                        {
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group" id="costodiv">
+                                    <label for="costo" class="control-label col-xs-3">Costo:</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="number" id="costoLista" disabled name="costoLista">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <input class="form-control" type="hidden" id="costoLista" disabled name="costoLista">
+                        }
+
+                    </div>
+
+
+
+                    <div class="row">
+
+
+
+
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="precio" class="control-label col-xs-3">Precio Neto:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" type="hidden" id="precioRegistrado" name="precioRegistrado">
+                                    <input class="form-control" type="number" step=".1" value="" disabled id="precio" name="precio">
+                                </div>
+
+
+
+                                <label for="margen" class="control-label col-xs-2">Mg %:</label>
+                                <div class="col-xs-3">
+
+                                    <input class="form-control" type="number" disabled value="" min="1" step="1" id="margen" name="margen">
+                                </div>
+                            </div>
+                        </div>
+                        <!--CANTIDAD-->
+                        <div class="col-sm-6 col-lg-6" id="cantidadiv">
+                            <div class="form-group">
+                                <label for="cantidad" class="control-label col-xs-3">Cantidad:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="number" value="" min="1" step="1" id="cantidad" name="cantidad">
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="precio" class="control-label col-xs-3">Flete:</label>
+                                <div class="col-xs-3">
+                                    <input class="form-control" type="number" step=".1" value="" id="fleteDetalle" name="fleteDetalle">
+                                </div>
+                                <label for="margen" class="control-label col-xs-2">Precio Unit:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" type="number" disabled value="" min="1" step="1" id="precioUnitario" name="precioUnitario">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group" id="subtotaldiv">
+                                <label for="subtotal" class="control-label col-xs-3">Sub total:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="text" value="" id="subtotal" name="subtotal" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </form>
+
+                <div class="row pull-right">
+                    <span style="margin-right: 20px; color: red; font-weight: bold " class="has-error" id="resultadoAgregarProducto"></span>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancelAddProduct" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAddProduct" class="btn btn-primary">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- MODAL CALCULAR MONTO -->
+<div class="modal fade" id="modalCalculadora" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCalculadoraTitle"><b>Calcular Descuento</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <input type="hidden" id="idProducto" value="" />
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--NUEVO PRECIO-->
+                            <div class="form-group">
+                                <label for="nuevoPrecio" class="control-label col-xs-4">Nuevo Precio:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" step=".1" value="" id="nuevoPrecio" name="nuevoPrecio">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+
+                            <!--NUEVO PRECIO-->
+                            <div class="form-group">
+                                <label for="nuevoDescuento" class="control-label col-xs-4">Dscto % al P. Lista:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" step=".1" value="" disabled id="nuevoDescuento" name="nuevoDescuento">
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </form>
+            </div>
+            <!--
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Input Placeholder..." />
+                        <span class="input-group-btn"><button class="btn btn-default" type="button">Action</button></span>
+                    </div>
+                </div>
+            </div>-->
+            <div class="modal-footer">
+                <button type="button" id="btnCancelCalculadora" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveDescuento" class="btn btn-primary">Guardar Descuento</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--MODAL MOSTRAR PRECIOS-->
+<div class="modal fade" id="modalMostrarPrecios" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación </b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="tableMostrarPrecios" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar Edición Detalle"
+                           data-editing-add-text="Descartar Cambios Detalle">
+                        <thead>
+                            <tr>
+                                <th data-name="idProducto" data-visible="true">Número Cotización</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Unidad</th>
+                                <th data-name="idProducto" data-visible="true">Precio Neto</th>
+                                <th data-name="idProducto" data-visible="true">Flete</th>
+                                <th data-name="idProducto" data-visible="true">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- MODAL AGREGAR CLIENTE -->
+<div class="modal fade" id="modalAgregarCliente" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarClienteTitle"><b>Agregar Cliente</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body" id="modalAgregarCliente2">
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--RAZON SOCIAL-->
+                            <div class="form-group">
+                                <label for="nuevoPrecio" class="control-label col-xs-4">Razón Social:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" value="" id="ncRazonSocial" name="ncRazonSocial">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+
+                            <!--NOMBRE COMERCIAL-->
+                            <div class="form-group">
+                                <label for="nuevoDescuento" class="control-label col-xs-4">Nombre Comercial:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" value="" id="ncNombreComercial" name="ncNombreComercial">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--RUC-->
+                            <div class="form-group">
+                                <label for="nuevoPrecio" class="control-label col-xs-4">RUC:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" value="" id="ncRUC" name="ncRUC">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+
+                            <!--CONTACTO-->
+                            <div class="form-group">
+                                <label for="nuevoDescuento" class="control-label col-xs-4">Contacto:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" value="" id="ncContacto" name="ncContacto">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelCliente" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveCliente" class="btn btn-primary">Agregar Cliente</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- MODAL AGREGAR DIRECCION -->
+<div class="modal fade" id="modalAgregarDireccion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarDireccionTitle"><b>Nueva Dirección</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+                            <!--Dirección-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label  col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(d => direccionEntrega.descripcion, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--CONTACTO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => direccionEntrega.contacto, htmlAttributes: new { @class = "control-label  col-xs-4" })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(d => direccionEntrega.contacto, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--TELEFONO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => direccionEntrega.telefono, htmlAttributes: new { @class = "control-label  col-xs-4" })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(d => direccionEntrega.telefono, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelDireccion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveDireccion" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL AGREGAR DIRECCION -->
+<div class="modal fade" id="modalAgregarSolicitante" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarSolicitanteTitle"><b>Nuevo Solicitante</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+            
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+                            <!--Nombre-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => solicitante.nombre, htmlAttributes: new { @class = "control-label  col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(d => solicitante.nombre, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--CONTACTO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => solicitante.telefono, htmlAttributes: new { @class = "control-label  col-xs-4" })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(d => solicitante.telefono, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                            <div class="col-sm-6 col-lg-12">
+                                <!--TELEFONO-->
+                                <div class="form-group">
+                                    @Html.LabelFor(d => solicitante.correo, htmlAttributes: new { @class = "control-label  col-xs-2" })
+                                    <div class="col-xs-10">
+                                        @Html.TextBoxFor(d => solicitante.correo, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+
+                   </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelSolicitante" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveSolicitante" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--MODAL BUSCAR PRECIOS REGISTRADOS-->
+<div class="modal fade" id="modalBuscarPreciosRegistrados" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalBuscarPreciosRegistrados"><b>Filtro Búsqueda de Precios Registrados</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+
+
+                            <!--Familia-->
+                            <div class="form-group">
+                                <label for="familia" class="control-label col-xs-4">Familia:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("listBusquedaPrecios", "Familia")
+                                </div>
+                            </div>
+
+
+                            <!--Proveedor-->
+                            <div class="form-group">
+                                <label for="proveedor" class="control-label col-xs-4">Proveedor:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("listBusquedaPrecios", "Proveedor")
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fechaPrecios" class="control-label col-xs-4">Precios a partir de:</label>
+                                <div class="col-xs-8">
+                                    <input type="hidden" id="fechaPreciostmp" value="@ViewBag.fechaPrecios" />
+                                    <input class="form-control" type="text" id="fechaPrecios" name="fechaPrecios">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarObtenerProductos" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnObtenerProductos" class="btn btn-primary">Continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--MODAL AGREGAR MENSAJE PARA APROBADOR-->
+<div class="modal fade" id="modalComentarioPendienteIngreso" tabindex="-1">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalComentarioPendienteIngresoTitle"><b>Modificar Comentario Estado Pendiente Ingreso</b></h4>
+                <p></p>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+
+                            <!--MOTIVO RECHAZO-->
+                            <div class="form-group">
+                                <!--<label for="comentarioPendienteAprobacion" class="control-label col-xs-4">Comentario:</label>-->
+                                <div class="col-xs-12">
+                                    <span style="color: darkred" id="solicitudIngresoComentario"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-12" id="motivoRechazoDiv">
+
+                            <!--MOTIVO RECHAZO-->
+                            <div class="form-group">
+                                <!--<label for="comentarioPendienteAprobacion" class="control-label col-xs-4">Comentario:</label>-->
+                                <div class="col-xs-12">
+                                    <textarea class="form-control" rows="5" id="comentarioPendienteIngreso" name="comentarioPendienteIngreso"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <!--<button type="button" id="btnCancelarComentario" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>-->
+                <button type="button" id="btnAceptarComentario" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/pedidoCompra")
+    @Scripts.Render("~/Scripts/App/ubigeo.js")
+}

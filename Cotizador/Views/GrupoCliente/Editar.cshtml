@@ -1,0 +1,317 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Grupo";
+    Model.GrupoCliente grupoCliente = ViewBag.grupoCliente;
+    var disabledLabel = "disabled = ''";
+
+   
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal" enctype="multipart/form-data" id="formularioConArchivos" method="post">
+        <input type="hidden" id="considerarCantidades" name="considerarCantidades" value="2" />
+
+        <div class="row">
+
+            @if (grupoCliente.codigo != null && grupoCliente.codigo.Length > 0)
+            {
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => grupoCliente.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                        <div class="col-xs-8">
+                            @Html.Action("GetCiudades", "Ciudad",
+                                   new
+                                   {
+                                       ciudadSelectId = "idCiudad",
+                                       selectedValue = grupoCliente.ciudad.idCiudad,
+                                       disabled = "disabled"
+                                   })
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => grupoCliente.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                        <div class="col-xs-8">
+                            @Html.Action("GetCiudades", "Ciudad",
+                                           new
+                                           {
+                                               ciudadSelectId = "idCiudad",
+                                               selectedValue = grupoCliente.ciudad.idCiudad
+                                           })
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <input type="hidden" id="idGrupoCliente" name="idGrupoCliente" value="@grupoCliente.idGrupoCliente" />
+
+
+            <!--CODIGO CLIENTE-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => grupoCliente.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @if (grupoCliente.idGrupoCliente > 0)
+                        {
+                            @Html.TextBoxFor(c => grupoCliente.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(c => grupoCliente.codigo, htmlAttributes: new { @class = "form-control" })
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <br />
+        <fieldset id="fieldSetDatosComerciales">
+            <legend>Información Comercial:</legend>
+            <div class="row">
+                <!--Nombre COmercial CLIENTE-->
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(c => grupoCliente.nombre, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-2", @id = "labelClienteNombre" })
+                        <div class="col-xs-8 col-sm-8 col-lg-10">
+                            @Html.TextBoxFor(c => grupoCliente.nombre, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => grupoCliente.contacto, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                        <div class="col-xs-8 col-sm-8 col-lg-8">
+                            @Html.TextBoxFor(c => grupoCliente.contacto, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--CORREO CLIENTE-->
+            <div class="row">
+
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => grupoCliente.telefonoContacto, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                        <div class="col-xs-8 col-sm-8 col-lg-8">
+                            @Html.TextBoxFor(c => grupoCliente.telefonoContacto, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => grupoCliente.observaciones, htmlAttributes: new { @class = "control-label  col-xs-4  col-sm-4 col-lg-2" })
+                        <div class="col-xs-8 col-sm-8 col-lg-10">
+                            @Html.TextAreaFor(p => grupoCliente.observaciones, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => grupoCliente.emailContacto, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                        <div class="col-xs-8 col-sm-8 col-lg-8">
+                            @Html.TextBoxFor(c => grupoCliente.emailContacto, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </fieldset>
+
+        <br />
+        <fieldset>
+            <legend>Crédito y Condiciones de Pago:</legend>
+            <div class="row">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => grupoCliente.plazoCreditoSolicitado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                        <div class="col-xs-8">
+                            @if (grupoCliente.usuario.apruebaPlazoCredito)
+                            {
+                                @Html.DropDownList("plazoCreditoSolicitado",
+                                               EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), grupoCliente.plazoCreditoSolicitado),
+                                               new { @class = "form-control", @disabled = "disabled" }
+                                               )
+                            }
+                            else
+                            {
+                                @Html.DropDownList("plazoCreditoSolicitado",
+                                               EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), grupoCliente.plazoCreditoSolicitado),
+                                               new { @class = "form-control" }
+                                               )
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => grupoCliente.plazoCreditoAprobado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                        <div class="col-xs-8">
+                            @if (grupoCliente.usuario.apruebaPlazoCredito)
+                            {
+
+                                @Html.DropDownList("plazoCreditoAprobado",
+                                               EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), grupoCliente.plazoCreditoAprobado),
+                                               new { @class = "form-control" }
+                                               )
+                            }
+                            else
+                            {
+                                @Html.DropDownList("plazoCreditoAprobado",
+                                               EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoPago), grupoCliente.plazoCreditoAprobado),
+                                               new { @class = "form-control", @disabled = "disabled" }
+                                               )
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => grupoCliente.creditoSolicitado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                        <div class="col-xs-8 ">
+                            @if (grupoCliente.usuario.apruebaMontoCredito)
+                            {
+                                @Html.TextBoxFor(c => grupoCliente.creditoSolicitado, htmlAttributes: new { @class = "form-control", disabled = "disabled", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(c => grupoCliente.creditoSolicitado, htmlAttributes: new { @class = "form-control", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => grupoCliente.creditoAprobado, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                        <div class="col-xs-8">
+                            @if (grupoCliente.usuario.apruebaMontoCredito)
+                            {
+                                @Html.TextBoxFor(c => grupoCliente.creditoAprobado, htmlAttributes: new { @class = "form-control", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(c => grupoCliente.creditoAprobado, htmlAttributes: new { @class = "form-control", @disabled = "disabled", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => grupoCliente.sobreGiro, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                        <div class="col-xs-8">
+                            @if (grupoCliente.usuario.apruebaMontoCredito)
+                            {
+                                @Html.TextBoxFor(c => grupoCliente.sobreGiro, htmlAttributes: new { @class = "form-control", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(c => grupoCliente.sobreGiro, htmlAttributes: new { @class = "form-control", @disabled = "disabled", type = "number", min = "0.00", step = "0.01", value = "0.00", placeholder = "0.00" })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => grupoCliente.observacionesCredito, htmlAttributes: new { @class = "control-label  col-xs-4  col-sm-4 col-lg-2" })
+                        <div class="col-xs-8 col-sm-8 col-lg-10">
+
+                            @if (grupoCliente.usuario.apruebaPlazoCredito || grupoCliente.usuario.apruebaMontoCredito)
+                            {
+                                @Html.TextAreaFor(p => grupoCliente.observacionesCredito, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
+                            }
+                            else
+                            {
+                                @Html.TextAreaFor(p => grupoCliente.observacionesCredito, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%", @disabled = "disabled" })
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            @*<div class="row">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
+                        <div class="col-xs-3">
+                            <div class="upload-btn-wrapper">
+                                <button class="btn btn-primary"></button>
+                                <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+            @*<div class="row">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        <label for="archivoAdjunto" class="control-label col-xs-2"></label>
+                        <div class="col-xs-8">
+                            <ul id="nombreArchivos">
+                                @foreach (Model.GrupoClienteAdjunto grupoClienteAdjunto in grupoCliente.grupoClienteAdjuntoList)
+                                {
+                                    <li>
+                                        <a href="javascript:mostrar();" class="descargar">@grupoClienteAdjunto.nombre</a>
+                                        <a href="javascript:mostrar();"><img src="~/images/icon-close.png" id="@grupoClienteAdjunto.nombre" class="btnDeleteArchivo" /></a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        </fieldset>
+
+
+        <div class="row">
+
+
+            <div class="pull-right">
+                <button type="button" id="btnCancelarGrupoCliente" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionGrupoCliente" type="button" class="btn btn-success">Finalizar Creación</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/grupoCliente")
+}

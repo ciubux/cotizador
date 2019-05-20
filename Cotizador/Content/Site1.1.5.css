@@ -1,0 +1,654 @@
+﻿
+body {
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+}
+
+
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.btnUpload {
+    border: 2px solid gray;
+    color: gray;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+
+.modal.modal-wide .modal-dialog {
+  width: 90%;
+}
+.modal-wide .modal-body {
+  overflow-y: auto;
+}
+
+
+.totales {
+    font-weight: bold;
+    font-size: medium;
+    color: brown;
+}
+
+
+.mensaje {
+    font-weight: bold;
+    font-size: medium;
+    color: brown;
+}
+
+
+@media screen and (min-width: 768px) {
+	
+	#modalAgregarProducto .modal-dialog  {width:900px;}
+    #modalAgregarDireccion .modal-dialog {
+        width: 900px;
+    }
+    #modalActualizarPedido .modal-dialog {
+        width: 1200px;
+    }
+
+    #modalAgregarCliente .modal-dialog {
+        width: 1100px;
+    }
+    #modalCalculadora .modal-dialog {
+        width: 900px;
+    }
+    #modalVerVentaConsolidada .modal-dialog {
+        width: 1200px;
+    }
+
+    #modalComentarioPendienteIngreso .modal-dialog {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    
+    #modalComentarioPendienteAprobacion .modal-dialog {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    #modalComentarioPendienteAprobacion .modal-content {
+        height: auto;
+        min-height: 100%;
+        border-radius: 0;
+    }
+    
+    #modalVerCotizacion .modal-dialog {
+        width: 1400px;
+    }
+    #modalMostrarPrecios .modal-dialog {
+        width: 900px;
+    }
+    #modalVerPedido .modal-dialog {
+        width: 1200px;
+    }
+
+    #modalVerGuiaRemision .modal-dialog {
+        width: 1200px;
+    }
+
+    #modalVerNotaIngreso .modal-dialog {
+        width: 1200px;
+    }
+    
+    
+    #modalVerGuiasRemision .modal-dialog {
+        width: 1200px;
+    }
+
+    #modalIngresarDatosVentaConsolidada .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalIngresarDatosReporteDetallado .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalVerNotasIngreso .modal-dialog {
+        width: 1200px;
+    }
+
+    #modalAtencion .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalFacturar .modal-dialog {
+        width: 1200px;
+    }
+
+    #modalVistaPreviaFactura .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalVistaPreviaCPE .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalVerFactura .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalGenerarNotaCredito .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalGenerarNotaDebito .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalGenerarNotaIngreso .modal-dialog {
+        width: 1100px;
+    }
+
+    #modalVerCliente .modal-dialog {
+        width: 1200px;
+    }
+
+    #modalVerGrupoCliente .modal-dialog {
+        width: 1200px;
+    }
+    
+    #modalVerProducto .modal-dialog {
+        width: 1000px;
+    }
+
+    #modalVerHistorialCotizacion .modal-dialog {
+        width: 900px;
+    }
+
+    #modalVerHistorialPedido .modal-dialog {
+        width: 900px;
+    }
+
+    #modalVerHistorialCrediticioPedido .modal-dialog {
+        width: 900px;
+    }
+
+
+    #modalEdicionDireccionEntrega .modal-dialog {
+        width: 900px;
+    }
+}
+
+
+div.header {
+    width: 100%;
+    height: 40px;
+} 
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.modal-title {
+    position: absolute;
+}
+
+.modal-add-image {
+    text-align: center;
+}
+
+.modal-add-image img {
+    height: 180px;
+}
+
+input.label-input {
+    border: none;
+    width: 80px;
+    cursor: pointer;
+}
+
+.table-product-img {
+    height: 30px;
+}
+
+.column-img {
+    text-align: center;
+}
+
+#producto_chosen {
+    width: 100% !important;
+}
+
+@media only screen and (max-width: 991px) {
+    .table-product-img {
+        height: 70px;
+    }
+
+    .column-img {
+        text-align: left;
+        padding-left: 20px;
+    }
+}
+
+.up {
+    width: 16px;
+    height: 16px;
+    background: white url(/images/up2.png) no-repeat;
+    background-color: transparent;
+    float: left;
+}
+
+.up:hover {
+    background-color: #A9D0F5;
+}
+
+.down {
+    width: 16px;
+    height: 16px;
+    background: white url(/images/down2.png) no-repeat;
+    background-color: transparent;
+    float: left;
+}
+
+.down:hover {
+    background-color: #A9D0F5;
+}
+
+.updown {
+    width: 32px;
+    height: 16px;
+}
+
+
+.bouton-image-add:before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 0px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.bouton-image:before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.botonSunat:before {
+    background-image: url(/images/logo_sunat.gif);
+}
+
+.botonExcel:before {
+    background-image: url(/images/excel.png);
+}
+
+.botonClean:before {
+    background-image: url(/images/clean.png);
+}
+
+
+.botonSearch:before {
+    background-image: url(/images/search_icon.png);
+}
+
+.monBouton:before {
+    background-image: url(/images/calculadora3.png);
+}
+
+.pdfBoton:before {
+    background-image: url(/images/pdf-icon.png);
+}
+
+.botonPrecios:before {
+    background-image: url(/images/etiqueta-de-precio-en-dolares.png);
+}
+
+
+.addBouton:before {
+    background-image: url(/images/Add-Male-User-icon.png);
+}
+
+.botonClose:before {
+    background-image: url(/images/icon-close.png);
+}
+
+.addDireccion:before {
+    background-image: url(/images/map.png);
+}
+
+.addTransportista:before {
+    background-image: url(/images/addTransportista.png);
+}
+
+/*
+#modalCalculadora {
+    margin-top: 200px;
+}*/
+/*$red: #cc4e46;
+$darkred: darken($red, 0.2);*/
+.footable > thead > tr > th, .footable > thead > tr > td {
+    position: relative;
+}
+
+
+/*.footable > tfoot  > tr > td{
+  border: none;
+}*/
+.footable {
+  border-spacing: 0;
+  width: 100%;
+/*  border: solid #ccc 1px;*/
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+ /* font-family: 'trebuchet MS' , 'Lucida sans' , Arial;*/
+  font-size: 14px;
+  color: #444;
+  border-top: 1px solid #ccc;
+}
+
+.footable.breakpoint > tbody > tr > td.expand {
+  background: url('http://themergency.com/footable-demo/css/img/plus.png') no-repeat 5px center;
+  padding-left: 40px;
+}
+
+.footable.breakpoint > tbody > tr.footable-detail-show > td.expand {
+  background: url('http://themergency.com/footable-demo/css/img/minus.png') no-repeat 5px center;
+}
+
+.footable.breakpoint > tbody > tr.footable-row-detail {
+  background: #eee;
+}
+
+.footable > tbody > tr:hover {
+  background:#FFF9C4;
+}
+
+
+
+
+.footable.breakpoint > tbody > tr:hover:not(.footable-row-detail) {
+  cursor: pointer;
+}
+
+.footable > tbody > tr > td, .footable > thead > tr > th {
+ /* border-left: 1px solid #ccc;*/
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+    .footable > thead > tr > th, .footable > thead > tr > td {
+        background-color: #BDBDBD;
+        /* background-color: $red;
+  background-image: -webkit-gradient(linear, left top, left bottom, from($red), to($darkred));
+  background-image: -webkit-linear-gradient(top, $red, $darkred);
+  background-image: -moz-linear-gradient(top, $red, $darkred);
+  background-image: -ms-linear-gradient(top, $red, $darkred);
+  background-image: -o-linear-gradient(top, $red, $darkred);
+  background-image: linear-gradient(to bottom, $red, $darkred);
+  -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+  -moz-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+  box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;*/
+        /*border-top: none; */
+        border: 1px solid #ccc;
+        text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    }
+
+.footable > thead > tr > th:first-child, .footable > thead > tr > td:first-child {
+  -moz-border-radius: 6px 0 0 0;
+  -webkit-border-radius: 6px 0 0 0;
+  border-radius: 6px 0 0 0;
+}
+
+.footable > thead > tr > th:last-child, .footable > thead > tr > td:last-child {
+  -moz-border-radius: 0 6px 0 0;
+  -webkit-border-radius: 0 6px 0 0;
+  border-radius: 0 6px 0 0;
+}
+
+.footable > thead > tr > th:only-child, .footable > thead > tr > td:only-child {
+  -moz-border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
+}
+
+.footable > tbody > tr:last-child > td:first-child {
+  -moz-border-radius: 0 0 0 6px;
+  -webkit-border-radius: 0 0 0 6px;
+  border-radius: 0 0 0 6px;
+}
+
+.footable > tbody > tr:last-child > td:last-child {
+  -moz-border-radius: 0 0 6px 0;
+  -webkit-border-radius: 0 0 6px 0;
+  border-radius: 0 0 6px 0;
+}
+
+.footable > tbody img {
+  vertical-align:middle;
+}
+
+.resaltarDatosFactura {
+    background-color: burlywood;
+}
+
+.atenuarDetalleFactura {
+    background-color: cadetblue;
+}
+
+
+.list-group,
+.list-group-item {
+    display: block;
+}
+
+
+/**@brand-primary: darken(#428bca, 6.5%); // #337ab7
+@brand-success: #5cb85c;
+@brand-info:    #5bc0de;
+@brand-warning: #f0ad4e;
+@brand-danger:  #d9534f;*/
+
+.badge-warning {
+    background-color: #f0ad4e;
+}
+
+.badge-danger {
+    background-color: #d9534f;
+}
+
+
+.tab-content > .active, .pill-content > .active {
+    background-color: #eeeeee;
+    padding: 5px 15px;
+}
+
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    background-color: #eeeeee;
+    text-decoration: underline;
+}
+
+.tab-content > .tab-pane, .pill-content > .pill-pane {
+    padding: 10px 15px;
+}
+
+
+
+
+/* SWITCH */
+.onoffswitch {
+    position: relative;
+    width: 35px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.onoffswitch-checkbox {
+    display: none;
+}
+
+.onoffswitch-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    height: 22px;
+    padding: 0;
+    line-height: 22px;
+    border: 0px solid #E3E3E3;
+    border-radius: 16px;
+    background-color: #FFFFFF;
+}
+
+.onoffswitch-label:before {
+    content: "";
+    display: block;
+    width: 16px;
+    margin: 3px;
+    background: #A1A1A1;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 14px;
+    border-radius: 16px;
+    box-shadow: 0 6px 12px 0px #757575;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label {
+    background-color: #49E845;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+border-color: #49E845;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+    right: 0px;
+    background-color: #27A1CA;
+    box-shadow: 3px 6px 18px 0px rgba(0, 0, 0, 0.2);
+}
+/* END SWITCH */
+
+
+#menuCategoriaPermisos {
+    min-height: 350px;
+}
+
+.menuUsuarios {
+    width: 100%;
+    min-height: 300px;
+}
+
+.divMenuUsuarios {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.menuUsuarios li {
+    list-style: none;
+    background-color: aliceblue;
+    border-bottom: 1px dotted Gray;
+}
+
+.menuUsuarios li.selected {
+    /*background-color: GoldenRod*/
+}
+
+.selected {
+    border: 1px solid #888;
+    background-color: cornflowerblue;
+}
+
+
+
+
+
+/* Alertas Flotantes */
+/* The alert message box */
+.alert {
+    padding: 15px;
+    margin-top: 35px;
+    color: white;
+    font-weight: bold;
+}
+
+.alert-warning {
+    background-color: #E5A218;
+}
+
+.alert-error {
+    background-color: #f44336;
+}
+
+/* The close button */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+    color: black;
+}

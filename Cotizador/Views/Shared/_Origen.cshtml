@@ -1,0 +1,26 @@
+﻿@model Cotizador.Models.OrigenViewModels
+
+@if (Model.Disabled)
+{
+    @Html.DropDownList(
+                Model.OrigenSelectId,
+                Model.Origenes, "Seleccione",
+                new
+                {
+                    id = Model.OrigenSelectId,
+                    @class = "form-control",
+                    @disabled = "disabled"
+                })
+}
+else
+{
+    @Html.DropDownList(
+            Model.OrigenSelectId,
+            Model.Origenes, "Seleccione",
+            new
+            {
+                id = Model.OrigenSelectId,
+                @class = "form-control"
+
+            })
+}

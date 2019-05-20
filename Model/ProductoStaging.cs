@@ -30,5 +30,10 @@ namespace Model
         public String proveedor { get; set; }
         public String monedaMP { get; set; }
         public String monedaProveedor { get; set; }
+
+        public String unidadSunat { get; set; }
+        public String unidadAlternativaSunat { get; set; }
+        public String unidadProveedorSunat { get; set; }
+
     }
 }
