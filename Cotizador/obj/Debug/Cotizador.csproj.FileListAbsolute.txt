@@ -894,3 +894,5 @@ D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
+D:\Repo\freelos\cotizador\Cotizador\bin\Spire.License.xml
+D:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.xml

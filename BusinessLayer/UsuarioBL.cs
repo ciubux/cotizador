@@ -23,6 +23,16 @@ namespace BusinessLayer
             return usuario;
         }
 
+        public Usuario getUsuario(Guid idUsuario)
+        {
+            Usuario usuario = null;
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                usuario = usuarioDAL.getUsuario(idUsuario);
+            }
+            return usuario;
+        }
+
         public void updateCotizacionSerializada(Usuario usuario, String cotizacionSerializada)
         {
             using (var usuarioDAL = new UsuarioDAL())

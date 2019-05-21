@@ -284,8 +284,156 @@ jQuery(function ($) {
         ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Rol/CancelarCreacionRol', null)
     })
 
+    $("body").on('click', ".btnVerUsuariosRol", function () {
+        var idRol = $(this).attr("idRol");
+        window.location = '/Rol/Usuarios?idRol=' + idRol;
+    });
+
+    $("#btnAgregarUsuarioRol").click(function () {
+        //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+
+        var idUsuario = $("#idUsuario").val();
+        var idRol = $("#idRol").val();
+        
+        if (idUsuario == "") {
+            $.alert({
+                title: "Ocurrió un error",
+                type: 'red',
+                content: "Debe seleccionar un usuario",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+
+            return;
+        }
+
+        $('body').loadingModal({
+            text: 'Agregando Usuario'
+        });
+
+        $.ajax({
+            url: "/Rol/AddUsuarioRol",
+            type: 'POST',
+            data: {
+                idUsuario: idUsuario,
+                idRol: idRol
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    
+                    var usuario = resultado.usuario;
+
+                    var clienteRow = '<tr data-expanded="true">' +
+                        '<td>  ' + usuario.idUsuario + '</td>' +
+                        '<td>  ' + usuario.email + '  </td>' +
+                        '<td>  ' + usuario.nombre + '  </td>' +
+                        '<td><button type="button" class="btn btn-danger btnQuitarUsuarioRol" idUsuario="' + usuario.idUsuario + '">Remover</button></td>' +
+                        '</tr>';
+
+                    $("#tableUsuariosRol").append(clienteRow);
+
+                    FooTable.init('#tableUsuariosRol');
+
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+
+                }
+                else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+                $('body').loadingModal('hide');
+            },
+            error: function () {
+                $('body').loadingModal('hide');
+            }
+        });
+    });
 
 
+    $("body").on('click', ".btnQuitarUsuarioRol", function () {
+        //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+        var that = this;
+        var emailUsuario = $(this).closest("tr").find("td:nth-child(2)").html();
+        var nomUsuario = $(this).closest("tr").find("td:nth-child(3)").html();
+        $.confirm({
+            title: 'Confirmar operación',
+            content: 'Esta seguro que desea remover el usuario: ' + emailUsuario + ' - ' + nomUsuario,
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'SI',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        var idUsuario = $(that).attr("idUsuario");
+                        var idRol = $("#idRol").val();
+                        $.ajax({
+                            url: "/Rol/QuitarUsuarioRol",
+                            type: 'POST',
+                            data: {
+                                idUsuario: idUsuario,
+                                idRol: idRol
+                            },
+                            type: 'POST',
+                            dataType: 'JSON',
+                            success: function (resultado) {
+                                if (resultado.success == 1) {
+
+                                    $(that).closest("tr").remove();
+                                    FooTable.init('#tableUsuariosRol');
+
+                                    $.alert({
+                                        title: "Operación exitosa",
+                                        type: 'green',
+                                        content: resultado.message,
+                                        buttons: {
+                                            OK: function () { }
+                                        }
+                                    });
+
+                                }
+                                else {
+                                    $.alert({
+                                        title: "Ocurrió un error",
+                                        type: 'red',
+                                        content: resultado.message,
+                                        buttons: {
+                                            OK: function () { }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                },
+                noAplica: {
+                    text: 'NO',
+                    btnClass: 'btn-danger',
+                    action: function () {
+                    }
+                }
+            }
+        });
+
+
+    });
 
     var ft = null;
 

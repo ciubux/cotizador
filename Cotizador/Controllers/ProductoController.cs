@@ -927,7 +927,7 @@ namespace Cotizador.Controllers
                         pos = posicionInicial + 30;
                         try
                         {
-                            productoStaging.Estado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper() == "SI" ? 1 : 0;
+                            productoStaging.Estado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
                         }
                         catch (Exception e)
                         {

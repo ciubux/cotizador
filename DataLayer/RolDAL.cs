@@ -138,7 +138,44 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
 
             return obj;
+        }
+        
 
+        public List<Usuario> getUsuarios(int idRol)
+        {
+            var objCommand = GetSqlCommand("ps_rol_usuarios");
+            InputParameterAdd.Int(objCommand, "idRol", idRol);
+            DataTable dataTable = Execute(objCommand);
+            List<Usuario> lista = new List<Usuario>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Usuario obj = new Usuario();
+                obj.idUsuario = Converter.GetGuid(row, "id_usuario");
+                obj.email = Converter.GetString(row, "email");
+                obj.nombre = Converter.GetString(row, "nombre");
+                lista.Add(obj);
+            }
+
+            return lista;
+        }
+
+        public void agregarUsuarioRol(int idRol, Guid idUsuario, Guid idUsuarioModifica)
+        {
+            var objCommand = GetSqlCommand("pi_rol_usuario");
+            InputParameterAdd.Int(objCommand, "idRol", idRol);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuarioModifica", idUsuarioModifica);
+            ExecuteNonQuery(objCommand);
+        }
+
+        public void quitarUsuarioRol(int idRol, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pd_rol_usuario");
+            InputParameterAdd.Int(objCommand, "idRol", idRol);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            ExecuteNonQuery(objCommand);
         }
     }
 }

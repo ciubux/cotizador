@@ -42,5 +42,29 @@ namespace BusinessLayer
                 return dal.updateRol(obj);
             }
         }
+
+        public List<Usuario> getUsuarios(int idRol)
+        {
+            using (var dal = new RolDAL())
+            {
+                return dal.getUsuarios(idRol);
+            }
+        }
+
+        public void agregarUsuarioRol(int idRol, Guid idUsuario, Guid idUsuarioModifica)
+        {
+            using (var dal = new RolDAL())
+            {
+                dal.agregarUsuarioRol(idRol, idUsuario, idUsuarioModifica);
+            }
+        }
+
+        public void quitarUsuarioRol(int idRol, Guid idUsuario)
+        {
+            using (var dal = new RolDAL())
+            {
+                dal.quitarUsuarioRol(idRol, idUsuario);
+            }
+        }
     }
 }

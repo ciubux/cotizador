@@ -123,21 +123,94 @@ END
 
 
 /* **** 5 **** */
+CREATE TABLE ROL_USUARIO(
+	[id_rol] [int] NOT NULL,
+	[id_usuario] UNIQUEIDENTIFIER NOT NULL,
+	[usuario_modificacion] [uniqueidentifier] NULL,
+	[fecha_modificacion] [datetime] NULL
+) ON [PRIMARY]
 
 
 
 
 /* **** 6 **** */
+CREATE PROCEDURE ps_usuario_get
+	@idUsuario uniqueidentifier
+AS
+BEGIN
+	SELECT id_usuario, cargo, nombre , contacto, es_cliente, estado, email, id_ciudad
+	FROM USUARIO 
+	WHERE id_usuario = @idUsuario;
+END
 
 
 
 
 /* **** 7 **** */
-
+CREATE PROCEDURE ps_rol_usuarios
+	@idRol int
+AS
+BEGIN
+	SELECT u.id_usuario, u.cargo, u.nombre , u.contacto, u.es_cliente, u.estado, u.email, u.id_ciudad
+	FROM USUARIO u 
+	INNER JOIN ROL_USUARIO ru ON ru.id_usuario = u.id_usuario 
+	WHERE ru.id_rol = @idRol;
+END
 
 
 
 
 /* **** 8 **** */
+CREATE PROCEDURE pi_rol_usuario
+	@idRol int,
+	@idUsuario uniqueidentifier,
+	@idUsuarioModifica uniqueidentifier
+AS
+BEGIN
+	INSERT INTO ROL_USUARIO
+           ([id_rol]
+           ,[id_usuario]
+           ,[usuario_modificacion]
+           ,[fecha_modificacion])
+     VALUES
+            (@idRol
+           ,@idUsuario
+           ,@idUsuarioModifica
+           ,GETDATE());
+END
+
+
+
+
+/* **** 9 **** */
+CREATE PROCEDURE pd_rol_usuario
+	@idRol int,
+	@idUsuario uniqueidentifier
+AS
+BEGIN
+	DELETE FROM ROL_USUARIO
+    WHERE id_rol = @idRol AND id_usuario = @idUsuario;
+END
+
+
+
+
+
+/* **** 10 **** */
+CREATE PROCEDURE ps_usuarios_search
+@textoBusqueda varchar(50)
+AS
+BEGIN
+
+SELECT id_usuario, email, nombre
+FROM USUARIO u
+WHERE estado > 0
+AND (REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(email, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  LIKE '%'+@textoBusqueda+'%' OR
+nombre LIKE '%'+@textoBusqueda+'%')
+
+
+END
+
+
 
 

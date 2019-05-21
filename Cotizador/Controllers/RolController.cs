@@ -21,6 +21,11 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult List()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!usuario.visualizaRoles && !usuario.modificaRol)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaRoles;
             
@@ -93,7 +98,7 @@ namespace Cotizador.Controllers
 
             if (!usuario.modificaRol)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("List", "Rol");
             }
 
 
@@ -244,7 +249,133 @@ namespace Cotizador.Controllers
             //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
             return resultado;
         }
-        
+
+        public ActionResult Usuarios(int? idRol)
+        {
+            RolBL bl = new RolBL();
+            Rol rol = new Rol();
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaRol)
+            {
+                return RedirectToAction("List", "Rol");
+            }
+
+            if (idRol == null || idRol == 0)
+            {
+                return RedirectToAction("Index", "Rol");
+            }
+
+            rol = bl.getRol(idRol.Value);
+            rol.usuario = usuario;
+            rol.IdUsuarioRegistro = usuario.idUsuario;
+            rol.usuarios = bl.getUsuarios(rol.idRol);
+
+            
+            ViewBag.rol = rol;
+            return View();
+        }
+
+        [HttpPost]
+        public String AddUsuarioRol()
+        {
+            int success = 1;
+            string message = "";
+            UsuarioBL usuarioBl = new UsuarioBL();
+            RolBL bl = new RolBL();
+
+
+            Guid idUsuario = Guid.Parse(this.Request.Params["idUsuario"]);
+            int idRol = int.Parse(this.Request.Params["idRol"]);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Rol rol = bl.getRol(idRol);
+            rol.usuario = usuario;
+            rol.IdUsuarioRegistro = usuario.idUsuario;
+            rol.usuarios = bl.getUsuarios(rol.idRol);
+
+            if (!usuario.modificaRol)
+            {
+                return "";
+            }
+
+
+            foreach (Usuario item in rol.usuarios)
+            {
+                if (item.idUsuario == idUsuario)
+                {
+                    success = 0;
+                    message = "El usuario ya está agregado.";
+                }
+            }
+
+            Usuario addItem = null;
+            if (success == 1)
+            {
+                addItem = usuarioBl.getUsuario(idUsuario);
+
+                bl.agregarUsuarioRol(rol.idRol, addItem.idUsuario, usuario.idUsuario);
+                rol.usuarios.Add(addItem);
+                
+                message = "Se agregó el usuario correctamente.";
+            }
+
+            String itemJson = JsonConvert.SerializeObject(usuario);
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\", \"usuario\":" + itemJson + "}";
+        }
+
+        [HttpPost]
+        public String QuitarUsuarioRol()
+        {
+            int success = 0;
+            string message = "";
+            UsuarioBL usuarioBl = new UsuarioBL();
+            RolBL bl = new RolBL();
+
+            Guid idUsuario = Guid.Parse(this.Request.Params["idUsuario"]);
+            int idRol = int.Parse(this.Request.Params["idRol"]);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Rol rol = bl.getRol(idRol);
+            rol.usuario = usuario;
+            rol.IdUsuarioRegistro = usuario.idUsuario;
+            rol.usuarios = bl.getUsuarios(rol.idRol);
+
+
+            int removeAt = -1;
+            foreach (Usuario item in rol.usuarios)
+            {
+                if (item.idUsuario == idUsuario)
+                {
+                    success = 1;
+                    removeAt = rol.usuarios.IndexOf(item);
+                }
+            }
+            
+            rol.usuario = usuario;
+
+            if (!usuario.modificaRol)
+            {
+                success = 0;
+            }
+
+            
+            if (success == 1)
+            {
+                bl.quitarUsuarioRol(rol.idRol, idUsuario);
+                rol.usuarios.RemoveAt(removeAt);
+                message = "Se removió el usuario.";
+            }
+            else
+            {
+                message = "El usuario no existe o no esta agregado al rol.";
+            }
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
+
         public void ChangeInputString()
         {
             Rol obj = (Rol) this.RolSession;

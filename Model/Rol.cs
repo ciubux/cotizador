@@ -11,6 +11,7 @@ namespace Model
         public Rol() 
         {
             this.permisos = new List<Permiso>();
+            this.usuarios = new List<Usuario>();
         }
 
         public int idRol { get; set; }
@@ -20,7 +21,9 @@ namespace Model
         public String nombre { get; set; }
 
         public List<Permiso> permisos { get; set; }
-        public Usuario usuario { get; set; }
+
+
+        public List<Usuario> usuarios { get; set; }
         public override string ToString()
         {
             return "Rol: " + this.nombre + " - Cod: " + this.codigo;

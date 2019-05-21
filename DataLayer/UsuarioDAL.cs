@@ -91,7 +91,26 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             ExecuteNonQuery(objCommand);      
         }
-        
+
+        public Usuario getUsuario(Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_usuario_get");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            DataTable dataTable = Execute(objCommand);
+
+            Usuario obj = new Usuario();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                obj.idUsuario = Converter.GetGuid(row, "id_usuario");
+                obj.cargo = Converter.GetString(row, "cargo");
+                obj.nombre = Converter.GetString(row, "nombre");
+                obj.email = Converter.GetString(row, "email");
+                obj.contacto = Converter.GetString(row, "contacto");
+            }
+
+            return obj;
+        }
 
         public Usuario getUsuarioLogin(Usuario usuario)
         {
