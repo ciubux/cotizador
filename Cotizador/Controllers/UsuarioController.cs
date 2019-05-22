@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BusinessLayer;
 
 namespace Cotizador.Controllers
 {
@@ -13,6 +14,25 @@ namespace Cotizador.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public String SearchUsuarios()
+        {
+            String data = this.Request.Params["data[q]"];
+            UsuarioBL bl = new UsuarioBL();
+            List<Usuario> lista = bl.searchUsuarios(data);
+            
+            String resultado = "{\"q\":\"" + data + "\",\"results\":[";
+            Boolean existeItem = false;
+            foreach (Usuario item in lista)
+            {
+                resultado += existeItem ? "," : "";
+                resultado += "{\"id\":\"" + item.idUsuario + "\",\"text\":\"" + item.nombre + " (" + item.email + ")\"}";
+                existeItem = true;
+            }
+            resultado = resultado.Substring(0, resultado.Length) + "]}";
+
+            return resultado;
         }
 
         public ActionResult usuariosCotizacionList()

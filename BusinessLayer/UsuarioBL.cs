@@ -72,5 +72,13 @@ namespace BusinessLayer
                 usuarioDAL.updatePermiso(usuarioList, permiso, usuario);
             }
         }
+
+        public List<Usuario> searchUsuarios(String textoBusqueda)
+        {
+            using (var dal = new UsuarioDAL())
+            {
+                return dal.searchUsuarios(textoBusqueda);
+            }
+        }
     }
 }

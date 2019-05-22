@@ -18,6 +18,26 @@ namespace DataLayer
         {
         }
 
+        public List<Usuario> searchUsuarios(String textoBusqueda)
+        {
+            var objCommand = GetSqlCommand("ps_usuarios_search");
+            InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
+            DataTable dataTable = Execute(objCommand);
+
+            List<Usuario> usuarioList = new List<Usuario>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Usuario usuario = new Usuario();
+                usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                usuario.email = Converter.GetString(row, "email");
+                usuario.nombre = Converter.GetString(row, "nombre");
+                usuarioList.Add(usuario);
+            }
+
+            return usuarioList;
+        }
+
         public void updateCotizacionSerializada(Usuario usuario,String cotizacionSerializada)
         {
             var objCommand = GetSqlCommand("pu_cotizacionSerializada");

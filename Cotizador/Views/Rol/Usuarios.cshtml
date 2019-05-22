@@ -1,6 +1,6 @@
 ﻿@{
-    ViewBag.Title = "Listado de Usuarios asignados al Rol";
     Model.Rol rol = ViewBag.rol;
+    ViewBag.Title = "Listado de Usuarios asignados al Rol \"" + rol.nombre + "\"";
 
     var itemHeredaChecked = "";
 }
@@ -59,7 +59,7 @@
                                 <td>  @item.email </td>
                                 <td>  @item.nombre </td>
                                 <td>
-                                    <button type="button" class="btn btn-danger btnQuitarUsuarioRol" idCliente="@item.idUsuario">Remover</button>
+                                    <button type="button" class="btn btn-danger btnQuitarUsuarioRol" idUsuario="@item.idUsuario">Remover</button>
                                 </td>
                             </tr>
                         }

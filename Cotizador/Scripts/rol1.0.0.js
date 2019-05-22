@@ -9,6 +9,9 @@ jQuery(function ($) {
         $("#btnBusqueda").click();
         //cargarChosenCliente();
         verificarSiExisteCliente();
+
+        cargarChosenUsuario();
+        FooTable.init('#tableUsuariosRol');
     });
 
     function verificarSiExisteCliente() {
@@ -435,10 +438,28 @@ jQuery(function ($) {
 
     });
 
+
+    function cargarChosenUsuario() {
+        $("#idUsuario").chosen({ placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" }).on('chosen:showing_dropdown', function (evt, params) {
+
+        });
+
+        $("#idUsuario").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Usuario/SearchUsuarios"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });
+    }
+
+
+
     var ft = null;
-
     
-
     /*Evento que se dispara cuando se hace clic en el boton EDITAR en la edición de la grilla*/
     $(document).on('click', "button.footable-show", function () {
 
@@ -565,9 +586,10 @@ jQuery(function ($) {
                         '<td>  ' + list[i].nombre + '  </td>' +
                         '<td>' +
                         '<button type="button" class="' + list[i].idRol + ' btnEditarRol btn btn-primary ">Editar</button>' +
+                        '&nbsp;&nbsp;&nbsp;<button type="button" idRol="' + list[i].idRol + '" class="btnVerUsuariosRol btn btn-secundary">Usuarios</button>' +
                         '</td>' +
                         '</tr>';
-
+                    
                     $("#tableRoles").append(ItemRow);
 
                 }

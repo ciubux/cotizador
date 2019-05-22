@@ -321,7 +321,7 @@ namespace Cotizador.Controllers
                 message = "Se agregó el usuario correctamente.";
             }
 
-            String itemJson = JsonConvert.SerializeObject(usuario);
+            String itemJson = JsonConvert.SerializeObject(addItem);
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\", \"usuario\":" + itemJson + "}";
         }

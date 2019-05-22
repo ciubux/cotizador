@@ -70,7 +70,7 @@
                     <th data-name="idRol" data-visible="false"></th>
                     <th data-name="codigo" data-visible="true">Código</th>
                     <th data-name="nombre" data-visible="true" data-sortable="true">Nombre</th>
-
+                    
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
             </thead>
@@ -78,6 +78,15 @@
         </table>
     </form>
 </div>
+
+@if (!rol.usuario.modificaRol)
+{
+<style>
+    .btnEditarRol, .btnVerUsuariosRol {
+        display: none;
+    }
+</style>
+}
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/rol")
