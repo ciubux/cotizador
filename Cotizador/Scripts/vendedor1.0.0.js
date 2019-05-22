@@ -140,15 +140,7 @@
 
        
 
-    function verificarSiExisteCliente() {
-        if ($("#idVendedor").val().trim() != "0") {
-            $("#btnFinalizarEdicionVendedor").html('Finalizar Edición');
-        }
-        else {
-            $("#btnFinalizarEdicionVendedor").html('Finalizar Creación');
-        }
-
-    }
+    
 
 
 
@@ -224,7 +216,7 @@
 
     $("#btnFinalizarEdicionVendedor").click(function () {
         /*Si no tiene codigo el cliente se está creando*/
-        if ($("#vendedor_idVendedor").val() =='0') {
+        if ($("#idVendedor").val() =='0') {
             crearVendedor();
         }
         else {
@@ -236,7 +228,7 @@
 
     function editarVendedor() {
 
-        if (!validacionDatosVendedor())
+        if (!validacionDatosVendedor2())
             return false;
 
 
@@ -276,15 +268,79 @@
     }
 
 
-
-
     function validacionDatosVendedor() {
 
-        if ($("#vendedor_codigo").val().length < 2) {
+        if ($("#vendedor_codigo").val().length >= 3) {
             $.alert({
                 title: "Código Inválido",
                 type: 'orange',
-                content: 'Debe ingresar un Código de origen válido.',
+                content: 'Debe ingresar un Código de Vendedor válido.',
+                buttons: {
+                    OK: function () { $('#vendedor_codigo').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#vendedor_descripcion").val().length < 5) {
+            $.alert({
+                title: "Nombre Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un nombre válido.',
+                buttons: {
+                    OK: function () { $('#vendedor_descripcion').focus(); }
+                }
+            });
+            return false;
+        }
+        if ($("#vendedor_pass").val().length < 5) {
+            $.alert({
+                title: "Contraseña Inválida",
+                type: 'orange',
+                content: 'Debe ingresar una contraseña válida.',
+                buttons: {
+                    OK: function () { $('#vendedor_pass').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#vendedor_idCiudad").val() === "") {
+            $.alert({
+                title: "Ciudad Inválida",
+                type: 'orange',
+                content: 'Debe ingresar una Sede para el usuario.',
+                buttons: {
+                    OK: function () { $('#vendedor_idCiudad').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#vendedor_email").val().indexOf("@mpinstitucional.com") == -1)
+        {
+            $.alert({
+                title: "Email Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un Email válido. Ejem:prueba@mpinstitucional.com',
+                buttons: {
+                    OK: function () { $('#vendedor_email').focus(); }
+                }
+            });
+            return false;
+        }
+
+        return true;
+
+    }
+
+    function validacionDatosVendedor2() {
+
+        if ($("#vendedor_codigo").val().length >= 3) {
+            $.alert({
+                title: "Código Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un Código de Vendedor válido.',
                 buttons: {
                     OK: function () { $('#vendedor_codigo').focus(); }
                 }
@@ -304,6 +360,32 @@
             return false;
         }
 
+        if ($("#vendedor_idCiudad").val() === "") {
+            $.alert({
+                title: "Ciudad Inválida",
+                type: 'orange',
+                content: 'Debe ingresar una sede para el usuario.',
+                buttons: {
+                    OK: function () { $('#vendedor_idCiudad').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#vendedor_email").val().indexOf("@mpinstitucional.com") == -1)
+        {
+            $.alert({
+                title: "Email Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un Email válido. Ejem:prueba@mpinstitucional.com',
+                buttons: {
+                    OK: function () { $('#vendedor_email').focus(); }
+                }
+            });
+            return false;
+        }
+        
+
         return true;
 
     }
@@ -320,6 +402,7 @@
         changeInputString("codigo", $("#vendedor_codigo").val());
     });
     $("#vendedor_email").change(function () {
+
         changeInputString("email", $("#vendedor_email").val());
     });   
 

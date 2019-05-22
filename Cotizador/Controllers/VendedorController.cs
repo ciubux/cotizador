@@ -156,6 +156,7 @@ namespace Cotizador.Controllers
             }
             else
             {
+                obj.pass =null;
                 obj = bL.updateVendedor(obj);
                 this.Session[Constantes.VAR_SESSION_VENDEDOR] = null;
             }
@@ -272,12 +273,11 @@ namespace Cotizador.Controllers
         private void instanciarVendedor()
         {
             Vendedor obj = new Vendedor();
-            
-            //obj.idOrigen = 0;
+            obj.idVendedor = 0;           
             obj.estado = 1;
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            //obj.usuario.idUsuario = usuario.idUsuario;
-            obj.usuario = usuario;
+            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];                
+            obj.usuario = user;
+
             this.Session[Constantes.VAR_SESSION_VENDEDOR] = obj;
         }
 

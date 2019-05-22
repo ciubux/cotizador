@@ -1,4 +1,4 @@
-ALTER   procedure [dbo].[PS_VENDEDORES](@estado int,@cod VARCHAR(2),@descripcion varchar(50),@email varchar(50))
+create procedure [dbo].[ps_vendedores](@estado int,@cod VARCHAR(2),@descripcion varchar(50),@email varchar(50))
 AS BEGIN 
 IF @cod IS NULL  OR @cod ='' 
 begin

@@ -1,4 +1,4 @@
-ALTER  PROCEDURE [dbo].[PI_VENDEDOR]
+create PROCEDURE [dbo].[pi_vendedor]
 ( 
   @email varchar(50),
   @codigo varchar(20),
@@ -10,9 +10,11 @@ ALTER  PROCEDURE [dbo].[PI_VENDEDOR]
   @usuario_creacion uniqueidentifier,  
   @maximo_descuento decimal,
   @id_ciudad uniqueidentifier,
-  @newid  uniqueidentifier OUTPUT  )
+  @newid uniqueidentifier
+   )
 as begin 
-set @newid=newid()
+
+set @newid=NEWID()
 insert into usuario
 			(id_usuario,
 			email,
@@ -25,7 +27,8 @@ insert into usuario
 			usuario_creacion,
 			fecha_creacion,
 			usuario_modificacion,
-			fecha_modificacion,id_ciudad)
+			fecha_modificacion,
+			id_ciudad)
 			values( @newid,
 					@email,
 					PWDENCRYPT(@pass),
@@ -37,7 +40,8 @@ insert into usuario
 					@usuario_creacion,
 					getdate(),
 					@usuario_creacion,
-					getdate(),@id_ciudad)
+					getdate(),
+					@id_ciudad)
 insert  into VENDEDOR(
 						id_usuario,
 						codigo,
@@ -47,8 +51,7 @@ insert  into VENDEDOR(
 						fecha_creacion,
 						usuario_modificacion,
 						fecha_modificacion) 
-						values (
-								@newid,								
+						values (@newid,								
 								@codigo,
 								@nombre,
 								@estado,
@@ -56,6 +59,5 @@ insert  into VENDEDOR(
 								getdate(),
 								@usuario_creacion,
 								getdate()
-								)	
-	  
+								)  
   END

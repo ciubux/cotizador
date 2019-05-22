@@ -179,8 +179,8 @@ namespace Model
 
 
         /*Vendedores*/
-        public bool modificaVendedores { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_VENDEDORES)).FirstOrDefault() != null; } }
-        public bool visualizaVendedores { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }
+        public bool modificaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_VENDEDORES)).FirstOrDefault() != null; } }
+        public bool visualizaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }
         
 
         /*Administra Permisos*/
@@ -188,9 +188,7 @@ namespace Model
 
         public bool modificaDireccionEntrega { get; set; }
 
-        /*Administra Permisos*/
-        public bool modificaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ORIGEN)).FirstOrDefault() != null; } }
-
+        
     }
 }
 

@@ -151,6 +151,9 @@
 
                             case 38: linkAsignacionPermisos = "ative"; linkMaestros = "active"; break;
 
+                            case 41: linkBusquedaVendedor = "ative"; linkMaestros = "active"; break;
+                            case 42: linkMantenimientoVendedor = "ative"; linkMaestros = "active"; break;
+
 
 
                         }
@@ -349,13 +352,13 @@
                                     }
 
 
-                                    @if (usuario.modificaVendedor || usuario.visualizaVendedores)
+                                    @if (usuario.modificaVendedor || usuario.visualizaVendedor)
                                     {
-                                        <li id="linkBusquedaSubDistribuidor" class="@linkBusquedaVendedor">@Html.ActionLink("Vendedor - Búsqueda", "Lista", "Vendedor")</li>
+                                        <li id="linkBusquedaVendedor" class="@linkBusquedaVendedor">@Html.ActionLink("Vendedor - Búsqueda", "Lista", "Vendedor")</li>
                                     }
                                     @if (usuario.modificaVendedor)
                                     {
-                                        <li id="linkCRSubDistribuidor" class="@linkMantenimientoVendedor">@Html.ActionLink("Vendedor - Crear/Modificar ", "Editar", "Vendedor")</li>
+                                        <li id="linkMantenimientoVendedor" class="@linkMantenimientoVendedor">@Html.ActionLink("Vendedor - Crear/Modificar ", "Editar", "Vendedor")</li>
                                     }
 
 

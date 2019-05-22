@@ -23,7 +23,7 @@ namespace DataLayer
 
         public List<Vendedor> getVendedores(Vendedor vendedor)
         {
-            var objCommand = GetSqlCommand("PS_VENDEDORES");
+            var objCommand = GetSqlCommand("ps_vendedores");
             List<Vendedor> lista = new List<Vendedor>();
             
             InputParameterAdd.Int(objCommand, "estado", vendedor.estado);
@@ -49,7 +49,7 @@ namespace DataLayer
 
         public Vendedor getVendedor(int idVendedor)
         {
-            var objCommand = GetSqlCommand("PS_DETALLE_VENDEDORES");
+            var objCommand = GetSqlCommand("ps_detalle_vendedores");
             InputParameterAdd.Int(objCommand, "idUsuarioVenta", idVendedor);
             DataTable dataTable = Execute(objCommand);
             Vendedor obj = new Vendedor();
@@ -66,6 +66,7 @@ namespace DataLayer
                 obj.contacto = Converter.GetString(row, "contacto");                
                 obj.idCiudad = Converter.GetGuid(row, "id_ciudad");                
                 obj.maxdesapro = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
+                obj.pass = Converter.GetString(row, "pass");
 
             }
 
@@ -74,21 +75,23 @@ namespace DataLayer
 
         public Vendedor insertVendedor(Vendedor obj)
         {
-            obj.usuario = new Usuario(); 
+             
             var objCommand = GetSqlCommand("pi_vendedor");
             InputParameterAdd.Guid(objCommand, "usuario_creacion", obj.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
             InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion);
             InputParameterAdd.Int(objCommand, "estado", obj.estado);
-            InputParameterAdd.Varchar(objCommand, "email", obj.email);
-            InputParameterAdd.Varchar(objCommand, "pass", obj.pass);
+            InputParameterAdd.Varchar(objCommand, "email", obj.email);            
+            InputParameterAdd.VarcharEmpty(objCommand, "pass", obj.pass);                       
             InputParameterAdd.Guid(objCommand, "id_ciudad", obj.idCiudad);
             InputParameterAdd.Varchar(objCommand, "cargo", obj.cargo);
             InputParameterAdd.Varchar(objCommand, "contacto", obj.contacto);
             InputParameterAdd.Decimal(objCommand, "maximo_descuento", obj.maxdesapro);
-            OutputParameterAdd.Int(objCommand, "newid");
+
+            //OutputParameterAdd.UniqueIdentifier(objCommand, "newid");
+            InputParameterAdd.Guid(objCommand, "newid",null);
             ExecuteNonQuery(objCommand);
-            obj.usuario.idUsuario = (Guid)objCommand.Parameters["@newId"].Value;
+           
 
             return obj;
 
@@ -100,9 +103,9 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_vendedores");
             InputParameterAdd.Int(objCommand, "id_vendedor", obj.idVendedor);
             InputParameterAdd.Guid(objCommand, "usuario_modificacion", obj.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "codigo", obj.descripcion);
-            InputParameterAdd.Varchar(objCommand, "email", obj.codigo);
-            InputParameterAdd.Varchar(objCommand, "password", obj.pass);
+            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
+            InputParameterAdd.Varchar(objCommand, "email", obj.email);            
+            InputParameterAdd.Varchar(objCommand, "Newpassword", obj.pass);                        
             InputParameterAdd.Varchar(objCommand, "cargo", obj.cargo);
             InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion);
             InputParameterAdd.Varchar(objCommand, "contacto", obj.contacto);

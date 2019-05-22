@@ -54,3 +54,7 @@ The statement has been terminated.
 2019-04-25 23:22:37.1131|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
 2019-04-25 23:23:01.5061|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
 2019-04-25 23:24:46.7005|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
+2019-05-21 16:20:32.7446|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Could not find stored procedure 'pu_usuarioPermiso'.
+2019-05-21 17:09:21.4494|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Could not find stored procedure 'pu_usuarioPermiso'.
+2019-05-21 17:10:14.4586|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Could not find stored procedure 'pu_usuarioPermiso'.
+2019-05-21 17:26:09.0608|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Could not find stored procedure 'pu_usuarioPermiso'.
