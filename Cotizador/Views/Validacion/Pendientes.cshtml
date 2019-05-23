@@ -32,12 +32,12 @@
             <tbody>
                 @foreach(Model.AlertaValidacion obj in alertas)
                 {
-                <tr idAlertaValidacion="@obj.IdAlertaValidacion">
+                <tr idAlertaValidacion="@obj.IdAlertaValidacion" >
                     <td>@obj.CambioDesc</td>
                     <td>@obj.FechaCreacionDesc </td>
                     <td>@obj.UsuarioCreacion.nombre </td>
                     <td>
-                        <button type="button" class="btn btn-primary btnValidarAlerta" >Validar</button>
+                        <button idAlertaValidacion="@obj.IdAlertaValidacion" type="button" class="btn btn-primary btnValidarAlerta" >Validar</button>
                     </td>
                 </tr>
                 }

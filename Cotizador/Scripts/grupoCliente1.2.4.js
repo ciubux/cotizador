@@ -300,6 +300,7 @@ jQuery(function ($) {
 
 
     function validacionDatosGrupoCliente() {
+
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             $.alert({
                 title: "No selecionó Ciudad",
@@ -313,8 +314,22 @@ jQuery(function ($) {
             return false;
         }
 
+        var codigo = $("#grupoCliente_codigo").val().trim();
+        var nCodigo = codigo.length;
 
-      
+        if (nCodigo != 4) {
+            $.alert({
+                title: "Código inválido.",
+                type: 'orange',
+                content: 'El código del grupo debe ser de 4 dígitos.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#idCiudad").focus()
+            return false;
+        }
+
 
         if ($("#plazoCreditoSolicitado").is(':enabled')) {
 
