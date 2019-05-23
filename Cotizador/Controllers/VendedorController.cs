@@ -156,7 +156,7 @@ namespace Cotizador.Controllers
             }
             else
             {
-                obj.pass =null;
+                
                 obj = bL.updateVendedor(obj);
                 this.Session[Constantes.VAR_SESSION_VENDEDOR] = null;
             }
@@ -244,9 +244,6 @@ namespace Cotizador.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-
-
-
             if (this.Session[Constantes.VAR_SESSION_VENDEDOR] == null && idVendedor == null)
             {
                 instanciarVendedor();
@@ -275,6 +272,7 @@ namespace Cotizador.Controllers
             Vendedor obj = new Vendedor();
             obj.idVendedor = 0;           
             obj.estado = 1;
+            obj.cargo = " ";
             Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];                
             obj.usuario = user;
 
