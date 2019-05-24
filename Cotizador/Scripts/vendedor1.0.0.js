@@ -5,14 +5,24 @@
     var TITLE_EXITO = 'Operación Realizada';
 
     $(document).ready(function () {
-        $("#btnBusqueda").click();      
+        $("#btnBusqueda").click();
+        verificarSiExisteVendedor();
     });
 
+    function verificarSiExisteVendedor() {
+        if ($("#idVendedor").val().trim() != "0") {
+            $("#btnFinalizarEdicionVendedor").html('Finalizar Edición');
 
-    
+        }
+        else {
+            $("#btnFinalizarEdicionVendedor").html('Finalizar Creación');
+        }
 
- $("#btnBusqueda").click(function () {
-        
+    }
+
+
+    $("#btnBusqueda").click(function () {
+
         $("#btnBusqueda").attr("disabled", "disabled");
         $.ajax({
             url: "/Vendedor/SearchList",
@@ -36,7 +46,7 @@
                     if (list[i].estado == 1) { act = "Activo" };
                     if (list[i].estado == 0) { act = "Inactivo" };
                     var ItemRow = '<tr data-expanded="true">' +
-                        
+
                         '<td>  ' + list[i].idVendedor + '  </td>' +
                         '<td>  ' + list[i].descripcion + '  </td>' +
                         '<td>  ' + list[i].codigo + '  </td>' +
@@ -52,13 +62,11 @@
 
                 }
 
-                if (ItemRow.length > 0)
-                {
-                    $("#msgBusquedaSinResultados").hide();                   
+                if (ItemRow.length > 0) {
+                    $("#msgBusquedaSinResultados").hide();
                 }
-                else
-                {
-                    $("#msgBusquedaSinResultados").show();             
+                else {
+                    $("#msgBusquedaSinResultados").show();
                 }
 
             }
@@ -85,9 +93,9 @@
             },
             success: function () { }
         });
-    }  
+    }
 
-   
+
 
     $(document).on('click', "button.btnEditarVendedor", function () {
         //  desactivarBotonesVer();
@@ -129,18 +137,18 @@
             }
         });
 
-        
-    });   
 
-    
+    });
+
+
     $("#btnCancelarVendedor").click(function () {
 
         ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Vendedor/CancelarCreacionVendedor', null);
     });
 
-       
 
-    
+
+
 
 
 
@@ -216,7 +224,7 @@
 
     $("#btnFinalizarEdicionVendedor").click(function () {
         /*Si no tiene codigo el cliente se está creando*/
-        if ($("#idVendedor").val() =='0') {
+        if ($("#idVendedor").val() == '0') {
             crearVendedor();
         }
         else {
@@ -270,7 +278,7 @@
 
     function validacionDatosVendedor() {
 
-        if ($("#vendedor_codigo").val().length >= 3) {
+        if ($("#vendedor_codigo").val().indexOf(" ") !== -1 || $("#vendedor_codigo").val().length == 1 || $("#vendedor_codigo").val().length > 2 || $("#vendedor_codigo").val().length == "") {
             $.alert({
                 title: "Código Inválido",
                 type: 'orange',
@@ -282,7 +290,7 @@
             return false;
         }
 
-        if ($("#vendedor_descripcion").val().length < 5) {
+        if ($("#vendedor_descripcion").val().length < 4) {
             $.alert({
                 title: "Nombre Inválido",
                 type: 'orange',
@@ -317,8 +325,7 @@
             return false;
         }
 
-        if ($("#vendedor_email").val().indexOf("@mpinstitucional.com") == -1)
-        {
+        if ($("#vendedor_email").val().indexOf(" ") !== -1 || $("#vendedor_email").val().indexOf("@mpinstitucional.com") == -1 || $("#vendedor_email").val().length < 22) {
             $.alert({
                 title: "Email Inválido",
                 type: 'orange',
@@ -336,7 +343,7 @@
 
     function validacionDatosVendedor2() {
 
-        if ($("#vendedor_codigo").val().length >= 3) {
+        if ($("#vendedor_codigo").val().indexOf(" ") !== -1  || $("#vendedor_codigo").val().length == 1 || $("#vendedor_codigo").val().length > 2 || $("#vendedor_codigo").val().length == "") {
             $.alert({
                 title: "Código Inválido",
                 type: 'orange',
@@ -372,8 +379,7 @@
             return false;
         }
 
-        if ($("#vendedor_email").val().indexOf("@mpinstitucional.com") == -1)
-        {
+        if ($("#vendedor_email").val().indexOf(" ") !== -1 || $("#vendedor_email").val().indexOf("@mpinstitucional.com") == -1 || $("#vendedor_email").val().length < 22) {
             $.alert({
                 title: "Email Inválido",
                 type: 'orange',
@@ -384,7 +390,7 @@
             });
             return false;
         }
-        
+
 
         return true;
 
@@ -404,7 +410,7 @@
     $("#vendedor_email").change(function () {
 
         changeInputString("email", $("#vendedor_email").val());
-    });   
+    });
 
 
     $("#vendedor_pass").change(function () {
@@ -442,8 +448,8 @@
         });
     });
 
-   
-     
+
+
     function changeInputString(propiedad, valor) {
         $.ajax({
             url: "/Vendedor/ChangeInputString",
@@ -469,7 +475,6 @@
     }
 
 
-   
+
 
 });
-
