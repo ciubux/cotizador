@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Model
 {
-    public class Usuario
+    public class Usuario : Auditoria
     {
         public Usuario()
         {
@@ -183,7 +183,8 @@ namespace Model
         public bool modificaRol { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ROL)).FirstOrDefault() != null; } }
         public bool visualizaRoles { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_ROLES)).FirstOrDefault() != null; } }
 
-
+        public bool modificaUsuario { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_USUARIO)).FirstOrDefault() != null; } }
+        public bool visualizaUsuarios { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_USUARIOS)).FirstOrDefault() != null; } }
     }
 }
 

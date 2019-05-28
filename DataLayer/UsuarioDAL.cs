@@ -498,5 +498,25 @@ namespace DataLayer
 
             return usuario;
         }
+
+        public List<Usuario> getUsuariosMantenedor(Usuario usuario)
+        {
+            var objCommand = GetSqlCommand("ps_usuarios_mantenedor");
+            InputParameterAdd.Int(objCommand, "estado", usuario.Estado);
+            DataTable dataTable = Execute(objCommand);
+            List<Usuario> lista = new List<Usuario>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Usuario obj = new Usuario();
+                obj.idUsuario = Converter.GetGuid(row, "id_usuario");
+                obj.email = Converter.GetString(row, "email");
+                obj.nombre = Converter.GetString(row, "nombre");
+                obj.Estado = Converter.GetInt(row, "estado");
+                lista.Add(obj);
+            }
+
+            return lista;
+        }
     }
 }

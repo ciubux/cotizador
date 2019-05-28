@@ -1,6 +1,6 @@
 ﻿@{
 
-    TempData["ScriptVersion"] = "232";
+    TempData["ScriptVersion"] = "237";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -57,16 +57,16 @@
                         var linkDocumentosVenta = "";
                         var linkBusquedaFactura = "";
                         var linkBusquedaDocumentosCompra = "";
-                /*        var linkMantenimientoFactura = "";
+                        /*        var linkMantenimientoFactura = "";
 
-                        var linkBusquedaBoleta = "";
-                        var linkMantenimientoBoleta = "";
+                                var linkBusquedaBoleta = "";
+                                var linkMantenimientoBoleta = "";
 
-                        var linkBusquedaNotaCredito = "";
-                        var linkMantenimientoNotaCredito = "";
+                                var linkBusquedaNotaCredito = "";
+                                var linkMantenimientoNotaCredito = "";
 
-                        var linkBusquedaNotaDebito = "";
-                        var linkMantenimientoNotaDebito = "";*/
+                                var linkBusquedaNotaDebito = "";
+                                var linkMantenimientoNotaDebito = "";*/
 
                         var linkMaestros = "";
                         var linkBusquedaCliente = "";
@@ -84,7 +84,11 @@
                         var linkBusquedaSubDistribuidor = "";
                         var linkMantenimientoSubDistribuidor = "";
 
+                        var linkBusquedaRol = "";
+                        var linkMantenimientoRol = "";
 
+                        var linkBusquedaUsuario = "";
+                        var linkMantenimientoUsuario = "";
 
 
                         var linkCrearFacturaConsolidada = "";
@@ -145,13 +149,17 @@
 
                             case 35: linkMantenimientoCotizacionGrupal = "ative"; linkCotizaciones = "active"; break;
 
+                            case 36: linkBusquedaGrupoCliente = "ative"; linkMaestros = "active"; break;
+                            case 37: linkMantenimientoGrupoCliente = "ative"; linkMaestros = "active"; break;
 
                             case 38: linkAsignacionPermisos = "ative"; linkMaestros = "active"; break;
 
-
-
+                            case 101: linkBusquedaRol = "ative"; linkMaestros = "active"; break;
+                            case 102: linkMantenimientoRol = "ative"; linkMaestros = "active"; break;
+                            case 103: linkBusquedaUsuario = "ative"; linkMaestros = "active"; break;
+                            case 104: linkMantenimientoUsuario = "ative"; linkMaestros = "active"; break;
                         }
-                        
+
 
 
 
@@ -347,11 +355,20 @@
 
                                     @if (usuario.modificaRol || usuario.visualizaRoles)
                                     {
-                                        <li id="linkBusquedaRol" class="@linkBusquedaOrigen">@Html.ActionLink("Rol - Búsqueda", "List", "Rol")</li>
+                                        <li id="linkBusquedaRol" class="@linkBusquedaRol">@Html.ActionLink("Rol - Búsqueda", "List", "Rol")</li>
                                     }
                                     @if (usuario.modificaRol)
                                     {
-                                        <li id="linkCRRol" class="@linkMantenimientoOrigen">@Html.ActionLink("Rol - Crear/Modificar ", "Editar", "Rol")</li>
+                                        <li id="linkCRRol" class="@linkMantenimientoRol">@Html.ActionLink("Rol - Crear/Modificar ", "Editar", "Rol")</li>
+                                    }
+
+                                    @if (usuario.modificaUsuario || usuario.visualizaUsuarios)
+                                    {
+                                        <li id="linkBusquedaUsuario" class="@linkBusquedaUsuario">@Html.ActionLink("Usuario - Búsqueda", "List", "Usuario")</li>
+                                    }
+                                    @if (usuario.modificaUsuario)
+                                    {
+                                        <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
                                     }
 
                                     @if (usuario.administraPermisos)

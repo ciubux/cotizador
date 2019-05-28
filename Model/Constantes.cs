@@ -178,6 +178,10 @@ namespace Model
 
         public static String VAR_SESSION_USUARIO_LISTA = "usuarioList";
         public static String VAR_SESSION_USUARIO = "usuario";
+        public static String VAR_SESSION_USUARIO_MANTENEDOR = "usuarioMantenedor";
+        public static String VAR_SESSION_USUARIO_BUSQUEDA = "usuarioBusqueda";
+        public static String VAR_SESSION_USUARIO_LISTA_MANTENEDOR = "usuarioMantenedorList";
+        public static String VAR_SESSION_USUARIO_VER = "usuarioVer";
 
 
         public static String VAR_SESSION_PERMISO_LISTA = "permisoList";
@@ -347,8 +351,9 @@ namespace Model
         
         public const String MODIFICA_ROL = "P810";
         public const String VISUALIZA_ROLES = "P811";
+        public const String MODIFICA_USUARIO = "P812";
+        public const String VISUALIZA_USUARIOS = "P813";
 
-       
         public enum paginas {
             /*COTIZACION*/
             [Display(Name = "BUSQUEDA COTIZACION")]
@@ -453,7 +458,13 @@ namespace Model
             [Display(Name = "BUSQUEDA ROLES")]
             BusquedaRoles = 101,
             [Display(Name = "MANTENIMIENTO ROL")]
-            MantenimientoRol = 102
+            MantenimientoRol = 102,
+
+            /*USUARIOS*/
+            [Display(Name = "BUSQUEDA USUARIOS")]
+            BusquedaUsuarios = 103,
+            [Display(Name = "MANTENIMIENTO USUARIO")]
+            MantenimientoUsuario = 104
         };
 
 

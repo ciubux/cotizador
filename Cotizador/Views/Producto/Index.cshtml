@@ -42,7 +42,10 @@
                 <div class="row">
                     <div class="col-sm-12 col-lg-12">
                         <!--Items-->
-                        <label class="control-label col-xs-3" for="file">Tipo cambio:</label>
+                        <label class="control-label col-xs-3" for="file">
+                            Tipo cambio: <br />
+                            <button id="lnkActualizarTodos" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalActualizarTipoCambio">Actualización Global</button>
+                        </label>
                         <div class="col-xs-3">
                             <input class="form-control" type="number" value="@ViewBag.tipoCambio" name="tipo_cambio" id="tipoCambio" />
                         </div>
@@ -86,7 +89,7 @@
                 <br />
                 <div class="row">
                     <div class="col-sm-12 col-lg-12 text-left">
-                        <button id="lnkActualizarTodos" type="button" class="btn btn-link lnkAction" data-toggle="modal" data-target="#modalActualizarTipoCambio">Actualizar tipo de cambio de todos los productos</button>    
+                        
                     </div>
                 </div>
             </div>

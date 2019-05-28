@@ -80,5 +80,13 @@ namespace BusinessLayer
                 return dal.searchUsuarios(textoBusqueda);
             }
         }
+
+        public List<Usuario> getUsuariosMantenedor(Usuario usuario)
+        {
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                return usuarioDAL.getUsuariosMantenedor(usuario);
+            }
+        }
     }
 }

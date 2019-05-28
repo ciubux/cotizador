@@ -659,3 +659,8 @@ border-color: #49E845;
     background-color: #D3EFFF;
     border-radius: 5px;
 }
+
+.lnkActionLabel {
+    padding: 3px 3px;
+    font-size: 13px;
+}

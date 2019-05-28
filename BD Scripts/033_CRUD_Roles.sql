@@ -31,9 +31,9 @@ INSERT INTO ROL
            ,@nombre
            ,@estado
            ,@idUsuario
-           ,GETDATE()
+           ,dbo.getlocaldate()
            ,@idUsuario
-           ,GETDATE());
+           ,dbo.getlocaldate());
 
 SET NOCOUNT ON
 SET @newId = SCOPE_IDENTITY();
@@ -56,7 +56,7 @@ BEGIN
 			   (@newId
 			   ,@idPermiso
 			   ,@idUsuario
-               ,GETDATE());
+               ,dbo.getlocaldate());
 
 
 
@@ -176,7 +176,7 @@ BEGIN
             (@idRol
            ,@idUsuario
            ,@idUsuarioModifica
-           ,GETDATE());
+           ,dbo.getlocaldate());
 END
 
 
@@ -215,7 +215,7 @@ END
 
 
 
-/* **** 10 **** */
+/* **** 11 **** */
 ALTER PROCEDURE [dbo].[ps_usuario] 
 @email varchar(50),
 @password varchar(50)

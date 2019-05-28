@@ -392,8 +392,8 @@
     <Content Include="images\addTransportista.png" />
     <Content Include="images\up.png" />
     <Content Include="images\up2.png" />
-	<Content Include="images\user_icon_1.png" />
-	<Content Include="images\user_icon_2.png" />
+    <Content Include="images\user_icon_1.png" />
+    <Content Include="images\user_icon_2.png" />
     <Content Include="Scripts\app\cotizador\cotizador.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -412,6 +412,7 @@
     <Content Include="Scripts\documentoCompra1.1.1.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
+    <Content Include="Scripts\usuario1.0.0.js" />
     <Content Include="Scripts\rol1.0.0.js" />
     <Content Include="Scripts\subDistribuidor1.0.0.js" />
     <Content Include="Scripts\origen1.0.0.js" />
@@ -575,6 +576,7 @@
     <Content Include="Views\Rol\Editar.cshtml" />
     <Content Include="Views\Rol\List.cshtml" />
     <Content Include="Views\Rol\Usuarios.cshtml" />
+    <Content Include="Views\Usuario\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
