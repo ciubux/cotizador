@@ -76,9 +76,3 @@ C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizado
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb

@@ -171,14 +171,3 @@ C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizado
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb

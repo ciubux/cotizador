@@ -140,13 +140,3 @@ C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizado
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.dll
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\bin\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\bin\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.pdb

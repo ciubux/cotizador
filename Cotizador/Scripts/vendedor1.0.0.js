@@ -324,10 +324,10 @@
             });
             return false;
         }
-        var reg = /^[0-9]\d*(\.\d+)?$/; 
+        var reg = /^[0-9]\d*(\.\d+)?$/;
         var var1 = $("#vendedor_maxdesapro").val();
-            
-        if (reg.test(var1) ==false ) {
+
+        if (reg.test(var1) == false) {
             $.alert({
                 title: "Maximo descuento aprobado Inválido",
                 type: 'orange',
@@ -359,7 +359,7 @@
 
     function validacionDatosVendedor2() {
 
-        if ($("#vendedor_codigo").val().indexOf(" ") !== -1  || $("#vendedor_codigo").val().length == 1 || $("#vendedor_codigo").val().length > 2 || $("#vendedor_codigo").val().length == "") {
+        if ($("#vendedor_codigo").val().indexOf(" ") !== -1 || $("#vendedor_codigo").val().length == 1 || $("#vendedor_codigo").val().length > 2 || $("#vendedor_codigo").val().length == "") {
             $.alert({
                 title: "Código Inválido",
                 type: 'orange',
@@ -398,7 +398,7 @@
 
         var reg = /^[0-9]\d*(\.\d+)?$/;
         var var2 = $("#vendedor_maxdesapro").val()
-        if (reg.test(var2)==false) {
+        if (reg.test(var2) == false) {
             $.alert({
                 title: "Maximo descuento aprobado Inválido",
                 type: 'orange',
