@@ -324,8 +324,24 @@
             });
             return false;
         }
+        var reg = /^[0-9]\d*(\.\d+)?$/; 
+        var var1 = $("#vendedor_maxdesapro").val();
+            
+        if (reg.test(var1) ==false ) {
+            $.alert({
+                title: "Maximo descuento aprobado Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un numero correcto.',
+                buttons: {
+                    OK: function () { $('#vendedor_maxdesapro').focus(); }
+                }
+            });
+            return false;
+        }
 
-        if ($("#vendedor_email").val().indexOf(" ") !== -1 || $("#vendedor_email").val().indexOf("@mpinstitucional.com") == -1 || $("#vendedor_email").val().length < 22) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        var var2 = $("#vendedor_email").val();
+        if (regex.test(var1) !== true || $("#vendedor_email").val().indexOf(" ") !== -1 || $("#vendedor_email").val().indexOf("@") == -1 || $("#vendedor_email").val().length < 12) {
             $.alert({
                 title: "Email Inválido",
                 type: 'orange',
@@ -379,7 +395,25 @@
             return false;
         }
 
-        if ($("#vendedor_email").val().indexOf(" ") !== -1 || $("#vendedor_email").val().indexOf("@mpinstitucional.com") == -1 || $("#vendedor_email").val().length < 22) {
+
+        var reg = /^[0-9]\d*(\.\d+)?$/;
+        var var2 = $("#vendedor_maxdesapro").val()
+        if (reg.test(var2)==false) {
+            $.alert({
+                title: "Maximo descuento aprobado Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un numero correcto.',
+                buttons: {
+                    OK: function () { $('#vendedor_maxdesapro').focus(); }
+                }
+            });
+            return false;
+        }
+
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        var var1 = $("#vendedor_email").val();
+
+        if (regex.test(var1) !== true || $("#vendedor_email").val().indexOf(" ") !== -1 || $("#vendedor_email").val().indexOf("@") == -1 || $("#vendedor_email").val().length < 12) {
             $.alert({
                 title: "Email Inválido",
                 type: 'orange',
