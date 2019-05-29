@@ -490,3 +490,7 @@ C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Release\Cotizador.csprojR
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Release\Cotizador.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Release\Cotizador.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Cotizador\obj\Release\Cotizador.pdb
+D:\Repo\freelos\cotizador\Cotizador\obj\Release\Cotizador.csprojAssemblyReference.cache
+D:\Repo\freelos\cotizador\Cotizador\obj\Release\Cotizador.csproj.CoreCompileInputs.cache
+D:\Repo\freelos\cotizador\Cotizador\obj\Release\Cotizador.dll
+D:\Repo\freelos\cotizador\Cotizador\obj\Release\Cotizador.pdb

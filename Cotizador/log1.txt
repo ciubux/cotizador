@@ -54,3 +54,22 @@ The statement has been terminated.
 2019-04-25 23:22:37.1131|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
 2019-04-25 23:23:01.5061|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
 2019-04-25 23:24:46.7005|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
+2019-05-29 10:17:28.0981|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE_SUNAT' with unique index 'IDX_CLIENTE_SUNAT_RUC'. The duplicate key value is (<NULL>).
+Cannot insert the value NULL into column 'direccion', table 'cotizadormp.dbo.DOMICILIO_LEGAL'; column does not allow nulls. INSERT fails.
+Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_CLIENTE_CODIGO'. The duplicate key value is (<NULL>, 1).
+The statement has been terminated.
+The statement has been terminated.
+The statement has been terminated.
+2019-05-29 10:21:52.5107|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE_SUNAT' with unique index 'IDX_CLIENTE_SUNAT_RUC'. The duplicate key value is (<NULL>).
+Cannot insert the value NULL into column 'direccion', table 'cotizadormp.dbo.DOMICILIO_LEGAL'; column does not allow nulls. INSERT fails.
+Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_CLIENTE_CODIGO'. The duplicate key value is (<NULL>, 1).
+The statement has been terminated.
+The statement has been terminated.
+The statement has been terminated.
+2019-05-29 10:22:40.4592|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE_SUNAT' with unique index 'IDX_CLIENTE_SUNAT_RUC'. The duplicate key value is (<NULL>).
+Cannot insert the value NULL into column 'direccion', table 'cotizadormp.dbo.DOMICILIO_LEGAL'; column does not allow nulls. INSERT fails.
+The statement has been terminated.
+The statement has been terminated.
+2019-05-29 10:23:47.9848|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (10461243679, 15526227-2108-4113-b46a-1c8ab5c0e581, 1).
+The statement has been terminated.
+2019-05-29 10:24:11.6342|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
