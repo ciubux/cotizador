@@ -1,0 +1,51 @@
+﻿@{
+    Model.Usuario usuario = ViewBag.usuario;
+    ViewBag.Title = "Listado de Permisos asignados al Usuario: " + usuario.nombre + "(" + usuario.email + ")";
+    List<Model.Permiso> permisos = ViewBag.permisos;
+
+    int idCategoriaTemp = 0;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <input type="hidden" id="idRol" value="@usuario.idUsuario" />
+    <br /><br />
+
+    @if (usuario.idUsuario != Guid.Empty)
+    {
+        <div class="row">
+            @foreach (Model.Permiso per in permisos)
+            {
+
+                if (idCategoriaTemp != per.categoriaPermiso.idCategoriaPermiso)
+                {
+                    idCategoriaTemp = per.categoriaPermiso.idCategoriaPermiso;
+                    string titulo = "</div><br/><div class=\"row\"><div class=\"col-sm-12 col-lg-12 col-xs-12\"><h3>" + per.categoriaPermiso.descripcion + "</h3></div>";
+
+                    @Html.Raw(titulo)
+                }
+
+                string itemChecked = usuario.TienePermiso(per.idPermiso) ? "checked" : "";
+                string itemDisabled = usuario.PermisoPorRol(per.idPermiso) ? "disabled" : "";
+
+                <div class="col-sm-6 col-lg-4 col-xs-12">
+                    <label class="radio-label" for="permiso_@per.idPermiso">
+                        <input type="checkbox" @itemChecked @itemDisabled class="chk-permiso" name="permiso_@per.idPermiso" id="permiso_@per.idPermiso" value="1">
+                        <span>@per.descripcion_corta - (@per.codigo)</span>
+                    </label>
+                </div>
+            }
+        </div>
+
+    }
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/usuario")
+}
