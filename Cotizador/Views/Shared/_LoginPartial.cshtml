@@ -7,9 +7,15 @@
     if (usuario != null)
     {
     <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Hola @usuario.nombre</a>
+        <li>
+            <a class="dropdown-toggle" data-toggle="dropdown">
+                <img src="~/images/user_icon_2.png" height="22" style="vertical-align:bottom; margin-right: 2px;" /> @usuario.nombre
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li>  @Html.ActionLink("Salir", "Exit", "General")</li>
+            </ul>
         </li>
-        <li>  @Html.ActionLink("Salir", "Exit", "General")</li>
     </ul>
     }
 }

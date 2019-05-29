@@ -31,6 +31,9 @@ jQuery(function ($) {
     var fecha = $("#fechaInicioVigenciatmp").val();
     $("#fechaInicioVigencia").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
 
+
+    $("#fechaInicioVigenciaTC").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
+
     $(document).ready(function () {
 
         $("#btnBusqueda").click();
@@ -307,6 +310,11 @@ jQuery(function ($) {
 
     $("#producto_estado_no").click(function () {
         var valCheck = 0;
+        changeInputInt("Estado", valCheck)
+    });
+
+    $("#producto_estado_todos").click(function () {
+        var valCheck = -1;
         changeInputInt("Estado", valCheck)
     });
 
@@ -613,16 +621,27 @@ jQuery(function ($) {
         });
     }
 
-
     
-    $("#btnExportExcel").click(function () {
+    $("#lnkActualizarTodos").click(function () {
+        $("#tipoCambioTC").val($("#tipoCambio").val());
+        $("#fechaInicioVigenciaTC").val($("#fechaInicioVigencia").val());
+    });
+
+
+    $("#btnActualizarTipoCambio").click(function () {
+        $("#formActualizarTipoCambio").submit();
+    });
+    
+
+    $("#btnExportExcel, #btnExportUploadExcel").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
+    
 
     $("#btnCargarProductos").click(function () {
         var listaTextosCampos = "";
         $(".chk_campo_registra").each(function () {
-            if (!$(this).prop('checked')) {
+            if (!$(this).prop('checked') && !$(this)[0].hasAttribute('disabled')) {
                 if (listaTextosCampos != "") listaTextosCampos = listaTextosCampos + "<br/>";
                 listaTextosCampos = listaTextosCampos + $(this).closest("tr").find("td.nombreCampo").html();
             }
@@ -650,7 +669,26 @@ jQuery(function ($) {
                 }
             });
         } else {
-            $("#formCargarProductos").submit();
+            $.confirm({
+                title: 'Información Actualización',
+                content: 'Se realizará la actualización de todos los campos seleccionados. ¿Desea continuar?',
+                type: 'orange',
+                buttons: {
+                    aplica: {
+                        text: 'SI',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            $("#formCargarProductos").submit();
+                        }
+                    },
+                    cancelar: {
+                        text: 'Cancelar',
+                        btnClass: '',
+                        action: function () {
+                        }
+                    }
+                }
+            });
         }
         
     });

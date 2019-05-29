@@ -2,6 +2,7 @@
     ViewBag.Title = "Carga Masiva de Productos";
 }
 
+
 <div class="page-header">
     <h3>@ViewBag.Title</h3>
 </div>
@@ -16,7 +17,10 @@
                         <p>
                             <b>FORMATO</b>
                             <ul>
-                                <li>La carga masiva permite registrar productos nuevos y actualizar productos existentes, desde un archivo Excel.</li>
+                                <li>
+                                    La carga masiva permite registrar productos nuevos y actualizar productos existentes, desde un archivo Excel.
+                                    Puede descargar productos en formato de actualización en el <a target="_blank" href="@Url.Action("List", "Producto")">formulario de búsqueda productos.</a>
+                                </li>
                             </ul>
                         </p>
                         <p>
@@ -37,21 +41,13 @@
                 <br />
                 <div class="row">
                     <div class="col-sm-12 col-lg-12">
-                        <!--Archivo-->
-                        <label class="control-label col-xs-3" for="file">Archivo <br />Productos:</label>
-                        <div class="col-xs-9">
-                            <input class="form-control" type="file" name="file" id="file" />
-                        </div>
-                    </div>
-                </div>
-
-                <br />
-                <div class="row">
-                    <div class="col-sm-12 col-lg-12">
                         <!--Items-->
-                        <label class="control-label col-xs-3" for="file">Cantidad <br /> Registros:</label>
+                        <label class="control-label col-xs-3" for="file">
+                            Tipo cambio: <br />
+                            <button id="lnkActualizarTodos" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalActualizarTipoCambio">Actualización Global</button>
+                        </label>
                         <div class="col-xs-3">
-                            <input class="form-control" type="number" value="0" name="cantidadLineas" id="cantidadLineas" />
+                            <input class="form-control" type="number" value="@ViewBag.tipoCambio" name="tipo_cambio" id="tipoCambio" />
                         </div>
 
                         <!--Fecha Inicio Vigencia-->
@@ -63,10 +59,39 @@
                     </div>
                 </div>
                 <br />
-                <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
-                    <button id="btnCargarProductos" type="button" class="btn btn-primary">Cargar Productos</button>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <!--Archivo-->
+                        <label class="control-label col-xs-3" for="file">Archivo <br />Productos:</label>
+                        <div class="col-xs-9">
+                            <input class="form-control" type="file" name="file" id="file" />
+                        </div>
+                    </div>
                 </div>
 
+                <br />
+
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <!--Items-->
+                        <label class="control-label col-xs-3" for="file">Cantidad <br /> Registros:</label>
+                        <div class="col-xs-3">
+                            <input class="form-control" type="number" value="0" name="cantidadLineas" id="cantidadLineas" />
+                        </div>
+
+                        <div class="col-xs-6 text-right">
+                            <button id="btnCargarProductos" type="button" class="btn btn-primary">Cargar Productos</button>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 text-left">
+                        
+                    </div>
+                </div>
             </div>
             <div class="col-sm-12 col-lg-6">
                 <table class="table" style="margin-top: 10px;">
@@ -80,11 +105,12 @@
                     <tbody>
                         @foreach (Model.CampoPersistir camp in ViewBag.persitirCampos)
                         {
+                            string uploadAttr = BusinessLayer.ProductoBL.esCampoActualizableCargaMasiva(camp.campo.nombre) ? "checked" : "disabled";
                             <tr>
                                 <td class="nombreCampo">@camp.nombre</td>
-                                <td><input type="checkbox" checked class="chk_campo_registra" name="registra_@camp.campo.nombre" id="registra_@camp.campo.nombre" value="1"></td>
+                                <td><input type="checkbox" @uploadAttr class="chk_campo_registra" name="registra_@camp.campo.nombre" id="registra_@camp.campo.nombre" value="1"></td>
                                 <td>
-                                    @if (camp.persiste)
+                                    @if (BusinessLayer.ProductoBL.esCampoActualizableCargaMasiva(camp.campo.nombre) && camp.persiste)
                                     {
                                         <input type="checkbox" class="chk_campo_persiste" name="persiste_@camp.campo.nombre" id="persiste_@camp.campo.nombre" value="1">
                                     }
@@ -95,12 +121,79 @@
                 </table>
             </div>
         </div>
-        
 
 
-        
+
+
     </form>
 
+</div>
+
+
+<div class="modal fade" id="modalActualizarTipoCambio" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalActualizarTipoCambio"><b>Actualizar Tipo de cambio en todos los productos</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+            <div class="modal-body">
+                <form class="form-horizontal" action="/Producto/ActualizarTodosPorTipoCambio" method="post" id="formActualizarTipoCambio">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <!--Items-->
+                            <label class="control-label col-xs-3" for="file">Tipo cambio:</label>
+                            <div class="col-xs-3">
+                                <input class="form-control" type="number" value="@ViewBag.tipoCambio" name="tipo_cambio" id="tipoCambioTC" />
+                            </div>
+
+                            <!--Fecha Inicio Vigencia-->
+                            <label class="control-label col-xs-3" for="file">Inicio <br />Vigencia:</label>
+                            <div class="col-xs-3">
+                                <input id="fechaInicioVigenciatmpTC" type="hidden" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+                                <input class="form-control" type="text" id="fechaInicioVigenciaTC" name="fechaInicioVigencia">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <label class="control-label">Campos a actualizar:</label>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            @foreach (Model.CampoPersistir camp in ViewBag.persitirCampos)
+                            {
+                                if (BusinessLayer.ProductoBL.esCampoCalculado(camp.campo.nombre))
+                                {
+                                    <label>
+                                        <input type="checkbox" checked class="chk_campo_registra" name="registra_tc_@camp.campo.nombre" id="registra_tc_@camp.campo.nombre" value="1">
+                                        @camp.nombre
+                                    </label>
+                                    <br />
+                                }
+                            }
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" id="btnCancelarTipoCambio" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnActualizarTipoCambio" class="btn btn-primary ">Actualizar Productos</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 

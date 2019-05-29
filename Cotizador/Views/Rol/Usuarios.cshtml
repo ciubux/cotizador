@@ -1,0 +1,77 @@
+﻿@{
+    Model.Rol rol = ViewBag.rol;
+    ViewBag.Title = "Listado de Usuarios asignados al Rol \"" + rol.nombre + "\"";
+
+    var itemHeredaChecked = "";
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <input type="hidden" id="idRol" value="@rol.idRol" />
+
+    <br /><br />
+    @if (rol.idRol != 0)
+    {
+
+        <div class="row">
+            <div class="col-xs-12 col-lg-6">
+                <!--Usuario-->
+                <div class="form-group">
+                    <label for="idUsuario" class="control-label col-xs-3">Buscar Usuario:</label>
+
+                    <div class="col-xs-6">
+                        <select class="form-control input-sm" id="idUsuario" name="idUsuario" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <button id="btnAgregarUsuarioRol" type="button" class="btn btn-primary">Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-12">
+                <table id="tableUsuariosRol" class="table" data-editing="false"
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="idUsuario" data-visible="false"></th>
+                            <th data-name="email" data-visible="true" data-sortable="true">Email</th>
+                            <th data-name="nombre" data-visible="true" data-sortable="true">Nombre</th>
+                            <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Model.Usuario item in rol.usuarios)
+                        {
+                            <tr data-expanded="true">
+                                <td>  @item.idUsuario </td>
+                                <td>  @item.email </td>
+                                <td>  @item.nombre </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btnQuitarUsuarioRol" idUsuario="@item.idUsuario">Remover</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/rol")
+}

@@ -23,6 +23,16 @@ namespace BusinessLayer
             return usuario;
         }
 
+        public Usuario getUsuario(Guid idUsuario)
+        {
+            Usuario usuario = null;
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                usuario = usuarioDAL.getUsuario(idUsuario);
+            }
+            return usuario;
+        }
+
         public void updateCotizacionSerializada(Usuario usuario, String cotizacionSerializada)
         {
             using (var usuarioDAL = new UsuarioDAL())
@@ -60,6 +70,22 @@ namespace BusinessLayer
             using (var usuarioDAL = new UsuarioDAL())
             {
                 usuarioDAL.updatePermiso(usuarioList, permiso, usuario);
+            }
+        }
+
+        public List<Usuario> searchUsuarios(String textoBusqueda)
+        {
+            using (var dal = new UsuarioDAL())
+            {
+                return dal.searchUsuarios(textoBusqueda);
+            }
+        }
+
+        public List<Usuario> getUsuariosMantenedor(Usuario usuario)
+        {
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                return usuarioDAL.getUsuariosMantenedor(usuario);
             }
         }
     }

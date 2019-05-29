@@ -166,6 +166,11 @@ namespace Model
         public static String VAR_SESSION_NOTA_DEBITO_COMPRA_BUSQUEDA = "notaDebitoCompraBusqueda";
         public static String VAR_SESSION_NOTA_DEBITO_COMPRA_LISTA = "notaDebitoCompraList";
         public static String VAR_SESSION_NOTA_DEBITO_COMPRA_VER = "notaDebitoCompraVer";
+        
+        public static String VAR_SESSION_ROL = "rol";
+        public static String VAR_SESSION_ROL_BUSQUEDA = "rolBusqueda";
+        public static String VAR_SESSION_ROL_LISTA = "rolList";
+        public static String VAR_SESSION_ROL_VER = "rolVer";
 
 
         public static String VAR_SESSION_PAGINA = "pagina";
@@ -173,6 +178,15 @@ namespace Model
 
         public static String VAR_SESSION_USUARIO_LISTA = "usuarioList";
         public static String VAR_SESSION_USUARIO = "usuario";
+        public static String VAR_SESSION_USUARIO_MANTENEDOR = "usuarioMantenedor";
+        public static String VAR_SESSION_USUARIO_BUSQUEDA = "usuarioBusqueda";
+        public static String VAR_SESSION_USUARIO_LISTA_MANTENEDOR = "usuarioMantenedorList";
+        public static String VAR_SESSION_USUARIO_VER = "usuarioVer";
+
+
+        public static String VAR_SESSION_PERMISO_LISTA = "permisoList";
+
+        
 
         public static String VAR_SESSION_ASIGNACION_PERMISOS = "AsignacionPermisos";
         public static String VAR_SESSION_CAMBIO_ASIGNACION_PERMISOS = "CambioAsignacionPermisos";
@@ -334,10 +348,11 @@ namespace Model
         public const String ASIGNA_SUBDISTRIBUIDOR = "P071";
         public const String VISUALIZA_DOCUMENTOS_COMPRA = "P009";
         public const String CREA_DOCUMENTOS_COMPRA = "P009";
-
-
-
-
+        
+        public const String MODIFICA_ROL = "P810";
+        public const String VISUALIZA_ROLES = "P811";
+        public const String MODIFICA_USUARIO = "P812";
+        public const String VISUALIZA_USUARIOS = "P813";
 
         public enum paginas {
             /*COTIZACION*/
@@ -437,7 +452,19 @@ namespace Model
             AlertasValidacionPendientes = 40,
             /*DOCUMENTOS DE VENTA*/
             [Display(Name = "BUSQUEDA DOCUMENTOS COMPRA")]
-            BusquedaDocumentosCompra = 41
+            BusquedaDocumentosCompra = 41,
+
+            /*ROLES*/
+            [Display(Name = "BUSQUEDA ROLES")]
+            BusquedaRoles = 101,
+            [Display(Name = "MANTENIMIENTO ROL")]
+            MantenimientoRol = 102,
+
+            /*USUARIOS*/
+            [Display(Name = "BUSQUEDA USUARIOS")]
+            BusquedaUsuarios = 103,
+            [Display(Name = "MANTENIMIENTO USUARIO")]
+            MantenimientoUsuario = 104
         };
 
 
