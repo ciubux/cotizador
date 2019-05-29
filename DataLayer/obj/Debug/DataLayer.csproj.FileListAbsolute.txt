@@ -274,3 +274,21 @@ C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizado
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.dll
 C:\Users\Andre\Desktop\FINAL PROYECTO VENDEDOR\cotizador-Andre-Vendedor\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.pdb
