@@ -518,5 +518,43 @@ namespace DataLayer
 
             return lista;
         }
+
+        public Usuario getUsuarioMantenedor(Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_usuario_mantenedor");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable usuario = dataSet.Tables[0];
+            DataTable permisos = dataSet.Tables[1];
+
+            Usuario obj = new Usuario();
+
+            foreach (DataRow row in usuario.Rows)
+            {
+                obj.idUsuario = Converter.GetGuid(row, "id_usuario");
+                obj.email = Converter.GetString(row, "email");
+                obj.nombre = Converter.GetString(row, "nombre");
+                obj.Estado = Converter.GetInt(row, "estado");
+            }
+
+            obj.permisoList = new List<Permiso>();
+            foreach (DataRow row in permisos.Rows)
+            {
+                Permiso permiso = new Permiso();
+                permiso.idPermiso = Converter.GetInt(row, "id_permiso");
+                permiso.codigo = Converter.GetString(row, "codigo");
+                permiso.descripcion_corta = Converter.GetString(row, "descripcion_corta");
+                permiso.descripcion_larga = Converter.GetString(row, "descripcion_larga");
+                permiso.categoriaPermiso = new CategoriaPermiso();
+                permiso.categoriaPermiso.idCategoriaPermiso = Converter.GetInt(row, "id_categoria_permiso");
+                permiso.categoriaPermiso.descripcion = Converter.GetString(row, "descripcion_categoria");
+                permiso.byRol = Converter.GetInt(row, "id_categoria_permiso") == 1;
+                permiso.byUser = Converter.GetInt(row, "id_categoria_permiso") == 1;
+
+                obj.permisoList.Add(permiso);
+            }
+
+            return obj;
+        }
     }
 }

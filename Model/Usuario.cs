@@ -77,6 +77,21 @@ namespace Model
 
         public List<Permiso> permisoList { get; set; }
 
+        public bool TienePermiso(int idPermiso)
+        {
+            return this.permisoList.Where(item => item.idPermiso.Equals(idPermiso)).FirstOrDefault() != null;
+        }
+
+        public bool PermisoPorRol(int idPermiso)
+        {
+            try
+            {
+                return this.permisoList.Where(item => item.idPermiso.Equals(idPermiso)).FirstOrDefault().byRol;
+            } catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
         /*PERMISOS COTIZACION*/
         public bool apruebaCotizaciones { get { return apruebaCotizacionesLima || apruebaCotizacionesProvincias; } }

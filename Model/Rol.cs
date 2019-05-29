@@ -29,13 +29,10 @@ namespace Model
             return "Rol: " + this.nombre + " - Cod: " + this.codigo;
         }
 
+
         public bool TienePermiso(int idPermiso)
         {
-            foreach (Permiso per in this.permisos)
-            {
-                if (per.idPermiso == idPermiso) return true;
-            }
-            return false;
+            return this.permisos.Where(item => item.idPermiso.Equals(idPermiso)).FirstOrDefault() != null;
         }
     }
 }

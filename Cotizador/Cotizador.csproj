@@ -577,6 +577,7 @@
     <Content Include="Views\Rol\List.cshtml" />
     <Content Include="Views\Rol\Usuarios.cshtml" />
     <Content Include="Views\Usuario\List.cshtml" />
+    <Content Include="Views\Usuario\Permisos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
