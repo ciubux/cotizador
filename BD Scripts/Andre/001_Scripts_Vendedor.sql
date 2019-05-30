@@ -47,7 +47,7 @@ create PROCEDURE [dbo].[pi_vendedor]
   @contacto varchar(50),
   @estado int,
   @usuario_creacion uniqueidentifier,  
-  @maximo_descuento decimal,
+  @maximo_descuento decimal(5,2),
   @id_ciudad uniqueidentifier,
   @newid uniqueidentifier
    )
@@ -115,7 +115,7 @@ insert  into VENDEDOR(
 						@cargo varchar(50),
 						@nombre varchar(50),
 						@contacto varchar(50),
-						@max_por_des_apro decimal,
+						@max_por_des_apro decimal(5,2),
 						@estado int,
 						@id_ciudad 	uniqueidentifier													
 						)
