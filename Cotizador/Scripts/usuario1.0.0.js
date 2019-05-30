@@ -98,8 +98,7 @@ jQuery(function ($) {
 
     }
 
-
-    $("#btnFinalizarEdicionUsuario").click(function () {
+    $("#btnActualizarPermisos").click(function () {
         /*Si no tiene codigo el cliente se está creando*/
         if ($("#usuario_idUsuario").val() == '0') {
             crearUsuario();
@@ -107,6 +106,46 @@ jQuery(function ($) {
         else {
             editarUsuario();
         }
+    });
+
+    $("#btnCancelarEdicionPermisos").click(function () {
+        ConfirmDialog("¿Seguro que desea cancelar la edición de permisos? Se perderán todos los cambios realizados.", '/Usuario/List', null)
+    });
+
+    $("#btnFinalizarEdicionPermisos").click(function () {
+        $('body').loadingModal({
+            text: 'Actualizando Permisos...'
+        });
+        $.ajax({
+            url: "/Usuario/UpdatePermisos",
+            type: 'POST',
+            data: $("#formPermisosUsuario").serialize(),
+            dataType: 'JSON',
+            error: function (resultado) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: 'Error',
+                    content: 'Se generó un error al intentar actualizar los permisos del usuario.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (resultado) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: TITLE_EXITO,
+                    content: 'Los permisos se actualizaron correctamente.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Usuario/List';
+                        }
+                    }
+                });
+            }
+        });
     });
 
 

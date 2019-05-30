@@ -109,12 +109,6 @@
     <Reference Include="NPOI.OpenXmlFormats">
       <HintPath>..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
-    <Reference Include="Spire.License">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.pdf-fe\Bin\NET4.0\Spire.License.dll</HintPath>
-    </Reference>
-    <Reference Include="Spire.Pdf">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.pdf-fe\Bin\NET4.0\Spire.Pdf.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />

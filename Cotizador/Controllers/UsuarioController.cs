@@ -135,31 +135,74 @@ namespace Cotizador.Controllers
 
         }
         
-        public ActionResult Permisos(int? idRol)
+        public ActionResult Permisos(Guid? idUsuario)
         {
-            RolBL bl = new RolBL();
-            Rol rol = new Rol();
+            UsuarioBL bl = new UsuarioBL();
+            Usuario usuarioEdit = new Usuario();
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (!usuario.modificaRol)
+            if (!usuario.modificaUsuario)
             {
-                return RedirectToAction("List", "Rol");
+                return RedirectToAction("List", "Usuario");
             }
 
-            if (idRol == null || idRol == 0)
+            if (idUsuario == null || idUsuario == Guid.Empty)
             {
-                return RedirectToAction("Index", "Rol");
+                return RedirectToAction("List", "Usuario");
             }
 
-            rol = bl.getRol(idRol.Value);
-            rol.usuario = usuario;
-            rol.IdUsuarioRegistro = usuario.idUsuario;
-            rol.usuarios = bl.getUsuarios(rol.idRol);
+            usuarioEdit = bl.getUsuarioMantenedor(idUsuario.Value);
+            usuarioEdit.usuario = usuario;
+            usuarioEdit.IdUsuarioRegistro = usuario.idUsuario;
 
+            PermisoBL permisobl = new PermisoBL();
+            List<Permiso> permisos = new List<Permiso>();
+            permisos = permisobl.getPermisos();
 
-            ViewBag.rol = rol;
+            ViewBag.usuario = usuarioEdit;
+            ViewBag.permisos = permisos;
+            
             return View();
+        }
+        
+        public String UpdatePermisos()
+        {
+            UsuarioBL bl = new UsuarioBL();
+            Usuario usuarioEdit = new Usuario();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Guid idUsuario = Guid.Parse(this.Request.Params["idUsuario"].ToString());
+
+
+            if (!usuario.modificaUsuario || idUsuario == null || idUsuario == Guid.Empty)
+            {
+                return JsonConvert.SerializeObject(new Usuario());
+            }
+            
+
+            PermisoBL permisobl = new PermisoBL();
+            List<Permiso> permisos = permisobl.getPermisos();
+            List<Permiso> permisosUsuario = new List<Permiso>();
+
+            foreach(Permiso item in permisos)
+            {
+                if (Request["permiso_" + item.idPermiso.ToString()] != null && Int32.Parse(Request["permiso_" + item.idPermiso.ToString()].ToString()) == 1)
+                {
+                    permisosUsuario.Add(item);
+                }
+            }
+            
+
+            usuarioEdit = bl.getUsuarioMantenedor(idUsuario);
+            usuarioEdit.usuario = usuario;
+            usuarioEdit.IdUsuarioRegistro = usuario.idUsuario;
+            usuarioEdit.permisoList = permisosUsuario;
+
+            bl.updatePermisos(usuarioEdit);
+
+
+            return JsonConvert.SerializeObject(usuarioEdit);
         }
     }
 }

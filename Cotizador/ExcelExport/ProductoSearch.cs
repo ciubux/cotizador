@@ -77,20 +77,20 @@ namespace Cotizador.ExcelExport
 
                 int i = 0;
 
-                UtilesHelper.setValorCelda(sheet, 1, "A", "Código", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "B", "Código Proveedor", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "C", "Proveedor", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "D", "Familia", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "E", "Descripcion", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "F", "Unidad", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "G", "Unidad Alternativa", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "H", "Equivalencia ", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "I", "Unidad Proveedor", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "J", "Equivalencia Proveedor", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "K", "Precio", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "L", "Precio Provincia", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "A", "Código", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "B", "Código Proveedor", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "C", "Proveedor", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "D", "Familia", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "E", "Descripcion", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "F", "Unidad", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "G", "Unidad Alternativa", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "H", "Equivalencia ", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "I", "Unidad Proveedor", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "J", "Equivalencia Proveedor", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "K", "Precio", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "L", "Precio Provincia", titleCellStyle, true);
                 if (usuario.visualizaCostos) { 
-                    UtilesHelper.setValorCelda(sheet, 1, "M", "Costo", titleCellStyle);
+                    UtilesHelper.setValorCelda(sheet, 1, "M", "Costo", titleCellStyle, true);
                 }
                 i = 2;
 
@@ -159,8 +159,12 @@ namespace Cotizador.ExcelExport
                 titleCellStyle.FillPattern = FillPattern.SolidForeground;
                 titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
 
+                HSSFCellStyle blockedCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                blockedCellStyle.FillPattern = FillPattern.SolidForeground;
+                blockedCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
+
                 //titleCellStyle.FillBackgroundColor = HSSFColor.BlueGrey.Index;
-                
+
                 IDataFormat format = wb.CreateDataFormat();
                 ICellStyle dateFormatStyle = wb.CreateCellStyle();
                 dateFormatStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
@@ -175,7 +179,7 @@ namespace Cotizador.ExcelExport
                  * ub.provincia,  ub.departamento, ma.observaciones,*/
 
                 /*Cabecera, Sub total*/
-                int rTotal = (list.Count) + 4;
+                int rTotal = (list.Count) + 1;
                 int cTotal = 34 + 2;
 
                 /*Se crean todas las celdas*/
@@ -189,41 +193,45 @@ namespace Cotizador.ExcelExport
                 }
 
                 int i = 0;
-
-                UtilesHelper.setValorCelda(sheet, 1, "A", Producto.nombreAtributo("sku"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "B", Producto.nombreAtributo("skuProveedor"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "C", Producto.nombreAtributo("proveedor"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "D", Producto.nombreAtributo("familia"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "E", Producto.nombreAtributo("descripcion"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "F", Producto.nombreAtributo("unidad"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "G", Producto.nombreAtributo("unidadProveedor"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "H", Producto.nombreAtributo("equivalenciaProveedor"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "I", Producto.nombreAtributo("unidad_alternativa"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "J", Producto.nombreAtributo("equivalenciaAlternativa"), titleCellStyle);
-
-                UtilesHelper.setValorCelda(sheet, 1, "K", Producto.nombreAtributo("monedaProveedor"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "L", Producto.nombreAtributo("costoOriginal"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "M", Producto.nombreAtributo("costoSinIgv"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "N", Producto.nombreAtributo("monedaMP"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "O", Producto.nombreAtributo("precioOriginal"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "P", Producto.nombreAtributo("precioSinIgv"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "Q", Producto.nombreAtributo("precioProvinciasOriginal"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "R", Producto.nombreAtributo("precioProvinciaSinIgv"), titleCellStyle);
-
-                UtilesHelper.setValorCelda(sheet, 1, "S", Producto.nombreAtributo("unidadConteo"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "T", Producto.nombreAtributo("unidadEstandarInternacional"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "U", Producto.nombreAtributo("equivalenciaUnidadEstandarUnidadConteo"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "V", Producto.nombreAtributo("unidadProveedorInternacional"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "W", Producto.nombreAtributo("equivalenciaUnidadProveedorUnidadConteo"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "X", Producto.nombreAtributo("unidadAlternativaInternacional"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "Y", Producto.nombreAtributo("equivalenciaUnidadAlternativaUnidadConteo"), titleCellStyle);
                 
-                UtilesHelper.setValorCelda(sheet, 1, "Z", Producto.nombreAtributo("codigoSunat"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "AA", Producto.nombreAtributo("exoneradoIgv"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "AB", Producto.nombreAtributo("inafecto"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "AD", Producto.nombreAtributo("tipoCambio"), titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "AE", "Activo", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "A", "SKU MP", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "B", "SKU Prov.", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "C", "Proveedor", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "D", "Familia", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "E", "Descripción", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "F", "Unidad de Venta", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "G", "Unidad Proveedor", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "H", "Equiva. Und.Prov.", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "I", "Unidad Alternativa", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "J", "Equivalencia Und.Alt.", titleCellStyle, true);
+
+                UtilesHelper.setValorCelda(sheet, 1, "K", "Moneda Proveedor", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "L", "Costo Und Prov", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "M", "Costo Und MP", titleCellStyle, true);
+                UtilesHelper.setColumnDefaultStyle(sheet, "M", blockedCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "N", "Moneda Venta MP", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "O", "Precio Lista MP Lima", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "P", "Precio Lima", titleCellStyle, true);
+                UtilesHelper.setColumnDefaultStyle(sheet, "P", blockedCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "Q", "Precio Lista MP Provincias", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "R", "Precio Provincias", titleCellStyle, true);
+                UtilesHelper.setColumnDefaultStyle(sheet, "R", blockedCellStyle);
+
+                UtilesHelper.setValorCelda(sheet, 1, "S", "Unidad de Conteo", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "T", "Unidad SUNAT", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "U", "Equiva. Und.Est. Und.Conteo", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "V", "Unidad Proveedor Internacional", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "W", "Equivalencia Und.Prov. Und.Conteo", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "X", "Unidad Alternativa SUNAT", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "Y", "Equivalencia Und.Alt. Und.Conteo", titleCellStyle, true);
+                
+                UtilesHelper.setValorCelda(sheet, 1, "Z", "Código SUNAT", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "AA", "Exonerado IGV", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "AB", "Inafecto", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "AC", "Tipo de Producto", titleCellStyle, true);
+                UtilesHelper.setValorCelda(sheet, 1, "AD", "Tipo Cambio", titleCellStyle, true);
+                UtilesHelper.setColumnDefaultStyle(sheet, "AD", blockedCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AE", "Activo", titleCellStyle, true);
 
 
                 i = 2;
@@ -246,12 +254,12 @@ namespace Cotizador.ExcelExport
                     
                     UtilesHelper.setValorCelda(sheet, i, "K", obj.monedaProveedor);
                     UtilesHelper.setValorCelda(sheet, i, "L", (double)obj.costoOriginal);
-                    UtilesHelper.setValorCelda(sheet, i, "M", (double)obj.costoSinIgv);
+                    UtilesHelper.setValorCelda(sheet, i, "M", (double)obj.costoSinIgv, blockedCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "N", obj.monedaMP);
                     UtilesHelper.setValorCelda(sheet, i, "O", (double)obj.precioOriginal);
-                    UtilesHelper.setValorCelda(sheet, i, "P", (double)obj.precioSinIgv);
+                    UtilesHelper.setValorCelda(sheet, i, "P", (double)obj.precioSinIgv, blockedCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "Q", (double)obj.precioProvinciasOriginal);
-                    UtilesHelper.setValorCelda(sheet, i, "R", (double)obj.precioProvinciaSinIgv);
+                    UtilesHelper.setValorCelda(sheet, i, "R", (double)obj.precioProvinciaSinIgv, blockedCellStyle);
 
                     UtilesHelper.setValorCelda(sheet, i, "S", obj.unidadConteo);
                     UtilesHelper.setValorCelda(sheet, i, "T", obj.unidadEstandarInternacional);

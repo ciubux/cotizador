@@ -548,11 +548,38 @@ namespace DataLayer
                 permiso.categoriaPermiso = new CategoriaPermiso();
                 permiso.categoriaPermiso.idCategoriaPermiso = Converter.GetInt(row, "id_categoria_permiso");
                 permiso.categoriaPermiso.descripcion = Converter.GetString(row, "descripcion_categoria");
-                permiso.byRol = Converter.GetInt(row, "id_categoria_permiso") == 1;
-                permiso.byUser = Converter.GetInt(row, "id_categoria_permiso") == 1;
+                permiso.byRol = Converter.GetInt(row, "es_rol") == 1;
+                permiso.byUser = Converter.GetInt(row, "es_usuario") == 1;
 
                 obj.permisoList.Add(permiso);
             }
+
+            return obj;
+        }
+
+
+        public Usuario updatePermisos(Usuario obj)
+        {
+            var objCommand = GetSqlCommand("pu_usuario_permisos");
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuarioModificacion", obj.IdUsuarioRegistro);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (Permiso item in obj.permisoList)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idPermiso;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@permisos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.IntegerList";
+
+
+            ExecuteNonQuery(objCommand);
 
             return obj;
         }

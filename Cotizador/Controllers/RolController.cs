@@ -264,7 +264,7 @@ namespace Cotizador.Controllers
 
             if (idRol == null || idRol == 0)
             {
-                return RedirectToAction("Index", "Rol");
+                return RedirectToAction("List", "Rol");
             }
 
             rol = bl.getRol(idRol.Value);
