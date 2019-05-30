@@ -19,8 +19,9 @@ BEGIN
 	SELECT id_usuario,
 	nombre, email, estado FROM USUARIO 
 	where id_usuario = @idUsuario;
+
 	
-	
+
 	SELECT pe.id_permiso, pe.codigo,pe.descripcion_corta, pe.descripcion_larga,   
 		   CASE WHEN NOT up.id_usuario IS NULL THEN 1 ELSE 0 END as es_usuario, 
 		   CASE WHEN NOT rp.id_rol IS NULL THEN 1 ELSE 0 END as es_rol,
@@ -31,10 +32,9 @@ BEGIN
 	LEFT JOIN USUARIO_PERMISO up ON pe.id_permiso = up.id_permiso and up.id_usuario = @idUsuario AND up.estado = 1
 	INNER JOIN CATEGORIA_PERMISO cp ON pe.id_categoria_permiso = cp.id_categoria_permiso
 	where pe.estado = 1 AND (NOT up.id_usuario IS NULL OR NOT rp.id_rol IS NULL)
-	ORDER BY pe.id_categoria_permiso, pe.orden_permiso;
+	ORDER BY pe.id_categoria_permiso, pe.orden_permiso, es_rol desc;
 
 END
-
 
 
 
