@@ -327,7 +327,7 @@
         var reg = /^[0-9]\d*(\.\d+)?$/;
         var var2 = $("#vendedor_maxdesapro").val();
 
-        if (reg.test(var2) == false) {
+        if (reg.test(var2) == false || || $("#vendedor_maxdesapro").val() > 100) {
             $.alert({
                 title: "Maximo descuento aprobado Inválido",
                 type: 'orange',
@@ -399,7 +399,7 @@
 
         var reg = /^[0-9]\d*(\.\d+)?$/;
         var var2 = $("#vendedor_maxdesapro").val()
-        if (reg.test(var2) == false) {
+        if (reg.test(var2) == false || $("#vendedor_maxdesapro").val() > 100) {
             $.alert({
                 title: "Maximo descuento aprobado Inválido",
                 type: 'orange',
