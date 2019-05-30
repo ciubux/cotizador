@@ -502,6 +502,7 @@ namespace DataLayer
         public List<Usuario> getUsuariosMantenedor(Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_usuarios_mantenedor");
+            InputParameterAdd.VarcharEmpty(objCommand, "textoBusqueda", usuario.nombre);
             InputParameterAdd.Int(objCommand, "estado", usuario.Estado);
             DataTable dataTable = Execute(objCommand);
             List<Usuario> lista = new List<Usuario>();

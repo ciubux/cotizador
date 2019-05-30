@@ -635,7 +635,7 @@ namespace Cotizador.Controllers
                 cantidad = sheet.LastRowNum;
 
             //   cantidad = 2008;
-            //sheet.LastRowNum
+            int lastrow = sheet.LastRowNum;
             int posicionInicial = 0;
             int pos = 0;
 
@@ -643,6 +643,7 @@ namespace Cotizador.Controllers
 
             for (row = 1; row <= cantidad; row++)
             {
+                int a = 1;
                 if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                 {
                     isNew = false;
