@@ -364,7 +364,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            ViewBag.pagina = (int)Constantes.paginas.MantenimientoPedido;
+            ViewBag.pagina = (int)Constantes.paginas.MantenimientoVenta;
             return View();
         }
 

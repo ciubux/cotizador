@@ -302,6 +302,7 @@ jQuery(function ($) {
 
 
     function validacionDatosGrupoCliente() {
+
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             $.alert({
                 title: "No selecionó Ciudad",
@@ -315,8 +316,22 @@ jQuery(function ($) {
             return false;
         }
 
+        var codigo = $("#grupoCliente_codigo").val().trim();
+        var nCodigo = codigo.length;
 
-      
+        if (nCodigo != 4) {
+            $.alert({
+                title: "Código inválido.",
+                type: 'orange',
+                content: 'El código del grupo debe ser de 4 dígitos.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#idCiudad").focus()
+            return false;
+        }
+
 
         if ($("#plazoCreditoSolicitado").is(':enabled')) {
 
@@ -1470,7 +1485,6 @@ jQuery(function ($) {
                 var disabledCanasta = "";
 
                 var editaCliente = parseInt($("#tableListaPrecios th.listaPreciosCanasta").attr("hasEdit"));
-           
 
                 disabledCanasta = "";
 
@@ -1541,7 +1555,6 @@ jQuery(function ($) {
                 else {
                     $("#msgPreciosSinResultados").show();
                 }
-
                 
                 if (obj.editaGrupo != 1) {
                     editGrupoCliente = 0;
@@ -1558,7 +1571,6 @@ jQuery(function ($) {
                     editaMiembros = 1;
                     $("#btnMiembrosGrupoCliente").show();
                 }
-
 
                 FooTable.init('#tableListaPrecios');
 
@@ -1821,7 +1833,6 @@ jQuery(function ($) {
                         '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + cliente.ruc + '  </td>' +
                         '<td>  ' + cliente.ciudad.nombre + '  </td>' +
-                        '<td>  ' + textoHeredaPrecios + '  </td>' +
                         '<td>  <input type="checkbox" class="chkMiembroHeredaPrecios' + checkedHeredaPrecios + ' value="1"> </td>' + 
                         '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                         '</tr>';

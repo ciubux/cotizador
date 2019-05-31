@@ -77,6 +77,18 @@
                             }
                         </label>
                     </div>
+                    <div class="radio radio-inline">
+                        <label class="radio-label">
+                            @if (producto.Estado == -1)
+                            {
+                                <input class="radio-input" checked type="radio" name="producto_estado" id="producto_estado_todos" value="0"><span>Todos</span>
+                            }
+                            else
+                            {
+                                <input class="radio-input" type="radio" name="producto_estado" id="producto_estado_todos" value="0"><span>Todos</span>
+                            }
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -123,6 +135,10 @@
 
                 <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
                     <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Producto")">Exportar</button>
+                    @if (producto.usuario.realizaCargaMasivaProductos)
+                    {
+                        <button id="btnExportUploadExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchUploadExcel", "Producto")">Exportar para Actualización</button>
+                    }
                 </div>
 
                 <table id="tableProductos" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"

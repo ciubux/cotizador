@@ -54,7 +54,7 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
-
+        
         public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null)
         {
             var objCommand = GetSqlCommand("ps_getproductos_search");
@@ -94,6 +94,21 @@ namespace DataLayer
             }
             return idProducto;
         }
+
+        public Guid getAllProductoId(String sku)
+        {
+            var objCommand = GetSqlCommand("ps_allProductoId");
+            InputParameterAdd.Varchar(objCommand, "sku", sku);
+            DataTable dataTable = Execute(objCommand);
+
+            Guid idProducto = Guid.Empty;
+            foreach (DataRow row in dataTable.Rows)
+            {
+                idProducto = Converter.GetGuid(row, "id_producto");
+            }
+            return idProducto;
+        }
+
 
         public Producto getProducto(Guid idProducto, Guid idCliente, Boolean esCompra = false)
         {
@@ -738,18 +753,39 @@ namespace DataLayer
                 item.unidad = Converter.GetString(row, "unidad");
                 item.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
                 item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                item.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                item.unidadProveedorInternacional = Converter.GetString(row, "unidad_proveedor_internacional");
+                item.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
+                item.unidadAlternativaInternacional = Converter.GetString(row, "unidad_alternativa_internacional");
                 item.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
                 item.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                item.equivalenciaUnidadAlternativaUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_alternativa_unidad_conteo");
+                item.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                item.equivalenciaUnidadProveedorUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_proveedor_unidad_conteo");
+                item.codigoSunat = Converter.GetString(row, "codigo_sunat");
+                item.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
+                item.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
+
                 item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
                 item.tipoProductoVista = (int)item.tipoProducto;
 
                 item.precioSinIgv = Converter.GetDecimal(row, "precio");
+                item.precioOriginal = Converter.GetDecimal(row, "precio_original");
                 item.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
+                item.precioProvinciasOriginal = Converter.GetDecimal(row, "precio_provincia_original");
                 item.costoSinIgv = Converter.GetDecimal(row, "costo");
+                item.costoOriginal = Converter.GetDecimal(row, "costo_original");
+
+                item.tipoCambio = Converter.GetDecimal(row, "tipo_cambio");
+                item.monedaMP = Converter.GetString(row, "moneda_venta");
+                item.monedaProveedor = Converter.GetString(row, "moneda_compra");
 
                 item.image = Converter.GetBytes(row, "imagen");
                 item.Estado = Converter.GetInt(row, "estado");
                 item.FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion");
+                
+
+                
                 productoList.Add(item);
             }
       
@@ -772,14 +808,20 @@ namespace DataLayer
                 item.familia = Converter.GetString(row, "familia");
                 item.proveedor = Converter.GetString(row, "proveedor");
                 item.unidad = Converter.GetString(row, "unidad");
+                item.unidadConteo = Converter.GetString(row, "unidad_conteo");
                 item.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
                 item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
                 item.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
                 item.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                item.equivalenciaUnidadAlternativaUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_alternativa_unidad_conteo");
+                item.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                item.equivalenciaUnidadProveedorUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_proveedor_unidad_conteo");
                 item.Estado = Converter.GetInt(row, "estado");
                 item.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
                 item.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
+                item.unidadProveedorInternacional = Converter.GetString(row, "unidad_proveedor_internacional");
                 item.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
+                item.unidadAlternativaInternacional = Converter.GetString(row, "unidad_alternativa_internacional");
                 item.Estado = Converter.GetInt(row, "estado");
                 item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
                 item.tipoProductoVista = (int)item.tipoProducto;
@@ -787,11 +829,19 @@ namespace DataLayer
                 //,fecha_creacion
                 //,usuario_modificacion
                 //,fecha_modificacion
-
+                item.monedaProveedor = Converter.GetString(row, "moneda_compra");
+                item.monedaMP = Converter.GetString(row, "moneda_venta");
+                item.tipoCambio = Converter.GetDecimal(row, "tipo_cambio");
 
                 item.precioSinIgv = Converter.GetDecimal(row, "precio");
+                item.precioOriginal = Converter.GetDecimal(row, "precio_original");
                 item.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
+                item.precioProvinciasOriginal = Converter.GetDecimal(row, "precio_provincia_original");
                 item.costoSinIgv = Converter.GetDecimal(row, "costo");
+                item.costoOriginal = Converter.GetDecimal(row, "costo_original");
+
+                item.codigoSunat = Converter.GetString(row, "codigo_sunat");
+                
 
                 item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
 
@@ -815,20 +865,36 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
             InputParameterAdd.Varchar(objCommand, "unidad", producto.unidad);
             InputParameterAdd.Varchar(objCommand, "unidadAlternativa", producto.unidad_alternativa);
-            InputParameterAdd.Varchar(objCommand, "unidadProveedor", producto.unidadProveedor);
+            InputParameterAdd.VarcharEmpty(objCommand, "unidadProveedor", producto.unidadProveedor == null ? "" : producto.unidadProveedor);
             InputParameterAdd.Varchar(objCommand, "unidadEstandarInternacional", producto.unidadEstandarInternacional);
             InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalenciaAlternativa);
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
-            InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "exoneradoIgv", (producto.exoneradoIgv ? 1 : 0));
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
             InputParameterAdd.Int(objCommand, "tipo", (int) producto.tipoProducto);
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);
             InputParameterAdd.Decimal(objCommand, "costo", producto.costoSinIgv);
-            InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", DateTime.Now.ToString("yyyy-MM-dd"));
-            InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(producto.CargaMasiva ? 1 : 0));
+            InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", DateTime.Now);
+            InputParameterAdd.Int(objCommand, "esCargaMasiva", producto.CargaMasiva ? 1 : 0);
 
+            InputParameterAdd.Varchar(objCommand, "monedaCompra", producto.monedaProveedor);
+            InputParameterAdd.Varchar(objCommand, "monedaVenta", producto.monedaMP);
+            InputParameterAdd.Varchar(objCommand, "unidadAlternativaInternacional", producto.unidadAlternativaInternacional);
+            InputParameterAdd.Varchar(objCommand, "unidadConteo", producto.unidadConteo);
+            InputParameterAdd.VarcharEmpty(objCommand, "unidadProveedorInternacional", producto.unidadProveedorInternacional == null ? "" : producto.unidadProveedorInternacional);
+            InputParameterAdd.Varchar(objCommand, "codigoSunat", producto.codigoSunat);
+
+            InputParameterAdd.Int(objCommand, "equivalenciaUnidadAlternativaUnidadConteo", producto.equivalenciaUnidadAlternativaUnidadConteo);
+            InputParameterAdd.Int(objCommand, "equivalenciaUnidadEstandarUnidadConteo", producto.equivalenciaUnidadEstandarUnidadConteo);
+            InputParameterAdd.Int(objCommand, "equivalenciaUnidadProveedorUnidadConteo", producto.equivalenciaUnidadProveedorUnidadConteo);
+
+            InputParameterAdd.Decimal(objCommand, "costoOriginal", producto.costoOriginal);
+            InputParameterAdd.Decimal(objCommand, "precioOriginal", producto.precioOriginal);
+            InputParameterAdd.Decimal(objCommand, "precioProvinciaOriginal", producto.precioProvinciasOriginal);
+            InputParameterAdd.Decimal(objCommand, "tipoCambio", producto.tipoCambio);
+            
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
 
             ExecuteNonQuery(objCommand);
@@ -861,18 +927,46 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
             InputParameterAdd.Int(objCommand, "tipo", (int)producto.tipoProducto);
-            InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", DateTime.Now);
-
-            InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(producto.CargaMasiva ? 1 : 0));
-
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);
             InputParameterAdd.Decimal(objCommand, "costo", producto.costoSinIgv);
+            InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", DateTime.Now);
+            InputParameterAdd.Int(objCommand, "esCargaMasiva", producto.CargaMasiva ? 1 : 0);
+            
+            InputParameterAdd.Varchar(objCommand, "monedaCompra", producto.monedaProveedor);
+            InputParameterAdd.Varchar(objCommand, "monedaVenta", producto.monedaMP);
+            InputParameterAdd.Varchar(objCommand, "unidadAlternativaInternacional", producto.unidadAlternativaInternacional);
+            InputParameterAdd.Varchar(objCommand, "unidadConteo", producto.unidadConteo);
+            InputParameterAdd.Varchar(objCommand, "unidadProveedorInternacional", producto.unidadProveedorInternacional);
+            InputParameterAdd.Varchar(objCommand, "codigoSunat", producto.codigoSunat);
 
+            InputParameterAdd.Int(objCommand, "equivalenciaUnidadAlternativaUnidadConteo", producto.equivalenciaUnidadAlternativaUnidadConteo);
+            InputParameterAdd.Int(objCommand, "equivalenciaUnidadEstandarUnidadConteo", producto.equivalenciaUnidadEstandarUnidadConteo);
+            InputParameterAdd.Int(objCommand, "equivalenciaUnidadProveedorUnidadConteo", producto.equivalenciaUnidadProveedorUnidadConteo);
+
+            InputParameterAdd.Decimal(objCommand, "costoOriginal", producto.costoOriginal);
+            InputParameterAdd.Decimal(objCommand, "precioOriginal", producto.precioOriginal);
+            InputParameterAdd.Decimal(objCommand, "precioProvinciaOriginal", producto.precioProvinciasOriginal);
+            InputParameterAdd.Decimal(objCommand, "tipoCambio", producto.tipoCambio);
+            
             ExecuteNonQuery(objCommand);
 
             return producto;
 
+        }
+
+        public void actualizarTipoCambioCatalogo(Decimal tipoCambio, bool aplicaCosto, bool aplicaPrecio, bool aplicaPrecioProvincias, DateTime fechaInicioVigencia, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pp_actualiza_tipo_cambio_productos");
+            InputParameterAdd.Int(objCommand, "aplicaCosto", aplicaCosto ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "aplicaPrecio", aplicaPrecio  ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "aplicaPrecioProvincia", aplicaPrecioProvincias ? 1 : 0);
+            InputParameterAdd.Decimal(objCommand, "tipoCambio", tipoCambio);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", fechaInicioVigencia);
+
+            ExecuteNonQuery(objCommand);
+            
         }
     }
 }

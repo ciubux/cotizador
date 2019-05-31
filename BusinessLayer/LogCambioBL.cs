@@ -90,6 +90,7 @@ namespace BusinessLayer
 
                     prod.usuario = new Usuario();
                     prod.usuario.idUsuario = logs.ElementAt<LogCambio>(0).idUsuarioModificacion;
+                    prod.IdUsuarioRegistro = prod.usuario.idUsuario;
 
                     if (prod.idProducto != null && prod.idProducto != Guid.Empty)
                     {
@@ -101,7 +102,6 @@ namespace BusinessLayer
                         {
                             cambio.idRegistro = prod.idProducto.ToString();
                         }
-
                     }
 
                     break;

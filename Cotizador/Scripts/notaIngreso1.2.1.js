@@ -560,7 +560,7 @@ jQuery(function ($) {
     function desactivarBotonesFacturar() {
         $("#btnCancelarFacturarPedido").attr('disabled', 'disabled');
         $("#btnEditarCliente").attr('disabled', 'disabled');
-        $("#btnEditarVenta").attr('disabled', 'disabled');
+        $("#btnEditarCompra").attr('disabled', 'disabled');
         $("#btnAceptarFacturarNotaIngreso").attr('disabled', 'disabled');
         $("#btnConfirmarFacturaCompra").attr('disabled', 'disabled');
         $("#btnCancelarConfirmarFacturarPedido").attr('disabled', 'disabled');
@@ -570,7 +570,7 @@ jQuery(function ($) {
     function activarBotonesFacturar() {
         $("#btnCancelarFacturarPedido").removeAttr('disabled');
         $("#btnEditarCliente").removeAttr('disabled');
-        $("#btnEditarVenta").removeAttr('disabled');
+        $("#btnEditarCompra").removeAttr('disabled');
         $("#btnAceptarFacturarNotaIngreso").removeAttr('disabled');
         $("#btnConfirmarFacturaCompra").removeAttr('disabled');
         $("#btnCancelarConfirmarFacturarPedido").removeAttr('disabled');
@@ -1265,7 +1265,7 @@ jQuery(function ($) {
         );
     });
 
-    $("#btnEditarVenta").click(function () {
+    $("#btnEditarCompra").click(function () {
 
         $("#btnCancelarFacturarPedido").click();
        // desactivarBotonesVer();
@@ -1273,15 +1273,15 @@ jQuery(function ($) {
       
         var yourWindow;
         $.ajax({
-            url: "/Venta/iniciarEdicionVenta",
+            url: "/Compra/iniciarEdicionCompra",
             type: 'POST',
             error: function (detalle) { alert("Ocurrió un problema al iniciar la edición de la venta."); },
             success: function (fileName) {
 
                 
                 yourWindow = window.open(
-                    "/Venta/Vender",
-                    "Edición de Venta",
+                    "/Compra/Comprar",
+                    "Edición de Compra",
                     "resizable,scrollbars,status"
                 );
            

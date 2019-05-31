@@ -206,6 +206,8 @@ namespace Cotizador.Controllers
             cliente.perteneceCanalProvincias = true;
             cliente.perteneceCanalMultiregional = true;
             cliente.perteneceCanalPCP = true;
+            cliente.textoBusqueda = "";
+            cliente.sku = "";
             return cliente;
         }
 
