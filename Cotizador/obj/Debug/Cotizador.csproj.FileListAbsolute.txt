@@ -699,7 +699,6 @@ D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompil
 D:\Repo\freelos\cotizador\Cotizador\bin\Moq.pdb
 D:\Repo\freelos\cotizador\Cotizador\bin\Moq.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\NLog.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\NPOI.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\System.Runtime.CompilerServices.Unsafe.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\System.Threading.Tasks.Extensions.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.Helpers.xml
@@ -2300,3 +2299,7 @@ C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Cot
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Cotizador\obj\Debug\Cotizador.pdb
+D:\Repo\freelos\cotizador\Cotizador\bin\Spire.License.dll
+D:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.dll
+D:\Repo\freelos\cotizador\Cotizador\bin\Spire.License.xml
+D:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.xml

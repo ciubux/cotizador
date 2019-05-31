@@ -119,7 +119,6 @@ D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.pdb
 D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Model.pdb
 D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Model.dll.config
 D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\ServiceLayer.pdb
-D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\NPOI.xml
 D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csprojAssemblyReference.cache
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
