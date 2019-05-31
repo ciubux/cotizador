@@ -43,21 +43,6 @@ C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Debug\Model.csproj.CoreCompileI
 C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Debug\Model.pdb
 C:\Users\cesar\Documents\MP2\cotizador\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
-<<<<<<< HEAD
-=======
-D:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll.config
-D:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll
-D:\Repo\freelos\cotizador\Model\bin\Debug\Model.pdb
-D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.dll
-D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.dll
-D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.xml
-D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb
->>>>>>> Andre/Vendedor
 C:\Users\cesar\Documents\MP2\cotizador_2\Model\bin\Debug\Model.dll.config
 C:\Users\cesar\Documents\MP2\cotizador_2\Model\bin\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Model\bin\Debug\Model.pdb
