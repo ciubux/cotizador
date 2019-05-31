@@ -21,7 +21,7 @@ namespace Model
 
 
         public Guid idProducto { get; set; }
-
+        
         [Display(Name = "SKU MP:")]
         public String sku { get; set; }
         [Display(Name = "SKU Prov.:")]
@@ -418,7 +418,6 @@ namespace Model
                     case "unidad_proveedor_internacional": lc = instanciarLogCambio(campo); lc.valor = this.unidadProveedorInternacional; break;
                     case "codigo_sunat": lc = instanciarLogCambio(campo); lc.valor = this.codigoSunat; break;
                     case "exonerado_igv": lc = instanciarLogCambio(campo); lc.valor = this.exoneradoIgv.ToString(); break;
-
                     case "estado": lc = instanciarLogCambio(campo); lc.valor = this.Estado.ToString(); break;
                 }
 
@@ -974,7 +973,7 @@ namespace Model
 
             return false;
         }
-
+        
         /*     public Guid idFamilia { get; set; }
     public Guid idProveedor { get; set; }
     public Guid idUnidad { get; set; }*/

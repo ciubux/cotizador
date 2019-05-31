@@ -73,6 +73,7 @@
     <Compile Include="LogCampoBL.cs" />
     <Compile Include="UtilesHelper.cs" />
     <Compile Include="CompraBL.cs" />
+    <Compile Include="VendedorBL.cs" />
     <Compile Include="VentaBL.cs" />
     <Compile Include="TransportistaBL.cs" />
     <Compile Include="PedidoBL.cs" />

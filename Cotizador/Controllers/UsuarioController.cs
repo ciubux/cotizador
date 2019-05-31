@@ -17,7 +17,7 @@ namespace Cotizador.Controllers
         {
             return View();
         }
-
+        
         private Usuario UsuarioSession
         {
             get
@@ -73,7 +73,7 @@ namespace Cotizador.Controllers
 
             return resultado;
         }
-
+        
         public ActionResult usuariosCotizacionList()
         {
             Usuario usuarioSession = ((Usuario)this.Session["usuario"]);

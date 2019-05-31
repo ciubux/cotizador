@@ -99,6 +99,11 @@ namespace Model
         public static String VAR_SESSION_ORIGEN_LISTA = "origenList";
         public static String VAR_SESSION_ORIGEN_VER = "origenVer";
 
+        public static String VAR_SESSION_VENDEDOR = "vendedor";
+        public static String VAR_SESSION_VENDEDOR_BUSQUEDA = "vendedorBusqueda";
+        public static String VAR_SESSION_VENDEDOR_LISTA = "vendedorList";
+        public static String VAR_SESSION_VENDEDOR_VER = "vendedorVer";
+
         public static String VAR_SESSION_SUBDISTRIBUIDOR = "subDistribuidor";
         public static String VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA = "subDistribuidorBusqueda";
         public static String VAR_SESSION_SUBDISTRIBUIDOR_LISTA = "subDistribuidorList";
@@ -186,7 +191,6 @@ namespace Model
 
         public static String VAR_SESSION_PERMISO_LISTA = "permisoList";
 
-        
 
         public static String VAR_SESSION_ASIGNACION_PERMISOS = "AsignacionPermisos";
         public static String VAR_SESSION_CAMBIO_ASIGNACION_PERMISOS = "CambioAsignacionPermisos";
@@ -354,6 +358,9 @@ namespace Model
         public const String MODIFICA_USUARIO = "P812";
         public const String VISUALIZA_USUARIOS = "P813";
 
+        public const String MODIFICA_VENDEDORES = "P072";
+        public const String VISUALIZA_VENDEDORES = "P073";
+
         public enum paginas {
             /*COTIZACION*/
             [Display(Name = "BUSQUEDA COTIZACION")]
@@ -454,8 +461,14 @@ namespace Model
             [Display(Name = "BUSQUEDA DOCUMENTOS COMPRA")]
             BusquedaDocumentosCompra = 41,
 
-            /*ROLES*/
-            [Display(Name = "BUSQUEDA ROLES")]
+            /*BUSQUEDA DE VENDEDORES*/
+            [Display(Name = "BUSQUEDA VENDEDORES")]
+            BusquedaVendedores = 42,
+            [Display(Name = "MANTENIMIENTO VENDEDORES")]
+            MantenimientoVendedores = 43,
+
+             /*ROLES*/
+             [Display(Name = "BUSQUEDA ROLES")]
             BusquedaRoles = 101,
             [Display(Name = "MANTENIMIENTO ROL")]
             MantenimientoRol = 102,
@@ -465,6 +478,7 @@ namespace Model
             BusquedaUsuarios = 103,
             [Display(Name = "MANTENIMIENTO USUARIO")]
             MantenimientoUsuario = 104
+
         };
 
 

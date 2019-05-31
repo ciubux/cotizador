@@ -302,7 +302,10 @@ jQuery(function ($) {
 
 
     function validacionDatosGrupoCliente() {
+<<<<<<< HEAD
 
+=======
+>>>>>>> Andre/Vendedor
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             $.alert({
                 title: "No selecionó Ciudad",
@@ -316,6 +319,7 @@ jQuery(function ($) {
             return false;
         }
 
+<<<<<<< HEAD
         var codigo = $("#grupoCliente_codigo").val().trim();
         var nCodigo = codigo.length;
 
@@ -332,6 +336,10 @@ jQuery(function ($) {
             return false;
         }
 
+=======
+
+      
+>>>>>>> Andre/Vendedor
 
         if ($("#plazoCreditoSolicitado").is(':enabled')) {
 
@@ -1485,6 +1493,10 @@ jQuery(function ($) {
                 var disabledCanasta = "";
 
                 var editaCliente = parseInt($("#tableListaPrecios th.listaPreciosCanasta").attr("hasEdit"));
+<<<<<<< HEAD
+=======
+           
+>>>>>>> Andre/Vendedor
 
                 disabledCanasta = "";
 
@@ -1571,7 +1583,7 @@ jQuery(function ($) {
                     editaMiembros = 1;
                     $("#btnMiembrosGrupoCliente").show();
                 }
-
+                
                 FooTable.init('#tableListaPrecios');
 
                 $("#chkSoloCanasta").prop("checked", false);
@@ -1833,6 +1845,10 @@ jQuery(function ($) {
                         '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + cliente.ruc + '  </td>' +
                         '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+<<<<<<< HEAD
+=======
+                        '<td>  ' + textoHeredaPrecios + '  </td>' +
+>>>>>>> Andre/Vendedor
                         '<td>  <input type="checkbox" class="chkMiembroHeredaPrecios' + checkedHeredaPrecios + ' value="1"> </td>' + 
                         '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                         '</tr>';

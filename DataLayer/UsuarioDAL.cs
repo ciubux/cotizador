@@ -131,6 +131,7 @@ namespace DataLayer
 
             return obj;
         }
+        
 
         public Usuario getUsuarioLogin(Usuario usuario)
         {
@@ -416,7 +417,7 @@ namespace DataLayer
                 }
                 usuario.usuarioCreaDocumentoVentaList = usuarioList;
             }
-
+            
             if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
             {
                 DataTable dataTableClientes = dataSet.Tables[6];
@@ -490,8 +491,7 @@ namespace DataLayer
                     Constantes.CARGOS_LIST.Add(producto);
                 }
             }
-
-
+            
             AlertaValidacionDAL alertaDal = new AlertaValidacionDAL();
             usuario.alertasList = alertaDal.getAlertasPorUsuario(usuario);
 

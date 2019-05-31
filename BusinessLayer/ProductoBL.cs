@@ -56,6 +56,7 @@ namespace BusinessLayer
             }
         }
 
+
         public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente, Boolean esCompra = false)
         {
             using (var dal = new ProductoDAL())
@@ -116,9 +117,6 @@ namespace BusinessLayer
                 return producto;
             }
         }
-
-
-
 
         public List<Producto> getProductos(Producto producto)
         {

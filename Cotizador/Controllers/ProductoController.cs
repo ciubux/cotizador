@@ -184,7 +184,7 @@ namespace Cotizador.Controllers
             ProductoSearch excel = new ProductoSearch();
             return excel.generateExcel(list, (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]);
         }
-
+        
         [HttpGet]
         public ActionResult ExportLastSearchUploadExcel()
         {
@@ -232,7 +232,7 @@ namespace Cotizador.Controllers
 
             ViewBag.persitirCampos = persitirCampos;
             ViewBag.tipoCambio = tipoCambio;
-
+            
             return View();
 
         }
@@ -566,9 +566,7 @@ namespace Cotizador.Controllers
                 return View("CargaIncorrecta");
             }
         }
-
-
-
+        
 
         [HttpPost]
         public ActionResult Load(HttpPostedFileBase file)
@@ -581,10 +579,12 @@ namespace Cotizador.Controllers
             List<CampoPersistir> registrarCampos = Producto.obtenerCampos(campos);
             //List<CampoPersistir> registrarCampos = new List<CampoPersistir>();
             int select = 0;
+
             foreach (CampoPersistir cp in registrarCampos)
             {
                 cp.registra = false;
                 cp.persiste = false;
+                
                 //si ha sido seleccionado o es un campo no actualizable en la carga masiva debe agregarse a la lista de cmapos a registrar
                 if (Request["registra_" + cp.campo.nombre] != null || !Producto.esCampoActualizableCargaMasiva(cp.campo.nombre))
                 {
@@ -596,7 +596,7 @@ namespace Cotizador.Controllers
                     {
                         select = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
                     }
-
+                    
                     if (select == 1)
                     {
                         cp.registra = true;
@@ -638,9 +638,7 @@ namespace Cotizador.Controllers
             int lastrow = sheet.LastRowNum;
             int posicionInicial = 0;
             int pos = 0;
-
             
-
             for (row = 1; row <= cantidad; row++)
             {
                 int a = 1;
@@ -649,7 +647,7 @@ namespace Cotizador.Controllers
                     isNew = false;
 
                     Producto productoStaging = new Producto();
-                    
+
                     try
                     {
                         pos = posicionInicial + 0;
@@ -671,7 +669,7 @@ namespace Cotizador.Controllers
                         {
                             productoStaging.skuProveedor = sheet.GetRow(row).GetCell(pos).ToString();
                         }
-
+                        
                         pos = posicionInicial + 2;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
@@ -1028,8 +1026,6 @@ namespace Cotizador.Controllers
                                 }
                             }
                         }
-
-
                     }
                     catch (Exception ex)
                     {
@@ -1056,7 +1052,7 @@ namespace Cotizador.Controllers
             // Obtener productos con moneda compra y/o venta en dolares 
             // Actualizar tipo de cambio, hacer calculo y mandar al log programado
             // aplicar log programado
-
+            
             Usuario usuario = (Usuario)this.Session["usuario"];
             LogCampoBL logCambioBl = new LogCampoBL();
             List<LogCampo> campos = logCambioBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);

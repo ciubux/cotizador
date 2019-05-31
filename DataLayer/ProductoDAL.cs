@@ -53,7 +53,6 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_productoStaging");
             ExecuteNonQuery(objCommand);
         }
-
         
         public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null)
         {
@@ -94,7 +93,7 @@ namespace DataLayer
             }
             return idProducto;
         }
-
+        
         public Guid getAllProductoId(String sku)
         {
             var objCommand = GetSqlCommand("ps_allProductoId");
@@ -108,8 +107,7 @@ namespace DataLayer
             }
             return idProducto;
         }
-
-
+        
         public Producto getProducto(Guid idProducto, Guid idCliente, Boolean esCompra = false)
         {
             var objCommand = GetSqlCommand("ps_getproducto");
@@ -143,7 +141,6 @@ namespace DataLayer
                     producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
                 }
                 
-
                 producto.familia = Converter.GetString(row, "familia");
                // producto.clase = Converter.GetString(row, "clase");
                 producto.proveedor = Converter.GetString(row, "proveedor");
@@ -155,9 +152,8 @@ namespace DataLayer
                 
                 producto.precioClienteProducto = new PrecioClienteProducto();
                 producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
-
                 producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
-
+                
                 producto.Stock = Converter.GetInt(row, "stock");
 
                 /*Obtenido a partir de precio Lista*/
@@ -783,9 +779,7 @@ namespace DataLayer
                 item.image = Converter.GetBytes(row, "imagen");
                 item.Estado = Converter.GetInt(row, "estado");
                 item.FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion");
-                
 
-                
                 productoList.Add(item);
             }
       
@@ -809,6 +803,7 @@ namespace DataLayer
                 item.proveedor = Converter.GetString(row, "proveedor");
                 item.unidad = Converter.GetString(row, "unidad");
                 item.unidadConteo = Converter.GetString(row, "unidad_conteo");
+
                 item.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
                 item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
                 item.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
@@ -822,6 +817,7 @@ namespace DataLayer
                 item.unidadProveedorInternacional = Converter.GetString(row, "unidad_proveedor_internacional");
                 item.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
                 item.unidadAlternativaInternacional = Converter.GetString(row, "unidad_alternativa_internacional");
+
                 item.Estado = Converter.GetInt(row, "estado");
                 item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
                 item.tipoProductoVista = (int)item.tipoProducto;
@@ -829,6 +825,7 @@ namespace DataLayer
                 //,fecha_creacion
                 //,usuario_modificacion
                 //,fecha_modificacion
+
                 item.monedaProveedor = Converter.GetString(row, "moneda_compra");
                 item.monedaMP = Converter.GetString(row, "moneda_venta");
                 item.tipoCambio = Converter.GetDecimal(row, "tipo_cambio");
@@ -841,8 +838,6 @@ namespace DataLayer
                 item.costoOriginal = Converter.GetDecimal(row, "costo_original");
 
                 item.codigoSunat = Converter.GetString(row, "codigo_sunat");
-                
-
                 item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
 
                 item.image = Converter.GetBytes(row, "imagen");
