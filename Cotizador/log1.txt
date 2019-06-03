@@ -72,4 +72,5 @@ The statement has been terminated.
 The statement has been terminated.
 2019-05-29 10:23:47.9848|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (10461243679, 15526227-2108-4113-b46a-1c8ab5c0e581, 1).
 The statement has been terminated.
-2019-05-29 10:24:11.6342|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-05-29 10:24:11.6342|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.2019-06-03 13:35:29.4470|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-06-03 13:38:34.0882|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.

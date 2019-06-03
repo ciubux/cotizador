@@ -81,4 +81,4 @@
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/guiaRemision")
 }
 
-<link rel="stylesheet" href="http://mpinstitucional.com/css/PrintGuiaC.css">
+<link href="@Url.Content("~/Content/PrintGuiaC.css?nocache=" + TempData["ScriptVersion"])" rel="stylesheet" type="text/css" />
