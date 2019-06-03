@@ -431,3 +431,5 @@ D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompile
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\obj\Debug\CotizadorPDF.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache

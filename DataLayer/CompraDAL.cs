@@ -228,6 +228,201 @@ namespace DataLayer
 
 
 
+        public void UpdateCompra(Compra compra)
+        {
+            this.BeginTransaction(IsolationLevel.ReadCommitted);
+
+            foreach (PedidoDetalle ventaDetalle in compra.pedido.pedidoDetalleList)
+            {
+                this.UpdateCompraDetalle(ventaDetalle);
+            }
+
+            //Actualiza los totales de la venta
+            var objCommand = GetSqlCommand("pu_compra");
+            InputParameterAdd.Guid(objCommand, "idCompra", compra.idCompra);
+            InputParameterAdd.Varchar(objCommand, "observaciones", compra.observaciones);
+            ExecuteNonQuery(objCommand);
+
+            this.Commit();
+        }
+
+
+
+        public void UpdateCompraDetalle(PedidoDetalle ventaDetalle)
+        {
+            var objCommand = GetSqlCommand("pu_ventaDetalle");
+            InputParameterAdd.Guid(objCommand, "idVentaDetalle", ventaDetalle.idVentaDetalle);
+            InputParameterAdd.Decimal(objCommand, "precioUnitario", ventaDetalle.precioUnitario);
+            InputParameterAdd.Decimal(objCommand, "precioNeto", ventaDetalle.precioNeto);
+            InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", ventaDetalle.porcentajeDescuento);
+            InputParameterAdd.Decimal(objCommand, "flete", ventaDetalle.flete);
+            ExecuteNonQuery(objCommand);
+
+        }
+
+
+
+
+        public Transaccion SelectPlantillaCompra(Compra transaccion, Usuario usuario, Guid? idProducto = null, List<Guid> idProductoList = null)
+        {
+            var objCommand = GetSqlCommand("ps_plantillaCompra");
+
+            if (idProducto != null)
+            {
+                objCommand = GetSqlCommand("ps_plantillaCompraDescuentoGlobal");
+                InputParameterAdd.Guid(objCommand, "idProducto", idProducto.Value);
+            }
+            else if (idProductoList != null)
+            {
+                DataTable tvp = new DataTable();
+                tvp.Columns.Add(new DataColumn("idProductoList", typeof(Guid)));
+
+                // populate DataTable from your List here
+                foreach (var id in idProductoList)
+                    tvp.Rows.Add(id);
+
+
+                objCommand = GetSqlCommand("ps_plantillaCompraCargos");
+
+                SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idProductoList", tvp);
+                // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
+                tvparam.SqlDbType = SqlDbType.Structured;
+                tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+                //InputParameterAdd.Varchar(objCommand, "idProductoList", tvparam);
+            }
+
+            InputParameterAdd.Int(objCommand, "idDocumentoCompra", transaccion.documentoCompra.idDocumentoCompra);
+            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)transaccion.documentoCompra.tipoDocumento);
+
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            transaccion.tipoErrorCrearTransaccion = (Compra.TiposErrorCrearTransaccion)(int)objCommand.Parameters["@tipoError"].Value;
+            transaccion.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+
+            if (transaccion.tipoErrorCrearTransaccion == Compra.TiposErrorCrearTransaccion.NoExisteError)
+            {
+                DataTable ventaDataTable = dataSet.Tables[0];
+                DataTable ventaDetalleDataTable = dataSet.Tables[1];
+
+                //   DataTable dataTable = Execute(objCommand);
+                //Datos de la cotizacion
+                transaccion.pedido = new Pedido();
+                Pedido pedido = transaccion.pedido;
+
+                foreach (DataRow row in ventaDataTable.Rows)
+                {
+                    transaccion.cliente = new Cliente();
+                    transaccion.cliente.codigo = Converter.GetString(row, "codigo");
+                    transaccion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                    transaccion.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                    transaccion.cliente.ruc = Converter.GetString(row, "ruc");
+                    transaccion.cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                    transaccion.cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
+                    transaccion.cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
+                    transaccion.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
+                    ///REVISAR
+                    transaccion.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                    transaccion.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
+                    transaccion.cliente.ciudad = new Ciudad();
+                    transaccion.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                    transaccion.documentoCompra.serie = Converter.GetString(row, "serie");
+                    transaccion.documentoCompra.numero = Converter.GetInt(row, "correlativo").ToString().PadLeft(8, '0');
+                    transaccion.pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
+                    transaccion.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+                    transaccion.pedido.observacionesFactura = Converter.GetString(row, "observaciones");
+                    transaccion.guiaRemision = new GuiaRemision();
+                    transaccion.guiaRemision.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                    transaccion.guiaRemision.serieDocumento = Converter.GetString(row, "serie_guia_remision");
+                    transaccion.guiaRemision.numeroDocumento = Converter.GetInt(row, "numero_guia_remision");
+                }
+
+
+                pedido.pedidoDetalleList = new List<PedidoDetalle>();
+                //Detalle de la cotizacion
+                foreach (DataRow row in ventaDetalleDataTable.Rows)
+                {
+                    PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
+                    pedidoDetalle.producto = new Producto();
+
+                    pedidoDetalle.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");
+                    pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                    pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
+                    pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
+                    pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+                    if (pedidoDetalle.esPrecioAlternativo)
+                    {
+                        pedidoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                        pedidoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                    }
+
+
+                    pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
+
+                    pedidoDetalle.precioUnitarioOriginal = Converter.GetDecimal(row, "precio_unitario_original");
+                    pedidoDetalle.cantidadOriginal = Converter.GetInt(row, "cantidad");
+
+                    //Si NO es recotizacion se consideran los precios y el costo de lo guardado
+                    pedidoDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
+                    pedidoDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+
+                    //Si la unidad es alternativa se múltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el precio estándar
+
+
+                    if (pedidoDetalle.esPrecioAlternativo)
+                    {
+                        pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.ProductoPresentacion.Equivalencia;
+                    }
+                    else
+                    {
+                        pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                    }
+
+                    pedidoDetalle.unidad = Converter.GetString(row, "unidad");
+                    pedidoDetalle.unidadInternacional = Converter.GetString(row, "unidad_internacional");
+
+                    pedidoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                    pedidoDetalle.producto.sku = Converter.GetString(row, "sku");
+                    pedidoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                    pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                    pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
+
+                    pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
+
+                    pedidoDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
+
+                    pedidoDetalle.observacion = Converter.GetString(row, "observaciones");
+
+
+                    PrecioClienteProducto precioClienteProducto = new PrecioClienteProducto();
+
+                    precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto_vigente");
+                    precioClienteProducto.flete = Converter.GetDecimal(row, "flete_vigente");
+                    precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario_vigente");
+                    precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia_vigente");
+
+                    precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
+                    precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                    precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+                    precioClienteProducto.cliente = new Cliente();
+                    precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                    pedidoDetalle.producto.precioClienteProducto = precioClienteProducto;
+
+                    //Revisar
+                    pedidoDetalle.precioUnitarioVenta = Converter.GetDecimal(row, "precio_unitario_venta");
+                    pedidoDetalle.idVentaDetalle = Converter.GetGuid(row, "id_venta_detalle");
+
+                    pedido.pedidoDetalleList.Add(pedidoDetalle);
+                }
+                pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            }
+            return transaccion;
+        }
+
+
+
         /*
 
 
@@ -397,192 +592,10 @@ namespace DataLayer
 
 
         
-        public void UpdateCompra(Compra venta)
-        {
-            this.BeginTransaction(IsolationLevel.ReadCommitted);
-
-            foreach (PedidoDetalle ventaDetalle in venta.pedido.pedidoDetalleList)
-            {
-                this.UpdateCompraDetalle(ventaDetalle);
-            }
-
-            //Actualiza los totales de la venta
-            var objCommand = GetSqlCommand("pu_venta");
-            InputParameterAdd.Guid(objCommand, "idCompra", venta.idCompra);
-            InputParameterAdd.Varchar(objCommand, "observaciones", venta.observaciones);
-            ExecuteNonQuery(objCommand);
-
-            this.Commit();
-        }
+     
 
 
-        public void UpdateCompraDetalle(PedidoDetalle ventaDetalle)
-        {
-            var objCommand = GetSqlCommand("pu_ventaDetalle");
-            InputParameterAdd.Guid(objCommand, "idCompraDetalle", ventaDetalle.idCompraDetalle);
-            InputParameterAdd.Decimal(objCommand, "precioUnitario", ventaDetalle.precioUnitario);
-            InputParameterAdd.Decimal(objCommand, "precioNeto", ventaDetalle.precioNeto);
-            InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", ventaDetalle.porcentajeDescuento);
-            InputParameterAdd.Decimal(objCommand, "flete", ventaDetalle.flete);
-            ExecuteNonQuery(objCommand);
-
-        }
-
-
-
-        
-        public Transaccion SelectPlantillaCompra(Compra transaccion, Usuario usuario, Guid? idProducto = null, List<Guid> idProductoList = null)
-        {
-            var objCommand = GetSqlCommand("ps_plantillaCompra");
-            
-            if (idProducto != null)
-            { 
-                objCommand = GetSqlCommand("ps_plantillaCompraDescuentoGlobal");
-                InputParameterAdd.Guid(objCommand, "idProducto", idProducto.Value);
-            }
-            else if(idProductoList != null)
-            {
-                DataTable tvp = new DataTable();
-                tvp.Columns.Add(new DataColumn("idProductoList", typeof(Guid)));
-
-                // populate DataTable from your List here
-                foreach (var id in idProductoList)
-                    tvp.Rows.Add(id);
-
-
-                objCommand = GetSqlCommand("ps_plantillaCompraCargos");
-
-                SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idProductoList", tvp);
-                // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
-                tvparam.SqlDbType = SqlDbType.Structured;
-                tvparam.TypeName = "dbo.UniqueIdentifierList";
-
-                //InputParameterAdd.Varchar(objCommand, "idProductoList", tvparam);
-            }
-
-            InputParameterAdd.Int(objCommand, "idDocumentoCompra", transaccion.documentoCompra.idDocumentoCompra);
-            InputParameterAdd.Int(objCommand, "tipoDocumento", (int)transaccion.documentoCompra.tipoDocumento);
-
-            OutputParameterAdd.Int(objCommand, "tipoError");
-            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
-
-            DataSet dataSet = ExecuteDataSet(objCommand);
-            transaccion.tipoErrorCrearTransaccion = (Compra.TiposErrorCrearTransaccion)(int)objCommand.Parameters["@tipoError"].Value;
-            transaccion.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
-
-            if (transaccion.tipoErrorCrearTransaccion == Compra.TiposErrorCrearTransaccion.NoExisteError)
-            {
-                DataTable ventaDataTable = dataSet.Tables[0];
-                DataTable ventaDetalleDataTable = dataSet.Tables[1];
-
-                //   DataTable dataTable = Execute(objCommand);
-                //Datos de la cotizacion
-                transaccion.pedido = new Pedido();
-                Pedido pedido = transaccion.pedido;
-
-                foreach (DataRow row in ventaDataTable.Rows)
-                {
-                    transaccion.cliente = new Cliente();
-                    transaccion.cliente.codigo = Converter.GetString(row, "codigo");
-                    transaccion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                    transaccion.cliente.razonSocial = Converter.GetString(row, "razon_social");
-                    transaccion.cliente.ruc = Converter.GetString(row, "ruc");
-                    transaccion.cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
-                    transaccion.cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
-                    transaccion.cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
-                    transaccion.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
-                    transaccion.cliente.tipoPagoFactura = (DocumentoCompra.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
-                    transaccion.cliente.formaPagoFactura = (DocumentoCompra.FormaPago)Converter.GetInt(row, "forma_pago_factura");
-                    transaccion.cliente.ciudad = new Ciudad();
-                    transaccion.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                    transaccion.documentoCompra.serie = Converter.GetString(row, "serie");
-                    transaccion.documentoCompra.numero = Converter.GetInt(row, "correlativo").ToString().PadLeft(8, '0');
-                    transaccion.pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
-                    transaccion.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
-                    transaccion.pedido.observacionesFactura = Converter.GetString(row, "observaciones");
-                    transaccion.guiaRemision = new GuiaRemision();
-                    transaccion.guiaRemision.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
-                    transaccion.guiaRemision.serieDocumento = Converter.GetString(row, "serie_guia_remision");
-                    transaccion.guiaRemision.numeroDocumento = Converter.GetInt(row, "numero_guia_remision");
-                }
-
-
-                pedido.pedidoDetalleList = new List<PedidoDetalle>();
-                //Detalle de la cotizacion
-                foreach (DataRow row in ventaDetalleDataTable.Rows)
-                {
-                    PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
-                    pedidoDetalle.producto = new Producto();
-
-                    pedidoDetalle.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");
-                    pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
-                    pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
-                    pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
-                    pedidoDetalle.producto.equivalencia = Convert.ToInt32(Converter.GetDecimal(row, "equivalencia"));
-
-                    pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
-                    pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
-
-                    pedidoDetalle.precioUnitarioOriginal = Converter.GetDecimal(row, "precio_unitario_original");
-                    pedidoDetalle.cantidadOriginal = Converter.GetInt(row, "cantidad");
-
-                    //Si NO es recotizacion se consideran los precios y el costo de lo guardado
-                    pedidoDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
-                    pedidoDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
-
-                    //Si la unidad es alternativa se múltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el precio estándar
-
-
-                    if (pedidoDetalle.esPrecioAlternativo)
-                    {
-                        pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * pedidoDetalle.producto.equivalencia;
-                    }
-                    else
-                    {
-                        pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
-                    }
-
-                    pedidoDetalle.unidad = Converter.GetString(row, "unidad");
-                    pedidoDetalle.unidadInternacional = Converter.GetString(row, "unidad_internacional");
-
-                    pedidoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
-                    pedidoDetalle.producto.sku = Converter.GetString(row, "sku");
-                    pedidoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
-                    pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
-                    pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
-
-                    pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
-
-                    pedidoDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
-
-                    pedidoDetalle.observacion = Converter.GetString(row, "observaciones");
-
-
-                    PrecioClienteProducto precioClienteProducto = new PrecioClienteProducto();
-
-                    precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto_vigente");
-                    precioClienteProducto.flete = Converter.GetDecimal(row, "flete_vigente");
-                    precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario_vigente");
-                    precioClienteProducto.equivalencia = Converter.GetInt(row, "equivalencia_vigente");
-
-                    precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
-                    precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
-                    precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
-                    precioClienteProducto.cliente = new Cliente();
-                    precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                    pedidoDetalle.producto.precioClienteProducto = precioClienteProducto;
-
-
-                    pedidoDetalle.precioUnitarioCompra = Converter.GetDecimal(row, "precio_unitario_venta");
-                    pedidoDetalle.idCompraDetalle = Converter.GetGuid(row, "id_venta_detalle");
-
-                    pedido.pedidoDetalleList.Add(pedidoDetalle);
-                }
-                pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
-            }
-            return transaccion;
-        }
-
+   
 
         public Transaccion SelectNotaIngresoTransaccion(Transaccion transaccion, NotaIngreso notaIngreso, Usuario usuario)
         {

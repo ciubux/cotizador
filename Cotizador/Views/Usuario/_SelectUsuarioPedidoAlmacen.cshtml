@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Model.Usuario>
+
+@Html.DropDownList("usuario",
+new SelectList(Model, "idUsuario", "nombre", ((Model.Pedido)this.Session["pedidoAlmacenBusqueda"]).usuarioBusqueda.idUsuario, ViewBag.List as IEnumerable<Model.Usuario>),
+new { @class = "form-control ", onchange = @"
+$.ajax({
+url: '/PedidoAlmacen/updateUsuario',
+type: 'POST',
+dataType: 'JSON',
+data: {
+    usuario: this.value
+}
+});
+" })

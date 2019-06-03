@@ -350,16 +350,15 @@ namespace Model
         public const String MODIFICA_CANASTA_GRUPO_CLIENTE = "P069";
         public const String MODIFICA_MIEMBROS_GRUPO_CLIENTE = "P070";
         public const String ASIGNA_SUBDISTRIBUIDOR = "P071";
-        public const String VISUALIZA_DOCUMENTOS_COMPRA = "P009";
-        public const String CREA_DOCUMENTOS_COMPRA = "P009";
-        
+        public const String CREA_DOCUMENTOS_COMPRA = "P072";
+        public const String VISUALIZA_DOCUMENTOS_COMPRA = "P073";        
         public const String MODIFICA_ROL = "P810";
         public const String VISUALIZA_ROLES = "P811";
         public const String MODIFICA_USUARIO = "P812";
         public const String VISUALIZA_USUARIOS = "P813";
 
-        public const String MODIFICA_VENDEDORES = "P072";
-        public const String VISUALIZA_VENDEDORES = "P073";
+        public const String MODIFICA_VENDEDORES = "P821";
+        public const String VISUALIZA_VENDEDORES = "P822";
 
         public enum paginas {
             /*COTIZACION*/
@@ -461,14 +460,17 @@ namespace Model
             [Display(Name = "BUSQUEDA DOCUMENTOS COMPRA")]
             BusquedaDocumentosCompra = 41,
 
+            [Display(Name = "MANTENIMIENTO COMPRA")]
+            MantenimientoCompra = 42,
+
             /*BUSQUEDA DE VENDEDORES*/
             [Display(Name = "BUSQUEDA VENDEDORES")]
-            BusquedaVendedores = 42,
+            BusquedaVendedores = 43,
             [Display(Name = "MANTENIMIENTO VENDEDORES")]
-            MantenimientoVendedores = 43,
-
-             /*ROLES*/
-             [Display(Name = "BUSQUEDA ROLES")]
+            MantenimientoVendedores = 44,
+            
+            /*ROLES*/
+            [Display(Name = "BUSQUEDA ROLES")]
             BusquedaRoles = 101,
             [Display(Name = "MANTENIMIENTO ROL")]
             MantenimientoRol = 102,
@@ -477,8 +479,9 @@ namespace Model
             [Display(Name = "BUSQUEDA USUARIOS")]
             BusquedaUsuarios = 103,
             [Display(Name = "MANTENIMIENTO USUARIO")]
-            MantenimientoUsuario = 104
 
+            MantenimientoUsuario = 104
+           
         };
 
 

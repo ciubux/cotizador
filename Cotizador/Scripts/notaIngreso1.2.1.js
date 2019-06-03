@@ -560,17 +560,18 @@ jQuery(function ($) {
     function desactivarBotonesFacturar() {
         $("#btnCancelarFacturarPedido").attr('disabled', 'disabled');
         $("#btnEditarCliente").attr('disabled', 'disabled');
-        $("#btnEditarVenta").attr('disabled', 'disabled');
-        $("#btnAceptarFacturarPedido").attr('disabled', 'disabled');
+        $("#btnEditarCompra").attr('disabled', 'disabled');
+        $("#btnAceptarFacturarNotaIngreso").attr('disabled', 'disabled');
         $("#btnConfirmarFacturaCompra").attr('disabled', 'disabled');
         $("#btnCancelarConfirmarFacturarPedido").attr('disabled', 'disabled');
+        
     }
 
     function activarBotonesFacturar() {
         $("#btnCancelarFacturarPedido").removeAttr('disabled');
         $("#btnEditarCliente").removeAttr('disabled');
-        $("#btnEditarVenta").removeAttr('disabled');
-        $("#btnAceptarFacturarPedido").removeAttr('disabled');
+        $("#btnEditarCompra").removeAttr('disabled');
+        $("#btnAceptarFacturarNotaIngreso").removeAttr('disabled');
         $("#btnConfirmarFacturaCompra").removeAttr('disabled');
         $("#btnCancelarConfirmarFacturarPedido").removeAttr('disabled');
     }
@@ -839,6 +840,7 @@ jQuery(function ($) {
 
                 $("#ver_notaIngreso_estadoDescripcion").html(notaIngreso.estadoDescripcion);
 
+
                 if (notaIngreso.estaAnulado == 1) {
                     $("#ver_notaIngreso_estadoDescripcion").attr("style", "color:red")
                     $("#btnAnularNotaIngreso").hide();
@@ -875,7 +877,7 @@ jQuery(function ($) {
                         else {
                             $("#btnExtornar").hide();
                         }
-                          $("#btnFacturarNotaIngreso").hide();
+                        $("#btnFacturarNotaIngreso").hide();
                     }
 
 
@@ -919,6 +921,7 @@ jQuery(function ($) {
                     if (notaIngreso.estaFacturado == 1) {
                         $("#ver_notaIngreso_estadoDescripcion").attr("style", "color:green")
                         $("#btnAnularNotaIngreso").hide();
+                        $("#btnFacturarNotaIngreso").hide();
                     }
 
                 }
@@ -1262,7 +1265,7 @@ jQuery(function ($) {
         );
     });
 
-    $("#btnEditarVenta").click(function () {
+    $("#btnEditarCompra").click(function () {
 
         $("#btnCancelarFacturarPedido").click();
        // desactivarBotonesVer();
@@ -1270,15 +1273,15 @@ jQuery(function ($) {
       
         var yourWindow;
         $.ajax({
-            url: "/Venta/iniciarEdicionVenta",
+            url: "/Compra/iniciarEdicionCompra",
             type: 'POST',
             error: function (detalle) { alert("Ocurrió un problema al iniciar la edición de la venta."); },
             success: function (fileName) {
 
                 
                 yourWindow = window.open(
-                    "/Venta/Vender",
-                    "Edición de Venta",
+                    "/Compra/Comprar",
+                    "Edición de Compra",
                     "resizable,scrollbars,status"
                 );
            
@@ -1319,11 +1322,6 @@ jQuery(function ($) {
             return false;
         }
 
-        if ($("#documentoVenta_horaEmision").val() == "" || $("#documentoVenta_horaEmision").val() == null) {
-            alert("Debe ingresar la hora de emisión.");
-            $("#documentoVenta_horaEmision").focus();
-            return false;
-        }
 
         if ($("#documentoVenta_fechaVencimiento").val() == "" || $("#documentoVenta_fechaVencimiento").val() == null) {
             alert("Debe ingresar la fecha de vencimiento.");
@@ -1392,7 +1390,7 @@ jQuery(function ($) {
         var serie = $("#documentoVenta_serie").val();
         var numero = $("#documentoVenta_numero").val();
         var fechaEmision = $("#documentoVenta_fechaEmision").val();
-        var horaEmision = $("#documentoVenta_horaEmision").val();
+        //var horaEmision = $("#documentoVenta_horaEmision").val();
         var fechaVencimiento = $("#documentoVenta_fechaVencimiento").val();
         var observaciones = $("#documentoVenta_observaciones").val();
         var tipoPago = $("#tipoPago").val();
@@ -1416,7 +1414,7 @@ jQuery(function ($) {
             dataType: 'JSON',
             data: {
                 fechaEmision: fechaEmision,
-                horaEmision: horaEmision,
+                //horaEmision: horaEmision,
                 fechaVencimiento: fechaVencimiento,
                 idMovimientoAlmacen: idMovimientoAlmacen,
                 tipoPago: tipoPago,
@@ -1436,7 +1434,7 @@ jQuery(function ($) {
                 if (documentoCompra.cPE_RESPUESTA_COMPRA.CODIGO == "001") {
                     $("#idDocumentoCompra").val(documentoCompra.idDocumentoCompra);
                     /*FECHA HORA EMISIÓN -  SERIE CORRELATIVO*/
-                    $("#vpFEC_EMI_HOR_EMI").html(documentoCompra.cPE_CABECERA_COMPRA.FEC_EMI + ' ' + documentoCompra.cPE_CABECERA_COMPRA.HOR_EMI) 
+                    $("#vpFEC_EMI_HOR_EMI").html(documentoCompra.cPE_CABECERA_COMPRA.FEC_EMI) 
                     $("#vpSERIE_CORRELATIVO").html(documentoCompra.cPE_CABECERA_COMPRA.SERIE + ' ' + documentoCompra.cPE_CABECERA_COMPRA.CORRELATIVO);
 
                     /*NOMBRE COMERCIAL CLIENTE*/
@@ -1544,11 +1542,6 @@ jQuery(function ($) {
             return false;
         }
 
-        if ($("#documentoVenta_horaEmision").val() == "" || $("#documentoVenta_horaEmision").val() == null) {
-            alert("Debe ingresar la hora de emisión.");
-            $("#documentoVenta_horaEmision").focus();
-            return false;
-        }
 
         if ($("#documentoVenta_fechaVencimiento").val() == "" || $("#documentoVenta_fechaVencimiento").val() == null) {
             alert("Debe ingresar la fecha de vencimiento.");
@@ -1566,7 +1559,6 @@ jQuery(function ($) {
 
         var serie = $("#documentoVenta_serie").val();
         var fechaEmision = $("#documentoVenta_fechaEmision").val();
-        var horaEmision = $("#documentoVenta_horaEmision").val();
         var fechaVencimiento = $("#documentoVenta_fechaVencimiento").val();
         var observaciones = $("#documentoVenta_observaciones").val();
         var tipoPago = $("#tipoPago").val();
@@ -2236,7 +2228,7 @@ jQuery(function ($) {
                 $("#btnBusqueda").removeAttr("disabled");
 
             },
-            success: function (guiaRemisionList) {
+            success: function (notaIngresoList) {
                 $("#btnBusqueda").removeAttr("disabled");
                 $("#tableGuiasRemision > tbody").empty();
                 //FooTable.init('#tableCotizaciones');
@@ -2246,15 +2238,15 @@ jQuery(function ($) {
                     }
                 });
 
-                for (var i = 0; i < guiaRemisionList.length; i++) {
+                for (var i = 0; i < notaIngresoList.length; i++) {
 
                     var guiaRemision = "";
 
                     var styleEstado = "";
-                    if (guiaRemisionList[i].estaAnulado == 1) {
+                    if (notaIngresoList[i].estaAnulado == 1) {
                         styleEstado = "style='color: red'";
                     }
-                    else if (guiaRemisionList[i].estaFacturado == 1) {
+                    else if (notaIngresoList[i].estaFacturado == 1) {
                         styleEstado = "style='color: green'";
                     }
                     else {
@@ -2262,15 +2254,15 @@ jQuery(function ($) {
                     }
 
                     var noEntregado = '';
-                    if (guiaRemisionList[i].estaNoEntregado == 1) {
-                        noEntregado = '<input class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' chkNoEntregado" type="checkbox" checked></input>'
+                    if (notaIngresoList[i].estaNoEntregado == 1) {
+                        noEntregado = '<input class="' + notaIngresoList[i].idMovimientoAlmacen + ' ' + notaIngresoList[i].numeroDocumento + ' chkNoEntregado" type="checkbox" checked></input>'
                     }
                     else {
-                        noEntregado = '<input class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' chkNoEntregado" type="checkbox"></input>'
+                        noEntregado = '<input class="' + notaIngresoList[i].idMovimientoAlmacen + ' ' + notaIngresoList[i].numeroDocumento + ' chkNoEntregado" type="checkbox"></input>'
                     }
 
                     var noEntregadoLectura = '';
-                    if (guiaRemisionList[i].estaNoEntregado == 1) {
+                    if (notaIngresoList[i].estaNoEntregado == 1) {
                         noEntregadoLectura = '<input disabled type="checkbox" checked></input>'
                     }
                     else {
@@ -2278,28 +2270,28 @@ jQuery(function ($) {
                     }
 
                     var guiaRemision = '<tr data-expanded="false">' +
-                        '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].serieNumeroNotaIngreso + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido_numeroPedidoString + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].motivoTrasladoString + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].usuario_nombre + '</td>' +
-                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
-                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido_cliente_razonSocial + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido_cliente_ruc + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].ciudadDestino_nombre + '</td>' +
-                        '<td ' + styleEstado + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
-                        '<td>' + guiaRemisionList[i].tipoExtornoToString + '</td>' +
+                        '<td>  ' + notaIngresoList[i].idMovimientoAlmacen + '</td>' +
+                        '<td>  ' + notaIngresoList[i].serieNumeroNotaIngreso + '</td>' +
+                        '<td>  ' + notaIngresoList[i].pedido_numeroPedidoString + '</td>' +
+                        '<td>  ' + notaIngresoList[i].motivoTrasladoString + '</td>' +
+                        '<td>  ' + notaIngresoList[i].usuario_nombre + '</td>' +
+                        '<td>  ' + invertirFormatoFecha(notaIngresoList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td>  ' + invertirFormatoFecha(notaIngresoList[i].fechaTraslado.substr(0, 10)) + '</td>' +
+                        '<td>  ' + notaIngresoList[i].pedido_cliente_razonSocial + '</td>' +
+                        '<td>  ' + notaIngresoList[i].pedido_cliente_ruc + '</td>' +
+                        '<td>  ' + notaIngresoList[i].ciudadDestino_nombre + '</td>' +
+                        '<td ' + styleEstado + '>  ' + notaIngresoList[i].estadoDescripcion + '</td>' +
+                        '<td>' + notaIngresoList[i].tipoExtornoToString + '</td>' +
                         '<td>' + noEntregado + '</td>' +
                         '<td>' + noEntregadoLectura + '</td>' +
-                        '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerNotaIngreso btn btn-primary ">Ver</button></td > ' +
+                        '<td> <button type="button" class="' + notaIngresoList[i].idMovimientoAlmacen + ' ' + notaIngresoList[i].numeroDocumento + ' btnVerNotaIngreso btn btn-primary ">Ver</button></td > ' +
                         '</tr>';
 
                     $("#tableGuiasRemision").append(guiaRemision);
                 }
 
 
-                if (guiaRemisionList.length > 0) {
+                if (notaIngresoList.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
                     $("#divExportButton").show();
                 }
@@ -2917,6 +2909,40 @@ jQuery(function ($) {
         $("#tableDetallePedido").append(d);
         $("#modalFacturar").modal('show');
     }
+
+
+    /*Crear Factura*/
+    $("#documentoVenta_numero").change(function () {
+        $.alert({
+            //icon: 'fa fa-warning',
+            title: 'Advertencia',
+            content: 'El número de la factura ha cambiado, se actualizará en la nota de ingreso.',
+            type: 'orange',
+            buttons: {
+                OK: function () {
+                    $('#documentoVenta_numero').focus();
+                }
+            }
+        });
+    });
+
+    $("#documentoVenta_serie").change(function () {
+        alert("as");
+        $.alert({
+            //icon: 'fa fa-warning',
+            title: 'Advertencia',
+            content: 'La serie de la factura ha cambiado, se actualizará en la nota de ingreso.',
+            type: 'orange',
+            buttons: {
+                OK: function () {
+                    $('#documentoVenta_serie').focus();
+                }
+            }
+        });
+    });
+    
+
+
 
 
 

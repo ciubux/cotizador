@@ -679,6 +679,9 @@ namespace DataLayer
                 pedido.cliente.ruc = Converter.GetString(row, "ruc");
                 pedido.cliente.bloqueado = Converter.GetBool(row, "bloqueado");
 
+                pedido.cliente.grupoCliente = new GrupoCliente();
+                pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "nombre_grupo");
+
                 pedido.usuario = new Usuario();
                 pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
@@ -848,7 +851,10 @@ namespace DataLayer
                 pedido.cliente.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
                 pedido.cliente.asistenteServicioCliente.usuario = new Usuario();
                 pedido.cliente.asistenteServicioCliente.usuario.email = Converter.GetString(row, "asistente_servicio_cliente_email");
-            
+
+                pedido.cliente.grupoCliente = new GrupoCliente();
+                pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
+
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");

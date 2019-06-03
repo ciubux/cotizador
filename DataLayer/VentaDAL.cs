@@ -512,7 +512,7 @@ namespace DataLayer
 
         public Venta SelectVenta(Venta venta, Usuario usuario)
         {
-            var objCommand = GetSqlCommand("ps_venta");
+            var objCommand = GetSqlCommand("ps_enta");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", venta.guiaRemision.idMovimientoAlmacen);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable ventaDataTable = dataSet.Tables[0];

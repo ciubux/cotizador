@@ -622,12 +622,8 @@ C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\csc.exe
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.dll
-C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
-C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\Microsoft.CSharp.Core.targets
-C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\Microsoft.VisualBasic.Core.targets
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\System.Collections.Immutable.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\System.Reflection.Metadata.dll
-C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\vbc.exe
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\VBCSCompiler.exe
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\VBCSCompiler.exe.config
 C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\Cotizador.dll.config
@@ -2299,3 +2295,9 @@ D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\bin\roslyn\vbc.exe
+C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\obj\Debug\Cotizador.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache

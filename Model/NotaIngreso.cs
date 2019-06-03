@@ -135,8 +135,28 @@ namespace Model
         {
             get
             {
-                return this.estaAnulado ? "Anulada" :
-                    (this.estaFacturado ? "Registrada (con Nota Crédito)" : "Registrada");
+                if (this.estaAnulado)
+                { return "Anulada"; }
+                else 
+                {
+                    if (this.estaFacturado)
+                    {
+                        if (this.motivoTraslado == motivosTraslado.Compra ||
+                            this.motivoTraslado == motivosTraslado.TransferenciaGratuitaRecibida
+                            )
+                        {
+                            return "Registrada (con Factura Compra)";
+                        }
+                        else {
+                            return "Registrada (con Nota Crédito)";
+                        }
+                    }
+                    else
+                    {
+                        return "Registrada";
+                    }
+                }
+                        
             }
 
         }

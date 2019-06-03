@@ -77,9 +77,9 @@ insert into usuario
 					@maximo_descuento,
 					@estado,
 					@usuario_creacion,
-					getdate(),
+					dbo.getlocaldate(),
 					@usuario_creacion,
-					getdate(),
+					dbo.getlocaldate(),
 					@id_ciudad)
 insert  into VENDEDOR(
 						id_usuario,
@@ -95,9 +95,9 @@ insert  into VENDEDOR(
 								@nombre,
 								@estado,
 								@usuario_creacion,
-								getdate(),
+								dbo.getlocaldate(),
 								@usuario_creacion,
-								getdate()
+								dbo.getlocaldate()
 								)  
   END
 
@@ -132,7 +132,7 @@ insert  into VENDEDOR(
 											us.contacto=@contacto,
 											us.maximo_porcentaje_descuento_aprobacion=@max_por_des_apro,
 											us.estado=@estado,
-											us.fecha_modificacion=getdate(),
+											us.fecha_modificacion=dbo.getlocaldate(),
 											us.usuario_modificacion=@usuario_modificacion,		
 											us.id_ciudad=@id_ciudad
 									from usuario as us
@@ -143,7 +143,7 @@ insert  into VENDEDOR(
 											ve.descripcion=@nombre,
 											ve.estado=@estado,			
 											ve.usuario_modificacion=@usuario_modificacion,
-											ve.fecha_modificacion=getdate()	
+											ve.fecha_modificacion=dbo.getlocaldate()	
 									from vendedor as ve
 								INNER JOIN usuario us ON (ve.id_usuario = us.id_usuario)
 										where ve.id_vendedor=@id_vendedor
@@ -159,7 +159,7 @@ insert  into VENDEDOR(
 											us.contacto=@contacto,
 											us.maximo_porcentaje_descuento_aprobacion=@max_por_des_apro,
 											us.estado=@estado,
-											us.fecha_modificacion=getdate(),
+											us.fecha_modificacion=dbo.getlocaldate(),
 											us.usuario_modificacion=@usuario_modificacion,		
 											us.id_ciudad=@id_ciudad
 									from usuario as us
@@ -170,7 +170,7 @@ insert  into VENDEDOR(
 											ve.descripcion=@nombre,
 											ve.estado=@estado,			
 											ve.usuario_modificacion=@usuario_modificacion,
-											ve.fecha_modificacion=getdate()	
+											ve.fecha_modificacion=dbo.getlocaldate()
 									from vendedor as ve
 								INNER JOIN usuario us ON (ve.id_usuario = us.id_usuario)
 										where ve.id_vendedor=@id_vendedor
@@ -182,16 +182,16 @@ insert  into VENDEDOR(
   /* **** Permisos para la tabla PERMISO Y USUARIO_PERMISO **** */
 
 insert into PERMISO (estado,fecha_creacion,fecha_modificacion,codigo,descripcion_corta,id_categoria_permiso,orden_permiso)
-						values (1,GETDATE(),GETDATE(),'P073','visualiza_vendedores',7,6)
+						values (1,dbo.getlocaldate(),dbo.getlocaldate(),'P073','visualiza_vendedores',7,6)
 
 insert into PERMISO (estado,fecha_creacion,fecha_modificacion,codigo,descripcion_corta,id_categoria_permiso,orden_permiso)
-						values (1,GETDATE(),GETDATE(),'P072','modifica_vendedores',7,6)
+						values (1,dbo.getlocaldate(),dbo.getlocaldate(),'P072','modifica_vendedores',7,6)
 
 
 insert into USUARIO_PERMISO(id_permiso,id_usuario,estado,fecha_creacion,fecha_modificacion) 
-							values (78,'7E875C20-24FD-4B5E-9BB5-A7F23718F1FA',1,getdate(),getdate())
+							values (78,'7E875C20-24FD-4B5E-9BB5-A7F23718F1FA',1,dbo.getlocaldate(),dbo.getlocaldate())
 
 insert into USUARIO_PERMISO(id_permiso,id_usuario,estado,fecha_creacion,fecha_modificacion) 
-							values (79,'7E875C20-24FD-4B5E-9BB5-A7F23718F1FA',1,getdate(),getdate())
+							values (79,'7E875C20-24FD-4B5E-9BB5-A7F23718F1FA',1,dbo.getlocaldate(),dbo.getlocaldate())
 
 

@@ -432,6 +432,7 @@
     <Content Include="Scripts\utiles1.1.7.js" />
     <Content Include="Scripts\utilesFacturacion1.1.4.js" />
     <Content Include="Scripts\notaCredito1.1.3.js" />
+    <Content Include="Scripts\compra1.1.2.js" />
     <Content Include="Scripts\venta1.1.2.js" />
     <Content Include="Scripts\footable.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -567,6 +568,8 @@
     <Content Include="Views\DocumentoCompra\Index.cshtml" />
     <Content Include="Views\DocumentoCompra\PreLoad.cshtml" />
     <Content Include="Views\Validacion\Pendientes.cshtml" />
+    <Content Include="Views\Usuario\_SelectUsuarioPedidoAlmacen.cshtml" />
+    <Content Include="Views\Usuario\_SelectUsuarioPedidoCompra.cshtml" />
     <Content Include="Views\Rol\Editar.cshtml" />
     <Content Include="Views\Rol\List.cshtml" />
     <Content Include="Views\Rol\Usuarios.cshtml" />
@@ -575,6 +578,7 @@
     <Content Include="Views\Vendedor\Lista.cshtml" />
     <Content Include="Scripts\vendedor1.0.0.js" />
     <Content Include="Views\Vendedor\Editar.cshtml" />
+    <Content Include="Views\Compra\Comprar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

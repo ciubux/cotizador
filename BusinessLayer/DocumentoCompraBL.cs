@@ -283,6 +283,8 @@ namespace BusinessLayer
                                 return documentoCompra.cPE_RESPUESTA_COMPRA;
                             }
                         }*/
+                    documentoCompra.serie = documentoCompra.cPE_CABECERA_COMPRA.SERIE;
+                    documentoCompra.numero = documentoCompra.cPE_CABECERA_COMPRA.CORRELATIVO;
 
                     return documentoCompra.cPE_RESPUESTA_COMPRA;
                 }

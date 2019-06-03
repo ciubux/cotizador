@@ -117,6 +117,49 @@ namespace Cotizador.Controllers
         }
 
 
+        public ActionResult usuariosPedidoAlmacenList()
+        {
+            Usuario usuarioSession = ((Usuario)this.Session["usuario"]);
+            List<Usuario> usuarioList = new List<Usuario>();
+            //      if (usuarioSession.apruebaPedidos)
+            //     {
+            List<Usuario> usuarioListTmp = usuarioSession.usuarioTomaPedidoList;
+
+            Usuario usuarioTodos = new Usuario { nombre = "Todos", idUsuario = Guid.Empty };
+            usuarioList.Add(usuarioTodos);
+            usuarioList.Add(usuarioSession);
+            foreach (Usuario usuario in usuarioListTmp)
+            {
+                usuarioList.Add(usuario);
+            }
+            ///    }
+            var model = usuarioList;
+
+            return PartialView("_SelectUsuarioPedidoAlmacen", model);
+        }
+
+
+        public ActionResult usuariosPedidoCompraList()
+        {
+            Usuario usuarioSession = ((Usuario)this.Session["usuario"]);
+            List<Usuario> usuarioList = new List<Usuario>();
+            //      if (usuarioSession.apruebaPedidos)
+            //     {
+            List<Usuario> usuarioListTmp = usuarioSession.usuarioTomaPedidoList;
+
+            Usuario usuarioTodos = new Usuario { nombre = "Todos", idUsuario = Guid.Empty };
+            usuarioList.Add(usuarioTodos);
+            usuarioList.Add(usuarioSession);
+            foreach (Usuario usuario in usuarioListTmp)
+            {
+                usuarioList.Add(usuario);
+            }
+            ///    }
+            var model = usuarioList;
+
+            return PartialView("_SelectUsuarioPedidoCompra", model);
+        }
+
         [HttpGet]
         public ActionResult List()
         {

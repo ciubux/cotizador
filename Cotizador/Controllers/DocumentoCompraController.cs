@@ -50,11 +50,11 @@ namespace Cotizador.Controllers
                 Compra compra = (Compra)this.Session[Constantes.VAR_SESSION_COMPRA_VER];
                 DocumentoCompra documentoCompra = new DocumentoCompra();
                 String[] fecha = this.Request.Params["fechaEmision"].Split('/');
-                String[] hora = this.Request.Params["horaEmision"].Split(':');
+                // String[] hora = this.Request.Params["horaEmision"].Split(':');
                 documentoCompra.serie = this.Request.Params["serie"];
                 documentoCompra.numero = this.Request.Params["numero"];
                 documentoCompra.proveedor = compra.pedido.proveedor;
-                documentoCompra.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
+                documentoCompra.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]),0,0, 0);
                 fecha = this.Request.Params["fechaVencimiento"].Split('/');
                 documentoCompra.fechaVencimiento = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
                 documentoCompra.tipoPago = (DocumentoCompra.TipoPago)Int32.Parse(this.Request.Params["tipoPago"]);
@@ -144,7 +144,7 @@ namespace Cotizador.Controllers
             try
             {
                 DocumentoCompra DocumentoCompra = new DocumentoCompra();
-                List<DocumentoCompra> DocumentoCompraList = (List<DocumentoCompra>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+                List<DocumentoCompra> DocumentoCompraList = (List<DocumentoCompra>)this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_LISTA];
                 int idDocumentoCompra = int.Parse(this.Request.Params["idDocumentoCompra"]);
                 DocumentoCompra = DocumentoCompraList.Where(d => d.idDocumentoCompra == idDocumentoCompra).First();
                 DocumentoCompraBL DocumentoCompraBL = new DocumentoCompraBL();
@@ -162,7 +162,7 @@ namespace Cotizador.Controllers
                 }
 
 
-                this.Session[Constantes.VAR_SESSION_FACTURA_VER] = DocumentoCompra;
+                this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_VER] = DocumentoCompra;
                 return JsonConvert.SerializeObject(DocumentoCompra);
             }
             catch (Exception ex)

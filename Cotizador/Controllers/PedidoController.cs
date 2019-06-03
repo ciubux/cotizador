@@ -1007,7 +1007,7 @@ namespace Cotizador.Controllers
                     if (detalle.producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
                     {
                         detalle.producto.precioClienteProducto.precioUnitario =
-                       detalle.producto.precioClienteProducto.precioUnitario / detalle.producto.precioClienteProducto.equivalencia;
+                       detalle.producto.precioClienteProducto.precioUnitario / detalle.ProductoPresentacion.Equivalencia;
                     }
 
                 }

@@ -18,6 +18,10 @@ namespace Cotizador
                          "~/Scripts/venta1.1.2.js"
                          ));
 
+            bundles.Add(new ScriptBundle("~/bundles/compra").Include(
+                         "~/Scripts/compra1.1.2.js"
+                         ));
+
             bundles.Add(new ScriptBundle("~/bundles/factura").Include(
                         "~/Scripts/factura1.1.7.js"
                         ));
