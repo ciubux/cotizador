@@ -2888,9 +2888,17 @@ jQuery(function ($) {
                 var lista = pedido.pedidoDetalleList;
                 for (var i = 0; i < lista.length; i++) {
 
+                    var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img" src="/images/semaforo_verde_min.png"/></a>';
+                    if (lista[i].indicadorAprobacion == 2)
+                        imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"> <img class="table-product-img" src="/images/semaforo_naranja_min.png"/></a>';
+                    else if (lista[i].indicadorAprobacion == 3)
+                        imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"><img class="table-product-img" src="/images/semaforo_rojo_min.png"/></a>';
+
+
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
 
                     d += '<tr>' +
+                        '<td>' + imgIndicadorAprobacion + '</td>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
                         '<td>' + lista[i].producto.sku + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +

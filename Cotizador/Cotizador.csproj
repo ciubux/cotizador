@@ -382,6 +382,9 @@
     <Content Include="images\marcas.png" />
     <Content Include="images\NoDisponible.gif" />
     <Content Include="images\search_icon.png" />
+    <Content Include="images\semaforo_naranja_min.png" />
+    <Content Include="images\semaforo_rojo_min.png" />
+    <Content Include="images\semaforo_verde_min.png" />
     <Content Include="images\tmp.png" />
     <Content Include="images\addTransportista.png" />
     <Content Include="images\up.png" />

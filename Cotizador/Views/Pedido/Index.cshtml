@@ -772,6 +772,7 @@ else
                            data-editing-add-text="Descartar cambios">
                         <thead>
                             <tr>
+                                <th data-name="indicadorAprobacion" data-sortable="false">-</th>
                                 <th data-name="proveedor" data-sortable="false">Prov.</th>
                                 <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                                 <th data-name="producto" data-sortable="false">Producto / Descripción</th>
@@ -780,36 +781,36 @@ else
                                 <th data-name="precioLista" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
                                 <th data-name="porcentajeDescuentoMostrar" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
                                 @if (pedido.usuario.esCliente)
-                                {
-                                    <th data-name="precioNeto" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Precio Neto</th>
-                                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-                                }
-                                else
-                                {
-                                    <!--Si no es cliente-->
-                                    <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
-                                    if (pedido.usuario.visualizaMargen)
-                                    {
-                                        <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-                                    }
-                                    else
-                                    {
-                                        <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
-                                    }
-                                }
+    {
+                            <th data-name="precioNeto" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Precio Neto</th>
+                            <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+}
+else
+{
+                            <!--Si no es cliente-->
+                            <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+if (pedido.usuario.visualizaMargen)
+{
+                            <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+}
+else
+{
+                            <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+}
+}
 
                                 <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
                                 <!--     @if (pedido.usuario.creaDocumentosVenta)
-                     {
-                         <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
-                         }
-                         else
-                         {
-                                         <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
-                         }
-                -->
+         {
+             <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+             }
+             else
+             {
+                             <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+             }
+    -->
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
