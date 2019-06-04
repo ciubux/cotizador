@@ -2888,7 +2888,7 @@ jQuery(function ($) {
                 var lista = pedido.pedidoDetalleList;
                 for (var i = 0; i < lista.length; i++) {
 
-                    var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png" srcset="semaforo_verde_min.png 2x"/></a>';
+                    var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
                     if (lista[i].indicadorAprobacion == 2)
                         imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"> <img class="table-product-img" src="/images/semaforo_naranja_small.png" srcset="semaforo_naranja_min.png 2x"/></a>';
                     else if (lista[i].indicadorAprobacion == 3)
