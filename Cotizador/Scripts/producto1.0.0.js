@@ -31,7 +31,6 @@ jQuery(function ($) {
     var fecha = $("#fechaInicioVigenciatmp").val();
     $("#fechaInicioVigencia").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
 
-
     $("#fechaInicioVigenciaTC").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
 
     $(document).ready(function () {
@@ -312,12 +311,12 @@ jQuery(function ($) {
         var valCheck = 0;
         changeInputInt("Estado", valCheck)
     });
-
+    
     $("#producto_estado_todos").click(function () {
         var valCheck = -1;
         changeInputInt("Estado", valCheck)
     });
-
+    
     function changeInputString(propiedad, valor) {
         $.ajax({
             url: "/Producto/ChangeInputString",
@@ -620,7 +619,7 @@ jQuery(function ($) {
             success: function () { }
         });
     }
-
+    
     
     $("#lnkActualizarTodos").click(function () {
         $("#tipoCambioTC").val($("#tipoCambio").val());
@@ -636,7 +635,6 @@ jQuery(function ($) {
     $("#btnExportExcel, #btnExportUploadExcel").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
-    
 
     $("#btnCargarProductos").click(function () {
         var listaTextosCampos = "";

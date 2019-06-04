@@ -68,6 +68,7 @@ C:\Users\cesar\Documents\MP2\cotizador_2\DataLayer\obj\Release\DataLayer.csprojR
 C:\Users\cesar\Documents\MP2\cotizador_2\DataLayer\obj\Release\DataLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\DataLayer\obj\Release\DataLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\DataLayer\obj\Release\DataLayer.pdb
+<<<<<<< HEAD
 D:\Repo\freelos\cotizador\DataLayer\bin\Release\DataLayer.dll
 D:\Repo\freelos\cotizador\DataLayer\bin\Release\DataLayer.pdb
 D:\Repo\freelos\cotizador\DataLayer\bin\Release\Framework.DAL.dll
@@ -86,3 +87,5 @@ D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.csproj.CoreCompileInpu
 D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.csproj.CopyComplete
 D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.dll
 D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.pdb
+=======
+>>>>>>> Andre/Vendedor

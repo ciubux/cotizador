@@ -22,6 +22,7 @@ namespace BusinessLayer
             }
             return usuario;
         }
+        
 
         public Usuario getUsuario(Guid idUsuario)
         {

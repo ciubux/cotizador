@@ -45,6 +45,7 @@ C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL.Settings\obj\Release\Fram
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.pdb
+<<<<<<< HEAD
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Release\Framework.DAL.Settings.dll
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Release\Framework.DAL.Settings.pdb
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Release\Framework.DAL.dll
@@ -56,3 +57,5 @@ D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Release\Framework.DAL.Setti
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.dll
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Release\Framework.DAL.Settings.pdb
+=======
+>>>>>>> Andre/Vendedor

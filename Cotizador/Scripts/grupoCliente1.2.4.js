@@ -302,7 +302,6 @@ jQuery(function ($) {
 
 
     function validacionDatosGrupoCliente() {
-
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             $.alert({
                 title: "No selecionó Ciudad",
@@ -315,7 +314,7 @@ jQuery(function ($) {
             $("#idCiudad").focus()
             return false;
         }
-
+        
         var codigo = $("#grupoCliente_codigo").val().trim();
         var nCodigo = codigo.length;
 
@@ -331,7 +330,7 @@ jQuery(function ($) {
             $("#idCiudad").focus()
             return false;
         }
-
+        
 
         if ($("#plazoCreditoSolicitado").is(':enabled')) {
 
@@ -1571,7 +1570,7 @@ jQuery(function ($) {
                     editaMiembros = 1;
                     $("#btnMiembrosGrupoCliente").show();
                 }
-
+                
                 FooTable.init('#tableListaPrecios');
 
                 $("#chkSoloCanasta").prop("checked", false);
@@ -1833,6 +1832,7 @@ jQuery(function ($) {
                         '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + cliente.ruc + '  </td>' +
                         '<td>  ' + cliente.ciudad.nombre + '  </td>' +
+                        '<td>  ' + textoHeredaPrecios + '  </td>' +
                         '<td>  <input type="checkbox" class="chkMiembroHeredaPrecios' + checkedHeredaPrecios + ' value="1"> </td>' + 
                         '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                         '</tr>';
