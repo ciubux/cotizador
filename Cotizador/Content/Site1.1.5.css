@@ -666,3 +666,8 @@ border-color: #49E845;
     padding: 3px 3px;
     font-size: 13px;
 }
+
+.img-responsive {
+    max-width: 64px;
+    height: auto;
+}
