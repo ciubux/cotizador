@@ -200,13 +200,7 @@ jQuery(function ($) {
             var flete = value.innerText;
             value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detinflete form-control' value='" + flete + "' type='number'/>";
         });
-
-
-
     });
-
-    
-
 
 });
 

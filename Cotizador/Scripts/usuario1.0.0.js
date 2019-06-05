@@ -277,32 +277,10 @@ jQuery(function ($) {
         });
     }
 
-
-    function changeInputPermiso(permiso, valor) {
-        $.ajax({
-            url: "/Usuario/ChangePermiso",
-            type: 'POST',
-            data: {
-                permiso: permiso,
-                valor: valor
-            },
-            success: function () { }
-        });
-    }
     
-
     $("#usuario_nombre").change(function () {
         changeInputString("nombre", $("#usuario_nombre").val());
     });
-
-    $(".chk-permiso").change(function () {
-        var valor = 0;
-        if ($(this).prop("checked")) {
-            valor = 1;
-        }
-        changeInputPermiso($(this).attr("id"), valor);
-    });
-
 
     $("#btnCancelarUsuario").click(function () {
         ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Usuario/CancelarCreacionUsuario', null)
@@ -312,9 +290,6 @@ jQuery(function ($) {
         var idUsuario = $(this).attr("idUsuario");
         window.location = '/Usuario/Permisos?idUsuario=' + idUsuario;
     });
-
-  
-
 
     var ft = null;
     

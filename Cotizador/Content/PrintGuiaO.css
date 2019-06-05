@@ -22,7 +22,7 @@
 
     .row_uno > .col_tres {
         float: left;
-        width: 3.2cm;
+        width: 3.5cm;
     }
 
     .row_uno > .col_cuatro {
@@ -32,7 +32,7 @@
 
     /*ROW DOS*/
     .row_dos {
-        font-family: "Arial Narrow", Arial, sans-serif;
+        font-family: 'Lucida Console', Monaco; font-stretch:normal; font-weight:bold;
         margin-top: 0.19cm;
     }
 
@@ -53,7 +53,7 @@
 
     /*ROW TRES*/
     .row_tres {
-        font-family: "Arial Narrow", Arial, sans-serif;
+        font-family: 'Lucida Console', Monaco; font-stretch:normal; font-weight:bold;
         margin-top: 0.18cm;
     }
 
@@ -84,7 +84,7 @@
 
         .row_cuatro > .col_dos {
             float: left;
-            width: 11cm;
+            width: 14cm;
         }
 
 
@@ -116,12 +116,12 @@
 
         .row_siete > .col_dos {
             float: left;
-            width: 8.6cm;
+            width: 8.8cm;
         }
 
         .row_siete > .col_tres {
             float: left;
-            width: 4.2cm;
+            width: 3cm;
         }
 
         .row_siete > .col_cuatro {
@@ -141,7 +141,7 @@
 
         .row_ocho > .col_dos {
             float: left;
-            width: 7cm;
+            width: 6cm;
         }
 
         .row_ocho > .col_tres {
@@ -160,7 +160,7 @@
         }
 
     .detalle {
-        font-family: "Arial Narrow", Arial, sans-serif;
+        font-family: 'Lucida Console', Monaco; font-stretch:normal; font-weight:bold;
         margin-top: 0.7cm;
         margin-left: 1cm;
     }
@@ -173,18 +173,18 @@
 
     .row_detalle > .col_dos {
         float: left;
-        width: 1.5cm;
+        width: 1cm;
     }
 
 
     .row_detalle > .col_tres {
         float: left;
-        width: 3cm;
+        width: 2cm;
     }
 
     .row_detalle > .col_cuatro {
         float: left;
-        width: 11cm;
+        width: 12cm;
     }
 
 
@@ -198,7 +198,7 @@
 
     body {
         /*background-color: black;*/
-        font-family: "Arial Narrow", Arial, sans-serif;
+        font-family: 'Lucida Console', Monaco; font-stretch:normal; font-weight:bold;
         font-size: 10px;
         color: #333333;
         margin-top: 3.3cm;

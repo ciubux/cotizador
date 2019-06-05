@@ -581,6 +581,9 @@
     <Content Include="Views\Rol\Usuarios.cshtml" />
     <Content Include="Views\Usuario\List.cshtml" />
     <Content Include="Views\Usuario\Permisos.cshtml" />
+    <Content Include="Views\Vendedor\Lista.cshtml" />
+    <Content Include="Scripts\vendedor1.0.0.js" />
+    <Content Include="Views\Vendedor\Editar.cshtml" />
     <Content Include="Views\Compra\Comprar.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using BusinessLayer;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace Cotizador.Controllers
 {
@@ -15,6 +16,28 @@ namespace Cotizador.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+        
+        private Usuario UsuarioSession
+        {
+            get
+            {
+                Usuario obj = null;
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.BusquedaUsuarios: obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_BUSQUEDA]; break;
+                    case Constantes.paginas.MantenimientoUsuario: obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR]; break;
+                }
+                return obj;
+            }
+            set
+            {
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.BusquedaUsuarios: this.Session[Constantes.VAR_SESSION_USUARIO_BUSQUEDA] = value; break;
+                    case Constantes.paginas.MantenimientoUsuario: this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = value; break;
+                }
+            }
         }
 
         private void instanciarUsuarioBusqueda()
@@ -50,7 +73,7 @@ namespace Cotizador.Controllers
 
             return resultado;
         }
-
+        
         public ActionResult usuariosCotizacionList()
         {
             Usuario usuarioSession = ((Usuario)this.Session["usuario"]);
@@ -246,6 +269,17 @@ namespace Cotizador.Controllers
 
 
             return JsonConvert.SerializeObject(usuarioEdit);
+        }
+
+
+        
+
+        public void ChangeInputString()
+        {
+            Usuario obj = (Usuario)this.UsuarioSession;
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, this.Request.Params["valor"]);
+            this.UsuarioSession = obj;
         }
     }
 }

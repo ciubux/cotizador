@@ -14,7 +14,6 @@ namespace Model
         public String descripcion_larga { get; set; }
         public CategoriaPermiso categoriaPermiso { get; set; }
         public List<Usuario> usuarioList { get; set; }
-
         public bool byRol { get; set; }
         public bool byUser { get; set; }
     }

@@ -32,7 +32,7 @@
 
     /*ROW DOS*/
     .row_dos {
-        margin-top: 0.19cm;
+        margin-top: 0.00cm;
     }
 
         .row_dos > .col_uno {
@@ -42,7 +42,7 @@
 
         .row_dos > .col_dos {
             float: left;
-            width: 5.9cm;
+            width: 7cm;
         }
 
         .row_dos > .col_tres {
@@ -62,12 +62,12 @@
 
         .row_tres > .col_dos {
             float: left;
-            width: 8cm;
+            width: 11cm;
         }
 
         .row_tres > .col_tres {
-            float: left;
-            width: 3cm;
+            float: right;
+            width: 4cm;
         }
 
     /*ROW CUATRO*/
@@ -82,14 +82,14 @@
 
         .row_cuatro > .col_dos {
             float: left;
-            width: 13cm;
+            width: 15cm;
         }
 
 
 
     /*ROW SEIS*/
     .row_seis {
-        margin-top: 0.15cm;
+        margin-top: 0.22cm;
     }
 
         .row_seis > .col_uno {
@@ -104,7 +104,7 @@
 
     /*ROW SIETE*/
     .row_siete {
-        margin-top: 0.2cm;
+        margin-top: 0.24cm;
     }
 
         .row_siete > .col_uno {
@@ -139,7 +139,7 @@
 
         .row_ocho > .col_dos {
             float: left;
-            width: 7cm;
+            width: 8cm;
         }
 
         .row_ocho > .col_tres {
@@ -159,7 +159,7 @@
 
     .detalle {
         margin-top: 0.7cm;
-        margin-left: 1cm;
+        margin-left: 1.2cm;
     }
 
     /*ROW DETALLE*/
@@ -181,7 +181,7 @@
 
     .row_detalle > .col_cuatro {
         float: left;
-        width: 11cm;
+        width: 9cm;
     }
 
 
@@ -196,12 +196,13 @@
     body {
         /*background-color: black;*/
         /*   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
-        font-size: 1.2em;
+		font-weight: bold;
+        font-size: 1.1em;
         color: #333333;
         margin-top: 3cm;
         margin-right: 1cm;
         margin-bottom: 15cm;
-        margin-left: 1.1cm 
+        margin-left: 1cm /*Trujillo*/
     }
 
 

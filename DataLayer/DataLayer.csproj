@@ -60,6 +60,7 @@
     <Compile Include="MovimientoAlmacenDAL.cs" />
     <Compile Include="CompraDAL.cs" />
     <Compile Include="LogCampoDAL.cs" />
+    <Compile Include="VendedorDAL.cs" />
     <Compile Include="VentaDAL.cs" />
     <Compile Include="TransportistaDAL.cs" />
     <Compile Include="PedidoDAL.cs" />

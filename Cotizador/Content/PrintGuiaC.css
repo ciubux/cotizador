@@ -17,12 +17,12 @@
 
     .row_uno > .col_dos {
         float: left;
-        width: 3.5cm;
+        width: 4cm;
     }
 
     .row_uno > .col_tres {
         float: left;
-        width: 3.2cm;
+        width: 3.6cm;
     }
 
     .row_uno > .col_cuatro {
@@ -32,7 +32,7 @@
 
     /*ROW DOS*/
     .row_dos {
-        margin-top: 0.19cm;
+        margin-top: 0.14cm;
     }
 
         .row_dos > .col_uno {
@@ -42,7 +42,7 @@
 
         .row_dos > .col_dos {
             float: left;
-            width: 5.9cm;
+            width: 7.4cm;
         }
 
         .row_dos > .col_tres {
@@ -52,7 +52,7 @@
 
     /*ROW TRES*/
     .row_tres {
-        margin-top: 0.18cm;
+        margin-top: 0.14cm;
     }
 
         .row_tres > .col_uno {
@@ -62,17 +62,17 @@
 
         .row_tres > .col_dos {
             float: left;
-            width: 8cm;
+            width: 15cm;
         }
-
-        .row_tres > .col_tres {
+		.row_tres > .col_tres {
             float: left;
             width: 3cm;
         }
 
+      
     /*ROW CUATRO*/
     .row_cuatro {
-        margin-top: 0.18cm;
+        margin-top: 0.14cm;
     }
 
         .row_cuatro > .col_uno {
@@ -89,7 +89,7 @@
 
     /*ROW SEIS*/
     .row_seis {
-        margin-top: 0.15cm;
+        margin-top: 0.14cm;
     }
 
         .row_seis > .col_uno {
@@ -114,7 +114,7 @@
 
         .row_siete > .col_dos {
             float: left;
-            width: 8.6cm;
+            width: 9.5cm;
         }
 
         .row_siete > .col_tres {
@@ -124,7 +124,7 @@
 
         .row_siete > .col_cuatro {
             float: left;
-            width: 2cm;
+            width: 5cm;
         }
 
     /*ROW OCHO*/
@@ -139,17 +139,17 @@
 
         .row_ocho > .col_dos {
             float: left;
-            width: 7cm;
+            width: 11cm;
         }
 
         .row_ocho > .col_tres {
             float: left;
-            width: 2.8cm;
+            width: 0.1cm;
         }
 
         .row_ocho > .col_cuatro {
             float: left;
-            width: 3.3cm;
+            width: 3.8cm;
         }
 
         .row_ocho > .col_cinco {
@@ -198,10 +198,10 @@
         /*   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
         font-size: 1.2em;
         color: #333333;
-        margin-top: 3cm;
-        margin-right: 1cm;
+        margin-top: 3.3cm;
+        margin-right: 0cm;
         margin-bottom: 15cm;
-        margin-left: 1.1cm 
+        margin-left: 0.6cm 
     }
 
 

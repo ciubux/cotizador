@@ -16,11 +16,14 @@ namespace Model
 
         public Guid idUsuario { get; set; }
         /*DATOS*/
+        [Display(Name = "Email:")]
         public string email { get; set; }
         public string password { get; set; }
         [Display(Name = "Nombre:")]
         public string nombre { get; set; }
+        [Display(Name = "Cargo:")]
         public string cargo { get; set; }
+        [Display(Name = "Contacto:")]
         public string contacto { get; set; }
         public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
 
@@ -189,11 +192,15 @@ namespace Model
         public bool modificaOrigen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ORIGEN)).FirstOrDefault() != null; } }
         public bool visualizaOrigenes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_ORIGENES)).FirstOrDefault() != null; } }
 
+        /*Vendedores*/
+        public bool modificaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_VENDEDORES)).FirstOrDefault() != null; } }
+        public bool visualizaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }        
+
         /*Administra Permisos*/
         public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }
 
         public bool modificaDireccionEntrega { get; set; }
-
+        
         /*Roles*/
         public bool modificaRol { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ROL)).FirstOrDefault() != null; } }
         public bool visualizaRoles { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_ROLES)).FirstOrDefault() != null; } }
