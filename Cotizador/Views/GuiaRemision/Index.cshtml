@@ -686,7 +686,7 @@
 
                 <div class="pull-right">
                     <button type="button" id="btnCancelarVerGuiaRemision" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    @if (guiaRemision.usuario.creaGuias)
+                    @if (guiaRemision.usuario.administraGuias || guiaRemision.usuario.creaGuias)
                     {
                         <button type="button" id="btnImprimirGuiaRemision" class="btn btn-success">Imprimir</button>
                     }
