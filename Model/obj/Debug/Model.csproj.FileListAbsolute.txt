@@ -185,3 +185,4 @@ D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb
+D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache
