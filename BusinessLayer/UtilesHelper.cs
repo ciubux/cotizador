@@ -28,7 +28,7 @@ namespace BusinessLayer
         }
 
 
-        public static void setValorCelda(ISheet sheet, int fila, int columna, string valor, HSSFCellStyle cellStyle = null)
+        public static void setValorCelda(ISheet sheet, int fila, int columna, string valor, ICellStyle cellStyle = null)
         {
             sheet.GetRow(fila - 1).GetCell(columna-1).SetCellValue(valor);
             if (cellStyle != null)
@@ -42,7 +42,7 @@ namespace BusinessLayer
             sheet.AddMergedRegion(cra);
         }
         
-        public static void setValorCelda(ISheet sheet, int fila, string columna, string valor, HSSFCellStyle cellStyle = null, bool autoSizeColumn = false)
+        public static void setValorCelda(ISheet sheet, int fila, string columna, string valor, ICellStyle cellStyle = null, bool autoSizeColumn = false)
         {
             sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
             if (cellStyle != null)
@@ -54,7 +54,7 @@ namespace BusinessLayer
             }
         }
 
-        public static void setValorCelda(ISheet sheet, int fila, string columna, double valor, HSSFCellStyle cellStyle = null)
+        public static void setValorCelda(ISheet sheet, int fila, string columna, double valor, ICellStyle cellStyle = null)
         {
             sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
             if (cellStyle != null)
@@ -106,7 +106,7 @@ namespace BusinessLayer
             return valorCeldaInt;
         }
         
-        public static void setColumnDefaultStyle(ISheet sheet, string columna, HSSFCellStyle cellStyle)
+        public static void setColumnDefaultStyle(ISheet sheet, string columna, ICellStyle cellStyle)
         {
             sheet.SetDefaultColumnStyle(columnas.FindIndex(x => x.StartsWith(columna)), cellStyle);
         }
@@ -138,6 +138,19 @@ namespace BusinessLayer
             return valorCeldaDecimal;
         }
 
+        public static void setColumnWidth(ISheet sheet, string columna, int width = -1)
+        {
+            sheet.SetColumnWidth(columnas.FindIndex(x => x.StartsWith(columna)), width);
+            if (width < 0)
+            {
+                sheet.AutoSizeColumn(columnas.FindIndex(x => x.StartsWith(columna)));
+            }
+        }
+
+        public static void setRowHeight(ISheet sheet, int fila, int height)
+        {
+            sheet.GetRow(fila - 1).Height = (short) height;
+        }
     }
 }
 

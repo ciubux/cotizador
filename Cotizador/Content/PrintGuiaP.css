@@ -22,7 +22,7 @@
 
     .row_uno > .col_tres {
         float: left;
-        width: 3.2cm;
+        width: 3.8cm;
     }
 
     .row_uno > .col_cuatro {
@@ -32,17 +32,18 @@
 
     /*ROW DOS*/
     .row_dos {
-        margin-top: 0.00cm;
+        margin-top: 0.16cm;
     }
 
         .row_dos > .col_uno {
             float: left;
-            width: 2.5cm;
+            width: 2.3cm;
         }
 
         .row_dos > .col_dos {
             float: left;
             width: 7cm;
+			line-height:11px;
         }
 
         .row_dos > .col_tres {
@@ -52,12 +53,12 @@
 
     /*ROW TRES*/
     .row_tres {
-        margin-top: 0.18cm;
+        margin-top: 0.16cm;
     }
 
         .row_tres > .col_uno {
             float: left;
-            width: 3.9cm;
+            width: 3.7cm;
         }
 
         .row_tres > .col_dos {
@@ -72,29 +73,30 @@
 
     /*ROW CUATRO*/
     .row_cuatro {
-        margin-top: 0.18cm;
+        margin-top: 0.16cm;
     }
 
         .row_cuatro > .col_uno {
             float: left;
-            width: 3.9cm;
+            width: 3.7cm;
         }
 
         .row_cuatro > .col_dos {
             float: left;
             width: 15cm;
+			line-height:11px;
         }
 
 
 
     /*ROW SEIS*/
     .row_seis {
-        margin-top: 0.22cm;
+        margin-top: 0.18cm;
     }
 
         .row_seis > .col_uno {
             float: left;
-            width: 3cm;
+            width: 2.8cm;
         }
 
         .row_seis > .col_dos {
@@ -104,17 +106,17 @@
 
     /*ROW SIETE*/
     .row_siete {
-        margin-top: 0.24cm;
+        margin-top: 0.20cm;
     }
 
         .row_siete > .col_uno {
             float: left;
-            width: 3cm;
+            width: 2.8cm;
         }
 
         .row_siete > .col_dos {
             float: left;
-            width: 8.6cm;
+            width: 9.4cm;
         }
 
         .row_siete > .col_tres {
@@ -129,22 +131,22 @@
 
     /*ROW OCHO*/
     .row_ocho {
-        margin-top: 0.2cm;
+        margin-top: 0.18cm;
     }
 
         .row_ocho > .col_uno {
             float: left;
-            width: 2.6cm;
+            width: 2.4cm;
         }
 
         .row_ocho > .col_dos {
             float: left;
-            width: 8cm;
+            width: 8.4cm;
         }
 
         .row_ocho > .col_tres {
             float: left;
-            width: 2.8cm;
+            width: 3cm;
         }
 
         .row_ocho > .col_cuatro {
@@ -196,7 +198,8 @@
     body {
         /*background-color: black;*/
         /*   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
-		font-weight: bold;
+		font-family: Tahoma;
+		font-weight: bold;		
         font-size: 1.1em;
         color: #333333;
         margin-top: 3cm;

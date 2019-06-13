@@ -141,6 +141,11 @@ jQuery(function ($) {
         });
     }
 
+    $("#btnExcelCompra").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
+
     /**
      * ################################ INICIO CONTROLES DE CLIENTE
      */

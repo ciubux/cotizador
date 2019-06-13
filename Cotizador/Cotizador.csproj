@@ -275,6 +275,7 @@
     <Compile Include="ExcelExport\GuiaRemisionSearch.cs" />
     <Compile Include="ExcelExport\CotizacionSearch.cs" />
     <Compile Include="ExcelExport\ClienteSearch.cs" />
+    <Compile Include="ExcelExport\PedidoOCExcel.cs" />
     <Compile Include="ExcelExport\SubDistribuidorSearch.cs" />
     <Compile Include="ExcelExport\OrigenSearch.cs" />
     <Compile Include="ExcelExport\ProductoSearch.cs" />
@@ -598,7 +599,6 @@
     <Folder Include="Views\Mail\" />
     <Folder Include="Views\Parent\" />
     <Folder Include="Views\Ubigeo\" />
-    <Folder Include="Views\Vendedor\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using cotizadorPDF;
+using Cotizador.ExcelExport;
 
 namespace Cotizador.Controllers
 {
@@ -471,6 +473,31 @@ namespace Cotizador.Controllers
             pedido = pedidoBL.obtenerProductosAPartirdePreciosRegistrados(pedido, familia, proveedor, usuario);
             pedidoBL.calcularMontosTotales(pedido);
             this.PedidoSession = pedido;
+        }
+
+
+        [HttpGet]
+        public ActionResult ExportLastViewExcel()
+        {
+            Pedido obj = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
+
+            PedidoOCExcel excel = new PedidoOCExcel();
+            return excel.generateExcel(obj);
+        }
+
+        [HttpPost]
+        public String GenerarPDF()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Int64 codigo = Int64.Parse(this.Request.Params["codigo"].ToString());
+
+            PedidoBL bl = new PedidoBL();
+            Pedido obj = new Pedido();
+            obj.numeroPedido = codigo;
+            obj = bl.GetPedido(obj, usuario);
+            GeneradorOrdenCompraPDF gen = new GeneradorOrdenCompraPDF();
+            String nombreArchivo = gen.generarPDFExtended(obj);
+            return nombreArchivo;
         }
 
 
