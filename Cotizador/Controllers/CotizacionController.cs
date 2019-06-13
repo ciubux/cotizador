@@ -533,6 +533,7 @@ namespace Cotizador.Controllers
             {
                 cotizacion.grupo = grupoClienteBL.getGrupo(int.Parse(this.Request.Params["idGrupoCliente"]));
                 cotizacion.contacto = cotizacion.grupo.contacto;
+                cotizacion.ciudad = cotizacion.grupo.ciudad;
             }
             else
             {

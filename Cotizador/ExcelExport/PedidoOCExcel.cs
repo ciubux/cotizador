@@ -28,8 +28,29 @@ namespace Cotizador.ExcelExport
             {
                 wb = HSSFWorkbook.Create(InternalWorkbook.CreateWorkbook());
 
-                HSSFCellStyle descCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
-                descCellStyle.WrapText = true;
+                HSSFCellStyle defaulCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                defaulCellStyle.FillPattern = FillPattern.SolidForeground;
+                defaulCellStyle.FillForegroundColor = HSSFColor.White.Index;
+
+                HSSFFont formLabelFont = (HSSFFont)wb.CreateFont();
+                formLabelFont.FontHeightInPoints = (short)11;
+                formLabelFont.FontName = "Arial";
+                formLabelFont.Color = IndexedColors.Black.Index;
+                formLabelFont.IsBold = true;
+                //  HSSFColor color = new HSSFColor(); // (new byte[] { 184, 212, 249 });
+                //     color.RGB.SetValue(new byte[] { 184, 212, 249 },0);
+                HSSFCellStyle formLabelCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                formLabelCellStyle.SetFont(formLabelFont);
+                formLabelCellStyle.Alignment = HorizontalAlignment.Right;
+
+                HSSFCellStyle formDataCenterCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                formDataCenterCellStyle.Alignment = HorizontalAlignment.Center;
+                formDataCenterCellStyle.BorderLeft = BorderStyle.Thin;
+                formDataCenterCellStyle.BorderTop = BorderStyle.Thin;
+                formDataCenterCellStyle.BorderRight = BorderStyle.Thin;
+                formDataCenterCellStyle.BorderBottom = BorderStyle.Thin;
+
+
 
                 HSSFFont titleFont = (HSSFFont)wb.CreateFont();
                 titleFont.FontHeightInPoints = (short)11;
@@ -42,18 +63,27 @@ namespace Cotizador.ExcelExport
                 titleCellStyle.SetFont(titleFont);
                 titleCellStyle.Alignment = HorizontalAlignment.Center;
                 titleCellStyle.FillPattern = FillPattern.SolidForeground;
-                titleCellStyle.FillForegroundColor = HSSFColor.SkyBlue.Index;
+                titleCellStyle.FillForegroundColor = HSSFColor.RoyalBlue.Index;
+               
 
-                //titleCellStyle.FillBackgroundColor = HSSFColor.BlueGrey.Index;
+                HSSFCellStyle titleDataCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                titleDataCellStyle.CloneStyleFrom(titleCellStyle);
+                titleDataCellStyle.BorderLeft = BorderStyle.Thin;
+                titleDataCellStyle.BorderTop = BorderStyle.Thin;
+                titleDataCellStyle.BorderRight = BorderStyle.Thin;
 
                 HSSFCellStyle ocTitleCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 HSSFFont ocTitleFont = (HSSFFont)wb.CreateFont();
                 ocTitleFont.FontHeightInPoints = (short)28;
                 ocTitleFont.FontName = "Arial";
-                ocTitleFont.Color = IndexedColors.SkyBlue.Index;
+                ocTitleFont.Color = IndexedColors.RoyalBlue.Index;
                 ocTitleFont.IsBold = true;
                 ocTitleCellStyle.SetFont(ocTitleFont);
                 ocTitleCellStyle.Alignment = HorizontalAlignment.Center;
+                ocTitleCellStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                HSSFCellStyle footerTextCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                footerTextCellStyle.Alignment = HorizontalAlignment.Center;
 
                 IDataFormat format = wb.CreateDataFormat();
                 ICellStyle dateFormatStyle = wb.CreateCellStyle();
@@ -61,9 +91,32 @@ namespace Cotizador.ExcelExport
 
                 var avgCellFormate = wb.CreateDataFormat();
                 var twoDecFormat = avgCellFormate.GetFormat("0.00");
-                HSSFCellStyle twoDecCellStyle = (HSSFCellStyle) wb.CreateCellStyle();
+                HSSFCellStyle twoDecCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 twoDecCellStyle.DataFormat = twoDecFormat;
-                
+                twoDecCellStyle.BorderLeft = BorderStyle.Thin;
+                twoDecCellStyle.BorderRight = BorderStyle.Thin;
+
+
+                HSSFCellStyle totalsCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                totalsCellStyle.DataFormat = twoDecFormat;
+                totalsCellStyle.BorderLeft = BorderStyle.Thin;
+                totalsCellStyle.BorderRight = BorderStyle.Thin;
+                totalsCellStyle.BorderTop = BorderStyle.Thin;
+                totalsCellStyle.BorderBottom = BorderStyle.Thin;
+
+
+                HSSFCellStyle tableDataCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                tableDataCellStyle.WrapText = true;
+                tableDataCellStyle.BorderLeft = BorderStyle.Thin;
+                tableDataCellStyle.BorderRight = BorderStyle.Thin;
+
+                HSSFCellStyle tableDataLastCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                tableDataLastCellStyle.CloneStyleFrom(tableDataCellStyle);
+                tableDataLastCellStyle.BorderBottom = BorderStyle.Thin;
+
+                HSSFCellStyle twoDecLastCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                twoDecLastCellStyle.CloneStyleFrom(twoDecCellStyle);
+                twoDecLastCellStyle.BorderBottom = BorderStyle.Thin;
 
                 // create sheet
                 sheet = (HSSFSheet)wb.CreateSheet("Atenciones");
@@ -74,7 +127,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (obj.pedidoDetalleList.Count) + 40;
-                int cTotal = 10;
+                int cTotal = 7;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -82,7 +135,7 @@ namespace Cotizador.ExcelExport
                     var row = sheet.CreateRow(r);
                     for (int c = 0; c < cTotal; c++)
                     {
-                        row.CreateCell(c);
+                        row.CreateCell(c).CellStyle = defaulCellStyle;
                     }
                 }
 
@@ -109,33 +162,66 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setRowHeight(sheet, 1, 1200);
 
+                UtilesHelper.setValorCelda(sheet, 2, "A", "[Dirección]");
+                UtilesHelper.setValorCelda(sheet, 3, "A", "[Ciudad, Estado, postal]");
+                UtilesHelper.setValorCelda(sheet, 4, "A", "Telefono: (000) 000-0000");
+                UtilesHelper.setValorCelda(sheet, 5, "A", "Fax: (000) 000-0000");
+                UtilesHelper.setValorCelda(sheet, 6, "A", "http://mpinstitucional.com");
 
-                UtilesHelper.setValorCelda(sheet, 2, "E", "FECHA:");
+
+
+                UtilesHelper.setValorCelda(sheet, 2, "E", "FECHA:", formLabelCellStyle);
                 UtilesHelper.combinarCeldas(sheet, 2, 2, "F", "G");
-                UtilesHelper.setValorCelda(sheet, 2, "F", obj.FechaRegistroFormatoFecha);
+                UtilesHelper.setValorCelda(sheet, 2, "F", obj.FechaRegistroFormatoFecha, formDataCenterCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "G", "", formDataCenterCellStyle);
 
-                UtilesHelper.setValorCelda(sheet, 3, "E", "N° OC:");
+                UtilesHelper.setValorCelda(sheet, 3, "E", "N° OC:", formLabelCellStyle);
                 UtilesHelper.combinarCeldas(sheet, 3, 3, "F", "G");
-                UtilesHelper.setValorCelda(sheet, 3, "F", obj.numeroPedido);
+                UtilesHelper.setValorCelda(sheet, 3, "F", obj.numeroPedido, formDataCenterCellStyle);
+                UtilesHelper.setValorCelda(sheet, 3, "G", "", formDataCenterCellStyle);
 
-                int i = 5; 
+                int i = 8;
 
-                UtilesHelper.setValorCelda(sheet, i, "A", "CÓDIGO", titleCellStyle);
+                UtilesHelper.combinarCeldas(sheet, i, i, "A", "B");
+                UtilesHelper.setValorCelda(sheet, i, "A", "VENDEDOR", titleCellStyle);
+
+
+                UtilesHelper.setValorCelda(sheet, i + 1, "A", "MP INSTITUCIONAL S.A.C.");
+                UtilesHelper.setValorCelda(sheet, i + 2, "A", "[Contacto o Departamento]");
+                UtilesHelper.setValorCelda(sheet, i + 3, "A", "[Dirección]");
+                UtilesHelper.setValorCelda(sheet, i + 4, "A", "[Ciudad, Estado, postal]");
+                UtilesHelper.setValorCelda(sheet, i + 5, "A", "Telefono: (000) 000-0000");
+                UtilesHelper.setValorCelda(sheet, i + 6, "A", "Fax: (000) 000-0000");
+                
+                
+                UtilesHelper.combinarCeldas(sheet, i, i, "E", "G");
+                UtilesHelper.setValorCelda(sheet, i, "E", "ENVÍE A", titleCellStyle);
+
+                UtilesHelper.setValorCelda(sheet, i + 1, "E", "[Nombre]");
+                UtilesHelper.setValorCelda(sheet, i + 2, "E", "[Nombre de empresa]");
+                UtilesHelper.setValorCelda(sheet, i + 3, "E", "[Dirección]");
+                UtilesHelper.setValorCelda(sheet, i + 4, "E", "[Ciudad, Estado, postal]");
+                UtilesHelper.setValorCelda(sheet, i + 5, "E", "[Telefono]");
+
+
+                i = i + 8; 
+
+                UtilesHelper.setValorCelda(sheet, i, "A", "CÓDIGO", titleDataCellStyle);
                 UtilesHelper.combinarCeldas(sheet, i, i, "B", "C");
-                UtilesHelper.setValorCelda(sheet, i, "B", "DESCRIPCIÓN", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "D", "UND", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "E", "CANT.", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "F", "P. UNIT.", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "G", "TOTAL", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "B", "DESCRIPCIÓN", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "C", "", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "D", "UND", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "E", "CANT.", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "F", "P. UNIT.", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "G", "TOTAL", titleDataCellStyle);
 
                 UtilesHelper.setColumnWidth(sheet, "A", 3000);
                 UtilesHelper.setColumnWidth(sheet, "B", 6000);
                 UtilesHelper.setColumnWidth(sheet, "C", 12000);
                 UtilesHelper.setColumnWidth(sheet, "D", 5000);
 
-                UtilesHelper.setColumnWidth(sheet, "F", 2850);
-                UtilesHelper.setColumnWidth(sheet, "G", 2850);
-                UtilesHelper.setColumnWidth(sheet, "G", 2850);
+                UtilesHelper.setColumnWidth(sheet, "F", 2900);
+                UtilesHelper.setColumnWidth(sheet, "G", 3200);
 
                 i++;
 
@@ -144,10 +230,18 @@ namespace Cotizador.ExcelExport
 
                 foreach (PedidoDetalle det in obj.pedidoDetalleList)
                 {
+                    UtilesHelper.setValorCelda(sheet, i, "A", "", tableDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "B", "", tableDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "C", "", tableDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "D", "", tableDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "E", "", tableDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "F", "", tableDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCellStyle);
+
                     UtilesHelper.setValorCelda(sheet, i, "A", det.producto.sku);
                     UtilesHelper.combinarCeldas(sheet, i, i, "B", "C");
-                    UtilesHelper.setValorCelda(sheet, i, "B", det.producto.descripcion, descCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "D", det.unidad, descCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "B", det.producto.descripcion);
+                    UtilesHelper.setValorCelda(sheet, i, "D", det.unidad);
                     UtilesHelper.setValorCelda(sheet, i, "E", det.cantidad);
                     UtilesHelper.setValorCelda(sheet, i, "F", (double) det.precioUnitario, twoDecCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "G", (double) det.subTotal, twoDecCellStyle);
@@ -155,28 +249,37 @@ namespace Cotizador.ExcelExport
                     i++;
                 }
 
+                UtilesHelper.setValorCelda(sheet, i - 1, "A", UtilesHelper.getValorCelda(sheet, i - 1, "A"), tableDataLastCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "B", UtilesHelper.getValorCelda(sheet, i - 1, "B"), tableDataLastCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "C", UtilesHelper.getValorCelda(sheet, i - 1, "C"), tableDataLastCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "D", UtilesHelper.getValorCelda(sheet, i - 1, "D"), tableDataLastCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "E", int.Parse(UtilesHelper.getValorCelda(sheet, i - 1, "E")), tableDataLastCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "F", double.Parse(UtilesHelper.getValorCelda(sheet, i - 1, "F")), twoDecLastCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "G", double.Parse(UtilesHelper.getValorCelda(sheet, i - 1, "G")), twoDecLastCellStyle);
+                
+
 
                 UtilesHelper.setValorCelda(sheet, i, "F", "SUB TOTAL");
-                UtilesHelper.setValorCelda(sheet, i, "G", (double)obj.montoSubTotal, twoDecCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "G", (double)obj.montoSubTotal, totalsCellStyle);
                 i++;
 
                 UtilesHelper.setValorCelda(sheet, i, "F", "IGV");
-                UtilesHelper.setValorCelda(sheet, i, "G", (double)obj.montoIGV, twoDecCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "G", (double)obj.montoIGV, totalsCellStyle);
                 i++;
 
                 UtilesHelper.setValorCelda(sheet, i, "F", "TOTAL");
-                UtilesHelper.setValorCelda(sheet, i, "G", (double)obj.montoTotal, twoDecCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "G", (double)obj.montoTotal, totalsCellStyle);
                 i++;
                 
 
 
                 i = i + 3;
                 UtilesHelper.combinarCeldas(sheet, i, i, "A", "G");
-                UtilesHelper.setValorCelda(sheet, i, "A", "Si usted tiene alguna pregunta sobre esta orden de compra, por favor, póngase en contacto con");
+                UtilesHelper.setValorCelda(sheet, i, "A", "Si usted tiene alguna pregunta sobre esta orden de compra, por favor, póngase en contacto con", footerTextCellStyle);
 
                 i++;
                 UtilesHelper.combinarCeldas(sheet, i, i, "A", "G");
-                UtilesHelper.setValorCelda(sheet, i, "A", "[]");
+                UtilesHelper.setValorCelda(sheet, i, "A", "[Nombre, Teléfono, E-Mail]", footerTextCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())

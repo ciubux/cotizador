@@ -769,10 +769,10 @@ else
                     {
                         <button type="button" id="btnBloquearPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalLiberacion'>Bloquear</button>
                     }
-                    @*@if (pedido.usuario.tomaPedidos || pedido.usuario.apruebaPedidos || pedido.usuario.visualizaGuias)
+                    @if (pedido.usuario.tomaPedidos || pedido.usuario.apruebaPedidos || pedido.usuario.visualizaGuias)
                     {
                         <button type="button" id="btnExcelCompra" class="btn btn-primary bouton-image botonExcel" actionLink="@Url.Action("ExportLastViewExcel", "PedidoCompra")">Excel</button>
-                    }*@
+                    }
                 </div>
 
 
