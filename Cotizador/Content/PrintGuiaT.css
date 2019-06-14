@@ -12,7 +12,7 @@
 
     .row_uno > .col_uno {
         float: left;
-        width: 2.2cm;
+        width: 2.1cm;
     }
 
     .row_uno > .col_dos {
@@ -22,7 +22,7 @@
 
     .row_uno > .col_tres {
         float: left;
-        width: 3.2cm;
+        width: 3.7cm;
     }
 
     .row_uno > .col_cuatro {
@@ -37,12 +37,13 @@
 
         .row_dos > .col_uno {
             float: left;
-            width: 2.5cm;
+            width: 2.2cm
         }
 
         .row_dos > .col_dos {
             float: left;
-            width: 5.9cm;
+            width: 6.4cm;
+			line-height:11px;
         }
 
         .row_dos > .col_tres {
@@ -57,12 +58,12 @@
 
         .row_tres > .col_uno {
             float: left;
-            width: 3.9cm;
+            width: 3.6cm;
         }
 
         .row_tres > .col_dos {
             float: left;
-            width: 8cm;
+            width: 10cm;
         }
 
         .row_tres > .col_tres {
@@ -77,12 +78,13 @@
 
         .row_cuatro > .col_uno {
             float: left;
-            width: 3.9cm;
+            width: 3.3cm;
         }
 
         .row_cuatro > .col_dos {
             float: left;
-            width: 11cm;
+            width: 12cm;
+			line-height:11px;
         }
 
 
@@ -94,7 +96,7 @@
 
         .row_seis > .col_uno {
             float: left;
-            width: 3cm;
+            width: 2.3cm;
         }
 
         .row_seis > .col_dos {
@@ -114,17 +116,17 @@
 
         .row_siete > .col_dos {
             float: left;
-            width: 8.6cm;
+            width: 9cm;
         }
 
         .row_siete > .col_tres {
             float: left;
-            width: 4.2cm;
+            width: 4.3cm;
         }
 
         .row_siete > .col_cuatro {
             float: left;
-            width: 2cm;
+            width: 1cm;
         }
 
     /*ROW OCHO*/
@@ -134,7 +136,7 @@
 
         .row_ocho > .col_uno {
             float: left;
-            width: 2.6cm;
+            width: 2.5cm;
         }
 
         .row_ocho > .col_dos {
@@ -144,12 +146,12 @@
 
         .row_ocho > .col_tres {
             float: left;
-            width: 2.8cm;
+            width: 3cm;
         }
 
         .row_ocho > .col_cuatro {
             float: left;
-            width: 3.3cm;
+            width: 3cm;
         }
 
         .row_ocho > .col_cinco {
@@ -159,7 +161,7 @@
 
     .detalle {
         margin-top: 0.7cm;
-        margin-left: 1.2cm;
+        margin-left: 1.5cm;
     }
 
     /*ROW DETALLE*/
@@ -190,18 +192,20 @@
     @page {
         size: auto;
         margin: 0mm;
-        /*size: A4 landscape;*/
+        size: A4;
     }
 
     body {
         /*background-color: black;*/
         /*   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
+		font-family: Tahoma;
+		font-weight: bold;
         font-size: 1em;
         color: #333333;
         margin-top: 2.87cm;
-        margin-right: 1cm;
+        margin-right: 0cm;
         margin-bottom: 15cm;
-        margin-left: 1cm /*Trujillo*/
+        margin-left: 3cm /*Trujillo*/
     }
 
 
