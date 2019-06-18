@@ -1392,9 +1392,16 @@ namespace Cotizador.Controllers
            
 
         }
-        
 
 
+        [HttpGet]
+        public ActionResult ExportLastViewExcel()
+        {
+            Cotizacion obj = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
+
+            CotizacionDetalleExcel excel = new CotizacionDetalleExcel();
+            return excel.generateExcel(obj);
+        }
 
 
 

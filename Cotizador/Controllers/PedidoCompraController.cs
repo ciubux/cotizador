@@ -485,6 +485,33 @@ namespace Cotizador.Controllers
             return excel.generateExcel(obj);
         }
 
+        [HttpGet]
+        public void ExportLastViewCSVKC()
+        {
+            Pedido obj = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
+
+
+            Response.Clear();
+            Response.AddHeader("Content-Disposition", "attachment; filename=OC_" + obj.numeroPedido + ".csv");
+            Response.ContentType = "text/csv";
+
+            int count = 0;
+            foreach (PedidoDetalle pd in obj.pedidoDetalleList)
+            {
+                if (count > 0)
+                {
+                    Response.Write("\n");
+                }
+                Response.Write(String.Format("{0},{1},{2}", pd.producto.skuProveedor, pd.cantidad, "cj"));
+                count++;
+            }
+
+            
+
+            Response.End();
+            
+        }
+
         [HttpPost]
         public String GenerarPDF()
         {
