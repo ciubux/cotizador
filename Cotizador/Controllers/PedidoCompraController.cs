@@ -660,6 +660,7 @@ namespace Cotizador.Controllers
             }
             else
             {
+                detalle.unidad = detalle.producto.unidad;
                 detalle.precioNeto = precioNeto;
             }
             detalle.flete = flete;
@@ -672,12 +673,13 @@ namespace Cotizador.Controllers
             pedidoBL.calcularMontosTotales(pedido);
 
 
-            detalle.unidad = detalle.producto.unidad;
+            /*detalle.unidad = detalle.producto.unidad;
             //si esPrecioAlternativo  se mostrará la unidad alternativa
             if (detalle.esPrecioAlternativo)
             {
                 detalle.unidad = detalle.producto.unidad_alternativa;
             }
+            */
 
             var nombreProducto = detalle.producto.descripcion;
            /* if (pedido.mostrarCodigoProveedor)

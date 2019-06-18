@@ -12,7 +12,7 @@
 
     .row_uno > .col_uno {
         float: left;
-        width: 2.2cm;
+        width: 2.4cm;
     }
 
     .row_uno > .col_dos {
@@ -22,7 +22,7 @@
 
     .row_uno > .col_tres {
         float: left;
-        width: 3.2cm;
+        width: 3.8cm;
     }
 
     .row_uno > .col_cuatro {
@@ -42,7 +42,8 @@
 
         .row_dos > .col_dos {
             float: left;
-            width: 5.9cm;
+            width: 6.5cm;
+			line-height:11px;
         }
 
         .row_dos > .col_tres {
@@ -62,7 +63,8 @@
 
         .row_tres > .col_dos {
             float: left;
-            width: 8cm;
+            width: 9cm;
+			line-height:11px;
         }
 
         .row_tres > .col_tres {
@@ -72,7 +74,7 @@
 
     /*ROW CUATRO*/
     .row_cuatro {
-        margin-top: 0.18cm;
+        margin-top: 0.16cm;
     }
 
         .row_cuatro > .col_uno {
@@ -83,6 +85,8 @@
         .row_cuatro > .col_dos {
             float: left;
             width: 13cm;
+			line-height:11px;
+			
         }
 
 
@@ -104,7 +108,7 @@
 
     /*ROW SIETE*/
     .row_siete {
-        margin-top: 0.2cm;
+        margin-top: 0.16cm;
     }
 
         .row_siete > .col_uno {
@@ -114,7 +118,7 @@
 
         .row_siete > .col_dos {
             float: left;
-            width: 8.6cm;
+            width: 9.2cm;
         }
 
         .row_siete > .col_tres {
@@ -139,7 +143,8 @@
 
         .row_ocho > .col_dos {
             float: left;
-            width: 7cm;
+            width: 7.5cm;
+			line-height:11px;
         }
 
         .row_ocho > .col_tres {
@@ -149,12 +154,12 @@
 
         .row_ocho > .col_cuatro {
             float: left;
-            width: 3.3cm;
+            width: 3cm;
         }
 
         .row_ocho > .col_cinco {
             float: left;
-            width: 2.5cm;
+            width: 2.2cm;
         }
 
     .detalle {
@@ -196,9 +201,11 @@
     body {
         /*background-color: black;*/
         /*   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
+		font-family: Tahoma;
+		font-weight: bold;
         font-size: 1.2em;
         color: #333333;
-        margin-top: 3cm;
+        margin-top: 2.8cm;
         margin-right: 1cm;
         margin-bottom: 15cm;
         margin-left: 1.1cm 

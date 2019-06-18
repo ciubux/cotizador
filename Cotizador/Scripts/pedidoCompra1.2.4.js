@@ -1011,7 +1011,7 @@ jQuery(function ($) {
                 $("#familia").val(producto.familia);
                 $('#precioUnitarioSinIGV').val(producto.precioUnitarioSinIGV);
                 $('#precioUnitarioAlternativoSinIGV').val(producto.precioUnitarioAlternativoSinIGV);
-                $('#costoSinIGV').val(producto.costoSinIGV);
+                $('#costoSiniGV').val(producto.costoSinIGV);
                 $('#costoAlternativoSinIGV').val(producto.costoAlternativoSinIGV);
                 $('#observacionProducto').val("");
                 $('#fleteDetalle').val(producto.fleteDetalle);
@@ -1105,7 +1105,10 @@ jQuery(function ($) {
             costoLista = (costoLista + (costoLista * IGV)).toFixed(cantidadDecimales);
         }
 
-        $("#precioLista").val(precioLista);
+
+        //$("#precioLista").val(precioLista);
+
+        $("#precioLista").val(costoLista);
         $("#costoLista").val(costoLista);
 
         calcularSubtotalProducto();

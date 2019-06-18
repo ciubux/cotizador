@@ -42,6 +42,9 @@ namespace Cotizador.ExcelExport
                 HSSFCellStyle formLabelCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 formLabelCellStyle.SetFont(formLabelFont);
                 formLabelCellStyle.Alignment = HorizontalAlignment.Right;
+                formLabelCellStyle.FillPattern = FillPattern.SolidForeground;
+                formLabelCellStyle.FillForegroundColor = HSSFColor.White.Index;
+
 
                 HSSFCellStyle formDataCenterCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 formDataCenterCellStyle.Alignment = HorizontalAlignment.Center;
@@ -106,6 +109,7 @@ namespace Cotizador.ExcelExport
                 totalsCellStyle.BorderRight = BorderStyle.Thin;
                 totalsCellStyle.BorderTop = BorderStyle.Thin;
                 totalsCellStyle.BorderBottom = BorderStyle.Thin;
+                totalsCellStyle.Indention = 1;
 
 
                 HSSFCellStyle totalsTotalCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
@@ -120,6 +124,7 @@ namespace Cotizador.ExcelExport
 
                 HSSFCellStyle totalsTotalLabelCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 totalsTotalLabelCellStyle.SetFont(totalFont);
+                totalsTotalLabelCellStyle.BorderTop = BorderStyle.Double;
 
                 HSSFCellStyle tableDataCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 tableDataCellStyle.WrapText = true;
@@ -198,7 +203,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 3, "G", obj.numeroPedido, formDataCenterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 3, "H", "", formDataCenterCellStyle);
 
-                int i = 8;
+                int i = 9;
 
                 UtilesHelper.combinarCeldas(sheet, i, i, "A", "C");
                 UtilesHelper.setValorCelda(sheet, i, "A", "VENDEDOR", titleCellStyle);
@@ -222,7 +227,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i + 5, "F", "[Telefono]");
 
 
-                i = i + 8;
+                i = i + 9;
 
                 UtilesHelper.setRowHeight(sheet, i, 540);
                 UtilesHelper.setValorCelda(sheet, i, "A", "SKU", titleDataCellStyle);
@@ -235,16 +240,25 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "G", "P. UNIT.", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "H", "TOTAL", titleDataCellStyle);
 
-                UtilesHelper.setColumnWidth(sheet, "A", 2400);
+                UtilesHelper.setColumnWidth(sheet, "A", 2200);
                 UtilesHelper.setColumnWidth(sheet, "B", 2900);
                 UtilesHelper.setColumnWidth(sheet, "C", 4200);
                 UtilesHelper.setColumnWidth(sheet, "D", 8000);
                 UtilesHelper.setColumnWidth(sheet, "E", 5000);
 
                 UtilesHelper.setColumnWidth(sheet, "G", 2900);
-                UtilesHelper.setColumnWidth(sheet, "H", 3200);
+                UtilesHelper.setColumnWidth(sheet, "H", 3500);
 
                 i++;
+
+                HSSFCellStyle tableDataCenterCellStyle = (HSSFCellStyle) UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCellStyle);
+                HSSFCellStyle tableDataLastCenterCellStyle = (HSSFCellStyle) UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataLastCellStyle);
+
+                HSSFCellStyle twoDecCenterCellStyle = (HSSFCellStyle) UtilesHelper.GetCloneStyleWithHCenter(wb, twoDecCellStyle);
+                HSSFCellStyle twoDecLastCenterCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, twoDecLastCellStyle);
+
+                HSSFCellStyle twoDecIdentCellStyle = (HSSFCellStyle) UtilesHelper.GetCloneStyleWithIndent(wb, twoDecCellStyle, 1);
+                HSSFCellStyle twoDecIdentLastCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithIndent(wb, twoDecLastCellStyle, 1);
 
                 /*  for (int iii = 0; iii<50;iii++)
                   { */
@@ -252,13 +266,14 @@ namespace Cotizador.ExcelExport
                 foreach (PedidoDetalle det in obj.pedidoDetalleList)
                 {
                     UtilesHelper.setRowHeight(sheet, i, 540);
-                    UtilesHelper.setValorCelda(sheet, i, "A", "", tableDataCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "B", "", tableDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "A", "", tableDataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "B", "", tableDataCenterCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "C", "", tableDataCellStyle);
 
                     UtilesHelper.setValorCelda(sheet, i, "D", "", tableDataCellStyle);
+                    
                     UtilesHelper.setValorCelda(sheet, i, "E", "", tableDataCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "F", "", tableDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "F", "", tableDataCenterCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "H", "", tableDataCellStyle);
 
@@ -268,20 +283,22 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "C", det.producto.descripcion);
                     UtilesHelper.setValorCelda(sheet, i, "E", det.unidad);
                     UtilesHelper.setValorCelda(sheet, i, "F", det.cantidad);
-                    UtilesHelper.setValorCelda(sheet, i, "G", (double)det.precioUnitario, twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "H", (double)det.subTotal, twoDecCellStyle);
-
+                    
+                    
+                    UtilesHelper.setValorCelda(sheet, i, "G", (double)det.precioUnitario, twoDecCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "H", (double)det.subTotal, twoDecIdentCellStyle);
+                    
                     i++;
                 }
 
-                UtilesHelper.setValorCelda(sheet, i - 1, "A", UtilesHelper.getValorCelda(sheet, i - 1, "A"), tableDataLastCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "B", UtilesHelper.getValorCelda(sheet, i - 1, "B"), tableDataLastCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "A", UtilesHelper.getValorCelda(sheet, i - 1, "A"), tableDataLastCenterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "B", UtilesHelper.getValorCelda(sheet, i - 1, "B"), tableDataLastCenterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "C", UtilesHelper.getValorCelda(sheet, i - 1, "C"), tableDataLastCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "D", UtilesHelper.getValorCelda(sheet, i - 1, "D"), tableDataLastCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "E", UtilesHelper.getValorCelda(sheet, i - 1, "E"), tableDataLastCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "F", int.Parse(UtilesHelper.getValorCelda(sheet, i - 1, "F")), tableDataLastCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "G", double.Parse(UtilesHelper.getValorCelda(sheet, i - 1, "G")), twoDecLastCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "H", double.Parse(UtilesHelper.getValorCelda(sheet, i - 1, "H")), twoDecLastCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "F", int.Parse(UtilesHelper.getValorCelda(sheet, i - 1, "F")), tableDataLastCenterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "G", double.Parse(UtilesHelper.getValorCelda(sheet, i - 1, "G")), twoDecLastCenterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "H", double.Parse(UtilesHelper.getValorCelda(sheet, i - 1, "H")), twoDecIdentLastCellStyle);
 
 
                 UtilesHelper.setRowHeight(sheet, i, 540);

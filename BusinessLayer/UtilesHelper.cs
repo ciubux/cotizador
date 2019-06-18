@@ -151,6 +151,32 @@ namespace BusinessLayer
         {
             sheet.GetRow(fila - 1).Height = (short) height;
         }
+
+        public static ICellStyle GetCloneStyleWithIndent(IWorkbook wb, ICellStyle original, short indention)
+        {
+            ICellStyle temp = wb.CreateCellStyle();
+            temp.CloneStyleFrom(original);
+            temp.Indention = indention;
+
+            return temp;
+        }
+
+        public static ICellStyle GetCloneStyleWithHCenter(IWorkbook wb, ICellStyle original)
+        {
+            ICellStyle temp = wb.CreateCellStyle();
+            temp.CloneStyleFrom(original);
+            temp.Alignment = HorizontalAlignment.Center;
+
+            return temp;
+        }
+
+        public static ICellStyle GetCloneStyle(IWorkbook wb, ICellStyle original)
+        {
+            ICellStyle temp = wb.CreateCellStyle();
+            temp.CloneStyleFrom(original);
+
+            return temp;
+        }
     }
 }
 
