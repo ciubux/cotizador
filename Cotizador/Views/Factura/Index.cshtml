@@ -671,6 +671,11 @@ else
     {
                 <!--           <button type="button" id="btnIniciarRefacturacion" class="btn btn-danger">Generar Factura Reemplazo</button>-->
 }
+                    @if (documentoVenta.usuario.visualizaDocumentosVenta)
+                    {
+                        <button type="button" id="btnVerNotaDebito" class="btn btn-primary">Ver Notas Débito</button>
+                        <button type="button" id="btnVerNotaCredito" class="btn btn-primary">Ver Notas Crédito</button>
+                    }
                 </div>
 
             </div>

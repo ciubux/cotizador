@@ -1067,6 +1067,28 @@ jQuery(function ($) {
             },
             success: function (documentoVenta) {
                 $('body').loadingModal('hide');
+                /*Habilitar/Deshabilitar botones para ver notas de crédito/débito*/
+
+
+                $("#btnVerNotaCredito").hide();
+                if (documentoVenta.tieneNotaCredito) {
+                    $("#btnVerNotaCredito").show();
+                }
+
+                $("#btnVerNotaDebito").hide();
+                if (documentoVenta.tieneNotaDebito) {
+                    $("#btnVerNotaDebito").show();
+                }
+
+
+                
+            
+
+
+
+
+
+
                 /*Solicitar Anulación */
                 if (documentoVenta.solicitadoAnulacion == false
                     && 

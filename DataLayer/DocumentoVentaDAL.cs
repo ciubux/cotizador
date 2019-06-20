@@ -479,7 +479,8 @@ namespace DataLayer
 
                 documentoVenta.solicitadoAnulacion = Converter.GetBool(row, "SOLICITUD_ANULACION");
                 documentoVenta.permiteAnulacion = Converter.GetBool(row, "permite_anulacion");
-
+                documentoVenta.tieneNotaCredito = Converter.GetBool(row, "tiene_nota_credito");
+                documentoVenta.tieneNotaDebito = Converter.GetBool(row, "tiene_nota_debito");
 
                 foreach (String column in columnasCabecera)
                 {
