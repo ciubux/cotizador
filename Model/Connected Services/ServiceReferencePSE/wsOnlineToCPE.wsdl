@@ -5,9 +5,10 @@
       <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" />
-      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Commons" />
-      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA" />
-      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/" />
+      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.EMISION" />
+      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Commons" />
+      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA" />
+      <xsd:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IwsOnlineToCPE_callProcessOnline_InputMessage">
@@ -46,6 +47,18 @@
   <wsdl:message name="IwsOnlineToCPE_CallRequestLow_OutputMessage">
     <wsdl:part name="parameters" element="tns:CallRequestLowResponse" />
   </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callProcessReturn_InputMessage">
+    <wsdl:part name="parameters" element="tns:callProcessReturn" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callProcessReturn_OutputMessage">
+    <wsdl:part name="parameters" element="tns:callProcessReturnResponse" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callStateOpe_InputMessage">
+    <wsdl:part name="parameters" element="tns:callStateOpe" />
+  </wsdl:message>
+  <wsdl:message name="IwsOnlineToCPE_callStateOpe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:callStateOpeResponse" />
+  </wsdl:message>
   <wsdl:portType name="IwsOnlineToCPE">
     <wsdl:operation name="callProcessOnline">
       <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callProcessOnline" message="tns:IwsOnlineToCPE_callProcessOnline_InputMessage" />
@@ -70,6 +83,14 @@
     <wsdl:operation name="CallRequestLow">
       <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/CallRequestLow" message="tns:IwsOnlineToCPE_CallRequestLow_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/CallRequestLowResponse" message="tns:IwsOnlineToCPE_CallRequestLow_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="callProcessReturn">
+      <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callProcessReturn" message="tns:IwsOnlineToCPE_callProcessReturn_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callProcessReturnResponse" message="tns:IwsOnlineToCPE_callProcessReturn_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="callStateOpe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callStateOpe" message="tns:IwsOnlineToCPE_callStateOpe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IwsOnlineToCPE/callStateOpeResponse" message="tns:IwsOnlineToCPE_callStateOpe_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IwsOnlineToCPE" type="tns:IwsOnlineToCPE">
@@ -121,6 +142,24 @@
     </wsdl:operation>
     <wsdl:operation name="CallRequestLow">
       <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/CallRequestLow" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="callProcessReturn">
+      <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/callProcessReturn" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="callStateOpe">
+      <soap:operation soapAction="http://tempuri.org/IwsOnlineToCPE/callStateOpe" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

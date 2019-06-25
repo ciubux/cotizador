@@ -145,6 +145,9 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    $("#btnCvsCompra").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
 
     /**
      * ################################ INICIO CONTROLES DE CLIENTE
