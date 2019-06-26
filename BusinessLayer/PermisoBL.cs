@@ -15,6 +15,13 @@ namespace BusinessLayer
                 return dal.selectPermisos();
             }
         }
-        
+
+        public Permiso getPermiso(int idPermiso)
+        {
+            using (var dal = new PermisoDAL())
+            {
+                return dal.getPermiso(idPermiso);
+            }
+        }
     }
 }

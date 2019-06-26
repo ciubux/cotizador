@@ -588,6 +588,7 @@
     <Content Include="Scripts\vendedor1.0.0.js" />
     <Content Include="Views\Vendedor\Editar.cshtml" />
     <Content Include="Views\Compra\Comprar.cshtml" />
+    <Content Include="Views\Permiso\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

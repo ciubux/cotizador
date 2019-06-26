@@ -42,5 +42,26 @@ namespace DataLayer
             }
             return permisoList;
         }
+
+        public Permiso getPermiso(int idPermiso)
+        {
+            var objCommand = GetSqlCommand("ps_permiso");
+            InputParameterAdd.Int(objCommand, "idPermiso", idPermiso);
+
+            DataTable dataTable = Execute(objCommand);
+            Permiso permiso = new Permiso();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                permiso.idPermiso = Converter.GetInt(row, "id_permiso");
+                permiso.codigo = Converter.GetString(row, "codigo");
+                permiso.descripcion_corta = Converter.GetString(row, "descripcion_corta");
+                permiso.descripcion_larga = Converter.GetString(row, "descripcion_larga");
+
+                permiso.categoriaPermiso = new CategoriaPermiso();
+                permiso.categoriaPermiso.idCategoriaPermiso = Converter.GetInt(row, "id_categoria_permiso");
+            }
+            return permiso;
+        }
     }
 }

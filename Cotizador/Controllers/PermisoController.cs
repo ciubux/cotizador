@@ -35,6 +35,36 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        private void instanciarPermisoBusqueda()
+        {
+            Permiso obj = new Permiso();
+            obj.idPermiso = 0;
+            obj.Estado = 1;
+            obj.descripcion_corta = String.Empty;
+            obj.descripcion_larga = String.Empty;
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.IdUsuarioRegistro = usuario.idUsuario;
+            obj.usuario = usuario;
+
+            this.Session[Constantes.VAR_SESSION_PERMISO_BUSQUEDA] = obj;
+        }
+
+        private void instanciarPermiso()
+        {
+            Permiso obj = new Permiso();
+            obj.idPermiso = 0;
+            obj.Estado = 1;
+            obj.descripcion_corta = String.Empty;
+            obj.descripcion_larga = String.Empty;
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.IdUsuarioRegistro = usuario.idUsuario;
+            obj.usuario = usuario;
+
+            this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR] = obj;
+        }
+
         public ActionResult AsignarPermisos()
         {
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
@@ -152,6 +182,73 @@ namespace Cotizador.Controllers
                 logger.Error(e, agregarUsuarioAlMensaje(e.Message));
                 throw e;
             }
-}
+        }
+
+
+
+        [HttpGet]
+        public ActionResult List()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            PermisoBL bl = new PermisoBL();
+
+            if (!usuario.administraPermisos)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaPermisos;
+
+            if (this.Session[Constantes.VAR_SESSION_PERMISO_BUSQUEDA] == null)
+            {
+                instanciarPermisoBusqueda();
+            }
+
+
+            Permiso objSearch = (Permiso)this.Session[Constantes.VAR_SESSION_PERMISO_BUSQUEDA];
+            List<Permiso> permisos = bl.getPermisos();
+
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaPermisos;
+            ViewBag.usuario = objSearch;
+            ViewBag.permisos = permisos;
+
+            return View();
+        }
+
+
+        public ActionResult Editar(int? idPermiso = null)
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoPermisos;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.administraPermisos)
+            {
+                return RedirectToAction("List", "Permiso");
+            }
+
+
+            if (this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR] == null && idPermiso == null)
+            {
+                instanciarPermiso();
+            }
+
+            Permiso obj = (Permiso)this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR];
+
+            if (idPermiso != null)
+            {
+                PermisoBL bL = new PermisoBL();
+                obj = bL.getPermiso(idPermiso.Value);
+                obj.IdUsuarioRegistro = usuario.idUsuario;
+                obj.usuario = usuario;
+
+                this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR] = obj;
+            }
+
+
+            ViewBag.permiso = obj;
+
+            return View();
+
+        }
     }
 }

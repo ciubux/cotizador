@@ -6,8 +6,48 @@ $(document).ready(function () {
         $(".menuUsuarios").menu();
     });
 
+    $(function () {
+        FooTable.init('#tablePermisos');
+    });
 
 
+    $('#permiso_descripcion_corta').keyup(function (e) {
+        var textSearch = $('#permiso_descripcion_corta').val();
+        
+        setTimeout(function () {
+            var textNow = $('#permiso_descripcion_corta').val();
+            if (textSearch == textNow) {
+                filterPermisos(textSearch);
+            }
+        }, 1000);
+    });
+
+    function filterPermisos(textSearch) {
+        $("#tablePermisos > tbody").empty();
+        $("#tablePermisos").footable({
+            "paging": {
+                "enabled": true
+            }
+        });
+
+        $('#dtPermisos tr').each(function () {
+            var tr = this;
+            var founds = 0;
+            $(tr).find('td[isSearchable=1]').each(function () {
+                var text = $(this).html();
+                if (text.indexOf(textSearch) >= 0) {
+                    founds = founds + 1;
+                } 
+            });
+
+            if (founds > 0) {
+                $("#tablePermisos").append('<tr data-expanded="true">' + $(tr).html() + '</tr>');
+            }            
+        });
+
+        //FooTable.init('#tablePermisos');
+    }
+   
     $('#menuCategoriaPermisos li ul li').click(function (e) {
 
         var idPermiso = $(this).find("div").attr("id");
