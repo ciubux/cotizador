@@ -275,6 +275,7 @@
     <Compile Include="ExcelExport\GuiaRemisionSearch.cs" />
     <Compile Include="ExcelExport\CotizacionSearch.cs" />
     <Compile Include="ExcelExport\ClienteSearch.cs" />
+    <Compile Include="ExcelExport\CotizacionDetalleExcel.cs" />
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
     <Compile Include="ExcelExport\SubDistribuidorSearch.cs" />
     <Compile Include="ExcelExport\OrigenSearch.cs" />

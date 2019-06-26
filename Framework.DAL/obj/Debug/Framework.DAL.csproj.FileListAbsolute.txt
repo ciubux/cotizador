@@ -140,16 +140,6 @@ C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Fra
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.dll
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Framework.DAL\obj\Debug\Framework.DAL.pdb
-D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
-D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
-D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.dll
-D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.pdb
-D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.dll.config
-D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
-D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
-D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
-D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
-D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL\bin\Debug\Model.dll

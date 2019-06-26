@@ -174,18 +174,6 @@ C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Mod
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Model\obj\Debug\Model.csproj.CopyComplete
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Model\obj\Debug\Model.dll
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Model\obj\Debug\Model.pdb
-D:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll.config
-D:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll
-D:\Repo\freelos\cotizador\Model\bin\Debug\Model.pdb
-D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.dll
-D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.dll
-D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.xml
-D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\Model.dll.config
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\Model.pdb
