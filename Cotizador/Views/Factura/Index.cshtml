@@ -20,11 +20,11 @@
                     @Html.LabelFor(dv => documentoVenta.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                        new
-                        {
-                            ciudadSelectId = "idCiudad",
-                            selectedValue = documentoVenta.ciudad.idCiudad
-                        })
+                                       new
+                                       {
+                                           ciudadSelectId = "idCiudad",
+                                           selectedValue = documentoVenta.ciudad.idCiudad
+                                       })
                     </div>
                 </div>
             </div>
@@ -57,11 +57,11 @@
                     <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
                     <div class="col-xs-8">
                         @Html.Action("GetGruposCliente", "GrupoCliente",
-                                new
-                                {
-                                    grupoClienteSelectId = "idGrupoCliente",
-                                    selectedValue = documentoVenta.idGrupoCliente
-                                })
+                                               new
+                                               {
+                                                   grupoClienteSelectId = "idGrupoCliente",
+                                                   selectedValue = documentoVenta.idGrupoCliente
+                                               })
                     </div>
                     @if (documentoVenta.usuario.buscaSedesGrupoCliente)
                     {
@@ -91,9 +91,9 @@
                     <label for="documentoVenta_numero" class="control-label col-xs-4">Tipo/Número Doc.:</label>
                     <div class="col-xs-4">
                         @Html.DropDownList("documentoVenta_tipoDocumento",
-                           EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoDocumento), documentoVenta.tipoDocumento),
-                           new { @class = "form-control" }
-                           )
+                                          EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoDocumento), documentoVenta.tipoDocumento),
+                                          new { @class = "form-control" }
+                                          )
                     </div>
                     <div class="col-xs-4">
                         @if (Int64.Parse(documentoVenta.numero) > 0)
@@ -184,9 +184,9 @@
                     @Html.LabelFor(dv => documentoVenta.estadoDocumentoSunatBusqueda, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.DropDownList("documentoVenta_estadoDocumentoSunatBusqueda",
-                                                     EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.EstadosDocumentoSunatBusqueda), documentoVenta.estadoDocumentoSunatBusqueda),
-                                                     new { @class = "form-control" }
-                                                     )
+                                                                    EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.EstadosDocumentoSunatBusqueda), documentoVenta.estadoDocumentoSunatBusqueda),
+                                                                    new { @class = "form-control" }
+                                                                    )
                     </div>
                 </div>
             </div>
@@ -194,24 +194,24 @@
         </div>
 
 
-    
-            <div class="row">
-                	<div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => documentoVenta.sku, htmlAttributes: new { @class = "control-label col-xs-4" })
 
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => documentoVenta.sku, htmlAttributes: new { @class = "form-control" })
-                            <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Puede ingresar el SKU del producto que se encuentra en el detalle del documento.</span>
-                        </div>
-                        
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => documentoVenta.sku, htmlAttributes: new { @class = "control-label col-xs-4" })
 
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => documentoVenta.sku, htmlAttributes: new { @class = "form-control" })
+                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Puede ingresar el SKU del producto que se encuentra en el detalle del documento.</span>
                     </div>
+
 
                 </div>
 
+            </div>
+
             @if (documentoVenta.usuario.apruebaAnulaciones)
-        {
+            {
                 <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
                         <label for="documentoVenta_solicitadoAnulacion" class="control-label col-xs-4">Mostrar solo con Solicitud de Anulación:</label>
@@ -244,9 +244,9 @@
                         </div>
 
                     </div>
-                </div>  }
-            </div>
-      
+                </div>}
+        </div>
+
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
             <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
@@ -282,13 +282,13 @@
                     <th data-name="asesorComercial" data-sortable="true" data-breakpoints="xs">Cod. Asesor Comercial</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
                     @if (documentoVenta.usuario.apruebaAnulaciones)
-    {
-                <th data-name="comentarioSolicitudAnulacion" data-visible="true" data-sortable="true" data-breakpoints="xs">Comentario Solicitud Anulación</th>
-}
-else
-{
-                <th data-name="comentarioSolicitudAnulacion" data-visible="false" data-sortable="true" data-breakpoints="xs">Comentario Solicitud Anulación</th>
-}
+                    {
+                        <th data-name="comentarioSolicitudAnulacion" data-visible="true" data-sortable="true" data-breakpoints="xs">Comentario Solicitud Anulación</th>
+                    }
+                    else
+                    {
+                        <th data-name="comentarioSolicitudAnulacion" data-visible="false" data-sortable="true" data-breakpoints="xs">Comentario Solicitud Anulación</th>
+                    }
                     <th data-name="opciones" data-sortable="false" data-breakpoints="xs"></th>
                 </tr>
             </thead>
@@ -644,33 +644,33 @@ else
 
                 <div class="pull-right">
                     @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
-    {
-                <button type="button" id="btnCancelarConfirmarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-}
+                    {
+                        <button type="button" id="btnCancelarConfirmarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    }
                     @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
-    {
-                <!--        <button type="button" id="btnActualizarEstado" class="btn btn-primary">Actualizar Estado</button>-->
-}
+                    {
+                        <!--        <button type="button" id="btnActualizarEstado" class="btn btn-primary">Actualizar Estado</button>-->
+                    }
                     @if (documentoVenta.usuario.creaDocumentosVenta)
-    {
-                <button type="button" id="btnSolicitarAnulacion" class="btn btn-danger">Solicitar Anulación</button>
-}
+                    {
+                        <button type="button" id="btnSolicitarAnulacion" class="btn btn-danger">Solicitar Anulación</button>
+                    }
                     @if (documentoVenta.usuario.apruebaAnulaciones)
-    {
-                <button type="button" id="btnIniciarAprobacion" class="btn btn-danger">Aprobar Anulación</button>
-}
+                    {
+                        <button type="button" id="btnIniciarAprobacion" class="btn btn-danger">Aprobar Anulación</button>
+                    }
                     @if (documentoVenta.usuario.creaNotasCredito)
-    {
-                <button type="button" id="btnIniciarNotaCredito" class="btn btn-danger">Generar Nota Crédito</button>
-}
+                    {
+                        <button type="button" id="btnIniciarNotaCredito" class="btn btn-danger">Generar Nota Crédito</button>
+                    }
                     @if (documentoVenta.usuario.creaNotasDebito)
-    {
-                <button type="button" id="btnIniciarNotaDebito" class="btn btn-danger">Generar Nota Débito</button>
-}
+                    {
+                        <button type="button" id="btnIniciarNotaDebito" class="btn btn-danger">Generar Nota Débito</button>
+                    }
                     @if (documentoVenta.usuario.realizaRefacturacion)
-    {
-                <!--           <button type="button" id="btnIniciarRefacturacion" class="btn btn-danger">Generar Factura Reemplazo</button>-->
-}
+                    {
+                        <!--           <button type="button" id="btnIniciarRefacturacion" class="btn btn-danger">Generar Factura Reemplazo</button>-->
+                    }
                     @if (documentoVenta.usuario.visualizaDocumentosVenta)
                     {
                         <button type="button" id="btnVerNotaDebito" class="btn btn-primary">Ver Notas Débito</button>
@@ -843,7 +843,7 @@ else
                                         <li class="list-group-item"><input type="radio" id="tipoNotaCredito4" name="tipoNotaCredito" value="4" /><label for="tipoNotaCredito4">DESCUENTO GLOBAL</label> </li>
                                         <li class="list-group-item"><input type="radio" id="tipoNotaCredito5" name="tipoNotaCredito" value="5" /><label for="tipoNotaCredito5">DESCUENTO POR ITEM</label> </li>
                                         <!--<li class="list-group-item"><input type="radio" id="tipoNotaCredito6" name="tipoNotaCredito" value="6" /><label for="tipoNotaCredito6">DEVOLUCIÓN TOTAL</label> </li>
-                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito7" name="tipoNotaCredito" value="7" /><label for="tipoNotaCredito7">DEVOLUCIÓN POR ITEM</label> </li>-->
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito7" name="tipoNotaCredito" value="7" /><label for="tipoNotaCredito7">DEVOLUCIÓN POR ITEM</label> </li>-->
                                         <li class="list-group-item"><input type="radio" id="tipoNotaCredito8" name="tipoNotaCredito" value="9" /><label for="tipoNotaCredito8">DISMINUCIÓN EN EL VALOR</label> </li>
                                     </ul>
                                 </div>
@@ -852,17 +852,17 @@ else
                     </div>
 
 
-                    
+
                     <div id="divProductoDescuento" class="row">
                         <div class="col-sm-6 col-lg-8">
                             <div class="form-group">
                                 <label class="control-label col-xs-4" for="idProducto">Descuento a Aplicar:</label>
                                 <div class="col-xs-8">
                                     @Html.Action("GetDescuentos", "Producto",
-                                     new
-                                     {
-                                         productoSelectId = "idProducto"
-                                     })
+                                                    new
+                                                    {
+                                                        productoSelectId = "idProducto"
+                                                    })
                                 </div>
                             </div>
                         </div>
@@ -933,10 +933,10 @@ else
                                 <label class="control-label col-xs-4" for="idProducto">Cargo a Aplicar:</label>
                                 <div class="col-xs-8">
                                     @Html.Action("GetCargos", "Producto",
-                                     new
-                                     {
-                                         productoSelectId = "idProducto"
-                                     })
+                                                    new
+                                                    {
+                                                        productoSelectId = "idProducto"
+                                                    })
                                 </div>
                             </div>
                         </div>
@@ -957,8 +957,117 @@ else
 
 
 
+<div class="modal fade" id="modalVerNotasCredito" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerNotasCreditoTitle"><b>Notas de Crédito</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" id="formVerNotasCredito"></form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarVerNotasCredito" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
+
+<div class="modal fade" id="modalVerNotasDebito" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerNotasDebitoTitle"><b>Notas de Débito</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" id="formVerNotasDebito"></form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarVerNotasDebito" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="plantillaVerNotas" style="display:none;">
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verSerieNumeroNota" class="control-label col-xs-4">Número Nota #EtiquetaNota:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verSerieNumeroNota">#serieNumero</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verFechaNota" class="control-label col-xs-4">Fecha Emisión Nota #EtiquetaNota:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaNota">#fechaEmisionNota</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verTipoNota" class="control-label col-xs-4">Tipo Nota #EtiquetaNota:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verTipoNota">#tipoNota</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verTotal" class="control-label col-xs-4">Total:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaGuia">#totalNota</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table id="tableDetalleNota" class="table" data-editing="false">
+        <thead>
+            <tr>
+                <th data-name="codigo" data-sortable="false">CODIGO</th>
+                <th data-name="cantidad" data-sortable="false" data-breakpoints="xs">CANTIDAD</th>
+                <th data-name="descripcion" data-sortable="false" data-breakpoints="xs">DESCRIPCIÓN</th>
+                <th data-name="valorUnitario" data-sortable="false" data-breakpoints="xs sm">VALOR UNITARIO</th>
+                <th data-name="valorVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">VALOR VENTA</th>
+                <th data-name="igv" data-visible="true" data-sortable="false" data-breakpoints="xs sm">IGV</th>
+                <th data-name="precioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">PRECIO VENTA</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div class="modal-body">
+    <form class="form-horizontal" id="formVerGuiasRemision"></form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" id="btnCancelarVerGuiasRemision" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+</div>
 
 
 

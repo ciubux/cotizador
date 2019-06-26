@@ -413,6 +413,7 @@
     <Content Include="Scripts\documentoCompra1.1.1.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
+    <Content Include="Scripts\pedidoLoad.js" />
     <Content Include="Scripts\usuario1.0.0.js" />
     <Content Include="Scripts\rol1.0.0.js" />
     <Content Include="Scripts\subDistribuidor1.0.0.js" />
