@@ -3,8 +3,10 @@ using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using System.Web;
 using System.Web.Mvc;
+using System.Reflection;
 
 namespace Cotizador.Controllers
 {
@@ -18,6 +20,8 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.AsignacionPermisos: permiso = (Permiso)this.Session[Constantes.VAR_SESSION_ASIGNACION_PERMISOS]; break;
+                    case Constantes.paginas.BusquedaPermisos: permiso = (Permiso)this.Session[Constantes.VAR_SESSION_PERMISO_BUSQUEDA]; break;
+                    case Constantes.paginas.MantenimientoPermisos: permiso = (Permiso)this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR]; break;
                 }
                 return permiso;
             }
@@ -26,9 +30,12 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.AsignacionPermisos: this.Session[Constantes.VAR_SESSION_ASIGNACION_PERMISOS] = value; break;
+                    case Constantes.paginas.BusquedaPermisos: this.Session[Constantes.VAR_SESSION_PERMISO_BUSQUEDA] = value; break;
+                    case Constantes.paginas.MantenimientoPermisos: this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR] = value; break;
                 }
             }
         }
+
         // GET: Permiso
         public ActionResult Index()
         {
@@ -125,6 +132,13 @@ namespace Cotizador.Controllers
             }
         }
 
+        public void ChangeInputString()
+        {
+            Permiso obj = this.PermisoSession;
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, this.Request.Params["valor"]);
+            this.PermisoSession = obj;
+        }
 
         public void ChangeIdPermiso()
         {
@@ -184,6 +198,37 @@ namespace Cotizador.Controllers
             }
         }
 
+
+        public string Update()
+        {
+            try
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                UsuarioBL usuarioBL = new UsuarioBL();
+
+                PermisoBL bL = new PermisoBL();
+                Permiso obj = (Permiso)this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR];
+
+                if (obj.idPermiso == 0)
+                {
+                    throw new Exception("Error");
+                }
+                else
+                {
+                    obj = bL.updatePermiso(obj);
+                    this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR] = null;
+                }
+                String resultado = JsonConvert.SerializeObject(obj);
+                //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+                return resultado;
+
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+                throw e;
+            }
+        }
 
 
         [HttpGet]
@@ -248,6 +293,40 @@ namespace Cotizador.Controllers
             ViewBag.permiso = obj;
 
             return View();
+
+        }
+
+        public void iniciarEdicionPermiso()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Permiso obj = (Permiso)this.Session[Constantes.VAR_SESSION_PERMISO_VER];
+            this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR] = obj;
+        }
+
+        public String ConsultarSiExistePermiso()
+        {
+            int idPermiso = int.Parse(Request["idPermiso"].ToString());
+            PermisoBL bL = new PermisoBL();
+            Permiso obj = bL.getPermiso(idPermiso);
+            obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String resultado = JsonConvert.SerializeObject(obj);
+            this.Session[Constantes.VAR_SESSION_PERMISO_VER] = obj;
+
+            obj = (Permiso)this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR];
+            if (obj == null)
+                return "{\"existe\":\"false\",\"idPermiso\":\"0\"}";
+            else
+                return "{\"existe\":\"true\",\"idPermiso\":\"" + obj.idPermiso + "\"}";
+        }
+
+        public ActionResult CancelarCreacionPermiso()
+        {
+            this.Session[Constantes.VAR_SESSION_PERMISO_MANTENEDOR] = null;
+            UsuarioBL usuarioBL = new UsuarioBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            //   usuarioBL.updateCotizacionSerializada(usuario, null);
+            return RedirectToAction("List", "Permiso");
 
         }
     }

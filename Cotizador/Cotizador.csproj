@@ -589,6 +589,7 @@
     <Content Include="Views\Vendedor\Editar.cshtml" />
     <Content Include="Views\Compra\Comprar.cshtml" />
     <Content Include="Views\Permiso\List.cshtml" />
+    <Content Include="Views\Permiso\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

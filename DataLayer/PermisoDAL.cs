@@ -18,8 +18,20 @@ namespace DataLayer
         }
 
 
-        
 
+
+        public Permiso updatePermiso(Permiso obj)
+        {
+            var objCommand = GetSqlCommand("pu_permiso");
+            InputParameterAdd.Int(objCommand, "idPermiso", obj.idPermiso);
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
+            InputParameterAdd.Varchar(objCommand, "descripcionCorta", obj.descripcion_corta);
+            InputParameterAdd.Varchar(objCommand, "descripcionLarga", obj.descripcion_larga);
+
+            ExecuteNonQuery(objCommand);
+
+            return obj;
+        }
 
 
         public List<Permiso> selectPermisos()

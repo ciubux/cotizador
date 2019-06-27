@@ -8,6 +8,14 @@ namespace BusinessLayer
 {
     public class PermisoBL
     {
+        public Permiso updatePermiso(Permiso obj)
+        {
+            using (var dal = new PermisoDAL())
+            {
+                return dal.updatePermiso(obj);
+            }
+        }
+
         public List<Permiso> getPermisos()
         {
             using (var dal = new PermisoDAL())
