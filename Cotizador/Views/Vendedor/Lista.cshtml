@@ -78,7 +78,11 @@
                                     {
                                         <input class="radio-input" type="radio" name="vendedor_estado" id="vendedor_estado_no" value="0"><span>Inactivo</span>
                                     }
-                                </label>
+                                    @if (vendedor.estado == null)
+                                    {
+                                        <input class="radio-input" type="radio" name="vendedor_estado"><span>Inactivo</span>
+                                    }
+                                    </label>
                             </div>
                         </div>
                     </div>

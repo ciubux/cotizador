@@ -314,6 +314,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pu_documentoCompra");
             InputParameterAdd.Int(objCommand, "idDocumentoCompra", documentoCompra.idDocumentoCompra);
+            InputParameterAdd.Guid(objCommand, "idCompra", documentoCompra.compra.idCompra);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoCompra.usuario.idUsuario);
             ExecuteNonQuery(objCommand);
         }

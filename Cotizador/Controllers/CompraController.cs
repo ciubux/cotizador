@@ -20,17 +20,17 @@ namespace Cotizador.Controllers
 
         public void iniciarEdicionCompra()
         {
-            Venta ventaVer = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA_VER];
-            VentaBL ventaBL = new VentaBL();
-            Venta venta = new Venta();
+            Compra compraVer = (Compra)this.Session[Constantes.VAR_SESSION_COMPRA_VER];
+            CompraBL compraBL = new CompraBL();
+            Compra compra = new Compra();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            venta = ventaBL.GetVenta(ventaVer, usuario);
+            compra = compraBL.GetCompra(compraVer, usuario);
             //Temporal
-            Pedido pedido = venta.pedido;
+            Pedido pedido = compra.pedido;
             pedido.ciudadASolicitar = new Ciudad();
 
-            this.Session[Constantes.VAR_SESSION_COMPRA] = venta;
+            this.Session[Constantes.VAR_SESSION_COMPRA] = compra;
         }
 
 
@@ -221,11 +221,11 @@ namespace Cotizador.Controllers
 
         }
 
-        public ActionResult Vender()
+        public ActionResult Comprar()
         {
             try
             {
-                this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoVenta;
+                this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCompra;
 
                 //Si no hay usuario, se dirige el logueo
                 if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
@@ -254,20 +254,20 @@ namespace Cotizador.Controllers
 
                     instanciarPedido();
                 }*/
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA];
-                Pedido pedido = venta.pedido;
+                Compra compra = (Compra)this.Session[Constantes.VAR_SESSION_COMPRA];
+                Pedido pedido = compra.pedido;
                     
 
 
                 int existeCliente = 0;
-                if (pedido.cliente.idCliente != Guid.Empty)
+                if (pedido.proveedor.idProveedor != Guid.Empty)
                 {
                     existeCliente = 1;
                 }
 
                 ViewBag.existeCliente = existeCliente;
-                ViewBag.idClienteGrupo = pedido.cliente.idCliente;
-                ViewBag.clienteGrupo = pedido.cliente.ToString();
+                ViewBag.idClienteGrupo = pedido.proveedor.idProveedor;
+                ViewBag.clienteGrupo = pedido.proveedor.ToString();
 
                 ViewBag.fechaSolicitud = pedido.fechaSolicitud.ToString(Constantes.formatoFecha);
                 ViewBag.horaSolicitud = pedido.fechaSolicitud.ToString(Constantes.formatoHora);
@@ -292,7 +292,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            ViewBag.pagina = Constantes.paginas.MantenimientoPedido;
+            ViewBag.pagina = (int)Constantes.paginas.MantenimientoCompra;
             return View();
         }
 
@@ -300,16 +300,16 @@ namespace Cotizador.Controllers
         [HttpPost]
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
         {
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA];
+            Compra compra = (Compra)this.Session[Constantes.VAR_SESSION_COMPRA];
 
-            IDocumento documento = (Pedido)venta.pedido;
+            IDocumento documento = (Pedido)compra.pedido;
             List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList);
             documento.documentoDetalle = documentoDetalle;
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.calcularMontosTotales((Pedido)documento);
-            venta.pedido = (Pedido)documento;
+            compra.pedido = (Pedido)documento;
 
-            this.Session[Constantes.VAR_SESSION_COMPRA] = venta;
+            this.Session[Constantes.VAR_SESSION_COMPRA] = compra;
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
 
@@ -321,14 +321,14 @@ namespace Cotizador.Controllers
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_COMPRA];
-            venta.usuario = usuario;
-            VentaBL bl = new VentaBL();
-            bl.UpdateVenta(venta);
+            Compra compra = (Compra)this.Session[Constantes.VAR_SESSION_COMPRA];
+            compra.usuario = usuario;
+            CompraBL bl = new CompraBL();
+            bl.UpdateCompra(compra);
 
 
-            long numeroPedido = venta.pedido.numeroPedido;
-            String numeroPedidoString = venta.pedido.numeroPedidoString;
+            long numeroPedido = compra.pedido.numeroPedido;
+            String numeroPedidoString = compra.pedido.numeroPedidoString;
         
 
             var v = new { numeroPedido = numeroPedidoString };

@@ -467,6 +467,9 @@ namespace DataLayer
             {
                 InputParameterAdd.Int(objCommand, "idProductoPresentacion", 0);
             }
+
+            InputParameterAdd.Int(objCommand, "indicadorAprobacion", (int)pedidoDetalle.indicadorAprobacion);
+
             ExecuteNonQuery(objCommand);
           
             pedidoDetalle.idPedidoDetalle = (Guid)objCommand.Parameters["@newId"].Value;
@@ -679,6 +682,9 @@ namespace DataLayer
                 pedido.cliente.ruc = Converter.GetString(row, "ruc");
                 pedido.cliente.bloqueado = Converter.GetBool(row, "bloqueado");
 
+                pedido.cliente.grupoCliente = new GrupoCliente();
+                pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "nombre_grupo");
+
                 pedido.usuario = new Usuario();
                 pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
@@ -848,7 +854,10 @@ namespace DataLayer
                 pedido.cliente.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
                 pedido.cliente.asistenteServicioCliente.usuario = new Usuario();
                 pedido.cliente.asistenteServicioCliente.usuario.email = Converter.GetString(row, "asistente_servicio_cliente_email");
-            
+
+                pedido.cliente.grupoCliente = new GrupoCliente();
+                pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
+
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
@@ -874,7 +883,7 @@ namespace DataLayer
                 pedido.seguimientoCrediticioPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento_crediticio");
                 pedido.seguimientoCrediticioPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento_crediticio");
 
-
+                
             }
 
 
@@ -962,6 +971,8 @@ namespace DataLayer
 
                 pedidoDetalle.precioUnitarioVenta = Converter.GetDecimal(row, "precio_unitario_venta");
                 pedidoDetalle.idVentaDetalle = Converter.GetGuid(row, "id_venta_detalle");
+
+                pedidoDetalle.indicadorAprobacion = (PedidoDetalle.IndicadorAprobacion)Converter.GetShort(row, "indicador_aprobacion");
 
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
             }

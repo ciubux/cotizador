@@ -65,7 +65,7 @@
                         }
                         else
                         {
-                            @Html.TextBoxFor(c => grupoCliente.codigo, htmlAttributes: new { @class = "form-control" })
+                            @Html.TextBoxFor(c => grupoCliente.codigo, htmlAttributes: new { @class = "form-control", @maxLength = "4" })
                         }
 
                     </div>

@@ -2807,6 +2807,11 @@ jQuery(function ($) {
                 $("#verCiudad").html(pedido.ciudad_nombre);
                 $("#verIdCliente").val(pedido.cliente_idCliente);
                 $("#verCliente").html(pedido.cliente_codigoRazonSocial);
+
+
+                $("#verGrupoCliente").html(pedido.grupoCliente_nombre == null ? "" : pedido.grupoCliente_nombre);
+                
+
                 $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
                 $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
                 $("#verNumeroRequerimiento").html(pedido.numeroRequerimiento);
@@ -2883,9 +2888,17 @@ jQuery(function ($) {
                 var lista = pedido.pedidoDetalleList;
                 for (var i = 0; i < lista.length; i++) {
 
+                    var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
+                    if (lista[i].indicadorAprobacion == 2)
+                        imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"> <img class="table-product-img" src="/images/semaforo_naranja_small.png" srcset="semaforo_naranja_min.png 2x"/></a>';
+                    else if (lista[i].indicadorAprobacion == 3)
+                        imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"><img class="table-product-img " src="/images/semaforo_rojo_small.png" srcset="semaforo_rojo_min.png 2x"/></a>';
+
+
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
 
                     d += '<tr>' +
+                        '<td>' + imgIndicadorAprobacion + '</td>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
                         '<td>' + lista[i].producto.sku + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +
@@ -4313,13 +4326,14 @@ jQuery(function ($) {
                             '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                     }
                     
-
+                    var grupoCliente = pedidoList[i].grupoCliente_nombre == null ? "" : pedidoList[i].grupoCliente_nombre;
                     var pedido = '<tr data-expanded="true">' +
                         '<td>  ' + pedidoList[i].idPedido+'</td>' +
                         '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + '  </td>' +
                         '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +
                         '<td>  ' + pedidoList[i].cliente_razonSocial + '</td>' +
+                        '<td>  ' + grupoCliente + '</td>' +
                         '<td>  ' + pedidoList[i].numeroReferenciaCliente+'  </td>' +
                         '<td>  ' + pedidoList[i].usuario_nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].fechaHoraRegistro + '</td>' +

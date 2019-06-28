@@ -9,7 +9,6 @@ using BusinessLayer;
 using Newtonsoft.Json;
 using System.Reflection;
 
-
 namespace Cotizador.Controllers
 {
     public class VendedorController : Controller
@@ -21,6 +20,7 @@ namespace Cotizador.Controllers
             return View();
         }
         */
+
         public ActionResult GetResponsablesComerciales(string vendedorSelectId, string selectedValue = null, string disabled = null)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -66,8 +66,7 @@ namespace Cotizador.Controllers
             return PartialView("_Vendedor", model);
         }
 
-
-
+        
         /*-----------------------------------------------------------*/
 
         [HttpGet]
@@ -240,10 +239,6 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoVendedores;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (!usuario.modificaVendedor)
-            {
-                return RedirectToAction("Login", "Account");
-            }
             if (this.Session[Constantes.VAR_SESSION_VENDEDOR] == null && idVendedor == null)
             {
                 instanciarVendedor();
@@ -313,17 +308,5 @@ namespace Cotizador.Controllers
             else
                 return "{\"existe\":\"true\",\"idVendedor\":\"" + obj.idVendedor + "\"}";
         }
-
-
-        
-
-
-
-
-
-
-
-
-
     }
 }

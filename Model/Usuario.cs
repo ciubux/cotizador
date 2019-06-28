@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Model
 {
-    public class Usuario
+    public class Usuario : Auditoria
     {
         public Usuario()
         {
@@ -80,6 +80,21 @@ namespace Model
 
         public List<Permiso> permisoList { get; set; }
 
+        public bool TienePermiso(int idPermiso)
+        {
+            return this.permisoList.Where(item => item.idPermiso.Equals(idPermiso)).FirstOrDefault() != null;
+        }
+
+        public bool PermisoPorRol(int idPermiso)
+        {
+            try
+            {
+                return this.permisoList.Where(item => item.idPermiso.Equals(idPermiso)).FirstOrDefault().byRol;
+            } catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
         /*PERMISOS COTIZACION*/
         public bool apruebaCotizaciones { get { return apruebaCotizacionesLima || apruebaCotizacionesProvincias; } }
@@ -177,18 +192,25 @@ namespace Model
         public bool modificaOrigen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ORIGEN)).FirstOrDefault() != null; } }
         public bool visualizaOrigenes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_ORIGENES)).FirstOrDefault() != null; } }
 
-
         /*Vendedores*/
         public bool modificaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_VENDEDORES)).FirstOrDefault() != null; } }
         public bool visualizaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }
-        
+
+        /*Catalogo*/
+        public bool modificaCatalogo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_VENDEDORES)).FirstOrDefault() != null; } }
+        public bool visualizaCatalogo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }
 
         /*Administra Permisos*/
         public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }
 
         public bool modificaDireccionEntrega { get; set; }
-
         
+        /*Roles*/
+        public bool modificaRol { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ROL)).FirstOrDefault() != null; } }
+        public bool visualizaRoles { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_ROLES)).FirstOrDefault() != null; } }
+
+        public bool modificaUsuario { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_USUARIO)).FirstOrDefault() != null; } }
+        public bool visualizaUsuarios { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_USUARIOS)).FirstOrDefault() != null; } }
     }
 }
 

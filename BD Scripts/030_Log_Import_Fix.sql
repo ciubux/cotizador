@@ -140,7 +140,7 @@ BEGIN
             1, 
 			@fechaInicioVigencia,
 			@idUsuario,
-			GETDATE()
+			dbo.getlocaldate()
 			);
 
 
@@ -222,8 +222,8 @@ SET @newId = NEWID();
      VALUES
            (@newId,
 		    @sku,
-			GETDATE(),
-			DATEADD(mm, 6, GETDATE()),
+			dbo.getlocaldate(),
+			DATEADD(mm, 6, dbo.getlocaldate()),
 			@descripcion,
 			@skuProveedor,
 			@estado,
@@ -237,9 +237,9 @@ SET @newId = NEWID();
 			@unidadAlternativa,
 			@equivalencia,
 			@idUsuario,
-			GETDATE(),
+			dbo.getlocaldate(),
 			@idUsuario,
-			GETDATE(),
+			dbo.getlocaldate(),
 			@unidadProveedor,
 			@equivalenciaProveedor,
 			@unidadEstandarInternacional,

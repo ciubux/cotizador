@@ -9,7 +9,12 @@
     }
 
 
-
+    body {
+        font-family: 'Courier';
+        font-stretch: normal;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
 
 
 
@@ -17,8 +22,10 @@
 
     .row_uno {
         /*'Arial Narrow', */
-        font-family: 'Arial Narrow',Arial, sans-serif, Helvetica, sans-serif;
-        font-size: 1.2em;
+        font-family: 'Courier';
+        font-stretch: normal;
+        font-weight: bold;
+        font-size: 1.3em;
     }
 
         .row_uno > .col_uno {
@@ -43,8 +50,10 @@
     /*ROW DOS*/
     .row_dos {
         margin-top: 0.08cm;
-        font-family: 'Arial Narrow',Arial, Helvetica, sans-serif;
-        font-size: 1.2em;
+        font-family: 'Courier';
+        font-stretch: normal;
+        font-weight: bold;
+        font-size: 1.1em;
     }
 
         .row_dos > .col_uno {
@@ -70,8 +79,10 @@
 
     .row_tres {
         margin-top: 0.02cm;
-        font-family: 'Arial Narrow',Arial, Helvetica, sans-serif;
-        font-size: 1.2em;
+        font-family: 'Courier';
+        font-stretch: normal;
+        font-weight: bold;
+        font-size: 1.1em;
     }
 
 
@@ -88,6 +99,7 @@
 
     .row_cuatro {
         margin-top: 0cm;
+        font-size: 1.1em;
     }
 
 
@@ -116,7 +128,9 @@
 
     .row_cinco {
         margin-top: 0cm;
-        font-family: 'Arial Narrow',Arial, Helvetica, sans-serif;
+        font-family: 'Courier';
+        font-stretch: normal;
+        font-weight: bold;
         font-size: 1.1em;
     }
         /*ROW CINCO*/
@@ -133,7 +147,9 @@
 
     .row_seis {
         margin-top: 0cm;
-        font-family: 'Arial Narrow',Arial, Helvetica, sans-serif;
+        font-family: 'Courier';
+        font-stretch: normal;
+        font-weight: bold;
         font-size: 1.1em;
     }
         /*ROW SEIS*/
@@ -150,7 +166,9 @@
 
     .row_siete {
         margin-top: 0.05cm;
-        font-family: 'Arial Narrow',Arial, Helvetica, sans-serif;
+        font-family: 'Courier';
+        font-stretch: normal;
+        font-weight: bold;
         font-size: 1.1em;
     }
         /*ROW SIETE*/
@@ -167,30 +185,34 @@
 
 
     .detalle {
+        font-family: 'Courier';
+        font-stretch: normal;
+        font-weight: bold;
+        font-size: 1.2em;
         margin-top: 1cm;
         margin-left: 0.5cm;
-        height: 5.2cm;
+        height: 5.4cm;
     }
 
     /*ROW DETALLE*/
     .row_detalle > .col_uno {
         float: left;
-        width: 1.8cm;
+        width: 2cm;
     }
 
     .row_detalle > .col_dos {
         float: left;
-        width: 2cm;
+        width: 1.5cm;
     }
 
     .row_detalle > .col_tres {
         float: left;
-        width: 3cm;
+        width: 4cm;
     }
 
     .row_detalle > .col_cuatro {
         float: left;
-        width: 11cm;
+        width: 13cm;
     }
 
 
@@ -219,7 +241,7 @@
 
         .row_nueve > .col_dos {
             float: left;
-            width: 9cm;
+            width: 12cm;
         }
 
     .row_diez {
@@ -269,7 +291,9 @@
 
     body {
         /*background-color: black;*/
-        font-family: 'Arial Narrow', Helvetica, sans-serif;
+        font-family: 'Courier';
+        font-stretch: normal;
+        font-weight: bold;
         font-size: 1.1em;
         color: #333333;
         margin-top: 3.0cm;

@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anotations\Columna.cs" />
+    <Compile Include="CatalogoDAL.cs" />
+    <Compile Include="RolDAL.cs" />
+    <Compile Include="ParametroDAL.cs" />
     <Compile Include="DALConverter\UbigeoConvertTo.cs" />
     <Compile Include="ArchivoDAL.cs" />
     <Compile Include="DocumentoCompraDAL.cs" />

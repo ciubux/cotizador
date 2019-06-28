@@ -250,6 +250,7 @@ namespace Cotizador.Models.DTOsSearch
                 pedidoDTO.ubigeoEntrega_distrito = pedidoTmp.ubigeoEntrega.Distrito;
                 pedidoDTO.seguimientoPedido_estadoString = pedidoTmp.seguimientoPedido.estadoString;
                 pedidoDTO.seguimientoCrediticioPedido_estadoString = pedidoTmp.seguimientoCrediticioPedido.estadoString;
+                pedidoDTO.grupoCliente_nombre = pedidoTmp.cliente.grupoCliente.nombre;
                 pedidoDTOList.Add(pedidoDTO);
             }
             return pedidoDTOList;

@@ -686,73 +686,73 @@
             <tbody>
 
                 @{int contador = 0;}
-                @foreach (var cotizacionDetalle in pedido.pedidoDetalleList)
+                @foreach (var pedidoDetalle in pedido.pedidoDetalleList)
                 {
                     contador++;
                     <tr data-expanded="true">
-                        <td>  @cotizacionDetalle.producto.idProducto  </td>
-                        <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
-                        <td>  @cotizacionDetalle.producto.proveedor  </td>
-                        <td>  @cotizacionDetalle.producto.sku  </td>
+                        <td>  @pedidoDetalle.producto.idProducto  </td>
+                        <td>  @pedidoDetalle.esPrecioAlternativo  </td>
+                        <td>  @pedidoDetalle.producto.proveedor  </td>
+                        <td>  @pedidoDetalle.producto.sku  </td>
                         <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
                         <td>
-                            @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
+                            @pedidoDetalle.producto.skuProveedor - @pedidoDetalle.producto.descripcion
                             <br />
-                            <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
+                            <span class="@pedidoDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @pedidoDetalle.observacion</span>
                         </td>
 
 
 
 
-                        <td>  @cotizacionDetalle.unidad  </td>
-                        <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
-                        <td class="@cotizacionDetalle.producto.idProducto detprecioLista" style="text-align:right">@cotizacionDetalle.precioLista</td>
+                        <td>  @pedidoDetalle.unidad  </td>
+                        <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(pedidoDetalle.producto.image)"></td>
+                        <td class="@pedidoDetalle.producto.idProducto detprecioLista" style="text-align:right">@pedidoDetalle.precioLista</td>
 
 
-                        <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@cotizacionDetalle.porcentajeDescuento %</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@cotizacionDetalle.porcentajeDescuentoMostrar %</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoLista  </td>
-                        <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
+                        <td class="@pedidoDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@pedidoDetalle.porcentajeDescuento %</td>
+                        <td class="@pedidoDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@pedidoDetalle.porcentajeDescuentoMostrar %</td>
+                        <td class="@pedidoDetalle.producto.idProducto detprecio" style="text-align:right">@pedidoDetalle.precioNeto</td>
+                        <td class="@pedidoDetalle.producto.idProducto detcostoLista">@pedidoDetalle.costoLista  </td>
+                        <td class="@pedidoDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@pedidoDetalle.margen %</td>
 
 
-                        <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
+                        <td class="@pedidoDetalle.producto.idProducto detflete" style="text-align:right">@pedidoDetalle.flete</td>
 
-                        @if (cotizacionDetalle.producto.precioClienteProducto.precioUnitario == 0)
+                        @if (pedidoDetalle.producto.precioClienteProducto.precioUnitario == 0)
                         {
-                            if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioLista - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
-                      && cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioLista + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                            if (pedidoDetalle.precioUnitario >= pedidoDetalle.producto.precioLista - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+                      && pedidoDetalle.precioUnitario <= pedidoDetalle.producto.precioLista + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
                             {
-                                <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
+                                <td class="@pedidoDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@pedidoDetalle.precioUnitario </td>
 
                             }
                             else
                             {
-                                <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
+                                <td class="@pedidoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@pedidoDetalle.precioUnitario </td>
                             }
 
                         }
                         else
                         {
-                            if (cotizacionDetalle.precioUnitario >= cotizacionDetalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
-                            && cotizacionDetalle.precioUnitario <= cotizacionDetalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                            if (pedidoDetalle.precioUnitario >= pedidoDetalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+                            && pedidoDetalle.precioUnitario <= pedidoDetalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
                             {
-                                <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
+                                <td class="@pedidoDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@pedidoDetalle.precioUnitario </td>
 
                             }
                             else
                             {
-                                <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
+                                <td class="@pedidoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@pedidoDetalle.precioUnitario </td>
                             }
                         }
-                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
+                        <td class="@pedidoDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@pedidoDetalle.producto.precioClienteProducto.precioUnitario </td>
 
-                        <td class="@cotizacionDetalle.producto.idProducto detcantidad" style="text-align:right">@cotizacionDetalle.cantidad</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+                        <td class="@pedidoDetalle.producto.idProducto detcantidad" style="text-align:right">@pedidoDetalle.cantidad</td>
+                        <td class="@pedidoDetalle.producto.idProducto detsubtotal" style="text-align:right">@pedidoDetalle.subTotal</td>
+                        <td class="@pedidoDetalle.producto.idProducto detobservacion" style="text-align:left">@pedidoDetalle.observacion</td>
+                        <td class="@pedidoDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@pedidoDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
 
-                        <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
+                        <td class="@pedidoDetalle.producto.idProducto detordenamiento"></td>
 
 
 

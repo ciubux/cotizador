@@ -10,6 +10,7 @@ namespace Model
     public class Vendedor
     {
         public int idVendedor { get; set; }
+
         [Display(Name = "Codigo:")]
         public String codigo { get; set; }
         [Display(Name = "Nombre:")]
@@ -47,6 +48,5 @@ namespace Model
         [Display(Name = "Email:")]
         public string email { get; set; }
         
-
     }
 }

@@ -52,6 +52,7 @@
     <Compile Include="AlertaValidacion.cs" />
     <Compile Include="Auditoria.cs" />
     <Compile Include="CampoPersistir.cs" />
+    <Compile Include="Catalogo.cs" />
     <Compile Include="LogCambio.cs" />
     <Compile Include="LogTabla.cs" />
     <Compile Include="LogCampo.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="DocumentoCompra.cs" />
     <Compile Include="GrupoClienteAdjunto.cs" />
     <Compile Include="IDocumentoPago.cs" />
+    <Compile Include="Rol.cs" />
     <Compile Include="Origen.cs" />
     <Compile Include="CategoriaPermiso.cs" />
     <Compile Include="PedidoVenta.cs" />

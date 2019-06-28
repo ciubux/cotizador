@@ -512,8 +512,9 @@ namespace DataLayer
                         !column.Equals("aprobado") &&
                         !column.Equals("usuario_aprobacion") &&
                         !column.Equals("fecha_aprobacion") &&
-                        !column.Equals("observaciones")
-                        
+                        !column.Equals("observaciones") &&
+                        !column.Equals("tiene_nota_credito") &&
+                        !column.Equals("tiene_nota_debito")
                         )
                     {
                         documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));

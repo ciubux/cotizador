@@ -79,7 +79,7 @@ jQuery(function ($) {
         });
 
         var that = this;
-        var idAlertaValidacion = $(this).closest("tr").attr("idAlertaValidacion");
+        var idAlertaValidacion = $(this).attr("idAlertaValidacion");
 
         $.ajax({
             url: "/Validacion/ValidarPendiente",
@@ -91,6 +91,7 @@ jQuery(function ($) {
             success: function (result) {
                 $('body').loadingModal('hide');
                 $(that).closest("tr").remove();
+                $("tr[idAlertaValidacion='" + idAlertaValidacion + "']").remove();
 
                 $.alert({
                     title: TITLE_EXITO,
@@ -199,13 +200,7 @@ jQuery(function ($) {
             var flete = value.innerText;
             value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detinflete form-control' value='" + flete + "' type='number'/>";
         });
-
-
-
     });
-
-    
-
 
 });
 

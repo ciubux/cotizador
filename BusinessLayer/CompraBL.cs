@@ -11,11 +11,11 @@ namespace BusinessLayer
     {
          
 
-        public void UpdateCompra(Venta compra)
+        public void UpdateCompra(Compra compra)
         {
-            using (var dal = new VentaDAL())
+            using (var dal = new CompraDAL())
             {
-                dal.UpdateVenta(compra);
+                dal.UpdateCompra(compra);
             }           
         }
 

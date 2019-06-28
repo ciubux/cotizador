@@ -68,34 +68,6 @@ C:\Users\cesar\Documents\MP2\cotizador_2\CotizadorPDF\obj\Debug\CotizadorPDF.csp
 C:\Users\cesar\Documents\MP2\cotizador_2\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\NPOI.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.pdb
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.pdb
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.dll.config
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.pdb
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll.config
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.pdb
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\NPOI.xml
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.pdb
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
-D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
-D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
-D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
-D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\BusinessLayer.dll
@@ -115,8 +87,6 @@ C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\BusinessLayer.pd
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\Model.pdb
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\Model.dll.config
-C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\Spire.License.xml
-C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\Spire.Pdf.xml
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\DataLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\DataLayer.dll.config
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\ServiceLayer.pdb
@@ -125,8 +95,6 @@ C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\Framework.DAL.pd
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
-C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\obj\Debug\CotizadorPDF.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
 C:\Users\Andre\Desktop\cotizador-devInvoice ORIGINAL\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.dll
@@ -182,8 +150,6 @@ C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bi
 C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
 C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.pdb
 C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.License.xml
-C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.Pdf.xml
 C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.pdb
 C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll.config
 C:\Users\Andre\Desktop\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.pdb
@@ -430,3 +396,287 @@ C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Cot
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\obj\Debug\CotizadorPDF.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_3\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Spire.License.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\NPOI.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.pdb
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.dll.config
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.pdb
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll.config
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.License.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll.config
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.xml
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.License.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll.config
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.xml
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.License.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll.config
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.xml
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.License.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll.config
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.License.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll.config
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.License.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll.config
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.License.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll.config
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.License.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\NPOI.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\DataLayer.dll.config
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.pdb

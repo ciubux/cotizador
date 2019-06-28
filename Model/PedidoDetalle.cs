@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,10 +8,11 @@ namespace Model
 {
     public class PedidoDetalle : DocumentoDetalle
     {
-        public PedidoDetalle(Boolean visualizaCostos, Boolean visualizaMargen) 
+        public PedidoDetalle(Boolean visualizaCostos, Boolean visualizaMargen)
         {
             this.visualizaCostos = visualizaCostos;
             this.visualizaMargen = visualizaMargen;
+            indicadorAprobacion = IndicadorAprobacion.Aprobado;
             //this.ProductoPresentacion = new ProductoPresentacion();
         }
 
@@ -59,7 +61,7 @@ namespace Model
 
         public Decimal precioUnitarioOriginal
         {
-            get;set;
+            get; set;
         }
 
         public int cantidadOriginal
@@ -93,6 +95,18 @@ namespace Model
                 else
                     return 0.0M;
             }
+        }
+
+        public IndicadorAprobacion indicadorAprobacion { get; set; }
+
+        public enum IndicadorAprobacion
+        {
+            [Display(Name = "Aprobado")]
+            Aprobado = 1,
+            [Display(Name = "Pendiente Aprobación sin Vigencia")]
+            RechazadoSinVigencia = 2,
+            [Display(Name = "Pendiente Aprobación sin Precio")]
+            RechazadoSinPrecio = 3
         }
 
     }

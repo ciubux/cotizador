@@ -22,6 +22,7 @@ namespace Model
         public Guid idUsuarioModificacion { get; set; }
 
         public bool repiteDato { get; set; }
+
     }
 }
 

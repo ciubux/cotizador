@@ -90,30 +90,35 @@ namespace BusinessLayer
 
                     prod.usuario = new Usuario();
                     prod.usuario.idUsuario = logs.ElementAt<LogCambio>(0).idUsuarioModificacion;
+                    prod.IdUsuarioRegistro = prod.usuario.idUsuario;
 
-                    if (prod.idProducto != null && prod.idProducto != Guid.Empty)
+                    if (aplicados.Count > 0)
                     {
-                        prodDal.updateProducto(prod);
-                    } else
-                    {
-                        prodDal.insertProducto(prod);
-                        foreach (LogCambio cambio in logs)
+                        if (prod.idProducto != null && prod.idProducto != Guid.Empty)
                         {
-                            cambio.idRegistro = prod.idProducto.ToString();
+                            prodDal.updateProducto(prod);
                         }
-
+                        else
+                        {
+                            prodDal.insertProducto(prod);
+                            foreach (LogCambio cambio in logs)
+                            {
+                                cambio.idRegistro = prod.idProducto.ToString();
+                            }
+                        }
                     }
-
                     break;
             }
-            
 
-            using (var dal = new LogCambioDAL())
+            if (aplicados.Count > 0)
             {
-                dal.traspasarCambios(aplicados);
-
-                return true;
+                using (var dal = new LogCambioDAL())
+                {
+                    dal.traspasarCambios(aplicados);
+                }
             }
+
+            return true;
         }
 
         public bool limpiarCambiosProgramados()

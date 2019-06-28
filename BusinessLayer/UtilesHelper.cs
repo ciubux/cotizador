@@ -41,17 +41,24 @@ namespace BusinessLayer
             NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(filaInicio - 1, filaFin - 1, columnas.FindIndex(x => x.StartsWith(columnaInicio)), columnas.FindIndex(x => x.StartsWith(columnaFin)));
             sheet.AddMergedRegion(cra);
         }
-
-        public static void setValorCelda(ISheet sheet, int fila, string columna, string valor, HSSFCellStyle cellStyle = null)
+        
+        public static void setValorCelda(ISheet sheet, int fila, string columna, string valor, HSSFCellStyle cellStyle = null, bool autoSizeColumn = false)
         {
             sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
             if (cellStyle != null)
             { sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).CellStyle = cellStyle; }
+
+            if (autoSizeColumn)
+            {
+                sheet.AutoSizeColumn(columnas.FindIndex(x => x.StartsWith(columna)));
+            }
         }
 
-        public static void setValorCelda(ISheet sheet, int fila, string columna, double valor)
+        public static void setValorCelda(ISheet sheet, int fila, string columna, double valor, HSSFCellStyle cellStyle = null)
         {
             sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
+            if (cellStyle != null)
+            { sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).CellStyle = cellStyle; }
         }
 
         public static void setValorCelda(ISheet sheet, int fila, int columna, double valor)
@@ -98,7 +105,11 @@ namespace BusinessLayer
 
             return valorCeldaInt;
         }
-
+        
+        public static void setColumnDefaultStyle(ISheet sheet, string columna, HSSFCellStyle cellStyle)
+        {
+            sheet.SetDefaultColumnStyle(columnas.FindIndex(x => x.StartsWith(columna)), cellStyle);
+        }
 
         public static DateTime? getValorCeldaDate(ISheet sheet, int fila, string columna)
         {

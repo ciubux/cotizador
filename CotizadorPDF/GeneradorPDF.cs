@@ -563,7 +563,7 @@ namespace cotizadorPDF
             }
             catch (Exception ex)
             {
-                Log log = new Log(ex.ToString(), TipoLog.Error,cot.usuario);
+                Log log = new Log(ex.ToString(), TipoLog.Error, cot.usuario);
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
                 return ex.ToString();

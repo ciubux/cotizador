@@ -97,3 +97,10 @@ C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Release\BusinessLayer
 C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Release\BusinessLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Release\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\BusinessLayer\obj\Release\BusinessLayer.pdb
+<<<<<<< HEAD
+D:\Repo\freelos\cotizador\BusinessLayer\obj\Release\BusinessLayer.csprojAssemblyReference.cache
+D:\Repo\freelos\cotizador\BusinessLayer\obj\Release\BusinessLayer.csproj.CoreCompileInputs.cache
+D:\Repo\freelos\cotizador\BusinessLayer\obj\Release\BusinessLayer.dll
+D:\Repo\freelos\cotizador\BusinessLayer\obj\Release\BusinessLayer.pdb
+=======
+>>>>>>> Andre/Vendedor

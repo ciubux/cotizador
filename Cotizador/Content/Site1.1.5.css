@@ -606,9 +606,12 @@ border-color: #49E845;
     border-bottom: 1px dotted Gray;
 }
 
+
+/*
 .menuUsuarios li.selected {
-    /*background-color: GoldenRod*/
-}
+    background-color: GoldenRod;
+}*/
+
 
 .selected {
     border: 1px solid #888;
@@ -651,4 +654,20 @@ border-color: #49E845;
 /* When moving the mouse over the close button */
 .closebtn:hover {
     color: black;
+}
+
+
+.lnkAction:hover {
+    background-color: #D3EFFF;
+    border-radius: 5px;
+}
+
+.lnkActionLabel {
+    padding: 3px 3px;
+    font-size: 13px;
+}
+
+.img-responsive {
+    max-width: 64px;
+    height: auto;
 }
