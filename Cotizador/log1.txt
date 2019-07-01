@@ -77,3 +77,5 @@ The statement has been terminated.
 2019-06-03 21:08:50.3365|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Cotización ya se encuentra creada
 2019-06-24 12:34:45.2015|ERROR|Cotizador.Controllers.ParentController|c.benavides@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE_SUNAT' with unique index 'IDX_CLIENTE_SUNAT_RUC'. The duplicate key value is (<NULL>).
 The statement has been terminated.
+2019-06-27 12:50:21.1120|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-06-27 14:04:36.4211|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Could not find stored procedure 'pu_permiso'.

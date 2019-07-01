@@ -190,6 +190,12 @@ namespace Model
 
 
         public static String VAR_SESSION_PERMISO_LISTA = "permisoList";
+        
+        public static String VAR_SESSION_PERMISO = "permiso";
+        public static String VAR_SESSION_PERMISO_MANTENEDOR = "permisoMantenedor";
+        public static String VAR_SESSION_PERMISO_BUSQUEDA = "permisoBusqueda";
+        public static String VAR_SESSION_PERMISO_LISTA_MANTENEDOR = "permisoMantenedorList";
+        public static String VAR_SESSION_PERMISO_VER = "permisoVer";
 
 
         public static String VAR_SESSION_ASIGNACION_PERMISOS = "AsignacionPermisos";
@@ -478,10 +484,17 @@ namespace Model
             /*USUARIOS*/
             [Display(Name = "BUSQUEDA USUARIOS")]
             BusquedaUsuarios = 103,
-            [Display(Name = "MANTENIMIENTO USUARIO")]
 
-            MantenimientoUsuario = 104
-           
+            [Display(Name = "MANTENIMIENTO USUARIO")]
+            MantenimientoUsuario = 104,
+
+            /*USUARIOS*/
+            [Display(Name = "BUSQUEDA PERMISO")]
+            BusquedaPermisos = 105,
+
+            [Display(Name = "MANTENIMIENTO PERMISO")]
+            MantenimientoPermisos = 106
+
         };
 
 

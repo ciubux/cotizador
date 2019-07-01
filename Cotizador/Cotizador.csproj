@@ -98,16 +98,16 @@
       <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
-      <HintPath>..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OOXML.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OOXML.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXml4Net.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXmlFormats.dll</HintPath>
+      <HintPath>..\..\..\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -414,6 +414,7 @@
     <Content Include="Scripts\documentoCompra1.1.1.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
+    <Content Include="Scripts\pedidoLoad.js" />
     <Content Include="Scripts\usuario1.0.0.js" />
     <Content Include="Scripts\rol1.0.0.js" />
     <Content Include="Scripts\subDistribuidor1.0.0.js" />
@@ -587,6 +588,8 @@
     <Content Include="Scripts\vendedor1.0.0.js" />
     <Content Include="Views\Vendedor\Editar.cshtml" />
     <Content Include="Views\Compra\Comprar.cshtml" />
+    <Content Include="Views\Permiso\List.cshtml" />
+    <Content Include="Views\Permiso\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

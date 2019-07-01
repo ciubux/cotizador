@@ -274,6 +274,23 @@ C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Dat
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.dll
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\DataLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\DataLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.DAL.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Model.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.DAL.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\obj\Debug\DataLayer.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\obj\Debug\DataLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\obj\Debug\DataLayer.pdb
 D:\Repo\freelos\cotizador\DataLayer\bin\Debug\DataLayer.dll
 D:\Repo\freelos\cotizador\DataLayer\bin\Debug\DataLayer.pdb
 D:\Repo\freelos\cotizador\DataLayer\bin\Debug\Framework.DAL.dll

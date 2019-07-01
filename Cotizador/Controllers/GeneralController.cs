@@ -95,6 +95,13 @@ namespace Cotizador.Controllers
             return "ActualizarEstadoDocumentosElectronicos Ejecutando, time:" + DateTime.Now;
         }
 
+        public void actualizarParametroRUCCargaMasiva()
+        {
+            String codigo = "RUC_CARGA_MASIVA_PRODUCTO";
+            String valor = this.Request.Params["ruc"];
+            ParametroBL parametroBL = new ParametroBL();
+            parametroBL.updateParametro(codigo, valor);
+        }
 
     }
 }
