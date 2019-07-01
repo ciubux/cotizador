@@ -15,7 +15,7 @@ END
 CREATE procedure [dbo].[PS_DETALLE_CATALOGO_CAMPO]
 (@ID_CATALOGO_CAMPO INT)
 AS  BEGIN
-SELECT * FROM CATALOGO_CAMPO WHERE id_catalogo_campo=@ID_CATALOGO_CAMPO
+SELECT id_catalogo_campo,CATALOGO_CAMPO.estado,puede_persistir,CATALOGO_CAMPO.codigo,CATALOGO_CAMPO.nombre,CATALOGO_CAMPO.id_catalogo_tabla,CATALOGO_TABLA.nombre AS tabla_referencia,orden,campos_referencia FROM CATALOGO_CAMPO  inner join CATALOGO_TABLA on CATALOGO_TABLA.id_catalogo_tabla=CATALOGO_CAMPO.id_catalogo_tabla WHERE id_catalogo_campo=@ID_CATALOGO_CAMPO
 END 
 
 
