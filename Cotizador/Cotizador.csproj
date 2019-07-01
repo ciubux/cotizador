@@ -231,11 +231,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\CatalogoController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\DocumentoCompraController.cs" />
     <Compile Include="Controllers\DomicilioLegalController.cs" />
     <Compile Include="Controllers\GrupoClienteController.cs" />
+    <Compile Include="Controllers\LogCambioController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
@@ -276,6 +276,8 @@
     <Compile Include="ExcelExport\GuiaRemisionSearch.cs" />
     <Compile Include="ExcelExport\CotizacionSearch.cs" />
     <Compile Include="ExcelExport\ClienteSearch.cs" />
+    <Compile Include="ExcelExport\CotizacionDetalleExcel.cs" />
+    <Compile Include="ExcelExport\PedidoOCExcel.cs" />
     <Compile Include="ExcelExport\SubDistribuidorSearch.cs" />
     <Compile Include="ExcelExport\OrigenSearch.cs" />
     <Compile Include="ExcelExport\ProductoSearch.cs" />
@@ -284,7 +286,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\CatalogoViewModels.cs" />
     <Compile Include="Models\DTOsSearch\ClienteDTO.cs" />
     <Compile Include="Models\DTOsSearch\CotizacionDTO.cs" />
     <Compile Include="Models\DTOsSearch\FacturaDTO.cs" />
@@ -305,6 +306,7 @@
     <Compile Include="Models\DTOsShow\PedidoDTOshow.cs" />
     <Compile Include="Models\DomicilioLegalViewModels.cs" />
     <Compile Include="Models\GrupoClienteViewModels.cs" />
+    <Compile Include="Models\LogCambioViewModels.cs" />
     <Compile Include="Models\RolViewModels.cs" />
     <Compile Include="Models\ProductoMultipleViewModels.cs" />
     <Compile Include="Models\ProductoViewModels.cs" />
@@ -407,7 +409,6 @@
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\zasmp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\catalogo1.0.0.js" />
     <Content Include="Scripts\chosen\chosen.ajaxaddition.jquery.js" />
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
@@ -415,6 +416,8 @@
     <Content Include="Scripts\documentoCompra1.1.1.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
+    <Content Include="Scripts\logcambio1.0.0.js" />
+    <Content Include="Scripts\pedidoLoad.js" />
     <Content Include="Scripts\usuario1.0.0.js" />
     <Content Include="Scripts\rol1.0.0.js" />
     <Content Include="Scripts\subDistribuidor1.0.0.js" />
@@ -588,8 +591,10 @@
     <Content Include="Scripts\vendedor1.0.0.js" />
     <Content Include="Views\Vendedor\Editar.cshtml" />
     <Content Include="Views\Compra\Comprar.cshtml" />
-    <Content Include="Views\Catalogo\Lista.cshtml" />
-    <Content Include="Views\Shared\_Catalogo.cshtml" />
+    <Content Include="Views\Permiso\List.cshtml" />
+    <Content Include="Views\Permiso\Editar.cshtml" />
+    <Content Include="Views\LogCambio\Lista.cshtml" />
+    <Content Include="Views\Shared\_LogCambio.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

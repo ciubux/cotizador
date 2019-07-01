@@ -104,10 +104,11 @@ namespace Model
         public static String VAR_SESSION_VENDEDOR_LISTA = "vendedorList";
         public static String VAR_SESSION_VENDEDOR_VER = "vendedorVer";
 
-        public static String VAR_SESSION_CATALOGO = "catalogo";
-        public static String VAR_SESSION_CATALOGO_BUSQUEDA = "catalogoBusqueda";
-        public static String VAR_SESSION_CATALOGO_LISTA = "catalogoList";
-        public static String VAR_SESSION_CATALOGO_VER = "catalogoVer";
+
+        public static String VAR_SESSION_LOGCAMBIO = "logcambio";
+        public static String VAR_SESSION_LOGCAMBIO_BUSQUEDA = "logcambioBusqueda";
+        public static String VAR_SESSION_LOGCAMBIO_LISTA = "logcambioList";
+        public static String VAR_SESSION_LOGCAMBIO_VER = "logcambioVer";
 
         public static String VAR_SESSION_SUBDISTRIBUIDOR = "subDistribuidor";
         public static String VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA = "subDistribuidorBusqueda";
@@ -130,7 +131,12 @@ namespace Model
         public static String VAR_SESSION_NOTA_INGRESO = "notaIngreso";
         public static String VAR_SESSION_NOTA_INGRESO_BUSQUEDA = "notaIngresoBusqueda";
         public static String VAR_SESSION_NOTA_INGRESO_LISTA = "notaIngresoLista";
-        public static String VAR_SESSION_NOTA_INGRESO_VER = "notaIngresoVer";      
+        public static String VAR_SESSION_NOTA_INGRESO_VER = "notaIngresoVer";
+
+        public static String VAR_SESSION_VENTA = "venta";
+        public static String VAR_SESSION_VENTA_BUSQUEDA = "ventaBusqueda";
+        public static String VAR_SESSION_VENTA_LISTA = "ventaList";
+        public static String VAR_SESSION_VENTA_VER = "ventaVer";
 
         public static String VAR_SESSION_COMPRA = "compra";
         public static String VAR_SESSION_COMPRA_BUSQUEDA = "compraBusqueda";
@@ -177,10 +183,6 @@ namespace Model
         public static String VAR_SESSION_ROL_LISTA = "rolList";
         public static String VAR_SESSION_ROL_VER = "rolVer";
 
-        public static String VAR_SESSION_VENTA = "venta";
-        public static String VAR_SESSION_VENTA_BUSQUEDA = "ventaBusqueda";
-        public static String VAR_SESSION_VENTA_LISTA = "ventaList";
-        public static String VAR_SESSION_VENTA_VER = "ventaVer";
 
         public static String VAR_SESSION_PAGINA = "pagina";
         
@@ -194,6 +196,12 @@ namespace Model
 
 
         public static String VAR_SESSION_PERMISO_LISTA = "permisoList";
+        
+        public static String VAR_SESSION_PERMISO = "permiso";
+        public static String VAR_SESSION_PERMISO_MANTENEDOR = "permisoMantenedor";
+        public static String VAR_SESSION_PERMISO_BUSQUEDA = "permisoBusqueda";
+        public static String VAR_SESSION_PERMISO_LISTA_MANTENEDOR = "permisoMantenedorList";
+        public static String VAR_SESSION_PERMISO_VER = "permisoVer";
 
 
         public static String VAR_SESSION_ASIGNACION_PERMISOS = "AsignacionPermisos";
@@ -364,6 +372,9 @@ namespace Model
         public const String MODIFICA_VENDEDORES = "P821";
         public const String VISUALIZA_VENDEDORES = "P822";
 
+        public const String MODIFICA_LOGCAMBIO = "P823";
+        public const String VISUALIZA_LOGCAMBIO = "P824";
+
         public enum paginas {
             /*COTIZACION*/
             [Display(Name = "BUSQUEDA COTIZACION")]
@@ -474,12 +485,11 @@ namespace Model
             MantenimientoVendedores = 44,
 
 
-            /*BUSQUEDA DE CATALOGO*/
-            [Display(Name = "BUSQUEDA CATALOGO")]
-            BusquedaCatalogo = 45,
-            [Display(Name = "MANTENIMIENTO CATALOGO")]
-            MantenimientoCatalogo = 46,
-
+            /*BUSQUEDA DE LOGCAMBIO*/
+            [Display(Name = "BUSQUEDA LOGCAMBIO")]
+            BusquedaLogCambio = 45,
+            [Display(Name = "MANTENIMIENTO LOGCAMBIO")]
+            MantenimientoLogCambio = 46,
 
             /*ROLES*/
             [Display(Name = "BUSQUEDA ROLES")]
@@ -490,10 +500,17 @@ namespace Model
             /*USUARIOS*/
             [Display(Name = "BUSQUEDA USUARIOS")]
             BusquedaUsuarios = 103,
-            [Display(Name = "MANTENIMIENTO USUARIO")]
 
-            MantenimientoUsuario = 104
-           
+            [Display(Name = "MANTENIMIENTO USUARIO")]
+            MantenimientoUsuario = 104,
+
+            /*USUARIOS*/
+            [Display(Name = "BUSQUEDA PERMISO")]
+            BusquedaPermisos = 105,
+
+            [Display(Name = "MANTENIMIENTO PERMISO")]
+            MantenimientoPermisos = 106
+
         };
 
 

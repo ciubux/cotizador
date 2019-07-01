@@ -533,6 +533,7 @@ namespace Cotizador.Controllers
             {
                 cotizacion.grupo = grupoClienteBL.getGrupo(int.Parse(this.Request.Params["idGrupoCliente"]));
                 cotizacion.contacto = cotizacion.grupo.contacto;
+                cotizacion.ciudad = cotizacion.grupo.ciudad;
             }
             else
             {
@@ -1391,9 +1392,16 @@ namespace Cotizador.Controllers
            
 
         }
-        
 
 
+        [HttpGet]
+        public ActionResult ExportLastViewExcel()
+        {
+            Cotizacion obj = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
+
+            CotizacionDetalleExcel excel = new CotizacionDetalleExcel();
+            return excel.generateExcel(obj);
+        }
 
 
 

@@ -11,14 +11,14 @@ using System.Reflection;
 
 namespace Cotizador.Controllers
 {
-    public class CatalogoController : Controller
+    public class LogCambioController : Controller
     {
         [HttpGet]
         public ActionResult Index()
         {
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.modificaCatalogo)
+            if (!usuario.modificaLogCambio)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -31,14 +31,14 @@ namespace Cotizador.Controllers
         public ActionResult Lista()
         {
 
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaCatalogo;
-            if (this.Session[Constantes.VAR_SESSION_CATALOGO_BUSQUEDA] == null)
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaLogCambio;
+            if (this.Session[Constantes.VAR_SESSION_LOGCAMBIO_BUSQUEDA] == null)
             {
                 instanciarCatalogoBusqueda();
             }
 
-            Catalogo objSearch = (Catalogo)this.Session[Constantes.VAR_SESSION_CATALOGO_BUSQUEDA];
-            ViewBag.pagina = (int)Constantes.paginas.BusquedaCatalogo;
+            LogCambio objSearch = (LogCambio)this.Session[Constantes.VAR_SESSION_LOGCAMBIO_BUSQUEDA];
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaLogCambio;
             ViewBag.catalogo = objSearch;
 
             return View();
@@ -48,13 +48,13 @@ namespace Cotizador.Controllers
         {
 
             //Se indica la página con la que se va a trabajar
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaCatalogo;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaLogCambio;
             //Se recupera el objeto cliente que contiene los criterios de Búsqueda de la session
-            Catalogo obj = (Catalogo)this.Session[Constantes.VAR_SESSION_CATALOGO_BUSQUEDA];
-            CatalogoBL bL = new CatalogoBL();
-            Catalogo list = bL.getCatalogoById(obj);
+            LogCambio obj = (LogCambio)this.Session[Constantes.VAR_SESSION_LOGCAMBIO_BUSQUEDA];
+            LogCambioBL bL = new LogCambioBL();
+            LogCambio list = bL.getCatalogoById(obj);
             //Se coloca en session el resultado de la búsqueda
-            this.Session[Constantes.VAR_SESSION_CATALOGO_LISTA] = list;
+            this.Session[Constantes.VAR_SESSION_LOGCAMBIO_LISTA] = list;
             //Se retorna la cantidad de elementos encontrados
             return JsonConvert.SerializeObject(list);
         }
@@ -64,61 +64,61 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            CatalogoBL grupoClienteBL = new CatalogoBL();
-            List<Catalogo> grupoClienteList = grupoClienteBL.getCatalogoList();
+            LogCambioBL grupoClienteBL = new LogCambioBL();
+            List<LogCambio> grupoClienteList = grupoClienteBL.getCatalogoList();
 
 
-            var model = new CatalogoViewModels
+            var model = new LogCambioViewModels
             {
                 Data = grupoClienteList,
                 CatalogoSelectId = catalogoId,
                 SelectedValue = selectedValue
             };
 
-            return PartialView("_Catalogo", model);
+            return PartialView("_LogCambio", model);
         }
 
 
-       
+
 
         private void instanciarCatalogoBusqueda()
         {
-            Catalogo obj = new Catalogo();
+            LogCambio obj = new LogCambio();
             obj.catalogoId = 0;
-            obj.estado = 0;
+            obj.estadoCatalogo = 0;
             obj.codigo = String.Empty;
             obj.nombre = String.Empty;
             obj.puede_persistir = 0;
 
 
-            this.Session[Constantes.VAR_SESSION_CATALOGO_BUSQUEDA] = obj;
+            this.Session[Constantes.VAR_SESSION_LOGCAMBIO_BUSQUEDA] = obj;
         }
         public void ChangeInputInt()
         {
 
-            Catalogo obj = (Catalogo)this.CatalogoSession;
+            LogCambio obj = (LogCambio)this.CatalogoSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
             this.CatalogoSession = obj;
-        }  
-        
+        }
 
 
 
 
 
 
-        private Catalogo CatalogoSession
+
+        private LogCambio CatalogoSession
         {
             get
             {
-                Catalogo obj = null;
+                LogCambio obj = null;
 
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
 
-                    case Constantes.paginas.BusquedaCatalogo: obj = (Catalogo)this.Session[Constantes.VAR_SESSION_CATALOGO_BUSQUEDA]; break;
-                    case Constantes.paginas.MantenimientoCatalogo: obj = (Catalogo)this.Session[Constantes.VAR_SESSION_CATALOGO]; break;
+                    case Constantes.paginas.BusquedaLogCambio: obj = (LogCambio)this.Session[Constantes.VAR_SESSION_LOGCAMBIO_BUSQUEDA]; break;
+                    case Constantes.paginas.MantenimientoLogCambio: obj = (LogCambio)this.Session[Constantes.VAR_SESSION_LOGCAMBIO]; break;
                 }
                 return obj;
             }
@@ -126,8 +126,8 @@ namespace Cotizador.Controllers
             {
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
-                    case Constantes.paginas.BusquedaCatalogo: this.Session[Constantes.VAR_SESSION_CATALOGO_BUSQUEDA] = value; break;
-                    case Constantes.paginas.MantenimientoCatalogo: this.Session[Constantes.VAR_SESSION_CATALOGO] = value; break;
+                    case Constantes.paginas.BusquedaLogCambio: this.Session[Constantes.VAR_SESSION_LOGCAMBIO_BUSQUEDA] = value; break;
+                    case Constantes.paginas.MantenimientoLogCambio: this.Session[Constantes.VAR_SESSION_LOGCAMBIO] = value; break;
                 }
             }
         }
@@ -135,24 +135,24 @@ namespace Cotizador.Controllers
         public void LimpiarBusqueda()
         {
             instanciarCatalogoBusqueda();
-          
+
         }
 
         public String ChangeIdCiudad()
         {
-           
-            Catalogo vendedor = this.CatalogoSession;
+
+            LogCambio vendedor = this.CatalogoSession;
             int idCiudad = 0;
             int estado = 0;
             int puede_persistir = 0;
             if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
             {
                 idCiudad = int.Parse(this.Request.Params["idCiudad"]);
-               
-            }            
+
+            }
             vendedor.catalogoId = idCiudad;
-            CatalogoBL grupoClienteBL = new CatalogoBL();            
-            vendedor = grupoClienteBL.getCatalogoById(vendedor);            
+            LogCambioBL grupoClienteBL = new LogCambioBL();
+            vendedor = grupoClienteBL.getCatalogoById(vendedor);
             this.CatalogoSession = vendedor;
 
             return JsonConvert.SerializeObject(vendedor.catalogoId);
@@ -161,11 +161,11 @@ namespace Cotizador.Controllers
 
         public String Update()
         {
-            
-            CatalogoBL bL = new CatalogoBL();
-            Catalogo obj = (Catalogo)this.CatalogoSession;
+
+            LogCambioBL bL = new LogCambioBL();
+            LogCambio obj = (LogCambio)this.CatalogoSession;
             obj = bL.updateCatalogo(obj);
-            this.Session[Constantes.VAR_SESSION_CATALOGO] = null;            
+            this.Session[Constantes.VAR_SESSION_LOGCAMBIO] = null;
             String resultado = JsonConvert.SerializeObject(obj);
 
             return resultado;
@@ -185,12 +185,6 @@ namespace Cotizador.Controllers
 
             return resultado;
         }
-
-
-
-
-
-
 
 
     }

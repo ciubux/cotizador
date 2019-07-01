@@ -274,6 +274,23 @@ C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Dat
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.dll
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\DataLayer\obj\Debug\DataLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\DataLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\DataLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.DAL.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Model.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.DAL.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\obj\Debug\DataLayer.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\obj\Debug\DataLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\DataLayer\obj\Debug\DataLayer.pdb
 D:\Repo\freelos\cotizador\DataLayer\bin\Debug\DataLayer.dll
 D:\Repo\freelos\cotizador\DataLayer\bin\Debug\DataLayer.pdb
 D:\Repo\freelos\cotizador\DataLayer\bin\Debug\Framework.DAL.dll
@@ -292,147 +309,21 @@ D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs
 D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
 D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.dll
 D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.pdb
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.pdb
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.pdb
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.pdb
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.pdb

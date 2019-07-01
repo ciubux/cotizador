@@ -31,5 +31,17 @@ namespace DataLayer
             }
             return valor;
         }
+
+        public void updateParametro(String codigo, String valor)
+        {
+            var objCommand = GetSqlCommand("pu_parametro");
+            InputParameterAdd.Varchar(objCommand, "codigo", codigo);
+            InputParameterAdd.Varchar(objCommand, "valor", valor);
+            ExecuteNonQuery(objCommand);
+
+
+
+
+        }
     }
 }

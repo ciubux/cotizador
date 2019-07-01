@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using cotizadorPDF;
+using Cotizador.ExcelExport;
 
 namespace Cotizador.Controllers
 {
@@ -474,6 +476,58 @@ namespace Cotizador.Controllers
         }
 
 
+        [HttpGet]
+        public ActionResult ExportLastViewExcel()
+        {
+            Pedido obj = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
+
+            PedidoOCExcel excel = new PedidoOCExcel();
+            return excel.generateExcel(obj);
+        }
+
+        [HttpGet]
+        public void ExportLastViewCSVKC()
+        {
+            Pedido obj = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
+
+
+            Response.Clear();
+            Response.AddHeader("Content-Disposition", "attachment; filename=OC_" + obj.numeroPedido + ".csv");
+            Response.ContentType = "text/csv";
+
+            int count = 0;
+            foreach (PedidoDetalle pd in obj.pedidoDetalleList)
+            {
+                if (count > 0)
+                {
+                    Response.Write("\n");
+                }
+                Response.Write(String.Format("{0},{1},{2}", pd.producto.skuProveedor, pd.cantidad, "cj"));
+                count++;
+            }
+
+            
+
+            Response.End();
+            
+        }
+
+        [HttpPost]
+        public String GenerarPDF()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Int64 codigo = Int64.Parse(this.Request.Params["codigo"].ToString());
+
+            PedidoBL bl = new PedidoBL();
+            Pedido obj = new Pedido();
+            obj.numeroPedido = codigo;
+            obj = bl.GetPedido(obj, usuario);
+            GeneradorOrdenCompraPDF gen = new GeneradorOrdenCompraPDF();
+            String nombreArchivo = gen.generarPDFExtended(obj);
+            return nombreArchivo;
+        }
+
+
         public ActionResult CancelarCreacionPedido()
         {
             this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA] = null;
@@ -633,6 +687,7 @@ namespace Cotizador.Controllers
             }
             else
             {
+                detalle.unidad = detalle.producto.unidad;
                 detalle.precioNeto = precioNeto;
             }
             detalle.flete = flete;
@@ -645,12 +700,13 @@ namespace Cotizador.Controllers
             pedidoBL.calcularMontosTotales(pedido);
 
 
-            detalle.unidad = detalle.producto.unidad;
+            /*detalle.unidad = detalle.producto.unidad;
             //si esPrecioAlternativo  se mostrará la unidad alternativa
             if (detalle.esPrecioAlternativo)
             {
                 detalle.unidad = detalle.producto.unidad_alternativa;
             }
+            */
 
             var nombreProducto = detalle.producto.descripcion;
            /* if (pedido.mostrarCodigoProveedor)

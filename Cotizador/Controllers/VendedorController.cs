@@ -239,6 +239,10 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoVendedores;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            if (!usuario.modificaVendedor)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             if (this.Session[Constantes.VAR_SESSION_VENDEDOR] == null && idVendedor == null)
             {
                 instanciarVendedor();

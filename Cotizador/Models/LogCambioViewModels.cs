@@ -5,15 +5,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-
 namespace Cotizador.Models
 {
-    public class CatalogoViewModels
+    public class LogCambioViewModels
     {
         public string CatalogoSelectId { get; set; }
         public string SelectedValue { get; set; }
 
-        public List<Catalogo> Data { get; set; }
+        public List<LogCambio> Data { get; set; }
 
         public IEnumerable<SelectListItem> Catalogo
         {

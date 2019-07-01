@@ -236,7 +236,7 @@ namespace DataLayer
                 productoPresentacion.Presentacion = Converter.GetString(row, "presentacion");
                 productoPresentacion.PrecioLimaSinIGV = Converter.GetDecimal(row, "precio_lima_sin_igv");
                 productoPresentacion.PrecioProvinciasSinIGV = Converter.GetDecimal(row, "precio_provincias_sin_igv");
-                productoPresentacion.CostoSinIGV = Converter.GetInt(row, "costo_sin_igv");
+                productoPresentacion.CostoSinIGV = Converter.GetDecimal(row, "costo_sin_igv");
                 productoPresentacion.PrecioSinIGV = productoPresentacion.PrecioLimaSinIGV;
                 productoPresentacion.UnidadInternacional = Converter.GetString(row, "unidad_internacional");
                 productoPresentacion.Stock = Converter.GetInt(row, "stock");

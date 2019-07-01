@@ -442,6 +442,9 @@ namespace Model
 
         public bool permiteAnulacion { get; set; }
 
+        public bool tieneNotaCredito { get; set; }
+
+        public bool tieneNotaDebito { get; set; }
 
         public int idGrupoCliente { get; set; }
 

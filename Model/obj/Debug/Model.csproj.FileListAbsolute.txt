@@ -174,6 +174,18 @@ C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Mod
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Model\obj\Debug\Model.csproj.CopyComplete
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Model\obj\Debug\Model.dll
 C:\Users\Andre\Desktop\cotizador-Andre-Vendedor (2)\cotizador-Andre-Vendedor\Model\obj\Debug\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\Model.dll.config
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\Model.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\Model.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\EntityFramework.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\System.Web.Mvc.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\EntityFramework.xml
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.pdb
 D:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll.config
 D:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll
 D:\Repo\freelos\cotizador\Model\bin\Debug\Model.pdb
@@ -181,102 +193,20 @@ D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.dll
 D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.dll
 D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.xml
 D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
+D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\bin\Debug\EntityFramework.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\bin\Debug\EntityFramework.xml
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\obj\Debug\Model.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CopyComplete
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\obj\Debug\Model.dll
-C:\Users\Andre\Desktop\cotizador-devInvoice (2)\cotizador-devInvoice\Model\obj\Debug\Model.pdb
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.xml
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CopyComplete
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.dll
-C:\Users\Andre\Desktop\COTIZADORMP LAST\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.pdb
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\bin\Debug\EntityFramework.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\bin\Debug\EntityFramework.xml
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\obj\Debug\Model.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CopyComplete
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\obj\Debug\Model.dll
-C:\Users\Andre\Desktop\LAS\cotizador-devInvoice\Model\obj\Debug\Model.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\bin\Debug\EntityFramework.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\bin\Debug\EntityFramework.xml
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CopyComplete
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\obj\Debug\Model.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\obj\Debug\Model.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\LAST\cotizador-devInvoice\Model\obj\Debug\Model.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.xml
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CopyComplete
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.dll
-C:\Users\Andre\Desktop\FINAL DE CATALGO\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.pdb
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.xml
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CopyComplete
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.dll
-C:\Users\Andre\Desktop\ULTIMOMASOO\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.xml
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csprojAssemblyReference.cache
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CopyComplete
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.dll
-C:\Users\Andre\Desktop\Nueva carpeta (2)\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.pdb
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.dll.config
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\Model.pdb
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.xml
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CopyComplete
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.dll
-C:\Users\Andre\Desktop\28-06-19\cotizador-devInvoice\cotizador-devInvoice\cotizador-devInvoice\Model\obj\Debug\Model.pdb
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\bin\Debug\EntityFramework.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\bin\Debug\EntityFramework.xml
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\obj\Debug\Model.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\obj\Debug\Model.csproj.CopyComplete
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\obj\Debug\Model.dll
+C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Model\obj\Debug\Model.pdb

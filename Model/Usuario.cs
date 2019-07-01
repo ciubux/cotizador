@@ -196,9 +196,10 @@ namespace Model
         public bool modificaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_VENDEDORES)).FirstOrDefault() != null; } }
         public bool visualizaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }
 
-        /*Catalogo*/
-        public bool modificaCatalogo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_VENDEDORES)).FirstOrDefault() != null; } }
-        public bool visualizaCatalogo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }
+        /*LogCambio*/
+        public bool modificaLogCambio { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_LOGCAMBIO)).FirstOrDefault() != null; } }
+        public bool visualizaLogCambio { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_LOGCAMBIO)).FirstOrDefault() != null; } }
+
 
         /*Administra Permisos*/
         public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }

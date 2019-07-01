@@ -63,6 +63,7 @@ namespace DataLayer
                 grupoCliente.ciudad = new Ciudad();
                 grupoCliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 grupoCliente.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
+                grupoCliente.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
                 grupoCliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
                 grupoCliente.plazoCreditoAprobado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_aprobado");
 

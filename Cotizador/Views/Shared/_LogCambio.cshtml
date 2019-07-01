@@ -1,4 +1,4 @@
-﻿@model Cotizador.Models.CatalogoViewModels
+﻿@model Cotizador.Models.LogCambioViewModels
 @Html.DropDownList(
     Model.CatalogoSelectId,
     Model.Catalogo, "Seleccione la Tabla",
@@ -9,6 +9,6 @@
     })
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function (event) {
-        $("#@Model.CatalogoSelectId").chosen({ placeholder_text_single: "Seleccione el la Tabla", no_results_text: "No se encontró Grupo Cliente" }).on('chosen:showing_dropdown');
+        $("#@Model.CatalogoSelectId").chosen({ placeholder_text_single: "Seleccione el la Tabla", no_results_text: "No se encontró Catalogo" }).on('chosen:showing_dropdown');
     });
 </script>

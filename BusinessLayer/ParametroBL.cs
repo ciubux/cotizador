@@ -17,6 +17,15 @@ namespace BusinessLayer
             }
         }
 
+
+        public void updateParametro(String codigo, String valor)
+        {
+            using (var dal = new ParametroDAL())
+            {
+                dal.updateParametro(codigo, valor);
+            }
+        }
+
         public Decimal getParametroDecimal(String codigo)
         {
             Decimal valor = 0;

@@ -75,3 +75,5 @@ The statement has been terminated.
 2019-05-29 10:24:11.6342|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.2019-06-03 13:35:29.4470|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
 2019-06-03 13:38:34.0882|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
 2019-06-03 21:08:50.3365|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Cotización ya se encuentra creada
+2019-06-27 12:50:21.1120|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-06-27 14:04:36.4211|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Could not find stored procedure 'pu_permiso'.

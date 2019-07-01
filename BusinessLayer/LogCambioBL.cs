@@ -164,5 +164,42 @@ namespace BusinessLayer
 
             return this.limpiarCambiosProgramados();
         }
+
+        /*----------------------------------------------------------------------*/
+
+
+        public List<LogCambio> getCatalogoList()
+        {
+            using (var dal = new LogCambioDAL())
+            {
+                return dal.getCatalogoList();
+            }
+        }
+
+        public LogCambio getCatalogoById(LogCambio idCatalogo)
+        {
+            using (var dal = new LogCambioDAL())
+            {
+                LogCambio obj = dal.getCatalogoById(idCatalogo);
+
+                return obj;
+            }
+        }
+
+
+        public LogCambio updateCatalogo(LogCambio idCatalogo)
+        {
+            using (var dal = new LogCambioDAL())
+            {
+                LogCambio obj = dal.updateCatalogo(idCatalogo);
+
+                return obj;
+            }
+        }
+
+
+
+
+
     }
 }

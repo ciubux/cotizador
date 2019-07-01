@@ -20,6 +20,7 @@
 
     }
 
+
     $("#btnBusqueda").click(function () {
 
         $("#btnBusqueda").attr("disabled", "disabled");
