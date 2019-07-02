@@ -7,11 +7,12 @@ jQuery(function ($) {
     var persiste;
     var estado;
 
-    if ($("#catalogo_catalogoId").val()=="")
+   $(document).ready(function () {
+       if ($("#catalogo_catalogoId").val()=="")
     {
         $("#btnBusqueda").attr("disabled", "disabled");
-    }
-    
+    } 
+    });
 
     $("#btnBusqueda").click(function () {
 
