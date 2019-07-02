@@ -1,4 +1,4 @@
-﻿jQuery(function ($) {
+jQuery(function ($) {
 
     var TITLE_EXITO = 'Operación Realizada';
 
@@ -6,9 +6,16 @@
     var persiste_lista;
     var persiste;
     var estado;
+
+    if ($("#catalogo_catalogoId").val()=="")
+    {
+        $("#btnBusqueda").attr("disabled", "disabled");
+    }
+    
+
     $("#btnBusqueda").click(function () {
 
-        $("#btnBusqueda").attr("disabled", "disabled");
+                $("#btnBusqueda").attr("disabled", "disabled");
         $.ajax({
             url: "/LogCambio/SearchList",
             type: 'POST',
@@ -23,7 +30,7 @@
                 estado_lista = list.estado;
                 persiste_lista = list.puede_persistir;
 
-                if (list.catalogoId !== 0) {
+               
                     $("#btnBusqueda").removeAttr("disabled");
                     $("#tableCatalogo > tbody").empty();
                     $("#tableCatalogo").footable({
@@ -75,7 +82,7 @@
                         '</tr>';
 
                     $("#tableCatalogo").append(ItemRow);
-                }
+                
 
 
             }
