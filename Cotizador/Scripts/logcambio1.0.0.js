@@ -27,7 +27,7 @@ jQuery(function ($) {
 
             success: function (list) {
 
-                estado_lista = list.estado;
+                estado_lista = list.estadoCatalogo;
                 persiste_lista = list.puede_persistir;
 
                
@@ -43,14 +43,14 @@ jQuery(function ($) {
                     var label2;
                     var label3;
                     var label4;
-                    if (list.estado == 1) {
+                if (list.estadoCatalogo == 1) {
                         label = '<input class="radio-input" checked type="radio" name="catalogo_estado" id="catalogo_estado_si" value="1"><span>Activo</span>'
                     }
                     else {
                         label = '<input class="radio-input" type="radio" name="catalogo_estado" id="catalogo_estado_si" value="1"><span>Activo</span>'
                     };
 
-                    if (list.estado == 0) {
+                if (list.estadoCatalogo == 0) {
                         label2 = '<input class="radio-input" checked type="radio" name="catalogo_estado" id="catalogo_estado_no" value="0"><span>Inactivo</span>'
                     }
                     else {
@@ -152,9 +152,9 @@ jQuery(function ($) {
                                     type: 'green',
                                     buttons: {
                                         OK: function () {
-                                            $(document).ready(function () {
+                                            
                                                 $("#btnBusqueda").click();
-                                            });
+                                            
                                         }
                                     }
                                 });
@@ -166,10 +166,10 @@ jQuery(function ($) {
                     text: 'No',
                     action: function () {
 
-                        $(document).ready(function () {
+                        
                             $("#btnBusqueda").click();
 
-                        });
+                        
                     }
                 }
             }
@@ -211,9 +211,9 @@ jQuery(function ($) {
                                     type: 'green',
                                     buttons: {
                                         OK: function () {
-                                            $(document).ready(function () {
+                                            
                                                 $("#btnBusqueda").click();
-                                            });
+                                            
                                         }
                                     }
                                 });
@@ -225,9 +225,9 @@ jQuery(function ($) {
                     text: 'No',
                     action: function () {
 
-                        $(document).ready(function () {
+                        
                             $("#btnBusqueda").click();
-                        });
+                        
 
                     }
                 }
@@ -269,4 +269,3 @@ jQuery(function ($) {
         });
     });
 });
-
