@@ -518,7 +518,10 @@ namespace DataLayer
                         !column.Equals("tiene_nota_debito")
                         )
                     {
-                        documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));
+                        if (documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column) != null)
+                        {
+                            documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));
+                        }
                     }
                 }
             }
@@ -530,7 +533,10 @@ namespace DataLayer
                 {
                     if (!column.Equals("id_cpe_detalle_be") && !column.Equals("id_cpe_cabecera_be") && !column.Equals("estado"))
                     {
-                        cPE_DETALLE_BE.GetType().GetProperty(column).SetValue(cPE_DETALLE_BE, Converter.GetString(row, column));
+                        if (cPE_DETALLE_BE.GetType().GetProperty(column) != null)
+                        {
+                            cPE_DETALLE_BE.GetType().GetProperty(column).SetValue(cPE_DETALLE_BE, Converter.GetString(row, column));
+                        }
                     }
                 }
                 documentoVenta.cPE_DETALLE_BEList.Add(cPE_DETALLE_BE);
@@ -545,7 +551,10 @@ namespace DataLayer
                 {
                     if (!column.Equals("id_cpe_dat_adic_be") && !column.Equals("id_cpe_cabecera_be") )
                     {
-                        cPE_DAT_ADIC_BE.GetType().GetProperty(column).SetValue(cPE_DAT_ADIC_BE, Converter.GetString(row, column));
+                        if (cPE_DAT_ADIC_BE.GetType().GetProperty(column) != null)
+                        {
+                            cPE_DAT_ADIC_BE.GetType().GetProperty(column).SetValue(cPE_DAT_ADIC_BE, Converter.GetString(row, column));
+                        }
                     }
                 }
                 documentoVenta.cPE_DAT_ADIC_BEList.Add(cPE_DAT_ADIC_BE);
@@ -559,7 +568,10 @@ namespace DataLayer
                 {
                     if (!column.Equals("id_cpe_doc_ref_be") && !column.Equals("id_cpe_cabecera_be"))
                     {
-                        cPE_DOC_REF_BE.GetType().GetProperty(column).SetValue(cPE_DOC_REF_BE, Converter.GetString(row, column));
+                        if (cPE_DOC_REF_BE.GetType().GetProperty(column) != null)
+                        {
+                            cPE_DOC_REF_BE.GetType().GetProperty(column).SetValue(cPE_DOC_REF_BE, Converter.GetString(row, column));
+                        }
                     }
                 }
                 documentoVenta.cPE_DOC_REF_BEList.Add(cPE_DOC_REF_BE);

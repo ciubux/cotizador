@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:complexType name="ArrayOfCPE_DOC_BAJA">
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="RPTA_BE">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="CPE_DOC_BAJA" nillable="true" type="tns:CPE_DOC_BAJA" />
+      <xs:element minOccurs="0" name="CODIGO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DESCRIPCION" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DETALLE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ESTADO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NUM_OPE" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfCPE_DOC_BAJA" nillable="true" type="tns:ArrayOfCPE_DOC_BAJA" />
-  <xs:complexType name="CPE_DOC_BAJA">
+  <xs:element name="RPTA_BE" nillable="true" type="tns:RPTA_BE" />
+  <xs:complexType name="RPTA_DOC_TRIB_BE">
     <xs:sequence>
-      <xs:element minOccurs="0" name="NRO_DOC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TIP_DOC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TIP_CPE" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="FEC_EMI" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="SERIE" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CORRELATIVO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="MTVO_BAJA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COD_RPTA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DESCRIPCION" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DETALLE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DOC_TRIB_PDF" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="DOC_TRIB_RPTA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DOC_TRIB_XML" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NUM_OPE" nillable="true" type="xs:long" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="CPE_DOC_BAJA" nillable="true" type="tns:CPE_DOC_BAJA" />
+  <xs:element name="RPTA_DOC_TRIB_BE" nillable="true" type="tns:RPTA_DOC_TRIB_BE" />
+  <xs:complexType name="ArrayOfRPTA_BE">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RPTA_BE" nillable="true" type="tns:RPTA_BE" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfRPTA_BE" nillable="true" type="tns:ArrayOfRPTA_BE" />
+  <xs:complexType name="RPTA_OPE_BE">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="flagexcepcion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="tipocpe" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="nroserie" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="nrocorrelativo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="fechaemision" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="messageexcepcion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IdDocumento" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="estadosunat" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RPTA_OPE_BE" nillable="true" type="tns:RPTA_OPE_BE" />
 </xs:schema>

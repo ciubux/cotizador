@@ -461,6 +461,7 @@ D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompile
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+<<<<<<< HEAD
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.dll
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\CotizadorPDF\bin\Debug\BusinessLayer.dll
@@ -493,3 +494,5 @@ C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\CotizadorPDF\obj\Debug\Cotiz
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+=======
+>>>>>>> origin/devInvoice

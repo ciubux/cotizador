@@ -46,8 +46,8 @@ namespace Cotizador.Controllers
         {
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            try
-            {
+            //try
+            //{
                 Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
 
 
@@ -98,14 +98,14 @@ namespace Cotizador.Controllers
               
 
                 return JsonConvert.SerializeObject(documentoVenta);
-            }
-            catch (Exception ex)
-            {
-                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
-                LogBL logBL = new LogBL();
-                logBL.insertLog(log);
-                return ex.ToString();
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+            //    LogBL logBL = new LogBL();
+            //    logBL.insertLog(log);
+            //    return ex.ToString();
+            //}
         }
 
         public String Show()

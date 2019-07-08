@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.EMISION" />
   <xs:complexType name="CPE_CABECERA_BE">
     <xs:sequence>
       <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
@@ -100,6 +101,12 @@
       <xs:element minOccurs="0" name="ID_EXT_RZN" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ETD_SNT" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DES_REF_CLT" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COD_TIP_DOC_COM" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NRO_DOC_COM" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NOM_COM" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.EMISION" minOccurs="0" name="MIE_LIST_RCT" nillable="true" type="q1:ArrayOfCPE_CABECERA_MIE" />
+      <xs:element minOccurs="0" name="TIP_ORI" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MNT_TOT_ROUNDING" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_CABECERA_BE" nillable="true" type="tns:CPE_CABECERA_BE" />
@@ -138,55 +145,7 @@
       <xs:element minOccurs="0" name="TXT_DES_ADIC_ITM" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="COD_ITM" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="COD_ITM_SUNAT" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HPJ_NUM_DOC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HPJ_TIP_DOC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HPJ_PAIS_EMI_PASP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HPJ_NOM_APE_RZN_SCL" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HPJ_PAIS_RES" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HPJ_NUM_DIAS_PER" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HPJ_FEC_ING" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HPJ_FEC_SAL" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="HPJ_FEC_CSM" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PQT_NUM_DOC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PQT_TIP_DOC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PQT_NOM_DOC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TPT_NUM_ASNT" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TPT_INF_MAN" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TPT_FEC_INI_PROG" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TPT_HOR_INI_PROG" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TPT_NUM_DOC_PASJ" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TPT_TIP_DOC_PASJ" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TPT_NOM_APE_PASJ" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TPT_UBIG_DEST" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TPT_UBIG_ORIG" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="NUM_EXPEDIENTE" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="COD_UND_EJECUTORA" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="NUM_CONTRATO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="NUM_PROCESO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DRH_NOM_MTR_EMB" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DRH_CANT_ESP_MAR" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DRH_LUG_DES" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DRH_FEC_DES" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_NUM_REG_MTC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_CONF_VHC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_PTO_ORG" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_PTO_DET" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_COD_MND" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_VAL_REF_VJE" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_VAL_REF_VHC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_VAL_REF_TM_VJE" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_CAR_EFV_VHC" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_CAR_EFV_VHC_UND" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_CAR_UTL_VHC_VJE" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DST_CAR_UTL_VHC_VJE_UND" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CDO_COD_UNI_CON_MIN" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CDO_NUM_DEC_COMP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CDO_REG_COM_ORO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CDO_RES_AUT_PLAN" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CDO_LEY_MIN" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="GDI_NUM_PLACA" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="GDI_NUM_CONT" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="GDI_FEC_CRED" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COD_ITM_GS1" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DET_VAL_ADIC01" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DET_VAL_ADIC02" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DET_VAL_ADIC03" nillable="true" type="xs:string" />
@@ -198,6 +157,7 @@
       <xs:element minOccurs="0" name="DET_VAL_ADIC09" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DET_VAL_ADIC10" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DES_COMP" nillable="true" type="tns:ArrayOfCPE_DETALLE_COMPTA_BE" />
+      <xs:element minOccurs="0" name="DET_LIST_ADIC" nillable="true" type="tns:ArrayOfCPE_DETALLE_ADIC_BE" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_DETALLE_BE" nillable="true" type="tns:CPE_DETALLE_BE" />
@@ -215,6 +175,22 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_DETALLE_COMPTA_BE" nillable="true" type="tns:CPE_DETALLE_COMPTA_BE" />
+  <xs:complexType name="ArrayOfCPE_DETALLE_ADIC_BE">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CPE_DETALLE_ADIC_BE" nillable="true" type="tns:CPE_DETALLE_ADIC_BE" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCPE_DETALLE_ADIC_BE" nillable="true" type="tns:ArrayOfCPE_DETALLE_ADIC_BE" />
+  <xs:complexType name="CPE_DETALLE_ADIC_BE">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DET_NUM_LIN_ADIC" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DET_NUM_LIN_ITM" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DET_COD_TIP_ADIC" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DET_DES_ADIC" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DET_DES_OPC" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CPE_DETALLE_ADIC_BE" nillable="true" type="tns:CPE_DETALLE_ADIC_BE" />
   <xs:complexType name="ArrayOfCPE_DAT_ADIC_BE">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="CPE_DAT_ADIC_BE" nillable="true" type="tns:CPE_DAT_ADIC_BE" />
@@ -256,12 +232,22 @@
   <xs:element name="ArrayOfCPE_ANTICIPO_BE" nillable="true" type="tns:ArrayOfCPE_ANTICIPO_BE" />
   <xs:complexType name="CPE_ANTICIPO_BE">
     <xs:sequence>
-      <xs:element minOccurs="0" name="COD_TIP_DOC_ANTCP" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LIN_ANTCP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="MNT_ANTCP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="NUM_CORRE_CPE_ANTCP" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="NUM_SERIE_CPE_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NUM_CORRE_CPE_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COD_TIP_DOC_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MNT_ANTCP" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SERIE_CORRE_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NUM_DOC_EMIS_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIP_DOC_EMIS_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IDE_PAG_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COD_EST_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NRO_ADC_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FEC_PAG_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COD_CPE_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="VAL_ADC_01_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="VAL_ADC_02_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="VAL_ADC_03_ANTCP" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_ANTICIPO_BE" nillable="true" type="tns:CPE_ANTICIPO_BE" />
@@ -273,32 +259,35 @@
   <xs:element name="ArrayOfCPE_FAC_GUIA_BE" nillable="true" type="tns:ArrayOfCPE_FAC_GUIA_BE" />
   <xs:complexType name="CPE_FAC_GUIA_BE">
     <xs:sequence>
-      <xs:element minOccurs="0" name="CERT_AUTO_TRNSP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="COD_MOD_TRNSP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="COD_TIP_GRE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIP_DOC_DESTINATARIO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NRO_DOC_DESTINATARIO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NOM_DESTINATARIO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MTV_TRASLADO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TOT_PSO_BRUTO" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="COD_UND_MEDIDA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COD_MOD_TRNSP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FEC_INI_TRASLADO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIP_DOC_TRNSP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NRO_DOC_TRNSP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RZN_SCL_TRNSP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="REG_MTC_TRNSP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CERT_AUTO_TRNSP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NRO_PLACA_TRASLADO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NRO_PLACA_SEC" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIP_DOC_COND_TRASLADO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NRO_DOC_COND_TRASLADO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DIR_UBI_LLEGADA" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DIR_LLEGADA" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DIR_PAI_LLEGADA" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DIR_PAI_PARTIDA" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DIR_PARTIDA" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DIR_UBI_LLEGADA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IND_SUB_CONTRATA" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DIR_UBI_PARTIDA" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="FEC_INI_TRASLADO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="IND_SUB_CONTRATA" type="xs:boolean" />
-      <xs:element minOccurs="0" name="LIC_COND_TRNSP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="MARCA_AUTO_TRNSP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="MTV_TRASLADO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="NOM_DESTINATARIO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="NRO_DOC_COND_TRASLADO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="NRO_DOC_DESTINATARIO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DIR_PARTIDA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DIR_PAI_PARTIDA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COD_TIP_GRE" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="NRO_GRE" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="NRO_PLACA_TRASLADO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PLACA_AUTO_TRNSP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="RUC_TRNSP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="RZN_SCL_TRNSP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TIP_DOC_COND_TRASLADO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TIP_DOC_DESTINATARIO" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TOT_PSO_BRUTO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MARCA_AUTO_TRNSP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NOM_COND_TRASLADO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LIC_COND_TRASLADO" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_FAC_GUIA_BE" nillable="true" type="tns:CPE_FAC_GUIA_BE" />
@@ -340,4 +329,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_DOC_TRIBUTARO_BE" nillable="true" type="tns:CPE_DOC_TRIBUTARO_BE" />
+  <xs:complexType name="RPTA_RET_BE">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CAD_HASH" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CODIGO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COD_HASH" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DESCRIPCION" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DETALLE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DOC_TRIB_IMG" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="DOC_TRIB_PDF" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="DOC_TRIB_XML" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ESTADO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NUM_OPE" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RPTA_RET_BE" nillable="true" type="tns:RPTA_RET_BE" />
 </xs:schema>

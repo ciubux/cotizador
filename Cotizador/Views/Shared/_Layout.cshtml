@@ -1,10 +1,12 @@
 ﻿@{
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/devInvoice
     TempData["ScriptVersion"] = "279";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
-
 }
 
 <!DOCTYPE html>
@@ -86,6 +88,15 @@
 
                         var linkBusquedaRol = "";
                         var linkMantenimientoRol = "";
+<<<<<<< HEAD
+=======
+
+                        var linkBusquedaUsuario = "";
+                        var linkMantenimientoUsuario = "";
+
+                        var linkBusquedaVendedor = "";
+                        var linkMantenimientoVendedor = "";
+>>>>>>> origin/devInvoice
 
                         var linkBusquedaUsuario = "";
                         var linkMantenimientoUsuario = "";
@@ -161,9 +172,12 @@
                             case 41: linkBusquedaVendedor = "ative"; linkMaestros = "active"; break;
                             case 42: linkMantenimientoVendedor = "ative"; linkMaestros = "active"; break;
 
+<<<<<<< HEAD
                             case 43: linkMantenimientoLogCambio = "ative"; linkMaestros = "active"; break;
                             
 
+=======
+>>>>>>> origin/devInvoice
                             case 101: linkBusquedaRol = "ative"; linkMaestros = "active"; break;
                             case 102: linkMantenimientoRol = "ative"; linkMaestros = "active"; break;
                             case 103: linkBusquedaUsuario = "ative"; linkMaestros = "active"; break;
@@ -363,6 +377,7 @@
                                 </ul>
                             </li>
                         }
+<<<<<<< HEAD
 
                         if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor)
                         {
@@ -372,6 +387,17 @@
                                     <span class="caret"></span>
                                 </a>
 
+=======
+
+                        if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor)
+                        {
+                            <li class="@linkMaestros">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Sistema
+                                    <span class="caret"></span>
+                                </a>
+
+>>>>>>> origin/devInvoice
                                 <ul class="dropdown-menu" role="menu">
                                     @if (usuario.administraPermisos)
                                     {
@@ -387,6 +413,7 @@
                                         <li id="linkMantenimientoVendedor" class="@linkMantenimientoVendedor">@Html.ActionLink("Vendedor - Crear/Modificar ", "Editar", "Vendedor")</li>
                                     }
 
+<<<<<<< HEAD
                                     @if (usuario.modificaLogCambio || usuario.visualizaLogCambio)
                                     {
                                         <li id="linkBusquedaLogCambio" class="@linkMantenimientoLogCambio">@Html.ActionLink("LogCambio - Búsqueda", "Lista", "LogCambio")</li>
@@ -394,6 +421,8 @@
                                     
 
 
+=======
+>>>>>>> origin/devInvoice
                                     @if (usuario.modificaRol || usuario.visualizaRoles)
                                     {
                                         <li id="linkBusquedaRol" class="@linkBusquedaRol">@Html.ActionLink("Rol - Búsqueda", "List", "Rol")</li>
@@ -409,9 +438,15 @@
                                     }
 
                                     @*@if (usuario.modificaUsuario)
+<<<<<<< HEAD
         {
             <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
         }*@
+=======
+                                    {
+                                        <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
+                                    }*@
+>>>>>>> origin/devInvoice
 
 
                                     @if (usuario.administraPermisos)

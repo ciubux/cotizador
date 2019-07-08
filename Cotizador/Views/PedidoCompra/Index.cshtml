@@ -771,7 +771,13 @@ else
                     }
                     @if (pedido.usuario.tomaPedidos || pedido.usuario.apruebaPedidos || pedido.usuario.visualizaGuias)
                     {
+<<<<<<< HEAD
                         <button type="button" id="btnExcelCompra" class="btn btn-primary bouton-image botonExcel" actionLink="@Url.Action("ExportLastViewExcel", "PedidoCompra")">Excel</button>
+=======
+                                
+                        <button type="button" id="btnExcelCompra" class="btn btn-primary bouton-image botonExcel" actionLink="@Url.Action("ExportLastViewExcel", "PedidoCompra")">Excel</button>
+                        <button type = "button" id="btnCvsCompra" class="btn btn-primary" actionLink="@Url.Action("ExportLastViewCSVKC", "PedidoCompra")">Exportar CVS</button>
+>>>>>>> origin/devInvoice
                     }
                 </div>
 

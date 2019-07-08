@@ -2439,6 +2439,7 @@ D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
+<<<<<<< HEAD
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Cotizador\bin\ApplicationInsights.config
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Cotizador\bin\roslyn\csc.exe
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -2718,3 +2719,5 @@ C:\Users\Andre\Desktop\PRINCIPAL\cotizador-devInvoice\Cotizador\obj\Debug\Cotiza
 C:\Users\Andre\Desktop\PRINCIPAL\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 C:\Users\Andre\Desktop\PRINCIPAL\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.dll
 C:\Users\Andre\Desktop\PRINCIPAL\cotizador-devInvoice\Cotizador\obj\Debug\Cotizador.pdb
+=======
+>>>>>>> origin/devInvoice

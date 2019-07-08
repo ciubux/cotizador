@@ -515,8 +515,8 @@ namespace Cotizador.Controllers
 
         public String Update()
         {
-            try
-            {
+            //try
+            //{
                 ClienteBL clienteBL = new ClienteBL();
                 Cliente cliente = this.ClienteSession;
                 if (cliente.idCliente == Guid.Empty)
@@ -535,12 +535,12 @@ namespace Cotizador.Controllers
                 String resultado = JsonConvert.SerializeObject(cliente);
                 //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
                 return resultado;
-            }
-            catch (Exception e)
-            {
-                logger.Error(e, agregarUsuarioAlMensaje(e.Message));
-                throw e;
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+            //    throw e;
+            //}
         }
 
 

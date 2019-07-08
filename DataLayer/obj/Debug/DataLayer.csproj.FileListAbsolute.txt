@@ -309,6 +309,7 @@ D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs
 D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
 D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.dll
 D:\Repo\freelos\cotizador\DataLayer\obj\Debug\DataLayer.pdb
+<<<<<<< HEAD
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.dll
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\DataLayer.pdb
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\bin\Debug\Framework.DAL.dll
@@ -327,3 +328,5 @@ C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\obj\Debug\DataLaye
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.dll
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\DataLayer\obj\Debug\DataLayer.pdb
+=======
+>>>>>>> origin/devInvoice

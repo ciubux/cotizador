@@ -451,6 +451,7 @@ D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompi
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
+<<<<<<< HEAD
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\BusinessLayer\bin\Debug\BusinessLayer.dll.config
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\BusinessLayer\bin\Debug\BusinessLayer.dll
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\BusinessLayer\bin\Debug\BusinessLayer.pdb
@@ -481,3 +482,5 @@ C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\BusinessLayer\obj\Debug\Busi
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\BusinessLayer\obj\Debug\BusinessLayer.pdb
+=======
+>>>>>>> origin/devInvoice

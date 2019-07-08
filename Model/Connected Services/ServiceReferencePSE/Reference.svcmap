@@ -29,6 +29,7 @@
     <MetadataFile FileName="wsOnlineToCPE2.xsd" MetadataType="Schema" ID="f8025ff6-c0b0-40e3-8fbd-e5a6042d4ad3" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd3" />
     <MetadataFile FileName="wsOnlineToCPE3.xsd" MetadataType="Schema" ID="ec597f87-702b-402f-8b5d-545216394591" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd0" />
     <MetadataFile FileName="wsOnlineToCPE4.xsd" MetadataType="Schema" ID="b3c181a3-b04b-4dfd-8632-9a35e9401530" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd1" />
+    <MetadataFile FileName="wsOnlineToCPE6.xsd" MetadataType="Schema" ID="d592b38d-1cc8-43bb-9c0a-ae17ad387eb9" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd6" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

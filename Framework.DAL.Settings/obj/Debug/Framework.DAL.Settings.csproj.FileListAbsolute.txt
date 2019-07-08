@@ -192,6 +192,7 @@ D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Setting
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
+<<<<<<< HEAD
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
@@ -203,3 +204,5 @@ C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL.Settings\obj\D
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
+=======
+>>>>>>> origin/devInvoice

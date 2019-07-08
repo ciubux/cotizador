@@ -36,6 +36,7 @@
       <HintPath>..\..\..\NPOI 2.2.1 binary package\NPOI 2.2.1 binary package\Release\Net40\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
+<<<<<<< HEAD
       <HintPath>..\..\..\NPOI 2.2.1 binary package\NPOI 2.2.1 binary package\Release\Net40\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
@@ -46,6 +47,18 @@
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
       <HintPath>..\..\..\NPOI 2.2.1 binary package\NPOI 2.2.1 binary package\Release\Net40\NPOI.OpenXmlFormats.dll</HintPath>
+=======
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+>>>>>>> origin/devInvoice
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
