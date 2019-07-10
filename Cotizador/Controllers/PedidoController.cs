@@ -2082,7 +2082,7 @@ namespace Cotizador.Controllers
             DateTime? fechaEntregaDesde, DateTime? fechaEntregaHasta,
             String inicioPrimerTurnoEntrega, String finPrimerTurnoEntrega, String inicioSegundoTurnoEntrega, String finSegundoTurnoEntrega,
             String numeroOrdenCompra, Pedido.ClasesPedido tipoPedido, Pedido.tiposPedido tipoPedidoVenta, Pedido.tiposPedidoAlmacen tipoPedidoAlmacen, String facturaConsolidada,
-            Int64 numeroGrupo
+            Int64 numeroGrupo, Boolean esPagoContado
             )
         {
             Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
@@ -2092,15 +2092,16 @@ namespace Cotizador.Controllers
             pedido.numeroGrupoPedido = numeroGrupo;
             pedido.cotizacion = new Cotizacion();
             pedido.observaciones = observaciones;
+            pedido.esPagoContado = esPagoContado;
           //  pedido.ubigeoEntrega = new Ubigeo();
-           // pedido.ubigeoEntrega.Id = ubigeo;
+          // pedido.ubigeoEntrega.Id = ubigeo;
 
             //ClienteBL clienteBL = new ClienteBL();
 
-       /*     Guid idCliente = clienteBL.getClienteId(ruc, sedeMP);
-            pedido.cliente = clienteBL.getCliente(idCliente);
-            pedido.ciudad = pedido.cliente.ciudad;*/
-            
+            /*     Guid idCliente = clienteBL.getClienteId(ruc, sedeMP);
+                 pedido.cliente = clienteBL.getCliente(idCliente);
+                 pedido.ciudad = pedido.cliente.ciudad;*/
+
             pedido.ciudadASolicitar = new Ciudad();
             pedido.numeroReferenciaCliente = numeroOrdenCompra;
 
@@ -2169,6 +2170,8 @@ namespace Cotizador.Controllers
                 String ruc = UtilesHelper.getValorCelda(sheet,4,"B");
                 String nombreComercial = UtilesHelper.getValorCelda(sheet, 5, "B");
                 String pedidoContado = UtilesHelper.getValorCelda(sheet, 6, "B"); //Se integra con implementación pendiente de Yrving
+                Boolean esPagoContado = pedidoContado.ToUpper().Equals("SI");
+
                 DateTime? fechaEntregaDesdeGeneral = UtilesHelper.getValorCeldaDate(sheet, 7, "B");
                 DateTime? fechaEntregaHastaGeneral = UtilesHelper.getValorCeldaDate(sheet, 8, "B");
                 String inicioPrimerTurnoEntrega = UtilesHelper.getValorCelda(sheet, 9, "B");
@@ -2268,7 +2271,7 @@ namespace Cotizador.Controllers
                                 direccionEntrega, observaciones, fechaEntregaDesdeGeneral, fechaEntregaHasta,
                                 inicioPrimerTurnoEntrega, finPrimerTurnoEntrega, inicioSegundoTurnoEntrega, finSegundoTurnoEntrega,
                                 numeroOrdenCompra, tipoPedido, tipoPedidoVenta, tipoPedidoTrasladoInterno, facturaConsolidada,
-                                numeroGrupo);
+                                numeroGrupo, esPagoContado);
                             ultimoPedido = pedido;
                             pedidoList.Add(pedido);
                         }

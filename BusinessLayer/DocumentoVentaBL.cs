@@ -104,6 +104,22 @@ namespace BusinessLayer
             }
         }
 
+        public List<DocumentoVenta> getNotasCreditoAplicadas(DocumentoVenta documentoVenta)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.SelectNotasCreditoAplicadas(documentoVenta);
+            }
+        }
+
+        public List<DocumentoVenta> getNotasDebitoAplicadas(DocumentoVenta documentoVenta)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.SelectNotasDebitoAplicadas(documentoVenta);
+            }
+        }
+
         public void ActualizarEstadoDocumentosElectronicos(Usuario usuario)
         {
             using (var dal = new DocumentoVentaDAL())

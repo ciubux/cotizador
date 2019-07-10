@@ -451,3 +451,4 @@ D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompi
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\ICSharpCode.SharpZipLib.dll

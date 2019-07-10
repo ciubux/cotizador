@@ -1546,50 +1546,134 @@ jQuery(function ($) {
     $("#btnVerNotaCredito").click(function () {
 
 
-        /*
-        var guiaRemisionList = pedido.guiaRemisionList;
-        for (var j = 0; j < guiaRemisionList.length; j++) {
-            $("#tableDetalleGuia > tbody").empty();
-            var plantilla = $("#plantillaVerGuiasRemision").html();
-            var dGuia = '';
-            var documentoDetalleList = guiaRemisionList[j].documentoDetalle;
-            for (var k = 0; k < documentoDetalleList.length; k++) {
+        $.ajax({
+            url: "/Factura/getNotasCreditoAplicadas",
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (resultado) {
+                /*mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                activarBotonesNotasCredito();*/
+            },
+            success: function (notaCreditoList) {
 
-                dGuia += '<tr>' +
-                    '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
-                    '<td>' + documentoDetalleList[k].cantidad + '</td>' +
-                    '<td>' + documentoDetalleList[k].unidad + '</td>' +
-                    '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
-                    '</tr>';
+                $("#formVerNotasCredito").html("");
+                var notaCreditoList = notaCreditoList;
+                for (var j = 0; j < notaCreditoList.length; j++) {
+                    $("#tableDetalleNota > tbody").empty();
+                    //var plantilla = $("#modalVerNotasCredito").html();
+                    var detNota = '';
+                    var documentoDetalleList = notaCreditoList[j].cPE_DETALLE_BEList;
+                    for (var k = 0; k < documentoDetalleList.length; k++) {
+                        detNota += '<tr>' +
+                            '<td>' + documentoDetalleList[k].COD_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].CANT_UND_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].TXT_DES_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].VAL_UNIT_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].VAL_VTA_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].MNT_IGV_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].PRC_VTA_ITEM + '</td>' +
+                            '</tr>';
+                    }
+                    $("#tableDetalleNota").append(detNota);
+
+                    
+                    plantilla = $("#plantillaVerNotas").html();
+                    plantilla = plantilla.replace(/#EtiquetaNota/g,"Crédito")
+                    plantilla = plantilla.replace("#serieNumero", notaCreditoList[j].cPE_CABECERA_BE.SERIE + "-" + notaCreditoList[j].cPE_CABECERA_BE.CORRELATIVO);
+                    plantilla = plantilla.replace("#fechaEmisionNota", notaCreditoList[j].cPE_CABECERA_BE.FEC_EMI);
+
+                    plantilla = plantilla.replace("#totalNota", notaCreditoList[j].cPE_CABECERA_BE.MNT_TOT_PRC_VTA);
+
+                    var tipoNotaCredito = "";
+
+                    if (notaCreditoList[j].cPE_CABECERA_BE.TIP_CPE = "01")
+                        tipoNotaCredito = "ANULACION DE LA OPERACION"
+                    else if (notaCreditoList[j].cPE_CABECERA_BE.TIP_CPE = "04")
+                        tipoNotaCredito = "DESCUENTO GLOBAL"
+                    else if (notaCreditoList[j].cPE_CABECERA_BE.TIP_CPE = "05")
+                        tipoNotaCredito = "DESCUENTO POR ITEM"
+                    else if (notaCreditoList[j].cPE_CABECERA_BE.TIP_CPE = "06")
+                        tipoNotaCredito = "DEVOLUCIÓN TOTAL"
+                    else if (notaCreditoList[j].cPE_CABECERA_BE.TIP_CPE = "07")
+                        tipoNotaCredito = "DEVOLUCIÓN POR ITEM"
+                    else if (notaCreditoList[j].cPE_CABECERA_BE.TIP_CPE = "09")
+                        tipoNotaCredito = "DISMINUCIÓN EN EL VALOR"
+                    
+                    plantilla = plantilla.replace("#tipoNota", tipoNotaCredito);
+
+
+
+                    plantilla = plantilla.replace("tableDetalleNota", "tableDetalleNota" + j);
+                    
+                    $("#formVerNotasCredito").append(plantilla);
+                }
+
+                $("#modalVerNotasCredito").modal('show');
             }
-
-            $("#tableDetalleGuia").append(dGuia);
-
-            plantilla = $("#plantillaVerGuiasRemision").html();
-
-            plantilla = plantilla.replace("#serieNumero", guiaRemisionList[j].serieNumeroGuia);
-            plantilla = plantilla.replace("#fechaEmisionGuia", invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
-
-            plantilla = plantilla.replace("#serieNumeroFactura", guiaRemisionList[j].documentoVenta.serieNumero);
-            if (guiaRemisionList[j].documentoVenta.fechaEmision != null) {
-                plantilla = plantilla.replace("#fechaEmisionFactura", invertirFormatoFecha(guiaRemisionList[j].documentoVenta.fechaEmision.substr(0, 10)));
-            }
-            else
-                plantilla = plantilla.replace("#fechaEmisionFactura", "");
-
-
-            plantilla = plantilla.replace("tableDetalleGuia", "tableDetalleGuia" + j);
-
-            $("#formVerGuiasRemision").append(plantilla);
-            
-        }*/
-
-
-
+        })
     });
 
     $("#btnVerNotaDebito").click(function () {
 
+
+        $.ajax({
+            url: "/Factura/getNotasDebitoAplicadas",
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (resultado) {
+                /*mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                activarBotonesNotasDebito();*/
+            },
+            success: function (notaDebitoList) {
+
+                $("#formVerNotasDebito").html("");
+                var notaDebitoList = notaDebitoList;
+                for (var j = 0; j < notaDebitoList.length; j++) {
+                    $("#tableDetalleNota > tbody").empty();
+                    //var plantilla = $("#modalVerNotasDebito").html();
+                    var detNota = '';
+                    var documentoDetalleList = notaDebitoList[j].cPE_DETALLE_BEList;
+                    for (var k = 0; k < documentoDetalleList.length; k++) {
+                        detNota += '<tr>' +
+                            '<td>' + documentoDetalleList[k].COD_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].CANT_UND_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].TXT_DES_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].VAL_UNIT_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].VAL_VTA_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].MNT_IGV_ITM + '</td>' +
+                            '<td>' + documentoDetalleList[k].PRC_VTA_ITEM + '</td>' +
+                            '</tr>';
+                    }
+                    $("#tableDetalleNota").append(detNota);
+
+
+                    plantilla = $("#plantillaVerNotas").html();
+                    plantilla = plantilla.replace(/#EtiquetaNota/g, "Débito")
+                    plantilla = plantilla.replace("#serieNumero", notaDebitoList[j].cPE_CABECERA_BE.SERIE + "-" + notaDebitoList[j].cPE_CABECERA_BE.CORRELATIVO);
+                    plantilla = plantilla.replace("#fechaEmisionNota", notaDebitoList[j].cPE_CABECERA_BE.FEC_EMI);
+
+                    plantilla = plantilla.replace("#totalNota", notaDebitoList[j].cPE_CABECERA_BE.MNT_TOT_PRC_VTA);
+
+                    var tipoNotaDebito = "";
+                    if (notaDebitoList[j].cPE_CABECERA_BE.TIP_CPE = "01")
+                        tipoNotaDebito = "INTERESES POR MORA"
+                    else if (notaDebitoList[j].cPE_CABECERA_BE.TIP_CPE = "02")
+                        tipoNotaDebito = "AUMENTO EN EL VALOR"
+                    else (notaDebitoList[j].cPE_CABECERA_BE.TIP_CPE = "03")
+                        tipoNotaDebito = "PENALIDADES / OTROS CONCEPTOS"
+                    
+                    plantilla = plantilla.replace("#tipoNota", tipoNotaDebito);
+
+
+
+                    plantilla = plantilla.replace("tableDetalleNota", "tableDetalleNota" + j);
+
+                    $("#formVerNotasDebito").append(plantilla);
+                }
+
+                $("#modalVerNotasDebito").modal('show');
+            }
+        })
     });
 
     function activarBotonesFactura() {

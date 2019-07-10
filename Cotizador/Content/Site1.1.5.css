@@ -209,6 +209,22 @@ textarea {
     #modalEdicionDireccionEntrega .modal-dialog {
         width: 900px;
     }
+
+    #modalVerNotasCredito .modal-dialog {
+        width: 900px;
+    }
+
+    #modalVerNotasDebito .modal-dialog {
+        width: 900px;
+    }
+
+    #modalVerGuiasRemisionEnFactura .modal-dialog {
+        width: 900px;
+    }
+
+    #modalVerGuiasRemisionEnFactura .modal-dialog {
+        width: 900px;
+    }
 }
 
 

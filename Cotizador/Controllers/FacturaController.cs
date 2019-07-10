@@ -146,6 +146,22 @@ namespace Cotizador.Controllers
         }
 
 
+        public String getNotasCreditoAplicadas()
+        {
+            DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            String notasCreditoAplicadas = JsonConvert.SerializeObject(documentoVentaBL.getNotasCreditoAplicadas(documentoVenta));
+            return notasCreditoAplicadas;
+        }
+
+        public String getNotasDebitoAplicadas()
+        {
+            DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            String notasDebitoAplicadas = JsonConvert.SerializeObject(documentoVentaBL.getNotasDebitoAplicadas(documentoVenta));
+            return notasDebitoAplicadas;
+        }
+
 
         public String iniciarRefacturacion()
         {

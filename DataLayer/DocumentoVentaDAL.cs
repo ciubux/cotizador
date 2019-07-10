@@ -43,6 +43,217 @@ namespace DataLayer
         }
 
 
+        public List<DocumentoVenta> SelectNotasCreditoAplicadas(DocumentoVenta factura)
+        {
+            List<DocumentoVenta> documentoVentaList = new List<DocumentoVenta>();
+
+            var objCommand = GetSqlCommand("ps_notasCreditoAplicadas");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", factura.idDocumentoVenta);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable cpeCabeceraBETable = dataSet.Tables[0];
+            DataTable cpeDetalleBETable = dataSet.Tables[1];
+
+            //Se obtienen todas las columnas de la tabla 
+            var columnasCabecera = cpeCabeceraBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+            var columnnasDetalle = cpeDetalleBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+
+            foreach (DataRow row in cpeCabeceraBETable.Rows)
+            {
+                DocumentoVenta documentoVenta = new DocumentoVenta();
+                documentoVenta.cPE_CABECERA_BE = new CPE_CABECERA_BE();
+                documentoVenta.cPE_DETALLE_BEList = new List<CPE_DETALLE_BE>();
+                documentoVenta.solicitadoAnulacion = Converter.GetBool(row, "SOLICITUD_ANULACION");
+                documentoVenta.permiteAnulacion = Converter.GetBool(row, "permite_anulacion");
+                documentoVenta.tieneNotaCredito = Converter.GetBool(row, "tiene_nota_credito");
+                documentoVenta.tieneNotaDebito = Converter.GetBool(row, "tiene_nota_debito");
+
+                foreach (String column in columnasCabecera)
+                {
+
+                    if (column.Equals("id_cpe_cabecera_be"))
+                    {
+                        documentoVenta.idDocumentoVenta = Converter.GetGuid(row, column);
+                    }
+                    else
+                    if (
+                        !column.Equals("estado") &&
+                        !column.Equals("usuario_creacion") &&
+                        !column.Equals("usuario_modificacion") &&
+                        !column.Equals("fecha_creacion") &&
+                        !column.Equals("fecha_modificacion") &&
+                        !column.Equals("ESTADO_SUNAT") &&
+                        !column.Equals("CODIGO") &&
+                        !column.Equals("COD_ESTD_SUNAT") &&
+                        !column.Equals("DESCRIPCION") &&
+                        !column.Equals("DETALLE") &&
+                        !column.Equals("NUM_CPE") &&
+                        !column.Equals("SOLICITUD_ANULACION") &&
+                        !column.Equals("ENVIADO_A_EOL") &&
+                        !column.Equals("AMBIENTE_PRODUCCION") &&
+                        !column.Equals("id_venta") &&
+                        !column.Equals("COMENTARIO_SOLICITUD_ANULACION") &&
+                        !column.Equals("COMENTARIO_APROBACION_ANULACION") &&
+                        !column.Equals("permite_anulacion") &&
+                        !column.Equals("observaciones_adicionales") &&
+                        !column.Equals("fecha_solicitud_anulacion") &&
+                        !column.Equals("fecha_aprobacion_anulacion") &&
+                        !column.Equals("usuario_solicitud_anulacion") &&
+                        !column.Equals("usuario_aprobacion_anulacion") &&
+                        !column.Equals("aprobado") &&
+                        !column.Equals("usuario_aprobacion") &&
+                        !column.Equals("fecha_aprobacion") &&
+                        !column.Equals("observaciones") &&
+                        !column.Equals("tiene_nota_credito") &&
+                        !column.Equals("tiene_nota_debito")
+                        )
+                    {
+                        if (documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column) != null)
+                        {
+                            documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));
+                        }
+                    }
+                }
+
+                documentoVentaList.Add(documentoVenta);
+            }
+
+            foreach (DataRow row in cpeDetalleBETable.Rows)
+            {
+                Guid idDocumentoVenta = Guid.Empty;                
+                CPE_DETALLE_BE cPE_DETALLE_BE = new CPE_DETALLE_BE();
+                foreach (String column in columnnasDetalle)
+                {
+
+                    if (column.Equals("id_cpe_cabecera_be"))
+                    {
+                        idDocumentoVenta = Converter.GetGuid(row, column);
+                    }
+                    else if (!column.Equals("id_cpe_detalle_be") && !column.Equals("estado"))
+                    {
+                        if (cPE_DETALLE_BE.GetType().GetProperty(column) != null)
+                        {
+                            cPE_DETALLE_BE.GetType().GetProperty(column).SetValue(cPE_DETALLE_BE, Converter.GetString(row, column));
+                        }
+                    }
+                }
+
+                DocumentoVenta documentoVenta = documentoVentaList.Where(dv => dv.idDocumentoVenta == idDocumentoVenta).FirstOrDefault();
+                documentoVenta.cPE_DETALLE_BEList.Add(cPE_DETALLE_BE);
+
+            }
+
+
+
+
+
+
+
+
+
+            return documentoVentaList;
+        }
+
+        public List<DocumentoVenta> SelectNotasDebitoAplicadas(DocumentoVenta factura)
+        {
+            List<DocumentoVenta> documentoVentaList = new List<DocumentoVenta>();
+
+            var objCommand = GetSqlCommand("ps_notasDebitoAplicadas");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", factura.idDocumentoVenta);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable cpeCabeceraBETable = dataSet.Tables[0];
+            DataTable cpeDetalleBETable = dataSet.Tables[1];
+
+            //Se obtienen todas las columnas de la tabla 
+            var columnasCabecera = cpeCabeceraBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+            var columnnasDetalle = cpeDetalleBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+
+            foreach (DataRow row in cpeCabeceraBETable.Rows)
+            {
+                DocumentoVenta documentoVenta = new DocumentoVenta();
+                documentoVenta.cPE_CABECERA_BE = new CPE_CABECERA_BE();
+                documentoVenta.cPE_DETALLE_BEList = new List<CPE_DETALLE_BE>();
+                documentoVenta.solicitadoAnulacion = Converter.GetBool(row, "SOLICITUD_ANULACION");
+                documentoVenta.permiteAnulacion = Converter.GetBool(row, "permite_anulacion");
+                documentoVenta.tieneNotaCredito = Converter.GetBool(row, "tiene_nota_credito");
+                documentoVenta.tieneNotaDebito = Converter.GetBool(row, "tiene_nota_debito");
+
+                foreach (String column in columnasCabecera)
+                {
+
+                    if (column.Equals("id_cpe_cabecera_be"))
+                    {
+                        documentoVenta.idDocumentoVenta = Converter.GetGuid(row, column);
+                    }
+                    else
+                    if (
+                        !column.Equals("estado") &&
+                        !column.Equals("usuario_creacion") &&
+                        !column.Equals("usuario_modificacion") &&
+                        !column.Equals("fecha_creacion") &&
+                        !column.Equals("fecha_modificacion") &&
+                        !column.Equals("ESTADO_SUNAT") &&
+                        !column.Equals("CODIGO") &&
+                        !column.Equals("COD_ESTD_SUNAT") &&
+                        !column.Equals("DESCRIPCION") &&
+                        !column.Equals("DETALLE") &&
+                        !column.Equals("NUM_CPE") &&
+                        !column.Equals("SOLICITUD_ANULACION") &&
+                        !column.Equals("ENVIADO_A_EOL") &&
+                        !column.Equals("AMBIENTE_PRODUCCION") &&
+                        !column.Equals("id_venta") &&
+                        !column.Equals("COMENTARIO_SOLICITUD_ANULACION") &&
+                        !column.Equals("COMENTARIO_APROBACION_ANULACION") &&
+                        !column.Equals("permite_anulacion") &&
+                        !column.Equals("observaciones_adicionales") &&
+                        !column.Equals("fecha_solicitud_anulacion") &&
+                        !column.Equals("fecha_aprobacion_anulacion") &&
+                        !column.Equals("usuario_solicitud_anulacion") &&
+                        !column.Equals("usuario_aprobacion_anulacion") &&
+                        !column.Equals("aprobado") &&
+                        !column.Equals("usuario_aprobacion") &&
+                        !column.Equals("fecha_aprobacion") &&
+                        !column.Equals("observaciones") &&
+                        !column.Equals("tiene_nota_credito") &&
+                        !column.Equals("tiene_nota_debito")
+                        )
+                    {
+                        if (documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column) != null)
+                        {
+                            documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));
+                        }
+                    }
+                }
+
+                documentoVentaList.Add(documentoVenta);
+            }
+
+            foreach (DataRow row in cpeDetalleBETable.Rows)
+            {
+                Guid idDocumentoVenta = Guid.Empty;
+                CPE_DETALLE_BE cPE_DETALLE_BE = new CPE_DETALLE_BE();
+                foreach (String column in columnnasDetalle)
+                {
+
+                    if (column.Equals("id_cpe_cabecera_be"))
+                    {
+                        idDocumentoVenta = Converter.GetGuid(row, column);
+                    }
+                    else if (!column.Equals("id_cpe_detalle_be") && !column.Equals("estado"))
+                    {
+                        if (cPE_DETALLE_BE.GetType().GetProperty(column) != null)
+                        {
+                            cPE_DETALLE_BE.GetType().GetProperty(column).SetValue(cPE_DETALLE_BE, Converter.GetString(row, column));
+                        }
+                    }
+                }
+
+                DocumentoVenta documentoVenta = documentoVentaList.Where(dv => dv.idDocumentoVenta == idDocumentoVenta).FirstOrDefault();
+                documentoVenta.cPE_DETALLE_BEList.Add(cPE_DETALLE_BE);
+
+            }
+            return documentoVentaList;
+        }
+
         public void anularDocumentoVenta(DocumentoVenta documentoVenta)
         {
             var objCommand = GetSqlCommand("pu_solicitarAnulacionDocumentoVenta");
