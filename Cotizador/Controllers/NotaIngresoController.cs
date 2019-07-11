@@ -27,7 +27,7 @@ namespace Cotizador.Controllers
                 {
                     case Constantes.paginas.BusquedaNotasIngreso: notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA]; break;
                     case Constantes.paginas.MantenimientoNotaIngreso: notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO]; break;
-                        //       case Constantes.paginas.BusquedaGuiasRemisionConsolidarFactura: notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA]; break;
+                    case Constantes.paginas.BusquedaNotasIngresoConsolidarFactura: notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA]; break;
                 }
                 return notaIngreso;
             }
@@ -37,7 +37,7 @@ namespace Cotizador.Controllers
                 {
                     case Constantes.paginas.BusquedaNotasIngreso: this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA] = value; break;
                     case Constantes.paginas.MantenimientoNotaIngreso: this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = value; break;
-                        //      case Constantes.paginas.BusquedaGuiasRemisionConsolidarFactura: this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA] = value; break;
+                    case Constantes.paginas.BusquedaNotasIngresoConsolidarFactura: this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA] = value; break;
                 }
             }
         }
@@ -73,7 +73,9 @@ namespace Cotizador.Controllers
         }
 
 
-        #region Busqueda Guias
+
+
+        #region Busqueda Notas Ingreso
 
         private void instanciarNotaIngresoBusqueda()
         {
@@ -160,6 +162,75 @@ namespace Cotizador.Controllers
 
             return View();
         }
+
+        private void instanciarNotaIngresoBusquedaFacturaConsolidada()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaNotasIngresoConsolidarFactura;
+
+            NotaIngreso notaIngreso = new NotaIngreso();
+            notaIngreso.seguimientoMovimientoAlmacenEntrada = new SeguimientoMovimientoAlmacenEntrada();
+            notaIngreso.seguimientoMovimientoAlmacenEntrada.estado = SeguimientoMovimientoAlmacenEntrada.estadosSeguimientoMovimientoAlmacenEntrada.Recibido;
+            notaIngreso.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            notaIngreso.ciudadDestino = notaIngreso.usuario.sedesMP.Where(c => !c.esProvincia).FirstOrDefault();
+            notaIngreso.pedido = new Pedido();
+            notaIngreso.pedido.cliente = new Cliente();
+            notaIngreso.pedido.cliente.idCliente = Guid.Empty;
+            //Busca hasta 45 días atrás
+            notaIngreso.fechaTrasladoDesde = DateTime.Now.AddDays(-45);
+            notaIngreso.fechaTrasladoHasta = DateTime.Now.AddDays(1);
+            this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA] = notaIngreso;
+        }
+
+        public ActionResult ConsolidarFactura()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaNotasIngresoConsolidarFactura;
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA] == null)
+            {
+                instanciarNotaIngresoBusquedaFacturaConsolidada();
+            }
+
+            if (this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_LISTA_FACTURA_CONSOLIDADA] == null)
+            {
+                this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_LISTA_FACTURA_CONSOLIDADA] = new List<NotaIngreso>();
+            }
+
+            NotaIngreso notaIngresoSearch = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA];
+
+            ViewBag.notaIngreso = notaIngresoSearch;
+            ViewBag.notaIngresoList = this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_LISTA_FACTURA_CONSOLIDADA];
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaNotasIngresoConsolidarFactura;
+
+            ViewBag.fechaTrasladoDesde = notaIngresoSearch.fechaTrasladoDesde.ToString(Constantes.formatoFecha);
+            ViewBag.fechaTrasladoHasta = notaIngresoSearch.fechaTrasladoHasta.ToString(Constantes.formatoFecha);
+            ViewBag.Si = Constantes.MENSAJE_SI;
+            ViewBag.No = Constantes.MENSAJE_NO;
+
+            int existeCliente = 0;
+            if (notaIngresoSearch.pedido.cliente.idCliente != Guid.Empty)
+            {
+                existeCliente = 1;
+            }
+
+            Pedido pedido = new Pedido();
+
+            ViewBag.pedido = pedido;
+
+            DocumentoCompra documentoCompra = new DocumentoCompra();
+            ViewBag.documentoCompra = documentoCompra;
+
+            ViewBag.existeCliente = existeCliente;
+            //ViewBag.movimientoAlmacenIdList = this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
+            return View();
+        }
+
+
+
 
         [HttpGet]
         public ActionResult ExportLastSearchExcel()

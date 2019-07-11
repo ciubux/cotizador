@@ -1080,6 +1080,18 @@ jQuery(function ($) {
                     $("#btnVerNotaDebito").show();
                 }
 
+                if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA)
+                {
+                    $("#btnVerGuiasRemision").show();
+                    $("#btnVerNotasIngreso").hide();
+                }
+
+                if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO) {
+                    $("#btnVerNotasIngreso").show();
+                    $("#btnVerGuiasRemision").hide();
+                }
+                
+
 
                 /*Solicitar Anulación */
                 if (documentoVenta.solicitadoAnulacion == false
@@ -1149,8 +1161,7 @@ jQuery(function ($) {
                 $('#btnIniciarRefacturacion').hide();
             }
 
-            
-
+          
             if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO
                     || documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_DEBITO) {
 
@@ -1675,6 +1686,98 @@ jQuery(function ($) {
             }
         })
     });
+
+    $("#btnVerGuiasRemision").click(function () {
+
+        $.ajax({
+            url: "/Factura/getGuiasRemision",
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (resultado) {
+                /*mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                activarBotonesNotasDebito();*/
+            },
+            success: function (guiaRemisionList) {
+
+                    $("#formVerGuiasRemision").html("");
+                    for (var j = 0; j < guiaRemisionList.length; j++) {
+                        $("#tableDetalleGuia > tbody").empty();
+                        var plantilla = $("#plantillaVerGuiasRemision").html();
+                        var dGuia = '';
+                        var documentoDetalleList = guiaRemisionList[j].documentoDetalle;
+                        for (var k = 0; k < documentoDetalleList.length; k++) {
+
+                            dGuia += '<tr>' +
+                                '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
+                                '<td>' + documentoDetalleList[k].cantidad + '</td>' +
+                                '<td>' + documentoDetalleList[k].unidad + '</td>' +
+                                '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
+                                '</tr>';
+                        }
+
+                        $("#tableDetalleGuia").append(dGuia);
+
+                        plantilla = $("#plantillaVerGuiasRemision").html();
+
+                        plantilla = plantilla.replace("#serieNumero", guiaRemisionList[j].serieNumeroGuia);
+                        plantilla = plantilla.replace("#fechaEmisionGuia", invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
+
+                      
+
+                        plantilla = plantilla.replace("tableDetalleGuia", "tableDetalleGuia" + j);
+
+                        $("#formVerGuiasRemision").append(plantilla);
+                    }
+                    $("#modalVerGuiasRemision").modal('show');
+                }
+            })
+     
+    })
+
+    $("#btnVerNotasIngreso").click(function () {
+
+        $.ajax({
+            url: "/Factura/getNotasIngreso",
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (resultado) {
+                /*mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                activarBotonesNotasDebito();*/
+            },
+            success: function (notaIngresoList) {
+
+                $("#formVerNotasIngreso").html("");
+                for (var j = 0; j < notaIngresoList.length; j++) {
+                    $("#tableDetalleNotaIngreso > tbody").empty();
+                    var plantilla = $("#plantillaVerNotasIngreso").html();
+                    var dNota = '';
+                    var documentoDetalleList = notaIngresoList[j].documentoDetalle;
+                    for (var k = 0; k < documentoDetalleList.length; k++) {
+
+                        dNota += '<tr>' +
+                            '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
+                            '<td>' + documentoDetalleList[k].cantidad + '</td>' +
+                            '<td>' + documentoDetalleList[k].unidad + '</td>' +
+                            '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
+                            '</tr>';
+                    }
+
+                    $("#tableDetalleNotaIngreso").append(dNota);
+
+                    plantilla = $("#plantillaVerNotasIngreso").html();
+
+                    plantilla = plantilla.replace("#serieNumero", notaIngresoList[j].serieNumeroNotaIngreso);
+                    plantilla = plantilla.replace("#fechaEmisionNotaIngreso", invertirFormatoFecha(notaIngresoList[j].fechaEmision.substr(0, 10)));
+
+                    plantilla = plantilla.replace("tableDetalleNotaIngreso", "tableDetalleNotaIngreso" + j);
+
+                    $("#formVerNotasIngreso").append(plantilla);
+                }
+                $("#modalVerNotasIngreso").modal('show');
+            }
+        })
+
+    })
 
     function activarBotonesFactura() {
         $("#btnFinalizarCreacionFactura").removeAttr("disabled");

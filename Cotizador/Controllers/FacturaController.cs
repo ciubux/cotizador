@@ -162,6 +162,22 @@ namespace Cotizador.Controllers
             return notasDebitoAplicadas;
         }
 
+        public String getGuiasRemision()
+        {
+            DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            String guiasRemision = JsonConvert.SerializeObject(documentoVentaBL.getGuiasRemision(documentoVenta));
+            return guiasRemision;
+        }
+
+        public String getNotasIngreso()
+        {
+            DocumentoVenta documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            String notasIngreso = JsonConvert.SerializeObject(documentoVentaBL.getNotasIngreso(documentoVenta));
+            return notasIngreso;
+        }
+
 
         public String iniciarRefacturacion()
         {

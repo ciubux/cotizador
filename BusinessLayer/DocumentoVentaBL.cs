@@ -120,6 +120,22 @@ namespace BusinessLayer
             }
         }
 
+        public List<GuiaRemision> getGuiasRemision(DocumentoVenta documentoVenta)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.SelectGuiasRemision(documentoVenta);
+            }
+        }
+
+        public List<NotaIngreso> getNotasIngreso(DocumentoVenta documentoVenta)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.SelectNotasIngreso(documentoVenta);
+            }
+        }
+
         public void ActualizarEstadoDocumentosElectronicos(Usuario usuario)
         {
             using (var dal = new DocumentoVentaDAL())

@@ -42,6 +42,105 @@ namespace DataLayer
             return documentoVentaList;
         }
 
+        public List<NotaIngreso> SelectNotasIngreso(DocumentoVenta factura)
+        {
+            var objCommand = GetSqlCommand("ps_movimientosAlmacenPorDocumentoVenta");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", factura.idDocumentoVenta);
+            DataTable dataTable = Execute(objCommand); 
+            List<NotaIngreso> notaIngresoList = new List<NotaIngreso>();
+
+            NotaIngreso movimientoAlmacen = new NotaIngreso();
+            movimientoAlmacen.idMovimientoAlmacen = Guid.Empty;
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Guid idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                if (movimientoAlmacen.idMovimientoAlmacen != idMovimientoAlmacen)
+                {
+                    //Si no coincide con el anterior se crea un nuevo movimiento Almacen
+                    movimientoAlmacen = new NotaIngreso();
+                    movimientoAlmacen.idMovimientoAlmacen = idMovimientoAlmacen;
+                    movimientoAlmacen.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                    movimientoAlmacen.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
+                    movimientoAlmacen.numeroDocumento = Converter.GetInt(row, "numero_documento");
+                    movimientoAlmacen.serieDocumento = Converter.GetString(row, "serie_documento");
+                    movimientoAlmacen.documentoDetalle = new List<DocumentoDetalle>();
+
+                    movimientoAlmacen.documentoVenta = new DocumentoVenta();
+                    movimientoAlmacen.documentoVenta.idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta");
+                    movimientoAlmacen.documentoVenta.serie = Converter.GetString(row, "SERIE");
+                    movimientoAlmacen.documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
+
+                    movimientoAlmacen.documentoVenta.fechaEmision = Converter.GetDateTimeNullable(row, "fecha_emision_factura");
+                    notaIngresoList.Add(movimientoAlmacen);
+                }
+
+                DocumentoDetalle documentoDetalle = new DocumentoDetalle();
+                documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.producto = new Producto();
+                documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                documentoDetalle.producto.sku = Converter.GetString(row, "sku");
+                documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                documentoDetalle.unidad = Converter.GetString(row, "unidad");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+
+                movimientoAlmacen.documentoDetalle.Add(documentoDetalle);
+            }
+
+            return notaIngresoList;
+        }
+
+        public List<GuiaRemision> SelectGuiasRemision(DocumentoVenta factura)
+        {
+            var objCommand = GetSqlCommand("ps_movimientosAlmacenPorDocumentoVenta");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", factura.idDocumentoVenta);
+            DataTable dataTable = Execute(objCommand);
+            List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
+
+            GuiaRemision movimientoAlmacen = new GuiaRemision();
+            movimientoAlmacen.idMovimientoAlmacen = Guid.Empty;
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Guid idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                if (movimientoAlmacen.idMovimientoAlmacen != idMovimientoAlmacen)
+                {
+                    //Si no coincide con el anterior se crea un nuevo movimiento Almacen
+                    movimientoAlmacen = new GuiaRemision();
+                    movimientoAlmacen.idMovimientoAlmacen = idMovimientoAlmacen;
+                    movimientoAlmacen.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                    movimientoAlmacen.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
+                    movimientoAlmacen.numeroDocumento = Converter.GetInt(row, "numero_documento");
+                    movimientoAlmacen.serieDocumento = Converter.GetString(row, "serie_documento");
+                    movimientoAlmacen.documentoDetalle = new List<DocumentoDetalle>();
+
+                    movimientoAlmacen.documentoVenta = new DocumentoVenta();
+                    movimientoAlmacen.documentoVenta.idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta");
+                    movimientoAlmacen.documentoVenta.serie = Converter.GetString(row, "SERIE");
+                    movimientoAlmacen.documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
+
+                    movimientoAlmacen.documentoVenta.fechaEmision = Converter.GetDateTimeNullable(row, "fecha_emision_factura");
+                    guiaRemisionList.Add(movimientoAlmacen);
+                }
+
+                DocumentoDetalle documentoDetalle = new DocumentoDetalle();
+                documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.producto = new Producto();
+                documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                documentoDetalle.producto.sku = Converter.GetString(row, "sku");
+                documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                documentoDetalle.unidad = Converter.GetString(row, "unidad");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+
+                movimientoAlmacen.documentoDetalle.Add(documentoDetalle);
+            }
+
+            return guiaRemisionList;
+        }
 
         public List<DocumentoVenta> SelectNotasCreditoAplicadas(DocumentoVenta factura)
         {

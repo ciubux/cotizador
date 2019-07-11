@@ -124,23 +124,33 @@ namespace Model
 
         public static String VAR_SESSION_NOTA_INGRESO = "notaIngreso";
         public static String VAR_SESSION_NOTA_INGRESO_BUSQUEDA = "notaIngresoBusqueda";
+        public static String VAR_SESSION_NOTA_INGRESO_BUSQUEDA_FACTURA_CONSOLIDADA = "notaIngresoBusquedaFacturaConsolidada";
+        public static String VAR_SESSION_NOTA_INGRESO_CONSOLIDADA = "notaIngresoBusquedaFacturaConsolidada";
+
+        public static String VAR_SESSION_RESUMEN_COMPRA_CONSOLIDADO = "documentoCompraResumenConsolidado";
         public static String VAR_SESSION_NOTA_INGRESO_LISTA = "notaIngresoLista";
+        public static String VAR_SESSION_NOTA_INGRESO_LISTA_FACTURA_CONSOLIDADA = "notaIngresoListFacturaConsolidada";
         public static String VAR_SESSION_NOTA_INGRESO_VER = "notaIngresoVer";
+        public static String VAR_SESSION_NOTA_INGRESO_BUSQUEDA_LISTA_IDS = "notaIngresoBusquedaFacturaConsolidadaIDs";
+
 
         public static String VAR_SESSION_VENTA = "venta";
         public static String VAR_SESSION_VENTA_BUSQUEDA = "ventaBusqueda";
         public static String VAR_SESSION_VENTA_LISTA = "ventaList";
         public static String VAR_SESSION_VENTA_VER = "ventaVer";
 
-        public static String VAR_SESSION_COMPRA = "compra";
-        public static String VAR_SESSION_COMPRA_BUSQUEDA = "compraBusqueda";
-        public static String VAR_SESSION_COMPRA_LISTA = "compraList";
-        public static String VAR_SESSION_COMPRA_VER = "compraVer";
-
         public static String VAR_SESSION_FACTURA = "factura";
         public static String VAR_SESSION_FACTURA_BUSQUEDA = "facturaBusqueda";
         public static String VAR_SESSION_FACTURA_LISTA = "facturaList";
         public static String VAR_SESSION_FACTURA_VER = "facturaVer";
+
+        public static String VAR_SESSION_COMPRA = "compra";
+        public static String VAR_SESSION_COMPRA_BUSQUEDA = "compraBusqueda";
+        public static String VAR_SESSION_COMPRA_LISTA = "compraList";
+        public static String VAR_SESSION_COMPRA_VER = "compraVer";
+        
+
+
 
         public static String VAR_SESSION_BOLETA = "boleta";
         public static String VAR_SESSION_BOLETA_BUSQUEDA = "boletaBusqueda";
@@ -474,7 +484,11 @@ namespace Model
             BusquedaVendedores = 43,
             [Display(Name = "MANTENIMIENTO VENDEDORES")]
             MantenimientoVendedores = 44,
-            
+
+            /*CONSOLIDAR NOTAS INGRESO*/
+            [Display(Name = "BUSQUEDA NOTAS INGRESO CONSOLIDAR FACTURA")]
+            BusquedaNotasIngresoConsolidarFactura = 45,
+
             /*ROLES*/
             [Display(Name = "BUSQUEDA ROLES")]
             BusquedaRoles = 101,
