@@ -63,7 +63,7 @@ namespace Cotizador.Controllers
         public ActionResult Login()//string returnUrl)
         {
             //ViewBag.ReturnUrl = returnUrl;
-            ViewBag.ReturnUrl = "Home/Index";
+            ViewBag.ReturnUrl = "Account/Login";
             return View();
         }
 
@@ -102,28 +102,321 @@ namespace Cotizador.Controllers
                     List<Proveedor> proveedorList = proveedorBL.getProveedores();
                     this.Session["proveedorList"] = proveedorList;
 
-                    try {
-                        Cotizacion cotizacion = JsonConvert.DeserializeObject<Cotizacion>(usuario.cotizacionSerializada);
-                        usuario.cotizacionSerializada = null;
-                        this.Session["usuario"] = usuario;
-               /*        foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
+                    CiudadBL ciudadBL = new CiudadBL();
+                    List<Ciudad> ciudadList = ciudadBL.getCiudades();
+                    usuario.sedesMP = ciudadList;
+
+                    #region SedesCotizacion
+                    /*Sedes para guias de remision*/
+                    usuario.sedesMPCotizaciones = new List<Ciudad>();
+                    /*Usuarios a su cargo*/
+                    List<Usuario> usuarioCreaCotizacionList = new List<Usuario>();
+
+                    if (usuario.apruebaCotizacionesLima)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
                         {
-                            FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
-                            MemoryStream storeStream = new MemoryStream();
-                            storeStream.SetLength(inStream.Length);
-                            inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
-                            storeStream.Flush();
-                            inStream.Close();
-                            cotizacionDetalle.producto.image = storeStream.GetBuffer();
+                            if (!ciudad.esProvincia)
+                            {
+                                usuario.sedesMPCotizaciones.Add(ciudad);
+                            }
+                        }
+                     /*   foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
+                        {
+                            if (!usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaCotizacionList.Add(usuarioTmp);
+                            }
                         }*/
+                    }
 
-                        this.Session["cotizacion"] = cotizacion;
+                    if (usuario.apruebaCotizacionesProvincias || usuario.creaCotizacionesProvincias)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.esProvincia)
+                            {
+                                usuario.sedesMPCotizaciones.Add(ciudad);
+                            }
+                        }
+                     /*   if (usuario.apruebaCotizacionesProvincias)
+                        {
+                            foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
+                            {
+                                if (usuarioTmp.sedeMP.esProvincia)
+                                {
+                                    usuarioCreaCotizacionList.Add(usuarioTmp);
+                                }
+                            }
+                        }*/
+                    }
 
+                    
+
+
+                    
+
+                    if (!usuario.apruebaCotizaciones)
+                    {
+                        if (usuario.sedesMPCotizaciones.Where(s => s.idCiudad == usuario.sedeMP.idCiudad).FirstOrDefault() == null)
+                        {
+                            foreach (Ciudad ciudad in ciudadList)
+                            {
+                                if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                                {
+                                    usuario.sedesMPCotizaciones.Add(ciudad);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+              /*      else
+                    {
+                        usuario.usuarioCreaCotizacionList = usuarioCreaCotizacionList;
+                    }*/
+
+                    #endregion
+
+
+                    #region SedesPedido
+
+                    usuario.sedesMPPedidos = new List<Ciudad>();
+                    /*Usuarios a su cargo*/
+                    List<Usuario> usuarioTomaPedidoList = new List<Usuario>();
+
+                    if (usuario.apruebaPedidosLima || usuario.visualizaPedidosLima)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (!ciudad.esProvincia)
+                            {
+                                usuario.sedesMPPedidos.Add(ciudad);
+    
+                            }
+                        }
+                   //     if (usuario.apruebaPedidosLima)
+                        {
+                            foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
+                            {
+                                if (!usuarioTmp.sedeMP.esProvincia)
+                                {
+                                    usuarioTomaPedidoList.Add(usuarioTmp);
+                                }
+                            }
+                        }
+
+                    }
+
+                    if (usuario.apruebaPedidosProvincias || usuario.tomaPedidosProvincias || usuario.visualizaPedidosProvincias)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.esProvincia)
+                            {
+                                usuario.sedesMPPedidos.Add(ciudad);
+                            }
+                        }
+                        if (usuario.apruebaPedidosProvincias)
+                        {
+                            foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
+                            {
+                                if (usuarioTmp.sedeMP.esProvincia)
+                                {
+                                    usuarioTomaPedidoList.Add(usuarioTmp);
+                                }
+                            }
+                        }
+                    }
+
+
+
+                    if (!usuario.apruebaPedidos)
+                    {
+                        if (usuario.sedesMPPedidos.Where(s => s.idCiudad == usuario.sedeMP.idCiudad).FirstOrDefault() == null)
+                        {
+                            foreach (Ciudad ciudad in ciudadList)
+                            {
+                                if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                                {
+                                    usuario.sedesMPPedidos.Add(ciudad);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+            //        else
+                    {
+                        usuario.usuarioTomaPedidoList = usuarioTomaPedidoList;
+                    }
+
+
+
+                    #endregion
+
+
+              
+                    #region SedesGuias
+
+                    usuario.sedesMPGuiasRemision = new List<Ciudad>();
+                    /*Usuarios a su cargo*/
+                    List<Usuario> usuarioCreaGuiaList = new List<Usuario>();
+
+                    if (usuario.administraGuiasLima)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (!ciudad.esProvincia)
+                            {
+                                usuario.sedesMPGuiasRemision.Add(ciudad);
+                            }
+                        }
+                        foreach (Usuario usuarioTmp in usuario.usuarioCreaGuiaList)
+                        {
+                            if (!usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaGuiaList.Add(usuarioTmp);
+                            }
+                        }
+
+                    }
+
+                    if (usuario.administraGuiasProvincias)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.esProvincia)
+                            {
+                                usuario.sedesMPGuiasRemision.Add(ciudad);
+                            }
+                        }
+                        foreach (Usuario usuarioTmp in usuario.usuarioCreaGuiaList)
+                        {
+                            if (usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaGuiaList.Add(usuarioTmp);
+                            }
+                        }
+                    }
+
+                    if (!usuario.administraGuias)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                            {
+                                usuario.sedesMPGuiasRemision.Add(ciudad);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        usuario.usuarioCreaGuiaList = usuarioCreaGuiaList;
+                    }
+
+                    #endregion
+
+
+                    #region SedesDocumentosVenta
+
+                    usuario.sedesMPDocumentosVenta = new List<Ciudad>();
+                    /*Usuarios a su cargo*/
+                    List<Usuario> usuarioCreaDocumentoVentaList = new List<Usuario>();
+
+                    if (usuario.administraDocumentosVentaLima)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (!ciudad.esProvincia)
+                            {
+                                usuario.sedesMPDocumentosVenta.Add(ciudad);
+                            }
+                        }
+                        foreach (Usuario usuarioTmp in usuario.usuarioCreaDocumentoVentaList)
+                        {
+                            if (!usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaDocumentoVentaList.Add(usuarioTmp);
+                            }
+                        }
+
+                    }
+
+                    if (usuario.administraDocumentosVentaProvincias)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.esProvincia)
+                            {
+                                usuario.sedesMPDocumentosVenta.Add(ciudad);
+                            }
+                        }
+                        foreach (Usuario usuarioTmp in usuario.usuarioCreaDocumentoVentaList)
+                        {
+                            if (usuarioTmp.sedeMP.esProvincia)
+                            {
+                                usuarioCreaDocumentoVentaList.Add(usuarioTmp);
+                            }
+                        }
+                    }
+
+                    if (!usuario.administraDocumentosVenta)
+                    {
+                        foreach (Ciudad ciudad in ciudadList)
+                        {
+                            if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                            {
+                                usuario.sedesMPDocumentosVenta.Add(ciudad);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        usuario.usuarioCreaDocumentoVentaList = usuarioCreaDocumentoVentaList;
+                    }
+
+                    #endregion
+
+                    try
+                    {
+                        if (usuario.cotizacionSerializada != null)
+                        {
+                            Cotizacion cotizacion = JsonConvert.DeserializeObject<Cotizacion>(usuario.cotizacionSerializada);
+                            //usuario.cotizacionSerializada = null;
+                            this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
+                            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCotizacion;
+                            this.Session[Constantes.VAR_SESSION_COTIZACION] = cotizacion;
+                        }
                     }
                     catch (Exception e)
                     {
-                        this.Session["cotizacion"] = null;
+                        this.Session[Constantes.VAR_SESSION_COTIZACION] = null;
                     }
+
+                    try
+                    {   if (usuario.pedidoSerializado != null)
+                        {
+                            Pedido pedido = JsonConvert.DeserializeObject<Pedido>(usuario.pedidoSerializado);
+                           
+                            //usuario.pedidoSerializado = null;
+                            this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
+                            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoPedido;
+                            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
+                    }
+
+                    if (this.Session["Prev_Request_Url"] != null)
+                    {
+                        string prevUrl = this.Session["Prev_Request_Url"].ToString();
+                        this.Session["Prev_Request_Url"] = null;
+                        return Redirect(prevUrl);
+                    }
+
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -201,14 +494,13 @@ namespace Cotizador.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // Para obtener más información sobre cómo habilitar la confirmación de cuenta y el restablecimiento de contraseña, visite http://go.microsoft.com/fwlink/?LinkID=320771
                     // Enviar correo electrónico con este vínculo
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirmar cuenta", "Para confirmar la cuenta, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
-
-                    return RedirectToAction("Index", "Home");
+                   
                 }
                 AddErrors(result);
             }
@@ -438,7 +730,7 @@ namespace Cotizador.Controllers
         {
             this.Session["Usuario"] = null;
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "General");
         }
 
         //
@@ -491,11 +783,49 @@ namespace Cotizador.Controllers
 
         private ActionResult RedirectToLocal(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
+            /*  if (Url.IsLocalUrl(returnUrl))
+              {
+                  return Redirect(returnUrl);
+              }*/
+
+        /*    if (this.Session[Constantes.VAR_SESSION_PAGINA] != null)
             {
-                return Redirect(returnUrl);
+                int pagina = (int)this.Session[Constantes.VAR_SESSION_PAGINA];
+                if (pagina == (int)Constantes.paginas.MantenimientoCotizacion)
+                {
+                    return RedirectToAction("Cotizar", "Cotizacion");
+                }
+                else if (pagina == (int)Constantes.paginas.MantenimientoPedido)
+                {
+                    return RedirectToAction("Pedir", "Pedido");
+                }
+            }*/
+
+
+            Usuario usuario = (Model.Usuario)this.Session["usuario"];
+            if (usuario != null)
+            {
+
+                /*    if (usuario.tomaPedidos)
+                    return RedirectToAction("Pedir", "Pedido");*/
+                if (usuario.apruebaPedidos || usuario.tomaPedidos || usuario.visualizaPedidos)
+                    return RedirectToAction("Index", "Pedido");
+                /*   if(usuario.creaCotizaciones)
+                       return RedirectToAction("Cotizar", "Cotizacion");*/
+                if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
+                    return RedirectToAction("Index", "Cotizacion");            
+
+                if (usuario.creaGuias || usuario.visualizaGuias)
+                    return RedirectToAction("Index", "GuiaRemision");
+
+                if (usuario.creaDocumentosVenta || usuario.visualizaDocumentosVenta)
+                    return RedirectToAction("Index", "Factura");
+
+                if (usuario.modificaMaestroClientes)
+                    return RedirectToAction("Edita", "Cliente");
             }
-            return RedirectToAction("Index", "Home");
+
+            return RedirectToAction("Index", "Cotizacion");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

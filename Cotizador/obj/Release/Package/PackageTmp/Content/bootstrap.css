@@ -55,6 +55,7 @@ html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
+
 }
 
 body {
@@ -1242,9 +1243,10 @@ pre code {
 }
 
 @media (min-width: 1200px) {
-  .container {
-    max-width: 1170px;
-  }
+    .container {
+        /* max-width: 1170px;*/
+        max-width: 1270px;
+    }
   .col-lg-1,
   .col-lg-2,
   .col-lg-3,
@@ -4533,7 +4535,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus {
   color: #ffffff;
-  background-color: #080808;
+  /*Cesarbackground-color: #080808;*/
+  background-color: #428bca;
 }
 
 .navbar-inverse .navbar-nav > .disabled > a,
@@ -4565,7 +4568,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .navbar-inverse .navbar-nav > .open > a:hover,
 .navbar-inverse .navbar-nav > .open > a:focus {
   color: #080808;
-  background-color: #080808;
+ /*cesarbackground-color: #080808;*/
+  background-color: #c8C8C8;
 }
 
 .navbar-inverse .navbar-nav > .dropdown > a:hover .caret {

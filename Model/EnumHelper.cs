@@ -58,7 +58,8 @@ public static class EnumHelper<T>
         if (descriptionAttributes[0].ResourceType != null)
             return lookupResource(descriptionAttributes[0].ResourceType, descriptionAttributes[0].Name);
 
-        if (descriptionAttributes == null) return string.Empty;
+        if (descriptionAttributes == null)
+                return string.Empty;
         return (descriptionAttributes.Length > 0) ? descriptionAttributes[0].Name : value.ToString();
     }
 }

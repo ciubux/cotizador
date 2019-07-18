@@ -165,7 +165,7 @@ namespace cotizadorPDF
                     String presentacion = det.unidad; //Se muestra la unidad seleccionada y que se encuentra en el detalle
                     String imagen = "";
                     String precioUnitarioAnterior = "";
-                    String precioUnitarioNuevo = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDosDecimales, det.precioUnitario);
+                    String precioUnitarioNuevo = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDecimalesPrecioNeto, det.precioUnitario);
 
 
                     String cantidad = "";
@@ -295,8 +295,6 @@ namespace cotizadorPDF
 
                 PdfSolidBrush brushColorBlue = new PdfSolidBrush(Color.Blue);
 
-
-
                 int countPages = doc.Pages.Count;
 
 
@@ -310,121 +308,36 @@ namespace cotizadorPDF
                 int xPage2a = 0;
                 String reiniciarY = "";
 
-                //Si son dos paginas entonces se obtiene la página y se obtiene cuantos registros
-                //mayores a 10 son
-                if (countPages == 2)
+                xPage2 = margenLeft;
+
+                if (y < 600)
                 {
-                    y = margenTop;
-
-                    if (cot.cotizacionDetalleList.Count > 10)
-                    {
-                        y = y + (60 * (cot.cotizacionDetalleList.Count - 10));
-                    }
-
-                    sectionTotales = doc.Pages[1];
-                    sectionObervaciones = doc.Pages[1];
-                    sectionFirma = doc.Pages[1];
-                    xPage2 = margenLeft;
+                    sectionTotales = doc.Pages[countPages-1];
+                    sectionObervaciones = doc.Pages[countPages-1];
+                    sectionFirma = doc.Pages[countPages-1];
+                    y = y + 35;
                 }
                 else
                 {
-                    if (countPages < 2)
-                    {
-                        if (cot.cotizacionDetalleList.Count > 5)
-                        {
+                    SizeF size = page.Size;
+                    PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
 
-                            SizeF size = page.Size;
-                            PdfPageBase page2 = doc.Pages.Add(size, new PdfMargins(0));
-
-                            switch (cot.cotizacionDetalleList.Count)
-                            {
-                                case 6:
-                                    reiniciarY = "FIRMA";
-                                    sectionTotales = page;
-                                    sectionObervaciones = page;
-                                    sectionFirma = page2; break;
-                                case 7:
-                                    reiniciarY = "OBSERVACIONES";
-                                    sectionTotales = page;
-                                    sectionObervaciones = page2;
-                                    sectionFirma = page2; break;
-                                case 8:
-                                    reiniciarY = "OBSERVACIONES";
-                                    sectionTotales = page;
-                                    sectionObervaciones = page2;
-                                    sectionFirma = page2; break;
-                                case 9:
-                                    reiniciarY = "OBSERVACIONES";
-                                    sectionTotales = page;
-                                    sectionObervaciones = page2;
-                                    sectionFirma = page2; break;
-                                case 10:
-                                    reiniciarY = "TOTALES";
-                                    sectionTotales = page2;
-                                    sectionObervaciones = page2;
-                                    sectionFirma = page2; break;
-
-                            }
-                        }
-                    }
+                    sectionTotales = doc.Pages[countPages];
+                    sectionObervaciones = doc.Pages[countPages];
+                    sectionFirma = doc.Pages[countPages];
+                    //Si es una nueva pagina se inicia en el margen top
+                    //Y se agrega 150 porque en la siguiente instrucción se restán 150 para que no haya mucho margen entre
+                    //el fin de la tabla y la observación.
+                    y =  margenTop +150;
                 }
-
-
-                if (countPages == 3)
+                countPages = doc.Pages.Count;
+                if (countPages > 1)
                 {
-                    y = margenTop;
 
-                    if (cot.cotizacionDetalleList.Count > 24)
-                    {
-                        y = y + (60 * (cot.cotizacionDetalleList.Count - 24));
-                    }
-
-                    sectionTotales = doc.Pages[2];
-                    sectionObervaciones = doc.Pages[2];
-                    sectionFirma = doc.Pages[2];
-                    xPage2 = margenLeft;
-                }
-                else
-                {
-                    if (cot.cotizacionDetalleList.Count > 21)
-                    {
-
-                        SizeF size = page.Size;
-                        PdfPageBase page2 = doc.Pages.Add(size, new PdfMargins(0));
-
-                        switch (cot.cotizacionDetalleList.Count)
-                        {
-                            case 20:
-                                reiniciarY = "FIRMA";
-                                sectionTotales = page;
-                                sectionObervaciones = page;
-                                sectionFirma = page2; break;
-                            case 21:
-                                reiniciarY = "OBSERVACIONES";
-                                sectionTotales = page;
-                                sectionObervaciones = page2;
-                                sectionFirma = page2; break;
-                            case 22:
-                                reiniciarY = "OBSERVACIONES";
-                                sectionTotales = page;
-                                sectionObervaciones = page2;
-                                sectionFirma = page2; break;
-                            case 23:
-                                reiniciarY = "OBSERVACIONES";
-                                sectionTotales = page;
-                                sectionObervaciones = page2;
-                                sectionFirma = page2; break;
-                            case 24:
-                                reiniciarY = "TOTALES";
-                                sectionTotales = page2;
-                                sectionObervaciones = page2;
-                                sectionFirma = page2; break;
-
-                        }
-                    }
+                    y = y - 150;
                 }
 
-
+                
                 //Si es distinto de solo observaciones
                 if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                 {
@@ -515,7 +428,12 @@ namespace cotizadorPDF
                 string[] stringSeparators = new string[] { "\n" };
                 string[] lines = observaciones.Split(stringSeparators, StringSplitOptions.None);
 
-                if (cot.incluidoIgv)
+
+                sectionObervaciones.Canvas.DrawString("* Condiciones de Pago: " + cot.textoCondicionesPago, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                y = y + sepLine;
+
+
+                if (cot.incluidoIGV)
                 {
                     sectionObervaciones.Canvas.DrawString("* Los precios incluyen IGV.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 }
@@ -624,12 +542,19 @@ namespace cotizadorPDF
                 link2.Font = new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline);
                 link2.Brush = PdfBrushes.DarkSeaGreen;
                 link2.DrawTextWebLink(sectionFirma.Canvas, new PointF(xPage2, y));
+
+
+  
+
+
                 String pathrootsave = AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\";
 
                 String fechaCotizacion = cot.fecha.Day.ToString().PadLeft(2, '0') + "-" + cot.fecha.Month.ToString().PadLeft(2, '0')  + "-" + cot.fecha.Year;// + "-" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
                 String nombreArchivo = cot.cliente.razonSocial + " " + fechaCotizacion + " N° " + cot.codigo.ToString().PadLeft(10,'0') + ".pdf";
 
                 nombreArchivo = nombreArchivo.Replace('&', 'Y');
+                nombreArchivo = nombreArchivo.Replace(':', '.');
+
 
                 doc.SaveToFile(pathrootsave+nombreArchivo);
                 PDFDocumentViewer(pathrootsave+nombreArchivo);
@@ -638,7 +563,7 @@ namespace cotizadorPDF
             }
             catch (Exception ex)
             {
-                Log log = new Log(ex.ToString(), TipoLog.Error,cot.usuario);
+                Log log = new Log(ex.ToString(), TipoLog.Error, cot.usuario);
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
                 return ex.ToString();
@@ -685,8 +610,24 @@ namespace cotizadorPDF
                 using (MemoryStream stream = new MemoryStream(imageData))
                 {    
                     image = PdfImage.FromStream(stream);
-                    float width = 45f;
-                    float height = 45f;
+                    float width = 0;
+                    float height = 0;
+                    if (image.PhysicalDimension.Width >= image.PhysicalDimension.Height)
+                    {
+                        float relacion = 45f / image.PhysicalDimension.Width;
+                        width = 45f;
+                        height = image.PhysicalDimension.Height * relacion;
+                    }
+                    else 
+                    {
+                        float relacion = 45f / image.PhysicalDimension.Height;
+                        height  = 45f;
+                        width = image.PhysicalDimension.Width * relacion;
+                    }
+
+
+
+
                     args.Graphics.DrawImage(image, x, y, width, height);
                 }
             }

@@ -1,144 +1,114 @@
 ﻿@{
-    ViewBag.Title = "Pedir";
+    ViewBag.Title = "Crear/Modificar Pedido Venta";
     Model.Pedido pedido = ViewBag.pedido;
+    Model.DireccionEntrega direccionEntrega = ViewBag.direccionEntrega;
+    Model.Solicitante solicitante = ViewBag.solicitante;
     // Model.pedido.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
     // @model Enum;
 }
 
-
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
 <div class="container">
-
+    <input type="hidden" id="idPedido" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" value="@ViewBag.debug" />
-    <form class="form-horizontal">
+    @Html.HiddenFor(p => @pedido.cliente.habilitadoModificarDireccionEntrega, htmlAttributes: new { })
+
+
+    <form class="form-horizontal" enctype="multipart/form-data" id="formularioConArchivos" method="post">
+        <input type="hidden" id="considerarCantidades" name="considerarCantidades" value="2" />
+
         <div class="row">
-            <!--NÚMERO COTIZACION-->
-            <div class="col-sm-6 col-lg-5">
+            <!--NÚMERO PEDIDO-->
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="numero" class="control-label col-xs-4">Número:</label>
+                    @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        @if (pedido.codigo != 0)
+                        @if (pedido.numeroPedido != 0)
                         {
-                            <input class="form-control" disabled type="number" value="@pedido.codigo" min="0" id="numero" name="numero">
+                            @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
                         }
                         else
                         {
-                            <input class="form-control" disabled type="number" value="" min="0" id="numero" name="numero">
+                            @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
                         }
                     </div>
                 </div>
             </div>
+            <!--NÚMERO GRUPO PEDIDO
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @if (pedido.numeroGrupoPedido != 0)
+                        {
+                            @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+                        }
+                    </div>
+                </div>
+            </div>-->
+            <!--NÚMERO COTIZACION-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @if (pedido.cotizacion.codigo != 0)
+                        {
+                            @Html.TextBoxFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.tipoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.DropDownList("pedido_tipoPedido",
+                                                    EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedido), pedido.tipoPedido),
+                                                    new { @class = "form-control" }
+                                                    )
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
             <!--CIUDAD-->
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="idCiudad" class="control-label col-xs-4">Ciudad:</label>
+                    @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
-                        @Html.Action("list", "Ciudad")
+                        @Html.Action("GetCiudades", "Ciudad",
+                                                                new
+                                                                {
+                                                                    ciudadSelectId = "idCiudad",
+                                                                    selectedValue = pedido.ciudad.idCiudad
+                                                                })
                     </div>
                 </div>
             </div>
-
-        </div>
-
-        <div class="row">
-            <!--FECHA DOCUMENTO-->
-            <div class="col-sm-6 col-lg-5">
-                <div class="form-group">
-                    <label for="fecha" class="control-label col-xs-4">Fecha Cotización:</label>
-                    <div class="col-xs-4">
-                        <input type="hidden" id="fechatmp" value="@ViewBag.fecha" />
-                        <input class="form-control" type="text" id="fecha" name="fecha">
-
-                    </div>
-                    <div class="col-xs-4 form-check">
-                         @if(pedido.fechaEsModificada)
-                         {
-                            <input type="checkbox" checked class="form-check-input" id="chkFechaEsModificada">
-                         }
-                         else
-                         {
-                            <input type="checkbox" class="form-check-input" id="chkFechaEsModificada">
-                         }
-                        <label class="form-check-label" for="chkFechaEsModificada">Ingresar Fecha</label>
-                         
-                    </div>
-                </div>
-
-                </div>
-
-            <div class="col-sm-6 col-lg-5">
-                <div class="form-group">
-                    <label for="fechaLimiteValidezOferta" class="control-label col-xs-4">Validez Oferta Hasta:</label>
-
-
-
-                    <div class="col-xs-3">
-                        <select class="form-control " id="mostrarValidezOfertaEnDias" name="mostrarValidezOfertaEnDias">
-                            <option value="0">Días</option>
-                            @if (pedido.mostrarValidezOfertaEnDias == 1)
-                            {
-                                <option selected value="1">Fecha</option>
-                            }
-                            else
-                            {
-                                <option value="1">Fecha</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-xs-4">
-                        <input type="hidden" id="fechaLimiteValidezOfertaTmp" value="@pedido.fechaLimiteValidezOferta" />
-                        <div id="fechaVigenciadiv">
-                            <input class="form-control" type="text" id="fechaLimiteValidezOferta" name="fechaLimiteValidezOferta">
-                        </div>
-                        <div id="diasVigenciadiv">
-                            <input class="form-control" type="number" min="1" step="1" id="validezOfertaEnDias" value="@pedido.validezOfertaEnDias" name="fechaLimiteValidezOferta">
-                        </div>
-
-                    </div>
-
-
-
-                </div>
-            </div>
-
-
-        </div>
-
-        <div class="row">
-            <!--FECHA VIGENCIA INICIO -->
-            <div class="col-sm-6 col-lg-5">
-                <div class="form-group">
-                    <label for="fechaInicioVigenciaPrecios" class="control-label col-xs-4">Inicio Vigencia Precios:</label>
-                    <div class="col-xs-8">
-                        <input type="hidden" id="fechaInicioVigenciaPreciosTmp" value="@ViewBag.fechaInicioVigenciaPrecios" />
-                        <input class="form-control" type="text" id="fechaInicioVigenciaPrecios" name="fechaInicioVigenciaPrecios">
-                    </div>
-                </div>
-            </div>
-
-            <!--FECHA VIGENCIA FIN -->
-            <div class="col-sm-6 col-lg-5">
-                <div class="form-group">
-                    <label for="fechaFinVigenciaPrecios" class="control-label col-xs-4">Fin Vigencia Precios:</label>
-                    <div class="col-xs-8">
-                        <input type="hidden" id="fechaFinVigenciaPreciosTmp" value="@ViewBag.fechaFinVigenciaPrecios" />
-                        <input class="form-control" type="text" id="fechaFinVigenciaPrecios" name="fechaFinVigenciaPrecios">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-
             <!--CLIENTE-->
-            <div class="col-sm-6 col-lg-5">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="cliente" class="control-label col-xs-4">Cliente / Grupo:</label>
+                    <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
 
                     <div class="col-xs-6">
                         <select class="form-control input-sm" id="idCliente" name="idCliente" required>
                             @if (ViewBag.existeCliente == 1)
                             {
-                                <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
+                                <option selected value="@pedido.cliente.idCliente ">@pedido.cliente</option>
                             }
                             else
                             {
@@ -148,131 +118,40 @@
                     </div>
 
                     <div class="col-xs-2">
-                        <button id="btnAgregarCliente" type="button" class="btn btn-primary bouton-image-add addBouton" data-toggle="modal" data-target="#modalAgregarCliente"></button>
+                        <button id="btnAgregarCliente" type="button" class="btn btn-primary bouton-image-add addBouton"></button>
                     </div>
 
                 </div>
             </div>
 
-            <div class="col-sm-6 col-lg-5">
+            <!--NUMERO REFERENCIA -->
+            <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
                 <div class="form-group">
-                    <label for="contacto" class="control-label col-xs-4">Dirigido a:</label>
-
+                    @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input class="form-control" type="text" value="@pedido.contacto" id="contacto" name="contacto">
+                        @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.numeroRequerimiento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => pedido.numeroRequerimiento, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
             </div>
 
-
-
-        </div>
-
-        <div class="row">
-
-
-
-            <div class="col-sm-6 col-lg-5">
-                <!--IGV-->
+            <!--CIUDAD-->
+            <div class="col-sm-6 col-lg-4" id="divCiudadASolicitar">
                 <div class="form-group">
-                    <label for="igv" class="control-label col-xs-4">¿Precios unitarios incluyen IGV?:</label>
+                    @Html.LabelFor(p => pedido.ciudadASolicitar, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudadASolicitar" })
                     <div class="col-xs-8">
-                        <div class="radio radio-inline">
-                            <label class="radio-label">
-                                @if (pedido.incluidoIgv)
-                                {
-                                    <input class="radio-input" checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
-                                }
-
-                            </label>
-                        </div>
-                        <div class="radio radio-inline">
-                            <label class="radio-label">
-                                @if (!pedido.incluidoIgv)
-                                {
-                                    <input class="radio-input" checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
-                                }
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-            <!--CANTIDADES-->
-            <div class="col-sm-6 col-lg-5">
-
-                <div class="form-group">
-                    <label for="considerarCantidades" class="control-label col-xs-4">¿Mostrar cantitades y/o observaciones?:</label>
-                    <div class="col-xs-8">
-                        @Html.DropDownList("considerarCantidades",
-                                  EnumHelper.GetSelectList(typeof(Model.Pedido.OpcionesConsiderarCantidades), pedido.considerarCantidades),
-                                  new { @class = "form-control" }
-                                  )
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row">
-
-            <!--FLETE-->
-
-            <div class="col-sm-6 col-lg-5">
-                <div class="form-group">
-                    <label for="flete" class="control-label col-xs-4">
-                        Recargo Flete %
-                        (sobre el costo):
-                    </label>
-                    <div class="col-xs-8">
-                        <input class="form-control" type="number" min="0" max="100.00" step=".1" value="@pedido.flete" id="flete" name="flete">
-                    </div>
-                </div>
-            </div>
-
-            <!--MOSTRAR CODIGO PROVEEDOR-->
-            <div class="col-sm-6 col-lg-5">
-
-                <div class="form-group">
-                    <label for="igv" class="control-label col-xs-4">¿Mostrar Cod. Proveedor?:</label>
-                    <div class="col-xs-8">
-                        <div class="radio radio-inline">
-                            <label class="radio-label">
-                                @if (pedido.mostrarCodigoProveedor)
-                                {
-                                    <input class="radio-input" checked type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorSi" value="1">@ViewBag.Si;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorSi" value="1">@ViewBag.Si;
-                                }
-
-                            </label>
-                        </div>
-                        <div class="radio radio-inline">
-                            <label class="radio-label">
-                                @if (!pedido.mostrarCodigoProveedor)
-                                {
-                                    <input class="radio-input" checked type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorNo" value="0">@ViewBag.No;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="mostrarcodproveedor" id="mostrarCodProveedorNo" value="0">@ViewBag.No;
-                                }
-                            </label>
-                        </div>
+                        @Html.Action("GetCiudadesASolicitar", "Ciudad",
+                                                                new
+                                                                {
+                                                                    ciudadSelectId = "idCiudadASolicitar",
+                                                                    selectedValue = pedido.ciudadASolicitar.idCiudad
+                                                                })
                     </div>
                 </div>
             </div>
@@ -280,125 +159,525 @@
         </div>
 
 
-        <div class="">
+
+        <fieldset>
+            <legend id="divpedido_direccionEntrega">Datos de Entrega:</legend>
+
+            <div class="row mostrarDatosParaGuia">
+                <!--ENTREGAR EN-->
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.DropDownList("pedido_direccionEntrega",
+                                                                      new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "direccionConSede", pedido.direccionEntrega.idDireccionEntrega, null),
+                                                                      "Seleccione Dirección de Entrega",
+                                                                      new { @class = "form-control" })
+                        </div>
+                        <div class="col-xs-2 col-lg-1">
+                            @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
+                            {
+                                <button id="btnAgregarDireccion" type="button" class="btn btn-primary bouton-image-add addDireccion" data-toggle="modal" data-target="#modalAgregarDireccion"></button>
+                            }
+                        </div>
+                    </div>
 
 
-        </div>
+                </div>
+
+
+
+            </div>
+            <div class="row mostrarDatosParaGuia">
+                <!--CONTACTO ENTREGA -->
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "control-label col-xs-2" })
+                        <div class="input-group col-xs-6">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Nombre:</span>
+                            </div>
+                            @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
+                            {
+                                @Html.TextBoxFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "form-control" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(p => pedido.direccionEntrega.contacto, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            }
+                        </div>
+                        <div class="input-group col-xs-4">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Teléfono:</span>
+                            </div>
+                            @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
+                            {
+                                @Html.TextBoxFor(p => pedido.direccionEntrega.telefono, htmlAttributes: new { @class = "form-control" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(p => pedido.direccionEntrega.telefono, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <div class="input-group col-xs-12">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Dirección:</span>
+                            </div>
+                            @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
+                            {
+                                @Html.TextBoxFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "form-control" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row mostrarDatosParaGuia">
+                <!--CENTRO DE COSTOS -->
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.direccionEntrega.nombre, htmlAttributes: new { @class = "control-label col-xs-2" })
+                        <div class="input-group col-xs-6">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Nombre:</span>
+                            </div>
+                            @Html.TextBoxFor(p => pedido.direccionEntrega.nombre, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                        <div class="input-group col-xs-4">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Código Cliente:</span>
+                            </div>
+                            @Html.TextBoxFor(p => pedido.direccionEntrega.codigoCliente, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+
+                        </div>
+                        <span style="margin-left: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*El nombre y código cliente aparecerá en las observaciones de la guía y factura.</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <div class="input-group col-xs-12">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Dir. Factura:</span>
+                            </div>
+                            @Html.TextBoxFor(p => pedido.direccionEntrega.direccionDomicilioLegal, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="row mostrarDatosParaGuia">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => pedido.ubigeoEntrega.Departamento, new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            <!--class="control-departamento-width" style="display:flex">-->
+                            @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
+                            {
+                                @Html.Action("GetDepartamentos", "Ubigeo",
+                                                                                       new
+                                                                                       {
+                                                                                           departamentoSelectId = "ActualDepartamento",
+                                                                                           provinciaSelectId = "ActualProvincia",
+                                                                                           distritoSelectId = "ActualDistrito",
+                                                                                           provinciaDivId = "dvProvincias",
+                                                                                           distritoDivId = "dvDistritos",
+                                                                                           selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2)
+                                                                                       })
+                            }
+                            else
+                            {
+                                 @Html.Action("GetDepartamentos", "Ubigeo",
+                                                                              new
+                                                                              {
+                                                                                  departamentoSelectId = "ActualDepartamento",
+                                                                                  provinciaSelectId = "ActualProvincia",
+                                                                                  distritoSelectId = "ActualDistrito",
+                                                                                  provinciaDivId = "dvProvincias",
+                                                                                  distritoDivId = "dvDistritos",
+                                                                                  selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                                                                  disabled = true
+                                                                              })
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => pedido.ubigeoEntrega.Provincia, new { @class = "control-label col-xs-4" })
+                        <div id="dvProvincias" class="col-xs-8">
+                            <!-- class="control-provincia-width" style="display:flex">-->
+                            @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
+                            {
+                                @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
+                                                new
+                                                {
+                                                    departamentoSelectId = "ActualDepartamento",
+                                                    provinciaSelectId = "ActualProvincia",
+                                                    distritoSelectId = "ActualDistrito",
+                                                    distritoDivId = "dvDistritos",
+                                                    codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                                    selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4)
+                                                })
+                            }
+                            else
+                            {
+                                 @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
+                                                new
+                                                {
+                                                    departamentoSelectId = "ActualDepartamento",
+                                                    provinciaSelectId = "ActualProvincia",
+                                                    distritoSelectId = "ActualDistrito",
+                                                    distritoDivId = "dvDistritos",
+                                                    codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                                    selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4),
+                                                    disabled = true
+                                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => pedido.ubigeoEntrega.Distrito, new { @class = "control-label col-xs-4" })
+                        <div id="dvDistritos" class="col-xs-8">
+                            <!-- class="control-distrito-width" style="display:flex">-->
+                            @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
+                            {
+                                @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
+                               {
+                                   distritoSelectId = "ActualDistrito",
+                                   codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                   codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
+                                   selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6)
+                               })
+                            }
+                            else
+                            {
+                                 @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
+                            {
+                                distritoSelectId = "ActualDistrito",
+                                codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
+                                selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6),
+                                disabled = true
+                            })
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <!--FECHA ENTREGA -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.rangoFechasEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
+                        <div class="input-group col-xs-6 col-lg-8">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Desde:</span>
+                            </div>
+                            <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesde" />
+                            <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde">
+                        </div>
+                        <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+                        <div class="input-group col-xs-6 col-lg-8">
+
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                            </div>
+                            <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHasta" />
+                            <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta">
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--HORA ENTREGA -->
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.rangoHoraEntrega, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-2" })
+                        <div class="input-group col-xs-4 col-lg-4">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">1er Turno:</span>
+                            </div>
+                            <input class="form-control" type="time" id="pedido_horaEntregaDesde" name="pedido_horaEntregaDesde" value="@pedido.horaEntregaDesde">
+                            <input class="form-control" type="time" id="pedido_horaEntregaHasta" name="pedido_horaEntregaHasta" value="@pedido.horaEntregaHasta">
+                        </div>
+                        <div class="input-group col-xs-4 col-lg-4">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">2do Turno:</span>
+                            </div>
+                            <input class="form-control" type="time" id="pedido_horaEntregaAdicionalDesde" name="pedido_horaEntregaAdicionalDesde" value="@pedido.horaEntregaAdicionalDesde">
+                            <input class="form-control" type="time" id="pedido_horaEntregaAdicionalHasta" name="pedido_horaEntregaAdicionalHasta" value="@pedido.horaEntregaAdicionalHasta">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Datos de la Solicitud:</legend>
+
+            <div class="row mostrarDatosParaGuia">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.solicitante, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.DropDownList("pedido_solicitante",
+
+                                                             new SelectList(pedido.cliente.solicitanteList as IEnumerable<Model.Solicitante>, "idSolicitante", "nombre", pedido.solicitante.idSolicitante, null),
+                                                             "Seleccione Solicitante",
+                                                             new { @class = "form-control" })
+                        </div>
+                        <div class="col-xs-2 col-lg-1">
+                            <button id="btnAgregarSolicitante" type="button" class="btn btn-primary bouton-image-add addBouton" data-toggle="modal" data-target="#modalAgregarSolicitante"></button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="row mostrarDatosParaGuia">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        <label for="pedido_solicitante_nombre" class="control-label col-xs-2">Datos de Solicitante:</label>
+                        <div class="input-group col-xs-6">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Nombre:</span>
+                            </div>
+                            @Html.TextBoxFor(p => pedido.solicitante.nombre, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="input-group col-xs-4">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Teléfono:</span>
+                            </div>
+                            @Html.TextBoxFor(p => pedido.solicitante.telefono, htmlAttributes: new { @class = "form-control" })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="input-group col-xs-12">
+                        <div class="input-group-addon">
+                            <span class="input-group-text" id="basic-addon1">E-mail:</span>
+                        </div>
+                        @Html.TextBoxFor(p => pedido.solicitante.correo, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Correo del Cliente a donde se le notificará sobre la atención de su Pedido.</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <!--FECHA SOLICITUD -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="fechaSolicitud" class="control-label col-xs-6 col-lg-4">Fecha de Solicitud:</label>
+                        <div class="input-group col-xs-8 col-lg-8">
+
+                            <input type="hidden" id="fechaSolicitudTmp" value="@ViewBag.fechaSolicitud" />
+                            <input class="form-control" type="text" id="fechaSolicitud" name="fechaSolicitud">
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--HORA SOLICITUD -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="fechaEntrega" class="control-label col-xs-6 col-lg-4">Hora de Solicitud:</label>
+                        <!-- <div class="input-group col-xs-6 col-lg-8">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Hora:</span>
+                            </div>
+
+                        </div>-->
+                        <div class="input-group col-xs-8 col-lg-8">
+                            <input class="form-control" type="time" id="horaSolicitud" name="horaSolicitud" value="@ViewBag.horaSolicitud">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+
+
+
+                <div class="col-sm-6 col-lg-4">
+                    <!--IGV-->
+                    <div class="form-group">
+                        <label for="igv" class="control-label col-xs-4">¿Precios unitarios incluyen IGV?:</label>
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (pedido.incluidoIGV)
+                                    {
+                                        <input class="radio-input" disabled checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" disabled type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                                    }
+
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (!pedido.incluidoIGV)
+                                    {
+                                        <input class="radio-input" disabled checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" disabled type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                                    }
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--FLETE-->
+                <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
+                    <div class="form-group">
+                        @Html.LabelFor(p => pedido.otrosCargos, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(p => pedido.otrosCargos, htmlAttributes: new { @class = "form-control", type = "number", step = ".1" })
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </fieldset>
+
 
         <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
 
             <div class="pull-left">
-                   @if (pedido.usuario.esAprobador)
-                    {
-                        <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
-
-                        if (pedido.mostrarCosto)
-                        {
-                            <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
-                        }
-                        else
-                        {
-                            <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
-                        }
-                    }
-            </div>
-
-            <div class="pull-left">
-
                 <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
             </div>
 
             <div class="pull-right">
-                
                 <button id="btnOpenAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
-
             </div>
 
-              </div>
+        </div>
+        @if (pedido.usuario.visualizaCostos)
+        {
+            <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
 
-        <table id="tablefoottable" class="table" data-editing="true"  
+                <div class="pull-left">
+                    <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
+                    @if (pedido.mostrarCosto)
+                    {
+                        <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                    }
+                    else
+                    {
+                        <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                    }
+
+                </div>
+            </div>
+        }
+
+        <table id="tableDetallePedido" class="table" data-editing="true"
                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                data-editing-allow-add="true"
                data-editing-allow-delete="true"
                data-editing-allow-edit="false"
                data-sorting="true"
                data-show-toggle="false"
-               data-editing-hide-text="Finalizar edición"
-               data-editing-add-text="Descartar cambios">
+               data-editing-hide-text="Finalizar Edición Detalle"
+               data-editing-add-text="Descartar Cambios Detalle">
             <thead>
                 <tr>
                     <th data-name="idProducto" data-visible="false"></th>
 
                     @if (ViewBag.debug == 1)
-    {
-                <th data-name="esPrecioAlternativo" data-visible="true">EsPrecioAlternativo</th>
-}
-else
-{
-                <th data-name="esPrecioAlternativo" data-visible="false">EsPrecioAlternativo</th>
-}
+                    {
+                        <th data-name="esPrecioAlternativo" data-visible="true">EsPrecioAlternativo</th>
+                    }
+                    else
+                    {
+                        <th data-name="esPrecioAlternativo" data-visible="false">EsPrecioAlternativo</th>
+                    }
                     <th data-name="proveedor" data-sortable="false">Prov.</th>
                     <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                     <th data-name="producto" data-sortable="false">Producto / Descripción</th>
                     <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
                     <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
                     <!--<th data-name="valorUnitario" data-sortable="true" data-breakpoints="xs sm">Costo Unitario</th>-->
-                    <th data-name="precioLista" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+                    <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
 
                     @if (ViewBag.debug == 1)
-    {
-                    <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-}
-else
-{
-                <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-}
+                    {
+                        <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    }
+                    else
+                    {
+                        <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    }
 
-                <th data-name="porcentajeDescuentoMostrar" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
                     <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
 
-                    @if (pedido.mostrarCosto || ViewBag.debug == 1)
-    {
-                <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
-}
-else
-{
-                <th data-name="costo" data-visible="false">Costo</th>
-}
-                    <th data-name="margen" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                    @if (pedido.mostrarCosto)
+                    {
+                        <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
+                    }
+                    else
+                    {
+                        <th data-name="costo" data-visible="false">Costo</th>
+                    }
+
+                    @if (pedido.usuario.visualizaMargen)
+                    {
+                        <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                    }
+                    else
+                    {
+                        <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                    }
 
                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Reg. Fact.</th>
+                    <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
+                    <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
+                    <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
+                    <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
 
-                    @if ((int)pedido.considerarCantidades == 1 || (int)pedido.considerarCantidades == 2)
-    {
-                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
-                <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
-                <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
-}
-else
-{
-                <th data-name="cantidad" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Cant.</th>
-                <th data-name="subTotal" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Sub Total</th>
-                <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
-}
-                <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
 
-                    @if (pedido.esRePedido)
-    {
-                <th data-name="precioNetoAnterior" data-visible="true" style="color: #B9371B">Precio neto ant</th>
-                <th data-name="precioNeto" data-visible="true" style="color: #B9371B">Var% precio neto</th>
-                <th data-name="varCosto" data-visible="true" style="color: #B9371B">Var% costo</th>
-
-                if (ViewBag.debug == 1)
-                {
-                                <th data-name="costoAnterior" data-visible="true">CostoAnterior</th>
-                }
-                else
-                {
-                                <th data-name="costoAnterior" data-visible="false">CostoAnterior</th>
-                }
-                }
                     <th class="ordenar" data-sortable="false" data-visible="false"></th>
 
 
@@ -407,67 +686,79 @@ else
             <tbody>
 
                 @{int contador = 0;}
-                @foreach (var cotizacionDetalle in pedido.PedidoDetalleList)
+                @foreach (var pedidoDetalle in pedido.pedidoDetalleList)
                 {
                     contador++;
-                <tr data-expanded="true" >
-                    <td>  @cotizacionDetalle.producto.idProducto  </td>
-                    <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
-                    <td>  @cotizacionDetalle.producto.proveedor  </td>
-                    <td>  @cotizacionDetalle.producto.sku  </td>
-                    <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
-                    @if (pedido.mostrarCodigoProveedor && (int)pedido.considerarCantidades == 2)
-    {
-                <td>
-                    @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
-                    <br />
-                    <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
-                </td> }
-else if (pedido.mostrarCodigoProveedor)
-{
-                <td>  @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion   </td>}
-
-else
-{
-                <td>  @cotizacionDetalle.producto.descripcion   </td>}
+                    <tr data-expanded="true">
+                        <td>  @pedidoDetalle.producto.idProducto  </td>
+                        <td>  @pedidoDetalle.esPrecioAlternativo  </td>
+                        <td>  @pedidoDetalle.producto.proveedor  </td>
+                        <td>  @pedidoDetalle.producto.sku  </td>
+                        <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
+                        <td>
+                            @pedidoDetalle.producto.skuProveedor - @pedidoDetalle.producto.descripcion
+                            <br />
+                            <span class="@pedidoDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @pedidoDetalle.observacion</span>
+                        </td>
 
 
 
 
+                        <td>  @pedidoDetalle.unidad  </td>
+                        <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(pedidoDetalle.producto.image)"></td>
+                        <td class="@pedidoDetalle.producto.idProducto detprecioLista" style="text-align:right">@pedidoDetalle.precioLista</td>
+
+
+                        <td class="@pedidoDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@pedidoDetalle.porcentajeDescuento %</td>
+                        <td class="@pedidoDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@pedidoDetalle.porcentajeDescuentoMostrar %</td>
+                        <td class="@pedidoDetalle.producto.idProducto detprecio" style="text-align:right">@pedidoDetalle.precioNeto</td>
+                        <td class="@pedidoDetalle.producto.idProducto detcostoLista">@pedidoDetalle.costoLista  </td>
+                        <td class="@pedidoDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@pedidoDetalle.margen %</td>
+
+
+                        <td class="@pedidoDetalle.producto.idProducto detflete" style="text-align:right">@pedidoDetalle.flete</td>
+
+                        @if (pedidoDetalle.producto.precioClienteProducto.precioUnitario == 0)
+                        {
+                            if (pedidoDetalle.precioUnitario >= pedidoDetalle.producto.precioLista - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+                      && pedidoDetalle.precioUnitario <= pedidoDetalle.producto.precioLista + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                            {
+                                <td class="@pedidoDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@pedidoDetalle.precioUnitario </td>
+
+                            }
+                            else
+                            {
+                                <td class="@pedidoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@pedidoDetalle.precioUnitario </td>
+                            }
+
+                        }
+                        else
+                        {
+                            if (pedidoDetalle.precioUnitario >= pedidoDetalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+                            && pedidoDetalle.precioUnitario <= pedidoDetalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                            {
+                                <td class="@pedidoDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@pedidoDetalle.precioUnitario </td>
+
+                            }
+                            else
+                            {
+                                <td class="@pedidoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@pedidoDetalle.precioUnitario </td>
+                            }
+                        }
+                        <td class="@pedidoDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@pedidoDetalle.producto.precioClienteProducto.precioUnitario </td>
+
+                        <td class="@pedidoDetalle.producto.idProducto detcantidad" style="text-align:right">@pedidoDetalle.cantidad</td>
+                        <td class="@pedidoDetalle.producto.idProducto detsubtotal" style="text-align:right">@pedidoDetalle.subTotal</td>
+                        <td class="@pedidoDetalle.producto.idProducto detobservacion" style="text-align:left">@pedidoDetalle.observacion</td>
+                        <td class="@pedidoDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@pedidoDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+
+                        <td class="@pedidoDetalle.producto.idProducto detordenamiento"></td>
 
 
 
-                    <td>  @cotizacionDetalle.unidad  </td>
-                    <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
-                    <td class="@cotizacionDetalle.producto.idProducto detprecioLista" style="text-align:right">@cotizacionDetalle.precioLista</td>
-
-                    <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@cotizacionDetalle.porcentajeDescuento %</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@cotizacionDetalle.porcentajeDescuentoMostrar %</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoLista  </td>
-
-                    <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
-
-                    <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@cotizacionDetalle.precioUnitario </td>
-                    <td class="@cotizacionDetalle.producto.idProducto detcantidad" style="text-align:right">@cotizacionDetalle.cantidad</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
-                    <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
-                    <!--class="@cotizacionDetalle.producto.idProducto detobservacion"-->
-                    <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
-                    @if (pedido.esRePedido)
-    {
-                <td class="@cotizacionDetalle.producto.idProducto detprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.precioNetoAnterior</td>
-                <td class="@cotizacionDetalle.producto.idProducto detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionPrecioAnterior %</td>
-                <td class="@cotizacionDetalle.producto.idProducto detvarCosto" style="text-align:right; color: #B9371B">@cotizacionDetalle.variacionCosto %</td>
-                <td class="@cotizacionDetalle.producto.idProducto detcostoAnterior" style="text-align:right; color: #B9371B">@cotizacionDetalle.costoAnterior</td>
-}
-                    <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
 
 
-
-
-                </tr>
+                    </tr>
                 }
 
             </tbody>
@@ -480,61 +771,136 @@ else
         <div class="row">
             <div class="col-sm-6 col-lg-9">
                 <div class="form-group">
-                    <label for="observaciones" class="control-label col-xs-2">Observaciones:</label>
-                    <div class="col-xs-10">
-                        <textarea rows="6" cols="300" style="min-width: 100%" id="observaciones" name="observaciones">@pedido.observaciones</textarea>
+                    @Html.LabelFor(p => pedido.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <div class="col-xs-8">
+                        @Html.TextAreaFor(p => pedido.observaciones, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
 
-                @if ((int)pedido.considerarCantidades == 1 || (int)pedido.considerarCantidades == 2)
-                {
-                    <div class="form-group">
-                        <div class="pull-right">
-                            <span class="totales">Subtotal: S/ </span>
-                            <span class="totales" id="montoSubTotal">@pedido.montoSubTotal</span>
-                        </div>
+
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales">Subtotal: S/ </span>
+                        <span class="totales" id="montoSubTotal">@pedido.montoSubTotal</span>
                     </div>
-                    <div class="form-group">
-                        <div class="pull-right">
-                            <span class="totales">IGV 18%: S/ </span>
-                            <span class="totales" id="montoIGV">@pedido.montoIGV</span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales">IGV 18%: S/ </span>
+                        <span class="totales" id="montoIGV">@pedido.montoIGV</span>
                     </div>
-                    <div class="form-group">
-                        <div class="pull-right">
-                            <input type="hidden" id="total" value="@pedido.montoTotal" />
-                            <span class="totales">TOTAL: S/ </span>
-                            <span class="totales" id="montoTotal">@pedido.montoTotal</span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <input type="hidden" id="total" value="@pedido.montoTotal" />
+                        <span class="totales">TOTAL: S/ </span>
+                        <span class="totales" id="montoTotal">@pedido.montoTotal</span>
                     </div>
-                }
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row mostrarCondicionesPago">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="condicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => pedido.textoCondicionesPago, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @if (pedido.esPagoContado)
+                        {
+                            <input type="checkbox" checked class="form-check-input" id="chkEsPagoContado">
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" id="chkEsPagoContado">
+                        }
+                        <label class="form-check-label" for="chkEsPagoContado">Es pago contado</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mostrarDatosParaGuia">
+            <!--OBSERVACIONES-->
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "form-control" })
+                        <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mostrarDatosParaGuia">
+            <!--OBSERVACIONES-->
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.observacionesFactura, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => pedido.observacionesFactura, htmlAttributes: new { @class = "form-control" })
+                        <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
+                    <div class="col-xs-3">
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2"></label>
+                    <div class="col-xs-8">
+                        <ul id="nombreArchivos">
+                            @foreach (Model.PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
+                            {
+                                <li>
+                                    <a href="javascript:mostrar();" class="descargar">@pedidoAdjunto.nombre</a>
+                                    <a href="javascript:mostrar();"><img src="~/images/icon-close.png" id="@pedidoAdjunto.nombre" class="btnDeleteArchivo" /></a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="row">
             <div class="pull-left">
-                @if (pedido.codigo > 0)
-                {
-                    <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar y Continuar Editando Luego</button>
-                }
-                else
-                {
-                    <button id="btnContinuarCreandoLuego" type="button" class="btn btn-primary">Guardar y Continuar Editando Luego</button>
-                }
+                <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar</button>
             </div>
 
 
             <div class="pull-right">
-                <button type="button" id="btnCancelCotizacion" class="btn btn-danger">Cancelar</button>
-                @if (pedido.codigo > 0)
+                <button type="button" id="btnCancelarPedido" class="btn btn-danger">Cancelar</button>
+                @if (pedido.numeroPedido > 0)
                 {
-                    <button id="btnFinalizarEdicionCotizacion" type="button" class="btn btn-success">Finalizar Edición</button>
+                    <button id="btnFinalizarEdicionPedido" type="button" class="btn btn-success">Finalizar Edición</button>
                 }
                 else
                 {
-                    <button id="btnFinalizarCreacionCotizacion" type="button" class="btn btn-success">Finalizar Creación</button>
+                    <button id="btnFinalizarCreacionPedido" type="button" class="btn btn-success">Finalizar Creación</button>
                 }
             </div>
         </div>
@@ -615,7 +981,7 @@ else
                                     <select class="form-control" id="producto" name="producto">
                                         <option value=""></option>
                                     </select>
-                                  <!--  <label><input type="checkbox" id="considerarDescontinuados" />Considerar Descontinuados</label>-->
+                                    <!--  <label><input type="checkbox" id="considerarDescontinuados" />Considerar Descontinuados</label>-->
                                 </div>
                             </div>
 
@@ -728,16 +1094,26 @@ else
                             <div class="form-group">
                                 <label for="precio" class="control-label col-xs-3">Precio Neto:</label>
                                 <div class="col-xs-4">
+                                    <input class="form-control" type="hidden" id="precioRegistrado" name="precioRegistrado">
                                     <input class="form-control" type="number" step=".1" value="" disabled id="precio" name="precio">
                                 </div>
 
 
+                                @if (pedido.usuario.visualizaMargen)
+                                {
+                                    <label for="margen" class="control-label col-xs-2">Mg %:</label>
+                                    <div class="col-xs-3">
 
-                                <label for="margen" class="control-label col-xs-2">Mg %:</label>
-                                <div class="col-xs-3">
+                                        <input class="form-control" type="number" disabled value="" min="1" step="1" id="margen" name="margen">
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-xs-5">
+                                        <input type="hidden" id="margen" name="margen">
+                                    </div>
+                                }
 
-                                    <input class="form-control" type="number" disabled value="" min="1" step="1" id="margen" name="margen">
-                                </div>
                             </div>
                         </div>
                         <!--CANTIDAD-->
@@ -773,7 +1149,7 @@ else
                                 <div class="col-xs-3">
                                     <input class="form-control" type="number" step=".1" value="" id="fleteDetalle" name="fleteDetalle">
                                 </div>
-                                <label for="margen" class="control-label col-xs-2">Precio Unit:</label>
+                                <label for="precioUnitario" class="control-label col-xs-2">Precio Unit:</label>
                                 <div class="col-xs-4">
                                     <input class="form-control" type="number" disabled value="" min="1" step="1" id="precioUnitario" name="precioUnitario">
                                 </div>
@@ -881,7 +1257,7 @@ else
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación </b></h4>
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -893,43 +1269,52 @@ else
             <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="row">
-                           
-                                <label for="numero" class="control-label col-xs-1">Producto:</label>
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
                                 <div class="col-xs-10">
                                     <p class="form-control-static" id="verProducto"></p>
                                 </div>
-
-
+                            </div>
                         </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                        <table id="tableMostrarPrecios" class="table" data-editing="false"
-                               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
-                               data-editing-allow-add="true"
-                               data-editing-allow-delete="true"
-                               data-editing-allow-edit="false"
-                               data-sorting="true"
-                               data-show-toggle="false"
-                               data-editing-hide-text="Finalizar edición"
-                               data-editing-add-text="Descartar cambios">
-                            <thead>
-                                <tr>
-                                    <th data-name="idProducto" data-visible="true">Número Cotización</th>
-                                    <th data-name="idProducto" data-visible="true">Fecha Inicio Vigencia</th>
-                                    <th data-name="idProducto" data-visible="true">Fecha Fin Vigencia</th>
-                                    <th data-name="idProducto" data-visible="true">Unidad</th>
-                                    <th data-name="idProducto" data-visible="true">Precio Neto</th>
-                                    <th data-name="idProducto" data-visible="true">Flete</th>
-                                    <th data-name="idProducto" data-visible="true">Precio Unitario</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                    <table id="tableMostrarPrecios" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar Edición Detalle"
+                           data-editing-add-text="Descartar Cambios Detalle">
+                        <thead>
+                            <tr>
+                                <th data-name="idProducto" data-visible="true">Número Cotización</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Unidad</th>
+                                <th data-name="idProducto" data-visible="true">Precio Neto</th>
+                                <th data-name="idProducto" data-visible="true">Flete</th>
+                                <th data-name="idProducto" data-visible="true">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </form>
             </div>
 
             <div class="modal-footer">
-                <button type="button" id="btnCancelCalculadora" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnSaveDescuento" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
             </div>
         </div>
     </div>
@@ -951,7 +1336,7 @@ else
 
 
 
-            <div class="modal-body">
+            <div class="modal-body" id="modalAgregarCliente2">
                 <form class="form-horizontal">
 
 
@@ -1017,6 +1402,144 @@ else
 
 
 
+<!-- MODAL AGREGAR DIRECCION -->
+<div class="modal fade" id="modalAgregarDireccion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarDireccionTitle"><b>Nueva Dirección</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+                            <!--Dirección-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label  col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(d => direccionEntrega.descripcion, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--CONTACTO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => direccionEntrega.contacto, htmlAttributes: new { @class = "control-label  col-xs-4" })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(d => direccionEntrega.contacto, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--TELEFONO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => direccionEntrega.telefono, htmlAttributes: new { @class = "control-label  col-xs-4" })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(d => direccionEntrega.telefono, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelDireccion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveDireccion" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL AGREGAR DIRECCION -->
+<div class="modal fade" id="modalAgregarSolicitante" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarSolicitanteTitle"><b>Nuevo Solicitante</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+                            <!--Nombre-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => solicitante.nombre, htmlAttributes: new { @class = "control-label  col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(d => solicitante.nombre, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--CONTACTO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => solicitante.telefono, htmlAttributes: new { @class = "control-label  col-xs-4" })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(d => solicitante.telefono, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-12">
+                            <!--TELEFONO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => solicitante.correo, htmlAttributes: new { @class = "control-label  col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(d => solicitante.correo, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelSolicitante" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveSolicitante" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -1067,9 +1590,9 @@ else
                             </div>
                         </div>
 
-                        </div>
+                    </div>
 
-</form>
+                </form>
             </div>
 
             <div class="modal-footer">
@@ -1079,3 +1602,75 @@ else
         </div>
     </div>
 </div>
+
+
+
+<!--MODAL AGREGAR MENSAJE PARA APROBADOR-->
+<div class="modal fade" id="modalComentarioPendienteIngreso" tabindex="-1">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalComentarioPendienteIngresoTitle"><b>Modificar Comentario Estado Pendiente Ingreso</b></h4>
+
+                <p></p>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+
+                            <!--MOTIVO RECHAZO-->
+                            <div class="form-group">
+                                <!--<label for="comentarioPendienteAprobacion" class="control-label col-xs-4">Comentario:</label>-->
+                                <div class="col-xs-12">
+                                    <span style="color: darkred" id="solicitudIngresoComentario"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-12" id="motivoRechazoDiv">
+
+                            <!--MOTIVO RECHAZO-->
+                            <div class="form-group">
+                                <!--<label for="comentarioPendienteAprobacion" class="control-label col-xs-4">Comentario:</label>-->
+                                <div class="col-xs-12">
+                                    <textarea class="form-control" rows="5" id="comentarioPendienteIngresoEditable" name="comentarioPendienteIngresoEditable"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12" id="motivoRechazoDiv">
+
+                            <!--MOTIVO RECHAZO-->
+                            <div class="form-group">
+                                <!--<label for="comentarioPendienteAprobacion" class="control-label col-xs-4">Comentario:</label>-->
+                                <div class="col-xs-12">
+                                    <textarea class="form-control" disabled rows="5" id="comentarioPendienteIngreso" name="comentarioPendienteIngreso"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <!--<button type="button" id="btnCancelarComentario" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>-->
+                <button type="button" id="btnAceptarComentario" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedido")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/Scripts/App/ubigeo.js")
+}

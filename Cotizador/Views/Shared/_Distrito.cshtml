@@ -1,0 +1,11 @@
+﻿@model Cotizador.Models.DistritoViewModels
+
+@if (Model.Disabled)
+{
+    @Html.DropDownList(Model.DistritoSelectId, Model.Distritos, "Seleccione el distrito", new { id = Model.DistritoSelectId, @class = "form-control", @disabled = "disabled" })
+}
+else
+{
+    @Html.DropDownList(Model.DistritoSelectId, Model.Distritos, "Seleccione el distrito", new { id = Model.DistritoSelectId, @class = "form-control" })
+}
+

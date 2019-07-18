@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Listado de Miembros de Grupo";
+    Model.GrupoCliente grupoCliente = ViewBag.grupoCliente;
+    var disabledLabel = "disabled = ''";
+
+    var itemHeredaChecked = "";
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <input type="hidden" id="idGrupoCliente" value="@grupoCliente.idGrupoCliente" />
+
+    <br /><br />
+    @if (grupoCliente.idGrupoCliente != 0)
+    {
+
+        <div class="row">
+            <div class="col-xs-12 col-lg-6">
+                <!--Cliente-->
+                <div class="form-group">
+                    <label for="idCliente" class="control-label col-xs-3">Buscar Cliente:</label>
+
+                    <div class="col-xs-6">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            <option value=""></option>
+                        </select>
+                        <label class="radio-label" style="margin-left: 15px; margin-top: 5px;">
+                            <input type="checkbox" name="cliente_habilitadoNegociacionGrupal" id="cliente_habilitadoNegociacionGrupal" value="1">
+                            <span>El Cliente a agregar heredarán los precios del grupo.</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <button id="btnAgregarClienteGrupo" type="button" class="btn btn-primary">Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-lg-6">
+                <!--RUC Cliente-->
+                <div class="form-group">
+                    <label for="rucCliente" class="control-label col-xs-3">Buscar RUC:</label>
+
+                    <div class="col-xs-6">
+                        <select class="form-control input-sm" id="rucCliente" name="rucCliente" required>
+                            <option value=""></option>
+                        </select>
+                        <label class="radio-label" style="margin-left: 15px; margin-top: 5px;">
+                            <input type="checkbox" name="clientes_habilitadosNegociacionGrupal" id="clientes_habilitadosNegociacionGrupal" value="1">
+                            <span>Los Clientes a agregar heredarán los precios del grupo.</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <button id="btnAgregarClientesGrupoRUC" type="button" class="btn btn-primary">Agregar Clientes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-12">
+                <table id="tableMiembrosGrupoCliente" class="table" data-editing="false"
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="idCliente" data-visible="false"></th>
+                            <th data-name="codigo" data-visible="true">Código</th>
+                            <th data-name="razonSocial" data-visible="true" data-sortable="true">Razón Social</th>
+                            <th data-name="nombreComercial" data-visible="true" data-sortable="true">Nombre Comercial</th>
+                            <th data-name="tipoDocumento" data-visible="true" data-sortable="true">Tipo Doc.</th>
+                            <th data-name="numeroDocumento" data-visible="true" data-sortable="true">N° Doc.</th>
+                            <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
+                            <th data-name="heredaPrecios" data-sortable="false" data-breakpoints="xs">Hereda precios<br /> del grupo</th>
+                            <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Model.Cliente cliente in grupoCliente.miembros)
+                        {
+                            {
+                                itemHeredaChecked = "";
+                                if (cliente.habilitadoNegociacionGrupal) {
+                                    itemHeredaChecked = "checked";
+                                }
+                            }
+                            <tr data-expanded="true" idCliente="@cliente.idCliente">
+                                <td>  @cliente.idCliente </td>
+                                <td>  @cliente.codigo </td>
+                                <td>  @cliente.razonSocialSunat </td>
+                                <td>  @cliente.nombreComercial </td>
+                                <td>  @cliente.tipoDocumentoIdentidadToString </td>
+                                <td>  @cliente.ruc </td>
+                                <td>  @cliente.ciudad.nombre </td>
+                                <td>  <input type="checkbox" class="chkMiembroHeredaPrecios" @itemHeredaChecked value="1"> </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="@cliente.idCliente">Remover</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/grupoCliente")
+}

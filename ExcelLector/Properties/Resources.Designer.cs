@@ -13,7 +13,7 @@ namespace ExcelLector.Properties
 
 
     /// <summary>
-    ///   Clase de recurso fuertemente tipado para buscar cadenas traducidas, etc.
+    ///   ClasesPedido de recurso fuertemente tipado para buscar cadenas traducidas, etc.
     /// </summary>
     // StronglyTypedResourceBuilder generó automáticamente esta clase
     // a través de una herramienta como ResGen o Visual Studio.

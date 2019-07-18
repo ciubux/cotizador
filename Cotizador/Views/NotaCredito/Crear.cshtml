@@ -1,0 +1,842 @@
+﻿@{
+    ViewBag.Title = "Crear Nota de Crédito";
+    Model.Transaccion venta = ViewBag.venta;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+
+    <input type="hidden" id="idPedido" />
+
+    <input type="hidden" id="permiteEditarCantidades" value="@venta.permiteEditarCantidades.ToString()" />
+    <input type="hidden" id="permiteEditarPrecios" value="@venta.permiteEditarPrecios.ToString()" />
+    <input type="hidden" id="permiteEliminarLineas" value="@venta.permiteEliminarLineas.ToString()" />
+
+
+    <!--<input type="hidden" id="idPedido" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+        -->
+    <form class="form-horizontal">
+        <input type="hidden" id="considerarCantidades" name="considerarCantidades" value="2" />
+
+        <!--    <fieldset>
+    <legend>Datos de Nota Crédito:</legend>
+    DATOS DEL CLIENTE-->
+
+        <div class="row">
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(v => venta.tipoNotaCreditoString, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
+                        @Html.TextBoxFor(v => venta.tipoNotaCreditoString, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-8">
+                <div class="form-group">
+                    @Html.LabelFor(p => venta.sustento, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <div class="col-xs-10">
+                        @Html.TextBoxFor(p => venta.sustento, htmlAttributes: new { @class = "form-control" })
+                        <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(v => venta.documentoVenta.serie, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                    <div class="col-xs-8">
+                        @Html.DropDownListFor(x => venta.documentoVenta.serieDocumentoElectronico,
+                         new SelectList(venta.cliente.ciudad.serieDocumentoElectronicoList, "serie", "serie", venta.documentoVenta.serieDocumentoElectronico), htmlAttributes: new { @class = "form-control", id = "documentoVenta_serie" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(v => venta.documentoVenta.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                    <div class="col-xs-8">
+                        <!--<input type="hidden" id="fechaEmision" value="" />
+                    <input type="hidden" id="fechaEntregaHastaProgramacion" value="" />-->
+                        <input type="hidden" id="documentoVenta_fechaEmisiontmp" value="@ViewBag.fechaEmision" />
+                        <input class="form-control" type="text" id="documentoVenta_fechaEmision" name="documentoVenta_fechaEmision">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(v => venta.documentoVenta.horaEmision, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                    <div class="col-xs-8">
+                        <input class="form-control" type="time" id="documentoVenta_horaEmision" name="documentoVenta_horaEmision" value="@ViewBag.horaEmision">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-8">
+                <div class="form-group">
+                    <label for="verRazonSocialSunat" class="control-label col-xs-2">Razón Social:</label>
+                    <div class="col-xs-10">
+                        @Html.TextBoxFor(v => venta.documentoVenta.cPE_CABECERA_BE.NOM_RCT, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        <!--
+                    <p class="form-control-static" id="verRazonSocialSunat"></p>-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="verRUC" class="control-label col-xs-4">RUC:</label>
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(v => venta.documentoVenta.cPE_CABECERA_BE.NRO_DOC_RCT, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-lg-8">
+                <div class="form-group">
+                    <label for="verDireccionDomicilioLegalSunat" class="control-label col-xs-2">Domicilio Legal:</label>
+                    <div class="col-xs-10">
+                        @Html.TextBoxFor(v => venta.documentoVenta.cPE_CABECERA_BE.DIR_DES_RCT, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="verCodigo" class="control-label col-xs-4">Código Cliente:</label>
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(v => venta.cliente.codigo, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-8">
+                <div class="form-group">
+                    <label for="verCorreoEnvioFactura" class="control-label col-xs-2">Correo Envío Factura:</label>
+                    <div class="col-xs-10">
+                        @Html.TextBoxFor(v => venta.cliente.correoEnvioFactura, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <fieldset>
+            <legend>Documento a extornar:</legend>
+            <div class="row">
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(v => venta.documentoReferencia.tipoDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
+                            @Html.TextBoxFor(v => venta.documentoReferencia.tipoDocumento, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(v => venta.documentoReferencia.serieNumero, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
+                            @Html.TextBoxFor(v => venta.documentoReferencia.serieNumero, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(v => venta.documentoReferencia.fechaEmisionFormat, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            <input type="hidden" id="tipoNotaCredito" value="@ViewBag.tipoNotaCredito" />
+                            @Html.TextBoxFor(v => venta.documentoReferencia.fechaEmisionFormat, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+
+
+        @if (venta.documentoVenta.movimientoAlmacen != null)
+    {
+        <fieldset>
+            <legend>Datos de Nota Ingreso:</legend>
+            <div class="row">
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="venta_documentoVenta_movimientoAlmacen_sustentoExtorno" class="control-label col-xs-4">Número:</label>
+                        <div class="col-xs-8">
+                            <input class="form-control" disabled value="@( ((Model.NotaIngreso)venta.documentoVenta.movimientoAlmacen).serieNumeroNotaIngreso)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        <label for="venta_documentoVenta_movimientoAlmacen_sustentoExtorno" class="control-label col-xs-2">Sustento:</label>
+                        <div class="col-xs-10">
+                            @Html.TextBoxFor(p => venta.documentoVenta.movimientoAlmacen.sustentoExtorno, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+
+}
+
+
+
+        <!-- </fieldset>-->
+        @{ var detalleEditable = "false";
+        var detalleAllowDelete = "false";}
+
+        <!--Si no existe movimiento de almacen quiere decir que se estrá creando la nota de crédito
+    directamente desde la factura-->
+        @if (venta.documentoVenta.movimientoAlmacen == null)
+    {
+
+        if (venta.permiteEditarCantidades
+        || venta.permiteEditarPrecios
+        || venta.permiteEliminarLineas)
+        {
+            detalleEditable = "true";
+            if (venta.permiteEliminarLineas)
+            {
+                detalleAllowDelete = "true";
+            }
+
+        }
+        else
+        {
+            detalleEditable = "false";
+        }
+    }
+
+
+
+
+        <table id="tableDetallePedido" class="table" data-editing="@detalleEditable"
+               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+               data-editing-allow-add="true"
+               data-editing-allow-delete="@detalleAllowDelete"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar Edición Detalle"
+               data-editing-add-text="Descartar Cambios Detalle">
+            <thead>
+                <tr>
+                    <th data-name="idProducto" data-visible="false"></th>
+                    <th data-name="esPrecioAlternativo" data-visible="false">EsPrecioAlternativo</th>
+                    <th data-name="proveedor" data-sortable="false">Prov.</th>
+                    <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
+                    <th data-name="producto" data-sortable="false">Producto / Descripción</th>
+                    <th data-name="unidad" data-sortable="false" data-visible="true" data-breakpoints="xs">Presentación</th>
+                    <th data-name="unidadInternacional" data-sortable="false" data-visible="true" data-breakpoints="xs">Unidad Sunat</th>
+                    <!--<th data-name="valorUnitario" data-sortable="true" data-breakpoints="xs sm">Costo Unitario</th>-->
+                    <th data-name="precioLista" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+                    <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    <th data-name="porcentajeDescuentoMostrar" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    <th data-name="precioNeto" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+                    <th data-name="costo" data-visible="false">Costo</th>
+                    <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                    <th data-name="flete" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Flete</th>
+                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+                    <th data-name="precioUnitarioFacturacion" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Precio Reg. Fact.</th>
+                    <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
+                    <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
+                    <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
+                    <th data-name="historialPrecios" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Historial Precios</th>
+                    <th data-name="precioFactura" data-visible="true" data-sortable="false" style="color: #B9371B">Cantidad Original Factura</th>
+                    <th data-name="cantitadFactura" data-visible="true" data-sortable="false" style="color: #B9371B">Precio Unit. Original Factura</th>
+                    <th class="ordenar" data-sortable="false" data-visible="false"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{int contador = 0;}
+                @foreach (var documentoDetalle in venta.pedido.pedidoDetalleList)
+            {
+                contador++;
+                <tr data-expanded="true">
+                    <td>  @documentoDetalle.producto.idProducto  </td>
+                    <td>  @documentoDetalle.esPrecioAlternativo  </td>
+                    <td>  @documentoDetalle.producto.proveedor  </td>
+                    <td>  @documentoDetalle.producto.sku  </td>
+                    <td>  @documentoDetalle.producto.descripcion</td>
+
+                    <td>  @documentoDetalle.unidad  </td>
+                    <td>  @documentoDetalle.unidadInternacional  </td>
+                    <td class="@documentoDetalle.producto.idProducto detprecioLista" style="text-align:right">@documentoDetalle.precioLista</td>
+                    <td class="@documentoDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@documentoDetalle.porcentajeDescuento %</td>
+                    <td class="@documentoDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@documentoDetalle.porcentajeDescuentoMostrar %</td>
+                    <td class="@documentoDetalle.producto.idProducto detprecio" style="text-align:right">@documentoDetalle.precioNeto</td>
+                    <td class="@documentoDetalle.producto.idProducto detcostoLista">@documentoDetalle.costoLista  </td>
+                    <td class="@documentoDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@documentoDetalle.margen %</td>
+
+                    <td class="@documentoDetalle.producto.idProducto detflete" style="text-align:right">@documentoDetalle.flete</td>
+
+                    <td class="@documentoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; font-weight:bold">@documentoDetalle.precioUnitario </td>
+                    <td class="@documentoDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@documentoDetalle.producto.precioClienteProducto.precioUnitario </td>
+
+
+
+                    <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right" font-weight:bold">@documentoDetalle.cantidad</td>
+                    <td class="@documentoDetalle.producto.idProducto detsubtotal" style="text-align:right">@documentoDetalle.subTotal</td>
+                    <td class="@documentoDetalle.producto.idProducto detobservacion" style="text-align:left">@documentoDetalle.observacion</td>
+                    <td class="@documentoDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@documentoDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+
+                    <td class="@documentoDetalle.producto.idProducto detCantidadOriginal">@documentoDetalle.cantidadOriginal</td>
+                    <td class="@documentoDetalle.producto.idProducto detPrecioUnitarioOriginal">@documentoDetalle.precioUnitarioOriginal</td>
+                    <td class="@documentoDetalle.producto.idProducto detordenamiento"></td>
+
+                </tr>
+        }
+
+            </tbody>
+        </table>
+
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    @Html.LabelFor(p => venta.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => venta.observaciones, htmlAttributes: new { @class = "form-control" })
+                        <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    @Html.LabelFor(p => venta.documentoVenta.observacionesUsoInterno, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <div class="col-xs-8">
+                        @Html.TextAreaFor(p => venta.documentoVenta.observacionesUsoInterno, htmlAttributes: new { @class = "form-control", rows = "5" })
+                        <!--<textarea class="form-control" rows="5" id="guiaRemision_observaciones" cols="100" name="guiaRemision_observaciones"></textarea>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales">Subtotal: S/ </span>
+                        <span class="totales" id="montoSubTotal">@venta.pedido.montoSubTotal</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales">IGV 18%: S/ </span>
+                        <span class="totales" id="montoIGV">@venta.pedido.montoIGV</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <input type="hidden" id="total" value="@venta.pedido.montoTotal" />
+                        <span class="totales">TOTAL: S/ </span>
+                        <span class="totales" id="montoTotal">@venta.pedido.montoTotal</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+
+
+
+            <div class="pull-right">
+                <button type="button" id="btnCancelarNotaCredito" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button id="btnFinalizarCreacionNotaCredito" type="button" class="btn btn-success">Generar Nota de Crédito</button>
+
+            </div>
+        </div>
+
+
+    </form>
+</div>
+
+
+
+
+<!--MODAL MOSTRAR PRECIOS-->
+<div class="modal fade" id="modalMostrarPrecios" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación </b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <table id="tableMostrarPrecios" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar Edición Detalle"
+                           data-editing-add-text="Descartar Cambios Detalle">
+                        <thead>
+                            <tr>
+                                <th data-name="idProducto" data-visible="true">Número Cotización</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Unidad</th>
+                                <th data-name="idProducto" data-visible="true">Precio Neto</th>
+                                <th data-name="idProducto" data-visible="true">Flete</th>
+                                <th data-name="idProducto" data-visible="true">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelCalculadora" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveDescuento" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--MODAL BUSCAR PRECIOS REGISTRADOS-->
+<div class="modal fade" id="modalBuscarPreciosRegistrados" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalBuscarPreciosRegistrados"><b>Filtro Búsqueda de Precios Registrados</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+
+
+                            <!--Familia-->
+                            <div class="form-group">
+                                <label for="familia" class="control-label col-xs-4">Familia:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("listBusquedaPrecios", "Familia")
+                                </div>
+                            </div>
+
+
+                            <!--Proveedor-->
+                            <div class="form-group">
+                                <label for="proveedor" class="control-label col-xs-4">Proveedor:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("listBusquedaPrecios", "Proveedor")
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fechaPrecios" class="control-label col-xs-4">Precios a partir de:</label>
+                                <div class="col-xs-8">
+                                    <input type="hidden" id="fechaPreciostmp" value="@ViewBag.fechaPrecios" />
+                                    <input class="form-control" type="text" id="fechaPrecios" name="fechaPrecios">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarObtenerProductos" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnObtenerProductos" class="btn btn-primary">Continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalVistaPreviaCPE" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVistaPreviaCPETitle"><b>Vista Previa Nota Crédito</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <!--FECHA HORA EMISIÓN -  SERIE CORRELATIVO-->
+                    <div class="row">
+                        <!--Fecha Emisión-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpFechaEmision" class="control-label col-xs-2">FECHA EMISIÓN:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="vpFEC_EMI_HOR_EMI"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--NUMERO FACTURA-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpSERIE_CORRELATIVO" class="control-label col-xs-4">NOTA DE CRÉDITO:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpSERIE_CORRELATIVO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <!--NOMBRE COMERCIAL CLIENTE-->
+                    <div class="row">
+                        <!--Razón Social-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpRazonSocial" class="control-label col-xs-2">SEÑOR(ES):</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="vpNOM_RCT"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--DIRECCION - ORDEN DE COMPRA-->
+                    <div class="row">
+                        <!--Dirección-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpRazonSocial" class="control-label col-xs-2 resaltarDatosFactura2">DIRECCIÓN:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static " id="vpDIR_DES_RCT"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpNRO_ORD_COM" class="control-label col-xs-4 resaltarDatosFactura2">REFERENCIA:</label>
+                                <div class="col-xs-8 ">
+                                    <p class="form-control-static" id="vpNRO_ORD_COM"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--RUC - NRO GUIA-->
+                    <div class="row">
+                        <!--RUC-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpNRO_DOC_RCT" class="control-label col-xs-2">R.U.C.:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="vpNRO_DOC_RCT"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--GUIA REMISION-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpNRO_GRE" class="control-label col-xs-4 resaltarDatosFactura2">N° DE GUÍA</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpNRO_GRE"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--OBSERVACIONES-->
+                    <div class="row">
+                        <!--OBSERVACIONES-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpOBSERVACIONES" class="control-label col-xs-2 resaltarDatosFactura2">OBSERV:</label>
+                                <div class="col-xs-10 ">
+                                    <p class="form-control-static" id="vpOBSERVACIONES"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--CODIGO CLIENTE-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpCODIGO_CLIENTE" class="control-label col-xs-4">CODIGO CLIENTE:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpCODIGO_CLIENTE"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!--CONDICIONES DE PAGO FECHA DE VENCIMIENTO-->
+                    <div class="row">
+                        <!--CONDICIONES DE PAGO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpCOND_PAGO" class="control-label col-xs-4">COND. PAGO:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpCOND_PAGO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--FECHA DE VENCIMIENTO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpFEC_VCTO" class="control-label col-xs-4">VENCIMIENTO:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpFEC_VCTO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--CODIGO VENDEDOR-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpCODIGO_VEND" class="control-label col-xs-4">CODIGO VEND.:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpCODIGO_VEND"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!--TIPO Y SUSTENTO-->
+                    <div class="row">
+                        <!--MOTIVO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="pvMOTIVO" class="control-label col-xs-4">MOTIVO:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="pvMOTIVO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--SUSTENTO-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="pvDES_MTVO_NC_ND" class="control-label col-xs-2">SUSTENTO:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="pvDES_MTVO_NC_ND"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <table id="tableDetalleCPEVistaPrevia" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="false"
+                           data-editing-allow-delete="false"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar edición"
+                           data-editing-add-text="Descartar cambios">
+                        <thead>
+                            <tr>
+                                <th data-name="posicion" data-sortable="false">N°.</th>
+                                <th data-name="codigo" data-sortable="false">CODIGO</th>
+                                <th data-name="cantidad" data-sortable="false" data-breakpoints="xs">CANTIDAD</th>
+                                <th data-name="unidad" data-sortable="false">UNIDAD</th>
+                                <th data-name="descripcion" data-sortable="false" data-breakpoints="xs">DESCRIPCIÓN</th>
+                                <th data-name="valorUnitario" data-sortable="false" data-breakpoints="xs sm">VALOR UNITARIO</th>
+                                <th data-name="valorVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">VALOR VENTA</th>
+                                <th data-name="igv" data-visible="true" data-sortable="false" data-breakpoints="xs sm">IGV</th>
+                                <th data-name="precioUnitario" data-visible="true" data-sortable="false" data-breakpoints="xs sm">PRECIO UNITARIO</th>
+                                <th data-name="precioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">PRECIO VENTA</th>
+                                <th data-name="porcentajeIGV" data-visible="true" data-sortable="false" data-breakpoints="xs sm">% IGV</th>
+                                <th data-name="tipoOperacion" data-visible="true" data-sortable="false" data-breakpoints="xs sm">TIP OP</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+
+
+
+                    <div class="row" style="margin-right: 10px">
+
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpREFERENCIA_SERIE_CORRELATIVO" class="control-label col-xs-4">FACTURA:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpREFERENCIA_SERIE_CORRELATIVO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!--Fecha Emisión-->
+                            <div class="form-group">
+                                <label for="vpREFERENCIA_FECHA_EMISION" class="control-label col-xs-4">FECHA EMISIÓN:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpREFERENCIA_FECHA_EMISION"></p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-6 col-lg-4" id="montosTotalesConfirmacionDiv">
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. GRAVADA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_GRV"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. INAFECTA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_INF"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. EXONERADA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_EXR"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. GRATUITA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_GRT"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">SUB TOTAL: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_VAL_VTA"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">IGV: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_TRB_IGV"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">TOTAL: S/ </span>
+                                    <span class="totales" id="pvMNT_TOT_PRC_VTA"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="idDocumentoVenta" />
+                <button type="button" id="btnCancelarConfirmarNotaCredito" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnConfirmarGeneracionNotaCredito" class="btn btn-success">Confirmar Generación Nota Crédito</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/notaCredito")
+}

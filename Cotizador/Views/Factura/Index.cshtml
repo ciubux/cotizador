@@ -1,57 +1,1080 @@
-﻿
+﻿@{
+    ViewBag.Title = "Búsqueda Documentos de Venta";
+    Model.DocumentoVenta documentoVenta = ViewBag.documentoVenta;
+    List<Model.DocumentoVenta> documentoVentaList = ViewBag.documentoVentaList;
+}
 
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
 <div class="container">
-<form action="/Factura/Load" method="post" enctype="multipart/form-data" id="form1">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" id="idDocumentoVenta" />
 
-    <table>
-        <tr>
-            <td>
-                <label class="control-label col-xs-6" for="file">Archivo Facturas:</label>
-            </td>
-            <td>
-                <input class="form-control" type="file" name="file" id="file" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label class="control-label col-xs-6" for="cantidad">Cantidad Registros:</label>
-            </td>
-            <td>
-                <input class="form-control" type="number" value="0" name="cantidad" id="cantidad" />
-            </td>
-        </tr>
-        <tr>
-            <td><label class="control-label col-xs-6" for="formato">Formato:</label></td>
-            <td><textarea class="form-control" rows="15" cols="100">
-Columna A=PlazaId
-Columna B=Plaza
-Columna C=Id
-Columna D=Nombre / Razón Social
-Columna E=RUC/DNI
-Columna F=Cód. Ve.
-Columna G=Nombre Comercial
-Columna H=Domicilio Legal
-Columna I=Distrito
-Columna J=Dirección de Despacho
-Columna K=Distrito
-Columna L=Rubro
-            
-*Fila1 es Cabecera
-</textarea></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <button type="submit" class="form-control" form="form1" value="Submit">Cargar Facturas</button>
-            </td>
-        </tr>
-    </table>
-</form>
+    <form class="form-horizontal">
+
+        <div class="row">
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(dv => documentoVenta.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                                       new
+                                       {
+                                           ciudadSelectId = "idCiudad",
+                                           selectedValue = documentoVenta.ciudad.idCiudad
+                                       })
+                    </div>
+                </div>
+            </div>
 
 
+            <div class="col-sm-6 col-lg-4">
+                <!--CLIENTE-->
+                <div class="form-group">
+                    <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
+
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            @if (ViewBag.existeCliente == 1)
+                            {
+                                <option selected value="@documentoVenta.cliente.idCliente">@documentoVenta.cliente</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--CODIGO GRUPO CLIENTE-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetGruposCliente", "GrupoCliente",
+                                               new
+                                               {
+                                                   grupoClienteSelectId = "idGrupoCliente",
+                                                   selectedValue = documentoVenta.idGrupoCliente
+                                               })
+                    </div>
+                    @if (documentoVenta.usuario.buscaSedesGrupoCliente)
+                    {
+                        <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                            @if (documentoVenta.pedido.buscarSedesGrupoCliente)
+                            {
+                                <input checked type="checkbox" name="buscarSedesGrupoCliente" id="buscarSedesGrupoCliente" value="1">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="buscarSedesGrupoCliente" id="buscarSedesGrupoCliente" value="1">
+                            }
+                            Todas las sedes
+                        </label>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <!--NUMERO FACTURA-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="documentoVenta_numero" class="control-label col-xs-4">Tipo/Número Doc.:</label>
+                    <div class="col-xs-4">
+                        @Html.DropDownList("documentoVenta_tipoDocumento",
+                                          EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.TipoDocumento), documentoVenta.tipoDocumento),
+                                          new { @class = "form-control" }
+                                          )
+                    </div>
+                    <div class="col-xs-4">
+                        @if (Int64.Parse(documentoVenta.numero) > 0)
+                        {
+                            @Html.TextBoxFor(dv => documentoVenta.numero, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(dv => documentoVenta.numero, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!--NUMERO GUIA-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="documentoVenta_guiaRemision_numero" class="control-label col-xs-4">Número Mov. Almacén:</label>
+
+                    <div class="col-xs-8">
+                        @if (documentoVenta.guiaRemision.numeroDocumento > 0)
+                        {
+                            @Html.TextBoxFor(dv => documentoVenta.guiaRemision.numeroDocumento, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(dv => documentoVenta.guiaRemision.numeroDocumento, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                        }
+                        <!--<span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los demás criterios no serán considerados al realizar la búsqueda.</span>-->
+                    </div>
+
+                </div>
+            </div>
 
 
 
 
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="documentoVenta_numero" class="control-label col-xs-4">Número Pedido:</label>
+
+                    <div class="col-xs-8">
+                        @if (documentoVenta.pedido.numeroPedido > 0)
+                        {
+                            @Html.TextBoxFor(dv => documentoVenta.pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(dv => documentoVenta.pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                        }
+                        <!--<span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los demás criterios no serán considerados al realizar la búsqueda.</span>---->
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+        <div class="row">
+            <!--FECHA-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(dv => documentoVenta.fechaEmisionDesde, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        <input type="hidden" id="fechaEmisionDesdetmp" value="@ViewBag.fechaEmisionDesde" />
+                        <input class="form-control" type="text" id="documentoVenta_fechaEmisionDesde" name="documentoVenta_fechaEmisionDesde">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(dv => documentoVenta.fechaEmisionHasta, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        <input type="hidden" id="fechaEmisionHastatmp" value="@ViewBag.fechaEmisionHasta" />
+                        <input class="form-control" type="text" id="documentoVenta_fechaEmisionHasta" name="documentoVenta_fechaEmisionDesde">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(dv => documentoVenta.estadoDocumentoSunatBusqueda, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.DropDownList("documentoVenta_estadoDocumentoSunatBusqueda",
+                                                                    EnumHelper.GetSelectList(typeof(Model.DocumentoVenta.EstadosDocumentoSunatBusqueda), documentoVenta.estadoDocumentoSunatBusqueda),
+                                                                    new { @class = "form-control" }
+                                                                    )
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => documentoVenta.sku, htmlAttributes: new { @class = "control-label col-xs-4" })
+
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => documentoVenta.sku, htmlAttributes: new { @class = "form-control" })
+                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Puede ingresar el SKU del producto que se encuentra en el detalle del documento.</span>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            @if (documentoVenta.usuario.apruebaAnulaciones)
+            {
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="documentoVenta_solicitadoAnulacion" class="control-label col-xs-4">Mostrar solo con Solicitud de Anulación:</label>
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (documentoVenta.solicitadoAnulacion)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladosi" value="1">@ViewBag.Si;
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladosi" value="1">@ViewBag.Si;
+                                    }
+
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (!documentoVenta.solicitadoAnulacion)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladono" value="0">@ViewBag.No;
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladono" value="0">@ViewBag.No;
+                                    }
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>}
+        </div>
+
+        <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+            <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+            <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+        </div>
+
+        <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Factura")">Exportar</button>
+        </div>
+
+        <table id="tableFacturas" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+               data-editing-allow-add="false"
+               data-editing-allow-delete="false"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar edición"
+               data-editing-add-text="Descartar cambios">
+            <thead>
+                <tr>
+                    <th data-name="idDocumentoVenta" data-visible="false"></th>
+                    <th data-name="serieNumeroFactura" data-visible="true">Doc. Venta</th>
+                    <th data-name="numeroPedido" data-visible="true">Pedido</th>
+                    <th data-name="serieNumeroGuia" data-visible="true">Movimiento Almacén</th>
+                    <th data-name="usuario" data-visible="true">Creado Por</th>
+                    <th data-name="fechaEmision" data-sortable="true" data-breakpoints="xs">Fecha Emisión</th>
+                    <th data-name="fechaVencimiento" data-sortable="true" data-breakpoints="xs">Fecha Vencimiento</th>
+                    <th data-name="codigoCliente" data-sortable="true">Cod. Cliente</th>
+                    <th data-name="razonSocial" data-sortable="true">Razón Social</th>
+                    <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
+                    <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
+                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
+                    <th data-name="asesorComercial" data-sortable="true" data-breakpoints="xs">Cod. Asesor Comercial</th>
+                    <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
+                    @if (documentoVenta.usuario.apruebaAnulaciones)
+                    {
+                        <th data-name="comentarioSolicitudAnulacion" data-visible="true" data-sortable="true" data-breakpoints="xs">Comentario Solicitud Anulación</th>
+                    }
+                    else
+                    {
+                        <th data-name="comentarioSolicitudAnulacion" data-visible="false" data-sortable="true" data-breakpoints="xs">Comentario Solicitud Anulación</th>
+                    }
+                    <th data-name="opciones" data-sortable="false" data-breakpoints="xs"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        @if (documentoVentaList.Count == 0)
+        {
+            <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
+                <p class="pagination-centered" style=" font-size: medium" align="center">
+                    La búsqueda no obtuvo resultados.
+                </p>
+            </div>
+        }
+    </form>
 </div>
 
+
+
+
+<div class="modal fade" id="modalVerFactura" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerFactura"><b>Documento Electrónico de Venta</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <!--FECHA HORA EMISIÓN -  SERIE CORRELATIVO-->
+                    <div class="row">
+                        <!--Fecha Emisión-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpFechaEmision" class="control-label col-xs-2">FECHA EMISIÓN:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="vpFEC_EMI_HOR_EMI"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--NUMERO FACTURA-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpSERIE_CORRELATIVO" class="control-label col-xs-4">SERIE / CORRELATIVO:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpSERIE_CORRELATIVO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <!--NOMBRE COMERCIAL CLIENTE-->
+                    <div class="row">
+                        <!--Razón Social-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpRazonSocial" class="control-label col-xs-2">SEÑOR(ES):</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="vpNOM_RCT"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--DIRECCION - ORDEN DE COMPRA-->
+                    <div class="row">
+                        <!--Dirección-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpRazonSocial" class="control-label col-xs-2 resaltarDatosFactura2">DIRECCIÓN:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static " id="vpDIR_DES_RCT"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpNRO_ORD_COM" class="control-label col-xs-4 resaltarDatosFactura2">REFERENCIA:</label>
+                                <div class="col-xs-8 ">
+                                    <p class="form-control-static" id="vpNRO_ORD_COM"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--RUC - NRO GUIA-->
+                    <div class="row">
+                        <!--RUC-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpNRO_DOC_RCT" class="control-label col-xs-2">R.U.C.:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="vpNRO_DOC_RCT"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--GUIA REMISION-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpNRO_GRE" class="control-label col-xs-4 resaltarDatosFactura2">N° DE GUÍA:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpNRO_GRE"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--OBSERVACIONES-->
+                    <div class="row">
+                        <!--OBSERVACIONES-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="vpOBSERVACIONES" class="control-label col-xs-2 resaltarDatosFactura2">OBSERV:</label>
+                                <div class="col-xs-10 ">
+                                    <p class="form-control-static" id="vpOBSERVACIONES"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--CODIGO CLIENTE-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpCODIGO_CLIENTE" class="control-label col-xs-4">CODIGO CLIENTE:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpCODIGO_CLIENTE"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!--CONDICIONES DE PAGO FECHA DE VENCIMIENTO-->
+                    <div class="row">
+                        <!--CONDICIONES DE PAGO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpCOND_PAGO" class="control-label col-xs-4">COND. PAGO:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpCOND_PAGO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--FECHA DE VENCIMIENTO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpFEC_VCTO" class="control-label col-xs-4">VENCIMIENTO:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpFEC_VCTO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--CODIGO VENDEDOR-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpCODIGO_VEND" class="control-label col-xs-4">CODIGO VEND.:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpCODIGO_VEND"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <!--DATOS NOTA DE CRÉDITO o NOTA DE DÉBITO--->
+
+                    <div class="row datosNotaCreditoDebito">
+                        <!--MOTIVO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="pvMOTIVO" class="control-label col-xs-4">MOTIVO:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="pvMOTIVO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--SUSTENTO-->
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="pvDES_MTVO_NC_ND" class="control-label col-xs-2">SUSTENTO:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="pvDES_MTVO_NC_ND"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row datosNotaCreditoDebito">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="vpREFERENCIA_SERIE_CORRELATIVO" class="control-label col-xs-4">DOC REF:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpREFERENCIA_SERIE_CORRELATIVO"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <!--Fecha Emisión-->
+                            <div class="form-group">
+                                <label for="vpREFERENCIA_FECHA_EMISION" class="control-label col-xs-4">FECHA EMISIÓN:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="vpREFERENCIA_FECHA_EMISION"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <table id="tableDetalleFacturaVistaPrevia" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="false"
+                           data-editing-allow-delete="false"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar edición"
+                           data-editing-add-text="Descartar cambios">
+                        <thead>
+                            <tr>
+                                <th data-name="posicion" data-sortable="false">N°.</th>
+                                <th data-name="codigo" data-sortable="false">CODIGO</th>
+                                <th data-name="cantidad" data-sortable="false" data-breakpoints="xs">CANTIDAD</th>
+                                <th data-name="unidad" data-sortable="false">UNIDAD</th>
+                                <th data-name="descripcion" data-sortable="false" data-breakpoints="xs">DESCRIPCIÓN</th>
+                                <th data-name="valorUnitario" data-sortable="false" data-breakpoints="xs sm">VALOR UNITARIO</th>
+                                <th data-name="valorVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">VALOR VENTA</th>
+                                <th data-name="igv" data-visible="true" data-sortable="false" data-breakpoints="xs sm">IGV</th>
+                                <th data-name="precioUnitario" data-visible="true" data-sortable="false" data-breakpoints="xs sm">PRECIO UNITARIO</th>
+                                <th data-name="precioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">PRECIO VENTA</th>
+                                <th data-name="porcentajeIGV" data-visible="true" data-sortable="false" data-breakpoints="xs sm">% IGV</th>
+                                <th data-name="tipoOperacion" data-visible="true" data-sortable="false" data-breakpoints="xs sm">TIP OP</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <div class="row" style="margin-right: 10px">
+
+                        <div class="col-sm-6 col-lg-8">
+                            <!--CORREO-->
+                            <div class="form-group">
+                                <label for="vpCORREO" class="control-label col-xs-2 resaltarDatosFactura2">CORREO:</label>
+                                <div class="col-xs-10 ">
+                                    <p class="form-control-static" id="vpCORREO"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4" id="montosTotalesConfirmacionDiv">
+
+                            <div class="form-group">
+
+
+
+                                <div class="pull-right">
+                                    <span class="totales">OP. GRAVADA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_GRV"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. INAFECTA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_INF"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. EXONERADA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_EXR"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">OP. GRATUITA: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_GRT"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">SUB TOTAL: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_VAL_VTA"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">IGV: S/ </span>
+                                    <span class="totales" id="vpMNT_TOT_TRB_IGV"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">TOTAL: S/ </span>
+                                    <span class="totales" id="pvMNT_TOT_PRC_VTA"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+
+
+
+
+            <div class="modal-footer">
+
+                <input type="hidden" id="idDocumentoVenta" />
+                <div class="pull-left">
+                    @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
+                    {
+                        <button type="button" id="btnDescargarPDF" class="btn btn-primary bouton-image pdfBoton">PDF</button>
+                    }
+                    @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
+                    {
+                        <button type="button" id="btnDescargarXML" class="btn btn-primary">Descargar XML</button>
+                    }
+                </div>
+
+                <div class="pull-right">
+                    @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
+                    {
+                        <button type="button" id="btnCancelarConfirmarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    }
+                    @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
+                    {
+                        <!--        <button type="button" id="btnActualizarEstado" class="btn btn-primary">Actualizar Estado</button>-->
+                    }
+                    @if (documentoVenta.usuario.creaDocumentosVenta)
+                    {
+                        <button type="button" id="btnSolicitarAnulacion" class="btn btn-danger">Solicitar Anulación</button>
+                    }
+                    @if (documentoVenta.usuario.apruebaAnulaciones)
+                    {
+                        <button type="button" id="btnIniciarAprobacion" class="btn btn-danger">Aprobar Anulación</button>
+                    }
+                    @if (documentoVenta.usuario.creaNotasCredito)
+                    {
+                        <button type="button" id="btnIniciarNotaCredito" class="btn btn-danger">Generar Nota Crédito</button>
+                    }
+                    @if (documentoVenta.usuario.creaNotasDebito)
+                    {
+                        <button type="button" id="btnIniciarNotaDebito" class="btn btn-danger">Generar Nota Débito</button>
+                    }
+                    @if (documentoVenta.usuario.realizaRefacturacion)
+                    {
+                        <!--           <button type="button" id="btnIniciarRefacturacion" class="btn btn-danger">Generar Factura Reemplazo</button>-->
+                    }
+                    @if (documentoVenta.usuario.visualizaDocumentosVenta)
+                    {
+                        <button type="button" id="btnVerNotaDebito" class="btn btn-primary">Ver Notas Débito</button>
+                        <button type="button" id="btnVerNotaCredito" class="btn btn-primary">Ver Notas Crédito</button>
+                    }
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="modalAnulacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAprobacionTitle"><b>Solicitud Anulación Documento de Venta Electrónico</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-12">
+                            <div class="form-group">
+                                <label for="serieNumero" class="control-label col-xs-3">Número Documento:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="text" id="serieNumero" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-12">
+
+                            <!--MOTIVO ANULACION-->
+                            <div class="form-group">
+                                <label for="comentarioAnulado" class="control-label col-xs-3">Motivo:</label>
+
+                                <div class="col-xs-9">
+                                    <textarea class="form-control" rows="5" id="comentarioAnulado" name="comentarioAnulado"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarAnulacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAceptarAnulacion" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalAprobacionAnulacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAprobacionTitle"><b>Aprobar Anulación Documento de Venta Electrónico</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-12">
+                            <div class="form-group">
+                                <label for="serieNumero" class="control-label col-xs-3">Número Documento:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="text" id="serieNumeroAprobacionAnulacion" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-12">
+
+                            <!--MOTIVO ANULACION-->
+                            <div class="form-group">
+                                <label for="comentarioAprobacionAnulacion" class="control-label col-xs-3">Motivo:</label>
+
+                                <div class="col-xs-9">
+                                    <textarea class="form-control" rows="5" id="comentarioAprobacionAnulacion" name="comentarioAprobacionAnulacion"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarAprobacionAnulacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAprobarAnulacion" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="modalGenerarNotaCredito" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalGenerarNotaCreditoTitle"><b>Generar Nota de Crédito</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+
+                    <!--FACTURA-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="serieNumeroFacturaParaNotaCredito" class="control-label col-xs-4">Número Documento:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" id="serieNumeroFacturaParaNotaCredito" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--MOTIVO-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                @Html.LabelFor(dv => documentoVenta.tipoNotaCredito, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito1" name="tipoNotaCredito" value="1" /><label for="tipoNotaCredito1">ANULACIÓN DE LA OPERACIÓN</label> </li>
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito2" name="tipoNotaCredito" value="2" /><label for="tipoNotaCredito2">ANULACIÓN POR ERROR EN EL RUC</label> </li>
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito3" name="tipoNotaCredito" value="3" /><label for="tipoNotaCredito3">CORRECCIÓN POR ERROR EN LA DESCRIPCIÓN</label> </li>
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito4" name="tipoNotaCredito" value="4" /><label for="tipoNotaCredito4">DESCUENTO GLOBAL</label> </li>
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito5" name="tipoNotaCredito" value="5" /><label for="tipoNotaCredito5">DESCUENTO POR ITEM</label> </li>
+                                        <!--<li class="list-group-item"><input type="radio" id="tipoNotaCredito6" name="tipoNotaCredito" value="6" /><label for="tipoNotaCredito6">DEVOLUCIÓN TOTAL</label> </li>
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito7" name="tipoNotaCredito" value="7" /><label for="tipoNotaCredito7">DEVOLUCIÓN POR ITEM</label> </li>-->
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaCredito8" name="tipoNotaCredito" value="9" /><label for="tipoNotaCredito8">DISMINUCIÓN EN EL VALOR</label> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div id="divProductoDescuento" class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4" for="idProducto">Descuento a Aplicar:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("GetDescuentos", "Producto",
+                                                    new
+                                                    {
+                                                        productoSelectId = "idProducto"
+                                                    })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarNotaCredito" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnContinuarGenerandoNotaCredito" class="btn btn-success">Continuar Generando Nota Crédito</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="modalGenerarNotaDebito" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalGenerarNotaDebitoTitle"><b>Generar Nota de Débito</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+
+                    <!--FACTURA-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="serieNumeroFacturaParaNotaDebito" class="control-label col-xs-4">Número Documento:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" id="serieNumeroFacturaParaNotaDebito" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--MOTIVO-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                @Html.LabelFor(dv => documentoVenta.tipoNotaDebito, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaDebito1" name="tipoNotaDebito" value="1" /><label for="tipoNotaDebito1">INTERESES POR MORA</label> </li>
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaDebito2" name="tipoNotaDebito" value="2" /><label for="tipoNotaDebito2">AUMENTO EN EL VALOR</label> </li>
+                                        <li class="list-group-item"><input type="radio" id="tipoNotaDebito3" name="tipoNotaDebito" value="3" /><label for="tipoNotaDebito3">PENALIDADES / OTROS CONCEPTOS</label> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="divProductoCargo" class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4" for="idProducto">Cargo a Aplicar:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("GetCargos", "Producto",
+                                                    new
+                                                    {
+                                                        productoSelectId = "idProducto"
+                                                    })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarNotaDebito" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnContinuarGenerandoNotaDebito" class="btn btn-success">Continuar Generando Nota Débito</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalVerNotasCredito" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerNotasCreditoTitle"><b>Notas de Crédito</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" id="formVerNotasCredito"></form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarVerNotasCredito" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalVerNotasDebito" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerNotasDebitoTitle"><b>Notas de Débito</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" id="formVerNotasDebito"></form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarVerNotasDebito" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="plantillaVerNotas" style="display:none;">
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verSerieNumeroNota" class="control-label col-xs-4">Número Nota #EtiquetaNota:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verSerieNumeroNota">#serieNumero</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verFechaNota" class="control-label col-xs-4">Fecha Emisión Nota #EtiquetaNota:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaNota">#fechaEmisionNota</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verTipoNota" class="control-label col-xs-4">Tipo Nota #EtiquetaNota:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verTipoNota">#tipoNota</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verTotal" class="control-label col-xs-4">Total:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaGuia">#totalNota</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table id="tableDetalleNota" class="table" data-editing="false">
+        <thead>
+            <tr>
+                <th data-name="codigo" data-sortable="false">CODIGO</th>
+                <th data-name="cantidad" data-sortable="false" data-breakpoints="xs">CANTIDAD</th>
+                <th data-name="descripcion" data-sortable="false" data-breakpoints="xs">DESCRIPCIÓN</th>
+                <th data-name="valorUnitario" data-sortable="false" data-breakpoints="xs sm">VALOR UNITARIO</th>
+                <th data-name="valorVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">VALOR VENTA</th>
+                <th data-name="igv" data-visible="true" data-sortable="false" data-breakpoints="xs sm">IGV</th>
+                <th data-name="precioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">PRECIO VENTA</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div class="modal-body">
+    <form class="form-horizontal" id="formVerGuiasRemision"></form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" id="btnCancelarVerGuiasRemision" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+</div>
+
+
+
+
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/factura")
+}

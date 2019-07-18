@@ -1,0 +1,29 @@
+﻿@model Cotizador.Models.DepartamentoViewModels
+
+@if (Model.Disabled)
+{
+    @Html.DropDownList(
+                Model.DepartamentoSelectId,
+                Model.Departamentos, "Seleccione el departamento",
+                new
+                {
+                    id = Model.DepartamentoSelectId,
+                    @class = "form-control",
+                    @disabled = "disabled",
+                    onchange = $"onChangeDepartamento('{Model.DepartamentoSelectId}','{Model.ProvinciaSelectId}','{Model.DistritoSelectId}','" +
+                               $"{Model.ProvinciaDivId}','{Model.DistritoDivId}','{Model.UrlProvinciasPorDepartamento}','{Model.UrlDistritosPorProvincia}');"
+                })
+}
+else
+{
+    @Html.DropDownList(
+                Model.DepartamentoSelectId,
+                Model.Departamentos, "Seleccione el departamento",
+                new
+                {
+                    id = Model.DepartamentoSelectId,
+                    @class = "form-control",
+                    onchange = $"onChangeDepartamento('{Model.DepartamentoSelectId}','{Model.ProvinciaSelectId}','{Model.DistritoSelectId}','" +
+                               $"{Model.ProvinciaDivId}','{Model.DistritoDivId}','{Model.UrlProvinciasPorDepartamento}','{Model.UrlDistritosPorProvincia}');"
+                })
+}

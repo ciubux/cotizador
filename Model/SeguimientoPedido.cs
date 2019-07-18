@@ -6,31 +6,49 @@ using System.Web;
 
 namespace Model
 {
-    public class SeguimientoPedido
+    public class SeguimientoPedido : Auditoria
     {
         public SeguimientoPedido()
         {
-            this.estado = estadosSeguimientoPedido.Aprobada;
+            this.estado = estadosSeguimientoPedido.Ingresado;
         }
-
 
         public enum estadosSeguimientoPedido
         {
             [Display(Name = "Todos")]
             Todos = -1,
-            [Display(Name = "Pendiente Aprobación")]
-            Pendiente = 0,
-            [Display(Name = "Aprobada")]
-            Aprobada = 1,
-            [Display(Name = "Denegada")]
-            Denegada = 2,
-            [Display(Name = "Aceptada")]
-            Aceptada = 3,
-            [Display(Name = "Rechazada")]
-            Rechazada = 4,
             [Display(Name = "En Edición")]
-            Edicion = 5
+            Edicion = 6,
+            [Display(Name = "Pendiente Aprobación de Ingreso")]
+            PendienteAprobacion = 0,
+            [Display(Name = "Ingresado")]
+            Ingresado = 1,
+            [Display(Name = "Denegado")]
+            Denegado = 2,
+            [Display(Name = "Programado")]
+            Programado = 3,
+            [Display(Name = "Guiado")]
+            Atendido = 4,
+            [Display(Name = "Guiado Parcialmente")]
+            AtendidoParcialmente = 5,
+            [Display(Name = "Recibido")]
+            Recibido = 10,
+            [Display(Name = "Recibido Parcialmente")]
+            RecibidoParcialmente = 11,
+            [Display(Name = "Facturado")]
+            Facturado = 8,
+            [Display(Name = "Facturado Parcialmente")]
+            FacturadoParcialmente = 9,
+            [Display(Name = "Eliminado")]
+            Eliminada = 7,
+
+
+
+            [Display(Name = "[Entrega No Finalizada]")]
+            NoAtendidos = -2
         };
+
+        public Guid idSeguimientoPedido { get; set; }
 
         public estadosSeguimientoPedido estado { get; set; }
         public String observacion { get; set; }

@@ -1,0 +1,1 @@
+ALTER TABLE PEDIDO_DETALLE ADD indicador_aprobacion smallint

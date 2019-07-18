@@ -30,13 +30,53 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\..\NPOI 2.2.1 binary package\Release\Net20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\..\..\NPOI 2.2.1 binary package\Release\Net20\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\..\..\..\NPOI 2.2.1 binary package\Release\Net20\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\..\..\..\NPOI 2.2.1 binary package\Release\Net20\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\..\..\..\NPOI 2.2.1 binary package\Release\Net20\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RolBL.cs" />
+    <Compile Include="ParametroBL.cs" />
+    <Compile Include="DocumentoVentaBL.cs" />
+    <Compile Include="Email\PedidoSinAtencion.cs" />
+    <Compile Include="ArchivoAdjuntoBL.cs" />
+    <Compile Include="DomicilioLegalBL.cs" />
+    <Compile Include="AlertaValidacionBL.cs" />
+    <Compile Include="LogCambioBL.cs" />
+    <Compile Include="PermisoBL.cs" />
+    <Compile Include="SubDistribuidorBL.cs" />
+    <Compile Include="OrigenBL.cs" />
+    <Compile Include="SerieDocumentoBL.cs" />
+    <Compile Include="SolicitanteBL.cs" />
+    <Compile Include="DireccionEntregaBL.cs" />
+    <Compile Include="DocumentoCompraBL.cs" />
+    <Compile Include="MovimientoAlmacenBL.cs" />
+    <Compile Include="LogCampoBL.cs" />
+    <Compile Include="UtilesHelper.cs" />
+    <Compile Include="CompraBL.cs" />
+    <Compile Include="VendedorBL.cs" />
+    <Compile Include="VentaBL.cs" />
+    <Compile Include="TransportistaBL.cs" />
+    <Compile Include="PedidoBL.cs" />
     <Compile Include="FacturaBL.cs" />
     <Compile Include="GrupoBL.cs" />
     <Compile Include="LogBL.cs" />
@@ -48,6 +88,7 @@
     <Compile Include="ProveedorBL.cs" />
     <Compile Include="CategoriaBL.cs" />
     <Compile Include="MonedaBL.cs" />
+    <Compile Include="UbigeoBL.cs" />
     <Compile Include="UsuarioBL.cs" />
     <Compile Include="PrecioBL.cs" />
     <Compile Include="CotizacionBL.cs" />
@@ -72,8 +113,14 @@
       <Project>{2e588952-5389-42e5-8ed8-c42b9e38f6d7}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj">
+      <Project>{8492E629-D624-499A-86C2-6E7F23450E78}</Project>
+      <Name>ServiceLayer</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

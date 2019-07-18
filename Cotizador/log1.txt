@@ -1,0 +1,79 @@
+2019-02-21 15:54:09.4620|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-02-21 15:58:29.1134|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-02-22 18:38:15.3595|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Producto ya se encuentra en la lista.
+2019-02-22 18:38:15.4294|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Producto ya se encuentra en la lista.
+2019-02-28 12:53:11.0394|ERROR|Cotizador.Controllers.ParentController|d.reducindo@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-03-05 18:01:56.9099|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Cannot insert the value NULL into column 'fecha_fin_vigencia', table 'cotizadormp.dbo.CAMBIO'; column does not allow nulls. INSERT fails.
+The statement has been terminated.
+2019-03-06 17:56:59.0114|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / El índice estaba fuera del intervalo. Debe ser un valor no negativo e inferior al tamaño de la colección.
+Nombre del parámetro: index
+2019-03-06 17:58:59.4293|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / El índice estaba fuera del intervalo. Debe ser un valor no negativo e inferior al tamaño de la colección.
+Nombre del parámetro: index
+2019-03-06 18:02:30.0676|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / El índice estaba fuera del intervalo. Debe ser un valor no negativo e inferior al tamaño de la colección.
+Nombre del parámetro: index
+2019-03-07 09:12:15.7531|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Error getting value from 'modificaCanasta' on 'Model.Cliente'.
+2019-03-07 09:14:20.5973|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Error getting value from 'modificaCanasta' on 'Model.Cliente'.
+2019-03-07 09:15:40.7355|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Error getting value from 'modificaCanasta' on 'Model.Cliente'.
+2019-03-07 17:12:40.0435|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (43996872, 15526227-2108-4113-b46a-1c8ab5c0e581, 1).
+The statement has been terminated.
+2019-03-08 17:56:14.0954|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Procedure or function 'pi_clienteAdjunto' expects parameter '@checksum', which was not supplied.
+2019-03-08 17:57:45.8083|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Procedure or function 'pi_clienteAdjunto' expects parameter '@checksum', which was not supplied.
+2019-03-11 18:08:23.4496|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / La conversión especificada no es válida.
+2019-03-11 18:08:34.4708|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / La conversión especificada no es válida.
+2019-03-12 11:00:26.6103|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE_SUNAT' with unique index 'IDX_CLIENTE_SUNAT_RUC'. The duplicate key value is (<NULL>).
+The statement has been terminated.
+2019-03-12 11:09:46.5229|ERROR|Cotizador.Controllers.ParentController|admin@mpinstitucional.com / Could not find stored procedure 'pu_usuarioPermiso'.
+2019-03-13 16:38:20.9961|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-03-13 16:42:12.1814|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-03-13 16:43:28.7627|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-03-13 16:43:46.8531|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-03-13 16:44:39.9858|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.
+2019-04-01 10:17:34.8270|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-01 10:42:26.2355|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-01 10:45:48.3777|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-01 10:47:35.9151|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-07 22:29:44.7306|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-04-07 23:04:17.9008|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-04-09 13:04:47.1940|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 13:07:47.3721|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 13:08:23.0791|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 13:14:53.8153|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 15:35:15.6641|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / La cadena de entrada no tiene el formato correcto.
+2019-04-09 15:35:41.7693|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / La cadena de entrada no tiene el formato correcto.
+2019-04-09 15:37:52.9355|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / La cadena de entrada no tiene el formato correcto.
+2019-04-09 15:41:09.9108|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / La cadena de entrada no tiene el formato correcto.
+2019-04-09 15:43:33.1799|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 15:43:55.2818|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 15:44:44.4552|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 15:45:48.6926|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-09 15:47:13.6946|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-21 09:01:05.8025|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / @@esCargaMasiva is not a parameter for procedure pu_clienteSunat.
+2019-04-21 09:02:01.3815|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / @@esCargaMasiva is not a parameter for procedure pu_clienteSunat.
+2019-04-21 09:03:37.6585|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-04-25 23:20:05.4178|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
+2019-04-25 23:22:37.1131|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
+2019-04-25 23:23:01.5061|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
+2019-04-25 23:24:46.7005|ERROR|Cotizador.Controllers.ParentController|c.cornejo@mpinstitucional.com / Intento de dividir por cero.
+2019-05-29 10:17:28.0981|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE_SUNAT' with unique index 'IDX_CLIENTE_SUNAT_RUC'. The duplicate key value is (<NULL>).
+Cannot insert the value NULL into column 'direccion', table 'cotizadormp.dbo.DOMICILIO_LEGAL'; column does not allow nulls. INSERT fails.
+Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_CLIENTE_CODIGO'. The duplicate key value is (<NULL>, 1).
+The statement has been terminated.
+The statement has been terminated.
+The statement has been terminated.
+2019-05-29 10:21:52.5107|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE_SUNAT' with unique index 'IDX_CLIENTE_SUNAT_RUC'. The duplicate key value is (<NULL>).
+Cannot insert the value NULL into column 'direccion', table 'cotizadormp.dbo.DOMICILIO_LEGAL'; column does not allow nulls. INSERT fails.
+Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_CLIENTE_CODIGO'. The duplicate key value is (<NULL>, 1).
+The statement has been terminated.
+The statement has been terminated.
+The statement has been terminated.
+2019-05-29 10:22:40.4592|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE_SUNAT' with unique index 'IDX_CLIENTE_SUNAT_RUC'. The duplicate key value is (<NULL>).
+Cannot insert the value NULL into column 'direccion', table 'cotizadormp.dbo.DOMICILIO_LEGAL'; column does not allow nulls. INSERT fails.
+The statement has been terminated.
+The statement has been terminated.
+2019-05-29 10:23:47.9848|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (10461243679, 15526227-2108-4113-b46a-1c8ab5c0e581, 1).
+The statement has been terminated.
+2019-05-29 10:24:11.6342|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.2019-06-03 13:35:29.4470|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-06-03 13:38:34.0882|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-06-03 21:08:50.3365|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Cotización ya se encuentra creada
+2019-06-27 12:50:21.1120|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-06-27 14:04:36.4211|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Could not find stored procedure 'pu_permiso'.

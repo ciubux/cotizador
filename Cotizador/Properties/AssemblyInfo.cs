@@ -14,9 +14,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Si configura ComVisible como falso, los tipos de este ensamblado no se hacen visibles
-// para componentes COM.  Si necesita acceder a un tipo de este ensamblado desde
-// COM, establezca el atributo ComVisible en True en este tipo.
+// Si configura ComVisible como falso, los ClasesPedido de este ensamblado no se hacen visibles
+// para componentes COM.  Si necesita acceder a un clasePedido de este ensamblado desde
+// COM, establezca el atributo ComVisible en True en este clasePedido.
 [assembly: ComVisible(false)]
 
 // El siguiente GUID sirve como ID de typelib si este proyecto se expone a COM
