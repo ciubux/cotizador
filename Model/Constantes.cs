@@ -104,6 +104,16 @@ namespace Model
         public static String VAR_SESSION_VENDEDOR_LISTA = "vendedorList";
         public static String VAR_SESSION_VENDEDOR_VER = "vendedorVer";
 
+        public static String VAR_SESSION_LOGCAMBIO = "logcambio";
+        public static String VAR_SESSION_LOGCAMBIO_BUSQUEDA = "logcambioBusqueda";
+        public static String VAR_SESSION_LOGCAMBIO_LISTA = "logcambioList";
+        public static String VAR_SESSION_LOGCAMBIO_VER = "logcambioVer";
+
+        public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA = "notificacionDocumentoVenta";
+        public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_BUSQUEDA = "notificacionDocumentoVentaBusqueda";
+        public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_LISTA = "notificacionDocumentoVentaList";
+        public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_VER = "notificacionDocumentoVentaVer";
+
         public static String VAR_SESSION_SUBDISTRIBUIDOR = "subDistribuidor";
         public static String VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA = "subDistribuidorBusqueda";
         public static String VAR_SESSION_SUBDISTRIBUIDOR_LISTA = "subDistribuidorList";
@@ -365,6 +375,10 @@ namespace Model
 
         public const String MODIFICA_VENDEDORES = "P821";
         public const String VISUALIZA_VENDEDORES = "P822";
+        public const String MODIFICA_LOGCAMBIO = "P823";
+        public const String VISUALIZA_LOGCAMBIO = "P824";
+
+        public const String VISUALIZA_DOCUMENTOVENTANOTIFICACION = "P420";
 
         public enum paginas {
             /*COTIZACION*/
@@ -474,7 +488,18 @@ namespace Model
             BusquedaVendedores = 43,
             [Display(Name = "MANTENIMIENTO VENDEDORES")]
             MantenimientoVendedores = 44,
-            
+
+            /*BUSQUEDA DE LOGCAMBIO*/
+            [Display(Name = "BUSQUEDA LOGCAMBIO")]
+            BusquedaLogCambio = 45,
+            [Display(Name = "MANTENIMIENTO LOGCAMBIO")]
+            MantenimientoLogCambio = 46,
+
+
+            /*NOTIFICACION DOCUMENTO DE VENTA*/
+            [Display(Name = "BUSQUEDA DOCUMENTOVENTANOTIFICACION")]
+            BusquedaDocumentoVentaNotificacion = 47,
+
             /*ROLES*/
             [Display(Name = "BUSQUEDA ROLES")]
             BusquedaRoles = 101,
@@ -494,6 +519,8 @@ namespace Model
 
             [Display(Name = "MANTENIMIENTO PERMISO")]
             MantenimientoPermisos = 106
+
+
 
         };
 

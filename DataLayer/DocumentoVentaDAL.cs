@@ -715,6 +715,50 @@ namespace DataLayer
 
     */
         }
-        
+
+
+
+        /*--------------------------------------------*/
+
+
+        public List<DocumentoVenta> getValidacionAnulacion()
+        {
+            var objCommand = GetSqlCommand("ps_validacionNotificacionDocumentoVenta");
+            DataTable dataTable = Execute(objCommand);
+            List<DocumentoVenta> lista = new List<DocumentoVenta>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                DocumentoVenta docuventa = new DocumentoVenta();
+
+                docuventa.idDocumentoVenta = Converter.GetGuid(row, "id_cpe_cabecera_be");
+                docuventa.razon_social = Converter.GetString(row, "razon_social");
+                docuventa.nombre = Converter.GetString(row, "nombre");
+                docuventa.fecha_solicitud = Converter.GetDateTime(row, "fecha_creacion").ToShortDateString();
+                docuventa.monto = Converter.GetString(row, "MNT_TOT_NAC");
+                docuventa.ruc = Converter.GetString(row, "ruc");
+                docuventa.contacto = Converter.GetString(row, "contacto1");
+                docuventa.estado_anulacion = Converter.GetInt(row, "estado_notificacion");
+                docuventa.correoEnvio = Converter.GetString(row, "CORREO_ENVIO");
+                docuventa.telefonoContacto = Converter.GetString(row, "telefono_contacto1");
+                docuventa.serie = Converter.GetString(row, "SERIE");
+                docuventa.numero_factura = Converter.GetString(row, "CORRELATIVO");
+                lista.Add(docuventa);
+            }
+            return lista;
+        }
+
+
+        public DocumentoVenta updateNotificacionAnulacion(DocumentoVenta obj)
+        {
+            var objCommand = GetSqlCommand("pu_proceso_cambiar");
+            InputParameterAdd.Guid(objCommand, "id_documento_venta", obj.idDocumentoVenta);
+            InputParameterAdd.Int(objCommand, "estado", obj.estado_anulacion);
+            ExecuteNonQuery(objCommand);
+
+            return obj;
+
+        }
+
     }
 }

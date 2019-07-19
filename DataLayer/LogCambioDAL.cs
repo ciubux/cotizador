@@ -129,7 +129,69 @@ namespace DataLayer
 
             return true;
         }
-        
+
+
+        /*--------------------------------------------------------------------------------------*/
+
+        public List<LogCambio> getCatalogoList()
+        {
+            var objCommand = GetSqlCommand("PS_CATALOGO_CAMPO");
+            DataTable dataTable = Execute(objCommand);
+            List<LogCambio> lista = new List<LogCambio>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                LogCambio obj = new LogCambio();
+
+                obj.catalogoId = Converter.GetInt(row, "ID_CATALOGO_CAMPO");
+                obj.nombre = Converter.GetString(row, "NOMBRE");
+                obj.estadoCatalogo = Converter.GetInt(row, "ESTADO");
+                lista.Add(obj);
+            }
+            return lista;
+        }
+
+
+        public LogCambio getCatalogoById(LogCambio idCatalogo)
+        {
+
+            var objCommand = GetSqlCommand("PS_DETALLE_CATALOGO_CAMPO");
+            InputParameterAdd.Int(objCommand, "ID_CATALOGO_CAMPO", idCatalogo.catalogoId);
+            DataTable dataTable = Execute(objCommand);
+            LogCambio obj = new LogCambio();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                obj.catalogoId = Converter.GetInt(row, "id_catalogo_campo");
+                obj.estadoCatalogo = Converter.GetInt(row, "estado");
+                obj.puede_persistir = Converter.GetInt(row, "puede_persistir");
+                obj.codigo = Converter.GetString(row, "codigo");
+                obj.nombre = Converter.GetString(row, "nombre");
+                obj.id_catalogo_campo = Converter.GetInt(row, "id_catalogo_tabla");
+                obj.tabla_referencia = Converter.GetString(row, "tabla_referencia");
+                obj.orden = Converter.GetInt(row, "orden");
+                obj.campo_referencia = Converter.GetString(row, "campo_referencia");
+
+
+            }
+
+            return obj;
+        }
+
+        public LogCambio updateCatalogo(LogCambio obj)
+        {
+            var objCommand = GetSqlCommand("PU_CATALOGO_CAMPO");
+            InputParameterAdd.Int(objCommand, "ID_CATALOGO_CAMPO", obj.catalogoId);
+            InputParameterAdd.Int(objCommand, "ESTADO", obj.estadoCatalogo);
+            InputParameterAdd.Int(objCommand, "PUEDE_PERSISTIR", obj.puede_persistir);
+
+
+            ExecuteNonQuery(objCommand);
+
+            return obj;
+
+        }
+
     }
 }
 

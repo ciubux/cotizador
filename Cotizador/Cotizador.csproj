@@ -235,6 +235,7 @@
     <Compile Include="Controllers\DocumentoCompraController.cs" />
     <Compile Include="Controllers\DomicilioLegalController.cs" />
     <Compile Include="Controllers\GrupoClienteController.cs" />
+    <Compile Include="Controllers\LogCambioController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
@@ -305,6 +306,7 @@
     <Compile Include="Models\DTOsShow\PedidoDTOshow.cs" />
     <Compile Include="Models\DomicilioLegalViewModels.cs" />
     <Compile Include="Models\GrupoClienteViewModels.cs" />
+    <Compile Include="Models\LogCambioViewModels.cs" />
     <Compile Include="Models\RolViewModels.cs" />
     <Compile Include="Models\ProductoMultipleViewModels.cs" />
     <Compile Include="Models\ProductoViewModels.cs" />
