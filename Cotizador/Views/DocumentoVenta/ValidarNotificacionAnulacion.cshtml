@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Documento de Venta - Notificaciones pendientes de anulaciones de facturas de venta";
+    Model.DocumentoVenta documentoventa = ViewBag.documentoventa;
+    
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="idProducto" value="" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <form class="form-horizontal">
+
+        <div class="row">
+
+
+
+
+            <table id="tableNotificacionAnulacion" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+                   data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                   data-editing-allow-add="false"
+                   data-editing-allow-delete="false"
+                   data-editing-allow-edit="false"
+                   data-sorting="true"
+                   data-show-toggle="false"
+                   data-editing-hide-text="Finalizar edición"
+                   data-editing-add-text="Descartar cambios">
+
+                <thead>
+                    <tr>
+                        <th data-name="id_documento_venta" data-visible="false"></th>
+                        <th data-name="factura" data-visible="true" data-sortable="true">Factura</th>
+                        <th data-name="razon_social" data-visible="true" data-sortable="true">Razón Social</th>
+                        <th data-name="ruc" data-visible="true">Ruc</th>
+                        <th data-name="usuario_solicitud" data-visible="true">Usuario Solicitud</th>
+                        <th data-name="contacto" data-visible="true">Contacto</th>
+                        <th data-name="fecha_solicitud" data-visible="true">Fecha Solicitud</th>
+                        <th data-name="monto" data-visible="true">Total</th>
+                        <th data-name="estado_anulacion" data-visible="true">Estado</th>
+                        <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                    </tr>
+                </thead>
+
+
+                <tbody></tbody>
+            </table>
+            
+        </div>
+        
+    </form>
+</div>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/documentoVenta")
+}

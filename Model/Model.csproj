@@ -157,12 +157,6 @@
     <None Include="Connected Services\ServiceReferencePSE\Model.ServiceReferencePSE.RPTA_DOC_TRIB_BE.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ServiceReferencePSE\Model.ServiceReferencePSE.RPTA_OPE_BE.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\ServiceReferencePSE\Model.ServiceReferencePSE.RPTA_RET_BE.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE.wsdl" />
     <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE.xsd">
       <SubType>Designer</SubType>
@@ -180,9 +174,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE6.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\ServiceSunatPadron\Model.ServiceSunatPadron.ClienteSunat.datasource">

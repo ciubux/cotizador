@@ -190,14 +190,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 4, "A", "Telefono: (000) 000-0000");
                 UtilesHelper.setValorCelda(sheet, 5, "A", "Fax: (000) 000-0000");
                 UtilesHelper.setValorCelda(sheet, 6, "A", "http://mpinstitucional.com");
-<<<<<<< HEAD
 
 
-=======
-                
-                
-                
->>>>>>> origin/devInvoice
 
                 UtilesHelper.setValorCelda(sheet, 2, "F", "FECHA:", formLabelCellStyle);
                 UtilesHelper.combinarCeldas(sheet, 2, 2, "G", "H");
@@ -237,7 +231,6 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setRowHeight(sheet, i, 540);
                 UtilesHelper.setValorCelda(sheet, i, "A", "SKU", titleDataCellStyle);
-<<<<<<< HEAD
                 UtilesHelper.setValorCelda(sheet, i, "B", "SKU PROV" , titleDataCellStyle);
                 UtilesHelper.combinarCeldas(sheet, i, i, "C", "D");
                 UtilesHelper.setValorCelda(sheet, i, "C", "DESCRIPCIÓN", titleDataCellStyle);
@@ -255,23 +248,6 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setColumnWidth(sheet, "G", 2900);
                 UtilesHelper.setColumnWidth(sheet, "H", 3500);
-=======
-                UtilesHelper.setValorCelda(sheet, i, "B", "IMAGEN" , titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "C", "DESCRIPCIÓN", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "D", "UNIDAD", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "E", "CANT.", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "F", "P. UNIT.", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "G", "TOTAL", titleDataCellStyle);
-
-                UtilesHelper.setColumnWidth(sheet, "A", 2200);
-                UtilesHelper.setColumnWidth(sheet, "B", 1500);
-                UtilesHelper.setColumnWidth(sheet, "C", 12000);
-                UtilesHelper.setColumnWidth(sheet, "D", 5000);
-                UtilesHelper.setColumnWidth(sheet, "E", 2000);
-
-                UtilesHelper.setColumnWidth(sheet, "G", 2500);
-                UtilesHelper.setColumnWidth(sheet, "H", 2500);
->>>>>>> origin/devInvoice
 
                 i++;
 
@@ -302,14 +278,6 @@ namespace Cotizador.ExcelExport
                     pictdet.Resize(1);
 
                     UtilesHelper.setValorCelda(sheet, i, "A", det.producto.sku);
-<<<<<<< HEAD
-=======
-                    UtilesHelper.setValorCelda(sheet, i, "C", det.producto.descripcion);
-                    UtilesHelper.setValorCelda(sheet, i, "D", det.unidad);
-                    UtilesHelper.setValorCelda(sheet, i, "E", det.cantidad);
-                    UtilesHelper.setValorCelda(sheet, i, "F", (double) det.precioUnitario);
-                    UtilesHelper.setValorCelda(sheet, i, "G", (double) det.subTotal);
->>>>>>> origin/devInvoice
 
                     i++;
                 }

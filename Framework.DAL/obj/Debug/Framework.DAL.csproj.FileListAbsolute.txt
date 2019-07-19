@@ -159,7 +159,6 @@ D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompi
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
-<<<<<<< HEAD
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL\bin\Debug\Framework.DAL.dll
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL\bin\Debug\Framework.DAL.pdb
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL\bin\Debug\Model.dll
@@ -170,5 +169,53 @@ C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL\obj\Debug\Fram
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL\obj\Debug\Framework.DAL.dll
 C:\Users\Andre\Desktop\OFICIAL\cotizador-devInvoice\Framework.DAL\obj\Debug\Framework.DAL.pdb
-=======
->>>>>>> origin/devInvoice
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador\cotizador\Framework.DAL\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador\cotizador\Framework.DAL\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador\cotizador\Framework.DAL\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\Nueva carpeta\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\trom\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\trom\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\trom\cotizador\Framework.DAL\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\trom\cotizador\Framework.DAL\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\trom\cotizador\Framework.DAL\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\trom\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\trom\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\trom\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+C:\Users\Andre\Desktop\trom\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\trom\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\16\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\16\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\16\cotizador\Framework.DAL\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\16\cotizador\Framework.DAL\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\16\cotizador\Framework.DAL\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\16\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\16\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\16\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+C:\Users\Andre\Desktop\16\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\16\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\ULTINMO\cotizador\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\ULTINMO\cotizador\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\ULTINMO\cotizador\cotizador\Framework.DAL\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\ULTINMO\cotizador\cotizador\Framework.DAL\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\ULTINMO\cotizador\cotizador\Framework.DAL\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\ULTINMO\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\ULTINMO\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\ULTINMO\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+C:\Users\Andre\Desktop\ULTINMO\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\ULTINMO\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb

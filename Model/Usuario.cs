@@ -194,16 +194,15 @@ namespace Model
 
         /*Vendedores*/
         public bool modificaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_VENDEDORES)).FirstOrDefault() != null; } }
-<<<<<<< HEAD
         public bool visualizaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }
 
         /*LogCambio*/
         public bool modificaLogCambio { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_LOGCAMBIO)).FirstOrDefault() != null; } }
         public bool visualizaLogCambio { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_LOGCAMBIO)).FirstOrDefault() != null; } }
 
-=======
-        public bool visualizaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }        
->>>>>>> origin/devInvoice
+        /*Notificacion de Documento de Venta*/        
+        public bool visualizaDocumentoVentaNotificacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOVENTANOTIFICACION)).FirstOrDefault() != null; } }
+
 
         /*Administra Permisos*/
         public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }

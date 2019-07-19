@@ -316,24 +316,6 @@ namespace Model.ServiceReferencePSE {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DES_REF_CLTField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string COD_TIP_DOC_COMField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NRO_DOC_COMField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NOM_COMField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Model.ServiceReferencePSE.CPE_CABECERA_MIE[] MIE_LIST_RCTField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string TIP_ORIField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MNT_TOT_ROUNDINGField;
-        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1618,177 +1600,6 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=98)]
-        public string COD_TIP_DOC_COM {
-            get {
-                return this.COD_TIP_DOC_COMField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.COD_TIP_DOC_COMField, value) != true)) {
-                    this.COD_TIP_DOC_COMField = value;
-                    this.RaisePropertyChanged("COD_TIP_DOC_COM");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=99)]
-        public string NRO_DOC_COM {
-            get {
-                return this.NRO_DOC_COMField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NRO_DOC_COMField, value) != true)) {
-                    this.NRO_DOC_COMField = value;
-                    this.RaisePropertyChanged("NRO_DOC_COM");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=100)]
-        public string NOM_COM {
-            get {
-                return this.NOM_COMField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NOM_COMField, value) != true)) {
-                    this.NOM_COMField = value;
-                    this.RaisePropertyChanged("NOM_COM");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=101)]
-        public Model.ServiceReferencePSE.CPE_CABECERA_MIE[] MIE_LIST_RCT {
-            get {
-                return this.MIE_LIST_RCTField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MIE_LIST_RCTField, value) != true)) {
-                    this.MIE_LIST_RCTField = value;
-                    this.RaisePropertyChanged("MIE_LIST_RCT");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=102)]
-        public string TIP_ORI {
-            get {
-                return this.TIP_ORIField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.TIP_ORIField, value) != true)) {
-                    this.TIP_ORIField = value;
-                    this.RaisePropertyChanged("TIP_ORI");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=103)]
-        public string MNT_TOT_ROUNDING {
-            get {
-                return this.MNT_TOT_ROUNDINGField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MNT_TOT_ROUNDINGField, value) != true)) {
-                    this.MNT_TOT_ROUNDINGField = value;
-                    this.RaisePropertyChanged("MNT_TOT_ROUNDING");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CPE_CABECERA_MIE", Namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.EMISION")]
-    [System.SerializableAttribute()]
-    public partial class CPE_CABECERA_MIE : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string LIN_PARTField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string COD_TIP_DOC_PARTField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NRO_DOC_PARTField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NOM_PARTField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string LIN_PART {
-            get {
-                return this.LIN_PARTField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.LIN_PARTField, value) != true)) {
-                    this.LIN_PARTField = value;
-                    this.RaisePropertyChanged("LIN_PART");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
-        public string COD_TIP_DOC_PART {
-            get {
-                return this.COD_TIP_DOC_PARTField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.COD_TIP_DOC_PARTField, value) != true)) {
-                    this.COD_TIP_DOC_PARTField = value;
-                    this.RaisePropertyChanged("COD_TIP_DOC_PART");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-        public string NRO_DOC_PART {
-            get {
-                return this.NRO_DOC_PARTField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NRO_DOC_PARTField, value) != true)) {
-                    this.NRO_DOC_PARTField = value;
-                    this.RaisePropertyChanged("NRO_DOC_PART");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
-        public string NOM_PART {
-            get {
-                return this.NOM_PARTField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NOM_PARTField, value) != true)) {
-                    this.NOM_PARTField = value;
-                    this.RaisePropertyChanged("NOM_PART");
-                }
-            }
-        }
-        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -1890,7 +1701,151 @@ namespace Model.ServiceReferencePSE {
         private string COD_ITM_SUNATField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string COD_ITM_GS1Field;
+        private string HPJ_NUM_DOCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HPJ_TIP_DOCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HPJ_PAIS_EMI_PASPField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HPJ_NOM_APE_RZN_SCLField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HPJ_PAIS_RESField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HPJ_NUM_DIAS_PERField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HPJ_FEC_INGField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HPJ_FEC_SALField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HPJ_FEC_CSMField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PQT_NUM_DOCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PQT_TIP_DOCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PQT_NOM_DOCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TPT_NUM_ASNTField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TPT_INF_MANField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TPT_FEC_INI_PROGField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TPT_HOR_INI_PROGField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TPT_NUM_DOC_PASJField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TPT_TIP_DOC_PASJField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TPT_NOM_APE_PASJField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TPT_UBIG_DESTField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TPT_UBIG_ORIGField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NUM_EXPEDIENTEField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string COD_UND_EJECUTORAField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NUM_CONTRATOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NUM_PROCESOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DRH_NOM_MTR_EMBField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DRH_CANT_ESP_MARField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DRH_LUG_DESField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DRH_FEC_DESField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_NUM_REG_MTCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_CONF_VHCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_PTO_ORGField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_PTO_DETField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_COD_MNDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_VAL_REF_VJEField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_VAL_REF_VHCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_VAL_REF_TM_VJEField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_CAR_EFV_VHCField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_CAR_EFV_VHC_UNDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_CAR_UTL_VHC_VJEField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DST_CAR_UTL_VHC_VJE_UNDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CDO_COD_UNI_CON_MINField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CDO_NUM_DEC_COMPField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CDO_REG_COM_OROField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CDO_RES_AUT_PLANField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CDO_LEY_MINField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string GDI_NUM_PLACAField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string GDI_NUM_CONTField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string GDI_FEC_CREDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DET_VAL_ADIC01Field;
@@ -1924,9 +1879,6 @@ namespace Model.ServiceReferencePSE {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Model.ServiceReferencePSE.CPE_DETALLE_COMPTA_BE[] DES_COMPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Model.ServiceReferencePSE.CPE_DETALLE_ADIC_BE[] DET_LIST_ADICField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -2290,19 +2242,643 @@ namespace Model.ServiceReferencePSE {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(Order=27)]
-        public string COD_ITM_GS1 {
+        public string HPJ_NUM_DOC {
             get {
-                return this.COD_ITM_GS1Field;
+                return this.HPJ_NUM_DOCField;
             }
             set {
-                if ((object.ReferenceEquals(this.COD_ITM_GS1Field, value) != true)) {
-                    this.COD_ITM_GS1Field = value;
-                    this.RaisePropertyChanged("COD_ITM_GS1");
+                if ((object.ReferenceEquals(this.HPJ_NUM_DOCField, value) != true)) {
+                    this.HPJ_NUM_DOCField = value;
+                    this.RaisePropertyChanged("HPJ_NUM_DOC");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(Order=28)]
+        public string HPJ_TIP_DOC {
+            get {
+                return this.HPJ_TIP_DOCField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HPJ_TIP_DOCField, value) != true)) {
+                    this.HPJ_TIP_DOCField = value;
+                    this.RaisePropertyChanged("HPJ_TIP_DOC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=29)]
+        public string HPJ_PAIS_EMI_PASP {
+            get {
+                return this.HPJ_PAIS_EMI_PASPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HPJ_PAIS_EMI_PASPField, value) != true)) {
+                    this.HPJ_PAIS_EMI_PASPField = value;
+                    this.RaisePropertyChanged("HPJ_PAIS_EMI_PASP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=30)]
+        public string HPJ_NOM_APE_RZN_SCL {
+            get {
+                return this.HPJ_NOM_APE_RZN_SCLField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HPJ_NOM_APE_RZN_SCLField, value) != true)) {
+                    this.HPJ_NOM_APE_RZN_SCLField = value;
+                    this.RaisePropertyChanged("HPJ_NOM_APE_RZN_SCL");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=31)]
+        public string HPJ_PAIS_RES {
+            get {
+                return this.HPJ_PAIS_RESField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HPJ_PAIS_RESField, value) != true)) {
+                    this.HPJ_PAIS_RESField = value;
+                    this.RaisePropertyChanged("HPJ_PAIS_RES");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=32)]
+        public string HPJ_NUM_DIAS_PER {
+            get {
+                return this.HPJ_NUM_DIAS_PERField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HPJ_NUM_DIAS_PERField, value) != true)) {
+                    this.HPJ_NUM_DIAS_PERField = value;
+                    this.RaisePropertyChanged("HPJ_NUM_DIAS_PER");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=33)]
+        public string HPJ_FEC_ING {
+            get {
+                return this.HPJ_FEC_INGField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HPJ_FEC_INGField, value) != true)) {
+                    this.HPJ_FEC_INGField = value;
+                    this.RaisePropertyChanged("HPJ_FEC_ING");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=34)]
+        public string HPJ_FEC_SAL {
+            get {
+                return this.HPJ_FEC_SALField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HPJ_FEC_SALField, value) != true)) {
+                    this.HPJ_FEC_SALField = value;
+                    this.RaisePropertyChanged("HPJ_FEC_SAL");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=35)]
+        public string HPJ_FEC_CSM {
+            get {
+                return this.HPJ_FEC_CSMField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HPJ_FEC_CSMField, value) != true)) {
+                    this.HPJ_FEC_CSMField = value;
+                    this.RaisePropertyChanged("HPJ_FEC_CSM");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=36)]
+        public string PQT_NUM_DOC {
+            get {
+                return this.PQT_NUM_DOCField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PQT_NUM_DOCField, value) != true)) {
+                    this.PQT_NUM_DOCField = value;
+                    this.RaisePropertyChanged("PQT_NUM_DOC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=37)]
+        public string PQT_TIP_DOC {
+            get {
+                return this.PQT_TIP_DOCField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PQT_TIP_DOCField, value) != true)) {
+                    this.PQT_TIP_DOCField = value;
+                    this.RaisePropertyChanged("PQT_TIP_DOC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=38)]
+        public string PQT_NOM_DOC {
+            get {
+                return this.PQT_NOM_DOCField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PQT_NOM_DOCField, value) != true)) {
+                    this.PQT_NOM_DOCField = value;
+                    this.RaisePropertyChanged("PQT_NOM_DOC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=39)]
+        public string TPT_NUM_ASNT {
+            get {
+                return this.TPT_NUM_ASNTField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TPT_NUM_ASNTField, value) != true)) {
+                    this.TPT_NUM_ASNTField = value;
+                    this.RaisePropertyChanged("TPT_NUM_ASNT");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=40)]
+        public string TPT_INF_MAN {
+            get {
+                return this.TPT_INF_MANField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TPT_INF_MANField, value) != true)) {
+                    this.TPT_INF_MANField = value;
+                    this.RaisePropertyChanged("TPT_INF_MAN");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=41)]
+        public string TPT_FEC_INI_PROG {
+            get {
+                return this.TPT_FEC_INI_PROGField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TPT_FEC_INI_PROGField, value) != true)) {
+                    this.TPT_FEC_INI_PROGField = value;
+                    this.RaisePropertyChanged("TPT_FEC_INI_PROG");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=42)]
+        public string TPT_HOR_INI_PROG {
+            get {
+                return this.TPT_HOR_INI_PROGField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TPT_HOR_INI_PROGField, value) != true)) {
+                    this.TPT_HOR_INI_PROGField = value;
+                    this.RaisePropertyChanged("TPT_HOR_INI_PROG");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=43)]
+        public string TPT_NUM_DOC_PASJ {
+            get {
+                return this.TPT_NUM_DOC_PASJField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TPT_NUM_DOC_PASJField, value) != true)) {
+                    this.TPT_NUM_DOC_PASJField = value;
+                    this.RaisePropertyChanged("TPT_NUM_DOC_PASJ");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=44)]
+        public string TPT_TIP_DOC_PASJ {
+            get {
+                return this.TPT_TIP_DOC_PASJField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TPT_TIP_DOC_PASJField, value) != true)) {
+                    this.TPT_TIP_DOC_PASJField = value;
+                    this.RaisePropertyChanged("TPT_TIP_DOC_PASJ");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=45)]
+        public string TPT_NOM_APE_PASJ {
+            get {
+                return this.TPT_NOM_APE_PASJField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TPT_NOM_APE_PASJField, value) != true)) {
+                    this.TPT_NOM_APE_PASJField = value;
+                    this.RaisePropertyChanged("TPT_NOM_APE_PASJ");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=46)]
+        public string TPT_UBIG_DEST {
+            get {
+                return this.TPT_UBIG_DESTField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TPT_UBIG_DESTField, value) != true)) {
+                    this.TPT_UBIG_DESTField = value;
+                    this.RaisePropertyChanged("TPT_UBIG_DEST");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=47)]
+        public string TPT_UBIG_ORIG {
+            get {
+                return this.TPT_UBIG_ORIGField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TPT_UBIG_ORIGField, value) != true)) {
+                    this.TPT_UBIG_ORIGField = value;
+                    this.RaisePropertyChanged("TPT_UBIG_ORIG");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=48)]
+        public string NUM_EXPEDIENTE {
+            get {
+                return this.NUM_EXPEDIENTEField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NUM_EXPEDIENTEField, value) != true)) {
+                    this.NUM_EXPEDIENTEField = value;
+                    this.RaisePropertyChanged("NUM_EXPEDIENTE");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=49)]
+        public string COD_UND_EJECUTORA {
+            get {
+                return this.COD_UND_EJECUTORAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.COD_UND_EJECUTORAField, value) != true)) {
+                    this.COD_UND_EJECUTORAField = value;
+                    this.RaisePropertyChanged("COD_UND_EJECUTORA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=50)]
+        public string NUM_CONTRATO {
+            get {
+                return this.NUM_CONTRATOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NUM_CONTRATOField, value) != true)) {
+                    this.NUM_CONTRATOField = value;
+                    this.RaisePropertyChanged("NUM_CONTRATO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=51)]
+        public string NUM_PROCESO {
+            get {
+                return this.NUM_PROCESOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NUM_PROCESOField, value) != true)) {
+                    this.NUM_PROCESOField = value;
+                    this.RaisePropertyChanged("NUM_PROCESO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=52)]
+        public string DRH_NOM_MTR_EMB {
+            get {
+                return this.DRH_NOM_MTR_EMBField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DRH_NOM_MTR_EMBField, value) != true)) {
+                    this.DRH_NOM_MTR_EMBField = value;
+                    this.RaisePropertyChanged("DRH_NOM_MTR_EMB");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=53)]
+        public string DRH_CANT_ESP_MAR {
+            get {
+                return this.DRH_CANT_ESP_MARField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DRH_CANT_ESP_MARField, value) != true)) {
+                    this.DRH_CANT_ESP_MARField = value;
+                    this.RaisePropertyChanged("DRH_CANT_ESP_MAR");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=54)]
+        public string DRH_LUG_DES {
+            get {
+                return this.DRH_LUG_DESField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DRH_LUG_DESField, value) != true)) {
+                    this.DRH_LUG_DESField = value;
+                    this.RaisePropertyChanged("DRH_LUG_DES");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=55)]
+        public string DRH_FEC_DES {
+            get {
+                return this.DRH_FEC_DESField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DRH_FEC_DESField, value) != true)) {
+                    this.DRH_FEC_DESField = value;
+                    this.RaisePropertyChanged("DRH_FEC_DES");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=56)]
+        public string DST_NUM_REG_MTC {
+            get {
+                return this.DST_NUM_REG_MTCField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_NUM_REG_MTCField, value) != true)) {
+                    this.DST_NUM_REG_MTCField = value;
+                    this.RaisePropertyChanged("DST_NUM_REG_MTC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=57)]
+        public string DST_CONF_VHC {
+            get {
+                return this.DST_CONF_VHCField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_CONF_VHCField, value) != true)) {
+                    this.DST_CONF_VHCField = value;
+                    this.RaisePropertyChanged("DST_CONF_VHC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=58)]
+        public string DST_PTO_ORG {
+            get {
+                return this.DST_PTO_ORGField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_PTO_ORGField, value) != true)) {
+                    this.DST_PTO_ORGField = value;
+                    this.RaisePropertyChanged("DST_PTO_ORG");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=59)]
+        public string DST_PTO_DET {
+            get {
+                return this.DST_PTO_DETField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_PTO_DETField, value) != true)) {
+                    this.DST_PTO_DETField = value;
+                    this.RaisePropertyChanged("DST_PTO_DET");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=60)]
+        public string DST_COD_MND {
+            get {
+                return this.DST_COD_MNDField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_COD_MNDField, value) != true)) {
+                    this.DST_COD_MNDField = value;
+                    this.RaisePropertyChanged("DST_COD_MND");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=61)]
+        public string DST_VAL_REF_VJE {
+            get {
+                return this.DST_VAL_REF_VJEField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_VAL_REF_VJEField, value) != true)) {
+                    this.DST_VAL_REF_VJEField = value;
+                    this.RaisePropertyChanged("DST_VAL_REF_VJE");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=62)]
+        public string DST_VAL_REF_VHC {
+            get {
+                return this.DST_VAL_REF_VHCField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_VAL_REF_VHCField, value) != true)) {
+                    this.DST_VAL_REF_VHCField = value;
+                    this.RaisePropertyChanged("DST_VAL_REF_VHC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=63)]
+        public string DST_VAL_REF_TM_VJE {
+            get {
+                return this.DST_VAL_REF_TM_VJEField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_VAL_REF_TM_VJEField, value) != true)) {
+                    this.DST_VAL_REF_TM_VJEField = value;
+                    this.RaisePropertyChanged("DST_VAL_REF_TM_VJE");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=64)]
+        public string DST_CAR_EFV_VHC {
+            get {
+                return this.DST_CAR_EFV_VHCField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_CAR_EFV_VHCField, value) != true)) {
+                    this.DST_CAR_EFV_VHCField = value;
+                    this.RaisePropertyChanged("DST_CAR_EFV_VHC");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=65)]
+        public string DST_CAR_EFV_VHC_UND {
+            get {
+                return this.DST_CAR_EFV_VHC_UNDField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_CAR_EFV_VHC_UNDField, value) != true)) {
+                    this.DST_CAR_EFV_VHC_UNDField = value;
+                    this.RaisePropertyChanged("DST_CAR_EFV_VHC_UND");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=66)]
+        public string DST_CAR_UTL_VHC_VJE {
+            get {
+                return this.DST_CAR_UTL_VHC_VJEField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_CAR_UTL_VHC_VJEField, value) != true)) {
+                    this.DST_CAR_UTL_VHC_VJEField = value;
+                    this.RaisePropertyChanged("DST_CAR_UTL_VHC_VJE");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=67)]
+        public string DST_CAR_UTL_VHC_VJE_UND {
+            get {
+                return this.DST_CAR_UTL_VHC_VJE_UNDField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DST_CAR_UTL_VHC_VJE_UNDField, value) != true)) {
+                    this.DST_CAR_UTL_VHC_VJE_UNDField = value;
+                    this.RaisePropertyChanged("DST_CAR_UTL_VHC_VJE_UND");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=68)]
+        public string CDO_COD_UNI_CON_MIN {
+            get {
+                return this.CDO_COD_UNI_CON_MINField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CDO_COD_UNI_CON_MINField, value) != true)) {
+                    this.CDO_COD_UNI_CON_MINField = value;
+                    this.RaisePropertyChanged("CDO_COD_UNI_CON_MIN");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=69)]
+        public string CDO_NUM_DEC_COMP {
+            get {
+                return this.CDO_NUM_DEC_COMPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CDO_NUM_DEC_COMPField, value) != true)) {
+                    this.CDO_NUM_DEC_COMPField = value;
+                    this.RaisePropertyChanged("CDO_NUM_DEC_COMP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=70)]
+        public string CDO_REG_COM_ORO {
+            get {
+                return this.CDO_REG_COM_OROField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CDO_REG_COM_OROField, value) != true)) {
+                    this.CDO_REG_COM_OROField = value;
+                    this.RaisePropertyChanged("CDO_REG_COM_ORO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=71)]
+        public string CDO_RES_AUT_PLAN {
+            get {
+                return this.CDO_RES_AUT_PLANField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CDO_RES_AUT_PLANField, value) != true)) {
+                    this.CDO_RES_AUT_PLANField = value;
+                    this.RaisePropertyChanged("CDO_RES_AUT_PLAN");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=72)]
+        public string CDO_LEY_MIN {
+            get {
+                return this.CDO_LEY_MINField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CDO_LEY_MINField, value) != true)) {
+                    this.CDO_LEY_MINField = value;
+                    this.RaisePropertyChanged("CDO_LEY_MIN");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=73)]
+        public string GDI_NUM_PLACA {
+            get {
+                return this.GDI_NUM_PLACAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.GDI_NUM_PLACAField, value) != true)) {
+                    this.GDI_NUM_PLACAField = value;
+                    this.RaisePropertyChanged("GDI_NUM_PLACA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=74)]
+        public string GDI_NUM_CONT {
+            get {
+                return this.GDI_NUM_CONTField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.GDI_NUM_CONTField, value) != true)) {
+                    this.GDI_NUM_CONTField = value;
+                    this.RaisePropertyChanged("GDI_NUM_CONT");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=75)]
+        public string GDI_FEC_CRED {
+            get {
+                return this.GDI_FEC_CREDField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.GDI_FEC_CREDField, value) != true)) {
+                    this.GDI_FEC_CREDField = value;
+                    this.RaisePropertyChanged("GDI_FEC_CRED");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=76)]
         public string DET_VAL_ADIC01 {
             get {
                 return this.DET_VAL_ADIC01Field;
@@ -2315,7 +2891,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=29)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=77)]
         public string DET_VAL_ADIC02 {
             get {
                 return this.DET_VAL_ADIC02Field;
@@ -2328,7 +2904,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=30)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=78)]
         public string DET_VAL_ADIC03 {
             get {
                 return this.DET_VAL_ADIC03Field;
@@ -2341,7 +2917,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=31)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=79)]
         public string DET_VAL_ADIC04 {
             get {
                 return this.DET_VAL_ADIC04Field;
@@ -2354,7 +2930,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=32)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=80)]
         public string DET_VAL_ADIC05 {
             get {
                 return this.DET_VAL_ADIC05Field;
@@ -2367,7 +2943,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=33)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=81)]
         public string DET_VAL_ADIC06 {
             get {
                 return this.DET_VAL_ADIC06Field;
@@ -2380,7 +2956,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=34)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=82)]
         public string DET_VAL_ADIC07 {
             get {
                 return this.DET_VAL_ADIC07Field;
@@ -2393,7 +2969,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=35)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=83)]
         public string DET_VAL_ADIC08 {
             get {
                 return this.DET_VAL_ADIC08Field;
@@ -2406,7 +2982,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=36)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=84)]
         public string DET_VAL_ADIC09 {
             get {
                 return this.DET_VAL_ADIC09Field;
@@ -2419,7 +2995,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=37)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=85)]
         public string DET_VAL_ADIC10 {
             get {
                 return this.DET_VAL_ADIC10Field;
@@ -2432,7 +3008,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=38)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=86)]
         public Model.ServiceReferencePSE.CPE_DETALLE_COMPTA_BE[] DES_COMP {
             get {
                 return this.DES_COMPField;
@@ -2441,19 +3017,6 @@ namespace Model.ServiceReferencePSE {
                 if ((object.ReferenceEquals(this.DES_COMPField, value) != true)) {
                     this.DES_COMPField = value;
                     this.RaisePropertyChanged("DES_COMP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=39)]
-        public Model.ServiceReferencePSE.CPE_DETALLE_ADIC_BE[] DET_LIST_ADIC {
-            get {
-                return this.DET_LIST_ADICField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DET_LIST_ADICField, value) != true)) {
-                    this.DET_LIST_ADICField = value;
-                    this.RaisePropertyChanged("DET_LIST_ADIC");
                 }
             }
         }
@@ -2531,115 +3094,6 @@ namespace Model.ServiceReferencePSE {
                 if ((object.ReferenceEquals(this.NumLinItemField, value) != true)) {
                     this.NumLinItemField = value;
                     this.RaisePropertyChanged("NumLinItem");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CPE_DETALLE_ADIC_BE", Namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE")]
-    [System.SerializableAttribute()]
-    public partial class CPE_DETALLE_ADIC_BE : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DET_NUM_LIN_ADICField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DET_NUM_LIN_ITMField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DET_COD_TIP_ADICField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DET_DES_ADICField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DET_DES_OPCField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string DET_NUM_LIN_ADIC {
-            get {
-                return this.DET_NUM_LIN_ADICField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DET_NUM_LIN_ADICField, value) != true)) {
-                    this.DET_NUM_LIN_ADICField = value;
-                    this.RaisePropertyChanged("DET_NUM_LIN_ADIC");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string DET_NUM_LIN_ITM {
-            get {
-                return this.DET_NUM_LIN_ITMField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DET_NUM_LIN_ITMField, value) != true)) {
-                    this.DET_NUM_LIN_ITMField = value;
-                    this.RaisePropertyChanged("DET_NUM_LIN_ITM");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-        public string DET_COD_TIP_ADIC {
-            get {
-                return this.DET_COD_TIP_ADICField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DET_COD_TIP_ADICField, value) != true)) {
-                    this.DET_COD_TIP_ADICField = value;
-                    this.RaisePropertyChanged("DET_COD_TIP_ADIC");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
-        public string DET_DES_ADIC {
-            get {
-                return this.DET_DES_ADICField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DET_DES_ADICField, value) != true)) {
-                    this.DET_DES_ADICField = value;
-                    this.RaisePropertyChanged("DET_DES_ADIC");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
-        public string DET_DES_OPC {
-            get {
-                return this.DET_DES_OPCField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DET_DES_OPCField, value) != true)) {
-                    this.DET_DES_OPCField = value;
-                    this.RaisePropertyChanged("DET_DES_OPC");
                 }
             }
         }
@@ -2898,52 +3352,22 @@ namespace Model.ServiceReferencePSE {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string LIN_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NUM_SERIE_CPE_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NUM_CORRE_CPE_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string COD_TIP_DOC_ANTCPField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LIN_ANTCPField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string MNT_ANTCPField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NUM_CORRE_CPE_ANTCPField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NUM_SERIE_CPE_ANTCPField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SERIE_CORRE_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NUM_DOC_EMIS_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string TIP_DOC_EMIS_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string IDE_PAG_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string COD_EST_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NRO_ADC_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FEC_PAG_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string COD_CPE_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string VAL_ADC_01_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string VAL_ADC_02_ANTCPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string VAL_ADC_03_ANTCPField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -2952,6 +3376,19 @@ namespace Model.ServiceReferencePSE {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string COD_TIP_DOC_ANTCP {
+            get {
+                return this.COD_TIP_DOC_ANTCPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.COD_TIP_DOC_ANTCPField, value) != true)) {
+                    this.COD_TIP_DOC_ANTCPField = value;
+                    this.RaisePropertyChanged("COD_TIP_DOC_ANTCP");
+                }
             }
         }
         
@@ -2969,45 +3406,6 @@ namespace Model.ServiceReferencePSE {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string NUM_SERIE_CPE_ANTCP {
-            get {
-                return this.NUM_SERIE_CPE_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NUM_SERIE_CPE_ANTCPField, value) != true)) {
-                    this.NUM_SERIE_CPE_ANTCPField = value;
-                    this.RaisePropertyChanged("NUM_SERIE_CPE_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-        public string NUM_CORRE_CPE_ANTCP {
-            get {
-                return this.NUM_CORRE_CPE_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NUM_CORRE_CPE_ANTCPField, value) != true)) {
-                    this.NUM_CORRE_CPE_ANTCPField = value;
-                    this.RaisePropertyChanged("NUM_CORRE_CPE_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
-        public string COD_TIP_DOC_ANTCP {
-            get {
-                return this.COD_TIP_DOC_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.COD_TIP_DOC_ANTCPField, value) != true)) {
-                    this.COD_TIP_DOC_ANTCPField = value;
-                    this.RaisePropertyChanged("COD_TIP_DOC_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public string MNT_ANTCP {
             get {
                 return this.MNT_ANTCPField;
@@ -3020,7 +3418,33 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NUM_CORRE_CPE_ANTCP {
+            get {
+                return this.NUM_CORRE_CPE_ANTCPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NUM_CORRE_CPE_ANTCPField, value) != true)) {
+                    this.NUM_CORRE_CPE_ANTCPField = value;
+                    this.RaisePropertyChanged("NUM_CORRE_CPE_ANTCP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NUM_SERIE_CPE_ANTCP {
+            get {
+                return this.NUM_SERIE_CPE_ANTCPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NUM_SERIE_CPE_ANTCPField, value) != true)) {
+                    this.NUM_SERIE_CPE_ANTCPField = value;
+                    this.RaisePropertyChanged("NUM_SERIE_CPE_ANTCP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string SERIE_CORRE_ANTCP {
             get {
                 return this.SERIE_CORRE_ANTCPField;
@@ -3029,136 +3453,6 @@ namespace Model.ServiceReferencePSE {
                 if ((object.ReferenceEquals(this.SERIE_CORRE_ANTCPField, value) != true)) {
                     this.SERIE_CORRE_ANTCPField = value;
                     this.RaisePropertyChanged("SERIE_CORRE_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=6)]
-        public string NUM_DOC_EMIS_ANTCP {
-            get {
-                return this.NUM_DOC_EMIS_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NUM_DOC_EMIS_ANTCPField, value) != true)) {
-                    this.NUM_DOC_EMIS_ANTCPField = value;
-                    this.RaisePropertyChanged("NUM_DOC_EMIS_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=7)]
-        public string TIP_DOC_EMIS_ANTCP {
-            get {
-                return this.TIP_DOC_EMIS_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.TIP_DOC_EMIS_ANTCPField, value) != true)) {
-                    this.TIP_DOC_EMIS_ANTCPField = value;
-                    this.RaisePropertyChanged("TIP_DOC_EMIS_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=8)]
-        public string IDE_PAG_ANTCP {
-            get {
-                return this.IDE_PAG_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.IDE_PAG_ANTCPField, value) != true)) {
-                    this.IDE_PAG_ANTCPField = value;
-                    this.RaisePropertyChanged("IDE_PAG_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=9)]
-        public string COD_EST_ANTCP {
-            get {
-                return this.COD_EST_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.COD_EST_ANTCPField, value) != true)) {
-                    this.COD_EST_ANTCPField = value;
-                    this.RaisePropertyChanged("COD_EST_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=10)]
-        public string NRO_ADC_ANTCP {
-            get {
-                return this.NRO_ADC_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NRO_ADC_ANTCPField, value) != true)) {
-                    this.NRO_ADC_ANTCPField = value;
-                    this.RaisePropertyChanged("NRO_ADC_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=11)]
-        public string FEC_PAG_ANTCP {
-            get {
-                return this.FEC_PAG_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FEC_PAG_ANTCPField, value) != true)) {
-                    this.FEC_PAG_ANTCPField = value;
-                    this.RaisePropertyChanged("FEC_PAG_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=12)]
-        public string COD_CPE_ANTCP {
-            get {
-                return this.COD_CPE_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.COD_CPE_ANTCPField, value) != true)) {
-                    this.COD_CPE_ANTCPField = value;
-                    this.RaisePropertyChanged("COD_CPE_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=13)]
-        public string VAL_ADC_01_ANTCP {
-            get {
-                return this.VAL_ADC_01_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.VAL_ADC_01_ANTCPField, value) != true)) {
-                    this.VAL_ADC_01_ANTCPField = value;
-                    this.RaisePropertyChanged("VAL_ADC_01_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=14)]
-        public string VAL_ADC_02_ANTCP {
-            get {
-                return this.VAL_ADC_02_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.VAL_ADC_02_ANTCPField, value) != true)) {
-                    this.VAL_ADC_02_ANTCPField = value;
-                    this.RaisePropertyChanged("VAL_ADC_02_ANTCP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=15)]
-        public string VAL_ADC_03_ANTCP {
-            get {
-                return this.VAL_ADC_03_ANTCPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.VAL_ADC_03_ANTCPField, value) != true)) {
-                    this.VAL_ADC_03_ANTCPField = value;
-                    this.RaisePropertyChanged("VAL_ADC_03_ANTCP");
                 }
             }
         }
@@ -3183,58 +3477,16 @@ namespace Model.ServiceReferencePSE {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string TIP_DOC_DESTINATARIOField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NRO_DOC_DESTINATARIOField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NOM_DESTINATARIOField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MTV_TRASLADOField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string TOT_PSO_BRUTOField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string COD_UND_MEDIDAField;
+        private string CERT_AUTO_TRNSPField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string COD_MOD_TRNSPField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FEC_INI_TRASLADOField;
+        private string COD_TIP_GREField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string TIP_DOC_TRNSPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NRO_DOC_TRNSPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string RZN_SCL_TRNSPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string REG_MTC_TRNSPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CERT_AUTO_TRNSPField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NRO_PLACA_TRASLADOField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NRO_PLACA_SECField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string TIP_DOC_COND_TRASLADOField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NRO_DOC_COND_TRASLADOField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DIR_UBI_LLEGADAField;
+        private string COD_UND_MEDIDAField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DIR_LLEGADAField;
@@ -3243,31 +3495,64 @@ namespace Model.ServiceReferencePSE {
         private string DIR_PAI_LLEGADAField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string IND_SUB_CONTRATAField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DIR_UBI_PARTIDAField;
+        private string DIR_PAI_PARTIDAField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DIR_PARTIDAField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DIR_PAI_PARTIDAField;
+        private string DIR_UBI_LLEGADAField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string COD_TIP_GREField;
+        private string DIR_UBI_PARTIDAField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NRO_GREField;
+        private string FEC_INI_TRASLADOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IND_SUB_CONTRATAField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LIC_COND_TRNSPField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string MARCA_AUTO_TRNSPField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NOM_COND_TRASLADOField;
+        private string MTV_TRASLADOField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string LIC_COND_TRASLADOField;
+        private string NOM_DESTINATARIOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NRO_DOC_COND_TRASLADOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NRO_DOC_DESTINATARIOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NRO_GREField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NRO_PLACA_TRASLADOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PLACA_AUTO_TRNSPField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RUC_TRNSPField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RZN_SCL_TRNSPField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TIP_DOC_COND_TRASLADOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TIP_DOC_DESTINATARIOField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TOT_PSO_BRUTOField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -3276,6 +3561,318 @@ namespace Model.ServiceReferencePSE {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CERT_AUTO_TRNSP {
+            get {
+                return this.CERT_AUTO_TRNSPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CERT_AUTO_TRNSPField, value) != true)) {
+                    this.CERT_AUTO_TRNSPField = value;
+                    this.RaisePropertyChanged("CERT_AUTO_TRNSP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string COD_MOD_TRNSP {
+            get {
+                return this.COD_MOD_TRNSPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.COD_MOD_TRNSPField, value) != true)) {
+                    this.COD_MOD_TRNSPField = value;
+                    this.RaisePropertyChanged("COD_MOD_TRNSP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string COD_TIP_GRE {
+            get {
+                return this.COD_TIP_GREField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.COD_TIP_GREField, value) != true)) {
+                    this.COD_TIP_GREField = value;
+                    this.RaisePropertyChanged("COD_TIP_GRE");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string COD_UND_MEDIDA {
+            get {
+                return this.COD_UND_MEDIDAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.COD_UND_MEDIDAField, value) != true)) {
+                    this.COD_UND_MEDIDAField = value;
+                    this.RaisePropertyChanged("COD_UND_MEDIDA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DIR_LLEGADA {
+            get {
+                return this.DIR_LLEGADAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DIR_LLEGADAField, value) != true)) {
+                    this.DIR_LLEGADAField = value;
+                    this.RaisePropertyChanged("DIR_LLEGADA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DIR_PAI_LLEGADA {
+            get {
+                return this.DIR_PAI_LLEGADAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DIR_PAI_LLEGADAField, value) != true)) {
+                    this.DIR_PAI_LLEGADAField = value;
+                    this.RaisePropertyChanged("DIR_PAI_LLEGADA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DIR_PAI_PARTIDA {
+            get {
+                return this.DIR_PAI_PARTIDAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DIR_PAI_PARTIDAField, value) != true)) {
+                    this.DIR_PAI_PARTIDAField = value;
+                    this.RaisePropertyChanged("DIR_PAI_PARTIDA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DIR_PARTIDA {
+            get {
+                return this.DIR_PARTIDAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DIR_PARTIDAField, value) != true)) {
+                    this.DIR_PARTIDAField = value;
+                    this.RaisePropertyChanged("DIR_PARTIDA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DIR_UBI_LLEGADA {
+            get {
+                return this.DIR_UBI_LLEGADAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DIR_UBI_LLEGADAField, value) != true)) {
+                    this.DIR_UBI_LLEGADAField = value;
+                    this.RaisePropertyChanged("DIR_UBI_LLEGADA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DIR_UBI_PARTIDA {
+            get {
+                return this.DIR_UBI_PARTIDAField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DIR_UBI_PARTIDAField, value) != true)) {
+                    this.DIR_UBI_PARTIDAField = value;
+                    this.RaisePropertyChanged("DIR_UBI_PARTIDA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FEC_INI_TRASLADO {
+            get {
+                return this.FEC_INI_TRASLADOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FEC_INI_TRASLADOField, value) != true)) {
+                    this.FEC_INI_TRASLADOField = value;
+                    this.RaisePropertyChanged("FEC_INI_TRASLADO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IND_SUB_CONTRATA {
+            get {
+                return this.IND_SUB_CONTRATAField;
+            }
+            set {
+                if ((this.IND_SUB_CONTRATAField.Equals(value) != true)) {
+                    this.IND_SUB_CONTRATAField = value;
+                    this.RaisePropertyChanged("IND_SUB_CONTRATA");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LIC_COND_TRNSP {
+            get {
+                return this.LIC_COND_TRNSPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LIC_COND_TRNSPField, value) != true)) {
+                    this.LIC_COND_TRNSPField = value;
+                    this.RaisePropertyChanged("LIC_COND_TRNSP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string MARCA_AUTO_TRNSP {
+            get {
+                return this.MARCA_AUTO_TRNSPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MARCA_AUTO_TRNSPField, value) != true)) {
+                    this.MARCA_AUTO_TRNSPField = value;
+                    this.RaisePropertyChanged("MARCA_AUTO_TRNSP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string MTV_TRASLADO {
+            get {
+                return this.MTV_TRASLADOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MTV_TRASLADOField, value) != true)) {
+                    this.MTV_TRASLADOField = value;
+                    this.RaisePropertyChanged("MTV_TRASLADO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NOM_DESTINATARIO {
+            get {
+                return this.NOM_DESTINATARIOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NOM_DESTINATARIOField, value) != true)) {
+                    this.NOM_DESTINATARIOField = value;
+                    this.RaisePropertyChanged("NOM_DESTINATARIO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NRO_DOC_COND_TRASLADO {
+            get {
+                return this.NRO_DOC_COND_TRASLADOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NRO_DOC_COND_TRASLADOField, value) != true)) {
+                    this.NRO_DOC_COND_TRASLADOField = value;
+                    this.RaisePropertyChanged("NRO_DOC_COND_TRASLADO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NRO_DOC_DESTINATARIO {
+            get {
+                return this.NRO_DOC_DESTINATARIOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NRO_DOC_DESTINATARIOField, value) != true)) {
+                    this.NRO_DOC_DESTINATARIOField = value;
+                    this.RaisePropertyChanged("NRO_DOC_DESTINATARIO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NRO_GRE {
+            get {
+                return this.NRO_GREField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NRO_GREField, value) != true)) {
+                    this.NRO_GREField = value;
+                    this.RaisePropertyChanged("NRO_GRE");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NRO_PLACA_TRASLADO {
+            get {
+                return this.NRO_PLACA_TRASLADOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NRO_PLACA_TRASLADOField, value) != true)) {
+                    this.NRO_PLACA_TRASLADOField = value;
+                    this.RaisePropertyChanged("NRO_PLACA_TRASLADO");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PLACA_AUTO_TRNSP {
+            get {
+                return this.PLACA_AUTO_TRNSPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PLACA_AUTO_TRNSPField, value) != true)) {
+                    this.PLACA_AUTO_TRNSPField = value;
+                    this.RaisePropertyChanged("PLACA_AUTO_TRNSP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RUC_TRNSP {
+            get {
+                return this.RUC_TRNSPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RUC_TRNSPField, value) != true)) {
+                    this.RUC_TRNSPField = value;
+                    this.RaisePropertyChanged("RUC_TRNSP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RZN_SCL_TRNSP {
+            get {
+                return this.RZN_SCL_TRNSPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RZN_SCL_TRNSPField, value) != true)) {
+                    this.RZN_SCL_TRNSPField = value;
+                    this.RaisePropertyChanged("RZN_SCL_TRNSP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TIP_DOC_COND_TRASLADO {
+            get {
+                return this.TIP_DOC_COND_TRASLADOField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TIP_DOC_COND_TRASLADOField, value) != true)) {
+                    this.TIP_DOC_COND_TRASLADOField = value;
+                    this.RaisePropertyChanged("TIP_DOC_COND_TRASLADO");
+                }
             }
         }
         
@@ -3292,46 +3889,7 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
-        public string NRO_DOC_DESTINATARIO {
-            get {
-                return this.NRO_DOC_DESTINATARIOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NRO_DOC_DESTINATARIOField, value) != true)) {
-                    this.NRO_DOC_DESTINATARIOField = value;
-                    this.RaisePropertyChanged("NRO_DOC_DESTINATARIO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-        public string NOM_DESTINATARIO {
-            get {
-                return this.NOM_DESTINATARIOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NOM_DESTINATARIOField, value) != true)) {
-                    this.NOM_DESTINATARIOField = value;
-                    this.RaisePropertyChanged("NOM_DESTINATARIO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
-        public string MTV_TRASLADO {
-            get {
-                return this.MTV_TRASLADOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MTV_TRASLADOField, value) != true)) {
-                    this.MTV_TRASLADOField = value;
-                    this.RaisePropertyChanged("MTV_TRASLADO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string TOT_PSO_BRUTO {
             get {
                 return this.TOT_PSO_BRUTOField;
@@ -3340,318 +3898,6 @@ namespace Model.ServiceReferencePSE {
                 if ((object.ReferenceEquals(this.TOT_PSO_BRUTOField, value) != true)) {
                     this.TOT_PSO_BRUTOField = value;
                     this.RaisePropertyChanged("TOT_PSO_BRUTO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=5)]
-        public string COD_UND_MEDIDA {
-            get {
-                return this.COD_UND_MEDIDAField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.COD_UND_MEDIDAField, value) != true)) {
-                    this.COD_UND_MEDIDAField = value;
-                    this.RaisePropertyChanged("COD_UND_MEDIDA");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=6)]
-        public string COD_MOD_TRNSP {
-            get {
-                return this.COD_MOD_TRNSPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.COD_MOD_TRNSPField, value) != true)) {
-                    this.COD_MOD_TRNSPField = value;
-                    this.RaisePropertyChanged("COD_MOD_TRNSP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=7)]
-        public string FEC_INI_TRASLADO {
-            get {
-                return this.FEC_INI_TRASLADOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FEC_INI_TRASLADOField, value) != true)) {
-                    this.FEC_INI_TRASLADOField = value;
-                    this.RaisePropertyChanged("FEC_INI_TRASLADO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=8)]
-        public string TIP_DOC_TRNSP {
-            get {
-                return this.TIP_DOC_TRNSPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.TIP_DOC_TRNSPField, value) != true)) {
-                    this.TIP_DOC_TRNSPField = value;
-                    this.RaisePropertyChanged("TIP_DOC_TRNSP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=9)]
-        public string NRO_DOC_TRNSP {
-            get {
-                return this.NRO_DOC_TRNSPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NRO_DOC_TRNSPField, value) != true)) {
-                    this.NRO_DOC_TRNSPField = value;
-                    this.RaisePropertyChanged("NRO_DOC_TRNSP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=10)]
-        public string RZN_SCL_TRNSP {
-            get {
-                return this.RZN_SCL_TRNSPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.RZN_SCL_TRNSPField, value) != true)) {
-                    this.RZN_SCL_TRNSPField = value;
-                    this.RaisePropertyChanged("RZN_SCL_TRNSP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=11)]
-        public string REG_MTC_TRNSP {
-            get {
-                return this.REG_MTC_TRNSPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.REG_MTC_TRNSPField, value) != true)) {
-                    this.REG_MTC_TRNSPField = value;
-                    this.RaisePropertyChanged("REG_MTC_TRNSP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=12)]
-        public string CERT_AUTO_TRNSP {
-            get {
-                return this.CERT_AUTO_TRNSPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CERT_AUTO_TRNSPField, value) != true)) {
-                    this.CERT_AUTO_TRNSPField = value;
-                    this.RaisePropertyChanged("CERT_AUTO_TRNSP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=13)]
-        public string NRO_PLACA_TRASLADO {
-            get {
-                return this.NRO_PLACA_TRASLADOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NRO_PLACA_TRASLADOField, value) != true)) {
-                    this.NRO_PLACA_TRASLADOField = value;
-                    this.RaisePropertyChanged("NRO_PLACA_TRASLADO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=14)]
-        public string NRO_PLACA_SEC {
-            get {
-                return this.NRO_PLACA_SECField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NRO_PLACA_SECField, value) != true)) {
-                    this.NRO_PLACA_SECField = value;
-                    this.RaisePropertyChanged("NRO_PLACA_SEC");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=15)]
-        public string TIP_DOC_COND_TRASLADO {
-            get {
-                return this.TIP_DOC_COND_TRASLADOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.TIP_DOC_COND_TRASLADOField, value) != true)) {
-                    this.TIP_DOC_COND_TRASLADOField = value;
-                    this.RaisePropertyChanged("TIP_DOC_COND_TRASLADO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=16)]
-        public string NRO_DOC_COND_TRASLADO {
-            get {
-                return this.NRO_DOC_COND_TRASLADOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NRO_DOC_COND_TRASLADOField, value) != true)) {
-                    this.NRO_DOC_COND_TRASLADOField = value;
-                    this.RaisePropertyChanged("NRO_DOC_COND_TRASLADO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=17)]
-        public string DIR_UBI_LLEGADA {
-            get {
-                return this.DIR_UBI_LLEGADAField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DIR_UBI_LLEGADAField, value) != true)) {
-                    this.DIR_UBI_LLEGADAField = value;
-                    this.RaisePropertyChanged("DIR_UBI_LLEGADA");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=18)]
-        public string DIR_LLEGADA {
-            get {
-                return this.DIR_LLEGADAField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DIR_LLEGADAField, value) != true)) {
-                    this.DIR_LLEGADAField = value;
-                    this.RaisePropertyChanged("DIR_LLEGADA");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=19)]
-        public string DIR_PAI_LLEGADA {
-            get {
-                return this.DIR_PAI_LLEGADAField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DIR_PAI_LLEGADAField, value) != true)) {
-                    this.DIR_PAI_LLEGADAField = value;
-                    this.RaisePropertyChanged("DIR_PAI_LLEGADA");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=20)]
-        public string IND_SUB_CONTRATA {
-            get {
-                return this.IND_SUB_CONTRATAField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.IND_SUB_CONTRATAField, value) != true)) {
-                    this.IND_SUB_CONTRATAField = value;
-                    this.RaisePropertyChanged("IND_SUB_CONTRATA");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=21)]
-        public string DIR_UBI_PARTIDA {
-            get {
-                return this.DIR_UBI_PARTIDAField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DIR_UBI_PARTIDAField, value) != true)) {
-                    this.DIR_UBI_PARTIDAField = value;
-                    this.RaisePropertyChanged("DIR_UBI_PARTIDA");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=22)]
-        public string DIR_PARTIDA {
-            get {
-                return this.DIR_PARTIDAField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DIR_PARTIDAField, value) != true)) {
-                    this.DIR_PARTIDAField = value;
-                    this.RaisePropertyChanged("DIR_PARTIDA");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=23)]
-        public string DIR_PAI_PARTIDA {
-            get {
-                return this.DIR_PAI_PARTIDAField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DIR_PAI_PARTIDAField, value) != true)) {
-                    this.DIR_PAI_PARTIDAField = value;
-                    this.RaisePropertyChanged("DIR_PAI_PARTIDA");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=24)]
-        public string COD_TIP_GRE {
-            get {
-                return this.COD_TIP_GREField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.COD_TIP_GREField, value) != true)) {
-                    this.COD_TIP_GREField = value;
-                    this.RaisePropertyChanged("COD_TIP_GRE");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=25)]
-        public string NRO_GRE {
-            get {
-                return this.NRO_GREField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NRO_GREField, value) != true)) {
-                    this.NRO_GREField = value;
-                    this.RaisePropertyChanged("NRO_GRE");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=26)]
-        public string MARCA_AUTO_TRNSP {
-            get {
-                return this.MARCA_AUTO_TRNSPField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MARCA_AUTO_TRNSPField, value) != true)) {
-                    this.MARCA_AUTO_TRNSPField = value;
-                    this.RaisePropertyChanged("MARCA_AUTO_TRNSP");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=27)]
-        public string NOM_COND_TRASLADO {
-            get {
-                return this.NOM_COND_TRASLADOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NOM_COND_TRASLADOField, value) != true)) {
-                    this.NOM_COND_TRASLADOField = value;
-                    this.RaisePropertyChanged("NOM_COND_TRASLADO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=28)]
-        public string LIC_COND_TRASLADO {
-            get {
-                return this.LIC_COND_TRASLADOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.LIC_COND_TRASLADOField, value) != true)) {
-                    this.LIC_COND_TRASLADOField = value;
-                    this.RaisePropertyChanged("LIC_COND_TRASLADO");
                 }
             }
         }
@@ -4436,352 +4682,6 @@ namespace Model.ServiceReferencePSE {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="RPTA_RET_BE", Namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE")]
-    [System.SerializableAttribute()]
-    public partial class RPTA_RET_BE : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CAD_HASHField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string CODIGOField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string COD_HASHField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DESCRIPCIONField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DETALLEField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private byte[] DOC_TRIB_IMGField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private byte[] DOC_TRIB_PDFField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DOC_TRIB_XMLField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ESTADOField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NUM_OPEField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string CAD_HASH {
-            get {
-                return this.CAD_HASHField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CAD_HASHField, value) != true)) {
-                    this.CAD_HASHField = value;
-                    this.RaisePropertyChanged("CAD_HASH");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string CODIGO {
-            get {
-                return this.CODIGOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CODIGOField, value) != true)) {
-                    this.CODIGOField = value;
-                    this.RaisePropertyChanged("CODIGO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string COD_HASH {
-            get {
-                return this.COD_HASHField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.COD_HASHField, value) != true)) {
-                    this.COD_HASHField = value;
-                    this.RaisePropertyChanged("COD_HASH");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string DESCRIPCION {
-            get {
-                return this.DESCRIPCIONField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DESCRIPCIONField, value) != true)) {
-                    this.DESCRIPCIONField = value;
-                    this.RaisePropertyChanged("DESCRIPCION");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string DETALLE {
-            get {
-                return this.DETALLEField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DETALLEField, value) != true)) {
-                    this.DETALLEField = value;
-                    this.RaisePropertyChanged("DETALLE");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public byte[] DOC_TRIB_IMG {
-            get {
-                return this.DOC_TRIB_IMGField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DOC_TRIB_IMGField, value) != true)) {
-                    this.DOC_TRIB_IMGField = value;
-                    this.RaisePropertyChanged("DOC_TRIB_IMG");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public byte[] DOC_TRIB_PDF {
-            get {
-                return this.DOC_TRIB_PDFField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DOC_TRIB_PDFField, value) != true)) {
-                    this.DOC_TRIB_PDFField = value;
-                    this.RaisePropertyChanged("DOC_TRIB_PDF");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string DOC_TRIB_XML {
-            get {
-                return this.DOC_TRIB_XMLField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DOC_TRIB_XMLField, value) != true)) {
-                    this.DOC_TRIB_XMLField = value;
-                    this.RaisePropertyChanged("DOC_TRIB_XML");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string ESTADO {
-            get {
-                return this.ESTADOField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ESTADOField, value) != true)) {
-                    this.ESTADOField = value;
-                    this.RaisePropertyChanged("ESTADO");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string NUM_OPE {
-            get {
-                return this.NUM_OPEField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NUM_OPEField, value) != true)) {
-                    this.NUM_OPEField = value;
-                    this.RaisePropertyChanged("NUM_OPE");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="RPTA_OPE_BE", Namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.RESPUESTA")]
-    [System.SerializableAttribute()]
-    public partial class RPTA_OPE_BE : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string flagexcepcionField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string tipocpeField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string nroserieField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string nrocorrelativoField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string fechaemisionField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string messageexcepcionField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string IdDocumentoField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string estadosunatField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string flagexcepcion {
-            get {
-                return this.flagexcepcionField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.flagexcepcionField, value) != true)) {
-                    this.flagexcepcionField = value;
-                    this.RaisePropertyChanged("flagexcepcion");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string tipocpe {
-            get {
-                return this.tipocpeField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.tipocpeField, value) != true)) {
-                    this.tipocpeField = value;
-                    this.RaisePropertyChanged("tipocpe");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-        public string nroserie {
-            get {
-                return this.nroserieField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.nroserieField, value) != true)) {
-                    this.nroserieField = value;
-                    this.RaisePropertyChanged("nroserie");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
-        public string nrocorrelativo {
-            get {
-                return this.nrocorrelativoField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.nrocorrelativoField, value) != true)) {
-                    this.nrocorrelativoField = value;
-                    this.RaisePropertyChanged("nrocorrelativo");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
-        public string fechaemision {
-            get {
-                return this.fechaemisionField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.fechaemisionField, value) != true)) {
-                    this.fechaemisionField = value;
-                    this.RaisePropertyChanged("fechaemision");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=5)]
-        public string messageexcepcion {
-            get {
-                return this.messageexcepcionField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.messageexcepcionField, value) != true)) {
-                    this.messageexcepcionField = value;
-                    this.RaisePropertyChanged("messageexcepcion");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=6)]
-        public string IdDocumento {
-            get {
-                return this.IdDocumentoField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.IdDocumentoField, value) != true)) {
-                    this.IdDocumentoField = value;
-                    this.RaisePropertyChanged("IdDocumento");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=7)]
-        public string estadosunat {
-            get {
-                return this.estadosunatField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.estadosunatField, value) != true)) {
-                    this.estadosunatField = value;
-                    this.RaisePropertyChanged("estadosunat");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReferencePSE.IwsOnlineToCPE")]
     public interface IwsOnlineToCPE {
@@ -4821,18 +4721,6 @@ namespace Model.ServiceReferencePSE {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/CallRequestLow", ReplyAction="http://tempuri.org/IwsOnlineToCPE/CallRequestLowResponse")]
         System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_BE[]> CallRequestLowAsync(string oId, string oGpo, string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callProcessReturn", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callProcessReturnResponse")]
-        Model.ServiceReferencePSE.RPTA_RET_BE callProcessReturn(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callProcessReturn", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callProcessReturnResponse")]
-        System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_RET_BE> callProcessReturnAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callStateOpe", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callStateOpeResponse")]
-        Model.ServiceReferencePSE.RPTA_OPE_BE callStateOpe(string oUser, string oPass, string oNroOpe, string oNroIde);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsOnlineToCPE/callStateOpe", ReplyAction="http://tempuri.org/IwsOnlineToCPE/callStateOpeResponse")]
-        System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_OPE_BE> callStateOpeAsync(string oUser, string oPass, string oNroOpe, string oNroIde);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -4908,22 +4796,6 @@ namespace Model.ServiceReferencePSE {
         
         public System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_BE[]> CallRequestLowAsync(string oId, string oGpo, string oUser, string oPass, Model.ServiceReferencePSE.CPE_DOC_BAJA[] oDoc) {
             return base.Channel.CallRequestLowAsync(oId, oGpo, oUser, oPass, oDoc);
-        }
-        
-        public Model.ServiceReferencePSE.RPTA_RET_BE callProcessReturn(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline) {
-            return base.Channel.callProcessReturn(oUser, oPass, oCabecera, listDetalle, listAdicionales, listReferenciados, listAnticipos, listFacGuia, listRelacionado, oTipoOnline);
-        }
-        
-        public System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_RET_BE> callProcessReturnAsync(string oUser, string oPass, Model.ServiceReferencePSE.CPE_CABECERA_BE oCabecera, Model.ServiceReferencePSE.CPE_DETALLE_BE[] listDetalle, Model.ServiceReferencePSE.CPE_DAT_ADIC_BE[] listAdicionales, Model.ServiceReferencePSE.CPE_DOC_REF_BE[] listReferenciados, Model.ServiceReferencePSE.CPE_ANTICIPO_BE[] listAnticipos, Model.ServiceReferencePSE.CPE_FAC_GUIA_BE[] listFacGuia, Model.ServiceReferencePSE.CPE_DOC_ASOC_BE[] listRelacionado, Model.ServiceReferencePSE.GlobalEnumTipoOnline oTipoOnline) {
-            return base.Channel.callProcessReturnAsync(oUser, oPass, oCabecera, listDetalle, listAdicionales, listReferenciados, listAnticipos, listFacGuia, listRelacionado, oTipoOnline);
-        }
-        
-        public Model.ServiceReferencePSE.RPTA_OPE_BE callStateOpe(string oUser, string oPass, string oNroOpe, string oNroIde) {
-            return base.Channel.callStateOpe(oUser, oPass, oNroOpe, oNroIde);
-        }
-        
-        public System.Threading.Tasks.Task<Model.ServiceReferencePSE.RPTA_OPE_BE> callStateOpeAsync(string oUser, string oPass, string oNroOpe, string oNroIde) {
-            return base.Channel.callStateOpeAsync(oUser, oPass, oNroOpe, oNroIde);
         }
     }
 }

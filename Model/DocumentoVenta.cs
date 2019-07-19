@@ -66,7 +66,7 @@ namespace Model
             [Display(Name = "CRÉDITO A 90 DÍAS")]
             Crédito90 = 6,
             [Display(Name = "CRÉDITO A 120 DÍAS")]
-            Crédito120 = 7                   
+            Crédito120 = 7
         };
 
         public enum FormaPago
@@ -150,7 +150,7 @@ namespace Model
         public String serieNumero { get { return this.serie + "-" + this.numero; } }
 
 
-        public String descripcionError { get; set;  }
+        public String descripcionError { get; set; }
 
         public TiposErrorValidacion tiposErrorValidacion { get; set; }
         public String tiposErrorValidacionString
@@ -190,7 +190,7 @@ namespace Model
             NoPermiteAnulacion = 1,
             [Display(Name = "Ya se ha solicitado anulación previamente")]
             ExisteSolicitudAnulacion = 2,
-           
+
         }
 
         public enum TipoDocumento
@@ -207,7 +207,7 @@ namespace Model
             NotaDébito = 8
         };
 
-       
+
         public CPE_CABECERA_BE cPE_CABECERA_BE;
 
         public List<CPE_DETALLE_BE> cPE_DETALLE_BEList;
@@ -231,11 +231,11 @@ namespace Model
 
         public RPTA_BE rPTA_BE { get; set; }
 
-        
+
 
 
         public GlobalEnumTipoOnline globalEnumTipoOnline;
-        
+
 
 
         [Display(Name = "Fecha Emisión Desde:")]
@@ -339,14 +339,14 @@ namespace Model
             DevolucionTotal = 6,
             [Display(Name = "DEVOLUCIÓN POR ITEM")]
             DevolucionItem = 7,
-                /*,
-            [Display(Name = "BONIFICACIÓN")]
-            Bonificacion = 8,*/
+            /*,
+        [Display(Name = "BONIFICACIÓN")]
+        Bonificacion = 8,*/
             [Display(Name = "DISMINUCIÓN EN EL VALOR")]
             DisminucionValor = 9
-                /*,
-            [Display(Name = "OTROS CONCEPTOS")]
-            OtrosConceptos = 10,*/
+            /*,
+        [Display(Name = "OTROS CONCEPTOS")]
+        OtrosConceptos = 10,*/
         };
         /*01 – Intereses por mora 02 – Aumento de valor 03 – Penalidades*/
 
@@ -456,5 +456,29 @@ namespace Model
          */
         [Display(Name = "SKU:")]
         public String sku { get; set; }
+
+
+        /********Agregado Andre*********/
+
+        public String razon_social { get; set; }
+        public String usuario_solicitud { get; set; }
+        public String nombre { get; set; }
+        public String fecha_solicitud { get; set; }
+        public String monto { get; set; }
+        public String numero_factura { get; set; }
+        public String ruc { get; set; }
+        public String contacto { get; set; }
+        public int estado_anulacion { get; set; }
+
+        public Usuario user { get; set; }
+
+        public Cliente client { get; set; }
+
+        public DocumentoVenta DocuVenta { get; set; }
+
+        public Venta ventas { get; set; }
+
+        public string telefonoContacto { get; set; }
+
     }
 }

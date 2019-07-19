@@ -685,5 +685,25 @@ namespace BusinessLayer
             }
 
         }
+
+        /*-----------------ANDRE----------------------*/
+       
+
+        public List<DocumentoVenta> BusquedaValidacionAnulacion()
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.getValidacionAnulacion();
+            }
+        }
+
+        public DocumentoVenta updateNotificacionAnulacion(DocumentoVenta obj)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.updateNotificacionAnulacion(obj);
+            }
+        }
+
     }
 }

@@ -145,12 +145,6 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
-<<<<<<< HEAD
-=======
-    $("#btnCvsCompra").click(function () {
-        window.location.href = $(this).attr("actionLink");
-    });
->>>>>>> origin/devInvoice
 
     /**
      * ################################ INICIO CONTROLES DE CLIENTE

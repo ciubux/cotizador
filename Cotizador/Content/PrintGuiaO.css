@@ -32,12 +32,8 @@
 
     /*ROW DOS*/
     .row_dos {
-<<<<<<< HEAD
         font-family: 'Lucida Console', Monaco; font-stretch:normal; font-weight:bold;
         margin-top: 0.19cm;
-=======
-        margin-top: 0.18cm;
->>>>>>> origin/devInvoice
     }
 
         .row_dos > .col_uno {
@@ -48,7 +44,6 @@
         .row_dos > .col_dos {
             float: left;
             width: 5.9cm;
-			line-height:11px;
         }
 
         .row_dos > .col_tres {
@@ -58,10 +53,7 @@
 
     /*ROW TRES*/
     .row_tres {
-<<<<<<< HEAD
         font-family: 'Lucida Console', Monaco; font-stretch:normal; font-weight:bold;
-=======
->>>>>>> origin/devInvoice
         margin-top: 0.18cm;
     }
 
@@ -93,10 +85,6 @@
         .row_cuatro > .col_dos {
             float: left;
             width: 14cm;
-<<<<<<< HEAD
-=======
-			line-height:11px;
->>>>>>> origin/devInvoice
         }
 
 
@@ -128,11 +116,7 @@
 
         .row_siete > .col_dos {
             float: left;
-<<<<<<< HEAD
             width: 8.8cm;
-=======
-            width: 9.2cm;
->>>>>>> origin/devInvoice
         }
 
         .row_siete > .col_tres {
@@ -157,16 +141,12 @@
 
         .row_ocho > .col_dos {
             float: left;
-<<<<<<< HEAD
             width: 6cm;
-=======
-            width: 8cm;
->>>>>>> origin/devInvoice
         }
 
         .row_ocho > .col_tres {
             float: left;
-            width: 2.5cm;
+            width: 2.8cm;
         }
 
         .row_ocho > .col_cuatro {
@@ -176,16 +156,12 @@
 
         .row_ocho > .col_cinco {
             float: left;
-            width: 2cm;
+            width: 2.5cm;
         }
 
     .detalle {
-<<<<<<< HEAD
         font-family: 'Lucida Console', Monaco; font-stretch:normal; font-weight:bold;
         margin-top: 0.7cm;
-=======
-        margin-top: 0.75cm;
->>>>>>> origin/devInvoice
         margin-left: 1cm;
     }
 
@@ -208,11 +184,7 @@
 
     .row_detalle > .col_cuatro {
         float: left;
-<<<<<<< HEAD
         width: 12cm;
-=======
-        width: 10.5cm;
->>>>>>> origin/devInvoice
     }
 
 
@@ -226,15 +198,10 @@
 
     body {
         /*background-color: black;*/
-<<<<<<< HEAD
         font-family: 'Lucida Console', Monaco; font-stretch:normal; font-weight:bold;
-=======
-		font-family: Tahoma;
-		font-weight: bold;
->>>>>>> origin/devInvoice
         font-size: 10px;
         color: #333333;
-        margin-top: 3.2cm;
+        margin-top: 3.3cm;
         margin-right: 1cm;
         margin-bottom: 15cm;
         margin-left: 1.5cm /*Trujillo*/
