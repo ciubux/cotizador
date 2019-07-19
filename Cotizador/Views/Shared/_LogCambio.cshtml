@@ -1,0 +1,14 @@
+﻿@model Cotizador.Models.LogCambioViewModels
+@Html.DropDownList(
+    Model.CatalogoSelectId,
+    Model.Catalogo, "Seleccione la Tabla",
+    new
+    {
+        id = Model.CatalogoSelectId,
+        @class = "form-control"
+    })
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        $("#@Model.CatalogoSelectId").chosen({ placeholder_text_single: "Seleccione el la Tabla", no_results_text: "No se encontró Catalogo" }).on('chosen:showing_dropdown');
+    });
+</script>

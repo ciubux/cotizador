@@ -456,5 +456,19 @@ namespace Model
          */
         [Display(Name = "SKU:")]
         public String sku { get; set; }
+
+        /***************************/
+
+        public String razon_social { get; set; }
+        public String usuario_solicitud { get; set; }
+        public String nombre { get; set; }
+        public String fecha_solicitud { get; set; }
+        public String monto { get; set; }
+        public String numero_factura { get; set; }
+        public String ruc { get; set; }
+        public String contacto { get; set; }
+        public int estado_anulacion { get; set; }
+
+        public string telefonoContacto { get; set; }
     }
 }
