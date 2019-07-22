@@ -46,4 +46,10 @@ insert into USUARIO_PERMISO(id_permiso,id_usuario,estado,fecha_creacion,fecha_mo
 insert into USUARIO_PERMISO(id_permiso,id_usuario,estado,fecha_creacion,fecha_modificacion) 
 							values (81,'7E875C20-24FD-4B5E-9BB5-A7F23718F1FA',1,dbo.getlocaldate(),dbo.getlocaldate())
 
-				
+
+/*-----------------------Añadir dos columnas en la tabla CATALOGO_CAMPO --------------------------------*/
+
+alter table CATALOGO_CAMPO 
+add orden int ,
+    campos_referencia varchar(50) ,	
+	tabla_referencia varchar(50)				
