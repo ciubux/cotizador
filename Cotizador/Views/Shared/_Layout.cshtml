@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "279";
+    TempData["ScriptVersion"] = "287";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -55,6 +55,7 @@
                         var linkDocumentosVenta = "";
                         var linkBusquedaFactura = "";
                         var linkBusquedaDocumentosCompra = "";
+                        var linkExportarCPEs = "";
                         /*        var linkMantenimientoFactura = "";
 
                                 var linkBusquedaBoleta = "";
@@ -117,6 +118,8 @@
                             case 6: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
                             case 19: linkCrearFacturaConsolidada = "ative"; linkDocumentosVenta = "active"; break;
                             case 40: linkBusquedaDocumentosCompra = "ative"; linkDocumentosVenta = "active"; break;
+
+                            case 410: linkExportarCPEs = "ative"; linkDocumentosVenta = "active"; break;
                             /*case 7: linkMantenimientoFactura = "ative"; linkDocumentosVenta = "active"; break;
                             case 8: linkBusquedaBoleta = "ative"; linkDocumentosVenta = "active"; break;
                             case 9: linkMantenimientoBoleta = "ative"; linkDocumentosVenta = "active"; break;
@@ -289,6 +292,11 @@
                                     @if (usuario.creaDocumentosCompra || usuario.visualizaDocumentosCompra)
                                     {
                                         <li id="linkBusquedaDocumentoCompra" class="@linkBusquedaDocumentosCompra">@Html.ActionLink("Documentos de Compra - Búsqueda", "Index", "DocumentoCompra")</li>
+                                    }
+
+                                    @if (usuario.administraPermisos)
+                                    {
+                                        <li id="linkExportarCPEs" class="@linkExportarCPEs">@Html.ActionLink("Exportar CPEs Venta", "ExportarCPEs", "DocumentoVenta")</li>
                                     }
                                 </ul>
                             </li>

@@ -1611,5 +1611,37 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
         }
 
+
+        private bool necesitaAjusteDecimales(Cotizacion obj)
+        {
+            bool ajustaPrecios = false;
+            decimal precioUnProv = 0;
+            decimal precioUnMP = 0;
+            decimal precioUnAlt = 0;
+
+            if (obj.ajusteCalculoPrecios)
+            {
+                foreach (CotizacionDetalle det in obj.cotizacionDetalleList)
+                {
+                    if (det.esPrecioAlternativo)
+                    {
+                        
+                    }
+
+                    if (det.producto.equivalenciaAlternativa > 1)
+                    {
+                    }
+
+                    if (det.producto.equivalenciaProveedor > 1)
+                    {
+
+                    } 
+                }
+            }
+
+            return ajustaPrecios;
+        }
+
+
     }
 }

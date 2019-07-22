@@ -472,16 +472,14 @@ namespace Cotizador.Controllers
 
 
 
-    /*    [HttpGet]
+        [HttpGet]
         public ActionResult ExportLastSearchExcel()
         {
-            List<DocumentoCompra> list = (List<DocumentoCompra>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+            List<DocumentoCompra> list = (List<DocumentoCompra>)this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_LISTA];
 
-            Facturasearch excel = new Facturasearch();
+            DocumentoCompraSearch excel = new DocumentoCompraSearch();
             return excel.generateExcel(list);
-        }*/
-        /*
-       */
+        }
 
 
         public String SolicitarAnulacion()

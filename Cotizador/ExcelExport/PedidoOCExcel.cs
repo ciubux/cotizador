@@ -76,6 +76,11 @@ namespace Cotizador.ExcelExport
                 titleDataCellStyle.BorderTop = BorderStyle.Thin;
                 titleDataCellStyle.BorderRight = BorderStyle.Thin;
 
+                HSSFCellStyle addressTextCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                addressTextCellStyle.CloneStyleFrom(defaulCellStyle);
+                addressTextCellStyle.VerticalAlignment = VerticalAlignment.Top;
+                addressTextCellStyle.WrapText = true;
+
                 HSSFCellStyle ocTitleCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 HSSFFont ocTitleFont = (HSSFFont)wb.CreateFont();
                 ocTitleFont.FontHeightInPoints = (short)28;
@@ -185,11 +190,11 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setRowHeight(sheet, 1, 1200);
 
-                UtilesHelper.setValorCelda(sheet, 2, "A", "[Dirección]");
-                UtilesHelper.setValorCelda(sheet, 3, "A", "[Ciudad, Estado, postal]");
-                UtilesHelper.setValorCelda(sheet, 4, "A", "Telefono: (000) 000-0000");
-                UtilesHelper.setValorCelda(sheet, 5, "A", "Fax: (000) 000-0000");
-                UtilesHelper.setValorCelda(sheet, 6, "A", "http://mpinstitucional.com");
+
+                UtilesHelper.setValorCelda(sheet, 3, "A", "Señores");
+                UtilesHelper.setValorCelda(sheet, 4, "A", obj.cliente.razonSocialSunat);
+                UtilesHelper.setValorCelda(sheet, 5, "A", obj.cliente.direccionDomicilioLegalSunat);
+                UtilesHelper.setValorCelda(sheet, 6, "A", "Atn.- " + obj.cliente.contacto1);
 
 
 
@@ -200,31 +205,33 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setValorCelda(sheet, 3, "F", "N° OC:", formLabelCellStyle);
                 UtilesHelper.combinarCeldas(sheet, 3, 3, "G", "H");
-                UtilesHelper.setValorCelda(sheet, 3, "G", obj.numeroPedido, formDataCenterCellStyle);
+                UtilesHelper.setValorCelda(sheet, 3, "G", "MP" + obj.ciudad.sede  + "-" + obj.numeroPedido + "-" + obj.pedidoDetalleList.ElementAt(0).producto.proveedor, formDataCenterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 3, "H", "", formDataCenterCellStyle);
 
                 int i = 9;
 
                 UtilesHelper.combinarCeldas(sheet, i, i, "A", "C");
-                UtilesHelper.setValorCelda(sheet, i, "A", "VENDEDOR", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "A", "GIRAR FACTURA A", titleCellStyle);
 
 
-                UtilesHelper.setValorCelda(sheet, i + 1, "A", "MP INSTITUCIONAL S.A.C.");
-                UtilesHelper.setValorCelda(sheet, i + 2, "A", "[Contacto o Departamento]");
-                UtilesHelper.setValorCelda(sheet, i + 3, "A", "[Dirección]");
-                UtilesHelper.setValorCelda(sheet, i + 4, "A", "[Ciudad, Estado, postal]");
-                UtilesHelper.setValorCelda(sheet, i + 5, "A", "Telefono: (000) 000-0000");
-                UtilesHelper.setValorCelda(sheet, i + 6, "A", "Fax: (000) 000-0000");
+                UtilesHelper.setValorCelda(sheet, i + 1, "A", Constantes.RAZON_SOCIAL_MP);
+                UtilesHelper.setValorCelda(sheet, i + 2, "A", "RUC: " + Constantes.RUC_MP);
+                UtilesHelper.setValorCelda(sheet, i + 3, "A", "", addressTextCellStyle);
+                UtilesHelper.setValorCelda(sheet, i + 4, "A", "", addressTextCellStyle);
+                UtilesHelper.combinarCeldas(sheet, i + 3, i + 4, "A", "C");
+                UtilesHelper.setValorCelda(sheet, i + 3, "A", Constantes.DIRECCION_MP);
+                UtilesHelper.setValorCelda(sheet, i + 5, "A", "Teléfono: " + Constantes.TELEFONO_MP);
+                UtilesHelper.setValorCelda(sheet, i + 6, "A", Constantes.WEB_MP);
                 
-                
+
                 UtilesHelper.combinarCeldas(sheet, i, i, "F", "H");
                 UtilesHelper.setValorCelda(sheet, i, "F", "ENVÍE A", titleCellStyle);
 
-                UtilesHelper.setValorCelda(sheet, i + 1, "F", "[Nombre]");
-                UtilesHelper.setValorCelda(sheet, i + 2, "F", "[Nombre de empresa]");
-                UtilesHelper.setValorCelda(sheet, i + 3, "F", "[Dirección]");
-                UtilesHelper.setValorCelda(sheet, i + 4, "F", "[Ciudad, Estado, postal]");
-                UtilesHelper.setValorCelda(sheet, i + 5, "F", "[Telefono]");
+                UtilesHelper.setValorCelda(sheet, i + 1, "F", "MP " + obj.ciudad.nombre);
+                UtilesHelper.setValorCelda(sheet, i + 2, "F", "", addressTextCellStyle);
+                UtilesHelper.setValorCelda(sheet, i + 3, "F", "", addressTextCellStyle);
+                UtilesHelper.setValorCelda(sheet, i + 2, "F", obj.ciudad.direccionPuntoLlegada);
+                UtilesHelper.combinarCeldas(sheet, i + 2, i + 5, "F", "H");
 
 
                 i = i + 9;
@@ -324,7 +331,7 @@ namespace Cotizador.ExcelExport
 
                 i++;
                 UtilesHelper.combinarCeldas(sheet, i, i, "A", "H");
-                UtilesHelper.setValorCelda(sheet, i, "A", "[Nombre, Teléfono, E-Mail]", footerTextCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "A", obj.usuario.nombre + " | " + obj.usuario.contacto + " | E-Mail: " + obj.usuario.email, footerTextCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())

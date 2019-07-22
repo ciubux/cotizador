@@ -13,19 +13,22 @@ $(document).ready(function () {
         FooTable.init('#tablePermisos');
     });
 
+    $('#categoriaPermiso').change(function (e) {
+        filterPermisos();
+    });
 
     $('#permiso_descripcion_corta').keyup(function (e) {
         var textSearch = $('#permiso_descripcion_corta').val();
-        
+
         setTimeout(function () {
             var textNow = $('#permiso_descripcion_corta').val();
             if (textSearch == textNow) {
-                filterPermisos(textSearch);
+                filterPermisos();
             }
         }, 1000);
     });
 
-    function filterPermisos(textSearch) {
+    function filterTable(searchs) {
         $("#tablePermisos > tbody").empty();
         $("#tablePermisos").footable({
             "paging": {
@@ -33,22 +36,48 @@ $(document).ready(function () {
             }
         });
 
+
+        var i = 0;
         $('#dtPermisos tr').each(function () {
             var tr = this;
             var founds = 0;
-            $(tr).find('td[isSearchable=1]').each(function () {
-                var text = $(this).html();
-                if (text.indexOf(textSearch) >= 0) {
+            var found = false;
+            i = 1;
+
+            searchs.forEach(function (element) {
+                //alert(element);
+                found = false;
+                $(tr).find('td[isSearchable=' + i + ']').each(function () {
+                    var text = $(this).html();
+                    
+                    if (text.indexOf(element) >= 0) {
+                        found = true;
+                    }
+                });
+                if (found) {
                     founds = founds + 1;
-                } 
+                }
+                i = i + 1;
             });
 
-            if (founds > 0) {
+            if (founds == (i - 1)) {
                 $("#tablePermisos").append('<tr data-expanded="true">' + $(tr).html() + '</tr>');
-            }            
+            }
         });
+    }
 
-        //FooTable.init('#tablePermisos');
+    function filterPermisos() {
+        var textSearch = $('#permiso_descripcion_corta').val();
+        var categorySearch = $('#categoriaPermiso').val();
+
+        var searchs = [];
+        searchs[0] = textSearch;
+
+        if (categorySearch.length > 0) {
+            searchs[1] = categorySearch;
+        } 
+        
+        filterTable(searchs);
     }
    
     $('#menuCategoriaPermisos li ul li').click(function (e) {

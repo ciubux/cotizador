@@ -685,5 +685,13 @@ namespace BusinessLayer
             }
 
         }
+
+        public List<List<String>> getCPEsExportStarsoft(DateTime fechaInicio, DateTime fechaFin)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.getExportStarsoft(fechaInicio, fechaFin);
+            }
+        }
     }
 }

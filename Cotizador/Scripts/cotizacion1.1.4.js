@@ -1589,13 +1589,7 @@ jQuery(function ($) {
         }
     }
 
-
-
-
-
-
-
-
+    
     function callCreate(continuarLuego) {
         $('body').loadingModal({
             text: 'Creando Cotización...'

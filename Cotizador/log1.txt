@@ -79,3 +79,8 @@ The statement has been terminated.
 The statement has been terminated.
 2019-06-27 12:50:21.1120|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
 2019-06-27 14:04:36.4211|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Could not find stored procedure 'pu_permiso'.
+2019-07-16 07:49:55.8699|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-07-16 07:50:03.6934|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-07-16 07:50:18.3107|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-07-16 07:50:20.3490|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-07-16 07:50:22.7296|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.

@@ -211,7 +211,6 @@ namespace Model
         public static String USER_EOL_PROD = "";
         public static String PASSWORD_EOL_PROD = "";
         public static String ENDPOINT_ADDRESS_EOL_PROD = "";
-        public static string RUC_MP = "20509411671";
         public static String AMBIENTE_EOL = "";
         public static String CPE_CABECERA_BE_ID = "";
         public static String CPE_CABECERA_BE_COD_GPO = "";
@@ -219,6 +218,14 @@ namespace Model
         public static String PASSWORD_MAIL_COMUNICACION_FACTURAS = "";
         public static String MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = "";
         public static String PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = "";
+
+
+        public static String RUC_MP = "";
+        public static String RAZON_SOCIAL_MP = "";
+        public static String DIRECCION_MP = "";
+        public static String TELEFONO_MP = "";
+        public static String WEB_MP = "";
+
 
         public static List<Producto> DESCUENTOS_LIST;
         public static List<Producto> CARGOS_LIST;

@@ -318,6 +318,18 @@ namespace DataLayer
                     case "CPE_CABECERA_BE_COD_GPO":
                         Constantes.CPE_CABECERA_BE_COD_GPO = valorParametro; break;
 
+                    case "RUC_MP":
+                        Constantes.RUC_MP = valorParametro; break;
+                    case "RAZON_SOCIAL_MP":
+                        Constantes.RAZON_SOCIAL_MP = valorParametro; break;
+                    case "DIRECCION_MP":
+                        Constantes.DIRECCION_MP = valorParametro; break;
+                    case "TELEFONO_MP":
+                        Constantes.TELEFONO_MP = valorParametro; break;
+                    case "WEB_MP":
+                        Constantes.WEB_MP = valorParametro; break;
+
+
                     case "AMBIENTE_EOL":
                         { 
                             Constantes.AMBIENTE_EOL = valorParametro;

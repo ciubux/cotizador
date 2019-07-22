@@ -270,6 +270,7 @@
     <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
+    <Compile Include="ExcelExport\DocumentoCompraSearch.cs" />
     <Compile Include="ExcelExport\FacturaSearch.cs" />
     <Compile Include="ExcelExport\NotaIngresoSearch.cs" />
     <Compile Include="ExcelExport\GuiaRemisionSearch.cs" />
@@ -590,6 +591,7 @@
     <Content Include="Views\Compra\Comprar.cshtml" />
     <Content Include="Views\Permiso\List.cshtml" />
     <Content Include="Views\Permiso\Editar.cshtml" />
+    <Content Include="Views\DocumentoVenta\ExportarCPEs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
@@ -597,7 +599,6 @@
     <Folder Include="Scripts\App_LocalResources\" />
     <Folder Include="Views\Ciudad\" />
     <Folder Include="Views\DireccionEntrega\" />
-    <Folder Include="Views\DocumentoVenta\" />
     <Folder Include="Views\General\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Mail\" />
