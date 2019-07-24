@@ -20,9 +20,9 @@ namespace Cotizador.Models
             {
                 return Data.Select(c => new SelectListItem
                 {
-                    Value = c.catalogoId.ToString(),
-                    Text = c.catalogoId + " - " + c.nombre,
-                    Selected = SelectedValue != null && SelectedValue == c.catalogoId.ToString()
+                    Value = c.tablaId.ToString(),
+                    Text = c.tablaId + " - " + c.nombreTabla,
+                    Selected = SelectedValue != null && SelectedValue == c.tablaId.ToString()
                 });
             }
         }

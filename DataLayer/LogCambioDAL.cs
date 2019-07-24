@@ -133,9 +133,9 @@ namespace DataLayer
 
         /*--------------------------------------------------------------------------------------*/
 
-        public List<LogCambio> getCatalogoList()
+        public List<LogCambio> getTablaList()
         {
-            var objCommand = GetSqlCommand("PS_CATALOGO_CAMPO");
+            var objCommand = GetSqlCommand("PS_CATALOGO_TABLA");
             DataTable dataTable = Execute(objCommand);
             List<LogCambio> lista = new List<LogCambio>();
 
@@ -143,25 +143,26 @@ namespace DataLayer
             {
                 LogCambio obj = new LogCambio();
 
-                obj.catalogoId = Converter.GetInt(row, "ID_CATALOGO_CAMPO");
-                obj.nombre = Converter.GetString(row, "NOMBRE");
-                obj.estadoCatalogo = Converter.GetInt(row, "ESTADO");
+                obj.tablaId = Converter.GetInt(row, "ID_CATALOGO_TABLA");
+                obj.nombreTabla = Converter.GetString(row, "NOMBRE");
+                obj.estadoTabla = Converter.GetInt(row, "ESTADO");
                 lista.Add(obj);
             }
             return lista;
         }
 
 
-        public LogCambio getCatalogoById(LogCambio idCatalogo)
+        public List<LogCambio> getCatalogoById(LogCambio Catalogo)
         {
 
             var objCommand = GetSqlCommand("PS_DETALLE_CATALOGO_CAMPO");
-            InputParameterAdd.Int(objCommand, "ID_CATALOGO_CAMPO", idCatalogo.catalogoId);
+            InputParameterAdd.Int(objCommand, "ID_CATALOGO_TABLA", Catalogo.tablaId);
             DataTable dataTable = Execute(objCommand);
-            LogCambio obj = new LogCambio();
+            List<LogCambio> listcata = new List<LogCambio>();
 
             foreach (DataRow row in dataTable.Rows)
             {
+                LogCambio obj = new LogCambio();
                 obj.catalogoId = Converter.GetInt(row, "id_catalogo_campo");
                 obj.estadoCatalogo = Converter.GetInt(row, "estado");
                 obj.puede_persistir = Converter.GetInt(row, "puede_persistir");
@@ -171,26 +172,24 @@ namespace DataLayer
                 obj.tabla_referencia = Converter.GetString(row, "tabla_referencia");
                 obj.orden = Converter.GetInt(row, "orden");
                 obj.campo_referencia = Converter.GetString(row, "campo_referencia");
-
+                listcata.Add(obj);
 
             }
 
-            return obj;
+            return listcata;
         }
 
         public LogCambio updateCatalogo(LogCambio obj)
         {
             var objCommand = GetSqlCommand("PU_CATALOGO_CAMPO");
-            InputParameterAdd.Int(objCommand, "ID_CATALOGO_CAMPO", obj.catalogoId);
+            InputParameterAdd.Int(objCommand, "ID_CATALOGO_CAMPO", obj.catalogoId);            
             InputParameterAdd.Int(objCommand, "ESTADO", obj.estadoCatalogo);
             InputParameterAdd.Int(objCommand, "PUEDE_PERSISTIR", obj.puede_persistir);
-
-
             ExecuteNonQuery(objCommand);
 
             return obj;
 
-        }
+        }       
 
     }
 }

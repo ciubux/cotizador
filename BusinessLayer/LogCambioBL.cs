@@ -168,21 +168,19 @@ namespace BusinessLayer
         /*----------------------------------------------------------------------*/
 
 
-        public List<LogCambio> getCatalogoList()
+        public List<LogCambio> getTablasList()
         {
             using (var dal = new LogCambioDAL())
             {
-                return dal.getCatalogoList();
+                return dal.getTablaList();
             }
         }
 
-        public LogCambio getCatalogoById(LogCambio idCatalogo)
+        public List<LogCambio> getCatalogoById(LogCambio Catalogo)
         {
             using (var dal = new LogCambioDAL())
             {
-                LogCambio obj = dal.getCatalogoById(idCatalogo);
-
-                return obj;
+                return dal.getCatalogoById(Catalogo);
             }
         }
 
@@ -190,12 +188,11 @@ namespace BusinessLayer
         public LogCambio updateCatalogo(LogCambio idCatalogo)
         {
             using (var dal = new LogCambioDAL())
-            {
-                LogCambio obj = dal.updateCatalogo(idCatalogo);
-
-                return obj;
+            {                
+                return dal.updateCatalogo(idCatalogo);                
             }
         }
+        
 
 
     }

@@ -2,21 +2,29 @@ jQuery(function ($) {
 
     var TITLE_EXITO = 'Operación Realizada';
 
-    var estado_lista;
-    var persiste_lista;
-    var persiste;
-    var estado;
+    var estadoPersistencia;
+    var valestadoPersistencia;
+    var catalogoId;
+    var nombreCatalogo;
 
-   $(document).ready(function () {
-       if ($("#catalogo_catalogoId").val()=="")
-    {
-        $("#btnBusqueda").attr("disabled", "disabled");
-    } 
+
+    $(document).ready(function () {
+        if ($("#catalogo_tablaId").val() == "") {
+            $("#btnBusqueda").attr("disabled", "disabled");
+        }
+        $(".form-control").on("change", function () {
+            var a = $("#catalogo_tablaId").val();
+            if (a == "") {
+                $("#btnBusqueda").attr("disabled", "disabled");
+            } else {
+                $("#btnBusqueda").removeAttr('disabled');
+            }
+        });
     });
 
     $("#btnBusqueda").click(function () {
 
-                $("#btnBusqueda").attr("disabled", "disabled");
+        $("#btnBusqueda").attr("disabled", "disabled");
         $.ajax({
             url: "/LogCambio/SearchList",
             type: 'POST',
@@ -28,103 +36,88 @@ jQuery(function ($) {
 
             success: function (list) {
 
-                estado_lista = list.estadoCatalogo;
-                persiste_lista = list.puede_persistir;
+                $("#btnBusqueda").removeAttr("disabled");
+                $("#tableCatalogo > tbody").empty();
+                $("#tableCatalogo").footable({
+                    "paging": {
+                        "enabled": true
+                    }
+                });
 
-               
-                    $("#btnBusqueda").removeAttr("disabled");
-                    $("#tableCatalogo > tbody").empty();
-                    $("#tableCatalogo").footable({
-                        "paging": {
-                            "enabled": true
-                        }
-                    });
+                for (var i = 0; i < list.length; i++) {
 
-                    var label;
-                    var label2;
-                    var label3;
-                    var label4;
-                if (list.estadoCatalogo == 1) {
-                        label = '<input class="radio-input" checked type="radio" name="catalogo_estado" id="catalogo_estado_si" value="1"><span>Activo</span>'
+                    if (list[i].estadoCatalogo == 1) {
+                        var label = '<input class="1 estadoCatalogo ' + list[i].catalogoId + " " + list[i].nombre + ' radio-input" checked type="radio" name="catalogo_estado ' + list[i].catalogoId + '" id="catalogo_estado_si" value="1"><span>Activo</span>';
                     }
                     else {
-                        label = '<input class="radio-input" type="radio" name="catalogo_estado" id="catalogo_estado_si" value="1"><span>Activo</span>'
+                        label = '<input class="1 estadoCatalogo ' + list[i].catalogoId + " " + list[i].nombre + 'radio-input" type="radio" name="catalogo_estado ' + list[i].catalogoId + '" id="catalogo_estado_si" value="1"><span>Activo</span>';
                     };
 
-                if (list.estadoCatalogo == 0) {
-                        label2 = '<input class="radio-input" checked type="radio" name="catalogo_estado" id="catalogo_estado_no" value="0"><span>Inactivo</span>'
+                    if (list[i].estadoCatalogo == 0) {
+                        var label2 = '<input class="0 estadoCatalogo ' + list[i].catalogoId + " " + list[i].nombre + ' radio-input" checked type="radio" name="catalogo_estado ' + list[i].catalogoId + '" id="catalogo_estado_no" value="0"><span>Inactivo</span>';
                     }
                     else {
-                        label2 = '<input class="radio-input" type="radio" name="catalogo_estado" id="catalogo_estado_no" value="0"><span>Inactivo</span>'
+                        label2 = '<input class="0 estadoCatalogo ' + list[i].catalogoId + " " + list[i].nombre + ' radio-input" type="radio" name="catalogo_estado ' + list[i].catalogoId + '" id="catalogo_estado_no" value="0"><span>Inactivo</span>';
                     };
-                    if (list.puede_persistir == 1) {
-                        label3 = '<input class="radio-input" checked type="radio" name="puede_persistir" id="catalogo_persiste_si" value="1"><span>Si</span>'
+                    if (list[i].puede_persistir == 1) {
+                        var label3 = '<input class="1 puede_persistir ' + list[i].catalogoId + " " + list[i].nombre + ' radio-input" checked type="radio" name="puede_persistir ' + list[i].catalogoId + '" id="catalogo_persiste_si" value="1"><span>Si</span>';
                     }
                     else {
-                        label3 = '<input class="radio-input" type="radio" name="puede_persistir" id="catalogo_persiste_si" value="1"><span>Si</span>'
-                    };
-
-                    if (list.puede_persistir == 0) {
-                        label4 = '<input class="radio-input" checked type="radio" name="puede_persistir" id="catalogo_persiste_no" value="0"><span>No</span>'
-                    }
-                    else {
-                        label4 = '<input class="radio-input" type="radio" name="puede_persistir" id="catalogo_persiste_no" value="0"><span>No</span>'
+                        label3 = '<input class="1 puede_persistir ' + list[i].catalogoId + " " + list[i].nombre + ' radio-input" type="radio" name="puede_persistir ' + list[i].catalogoId + '" id="catalogo_persiste_si" value="1"><span>Si</span>';
                     };
 
+                    if (list[i].puede_persistir == 0) {
+                        var label4 = '<input class="0 puede_persistir ' + list[i].catalogoId + " " + list[i].nombre + ' radio-input" checked type="radio" name="puede_persistir ' + list[i].catalogoId + '" id="catalogo_persiste_no" value="0"><span>No</span>';
+                    }
+                    else {
+                        label4 = '<input class="0 puede_persistir ' + list[i].catalogoId + " " + list[i].nombre + ' radio-input" type="radio" name="puede_persistir ' + list[i].catalogoId + '" id="catalogo_persiste_no" value="0"><span>No</span>';
+                    };
                     var ItemRow = '<tr data-expanded="true">' +
-                        '<td>  ' + list.catalogoId + '  </td>' +
-                        '<td>  ' + list.catalogoId + '  </td>' +
-                        '<td>  ' + list.nombre + '  </td>' +
+                        '<td>  ' + list[i].catalogoId + '  </td>' +
+                        '<td>  ' + list[i].catalogoId + '  </td>' +
+                        '<td>  ' + list[i].nombre + '  </td>' +
                         '<td> <div class="radio radio-inline"><label class="radio-label">' + label + '</label></div><div class="radio radio-inline"><label class="radio-label">' + label2 + '</label></div> </td>' +
                         '<td> <div class="radio radio-inline"><label class="radio-label">' + label3 + '</label></div><div class="radio radio-inline"><label class="radio-label">' + label4 + '</label></div> </td>' +
-                        '<td>  ' + list.codigo + '  </td>' +
-                        '<td>  ' + list.tabla_referencia + '  </td>' +
-                        '<td>  ' + list.campo_referencia + '  </td>' +
+                        '<td>  ' + list[i].codigo + '  </td>' +
+                        '<td>  ' + list[i].tabla_referencia + '  </td>' +
+                        '<td>  ' + list[i].campo_referencia + '  </td>' +
                         '</tr>';
 
                     $("#tableCatalogo").append(ItemRow);
-                
 
 
+                }
             }
         });
     });
 
-    $("#tableCatalogo").on("change", ".radio ", function () {
-        persiste = $('input[name=puede_persistir]:checked', '#tableCatalogo').val();
-        estado = $('input[name=catalogo_estado]:checked', '#tableCatalogo').val();
+    $("#tableCatalogo").on("change", "input", function () {
 
-        if (estado_lista != estado) {
-            changeInputInt("estadoCatalogo", estado);
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        valestadoPersistencia = arrrayClass[0];
+        estadoPersistencia = arrrayClass[1];
+        catalogoId = arrrayClass[2];
+        nombreCatalogo = arrrayClass[3];
+
+        if ("estadoCatalogo" == estadoPersistencia) {
+            
             confirmacionEstado();
 
         }
-        if (persiste_lista != persiste) {
-            changeInputInt("puede_persistir", persiste);
+        if ("puede_persistir" == estadoPersistencia) {
+            
             confirmacionPersistencia();
         }
 
     });
-    function changeInputInt(propiedad, valor) {
-        $.ajax({
-            url: "/LogCambio/ChangeInputInt",
-            type: 'POST',
-            data: {
-                propiedad: propiedad,
-                valor: valor
-            },
-            success: function () {
-
-            }
-        });
-    }
-
+    
+    var opcion;
     function confirmacionEstado() {
-        if (estado == 1) { estado = "Activo" }
-        if (estado == 0) { estado = "Inactivo" }
+        if (valestadoPersistencia == 1) { opcion = "Activo" }
+        if (valestadoPersistencia == 0) { opcion = "Inactivo" }
         $.confirm({
             title: 'Confirmación de cambio',
-            content: '¿Está seguro de cambiar el estado de la tabla a ' + estado + '?',
+            content: '¿Está seguro de cambiar el estado de la tabla ' + nombreCatalogo + ' a ' + opcion+ '?',
             type: 'orange',
             buttons: {
                 confirm: {
@@ -133,6 +126,12 @@ jQuery(function ($) {
                         $.ajax({
                             url: "/LogCambio/Update",
                             type: 'POST',
+                            data: {
+                                catalogoId: catalogoId, 
+                                propiedad: "estadoCatalogo",
+                                valor: valestadoPersistencia                              
+
+                            },
                             error: function (resultado) {
                                 $.alert({
                                     title: "Error",
@@ -177,13 +176,13 @@ jQuery(function ($) {
         })
 
     }
-
+    
     function confirmacionPersistencia() {
-        if (persiste == 1) { persiste = "Si" }
-        if (persiste == 0) { persiste = "No" }
+        if (valestadoPersistencia == 1) {opcion = "Si" }
+        if (valestadoPersistencia == 0) { opcion = "No" }
         $.confirm({
             title: 'Confirmación de cambio',
-            content: '¿Está seguro de cambiar la persistencia de la tabla a ' + persiste + '?',
+            content: '¿Está seguro de cambiar la persistencia de la tabla ' + nombreCatalogo + ' a ' + opcion+ '?',
             type: 'orange',
             buttons: {
                 confirm: {
@@ -192,6 +191,12 @@ jQuery(function ($) {
                         $.ajax({
                             url: "/LogCambio/Update",
                             type: 'POST',
+                            data: {
+                                catalogoId: catalogoId,
+                                propiedad: "puede_persistir",
+                                valor: valestadoPersistencia
+
+                            },
                             error: function (resultado) {
                                 $.alert({
                                     title: "Error",
@@ -250,22 +255,22 @@ jQuery(function ($) {
         });
     });
 
-    $("#catalogo_catalogoId").change(function () {
-        var idCiudad = $("#catalogo_catalogoId").val();
+    $("#catalogo_tablaId").change(function () {
+        var idTabla = $("#catalogo_tablaId").val();
 
-        var textCiudad = $("#catalogo_catalogoId option:selected").text();
+      
         $.ajax({
-            url: "/LogCambio/ChangeIdCiudad",
+            url: "/LogCambio/ChangeIdTabla",
             type: 'POST',
             dataType: 'JSON',
             data: {
-                idCiudad: idCiudad
+                idTabla: idTabla
             },
             error: function (detalle) {
                 $("#btnBusqueda").removeAttr("disabled");
             },
-            success: function (idCiudad) {
-                location.reload();
+            success: function (idTabla) {
+                
             }
         });
     });

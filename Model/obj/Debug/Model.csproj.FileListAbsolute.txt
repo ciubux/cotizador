@@ -209,3 +209,28 @@ C:\Users\Andre\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 C:\Users\Andre\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
 C:\Users\Andre\cotizador\Model\obj\Debug\Model.dll
 C:\Users\Andre\cotizador\Model\obj\Debug\Model.pdb
+C:\Users\Andre\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\bin\Debug\EntityFramework.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\bin\Debug\EntityFramework.xml
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\obj\Debug\Model.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Model\obj\Debug\Model.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\bin\Debug\EntityFramework.dll
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\bin\Debug\EntityFramework.xml
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\obj\Debug\Model.dll
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\obj\Debug\Model.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache

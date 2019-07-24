@@ -52,3 +52,15 @@ C:\Users\Andre\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
 C:\Users\Andre\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
 C:\Users\Andre\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
 C:\Users\Andre\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojAssemblyReference.cache

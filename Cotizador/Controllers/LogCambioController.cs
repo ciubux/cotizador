@@ -52,7 +52,7 @@ namespace Cotizador.Controllers
             //Se recupera el objeto cliente que contiene los criterios de Búsqueda de la session
             LogCambio obj = (LogCambio)this.Session[Constantes.VAR_SESSION_LOGCAMBIO_BUSQUEDA];
             LogCambioBL bL = new LogCambioBL();
-            LogCambio list = bL.getCatalogoById(obj);
+            List<LogCambio> list = bL.getCatalogoById(obj);
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_LOGCAMBIO_LISTA] = list;
             //Se retorna la cantidad de elementos encontrados
@@ -60,18 +60,18 @@ namespace Cotizador.Controllers
         }
 
 
-        public ActionResult GetTablas(string catalogoId, string selectedValue = null)
+        public ActionResult GetTablas(string tablaId, string selectedValue = null)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            LogCambioBL grupoClienteBL = new LogCambioBL();
-            List<LogCambio> grupoClienteList = grupoClienteBL.getCatalogoList();
+            LogCambioBL logcambioBL = new LogCambioBL();
+            List<LogCambio> logcambio = logcambioBL.getTablasList();
 
 
             var model = new LogCambioViewModels
             {
-                Data = grupoClienteList,
-                CatalogoSelectId = catalogoId,
+                Data = logcambio,
+                CatalogoSelectId = tablaId,
                 SelectedValue = selectedValue
             };
 
@@ -84,23 +84,14 @@ namespace Cotizador.Controllers
         private void instanciarCatalogoBusqueda()
         {
             LogCambio obj = new LogCambio();
-            obj.catalogoId = 0;
-            obj.estadoCatalogo = 0;
-            obj.codigo = String.Empty;
-            obj.nombre = String.Empty;
-            obj.puede_persistir = 0;
+            obj.tablaId = 0;
+            obj.estadoTabla = 0;            
+            obj.nombreTabla = String.Empty;           
 
 
             this.Session[Constantes.VAR_SESSION_LOGCAMBIO_BUSQUEDA] = obj;
         }
-        public void ChangeInputInt()
-        {
-
-            LogCambio obj = (LogCambio)this.CatalogoSession;
-            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
-            this.CatalogoSession = obj;
-        }
+        
 
 
 
@@ -108,7 +99,7 @@ namespace Cotizador.Controllers
 
 
 
-        private LogCambio CatalogoSession
+        private LogCambio LogCambioSession
         {
             get
             {
@@ -138,53 +129,51 @@ namespace Cotizador.Controllers
 
         }
 
-        public String ChangeIdCiudad()
+        public String ChangeIdTabla()
         {
 
-            LogCambio vendedor = this.CatalogoSession;
-            int idCiudad = 0;
-            int estado = 0;
-            int puede_persistir = 0;
-            if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
+            LogCambio logcambio = this.LogCambioSession;
+            int idTabla = 0;            
+            if (this.Request.Params["idTabla"] != null && !this.Request.Params["idTabla"].Equals(""))
             {
-                idCiudad = int.Parse(this.Request.Params["idCiudad"]);
+                idTabla = int.Parse(this.Request.Params["idTabla"]);
 
             }
-            vendedor.catalogoId = idCiudad;
-            LogCambioBL grupoClienteBL = new LogCambioBL();
-            vendedor = grupoClienteBL.getCatalogoById(vendedor);
-            this.CatalogoSession = vendedor;
+            logcambio.tablaId = idTabla;               
+            this.LogCambioSession = logcambio;
 
-            return JsonConvert.SerializeObject(vendedor.catalogoId);
+            return JsonConvert.SerializeObject(logcambio.tablaId);
         }
 
 
         public String Update()
         {
 
-            LogCambioBL bL = new LogCambioBL();
-            LogCambio obj = (LogCambio)this.CatalogoSession;
-            obj = bL.updateCatalogo(obj);
-            this.Session[Constantes.VAR_SESSION_LOGCAMBIO] = null;
+            LogCambio obj = new LogCambio();
+
+            obj.catalogoId = Int32.Parse(Request["catalogoId"].ToString());
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
+            LogCambioBL bL = new LogCambioBL();            
+            if (propertyInfo.Name == "estadoCatalogo")
+            {
+                obj.puede_persistir = 3;
+                obj = bL.updateCatalogo(obj);
+            }
+
+            if (propertyInfo.Name == "puede_persistir")
+            {
+                obj.estadoCatalogo = 3;
+                obj = bL.updateCatalogo(obj);
+            }
+            LogCambioSession = obj;
             String resultado = JsonConvert.SerializeObject(obj);
 
             return resultado;
+           
         }
 
-
-        public bool cancel()
-        {
-
-            bool resultado = false;
-
-            return resultado;
-        }
-        public bool accept()
-        {
-            bool resultado = true;
-
-            return resultado;
-        }
+        
 
 
     }
