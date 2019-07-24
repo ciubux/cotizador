@@ -16,15 +16,15 @@
 
 
             <!--CODIGO TABLAS-->
-            <div class="col-sm-6 col-lg-6">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label class="control-label col-xs-4" for="idTabla" name="idTabla">Tablas:</label>
                     <div class="col-xs-8">
                         @Html.Action("GetTablas", "LogCambio",
                                 new
                                 {
-                                    catalogoId = "catalogo_catalogoId",
-                                    selectedValue = catalogo.catalogoId
+                                    tablaId = "catalogo_tablaId",
+                                    selectedValue = catalogo.tablaId
                                 })
                     </div>
 

@@ -28,6 +28,12 @@ namespace Model
 
         /*------------------------------------------------*/
 
+        public int tablaId { get; set; }
+
+        public int estadoTabla { get; set; }
+
+        public string nombreTabla { get; set; }
+
         public int estadoCatalogo { get; set; }
 
         public string codigo { get; set; }

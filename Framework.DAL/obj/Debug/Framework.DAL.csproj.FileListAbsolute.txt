@@ -169,3 +169,23 @@ C:\Users\Andre\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompil
 C:\Users\Andre\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
 C:\Users\Andre\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 C:\Users\Andre\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\bin\Debug\Model.dll
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\bin\Debug\Model.pdb
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\bin\Debug\Model.dll.config
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
