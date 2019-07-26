@@ -164,36 +164,5 @@ namespace BusinessLayer
 
             return this.limpiarCambiosProgramados();
         }
-
-        /*----------------------------------------------------------------------*/
-
-
-        public List<LogCambio> getTablasList()
-        {
-            using (var dal = new LogCambioDAL())
-            {
-                return dal.getTablaList();
-            }
-        }
-
-        public List<LogCambio> getCatalogoById(LogCambio Catalogo)
-        {
-            using (var dal = new LogCambioDAL())
-            {
-                return dal.getCatalogoById(Catalogo);
-            }
-        }
-
-
-        public LogCambio updateCatalogo(LogCambio idCatalogo)
-        {
-            using (var dal = new LogCambioDAL())
-            {                
-                return dal.updateCatalogo(idCatalogo);                
-            }
-        }
-        
-
-
     }
 }

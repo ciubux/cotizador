@@ -9,7 +9,7 @@ END
 
 /* **** Create PS_DETALLE_CATALOGO_CAMP - Obtiene el detalle de un CATALOGO_CAMPO por ID_CATALOGO_CAMPO **** */
 
-alter procedure [dbo].[PS_DETALLE_CATALOGO_CAMPO]2
+create procedure [dbo].[PS_DETALLE_CATALOGO_CAMPO]
 (@ID_CATALOGO_TABLA INT)
 AS  BEGIN
 SELECT id_catalogo_campo,CATALOGO_CAMPO.estado,puede_persistir,CATALOGO_CAMPO.codigo,CATALOGO_CAMPO.nombre,CATALOGO_CAMPO.id_catalogo_tabla,CATALOGO_TABLA.nombre AS tabla_referencia,orden,campos_referencia FROM CATALOGO_CAMPO  inner join CATALOGO_TABLA on CATALOGO_TABLA.id_catalogo_tabla=CATALOGO_CAMPO.id_catalogo_tabla WHERE CATALOGO_CAMPO.id_catalogo_tabla=@ID_CATALOGO_TABLA
@@ -38,20 +38,20 @@ END
 
 /*-----------------------Permisos para la tabla PERMISO Y USUARIO_PERMISO--------------------------------*/
 
-insert into PERMISO (estado,fecha_creacion,fecha_modificacion,codigo,descripcion_corta,id_categoria_permiso,orden_permiso)
-						values (1,dbo.getlocaldate(),dbo.getlocaldate(),'P823','modifica_logcambio',7,10)
+insert into PERMISO (id_permiso,estado,fecha_creacion,fecha_modificacion,codigo,descripcion_corta,id_categoria_permiso,orden_permiso)
+						values (90,1,dbo.getlocaldate(),dbo.getlocaldate(),'P823','modifica_logcambio',7,10)
 
 insert into PERMISO (estado,fecha_creacion,fecha_modificacion,codigo,descripcion_corta,id_categoria_permiso,orden_permiso)
-						values (1,dbo.getlocaldate(),dbo.getlocaldate(),'P824','visualiza_logcambio',7,10)
+						values (91,1,dbo.getlocaldate(),dbo.getlocaldate(),'P824','visualiza_logcambio',7,10)
 
 
 insert into USUARIO_PERMISO(id_permiso,id_usuario,estado,fecha_creacion,fecha_modificacion) 
-							values (80,'7E875C20-24FD-4B5E-9BB5-A7F23718F1FA',1,dbo.getlocaldate(),dbo.getlocaldate())
+							values (90,'7E875C20-24FD-4B5E-9BB5-A7F23718F1FA',1,dbo.getlocaldate(),dbo.getlocaldate())
 
 insert into USUARIO_PERMISO(id_permiso,id_usuario,estado,fecha_creacion,fecha_modificacion) 
-							values (81,'7E875C20-24FD-4B5E-9BB5-A7F23718F1FA',1,dbo.getlocaldate(),dbo.getlocaldate())
+							values (91,'7E875C20-24FD-4B5E-9BB5-A7F23718F1FA',1,dbo.getlocaldate(),dbo.getlocaldate())
 
-
+							
 /*-----------------------Añadir dos columnas en la tabla CATALOGO_CAMPO --------------------------------*/
 
 

@@ -554,3 +554,34 @@ C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\CotizadorPDF\obj\De
 C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
 C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Model.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Spire.License.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\NPOI.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Model.pdb
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Model.dll.config
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\DataLayer.pdb
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll.config
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+C:\REPO\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+C:\REPO\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+C:\REPO\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+C:\REPO\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+C:\REPO\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+C:\REPO\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb

@@ -1,7 +1,7 @@
 ﻿@{
-    ViewBag.Title = "LogCambio - Búsqueda";
-    Model.LogCambio catalogo = ViewBag.catalogo;
-    List<Model.LogCambio> catalogoList = ViewBag.catalogoList;
+    ViewBag.Title = "LogCampo - Búsqueda";
+    Model.LogCampo catalogo = ViewBag.catalogo;
+    List<Model.LogCampo> catalogoList = ViewBag.catalogoList;
 }
 <div class="page-header">
     <h3>@ViewBag.Title</h3>
@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <label class="control-label col-xs-4" for="idTabla" name="idTabla">Tablas:</label>
                     <div class="col-xs-8">
-                        @Html.Action("GetTablas", "LogCambio",
+                        @Html.Action("GetTablas", "LogCampo",
                                 new
                                 {
                                     tablaId = "catalogo_tablaId",
@@ -36,6 +36,7 @@
             <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
         </div>
 
+
         <table id="tableCatalogo" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
                data-editing-allow-add="false"
                data-editing-allow-delete="false"
@@ -46,14 +47,12 @@
                data-editing-add-text="Descartar cambios">
             <thead>
                 <tr>
-                    <th data-name="catalogoId" data-visible="false"></th>
-                    <th data-name="catalogoId" data-visible="true" data-sortable="true">Codigo</th>
+
+
                     <th data-name="codigo" data-visible="true">Nombre</th>
                     <th data-name="cargo" data-visible="true">Estado</th>
                     <th data-name="estado" data-visible="true">Persiste</th>
-                    <th data-name="email" data-visible="true">Codigo</th>
-                    <th data-name="email" data-visible="true">Tabla Referencia</th>
-                    <th data-name="email" data-visible="true">Campo Referencia</th>
+
 
                 </tr>
             </thead>
@@ -61,9 +60,14 @@
 
             <tbody></tbody>
 
+
+
+
+
         </table>
+        
     </form>
 </div>
 @section Scripts {
-    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/logcambio")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/logcampo")
 }

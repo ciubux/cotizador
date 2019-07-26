@@ -523,3 +523,27 @@ C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\BusinessLayer\obj\D
 C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
+C:\REPO\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll.config
+C:\REPO\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\BusinessLayer.pdb
+C:\REPO\cotizador\BusinessLayer\bin\Debug\DataLayer.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Framework.DAL.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Model.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\ServiceLayer.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\DataLayer.pdb
+C:\REPO\cotizador\BusinessLayer\bin\Debug\DataLayer.dll.config
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Framework.DAL.pdb
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.pdb
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Model.pdb
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Model.dll.config
+C:\REPO\cotizador\BusinessLayer\bin\Debug\ServiceLayer.pdb
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
+C:\REPO\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.xml
+C:\REPO\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csprojAssemblyReference.cache
+C:\REPO\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
+C:\REPO\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
+C:\REPO\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
+C:\REPO\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb

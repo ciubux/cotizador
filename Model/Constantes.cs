@@ -104,10 +104,10 @@ namespace Model
         public static String VAR_SESSION_VENDEDOR_LISTA = "vendedorList";
         public static String VAR_SESSION_VENDEDOR_VER = "vendedorVer";
 
-        public static String VAR_SESSION_LOGCAMBIO = "logcambio";
-        public static String VAR_SESSION_LOGCAMBIO_BUSQUEDA = "logcambioBusqueda";
-        public static String VAR_SESSION_LOGCAMBIO_LISTA = "logcambioList";
-        public static String VAR_SESSION_LOGCAMBIO_VER = "logcambioVer";
+        public static String VAR_SESSION_LOGCAMPO = "logcampo";
+        public static String VAR_SESSION_LOGCAMPO_BUSQUEDA = "logcampoBusqueda";
+        public static String VAR_SESSION_LOGCAMPO_LISTA = "logcampoList";
+        public static String VAR_SESSION_LOGCAMPO_VER = "logcampoVer";
 
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA = "notificacionDocumentoVenta";
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_BUSQUEDA = "notificacionDocumentoVentaBusqueda";
@@ -375,8 +375,8 @@ namespace Model
 
         public const String MODIFICA_VENDEDORES = "P821";
         public const String VISUALIZA_VENDEDORES = "P822";
-        public const String MODIFICA_LOGCAMBIO = "P823";
-        public const String VISUALIZA_LOGCAMBIO = "P824";
+        public const String MODIFICA_LOGCAMPO = "P823";
+        public const String VISUALIZA_LOGCAMPO = "P824";
 
         public const String VISUALIZA_DOCUMENTOVENTANOTIFICACION = "P420";
 
@@ -489,11 +489,11 @@ namespace Model
             [Display(Name = "MANTENIMIENTO VENDEDORES")]
             MantenimientoVendedores = 44,
 
-            /*BUSQUEDA DE LOGCAMBIO*/
-            [Display(Name = "BUSQUEDA LOGCAMBIO")]
-            BusquedaLogCambio = 45,
-            [Display(Name = "MANTENIMIENTO LOGCAMBIO")]
-            MantenimientoLogCambio = 46,
+            /*BUSQUEDA DE LOGCAMPO*/
+            [Display(Name = "BUSQUEDA LOGCAMPO")]
+            BusquedaLogCampo = 45,
+            [Display(Name = "MANTENIMIENTO LOGCAMPO")]
+            MantenimientoLogCampo = 46,
 
 
             /*NOTIFICACION DOCUMENTO DE VENTA*/

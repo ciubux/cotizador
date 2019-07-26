@@ -189,3 +189,13 @@ C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\obj\D
 C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
 C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 C:\Users\Andre\Desktop\Nueva carpeta (3)\cotizador\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
+C:\REPO\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+C:\REPO\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+C:\REPO\cotizador\Framework.DAL\bin\Debug\Model.dll
+C:\REPO\cotizador\Framework.DAL\bin\Debug\Model.pdb
+C:\REPO\cotizador\Framework.DAL\bin\Debug\Model.dll.config
+C:\REPO\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
+C:\REPO\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
+C:\REPO\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+C:\REPO\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+C:\REPO\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb

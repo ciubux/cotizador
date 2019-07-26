@@ -19,5 +19,30 @@ namespace BusinessLayer
                 return dal.getCampoLogPorTabla(nombreTabla);
             }
         }
+
+        public List<LogCampo> getTablasList()
+        {
+            using (var dal = new LogCampoDAL())
+            {
+                return dal.getTablaList();
+            }
+        }
+
+        public List<LogCampo> getCatalogoById(LogCampo Catalogo)
+        {
+            using (var dal = new LogCampoDAL())
+            {
+                return dal.getCatalogoById(Catalogo);
+            }
+        }
+
+
+        public LogCampo updateCatalogo(LogCampo idCatalogo)
+        {
+            using (var dal = new LogCampoDAL())
+            {
+                return dal.updateCatalogo(idCatalogo);
+            }
+        }
     }
 }

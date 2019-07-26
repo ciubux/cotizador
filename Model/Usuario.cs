@@ -197,8 +197,8 @@ namespace Model
         public bool visualizaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }
 
         /*LogCambio*/
-        public bool modificaLogCambio { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_LOGCAMBIO)).FirstOrDefault() != null; } }
-        public bool visualizaLogCambio { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_LOGCAMBIO)).FirstOrDefault() != null; } }
+        public bool modificaLogCampo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_LOGCAMPO)).FirstOrDefault() != null; } }
+        public bool visualizaLogCampo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_LOGCAMPO)).FirstOrDefault() != null; } }
 
         /*Notificacion de Documento de Venta*/
         public bool visualizaDocumentoVentaNotificacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOVENTANOTIFICACION)).FirstOrDefault() != null; } }
