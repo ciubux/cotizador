@@ -83,7 +83,7 @@ namespace Cotizador.Controllers
             // Para permitir que los errores de contraseña desencadenen el bloqueo de la cuenta, cambie a shouldLockout: true
             //    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             UsuarioBL usuarioBL = new UsuarioBL();
-            Model.Usuario usuario = usuarioBL.getUsuarioLogin(model.Email, model.Password);
+            Model.Usuario usuario = usuarioBL.getUsuarioLogin(model.Email, model.Password, model.Ruc);
             this.Session["usuario"] = usuario;
             var result = usuario != null && usuario.idUsuario != null && usuario.idUsuario != Guid.Empty;
             SignInStatus signInStatus = SignInStatus.Failure;
@@ -95,11 +95,11 @@ namespace Cotizador.Controllers
                 case SignInStatus.Success:
 
                     FamiliaBL familiaBL = new FamiliaBL();
-                    List<Familia> familiaList = familiaBL.getFamilias();
+                    List<Familia> familiaList = new List<Familia>();
                     this.Session["familiaList"] = familiaList;
 
                     ProveedorBL proveedorBL = new ProveedorBL();
-                    List<Proveedor> proveedorList = proveedorBL.getProveedores();
+                    List<Proveedor> proveedorList = new List<Proveedor>();
                     this.Session["proveedorList"] = proveedorList;
 
                     CiudadBL ciudadBL = new CiudadBL();

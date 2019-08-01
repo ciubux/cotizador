@@ -78,10 +78,10 @@ namespace Cotizador.Controllers
         {
             Usuario usuarioSession = ((Usuario)this.Session["usuario"]);
             List<Usuario> usuarioList = new List<Usuario>();
-         /*   if (usuarioSession.apruebaCotizaciones)
-            { */
-                List<Usuario> usuarioListTmp = usuarioSession.usuarioCreaCotizacionList;
-                
+            /*   if (usuarioSession.apruebaCotizaciones)
+               { */
+                List<Usuario> usuarioListTmp = new List<Usuario>(); /* usuarioSession.usuarioCreaCotizacionList;*/
+                 
                 Usuario usuarioTodos = new Usuario { nombre = "Todos", idUsuario = Guid.Empty };
                 usuarioList.Add(usuarioTodos);
                 usuarioList.Add(usuarioSession);

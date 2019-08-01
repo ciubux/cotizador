@@ -198,3 +198,15 @@ D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb
+G:\Repo\maquetados\cotizador\Model\bin\Debug\Model.dll.config
+G:\Repo\maquetados\cotizador\Model\bin\Debug\Model.dll
+G:\Repo\maquetados\cotizador\Model\bin\Debug\Model.pdb
+G:\Repo\maquetados\cotizador\Model\bin\Debug\EntityFramework.dll
+G:\Repo\maquetados\cotizador\Model\bin\Debug\EntityFramework.SqlServer.dll
+G:\Repo\maquetados\cotizador\Model\bin\Debug\EntityFramework.xml
+G:\Repo\maquetados\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
+G:\Repo\maquetados\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache
+G:\Repo\maquetados\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
+G:\Repo\maquetados\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
+G:\Repo\maquetados\cotizador\Model\obj\Debug\Model.dll
+G:\Repo\maquetados\cotizador\Model\obj\Debug\Model.pdb

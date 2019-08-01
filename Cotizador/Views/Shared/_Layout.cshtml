@@ -118,15 +118,11 @@
                                     {
                                         <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Crear/Modificar", "Pedir", "Pedido")</li>
                                     }
-                                    @if (usuario.realizaCargaMasivaPedidos)
-                                    {
-                                        <li id="linkCargaPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Carga Masiva", "Load", "Pedido")</li>
-                                    }
                                 </ul>
                             </li>
                         }
 
-                        if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta || usuario.creaDocumentosCompra)
+                        if (usuario.visualizaDocumentosVenta)
                         {
 
                             <li class="@linkDocumentosVenta">
@@ -136,7 +132,7 @@
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
 
-                                    @if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta)
+                                    @if (usuario.visualizaDocumentosVenta)
                                     {
                                         <li id="linkBusquedaFactura" class="@linkBusquedaFactura">@Html.ActionLink("Documentos de Venta - Búsqueda", "Index", "Factura")</li>
                                     }

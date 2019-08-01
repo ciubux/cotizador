@@ -97,11 +97,11 @@ namespace Model
         }
 
         /*PERMISOS COTIZACION*/
-        public bool apruebaCotizaciones { get { return apruebaCotizacionesLima || apruebaCotizacionesProvincias; } }
+        public bool apruebaCotizaciones { get { return true /*apruebaCotizacionesLima || apruebaCotizacionesProvincias*/; } }
         public bool apruebaCotizacionesLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_COTIZACIONES_LIMA)).FirstOrDefault() != null;  } }
         public bool apruebaCotizacionesProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_COTIZACIONES_PROVINCIAS)).FirstOrDefault() != null; } }
-        public bool creaCotizaciones { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_COTIZACIONES_LIMA)).FirstOrDefault() != null; } }
-        public bool visualizaCotizaciones { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_COTIZACIONES)).FirstOrDefault() != null; } }
+        public bool creaCotizaciones { get { return true/* this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_COTIZACIONES_LIMA)).FirstOrDefault() != null*/; } }
+        public bool visualizaCotizaciones { get { return true /*this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_COTIZACIONES)).FirstOrDefault() != null*/; } }
         public bool eliminaCotizacionesAceptadas { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ELIMINA_COTIZACIONES_ACEPTADAS)).FirstOrDefault() != null; } }
         public bool visualizaCostos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_COSTOS)).FirstOrDefault() != null; } }
         public bool creaCotizacionesGrupales { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_COTIZACIONES_GRUPALES)).FirstOrDefault() != null; } }
@@ -110,17 +110,17 @@ namespace Model
         public bool visualizaMargen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_MARGEN)).FirstOrDefault() != null; } }
 
         /*PERMISOS PEDIDO*/
-        public bool tomaPedidos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.TOMA_PEDIDOS_LIMA)).FirstOrDefault() != null; } }
+        public bool tomaPedidos { get { return true /*this.permisoList.Where(u => u.codigo.Equals(Constantes.TOMA_PEDIDOS_LIMA)).FirstOrDefault() != null*/; } }
         public bool modificaPedidoFechaEntregaExtendida { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PEDIDO_FECHA_ENTREGA_EXTENDIDA)).FirstOrDefault() != null; } }
         public bool realizaCargaMasivaPedidos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_CARGA_MASIVA_PEDIDOS)).FirstOrDefault() != null; } }
-        public bool apruebaPedidos { get { return apruebaPedidosLima || apruebaPedidosProvincias; } }
+        public bool apruebaPedidos { get { return true /*apruebaPedidosLima || apruebaPedidosProvincias*/; } }
         public bool apruebaPedidosCompra { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_COMPRA)).FirstOrDefault() != null; } }
         public bool apruebaPedidosAlmacen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_ALMACEN)).FirstOrDefault() != null; } }
         public bool apruebaPedidosLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_LIMA)).FirstOrDefault() != null; } }
         public bool apruebaPedidosProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_PROVINCIAS)).FirstOrDefault() != null; } }
         public bool visualizaPedidosLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PEDIDOS_LIMA)).FirstOrDefault() != null; } }
         public bool visualizaPedidosProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PEDIDOS_PROVINCIAS)).FirstOrDefault() != null; } }
-        public bool visualizaPedidos { get { return visualizaPedidosLima || visualizaPedidosProvincias; } }
+        public bool visualizaPedidos { get { return true /* visualizaPedidosLima || visualizaPedidosProvincias*/; } }
         public bool bloqueaPedidos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.BLOQUEA_PEDIDOS)).FirstOrDefault() != null; } }
         public bool liberaPedidos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.LIBERA_PEDIDOS)).FirstOrDefault() != null; } }
         public bool tomaPedidosProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.TOMA_PEDIDOS_PROVINCIAS)).FirstOrDefault() != null; } }
@@ -147,7 +147,7 @@ namespace Model
         public bool apruebaAnulaciones { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_ANULACIONES)).FirstOrDefault() != null; } }
         public bool administraDocumentosVentaLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_DOCUMENTOS_VENTA_LIMA)).FirstOrDefault() != null; } }
         public bool administraDocumentosVentaProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_DOCUMENTOS_VENTA_PROVINCIAS)).FirstOrDefault() != null; } }
-        public bool visualizaDocumentosVenta { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOS_VENTA)).FirstOrDefault() != null; } }
+        public bool visualizaDocumentosVenta { get { return true /*this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOS_VENTA)).FirstOrDefault() != null*/; } }
         public bool visualizaDocumentosCompra { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOS_COMPRA)).FirstOrDefault() != null; } }
         public bool creaNotasCredito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_CREDITO)).FirstOrDefault() != null; } }
         public bool creaNotasDebito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_DEBITO)).FirstOrDefault() != null; } }
@@ -197,7 +197,7 @@ namespace Model
         public bool visualizaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }        
 
         /*Administra Permisos*/
-        public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }
+        public bool administraPermisos { get { return true /*this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null*/; } }
 
         public bool modificaDireccionEntrega { get; set; }
         
@@ -206,7 +206,7 @@ namespace Model
         public bool visualizaRoles { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_ROLES)).FirstOrDefault() != null; } }
 
         public bool modificaUsuario { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_USUARIO)).FirstOrDefault() != null; } }
-        public bool visualizaUsuarios { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_USUARIOS)).FirstOrDefault() != null; } }
+        public bool visualizaUsuarios { get { return true/* this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_USUARIOS)).FirstOrDefault() != null*/; } }
     }
 }
 

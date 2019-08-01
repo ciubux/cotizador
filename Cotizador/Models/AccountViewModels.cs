@@ -49,6 +49,10 @@ namespace Cotizador.Models
     public class LoginViewModel
     {
         [Required]
+        [Display(Name = "RUC")]
+        public string Ruc { get; set; }
+
+        [Required]
         [Display(Name = "Correo electrónico")]
         [EmailAddress]
         public string Email { get; set; }
