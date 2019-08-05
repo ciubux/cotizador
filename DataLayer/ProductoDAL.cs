@@ -147,6 +147,7 @@ namespace DataLayer
                 producto.unidad = Converter.GetString(row, "unidad");
                 producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
                 producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 //Costo sin IGV
                 

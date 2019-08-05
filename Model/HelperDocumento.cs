@@ -66,6 +66,40 @@ namespace Model
                         documentoDetalle.precioNeto = cotizacionDetalleJson.precio;
                     }
 
+                    if (true)
+                    {
+                        if ((documentoDetalle.ProductoPresentacion == null || documentoDetalle.ProductoPresentacion.IdProductoPresentacion == 0) && documentoDetalle.producto.equivalenciaAlternativa > 1)
+                        {
+                            decimal precioA = documentoDetalle.precioNeto / documentoDetalle.producto.equivalenciaAlternativa;
+                            precioA = Math.Truncate(precioA * 10000);
+                            decimal precioN = precioA * documentoDetalle.producto.equivalenciaAlternativa / 10000;
+
+                            while ((precioN * 100) - (Math.Truncate(precioN * 100)) > (decimal)0.001)
+                            {
+                                precioA--;
+                                precioN = precioA * documentoDetalle.producto.equivalenciaAlternativa / 10000;
+                            }
+                            documentoDetalle.precioNeto = precioA * documentoDetalle.producto.equivalenciaAlternativa / 10000;
+                        }
+                        
+                        //Proveedor
+                        if (documentoDetalle.ProductoPresentacion != null && documentoDetalle.ProductoPresentacion.IdProductoPresentacion == 2 && (documentoDetalle.producto.equivalenciaProveedor > 1 || documentoDetalle.producto.equivalenciaAlternativa > 1))
+                        {
+                            decimal equivalenciaA = documentoDetalle.producto.equivalenciaAlternativa * documentoDetalle.producto.equivalenciaProveedor;
+                            decimal precioA = documentoDetalle.precioNeto / equivalenciaA;
+                            precioA = Math.Truncate(precioA * 10000);
+                            decimal precioN = (precioA * equivalenciaA) / 10000;
+
+                            while ((precioN * 100) - (Math.Truncate(precioN * 100)) > (decimal)0.001)
+                            {
+                                precioA--;
+                                precioN = precioA * equivalenciaA / 10000;
+                            }
+
+                            documentoDetalle.precioNeto = (precioA * documentoDetalle.producto.equivalenciaAlternativa) / 10000;
+                        }
+                    }
+
                     if (precioNetoAnterior != documentoDetalle.precioNeto || documentoDetalle.porcentajeDescuento != cotizacionDetalleJson.porcentajeDescuento)
                     {
                         documentoDetalle.validar = true;

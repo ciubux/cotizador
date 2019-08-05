@@ -1002,6 +1002,50 @@ namespace Cotizador.Controllers
             detalle.precioNetoAnterior = precioNetoAnterior;
             cotizacion.cotizacionDetalleList.Add(detalle);
 
+
+            if (true)
+            {
+                switch (idProductoPresentacion)
+                {
+                    //Normal
+                    case 0:
+                        if (producto.equivalenciaAlternativa > 1)
+                        {
+                            decimal precioA = detalle.precioNeto / producto.equivalenciaAlternativa;
+                            precioA = Math.Truncate(precioA * 10000);
+                            decimal precioN = precioA * producto.equivalenciaAlternativa / 10000;
+
+                            while ((precioN * 100) - (Math.Truncate(precioN * 100)) > (decimal)0.001)
+                            {
+                                precioA--;
+                                precioN = precioA * producto.equivalenciaAlternativa / 10000;
+                            }
+                            detalle.precioNeto = precioA * producto.equivalenciaAlternativa / 10000;
+                        }
+                        break;
+
+                    //Proveedor
+                    case 2:
+                        if (producto.equivalenciaProveedor > 1 || producto.equivalenciaAlternativa > 1)
+                        {
+                            decimal equivalenciaA = producto.equivalenciaAlternativa * producto.equivalenciaProveedor;
+                            decimal precioA = detalle.precioNeto / equivalenciaA;
+                            precioA = Math.Truncate(precioA * 10000);
+                            decimal precioN = (precioA * equivalenciaA) / 10000;
+
+                            while ((precioN * 100) - (Math.Truncate(precioN * 100)) > (decimal)0.001)
+                            {
+                                precioA--;
+                                precioN = precioA * equivalenciaA / 10000;
+                            }
+
+                            detalle.precioNeto = (precioA * producto.equivalenciaAlternativa) / 10000;
+                        }
+
+                        break;
+                }
+            }
+
             //Calcula los montos totales de la cabecera de la cotizacion
             HelperDocumento.calcularMontosTotales(cotizacion);
 
