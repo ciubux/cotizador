@@ -1832,7 +1832,6 @@ jQuery(function ($) {
                         '<td>  ' + cliente.tipoDocumentoIdentidadToString + '</td>' +
                         '<td>  ' + cliente.ruc + '  </td>' +
                         '<td>  ' + cliente.ciudad.nombre + '  </td>' +
-                        '<td>  ' + textoHeredaPrecios + '  </td>' +
                         '<td>  <input type="checkbox" class="chkMiembroHeredaPrecios' + checkedHeredaPrecios + ' value="1"> </td>' + 
                         '<td><button type="button" class="btn btn-danger btnQuitarClienteGrupo" idCliente="' + cliente.idCliente + '">Remover</button></td>' +
                         '</tr>';

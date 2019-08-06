@@ -504,6 +504,11 @@
                     {
                         <button type="button" id="btnPDFCotizacion" class="btn btn-primary bouton-image pdfBoton">PDF</button>
                     }
+
+                    @if (cotizacion.usuario.visualizaCotizaciones || cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        <button type="button" id="btnExcelCotizacion" actionLink="@Url.Action("ExportLastViewExcel", "Cotizacion")" class="btn btn-primary bouton-image botonExcel">Excel</button>
+                    }
                 </div>
 
 

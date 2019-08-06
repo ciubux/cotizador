@@ -2498,6 +2498,13 @@ jQuery(function ($) {
         });
     });
 
+
+    $("#btnExcelCotizacion").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
+    
+
     function limpiarComentario()
     {
         $("#comentarioEstado").val("");
@@ -2807,7 +2814,19 @@ jQuery(function ($) {
     });
 
 
+    $("#chkAjusteCalculoPrecios").change(function () {
+        var ajusteCalculoPrecios = $('#chkAjusteCalculoPrecios').prop('checked');
+        $.ajax({
+            url: "/Cotizacion/updateAjusteCalculoPrecios",
+            type: 'POST',
+            data: {
+                ajusteCalculoPrecios: ajusteCalculoPrecios 
+            },
+            success: function () {
 
+            }
+        });
+    });
  
 
 

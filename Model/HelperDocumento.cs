@@ -32,7 +32,7 @@ namespace Model
             iDocumento.montoIGV = igv ;
         }
 
-        static public List<DocumentoDetalle> updateDocumentoDetalle(IDocumento documento, List<DocumentoDetalleJson> cotizacionDetalleJsonList)
+        static public List<DocumentoDetalle> updateDocumentoDetalle(IDocumento documento, List<DocumentoDetalleJson> cotizacionDetalleJsonList, bool ajustePrecios = false)
         {
             if (cotizacionDetalleJsonList != null)
             {
@@ -66,7 +66,7 @@ namespace Model
                         documentoDetalle.precioNeto = cotizacionDetalleJson.precio;
                     }
 
-                    if (true)
+                    if (ajustePrecios)
                     {
                         if ((documentoDetalle.ProductoPresentacion == null || documentoDetalle.ProductoPresentacion.IdProductoPresentacion == 0) && documentoDetalle.producto.equivalenciaAlternativa > 1)
                         {

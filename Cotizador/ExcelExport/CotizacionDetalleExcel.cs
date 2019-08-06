@@ -181,11 +181,11 @@ namespace Cotizador.ExcelExport
                 pict.Resize(1);
 
                 UtilesHelper.combinarCeldas(sheet, 1, 1, "E", "H");
-                UtilesHelper.setValorCelda(sheet, 1, "E", "ORDEN DE COMPRA", ocTitleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "E", "COTIZACIÓN", ocTitleCellStyle);
 
                 UtilesHelper.setRowHeight(sheet, 1, 1200);
 
-                UtilesHelper.setValorCelda(sheet, 2, "A", "[Dirección]");
+                UtilesHelper.setValorCelda(sheet, 2, "A", "[]");
                 UtilesHelper.setValorCelda(sheet, 3, "A", "[Ciudad, Estado, postal]");
                 UtilesHelper.setValorCelda(sheet, 4, "A", "Telefono: (000) 000-0000");
                 UtilesHelper.setValorCelda(sheet, 5, "A", "Fax: (000) 000-0000");
@@ -194,9 +194,9 @@ namespace Cotizador.ExcelExport
                 
                 
 
-                UtilesHelper.setValorCelda(sheet, 2, "F", "FECHA:", formLabelCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "F", "N° :", formLabelCellStyle);
                 UtilesHelper.combinarCeldas(sheet, 2, 2, "G", "H");
-                //UtilesHelper.setValorCelda(sheet, 2, "G", obj.FechaRegistroFormatoFecha, formDataCenterCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "G", obj.numeroCotizacionString, formDataCenterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 2, "H", "", formDataCenterCellStyle);
 
                 UtilesHelper.setValorCelda(sheet, 3, "F", "N° OC:", formLabelCellStyle);
@@ -232,12 +232,13 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setRowHeight(sheet, i, 540);
                 UtilesHelper.setValorCelda(sheet, i, "A", "SKU", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "B", "IMAGEN" , titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "B", "IMG." , titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "C", "DESCRIPCIÓN", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "D", "UNIDAD", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "E", "CANT.", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "F", "P. UNIT.", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "G", "TOTAL", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "H", "OBSERVACIONES", titleDataCellStyle);
 
                 UtilesHelper.setColumnWidth(sheet, "A", 2200);
                 UtilesHelper.setColumnWidth(sheet, "B", 1500);
@@ -246,7 +247,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setColumnWidth(sheet, "E", 2000);
 
                 UtilesHelper.setColumnWidth(sheet, "G", 2500);
-                UtilesHelper.setColumnWidth(sheet, "H", 2500);
+                UtilesHelper.setColumnWidth(sheet, "H", 8000);
 
                 i++;
 
@@ -266,6 +267,18 @@ namespace Cotizador.ExcelExport
                 {
                     UtilesHelper.setRowHeight(sheet, i, 810);
 
+                    UtilesHelper.setValorCelda(sheet, i, "A", "", tableDataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "B", "", tableDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "C", "", tableDataCellStyle);
+
+                    UtilesHelper.setValorCelda(sheet, i, "D", "", tableDataCellStyle);
+
+                    UtilesHelper.setValorCelda(sheet, i, "E", "", tableDataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "F", "", tableDataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "H", "", tableDataCellStyle);
+
+
                     int picDet = newWorkbook.AddPicture(det.producto.image, PictureType.PNG);
                     HSSFClientAnchor detAnchor = helper.CreateClientAnchor() as HSSFClientAnchor;
                     detAnchor.Col1 = 1;
@@ -282,6 +295,7 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "E", det.cantidad);
                     UtilesHelper.setValorCelda(sheet, i, "F", (double) det.precioUnitario);
                     UtilesHelper.setValorCelda(sheet, i, "G", (double) det.subTotal);
+                    UtilesHelper.setValorCelda(sheet, i, "H", det.observacion);
 
                     i++;
                 }

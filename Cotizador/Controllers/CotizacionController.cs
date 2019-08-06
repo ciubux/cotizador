@@ -201,6 +201,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
             cotizacionTmp.igv = Constantes.IGV;
             cotizacionTmp.flete = 0;
+            cotizacionTmp.ajusteCalculoPrecios = true;
             cotizacionTmp.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
             cotizacionTmp.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Observaciones;
             Usuario usuario = (Usuario)this.Session["usuario"];
@@ -515,6 +516,13 @@ namespace Cotizador.Controllers
         {
             Cotizacion cotizacion = this.CotizacionSession;
             cotizacion.mostrarCosto = Boolean.Parse(this.Request.Params["mostrarCosto"]);
+            this.CotizacionSession = cotizacion;
+        }
+
+        public void updateAjusteCalculoPrecios()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            cotizacion.ajusteCalculoPrecios = Boolean.Parse(this.Request.Params["ajusteCalculoPrecios"]);
             this.CotizacionSession = cotizacion;
         }
 
@@ -1003,7 +1011,7 @@ namespace Cotizador.Controllers
             cotizacion.cotizacionDetalleList.Add(detalle);
 
 
-            if (true)
+            if (cotizacion.ajusteCalculoPrecios)
             {
                 switch (idProductoPresentacion)
                 {
