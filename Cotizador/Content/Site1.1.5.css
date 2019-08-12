@@ -692,3 +692,13 @@ border-color: #49E845;
         right: -15px;
         top: -15px;
     }
+
+
+.ModalMensaje {
+    margin: auto;
+    padding: 20px;
+    border: none;
+    width: 80%;
+    overflow: hidden;
+    border: 10px solid transparent;
+}
