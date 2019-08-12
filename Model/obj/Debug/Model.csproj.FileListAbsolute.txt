@@ -245,3 +245,4 @@ C:\REPO\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 C:\REPO\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
 C:\REPO\cotizador\Model\obj\Debug\Model.dll
 C:\REPO\cotizador\Model\obj\Debug\Model.pdb
+C:\REPO\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache

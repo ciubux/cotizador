@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "280";
+    TempData["ScriptVersion"] = "281";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -12,12 +12,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cotizador - @ViewBag.Title</title>
-    
+
     @Styles.RenderFormat("<link rel=\"stylesheet\" href=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"/>", "~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 
 <body>
+    @{
+        Layout = "~/Views/Shared/ModalMensaje.cshtml";
+    }
 
 
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -28,7 +31,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <img src="~/images/logo_ind.jpg" height="42"  style="margin:3px; margin-right: 10px" />
+
+
+                @Html.HiddenFor(model => usuario.idUsuario)
+
+                <img src="~/images/logo_ind.jpg" id="imagenMP" height="42" style="margin:3px; margin-right: 10px ;" />
+
+
+
+
+
             </div>
 
             <div class="navbar-collapse collapse">
@@ -88,11 +100,13 @@
                         var linkBusquedaUsuario = "";
                         var linkMantenimientoUsuario = "";
 
-                       var linkBusquedaVendedor = "";
+                        var linkBusquedaVendedor = "";
                         var linkMantenimientoVendedor = "";
 
                         var linkMantenimientoLogCampo = "";
                         var linkBusquedaDocumentoVentaNotificacion = "";
+
+                        var linkCrearMensaje = "";
 
                         var linkCrearFacturaConsolidada = "";
 
@@ -162,6 +176,8 @@
                             case 42: linkMantenimientoVendedor = "ative"; linkMaestros = "active"; break;
 
                             case 43: linkMantenimientoLogCampo = "ative"; linkMaestros = "active"; break;
+
+                            case 45: linkCrearMensaje = "ative"; linkMaestros = "active"; break;
 
                             case 101: linkBusquedaRol = "ative"; linkMaestros = "active"; break;
                             case 102: linkMantenimientoRol = "ative"; linkMaestros = "active"; break;
@@ -362,7 +378,7 @@
                                     {
                                         <li id="linkCRSubDistribuidor" class="@linkMantenimientoSubDistribuidor">@Html.ActionLink("Categoría Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
                                     }
-                                   
+
                                 </ul>
                             </li>
                         }
@@ -409,10 +425,16 @@
                                         <li id="linkBusquedaUsuario" class="@linkBusquedaUsuario">@Html.ActionLink("Usuario - Búsqueda", "List", "Usuario")</li>
                                     }
 
+                                    @if (usuario.creaMensaje)
+                                    {
+                                        <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear Mensaje", "Crear", "Mensaje")</li>
+                                    }
+
+
                                     @*@if (usuario.modificaUsuario)
-        {
-            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
-        }*@
+                                        {
+                                            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
+                                        }*@
 
 
                                     @if (usuario.administraPermisos)
@@ -432,13 +454,14 @@
         </div>
     </div>
     <div class="container body-content">
-        @if (usuario != null && usuario.alertasList != null && usuario.alertasList.Count > 0) {
-        <a href="@Url.Action("Pendientes", "Validacion")" style="text-decoration: none;">
-            <div class="alert alert-warning">
-                Tienes @usuario.alertasList.Count.ToString() cambios por validar
-            </div>
-        </a>
-        
+        @if (usuario != null && usuario.alertasList != null && usuario.alertasList.Count > 0)
+        {
+            <a href="@Url.Action("Pendientes", "Validacion")" style="text-decoration: none;">
+                <div class="alert alert-warning">
+                    Tienes @usuario.alertasList.Count.ToString() cambios por validar
+                </div>
+            </a>
+
         }
         <p></p>
         @RenderBody()
@@ -458,5 +481,6 @@
     @Scripts.Render("~/bundles/loadingModal")
     @Scripts.Render("~/bundles/confirm")
     @Scripts.Render("~/bundles/utiles")
+    @Scripts.Render("~/bundles/mensaje")
 </body>
 </html>

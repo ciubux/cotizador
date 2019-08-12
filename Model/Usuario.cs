@@ -53,7 +53,8 @@ namespace Model
 
 
         public List<Vendedor> vendedorList { get; set; }
-        public List<Vendedor>  responsableComercialList {
+        public List<Vendedor> responsableComercialList
+        {
             get { return this.vendedorList.Where(v => v.esResponsableComercial).ToList(); }
         }
         public List<Vendedor> asistenteServicioClienteList
@@ -90,7 +91,8 @@ namespace Model
             try
             {
                 return this.permisoList.Where(item => item.idPermiso.Equals(idPermiso)).FirstOrDefault().byRol;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return false;
             }
@@ -98,7 +100,7 @@ namespace Model
 
         /*PERMISOS COTIZACION*/
         public bool apruebaCotizaciones { get { return apruebaCotizacionesLima || apruebaCotizacionesProvincias; } }
-        public bool apruebaCotizacionesLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_COTIZACIONES_LIMA)).FirstOrDefault() != null;  } }
+        public bool apruebaCotizacionesLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_COTIZACIONES_LIMA)).FirstOrDefault() != null; } }
         public bool apruebaCotizacionesProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_COTIZACIONES_PROVINCIAS)).FirstOrDefault() != null; } }
         public bool creaCotizaciones { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_COTIZACIONES_LIMA)).FirstOrDefault() != null; } }
         public bool visualizaCotizaciones { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_COTIZACIONES)).FirstOrDefault() != null; } }
@@ -152,7 +154,7 @@ namespace Model
         public bool creaNotasCredito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_CREDITO)).FirstOrDefault() != null; } }
         public bool creaNotasDebito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_DEBITO)).FirstOrDefault() != null; } }
         public bool realizaRefacturacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_REFACTURACION)).FirstOrDefault() != null; } }
-        
+
 
         /*Grupo Clientes*/
         public bool modificaGrupoClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_GRUPO_CLIENTES)).FirstOrDefault() != null; } }
@@ -200,6 +202,9 @@ namespace Model
         public bool modificaLogCampo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_LOGCAMPO)).FirstOrDefault() != null; } }
         public bool visualizaLogCampo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_LOGCAMPO)).FirstOrDefault() != null; } }
 
+        /*Mensaje*/
+        public bool creaMensaje { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_MENSAJE)).FirstOrDefault() != null; } }
+
         /*Notificacion de Documento de Venta*/
         public bool visualizaDocumentoVentaNotificacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOVENTANOTIFICACION)).FirstOrDefault() != null; } }
 
@@ -207,7 +212,7 @@ namespace Model
         public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }
 
         public bool modificaDireccionEntrega { get; set; }
-        
+
         /*Roles*/
         public bool modificaRol { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ROL)).FirstOrDefault() != null; } }
         public bool visualizaRoles { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_ROLES)).FirstOrDefault() != null; } }
@@ -217,4 +222,3 @@ namespace Model
     }
 }
 
-    

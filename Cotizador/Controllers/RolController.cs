@@ -28,12 +28,12 @@ namespace Cotizador.Controllers
             }
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaRoles;
-            
+
             if (this.Session[Constantes.VAR_SESSION_ROL_BUSQUEDA] == null)
             {
                 instanciarRolBusqueda();
             }
-            
+
 
             Rol objSearch = (Rol)this.Session[Constantes.VAR_SESSION_ROL_BUSQUEDA];
 
@@ -86,7 +86,7 @@ namespace Cotizador.Controllers
             RolBL bL = new RolBL();
             Rol obj = bL.getRol(idRol);
             obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            String resultado =  JsonConvert.SerializeObject(obj);
+            String resultado = JsonConvert.SerializeObject(obj);
             this.Session[Constantes.VAR_SESSION_ROL_VER] = obj;
             return resultado;
         }
@@ -113,17 +113,17 @@ namespace Cotizador.Controllers
             }
 
             Rol obj = (Rol)this.Session[Constantes.VAR_SESSION_ROL];
-            
+
             if (idRol != null)
             {
                 RolBL bL = new RolBL();
                 obj = bL.getRol(idRol.Value);
                 obj.IdUsuarioRegistro = usuario.idUsuario;
                 obj.usuario = usuario;
-                
+
                 this.Session[Constantes.VAR_SESSION_ROL] = obj;
             }
-            
+
 
             ViewBag.rol = obj;
             ViewBag.permisos = permisos;
@@ -139,7 +139,7 @@ namespace Cotizador.Controllers
             obj.Estado = 1;
             obj.codigo = String.Empty;
             obj.nombre = String.Empty;
-            
+
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             obj.IdUsuarioRegistro = usuario.idUsuario;
             obj.usuario = usuario;
@@ -172,7 +172,7 @@ namespace Cotizador.Controllers
         //    return excel.generateExcel(list, (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]);
         //}
 
-        
+
 
         // GET: Rol
         [HttpGet]
@@ -221,7 +221,7 @@ namespace Cotizador.Controllers
             List<Permiso> permisos = new List<Permiso>();
             permisos = permisobl.getPermisos();
 
-            
+
 
             obj = bL.insertRol(obj);
             this.Session[Constantes.VAR_SESSION_ROL] = null;
@@ -272,7 +272,7 @@ namespace Cotizador.Controllers
             rol.IdUsuarioRegistro = usuario.idUsuario;
             rol.usuarios = bl.getUsuarios(rol.idRol);
 
-            
+
             ViewBag.rol = rol;
             return View();
         }
@@ -317,7 +317,7 @@ namespace Cotizador.Controllers
 
                 bl.agregarUsuarioRol(rol.idRol, addItem.idUsuario, usuario.idUsuario);
                 rol.usuarios.Add(addItem);
-                
+
                 message = "Se agregó el usuario correctamente.";
             }
 
@@ -353,7 +353,7 @@ namespace Cotizador.Controllers
                     removeAt = rol.usuarios.IndexOf(item);
                 }
             }
-            
+
             rol.usuario = usuario;
 
             if (!usuario.modificaRol)
@@ -361,7 +361,7 @@ namespace Cotizador.Controllers
                 success = 0;
             }
 
-            
+
             if (success == 1)
             {
                 bl.quitarUsuarioRol(rol.idRol, idUsuario);
@@ -378,7 +378,7 @@ namespace Cotizador.Controllers
 
         public void ChangeInputString()
         {
-            Rol obj = (Rol) this.RolSession;
+            Rol obj = (Rol)this.RolSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, this.Request.Params["valor"]);
             this.RolSession = obj;
@@ -413,8 +413,8 @@ namespace Cotizador.Controllers
 
             int valor = Int32.Parse(this.Request.Params["valor"]);
             int permiso = Int32.Parse(this.Request.Params["permiso"].ToString().Replace("permiso_", ""));
-            
-            List<Permiso> listaPermisos = (List<Permiso>) this.Session[Constantes.VAR_SESSION_PERMISO_LISTA];
+
+            List<Permiso> listaPermisos = (List<Permiso>)this.Session[Constantes.VAR_SESSION_PERMISO_LISTA];
 
             if (valor == 0)
             {

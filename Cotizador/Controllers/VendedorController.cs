@@ -130,7 +130,7 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(list);
         }
 
-
+        [HttpGet]
         public String Create()
         {
             VendedorBL bL = new VendedorBL();

@@ -237,6 +237,7 @@
     <Compile Include="Controllers\GrupoClienteController.cs" />
     <Compile Include="Controllers\LogCampoController.cs" />
     <Compile Include="Controllers\MailController.cs" />
+    <Compile Include="Controllers\MensajeController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
     <Compile Include="Controllers\RolController.cs" />
@@ -597,6 +598,9 @@
     <Content Include="Views\DocumentoVenta\ValidarNotificacionAnulacion.cshtml" />
     <Content Include="Views\LogCampo\Lista.cshtml" />
     <Content Include="Views\Shared\_LogCampo.cshtml" />
+    <Content Include="Views\Mensaje\Crear.cshtml" />
+    <Content Include="Scripts\mensaje1.0.0.js" />
+    <Content Include="Views\Shared\ModalMensaje.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

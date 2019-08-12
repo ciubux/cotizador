@@ -671,3 +671,24 @@ border-color: #49E845;
     max-width: 64px;
     height: auto;
 }
+
+
+[data-notifications] {
+    position: relative;
+}
+
+    [data-notifications]:after {
+        content: attr(data-notifications);
+        position: absolute;
+        background: red;
+        border-radius: 50%;
+        border: 1px solid black;
+        width: 25px;
+        height: 25px;
+        text-align: center;
+        padding: 0.13em;
+        color: white;
+        font-weight: bold;
+        right: -15px;
+        top: -15px;
+    }

@@ -11,7 +11,7 @@ namespace Model
     {
         /*FORMATOS*/
         public static String formatoDecimalesPrecioNeto = "{0:0.00}";
-        public static String formatoDosDecimales = "{0:0.00}";        
+        public static String formatoDosDecimales = "{0:0.00}";
         public static String formatoUnDecimal = "{0:0.0}";
         public static String formatoCuatroDecimales = "{0:0.0000}";
         public static String formatoSeisDecimales = "{0:0.000000}";
@@ -109,6 +109,12 @@ namespace Model
         public static String VAR_SESSION_LOGCAMPO_LISTA = "logcampoList";
         public static String VAR_SESSION_LOGCAMPO_VER = "logcampoVer";
 
+        public static String VAR_SESSION_MENSAJE = "mensaje";
+        public static String VAR_SESSION_MENSAJE_BUSQUEDA = "mensajeBusqueda";
+        public static String VAR_SESSION_MENSAJE_LISTA = "mensajeList";
+        public static String VAR_SESSION_MENSAJE_VER = "mensajeVer";
+
+
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA = "notificacionDocumentoVenta";
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_BUSQUEDA = "notificacionDocumentoVentaBusqueda";
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_LISTA = "notificacionDocumentoVentaList";
@@ -125,7 +131,7 @@ namespace Model
         public static String VAR_SESSION_GUIA_BUSQUEDA = "guiaRemisionBusqueda";
         public static String VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA = "guiaRemisionBusquedaFacturaConsolidada";
         public static String VAR_SESSION_GUIA_CONSOLIDADA = "guiaRemisionConsolidada";
-        
+
         public static String VAR_SESSION_RESUMEN_CONSOLIDADO = "documentoVentaResumenConsolidado";
         public static String VAR_SESSION_GUIA_LISTA = "guiaRemisionList";
         public static String VAR_SESSION_GUIA_LISTA_FACTURA_CONSOLIDADA = "guiaRemisionListFacturaConsolidada";
@@ -181,7 +187,7 @@ namespace Model
         public static String VAR_SESSION_NOTA_DEBITO_COMPRA_BUSQUEDA = "notaDebitoCompraBusqueda";
         public static String VAR_SESSION_NOTA_DEBITO_COMPRA_LISTA = "notaDebitoCompraList";
         public static String VAR_SESSION_NOTA_DEBITO_COMPRA_VER = "notaDebitoCompraVer";
-        
+
         public static String VAR_SESSION_ROL = "rol";
         public static String VAR_SESSION_ROL_BUSQUEDA = "rolBusqueda";
         public static String VAR_SESSION_ROL_LISTA = "rolList";
@@ -189,7 +195,7 @@ namespace Model
 
 
         public static String VAR_SESSION_PAGINA = "pagina";
-        
+
 
         public static String VAR_SESSION_USUARIO_LISTA = "usuarioList";
         public static String VAR_SESSION_USUARIO = "usuario";
@@ -200,7 +206,7 @@ namespace Model
 
 
         public static String VAR_SESSION_PERMISO_LISTA = "permisoList";
-        
+
         public static String VAR_SESSION_PERMISO = "permiso";
         public static String VAR_SESSION_PERMISO_MANTENEDOR = "permisoMantenedor";
         public static String VAR_SESSION_PERMISO_BUSQUEDA = "permisoBusqueda";
@@ -233,7 +239,8 @@ namespace Model
         public static List<Producto> DESCUENTOS_LIST;
         public static List<Producto> CARGOS_LIST;
 
-        public static String USER_EOL {
+        public static String USER_EOL
+        {
             get { return AMBIENTE_EOL.Equals("TEST") ? USER_EOL_TEST : USER_EOL_PROD; }
         }
 
@@ -251,7 +258,7 @@ namespace Model
         {
             get { return AMBIENTE_EOL.Equals("PROD"); }
         }
-                
+
 
 
         public static Decimal IGV = 0.18M;
@@ -367,7 +374,7 @@ namespace Model
         public const String MODIFICA_MIEMBROS_GRUPO_CLIENTE = "P070";
         public const String ASIGNA_SUBDISTRIBUIDOR = "P071";
         public const String CREA_DOCUMENTOS_COMPRA = "P072";
-        public const String VISUALIZA_DOCUMENTOS_COMPRA = "P073";        
+        public const String VISUALIZA_DOCUMENTOS_COMPRA = "P073";
         public const String MODIFICA_ROL = "P810";
         public const String VISUALIZA_ROLES = "P811";
         public const String MODIFICA_USUARIO = "P812";
@@ -379,8 +386,10 @@ namespace Model
         public const String VISUALIZA_LOGCAMPO = "P824";
 
         public const String VISUALIZA_DOCUMENTOVENTANOTIFICACION = "P420";
+        public const String CREA_MENSAJE = "P421";
 
-        public enum paginas {
+        public enum paginas
+        {
             /*COTIZACION*/
             [Display(Name = "BUSQUEDA COTIZACION")]
             BusquedaCotizaciones = 0,
@@ -400,7 +409,7 @@ namespace Model
             [Display(Name = "BUSQUEDA FACTURAS")]
             BusquedaFacturas = 6,
             [Display(Name = "MANTENIMIENTO FACTURA")]
-            MantenimientoFactura = 7,               
+            MantenimientoFactura = 7,
             [Display(Name = "BUSQUEDA BOLETAS")]
             BusquedaBoletas = 8,
             [Display(Name = "MANTENIMIENTO BOLETA")]
@@ -456,7 +465,7 @@ namespace Model
             [Display(Name = "BUSQUEDA ORIGEN")]
             BusquedaOrigenes = 30,
             [Display(Name = "CREATE/UPDATE ORIGEN")]
-            MantenimientoOrigen= 31,
+            MantenimientoOrigen = 31,
             [Display(Name = "BUSQUEDA SUBDISTRIBUIDOR")]
             BusquedaSubDistribuidores = 32,
             [Display(Name = "CREATE/UPDATE SUBDISTRIBUIDOR")]
@@ -495,6 +504,11 @@ namespace Model
             [Display(Name = "MANTENIMIENTO LOGCAMPO")]
             MantenimientoLogCampo = 46,
 
+            /*BUSQUEDA DE MENSAJES*/
+            [Display(Name = "BUSQUEDA MENSAJES")]
+            BusquedaMensaje = 48,
+            [Display(Name = "MANTENIMIENTO MENSAJES")]
+            MantenimientoMensaje = 49,
 
             /*NOTIFICACION DOCUMENTO DE VENTA*/
             [Display(Name = "BUSQUEDA DOCUMENTOVENTANOTIFICACION")]
@@ -706,6 +720,6 @@ namespace Model
         </html>
         ";
 
-        }
+    }
 
 }
