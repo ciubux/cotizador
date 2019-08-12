@@ -285,15 +285,11 @@ namespace Cotizador.Controllers
                     nameFile = "V_FACTURAS_" + fechaInicio.ToString("yyyy_MM_dd") + "_" + fechaFin.ToString("yyyy_MM_dd") + "_GRAVADAS_ACEPTADAS_CANT_" + cantCPEs.ToString() + ".TXT";
                     readmeEntry = archive.CreateEntry(nameFile);
                     using (StreamWriter writer = new StreamWriter(readmeEntry.Open()))
-                    {
-                        for (int i = 0; i < 500; i++) { 
-                            foreach (String line in cpes.ElementAt(6))
-                            {
-                                writer.WriteLine(line);
-                            }
-                                                                                                                                                                                                                                                                                        }
-
-
+                    { 
+                        foreach (String line in cpes.ElementAt(6))
+                        {
+                            writer.WriteLine(line);
+                        }
                     }
                 }
 
