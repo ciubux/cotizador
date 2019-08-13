@@ -23,7 +23,7 @@ namespace DataLayer
         public void InsertPedido(Pedido pedido)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pi_pedido");
+            var objCommand = GetSqlCommand("CLIENTE.pi_pedido");
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido); //puede ser null
 
             if (pedido.cotizacion.idCotizacion == Guid.Empty)
@@ -184,7 +184,8 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
             InputParameterAdd.Char(objCommand, "tipo", ((char)pedido.clasePedido).ToString());
             InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", pedido.numeroRequerimiento);
-
+            InputParameterAdd.Int(objCommand, "idClienteSunat", pedido.usuario.idClienteSunat);
+            InputParameterAdd.Guid(objCommand, "idDireccionEntregaAlmacen", pedido.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "numero");
             ExecuteNonQuery(objCommand);
@@ -612,7 +613,7 @@ namespace DataLayer
 
         public List<Pedido> SelectPedidos(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("ps_pedidos");
+            var objCommand = GetSqlCommand("CLIENTE.ps_pedidos");
             InputParameterAdd.BigInt(objCommand, "numero", pedido.numeroPedido);
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
@@ -640,81 +641,104 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
             InputParameterAdd.Varchar(objCommand, "sku", pedido.sku);
+            InputParameterAdd.Int(objCommand, "idClienteSunat", pedido.usuario.idClienteSunat);
             DataTable dataTable = Execute(objCommand);
 
             List<Pedido> pedidoList = new List<Pedido>();
 
+            Guid idPedidoActual = Guid.Empty;
+
+           /// Dictionary<Guid, string> productosCabecera = new Dictionary<Guid, string>();
+
+
             foreach (DataRow row in dataTable.Rows)
             {
-                pedido = new Pedido(pedido.clasePedido);
-                pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
-                pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
-                pedido.idPedido = Converter.GetGuid(row, "id_pedido");
-                pedido.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
-                pedido.fechaEntregaDesde = Converter.GetDateTime(row, "fecha_entrega_desde");
-                pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
-                pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
-                pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
-                pedido.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
-                pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
-                pedido.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
-                pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+                if (Converter.GetGuid(row, "id_pedido") != idPedidoActual)
+                {
+                    idPedidoActual = Converter.GetGuid(row, "id_pedido");
+                    pedido = new Pedido(pedido.clasePedido);
+                    pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
+                    pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
+                    pedido.idPedido = Converter.GetGuid(row, "id_pedido");
 
-                pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
-                pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
-                pedido.stockConfirmado = Converter.GetBool(row, "stock_confirmado");
-                /*if (row["fecha_programacion"] == DBNull.Value)
-                    pedido.fechaProgramacion = null;
-                else*/
-                pedido.fechaProgramacion = Converter.GetDateTimeNullable(row, "fecha_programacion");
-                pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
+                    pedido.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
+                    pedido.fechaEntregaDesde = Converter.GetDateTime(row, "fecha_entrega_desde");
+                    pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
+                    pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
+                    pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
+                    pedido.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
+                    pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
+                    pedido.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
+                    pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
 
-                pedido.montoIGV = Converter.GetDecimal(row, "igv");
-                pedido.montoTotal = Converter.GetDecimal(row, "total");
-                pedido.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.montoTotal - pedido.montoIGV));
+                    pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
+                    pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
+                    pedido.stockConfirmado = Converter.GetBool(row, "stock_confirmado");
+                    /*if (row["fecha_programacion"] == DBNull.Value)
+                        pedido.fechaProgramacion = null;
+                    else*/
+                    pedido.fechaProgramacion = Converter.GetDateTimeNullable(row, "fecha_programacion");
+                    pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
 
-                pedido.observaciones = Converter.GetString(row, "observaciones");
+                    pedido.montoIGV = Converter.GetDecimal(row, "igv");
+                    pedido.montoTotal = Converter.GetDecimal(row, "total");
+                    pedido.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedido.montoTotal - pedido.montoIGV));
 
-                pedido.cliente = new Cliente();
-                pedido.cliente.codigo = Converter.GetString(row, "codigo");
-                pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
-                pedido.cliente.ruc = Converter.GetString(row, "ruc");
-                pedido.cliente.bloqueado = Converter.GetBool(row, "bloqueado");
+                    pedido.observaciones = Converter.GetString(row, "observaciones");
 
-                pedido.cliente.grupoCliente = new GrupoCliente();
-                pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "nombre_grupo");
+                    pedido.cliente = new Cliente();
+                    pedido.cliente.codigo = Converter.GetString(row, "codigo");
+                    pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                    pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                    pedido.cliente.ruc = Converter.GetString(row, "ruc");
+                    pedido.cliente.bloqueado = Converter.GetBool(row, "bloqueado");
 
-                pedido.usuario = new Usuario();
-                pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
-                pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                    pedido.cliente.grupoCliente = new GrupoCliente();
+                    pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "nombre_grupo");
 
-                //  cotizacion.usuario_aprobador = new Usuario();
-                //  cotizacion.usuario_aprobador.nombre = Converter.GetString(row, "nombre_usuario_aprobador");
+                    pedido.usuario = new Usuario();
+                    pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                    pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
 
-                pedido.ciudad = new Ciudad();
-                pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+                    //  cotizacion.usuario_aprobador = new Usuario();
+                    //  cotizacion.usuario_aprobador.nombre = Converter.GetString(row, "nombre_usuario_aprobador");
 
-                pedido.seguimientoPedido = new SeguimientoPedido();
-                pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_seguimiento");
-                pedido.seguimientoPedido.observacion = Converter.GetString(row, "observacion_seguimiento");
-                pedido.seguimientoPedido.usuario = new Usuario();
-                pedido.seguimientoPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
-                pedido.seguimientoPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
+                    pedido.ciudad = new Ciudad();
+                    pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                    pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
 
-                pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
-                pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Converter.GetInt(row, "estado_seguimiento_crediticio");
-                pedido.seguimientoCrediticioPedido.observacion = Converter.GetString(row, "observacion_seguimiento_crediticio");
-                pedido.seguimientoCrediticioPedido.usuario = new Usuario();
-                pedido.seguimientoCrediticioPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento_crediticio");
-                pedido.seguimientoCrediticioPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento_Crediticio");
+                    pedido.seguimientoPedido = new SeguimientoPedido();
+                    pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_seguimiento");
+                    pedido.seguimientoPedido.observacion = Converter.GetString(row, "observacion_seguimiento");
+                    pedido.seguimientoPedido.usuario = new Usuario();
+                    pedido.seguimientoPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento");
+                    pedido.seguimientoPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento");
 
-                pedido.ubigeoEntrega = new Ubigeo();
-                pedido.ubigeoEntrega.Id = Converter.GetString(row, "codigo_ubigeo");
-                pedido.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
+                    pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
+                    pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Converter.GetInt(row, "estado_seguimiento_crediticio");
+                    pedido.seguimientoCrediticioPedido.observacion = Converter.GetString(row, "observacion_seguimiento_crediticio");
+                    pedido.seguimientoCrediticioPedido.usuario = new Usuario();
+                    pedido.seguimientoCrediticioPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento_crediticio");
+                    pedido.seguimientoCrediticioPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento_Crediticio");
 
-                pedidoList.Add(pedido);
+                    pedido.ubigeoEntrega = new Ubigeo();
+                    pedido.ubigeoEntrega.Id = Converter.GetString(row, "codigo_ubigeo");
+                    pedido.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
+                    pedido.pedidoDetalleList = new List<PedidoDetalle>();
+                    pedidoList.Add(pedido);
+                }
+
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(false,false);
+
+                
+                pedidoDetalle.producto = new Producto();
+                pedidoDetalle.producto.sku = Converter.GetString(row, "sku");
+                pedidoDetalle.unidad = Converter.GetString(row, "unidad");
+                pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                pedidoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                pedido.pedidoDetalleList.Add(pedidoDetalle);
+
             }
             return pedidoList;
         }
@@ -722,8 +746,9 @@ namespace DataLayer
 
         public Pedido SelectPedido(Pedido pedido, Usuario usuario)
         {
-            var objCommand = GetSqlCommand("ps_pedido");
+            var objCommand = GetSqlCommand("CLIENTE.ps_pedido");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Int(objCommand, "idClienteSunat", usuario.idClienteSunat);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable pedidoDataTable = dataSet.Tables[0];
             DataTable pedidoDetalleDataTable = dataSet.Tables[1];
@@ -884,7 +909,7 @@ namespace DataLayer
                 pedido.seguimientoCrediticioPedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_seguimiento_crediticio");
                 pedido.seguimientoCrediticioPedido.usuario.nombre = Converter.GetString(row, "usuario_seguimiento_crediticio");
 
-                
+
             }
 
 
@@ -1094,8 +1119,9 @@ namespace DataLayer
 
         public Pedido SelectPedidoParaEditar(Pedido pedido, Usuario usuario)
         {
-            var objCommand = GetSqlCommand("ps_pedidoParaEditar");
+            var objCommand = GetSqlCommand("CLIENTE.ps_pedidoParaEditar");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Int(objCommand, "idClienteSunat", usuario.idClienteSunat);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable pedidoDataTable = dataSet.Tables[0];
             DataTable pedidoDetalleDataTable = dataSet.Tables[1];

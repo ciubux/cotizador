@@ -54,15 +54,15 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
         
-        public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null)
+        public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null, int idClienteSunat = 0)
         {
-            var objCommand = GetSqlCommand("ps_getproductos_search");
+            var objCommand = GetSqlCommand("CLIENTE.ps_getproductos_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
             InputParameterAdd.Varchar(objCommand, "proveedor", proveedor);
             InputParameterAdd.Varchar(objCommand, "familia", familia);
             InputParameterAdd.Int(objCommand, "considerarDescontinuados", considerarDescontinuados ? 1 : 0);
             InputParameterAdd.Char(objCommand, "tipoPedido", tipoPedido == null? null: ((Char)tipoPedido).ToString());
-
+            InputParameterAdd.Int(objCommand, "idClienteSunat", idClienteSunat);
             DataTable dataTable = Execute(objCommand);
             List<Producto> lista = new List<Producto>();
 
@@ -398,7 +398,7 @@ namespace DataLayer
 
         public List<DocumentoDetalle> obtenerProductosAPartirdePreciosRegistradosParaPedido(Guid idCliente, DateTime fechaPrecios, String familia, String proveedor)
         {
-            var objCommand = GetSqlCommand("ps_generarPlantillaPedido");
+            var objCommand = GetSqlCommand("CLIENTE.ps_generarPlantillaPedido");
             InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
             InputParameterAdd.DateTime(objCommand, "fecha", fechaPrecios);
             InputParameterAdd.Varchar(objCommand, "familia", familia);
@@ -721,6 +721,8 @@ namespace DataLayer
 
             return documentoDetalleList;
         }
+
+        
 
         public List<Producto> SelectProductos(Producto producto)
         {

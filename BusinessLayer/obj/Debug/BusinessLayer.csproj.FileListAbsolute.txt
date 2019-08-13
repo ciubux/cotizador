@@ -481,3 +481,4 @@ G:\Repo\maquetados\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.xml
 G:\Repo\maquetados\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 G:\Repo\maquetados\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 G:\Repo\maquetados\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\ICSharpCode.SharpZipLib.dll

@@ -149,9 +149,12 @@ namespace DataLayer
                 usuario.cargo = Converter.GetString(row, "cargo");
                 usuario.nombre = Converter.GetString(row, "nombre");
                 usuario.contacto = Converter.GetString(row, "telefono");
-
+                usuario.esCliente = true;
+                usuario.idClienteSunat = Converter.GetInt(row, "id_cliente_sunat");
                 usuario.sedeMP = new Ciudad();
                 usuario.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                usuario.solicitante = new Solicitante();
+                usuario.solicitante.idSolicitante = Converter.GetGuid(row, "id_solicitante");
             }
 
 
@@ -230,8 +233,58 @@ namespace DataLayer
                     case "WEB_MP":
                         Constantes.WEB_MP = valorParametro; break;
                 }
-
             }
+
+
+            if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
+            {
+                DataTable dataTableDireccionesEntrega = dataSet.Tables[4];
+                List<DireccionEntrega> direccionEntregaList = new List<DireccionEntrega>();
+
+                foreach (DataRow row in dataTableDireccionesEntrega.Rows)
+                {
+                    DireccionEntrega obj = new DireccionEntrega
+                    {
+                        idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega"),
+                        descripcion = Converter.GetString(row, "descripcion"),
+                        contacto = Converter.GetString(row, "contacto"),
+                        telefono = Converter.GetString(row, "telefono"),
+                        ubigeo = new Ubigeo
+                        {
+                            Id = Converter.GetString(row, "ubigeo"),
+                            Departamento = Converter.GetString(row, "departamento"),
+                            Provincia = Converter.GetString(row, "provincia"),
+                            Distrito = Converter.GetString(row, "distrito")
+                        },
+                        codigoCliente = Converter.GetString(row, "codigo_cliente"),
+                        codigoMP = Converter.GetString(row, "codigo_mp"),
+                        observaciones = Converter.GetString(row, "observaciones"),
+                        nombre = Converter.GetString(row, "nombre"),
+                        direccionDomicilioLegal = Converter.GetString(row, "direccionDomicilioLegal"),
+                        codigo = Converter.GetInt(row, "codigo"),
+                        emailRecepcionFacturas = Converter.GetString(row, "email_recepcion_facturas"),
+                    };
+                    obj.cliente = new Cliente
+                    {
+                        idCliente = Converter.GetGuid(row, "id_cliente")
+                    };
+                    obj.cliente.ciudad = new Ciudad
+                    {
+                        idCiudad = Converter.GetGuid(row, "id_ciudad"),
+                        sede = Converter.GetString(row, "sede"),
+                    };
+                    obj.domicilioLegal = new DomicilioLegal();
+                    obj.domicilioLegal.idDomicilioLegal = Converter.GetInt(row, "id_domicilio_legal");
+                    obj.domicilioLegal.direccion = Converter.GetString(row, "direccionDomicilioLegal");
+                    obj.direccionEntregaAlmacen = new DireccionEntrega();
+                    obj.direccionEntregaAlmacen.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega_almacen");
+                    direccionEntregaList.Add(obj);
+                }
+                usuario.direccionEntregaList = direccionEntregaList;
+            }
+
+
+
             return usuario;
         }
 

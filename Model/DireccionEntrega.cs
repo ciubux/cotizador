@@ -42,5 +42,7 @@ namespace Model
         [Display(Name = "Codigo:")]
         public int codigo { get; set; }
 
+        public DireccionEntrega direccionEntregaAlmacen { get; set; }
+
     }
 }

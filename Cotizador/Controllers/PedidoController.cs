@@ -677,7 +677,7 @@ namespace Cotizador.Controllers
                 pedido.pedidoDetalleList = new List<PedidoDetalle>();
                 pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
                 pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
-
+                pedido.cliente.direccionEntregaList = pedido.usuario.direccionEntregaList;
                 this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
             }
             catch (Exception e)
@@ -765,10 +765,11 @@ namespace Cotizador.Controllers
         {
             try
             {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 String texto_busqueda = this.Request.Params["data[q]"];
                 ProductoBL bl = new ProductoBL();
                 Pedido pedido = this.PedidoSession;
-                String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", pedido.tipoPedido);
+                String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", pedido.tipoPedido, usuario.idClienteSunat);
                 return resultado;
             }
             catch (Exception e)
@@ -817,13 +818,13 @@ namespace Cotizador.Controllers
 
 
 
-        public String GetCliente()
+        public void GetCliente(Guid idCliente, Guid idSolicitante)
         {
             try
             {
 
                 Pedido pedido = this.PedidoSession; 
-                Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+                //Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
                 ClienteBL clienteBl = new ClienteBL();
                 pedido.cliente = clienteBl.getCliente(idCliente);
 
@@ -836,26 +837,28 @@ namespace Cotizador.Controllers
 
                     //Se obtiene la lista de direccioines de entrega registradas para el cliente
                     DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
-                    pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
+                    pedido.cliente.direccionEntregaList = pedido.usuario.direccionEntregaList;//. direccionEntregaBL.getDireccionesEntrega(idCliente);
 
                     SolicitanteBL solicitanteBL = new SolicitanteBL();
                     pedido.cliente.solicitanteList = solicitanteBL.getSolicitantes(idCliente);
 
-                    pedido.direccionEntrega = new DireccionEntrega();
-                    pedido.horaEntregaDesde = pedido.cliente.horaInicioPrimerTurnoEntrega;
-                    pedido.horaEntregaHasta = pedido.cliente.horaFinPrimerTurnoEntrega;
-                    pedido.horaEntregaAdicionalDesde = pedido.cliente.horaInicioSegundoTurnoEntrega;
-                    pedido.horaEntregaAdicionalHasta = pedido.cliente.horaFinSegundoTurnoEntrega;
+                    //pedido.direccionEntrega = new DireccionEntrega();
+                    //pedido.horaEntregaDesde = pedido.cliente.horaInicioPrimerTurnoEntrega;
+                    //pedido.horaEntregaHasta = pedido.cliente.horaFinPrimerTurnoEntrega;
+                    //pedido.horaEntregaAdicionalDesde = pedido.cliente.horaInicioSegundoTurnoEntrega;
+                    //pedido.horaEntregaAdicionalHasta = pedido.cliente.horaFinSegundoTurnoEntrega;
 
                     //Se limpia el ubigeo de entrega
-                    pedido.ubigeoEntrega = new Ubigeo();
-                    pedido.ubigeoEntrega.Id = Constantes.UBIGEO_VACIO;
+                    //pedido.ubigeoEntrega = new Ubigeo();
+                    //pedido.ubigeoEntrega.Id = Constantes.UBIGEO_VACIO;
 
-                
+
                 }
+
+                pedido.solicitante = pedido.cliente.solicitanteList.Where(d => d.idSolicitante == idSolicitante).FirstOrDefault();
+
                 this.PedidoSession = pedido;
-                String resultado = JsonConvert.SerializeObject(pedido.cliente);
-                return resultado;
+                 
             }
             catch (Exception e)
             {
@@ -1132,13 +1135,16 @@ namespace Cotizador.Controllers
             if (this.Request.Params["idDireccionEntrega"] == null || this.Request.Params["idDireccionEntrega"].Equals(String.Empty))
             {
                 pedido.direccionEntrega = new DireccionEntrega();
+                pedido.ciudad = new Ciudad();
+                pedido.cliente = new Cliente();
             }
             else
             { 
                 Guid idDireccionEntrega = Guid.Parse(this.Request.Params["idDireccionEntrega"]);
                 pedido.direccionEntrega = pedido.cliente.direccionEntregaList.Where(d => d.idDireccionEntrega == idDireccionEntrega).FirstOrDefault();
                 pedido.ubigeoEntrega = pedido.direccionEntrega.ubigeo;
-
+                pedido.ciudad = pedido.direccionEntrega.cliente.ciudad;
+                GetCliente(pedido.direccionEntrega.cliente.idCliente, pedido.usuario.solicitante.idSolicitante);
             }
 
             pedido.existeCambioDireccionEntrega = false;
@@ -1343,12 +1349,18 @@ namespace Cotizador.Controllers
 
         public String ChangeIdCiudad()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             Pedido pedido = this.PedidoSession;
             pedido.cliente = new Cliente();
             Guid idCiudad = Guid.Empty;
+            List<Cliente> clienteList = (List<Cliente>)this.Session["clienteList"];
             if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
             {
                 idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+              
+
+
             }
             //Para realizar el cambio de ciudad ningun producto debe estar agregado
             if (pedido.pedidoDetalleList != null && pedido.pedidoDetalleList.Count > 0)
@@ -1361,7 +1373,19 @@ namespace Cotizador.Controllers
                 CiudadBL ciudadBL = new CiudadBL();
                 Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
                 pedido.ciudad = ciudadNueva;
-                this.PedidoSession = pedido;
+                pedido.cliente = clienteList.Where(c => c.ciudad.idCiudad == idCiudad).FirstOrDefault() ;
+                if (pedido.cliente == null)
+                {
+                    pedido.cliente = new Cliente();
+                }
+                else {
+                    GetCliente(pedido.cliente.idCliente, usuario.solicitante.idSolicitante);
+                }
+
+      
+
+
+                //this.PedidoSession = pedido;
                 return "{\"idCiudad\": \"" + idCiudad + "\"}";
             }
         }

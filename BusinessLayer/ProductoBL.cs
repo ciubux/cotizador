@@ -9,14 +9,14 @@ namespace BusinessLayer
 {
     public class ProductoBL
     {
-        public String getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null)
+        public String getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null, int idClienteSunat = 0)
         {
 
 
             List<Producto> productoList = new List<Producto>();
             using (var dal = new ProductoDAL())
             {
-                productoList = dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados, proveedor, familia, tipoPedido);
+                productoList = dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados, proveedor, familia, tipoPedido, idClienteSunat);
             }
 
 
@@ -125,6 +125,14 @@ namespace BusinessLayer
                 return productoDAL.SelectProductos(producto);
             }
         }
+
+      /*  public List<Producto> getProductosCanastaCliente(int idClienteSunat)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.SelectProductosCanastaCliente(idClienteSunat);
+            }
+        }*/
 
         public Producto getProductoById(Guid idProducto) 
         {

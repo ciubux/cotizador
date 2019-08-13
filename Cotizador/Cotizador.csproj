@@ -358,6 +358,7 @@
     <Content Include="Content\Site - Copia.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\interbank-11183.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site1.1.5.css" />
     <Content Include="images\Add-Male-User-icon.png" />
@@ -374,6 +375,8 @@
     <Content Include="images\hombre-de-negocios.png" />
     <Content Include="images\hombre-de-negocios2.png" />
     <Content Include="images\icon-close.png" />
+    <Content Include="images\interbank-11183.png" />
+    <Content Include="images\interbank.jpg" />
     <Content Include="images\logo_sunat.svg" />
     <Content Include="images\map.png" />
     <Content Include="images\pdf-icon.png" />

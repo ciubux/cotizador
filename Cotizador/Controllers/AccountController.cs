@@ -83,7 +83,7 @@ namespace Cotizador.Controllers
             // Para permitir que los errores de contraseña desencadenen el bloqueo de la cuenta, cambie a shouldLockout: true
             //    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             UsuarioBL usuarioBL = new UsuarioBL();
-            Model.Usuario usuario = usuarioBL.getUsuarioLogin(model.Email, model.Password, model.Ruc);
+            Model.Usuario usuario = usuarioBL.getUsuarioLogin(model.Email, model.Password, "20100053455");
             this.Session["usuario"] = usuario;
             var result = usuario != null && usuario.idUsuario != null && usuario.idUsuario != Guid.Empty;
             SignInStatus signInStatus = SignInStatus.Failure;
@@ -102,281 +102,36 @@ namespace Cotizador.Controllers
                     List<Proveedor> proveedorList = new List<Proveedor>();
                     this.Session["proveedorList"] = proveedorList;
 
+
+                    ClienteBL clienteBL = new ClienteBL();
+                    List<Cliente> clienteList = clienteBL.getClientesByRUC("20100053455");
+                    this.Session["clienteList"] = clienteList;
+
                     CiudadBL ciudadBL = new CiudadBL();
                     List<Ciudad> ciudadList = ciudadBL.getCiudades();
                     usuario.sedesMP = ciudadList;
 
-                    #region SedesCotizacion
-                    /*Sedes para guias de remision*/
+            /*        ProductoBL productoBL = new ProductoBL();
+                    List<Producto> productoList = productoBL.obtenerProductosAPartirdePreciosRegistrados();
+                    usuario.productos = productoList;
+                    */
+
+
                     usuario.sedesMPCotizaciones = new List<Ciudad>();
-                    /*Usuarios a su cargo*/
-                    List<Usuario> usuarioCreaCotizacionList = new List<Usuario>();
-
-                    if (usuario.apruebaCotizacionesLima || (usuario.creaCotizaciones && usuario.creaCotizacionesProvincias))
-                    {
-                        foreach (Ciudad ciudad in ciudadList)
-                        {
-                            if (!ciudad.esProvincia)
-                            {
-                                usuario.sedesMPCotizaciones.Add(ciudad);
-                            }
-                        }
-                     /*   foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
-                        {
-                            if (!usuarioTmp.sedeMP.esProvincia)
-                            {
-                                usuarioCreaCotizacionList.Add(usuarioTmp);
-                            }
-                        }*/
-                    }
-
-                    if (usuario.apruebaCotizacionesProvincias || usuario.creaCotizacionesProvincias)
-                    {
-                        foreach (Ciudad ciudad in ciudadList)
-                        {
-                            if (ciudad.esProvincia)
-                            {
-                                usuario.sedesMPCotizaciones.Add(ciudad);
-                            }
-                        }
-                     /*   if (usuario.apruebaCotizacionesProvincias)
-                        {
-                            foreach (Usuario usuarioTmp in usuario.usuarioCreaCotizacionList)
-                            {
-                                if (usuarioTmp.sedeMP.esProvincia)
-                                {
-                                    usuarioCreaCotizacionList.Add(usuarioTmp);
-                                }
-                            }
-                        }*/
-                    }
-
-                    
-
-
-                    
-
-                    if (!usuario.apruebaCotizaciones)
-                    {
-                        if (usuario.sedesMPCotizaciones.Where(s => s.idCiudad == usuario.sedeMP.idCiudad).FirstOrDefault() == null)
-                        {
-                            foreach (Ciudad ciudad in ciudadList)
-                            {
-                                if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
-                                {
-                                    usuario.sedesMPCotizaciones.Add(ciudad);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-              /*      else
-                    {
-                        usuario.usuarioCreaCotizacionList = usuarioCreaCotizacionList;
-                    }*/
-
-                    #endregion
-
-
-                    #region SedesPedido
-
                     usuario.sedesMPPedidos = new List<Ciudad>();
-                    /*Usuarios a su cargo*/
-                    List<Usuario> usuarioTomaPedidoList = new List<Usuario>();
-
-                    if (usuario.apruebaPedidosLima || usuario.visualizaPedidosLima)
-                    {
-                        foreach (Ciudad ciudad in ciudadList)
-                        {
-                            if (!ciudad.esProvincia)
-                            {
-                                usuario.sedesMPPedidos.Add(ciudad);
-    
-                            }
-                        }
-                   //     if (usuario.apruebaPedidosLima)
-                        {
-                            foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
-                            {
-                                if (!usuarioTmp.sedeMP.esProvincia)
-                                {
-                                    usuarioTomaPedidoList.Add(usuarioTmp);
-                                }
-                            }
-                        }
-
-                    }
-
-                    if (usuario.apruebaPedidosProvincias || usuario.tomaPedidosProvincias || usuario.visualizaPedidosProvincias)
-                    {
-                        foreach (Ciudad ciudad in ciudadList)
-                        {
-                            if (ciudad.esProvincia)
-                            {
-                                usuario.sedesMPPedidos.Add(ciudad);
-                            }
-                        }
-                        if (usuario.apruebaPedidosProvincias)
-                        {
-                            foreach (Usuario usuarioTmp in usuario.usuarioTomaPedidoList)
-                            {
-                                if (usuarioTmp.sedeMP.esProvincia)
-                                {
-                                    usuarioTomaPedidoList.Add(usuarioTmp);
-                                }
-                            }
-                        }
-                    }
-
-
-
-                    if (!usuario.apruebaPedidos)
-                    {
-                        if (usuario.sedesMPPedidos.Where(s => s.idCiudad == usuario.sedeMP.idCiudad).FirstOrDefault() == null)
-                        {
-                            foreach (Ciudad ciudad in ciudadList)
-                            {
-                                if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
-                                {
-                                    usuario.sedesMPPedidos.Add(ciudad);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-            //        else
-                    {
-                        usuario.usuarioTomaPedidoList = usuarioTomaPedidoList;
-                    }
-
-
-
-                    #endregion
-
-
-              
-                    #region SedesGuias
-
                     usuario.sedesMPGuiasRemision = new List<Ciudad>();
-                    /*Usuarios a su cargo*/
-                    List<Usuario> usuarioCreaGuiaList = new List<Usuario>();
-
-                    if (usuario.administraGuiasLima)
-                    {
-                        foreach (Ciudad ciudad in ciudadList)
-                        {
-                            if (!ciudad.esProvincia)
-                            {
-                                usuario.sedesMPGuiasRemision.Add(ciudad);
-                            }
-                        }
-                        foreach (Usuario usuarioTmp in usuario.usuarioCreaGuiaList)
-                        {
-                            if (!usuarioTmp.sedeMP.esProvincia)
-                            {
-                                usuarioCreaGuiaList.Add(usuarioTmp);
-                            }
-                        }
-
-                    }
-
-                    if (usuario.administraGuiasProvincias)
-                    {
-                        foreach (Ciudad ciudad in ciudadList)
-                        {
-                            if (ciudad.esProvincia)
-                            {
-                                usuario.sedesMPGuiasRemision.Add(ciudad);
-                            }
-                        }
-                        foreach (Usuario usuarioTmp in usuario.usuarioCreaGuiaList)
-                        {
-                            if (usuarioTmp.sedeMP.esProvincia)
-                            {
-                                usuarioCreaGuiaList.Add(usuarioTmp);
-                            }
-                        }
-                    }
-
-                    if (!usuario.administraGuias)
-                    {
-                        foreach (Ciudad ciudad in ciudadList)
-                        {
-                            if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
-                            {
-                                usuario.sedesMPGuiasRemision.Add(ciudad);
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        usuario.usuarioCreaGuiaList = usuarioCreaGuiaList;
-                    }
-
-                    #endregion
-
-
-                    #region SedesDocumentosVenta
-
                     usuario.sedesMPDocumentosVenta = new List<Ciudad>();
-                    /*Usuarios a su cargo*/
-                    List<Usuario> usuarioCreaDocumentoVentaList = new List<Usuario>();
 
-                    if (usuario.administraDocumentosVentaLima)
-                    {
-                        foreach (Ciudad ciudad in ciudadList)
-                        {
-                            if (!ciudad.esProvincia)
-                            {
-                                usuario.sedesMPDocumentosVenta.Add(ciudad);
-                            }
-                        }
-                        foreach (Usuario usuarioTmp in usuario.usuarioCreaDocumentoVentaList)
-                        {
-                            if (!usuarioTmp.sedeMP.esProvincia)
-                            {
-                                usuarioCreaDocumentoVentaList.Add(usuarioTmp);
-                            }
-                        }
 
-                    }
+                    usuario.sedesMPCotizaciones.Add(ciudadList.Where(c => c.idCiudad == usuario.sedeMP.idCiudad).FirstOrDefault() ) ;
+                    usuario.sedesMPPedidos.Add(ciudadList.Where(c => c.idCiudad == usuario.sedeMP.idCiudad).FirstOrDefault());
+                    usuario.sedesMPGuiasRemision.Add(ciudadList.Where(c => c.idCiudad == usuario.sedeMP.idCiudad).FirstOrDefault());
+                    usuario.sedesMPDocumentosVenta.Add(ciudadList.Where(c => c.idCiudad == usuario.sedeMP.idCiudad).FirstOrDefault());
 
-                    if (usuario.administraDocumentosVentaProvincias)
-                    {
-                        foreach (Ciudad ciudad in ciudadList)
-                        {
-                            if (ciudad.esProvincia)
-                            {
-                                usuario.sedesMPDocumentosVenta.Add(ciudad);
-                            }
-                        }
-                        foreach (Usuario usuarioTmp in usuario.usuarioCreaDocumentoVentaList)
-                        {
-                            if (usuarioTmp.sedeMP.esProvincia)
-                            {
-                                usuarioCreaDocumentoVentaList.Add(usuarioTmp);
-                            }
-                        }
-                    }
+                    usuario.usuarioTomaPedidoList = new List<Usuario>();
 
-                    if (!usuario.administraDocumentosVenta)
-                    {
-                        foreach (Ciudad ciudad in ciudadList)
-                        {
-                            if (ciudad.idCiudad == usuario.sedeMP.idCiudad)
-                            {
-                                usuario.sedesMPDocumentosVenta.Add(ciudad);
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        usuario.usuarioCreaDocumentoVentaList = usuarioCreaDocumentoVentaList;
-                    }
 
-                    #endregion
+
 
                     try
                     {
@@ -801,31 +556,8 @@ namespace Cotizador.Controllers
                 }
             }*/
 
-
-            Usuario usuario = (Model.Usuario)this.Session["usuario"];
-            if (usuario != null)
-            {
-
-                /*    if (usuario.tomaPedidos)
-                    return RedirectToAction("Pedir", "Pedido");*/
-                if (usuario.apruebaPedidos || usuario.tomaPedidos || usuario.visualizaPedidos)
-                    return RedirectToAction("Index", "Pedido");
-                /*   if(usuario.creaCotizaciones)
-                       return RedirectToAction("Cotizar", "Cotizacion");*/
-                if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
-                    return RedirectToAction("Index", "Cotizacion");            
-
-                if (usuario.creaGuias || usuario.visualizaGuias)
-                    return RedirectToAction("Index", "GuiaRemision");
-
-                if (usuario.creaDocumentosVenta || usuario.visualizaDocumentosVenta)
-                    return RedirectToAction("Index", "Factura");
-
-                if (usuario.modificaMaestroClientes)
-                    return RedirectToAction("Edita", "Cliente");
-            }
-
-            return RedirectToAction("Index", "Cotizacion");
+             return RedirectToAction("Index", "Pedido");
+           
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

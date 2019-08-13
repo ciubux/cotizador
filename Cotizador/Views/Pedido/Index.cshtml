@@ -20,7 +20,7 @@
 
         <div class="row">
             <!--NÚMERO PEDIDO-->
-            @if (!pedido.usuario.esCliente)
+            @if (pedido.usuario.esCliente)
             {
                 <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
@@ -42,7 +42,7 @@
                 </div>
 
                 <!--NÚMERO GRUPO PEDIDO-->
-                <div class="col-sm-6 col-lg-4">
+                <div hidden="hidden" class="col-sm-6 col-lg-4">
                     <div class="form-group">
                         @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
 
@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-6 col-lg-4">
+                <div hidden="hidden" class="col-sm-6 col-lg-4">
                     <!--Cliente-->
                     <div class="form-group">
                         <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
@@ -264,7 +264,7 @@
             </div>
 
             <!--FECHA PROGRACION-->
-            <div class="col-sm-6 col-lg-4">
+            <div hidden="hidden" class="col-sm-6 col-lg-4">
                 <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4">Fecha de Programación:</label>
                 <div class="input-group col-xs-6 col-lg-8">
                     <div class="input-group-addon" style="width:70px">
@@ -305,9 +305,9 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 col-lg-4">
+            <div  class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="estadoCrediticio" class="control-label col-xs-4">Estado Crediticio:</label>
+                    <label for="estadoCrediticio" class="control-label col-xs-4">Estado Solicitud:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estadoCrediticio",
                                        EnumHelper.GetSelectList(typeof(Model.SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido), pedido.seguimientoCrediticioPedido.estado),
@@ -356,35 +356,36 @@
                 <tr>
                     <th data-name="idPedido" data-visible="false"></th>
                     <th data-name="numero" data-visible="true">N°</th>
-                    <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
-                    <th data-name="codigo" data-visible="true" data-sortable="false" data-breakpoints="xs">Cod. Cliente</th>
-                    <th data-name="razonSocial" data-visible="true" data-sortable="true">Razón Social</th>
-                    <th data-name="grupoCliente" data-visible="true" data-sortable="true">Grupo Cliente</th>
+                    <th data-name="sedeMP" data-sortable="false" data-visible="false" data-breakpoints="xs">Sede MP</th>
+                    <th data-name="codigo" data-visible="false" data-sortable="false" data-breakpoints="xs">Cod. Cliente</th>
+                    <th data-name="razonSocial" data-visible="false" data-sortable="true">Razón Social</th>
+                    <th data-name="grupoCliente" data-visible="false" data-sortable="true">Grupo Cliente</th>
                     <th data-name="numeroReferenciaCliente" data-visible="true">O/C N°</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
                     <th data-name="fechaRegistro" data-sortable="true" data-breakpoints="xs">Fecha Registro</th>
                     <!--<th data-name="fechaSolicitud" data-sortable="true" data-breakpoints="xs">Fecha y Hora Solicitud</th>-->
-                    <th data-name="rangoFechaEntrega" data-sortable="true" data-breakpoints="xs">Rango Fecha Entrega</th>
-                    <th data-name="horarioEntrega" data-sortable="true" data-breakpoints="xs">Horarios Entrega</th>
+                    <th data-name="rangoFechaEntrega" data-visible="false" data-sortable="true" data-breakpoints="xs">Rango Fecha Entrega</th>
+                    <th data-name="horarioEntrega" data-sortable="true" data-visible="false" data-breakpoints="xs">Horarios Entrega</th>
                     <!--<th data-name="fechaProgramacion" data-sortable="true" data-breakpoints="xs">Programado Para:</th>-->
                     <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (Incl. IGV)</th>
                     <th data-name="distrito" data-sortable="true" data-breakpoints="xs">Distrito Entrega</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado Atención</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
     <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
-                    <th data-name="estadoCrediticio" data-sortable="true" data-breakpoints="xs">Estado Crediticio</th>
+                    <th data-name="estadoCrediticio" data-sortable="true"  data-visible="false" data-breakpoints="xs">Estado Crediticio</th>
                     <th data-name="observaciones" data-sortable="true" data-breakpoints="xs">Obs. Uso Interno</th>
-
+                    <th data-name="HJ1F20" data-sortable="true" data-breakpoints="xs">[HJ1F20] 30197006 - Jabón Espuma Kleenex Dermo Supreme - Sachet x 800 ml</th>
+                    <th data-name="HH2S81" data-sortable="true" data-breakpoints="xs">[HH2S81] 30228044 - Papel higiénico Scott JRT Super Económico Ahorramax con pre-corte (rollo x 550m) - Bls x 4 x 550 mts</th>
                     @if (pedido.usuario.confirmaStock)
     {
-                <th data-name="stockConfirmado" data-visible="true">Stock</th>
+                <th data-name="stockConfirmado" data-visible="false">Stock</th>
                 <th data-name="stockConfirmado" data-visible="false">Stock</th>
 }
 else
 {
 
                 <th data-name="stockConfirmado" data-visible="false">Stock</th>
-                <th data-name="stockConfirmado" data-visible="true">Stock</th>
+                <th data-name="stockConfirmado" data-visible="false">Stock</th>
 }
 
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
@@ -783,7 +784,7 @@ else
                                 @if (pedido.usuario.esCliente)
     {
                             <th data-name="precioNeto" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Precio Neto</th>
-                            <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                            <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
 }
 else
 {
@@ -815,7 +816,7 @@ else
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
                                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
-                                <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+                                <th data-name="historialPrecios" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Historial Precios</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

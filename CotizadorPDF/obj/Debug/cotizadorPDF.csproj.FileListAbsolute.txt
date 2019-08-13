@@ -493,3 +493,4 @@ G:\Repo\maquetados\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.pdb
 G:\Repo\maquetados\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
 G:\Repo\maquetados\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
 G:\Repo\maquetados\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll

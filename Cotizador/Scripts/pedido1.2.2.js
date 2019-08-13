@@ -18,6 +18,8 @@ jQuery(function ($) {
         verificarSiExisteDetalle();
         verificarSiExisteCliente();
         $("#btnBusquedaPedidos").click();
+        $("#btnAgregarProductosDesdePreciosRegistrados").click()
+
         var tipoPedido = $("#pedido_tipoPedido").val();
         validarTipoPedido(tipoPedido);
 
@@ -195,11 +197,17 @@ jQuery(function ($) {
         if ($("#idCliente").val().trim() != "") {
             //$("#idCiudad").attr('disabled', 'disabled');
             if (habilitadoModificarDireccionEntrega) {
-                $('#ActualDepartamento').removeAttr('disabled');
+                /*$('#ActualDepartamento').removeAttr('disabled');
                 $('#ActualProvincia').removeAttr('disabled');
                 $('#ActualDistrito').removeAttr('disabled');
                 $("#pedido_direccionEntrega").removeAttr('disabled');
                 $("#btnAgregarDireccion").removeAttr('disabled');
+                */
+                $("#ActualDepartamento").attr('disabled', 'disabled');
+                $('#ActualProvincia').attr('disabled', 'disabled');
+                $('#ActualDistrito').attr('disabled', 'disabled');
+                $("#pedido_direccionEntrega").attr('disabled', 'disabled');
+                $("#btnAgregarDireccion").attr('disabled', 'disabled');
             }
             else {
                 $("#ActualDepartamento").attr('disabled', 'disabled');
@@ -235,7 +243,7 @@ jQuery(function ($) {
 
 
     function toggleControlesDireccionEntrega() {
-        //alert("W");
+      
         var idDireccionEntrega = $('#pedido_direccionEntrega').val();
         var varTmp = $('#pedido_cliente_habilitadoModificarDireccionEntrega').val();
         var habilitadoModificarDireccionEntrega = varTmp == 'True' || varTmp == 'true';
@@ -251,19 +259,21 @@ jQuery(function ($) {
             $("#pedido_direccionEntrega_contacto").attr('disabled', 'disabled');
             $("#pedido_direccionEntrega_telefono").attr('disabled', 'disabled');
         }
-
+        /*
         if (habilitadoModificarDireccionEntrega) {
             $("#btnAgregarDireccion").show();
+
             $("#ActualDepartamento").removeAttr("disabled");
             $("#ActualDepartamento").removeAttr("disabled");
             $("#ActualDistrito").removeAttr("disabled");
         }
         else {
+            */
             $("#btnAgregarDireccion").hide();
             $("#ActualDepartamento").attr("disabled");
             $("#ActualDepartamento").attr("disabled");
             $("#ActualDistrito").attr("disabled");
-        }
+        //}
 
     }
     
@@ -1759,18 +1769,7 @@ jQuery(function ($) {
         });
 
     });
-
-
-
-
-
-
-
-
-
-
-
-
+    
     /**
     * INTERFACE PARA CALCULO DE DESCUENTO
     */
@@ -1860,10 +1859,9 @@ jQuery(function ($) {
 
 
     $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
-
         var idCiudad = $("#idCiudad").val();
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar una ciudad previamente.");
+            alert("Debe seleccionar una dirección de entrega para cargar los productos.");
             $("#idCiudad").focus();
             $("#btnCancelarObtenerProductos").click();
             return false;
@@ -1878,9 +1876,11 @@ jQuery(function ($) {
 
 
         if (verificarSiExisteDetalle()) {
-            alert("No deben existir productos agregados al pedido.");
+            //alert("No deben existir productos agregados al pedido.");
             return false;
         }
+
+        $("#btnObtenerProductos").click();
 
     });
 
@@ -1909,7 +1909,7 @@ jQuery(function ($) {
             type: 'POST',
             error: function () {
                 $('body').loadingModal('hide')
-                alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
+               // alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
                 //window.location = '/Pedido/Cotizador';
             },
             success: function () {
@@ -4325,6 +4325,18 @@ jQuery(function ($) {
                             '<p><a id="' + idVerMas + '" class="' + pedidoList[i].idPedido + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
                             '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                     }
+
+
+                    var cantidad1 = 0 
+                    var cantidad2 = 0
+                    for (var j = 0; j < pedidoList[i].pedidoDetalleList.length; j++) {
+                        if (pedidoList[i].pedidoDetalleList[j].producto.sku == 'HJ1F20')
+                            cantidad1 = pedidoList[i].pedidoDetalleList[j].cantidad;
+                        else
+                            cantidad2 = pedidoList[i].pedidoDetalleList[j].cantidad;
+                    }
+
+
                     
                     var grupoCliente = pedidoList[i].grupoCliente_nombre == null ? "" : pedidoList[i].grupoCliente_nombre;
                     var pedido = '<tr data-expanded="true">' +
@@ -4347,12 +4359,15 @@ jQuery(function ($) {
                       //  '<td>  ' + observacion+'  </td>' +
                         '<td>  ' + pedidoList[i].seguimientoCrediticioPedido_estadoString + '</td>' +
                         '<td> ' + observaciones + ' </td>' + 
+                        '<td> ' + cantidad1 + ' </td>' + 
+                        '<td> ' + cantidad2 + ' </td>' + 
                         '<td>' + stockConfirmado + '</td>' +
                         '<td>' + stockConfirmadoLectura + '</td>' +
                         '<td>' +
                         '<button type="button" class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numeroPedido + ' btnVerPedido btn btn-primary ">Ver</button>' +
                         '</td>' +
                         '</tr>';
+
 
                     $("#tablePedidos").append(pedido);
                  
@@ -4731,6 +4746,7 @@ jQuery(function ($) {
                 location.reload();
             },
             success: function (ciudad) {
+                location.reload();
             }
         });
     });  

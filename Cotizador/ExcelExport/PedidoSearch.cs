@@ -91,8 +91,10 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "L", "Estado Atención", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "M", "Estado Crediticio", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "N", "Obs. Uso Intern", titleCellStyle);
-                
-                    
+                UtilesHelper.setValorCelda(sheet, 1, "O", "[HJ1F20] 30197006 - Jabón Espuma Kleenex Dermo Supreme - Sachet x 800 ml", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "P", "[HH2S81] 30228044 - Papel higiénico Scott JRT Super Económico Ahorramax con pre-corte (rollo x 550m) - Bls x 4 x 550 mts", titleCellStyle);
+
+
 
                 i = 2;
 
@@ -116,9 +118,26 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "M", obj.seguimientoCrediticioPedido.estadoString);
                     UtilesHelper.setValorCelda(sheet, i, "N", obj.observaciones);
 
+                    foreach (PedidoDetalle pedidoDetalle in obj.pedidoDetalleList)
+                    {
+                        if (pedidoDetalle.producto.sku.Equals("HJ1F20"))
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "O", pedidoDetalle.cantidad);
+                        }
+                        else {
+                            UtilesHelper.setValorCelda(sheet, i, "P", pedidoDetalle.cantidad);
+                        }
+
+                    }
+
                     i++;
                 }
-                
+
+
+                sheet.GetRow(i-1).GetCell(9).CellFormula = "SUM(" + UtilesHelper.columnas[9] + "2:" + UtilesHelper.columnas[9] + (i-1) + ")";
+                sheet.GetRow(i - 1).GetCell(14).CellFormula = "SUM(" + UtilesHelper.columnas[14] + "2:" + UtilesHelper.columnas[14] + (i-1) + ")";
+                sheet.GetRow(i - 1).GetCell(15).CellFormula = "SUM(" + UtilesHelper.columnas[15] + "2:" + UtilesHelper.columnas[15] + (i-1) + ")";
+
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())

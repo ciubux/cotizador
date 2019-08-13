@@ -41,6 +41,8 @@
                         var linkPedidos = "";
                         var linkBusquedaPedidos = "";
                         var linkMantenimientoPedido = "";
+
+                        var linkGuiasRemision = "";
                         
 
                         var linkDocumentosVenta = "";
@@ -82,25 +84,7 @@
                             //case 104: linkMantenimientoUsuario = "ative"; linkMaestros = "active"; break;
                         }
 
-                        if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
-                        {
-                            <li class="@linkCotizaciones">
-                                <a class="dropdown-toggle" data-toggle="dropdown">
-                                    Cotizaciones
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu">
-                                    @if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
-                                    {
-                                        <li id="linkBusquedaCotizaciones" class="@linkBusquedaCotizaciones">@Html.ActionLink("Cotización - Búsqueda", "Index", "Cotizacion")</li>
-                                    }
-                                    @if (usuario.creaCotizaciones)
-                                    {
-                                        <li id="linkMantenimientoCotizacion" class="@linkMantenimientoCotizacion">@Html.ActionLink("Cotización - Crear/Modificar", "Cotizar", "Cotizacion")</li>
-                                    }
-                                </ul>
-                            </li>
-                        }
+                 
 
                         if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                         {
@@ -122,6 +106,19 @@
                             </li>
                         }
 
+
+
+                            <li class="@linkGuiasRemision">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Guias Remisión
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                     <li id="linkBusquedaGuiasRemision" class="@linkBusquedaPedidos">@Html.ActionLink("Guías Remisión - Búsqueda", "Index", "GuiaRemision")</li>
+                                </ul>
+                            </li>
+
+
                         if (usuario.visualizaDocumentosVenta)
                         {
 
@@ -140,29 +137,7 @@
                             </li>
                         }
 
-                        if (usuario.administraPermisos || usuario.visualizaUsuarios || usuario.modificaUsuario)
-                        {
-                            <li class="@linkMaestros">
-                                <a class="dropdown-toggle" data-toggle="dropdown">
-                                    Sistema
-                                    <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    @if (usuario.modificaUsuario || usuario.visualizaUsuarios)
-                                    {
-                                        <li id="linkBusquedaUsuario" class="@linkBusquedaUsuario">@Html.ActionLink("Usuario - Búsqueda", "List", "Usuario")</li>
-                                    }
-
-
-                                    @if (usuario.administraPermisos)
-                                    {
-                                        <li id="linkAsignaPermisos" class="@linkAsignacionPermisos">@Html.ActionLink("Permisos - Búsqueda", "List", "Permiso")</li>
-                                    }
-
-                                </ul>
-                            </li>
-                        }
+                      
                     }
 
                 </ul>

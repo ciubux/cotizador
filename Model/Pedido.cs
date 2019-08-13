@@ -561,5 +561,8 @@ namespace Model
         [Display(Name = "SKU:")]
         public String sku { get; set; }
 
+        
+
+
     }
 }

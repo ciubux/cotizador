@@ -54,7 +54,7 @@
                 </div>
             </div>-->
             <!--NÚMERO COTIZACION-->
-            <div class="col-sm-6 col-lg-4">
+            <div hidden="hidden" class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     @Html.LabelFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 col-lg-4">
+            <div hidden="hidden" class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     @Html.LabelFor(p => pedido.tipoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
@@ -84,7 +84,7 @@
         </div>
 
 
-        <div class="row">
+        <div hidden="hidden" class="row">
             <!--CIUDAD-->
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
@@ -100,7 +100,7 @@
                 </div>
             </div>
             <!--CLIENTE-->
-            <div class="col-sm-6 col-lg-4">
+            <div hidden="hidden" class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
 
@@ -125,8 +125,8 @@
             </div>
 
             <!--NUMERO REFERENCIA -->
-            <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
-                <div class="form-group">
+            <div  hidden="hidden" class="col-sm-6 col-lg-4" id="divReferenciaCliente">
+                <div  hidden="hidden" class="form-group">
                     @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
@@ -170,25 +170,29 @@
                         @Html.LabelFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
                         <div class="col-xs-8 col-lg-9">
                             @Html.DropDownList("pedido_direccionEntrega",
-                                                                      new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "direccionConSede", pedido.direccionEntrega.idDireccionEntrega, null),
-                                                                      "Seleccione Dirección de Entrega",
-                                                                      new { @class = "form-control" })
+                                                        new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "direccionConSede", pedido.direccionEntrega.idDireccionEntrega, null),
+                                                        "Seleccione Dirección de Entrega",
+                                                        new { @class = "form-control" })
                         </div>
-                        <div class="col-xs-2 col-lg-1">
+                        <div hidden="hidden" class="col-xs-2 col-lg-1">
                             @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
-                            {
-                                <button id="btnAgregarDireccion" type="button" class="btn btn-primary bouton-image-add addDireccion" data-toggle="modal" data-target="#modalAgregarDireccion"></button>
-                            }
+                {
+                    <button id="btnAgregarDireccion" type="button" class="btn btn-primary bouton-image-add addDireccion" data-toggle="modal" data-target="#modalAgregarDireccion"></button>
+    }
                         </div>
+
                     </div>
 
 
                 </div>
+                <!--<div class="col-sm-6 col-lg-4">
+         <span>Tienda Cayma</span>
+    </div>-->
 
 
 
             </div>
-            <div class="row mostrarDatosParaGuia">
+            <div hidden="hidden" class="row mostrarDatosParaGuia1">
                 <!--CONTACTO ENTREGA -->
                 <div class="col-sm-6 col-lg-8">
                     <div class="form-group">
@@ -242,7 +246,7 @@
             </div>
 
 
-            <div class="row mostrarDatosParaGuia">
+            <div  hidden="hidden" class="row mostrarDatosParaGuia1">
                 <!--CENTRO DE COSTOS -->
                 <div class="col-sm-6 col-lg-8">
                     <div class="form-group">
@@ -437,7 +441,7 @@
 
         </fieldset>
 
-        <fieldset>
+        <fieldset hidden="hidden" >
             <legend>Datos de la Solicitud:</legend>
 
             <div class="row mostrarDatosParaGuia">
@@ -582,8 +586,8 @@
 
         <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
 
-            <div class="pull-left">
-                <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
+            <div hidden="hidden" class="pull-left">
+                <button  id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary">Importar Detalle Desde Precios Registrados en Facturación</button>
             </div>
 
             <div class="pull-right">
@@ -631,29 +635,29 @@
                     {
                         <th data-name="esPrecioAlternativo" data-visible="false">EsPrecioAlternativo</th>
                     }
-                    <th data-name="proveedor" data-sortable="false">Prov.</th>
+                    <th data-name="proveedor" data-visible="false" data-sortable="false">Prov.</th>
                     <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                     <th data-name="producto" data-sortable="false">Producto / Descripción</th>
                     <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
                     <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
                     <!--<th data-name="valorUnitario" data-sortable="true" data-breakpoints="xs sm">Costo Unitario</th>-->
-                    <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+                    <th data-name="precioLista" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
 
                     @if (ViewBag.debug == 1)
                     {
-                        <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                        <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
                     }
                     else
                     {
                         <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
                     }
 
-                    <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    <th data-name="porcentajeDescuentoMostrar" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
                     <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
 
                     @if (pedido.mostrarCosto)
                     {
-                        <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
+                        <th data-name="costo" data-sortable="false" data-visible="false">Costo</th>
                     }
                     else
                     {
@@ -662,20 +666,20 @@
 
                     @if (pedido.usuario.visualizaMargen)
                     {
-                        <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                        <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
                     }
                     else
                     {
                         <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
                     }
 
-                    <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
+                    <th data-name="flete"  data-visible="false" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Reg. Fact.</th>
                     <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
                     <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
                     <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
-                    <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+                    <th data-name="historialPrecios"  data-sortable="false" data-visible="false" data-breakpoints="xs sm">Historial Precios</th>
 
 
                     <th class="ordenar" data-sortable="false" data-visible="false"></th>
@@ -804,7 +808,7 @@
         </div>
 
 
-        <div class="row mostrarCondicionesPago">
+        <div hidden="hidden" class="row mostrarCondicionesPago">
             <div class="col-sm-6 col-lg-9">
                 <div class="form-group">
                     <label for="condicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
@@ -824,7 +828,7 @@
             </div>
         </div>
 
-        <div class="row mostrarDatosParaGuia">
+        <div hidden="hidden" class="row mostrarDatosParaGuia_1">
             <!--OBSERVACIONES-->
             <div class="col-sm-6 col-lg-9">
                 <div class="form-group">
@@ -837,7 +841,7 @@
             </div>
         </div>
 
-        <div class="row mostrarDatosParaGuia">
+        <div hidden="hidden" class="row mostrarDatosParaGuia_1">
             <!--OBSERVACIONES-->
             <div class="col-sm-6 col-lg-9">
                 <div class="form-group">
@@ -850,7 +854,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div  hidden="hidden" class="row">
             <div class="col-sm-6 col-lg-9">
                 <div class="form-group">
                     <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
@@ -886,8 +890,8 @@
 
 
 
-        <div class="row">
-            <div class="pull-left">
+        <div  class="row">
+            <div hidden="hidden" class="pull-left">
                 <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar</button>
             </div>
 
@@ -956,7 +960,7 @@
 
 
                             <!--Familia-->
-                            <div class="form-group">
+                            <div hidden="hidden" class="form-group">
                                 <label for="familia" class="control-label col-xs-3">Familia:</label>
                                 <div class="col-xs-9">
                                     @Html.Action("list", "Familia")
@@ -965,7 +969,7 @@
 
 
                             <!--Proveedor-->
-                            <div class="form-group">
+                            <div hidden="hidden" class="form-group">
                                 <label for="proveedor" class="control-label col-xs-3">Proveedor:</label>
                                 <div class="col-xs-9">
                                     @Html.Action("list", "Proveedor")
@@ -996,20 +1000,20 @@
                             </div>
 
                             <!--PRECIO LISTA-->
-                            <div class="form-group">
+                            <div hidden="hidden" class="form-group">
                                 <label for="precioLista" class="control-label col-xs-3">Precio Lista:</label>
                                 <div class="col-xs-9">
 
                                     <input class="form-control" type="text" value="" id="precioLista" name="precioLista" disabled>
                                     <!--  <span style="margin-right: 20px; color: red; font-weight: normal " class="has-error" id="mensajeFlete"></span>
-                                    -->
+            -->
                                 </div>
                             </div>
 
 
                             <!--DESCUENTO-->
 
-                            <div class="form-group">
+                            <div hidden="hidden" class="form-group">
                                 <label for="porcentajeDescuento" class="control-label col-xs-3">Dscto % al P. Lista:</label>
                                 <div class="col-xs-4">
                                     <input class="form-control" type="number" step=".1" value="" id="porcentajeDescuento" name="porcentajeDescuento">
@@ -1023,8 +1027,64 @@
 
                             </div>
 
+                            <!--OBSERVACIONES-->
+                          
+                      
+                            <div class="form-group">
+                                <label for="precio" class="control-label col-xs-3">Precio Neto:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" type="hidden" id="precioRegistrado" name="precioRegistrado">
+                                    <input class="form-control" type="number" step=".1" value="" disabled id="precio" name="precio">
+                                </div>
 
 
+                                @if (pedido.usuario.visualizaMargen)
+                                {
+                                    <label for="margen" class="control-label col-xs-2">Mg %:</label>
+                                    <div class="col-xs-3">
+
+                                        <input class="form-control" type="number" disabled value="" min="1" step="1" id="margen" name="margen">
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-xs-5">
+                                        <input type="hidden" id="margen" name="margen">
+                                    </div>
+                                }
+
+                            </div>
+                       
+                        <!--CANTIDAD-->
+                     
+                            <div class="form-group">
+                                <label for="cantidad" class="control-label col-xs-3">Cantidad:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="number" value="" min="1" step="1" id="cantidad" name="cantidad">
+                                </div>
+
+                            </div>
+
+                            
+                            <div hidden="hidden" class="form-group">
+                                <label for="precio" class="control-label col-xs-3">Flete:</label>
+                                <div class="col-xs-3">
+                                    <input class="form-control" type="number" step=".1" value="" id="fleteDetalle" name="fleteDetalle">
+                                </div>
+                                <label for="precioUnitario" class="control-label col-xs-2">Precio Unit:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" type="number" disabled value="" min="1" step="1" id="precioUnitario" name="precioUnitario">
+                                </div>
+                            </div>
+                      
+
+                            <div class="form-group" id="subtotaldiv">
+                                <label for="subtotal" class="control-label col-xs-3">Sub total:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="text" value="" id="subtotal" name="subtotal" disabled>
+                                </div>
+                            </div>
+                        
                         </div>
 
 
@@ -1040,6 +1100,9 @@
                                     <textarea rows="5" cols="35" id="observacionProducto" name="observacionProducto"> </textarea>
                                 </div>
                             </div>
+
+
+
                         </div>
 
                     </div>
@@ -1085,51 +1148,6 @@
 
 
 
-                    <div class="row">
-
-
-
-
-                        <div class="col-sm-6 col-lg-6">
-                            <div class="form-group">
-                                <label for="precio" class="control-label col-xs-3">Precio Neto:</label>
-                                <div class="col-xs-4">
-                                    <input class="form-control" type="hidden" id="precioRegistrado" name="precioRegistrado">
-                                    <input class="form-control" type="number" step=".1" value="" disabled id="precio" name="precio">
-                                </div>
-
-
-                                @if (pedido.usuario.visualizaMargen)
-                                {
-                                    <label for="margen" class="control-label col-xs-2">Mg %:</label>
-                                    <div class="col-xs-3">
-
-                                        <input class="form-control" type="number" disabled value="" min="1" step="1" id="margen" name="margen">
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-xs-5">
-                                        <input type="hidden" id="margen" name="margen">
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
-                        <!--CANTIDAD-->
-                        <div class="col-sm-6 col-lg-6" id="cantidadiv">
-                            <div class="form-group">
-                                <label for="cantidad" class="control-label col-xs-3">Cantidad:</label>
-                                <div class="col-xs-9">
-                                    <input class="form-control" type="number" value="" min="1" step="1" id="cantidad" name="cantidad">
-                                </div>
-
-                            </div>
-                        </div>
-
-
-
-                    </div>
 
 
 
@@ -1140,33 +1158,7 @@
 
 
 
-
-
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-6">
-                            <div class="form-group">
-                                <label for="precio" class="control-label col-xs-3">Flete:</label>
-                                <div class="col-xs-3">
-                                    <input class="form-control" type="number" step=".1" value="" id="fleteDetalle" name="fleteDetalle">
-                                </div>
-                                <label for="precioUnitario" class="control-label col-xs-2">Precio Unit:</label>
-                                <div class="col-xs-4">
-                                    <input class="form-control" type="number" disabled value="" min="1" step="1" id="precioUnitario" name="precioUnitario">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6 col-lg-6">
-                            <div class="form-group" id="subtotaldiv">
-                                <label for="subtotal" class="control-label col-xs-3">Sub total:</label>
-                                <div class="col-xs-9">
-                                    <input class="form-control" type="text" value="" id="subtotal" name="subtotal" disabled>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
+      
 
 
                 </form>

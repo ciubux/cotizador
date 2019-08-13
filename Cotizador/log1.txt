@@ -84,3 +84,9 @@ The statement has been terminated.
 2019-07-16 07:50:18.3107|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
 2019-07-16 07:50:20.3490|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
 2019-07-16 07:50:22.7296|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-08-08 21:33:11.3668|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-08-08 21:34:25.0721|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-08-08 21:34:32.1670|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-08-09 06:45:44.1187|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-08-09 06:46:04.0729|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-08-12 11:41:20.4256|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / La conexión con el servidor se ha establecido correctamente, pero se ha producido un error durante el proceso de inicio de sesión. (provider: SSL Provider, error: 0 - El nombre de red especificado ya no está disponible.)

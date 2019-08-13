@@ -29,7 +29,11 @@ namespace Model
 
         public Ciudad sedeMP { get; set; }
 
+        public Solicitante solicitante { get; set; }
+
         public List<Ciudad> sedesMP { get; set; }
+
+    //    public List<Producto> productos { get; set; }
         public List<Ciudad> sedesMPGuiasRemision { get; set; }
 
         public List<Ciudad> sedesMPDocumentosVenta { get; set; }
@@ -39,6 +43,8 @@ namespace Model
         public List<Ciudad> sedesMPPedidos { get; set; }
 
         public List<Cliente> clienteList { get; set; }
+
+        public List<DireccionEntrega> direccionEntregaList { get; set; }
 
         public List<Usuario> usuarioCreaCotizacionList { get; set; }
         public List<Usuario> usuarioTomaPedidoList { get; set; }
@@ -70,6 +76,8 @@ namespace Model
         }
 
         public bool esCliente { get; set; }
+
+        public int idClienteSunat { get; set; }
 
         public bool esVendedor { get; set; }
 

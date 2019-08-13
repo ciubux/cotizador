@@ -42,8 +42,8 @@ namespace Cotizador.Models.DTOsSearch
         public String seguimientoCrediticioPedido_estadoString { get; set; }
 
         public String grupoCliente_nombre { get; set; }
-        
 
+        public List<Model.PedidoDetalle> pedidoDetalleList { get; set; }
 
 
     }
