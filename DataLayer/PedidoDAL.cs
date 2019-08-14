@@ -863,6 +863,7 @@ namespace DataLayer
                 pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
                 pedido.ciudad.direccionPuntoLlegada = Converter.GetString(row, "direccion_establecimiento");
                 pedido.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
+                pedido.ciudad.sede = Converter.GetString(row, "codigo_sede");
 
                 pedido.usuario = new Usuario();
                 pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");

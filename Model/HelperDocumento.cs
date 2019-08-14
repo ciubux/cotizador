@@ -11,21 +11,36 @@ namespace Model
 
         static public void calcularMontosTotales(IDocumento iDocumento)
         {
-            Decimal total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, iDocumento.documentoDetalle.AsEnumerable().Sum(o => o.subTotal)));
+            Decimal total = 0;
             Decimal subtotal = 0;
             Decimal igv = 0;
 
-            if (iDocumento.incluidoIGV)
+            foreach (DocumentoDetalle det in iDocumento.documentoDetalle)
             {
-                subtotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total / (1 + Constantes.IGV)));
-                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total - subtotal));
+                if (iDocumento.incluidoIGV)
+                {
+                    if (det.producto.exoneradoIgv)
+                    {
+                        subtotal = subtotal + det.subTotal;
+                    } else
+                    {
+                        subtotal = subtotal + (det.subTotal * ((decimal) (1/1.18)));
+                        igv = igv + (det.subTotal * ((decimal) (0.18/1.18)));
+                    }
+                }
+                else
+                {
+                    subtotal = subtotal + det.subTotal;
+                    if (!det.producto.exoneradoIgv)
+                    {
+                        igv = igv + (det.subTotal * ((decimal) 0.18));
+                    }
+                }
             }
-            else
-            {
-                subtotal = total;
-                igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, total * Constantes.IGV));
-                total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, subtotal + igv));
-            }
+
+            subtotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, subtotal));
+            igv = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, igv));
+            total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, subtotal + igv));
 
             iDocumento.montoTotal = total;
             iDocumento.montoSubTotal = subtotal;

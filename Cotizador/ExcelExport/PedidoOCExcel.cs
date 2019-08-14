@@ -14,6 +14,7 @@ using NPOI.HSSF.Util;
 using BusinessLayer;
 
 using System.Web.Mvc;
+using System.Globalization;
 
 namespace Cotizador.ExcelExport
 {
@@ -93,6 +94,8 @@ namespace Cotizador.ExcelExport
 
                 HSSFCellStyle footerTextCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 footerTextCellStyle.Alignment = HorizontalAlignment.Center;
+
+                TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 
                 IDataFormat format = wb.CreateDataFormat();
                 ICellStyle dateFormatStyle = wb.CreateCellStyle();
@@ -193,10 +196,8 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setValorCelda(sheet, 3, "A", "Señores");
                 UtilesHelper.setValorCelda(sheet, 4, "A", obj.cliente.razonSocialSunat);
-                UtilesHelper.setValorCelda(sheet, 5, "A", obj.cliente.direccionDomicilioLegalSunat);
+                UtilesHelper.setValorCelda(sheet, 5, "A", textInfo.ToTitleCase(obj.cliente.direccionDomicilioLegalSunat.ToLower()));
                 UtilesHelper.setValorCelda(sheet, 6, "A", "Atn.- " + obj.cliente.contacto1);
-
-
 
                 UtilesHelper.setValorCelda(sheet, 2, "F", "FECHA:", formLabelCellStyle);
                 UtilesHelper.combinarCeldas(sheet, 2, 2, "G", "H");
@@ -205,7 +206,9 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setValorCelda(sheet, 3, "F", "N° OC:", formLabelCellStyle);
                 UtilesHelper.combinarCeldas(sheet, 3, 3, "G", "H");
-                UtilesHelper.setValorCelda(sheet, 3, "G", "MP" + obj.ciudad.sede  + "-" + obj.numeroPedido + "-" + obj.pedidoDetalleList.ElementAt(0).producto.proveedor, formDataCenterCellStyle);
+
+                string codOC = "MP" + obj.ciudad.sede + "-" + obj.numeroPedido + "-" + obj.pedidoDetalleList.ElementAt(0).producto.proveedor;
+                UtilesHelper.setValorCelda(sheet, 3, "G", codOC, formDataCenterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 3, "H", "", formDataCenterCellStyle);
 
                 int i = 9;
@@ -219,22 +222,29 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i + 3, "A", "", addressTextCellStyle);
                 UtilesHelper.setValorCelda(sheet, i + 4, "A", "", addressTextCellStyle);
                 UtilesHelper.combinarCeldas(sheet, i + 3, i + 4, "A", "C");
-                UtilesHelper.setValorCelda(sheet, i + 3, "A", Constantes.DIRECCION_MP);
+                UtilesHelper.setValorCelda(sheet, i + 3, "A", textInfo.ToTitleCase(Constantes.DIRECCION_MP.ToLower()));
                 UtilesHelper.setValorCelda(sheet, i + 5, "A", "Teléfono: " + Constantes.TELEFONO_MP);
                 UtilesHelper.setValorCelda(sheet, i + 6, "A", Constantes.WEB_MP);
                 
 
+              
+                UtilesHelper.combinarCeldas(sheet, i, i, "F", "H");
+                UtilesHelper.setValorCelda(sheet, i, "F", "FECHA DE ENTREGA", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i + 1, "F",  obj.rangoFechasEntrega);
+                UtilesHelper.setValorCelda(sheet, i + 2, "F", obj.rangoHoraEntrega);
+
+                i = 12;
                 UtilesHelper.combinarCeldas(sheet, i, i, "F", "H");
                 UtilesHelper.setValorCelda(sheet, i, "F", "ENVÍE A", titleCellStyle);
 
                 UtilesHelper.setValorCelda(sheet, i + 1, "F", "MP " + obj.ciudad.nombre);
                 UtilesHelper.setValorCelda(sheet, i + 2, "F", "", addressTextCellStyle);
                 UtilesHelper.setValorCelda(sheet, i + 3, "F", "", addressTextCellStyle);
-                UtilesHelper.setValorCelda(sheet, i + 2, "F", obj.ciudad.direccionPuntoLlegada);
+                UtilesHelper.setValorCelda(sheet, i + 2, "F", textInfo.ToTitleCase(obj.ciudad.direccionPuntoLlegada.ToLower()));
                 UtilesHelper.combinarCeldas(sheet, i + 2, i + 5, "F", "H");
 
 
-                i = i + 9;
+                i = i + 8;
 
                 UtilesHelper.setRowHeight(sheet, i, 540);
                 UtilesHelper.setValorCelda(sheet, i, "A", "SKU", titleDataCellStyle);
@@ -343,7 +353,7 @@ namespace Cotizador.ExcelExport
                     ms.Position = 0;
                     FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
 
-                    result.FileDownloadName = "OC_" + obj.numeroPedido + " .xls";
+                    result.FileDownloadName = "OC_" + codOC.Replace("-", "_") + " .xls";
 
                     return result;
                 }

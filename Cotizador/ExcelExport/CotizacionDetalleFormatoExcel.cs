@@ -14,6 +14,7 @@ using NPOI.HSSF.Util;
 using BusinessLayer;
 
 using System.Web.Mvc;
+using NPOI.SS.Util;
 
 namespace Cotizador.ExcelExport
 {
@@ -58,6 +59,14 @@ namespace Cotizador.ExcelExport
                 // create sheet
                 sheet = (HSSFSheet)wb.CreateSheet("DETALLE");
 
+                //HSSFSheet sheetMeta = (HSSFSheet)wb.CreateSheet("META");
+                //sheetMeta.CreateRow(0).CreateCell(0);
+                //sheetMeta.CreateRow(0).CreateCell(1);
+                //sheetMeta.CreateRow(0).CreateCell(2);
+                //UtilesHelper.setValorCelda(sheet, 1, "A", "MP", titleDataCellStyle);
+                //UtilesHelper.setValorCelda(sheet, 2, "A", "Alternativa", titleDataCellStyle);
+                //UtilesHelper.setValorCelda(sheet, 3, "A", "Proveedor", titleDataCellStyle);
+
 
                 /*guiaRemision,fecha_emision, ma.direccion_entrega, ub.distrito, 
                  * ub.provincia,  ub.departamento, ma.observaciones,*/
@@ -77,6 +86,13 @@ namespace Cotizador.ExcelExport
                 }
 
 
+
+                var markConstraint = DVConstraint.CreateExplicitListConstraint(new string[] { "MP", "Alternativa", "Proveedor" });
+                var markColumn = new CellRangeAddressList(1, rTotal, 1, 1);
+                var markdv = new HSSFDataValidation(markColumn, markConstraint);
+                markdv.EmptyCellAllowed = true;
+                markdv.CreateErrorBox("Valor Incorrecto", "Por favor seleccione un tipo de unidad de la lista");
+                sheet.AddValidationData(markdv);
 
                 int i = 1;
 

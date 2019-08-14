@@ -1089,6 +1089,7 @@ namespace Cotizador.Controllers
             {
                 idProducto = detalle.producto.idProducto,
                 codigoProducto = detalle.producto.sku,
+                subTotalItem = detalle.subTotal.ToString(),
                 nombreProducto = nombreProducto,
                 unidad = detalle.unidad,
                 igv = cotizacion.montoIGV.ToString(),

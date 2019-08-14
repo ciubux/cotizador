@@ -575,6 +575,14 @@ jQuery(function ($) {
 
     }
 
+
+
+    $("#btnModalCargarProductos").click(function () {
+        if (!validarSeleccionClienteOGrupo()) {
+            return false;
+        }
+    });
+
     $('#btnOpenAgregarProducto').click(function () {
 
         indicarFamiliaTodas();
@@ -1072,7 +1080,7 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>' +
                     
                     '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + detalle.subTotal + '</td>' +
+                    '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + detalle.subTotalItem + '</td>' +
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
                     '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + detalle.idProducto+' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>'+
 
@@ -3809,7 +3817,9 @@ $(document).ready(function () {
                             type: 'green',
                             content: response.message,
                             buttons: {
-                                OK: function () { }
+                                OK: function () {
+                                    location.reload();
+                                }
                             }
                         });
 

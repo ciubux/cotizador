@@ -232,17 +232,7 @@
             </div>
 
             <div class="col-sm-12 col-lg-4">
-                <div class="form-group">
-                    @if (cotizacion.ajusteCalculoPrecios)
-                    {
-                        <input type="checkbox" checked class="form-check-input" id="chkAjusteCalculoPrecios">
-                    }
-                    else
-                    {
-                        <input type="checkbox" class="form-check-input" id="chkAjusteCalculoPrecios">
-                    }
-                    <label class="form-check-label" for="chkAjusteCalculoPrecios">Ajustar precio para unidades menores</label>
-                </div>
+                
             </div>
         </div>
 
@@ -371,7 +361,7 @@
             <div class="pull-left">
                 <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
                 &nbsp;
-                <button type="button" data-toggle="modal" data-target="#modalCargarProductos" class="btn btn-primary bouton-image botonExcel">Cargar Productos desde Archivo</button>
+                <button id="btnModalCargarProductos" type="button" data-toggle="modal" data-target="#modalCargarProductos" class="btn btn-primary bouton-image botonExcel">Cargar Productos desde Archivo</button>
             </div>
 
             <div class="pull-right">
@@ -382,11 +372,11 @@
 
         </div>
 
-        @if (cotizacion.usuario.visualizaCostos)
-        {
+        
 
-            <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
-
+        <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
+            @if (cotizacion.usuario.visualizaCostos)
+            {
                 <div class="pull-left">
                     @if (cotizacion.mostrarCosto)
                     {
@@ -397,12 +387,20 @@
                         <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
                     }
                     <label for="mostrarCosto" class=" form-check-label"> Mostrar Costo:</label>
-
                 </div>
-
+            }
+            <div class="pull-right">
+                @if (cotizacion.ajusteCalculoPrecios)
+                {
+                    <input type="checkbox" checked class="form-check-input" id="chkAjusteCalculoPrecios">
+                }
+                else
+                {
+                    <input type="checkbox" class="form-check-input" id="chkAjusteCalculoPrecios">
+                }
+                <label class="form-check-label" for="chkAjusteCalculoPrecios">Ajustar precio para unidades menores</label>
             </div>
-        }
-
+        </div>
         <table id="tableDetalleCotizacion" class="table" data-editing="true"
                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                data-editing-allow-add="true"
@@ -1334,53 +1332,7 @@
 </div>
 
 
-<!-- MODAL CARGAR PRODUCTOS -->
-<div class="modal fade" id="modalCargarProductos" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modalCargarProductosTitle"><b>Cargar Productos</b></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <p></p>
-            </div>
-
-
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-12">
-                            <div class="form-group">
-                                <label for="numero" class="control-label col-xs-3">Subir Archivo:</label>
-                                <div class="col-xs-9">
-                                    <input id="fileUploadExcel" name="file" type="file" data-url-set-file="@Url.Action("LoadProductosByExcel", "Cotizacion")"
-                                           class="btn btn-primary" data-max-size="2097152" data-max-size-text="2MB"
-                                           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-12">
-                            <button id="lnkDescargarDetalleFormatoExcel" actionLink="@Url.Action("ExportFormatoDetalleExcel", "Cotizacion")" type="button" class="btn btn-link lnkAction lnkActionLabel">> Decargar Formato</button>
-                        </div>
-                    </div>
-
-
-                </form>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" id="btnCancelUploadProducts" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnUploadProducts" class="btn btn-primary">Cargar Productos</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
+@Html.Partial("_ModalImportarDetallesExcel");
 
 
 <div class="modal fade" id="modalComentarioAprobacion" tabindex="-1">

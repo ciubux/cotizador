@@ -593,6 +593,7 @@
     <Content Include="Views\Permiso\List.cshtml" />
     <Content Include="Views\Permiso\Editar.cshtml" />
     <Content Include="Views\DocumentoVenta\ExportarCPEs.cshtml" />
+    <Content Include="Views\Cotizacion\_ModalImportarDetallesExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
