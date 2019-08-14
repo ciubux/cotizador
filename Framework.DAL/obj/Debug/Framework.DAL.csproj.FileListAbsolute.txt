@@ -169,3 +169,13 @@ G:\Repo\maquetados\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCo
 G:\Repo\maquetados\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
 G:\Repo\maquetados\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 G:\Repo\maquetados\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
+G:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+G:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+G:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.dll
+G:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.pdb
+G:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.dll.config
+G:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csprojAssemblyReference.cache
+G:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
+G:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+G:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+G:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb

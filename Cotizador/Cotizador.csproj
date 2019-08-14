@@ -239,6 +239,7 @@
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
     <Compile Include="Controllers\RolController.cs" />
+    <Compile Include="Controllers\PeriodoSolicitudController.cs" />
     <Compile Include="Controllers\ValidacionController.cs" />
     <Compile Include="Controllers\PermisoController.cs" />
     <Compile Include="Controllers\SubDistribuidorController.cs" />

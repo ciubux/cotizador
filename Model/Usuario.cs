@@ -215,6 +215,8 @@ namespace Model
 
         public bool modificaUsuario { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_USUARIO)).FirstOrDefault() != null; } }
         public bool visualizaUsuarios { get { return true/* this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_USUARIOS)).FirstOrDefault() != null*/; } }
+
+        public bool modificaPeriodoSolicitud { get { return true /*modificaPeriodoSolicitud || modificaPeriodoSolicitud*/; } }
     }
 }
 
