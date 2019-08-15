@@ -45,6 +45,7 @@ namespace BusinessLayer
             {
 
                 pedido.excedioPresupuesto = pedido.montoSubTotal > pedido.direccionEntrega.limitePresupuesto;
+                pedido.topePresupuesto = pedido.direccionEntrega.limitePresupuesto;
                 //if (!pedido.usuario.apruebaPedidos && !pedido.cliente.perteneceCanalMultiregional)
                 /*   if (!pedido.usuario.apruebaPedidos)
                    {

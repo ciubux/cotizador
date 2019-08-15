@@ -55,7 +55,128 @@ namespace Cotizador.ExcelExport
                 
 
                 // create sheet
-                sheet = (HSSFSheet)wb.CreateSheet("Atenciones");
+                sheet = (HSSFSheet)wb.CreateSheet("Pedidos");
+
+
+                /*guiaRemision,fecha_emision, ma.direccion_entrega, ub.distrito, 
+                 * ub.provincia,  ub.departamento, ma.observaciones,*/
+
+                /*Cabecera, Sub total*/
+                int rTotal = (list.Count) + 8;
+                int cTotal = 14 + 2;
+
+                /*Se crean todas las celdas*/
+                for (int r = 0; r < rTotal; r++)
+                {
+                    var row = sheet.CreateRow(r);
+                    for (int c = 0; c < cTotal; c++)
+                    {
+                        row.CreateCell(c);
+                    }
+                }
+
+                                int i = 1; 
+                UtilesHelper.setValorCelda(sheet, i, "A", "N°", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "B", "Sede MP", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "C", "Cod.Cliente", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "D", "Razón Social", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "E", "O/C N°", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "F", "Creado por", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "G", "Fecha Registro", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "H", "Rango Fecha Entrega ", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "I", "Horarios Entrega", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "J", "Total(No Incl.IGV)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "K", "Distrito Entrega", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "L", "Estado Atención", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "M", "Estado Crediticio", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "N", "Obs. Uso Intern", titleCellStyle);
+ 
+
+
+
+                i++;
+
+                /*  for (int iii = 0; iii<50;iii++)
+                  { */
+
+                foreach (Pedido obj in list)
+                {
+                    UtilesHelper.setValorCelda(sheet, i, "A", obj.numeroPedidoString);
+                    UtilesHelper.setValorCelda(sheet, i, "B", obj.ciudad.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "C", obj.cliente.codigo);
+                    UtilesHelper.setValorCelda(sheet, i, "D", obj.cliente.razonSocial);
+                    UtilesHelper.setValorCelda(sheet, i, "E", obj.numeroReferenciaCliente);
+                    UtilesHelper.setValorCelda(sheet, i, "F", obj.usuario.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "G", obj.fechaHoraRegistro);
+                    UtilesHelper.setValorCelda(sheet, i, "H", obj.rangoFechasEntrega);
+                    UtilesHelper.setValorCelda(sheet, i, "I", obj.rangoHoraEntrega);
+                    UtilesHelper.setValorCelda(sheet, i, "J", (double) obj.montoTotal);
+                    UtilesHelper.setValorCelda(sheet, i, "K", obj.ubigeoEntrega.Distrito);
+                    UtilesHelper.setValorCelda(sheet, i, "L", obj.seguimientoPedido.estadoString);
+                    UtilesHelper.setValorCelda(sheet, i, "M", obj.seguimientoCrediticioPedido.estadoString);
+                    UtilesHelper.setValorCelda(sheet, i, "N", obj.observaciones);
+                                   
+
+                    i++;
+                }
+
+
+                sheet.GetRow(i-1).GetCell(9).CellFormula = "SUM(" + UtilesHelper.columnas[9] + "2:" + UtilesHelper.columnas[9] + (i-1) + ")";
+           
+
+                MemoryStream ms = new MemoryStream();
+                using (MemoryStream tempStream = new MemoryStream())
+                {
+                    wb.Write(tempStream);
+                    var byteArray = tempStream.ToArray();
+                    ms.Write(byteArray, 0, byteArray.Length);
+                    ms.Flush();
+                    ms.Position = 0;
+                    FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
+
+                    result.FileDownloadName = "Pedidos_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
+
+                    return result;
+                }
+            }
+        }
+
+        public FileStreamResult generateExcelRequerimientos(List<Pedido> list)
+        {
+
+            HSSFWorkbook wb;
+            //  Dictionary<String, ICellStyle> styles = CreateExcelStyles(wb);
+            HSSFSheet sheet;
+            {
+                wb = HSSFWorkbook.Create(InternalWorkbook.CreateWorkbook());
+
+
+                HSSFFont titleFont = (HSSFFont)wb.CreateFont();
+                titleFont.FontHeightInPoints = (short)11;
+                titleFont.FontName = "Arial";
+                titleFont.Color = IndexedColors.Black.Index;
+                titleFont.IsBold = true;
+                //  HSSFColor color = new HSSFColor(); // (new byte[] { 184, 212, 249 });
+                //     color.RGB.SetValue(new byte[] { 184, 212, 249 },0);
+                HSSFCellStyle titleCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                titleCellStyle.SetFont(titleFont);
+                titleCellStyle.FillPattern = FillPattern.SolidForeground;
+                titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
+
+                //titleCellStyle.FillBackgroundColor = HSSFColor.BlueGrey.Index;
+
+
+
+
+
+                IDataFormat format = wb.CreateDataFormat();
+                ICellStyle dateFormatStyle = wb.CreateCellStyle();
+                dateFormatStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
+
+
+
+                // create sheet
+                sheet = (HSSFSheet)wb.CreateSheet("Requerimientos");
 
 
                 /*guiaRemision,fecha_emision, ma.direccion_entrega, ub.distrito, 
@@ -77,14 +198,26 @@ namespace Cotizador.ExcelExport
 
 
                 UtilesHelper.setValorCelda(sheet, 1, "A", "Productos", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "B", "SKU", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "C", "SKU Prov", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "D", "Descripción", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "E", "Unidad", titleCellStyle);
+
                 UtilesHelper.setValorCelda(sheet, 2, "A", "Prod 1");
-                UtilesHelper.setValorCelda(sheet, 2, "B", "[HJ1F20] 30197006 - Jabón Espuma Kleenex Dermo Supreme - Sachet x 800 ml");
+                UtilesHelper.setValorCelda(sheet, 2, "B", "HJ1F20");
+                UtilesHelper.setValorCelda(sheet, 2, "C", "30197006");
+                UtilesHelper.setValorCelda(sheet, 2, "D", "Jabón Espuma Kleenex Dermo Supreme");
+                UtilesHelper.setValorCelda(sheet, 2, "E", "Sachet x 800 ml");
+
                 UtilesHelper.setValorCelda(sheet, 3, "A", "Prod 2");
-                UtilesHelper.setValorCelda(sheet, 3, "B", "[HH2S81] 30228044 - Papel higiénico Scott JRT Super Económico Ahorramax con pre-corte (rollo x 550m) - Bls x 4 x 550 mts");
+                UtilesHelper.setValorCelda(sheet, 3, "B", "HH2S81");
+                UtilesHelper.setValorCelda(sheet, 3, "C", "30228044");
+                UtilesHelper.setValorCelda(sheet, 3, "D", "Papel higiénico Scott JRT Super Económico Ahorramax con pre-corte (rollo x 550m)");
+                UtilesHelper.setValorCelda(sheet, 3, "E", "Bls x 4 x 550 mts");
 
-
-                int i = 4; 
-                UtilesHelper.setValorCelda(sheet, i, "A", "N°", titleCellStyle);
+               
+                int i = 4;
+                UtilesHelper.setValorCelda(sheet, i, "A", "N° Req", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "B", "Sede MP", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "C", "Cod.Cliente", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "D", "Razón Social", titleCellStyle);
@@ -119,7 +252,7 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "G", obj.fechaHoraRegistro);
                     UtilesHelper.setValorCelda(sheet, i, "H", obj.rangoFechasEntrega);
                     UtilesHelper.setValorCelda(sheet, i, "I", obj.rangoHoraEntrega);
-                    UtilesHelper.setValorCelda(sheet, i, "J", (double) obj.montoTotal);
+                    UtilesHelper.setValorCelda(sheet, i, "J", (double)obj.montoTotal);
                     UtilesHelper.setValorCelda(sheet, i, "K", obj.ubigeoEntrega.Distrito);
                     UtilesHelper.setValorCelda(sheet, i, "L", obj.seguimientoPedido.estadoString);
                     UtilesHelper.setValorCelda(sheet, i, "M", obj.seguimientoCrediticioPedido.estadoString);
@@ -131,7 +264,8 @@ namespace Cotizador.ExcelExport
                         {
                             UtilesHelper.setValorCelda(sheet, i, "O", pedidoDetalle.cantidad);
                         }
-                        else {
+                        else
+                        {
                             UtilesHelper.setValorCelda(sheet, i, "P", pedidoDetalle.cantidad);
                         }
 
@@ -141,9 +275,9 @@ namespace Cotizador.ExcelExport
                 }
 
 
-                sheet.GetRow(i-1).GetCell(9).CellFormula = "SUM(" + UtilesHelper.columnas[9] + "2:" + UtilesHelper.columnas[9] + (i-1) + ")";
-                sheet.GetRow(i - 1).GetCell(14).CellFormula = "SUM(" + UtilesHelper.columnas[14] + "2:" + UtilesHelper.columnas[14] + (i-1) + ")";
-                sheet.GetRow(i - 1).GetCell(15).CellFormula = "SUM(" + UtilesHelper.columnas[15] + "2:" + UtilesHelper.columnas[15] + (i-1) + ")";
+                sheet.GetRow(i - 1).GetCell(9).CellFormula = "SUM(" + UtilesHelper.columnas[9] + "2:" + UtilesHelper.columnas[9] + (i - 1) + ")";
+                sheet.GetRow(i - 1).GetCell(14).CellFormula = "SUM(" + UtilesHelper.columnas[14] + "2:" + UtilesHelper.columnas[14] + (i - 1) + ")";
+                sheet.GetRow(i - 1).GetCell(15).CellFormula = "SUM(" + UtilesHelper.columnas[15] + "2:" + UtilesHelper.columnas[15] + (i - 1) + ")";
 
 
                 MemoryStream ms = new MemoryStream();
@@ -162,5 +296,6 @@ namespace Cotizador.ExcelExport
                 }
             }
         }
+
     }
 }

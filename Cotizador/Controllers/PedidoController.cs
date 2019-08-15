@@ -1482,6 +1482,12 @@ namespace Cotizador.Controllers
             this.PedidoSession.tipoPedidoVentaBusqueda = (Pedido.tiposPedidoVentaBusqueda)tipoPedidoBusqueda;
         }
 
+        public void changePeriodo()
+        {
+            int periodo = Int32.Parse(this.Request.Params["periodo"]);
+            this.PedidoSession.periodo = (Pedido.periodos)periodo;
+        }
+
 
         public String ChangeIdCiudadASolicitar()
         {
@@ -1881,6 +1887,15 @@ namespace Cotizador.Controllers
 
             PedidoSearch excel = new PedidoSearch();
             return excel.generateExcel(list);
+        }
+
+        [HttpGet]
+        public ActionResult ExportLastSearchRequerimientosExcel()
+        {
+            List<Pedido> list = (List<Pedido>)this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA_APROBACION];
+
+            PedidoSearch excel = new PedidoSearch();
+            return excel.generateExcelRequerimientos(list);
         }
 
         public String Search()

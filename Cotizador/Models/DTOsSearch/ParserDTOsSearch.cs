@@ -255,6 +255,7 @@ namespace Cotizador.Models.DTOsSearch
                 pedidoDTO.grupoCliente_nombre = pedidoTmp.cliente.grupoCliente.nombre;
                 pedidoDTO.pedidoDetalleList = pedidoTmp.pedidoDetalleList;
                 pedidoDTO.excedioPresupuesto = pedidoTmp.excedioPresupuesto;
+                pedidoDTO.topePresupuesto = pedidoTmp.topePresupuesto;
                 pedidoDTOList.Add(pedidoDTO);
             }
             return pedidoDTOList;
