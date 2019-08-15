@@ -4538,9 +4538,10 @@ jQuery(function ($) {
                         '<td>  ' + pedidoList[i].estadoSolicitudString + '</td>' +
                         '<td>' + stockConfirmado + '</td>' +
                         '<td>' + stockConfirmadoLectura + '</td>' +
+                        '<td>' + pedidoList[i].topePresupuesto.toFixed(cantidadDecimales) + '  </td>' +
+                        '<td>' + imgIndicadorAprobacion + '</td>' +
                         '<td>' +
                         '<button type="button" class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numeroPedido + ' btnVerPedido btn btn-primary ">Ver</button>' +
-                        '<td>' + imgIndicadorAprobacion+'</td>'
                         '</td>' +
                         '</tr>';
 
@@ -4698,6 +4699,20 @@ jQuery(function ($) {
             type: 'POST',
             data: {
                 estadoCrediticio: estado
+            },
+            success: function () {
+            }
+        });
+    });
+
+
+    $("#periodo").change(function () {
+        var periodo = $("#periodo").val();
+        $.ajax({
+            url: "/Pedido/changePeriodo",
+            type: 'POST',
+            data: {
+                periodo: periodo
             },
             success: function () {
             }
@@ -4965,6 +4980,10 @@ jQuery(function ($) {
     })
 
     $("#btnExportExcel").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
+    $("#btnExportRequerimientosExcel").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
 

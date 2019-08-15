@@ -188,6 +188,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idClienteSunat", pedido.usuario.idClienteSunat);
             InputParameterAdd.Guid(objCommand, "idDireccionEntregaAlmacen", pedido.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega);
             InputParameterAdd.Bit(objCommand, "excedioPresupuesto", pedido.excedioPresupuesto);
+            InputParameterAdd.Decimal(objCommand, "topePresupuesto", pedido.topePresupuesto);
 
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
@@ -379,7 +380,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idClienteSunat", pedido.usuario.idClienteSunat);
             InputParameterAdd.Guid(objCommand, "idDireccionEntregaAlmacen", pedido.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega);
             InputParameterAdd.Bit(objCommand, "excedioPresupuesto", pedido.excedioPresupuesto);
-
+            InputParameterAdd.Decimal(objCommand, "topePresupuesto", pedido.topePresupuesto);
             ExecuteNonQuery(objCommand);
 
 
@@ -637,9 +638,18 @@ namespace DataLayer
                 case Pedido.ClasesPedido.Compra: InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoCompraBusqueda).ToString()); break;
                 case Pedido.ClasesPedido.Almacen: InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoAlmacenBusqueda).ToString()); break;
             }
+            int mes = 8;
+            if (pedido.periodo == Pedido.periodos.abril)
+                mes = 4;
+            else if (pedido.periodo == Pedido.periodos.mayo)
+                mes = 5;
+            else if (pedido.periodo == Pedido.periodos.junio)
+                mes = 6;
+            else if (pedido.periodo == Pedido.periodos.julio)
+                mes = 7;
 
-            InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", new DateTime(pedido.fechaCreacionDesde.Year, pedido.fechaCreacionDesde.Month, pedido.fechaCreacionDesde.Day, 0, 0, 0));
-            InputParameterAdd.DateTime(objCommand, "fechaCreacionHasta", new DateTime(pedido.fechaCreacionHasta.Year, pedido.fechaCreacionHasta.Month, pedido.fechaCreacionHasta.Day, 23, 59, 59));
+            InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", new DateTime(pedido.fechaCreacionDesde.Year, mes, 1, 0, 0, 0));
+            InputParameterAdd.DateTime(objCommand, "fechaCreacionHasta", new DateTime(pedido.fechaCreacionHasta.Year, mes, 30, 23, 59, 59));
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde == null ? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaDesde.Value.Year, pedido.fechaEntregaDesde.Value.Month, pedido.fechaEntregaDesde.Value.Day, 0, 0, 0));
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta == null ? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaHasta.Value.Year, pedido.fechaEntregaHasta.Value.Month, pedido.fechaEntregaHasta.Value.Day, 23, 59, 59));
             InputParameterAdd.DateTime(objCommand, "fechaProgramacionDesde", pedido.fechaProgramacionDesde == null ? pedido.fechaProgramacionDesde : new DateTime(pedido.fechaProgramacionDesde.Value.Year, pedido.fechaProgramacionDesde.Value.Month, pedido.fechaProgramacionDesde.Value.Day, 0, 0, 0));  //pedido.fechaProgramacionDesde);
@@ -772,8 +782,18 @@ namespace DataLayer
                 case Pedido.ClasesPedido.Almacen: InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoAlmacenBusqueda).ToString()); break;
             }
 
-            InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", new DateTime(pedido.fechaCreacionDesde.Year, pedido.fechaCreacionDesde.Month, pedido.fechaCreacionDesde.Day, 0, 0, 0));
-            InputParameterAdd.DateTime(objCommand, "fechaCreacionHasta", new DateTime(pedido.fechaCreacionHasta.Year, pedido.fechaCreacionHasta.Month, pedido.fechaCreacionHasta.Day, 23, 59, 59));
+            int mes = 8;
+            if (pedido.periodo == Pedido.periodos.abril)
+                mes = 4;
+            else if (pedido.periodo == Pedido.periodos.mayo)
+                mes = 5;
+            else if (pedido.periodo == Pedido.periodos.junio)
+                mes = 6;
+            else if (pedido.periodo == Pedido.periodos.julio)
+                mes = 7;
+
+            InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", new DateTime(pedido.fechaCreacionDesde.Year, mes, 1, 0, 0, 0));
+            InputParameterAdd.DateTime(objCommand, "fechaCreacionHasta", new DateTime(pedido.fechaCreacionHasta.Year, mes, 30, 23, 59, 59));
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde == null ? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaDesde.Value.Year, pedido.fechaEntregaDesde.Value.Month, pedido.fechaEntregaDesde.Value.Day, 0, 0, 0));
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta == null ? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaHasta.Value.Year, pedido.fechaEntregaHasta.Value.Month, pedido.fechaEntregaHasta.Value.Day, 23, 59, 59));
             InputParameterAdd.DateTime(objCommand, "fechaProgramacionDesde", pedido.fechaProgramacionDesde == null ? pedido.fechaProgramacionDesde : new DateTime(pedido.fechaProgramacionDesde.Value.Year, pedido.fechaProgramacionDesde.Value.Month, pedido.fechaProgramacionDesde.Value.Day, 0, 0, 0));  //pedido.fechaProgramacionDesde);
@@ -868,8 +888,7 @@ namespace DataLayer
                     pedido.pedidoDetalleList = new List<PedidoDetalle>();
                     pedido.estadoRequerimiento = (Pedido.estadosRequerimiento)Converter.GetInt(row, "estado_solicitud");
                     pedido.excedioPresupuesto = Converter.GetBool(row, "excedio_presupuesto");
-
-
+                    pedido.topePresupuesto = Converter.GetDecimal(row, "tope_presupuesto");
                     pedidoList.Add(pedido);
                 }
 

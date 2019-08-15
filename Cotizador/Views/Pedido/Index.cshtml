@@ -41,6 +41,21 @@
 
             </div>
 
+            <div class="col-sm-6 col-lg-4">
+                 <div class="form-group">
+                     <label for="periodo" class="control-label col-xs-4">Periodo:</label>
+
+                     <div class="col-xs-8">
+                         @Html.DropDownList("periodo",
+                             EnumHelper.GetSelectList(typeof(Model.Pedido.periodos), pedido.periodo),
+                             new { @class = "form-control" }
+                             )
+
+                     </div>
+
+                 </div>
+            </div>
+
             <!--NÚMERO GRUPO PEDIDO-->
             <div hidden="hidden" class="col-sm-6 col-lg-4">
                 <div class="form-group">
@@ -220,7 +235,7 @@
         <div class="row">
 
             <!--FECHA CREACIÓN-->
-            <div class="col-sm-6 col-lg-4">
+            <div hidden="hidden" class="col-sm-6 col-lg-4">
                 <label for="pedido_fechaCreacionDesde" class="control-label col-xs-6 col-lg-4">Fecha de Creación:</label>
                 <div class="input-group col-xs-6 col-lg-8">
                     <div class="input-group-addon" style="width:70px">

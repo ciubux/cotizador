@@ -36,6 +36,9 @@
                     @{
 
                         var linkPedidos = "";
+                        var linkRequerimientos = "";
+
+
                         var linkBusquedaPedidos = "";
                         var linkAprobarPedidos = "";
                         var linkMantenimientoPedido = "";
@@ -70,8 +73,9 @@
                         {
 
                             case 2: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
-                            case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
-                            case 4: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
+                            case 3: linkMantenimientoPedido = "ative"; linkRequerimientos = "active"; break;
+
+                            case 4: linkAprobarPedidos = "ative"; linkRequerimientos = "active"; break;
 
 
                             case 6: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
@@ -86,10 +90,9 @@
 
                         if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                         {
-
-                            <li class="@linkPedidos">
+                            <li class="@linkRequerimientos">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
-                                    Pedidos
+                                    Requerimientos
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
@@ -101,6 +104,19 @@
                                     {
                                         <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Aprobar Requerimientos", "Aprobar", "Pedido")</li>
                                     }
+                        
+                                </ul>
+                            </li>
+
+
+                            <li class="@linkPedidos">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Pedidos
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                   
+
                                     @if (usuario.tomaPedidos)
                                     {
                                         <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Búsqueda Pedidos", "Index", "Pedido")</li>

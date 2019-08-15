@@ -50,6 +50,6 @@ namespace Cotizador.Models.DTOsSearch
         public List<Model.PedidoDetalle> pedidoDetalleList { get; set; }
 
         public bool excedioPresupuesto { get; set; }
-
+        public Decimal topePresupuesto { get; set; }
     }
 }
