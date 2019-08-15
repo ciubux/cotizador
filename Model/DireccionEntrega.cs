@@ -44,5 +44,7 @@ namespace Model
 
         public DireccionEntrega direccionEntregaAlmacen { get; set; }
 
+        public Decimal limitePresupuesto { get; set; }
+
     }
 }

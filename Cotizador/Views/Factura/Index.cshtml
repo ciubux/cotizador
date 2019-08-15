@@ -30,7 +30,7 @@
             </div>
 
 
-            <div class="col-sm-6 col-lg-4">
+            <div hidden="hidden" class="col-sm-6 col-lg-4">
                 <!--CLIENTE-->
                 <div class="form-group">
                     <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
@@ -52,7 +52,7 @@
             </div>
 
             <!--CODIGO GRUPO CLIENTE-->
-            <div class="col-sm-6 col-lg-4">
+            <div hidden="hidden" class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
                     <div class="col-xs-8">
@@ -853,20 +853,6 @@
 
 
 
-                    <div id="divProductoDescuento" class="row">
-                        <div class="col-sm-6 col-lg-8">
-                            <div class="form-group">
-                                <label class="control-label col-xs-4" for="idProducto">Descuento a Aplicar:</label>
-                                <div class="col-xs-8">
-                                    @Html.Action("GetDescuentos", "Producto",
-                                                    new
-                                                    {
-                                                        productoSelectId = "idProducto"
-                                                    })
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                 </form>
             </div>
@@ -927,20 +913,7 @@
                         </div>
                     </div>
 
-                    <div id="divProductoCargo" class="row">
-                        <div class="col-sm-6 col-lg-8">
-                            <div class="form-group">
-                                <label class="control-label col-xs-4" for="idProducto">Cargo a Aplicar:</label>
-                                <div class="col-xs-8">
-                                    @Html.Action("GetCargos", "Producto",
-                                                    new
-                                                    {
-                                                        productoSelectId = "idProducto"
-                                                    })
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                 
 
 
                 </form>

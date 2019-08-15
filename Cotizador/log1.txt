@@ -90,3 +90,5 @@ The statement has been terminated.
 2019-08-09 06:45:44.1187|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
 2019-08-09 06:46:04.0729|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
 2019-08-12 11:41:20.4256|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / La conexión con el servidor se ha establecido correctamente, pero se ha producido un error durante el proceso de inicio de sesión. (provider: SSL Provider, error: 0 - El nombre de red especificado ya no está disponible.)
+2019-08-14 12:32:09.0505|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Producto ya se encuentra en la lista.
+2019-08-14 12:32:09.1115|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Producto ya se encuentra en la lista.

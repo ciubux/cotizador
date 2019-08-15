@@ -247,11 +247,14 @@ namespace Cotizador.Models.DTOsSearch
                 pedidoDTO.rangoFechasEntrega = pedidoTmp.rangoFechasEntrega;
                 pedidoDTO.rangoHoraEntrega = pedidoTmp.rangoHoraEntrega;
                 pedidoDTO.montoTotal = pedidoTmp.montoTotal;
+                pedidoDTO.montoSubTotal = pedidoTmp.montoSubTotal;
                 pedidoDTO.ubigeoEntrega_distrito = pedidoTmp.ubigeoEntrega.Distrito;
                 pedidoDTO.seguimientoPedido_estadoString = pedidoTmp.seguimientoPedido.estadoString;
                 pedidoDTO.seguimientoCrediticioPedido_estadoString = pedidoTmp.seguimientoCrediticioPedido.estadoString;
+                pedidoDTO.estadoSolicitudString = pedidoTmp.estadoRequerimientoString;
                 pedidoDTO.grupoCliente_nombre = pedidoTmp.cliente.grupoCliente.nombre;
                 pedidoDTO.pedidoDetalleList = pedidoTmp.pedidoDetalleList;
+                pedidoDTO.excedioPresupuesto = pedidoTmp.excedioPresupuesto;
                 pedidoDTOList.Add(pedidoDTO);
             }
             return pedidoDTOList;

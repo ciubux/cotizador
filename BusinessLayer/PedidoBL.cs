@@ -16,6 +16,11 @@ namespace BusinessLayer
         #region Pedidos de VENTA
         private void validarPedidoVenta(Pedido pedido)
         {
+
+
+
+
+
             pedido.seguimientoPedido.observacion = String.Empty;
             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
             pedido.seguimientoCrediticioPedido.observacion = String.Empty;
@@ -28,11 +33,18 @@ namespace BusinessLayer
                 pedido.montoTotal = 0;
                 pedido.montoSubTotal = 0;
 
+                //Se revisa si se excedió el presupuesto
+              
+                    
+
+
                 pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                 pedido.seguimientoPedido.observacion = "Los pedidos de Transferencia Gratuita y Comodato requieren aprobación.";
             }
             else
             {
+
+                pedido.excedioPresupuesto = pedido.montoSubTotal > pedido.direccionEntrega.limitePresupuesto;
                 //if (!pedido.usuario.apruebaPedidos && !pedido.cliente.perteneceCanalMultiregional)
                 /*   if (!pedido.usuario.apruebaPedidos)
                    {
@@ -262,6 +274,15 @@ namespace BusinessLayer
             return pedidoList;
         }
 
+        public List<Pedido> GetRequerimientos(Pedido pedido)
+        {
+            List<Pedido> pedidoList = null;
+            using (var dal = new PedidoDAL())
+            {
+                pedidoList = dal.SelectRequerimientos(pedido);
+            }
+            return pedidoList;
+        }
 
         #endregion
 

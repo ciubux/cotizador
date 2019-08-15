@@ -34,17 +34,22 @@ namespace Cotizador.Models.DTOsSearch
         public String rangoHoraEntrega { get; set; }
 
         public Decimal montoTotal { get; set; }
-        
+
+        public Decimal montoSubTotal { get; set; }
+
         public String ubigeoEntrega_distrito { get; set; }
 
         public String seguimientoPedido_estadoString { get; set; }
 
         public String seguimientoCrediticioPedido_estadoString { get; set; }
 
+        public String estadoSolicitudString { get; set; }
+
         public String grupoCliente_nombre { get; set; }
 
         public List<Model.PedidoDetalle> pedidoDetalleList { get; set; }
 
+        public bool excedioPresupuesto { get; set; }
 
     }
 }

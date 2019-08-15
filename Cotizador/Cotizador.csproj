@@ -377,6 +377,7 @@
     <Content Include="images\icon-close.png" />
     <Content Include="images\interbank-11183.png" />
     <Content Include="images\interbank.jpg" />
+    <Content Include="images\logoInterbank.png" />
     <Content Include="images\logo_sunat.svg" />
     <Content Include="images\map.png" />
     <Content Include="images\pdf-icon.png" />
@@ -515,7 +516,7 @@
     <Content Include="Views\Proveedor\_SelectProveedorBusquedaPrecios.cshtml" />
     <Content Include="Views\Familia\_SelectFamiliaBusquedaPrecios.cshtml" />
     <Content Include="Views\Pedido\Pedir.cshtml" />
-    <Content Include="Views\Pedido\Index.cshtml" />
+    <Content Include="Views\Pedido\Aprobar.cshtml" />
     <Content Include="Views\GuiaRemision\Index.cshtml" />
     <Content Include="Views\GuiaRemision\Guiar.cshtml" />
     <Content Include="Views\Shared\_Departamento.cshtml" />
@@ -595,6 +596,7 @@
     <Content Include="Views\Permiso\List.cshtml" />
     <Content Include="Views\Permiso\Editar.cshtml" />
     <Content Include="Views\DocumentoVenta\ExportarCPEs.cshtml" />
+    <Content Include="Views\Pedido\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

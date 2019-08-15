@@ -62,7 +62,7 @@ namespace Cotizador.ExcelExport
                  * ub.provincia,  ub.departamento, ma.observaciones,*/
 
                 /*Cabecera, Sub total*/
-                int rTotal = (list.Count) + 4;
+                int rTotal = (list.Count) + 8;
                 int cTotal = 14 + 2;
 
                 /*Se crean todas las celdas*/
@@ -75,28 +75,35 @@ namespace Cotizador.ExcelExport
                     }
                 }
 
-                int i = 0; 
 
-                UtilesHelper.setValorCelda(sheet, 1, "A", "N°", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "B", "Sede MP", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "C", "Cod.Cliente", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "D", "Razón Social", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "E", "O/C N°", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "F", "Creado por", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "G", "Fecha Registro", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "H", "Rango Fecha Entrega ", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "I", "Horarios Entrega", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "J", "Total(Incl.IGV)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "K", "Distrito Entrega", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "L", "Estado Atención", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "M", "Estado Crediticio", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "N", "Obs. Uso Intern", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "O", "[HJ1F20] 30197006 - Jabón Espuma Kleenex Dermo Supreme - Sachet x 800 ml", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "P", "[HH2S81] 30228044 - Papel higiénico Scott JRT Super Económico Ahorramax con pre-corte (rollo x 550m) - Bls x 4 x 550 mts", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "A", "Productos", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "A", "Prod 1");
+                UtilesHelper.setValorCelda(sheet, 2, "B", "[HJ1F20] 30197006 - Jabón Espuma Kleenex Dermo Supreme - Sachet x 800 ml");
+                UtilesHelper.setValorCelda(sheet, 3, "A", "Prod 2");
+                UtilesHelper.setValorCelda(sheet, 3, "B", "[HH2S81] 30228044 - Papel higiénico Scott JRT Super Económico Ahorramax con pre-corte (rollo x 550m) - Bls x 4 x 550 mts");
 
 
+                int i = 4; 
+                UtilesHelper.setValorCelda(sheet, i, "A", "N°", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "B", "Sede MP", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "C", "Cod.Cliente", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "D", "Razón Social", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "E", "O/C N°", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "F", "Creado por", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "G", "Fecha Registro", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "H", "Rango Fecha Entrega ", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "I", "Horarios Entrega", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "J", "Total(No Incl.IGV)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "K", "Distrito Entrega", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "L", "Estado Atención", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "M", "Estado Crediticio", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "N", "Obs. Uso Intern", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "O", "Prod 1", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "P", "Prod 2", titleCellStyle);
 
-                i = 2;
+
+
+                i++;
 
                 /*  for (int iii = 0; iii<50;iii++)
                   { */

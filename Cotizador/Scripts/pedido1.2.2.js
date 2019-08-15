@@ -18,6 +18,7 @@ jQuery(function ($) {
         verificarSiExisteDetalle();
         verificarSiExisteCliente();
         $("#btnBusquedaPedidos").click();
+        $("#btnBusquedaRequerimientos").click();
         $("#btnAgregarProductosDesdePreciosRegistrados").click()
 
         var tipoPedido = $("#pedido_tipoPedido").val();
@@ -1861,14 +1862,14 @@ jQuery(function ($) {
     $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
         var idCiudad = $("#idCiudad").val();
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-            alert("Debe seleccionar una dirección de entrega para cargar los productos.");
+           // alert("Debe seleccionar una dirección de entrega para cargar los productos.");
             $("#idCiudad").focus();
             $("#btnCancelarObtenerProductos").click();
             return false;
         }
         var idCliente = $("#idCliente").val();
         if (idCliente.trim() == "") {
-            alert("Debe seleccionar un cliente.");
+           // alert("Debe seleccionar un cliente.");
             $('#idCliente').trigger('chosen:activate');
             $("#btnCancelarObtenerProductos").click();
             return false;
@@ -2436,9 +2437,9 @@ jQuery(function ($) {
                     $.alert({
                         title: TITLE_EXITO,
                         type: 'green',
-                        content: "El pedido número " + resultado.numeroPedido + " fue ingresado correctamente.",
+                        content: "El Requerimiento número " + resultado.numeroPedido + " fue ingresado correctamente.",
                         buttons: {
-                            OK: function () { window.location = '/Pedido/Index';  }
+                            OK: function () { window.location = '/Pedido/Aprobar';  }
                         }
                     });
                      
@@ -2454,11 +2455,11 @@ jQuery(function ($) {
                     });
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
-                    ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
+                    ConfirmDialog("El Requerimiento número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
                 }
                 else {
                     mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    window.location = '/Pedido/Index';
+                    window.location = '/Pedido/Aprobar';
                 }
 
             }
@@ -2492,9 +2493,9 @@ jQuery(function ($) {
                     $.alert({
                         title: TITLE_EXITO,
                         type: 'green',
-                        content: "El pedido número " + resultado.numeroPedido + " fue editado correctamente.",
+                        content: "El Requerimiento número " + resultado.numeroPedido + " fue editado correctamente.",
                         buttons: {
-                            OK: function () { window.location = '/Pedido/Index'; }
+                            OK: function () { window.location = '/Pedido/Aprobar'; }
                         }
                     });
                 }
@@ -2514,7 +2515,7 @@ jQuery(function ($) {
                 else {
                     //alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    window.location = '/Pedido/Index';
+                    window.location = '/Pedido/Aprobar';
                 }
             }
         });
@@ -4352,15 +4353,17 @@ jQuery(function ($) {
                         //'<td>  ' + pedidoList[i].fechaHoraSolicitud + '</td>' +                        
                         '<td>  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
                         '<td>  ' + pedidoList[i].rangoHoraEntrega + '</td>' + //horarioEntrega
-                        '<td>  ' + pedidoList[i].montoTotal + '  </td>' +
+                        
+                        //'<td>  ' + pedidoList[i].montoTotal + '  </td>' +
                         '<td>  ' + pedidoList[i].ubigeoEntrega_distrito + '  </td>' +
-                        '<td>  ' + pedidoList[i].seguimientoPedido_estadoString+'</td>' +
+                        
                       //  '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
                       //  '<td>  ' + observacion+'  </td>' +
-                        '<td>  ' + pedidoList[i].seguimientoCrediticioPedido_estadoString + '</td>' +
+
                         '<td> ' + observaciones + ' </td>' + 
-                        '<td> ' + cantidad1 + ' </td>' + 
-                        '<td> ' + cantidad2 + ' </td>' + 
+                        '<td>  ' + pedidoList[i].montoSubTotal.toFixed(cantidadDecimales) + '  </td>' +
+                        '<td>  ' + pedidoList[i].seguimientoPedido_estadoString + '</td>' +
+                        '<td>  ' + pedidoList[i].seguimientoCrediticioPedido_estadoString + '</td>' +
                         '<td>' + stockConfirmado + '</td>' +
                         '<td>' + stockConfirmadoLectura + '</td>' +
                         '<td>' +
@@ -4371,6 +4374,179 @@ jQuery(function ($) {
 
                     $("#tablePedidos").append(pedido);
                  
+                }
+
+                if (pedidoList.length > 0) {
+                    $("#msgBusquedaSinResultados").hide();
+                    $("#divExportButton").show();
+                }
+                else {
+                    $("#msgBusquedaSinResultados").show();
+                    $("#divExportButton").hide();
+                }
+            }
+        });
+    });
+
+
+    $("#btnBusquedaRequerimientos").click(function () {
+
+
+        var idCiudad = $("#idCiudad").val();
+        var idCliente = $("#idCliente").val();
+        var fechaCreacionDesde = $("#pedido_fechaCreacionDesde").val();
+        var fechaCreacionHasta = $("#pedido_fechaCreacionHasta").val();
+        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
+        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
+        var fechaProgramacionDesde = $("#pedido_fechaProgramacionDesde").val();
+        var fechaProgramacionHasta = $("#pedido_fechaProgramacionHasta").val();
+        var pedido_numeroPedido = $("#pedido_numeroPedido").val();
+        var pedido_numeroGrupoPedido = $("#pedido_numeroGrupoPedido").val();
+        var pedido_idGrupoCliente = $("#pedido_idGrupoCliente").val();
+        var estado = $("#estado").val();
+        var estadoCrediticio = $("#estadoCrediticio").val();
+        $("#btnBusquedaPedidos").attr("disabled", "disabled");
+        $.ajax({
+            url: "/Pedido/SearchRequerimientos",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad,
+                idCliente: idCliente,
+                fechaCreacionDesde: fechaCreacionDesde,
+                fechaCreacionHasta: fechaCreacionHasta,
+                fechaEntregaDesde: fechaEntregaDesde,
+                fechaEntregaHasta: fechaEntregaHasta,
+                fechaProgramacionDesde: fechaProgramacionDesde,
+                fechaProgramacionHasta: fechaProgramacionHasta,
+                numero: pedido_numeroPedido,
+                numeroGrupo: pedido_numeroGrupoPedido,
+                idGrupoCliente: pedido_idGrupoCliente,
+                estado: estado,
+                estadoCrediticio: estadoCrediticio
+            },
+            error: function () {
+                $("#btnBusquedaRequerimientos").removeAttr("disabled");
+            },
+
+            success: function (pedidoList) {
+
+                $("#tableProductos").footable();
+
+                $("#btnBusquedaRequerimientos").removeAttr("disabled");
+
+                $("#tablePedidos > tbody").empty();
+                //FooTable.init('#tableCotizaciones');
+                $("#tablePedidos").footable({
+                    "paging": {
+                        "enabled": true
+                    }
+                });
+
+                for (var i = 0; i < pedidoList.length; i++) {
+
+                    var fechaProgramacion = "No Programado";
+                    if (pedidoList[i].fechaProgramacion != null && pedidoList[i].fechaProgramacion != "") {
+                        fechaProgramacion = invertirFormatoFecha(pedidoList[i].fechaProgramacion.substr(0, 10));
+                    }
+
+
+                    var stockConfirmado = '';
+                    if (pedidoList[i].stockConfirmado == 1) {
+                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox" checked></input>'
+                    }
+                    else {
+                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox"></input>'
+                    }
+
+                    var stockConfirmadoLectura = '';
+                    if (pedidoList[i].stockConfirmado == 1) {
+                        stockConfirmadoLectura = '<input disabled type="checkbox" checked></input>'
+                    }
+                    else {
+                        stockConfirmadoLectura = '<input disabled type="checkbox"></input>'
+                    }
+
+                    /*  var codigoCliente = pedidoList[i].cliente.codigo;
+                      if (codigoCliente == null || codigoCliente == 'null') {
+                          codigoCliente = '';
+                      }
+                      var numeroReferenciaCliente = pedidoList[i].numeroReferenciaCliente;
+                      if (numeroReferenciaCliente == null || numeroReferenciaCliente == 'null') {
+                          numeroReferenciaCliente = '';
+                      }*/
+
+                    var observaciones = pedidoList[i].observaciones == null || pedidoList[i].observaciones == 'undefined' ? '' : pedidoList[i].observaciones;
+
+                    if (pedidoList[i].observaciones != null && pedidoList[i].observaciones.length > 20) {
+                        var idComentarioCorto = pedidoList[i].idPedido + "corto";
+                        var idComentarioLargo = pedidoList[i].idPedido + "largo";
+                        var idVerMas = pedidoList[i].idPedido + "verMas";
+                        var idVermenos = pedidoList[i].idPedido + "verMenos";
+                        var comentario = pedidoList[i].observaciones.substr(0, 20) + "...";
+
+                        observaciones = '<div id="' + idComentarioCorto + '" style="display:block;">' + comentario + '</div>' +
+                            '<div id="' + idComentarioLargo + '" style="display:none;">' + pedidoList[i].observaciones + '</div>' +
+                            '<p><a id="' + idVerMas + '" class="' + pedidoList[i].idPedido + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
+                            '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
+                    }
+
+
+                    var cantidad1 = 0
+                    var cantidad2 = 0
+                    for (var j = 0; j < pedidoList[i].pedidoDetalleList.length; j++) {
+                        if (pedidoList[i].pedidoDetalleList[j].producto.sku == 'HJ1F20')
+                            cantidad1 = pedidoList[i].pedidoDetalleList[j].cantidad;
+                        else
+                            cantidad2 = pedidoList[i].pedidoDetalleList[j].cantidad;
+                    }
+
+
+                    var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
+                    if (pedidoList[i].excedioPresupuesto)
+                        imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"><img class="table-product-img " src="/images/semaforo_rojo_small.png" srcset="semaforo_rojo_min.png 2x"/></a>';
+                    /*    imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"> <img class="table-product-img" src="/images/semaforo_naranja_small.png" srcset="semaforo_naranja_min.png 2x"/></a>';
+                    else if (lista[i].indicadorAprobacion == 3)*/
+                        
+
+
+                    var grupoCliente = pedidoList[i].grupoCliente_nombre == null ? "" : pedidoList[i].grupoCliente_nombre;
+                    var pedido = '<tr data-expanded="true">' +
+                        '<td>  ' + pedidoList[i].idPedido + '</td>' +
+                        '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + '  </td>' +
+                        '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
+                        '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +
+                        '<td>  ' + pedidoList[i].cliente_razonSocial + '</td>' +
+                        '<td>  ' + grupoCliente + '</td>' +
+                        '<td>  ' + pedidoList[i].numeroReferenciaCliente + '  </td>' +
+                        '<td>  ' + pedidoList[i].usuario_nombre + '  </td>' +
+                        '<td>  ' + pedidoList[i].fechaHoraRegistro + '</td>' +
+                        //'<td>  ' + pedidoList[i].fechaHoraSolicitud + '</td>' +                        
+                        '<td>  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
+                        '<td>  ' + pedidoList[i].rangoHoraEntrega + '</td>' + //horarioEntrega
+
+                        //'<td>  ' + pedidoList[i].montoTotal + '  </td>' +
+                        '<td>  ' + pedidoList[i].ubigeoEntrega_distrito + '  </td>' +
+
+                        //  '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
+                        //  '<td>  ' + observacion+'  </td>' +
+                        '<td>  ' + pedidoList[i].seguimientoCrediticioPedido_estadoString + '</td>' +
+                        '<td> ' + observaciones + ' </td>' +
+                        '<td> ' + cantidad1 + ' </td>' +
+                        '<td> ' + cantidad2 + ' </td>' +
+                        '<td>  ' + pedidoList[i].montoSubTotal.toFixed(cantidadDecimales) + '  </td>' +
+                        '<td>  ' + pedidoList[i].estadoSolicitudString + '</td>' +
+                        '<td>' + stockConfirmado + '</td>' +
+                        '<td>' + stockConfirmadoLectura + '</td>' +
+                        '<td>' +
+                        '<button type="button" class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numeroPedido + ' btnVerPedido btn btn-primary ">Ver</button>' +
+                        '<td>' + imgIndicadorAprobacion+'</td>'
+                        '</td>' +
+                        '</tr>';
+
+
+                    $("#tablePedidos").append(pedido);
+
                 }
 
                 if (pedidoList.length > 0) {

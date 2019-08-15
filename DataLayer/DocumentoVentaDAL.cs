@@ -25,7 +25,7 @@ namespace DataLayer
         {
             List<DocumentoVenta> documentoVentaList = new List<DocumentoVenta>();
 
-            var objCommand = GetSqlCommand("ps_documentosVentaPorProcesar");
+            var objCommand = GetSqlCommand("CLIENTE.ps_documentosVentaPorProcesar");
             DataTable dataTable = Execute(objCommand);
 
             foreach (DataRow row in dataTable.Rows)
@@ -45,7 +45,7 @@ namespace DataLayer
 
         public void anularDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pu_solicitarAnulacionDocumentoVenta");
+            var objCommand = GetSqlCommand("CLIENTE.pu_solicitarAnulacionDocumentoVenta");
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
             InputParameterAdd.Varchar(objCommand, "comentarioAnulado", documentoVenta.comentarioAnulado);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
@@ -59,7 +59,7 @@ namespace DataLayer
 
         public void aprobarAnulacionDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pu_aprobarAnulacionFactura");
+            var objCommand = GetSqlCommand("CLIENTE.pu_aprobarAnulacionFactura");
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
             InputParameterAdd.Varchar(objCommand, "comentarioAprobacionAnulacion", documentoVenta.comentarioAprobacionAnulacion);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
@@ -70,7 +70,7 @@ namespace DataLayer
 
         public void aprobarAnularDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pu_aprobarAnularFactura");
+            var objCommand = GetSqlCommand("CLIENTE.pu_aprobarAnularFactura");
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
             InputParameterAdd.Varchar(objCommand, "comentarioAnulado", documentoVenta.comentarioAnulado);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
@@ -80,7 +80,7 @@ namespace DataLayer
 
         public void InsertarDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pi_documentoVenta");
+            var objCommand = GetSqlCommand("CLIENTE.pi_documentoVenta");
             //var objCommand = GetSqlCommand("pi_documentoVenta_vInafecto");
             
 
@@ -110,7 +110,7 @@ namespace DataLayer
 
         public void InsertarDocumentoVentaNotaCreditoDebito(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pi_documentoVentaNotaCreditoDebito");
+            var objCommand = GetSqlCommand("CLIENTE.pi_documentoVentaNotaCreditoDebito");
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoVenta.fechaEmision);
@@ -137,7 +137,7 @@ namespace DataLayer
 
         public void UpdateSiguienteNumeroFactura(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pu_siguienteNumeroFactura");
+            var objCommand = GetSqlCommand("CLIENTE.pu_siguienteNumeroFactura");
 
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
@@ -149,7 +149,7 @@ namespace DataLayer
 
         public DocumentoVenta UpdateSiguienteNumeroFacturaConsolidada(DocumentoVenta documentoVenta, String idMovimientoAlmacenList)
         {
-            var objCommand = GetSqlCommand("pu_siguienteNumeroFacturaConsolidada");
+            var objCommand = GetSqlCommand("CLIENTE.pu_siguienteNumeroFacturaConsolidada");
 
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
@@ -186,7 +186,7 @@ namespace DataLayer
 
         public void UpdateSiguienteNumeroBoleta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pu_siguienteNumeroBoleta");
+            var objCommand = GetSqlCommand("CLIENTE.pu_siguienteNumeroBoleta");
 
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
@@ -199,7 +199,7 @@ namespace DataLayer
 
         public void UpdateSiguienteNumeroNotaCredito(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pu_siguienteNumeroNotaCredito");
+            var objCommand = GetSqlCommand("CLIENTE.pu_siguienteNumeroNotaCredito");
 
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
@@ -211,7 +211,7 @@ namespace DataLayer
 
         public void UpdateSiguienteNumeroNotaDebito(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pu_siguienteNumeroNotaDebito");
+            var objCommand = GetSqlCommand("CLIENTE.pu_siguienteNumeroNotaDebito");
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
             InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie.Substring(2, 2));
@@ -222,7 +222,7 @@ namespace DataLayer
 
         public void UpdateRespuestaDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pu_documentoVenta");
+            var objCommand = GetSqlCommand("CLIENTE.pu_documentoVenta");
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
             InputParameterAdd.Varchar(objCommand, "CODIGO", documentoVenta.cPE_RESPUESTA_BE.CODIGO);
             InputParameterAdd.Varchar(objCommand, "COD_ESTD_SUNAT", documentoVenta.cPE_RESPUESTA_BE.COD_ESTD_SUNAT);
@@ -236,7 +236,7 @@ namespace DataLayer
 
         public void insertEstadoDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pi_documentoVentaEstado");
+            var objCommand = GetSqlCommand("CLIENTE.pi_documentoVentaEstado");
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
             InputParameterAdd.Varchar(objCommand, "CODIGO", documentoVenta.rPTA_BE.CODIGO);
             InputParameterAdd.Varchar(objCommand, "DESCRIPCION", documentoVenta.rPTA_BE.DESCRIPCION);
@@ -248,7 +248,7 @@ namespace DataLayer
 
         public void UpdatePedido(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("pu_pedido");
+            var objCommand = GetSqlCommand("CLIENTE.pu_pedido");
 
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido); //puede ser null
@@ -302,7 +302,7 @@ namespace DataLayer
 
         public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle, Usuario usuario)
         {
-            var objCommand = GetSqlCommand("pi_pedidoDetalle");
+            var objCommand = GetSqlCommand("CLIENTE.pi_pedidoDetalle");
             InputParameterAdd.Guid(objCommand, "idPedido", pedidoDetalle.idPedido);
             InputParameterAdd.Guid(objCommand, "idProducto", pedidoDetalle.producto.idProducto);
             InputParameterAdd.Int(objCommand, "cantidad", pedidoDetalle.cantidad);
@@ -326,7 +326,7 @@ namespace DataLayer
 
         public Cotizacion aprobarCotizacion(Cotizacion cotizacion)
         {
-            var objCommand = GetSqlCommand("pu_aprobarCotizacion");
+            var objCommand = GetSqlCommand("CLIENTE.pu_aprobarCotizacion");
 
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
@@ -341,7 +341,7 @@ namespace DataLayer
 
         public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor, Usuario usuario)
         {
-            var objCommand = GetSqlCommand("ps_generarPlantillaCotizacion");
+            var objCommand = GetSqlCommand("CLIENTE.ps_generarPlantillaCotizacion");
             InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
             InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fechaPrecios);
             InputParameterAdd.Varchar(objCommand, "familia", familia);
@@ -450,7 +450,7 @@ namespace DataLayer
         public DocumentoVenta SelectDocumentoVenta(DocumentoVenta documentoVenta)
         {
 
-            var objCommand = GetSqlCommand("ps_documentoVenta");
+            var objCommand = GetSqlCommand("CLIENTE.ps_documentoVenta");
             InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable cpeCabeceraBETable = dataSet.Tables[0];
@@ -588,7 +588,7 @@ namespace DataLayer
 
             List<DocumentoVenta> facturaList = new List<DocumentoVenta>();
 
-            var objCommand = GetSqlCommand("ps_facturas");
+            var objCommand = GetSqlCommand("CLIENTE.ps_facturas");
             if (!documentoVenta.numero.Equals("0"))
             {
                 InputParameterAdd.Varchar(objCommand, "numero", documentoVenta.numero.PadLeft(8, '0'));
@@ -690,7 +690,7 @@ namespace DataLayer
 
         public void insertSeguimientoPedido(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("pi_seguimiento_pedido");
+            var objCommand = GetSqlCommand("CLIENTE.pi_seguimiento_pedido");
 
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
@@ -721,7 +721,7 @@ namespace DataLayer
         {
             List<List<String>> cpes = new List<List<String>>();
 
-            var objCommand = GetSqlCommand("ps_cpe_rango_fecha");
+            var objCommand = GetSqlCommand("CLIENTE.ps_cpe_rango_fecha");
             InputParameterAdd.Varchar(objCommand, "fechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
             InputParameterAdd.Varchar(objCommand, "fechaFin", fechaFin.ToString("yyyy-MM-dd"));
 

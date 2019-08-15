@@ -29,7 +29,7 @@ namespace Cotizador.Controllers
                 {
                     case Constantes.paginas.BusquedaPedidos: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA]; break;
                     case Constantes.paginas.MantenimientoPedido: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO]; break;
-                    case Constantes.paginas.AprobarPedidos: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO]; break;
+                    case Constantes.paginas.AprobarPedidos: pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_APROBACION]; break;
                 }
                 return pedido;
             }
@@ -38,7 +38,7 @@ namespace Cotizador.Controllers
                 {
                     case Constantes.paginas.BusquedaPedidos: this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = value; break;
                     case Constantes.paginas.MantenimientoPedido: this.Session[Constantes.VAR_SESSION_PEDIDO] = value; break;
-                    case Constantes.paginas.AprobarPedidos: this.Session[Constantes.VAR_SESSION_PEDIDO] = value; break;
+                    case Constantes.paginas.AprobarPedidos: this.Session[Constantes.VAR_SESSION_PEDIDO_APROBACION] = value; break;
                 }
             }
         }
@@ -249,9 +249,8 @@ namespace Cotizador.Controllers
         }
 
 
+        public ActionResult Aprobar(Guid? idPedido = null)
 
-
-        public ActionResult AprobarPedidos(Guid? idPedido = null)
         {
             try
             {
@@ -275,6 +274,7 @@ namespace Cotizador.Controllers
                     instanciarPedidoBusquedaAprobacion();
                 }
 
+
                 Pedido pedidoSearch = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_APROBACION];
 
                 //Si existe cotizacion se debe verificar si no existe cliente
@@ -287,7 +287,11 @@ namespace Cotizador.Controllers
                         this.Session[Constantes.VAR_SESSION_PEDIDO] = null;
                     }
 
+
+
                 }
+
+
 
                 ViewBag.fechaCreacionDesde = pedidoSearch.fechaCreacionDesde.ToString(Constantes.formatoFecha);
                 ViewBag.fechaCreacionHasta = pedidoSearch.fechaCreacionHasta.ToString(Constantes.formatoFecha);
@@ -295,7 +299,14 @@ namespace Cotizador.Controllers
                 if (pedidoSearch.fechaEntregaDesde != null)
                     ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
                 else
+
+
+
+
+
+
                     ViewBag.fechaEntregaDesde = null;
+
 
                 if (pedidoSearch.fechaEntregaHasta != null)
                     ViewBag.fechaEntregaHasta = pedidoSearch.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
@@ -303,15 +314,40 @@ namespace Cotizador.Controllers
                     ViewBag.fechaEntregaHasta = null;
 
 
+
+
+
+
+
+
+
+
+
                 if (pedidoSearch.fechaProgramacionDesde != null)
                     ViewBag.fechaProgramacionDesde = pedidoSearch.fechaProgramacionDesde.Value.ToString(Constantes.formatoFecha);
                 else
+
+
+
+
+
+
                     ViewBag.fechaProgramacionDesde = null;
+
 
                 if (pedidoSearch.fechaProgramacionHasta != null)
                     ViewBag.fechaProgramacionHasta = pedidoSearch.fechaProgramacionHasta.Value.ToString(Constantes.formatoFecha);
                 else
                     ViewBag.fechaProgramacionHasta = null;
+
+
+
+
+
+
+
+
+
 
 
 
@@ -322,6 +358,14 @@ namespace Cotizador.Controllers
                 }
 
 
+
+
+
+
+
+
+
+
                 int existeCliente = 0;
                 //  if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
                 if (pedidoSearch.cliente.idCliente != Guid.Empty)
@@ -329,10 +373,28 @@ namespace Cotizador.Controllers
                     existeCliente = 1;
                 }
 
+
+
+
+
+
+
+
+
                 GuiaRemision guiaRemision = new GuiaRemision();
                 guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.Venta;
 
+
+
+
+
+
+
+
+
                 ViewBag.guiaRemision = guiaRemision;
+
+
 
                 ViewBag.pedido = pedidoSearch;
                 DocumentoVenta documentoVenta = new DocumentoVenta();
@@ -347,6 +409,11 @@ namespace Cotizador.Controllers
 
                 ViewBag.pagina = (int)Constantes.paginas.BusquedaPedidos;
 
+
+
+
+
+
                 ViewBag.idPedido = idPedido;
                 return View();
             }
@@ -355,8 +422,15 @@ namespace Cotizador.Controllers
                 logger.Error(e, agregarUsuarioAlMensaje(e.Message));
                 throw e;
             }
+
+
+
         }
-        
+
+
+
+
+
 
         public ActionResult CargarPedidos()
         {
@@ -661,6 +735,10 @@ namespace Cotizador.Controllers
                 pedido.fechaSolicitud = DateTime.Now;
                 pedido.fechaEntregaDesde = null;
                 pedido.fechaEntregaHasta = null;
+                //Se considera como fecha de entrega la misma fecha en que se realiza el registro (solo debe ser para Interbank)
+                pedido.fechaEntregaDesde = DateTime.Now;
+                pedido.fechaEntregaHasta = DateTime.Now;
+
                 pedido.horaEntregaDesde = "09:00";
                 pedido.horaEntregaHasta = "18:00";
                 pedido.contactoPedido = String.Empty;
@@ -704,6 +782,8 @@ namespace Cotizador.Controllers
                 pedidoBL.cambiarEstadoPedido(pedido);
                 //Se obtiene los datos de la cotización ya modificada
                 pedido = pedidoBL.GetPedidoParaEditar(pedido,usuario);
+
+                pedido.cliente.direccionEntregaList = usuario.direccionEntregaList;
                 //Temporal
                 pedido.ciudadASolicitar = new Ciudad();
            
@@ -1900,6 +1980,106 @@ namespace Cotizador.Controllers
 
              String pedidoListString = JsonConvert.SerializeObject(ParserDTOsSearch.PedidoVentaToPedidoVentaDTO(pedidoList));
              return pedidoListString;
+            //return pedidoList.Count();
+        }
+
+        public String SearchRequerimientos()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.AprobarPedidos;
+            //Se recupera el pedido Búsqueda de la session
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_APROBACION];
+
+            String[] solDesde = this.Request.Params["fechaCreacionDesde"].Split('/');
+            pedido.fechaCreacionDesde = new DateTime(Int32.Parse(solDesde[2]), Int32.Parse(solDesde[1]), Int32.Parse(solDesde[0]));
+
+            String[] solHasta = this.Request.Params["fechaCreacionHasta"].Split('/');
+            pedido.fechaCreacionHasta = new DateTime(Int32.Parse(solHasta[2]), Int32.Parse(solHasta[1]), Int32.Parse(solHasta[0]), 23, 59, 59);
+
+
+            if (this.Request.Params["fechaEntregaDesde"] == null || this.Request.Params["fechaEntregaDesde"].Equals(""))
+            {
+                pedido.fechaEntregaDesde = null;
+            }
+            else
+            {
+                String[] entregaDesde = this.Request.Params["fechaEntregaDesde"].Split('/');
+                pedido.fechaEntregaDesde = new DateTime(Int32.Parse(entregaDesde[2]), Int32.Parse(entregaDesde[1]), Int32.Parse(entregaDesde[0]));
+            }
+
+
+            if (this.Request.Params["fechaEntregaHasta"] == null || this.Request.Params["fechaEntregaHasta"].Equals(""))
+            {
+                pedido.fechaEntregaHasta = null;
+            }
+            else
+            {
+                String[] entregaHasta = this.Request.Params["fechaEntregaHasta"].Split('/');
+                pedido.fechaEntregaHasta = new DateTime(Int32.Parse(entregaHasta[2]), Int32.Parse(entregaHasta[1]), Int32.Parse(entregaHasta[0]), 23, 59, 59);
+            }
+
+            if (this.Request.Params["fechaProgramacionDesde"] == null || this.Request.Params["fechaProgramacionDesde"].Equals(""))
+            {
+                pedido.fechaProgramacionDesde = null;
+            }
+            else
+            {
+                String[] programacionDesde = this.Request.Params["fechaProgramacionDesde"].Split('/');
+                pedido.fechaProgramacionDesde = new DateTime(Int32.Parse(programacionDesde[2]), Int32.Parse(programacionDesde[1]), Int32.Parse(programacionDesde[0]));
+            }
+
+
+            if (this.Request.Params["fechaProgramacionHasta"] == null || this.Request.Params["fechaProgramacionHasta"].Equals(""))
+            {
+                pedido.fechaProgramacionHasta = null;
+            }
+            else
+            {
+                String[] programacionHasta = this.Request.Params["fechaProgramacionDesde"].Split('/');
+                pedido.fechaProgramacionHasta = new DateTime(Int32.Parse(programacionHasta[2]), Int32.Parse(programacionHasta[1]), Int32.Parse(programacionHasta[0]));
+            }
+
+
+
+
+            if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
+            {
+                pedido.numeroPedido = 0;
+            }
+            else
+            {
+                pedido.numeroPedido = long.Parse(this.Request.Params["numero"]);
+            }
+
+            if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
+            {
+                pedido.numeroGrupoPedido = 0;
+            }
+            else
+            {
+                pedido.numeroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
+            }
+
+            if (this.Request.Params["idGrupoCliente"] == null || this.Request.Params["idGrupoCliente"].Trim().Length == 0)
+            {
+                pedido.idGrupoCliente = 0;
+            }
+            else
+            {
+                pedido.idGrupoCliente = int.Parse(this.Request.Params["idGrupoCliente"]);
+            }
+
+            //  pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido) Int32.Parse(this.Request.Params["estado"]);
+            pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Int32.Parse(this.Request.Params["estadoCrediticio"]);
+
+
+            PedidoBL pedidoBL = new PedidoBL();
+            List<Pedido> pedidoList = pedidoBL.GetRequerimientos(pedido);
+            //Se coloca en session el resultado de la búsqueda
+            this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA_APROBACION] = pedidoList;
+            this.Session[Constantes.VAR_SESSION_PEDIDO_APROBACION] = pedido;
+
+            String pedidoListString = JsonConvert.SerializeObject(ParserDTOsSearch.PedidoVentaToPedidoVentaDTO(pedidoList));
+            return pedidoListString;
             //return pedidoList.Count();
         }
 
