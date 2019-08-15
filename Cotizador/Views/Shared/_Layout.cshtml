@@ -67,7 +67,7 @@
 
                         var linkAdministracion = "";
                     }
-                    @if (this.Session["pagina"] != null)
+                    @if (usuario.idUsuario != Guid.Empty && this.Session["pagina"] != null)
                     {
                         switch ((int)this.Session["pagina"])
                         {
