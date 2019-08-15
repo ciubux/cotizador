@@ -21,18 +21,18 @@ namespace Cotizador.Controllers
         public ActionResult List()
         {
 
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaSubDistribuidores;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaPeriodosSolicitud;
             
-            if (this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA] == null)
+            if (this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_BUSQUEDA] == null)
             {
-                instanciarSubDistribuidorBusqueda();
+                instanciarPeriodoSolicitudBusqueda();
             }
             
 
-            SubDistribuidor objSearch = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA];
+            PeriodoSolicitud objSearch = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_BUSQUEDA];
 
-            ViewBag.pagina = (int)Constantes.paginas.BusquedaSubDistribuidores;
-            ViewBag.subDistribuidor = objSearch;
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaPeriodosSolicitud;
+            ViewBag.periodoSolicitud = objSearch;
 
             return View();
         }
@@ -40,14 +40,14 @@ namespace Cotizador.Controllers
         public String SearchList()
         {
             //Se indica la página con la que se va a trabajar
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaSubDistribuidores;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPeriodosSolicitud;
             //Se recupera el objeto cliente que contiene los criterios de Búsqueda de la session
-            SubDistribuidor obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA];
+            PeriodoSolicitud obj = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_BUSQUEDA];
 
-            SubDistribuidorBL bL = new SubDistribuidorBL();
-            List<SubDistribuidor> list = bL.getSubDistribuidores(obj);
+            PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
+            List<PeriodoSolicitud> list = bL.getPeriodosSolicitud(obj);
             //Se coloca en session el resultado de la búsqueda
-            this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_LISTA] = list;
+            this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_LISTA] = list;
             //Se retorna la cantidad de elementos encontrados
             return JsonConvert.SerializeObject(list);
 
@@ -55,46 +55,47 @@ namespace Cotizador.Controllers
 
         public String Show()
         {
-            int idSubDistribuidor = int.Parse(Request["idSubDistribuidor"].ToString());
-            SubDistribuidorBL bL = new SubDistribuidorBL();
-            SubDistribuidor obj = bL.getSubDistribuidorById(idSubDistribuidor);
+            Usuario usuerio = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Guid idPeriodoSolicitud = Guid.Parse(Request["idPeriodoSolicitud"].ToString());
+            PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
+            PeriodoSolicitud obj = bL.getPeriodoSolicitud(idPeriodoSolicitud, usuerio.idUsuario);
             obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             String resultado =  JsonConvert.SerializeObject(obj);
-            this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_VER] = obj;
+            this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_VER] = obj;
             return resultado;
         }
 
-        public ActionResult Editar(int? idSubDistribuidor = null)
+        public ActionResult Editar(Guid? idPeriodoSolicitud = null)
         {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoSubDistribuidor;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoPeriodoSolicitud;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (!usuario.modificaSubDistribuidor)
+            if (!usuario.modificaPeriodoSolicitud)
             {
                 return RedirectToAction("Login", "Account");
             }
 
 
 
-            if (this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] == null && idSubDistribuidor == null)
+            if (this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD] == null && idPeriodoSolicitud == null)
             {
-                instanciarSubDistribuidor();
+                instanciarPeriodoSolicitud();
             }
 
-            SubDistribuidor obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR];
+            PeriodoSolicitud obj = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD];
             
-            if (idSubDistribuidor != null)
+            if (idPeriodoSolicitud != null)
             {
-                SubDistribuidorBL bL = new SubDistribuidorBL();
-                obj = bL.getSubDistribuidorById(idSubDistribuidor.Value);
+                PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
+                obj = bL.getPeriodoSolicitud(idPeriodoSolicitud.Value, usuario.IdUsuarioRegistro);
                 obj.IdUsuarioRegistro = usuario.idUsuario;
                 obj.usuario = usuario;
                 
-                this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] = obj;
+                this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD] = obj;
             }
             
 
-            ViewBag.subDistribuidor = obj;
+            ViewBag.periodoSolicitud = obj;
             return View();
 
         }
@@ -103,7 +104,7 @@ namespace Cotizador.Controllers
         {
             PeriodoSolicitud obj = new PeriodoSolicitud();
             obj.idPeriodoSolicitud = Guid.Empty;
-            obj.Estado = 1;
+            obj.Estado = 2;
             obj.nombre = String.Empty;
             obj.fechaInicio = DateTime.Now;
             obj.fechaFin = DateTime.Now;
@@ -156,37 +157,38 @@ namespace Cotizador.Controllers
 
         }
 
-        public String ConsultarSiPeriodoSolicitud()
+        public String ConsultarSiExistePeriodoSolicitud()
         {
-            int idPeriodoSolicitud = int.Parse(Request["idPeriodoSolicitud"].ToString());
-            SubDistribuidorBL bL = new SubDistribuidorBL();
-            SubDistribuidor obj = bL.getSubDistribuidorById(idSubDistribuidor);
-            obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Guid idPeriodoSolicitud = Guid.Parse(Request["idPeriodoSolicitud"].ToString());
+            PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
+            PeriodoSolicitud obj = bL.getPeriodoSolicitud(idPeriodoSolicitud, usuario.idUsuario);
+            obj.usuario = usuario;
             String resultado = JsonConvert.SerializeObject(obj);
-            this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_VER] = obj;
+            this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_VER] = obj;
 
-            obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR];
+            obj = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD];
             if (obj == null)
-                return "{\"existe\":\"false\",\"idSubDistribuidor\":\"0\"}";
+                return "{\"existe\":\"false\",\"idPeriodoSolicitud\":\"" + Guid.Empty + "\"}";
             else
-                return "{\"existe\":\"true\",\"idSubDistribuidor\":\"" + obj.idSubDistribuidor + "\"}";
+                return "{\"existe\":\"true\",\"idPeriodoSolicitud\":\"" + obj.idPeriodoSolicitud + "\"}";
         }
 
 
-        public void iniciarEdicionSubDistribuidor()
+        public void iniciarEdicionPeriodoSolicitud()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            SubDistribuidor obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_VER];
-            this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] = obj;
+            PeriodoSolicitud obj = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_VER];
+            this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD] = obj;
         }
 
         public String Create()
         {
-            SubDistribuidorBL bL = new SubDistribuidorBL();
-            SubDistribuidor obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR];
+            PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
+            PeriodoSolicitud obj = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD];
 
-            obj = bL.insertSubDistribuidor(obj);
-            this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] = null;
+            obj = bL.insertPeriodoSolicitud(obj);
+            this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD] = null;
             String resultado = JsonConvert.SerializeObject(obj);
             return resultado;
         }
@@ -194,18 +196,18 @@ namespace Cotizador.Controllers
 
         public String Update()
         {
-            SubDistribuidorBL bL = new SubDistribuidorBL();
-            SubDistribuidor obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR];
+            PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
+            PeriodoSolicitud obj = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD];
 
-            if (obj.idSubDistribuidor == 0)
+            if (obj.idPeriodoSolicitud == Guid.Empty)
             {
-                obj = bL.insertSubDistribuidor(obj);
-                this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] = null;
+                obj = bL.insertPeriodoSolicitud(obj);
+                this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD] = null;
             }
             else
             {
-                obj = bL.updateSubDistribuidor(obj);
-                this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] = null;
+                obj = bL.updatePeriodoSolicitud(obj);
+                this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD] = null;
             }
             String resultado = JsonConvert.SerializeObject(obj);
             //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
@@ -214,45 +216,50 @@ namespace Cotizador.Controllers
         
         public void ChangeInputString()
         {
-            SubDistribuidor obj = (SubDistribuidor) this.SubDistribuidorSession;
+            PeriodoSolicitud obj = (PeriodoSolicitud) this.PeriodoSolicitudSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, this.Request.Params["valor"]);
-            this.SubDistribuidorSession = obj;
+            this.PeriodoSolicitudSession = obj;
         }
 
         public void ChangeInputInt()
         {
-            SubDistribuidor obj = (SubDistribuidor)this.SubDistribuidorSession;
+            PeriodoSolicitud obj = (PeriodoSolicitud)this.PeriodoSolicitudSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
-            this.SubDistribuidorSession = obj;
+            this.PeriodoSolicitudSession = obj;
         }
 
-        public void ChangeInputDecimal()
+        public void ChangeInputDate()
         {
-            SubDistribuidor obj = (SubDistribuidor)this.SubDistribuidorSession;
+            PeriodoSolicitud obj = (PeriodoSolicitud)this.PeriodoSolicitudSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(obj, Decimal.Parse(this.Request.Params["valor"]));
-            this.SubDistribuidorSession = obj;
+            
+            String[] fechai = this.Request.Params["valor"].Split('/');
+            DateTime fecha = new DateTime(Int32.Parse(fechai[2]), Int32.Parse(fechai[1]), Int32.Parse(fechai[0]), 0, 0, 0);
+
+            propertyInfo.SetValue(obj, fecha);
+            this.PeriodoSolicitudSession = obj;
         }
+
         public void ChangeInputBoolean()
         {
-            SubDistribuidor obj = (SubDistribuidor)this.SubDistribuidorSession;
+            PeriodoSolicitud obj = (PeriodoSolicitud)this.PeriodoSolicitudSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]) == 1);
-            this.SubDistribuidorSession = obj;
+            this.PeriodoSolicitudSession = obj;
         }
 
 
-        private SubDistribuidor SubDistribuidorSession
+        private PeriodoSolicitud PeriodoSolicitudSession
         {
             get
             {
-                SubDistribuidor obj = null;
+                PeriodoSolicitud obj = null;
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
-                    case Constantes.paginas.BusquedaSubDistribuidores: obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA]; break;
-                    case Constantes.paginas.MantenimientoSubDistribuidor: obj = (SubDistribuidor)this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR]; break;
+                    case Constantes.paginas.BusquedaPeriodosSolicitud: obj = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_BUSQUEDA]; break;
+                    case Constantes.paginas.MantenimientoPeriodoSolicitud: obj = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD]; break;
                 }
                 return obj;
             }
@@ -260,20 +267,20 @@ namespace Cotizador.Controllers
             {
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
-                    case Constantes.paginas.BusquedaSubDistribuidores: this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR_BUSQUEDA] = value; break;
-                    case Constantes.paginas.MantenimientoSubDistribuidor: this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] = value; break;
+                    case Constantes.paginas.BusquedaPeriodosSolicitud: this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_BUSQUEDA] = value; break;
+                    case Constantes.paginas.MantenimientoPeriodoSolicitud: this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD] = value; break;
                 }
             }
         }
 
-        public ActionResult CancelarCreacionSubDistribuidor()
+        public ActionResult CancelarCreacionPeriodoSolicitud()
         {
-            this.Session[Constantes.VAR_SESSION_SUBDISTRIBUIDOR] = null;
+            this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD] = null;
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             //   usuarioBL.updateCotizacionSerializada(usuario, null);
-            return RedirectToAction("List", "SubDistribuidor");
+            return RedirectToAction("List", "PeriodoSolicitud");
 
         }
     }

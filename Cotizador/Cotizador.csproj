@@ -419,6 +419,7 @@
     <Content Include="Scripts\documentoCompra1.1.1.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
+    <Content Include="Scripts\periodoSolicitud1.0.0.js" />
     <Content Include="Scripts\pedidoLoad.js" />
     <Content Include="Scripts\usuario1.0.0.js" />
     <Content Include="Scripts\rol1.0.0.js" />
@@ -596,6 +597,8 @@
     <Content Include="Views\Permiso\List.cshtml" />
     <Content Include="Views\Permiso\Editar.cshtml" />
     <Content Include="Views\DocumentoVenta\ExportarCPEs.cshtml" />
+    <Content Include="Views\PeriodoSolicitud\Editar.cshtml" />
+    <Content Include="Views\PeriodoSolicitud\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

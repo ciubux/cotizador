@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "287";
+    TempData["ScriptVersion"] = "295";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -37,13 +37,15 @@
                         var linkCotizaciones = "";
                         var linkBusquedaCotizaciones = "";
                         var linkMantenimientoCotizacion = "";
-                        
+
                         var linkPedidos = "";
                         var linkBusquedaPedidos = "";
                         var linkMantenimientoPedido = "";
 
                         var linkGuiasRemision = "";
-                        
+
+                        var linkBusquedaPeriodoSolicitud = "";
+                        var linkMantenimientoPeriodoSolicitud = "";
 
                         var linkDocumentosVenta = "";
                         var linkBusquedaFactura = "";
@@ -65,6 +67,7 @@
 
                         var linkAsignacionPermisos = "";
 
+                        var linkAdministracion = "";
                     }
                     @if (this.Session["pagina"] != null)
                     {
@@ -81,10 +84,13 @@
                             case 38: linkAsignacionPermisos = "ative"; linkMaestros = "active"; break;
 
                             case 103: linkBusquedaUsuario = "ative"; linkMaestros = "active"; break;
-                            //case 104: linkMantenimientoUsuario = "ative"; linkMaestros = "active"; break;
+
+                            case 1001: linkBusquedaPeriodoSolicitud = "ative"; linkAdministracion = "active"; break;
+                            case 1002: linkMantenimientoPeriodoSolicitud = "ative"; linkAdministracion = "active"; break;
+                                //case 104: linkMantenimientoUsuario = "ative"; linkMaestros = "active"; break;
                         }
 
-                 
+
 
                         if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                         {
@@ -97,7 +103,8 @@
                                 <ul class="dropdown-menu" role="menu">
                                     @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                                     {
-                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Pedido Venta - Búsqueda", "Index", "Pedido")</li>}
+                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Pedido Venta - Búsqueda", "Index", "Pedido")</li>
+}
                                     @if (usuario.tomaPedidos)
                                     {
                                         <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Crear/Modificar", "Pedir", "Pedido")</li>
@@ -108,15 +115,15 @@
 
 
 
-                            <li class="@linkGuiasRemision">
-                                <a class="dropdown-toggle" data-toggle="dropdown">
-                                    Guias Remisión
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu">
-                                     <li id="linkBusquedaGuiasRemision" class="@linkBusquedaPedidos">@Html.ActionLink("Guías Remisión - Búsqueda", "Index", "GuiaRemision")</li>
-                                </ul>
-                            </li>
+                        <li class="@linkGuiasRemision">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                Guias Remisión
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li id="linkBusquedaGuiasRemision" class="@linkBusquedaPedidos">@Html.ActionLink("Guías Remisión - Búsqueda", "Index", "GuiaRemision")</li>
+                            </ul>
+                        </li>
 
 
                         if (usuario.visualizaDocumentosVenta)
@@ -137,7 +144,25 @@
                             </li>
                         }
 
-                      
+
+                        if (usuario.modificaPeriodoSolicitud)
+                        {
+
+                            <li class="@linkAdministracion">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Administración
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+
+                                    @if (usuario.modificaPeriodoSolicitud)
+                                    {
+                                        <li id="linkBusquedaPeriodoSolicitud" class="@linkBusquedaPeriodoSolicitud">@Html.ActionLink("Periodo Requerimeinto - Búsqueda", "List", "PeriodoSolicitud")</li>
+                                        <li id="linkMantenimientoPeriodoSolicitud" class="@linkMantenimientoPeriodoSolicitud">@Html.ActionLink("Periodo Requerimeinto - Crear/Modificar", "Editar", "PeriodoSolicitud")</li>
+                                    }
+                                </ul>
+                            </li>
+                        }
                     }
 
                 </ul>

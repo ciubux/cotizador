@@ -23,5 +23,30 @@ namespace Model
         {
             return this.nombre;
         }
+
+        public String fechaInicioFormato
+        {
+            get { return this.fechaInicio.ToString(Constantes.formatoFecha); }
+        }
+
+        public String fechaFinFormato
+        {
+            get { return this.fechaFin.ToString(Constantes.formatoFecha); }
+        }
+
+        public String nombreEstado
+        {
+            get {
+                String nEstado = "";
+                switch (this.Estado)
+                {
+                    case 0: nEstado = "Eliminado"; break;
+                    case 1: nEstado = "Inactivo"; break;
+                    case 2: nEstado = "Activo"; break;
+                    case 10: nEstado = "Cerrado"; break;
+                }
+                return nEstado;
+            }
+        }
     }
 }
