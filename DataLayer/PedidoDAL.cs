@@ -853,6 +853,21 @@ namespace DataLayer
                     pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
                     pedido.cliente.ruc = Converter.GetString(row, "ruc");
                     pedido.cliente.bloqueado = Converter.GetBool(row, "bloqueado");
+                    pedido.direccionEntrega = new DireccionEntrega();
+                    pedido.direccionEntrega.descripcion = Converter.GetString(row, "direccion_entrega_descripcion");
+                    pedido.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
+                    pedido.direccionEntrega.codigoCliente = Converter.GetString(row, "direccion_entrega_codigo_cliente");
+
+                    pedido.direccionEntrega.direccionEntregaAlmacen = new DireccionEntrega();
+                    pedido.direccionEntrega.direccionEntregaAlmacen.descripcion = Converter.GetString(row, "direccion_entrega_almacen_descripcion");
+                    pedido.direccionEntrega.direccionEntregaAlmacen.nombre = Converter.GetString(row, "direccion_entrega_almacen_nombre");
+                    pedido.direccionEntrega.direccionEntregaAlmacen.codigoCliente = Converter.GetString(row, "direccion_entrega_almacen_codigo_cliente");
+                    pedido.direccionEntrega.direccionEntregaAlmacen.ubigeo = new Ubigeo();
+                    pedido.direccionEntrega.direccionEntregaAlmacen.ubigeo.Distrito = Converter.GetString(row, "direccion_entrega_almacen_distrito");
+                    pedido.direccionEntrega.direccionEntregaAlmacen.ubigeo.Provincia = Converter.GetString(row, "direccion_entrega_almacen_provincia");
+                    pedido.direccionEntrega.direccionEntregaAlmacen.ubigeo.Departamento = Converter.GetString(row, "direccion_entrega_almacen_departamento");
+
+
 
                     pedido.cliente.grupoCliente = new GrupoCliente();
                     pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "nombre_grupo");
@@ -885,6 +900,8 @@ namespace DataLayer
                     pedido.ubigeoEntrega = new Ubigeo();
                     pedido.ubigeoEntrega.Id = Converter.GetString(row, "codigo_ubigeo");
                     pedido.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
+                    pedido.ubigeoEntrega.Provincia = Converter.GetString(row, "provincia");
+                    pedido.ubigeoEntrega.Departamento = Converter.GetString(row, "departamento");
                     pedido.pedidoDetalleList = new List<PedidoDetalle>();
                     pedido.estadoRequerimiento = (Pedido.estadosRequerimiento)Converter.GetInt(row, "estado_solicitud");
                     pedido.excedioPresupuesto = Converter.GetBool(row, "excedio_presupuesto");

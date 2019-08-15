@@ -218,66 +218,73 @@ namespace Cotizador.ExcelExport
                
                 int i = 4;
                 UtilesHelper.setValorCelda(sheet, i, "A", "N° Req", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "B", "Sede MP", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "C", "Cod.Cliente", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "D", "Razón Social", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "E", "O/C N°", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "F", "Creado por", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "G", "Fecha Registro", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "H", "Rango Fecha Entrega ", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "I", "Horarios Entrega", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "J", "Total(No Incl.IGV)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "K", "Distrito Entrega", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "L", "Estado Atención", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "M", "Estado Crediticio", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "N", "Obs. Uso Intern", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "O", "Prod 1", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "P", "Prod 2", titleCellStyle);
-
+                UtilesHelper.setValorCelda(sheet, i, "B", "Creado por", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "C", "Fecha Registro", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "D", "Dirección Almacén", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "E", "Dirección Entrega", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "F", "Obs. Uso Intern", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "G", "Prod 1", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "H", "Prod 2", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "I", "Total(No Incl.IGV)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "J", "Tope Presupuesto(No Incl.IGV)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "K", "Estado Requerimiento", titleCellStyle);
 
 
                 i++;
 
                 /*  for (int iii = 0; iii<50;iii++)
                   { */
-
+                string desf = "{0} - {1} - ({2}) / {3} - {4} - {5}";
+                String des;
                 foreach (Pedido obj in list)
                 {
                     UtilesHelper.setValorCelda(sheet, i, "A", obj.numeroPedidoString);
-                    UtilesHelper.setValorCelda(sheet, i, "B", obj.ciudad.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "C", obj.cliente.codigo);
-                    UtilesHelper.setValorCelda(sheet, i, "D", obj.cliente.razonSocial);
-                    UtilesHelper.setValorCelda(sheet, i, "E", obj.numeroReferenciaCliente);
-                    UtilesHelper.setValorCelda(sheet, i, "F", obj.usuario.nombre);
-                    UtilesHelper.setValorCelda(sheet, i, "G", obj.fechaHoraRegistro);
-                    UtilesHelper.setValorCelda(sheet, i, "H", obj.rangoFechasEntrega);
-                    UtilesHelper.setValorCelda(sheet, i, "I", obj.rangoHoraEntrega);
-                    UtilesHelper.setValorCelda(sheet, i, "J", (double)obj.montoTotal);
-                    UtilesHelper.setValorCelda(sheet, i, "K", obj.ubigeoEntrega.Distrito);
-                    UtilesHelper.setValorCelda(sheet, i, "L", obj.seguimientoPedido.estadoString);
-                    UtilesHelper.setValorCelda(sheet, i, "M", obj.seguimientoCrediticioPedido.estadoString);
-                    UtilesHelper.setValorCelda(sheet, i, "N", obj.observaciones);
+                    UtilesHelper.setValorCelda(sheet, i, "B", obj.usuario.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "C", obj.fechaHoraRegistro);
 
+                    DireccionEntrega de = obj.direccionEntrega.direccionEntregaAlmacen;
+                    des = string.Format(desf, de.descripcion, de.nombre, de.codigoCliente,
+                                        de.ubigeo.Departamento,
+                                        de.ubigeo.Provincia,
+                                        de.ubigeo.Distrito);
+
+                   
+                    
+
+                    UtilesHelper.setValorCelda(sheet, i, "D", des);
+                    de = obj.direccionEntrega;
+
+                    des = string.Format(desf, de.descripcion, de.nombre, de.codigoCliente,
+                                        obj.ubigeoEntrega.Departamento,
+                                        obj.ubigeoEntrega.Provincia,
+                                        obj.ubigeoEntrega.Distrito);
+
+                    UtilesHelper.setValorCelda(sheet, i, "E",des);
+                    UtilesHelper.setValorCelda(sheet, i, "F", obj.observaciones);
                     foreach (PedidoDetalle pedidoDetalle in obj.pedidoDetalleList)
                     {
                         if (pedidoDetalle.producto.sku.Equals("HJ1F20"))
                         {
-                            UtilesHelper.setValorCelda(sheet, i, "O", pedidoDetalle.cantidad);
+                            UtilesHelper.setValorCelda(sheet, i, "G", pedidoDetalle.cantidad);
                         }
                         else
                         {
-                            UtilesHelper.setValorCelda(sheet, i, "P", pedidoDetalle.cantidad);
+                            UtilesHelper.setValorCelda(sheet, i, "H", pedidoDetalle.cantidad);
                         }
 
                     }
+
+                    UtilesHelper.setValorCelda(sheet, i, "I", (double)obj.montoTotal);
+                    UtilesHelper.setValorCelda(sheet, i, "J", (double)obj.topePresupuesto);
+                    UtilesHelper.setValorCelda(sheet, i, "K", obj.estadoRequerimientoString);
 
                     i++;
                 }
 
 
+                sheet.GetRow(i - 1).GetCell(7).CellFormula = "SUM(" + UtilesHelper.columnas[7] + "2:" + UtilesHelper.columnas[7] + (i - 1) + ")";
+                sheet.GetRow(i - 1).GetCell(8).CellFormula = "SUM(" + UtilesHelper.columnas[8] + "2:" + UtilesHelper.columnas[8] + (i - 1) + ")";
                 sheet.GetRow(i - 1).GetCell(9).CellFormula = "SUM(" + UtilesHelper.columnas[9] + "2:" + UtilesHelper.columnas[9] + (i - 1) + ")";
-                sheet.GetRow(i - 1).GetCell(14).CellFormula = "SUM(" + UtilesHelper.columnas[14] + "2:" + UtilesHelper.columnas[14] + (i - 1) + ")";
-                sheet.GetRow(i - 1).GetCell(15).CellFormula = "SUM(" + UtilesHelper.columnas[15] + "2:" + UtilesHelper.columnas[15] + (i - 1) + ")";
 
 
                 MemoryStream ms = new MemoryStream();
@@ -290,7 +297,7 @@ namespace Cotizador.ExcelExport
                     ms.Position = 0;
                     FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
 
-                    result.FileDownloadName = "Pedidos_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
+                    result.FileDownloadName = "Requerimientos_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
 
                     return result;
                 }
