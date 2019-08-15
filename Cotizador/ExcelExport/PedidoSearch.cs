@@ -281,10 +281,10 @@ namespace Cotizador.ExcelExport
                     i++;
                 }
 
-
+                sheet.GetRow(i - 1).GetCell(6).CellFormula = "SUM(" + UtilesHelper.columnas[6] + "2:" + UtilesHelper.columnas[6] + (i - 1) + ")";
                 sheet.GetRow(i - 1).GetCell(7).CellFormula = "SUM(" + UtilesHelper.columnas[7] + "2:" + UtilesHelper.columnas[7] + (i - 1) + ")";
                 sheet.GetRow(i - 1).GetCell(8).CellFormula = "SUM(" + UtilesHelper.columnas[8] + "2:" + UtilesHelper.columnas[8] + (i - 1) + ")";
-                sheet.GetRow(i - 1).GetCell(9).CellFormula = "SUM(" + UtilesHelper.columnas[9] + "2:" + UtilesHelper.columnas[9] + (i - 1) + ")";
+                
 
 
                 MemoryStream ms = new MemoryStream();

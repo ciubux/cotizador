@@ -453,14 +453,6 @@ G:\Repo\maquetados\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.xml
 G:\Repo\maquetados\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 G:\Repo\maquetados\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 G:\Repo\maquetados\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll.config
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\BusinessLayer.pdb
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\DataLayer.dll
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\Framework.DAL.dll
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.dll
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\ICSharpCode.SharpZipLib.dll
-<<<<<<< HEAD
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll.config
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.pdb
@@ -491,7 +483,13 @@ G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompi
 G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
-=======
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll.config
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\BusinessLayer.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\DataLayer.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\Framework.DAL.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\ICSharpCode.SharpZipLib.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\NPOI.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\bin\Debug\NPOI.OOXML.dll
@@ -514,4 +512,3 @@ C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\obj\Debug\Busin
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
->>>>>>> b8479c108e88c988ccd67dadb924f39f85134124
