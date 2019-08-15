@@ -34,18 +34,16 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @{
-                        var linkCotizaciones = "";
-                        var linkBusquedaCotizaciones = "";
-                        var linkMantenimientoCotizacion = "";
-
                         var linkPedidos = "";
                         var linkBusquedaPedidos = "";
+                        var linkAprobarPedidos = "";
                         var linkMantenimientoPedido = "";
 
                         var linkGuiasRemision = "";
 
                         var linkBusquedaPeriodoSolicitud = "";
                         var linkMantenimientoPeriodoSolicitud = "";
+
 
                         var linkDocumentosVenta = "";
                         var linkBusquedaFactura = "";
@@ -73,11 +71,11 @@
                     {
                         switch ((int)this.Session["pagina"])
                         {
-                            case 0: linkBusquedaCotizaciones = "ative"; linkCotizaciones = "active"; break;
-                            case 1: linkMantenimientoCotizacion = "ative"; linkCotizaciones = "active"; break;
 
                             case 2: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
                             case 3: linkMantenimientoPedido = "ative"; linkPedidos = "active"; break;
+                            case 4: linkBusquedaPedidos = "ative"; linkPedidos = "active"; break;
+
 
                             case 6: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
 
@@ -87,6 +85,7 @@
 
                             case 1001: linkBusquedaPeriodoSolicitud = "ative"; linkAdministracion = "active"; break;
                             case 1002: linkMantenimientoPeriodoSolicitud = "ative"; linkAdministracion = "active"; break;
+
                                 //case 104: linkMantenimientoUsuario = "ative"; linkMaestros = "active"; break;
                         }
 
@@ -101,14 +100,20 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
-                                    {
-                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Pedido Venta - Búsqueda", "Index", "Pedido")</li>
-}
                                     @if (usuario.tomaPedidos)
                                     {
-                                        <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Crear/Modificar", "Pedir", "Pedido")</li>
+                                        <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Requerimientos", "Pedir", "Pedido")</li>
                                     }
+                                    @if (usuario.apruebaPedidos)
+                                    {
+                                        <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Aprobar Requerimientos", "Aprobar", "Pedido")</li>
+                                    }
+                                    @if (usuario.tomaPedidos)
+                                    {
+                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Búsqueda Pedidos", "Index", "Pedido")</li>
+                                    }
+                                   
+                        
                                 </ul>
                             </li>
                         }

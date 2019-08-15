@@ -35,12 +35,6 @@ C:\Users\cesar\Documents\MP2\cotizador_3\Framework.WebCommon\obj\Debug\Framework
 C:\Users\cesar\Documents\MP2\cotizador_3\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_3\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
 C:\Users\cesar\Documents\MP2\cotizador_3\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojResolveAssemblyReference.cache
 D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
 D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
 D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csprojAssemblyReference.cache
@@ -53,3 +47,8 @@ G:\Repo\maquetados\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.c
 G:\Repo\maquetados\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
 G:\Repo\maquetados\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
 G:\Repo\maquetados\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb

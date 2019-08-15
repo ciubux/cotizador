@@ -22,7 +22,7 @@ namespace DataLayer
 
         public DocumentoVenta obtenerResumenConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList)
         {
-            var objCommand = GetSqlCommand("ps_resumenConsolidadoAtenciones");
+            var objCommand = GetSqlCommand("CLIENTE.ps_resumenConsolidadoAtenciones");
 
 
             
@@ -131,7 +131,7 @@ namespace DataLayer
 
         public List<GuiaRemision> obtenerDetalleConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList, Dictionary<String,int> mostrarUnidadAlternativaList)
         {
-            var objCommand = GetSqlCommand("ps_detalleConsolidadoAtenciones");
+            var objCommand = GetSqlCommand("CLIENTE.ps_detalleConsolidadoAtenciones");
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("idMovimientoAlmacenList", typeof(Guid)));
             foreach (var id in idMovimientoAlmacenList)
@@ -250,7 +250,7 @@ namespace DataLayer
 
         public void UpdateMarcaNoEntregado(GuiaRemision guiaRemision)
         {
-            var objCommand = GetSqlCommand("pu_guiaRemisionMarcaNoEntregado");
+            var objCommand = GetSqlCommand("CLIENTE.pu_guiaRemisionMarcaNoEntregado");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", guiaRemision.idMovimientoAlmacen);
             InputParameterAdd.Int(objCommand, "noEntregado", guiaRemision.estaNoEntregado?1:0);
             InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
@@ -261,7 +261,7 @@ namespace DataLayer
         {
 
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pi_movimientoAlmacenSalida");
+            var objCommand = GetSqlCommand("CLIENTE.pi_movimientoAlmacenSalida");
             InputParameterAdd.DateTime(objCommand, "fechaEmision", guiaRemision.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", guiaRemision.fechaTraslado);
             InputParameterAdd.Varchar(objCommand, "serieDocumento", guiaRemision.serieDocumento); //puede ser null
@@ -351,7 +351,7 @@ namespace DataLayer
             }
 
 
-            objCommand = GetSqlCommand("pu_venta");
+            objCommand = GetSqlCommand("CLIENTE.pu_venta");
             InputParameterAdd.Guid(objCommand, "idVenta", guiaRemision.venta.idVenta);
             InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Transacción");
             ExecuteNonQuery(objCommand);
@@ -364,7 +364,7 @@ namespace DataLayer
         public void InsertMovimientoAlmacenEntrada(NotaIngreso notaIngreso)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pi_movimientoAlmacenEntrada");
+            var objCommand = GetSqlCommand("CLIENTE.pi_movimientoAlmacenEntrada");
             InputParameterAdd.DateTime(objCommand, "fechaEmision", notaIngreso.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", notaIngreso.fechaTraslado);
             InputParameterAdd.Varchar(objCommand, "serieDocumento", notaIngreso.serieDocumento); //puede ser null
@@ -449,7 +449,7 @@ namespace DataLayer
                 this.InsertMovimientoAlmacenDetalle(notaIngreso);
             }
 
-            objCommand = GetSqlCommand("pu_venta");
+            objCommand = GetSqlCommand("CLIENTE.pu_venta");
             InputParameterAdd.Guid(objCommand, "idVenta", notaIngreso.venta.idVenta);
             InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Transacción");
             ExecuteNonQuery(objCommand);
@@ -464,7 +464,7 @@ namespace DataLayer
             {
                 if(documentoDetalle.cantidadPorAtender > 0)
                 { 
-                    var objCommand = GetSqlCommand("pi_movimientoAlmacenDetalle");
+                    var objCommand = GetSqlCommand("CLIENTE.pi_movimientoAlmacenDetalle");
                     InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
                     InputParameterAdd.Guid(objCommand, "idVenta", movimientoAlmacen.venta.idVenta);
                     InputParameterAdd.Guid(objCommand, "idUsuario", movimientoAlmacen.usuario.idUsuario);
@@ -485,7 +485,7 @@ namespace DataLayer
 
         public void AnularMovimientoAlmacen(MovimientoAlmacen movimientoAlmacen)
         {
-            var objCommand = GetSqlCommand("pu_anularMovimientoAlmacen");
+            var objCommand = GetSqlCommand("CLIENTE.pu_anularMovimientoAlmacen");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
             InputParameterAdd.Varchar(objCommand, "comentarioAnulado", movimientoAlmacen.comentarioAnulado);
             InputParameterAdd.Guid(objCommand, "idUsuario", movimientoAlmacen.usuario.idUsuario);
@@ -504,7 +504,7 @@ namespace DataLayer
 
         public void UpdateMovimientoAlmacenSalida(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("pu_pedido");
+            var objCommand = GetSqlCommand("CLIENTE.pu_pedido");
 
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido); //puede ser null
@@ -553,7 +553,7 @@ namespace DataLayer
 
         public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle, Usuario usuario)
         {
-            var objCommand = GetSqlCommand("pi_pedidoDetalle");
+            var objCommand = GetSqlCommand("CLIENTE.pi_pedidoDetalle");
             InputParameterAdd.Guid(objCommand, "idPedido", pedidoDetalle.idPedido);
             InputParameterAdd.Guid(objCommand, "idProducto", pedidoDetalle.producto.idProducto);
             InputParameterAdd.Int(objCommand, "cantidad", pedidoDetalle.cantidad);
@@ -577,7 +577,7 @@ namespace DataLayer
 
         public Cotizacion aprobarCotizacion(Cotizacion cotizacion)
         {
-            var objCommand = GetSqlCommand("pu_aprobarCotizacion");
+            var objCommand = GetSqlCommand("CLIENTE.pu_aprobarCotizacion");
 
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
@@ -592,7 +592,7 @@ namespace DataLayer
 
         public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor, Usuario usuario)
         {
-            var objCommand = GetSqlCommand("ps_generarPlantillaCotizacion");
+            var objCommand = GetSqlCommand("CLIENTE.ps_generarPlantillaCotizacion");
             InputParameterAdd.Guid(objCommand, "idCliente", cotizacion.cliente.idCliente);
             InputParameterAdd.DateTime(objCommand, "fecha", cotizacion.fechaPrecios);
             InputParameterAdd.Varchar(objCommand, "familia", familia);
@@ -701,7 +701,7 @@ namespace DataLayer
         public GuiaRemision SelectGuiaRemision(GuiaRemision guiaRemision)
         {
            
-            var objCommand = GetSqlCommand("ps_guiaRemision");
+            var objCommand = GetSqlCommand("CLIENTE.ps_guiaRemision");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", guiaRemision.idMovimientoAlmacen);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable guiaRemisionDataTable = dataSet.Tables[0];
@@ -821,7 +821,7 @@ namespace DataLayer
         public List<MovimientoAlmacen> SelectMovimientosAlmacenExtornantes(MovimientoAlmacen movimientoAlmacen)
         {
             List<MovimientoAlmacen> MovimientoAlmacenExtornantesList = new List<MovimientoAlmacen>();
-            var objCommand = GetSqlCommand("ps_movimientosAlmacenExtornantes");
+            var objCommand = GetSqlCommand("CLIENTE.ps_movimientosAlmacenExtornantes");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
             DataTable dataTable = Execute(objCommand);
             foreach (DataRow row in dataTable.Rows)
@@ -875,7 +875,7 @@ namespace DataLayer
         {
             List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
             
-            var objCommand = GetSqlCommand("ps_guiasRemision");
+            var objCommand = GetSqlCommand("CLIENTE.ps_guiasRemision");
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", guiaRemision.numeroDocumento);
             InputParameterAdd.Guid(objCommand, "idCiudad", guiaRemision.ciudadOrigen.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", guiaRemision.pedido.cliente.idCliente);
@@ -945,7 +945,7 @@ namespace DataLayer
         {
             List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
 
-            var objCommand = GetSqlCommand("ps_guiasRemisionGrupoCliente");
+            var objCommand = GetSqlCommand("CLIENTE.ps_guiasRemisionGrupoCliente");
             //InputParameterAdd.BigInt(objCommand, "numeroDocumento", guiaRemision.numeroDocumento);
             //InputParameterAdd.Guid(objCommand, "idCiudad", guiaRemision.ciudadOrigen.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", guiaRemision.pedido.cliente.idCliente);
@@ -1018,7 +1018,7 @@ namespace DataLayer
 
         public void insertSeguimientoPedido(Pedido pedido)
         {
-            var objCommand = GetSqlCommand("pi_seguimiento_pedido");
+            var objCommand = GetSqlCommand("CLIENTE.pi_seguimiento_pedido");
 
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
@@ -1055,7 +1055,7 @@ namespace DataLayer
         public NotaIngreso SelectNotaIngreso(NotaIngreso notaIngreso)
         {
 
-            var objCommand = GetSqlCommand("ps_notaIngreso");
+            var objCommand = GetSqlCommand("CLIENTE.ps_notaIngreso");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", notaIngreso.idMovimientoAlmacen);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable notaIngresoDataTable = dataSet.Tables[0];
@@ -1173,7 +1173,7 @@ namespace DataLayer
         {
             List<NotaIngreso> notaIngresoList = new List<NotaIngreso>();
 
-            var objCommand = GetSqlCommand("ps_notasIngreso");
+            var objCommand = GetSqlCommand("CLIENTE.ps_notasIngreso");
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", notaIngreso.numeroDocumento);
             InputParameterAdd.Guid(objCommand, "idCiudad", notaIngreso.ciudadDestino.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", notaIngreso.pedido.cliente.idCliente);
@@ -1243,7 +1243,7 @@ namespace DataLayer
 
         public List<DocumentoDetalle> SelectMovimientoAlmacenCantidadesExtornadas(MovimientoAlmacen movimientoAlmacen)
         {
-            var objCommand = GetSqlCommand("ps_movimientoAlmacenCantidadesExtornadas");
+            var objCommand = GetSqlCommand("CLIENTE.ps_movimientoAlmacenCantidadesExtornadas");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
             DataTable dataTable = Execute(objCommand);
             List<DocumentoDetalle> documentoDetalleList = new List<DocumentoDetalle>();
@@ -1260,7 +1260,7 @@ namespace DataLayer
 
         public Guid SelectMovimientoAlmacenIdCpeCabeceraBe(MovimientoAlmacen movimientoAlmacen)
         {
-            var objCommand = GetSqlCommand("ps_movimientoAlmacenObtenerIdCPECabeceraBE");
+            var objCommand = GetSqlCommand("CLIENTE.ps_movimientoAlmacenObtenerIdCPECabeceraBE");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
             DataTable dataTable = Execute(objCommand);
             List<DocumentoDetalle> documentoDetalleList = new List<DocumentoDetalle>();

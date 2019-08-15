@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Crear/Modificar Pedido Venta";
+    ViewBag.Title = "Crear/Modificar Requerimiento";
     Model.Pedido pedido = ViewBag.pedido;
     Model.DireccionEntrega direccionEntrega = ViewBag.direccionEntrega;
     Model.Solicitante solicitante = ViewBag.solicitante;
@@ -24,16 +24,16 @@
             <!--NÚMERO PEDIDO-->
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <label for="pedido_numeroPedido" class="control-label col-xs-4">Número Solicitud:</label>
                     <div class="col-xs-8">
                         @if (pedido.numeroPedido != 0)
-                        {
-                            @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
-                        }
+        {
+                @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+}
+else
+{
+                @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+}
                     </div>
                 </div>
             </div>
@@ -389,7 +389,7 @@
             </div>
 
 
-            <div class="row">
+            <div hidden="hidden" class="row">
                 <!--FECHA ENTREGA -->
                 <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
@@ -653,7 +653,7 @@
                     }
 
                     <th data-name="porcentajeDescuentoMostrar" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-                    <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+                    <th data-name="precioNeto" data-visible="false"  data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
 
                     @if (pedido.mostrarCosto)
                     {
@@ -674,8 +674,8 @@
                     }
 
                     <th data-name="flete"  data-visible="false" data-sortable="false" data-breakpoints="xs sm">Flete</th>
-                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
-                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Reg. Fact.</th>
+                    <th data-name="precioUnitario"   data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+                    <th data-name="precioUnitario" data-visible="false"  data-sortable="false" data-breakpoints="xs sm">Precio Reg. Fact.</th>
                     <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
                     <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
                     <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
@@ -993,9 +993,9 @@
 
                             <!--PRESENTACIÓN-->
                             <div class="form-group">
-                                <label for="unidad" class="control-label col-xs-3">Presentación:</label>
+                                <label for="unidad" class="control-label col-xs-3">Unidad:</label>
                                 <div class="col-xs-9">
-                                    <select class="form-control" id="unidad" name="unidad"></select>
+                                    <select disabled class="form-control" id="unidad" name="unidad"></select>
                                 </div>
                             </div>
 

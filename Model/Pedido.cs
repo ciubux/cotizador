@@ -17,7 +17,7 @@ namespace Model
             this.tipoPedidoVentaBusqueda = tiposPedidoVentaBusqueda.Todos;
             this.tipoPedidoCompraBusqueda = tiposPedidoCompraBusqueda.Todos;
             this.tipoPedidoAlmacenBusqueda = tiposPedidoAlmacenBusqueda.Todos;
-
+            this.estadoRequerimiento = estadosRequerimiento.Ingresado;
             this.solicitante = new Solicitante();
             this.pedidoAdjuntoList = new List<PedidoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
@@ -561,8 +561,29 @@ namespace Model
         [Display(Name = "SKU:")]
         public String sku { get; set; }
 
-        
 
+
+        [Display(Name = "Estado Requerimiento:")]
+        public estadosRequerimiento estadoRequerimiento { get; set; }
+        public enum estadosRequerimiento
+        {
+            [Display(Name = "Ingresado")]
+            Ingresado = 0, 
+            [Display(Name = "Aprobado")]
+            Aprobado = 1,  
+            [Display(Name = "Liberada")]
+            Liberada = 2
+        }
+
+        public String estadoRequerimientoString
+        {
+            get
+            {
+                return EnumHelper<estadosRequerimiento>.GetDisplayValue(this.estadoRequerimiento);
+            }
+        }
+
+        public bool excedioPresupuesto { get; set; }
 
     }
 }

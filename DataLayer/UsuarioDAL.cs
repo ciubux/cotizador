@@ -221,6 +221,59 @@ namespace DataLayer
                         Constantes.DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO = int.Parse(valorParametro); break;
                     case "VARIACION_PRECIO_ITEM_PEDIDO":
                         Constantes.VARIACION_PRECIO_ITEM_PEDIDO = Decimal.Parse(valorParametro); break;
+                    case "USER_EOL_TEST":
+                        Constantes.USER_EOL_TEST = valorParametro; break;
+                    case "PASSWORD_EOL_TEST":
+                        Constantes.PASSWORD_EOL_TEST = valorParametro; break;
+                    case "ENDPOINT_ADDRESS_EOL_TEST":
+                        Constantes.ENDPOINT_ADDRESS_EOL_TEST = valorParametro; break;
+                    case "MAIL_COMUNICACION_FACTURAS":
+                        Constantes.MAIL_COMUNICACION_FACTURAS = valorParametro; break;
+                    case "PASSWORD_MAIL_COMUNICACION_FACTURAS":
+                        Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS = valorParametro; break;
+                    case "MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS":
+                        Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = valorParametro; break;
+                    case "PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS":
+                        Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = valorParametro; break;
+                    case "ID_VENDEDOR_POR_ASIGNAR":
+                        Constantes.ID_VENDEDOR_POR_ASIGNAR = int.Parse(valorParametro); break;
+                    case "DIAS_MAX_COTIZACION_TRANSITORIA":
+                        Constantes.DIAS_MAX_COTIZACION_TRANSITORIA = int.Parse(valorParametro); break;
+
+
+                    case "HORA_CORTE_CREDITOS_LIMA":
+                        {
+
+                            DateTime horaCorte = new DateTime();
+                            String[] horaArray = valorParametro.Split(':');
+                            horaCorte = new DateTime(horaCorte.Year, horaCorte.Month, horaCorte.Day,
+                                Int32.Parse(horaArray[0]),
+                                Int32.Parse(horaArray[1]),
+                                Int32.Parse(horaArray[2])
+                            );
+
+                            Constantes.HORA_CORTE_CREDITOS_LIMA = horaCorte; break;
+                        }
+
+                    case "USER_EOL_PROD":
+                        Constantes.USER_EOL_PROD = valorParametro; break;
+                    case "PASSWORD_EOL_PROD":
+                        Constantes.PASSWORD_EOL_PROD = valorParametro; break;
+                    case "ENDPOINT_ADDRESS_EOL_PROD":
+                        Constantes.ENDPOINT_ADDRESS_EOL_PROD = valorParametro; break;
+                    case "DESCARGAR_XML":
+                        Constantes.DESCARGAR_XML = int.Parse(valorParametro); break;
+                    case "CPE_CABECERA_BE_ID":
+                        Constantes.CPE_CABECERA_BE_ID = valorParametro; break;
+                    case "CPE_CABECERA_BE_COD_GPO":
+                        Constantes.CPE_CABECERA_BE_COD_GPO = valorParametro; break;
+
+                    case "AMBIENTE_EOL":
+                        {
+                            Constantes.AMBIENTE_EOL = valorParametro;
+                            //  Constantes.AMBIENTE_EOL = "TEST";
+                        }
+                        break;
 
                     case "RUC_MP":
                         Constantes.RUC_MP = valorParametro; break;
@@ -278,6 +331,7 @@ namespace DataLayer
                     obj.domicilioLegal.direccion = Converter.GetString(row, "direccionDomicilioLegal");
                     obj.direccionEntregaAlmacen = new DireccionEntrega();
                     obj.direccionEntregaAlmacen.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega_almacen");
+                    obj.limitePresupuesto = Converter.GetDecimal(row, "limite_presupuesto");
                     direccionEntregaList.Add(obj);
                 }
                 usuario.direccionEntregaList = direccionEntregaList;
