@@ -199,6 +199,13 @@ namespace Model
         public static String VAR_SESSION_PERMISO_VER = "permisoVer";
 
 
+        public static String VAR_SESSION_PERIODOSOLICITUD = "periodoSolcilitud";
+        public static String VAR_SESSION_PERIODOSOLICITUD_BUSQUEDA = "periodoSolcilitudBusqueda";
+        public static String VAR_SESSION_PERIODOSOLICITUD_LISTA = "periodoSolcilitudList";
+        public static String VAR_SESSION_PERIODOSOLICITUD_VER = "periodoSolcilitudVer";
+
+
+
         public static String VAR_SESSION_ASIGNACION_PERMISOS = "AsignacionPermisos";
         public static String VAR_SESSION_CAMBIO_ASIGNACION_PERMISOS = "CambioAsignacionPermisos";
 
@@ -501,8 +508,12 @@ namespace Model
             BusquedaPermisos = 105,
 
             [Display(Name = "MANTENIMIENTO PERMISO")]
-            MantenimientoPermisos = 106
+            MantenimientoPermisos = 106,
 
+            [Display(Name = "BUSQUEDA PERIODOS REQUERIMIENTO")]
+            BusquedaPeriodosSolicitud = 1001,
+            [Display(Name = "CREATE/UPDATE PERIODO REQUERIMIENTO")]
+            MantenimientoPeriodoSolicitud = 1002
         };
 
 

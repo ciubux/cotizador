@@ -477,6 +477,40 @@ C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\bin\Debug\Framew
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+<<<<<<< HEAD
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Spire.License.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Spire.Pdf.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\NPOI.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Microsoft.mshtml.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ICSharpCode.SharpZipLib.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.pdb
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.pdb
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.dll.config
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.pdb
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll.config
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.pdb
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\NPOI.xml
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.pdb
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
+G:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csprojAssemblyReference.cache
+G:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
+G:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
+G:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
+G:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+=======
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.pdb
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll.config
@@ -494,3 +528,4 @@ C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\obj\Debug\Cotiza
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+>>>>>>> b8479c108e88c988ccd67dadb924f39f85134124
