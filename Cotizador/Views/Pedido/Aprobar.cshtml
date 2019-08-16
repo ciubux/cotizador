@@ -1104,6 +1104,55 @@
                     <input type="hidden" id="verIdPedido" />
                     <input type="hidden" id="verIdCliente" />
 
+                    <div class="row">
+                        <!--FECHA ENTREGA -->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.rangoFechasEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
+                                <div class="input-group col-xs-6 col-lg-8">
+                                    <div class="input-group-addon" style="width:70px">
+                                        <span class="input-group-text" id="basic-addon1">Desde:</span>
+                                    </div>
+                                    <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesdeTodos" />
+                                    <input class="form-control" type="text" id="pedido_fechaEntregaDesdeTodos" name="pedido_fechaEntregaDesdeTodos">
+                                </div>
+                                <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+                                <div class="input-group col-xs-6 col-lg-8">
+
+                                    <div class="input-group-addon" style="width:70px">
+                                        <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                                    </div>
+                                    <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHastaTodos" />
+                                    <input class="form-control" type="text" id="pedido_fechaEntregaHastaTodos" name="pedido_fechaEntregaHastaTodos">
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!--HORA ENTREGA -->
+                        <div class="col-sm-12 col-lg-8">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.rangoHoraEntrega, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-2" })
+                                <div class="input-group col-xs-4 col-lg-4">
+                                    <div class="input-group-addon" style="width:70px">
+                                        <span class="input-group-text" id="basic-addon1">1er Turno:</span>
+                                    </div>
+                                    <input class="form-control" type="time" id="pedido_horaEntregaDesde" name="pedido_horaEntregaDesde" value="@pedido.horaEntregaDesde">
+                                    <input class="form-control" type="time" id="pedido_horaEntregaHasta" name="pedido_horaEntregaHasta" value="@pedido.horaEntregaHasta">
+                                </div>
+                                <div class="input-group col-xs-4 col-lg-4">
+                                    <div class="input-group-addon" style="width:70px">
+                                        <span class="input-group-text" id="basic-addon1">2do Turno:</span>
+                                    </div>
+                                    <input class="form-control" type="time" id="pedido_horaEntregaAdicionalDesde" name="pedido_horaEntregaAdicionalDesde" value="@pedido.horaEntregaAdicionalDesde">
+                                    <input class="form-control" type="time" id="pedido_horaEntregaAdicionalHasta" name="pedido_horaEntregaAdicionalHasta" value="@pedido.horaEntregaAdicionalHasta">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
 
                     <table id="tableAprobarPedidos" class="table" data-editing="false"
                            data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
@@ -1116,6 +1165,7 @@
                            data-editing-add-text="Descartar cambios">
                         <thead>
                             <tr>
+                                <th data-name="numero" data-sortable="false" data-breakpoints="xs">N°</th>
                                 <th data-name="puntoEntrega" data-sortable="false" data-breakpoints="xs">Punto de Entrega</th>
                                 <th data-name="sku" data-sortable="false" data-breakpoints="xs">SKU</th>
                                 <th data-name="producto" data-sortable="false">Producto / Descripción</th>
