@@ -30,6 +30,30 @@ jQuery(function ($) {
             }
         }
 
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        var fechaEntregaDesde = $("#fechaEntregaDesdeTodostmp").val();
+        $("#pedido_fechaEntregaDesdeTodos").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
+
+        var fechaEntregaHasta = $("#fechaEntregaHastaTodostmp").val();
+        $("#pedido_fechaEntregaHastaTodos").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
     });
 
    
@@ -4411,6 +4435,8 @@ jQuery(function ($) {
                     }
                 });
 
+                var nro = 1;
+
                 for (var i = 0; i < pedidoList.length; i++) {
 
                     var observaciones = pedidoList[i].observaciones == null || pedidoList[i].observaciones == 'undefined' ? '' : pedidoList[i].observaciones;
@@ -4435,9 +4461,10 @@ jQuery(function ($) {
 
                     var direcc = pedidoList[i].direccionEntrega.descripcion + " (" + pedidoList[i].direccionEntrega.nombre + ") " + pedidoList[i].direccionEntrega.ubigeo.Departamento + " - " + pedidoList[i].direccionEntrega.ubigeo.Provincia + " - " + pedidoList[i].direccionEntrega.ubigeo.Distrito;
 
-
+                    
                     for (j = 0; j < pedidoList[i].pedidoDetalleList.length; j++) {
                         var pedido = '<tr data-expanded="true">' +
+                            '<td>  ' + nro + '  </td>' +
                             '<td>  ' + direcc + '  </td>' +
                             '<td>  ' + pedidoList[i].pedidoDetalleList[j].producto.sku + '  </td>' +
                             '<td>  ' + pedidoList[i].pedidoDetalleList[j].producto.descripcion + '  </td>' +
@@ -4447,7 +4474,7 @@ jQuery(function ($) {
                             '<td>  ' + pedidoList[i].pedidoDetalleList[j].subTotal.toFixed(cantidadDecimales) + '</td>' 
                             '</tr>';
 
-
+                        nro = nro + 1;
                         $("#tableAprobarPedidos").append(pedido);
                     }
                 }

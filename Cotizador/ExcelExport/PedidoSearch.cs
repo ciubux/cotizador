@@ -261,7 +261,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setColumnWidth(sheet, "H", 2200);
                 UtilesHelper.setColumnWidth(sheet, "I", 2200);
                 UtilesHelper.setColumnWidth(sheet, "J", 2200);
-                UtilesHelper.setColumnWidth(sheet, "K", 3000);
+                UtilesHelper.setColumnWidth(sheet, "K", 1000);
+                UtilesHelper.setColumnWidth(sheet, "L", 3000);
 
                 UtilesHelper.setRowHeight(sheet, 1, 350);
                 UtilesHelper.combinarCeldas(sheet, 1, 1, "A", "E");
@@ -300,7 +301,7 @@ namespace Cotizador.ExcelExport
 
                 int i = 7;
                 UtilesHelper.setRowHeight(sheet, i-1, 350);
-                UtilesHelper.combinarCeldas(sheet, i - 1, i - 1, "A", "K");
+                UtilesHelper.combinarCeldas(sheet, i - 1, i - 1, "A", "L");
                 UtilesHelper.setValorCelda(sheet, i - 1, "A", "REQUERIMIENTOS", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "B", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "C", "", titleMasterCellStyle);
@@ -312,7 +313,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i - 1, "I", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "J", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "K", "", titleMasterCellStyle);
-                
+                UtilesHelper.setValorCelda(sheet, i - 1, "L", "", titleMasterCellStyle);
 
 
                 UtilesHelper.setRowHeight(sheet, i, 540);
@@ -326,7 +327,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "H", "Cant. Prod 2", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "I", "Tope Ppto.", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "J", "Total", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "K", "Estado", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "K", "(X)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "L", "Estado", titleCellStyle);
 
 
                 i++;
@@ -375,17 +377,19 @@ namespace Cotizador.ExcelExport
 
                     }
 
-                    UtilesHelper.setValorCelda(sheet, i, "I", (double)obj.topePresupuesto, twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "J", (double)obj.montoTotal, twoDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "I", (double)obj.montoTotal, twoDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "J", (double)obj.topePresupuesto, twoDecCellStyle);
+                    
                     if (obj.excedioPresupuesto)
                     {
                         sheet.GetRow(i - 1).GetCell(9).CellStyle = twoDecErrorCellStyle;
+                        UtilesHelper.setValorCelda(sheet, i, "K", "X", dataCenterCellStyle);
                     } else
                     {
                         sheet.GetRow(i - 1).GetCell(9).CellStyle = twoDecSuccessCellStyle;
                     }
 
-                    UtilesHelper.setValorCelda(sheet, i, "K", obj.estadoRequerimientoString, dataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "L", obj.estadoRequerimientoString, dataCenterCellStyle);
 
                     i++;
                 }
@@ -397,8 +401,8 @@ namespace Cotizador.ExcelExport
                 sheet.GetRow(i - 1).GetCell(7).CellFormula = "SUM(" + UtilesHelper.columnas[7] + "2:" + UtilesHelper.columnas[7] + (i - 1) + ")";
                 sheet.GetRow(i - 1).GetCell(7).CellStyle = dataCenterCellStyle;
 
-                sheet.GetRow(i - 1).GetCell(9).CellFormula = "SUM(" + UtilesHelper.columnas[8] + "2:" + UtilesHelper.columnas[8] + (i - 1) + ")";
-                sheet.GetRow(i - 1).GetCell(9).CellStyle = twoDecCellStyle;
+                sheet.GetRow(i - 1).GetCell(8).CellFormula = "SUM(" + UtilesHelper.columnas[8] + "2:" + UtilesHelper.columnas[8] + (i - 1) + ")";
+                sheet.GetRow(i - 1).GetCell(8).CellStyle = twoDecCellStyle;
 
 
                 MemoryStream ms = new MemoryStream();
