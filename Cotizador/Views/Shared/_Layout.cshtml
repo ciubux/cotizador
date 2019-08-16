@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "301";
+    TempData["ScriptVersion"] = "302";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -107,14 +107,23 @@
                                     {
                                         <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Requerimientos", "Pedir", "Pedido")</li>
                                     }
-                                    @if (usuario.apruebaPedidos)
+                                    @if (usuario.idUsuario == Guid.Parse("7D485AFF-AC89-462D-BBB8-0F8ADF8C02F1"))
                                     {
+                                        if (usuario.apruebaPedidos)
+                                        {
                                         <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Aprobar Requerimientos", "Aprobar", "Pedido")</li>
+                                        }
                                     }
-                        
+                                    else
+                                    {
+                                        <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Buscar Requerimientos", "Aprobar", "Pedido")</li>
+                                    }
+
                                 </ul>
                             </li>
 
+                            if (usuario.idUsuario == Guid.Parse("7D485AFF-AC89-462D-BBB8-0F8ADF8C02F1"))
+                            {
 
                             <li class="@linkPedidos">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -132,9 +141,11 @@
                         
                                 </ul>
                             </li>
+                            }
                         }
 
-
+                        if (usuario.idUsuario == Guid.Parse("7D485AFF-AC89-462D-BBB8-0F8ADF8C02F1"))
+                        {
 
                         <li class="@linkGuiasRemision">
                             <a class="dropdown-toggle" data-toggle="dropdown">
@@ -147,8 +158,8 @@
                         </li>
 
 
-                        if (usuario.visualizaDocumentosVenta)
-                        {
+                            if (usuario.visualizaDocumentosVenta)
+                            {
 
                             <li class="@linkDocumentosVenta">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -163,11 +174,11 @@
                                     }
                                 </ul>
                             </li>
-                        }
+                            }
 
 
-                        if (usuario.modificaPeriodoSolicitud)
-                        {
+                            if (usuario.modificaPeriodoSolicitud)
+                            {
 
                             <li class="@linkAdministracion">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -183,7 +194,9 @@
                                     }
                                 </ul>
                             </li>
+                            }
                         }
+
                     }
 
                 </ul>

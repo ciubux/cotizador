@@ -1,11 +1,17 @@
 ﻿@{
-    /**/
 
-    ViewBag.Title = "Aprobar Requerimientos";
     Model.Pedido pedido = ViewBag.pedido;
     Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
     List<Model.Pedido> pedidoList = ViewBag.pedidoList;
     Model.DocumentoVenta documentoVenta = ViewBag.documentoVenta;
+    /**/
+    if (pedido.usuario.idUsuario == Guid.Parse("7D485AFF-AC89-462D-BBB8-0F8ADF8C02F1"))
+    {
+        ViewBag.Title = "Aprobar Requerimientos";
+    }
+    else {
+        ViewBag.Title = "Requerimientos";
+    }
 }
 
 <div class="page-header">
@@ -477,10 +483,12 @@
 
         }
 
-
+        @if (pedido.usuario.idUsuario == Guid.Parse("7D485AFF-AC89-462D-BBB8-0F8ADF8C02F1"))
+        {
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnAprobarSolicitudesPreview" type="button" class="btn btn-success" data-toggle="modal" data-target="#modalAprobarTodosPreview">Aprobar Todos</button>
         </div>
+        }
 
     </form>
 </div>

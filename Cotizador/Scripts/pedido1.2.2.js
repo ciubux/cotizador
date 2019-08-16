@@ -1862,7 +1862,7 @@ jQuery(function ($) {
     $("#btnAgregarProductosDesdePreciosRegistrados").click(function () {
         var idCiudad = $("#idCiudad").val();
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-           // alert("Debe seleccionar una dirección de entrega para cargar los productos.");
+           //alert("Debe seleccionar una dirección de entrega para cargar los productos.");
             $("#idCiudad").focus();
             $("#btnCancelarObtenerProductos").click();
             return false;
@@ -2415,7 +2415,7 @@ jQuery(function ($) {
 
 
         $('body').loadingModal({
-            text: 'Creando Pedido...'
+            text: 'Creando Requerimiento...'
         });
         $.ajax({
             url: "/Pedido/Create",
@@ -2470,7 +2470,7 @@ jQuery(function ($) {
         if (!validarIngresoDatosObligatoriosPedido())
             return false;
         $('body').loadingModal({
-            text: 'Editando Pedido...'
+            text: 'Editando Requerimiento...'
         });
         $.ajax({
             url: "/Pedido/Update",
