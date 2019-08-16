@@ -2098,6 +2098,65 @@ namespace Cotizador.Controllers
             //return pedidoList.Count();
         }
 
+        public String AprobarTodosPreview()
+        {
+            List<Pedido> pedidoList  = (List<Pedido>) this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA_APROBACION];
+
+            List<Pedido> finalList = new List<Pedido>();
+            bool esNuevo = true;
+            bool nuevoDetalle = true;
+            foreach (Pedido req in pedidoList)
+            {
+                Pedido item = null;
+                esNuevo = true;
+                foreach (Pedido ped in finalList)
+                {
+                    if (ped.direccionEntrega.idDireccionEntrega == req.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega)
+                    {
+                        esNuevo = false;
+                        item = ped;
+                    }
+                }
+
+                if (esNuevo)
+                {
+                    item = new Pedido();
+                    item.direccionEntrega = req.direccionEntrega.direccionEntregaAlmacen;
+                    item.ciudad = req.ciudad;
+                    item.cliente = req.cliente;
+                    item.pedidoDetalleList = new List<PedidoDetalle>();
+                    finalList.Add(item);
+                }
+
+                
+                foreach (PedidoDetalle detReq in req.pedidoDetalleList)
+                {
+                    nuevoDetalle = true;
+                    PedidoDetalle det = null;
+                    foreach (PedidoDetalle itemDet in item.pedidoDetalleList) {   
+                        if (detReq.producto.sku.Equals(itemDet.producto.sku))
+                        {
+                            nuevoDetalle = false;
+                            det = itemDet;
+                        }
+                    }
+
+                    if (nuevoDetalle)
+                    {
+                        det = JsonConvert.DeserializeObject<PedidoDetalle>(JsonConvert.SerializeObject(detReq));
+                        det.idDocumentoDetalle = Guid.Empty;
+                        item.pedidoDetalleList.Add(det);
+
+                    } else
+                    {
+                        det.cantidad = det.cantidad + detReq.cantidad;
+                    }
+                }
+            }
+
+            String pedidoListString = JsonConvert.SerializeObject(finalList);
+            return pedidoListString;
+        }
 
         public String ConsultarSiExistePedido()
         {

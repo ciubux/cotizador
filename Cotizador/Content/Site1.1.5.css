@@ -209,6 +209,11 @@ textarea {
     #modalEdicionDireccionEntrega .modal-dialog {
         width: 900px;
     }
+
+    #modalAprobarTodosPreview .modal-dialog {
+        width: 1000px;
+    }
+    
 }
 
 

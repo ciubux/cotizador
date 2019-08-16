@@ -4388,6 +4388,69 @@ jQuery(function ($) {
         });
     });
 
+    $("#btnAprobarSolicitudesPreview").click(function () {
+        $.ajax({
+            url: "/Pedido/AprobarTodosPreview",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+            },
+            error: function () {
+            },
+            success: function (pedidoList) {
+
+                //$("#tableAprobarPedidos").footable();
+
+                $("#tableAprobarPedidos > tbody").empty();
+                $("#tableAprobarPedidos").footable({
+                    "paging": {
+                        "enabled": true
+                    }
+                });
+
+                for (var i = 0; i < pedidoList.length; i++) {
+
+                    var observaciones = pedidoList[i].observaciones == null || pedidoList[i].observaciones == 'undefined' ? '' : pedidoList[i].observaciones;
+
+                    /*if (pedidoList[i].observaciones != null && pedidoList[i].observaciones.length > 20) {
+                        var idComentarioCorto = pedidoList[i].idPedido + "corto";
+                        var idComentarioLargo = pedidoList[i].idPedido + "largo";
+                        var idVerMas = pedidoList[i].idPedido + "verMas";
+                        var idVermenos = pedidoList[i].idPedido + "verMenos";
+                        var comentario = pedidoList[i].observaciones.substr(0, 20) + "...";
+
+                        observaciones = '<div id="' + idComentarioCorto + '" style="display:block;">' + comentario + '</div>' +
+                            '<div id="' + idComentarioLargo + '" style="display:none;">' + pedidoList[i].observaciones + '</div>' +
+                            '<p><a id="' + idVerMas + '" class="' + pedidoList[i].idPedido + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
+                            '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
+                    }*/
+
+
+                    var cantidad1 = 0
+                    var cantidad2 = 0
+                    
+
+                    var direcc = pedidoList[i].direccionEntrega.descripcion + " (" + pedidoList[i].direccionEntrega.nombre + ") " + pedidoList[i].direccionEntrega.ubigeo.Departamento + " - " + pedidoList[i].direccionEntrega.ubigeo.Provincia + " - " + pedidoList[i].direccionEntrega.ubigeo.Distrito;
+
+
+                    for (j = 0; j < pedidoList[i].pedidoDetalleList.length; j++) {
+                        var pedido = '<tr data-expanded="true">' +
+                            '<td>  ' + direcc + '  </td>' +
+                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].producto.sku + '  </td>' +
+                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].producto.descripcion + '  </td>' +
+                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].unidad + ' </td>' +
+                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
+                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].cantidad + '</td>' +
+                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].subTotal.toFixed(cantidadDecimales) + '</td>' 
+                            '</tr>';
+
+
+                        $("#tableAprobarPedidos").append(pedido);
+                    }
+                }
+            }
+        });
+    });
 
     $("#btnBusquedaRequerimientos").click(function () {
 
