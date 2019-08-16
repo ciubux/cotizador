@@ -177,14 +177,16 @@ namespace Cotizador.ExcelExport
                 titleMasterCellStyle.SetFont(titleMasterFont);
                 titleMasterCellStyle.Alignment = HorizontalAlignment.Center;
                 titleMasterCellStyle.VerticalAlignment = VerticalAlignment.Center;
-                titleMasterCellStyle.BottomBorderColor = HSSFColor.RoyalBlue.Index;
-                titleMasterCellStyle.LeftBorderColor = HSSFColor.RoyalBlue.Index;
-                titleMasterCellStyle.TopBorderColor = HSSFColor.RoyalBlue.Index;
-                titleMasterCellStyle.RightBorderColor = HSSFColor.RoyalBlue.Index;
+                titleMasterCellStyle.FillPattern = FillPattern.SolidForeground;
+                titleMasterCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
                 titleMasterCellStyle.BorderLeft = BorderStyle.Thin;
                 titleMasterCellStyle.BorderRight = BorderStyle.Thin;
                 titleMasterCellStyle.BorderTop = BorderStyle.Thin;
                 titleMasterCellStyle.BorderBottom = BorderStyle.Thin;
+                titleMasterCellStyle.BottomBorderColor = HSSFColor.RoyalBlue.Index;
+                titleMasterCellStyle.LeftBorderColor = HSSFColor.RoyalBlue.Index;
+                titleMasterCellStyle.TopBorderColor = HSSFColor.RoyalBlue.Index;
+                titleMasterCellStyle.RightBorderColor = HSSFColor.RoyalBlue.Index;
 
 
                 var avgCellFormate = wb.CreateDataFormat();
@@ -262,12 +264,13 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setColumnWidth(sheet, "K", 3000);
 
                 UtilesHelper.setRowHeight(sheet, 1, 350);
+                UtilesHelper.combinarCeldas(sheet, 1, 1, "A", "E");
                 UtilesHelper.setValorCelda(sheet, 1, "A", "PRODUCTOS", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "B", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "C", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "D", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "E", "", titleMasterCellStyle);
-                UtilesHelper.combinarCeldas(sheet, 1, 1, "A", "E");
+                
                 
                
 
@@ -297,18 +300,19 @@ namespace Cotizador.ExcelExport
 
                 int i = 7;
                 UtilesHelper.setRowHeight(sheet, i-1, 350);
-                UtilesHelper.setValorCelda(sheet, i-1, "A", "REQUERIMIENTOS", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "B", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "C", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "D", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "E", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "F", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "G", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "H", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "I", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "J", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "K", "", titleMasterCellStyle);
-                UtilesHelper.combinarCeldas(sheet, i-1, i-1, "A", "K");
+                UtilesHelper.combinarCeldas(sheet, i - 1, i - 1, "A", "K");
+                UtilesHelper.setValorCelda(sheet, i - 1, "A", "REQUERIMIENTOS", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "B", "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "C", "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "D", "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "E", "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "F", "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "G", "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "H", "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "I", "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "J", "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, "K", "", titleMasterCellStyle);
+                
 
 
                 UtilesHelper.setRowHeight(sheet, i, 540);
