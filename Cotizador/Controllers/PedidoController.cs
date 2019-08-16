@@ -2100,13 +2100,20 @@ namespace Cotizador.Controllers
 
         public String AprobarTodosPreview()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             List<Pedido> pedidoList  = (List<Pedido>) this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA_APROBACION];
 
             List<Pedido> finalList = new List<Pedido>();
+            PedidoBL pedidoBL = new PedidoBL();
+            Pedido pedidoSearch = new Pedido(Pedido.ClasesPedido.Venta);
             bool esNuevo = true;
             bool nuevoDetalle = true;
             foreach (Pedido req in pedidoList)
             {
+                pedidoSearch.idPedido = req.idPedido;
+                Pedido reqTotal = pedidoBL.GetPedido(pedidoSearch, usuario);
+
                 Pedido item = null;
                 esNuevo = true;
                 foreach (Pedido ped in finalList)
@@ -2120,16 +2127,17 @@ namespace Cotizador.Controllers
 
                 if (esNuevo)
                 {
-                    item = new Pedido();
+                    item = new Pedido(Pedido.ClasesPedido.Venta);
+                    
                     item.direccionEntrega = req.direccionEntrega.direccionEntregaAlmacen;
-                    item.ciudad = req.ciudad;
-                    item.cliente = req.cliente;
+                    item.ciudad = reqTotal.ciudad;
+                    item.cliente = reqTotal.cliente;
                     item.pedidoDetalleList = new List<PedidoDetalle>();
                     finalList.Add(item);
                 }
 
                 
-                foreach (PedidoDetalle detReq in req.pedidoDetalleList)
+                foreach (PedidoDetalle detReq in reqTotal.pedidoDetalleList)
                 {
                     nuevoDetalle = true;
                     PedidoDetalle det = null;
@@ -2154,8 +2162,20 @@ namespace Cotizador.Controllers
                 }
             }
 
+            decimal subTotal = 0;
+
+            foreach (Pedido ped in finalList)
+            {
+                HelperDocumento.calcularMontosTotales(ped);
+                subTotal = subTotal + ped.montoSubTotal;
+            }
+
+            decimal igv = subTotal * ((decimal) 0.18);
+            decimal total = igv + subTotal;
+
             String pedidoListString = JsonConvert.SerializeObject(finalList);
-            return pedidoListString;
+
+            return "{\"subTotal\":" + subTotal + ",\"igv\":" + igv + ",\"total\":" + total + ",\"pedidoList\":" + pedidoListString + "}";
         }
 
         public String ConsultarSiExistePedido()

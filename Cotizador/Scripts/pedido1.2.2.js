@@ -4397,8 +4397,11 @@ jQuery(function ($) {
             },
             error: function () {
             },
-            success: function (pedidoList) {
-
+            success: function (consolidado) {
+                $("#modalAprobarTodosPreview #verMontoSubTotal").html(consolidado.subTotal.toFixed(cantidadDecimales));
+                $("#modalAprobarTodosPreview #verMontoIGV").html(consolidado.igv.toFixed(cantidadDecimales));
+                $("#modalAprobarTodosPreview #verMontoTotal").html(consolidado.total.toFixed(cantidadDecimales));
+                pedidoList = consolidado.pedidoList;
                 //$("#tableAprobarPedidos").footable();
 
                 $("#tableAprobarPedidos > tbody").empty();
