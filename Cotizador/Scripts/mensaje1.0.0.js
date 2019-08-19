@@ -250,7 +250,13 @@
         $('#Mensaje').modal('show');
     });
 
-
+ function eliminateDuplicates(arrayIn) {
+        var arrayOut = {};
+        var unicos = arrayIn.filter(function (e) {
+            return arrayOut[e.id_mensaje] ? false : (arrayOut[e.id_mensaje] = true);
+        });
+        return unicos;
+    }
 
     var idUsuario;
     function ActulizarMensaje() {
@@ -269,8 +275,9 @@
                 success: function (list) {
 
                     if (list.length != 0) {
-
-
+                        
+                        list=eliminateDuplicates(list);
+                        
                         $("#imagenMP").before('<a data-notifications="' + list.length + '" class="btnModal" href="javascript:void()"></a>');
 
 
