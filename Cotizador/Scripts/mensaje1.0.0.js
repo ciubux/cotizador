@@ -250,7 +250,11 @@
         $('#Mensaje').modal('show');
     });
 
+<<<<<<< HEAD
     function eliminateDuplicates(arrayIn) {
+=======
+ function eliminateDuplicates(arrayIn) {
+>>>>>>> dc2b83dbb12f30b2156232b3ebfacc8e112bad52
         var arrayOut = {};
         var unicos = arrayIn.filter(function (e) {
             return arrayOut[e.id_mensaje] ? false : (arrayOut[e.id_mensaje] = true);
@@ -275,9 +279,15 @@
                 success: function (list) {
 
                     if (list.length != 0) {
+<<<<<<< HEAD
 
                         list=eliminateDuplicates(list);
 
+=======
+                        
+                        list=eliminateDuplicates(list);
+                        
+>>>>>>> dc2b83dbb12f30b2156232b3ebfacc8e112bad52
                         $("#imagenMP").before('<a data-notifications="' + list.length + '" class="btnModal" href="javascript:void()"></a>');
 
 
