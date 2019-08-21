@@ -1357,6 +1357,7 @@ namespace Cotizador.Controllers
             Cotizacion cotizacion = new Cotizacion();
             cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
             cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
+            cotizacion.usuarioBusqueda = usuario;
             this.Session[Constantes.VAR_SESSION_COTIZACION_VER] = cotizacion;
 
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
@@ -1462,7 +1463,7 @@ namespace Cotizador.Controllers
         public ActionResult ExportFormatoDetalleExcel()
         {
             CotizacionDetalleFormatoExcel excel = new CotizacionDetalleFormatoExcel();
-            return excel.generateExcel();
+            return excel.generateExcelFormato();
         }
 
         
@@ -1709,11 +1710,10 @@ namespace Cotizador.Controllers
         public String LoadProductosByExcel(HttpPostedFileBase file)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION];
+            Cotizacion cotizacion = this.CotizacionSession;
 
             try
             {
-
                 HSSFWorkbook hssfwb;
 
                 ProductoBL productoBL = new ProductoBL();
@@ -1721,45 +1721,54 @@ namespace Cotizador.Controllers
                 hssfwb = new HSSFWorkbook(file.InputStream);
 
                 ISheet sheet = hssfwb.GetSheetAt(0);
-                int row = 1;
+                int row = 0;
                 int cantidad = sheet.LastRowNum;
                 List<Cliente> clientesTemp = new List<Cliente>();
-                string textoTemp = "";
-                //   cantidad = 2008;
-                //sheet.LastRowNum
+
 
                 Decimal precioNeto = 0;
                 Decimal flete = 0;
                 string unidad = "";
                 int idProductoPresentacion = 0;
 
-                for (row = 1; row <= cantidad; row++)
+                int colSKU = 2;
+                int colUnidad = 5;
+                int colCantidad = 6;
+                int colPrecioNeto = 9;
+                int colFlete = 10;
+                int colObservaciones = 13;
+
+                for (row = CotizacionDetalleFormatoExcel.filaInicioDatos - 1; row <= cantidad; row++)
                 {
-                    if (sheet.GetRow(row) == null || sheet.GetRow(row).GetCell(0) == null || sheet.GetRow(row).GetCell(0).ToString().Trim().Equals(""))
+                    if (sheet.GetRow(row) == null || sheet.GetRow(row).GetCell(colSKU) == null || sheet.GetRow(row).GetCell(colSKU).ToString().Trim().Equals(""))
                     {
                         cantidad = 0;
+                        if (row == CotizacionDetalleFormatoExcel.filaInicioDatos - 1)
+                        {
+                            return "{\"success\":\"false\",\"message\":\"No se encontró SKU de producto en la primera fila de los datos.\"}";
+                        }
                     }
 
-                    if (cantidad > 0 && sheet.GetRow(row) != null && usuario.modificaMaestroClientes) //null is when the row only contains empty cells 
+                    if (cantidad > 0 && sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                     {
 
                         CotizacionDetalle item = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                         item.producto = new Producto();
                         try
                         {
-                            /* 0 SKU producto,
-                             * 1 unidad,
-                             * 2 precio unitario,
-                             * 3 % flete, 
-                             * 4 cantidad, 
-                             * 5 observaciones
-                            */
+                            
 
-                            if (sheet.GetRow(row).GetCell(0) != null)
+                            if (sheet.GetRow(row).GetCell(colSKU) != null)
                             {
-                                item.producto.idProducto = productoBL.getProductoId(sheet.GetRow(row).GetCell(0).ToString().Trim());
+                                item.producto.idProducto = productoBL.getProductoId(sheet.GetRow(row).GetCell(colSKU).ToString().Trim());
 
-                                item.producto = productoBL.getProducto(item.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente);
+                                if (cotizacion.cliente != null)
+                                {
+                                    item.producto = productoBL.getProducto(item.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente);
+                                } else
+                                {
+                                    item.producto = productoBL.getProducto(item.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, Guid.Empty);
+                                }
                             }
 
                             cotizacion.cotizacionDetalleList.Remove(cotizacion.cotizacionDetalleList.Where(p => p.producto.idProducto == item.producto.idProducto).FirstOrDefault());
@@ -1770,39 +1779,37 @@ namespace Cotizador.Controllers
 
 
                                 /* unidad */
-                                if (sheet.GetRow(row).GetCell(1) != null)
+                                if (sheet.GetRow(row).GetCell(colUnidad) != null)
                                 {
-                                    unidad = sheet.GetRow(row).GetCell(1).ToString().ToUpper().Trim();
+                                    unidad = sheet.GetRow(row).GetCell(colUnidad).ToString().ToUpper().Trim();
+                                    unidad = unidad.Split('-')[0].Trim();
                                 }
 
                                 /* precio unitario  */
-                                if (sheet.GetRow(row).GetCell(2) != null)
+                                if (sheet.GetRow(row).GetCell(colPrecioNeto) != null)
                                 {
-                                    precioNeto = Decimal.Parse(sheet.GetRow(row).GetCell(2).ToString());
+                                    precioNeto = Decimal.Parse(sheet.GetRow(row).GetCell(colPrecioNeto).ToString());
                                 }
 
                                 /* flete */
-                                if (sheet.GetRow(row).GetCell(3) != null)
+                                if (sheet.GetRow(row).GetCell(colFlete) != null)
                                 {
-                                    flete = Decimal.Parse(sheet.GetRow(row).GetCell(3).ToString());
+                                    flete = Decimal.Parse(sheet.GetRow(row).GetCell(colFlete).ToString());
                                 }
 
 
                                 /* cantidad */
-                                if (sheet.GetRow(row).GetCell(4) != null)
+                                if (sheet.GetRow(row).GetCell(colCantidad) != null)
                                 {
-                                    item.cantidad = int.Parse(sheet.GetRow(row).GetCell(4).ToString().Trim());
+                                    item.cantidad = int.Parse(sheet.GetRow(row).GetCell(colCantidad).ToString().Trim());
                                 }
 
                                 /* observaciones */
-                                if (sheet.GetRow(row).GetCell(5) != null)
+                                if (sheet.GetRow(row).GetCell(colObservaciones) != null)
                                 {
-                                    item.observacion = sheet.GetRow(row).GetCell(5).ToString().Trim();
+                                    item.observacion = sheet.GetRow(row).GetCell(colObservaciones).ToString().Trim();
                                 }
 
-
-                                //item.porcentajeDescuento = Decimal.Parse(Request["porcentajeDescuento"].ToString());
-                                //item.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
 
                                 switch (unidad)
                                 {
@@ -1819,6 +1826,7 @@ namespace Cotizador.Controllers
 
                                 item.unidad = item.producto.unidad;
                                 //si esPrecioAlternativo  se mostrará la unidad alternativa
+                                item.flete = flete;
 
                                 if (item.esPrecioAlternativo)
                                 {
@@ -1826,14 +1834,23 @@ namespace Cotizador.Controllers
                                     //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
                                     item.ProductoPresentacion = item.producto.getProductoPresentacion(idProductoPresentacion);
 
+                                    if (item.ProductoPresentacion == null)
+                                    {
+                                        item.esPrecioAlternativo = false;
+                                        item.precioNeto = precioNeto;
+                                        precioNetoAnterior = item.producto.precioClienteProducto.precioNeto;
+                                    }
+                                    else
+                                    {
 
-                                    item.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * item.ProductoPresentacion.Equivalencia));
+                                        item.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * item.ProductoPresentacion.Equivalencia));
 
 
-                                    precioNetoAnterior = item.producto.precioClienteProducto.precioNetoAlternativo;
+                                        precioNetoAnterior = item.producto.precioClienteProducto.precioNetoAlternativo;
 
 
-                                    item.unidad = item.ProductoPresentacion.Presentacion;
+                                        item.unidad = item.ProductoPresentacion.Presentacion;
+                                    }
                                 }
                                 else
                                 {
@@ -1842,7 +1859,7 @@ namespace Cotizador.Controllers
                                 }
 
 
-                                item.flete = flete;
+                                
                                 item.precioNetoAnterior = precioNetoAnterior;
                                 cotizacion.cotizacionDetalleList.Add(item);
 

@@ -475,3 +475,4 @@ G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompi
 G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
+G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\NPOI.xml

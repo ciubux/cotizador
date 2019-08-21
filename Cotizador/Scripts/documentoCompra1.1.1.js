@@ -218,17 +218,17 @@ jQuery(function ($) {
     $.datepicker.setDefaults($.datepicker.regional['es']);
 
     var fechaEmisionDesde = $("#fechaEmisionDesdetmp").val();
-    $("#documentoVenta_fechaEmisionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmisionDesde);
+    $("#documentoCompra_fechaEmisionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmisionDesde);
 
     var fechaEmisionHasta = $("#fechaEmisionHastatmp").val();
-    $("#documentoVenta_fechaEmisionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmisionHasta);
+    $("#documentoCompra_fechaEmisionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmisionHasta);
 
 
-    var documentoVenta_fechaEmision = $("#documentoVenta_fechaEmisiontmp").val();
-    $("#documentoVenta_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaEmision);
+    var documentoVenta_fechaEmision = $("#documentoCompra_fechaEmisiontmp").val();
+    $("#documentoCompra_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaEmision);
 
-    var documentoVenta_fechaVencimiento = $("#documentoVenta_fechaVencimientotmp").val();
-    $("#documentoVenta_fechaVencimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaVencimiento);
+    var documentoVenta_fechaVencimiento = $("#documentoCompra_fechaVencimientotmp").val();
+    $("#documentoCompra_fechaVencimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaVencimiento);
 
 
 
@@ -259,8 +259,8 @@ jQuery(function ($) {
     }
 
 
-    $("#documentoVenta_fechaEmisionDesde").change(function () {
-        var fechaEmisionDesde = $("#documentoVenta_fechaEmisionDesde").val();
+    $("#documentoCompra_fechaEmisionDesde").change(function () {
+        var fechaEmisionDesde = $("#documentoCompra_fechaEmisionDesde").val();
         $.ajax({
             url: "/DocumentoCompra/ChangeFechaEmisionDesde",
             type: 'POST',
@@ -272,8 +272,8 @@ jQuery(function ($) {
         });
     });
 
-    $("#documentoVenta_fechaEmisionHasta").change(function () {
-        var fechaEmisionHasta = $("#documentoVenta_fechaEmisionHasta").val();
+    $("#documentoCompra_fechaEmisionHasta").change(function () {
+        var fechaEmisionHasta = $("#documentoCompra_fechaEmisionHasta").val();
         $.ajax({
             url: "/DocumentoCompra/ChangeFechaEmisionHasta",
             type: 'POST',
@@ -792,7 +792,7 @@ jQuery(function ($) {
     $("#btnBusqueda").click(function () {
 
         var idCiudad = $("#idCiudad").val();
-        if ((idCiudad == "" || idCiudad == GUID_EMPTY)  && $("#documentoVenta_numero").val() != "") {
+        if ((idCiudad == "" || idCiudad == GUID_EMPTY)  && $("#documentoCompra_numero").val() != "") {
             $("#idCiudad").focus();
             $.alert({
                 title: TITLE_MENSAJE_BUSQUEDA,
@@ -809,19 +809,19 @@ jQuery(function ($) {
         //sede MP
         
         var idCliente = $("#idCliente").val();   
-        var numero = $("#documentoVenta_numero").val();
+        var numero = $("#documentoCompra_numero").val();
 
-        var numeroPedido = $("#documentoVenta_pedido_numeroPedido").val(); 
-        var numeroGuiaRemision = $("#documentoVenta_guiaRemision_numeroDocumento").val(); 
+        var numeroPedido = $("#documentoCompra_pedido_numeroPedido").val(); 
+        var numeroGuiaRemision = $("#documentoCompra_guiaRemision_numeroDocumento").val(); 
 
-        var fechaEmisionDesde = $("#documentoVenta_fechaEmisionDesde").val();
-        var fechaEmisionHasta = $("#documentoVenta_fechaEmisionHasta").val();
+        var fechaEmisionDesde = $("#documentoCompra_fechaEmisionDesde").val();
+        var fechaEmisionHasta = $("#documentoCompra_fechaEmisionHasta").val();
         //var estado = $("#estado").val();
 
-        var estadoDocumentoSunatBusqueda = $("#documentoVenta_estadoDocumentoSunatBusqueda").val();
-        var tipoDocumento = $("#documentoVenta_tipoDocumento").val();
+        var estadoDocumentoSunatBusqueda = $("#documentoCompra_estadoDocumentoSunatBusqueda").val();
+        var tipoDocumento = $("#documentoCompra_tipoDocumento").val();
 
-        var sku = $("#documentoVenta_sku").val();
+        var sku = $("#documentoCompra_sku").val();
 
 
         $("#btnBusqueda").attr("disabled", "disabled");
@@ -1361,21 +1361,21 @@ jQuery(function ($) {
 
     $("#btnFinalizarCreacionFactura").click(function () {
 
-        if ($("#documentoVenta_fechaEmision").val() == "" || $("#documentoVenta_fechaEmision").val() == null) {
+        if ($("#documentoCompra_fechaEmision").val() == "" || $("#documentoCompra_fechaEmision").val() == null) {
             alert("Debe ingresar la fecha de emisión.");
-            $("#documentoVenta_fechaEmision").focus();
+            $("#documentoCompra_fechaEmision").focus();
             return false;
         }
 
-        if ($("#documentoVenta_horaEmision").val() == "" || $("#documentoVenta_horaEmision").val() == null) {
+        if ($("#documentoCompra_horaEmision").val() == "" || $("#documentoCompra_horaEmision").val() == null) {
             alert("Debe ingresar la hora de emisión.");
-            $("#documentoVenta_horaEmision").focus();
+            $("#documentoCompra_horaEmision").focus();
             return false;
         }
 
         var observaciones = $("#venta_observaciones").val();
-        var fechaEmision = $("#documentoVenta_fechaEmision").val();
-        var horaEmision = $("#documentoVenta_horaEmision").val();
+        var fechaEmision = $("#documentoCompra_fechaEmision").val();
+        var horaEmision = $("#documentoCompra_horaEmision").val();
 
         desactivarBotonesFactura();
 
@@ -1415,7 +1415,7 @@ jQuery(function ($) {
                     $("#vpNRO_GRE").html(documentoVenta.cPE_CABECERA_BE.NRO_GRE);
 
                     /*OBSERVACIONES*/ /*CODIGO CLIENTE*/
-                    $("#vpOBSERVACIONES").html($("#documentoVenta_observaciones").val());
+                    $("#vpOBSERVACIONES").html($("#documentoCompra_observaciones").val());
                     $("#vpCODIGO_CLIENTE").html(documentoVenta.cliente.codigo);
 
 

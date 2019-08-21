@@ -18,9 +18,9 @@ using NPOI.SS.Util;
 
 namespace Cotizador.ExcelExport
 {
-    public class CotizacionDetalleFormatoExcel
+    public class CotizacionDetalleFormatoExcel : CotizacionDetalleExcel
     {
-        public FileStreamResult generateExcel()
+        public FileStreamResult generateExcelFormato()
         {
 
             HSSFWorkbook wb;
@@ -54,26 +54,18 @@ namespace Cotizador.ExcelExport
                 titleDataCellStyle.BorderTop = BorderStyle.Thin;
                 titleDataCellStyle.BorderRight = BorderStyle.Thin;
 
+                HSSFCellStyle titleDataStaticCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                titleDataStaticCellStyle.CloneStyleFrom(titleDataCellStyle);
+                titleDataStaticCellStyle.FillForegroundColor = HSSFColor.Grey50Percent.Index;
 
 
                 // create sheet
                 sheet = (HSSFSheet)wb.CreateSheet("DETALLE");
 
-                //HSSFSheet sheetMeta = (HSSFSheet)wb.CreateSheet("META");
-                //sheetMeta.CreateRow(0).CreateCell(0);
-                //sheetMeta.CreateRow(0).CreateCell(1);
-                //sheetMeta.CreateRow(0).CreateCell(2);
-                //UtilesHelper.setValorCelda(sheet, 1, "A", "MP", titleDataCellStyle);
-                //UtilesHelper.setValorCelda(sheet, 2, "A", "Alternativa", titleDataCellStyle);
-                //UtilesHelper.setValorCelda(sheet, 3, "A", "Proveedor", titleDataCellStyle);
-
-
-                /*guiaRemision,fecha_emision, ma.direccion_entrega, ub.distrito, 
-                 * ub.provincia,  ub.departamento, ma.observaciones,*/
 
                 /*Cabecera, Sub total*/
-                int rTotal = 200;
-                int cTotal = 6;
+                int rTotal = filaInicioDatos + cantFilasRegistrosAdicionales;
+                int cTotal = 22;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -85,33 +77,55 @@ namespace Cotizador.ExcelExport
                     }
                 }
 
+                UtilesHelper.setValorCelda(sheet, 4, "A", "Las columnas con '*' en su cabecera son las que se considererán en la carga de productos. Las demás columnas son calculadas o es información que se obtiene de los registros del sistema.");
 
+                int i = filaInicioDatos - 1;
 
-                var markConstraint = DVConstraint.CreateExplicitListConstraint(new string[] { "MP", "Alternativa", "Proveedor" });
-                var markColumn = new CellRangeAddressList(1, rTotal, 1, 1);
-                var markdv = new HSSFDataValidation(markColumn, markConstraint);
-                markdv.EmptyCellAllowed = true;
-                markdv.CreateErrorBox("Valor Incorrecto", "Por favor seleccione un tipo de unidad de la lista");
-                sheet.AddValidationData(markdv);
-
-                int i = 1;
 
                 UtilesHelper.setRowHeight(sheet, i, 540);
-                UtilesHelper.setValorCelda(sheet, i, "A", "SKU", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "B", "UNIDAD", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "C", "P. UNIT.", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "D", "FLETE (%)", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "E", "CANT.", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "F", "OBSERVACIONES", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "A", "PROV.", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "B", "SKU PROV", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "C", "*SKU", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "D", "IMG.", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "E", "DESCRIPCIÓN", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "F", "*UNIDAD", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "G", "*CANT.", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "H", "P. LISTA", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "I", "% DSCTO.", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "J", "*P. NETO", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "K", "*FLETE", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "L", "P. UNIT.", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "M", "TOTAL", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "N", "*OBSERVACIONES", titleDataCellStyle);
 
-                UtilesHelper.setColumnWidth(sheet, "A", 2200);
-                UtilesHelper.setColumnWidth(sheet, "B", 4000);
-                UtilesHelper.setColumnWidth(sheet, "C", 3000);
-                UtilesHelper.setColumnWidth(sheet, "D", 3000);
-                UtilesHelper.setColumnWidth(sheet, "E", 3000);
+                UtilesHelper.setColumnWidth(sheet, "A", 2300);
+                UtilesHelper.setColumnWidth(sheet, "B", 3500);
+                UtilesHelper.setColumnWidth(sheet, "C", 2500);
+                UtilesHelper.setColumnWidth(sheet, "D", 1800);
+                UtilesHelper.setColumnWidth(sheet, "E", 12000);
                 UtilesHelper.setColumnWidth(sheet, "F", 8000);
+                UtilesHelper.setColumnWidth(sheet, "G", 2000);
+
+                UtilesHelper.setColumnWidth(sheet, "H", 3000);
+                UtilesHelper.setColumnWidth(sheet, "I", 3000);
+                UtilesHelper.setColumnWidth(sheet, "J", 3000);
+                UtilesHelper.setColumnWidth(sheet, "K", 3000);
+                UtilesHelper.setColumnWidth(sheet, "L", 3500);
+                UtilesHelper.setColumnWidth(sheet, "M", 3500);
+
+                UtilesHelper.setColumnWidth(sheet, "N", 8000);
 
                 i++;
+
+                this.marcarUnidadesNuevosRegistros(sheet, i - 1, cantFilasRegistrosAdicionales, 5);
+
+                String rowDesc = "";
+                for(int j = 0; j < cantFilasRegistrosAdicionales; j++)
+                {
+                    rowDesc = (filaInicioDatos + j).ToString();
+                    UtilesHelper.setFormulaCelda(sheet, filaInicioDatos + j, "L", "J" + rowDesc + "+" + "K" + rowDesc);
+                    UtilesHelper.setFormulaCelda(sheet, filaInicioDatos + j, "M", "G" + rowDesc + "*" + "L" + rowDesc);
+                }
 
 
                 MemoryStream ms = new MemoryStream();

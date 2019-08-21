@@ -178,11 +178,11 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_documentosCompra");
             if (!documentoCompra.numero.Equals("0"))
             {
-                InputParameterAdd.Varchar(objCommand, "numero", documentoCompra.numero.PadLeft(8, '0'));
+                InputParameterAdd.VarcharEmpty(objCommand, "numero", documentoCompra.numero);
             }
             else
             {
-                InputParameterAdd.Varchar(objCommand, "numero", String.Empty);
+                InputParameterAdd.VarcharEmpty(objCommand, "numero", String.Empty);
             }
 
             InputParameterAdd.Guid(objCommand, "idProveedor", documentoCompra.proveedor.idProveedor);
@@ -197,7 +197,7 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "numeroPedido", documentoCompra.pedido.numeroPedido);
             InputParameterAdd.BigInt(objCommand, "numeroGuiaRemision", documentoCompra.guiaRemision.numeroDocumento);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoCompra.tipoDocumento);
-            InputParameterAdd.Varchar(objCommand, "sku", documentoCompra.sku);
+            InputParameterAdd.VarcharEmpty(objCommand, "sku", documentoCompra.sku);
 
 
 

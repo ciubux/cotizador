@@ -624,6 +624,10 @@
       <Project>{9264ca59-9806-4382-93c8-67d39b2e01c0}</Project>
       <Name>CotizadorPDF</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj">
+      <Project>{A7C12F64-A37D-468D-A3AA-47BB91D79168}</Project>
+      <Name>DataLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{2e588952-5389-42e5-8ed8-c42b9e38f6d7}</Project>
       <Name>Model</Name>

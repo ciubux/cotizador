@@ -492,3 +492,4 @@ G:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompile
 G:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
 G:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 G:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\NPOI.xml
