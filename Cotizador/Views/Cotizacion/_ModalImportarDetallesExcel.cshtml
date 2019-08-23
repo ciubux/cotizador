@@ -26,6 +26,25 @@
                         </div>
                     </div>
 
+                    @{
+                        var acpTextClass = "text-muted";
+                        var acpChecked = "";
+
+                        if (ViewBag.cotizacion.ajusteCalculoPrecios)
+                        {
+                            acpTextClass = "lbl-ajuste-calculo-precios";
+                            acpChecked = "checked";
+                        }
+                    }
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" @acpChecked class="onoffswitch-checkbox" id="chkAjusteCalculoPreciosModal">
+                                <label class="onoffswitch-label" for="chkAjusteCalculoPreciosModal"></label>
+                            </div>
+                            <h5 id="lblChkAjusteCalculoPreciosModal" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@acpTextClass">Ajustar precio para unidades menores</h5>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-12 col-lg-12">
                             <button id="lnkDescargarDetalleFormatoExcel" actionLink="@Url.Action("ExportFormatoDetalleExcel", "Cotizacion")" type="button" class="btn btn-link lnkAction lnkActionLabel">> Decargar Formato</button>
@@ -38,13 +57,13 @@
                             <p>
                                 <b>CONSIDERACIONES</b>
                                 <ul>
-                                    <li>El excel cargará datos de productos deteniendose en la primera fila cuya columna "SKU"  este vacía.</li>
-                                    <li>No se agregarán productos que ya se encuentren en la cotización. Estos solo se ignorarán.</li>
+                                    <li>El excel cargará datos de productos deteniendose en la primera fila cuya columna "SKU" este vacía.</li>
+                                    <li>Si el archivo contiene productos que ya se encuentran en la cotización, los de la cotización seran removidos y reemplazados por los del archivo.</li>
                                 </ul>
                             </p>
                         </div>
                     </div>
-                </form>
+</form>
             </div>
 
             <div class="modal-footer">

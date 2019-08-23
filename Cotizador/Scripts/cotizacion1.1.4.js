@@ -1838,7 +1838,6 @@ jQuery(function ($) {
         return Number(fecha)
     }
 
-
     $(document).on('click', "button.btnVerCotizacion", function () {
 
         $('body').loadingModal({
@@ -2616,6 +2615,78 @@ jQuery(function ($) {
 
 
 
+    $("#chkAjusteCalculoPrecios").change(function () {
+        if ($("#chkAjusteCalculoPrecios").is(":checked")) {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", false);
+        } else {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", true);
+        }
+
+        cambioChkAjusteCalculoPrecios();
+    });
+
+    $("#chkAjusteCalculoPreciosModal").change(function () {
+        if ($("#chkAjusteCalculoPreciosModal").is(":checked")) {
+            $("#chkAjusteCalculoPrecios").prop("checked", false);
+        } else {
+            $("#chkAjusteCalculoPrecios").prop("checked", true);
+        }
+
+        cambioChkAjusteCalculoPrecios();
+    });
+
+    
+    $("#lblChkAjusteCalculoPrecios").click(function () {
+        if ($("#chkAjusteCalculoPrecios").is(":checked")) {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", false);
+            $("#chkAjusteCalculoPrecios").prop("checked", false);
+        } else {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", true);
+            $("#chkAjusteCalculoPrecios").prop("checked", true);
+        }
+
+        cambioChkAjusteCalculoPrecios();
+    });
+
+    $("#lblChkAjusteCalculoPreciosModal").click(function () {
+        if ($("#chkAjusteCalculoPreciosModal").is(":checked")) {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", false);
+            $("#chkAjusteCalculoPrecios").prop("checked", false);
+        } else {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", true);
+            $("#chkAjusteCalculoPrecios").prop("checked", true);
+        }
+
+        cambioChkAjusteCalculoPrecios();
+    });
+
+    function cambioChkAjusteCalculoPrecios() {
+        var ajusteCalculoPrecios = $('#chkAjusteCalculoPrecios').prop('checked');
+        $.ajax({
+            url: "/Cotizacion/updateAjusteCalculoPrecios",
+            type: 'POST',
+            data: {
+                ajusteCalculoPrecios: ajusteCalculoPrecios
+            },
+            success: function () {
+
+            }
+        });
+
+        if ($("#chkAjusteCalculoPrecios").is(":checked")) {
+            $("#lblChkAjusteCalculoPreciosModal").addClass("lbl-ajuste-calculo-precios");
+            $("#lblChkAjusteCalculoPreciosModal").removeClass("text-muted");
+
+            $("#lblChkAjusteCalculoPrecios").addClass("lbl-ajuste-calculo-precios");
+            $("#lblChkAjusteCalculoPrecios").removeClass("text-muted");
+        } else {
+            $("#lblChkAjusteCalculoPreciosModal").addClass("text-muted");
+            $("#lblChkAjusteCalculoPreciosModal").removeClass("lbl-ajuste-calculo-precios");
+
+            $("#lblChkAjusteCalculoPrecios").addClass("text-muted");
+            $("#lblChkAjusteCalculoPrecios").removeClass("lbl-ajuste-calculo-precios");
+        }
+    }
     
     var ft = null;
 
@@ -2826,20 +2897,6 @@ jQuery(function ($) {
     });
 
 
-    $("#chkAjusteCalculoPrecios").change(function () {
-        var ajusteCalculoPrecios = $('#chkAjusteCalculoPrecios').prop('checked');
-        $.ajax({
-            url: "/Cotizacion/updateAjusteCalculoPrecios",
-            type: 'POST',
-            data: {
-                ajusteCalculoPrecios: ajusteCalculoPrecios 
-            },
-            success: function () {
-
-            }
-        });
-    });
- 
 
 
 
