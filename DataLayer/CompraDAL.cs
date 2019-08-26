@@ -250,12 +250,13 @@ namespace DataLayer
 
         public void UpdateCompraDetalle(PedidoDetalle ventaDetalle)
         {
-            var objCommand = GetSqlCommand("pu_ventaDetalle");
+            var objCommand = GetSqlCommand("pu_compraDetalle");
             InputParameterAdd.Guid(objCommand, "idVentaDetalle", ventaDetalle.idVentaDetalle);
             InputParameterAdd.Decimal(objCommand, "precioUnitario", ventaDetalle.precioUnitario);
             InputParameterAdd.Decimal(objCommand, "precioNeto", ventaDetalle.precioNeto);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", ventaDetalle.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "flete", ventaDetalle.flete);
+            InputParameterAdd.Decimal(objCommand, "subTotal", ventaDetalle.subTotal);
             ExecuteNonQuery(objCommand);
 
         }

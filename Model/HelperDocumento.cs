@@ -69,16 +69,28 @@ namespace Model
 
                     
                     documentoDetalle.flete = cotizacionDetalleJson.flete;
+                    documentoDetalle.reverseSubTotal = cotizacionDetalleJson.reverseSubTotal;
 
                     decimal precioNetoAnterior = documentoDetalle.precioNeto;
+                    Decimal subTotal = 0;
 
                     if (documentoDetalle.esPrecioAlternativo)
                     {
                         documentoDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, cotizacionDetalleJson.precio * documentoDetalle.ProductoPresentacion.Equivalencia));
+
+                        if (documentoDetalle.subTotal != documentoDetalle.reverseSubTotal)
+                        {
+                            documentoDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, (decimal.Round(documentoDetalle.reverseSubTotal / documentoDetalle.cantidad, 4,MidpointRounding.ToEven) - documentoDetalle.flete) * documentoDetalle.ProductoPresentacion.Equivalencia));
+                        }
                     }
                     else
                     {
                         documentoDetalle.precioNeto = cotizacionDetalleJson.precio;
+
+                        if (documentoDetalle.reverseSubTotal > 0 && documentoDetalle.subTotal != documentoDetalle.reverseSubTotal)
+                        {
+                            documentoDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, decimal.Round(documentoDetalle.reverseSubTotal / documentoDetalle.cantidad, 4, MidpointRounding.ToEven) - documentoDetalle.flete));
+                        }
                     }
 
                     if (ajustePrecios)
@@ -95,6 +107,7 @@ namespace Model
                                 precioN = precioA * documentoDetalle.producto.equivalenciaAlternativa / 10000;
                             }
                             documentoDetalle.precioNeto = precioA * documentoDetalle.producto.equivalenciaAlternativa / 10000;
+
                         }
                         
                         //Proveedor
