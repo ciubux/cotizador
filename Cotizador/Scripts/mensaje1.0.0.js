@@ -1,6 +1,6 @@
 ﻿jQuery(function ($) {
     var pagina = 28;
-    var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
+    var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación del mensaje; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
 
@@ -61,7 +61,7 @@
             $.alert({
                 title: "Importancia Inválida",
                 type: 'orange',
-                content: 'Debe ingresar una Importacia válida.',
+                content: 'Debe ingresar una Importacia.',
                 buttons: {
                     OK: function () { $('#importancia').focus(); }
                 }
@@ -94,11 +94,11 @@
         }
 
 
-        if (new Date($("#fechaHastaMensaje").val()).getTime() < new Date(hoy).getTime() || $("#fechaHastaMensaje").val() == null) {
+        if (new Date($("#fechaHastaMensaje").val()).getTime() > new Date(hoy).getTime() || $("#fechaHastaMensaje").val() == null) {
             $.alert({
                 title: "Fecha Inválida",
                 type: 'orange',
-                content: 'Debe ingresar un posterior a la de hoy.',
+                content: 'Debe ingresar una fecha posterior a la de hoy.',
                 buttons: {
                     OK: function () { $('#fechaHastaMensaje').focus(); }
                 }
@@ -138,10 +138,7 @@
         $.ajax({
             url: "/Mensaje/Create",
             type: 'POST',
-            dataType: 'JSON',
-            data: {
-                hoy: hoy
-            },
+            dataType: 'JSON',            
             error: function (detalle) {
 
                 $.alert({
@@ -250,11 +247,9 @@
         $('#Mensaje').modal('show');
     });
 
-<<<<<<< HEAD
+
     function eliminateDuplicates(arrayIn) {
-=======
- function eliminateDuplicates(arrayIn) {
->>>>>>> dc2b83dbb12f30b2156232b3ebfacc8e112bad52
+
         var arrayOut = {};
         var unicos = arrayIn.filter(function (e) {
             return arrayOut[e.id_mensaje] ? false : (arrayOut[e.id_mensaje] = true);
@@ -263,6 +258,7 @@
     }
 
     var idUsuario;
+
     function ActulizarMensaje() {
 
         idUsuario = $('#usuario_idUsuario').val();
@@ -279,15 +275,9 @@
                 success: function (list) {
 
                     if (list.length != 0) {
-<<<<<<< HEAD
-
-                        list=eliminateDuplicates(list);
-
-=======
                         
-                        list=eliminateDuplicates(list);
-                        
->>>>>>> dc2b83dbb12f30b2156232b3ebfacc8e112bad52
+                        list = eliminateDuplicates(list);
+
                         $("#imagenMP").before('<a data-notifications="' + list.length + '" class="btnModal" href="javascript:void()"></a>');
 
 
@@ -297,8 +287,7 @@
 
                             var ItemRow =
 
-
-                                '<div class="modal-content" id="' + list[i].id_mensaje + '">' +
+                                '<div class="modal-content">' +
                                 '<div class="modal-header">' +
 
                                 '<h4>' + list[i].titulo + '</h4>' +
@@ -328,8 +317,7 @@
 
     }
 
-
-
+    
     $("body").on("click", "a.Leido", function () {
 
         var arrrayClass = event.target.getAttribute("class").split(" ");

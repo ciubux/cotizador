@@ -28,11 +28,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<LogCampo> getCatalogoById(LogCampo Catalogo)
+        public List<LogCampo> getCatalogo(LogCampo logCampo)
         {
             using (var dal = new LogCampoDAL())
             {
-                return dal.getCatalogoById(Catalogo);
+                return dal.getCatalogo(logCampo);
             }
         }
 
@@ -41,7 +41,15 @@ namespace BusinessLayer
         {
             using (var dal = new LogCampoDAL())
             {
-                return dal.updateCatalogo(idCatalogo);
+                return dal.updateLogCampo(idCatalogo);
+            }
+        }
+
+        public LogCampo insertLogCampo(LogCampo idCatalogo)
+        {
+            using (var dal = new LogCampoDAL())
+            {
+                return dal.insertLogCampo(idCatalogo);
             }
         }
     }

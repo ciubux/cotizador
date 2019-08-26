@@ -102,8 +102,7 @@ namespace Cotizador.Controllers
         public String Create()
         {
             MensajeBL bL = new MensajeBL();
-            Mensaje obj = (Mensaje)this.MensajeSession;
-            obj.fechaVencimiento = DateTime.Parse(Request["hoy"]);
+            Mensaje obj = (Mensaje)this.MensajeSession;            
             obj = bL.insertMensaje(obj);
             String resultado = JsonConvert.SerializeObject(obj);
             return resultado;

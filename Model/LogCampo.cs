@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Model
 {
-    public class LogCampo 
+    public class LogCampo
     {
         public int idCampo { get; set; }
 
@@ -25,11 +25,11 @@ namespace Model
 
         public string nombreTabla { get; set; }
 
-        public int estadoCatalogo { get; set; }
+        public int? estadoCatalogo { get; set; }
 
         public string codigo { get; set; }
-        
-        public int puede_persistir { get; set; }
+
+        public int? puede_persistir { get; set; }
 
         public int id_catalogo_campo { get; set; }
 

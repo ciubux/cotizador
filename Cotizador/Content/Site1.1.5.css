@@ -695,13 +695,12 @@ border-color: #49E845;
 
 
 .ModalMensaje {
-    margin: auto;    
+    margin: auto;
     width: 80%;
     overflow-y: scroll;
-
 }
 
 ::-webkit-scrollbar {
     width: 0px;
-    background: transparent;
+    background: transparent;    
 }

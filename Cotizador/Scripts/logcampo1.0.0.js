@@ -1,49 +1,57 @@
 jQuery(function ($) {
 
     var TITLE_EXITO = 'Operación Realizada';
-    
+
     var catalogoId;
-   
+
 
     $(document).ready(function () {
         if ($("#catalogo_tablaId").val() == "") {
-            $("#btnBusqueda").attr("disabled", "disabled");
+            $("#btnBusquedaLogCatalogo").attr("disabled", "disabled");
+
         }
         $("#catalogo_tablaId").on("change", function () {
             var a = $("#catalogo_tablaId").val();
             if (a == "") {
-                $("#btnBusqueda").attr("disabled", "disabled");
-            } else
-            {
-                $("#btnBusqueda").removeAttr('disabled');
-                if ($("td").length)
-                {
+                $("#btnBusquedaLogCatalogo").attr("disabled", "disabled");
+                $("td").remove();
+
+            } else {
+                $("#btnBusquedaLogCatalogo").removeAttr('disabled');
+                if ($("td").length) {
                     $("td").remove();
                 }
             }
         });
+
+        $("#btnBusquedaLogCatalogo").click();
+
     });
 
-    $("#btnBusqueda").click(function () {
 
-        $("#btnBusqueda").attr("disabled", "disabled");
+
+    $("#btnBusquedaLogCatalogo").click(function () {
+
+        $("#btnBusquedaLogCatalogo").attr("disabled", "disabled");
         $.ajax({
             url: "/LogCampo/SearchList",
             type: 'POST',
             dataType: 'JSON',
 
             error: function () {
-                $("#btnBusqueda").removeAttr("disabled");
+                $("#btnBusquedaLogCatalogo").removeAttr("disabled");
             },
 
             success: function (list) {
 
-                $("#btnBusqueda").removeAttr("disabled");
+                $("#btnBusquedaLogCatalogo").removeAttr("disabled");
 
                 $("#tableCatalogo > tbody").empty();
 
 
                 for (var i = 0; i < list.length; i++) {
+
+
 
                     if (list[i].estadoCatalogo == 1) {
                         var label = '<input class="estadoCatalogo ' + list[i].catalogoId + ' radio-input" checked type="radio" name="catalogo_estado_' + list[i].catalogoId + '" value="1"><span>Activo</span>';
@@ -71,137 +79,207 @@ jQuery(function ($) {
                     else {
                         label4 = '<input class="puede_persistir ' + list[i].catalogoId + ' radio-input" type="radio" name="catalogo_persiste_' + list[i].catalogoId + '" value="0"><span>No</span>';
                     }
+
+
+                    if (list[i].estadoCatalogo == null && list[i].puede_persistir == null) {
+                        list[i].nombre = list[i].nombre + "<span style='color: darkred;' class='has - activate'><br>*No se encuentra configurado en el LOG</span>";
+                        if (list[i].estadoCatalogo == null) {
+
+                            label = '<input class="estadoCatalogo ' + list[i].catalogoId + ' add radio-input" type="radio" name="catalogo_estado_' + list[i].catalogoId + '" value="1"><span>Activo</span>';
+
+                            label2 = '<input class="estadoCatalogo ' + list[i].catalogoId + ' add radio-input" type="radio" name="catalogo_estado_' + list[i].catalogoId + '" value="0"><span>Inactivo</span>';
+                        }
+
+                        if (list[i].puede_persistir == null) {
+
+
+                            label3 = '<input class="puede_persistir ' + list[i].catalogoId + ' add radio-input"  type="radio" name="catalogo_persiste_' + list[i].catalogoId + '" value="1" ><span>Si</span>';
+
+                            label4 = '<input class="puede_persistir ' + list[i].catalogoId + ' add radio-input" type="radio" name="catalogo_persiste_' + list[i].catalogoId + '" value="0"><span>No</span>';
+                        }
+
+                    }
+
+
                     var ItemRow = '<tr data-expanded="true" id="contenidoTabla">' +
 
 
-                        '<td class="nombreCampo">  ' + list[i].nombre + '  </td>' +
+                        '<td class="nombreCampo">' + list[i].nombre + '</td>' +
                         '<td> <div class="radio radio-inline"><label class="radio-label">' + label + '</label></div><div class="radio radio-inline"><label class="radio-label">' + label2 + '</label></div> </td>' +
                         '<td> <div class="radio radio-inline"><label class="radio-label">' + label3 + '</label></div><div class="radio radio-inline"><label class="radio-label">' + label4 + '</label></div> </td>' +
                         '</tr>';
 
-                        
+
 
                     $("#tableCatalogo").append(ItemRow);
-                   
+
                 }
-               var paginacion='<nav aria-label="Page navigation example" >'+
-                            '<ul class="pagination justify-content-center">'+
-                                '<li class="page-item disabled">'+
-                                    '<a class="page-link" href="#" tabindex="-1">Previous</a>'+
-                                '</li>'+
-                                '<li class="page-item"><a class="page-link" href="#">1</a></li>'+
-                                '<li class="page-item"><a class="page-link" href="#">2</a></li>'+
-                                '<li class="page-item"><a class="page-link" href="#">3</a></li>'+
-                                '<li class="page-item">'+
-                                    '<a class="page-link" href="#">Next</a>'+
-                                '</li>'+
-                            '</ul>';
-                $("#tableCatalogo").append(paginacion);
-                    
+
+
             }
         });
     });
 
 
-   
-
-
-   
-
-
-
-    var applyEstado=false;
+    var applyEstado = false;
     $("#tableCatalogo").on("change", ".estadoCatalogo", function () {
-        if (applyEstado)
-        {
+        if (applyEstado) {
 
             return;
         }
         applyEstado = true;
 
         var arrrayClass = event.target.getAttribute("class").split(" ");
-        var that = this;     
-        catalogoId = arrrayClass[1];        
+        var that = this;
+        catalogoId = arrrayClass[1];
+        add = arrrayClass[2];
         var valor = $(this).val();
         if (valor == 1) {
             opcion = "Activo";
 
 
-        } if (valor == 0)
-        {
+        } if (valor == 0) {
             opcion = "Inactivo";
         }
-      
-        $.confirm({
-            title: 'Confirmación de cambio',
-            content: '¿Está seguro de cambiar el estado de la tabla ' + $(this).closest("tr").find("td.nombreCampo").html() + ' a ' + opcion + '?',
-            type: 'orange',
-            buttons: {
-                confirm: {
-                    text: 'Sí',
-                    action: function () {
-                        $.ajax({
-                            url: "/LogCampo/Update",
-                            type: 'POST',
-                            data: {
-                                catalogoId: catalogoId,
-                                propiedad: "estadoCatalogo",
-                                valor: valor
 
-                            },
-                            error: function (resultado) {
-                                $.alert({
-                                    title: "Error",
-                                    content: "Se generó un error al editar el estado de la tabla.",
-                                    type: 'red',
-                                    buttons: {
-                                        OK: function () {
+        var nombreCampo = $(this).closest("tr").find("td.nombreCampo").text().replace("*No se encuentra configurado en el LOG", "");;
+
+
+        if (add != "add") {
+            $.confirm({
+                title: 'Confirmación de cambio',
+                content: '¿Está seguro de cambiar el estado del campo ' + nombreCampo + ' a ' + opcion + '?',
+                type: 'orange',
+                buttons: {
+                    confirm: {
+                        text: 'Confirmar',
+                        action: function () {
+                            $.ajax({
+                                url: "/LogCampo/Update",
+                                type: 'POST',
+                                data: {
+                                    catalogoId: catalogoId,
+                                    propiedad: "estadoCatalogo",
+                                    valor: valor
+
+                                },
+                                error: function (resultado) {
+                                    $.alert({
+                                        title: "Error",
+                                        content: "Se generó un error al editar el estado del campo.",
+                                        type: 'red',
+                                        buttons: {
+                                            OK: function () {
+                                            }
                                         }
-                                    }
-                                });
-                            },
-                            success: function (resultado) {
-                                $('body').loadingModal('hide');
+                                    });
+                                },
+                                success: function (resultado) {
+                                    $('body').loadingModal('hide');
 
-                                $.alert({
-                                    title: TITLE_EXITO,
-                                    content: 'El estado de la tabla se editó correctamente.',
-                                    type: 'green',
-                                    buttons: {
-                                        OK: function () {
-
+                                    $.alert({
+                                        title: TITLE_EXITO,
+                                        content: 'El estado del campo se editó correctamente.',
+                                        type: 'green',
+                                        buttons: {
+                                            OK: function () {
 
 
+
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
+                            })
+                        }
+                    },
+                    cancel: {
+                        text: 'Cancelar',
+                        action: function () {
+                            if (valor == 0) {
+
+                                $(that).closest("td").find("input[value=0]").prop("checked", false);
+                                $(that).closest("td").find("input[value=1]").prop("checked", true);
+
                             }
-                        })
-                    }
-                },
-                cancel: {
-                    text: 'No',
-                    action: function () {
-                        if (valor == 0)  {
-                            
-                            $(that).closest("td").find("input[value=0]").prop("checked", false);
-                            $(that).closest("td").find("input[value=1]").prop("checked", true);
-                                                   
-                                                }
-                        if (valor == 1) {
-                            
+                            if (valor == 1) {
 
 
-                            $(that).closest("td").find("input[value=0]").prop("checked", true);
-                            $(that).closest("td").find("input[value=1]").prop("checked", false);
-                        } 
-                       
+
+                                $(that).closest("td").find("input[value=0]").prop("checked", true);
+                                $(that).closest("td").find("input[value=1]").prop("checked", false);
+                            }
+
+                        }
                     }
                 }
-            }
-        });
+            });
+
+        } else {
+            $.confirm({
+                title: 'Confirmación de cambio',
+                content: '¿Está seguro de cambiar el estado del campo ' + nombreCampo + '(Se insertará a la tabla LogCampo) a ' + opcion + '?',
+                type: 'orange',
+                buttons: {
+                    confirm: {
+                        text: 'Confirmar',
+                        action: function () {
+                            $.ajax({
+                                url: "/LogCampo/InsertCampo",
+                                type: 'POST',
+                                data: {
+                                    propiedad: "estadoCatalogo",
+                                    valor: valor,
+                                    nombre: nombreCampo
+                                },
+                                error: function (resultado) {
+                                    $.alert({
+                                        title: "Error",
+                                        content: "Se generó un error al editar el estado del campo.",
+                                        type: 'red',
+                                        buttons: {
+                                            OK: function () {
+                                                $(that).closest("td").find("input[value=0]").prop("checked", false);
+                                                $(that).closest("td").find("input[value=1]").prop("checked", false);
+                                            }
+                                        }
+                                    });
+                                },
+                                success: function (resultado) {
+                                    $('body').loadingModal('hide');
+
+                                    $.alert({
+                                        title: TITLE_EXITO,
+                                        content: 'El estado del campo se registro y editó correctamente.',
+                                        type: 'green',
+                                        buttons: {
+                                            OK: function () {
+
+                                                $("#btnBusquedaLogCatalogo").click();
+                                            }
+                                        }
+                                    });
+                                }
+                            })
+                        }
+                    },
+                    cancel: {
+                        text: 'Cancelar',
+                        action: function () {
+
+                            $(that).closest("td").find("input[value=0]").prop("checked", false);
+                            $(that).closest("td").find("input[value=1]").prop("checked", false);
+
+                        }
+                    }
+                }
+            });
+        }
+
+
+
         applyEstado = false;
-        
+
     });
 
     $("#tableCatalogo").on("change", ".puede_persistir", function () {
@@ -214,6 +292,7 @@ jQuery(function ($) {
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var that = this;
         catalogoId = arrrayClass[1];
+        add = arrrayClass[2];
         var valor = $(this).val();
         if (valor == 1) {
             opcion = "Si";
@@ -223,80 +302,145 @@ jQuery(function ($) {
             opcion = "No";
         }
 
-        $.confirm({
-            title: 'Confirmación de cambio',
-            content: '¿Está seguro de cambiar la persistencia de la tabla ' + $(this).closest("tr").find("td.nombreCampo").html() + ' a ' + opcion + '?',
-            type: 'orange',
-            buttons: {
-                confirm: {
-                    text: 'Sí',
-                    action: function () {
-                        $.ajax({
-                            url: "/LogCampo/Update",
-                            type: 'POST',
-                            data: {
-                                catalogoId: catalogoId,
-                                propiedad: "puede_persistir",
-                                valor: valor
+        var nombreCampo = $(this).closest("tr").find("td.nombreCampo").text().replace("*No se encuentra configurado en el LOG", "");
 
-                            },
-                            error: function (resultado) {
-                                $.alert({
-                                    title: "Error",
-                                    content: "Se generó un error al editar el estado de la tabla.",
-                                    type: 'red',
-                                    buttons: {
-                                        OK: function () {
+        if (add != "add") {
+            $.confirm({
+                title: 'Confirmación de cambio',
+                content: '¿Está seguro de cambiar la persistencia del campo ' + nombreCampo + ' a ' + opcion + '?',
+                type: 'orange',
+                buttons: {
+                    confirm: {
+                        text: 'Confirmar',
+                        action: function () {
+                            $.ajax({
+                                url: "/LogCampo/Update",
+                                type: 'POST',
+                                data: {
+                                    catalogoId: catalogoId,
+                                    propiedad: "puede_persistir",
+                                    valor: valor
+
+                                },
+                                error: function (resultado) {
+                                    $.alert({
+                                        title: "Error",
+                                        content: "Se generó un error al editar la persistencia del campo.",
+                                        type: 'red',
+                                        buttons: {
+                                            OK: function () {
+                                            }
                                         }
-                                    }
-                                });
-                            },
-                            success: function (resultado) {
-                                $('body').loadingModal('hide');
+                                    });
+                                },
+                                success: function (resultado) {
+                                    $('body').loadingModal('hide');
 
-                                $.alert({
-                                    title: TITLE_EXITO,
-                                    content: 'El estado de la tabla se editó correctamente.',
-                                    type: 'green',
-                                    buttons: {
-                                        OK: function () {
-
+                                    $.alert({
+                                        title: TITLE_EXITO,
+                                        content: 'La persistencia del campo se editó correctamente.',
+                                        type: 'green',
+                                        buttons: {
+                                            OK: function () {
 
 
+
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
+                            })
+                        }
+                    },
+                    cancel: {
+                        text: 'Cancelar',
+                        action: function () {
+                            if (valor == 0) {
+
+                                $(that).closest("td").find("input[value=0]").prop("checked", false);
+                                $(that).closest("td").find("input[value=1]").prop("checked", true);
+
                             }
-                        })
-                    }
-                },
-                cancel: {
-                    text: 'No',
-                    action: function () {
-                        if (valor == 0) {
+                            if (valor == 1) {
 
-                            $(that).closest("td").find("input[value=0]").prop("checked", false);
-                            $(that).closest("td").find("input[value=1]").prop("checked", true);
+
+
+                                $(that).closest("td").find("input[value=0]").prop("checked", true);
+                                $(that).closest("td").find("input[value=1]").prop("checked", false);
+                            }
 
                         }
-                        if (valor == 1) {
-
-
-
-                            $(that).closest("td").find("input[value=0]").prop("checked", true);
-                            $(that).closest("td").find("input[value=1]").prop("checked", false);
-                        }
-
                     }
                 }
-            }
-        });
+            });
+        } else {
+            $.confirm({
+                title: 'Confirmación de cambio',
+                content: '¿Está seguro de cambiar la persistencia del campo ' + nombreCampo + '(Se insertará a la tabla LogCampo) a ' + opcion + '?',
+                type: 'orange',
+                buttons: {
+                    confirm: {
+                        text: 'Confirmar',
+                        action: function () {
+                            $.ajax({
+                                url: "/LogCampo/InsertCampo",
+                                type: 'POST',
+                                data: {
+                                    propiedad: "puede_persistir",
+                                    valor: valor,
+                                    nombre: nombreCampo
+
+                                },
+                                error: function (resultado) {
+                                    $.alert({
+                                        title: "Error",
+                                        content: "Se generó un error al editar la persistencia del campo.",
+                                        type: 'red',
+                                        buttons: {
+                                            OK: function () {
+                                                $(that).closest("td").find("input[value=0]").prop("checked", false);
+                                                $(that).closest("td").find("input[value=1]").prop("checked", false);
+                                            }
+                                        }
+                                    });
+                                },
+                                success: function (resultado) {
+                                    $('body').loadingModal('hide');
+
+                                    $.alert({
+                                        title: TITLE_EXITO,
+                                        content: 'La persistencia del campo se registro y editó correctamente.',
+                                        type: 'green',
+                                        buttons: {
+                                            OK: function () {
+
+                                                $("#btnBusquedaLogCatalogo").click();
+                                            }
+                                        }
+                                    });
+                                }
+                            })
+                        }
+                    },
+                    cancel: {
+                        text: 'Cancelar',
+                        action: function () {
+
+                            $(that).closest("td").find("input[value=0]").prop("checked", false);
+                            $(that).closest("td").find("input[value=1]").prop("checked", false);
+
+                        }
+                    }
+                }
+            });
+
+        }
         applyEstado = false;
 
-    });  
-    
+    });
 
-    $("#btnLimpiarBusqueda").click(function () {
+
+    $("#btnLimpiarLogCatalogo").click(function () {
         $.ajax({
             url: "/LogCampo/LimpiarBusqueda",
             type: 'POST',
@@ -309,7 +453,7 @@ jQuery(function ($) {
     $("#catalogo_tablaId").change(function () {
         var idTabla = $("#catalogo_tablaId").val();
 
-      
+
         $.ajax({
             url: "/LogCampo/ChangeIdTabla",
             type: 'POST',
@@ -318,10 +462,10 @@ jQuery(function ($) {
                 idTabla: idTabla
             },
             error: function (detalle) {
-                $("#btnBusqueda").removeAttr("disabled");
+                $("#btnBusquedaLogCatalogo").removeAttr("disabled");
             },
             success: function (idTabla) {
-                
+
             }
         });
     });

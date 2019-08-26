@@ -54,7 +54,7 @@ namespace Cotizador.Controllers
             //Se recupera el objeto cliente que contiene los criterios de Búsqueda de la session
             LogCampo obj = (LogCampo)this.Session[Constantes.VAR_SESSION_LOGCAMPO_BUSQUEDA];
             LogCampoBL bL = new LogCampoBL();
-            List<LogCampo> list = bL.getCatalogoById(obj);
+            List<LogCampo> list = bL.getCatalogo(obj);
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_LOGCAMPO_LISTA] = list;
             //Se retorna la cantidad de elementos encontrados
@@ -87,13 +87,13 @@ namespace Cotizador.Controllers
         {
             LogCampo obj = new LogCampo();
             obj.tablaId = 0;
-            obj.estadoTabla = 0;            
-            obj.nombreTabla = String.Empty;           
+            obj.estadoTabla = 0;
+            obj.nombreTabla = String.Empty;
 
 
             this.Session[Constantes.VAR_SESSION_LOGCAMPO_BUSQUEDA] = obj;
         }
-        
+
 
 
 
@@ -135,13 +135,13 @@ namespace Cotizador.Controllers
         {
 
             LogCampo logCampo = this.LogCampoSession;
-            int idTabla = 0;            
+            int idTabla = 0;
             if (this.Request.Params["idTabla"] != null && !this.Request.Params["idTabla"].Equals(""))
             {
                 idTabla = int.Parse(this.Request.Params["idTabla"]);
 
             }
-            logCampo.tablaId = idTabla;               
+            logCampo.tablaId = idTabla;
             this.LogCampoSession = logCampo;
 
             return JsonConvert.SerializeObject(logCampo.tablaId);
@@ -151,12 +151,13 @@ namespace Cotizador.Controllers
         public String Update()
         {
 
-            LogCampo obj = new LogCampo();
+            LogCampo obj = this.LogCampoSession;
 
             obj.catalogoId = Int32.Parse(Request["catalogoId"].ToString());
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
-            LogCampoBL bL = new LogCampoBL();            
+            LogCampoBL bL = new LogCampoBL();
+
             if (propertyInfo.Name == "estadoCatalogo")
             {
                 obj.puede_persistir = 3;
@@ -168,11 +169,37 @@ namespace Cotizador.Controllers
                 obj.estadoCatalogo = 3;
                 obj = bL.updateCatalogo(obj);
             }
-            
+
+
+
             String resultado = JsonConvert.SerializeObject(obj);
 
             return resultado;
-           
+
+        }
+
+        public String InsertCampo()
+        {
+            LogCampo obj = this.LogCampoSession;
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
+            obj.nombre = Request["nombre"].ToString();
+            LogCampoBL bL = new LogCampoBL();
+
+            if (propertyInfo.Name == "estadoCatalogo")
+            {
+                obj.puede_persistir = 3;
+                obj = bL.insertLogCampo(obj);
+            }
+
+            if (propertyInfo.Name == "puede_persistir")
+            {
+                obj.estadoCatalogo = 3;
+                obj = bL.insertLogCampo(obj);
+            }
+            String resultado = JsonConvert.SerializeObject(obj);
+            return resultado;
+
         }
 
 
@@ -180,7 +207,8 @@ namespace Cotizador.Controllers
 
 
 
-        
+
+
 
 
     }

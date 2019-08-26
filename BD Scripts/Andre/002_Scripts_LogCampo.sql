@@ -1,23 +1,23 @@
 
 
 /* **** Create PS_CATALOGO_CAMPO - Lista de CAMPO_CATALOGO  **** */
-create PROCEDURE [dbo].[PS_CATALOGO_TABLA]
+create PROCEDURE [dbo].[ps_catalogo_tabla]
 AS BEGIN
-SELECT ID_CATALOGO_TABLA,NOMBRE,ESTADO,codigo FROM CATALOGO_TABLA where  estado=1
+SELECT ID_CATALOGO_TABLA,NOMBRE,ESTADO FROM CATALOGO_TABLA where  estado=1
 END 
 
 
 /* **** Create PS_DETALLE_CATALOGO_CAMP - Obtiene el detalle de un CATALOGO_CAMPO por ID_CATALOGO_CAMPO **** */
 
-create procedure [dbo].[PS_DETALLE_CATALOGO_CAMPO]
+create procedure [dbo].[ps_detalle_catalogo_campo]
 (@ID_CATALOGO_TABLA INT)
 AS  BEGIN
 SELECT id_catalogo_campo,CATALOGO_CAMPO.estado,puede_persistir,CATALOGO_CAMPO.codigo,CATALOGO_CAMPO.nombre,CATALOGO_CAMPO.id_catalogo_tabla,CATALOGO_TABLA.nombre AS tabla_referencia,orden,campos_referencia FROM CATALOGO_CAMPO  inner join CATALOGO_TABLA on CATALOGO_TABLA.id_catalogo_tabla=CATALOGO_CAMPO.id_catalogo_tabla WHERE CATALOGO_CAMPO.id_catalogo_tabla=@ID_CATALOGO_TABLA
 END 
 
 
-  /* **** Create PU_CATALOGO_CAMPO - Actualiza un LOGCAMPO **** */
-create PROCEDURE [dbo].[PU_CATALOGO_CAMPO]
+  /****** Create PU_CATALOGO_CAMPO - Actualiza un LOGCAMPO ******/
+create PROCEDURE [dbo].[pu_catalogo_campo]
 (@ID_CATALOGO_CAMPO INT,
 @ESTADO SMALLINT,
 @PUEDE_PERSISTIR SMALLINT)
@@ -35,6 +35,40 @@ SET puede_persistir=@PUEDE_PERSISTIR
 WHERE id_catalogo_campo=@ID_CATALOGO_CAMPO
 end
 END
+/**********Create ps_add_catalogo_campo - Obtiene las columnas que faltan añadir a la tabla CATALOGO_CAMPO************/
+
+create  procedure [dbo].[ps_add_catalogo_campo] 
+(@id_tabla int)
+as
+begin 
+declare @execstr nvarchar(max)
+declare @nombre_tabla varchar(50)
+set @nombre_tabla=(select nombre from catalogo_tabla where id_catalogo_tabla=@id_tabla)
+
+declare @prod varchar(max) 
+set @prod = concat('SELECT tab.COLUMN_NAME FROM Information_Schema.Columns tab   LEFT JOIN catalogo_campo on  
+catalogo_campo.nombre=tab.COLUMN_NAME WHERE tab.TABLE_NAME =''',@nombre_tabla,''' and tab.COLUMN_NAME not in (select nombre from CATALOGO_CAMPO where id_catalogo_tabla=''',@id_tabla,''') ORDER BY COLUMN_NAME ASC');
+set @execstr = CONVERT(nvarchar(max),@prod)
+exec(@execstr)
+end
+
+/****** Create pi_insert_add_log_campo - Inserta las columnas que no estan registradas en CATALOGO_CAMPO ******/
+
+create procedure [dbo].[pi_insert_add_log_campo]
+(@name_log_campo varchar(50),
+@id_catalogo_tabla smallint,
+@ESTADO smallint,
+@PUEDE_PERSISTIR smallint)
+as begin
+	    if  @PUEDE_PERSISTIR=3
+		begin
+		insert into CATALOGO_CAMPO (id_catalogo_campo,id_catalogo_tabla,nombre,estado,puede_persistir) select MAX (id_catalogo_campo)+1,@id_catalogo_tabla,@name_log_campo,@ESTADO,0 from CATALOGO_CAMPO
+		end
+		if @ESTADO=3
+		begin
+		insert into CATALOGO_CAMPO (id_catalogo_campo,id_catalogo_tabla,nombre,estado,puede_persistir) select MAX (id_catalogo_campo)+1 ,@id_catalogo_tabla,@name_log_campo,0,@PUEDE_PERSISTIR from CATALOGO_CAMPO
+		end
+end
 
 /*-----------------------Permisos para la tabla PERMISO Y USUARIO_PERMISO--------------------------------*/
 
