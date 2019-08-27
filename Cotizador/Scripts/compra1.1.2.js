@@ -3184,7 +3184,6 @@ jQuery(function ($) {
         //Se asigna el margen 
         $("." + idproducto + ".detmargen").text(margen.toFixed(1) + " %");
 
-        alert(1);
         var precioNetoAnterior = Number($("." + idproducto + ".detprecioNetoAnterior").html());
         var varprecioNetoAnterior = (precio / precioNetoAnterior - 1) * 100;
         $("." + idproducto + ".detvarprecioNetoAnterior").text(varprecioNetoAnterior.toFixed(1));
@@ -3196,7 +3195,6 @@ jQuery(function ($) {
 
         //Se actualiza el subtotal de la cotizacion
 
-        alert(2);
         var $j_object = $("td.detcantidad");
 
         var subTotal = 0;
@@ -3210,8 +3208,7 @@ jQuery(function ($) {
             subTotal = subTotal + Number(Number((precioUnitario * cantidad)).toFixed(cantidadDecimales));
         });
 
-        alert(3);
-
+        
         var incluidoIGV = $("input[name=igv]:checked").val();
         //Si no se etsá incluyendo IGV se le agrega
         if (incluidoIGV == "0") {
@@ -3229,7 +3226,6 @@ jQuery(function ($) {
         $('#montoIGV').html(igv.toFixed(cantidadDecimales));
         $('#montoTotal').html(total.toFixed(cantidadDecimales));
 
-        alert(4);
     };
 
     function calcularTotalesGrilla() {

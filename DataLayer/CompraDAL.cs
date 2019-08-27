@@ -175,6 +175,7 @@ namespace DataLayer
                     pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
                 }
 
+                pedidoDetalle.reverseSubTotal = Converter.GetDecimal(row, "sub_total");
                 pedidoDetalle.unidad = Converter.GetString(row, "unidad");
 
                 pedidoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");

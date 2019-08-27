@@ -402,7 +402,7 @@ namespace Cotizador.ExcelExport
                     }
                     if (obj.usuarioBusqueda.visualizaMargen)
                     {
-                        UtilesHelper.setFormulaCelda(sheet, i, "P", "1 - (O" + i.ToString() + "/L" + i.ToString() + ")", twoDecPercentageCellStyle);
+                        UtilesHelper.setFormulaCelda(sheet, i, "P", "1 - (O" + i.ToString() + "/J" + i.ToString() + ")", twoDecPercentageCellStyle);
 
                         if (det.esPrecioAlternativo)
                         {

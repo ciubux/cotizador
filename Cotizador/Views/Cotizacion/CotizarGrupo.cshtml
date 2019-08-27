@@ -327,16 +327,23 @@
                 </div>
             }
 
+
+            @{
+                var acpTextClass = "text-muted";
+                var acpChecked = "";
+
+                if (cotizacion.ajusteCalculoPrecios)
+                {
+                    acpTextClass = "lbl-ajuste-calculo-precios";
+                    acpChecked = "checked";
+                }
+            }
             <div class="pull-right">
-                @if (cotizacion.ajusteCalculoPrecios)
-                {
-                    <input type="checkbox" checked class="form-check-input" id="chkAjusteCalculoPrecios">
-                }
-                else
-                {
-                    <input type="checkbox" class="form-check-input" id="chkAjusteCalculoPrecios">
-                }
-                <label class="form-check-label" for="chkAjusteCalculoPrecios">Ajustar precio para unidades menores</label>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" @acpChecked class="onoffswitch-checkbox" id="chkAjusteCalculoPrecios">
+                    <label class="onoffswitch-label" for="chkAjusteCalculoPrecios"></label>
+                </div>
+                <h5 id="lblChkAjusteCalculoPrecios" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@acpTextClass">Ajustar precio para unidades menores</h5>
             </div>
         </div>
         

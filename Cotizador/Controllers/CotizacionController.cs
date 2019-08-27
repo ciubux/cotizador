@@ -987,7 +987,7 @@ namespace Cotizador.Controllers
                 detalle.ProductoPresentacion = producto.getProductoPresentacion(idProductoPresentacion);
 
 
-                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * detalle.ProductoPresentacion.Equivalencia));
+                detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * detalle.ProductoPresentacion.Equivalencia));
 
 
                 precioNetoAnterior = detalle.producto.precioClienteProducto.precioNetoAlternativo;
@@ -1842,8 +1842,7 @@ namespace Cotizador.Controllers
                                     }
                                     else
                                     {
-
-                                        item.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto * item.ProductoPresentacion.Equivalencia));
+                                        item.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * item.ProductoPresentacion.Equivalencia));
 
 
                                         precioNetoAnterior = item.producto.precioClienteProducto.precioNetoAlternativo;
