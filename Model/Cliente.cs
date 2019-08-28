@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model.CONFIGCLASSES;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -233,6 +234,9 @@ namespace Model
         public Boolean negociacionMultiregional { get; set; }
 
         public Boolean existenCambiosCreditos { get; set; }
+
+
+        public ClienteConfiguracion configuraciones { get; set; }
 
         public Usuario usuarioSolicitante { get; set; }
 

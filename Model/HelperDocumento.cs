@@ -78,7 +78,7 @@ namespace Model
                     {
                         documentoDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, cotizacionDetalleJson.precio * documentoDetalle.ProductoPresentacion.Equivalencia));
 
-                        if (documentoDetalle.subTotal != documentoDetalle.reverseSubTotal)
+                        if (documentoDetalle.reverseSubTotal > 0 && documentoDetalle.subTotal != documentoDetalle.reverseSubTotal)
                         {
                             documentoDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, (decimal.Round(documentoDetalle.reverseSubTotal / documentoDetalle.cantidad, 4,MidpointRounding.ToEven) - documentoDetalle.flete) * documentoDetalle.ProductoPresentacion.Equivalencia));
                         }

@@ -500,8 +500,8 @@ namespace Cotizador.Controllers
 
         public void iniciarEdicionPedidoDesdeCotizacion()
         {
-            try
-            {
+            //try
+            //{
                 if (this.Session[Constantes.VAR_SESSION_PEDIDO] == null)
                 {
 
@@ -581,7 +581,7 @@ namespace Cotizador.Controllers
                         //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
                         pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
                         pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
-                        pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia = cotizacion.fechaFinVigenciaPrecios.HasValue ? cotizacion.fechaFinVigenciaPrecios.Value : cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_COTIZACION_TRANSITORIA);
+                        pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia = cotizacion.fechaFinVigenciaPrecios.HasValue ? cotizacion.fechaFinVigenciaPrecios.Value : cotizacion.fechaInicioVigenciaPrecios.HasValue ? cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_COTIZACION_TRANSITORIA) : DateTime.Now.AddDays(10);
                         //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
                         pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
                         pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
@@ -628,12 +628,12 @@ namespace Cotizador.Controllers
                 PedidoBL pedidoBL = new PedidoBL();
                 pedidoBL.calcularMontosTotales(pedido);
                 this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
-            }
-            catch (Exception e)
-            {
-                logger.Error(e, agregarUsuarioAlMensaje(e.Message));
-                throw e;
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+            //    throw e;
+            //}
 
         }
 

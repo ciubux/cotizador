@@ -2326,6 +2326,14 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    $("#chkConfigAgregarNombreSedeObservacionFactura").change(function () {
+        var valor = 1;
+        if (!$('#chkConfigAgregarNombreSedeObservacionFactura').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('configuraciones_agregarNombreSedeObservacionFactura', valor)
+    });
+
     $("#btnBusqueda").click(function () {
         
         if ($("#cliente_textoBusqueda").val().length < 3 &&

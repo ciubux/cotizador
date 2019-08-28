@@ -179,7 +179,7 @@ namespace Cotizador.Controllers
             cliente.sedePrincipal = false;
             cliente.negociacionMultiregional = false;
             cliente.observacionHorarioEntrega = "";
-
+            cliente.configuraciones = new Model.CONFIGCLASSES.ClienteConfiguracion();
             
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
@@ -759,9 +759,30 @@ namespace Cotizador.Controllers
         public void ChangeInputBoolean()
         {
             Cliente cliente = this.ClienteSession;
-            PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(cliente, Int32.Parse(this.Request.Params["valor"]) == 1);
-            this.ClienteSession = cliente;
+
+            PropertyInfo propertyInfo = null;
+
+            string[] composicion = this.Request.Params["propiedad"].ToString().Split('_');
+
+            if (composicion.Length > 1)
+            {
+                switch (composicion[0])
+                {
+                    case "configuraciones":
+                        propertyInfo = cliente.configuraciones.GetType().GetProperty(composicion[1]);
+                        propertyInfo.SetValue(cliente.configuraciones, Int32.Parse(this.Request.Params["valor"]) == 1);
+                        break;
+                }
+            } else
+            {
+                propertyInfo = cliente.GetType().GetProperty(composicion[0]);
+                propertyInfo.SetValue(cliente, Int32.Parse(this.Request.Params["valor"]) == 1);
+            }
+          
+            if (propertyInfo != null)
+            {
+                this.ClienteSession = cliente;
+            }
         }
         
 

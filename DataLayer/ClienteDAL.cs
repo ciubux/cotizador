@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Model;
+using Newtonsoft.Json;
+using Model.CONFIGCLASSES;
 
 namespace DataLayer
 {
@@ -324,6 +326,14 @@ namespace DataLayer
                 cliente.habilitadoNegociacionGrupal = Converter.GetBool(row, "habilitado_negociacion_grupal");
                 cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
                 cliente.negociacionMultiregional = Converter.GetBool(row, "negociacion_multiregional");
+
+                try
+                {
+                    cliente.configuraciones = JsonConvert.DeserializeObject<ClienteConfiguracion>(Converter.GetString(row, "configuraciones"));
+                }catch (Exception ex)
+                {
+                    cliente.configuraciones = new ClienteConfiguracion();
+                }
 
                 cliente.grupoCliente = new GrupoCliente();
                 cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
@@ -729,6 +739,8 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
             InputParameterAdd.Int(objCommand, "idSubDistribuidor", (!cliente.esSubDistribuidor) ? 0 : cliente.subDistribuidor.idSubDistribuidor);
 
+            InputParameterAdd.Text(objCommand, "configuraciones", JsonConvert.SerializeObject(cliente.configuraciones));
+
             DateTime dtTmp = DateTime.Now;
             String[] horaTmp = cliente.horaInicioPrimerTurnoEntrega.Split(':');
             DateTime horaInicioPrimerTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
@@ -845,6 +857,7 @@ namespace DataLayer
             InputParameterAdd.Bit(objCommand, "sedePrincipal", cliente.sedePrincipal);
             InputParameterAdd.Bit(objCommand, "negociacionMultiregional", cliente.negociacionMultiregional);
             InputParameterAdd.Bit(objCommand, "habilitadoNegociacionGrupal", cliente.habilitadoNegociacionGrupal);
+            InputParameterAdd.Text(objCommand, "configuraciones", JsonConvert.SerializeObject(cliente.configuraciones));
 
             if (!cliente.esSubDistribuidor)
             {
