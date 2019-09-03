@@ -386,8 +386,8 @@ namespace Model
         public const String VISUALIZA_LOGCAMPO = "P824";
 
         public const String VISUALIZA_DOCUMENTOVENTANOTIFICACION = "P420";
-        public const String CREA_MENSAJE = "P421";
-
+        public const String MODIFICA_MENSAJE = "P421";
+        public const String LISTA_MENSAJE = "P422";
         public enum paginas
         {
             /*COTIZACION*/

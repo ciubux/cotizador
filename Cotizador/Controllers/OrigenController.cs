@@ -96,8 +96,6 @@ namespace Cotizador.Controllers
                 return RedirectToAction("Login", "Account");
             }
             
-
-
             if (this.Session[Constantes.VAR_SESSION_ORIGEN] == null && idOrigen == null)
             {
                 instanciarOrigen();

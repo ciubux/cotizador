@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "Mensaje - Crear/Modificar";
+    Model.Mensaje mensaje = ViewBag.Mensaje;
+    List<Model.Rol> roles = ViewBag.roles;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+
+    <div class="container">
+
+        <input type="hidden" id="idMensaje" name="idMensaje" value="@mensaje.id_mensaje" />
+
+
+
+
+
+
+
+
+        <div class="row form-group">
+            <label for="color" class="col-form-label col-md-2">Importancia:</label>
+
+
+            <div class="col-md-5">
+
+                <select name="importancia" id="importancia" class="form-control">
+                    @if (mensaje.importancia == "" || mensaje.importancia == null)
+                    {
+                        <option value="" selected>Selecciona una opción</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Baja">Baja</option>
+                    }
+                    @if (mensaje.importancia == "Alta")
+                    {
+                        <option value="">Selecciona una opción</option>
+                        <option value="Alta" selected>Alta</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Baja">Baja</option>
+                    }
+                    @if (mensaje.importancia == "Normal")
+                    {
+                        <option value="">Selecciona una opción</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Normal" selected>Normal</option>
+                        <option value="Baja">Baja</option>
+                    }
+                    @if (mensaje.importancia == "Baja")
+                    {
+                        <option value="">Selecciona una opción</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Baja" selected>Baja</option>
+                    }
+
+
+                </select>
+            </div>
+
+        </div>
+
+
+        <div class=" row form-group">
+            <label for="fechaHasta" class="col-form-label col-md-2">Fecha de Inicio:</label>
+            <div class="col-md-5">
+                <input class="form-control" type="text" id="mensaje_fechaInicioMensaje" name="fechaHasta" value="@mensaje.fechaInicioMensaje">
+            </div>
+        </div>
+
+        <div class=" row form-group">
+            <label for="fechaHasta" class="col-form-label col-md-2">Fecha de Vencimiento:</label>
+            <div class="col-md-5">
+                <input class="form-control" type="text" id="mensaje_fechaVencimientoMensaje_edit" name="fechaHasta" value="@mensaje.fechaVencimientoMensaje">
+            </div>
+        </div>
+
+
+        <div class="row form-group">
+            <label for="email" class="col-form-label col-md-2">Titulo:</label>
+            <div class="col-md-5">
+                <input name="titulo" id="titulo" class="form-control" value="@mensaje.titulo" required>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <label for="mensaje" class="col-form-label col-md-2">Mensaje:</label>
+            <div class="col-md-5">
+                <textarea class="form-control" name="mensaje" id="txtMensaje" rows="10" required>@mensaje.mensaje</textarea>
+            </div>
+        </div>
+
+        <div class="row form-group">
+
+            <div class="col-sm-12 col-lg-12 col-xs-12">
+                <label class="col-form-label col-md-2">Roles:</label>
+            </div>
+            <div class="col-sm-6 col-lg-4 col-xs-12">
+                @foreach (Model.Rol ro in roles)
+                {
+                    string itemChecked = mensaje.TieneRol(ro.idRol) ? "checked" : "";
+
+                    <div class="col-sm-6 col-lg-4 col-xs-12">
+                        <label class="radio-label" for="permiso_@ro.idRol">
+                            <input type="checkbox" @itemChecked class="chk-rol" name="rol_@ro.idRol" id="rol_@ro.idRol" value="1">
+                            <span>@ro.nombre - (@ro.codigo)</span>
+                        </label>
+                    </div>
+                }
+            </div>
+
+        </div>
+
+
+        <button hidden type="button" id="btnCancelarMensaje" class="btn btn-danger"> Cancelar</button>
+        <button class="btn btn-info" id="btnEnviarMensaje">Enviar</button>
+
+    </div>
+
+
+</div>
+
+
+
+

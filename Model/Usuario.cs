@@ -203,8 +203,9 @@ namespace Model
         public bool visualizaLogCampo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_LOGCAMPO)).FirstOrDefault() != null; } }
 
         /*Mensaje*/
-        public bool creaMensaje { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_MENSAJE)).FirstOrDefault() != null; } }
+        public bool modificaMensaje { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MENSAJE)).FirstOrDefault() != null; } }
 
+        public bool visualizaMensaje { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.LISTA_MENSAJE)).FirstOrDefault() != null; } }
         /*Notificacion de Documento de Venta*/
         public bool visualizaDocumentoVentaNotificacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOVENTANOTIFICACION)).FirstOrDefault() != null; } }
 

@@ -22,7 +22,7 @@ namespace Cotizador.Controllers
         {
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.modificaVendedor)
+            if (!usuario.visualizaMensaje)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -31,37 +31,129 @@ namespace Cotizador.Controllers
         }
 
         [HttpGet]
-        public ActionResult Crear(int? idRol = null)
+        public ActionResult Editar(Guid? id_mensaje = null)
         {
-
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaMensaje;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoMensaje;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA] == null)
+
+            if (!usuario.modificaMensaje)
+            {
+                return RedirectToAction("Lista", "Mensaje");
+            }
+
+            RolBL rolbl = new RolBL();
+            List<Rol> roles = new List<Rol>();
+            Rol rol = new Rol();
+            rol.Estado = 1;
+            roles = rolbl.getRoles(rol);
+            this.Session[Constantes.VAR_SESSION_ROL_LISTA] = roles;
+
+            if (this.Session[Constantes.VAR_SESSION_MENSAJE] == null && id_mensaje == null)
             {
                 instanciarMensaje();
             }
 
-            Rol obj2 = new Rol();
-            obj2.Estado = 1;
+            Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
 
-            RolBL permisobl = new RolBL();
-            List<Rol> permisos = new List<Rol>();
+            if (id_mensaje != null)
+            {
+                MensajeBL bL = new MensajeBL();
+                mensaje = bL.getMensajeById(id_mensaje.Value);
+                mensaje.user.idUsuario = usuario.idUsuario;
+                mensaje.user = usuario;
 
-            permisos = permisobl.getRoles(obj2);
-
-            this.Session[Constantes.VAR_SESSION_ROL_LISTA] = permisos;
-
-            Mensaje obj = new Mensaje();
-            obj.user = usuario;
-            obj.roles = new List<Rol>();
-            MensajeSession = obj;
-
-            ViewBag.roles = permisos;
+                this.Session[Constantes.VAR_SESSION_MENSAJE] = mensaje;
+            }
+            ViewBag.Mensaje = mensaje;
+            ViewBag.roles = roles;
 
             return View();
 
+        }
+
+        private void instanciarMensaje()
+        {
+            Mensaje obj = new Mensaje();
+            obj.user = new Usuario();
+            obj.id_mensaje = Guid.Empty;
+            obj.importancia = "";
+            obj.mensaje = String.Empty;
+            obj.titulo = String.Empty;
+            obj.estado = 1;
+            obj.fechaInicioMensaje = DateTime.Now;
+            obj.fechaVencimientoMensaje = DateTime.Now;
+            obj.user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            this.Session[Constantes.VAR_SESSION_MENSAJE] = obj;
+
 
         }
+
+        [HttpGet]
+        public ActionResult Lista()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaMensaje;
+
+            if (this.Session[Constantes.VAR_SESSION_ORIGEN_BUSQUEDA] == null)
+            {
+                instanciarBusquedaMensaje();
+            }
+
+            Mensaje objSearch = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA];
+
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaMensaje;
+            ViewBag.Mensaje = objSearch;
+
+            return View();
+        }
+
+        private void instanciarBusquedaMensaje()
+        {
+            Mensaje obj = new Mensaje();
+            obj.user = new Usuario();
+            obj.estado = 1;
+            obj.id_mensaje = Guid.Empty;
+            obj.fechaCreacionMensaje = null;
+            obj.fechaVencimientoMensaje = null;
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.user.idUsuario = usuario.idUsuario;
+
+            this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA] = obj;
+        }
+
+        public String SearchList()
+        {
+                       
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaMensaje;
+            Mensaje obj = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA];
+            obj.user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            MensajeBL bL = new MensajeBL();
+            List<Mensaje> list = bL.getListMensajes(obj);
+            //Se coloca en session el resultado de la búsqueda
+            this.Session[Constantes.VAR_SESSION_MENSAJE_LISTA] = list;
+            //Se retorna la cantidad de elementos encontrados
+            return JsonConvert.SerializeObject(list);
+        }
+
+        public String ConsultarSiExisteMensaje()
+        {
+            Guid idMensaje = Guid.Parse(Request["idMensaje"].ToString());
+            MensajeBL bL = new MensajeBL();
+            Mensaje obj = bL.getMensajeById(idMensaje);
+
+            String resultado = JsonConvert.SerializeObject(obj);
+            this.Session[Constantes.VAR_SESSION_MENSAJE_VER] = obj;
+
+            obj = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
+            if (obj == null || obj.id_mensaje == Guid.Empty)
+                return "{\"existe\":\"false\",\"idMensaje\":\"0\"}";
+            else
+                return "{\"existe\":\"true\",\"idMensaje\":\"" + obj.id_mensaje + "\"}";
+        }
+
+
+
+
         private Mensaje MensajeSession
         {
             get
@@ -87,33 +179,40 @@ namespace Cotizador.Controllers
         }
 
 
-        private void instanciarMensaje()
-        {
-            Mensaje obj = new Mensaje();
-            obj.importancia = "";
-            obj.mensaje = String.Empty;
-            obj.titulo = String.Empty;
-            MensajeSession = obj;
-            //obj.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
-            obj.user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-        }
 
         public String Create()
         {
             MensajeBL bL = new MensajeBL();
-            Mensaje obj = (Mensaje)this.MensajeSession;            
+            Mensaje obj = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
+
+            RolBL rolbl = new RolBL();
+            List<Rol> roles = new List<Rol>();
+            Rol rol = new Rol();
+            rol.Estado = 1;
+            roles = rolbl.getRoles(rol);
+
             obj = bL.insertMensaje(obj);
+            this.Session[Constantes.VAR_SESSION_MENSAJE] = null;
             String resultado = JsonConvert.SerializeObject(obj);
             return resultado;
         }
+
+        public void iniciarEdicionMensaje()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Mensaje obj = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE_VER];
+            this.Session[Constantes.VAR_SESSION_MENSAJE] = obj;
+        }
+
 
         public void ChangeInputString()
         {
             Mensaje obj = (Mensaje)this.MensajeSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, this.Request.Params["valor"]);
-            this.MensajeSession = obj;
+            this.MensajeSession = obj; ;
+
         }
 
         public void ChangeInputInt()
@@ -128,7 +227,7 @@ namespace Cotizador.Controllers
 
         public void Limpiar()
         {
-            instanciarMensaje();
+            instanciarBusquedaMensaje();
 
         }
 
@@ -136,15 +235,16 @@ namespace Cotizador.Controllers
         {
 
             Mensaje obj = (Mensaje)this.MensajeSession;
+
             int valor = Int32.Parse(this.Request.Params["valor"]);
-            int permiso = Int32.Parse(this.Request.Params["rol"].ToString().Replace("rol_", ""));
+            int rol_select = Int32.Parse(this.Request.Params["rol"].ToString().Replace("rol_", ""));
             List<Rol> listaRoles = (List<Rol>)this.Session[Constantes.VAR_SESSION_ROL_LISTA];
             if (valor == 0)
             {
                 //Remove
                 foreach (Rol rol in obj.roles)
                 {
-                    if (permiso == rol.idRol)
+                    if (rol_select == rol.idRol)
                     {
                         obj.roles.Remove(rol);
                         break;
@@ -156,15 +256,15 @@ namespace Cotizador.Controllers
                 //ADD
                 foreach (Rol rol in listaRoles)
                 {
-                    if (permiso == rol.idRol)
+                    if (rol_select == rol.idRol)
                     {
                         obj.roles.Add(rol);
                         break;
                     }
                 }
             }
-
             this.MensajeSession = obj;
+
         }
 
 
@@ -177,7 +277,7 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(list);
         }
 
-        public void UpdateMensaje()
+        public void UpdateMensajeVisto()
         {
             Mensaje obj = new Mensaje();
             obj.user = new Usuario();
@@ -185,15 +285,74 @@ namespace Cotizador.Controllers
             obj.id_mensaje = Guid.Parse(Request["idMensaje"].ToString());
             obj.user.idUsuario = Guid.Parse(Request["idUsuario"].ToString());
             MensajeBL bL = new MensajeBL();
-            bL.updateMensaje(obj);
+            bL.updateMensajeVisto(obj);
         }
 
-        public void changeFecha()
+
+
+        public String UpdateMensaje()
         {
-            Mensaje obj = this.MensajeSession;
-            String[] fecha = this.Request.Params["fechaVencimiento"].Split('/');
-            obj.fechaVencimiento = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+
+            MensajeBL bL = new MensajeBL();
+            Mensaje obj = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
+            obj.user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            //Mensaje update = (Mensaje)this.MensajeSession;
+            //obj.titulo = update.titulo;
+            //obj.importancia = update.importancia;
+            //obj.fechaInicioMensaje = update.fechaInicioMensaje;
+            //obj.fechaVencimientoMensaje = update.fechaVencimientoMensaje;
+            //obj.mensaje = update.mensaje;
+            if (obj.id_mensaje == null || obj.id_mensaje == Guid.Empty)
+            {
+                obj = bL.insertMensaje(obj);
+                this.Session[Constantes.VAR_SESSION_MENSAJE] = null;
+            }
+            else
+            {
+
+                obj = bL.updateMensaje(obj);
+                this.Session[Constantes.VAR_SESSION_MENSAJE] = null;
+            }
+            String resultado = JsonConvert.SerializeObject(obj);
+
+            return resultado;
+
+        }
+
+        public void ChangeFechaInicio()
+        {
+            Mensaje obj = (Mensaje)this.MensajeSession;
+            String[] fecha = this.Request.Params["fechaInicio"].Split('/');
+            obj.fechaInicioMensaje = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
             this.MensajeSession = obj;
+        }
+
+        public void ChangeFechaVencimiento()
+        {
+            Mensaje obj = (Mensaje)this.MensajeSession;
+            String[] fecha = this.Request.Params["fechaVencimiento"].Split('/');
+            obj.fechaVencimientoMensaje = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            obj.fechaCreacionMensaje = null;
+            this.MensajeSession = obj;
+
+        }
+
+        public void ChangeFechaCreacion()
+        {
+            Mensaje obj = (Mensaje)this.MensajeSession;
+            String[] fecha = this.Request.Params["fechaCreacion"].Split('/');
+            obj.fechaCreacionMensaje = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            obj.fechaVencimientoMensaje = null;
+            this.MensajeSession = obj;
+
+
+        }
+
+        public ActionResult CancelarCreacionMensaje()
+        {
+            this.Session[Constantes.VAR_SESSION_MENSAJE] = null;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            return RedirectToAction("Lista", "Mensaje");
         }
     }
 }

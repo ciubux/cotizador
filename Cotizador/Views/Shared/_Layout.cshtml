@@ -107,6 +107,7 @@
                         var linkBusquedaDocumentoVentaNotificacion = "";
 
                         var linkCrearMensaje = "";
+                        var linkBusquedaMensaje = "";
 
                         var linkCrearFacturaConsolidada = "";
 
@@ -178,7 +179,7 @@
                             case 43: linkMantenimientoLogCampo = "ative"; linkMaestros = "active"; break;
 
                             case 45: linkCrearMensaje = "ative"; linkMaestros = "active"; break;
-
+                            case 46: linkBusquedaMensaje = "ative"; linkMaestros = "active"; break;
                             case 101: linkBusquedaRol = "ative"; linkMaestros = "active"; break;
                             case 102: linkMantenimientoRol = "ative"; linkMaestros = "active"; break;
                             case 103: linkBusquedaUsuario = "ative"; linkMaestros = "active"; break;
@@ -425,16 +426,20 @@
                                         <li id="linkBusquedaUsuario" class="@linkBusquedaUsuario">@Html.ActionLink("Usuario - Búsqueda", "List", "Usuario")</li>
                                     }
 
-                                    @if (usuario.creaMensaje)
+                                    @if (usuario.visualizaMensaje)
                                     {
-                                        <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear Mensaje", "Crear", "Mensaje")</li>
+                                        <li id="linkBusquedaMensaje" class="@linkBusquedaMensaje">@Html.ActionLink("Mensaje - Búsqueda", "Lista", "Mensaje")</li>
+                                    }
+                                    @if (usuario.modificaMensaje)
+                                    {
+                                        <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
                                     }
 
 
                                     @*@if (usuario.modificaUsuario)
-                                        {
-                                            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
-                                        }*@
+        {
+            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
+        }*@
 
 
                                     @if (usuario.administraPermisos)

@@ -30,13 +30,41 @@ namespace BusinessLayer
 
         }
 
-        public void updateMensaje(Mensaje obj)
+        public List<Mensaje> getListMensajes(Mensaje mensaje)
         {
             using (var dal = new MensajeDAL())
             {
-                dal.updateMensaje(obj);
+                return dal.getListMensajes(mensaje);
+            }
+
+        }
+        public void updateMensajeVisto(Mensaje obj)
+        {
+            using (var dal = new MensajeDAL())
+            {
+                dal.updateMensajeVisto(obj);
             }
         }
+
+        public Mensaje getMensajeById(Guid idMensaje)
+        {
+            using (var dal = new MensajeDAL())
+            {
+                return dal.getMensajeById(idMensaje);
+            }
+
+        }
+
+
+        public Mensaje updateMensaje(Mensaje obj)
+        {
+            using (var dal = new MensajeDAL())
+            {
+                return dal.updateMensaje(obj);
+            }
+        }
+
+
 
     }
 }
