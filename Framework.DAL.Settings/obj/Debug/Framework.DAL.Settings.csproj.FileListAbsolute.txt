@@ -193,7 +193,6 @@ G:\Repo\maquetados\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Sett
 G:\Repo\maquetados\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
 G:\Repo\maquetados\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
 G:\Repo\maquetados\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
-<<<<<<< HEAD
 G:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
 G:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
 G:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
@@ -205,15 +204,3 @@ G:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Setting
 G:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
 G:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
 G:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
-=======
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.dll
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csprojResolveAssemblyReference.cache
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CoreCompileInputs.cache
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
->>>>>>> b8479c108e88c988ccd67dadb924f39f85134124

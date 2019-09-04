@@ -68,7 +68,6 @@ C:\Users\cesar\Documents\MP2\cotizador_2\DataLayer\obj\Release\DataLayer.csprojR
 C:\Users\cesar\Documents\MP2\cotizador_2\DataLayer\obj\Release\DataLayer.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\DataLayer\obj\Release\DataLayer.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\DataLayer\obj\Release\DataLayer.pdb
-<<<<<<< HEAD
 D:\Repo\freelos\cotizador\DataLayer\bin\Release\DataLayer.dll
 D:\Repo\freelos\cotizador\DataLayer\bin\Release\DataLayer.pdb
 D:\Repo\freelos\cotizador\DataLayer\bin\Release\Framework.DAL.dll
@@ -87,5 +86,21 @@ D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.csproj.CoreCompileInpu
 D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.csproj.CopyComplete
 D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.dll
 D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.pdb
-=======
->>>>>>> Andre/Vendedor
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\DataLayer.dll
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\DataLayer.pdb
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Framework.DAL.dll
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Framework.DAL.Settings.dll
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Framework.WebCommon.dll
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Model.dll
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Newtonsoft.Json.dll
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Framework.DAL.Settings.pdb
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Framework.DAL.pdb
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Framework.WebCommon.pdb
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Model.pdb
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Model.dll.config
+G:\Repo\maquetados\cotizador\DataLayer\bin\Release\Newtonsoft.Json.xml
+G:\Repo\maquetados\cotizador\DataLayer\obj\Release\DataLayer.csprojAssemblyReference.cache
+G:\Repo\maquetados\cotizador\DataLayer\obj\Release\DataLayer.csproj.CoreCompileInputs.cache
+G:\Repo\maquetados\cotizador\DataLayer\obj\Release\DataLayer.csproj.CopyComplete
+G:\Repo\maquetados\cotizador\DataLayer\obj\Release\DataLayer.dll
+G:\Repo\maquetados\cotizador\DataLayer\obj\Release\DataLayer.pdb

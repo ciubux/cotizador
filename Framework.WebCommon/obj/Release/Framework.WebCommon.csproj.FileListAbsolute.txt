@@ -25,12 +25,15 @@ C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Release\Framewo
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Release\Framework.WebCommon.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Release\Framework.WebCommon.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb
-<<<<<<< HEAD
 D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Release\Framework.WebCommon.dll
 D:\Repo\freelos\cotizador\Framework.WebCommon\bin\Release\Framework.WebCommon.pdb
 D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csprojAssemblyReference.cache
 D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csproj.CoreCompileInputs.cache
 D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.dll
 D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb
-=======
->>>>>>> Andre/Vendedor
+G:\Repo\maquetados\cotizador\Framework.WebCommon\bin\Release\Framework.WebCommon.dll
+G:\Repo\maquetados\cotizador\Framework.WebCommon\bin\Release\Framework.WebCommon.pdb
+G:\Repo\maquetados\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csprojAssemblyReference.cache
+G:\Repo\maquetados\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csproj.CoreCompileInputs.cache
+G:\Repo\maquetados\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.dll
+G:\Repo\maquetados\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb

@@ -411,6 +411,7 @@
     <Content Include="Content\jquery-confirm.less" />
     <None Include="Properties\PublishProfiles\cotizadormp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\zasinterbank - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\zasmp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen\chosen.ajaxaddition.jquery.js" />

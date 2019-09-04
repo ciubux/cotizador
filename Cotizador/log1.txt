@@ -93,3 +93,7 @@ The statement has been terminated.
 2019-08-14 12:32:09.0505|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Producto ya se encuentra en la lista.
 2019-08-14 12:32:09.1115|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Producto ya se encuentra en la lista.
 2019-08-15 10:31:57.6938|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-08-28 10:30:03.5133|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Intento de dividir por cero.
+2019-08-28 10:34:43.5137|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Intento de dividir por cero.
+2019-08-28 10:35:01.8196|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Intento de dividir por cero.
+2019-08-28 10:37:30.4205|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Intento de dividir por cero.

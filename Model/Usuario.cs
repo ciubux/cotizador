@@ -25,6 +25,8 @@ namespace Model
         public string cargo { get; set; }
         [Display(Name = "Contacto:")]
         public string contacto { get; set; }
+
+        public bool esMaestro { get; set; }
         public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
 
         public Ciudad sedeMP { get; set; }
@@ -205,7 +207,7 @@ namespace Model
         public bool visualizaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENDEDORES)).FirstOrDefault() != null; } }        
 
         /*Administra Permisos*/
-        public bool administraPermisos { get { return true /*this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null*/; } }
+        public bool administraPermisos { get { return this.esMaestro /*this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null*/; } }
 
         public bool modificaDireccionEntrega { get; set; }
         
@@ -213,10 +215,10 @@ namespace Model
         public bool modificaRol { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ROL)).FirstOrDefault() != null; } }
         public bool visualizaRoles { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_ROLES)).FirstOrDefault() != null; } }
 
-        public bool modificaUsuario { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_USUARIO)).FirstOrDefault() != null; } }
-        public bool visualizaUsuarios { get { return true/* this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_USUARIOS)).FirstOrDefault() != null*/; } }
+        public bool modificaUsuario { get { return this.esMaestro; /* this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_USUARIO)).FirstOrDefault() != null;*/ } }
+        public bool visualizaUsuarios { get { return this.esMaestro/* this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_USUARIOS)).FirstOrDefault() != null*/; } }
 
-        public bool modificaPeriodoSolicitud { get { return true /*modificaPeriodoSolicitud || modificaPeriodoSolicitud*/; } }
+        public bool modificaPeriodoSolicitud { get { return this.esMaestro /*modificaPeriodoSolicitud || modificaPeriodoSolicitud*/; } }
     }
 }
 
