@@ -41,7 +41,7 @@
     }).datepicker("setDate", fechaVencimientoedit);
 
     $("#mensaje_fechaVencimientoMensaje").datepicker({
-        dateFormat: 'dd/mm/yy'        
+        dateFormat: 'dd/mm/yy'
     }).datepicker("setDate", new Date());
 
     $("#mensaje_fechaInicioMensaje").datepicker({
@@ -126,13 +126,13 @@
             return false;
         }
 
-        var fechaVencimiento = $("#mensaje_fechaVencimientoMensaje").val();
+        var fechaVencimiento = $("#mensaje_fechaVencimientoMensaje_edit").val();
         var fechaInicio = $("#mensaje_fechaInicioMensaje").val();
 
         function validate_fechaMayorQue(fechaInicial, fechaFinal) {
             valuesStart = fechaInicial.split("/");
             valuesEnd = fechaFinal.split("/");
-            
+
             var dateStart = new Date(valuesStart[2], (valuesStart[1] - 1), valuesStart[0]);
             var dateEnd = new Date(valuesEnd[2], (valuesEnd[1] - 1), valuesEnd[0]);
             if (dateStart > dateEnd) {
@@ -239,8 +239,8 @@
             success: function () {
                 location.reload();
             }
-            });
-         });
+        });
+    });
 
     $(".chk-rol").change(function () {
         var valor = 0;
@@ -278,32 +278,15 @@
     }
 
     function eliminateFecha(arrayIn) {
-              
-        var hoy = new Date($.datepicker.formatDate('yy-mm-dd', new Date())).getTime();
 
-        var final = [];
-        for (var i = 0; i < arrayIn.length; i++) {          
-            
-            var fecInicio = new Date($.datepicker.formatDate('yy-mm-dd', new Date(arrayIn[i].fechaInicioMensaje))).getTime();
-            var fecVencimiento = new Date($.datepicker.formatDate('yy-mm-dd', new Date(arrayIn[i].fechaVencimientoMensaje))).getTime();
-            
-            if (fecInicio <= hoy && hoy <= fecVencimiento) {
-                var arrayOut = {};
-                arrayOut["id_mensaje"] = arrayIn[i].id_mensaje;
-                arrayOut["fechaCreacionMensaje"] = arrayIn[i].fechaCreacionMensaje;
-                arrayOut["titulo"] = arrayIn[i].titulo;
-                arrayOut["mensaje"] = arrayIn[i].mensaje;
-                arrayOut["importancia"] = arrayIn[i].importancia;
-                arrayOut["fechaVencimientoMensaje"] = arrayIn[i].fechaVencimientoMensaje;
-                arrayOut["fechaInicioMensaje"] = arrayIn[i].fechaInicioMensaje;
-                arrayOut["usuario_creacion"] = arrayIn[i].usuario_creacion;
-                final.push(arrayOut);
-            }
-        }
-        return final;
+            var hoy = new Date($.datepicker.formatDate('yy-mm-dd', new Date())).getTime();           
+            var result = jQuery.grep(arrayIn, function (n, i) {               
+                return new Date($.datepicker.formatDate('yy-mm-dd', new Date(arrayIn[i].fechaInicioMensaje))).getTime() <= hoy && hoy <= new Date($.datepicker.formatDate('yy-mm-dd', new Date(arrayIn[i].fechaVencimientoMensaje))).getTime();
+            });        
+        return result;
     }
 
-       
+
     var idUsuario;
 
     function ActulizarMensaje() {
@@ -321,11 +304,11 @@
                 },
                 success: function (list) {
 
-                        list = eliminateDuplicates(list);
-                        list = eliminateFecha(list);
+                    list = eliminateDuplicates(list);
+                    list = eliminateFecha(list);
                     if (list.length != 0) {
 
-                        
+
                         $("#imagenMP").before('<a data-notifications="' + list.length + '" class="btnModal" href="javascript:void()"></a>');
 
 
@@ -343,7 +326,7 @@
                                 '<div class="modal-body">' +
                                 '<p>' + list[i].mensaje + '<p>' +
                                 '</div>' +
-                                '<div class="modal-footer">' +                                 
+                                '<div class="modal-footer">' +
                                 '<a  class="Leido btn btn-default ' + list[i].id_mensaje + '">Leido</a>' +
                                 '</div>' +
                                 '</div>';
@@ -407,7 +390,7 @@
 
     $("#mensaje_fechaCreacionMensaje").change(function () {
         var fechaCreacion = $("#mensaje_fechaCreacionMensaje").val();
-        $("#mensaje_fechaVencimientoMensaje").prop('disabled', true);
+        $("#mensaje_fechaCreacionMensaje").prop('disabled', true);
         $.ajax({
             url: "/Mensaje/ChangeFechaCreacion",
             type: 'POST',
@@ -434,14 +417,30 @@
     });
 
 
+    $("#mensaje_fechaVencimientoMensaje_edit").change(function () {
+        var fechaVencimiento = $("#mensaje_fechaVencimientoMensaje_edit").val();
+       
+        $.ajax({
+            url: "/Mensaje/ChangeFechaVencimiento",
+            type: 'POST',
+            data: {
+                fechaVencimiento: fechaVencimiento
+            },
+            success: function () {
+            }
+        });
+    });
 
-    $("#btnBusquedaMensaje").click(function () {                
+
+
+
+    $("#btnBusquedaMensaje").click(function () {
 
         $("#btnBusquedaMensaje").attr("disabled", "disabled");
         $.ajax({
             url: "/Mensaje/SearchList",
             type: 'POST',
-            dataType: 'JSON',            
+            dataType: 'JSON',
             error: function () {
                 $("#btnBusquedaMensaje").removeAttr("disabled");
             },
@@ -474,7 +473,7 @@
 
                 }
 
-                
+
 
             }
         });
