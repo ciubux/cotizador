@@ -390,7 +390,7 @@
 
     $("#mensaje_fechaCreacionMensaje").change(function () {
         var fechaCreacion = $("#mensaje_fechaCreacionMensaje").val();
-        $("#mensaje_fechaCreacionMensaje").prop('disabled', true);
+        $("#mensaje_fechaVencimientoMensaje").prop('disabled', true);
         $.ajax({
             url: "/Mensaje/ChangeFechaCreacion",
             type: 'POST',
