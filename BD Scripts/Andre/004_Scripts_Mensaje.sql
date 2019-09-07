@@ -13,12 +13,12 @@ end
  if @fecha_vencimiento is null 
  begin 
  select id_mensaje,mensaje.fecha_creacion,titulo,usuario.nombre,fecha_vencimiento,mensaje.fecha_inicio from mensaje inner join usuario on usuario.id_usuario=mensaje.id_usuario_creacion 
-where mensaje.estado=@estado and id_usuario_creacion=@id_usuario_creacion and  datediff(day,mensaje.fecha_creacion,@fecha_creacion)=0
+where mensaje.estado=@estado and id_usuario_creacion=@id_usuario_creacion and  CONVERT(date,mensaje.fecha_creacion)=@fecha_creacion
  end 
  if @fecha_creacion is null 
 begin
 select id_mensaje,mensaje.fecha_creacion,titulo,usuario.nombre,fecha_vencimiento,mensaje.fecha_inicio from mensaje inner join usuario on usuario.id_usuario=mensaje.id_usuario_creacion 
-where mensaje.estado=@estado and id_usuario_creacion=@id_usuario_creacion and datediff(day,mensaje.fecha_vencimiento,@fecha_vencimiento) = 0
+where mensaje.estado=@estado and id_usuario_creacion=@id_usuario_creacion and mensaje.fecha_vencimiento=@fecha_vencimiento
  end
 end
 /* **** Create pi_mensaje - Inserta el mensaje creado por el usuario en las tablas mensaje y mensaje_roles  **** */
@@ -123,7 +123,6 @@ SELECT id_rol from mensaje_roles where id_mensaje=@id_mensaje
 end 
 
 /*********** Create ps_alerta_mensaje_usuario - Obtiene los mensajes pendientes de leer para el usuario ********/
-
 create procedure [dbo].[ps_alerta_mensaje_usuario] 
 (@id_usuario uniqueidentifier)
 as begin 
@@ -134,6 +133,7 @@ inner join mensaje_roles on   mensaje_roles.id_mensaje=mensaje.id_mensaje
 inner join  ROL_USUARIO on ROL_USUARIO.id_rol=mensaje_roles.id_rol
 inner join USUARIO on mensaje.id_usuario_creacion=usuario.id_usuario
 where Mensaje.id_mensaje not in (select id_mensaje from MENSAJE_LEIDO)  and ROL_USUARIO.id_usuario=@id_usuario and mensaje.estado=1 
+and fecha_inicio <= Format(GetDate(), N'yyyydd-MM-dd') and fecha_vencimiento>= Format(GetDate(), N'yyyydd-MM-dd')
 order by  mensaje.fecha_creacion desc
 end 
 /*********** Create pi_mensaje_visto - Inserta el mensaje leido por un usuario especifico ********/
@@ -145,8 +145,6 @@ as begin
 insert MENSAJE_LEIDO(id_mensaje,id_usuario,fecha_leido) values(@id_mensaje,@id_usuario,GETDATE())
 end 
 
-
-
 /*-----------------------CREACION DE TABLA MENSAJE --------------------------------*/
 CREATE TABLE [dbo].[MENSAJE](
 	[id_mensaje] [uniqueidentifier] NULL,
@@ -156,10 +154,10 @@ CREATE TABLE [dbo].[MENSAJE](
 	[importancia] [varchar](10) NULL,
 	[estado] [smallint] NULL,
 	[id_usuario_creacion] [uniqueidentifier] NULL,
-	[fecha_vencimiento] [datetime] NULL,
+	[fecha_vencimiento] [date] NULL,
 	[fecha_modificacion] [datetime] NULL,
 	[usuario_modificacion] [uniqueidentifier] NULL,
-	[fecha_inicio] [datetime] NULL
+	[fecha_inicio] [date] NULL
 )
 
 
@@ -170,7 +168,7 @@ CREATE TABLE [dbo].[MENSAJE_LEIDO](
 	[id_usuario] [uniqueidentifier] NULL,
 	[fecha_leido] [datetime] NULL
 )
-
+select * from mensaje 
 /*-----------------------CREACION DE TABLA MENSAJE_ROLES--------------------------------*/
 CREATE TABLE [dbo].[MENSAJE_ROLES](
 	[id_rol] [int] NULL,

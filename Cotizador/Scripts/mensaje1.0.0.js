@@ -277,14 +277,7 @@
         return unicos;
     }
 
-    function eliminateFecha(arrayIn) {
-
-            var hoy = new Date($.datepicker.formatDate('yy-mm-dd', new Date())).getTime();           
-            var result = jQuery.grep(arrayIn, function (n, i) {               
-                return new Date($.datepicker.formatDate('yy-mm-dd', new Date(arrayIn[i].fechaInicioMensaje))).getTime() <= hoy && hoy <= new Date($.datepicker.formatDate('yy-mm-dd', new Date(arrayIn[i].fechaVencimientoMensaje))).getTime();
-            });        
-        return result;
-    }
+    
 
 
     var idUsuario;
@@ -305,7 +298,7 @@
                 success: function (list) {
 
                     list = eliminateDuplicates(list);
-                    list = eliminateFecha(list);
+                    
                     if (list.length != 0) {
 
 
