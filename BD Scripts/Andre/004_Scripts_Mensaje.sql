@@ -85,7 +85,8 @@ mensaje=@mensaje,
 importancia=@importancia,
 fecha_vencimiento=@fecha_vencimiento,
 usuario_modificacion=@id_usuario_modificacion,
-fecha_inicio=@fecha_inicio
+fecha_inicio=@fecha_inicio,
+fecha_modificacion=getdate()
  where id_mensaje=@id_mensaje
 
 delete from MENSAJE_ROLES where id_mensaje=@id_mensaje
