@@ -2157,13 +2157,30 @@ jQuery(function ($) {
     });
 
 
-    $("#cliente_bloqueado").change(function () {
-        var valor = 1;
-        if (!$('#cliente_bloqueado').prop('checked')) {
-            valor = 0;
+    $("#cliente_tlc_todos").change(function () {
+        if ($('#cliente_tlc_todos').prop('checked')) {
+            changeTipoLiberacionCrediticia(-999);
         }
-        changeInputBoolean('bloqueado', valor)
     });
+
+    $("#cliente_tlc_requiere").change(function () {
+        if ($('#cliente_tlc_requiere').prop('checked')) {
+            changeTipoLiberacionCrediticia(0);
+        }
+    });
+
+    $("#cliente_tlc_bloqueado").change(function () {
+        if ($('#cliente_tlc_bloqueado').prop('checked')) {
+            changeTipoLiberacionCrediticia(-1);
+        }
+    });
+
+    $("#cliente_tlc_exonerado").change(function () {
+        if ($('#cliente_tlc_exonerado').prop('checked')) {
+            changeTipoLiberacionCrediticia(1);
+        }
+    });
+
 
     $("#cliente_negociacionMultiregional").change(function () {
         var valor = 1;
@@ -2265,6 +2282,17 @@ jQuery(function ($) {
         });
     }
 
+    function changeTipoLiberacionCrediticia(valor) {
+        $.ajax({
+            url: "/Cliente/ChangeTipoLiberacionCrediticia",
+            type: 'POST',
+            data: {
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
     function changeInputBitBoolean(propiedad, valor) {
         $.ajax({
             url: "/Cliente/ChangeInputBitBoolean",
@@ -2326,13 +2354,28 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    $("#lblChkConfigAgregarNombreSedeObservacionFactura").click(function () {
+        if ($("#chkConfigAgregarNombreSedeObservacionFactura").is(":checked")) {
+            $("#chkConfigAgregarNombreSedeObservacionFactura").prop("checked", false);
+        } else {
+            $("#chkConfigAgregarNombreSedeObservacionFactura").prop("checked", true);
+        }
+
+        actualizarValorChkConfigAgregarNombreSedeObservacionFactura();
+    });
+
+
     $("#chkConfigAgregarNombreSedeObservacionFactura").change(function () {
+        actualizarValorChkConfigAgregarNombreSedeObservacionFactura();
+    });
+
+    function actualizarValorChkConfigAgregarNombreSedeObservacionFactura() {
         var valor = 1;
         if (!$('#chkConfigAgregarNombreSedeObservacionFactura').prop('checked')) {
             valor = 0;
         }
         changeInputBoolean('configuraciones_agregarNombreSedeObservacionFactura', valor)
-    });
+    }
 
     $("#btnBusqueda").click(function () {
         

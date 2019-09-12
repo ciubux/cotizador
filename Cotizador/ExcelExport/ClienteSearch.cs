@@ -124,7 +124,7 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setValorCelda(sheet, 2, "R", "Plazo Crédito Aprobado", titleCellStyleEditable);
                 UtilesHelper.setValorCelda(sheet, 2, "S", "Crédito Aprobado (S/)", titleCellStyleEditable);
-                UtilesHelper.setValorCelda(sheet, 2, "T", "¿Bloqueado?", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 2, "T", "Liberación Crediticia", titleCellStyle);
 
                 UtilesHelper.setValorCelda(sheet, 2, "U", "Lima", titleCellStyleEditable);
                 UtilesHelper.setValorCelda(sheet, 2, "V", "Provincias", titleCellStyleEditable);
@@ -173,15 +173,9 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "Q", obj.asistenteServicioCliente.descripcion);
                     UtilesHelper.setValorCelda(sheet, i, "R", obj.tipoPagoFacturaToString);
                     UtilesHelper.setValorCelda(sheet, i, "S", (double) obj.creditoAprobado);
-                    if (obj.bloqueado)
-                    {
-                        UtilesHelper.setValorCelda(sheet, i, "T", "BLOQUEADO");
-                    } else
-                    {
-                        UtilesHelper.setValorCelda(sheet, i, "T", "");
-                    }
 
-                    
+                    UtilesHelper.setValorCelda(sheet, i, "T", obj.tipoLiberacionCrediticiaString);
+
 
                     if (obj.perteneceCanalLima)
                     {

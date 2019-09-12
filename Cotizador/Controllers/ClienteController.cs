@@ -177,6 +177,7 @@ namespace Cotizador.Controllers
             cliente.usuario = usuario;
             cliente.grupoCliente = new GrupoCliente();
             cliente.sedePrincipal = false;
+            cliente.tipoLiberacionCrediticia = Persona.TipoLiberacionCrediticia.requiere;
             cliente.negociacionMultiregional = false;
             cliente.observacionHorarioEntrega = "";
             cliente.configuraciones = new Model.CONFIGCLASSES.ClienteConfiguracion();
@@ -196,7 +197,7 @@ namespace Cotizador.Controllers
             cliente.ciudad = new Ciudad();
             cliente.vendedoresAsignados = false;
             cliente.sinPlazoCreditoAprobado = false;
-            cliente.bloqueado = false;
+            cliente.tipoLiberacionCrediticia = Persona.TipoLiberacionCrediticia.todos;
             cliente.codigo = String.Empty;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             cliente.IdUsuarioRegistro = usuario.idUsuario;
@@ -488,6 +489,14 @@ namespace Cotizador.Controllers
             this.ClienteSession = cliente;
             return "{\"idGrupoCliente\": \"" + idGrupoCliente + "\"}";
 
+        }
+
+        public void ChangeTipoLiberacionCrediticia()
+        {
+            Cliente cliente = this.ClienteSession;
+
+            cliente.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)int.Parse(this.Request.Params["valor"]);
+            this.ClienteSession = cliente;
         }
 
         public String Create()

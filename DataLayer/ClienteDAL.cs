@@ -315,7 +315,8 @@ namespace DataLayer
                 cliente.observacionesCredito = Converter.GetString(row, "observaciones_credito");
                 cliente.observaciones = Converter.GetString(row, "observaciones");
 
-                cliente.bloqueado = Converter.GetBool(row, "bloqueado");
+                cliente.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)Converter.GetInt(row, "estado_liberacion_creditica");
+                //cliente.bloqueado = Converter.GetBool(row, "bloqueado");
 
                 cliente.perteneceCanalMultiregional = Converter.GetBool(row, "pertenece_canal_multiregional");
                 cliente.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
@@ -330,7 +331,9 @@ namespace DataLayer
                 try
                 {
                     cliente.configuraciones = JsonConvert.DeserializeObject<ClienteConfiguracion>(Converter.GetString(row, "configuraciones"));
-                }catch (Exception ex)
+                    if (cliente.configuraciones == null) cliente.configuraciones = new ClienteConfiguracion();
+                }
+                catch (Exception ex)
                 {
                     cliente.configuraciones = new ClienteConfiguracion();
                 }
@@ -351,7 +354,7 @@ namespace DataLayer
                 cliente.subDistribuidor.codigo = Converter.GetString(row, "codigo_subdistribuidor");
                 cliente.subDistribuidor.nombre = Converter.GetString(row, "nombre_subdistribuidor");
 
-                cliente.exoneradoValidacionLiberacionCrediticia = Converter.GetBool(row, "exonerado_validacion_liberacion_crediticia");
+                //cliente.exoneradoValidacionLiberacionCrediticia = Converter.GetBool(row, "exonerado_validacion_liberacion_crediticia");
             }
 
             foreach (DataRow row in dataTableAdjunto.Rows)
@@ -484,7 +487,7 @@ namespace DataLayer
                 cliente.observacionesCredito = Converter.GetString(row, "observaciones_credito");
                 cliente.observaciones = Converter.GetString(row, "observaciones");
 
-                cliente.bloqueado = Converter.GetBool(row, "bloqueado");
+                cliente.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)Converter.GetInt(row, "estado_liberacion_creditica");
 
                 cliente.perteneceCanalMultiregional = Converter.GetBool(row, "pertenece_canal_multiregional");
                 cliente.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
@@ -557,7 +560,8 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
             InputParameterAdd.Int(objCommand, "sinPlazoCreditoAprobado", cliente.sinPlazoCreditoAprobado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "sinAsesorValidado", cliente.vendedoresAsignados ? 1 : 0);
-            InputParameterAdd.Int(objCommand, "bloqueado", cliente.bloqueado ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int) cliente.tipoLiberacionCrediticia);
+
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
             InputParameterAdd.Int(objCommand, "perteneceCanalLima", cliente.perteneceCanalLima?1:0);
             InputParameterAdd.Int(objCommand, "perteneceCanalProvincias", cliente.perteneceCanalProvincias ? 1 : 0);
@@ -617,7 +621,8 @@ namespace DataLayer
                 ClienteResultado.vendedoresAsignados = Converter.GetBool(row, "vendedores_asignados");
                 ///ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Char.Parse(Converter.GetString(row, "tipo_documento"));
 
-                ClienteResultado.bloqueado = Converter.GetBool(row, "bloqueado");
+                ClienteResultado.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)Converter.GetInt(row, "estado_liberacion_creditica");
+
 
                 ClienteResultado.perteneceCanalMultiregional = Converter.GetBool(row, "pertenece_canal_multiregional");
                 ClienteResultado.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
@@ -720,7 +725,9 @@ namespace DataLayer
 
             InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados?1:0));
 
-            InputParameterAdd.SmallInt(objCommand, "bloqueado", (short)(cliente.bloqueado ? 1 : 0));
+
+            InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int) cliente.tipoLiberacionCrediticia);
+
 
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalMultiregional", (short)(cliente.perteneceCanalMultiregional ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalLima", (short)(cliente.perteneceCanalLima ? 1 : 0));
@@ -844,7 +851,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito);
             InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
             InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados ? 1 : 0));
-            InputParameterAdd.SmallInt(objCommand, "bloqueado", (short)(cliente.bloqueado ? 1 : 0));
+            InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int) cliente.tipoLiberacionCrediticia);
 
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalMultiregional", (short)(cliente.perteneceCanalMultiregional ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalLima", (short)(cliente.perteneceCanalLima ? 1 : 0));
