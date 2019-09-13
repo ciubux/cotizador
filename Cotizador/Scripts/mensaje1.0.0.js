@@ -42,7 +42,7 @@
 
     $("#mensaje_fechaVencimientoMensaje").datepicker({
         dateFormat: 'dd/mm/yy'
-    }).datepicker("setDate", new Date());
+    }).datepicker("setDate", fechaVencimiento);
 
     $("#mensaje_fechaInicioMensaje").datepicker({
         dateFormat: 'dd/mm/yy'
@@ -50,7 +50,7 @@
 
     $("#mensaje_fechaCreacionMensaje").datepicker({
         dateFormat: 'dd/mm/yy'
-    }).datepicker("setDate", new Date());
+    }).datepicker("setDate", fechaCreacion);
 
 
     $("#btnEnviarMensaje").click(function () {

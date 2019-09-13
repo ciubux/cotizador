@@ -93,7 +93,7 @@ namespace Cotizador.Controllers
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaMensaje;
 
-            if (this.Session[Constantes.VAR_SESSION_ORIGEN_BUSQUEDA] == null)
+            if (this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA] == null)
             {
                 instanciarBusquedaMensaje();
             }
