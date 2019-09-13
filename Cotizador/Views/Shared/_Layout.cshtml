@@ -426,7 +426,7 @@
                                         <li id="linkBusquedaUsuario" class="@linkBusquedaUsuario">@Html.ActionLink("Usuario - Búsqueda", "List", "Usuario")</li>
                                     }
 
-                                    @if (usuario.visualizaMensaje)
+                                    @if (usuario.visualizaMensaje || usuario.modificaMensaje)
                                     {
                                         <li id="linkBusquedaMensaje" class="@linkBusquedaMensaje">@Html.ActionLink("Mensaje - Búsqueda", "Lista", "Mensaje")</li>
                                     }
