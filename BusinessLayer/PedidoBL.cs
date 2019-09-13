@@ -45,7 +45,7 @@ namespace BusinessLayer
                            pedido.seguimientoCrediticioPedido.observacion = "Se ha superado la Hora de Corte, la hora de corte actualmente es: " + Constantes.HORA_CORTE_CREDITOS_LIMA.Hour.ToString() + ":" + (Constantes.HORA_CORTE_CREDITOS_LIMA.Minute > 9 ? Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString() : "0" + Constantes.HORA_CORTE_CREDITOS_LIMA.Minute.ToString());
                       }
                    }*/
-                if (!pedido.cliente.exoneradoValidacionLiberacionCrediticia)
+                if (pedido.cliente.tipoLiberacionCrediticia != Persona.TipoLiberacionCrediticia.exonerado)
                 {
 
                     pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
@@ -71,7 +71,7 @@ namespace BusinessLayer
            
 
 
-            if (pedido.cliente.bloqueado)
+            if (pedido.cliente.tipoLiberacionCrediticia == Persona.TipoLiberacionCrediticia.bloqueado)
             {
                 pedido.seguimientoCrediticioPedido.observacion = "El cliente se encuentra BLOQUEADO."; // Agregar quien bloquea
                 pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.BLoqueado;
@@ -222,6 +222,29 @@ namespace BusinessLayer
                     pedido.observaciones = observacionesAdicionales;
                 }
 
+
+                if (pedido.cliente.configuraciones == null)
+                {
+                    ClienteDAL dalCliente = new ClienteDAL();
+                    pedido.cliente = dalCliente.getCliente(pedido.cliente.idCliente);
+                }
+
+                if (pedido.cliente.configuraciones.agregarNombreSedeObservacionFactura && pedido.direccionEntrega != null && 
+                    ((pedido.direccionEntrega.nombre != null  && !pedido.direccionEntrega.nombre.Trim().Equals("")) || 
+                     (pedido.direccionEntrega.codigoCliente != null && !pedido.direccionEntrega.codigoCliente.Trim().Equals(""))))
+                {
+                    pedido.observacionesFactura = pedido.observacionesFactura + " SEDE: ";
+                    if (pedido.direccionEntrega.nombre != null && !pedido.direccionEntrega.nombre.Trim().Equals(""))
+                    {
+                        pedido.observacionesFactura = pedido.observacionesFactura + pedido.direccionEntrega.nombre;
+                    }
+
+                    if (pedido.direccionEntrega.codigoCliente != null && !pedido.direccionEntrega.codigoCliente.Trim().Equals(""))
+                    {
+                        pedido.observacionesFactura = pedido.observacionesFactura + "(" + pedido.direccionEntrega.codigoCliente + ")";
+                    }
+                }
+
                 validarPedidoVenta(pedido);
                 dal.InsertPedido(pedido);
             }
@@ -294,7 +317,7 @@ namespace BusinessLayer
                 pedidoDetalle.idPedido = pedido.idPedido;
             }
 
-            if (pedido.cliente.bloqueado)
+            if (pedido.cliente.tipoLiberacionCrediticia == Persona.TipoLiberacionCrediticia.bloqueado)
             {
                 pedido.seguimientoPedido.observacion = "El cliente se encuentra bloqueado.";
                 pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;

@@ -177,9 +177,10 @@ namespace Cotizador.Controllers
             cliente.usuario = usuario;
             cliente.grupoCliente = new GrupoCliente();
             cliente.sedePrincipal = false;
+            cliente.tipoLiberacionCrediticia = Persona.TipoLiberacionCrediticia.requiere;
             cliente.negociacionMultiregional = false;
             cliente.observacionHorarioEntrega = "";
-
+            cliente.configuraciones = new Model.CONFIGCLASSES.ClienteConfiguracion();
             
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
@@ -196,7 +197,7 @@ namespace Cotizador.Controllers
             cliente.ciudad = new Ciudad();
             cliente.vendedoresAsignados = false;
             cliente.sinPlazoCreditoAprobado = false;
-            cliente.bloqueado = false;
+            cliente.tipoLiberacionCrediticia = Persona.TipoLiberacionCrediticia.todos;
             cliente.codigo = String.Empty;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             cliente.IdUsuarioRegistro = usuario.idUsuario;
@@ -490,6 +491,14 @@ namespace Cotizador.Controllers
 
         }
 
+        public void ChangeTipoLiberacionCrediticia()
+        {
+            Cliente cliente = this.ClienteSession;
+
+            cliente.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)int.Parse(this.Request.Params["valor"]);
+            this.ClienteSession = cliente;
+        }
+
         public String Create()
         {
             try
@@ -759,9 +768,30 @@ namespace Cotizador.Controllers
         public void ChangeInputBoolean()
         {
             Cliente cliente = this.ClienteSession;
-            PropertyInfo propertyInfo = cliente.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(cliente, Int32.Parse(this.Request.Params["valor"]) == 1);
-            this.ClienteSession = cliente;
+
+            PropertyInfo propertyInfo = null;
+
+            string[] composicion = this.Request.Params["propiedad"].ToString().Split('_');
+
+            if (composicion.Length > 1)
+            {
+                switch (composicion[0])
+                {
+                    case "configuraciones":
+                        propertyInfo = cliente.configuraciones.GetType().GetProperty(composicion[1]);
+                        propertyInfo.SetValue(cliente.configuraciones, Int32.Parse(this.Request.Params["valor"]) == 1);
+                        break;
+                }
+            } else
+            {
+                propertyInfo = cliente.GetType().GetProperty(composicion[0]);
+                propertyInfo.SetValue(cliente, Int32.Parse(this.Request.Params["valor"]) == 1);
+            }
+          
+            if (propertyInfo != null)
+            {
+                this.ClienteSession = cliente;
+            }
         }
         
 

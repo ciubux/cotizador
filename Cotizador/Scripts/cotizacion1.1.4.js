@@ -575,6 +575,14 @@ jQuery(function ($) {
 
     }
 
+
+
+    $("#btnModalCargarProductos").click(function () {
+        if (!validarSeleccionClienteOGrupo()) {
+            return false;
+        }
+    });
+
     $('#btnOpenAgregarProducto').click(function () {
 
         indicarFamiliaTodas();
@@ -1064,7 +1072,7 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detprecioLista" style="text-align:right">' + precioLista + '</td>' +
                     '<td class="' + detalle.idProducto + ' detporcentajedescuento" style="text-align:right">' + porcentajeDescuento.toFixed(4) + ' %</td>' +
                     '<td class="' + detalle.idProducto + ' detporcentajedescuentoMostrar" style="width:75px; text-align:right;">' + porcentajeDescuento.toFixed(1) + ' %</td>' +
-                    '<td class="' + detalle.idProducto + ' detprecio" style="text-align:right">' + precio + '</td>' +
+                    '<td class="' + detalle.idProducto + ' detprecio" style="text-align:right">' + detalle.precioUnitario + '</td>' +
                     '<td class="' + detalle.idProducto + ' detcostoLista">' + costoLista + '</td>' +
                     '<td class="' + detalle.idProducto + ' detmargen" style="width:70px; text-align:right; ">' + detalle.margen + ' %</td>' +
 
@@ -1072,7 +1080,7 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>' +
                     
                     '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
+                    '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + detalle.subTotalItem + '</td>' +
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
                     '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + detalle.idProducto+' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>'+
 
@@ -1589,13 +1597,7 @@ jQuery(function ($) {
         }
     }
 
-
-
-
-
-
-
-
+    
     function callCreate(continuarLuego) {
         $('body').loadingModal({
             text: 'Creando Cotización...'
@@ -1835,7 +1837,6 @@ jQuery(function ($) {
         fecha = fechaInvertida[2] + fechaInvertida[1] + fechaInvertida[0];
         return Number(fecha)
     }
-
 
     $(document).on('click', "button.btnVerCotizacion", function () {
 
@@ -2504,6 +2505,17 @@ jQuery(function ($) {
         });
     });
 
+
+    $("#btnExcelCotizacion").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
+    $("#lnkDescargarDetalleFormatoExcel").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+    
+    
+
     function limpiarComentario()
     {
         $("#comentarioEstado").val("");
@@ -2603,6 +2615,78 @@ jQuery(function ($) {
 
 
 
+    $("#chkAjusteCalculoPrecios").change(function () {
+        if ($("#chkAjusteCalculoPrecios").is(":checked")) {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", false);
+        } else {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", true);
+        }
+
+        cambioChkAjusteCalculoPrecios();
+    });
+
+    $("#chkAjusteCalculoPreciosModal").change(function () {
+        if ($("#chkAjusteCalculoPreciosModal").is(":checked")) {
+            $("#chkAjusteCalculoPrecios").prop("checked", false);
+        } else {
+            $("#chkAjusteCalculoPrecios").prop("checked", true);
+        }
+
+        cambioChkAjusteCalculoPrecios();
+    });
+
+    
+    $("#lblChkAjusteCalculoPrecios").click(function () {
+        if ($("#chkAjusteCalculoPrecios").is(":checked")) {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", false);
+            $("#chkAjusteCalculoPrecios").prop("checked", false);
+        } else {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", true);
+            $("#chkAjusteCalculoPrecios").prop("checked", true);
+        }
+
+        cambioChkAjusteCalculoPrecios();
+    });
+
+    $("#lblChkAjusteCalculoPreciosModal").click(function () {
+        if ($("#chkAjusteCalculoPreciosModal").is(":checked")) {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", false);
+            $("#chkAjusteCalculoPrecios").prop("checked", false);
+        } else {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", true);
+            $("#chkAjusteCalculoPrecios").prop("checked", true);
+        }
+
+        cambioChkAjusteCalculoPrecios();
+    });
+
+    function cambioChkAjusteCalculoPrecios() {
+        var ajusteCalculoPrecios = $('#chkAjusteCalculoPrecios').prop('checked');
+        $.ajax({
+            url: "/Cotizacion/updateAjusteCalculoPrecios",
+            type: 'POST',
+            data: {
+                ajusteCalculoPrecios: ajusteCalculoPrecios
+            },
+            success: function () {
+
+            }
+        });
+
+        if ($("#chkAjusteCalculoPrecios").is(":checked")) {
+            $("#lblChkAjusteCalculoPreciosModal").addClass("lbl-ajuste-calculo-precios");
+            $("#lblChkAjusteCalculoPreciosModal").removeClass("text-muted");
+
+            $("#lblChkAjusteCalculoPrecios").addClass("lbl-ajuste-calculo-precios");
+            $("#lblChkAjusteCalculoPrecios").removeClass("text-muted");
+        } else {
+            $("#lblChkAjusteCalculoPreciosModal").addClass("text-muted");
+            $("#lblChkAjusteCalculoPreciosModal").removeClass("lbl-ajuste-calculo-precios");
+
+            $("#lblChkAjusteCalculoPrecios").addClass("text-muted");
+            $("#lblChkAjusteCalculoPrecios").removeClass("lbl-ajuste-calculo-precios");
+        }
+    }
     
     var ft = null;
 
@@ -2813,8 +2897,6 @@ jQuery(function ($) {
     });
 
 
-
- 
 
 
 
@@ -3719,4 +3801,111 @@ jQuery(function ($) {
     });
 
 
+});
+
+
+
+$(document).ready(function () {
+    $('#btnUploadProducts').click(function (event) {
+        var fileInput = $('#fileUploadExcel');
+        var maxSize = fileInput.data('max-size');
+        var maxSizeText = fileInput.data('max-size-text');
+        var imagenValida = true;
+        if (fileInput.get(0).files.length) {
+            var fileSize = fileInput.get(0).files[0].size; // in bytes
+
+            if (fileSize > maxSize) {
+                $.alert({
+                    title: "Archivo Inválido",
+                    type: 'red',
+                    content: 'El tamaño del archivo debe ser como maximo ' + maxSizeText + '.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                imagenValida = false;
+            }
+
+
+        } else {
+            $.alert({
+                title: "Archivo Inválido",
+                type: 'red',
+                content: 'Seleccione un archivo por favor.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            imagenValida = false;
+        }
+
+        if (imagenValida) {
+
+            var that = document.getElementById('fileUploadExcel');
+            var file = that.files[0];
+            var form = new FormData();
+            var url = $(that).data("urlSetFile");
+            var reader = new FileReader();
+            var mime = file.type;
+
+            // read the image file as a data URL.
+            reader.readAsDataURL(file);
+
+            form.append('file', file);
+
+            $('body').loadingModal({
+                text: '...'
+            });
+            $.ajax({
+                url: url,
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form,
+                dataType: 'JSON',
+                beforeSend: function () {
+                    //$.blockUI();
+                },
+                success: function (response) {
+                    if (response.success == "true") {
+                        $.alert({
+                            title: "Carga Exitosa!",
+                            type: 'green',
+                            content: response.message,
+                            buttons: {
+                                OK: function () {
+                                    location.reload();
+                                }
+                            }
+                        });
+
+                        $('#btnBusqueda').click();
+                    } else {
+                        $.alert({
+                            title: "Carga fallida",
+                            type: 'red',
+                            content: response.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                    $.alert({
+                        title: "Carga fallida",
+                        type: 'red',
+                        content: 'Ocurrió un error al subir el archivo.',
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+            }).done(function () {
+                $('body').loadingModal('hide')
+            });
+        }
+    });
 });

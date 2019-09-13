@@ -20,7 +20,7 @@ namespace Cotizador.Models.DTOsShow
             clienteDTOshow.nombreComercial = cliente.nombreComercial;
             clienteDTOshow.contacto1 = cliente.contacto1;
             clienteDTOshow.correoEnvioFactura = cliente.correoEnvioFactura;
-            clienteDTOshow.bloqueado = cliente.bloqueado;
+            clienteDTOshow.bloqueado = false; // cliente.bloqueado;
             clienteDTOshow.plazoCreditoSolicitadoToString = cliente.plazoCreditoSolicitadoToString;
             clienteDTOshow.tipoPagoFacturaToString = cliente.tipoPagoFacturaToString;
             clienteDTOshow.observaciones = cliente.observaciones;

@@ -1,7 +1,8 @@
 ﻿@{
-    ViewBag.Title = "Usuarios";
+    ViewBag.Title = "Permisos";
     Model.Permiso permiso = ViewBag.permiso;
     List<Model.Permiso> permisos = ViewBag.permisos;
+    List<Model.CategoriaPermiso> categorias = ViewBag.categorias;
 }
 
 <div class="page-header">
@@ -14,6 +15,20 @@
     <form class="form-horizontal">
 
         <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => permiso.categoriaPermiso, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        <select id="categoriaPermiso" class="form-control">
+                            <option value="">Todas</option>
+                            @foreach (Model.CategoriaPermiso cat in categorias)
+                            {
+                                <option value="@cat.descripcion">@cat.descripcion</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="col-sm-6 col-lg-8">
                 <div class="form-group">
                     @Html.LabelFor(c => permiso.descripcion_corta, htmlAttributes: new { @class = "control-label col-xs-4" })
@@ -57,7 +72,7 @@
                 {
                     <tr data-expanded="true">
                         <td>@per.idPermiso</td>
-                        <td>@per.categoriaPermiso.descripcion</td>
+                        <td isSearchable="2">@per.categoriaPermiso.descripcion</td>
                         <td>@per.codigo</td>
                         <td isSearchable="1">@per.descripcion_corta</td>
                         <td isSearchable="1">@per.descripcion_larga</td>
@@ -71,7 +86,7 @@
             {
                 <tr>
                     <td>@per.idPermiso</td>
-                    <td>@per.categoriaPermiso.descripcion</td>
+                    <td isSearchable="2">@per.categoriaPermiso.descripcion</td>
                     <td>@per.codigo</td>
                     <td isSearchable="1">@per.descripcion_corta</td>
                     <td isSearchable="1">@per.descripcion_larga</td>

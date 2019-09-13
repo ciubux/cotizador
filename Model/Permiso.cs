@@ -19,6 +19,8 @@ namespace Model
 
         [Display(Name = "Descripción Completa:")]
         public String descripcion_larga { get; set; }
+
+        [Display(Name = "Categoría:")]
         public CategoriaPermiso categoriaPermiso { get; set; }
         public List<Usuario> usuarioList { get; set; }
         public bool byRol { get; set; }

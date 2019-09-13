@@ -140,17 +140,6 @@
                             <label for="sinPlazoCreditos" class="control-label">Solo sin plazo crédito aprobado</label>
                         </div>
                         <div class="row">
-                            @if (cliente.bloqueado)
-                            {
-                                <input class="radio-input" checked type="checkbox" name="cliente_bloqueadoBusqueda" id="bloqueadoBusqueda" value="1">
-                            }
-                            else
-                            {
-                                <input class="radio-input" type="checkbox" name="cliente_bloqueadoBusqueda" id="bloqueadoBusqueda" value="1">
-                            }
-                            <label for="bloqueadoBusqueda" class="control-label">Solo bloqueados</label>
-                        </div>
-                        <div class="row">
                             @if (cliente.vendedoresAsignados)
                             {
                                 <input class="radio-input" checked type="checkbox" name="cliente_sinAsesorValidado" id="sinAsesorValidado" value="1">
@@ -259,6 +248,53 @@
 
                 </div>
             </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.tipoLiberacionCrediticia, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                    <div class="col-xs-8 col-sm-8 col-lg-8">
+                        @if (!cliente.requiereLiberacionCrediticia && !cliente.exoneradoLiberacionCrediticia && !cliente.bloqueadoLiberacionCrediticia)
+                        {
+                            <input checked type="radio" id="cliente_tlc_todos" name="cliente_tipoLiberacionCrediticia" />
+                        }
+                        else
+                        {
+                            <input type="radio" id="cliente_tlc_todos" name="cliente_tipoLiberacionCrediticia" />
+                        }
+                        <label class="control-label" for="cliente_tlc_todos">Todos</label><br />
+
+                        @if (cliente.requiereLiberacionCrediticia)
+                        {
+                            <input checked type="radio" id="cliente_tlc_requiere" name="cliente_tipoLiberacionCrediticia" />
+                        }
+                        else
+                        {
+                            <input type="radio" id="cliente_tlc_requiere" name="cliente_tipoLiberacionCrediticia" />
+                        }
+                        <label class="control-label" for="cliente_tlc_requiere">Requiere</label><br />
+
+                        @if (cliente.exoneradoLiberacionCrediticia)
+                        {
+                            <input checked type="radio" id="cliente_tlc_exonerado" name="cliente_tipoLiberacionCrediticia" />
+                        }
+                        else
+                        {
+                            <input type="radio" id="cliente_tlc_exonerado" name="cliente_tipoLiberacionCrediticia" />
+                        }
+                        <label class="control-label" for="cliente_tlc_exonerado">Exonerado</label><br />
+
+                        @if (cliente.bloqueadoLiberacionCrediticia)
+                        {
+                            <input checked type="radio" id="cliente_tlc_bloqueado" name="cliente_tipoLiberacionCrediticia" />
+                        }
+                        else
+                        {
+                            <input type="radio" id="cliente_tlc_bloqueado" name="cliente_tipoLiberacionCrediticia" />
+                        }
+                        <label class="control-label" for="cliente_tlc_bloqueado">Bloqueado</label>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
@@ -276,14 +312,14 @@
         </div>
 
         <table id="tableClientes" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
-               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
-               data-editing-allow-add="false"
-               data-editing-allow-delete="false"
-               data-editing-allow-edit="false"
-               data-sorting="true"
-               data-show-toggle="false"
-               data-editing-hide-text="Finalizar edición"
-               data-editing-add-text="Descartar cambios">
+                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                data-editing-allow-add="false"
+                data-editing-allow-delete="false"
+                data-editing-allow-edit="false"
+                data-sorting="true"
+                data-show-toggle="false"
+                data-editing-hide-text="Finalizar edición"
+                data-editing-add-text="Descartar cambios">
             <thead>
                 <tr>
                     <th data-name="idCliente" data-visible="false"></th>
@@ -306,7 +342,7 @@
             </thead>
             <tbody></tbody>
         </table>
-    </form>
+</form>
 </div>
 
 
@@ -685,12 +721,12 @@
                                             <p class="form-control-static" id="verFormaPagoFactura"></p>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    @*<div class="form-group">
                                         @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
                                         <div class="col-xs-8 col-sm-8 col-lg-8">
                                             <p class="form-control-static" id="verBloqueado"></p>
                                         </div>
-                                    </div>
+                                    </div>*@
                                 </div>
 
                             </div>

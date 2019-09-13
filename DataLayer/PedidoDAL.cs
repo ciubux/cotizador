@@ -680,7 +680,8 @@ namespace DataLayer
                 pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 pedido.cliente.ruc = Converter.GetString(row, "ruc");
-                pedido.cliente.bloqueado = Converter.GetBool(row, "bloqueado");
+
+                //pedido.cliente.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)Converter.GetInt(row, "estado_liberacion_creditica"); 
 
                 pedido.cliente.grupoCliente = new GrupoCliente();
                 pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "nombre_grupo");
@@ -861,7 +862,9 @@ namespace DataLayer
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+                pedido.ciudad.direccionPuntoLlegada = Converter.GetString(row, "direccion_establecimiento");
                 pedido.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
+                pedido.ciudad.sede = Converter.GetString(row, "codigo_sede");
 
                 pedido.usuario = new Usuario();
                 pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
@@ -1200,7 +1203,7 @@ namespace DataLayer
                 pedido.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
                 pedido.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
                 pedido.cliente.habilitadoModificarDireccionEntrega = Converter.GetBool(row, "habilitado_modificar_direccion_entrega");
-                pedido.cliente.exoneradoValidacionLiberacionCrediticia = Converter.GetBool(row, "exonerado_validacion_liberacion_crediticia");
+                pedido.cliente.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)Converter.GetInt(row, "estado_liberacion_creditica");
 
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");

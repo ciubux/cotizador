@@ -252,10 +252,30 @@ namespace Cotizador.Controllers
 
             Permiso objSearch = (Permiso)this.Session[Constantes.VAR_SESSION_PERMISO_BUSQUEDA];
             List<Permiso> permisos = bl.getPermisos();
+            List<CategoriaPermiso> categorias = new List<CategoriaPermiso>();
+
+            bool agregarCat = false;
+            foreach (Permiso per in permisos)
+            {
+                agregarCat = true;
+                foreach (CategoriaPermiso cat in categorias) 
+                {
+                    if (cat.idCategoriaPermiso == per.categoriaPermiso.idCategoriaPermiso)
+                    {
+                        agregarCat = false;
+                    }
+                }
+                if (agregarCat)
+                {
+                    categorias.Add(per.categoriaPermiso);
+                }
+            }
+
 
             ViewBag.pagina = (int)Constantes.paginas.BusquedaPermisos;
             ViewBag.usuario = objSearch;
             ViewBag.permisos = permisos;
+            ViewBag.categorias = categorias;
 
             return View();
         }

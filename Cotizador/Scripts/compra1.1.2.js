@@ -2996,7 +2996,14 @@ jQuery(function ($) {
         });
 
 
+        var $j_objectFlete = $("td.detsubtotal");
+        $.each($j_objectFlete, function (key, value) {
+            var arrId = value.getAttribute("class").split(" ");
+            var subtotal = value.innerText.trim();
+            value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detinsubtotal form-control' value='" + subtotal + "' type='number'/>";
+        });
 
+        this.event.preventDefault();
     });
 
 
@@ -3038,11 +3045,13 @@ jQuery(function ($) {
             //  var subtotal = $("." + arrId[0] + ".detsubtotal").text();
             var flete = $("." + arrId[0] + ".detinflete").val();
 
+            var subTotal = $("." + arrId[0] + ".detinsubtotal").val();
+
             var costo = $("." + arrId[0] + ".detcostoLista").text();
 
             var observacion = $("." + arrId[0] + ".detobservacionarea").val();
 
-            json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo + '", "observacion":"' + observacion + '"},'
+            json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '", "reverseSubTotal":"' + subTotal + '",  "costo":"' + costo + '", "observacion":"' + observacion + '"},'
         });
         json = json.substr(0, json.length - 1) + "]";
 
@@ -3079,12 +3088,14 @@ jQuery(function ($) {
     $(document).on('change', "input.detinporcentajedescuento", function () {
         var idproducto = event.target.getAttribute("class").split(" ")[0];
         calcularSubtotalGrilla(idproducto);
+        this.event.preventDefault();
     });
 
     /*Evento que se dispara cuando se modifica un control de cantidad de la grilla*/
     $(document).on('change', "input.detincantidad", function () {
         var idproducto = event.target.getAttribute("class").split(" ")[0];
         calcularSubtotalGrilla(idproducto);
+        this.event.preventDefault();
     });
 
 
@@ -3092,6 +3103,13 @@ jQuery(function ($) {
     $(document).on('change', "input.detinflete", function () {
         var idproducto = event.target.getAttribute("class").split(" ")[0];
         calcularSubtotalGrilla(idproducto);
+        this.event.preventDefault();
+    });
+
+    $(document).on('change', "input.detinsubtotal", function () {
+        var idproducto = event.target.getAttribute("class").split(" ")[0];
+        calcularPrecioNetoGrilla(idproducto);
+        this.event.preventDefault();
     });
 
     /*Evento que se dispara cuando se modifica el color en la grilla*/
@@ -3108,7 +3126,37 @@ jQuery(function ($) {
             #00ff40*/
     //});
 
+    function calcularPrecioNetoGrilla(idproducto) {
+        var flete = Number($("." + idproducto + ".detinflete").val());
+        var subTotal = Number($("." + idproducto + ".detinsubtotal").val());
+        var cantidad = Number($("." + idproducto + ".detincantidad").val());
+        var precioLista = Number($("." + idproducto + ".detprecioLista").html());
 
+        var precioNeto = Number(Number(subTotal / cantidad).toFixed(cantidadCuatroDecimales)) - flete;
+
+        var porcentajeDescuento = Number((1 - (precioNeto / precioLista)) * 100).toFixed(cantidadCuatroDecimales); 
+
+        $("." + idproducto + ".detprecio").html(precioNeto);
+        $("." + idproducto + ".detprecioUnitario").html(Number(precioNeto + flete).toFixed(cantidadCuatroDecimales));
+        $("." + idproducto + ".detinporcentajedescuento").val(porcentajeDescuento.toFixed(cantidadCuatroDecimales));
+
+
+        //Se calcula el margen
+        var costo = Number($("." + idproducto + ".detcostoLista").html());
+        var margen = (1 - (Number(costo) / Number(precio))) * 100;
+        //Se asigna el margen 
+        $("." + idproducto + ".detmargen").text(margen.toFixed(1) + " %");
+
+        var precioNetoAnterior = Number($("." + idproducto + ".detprecioNetoAnterior").html());
+        var varprecioNetoAnterior = (precio / precioNetoAnterior - 1) * 100;
+        $("." + idproducto + ".detvarprecioNetoAnterior").text(varprecioNetoAnterior.toFixed(1));
+
+        var costoAnterior = Number($("." + idproducto + ".detcostoAnterior").html());
+        var varcosto = (costo / costoAnterior - 1) * 100;
+        $("." + idproducto + ".detvarCosto").text(varcosto.toFixed(1) + " %");
+
+        calcularTotalesGrilla();
+    };
 
     function calcularSubtotalGrilla(idproducto) {
         //Se obtiene el porcentaje descuento 
@@ -3129,7 +3177,7 @@ jQuery(function ($) {
         //Se calcula el subtotal
         var subTotal = precioUnitario * cantidad;
         //Se asigna el subtotal 
-        $("." + idproducto + ".detsubtotal").html(subTotal.toFixed(cantidadDecimales));
+        $("." + idproducto + ".detinsubtotal").val(subTotal.toFixed(cantidadDecimales));
         //Se calcula el margen
         var costo = Number($("." + idproducto + ".detcostoLista").html());
         var margen = (1 - (Number(costo) / Number(precio))) * 100;
@@ -3160,8 +3208,7 @@ jQuery(function ($) {
             subTotal = subTotal + Number(Number((precioUnitario * cantidad)).toFixed(cantidadDecimales));
         });
 
-
-
+        
         var incluidoIGV = $("input[name=igv]:checked").val();
         //Si no se etsá incluyendo IGV se le agrega
         if (incluidoIGV == "0") {
@@ -3180,6 +3227,37 @@ jQuery(function ($) {
         $('#montoTotal').html(total.toFixed(cantidadDecimales));
 
     };
+
+    function calcularTotalesGrilla() {
+        var $j_object = $("td.detcantidad");
+
+        var subTotal = 0;
+        var igv = 0;
+        var total = 0;
+
+        $.each($j_object, function (key, value) {
+            var arrId = value.getAttribute("class").split(" ");
+            subTotal = subTotal + Number($("." + arrId[0] + ".detinsubtotal").val());
+        });
+
+        var incluidoIGV = $("input[name=igv]:checked").val();
+        //Si no se etsá incluyendo IGV se le agrega
+        if (incluidoIGV == "0") {
+            igv = Number((subTotal * IGV).toFixed(cantidadDecimales));
+            total = subTotal + (igv);
+        }
+        //Si se está incluyendo IGV entonces se 
+        else {
+            total = subTotal;
+            subTotal = Number((subTotal / (1 + IGV)).toFixed(cantidadDecimales));
+            igv = total - subTotal;
+        }
+
+        $('#montoSubTotal').html(subTotal.toFixed(cantidadDecimales));
+        $('#montoIGV').html(igv.toFixed(cantidadDecimales));
+        $('#montoTotal').html(total.toFixed(cantidadDecimales));
+    };
+
 
     /*####################################################
     EVENTOS BUSQUEDA COTIZACIONES

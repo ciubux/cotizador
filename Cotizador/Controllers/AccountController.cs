@@ -112,7 +112,7 @@ namespace Cotizador.Controllers
                     /*Usuarios a su cargo*/
                     List<Usuario> usuarioCreaCotizacionList = new List<Usuario>();
 
-                    if (usuario.apruebaCotizacionesLima)
+                    if (usuario.apruebaCotizacionesLima || (usuario.creaCotizaciones && usuario.creaCotizacionesProvincias))
                     {
                         foreach (Ciudad ciudad in ciudadList)
                         {

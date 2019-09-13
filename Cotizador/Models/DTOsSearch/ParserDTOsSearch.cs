@@ -32,7 +32,7 @@ namespace Cotizador.Models.DTOsSearch
                 clienteDTO.vendedoresAsignados = clienteTmp.vendedoresAsignados;
                 clienteDTO.tipoPagoFacturaToString = clienteTmp.tipoPagoFactura.ToString();
 
-                clienteDTO.bloqueado = clienteTmp.bloqueado;
+                clienteDTO.bloqueado = false; //clienteTmp.bloqueado;
 
                 clienteDTOList.Add(clienteDTO);
             }

@@ -147,13 +147,17 @@ namespace DataLayer
                 producto.unidad = Converter.GetString(row, "unidad");
                 producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
                 producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 //Costo sin IGV
                 
                 producto.precioClienteProducto = new PrecioClienteProducto();
                 producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
                 producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
-                
+
+                producto.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
+                producto.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
+
                 producto.Stock = Converter.GetInt(row, "stock");
 
                 /*Obtenido a partir de precio Lista*/

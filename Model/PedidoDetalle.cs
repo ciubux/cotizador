@@ -56,7 +56,15 @@ namespace Model
 
         public new Decimal subTotal
         {
-            get { return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, this.cantidad * this.precioUnitario)); }
+            get {
+                if (this._reverseSubTotal <= 0)
+                {
+                    return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, this.cantidad * this.precioUnitario));
+                } else
+                {
+                    return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, this.reverseSubTotal));
+                }
+            }
         }
 
         public Decimal precioUnitarioOriginal

@@ -175,6 +175,7 @@ namespace DataLayer
                     pedidoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
                 }
 
+                pedidoDetalle.reverseSubTotal = Converter.GetDecimal(row, "sub_total");
                 pedidoDetalle.unidad = Converter.GetString(row, "unidad");
 
                 pedidoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
@@ -250,12 +251,13 @@ namespace DataLayer
 
         public void UpdateCompraDetalle(PedidoDetalle ventaDetalle)
         {
-            var objCommand = GetSqlCommand("pu_ventaDetalle");
+            var objCommand = GetSqlCommand("pu_compraDetalle");
             InputParameterAdd.Guid(objCommand, "idVentaDetalle", ventaDetalle.idVentaDetalle);
             InputParameterAdd.Decimal(objCommand, "precioUnitario", ventaDetalle.precioUnitario);
             InputParameterAdd.Decimal(objCommand, "precioNeto", ventaDetalle.precioNeto);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", ventaDetalle.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "flete", ventaDetalle.flete);
+            InputParameterAdd.Decimal(objCommand, "subTotal", ventaDetalle.subTotal);
             ExecuteNonQuery(objCommand);
 
         }

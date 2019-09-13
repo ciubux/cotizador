@@ -535,6 +535,9 @@ $darkred: darken($red, 0.2);*/
 
 
 
+.lbl-ajuste-calculo-precios {
+    color: #0d31ff;
+}
 
 /* SWITCH */
 .onoffswitch {
@@ -558,7 +561,7 @@ $darkred: darken($red, 0.2);*/
     line-height: 22px;
     border: 0px solid #E3E3E3;
     border-radius: 16px;
-    background-color: #FFFFFF;
+    background-color: #DDDDDD;
 }
 
     .onoffswitch-label:before {

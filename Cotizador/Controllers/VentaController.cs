@@ -69,7 +69,6 @@ namespace Cotizador.Controllers
             venta.guiaRemision = guiaRemision;
             VentaBL ventaBL = new VentaBL();
             ventaBL.InsertVentaRefacturacion(venta);
-            
         }
 
 

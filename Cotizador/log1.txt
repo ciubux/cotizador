@@ -79,3 +79,18 @@ The statement has been terminated.
 The statement has been terminated.
 2019-06-27 12:50:21.1120|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
 2019-06-27 14:04:36.4211|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Could not find stored procedure 'pu_permiso'.
+2019-07-16 07:49:55.8699|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-07-16 07:50:03.6934|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-07-16 07:50:18.3107|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-07-16 07:50:20.3490|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-07-16 07:50:22.7296|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-08-05 18:11:55.0538|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Invalid object name 'dbo.SEQ_CODIGO_COTIZACION'.
+2019-08-20 08:58:52.5515|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2019-08-28 16:04:26.5379|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / El objeto que acepta valores Null debe tener un valor.
+2019-09-05 09:58:18.4439|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Invalid object name 'SEQ_CODIGO_ALTERNO_CLIENTE'.
+Transaction count after EXECUTE indicates a mismatching number of BEGIN and COMMIT statements. Previous count = 0, current count = 1.
+2019-09-05 10:00:59.0535|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Invalid object name 'SEQ_ID_CLIENTE_SUNAT'.
+Transaction count after EXECUTE indicates a mismatching number of BEGIN and COMMIT statements. Previous count = 0, current count = 1.
+2019-09-05 10:01:26.3654|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Invalid object name 'SEQ_ID_DOMICILIO_LEGAL'.
+Transaction count after EXECUTE indicates a mismatching number of BEGIN and COMMIT statements. Previous count = 0, current count = 1.
+2019-09-13 11:28:16.1873|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.

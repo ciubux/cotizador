@@ -2983,6 +2983,8 @@ C:\REPO\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\REPO\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 C:\REPO\cotizador\Cotizador\obj\Debug\Cotizador.dll
 C:\REPO\cotizador\Cotizador\obj\Debug\Cotizador.pdb
+G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csprojAssemblyReference.cache
+G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 G:\Repo\freelos\cotizador\Cotizador\bin\ApplicationInsights.config
 G:\Repo\freelos\cotizador\Cotizador\bin\roslyn\csc.exe
 G:\Repo\freelos\cotizador\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -3115,8 +3117,6 @@ G:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Facebook.reso
 G:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
-G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csprojAssemblyReference.cache
-G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb

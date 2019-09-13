@@ -461,7 +461,7 @@ namespace Cotizador.Controllers
         {
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
-            DocumentoCompra factura = (DocumentoCompra)this.Session[Constantes.VAR_SESSION_FACTURA_BUSQUEDA];
+            DocumentoCompra factura = (DocumentoCompra)this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_BUSQUEDA];
             return clienteBL.getCLientesBusqueda(data, factura.ciudad.idCiudad);
         }
 
@@ -472,16 +472,14 @@ namespace Cotizador.Controllers
 
 
 
-    /*    [HttpGet]
+        [HttpGet]
         public ActionResult ExportLastSearchExcel()
         {
-            List<DocumentoCompra> list = (List<DocumentoCompra>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+            List<DocumentoCompra> list = (List<DocumentoCompra>)this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_LISTA];
 
-            Facturasearch excel = new Facturasearch();
+            DocumentoCompraSearch excel = new DocumentoCompraSearch();
             return excel.generateExcel(list);
-        }*/
-        /*
-       */
+        }
 
 
         public String SolicitarAnulacion()
@@ -619,18 +617,21 @@ namespace Cotizador.Controllers
 
         }
 
-       
-        /*
+
         public String GetCliente()
         {
             DocumentoCompra factura = this.documentoCompraSession;
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
-            factura.proveedor = clienteBl.getCliente(idCliente);
+            Cliente cli = clienteBl.getCliente(idCliente);
+            factura.proveedor = JsonConvert.DeserializeObject<Proveedor>(JsonConvert.SerializeObject(cli));
+            factura.proveedor.idProveedor = cli.idCliente;
+
             String resultado = JsonConvert.SerializeObject(factura.proveedor);
             this.documentoCompraSession = factura;
             return resultado;
-        }*/
+        }
+
 
         public String GetGrupoCliente()
         {

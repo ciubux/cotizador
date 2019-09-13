@@ -687,8 +687,6 @@ namespace BusinessLayer
         }
 
         /*---------------------------------------------*/
-
-
         public List<DocumentoVenta> BusquedaValidacionAnulacion()
         {
             using (var dal = new DocumentoVentaDAL())
@@ -702,6 +700,15 @@ namespace BusinessLayer
             using (var dal = new DocumentoVentaDAL())
             {
                 return dal.updateNotificacionAnulacion(obj);
+
+            }
+        }
+
+        public List<List<String>> getCPEsExportStarsoft(DateTime fechaInicio, DateTime fechaFin)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.getExportStarsoft(fechaInicio, fechaFin);
             }
         }
     }

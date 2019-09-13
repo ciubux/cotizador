@@ -78,7 +78,7 @@ namespace Model
         public List<SeguimientoCotizacion> seguimientoCotizacionList { get; set; }
 
         public bool mostrarCosto { get; set; }
-
+        public bool ajusteCalculoPrecios { get; set; }
         public bool considerarDescontinuados { get; set; }
 
         public Decimal maximoPorcentajeDescuentoPermitido { get; set; }

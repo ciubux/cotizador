@@ -717,10 +717,8 @@ namespace DataLayer
         }
 
 
-
+        
         /*--------------------------------------------*/
-
-
         public List<DocumentoVenta> getValidacionAnulacion()
         {
             var objCommand = GetSqlCommand("ps_validacionNotificacionDocumentoVenta");
@@ -760,5 +758,122 @@ namespace DataLayer
 
         }
 
+
+      
+        public List<List<String>> getExportStarsoft(DateTime fechaInicio, DateTime fechaFin) 
+        {
+            List<List<String>> cpes = new List<List<String>>();
+
+            var objCommand = GetSqlCommand("ps_cpe_rango_fecha");
+            InputParameterAdd.Varchar(objCommand, "fechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            InputParameterAdd.Varchar(objCommand, "fechaFin", fechaFin.ToString("yyyy-MM-dd"));
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+
+
+            DataTable tblBoletasOK = dataSet.Tables[0]; // BOLETAS
+            DataTable tblBoletasAnuladas = dataSet.Tables[1]; // BOLETAS ANULADAS
+            DataTable tblNCOK = dataSet.Tables[2]; // NOTAS DE CREDITO
+            DataTable tblNCAnuladas = dataSet.Tables[3]; // NOTAS DE CREDITO ANULADAS
+            DataTable tblNDOK = dataSet.Tables[4]; // NOTAS DE DEBITO
+            DataTable tblNDAnuladas = dataSet.Tables[5]; // NOTAS DE DEBITO ANULADAS
+            DataTable tblFGOK = dataSet.Tables[6]; // FACTURAS GRAVADAS
+            DataTable tblFGAnuladas = dataSet.Tables[7]; // FACTURAS GRAVADAS ANULADAS
+            DataTable tblFEOK = dataSet.Tables[8]; // FACTURAS EXONERADAS
+            DataTable tblFERechazadas = dataSet.Tables[9]; // FACTURAS EXONERADAS RECHAZADAS
+            DataTable tblFGratuitasOK = dataSet.Tables[10]; // FACTURAS GRATUITAS
+            DataTable tblFGratuitasAnuladas = dataSet.Tables[11]; // FACTURAS GRATUITAS ANULADAS
+
+
+
+            List<String> cpeBoletasOK = new List<String>();
+            List<String> cpeBoletasAnuladas = new List<String>();
+            List<String> cpeNCOK = new List<String>();
+            List<String> cpeNCAnuladas = new List<String>();
+            List<String> cpeNDOK = new List<String>();
+            List<String> cpeNDAnuladas = new List<String>();
+            List<String> cpeFGOK = new List<String>();
+            List<String> cpeFGAnuladas = new List<String>();
+            List<String> cpeFEOK = new List<String>();
+            List<String> cpeFERechazadas = new List<String>();
+            List<String> cpeFGratuitasOK = new List<String>();
+            List<String> cpeFGratuitasAnuladas = new List<String>();
+
+
+            foreach (DataRow row in tblBoletasOK.Rows)
+            {
+                cpeBoletasOK.Add(Converter.GetString(row, "CC"));
+            }
+
+            foreach (DataRow row in tblBoletasAnuladas.Rows)
+            {
+                cpeBoletasAnuladas.Add(Converter.GetString(row, "CC"));
+            }
+            
+            foreach (DataRow row in tblNCOK.Rows)
+            {
+                cpeNCOK.Add(Converter.GetString(row, "CC"));
+            }
+            
+            foreach (DataRow row in tblNCAnuladas.Rows)
+            {
+                cpeNCAnuladas.Add(Converter.GetString(row, "CC"));
+            }
+            
+            foreach (DataRow row in tblNDOK.Rows)
+            {
+                cpeNDOK.Add(Converter.GetString(row, "CC"));
+            }
+
+            foreach (DataRow row in tblNDAnuladas.Rows)
+            {
+                cpeNDAnuladas.Add(Converter.GetString(row, "CC"));
+            }
+
+            foreach (DataRow row in tblFGOK.Rows)
+            {
+                cpeFGOK.Add(Converter.GetString(row, "CC"));
+            }
+
+            foreach (DataRow row in tblFGAnuladas.Rows)
+            {
+                cpeFGAnuladas.Add(Converter.GetString(row, "CC"));
+            }
+
+            foreach (DataRow row in tblFEOK.Rows)
+            {
+                cpeFEOK.Add(Converter.GetString(row, "CC"));
+            }
+
+            foreach (DataRow row in tblFERechazadas.Rows)
+            {
+                cpeFERechazadas.Add(Converter.GetString(row, "CC"));
+            }
+
+            foreach (DataRow row in tblFGratuitasOK.Rows)
+            {
+                cpeFGratuitasOK.Add(Converter.GetString(row, "CC"));
+            }
+
+            foreach (DataRow row in tblFGratuitasAnuladas.Rows)
+            {
+                cpeFGratuitasAnuladas.Add(Converter.GetString(row, "CC"));
+            }
+
+            cpes.Add(cpeBoletasOK);
+            cpes.Add(cpeBoletasAnuladas);
+            cpes.Add(cpeNCOK);
+            cpes.Add(cpeNCAnuladas);
+            cpes.Add(cpeNDOK);
+            cpes.Add(cpeNDAnuladas);
+            cpes.Add(cpeFGOK);
+            cpes.Add(cpeFGAnuladas);
+            cpes.Add(cpeFEOK);
+            cpes.Add(cpeFERechazadas);
+            cpes.Add(cpeFGratuitasOK);
+            cpes.Add(cpeFGratuitasAnuladas);
+
+            return cpes;
+        }
     }
 }

@@ -8,9 +8,9 @@ namespace Model
     public class DocumentoDetalle
     {
 
-      
+
         public Guid idDocumentoDetalle { get; set; }
-        
+
         public int cantidad { get; set; }
 
         public decimal cantidadDecimal { get; set; }
@@ -32,10 +32,19 @@ namespace Model
         public String observacion { get; set; }
         public Decimal subTotal
         {
-            get {  return this.cantidad * precioUnitario;  }
+            get { return this.cantidad * precioUnitario; }
         }
 
-
+        protected Decimal _reverseSubTotal;
+        public Decimal reverseSubTotal
+        { 
+            get {
+                return this._reverseSubTotal;
+            }
+            set {
+                _reverseSubTotal = value;
+            }
+        }
 
 
         //permite identificar si el precio es el alternativo y poder hacer las divisiones donde corresponda

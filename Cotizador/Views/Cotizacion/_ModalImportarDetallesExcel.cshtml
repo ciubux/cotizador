@@ -1,0 +1,77 @@
+﻿<!-- MODAL CARGAR PRODUCTOS -->
+<div class="modal fade" id="modalCargarProductos" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCargarProductosTitle"><b>Cargar Productos</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-3">Subir Archivo:</label>
+                                <div class="col-xs-9">
+                                    <input id="fileUploadExcel" name="file" type="file" data-url-set-file="@Url.Action("LoadProductosByExcel", "Cotizacion")"
+                                           class="btn btn-primary" data-max-size="2097152" data-max-size-text="2MB"
+                                           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @{
+                        var acpTextClass = "text-muted";
+                        var acpChecked = "";
+
+                        if (ViewBag.cotizacion.ajusteCalculoPrecios)
+                        {
+                            acpTextClass = "lbl-ajuste-calculo-precios";
+                            acpChecked = "checked";
+                        }
+                    }
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" @acpChecked class="onoffswitch-checkbox" id="chkAjusteCalculoPreciosModal">
+                                <label class="onoffswitch-label" for="chkAjusteCalculoPreciosModal"></label>
+                            </div>
+                            <h5 id="lblChkAjusteCalculoPreciosModal" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@acpTextClass">Ajustar precio para unidades menores</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <button id="lnkDescargarDetalleFormatoExcel" actionLink="@Url.Action("ExportFormatoDetalleExcel", "Cotizacion")" type="button" class="btn btn-link lnkAction lnkActionLabel">> Decargar Formato</button>
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <p>
+                                <b>CONSIDERACIONES</b>
+                                <ul>
+                                    <li>El excel cargará datos de productos deteniendose en la primera fila cuya columna "SKU" este vacía.</li>
+                                    <li>Si el archivo contiene productos que ya se encuentran en la cotización, los de la cotización seran removidos y reemplazados por los del archivo.</li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+</form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelUploadProducts" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnUploadProducts" class="btn btn-primary">Cargar Productos</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

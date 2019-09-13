@@ -177,6 +177,18 @@ namespace BusinessLayer
 
             return temp;
         }
+
+        public static void setFormulaCelda(ISheet sheet, int fila, string columna, string valor, ICellStyle cellStyle = null, bool autoSizeColumn = false)
+        {
+            sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellFormula(valor);
+            if (cellStyle != null)
+            { sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).CellStyle = cellStyle; }
+
+            if (autoSizeColumn)
+            {
+                sheet.AutoSizeColumn(columnas.FindIndex(x => x.StartsWith(columna)));
+            }
+        }
     }
 }
 

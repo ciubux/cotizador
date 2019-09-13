@@ -128,6 +128,33 @@ namespace Model
         [Display(Name = "Forma de Pago Factura:")]
         public DocumentoVenta.FormaPago formaPagoFactura { get; set; }
 
+        [Display(Name = "Liberación Crediticia:")]
+        public TipoLiberacionCrediticia tipoLiberacionCrediticia { get; set; }
+        public enum TipoLiberacionCrediticia
+        {
+            [Display(Name = "Todos")]
+            todos = -999,
+
+            [Display(Name = "Requiere Liberación")]
+            requiere = 0,
+            [Display(Name = "Exonerado de Liberación")]
+            exonerado = 1,
+            [Display(Name = "Bloqueado")]
+            bloqueado = -1,
+        };
+        public String tipoLiberacionCrediticiaString
+        {
+            get
+            {
+                return EnumHelper<TipoLiberacionCrediticia>.GetDisplayValue(this.tipoLiberacionCrediticia);
+            }
+        }
+
+
+        public bool requiereLiberacionCrediticia { get { return this.tipoLiberacionCrediticia == TipoLiberacionCrediticia.requiere; } }
+        public bool exoneradoLiberacionCrediticia { get { return this.tipoLiberacionCrediticia == TipoLiberacionCrediticia.exonerado; } }
+        public bool bloqueadoLiberacionCrediticia { get { return this.tipoLiberacionCrediticia == TipoLiberacionCrediticia.bloqueado; } }
+
         public String formaPagoFacturaToString
         {
             get

@@ -272,6 +272,8 @@
     <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
+    <Compile Include="ExcelExport\CotizacionDetalleFormatoExcel.cs" />
+    <Compile Include="ExcelExport\DocumentoCompraSearch.cs" />
     <Compile Include="ExcelExport\FacturaSearch.cs" />
     <Compile Include="ExcelExport\NotaIngresoSearch.cs" />
     <Compile Include="ExcelExport\GuiaRemisionSearch.cs" />
@@ -602,6 +604,8 @@
     <Content Include="Scripts\mensaje1.0.0.js" />
     <Content Include="Views\Shared\ModalMensaje.cshtml" />
     <Content Include="Views\Mensaje\Lista.cshtml" />
+    <Content Include="Views\DocumentoVenta\ExportarCPEs.cshtml" />
+    <Content Include="Views\Cotizacion\_ModalImportarDetallesExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
@@ -631,6 +635,10 @@
     <ProjectReference Include="..\CotizadorPDF\CotizadorPDF.csproj">
       <Project>{9264ca59-9806-4382-93c8-67d39b2e01c0}</Project>
       <Name>CotizadorPDF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj">
+      <Project>{A7C12F64-A37D-468D-A3AA-47BB91D79168}</Project>
+      <Name>DataLayer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{2e588952-5389-42e5-8ed8-c42b9e38f6d7}</Project>

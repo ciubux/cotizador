@@ -12,6 +12,7 @@ order by sp.fecha_creacion desc
 END
 
 
+
 create PROCEDURE [dbo].[ps_cotizacion_seguimiento] 
 @idCotizacion uniqueIdentifier
 AS

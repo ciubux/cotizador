@@ -88,9 +88,9 @@
             <!--NUMERO FACTURA-->
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="documentoVenta_numero" class="control-label col-xs-4">Tipo/Número Doc.:</label>
+                    <label for="documentoCompra_numero" class="control-label col-xs-4">Tipo/Número Doc.:</label>
                     <div class="col-xs-4">
-                        @Html.DropDownList("documentoVenta_tipoDocumento",
+                        @Html.DropDownList("documentoCompra_tipoDocumento",
                            EnumHelper.GetSelectList(typeof(Model.DocumentoCompra.TipoDocumento), documentoCompra.tipoDocumento),
                            new { @class = "form-control" }
                            )
@@ -113,7 +113,7 @@
             <!--NUMERO GUIA-->
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="documentoVenta_guiaRemision_numero" class="control-label col-xs-4">Número Mov. Almacén:</label>
+                    <label for="documentoCompra_guiaRemision_numero" class="control-label col-xs-4">Número Mov. Almacén:</label>
 
                     <div class="col-xs-8">
                         @if (documentoCompra.guiaRemision.numeroDocumento > 0)
@@ -135,7 +135,7 @@
 
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="documentoVenta_numero" class="control-label col-xs-4">Número Pedido:</label>
+                    <label for="documentoCompra_numero" class="control-label col-xs-4">Número Pedido:</label>
 
                     <div class="col-xs-8">
                         @if (documentoCompra.pedido.numeroPedido > 0)
@@ -164,7 +164,7 @@
                     @Html.LabelFor(dv => documentoCompra.fechaEmisionDesde, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaEmisionDesdetmp" value="@ViewBag.fechaEmisionDesde" />
-                        <input class="form-control" type="text" id="documentoVenta_fechaEmisionDesde" name="documentoVenta_fechaEmisionDesde">
+                        <input class="form-control" type="text" id="documentoCompra_fechaEmisionDesde" name="documentoCompra_fechaEmisionDesde">
                     </div>
                 </div>
             </div>
@@ -174,7 +174,7 @@
                     @Html.LabelFor(dv => documentoCompra.fechaEmisionHasta, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaEmisionHastatmp" value="@ViewBag.fechaEmisionHasta" />
-                        <input class="form-control" type="text" id="documentoVenta_fechaEmisionHasta" name="documentoVenta_fechaEmisionDesde">
+                        <input class="form-control" type="text" id="documentoCompra_fechaEmisionHasta" name="documentoCompra_fechaEmisionDesde">
                     </div>
                 </div>
             </div>
@@ -183,7 +183,7 @@
                 <div class="form-group">
                     @Html.LabelFor(dv => documentoCompra.estadoDocumentoSunatBusqueda, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        @Html.DropDownList("documentoVenta_estadoDocumentoSunatBusqueda",
+                        @Html.DropDownList("documentoCompra_estadoDocumentoSunatBusqueda",
                                                      EnumHelper.GetSelectList(typeof(Model.DocumentoCompra.EstadosDocumentoSunatBusqueda), documentoCompra.estadoDocumentoSunatBusqueda),
                                                      new { @class = "form-control" }
                                                      )
@@ -214,17 +214,17 @@
         {
                 <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
-                        <label for="documentoVenta_solicitadoAnulacion" class="control-label col-xs-4">Mostrar solo con Solicitud de Anulación:</label>
+                        <label for="documentoCompra_solicitadoAnulacion" class="control-label col-xs-4">Mostrar solo con Solicitud de Anulación:</label>
                         <div class="col-xs-8">
                             <div class="radio radio-inline">
                                 <label class="radio-label">
                                     @if (documentoCompra.solicitadoAnulacion)
                                     {
-                                        <input class="radio-input" checked type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladosi" value="1">@ViewBag.Si;
+                                        <input class="radio-input" checked type="radio" name="documentoCompra_solicitadoAnulacion" id="anuladosi" value="1">@ViewBag.Si;
                                     }
                                     else
                                     {
-                                        <input class="radio-input" type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladosi" value="1">@ViewBag.Si;
+                                        <input class="radio-input" type="radio" name="documentoCompra_solicitadoAnulacion" id="anuladosi" value="1">@ViewBag.Si;
                                     }
 
                                 </label>
@@ -233,11 +233,11 @@
                                 <label class="radio-label">
                                     @if (!documentoCompra.solicitadoAnulacion)
                                     {
-                                        <input class="radio-input" checked type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladono" value="0">@ViewBag.No;
+                                        <input class="radio-input" checked type="radio" name="documentoCompra_solicitadoAnulacion" id="anuladono" value="0">@ViewBag.No;
                                     }
                                     else
                                     {
-                                        <input class="radio-input" type="radio" name="documentoVenta_solicitadoAnulacion" id="anuladono" value="0">@ViewBag.No;
+                                        <input class="radio-input" type="radio" name="documentoCompra_solicitadoAnulacion" id="anuladono" value="0">@ViewBag.No;
                                     }
                                 </label>
                             </div>
@@ -253,7 +253,7 @@
         </div>
 
         <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
-            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Factura")">Exportar</button>
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "DocumentoComprat")">Exportar</button>
         </div>
 
         <table id="tableFacturas" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
