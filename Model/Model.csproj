@@ -67,6 +67,8 @@
     <Compile Include="DocumentoCompra.cs" />
     <Compile Include="GrupoClienteAdjunto.cs" />
     <Compile Include="IDocumentoPago.cs" />
+    <Compile Include="RequerimientoDetalle.cs" />
+    <Compile Include="Requerimiento.cs" />
     <Compile Include="PeriodoSolicitud.cs" />
     <Compile Include="Rol.cs" />
     <Compile Include="Origen.cs" />

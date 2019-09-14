@@ -1,6 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "303";
-
+    TempData["ScriptVersion"] = "306";
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
 }
@@ -105,18 +104,18 @@
                                 <ul class="dropdown-menu" role="menu">
                                     @if (usuario.tomaPedidos)
                                     {
-                                        <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Requerimientos", "Pedir", "Pedido")</li>
+                                        <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Requerimientos", "Pedir", "Requerimiento")</li>
                                     }
                                     @if (usuario.idUsuario == Guid.Parse("7D485AFF-AC89-462D-BBB8-0F8ADF8C02F1"))
                                     {
                                         if (usuario.apruebaPedidos)
                                         {
-                                        <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Aprobar Requerimientos", "Aprobar", "Pedido")</li>
+                                        <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Aprobar Requerimientos", "Aprobar", "Requerimiento")</li>
                                         }
                                     }
                                     else
                                     {
-                                        <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Buscar Requerimientos", "Aprobar", "Pedido")</li>
+                                        <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Buscar Requerimientos", "Aprobar", "Requerimiento")</li>
                                     }
 
                                 </ul>

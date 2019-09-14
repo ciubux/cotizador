@@ -275,16 +275,7 @@ namespace BusinessLayer
             return pedidoList;
         }
 
-        public List<Pedido> GetRequerimientos(Pedido pedido)
-        {
-            List<Pedido> pedidoList = null;
-            using (var dal = new PedidoDAL())
-            {
-                pedidoList = dal.SelectRequerimientos(pedido);
-            }
-            return pedidoList;
-        }
-
+      
         #endregion
 
         #region Pedidos de COMPRA

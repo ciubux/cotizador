@@ -160,7 +160,6 @@ G:\Repo\maquetados\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCo
 G:\Repo\maquetados\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
 G:\Repo\maquetados\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 G:\Repo\maquetados\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
-<<<<<<< HEAD
 G:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
 G:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
 G:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.dll
@@ -171,7 +170,6 @@ G:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompi
 G:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
 G:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 G:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
-=======
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL\bin\Debug\Model.dll
@@ -181,4 +179,3 @@ C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL\obj\Debug\Frame
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
->>>>>>> b8479c108e88c988ccd67dadb924f39f85134124

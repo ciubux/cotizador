@@ -260,5 +260,39 @@ namespace Cotizador.Models.DTOsSearch
             }
             return pedidoDTOList;
         }
+
+        public static List<RequerimientoDTO> RequerimientoToRequerimientoDTO(List<Requerimiento> requerimientoList)
+        {
+
+            List<RequerimientoDTO> requerimientoDTOList = new List<RequerimientoDTO>();
+            foreach (Requerimiento requerimientoTmp in requerimientoList)
+            {
+                RequerimientoDTO requerimientoDTO = new RequerimientoDTO();
+                requerimientoDTO.fechaProgramacion = requerimientoTmp.fechaProgramacion;
+                requerimientoDTO.stockConfirmado = requerimientoTmp.stockConfirmado;
+                requerimientoDTO.observaciones = requerimientoTmp.observaciones;
+                requerimientoDTO.idRequerimiento = requerimientoTmp.idRequerimiento;
+                //pedidoDTO.numeroPedido = requerimientoTmp.pedido.numeroPedido;
+                //pedidoDTO.numeroPedidoNumeroGrupoString = requerimientoTmp.numeroPedidoNumeroGrupoString;
+                requerimientoDTO.ciudad_nombre = requerimientoTmp.ciudad.nombre;
+                requerimientoDTO.cliente_codigo = requerimientoTmp.cliente.codigo;
+                requerimientoDTO.cliente_razonSocial = requerimientoTmp.cliente.razonSocial;
+                requerimientoDTO.numeroReferenciaCliente = requerimientoTmp.numeroReferenciaCliente;
+                requerimientoDTO.usuario_nombre = requerimientoTmp.usuario.nombre;
+                requerimientoDTO.fechaHoraRegistro = requerimientoTmp.fechaHoraRegistro;
+                requerimientoDTO.rangoFechasEntrega = requerimientoTmp.rangoFechasEntrega;
+                requerimientoDTO.rangoHoraEntrega = requerimientoTmp.rangoHoraEntrega;
+                requerimientoDTO.montoTotal = requerimientoTmp.montoTotal;
+                requerimientoDTO.montoSubTotal = requerimientoTmp.montoSubTotal;
+                requerimientoDTO.ubigeoEntrega_distrito = requerimientoTmp.ubigeoEntrega.Distrito;
+                requerimientoDTO.estadoSolicitudString = requerimientoTmp.estadoRequerimientoString;
+                requerimientoDTO.grupoCliente_nombre = requerimientoTmp.cliente.grupoCliente.nombre;
+                requerimientoDTO.requerimientoDetalleList = requerimientoTmp.requerimientoDetalleList;
+                requerimientoDTO.excedioPresupuesto = requerimientoTmp.excedioPresupuesto;
+                requerimientoDTO.topePresupuesto = requerimientoTmp.topePresupuesto;
+                requerimientoDTOList.Add(requerimientoDTO);
+            }
+            return requerimientoDTOList;
+        }
     }
 }

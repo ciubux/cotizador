@@ -31,7 +31,6 @@ C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\obj\Release\Framework.DAL
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\obj\Release\Framework.DAL.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\obj\Release\Framework.DAL.dll
 C:\Users\cesar\Documents\MP2\cotizador_2\Framework.DAL\obj\Release\Framework.DAL.pdb
-<<<<<<< HEAD
 D:\Repo\freelos\cotizador\Framework.DAL\bin\Release\Framework.DAL.dll
 D:\Repo\freelos\cotizador\Framework.DAL\bin\Release\Framework.DAL.pdb
 D:\Repo\freelos\cotizador\Framework.DAL\bin\Release\Model.dll
@@ -42,5 +41,13 @@ D:\Repo\freelos\cotizador\Framework.DAL\obj\Release\Framework.DAL.csproj.CoreCom
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Release\Framework.DAL.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Release\Framework.DAL.dll
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Release\Framework.DAL.pdb
-=======
->>>>>>> Andre/Vendedor
+G:\Repo\maquetados\cotizador\Framework.DAL\bin\Release\Framework.DAL.dll
+G:\Repo\maquetados\cotizador\Framework.DAL\bin\Release\Framework.DAL.pdb
+G:\Repo\maquetados\cotizador\Framework.DAL\bin\Release\Model.dll
+G:\Repo\maquetados\cotizador\Framework.DAL\bin\Release\Model.pdb
+G:\Repo\maquetados\cotizador\Framework.DAL\bin\Release\Model.dll.config
+G:\Repo\maquetados\cotizador\Framework.DAL\obj\Release\Framework.DAL.csprojAssemblyReference.cache
+G:\Repo\maquetados\cotizador\Framework.DAL\obj\Release\Framework.DAL.csproj.CoreCompileInputs.cache
+G:\Repo\maquetados\cotizador\Framework.DAL\obj\Release\Framework.DAL.csproj.CopyComplete
+G:\Repo\maquetados\cotizador\Framework.DAL\obj\Release\Framework.DAL.dll
+G:\Repo\maquetados\cotizador\Framework.DAL\obj\Release\Framework.DAL.pdb

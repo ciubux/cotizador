@@ -198,7 +198,6 @@ G:\Repo\maquetados\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cach
 G:\Repo\maquetados\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
 G:\Repo\maquetados\cotizador\Model\obj\Debug\Model.dll
 G:\Repo\maquetados\cotizador\Model\obj\Debug\Model.pdb
-<<<<<<< HEAD
 G:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll.config
 G:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll
 G:\Repo\freelos\cotizador\Model\bin\Debug\Model.pdb
@@ -211,7 +210,6 @@ G:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 G:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
 G:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
 G:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb
-=======
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\Model.dll.config
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\Model.pdb
@@ -224,4 +222,3 @@ C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.csprojR
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.pdb
->>>>>>> b8479c108e88c988ccd67dadb924f39f85134124

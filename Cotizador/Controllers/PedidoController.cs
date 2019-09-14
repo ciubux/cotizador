@@ -2088,7 +2088,7 @@ namespace Cotizador.Controllers
 
 
             PedidoBL pedidoBL = new PedidoBL();
-            List<Pedido> pedidoList = pedidoBL.GetRequerimientos(pedido);
+            List<Pedido> pedidoList = null;// pedidoBL.GetRequerimientos(pedido);
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA_APROBACION] = pedidoList;
             this.Session[Constantes.VAR_SESSION_PEDIDO_APROBACION] = pedido;

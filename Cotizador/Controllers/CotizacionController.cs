@@ -75,7 +75,7 @@ namespace Cotizador.Controllers
         public ActionResult Index()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaCotizaciones;
-
+            return RedirectToAction("Index", "Pedido");
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
                 return RedirectToAction("Login", "Account");

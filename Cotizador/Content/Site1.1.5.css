@@ -124,6 +124,10 @@ textarea {
         width: 1200px;
     }
 
+    #modalVerRequerimiento .modal-dialog {
+        width: 1200px;
+    }
+
     #modalVerGuiaRemision .modal-dialog {
         width: 1200px;
     }
