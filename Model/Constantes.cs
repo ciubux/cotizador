@@ -72,6 +72,7 @@ namespace Model
         public static String VAR_SESSION_REQUERIMIENTO_BUSQUEDA = "requerimientoBusqueda";
         //public static String VAR_SESSION_REQUERIMIENTO_APROBACION = "requerimientoAprobacion";
         public static String VAR_SESSION_REQUERIMIENTO_LISTA = "requerimientoList";
+        public static String VAR_SESSION_REQUERIMIENTO_CONSOLIDADO = "requerimientoConsolidado";
         //public static String VAR_SESSION_REQUERIMIENTO_LISTA_APROBACION = "requerimientoAprobacionList";
         public static String VAR_SESSION_REQUERIMIENTO_VER = "requerimientoVer";
 

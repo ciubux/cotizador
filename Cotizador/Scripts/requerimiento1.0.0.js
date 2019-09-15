@@ -3771,12 +3771,13 @@ jQuery(function ($) {
             error: function () {
             },
             success: function (consolidado) {
+                
                 $("#modalAprobarTodosPreview #verMontoSubTotal").html(consolidado.subTotal.toFixed(cantidadDecimales));
                 $("#modalAprobarTodosPreview #verMontoIGV").html(consolidado.igv.toFixed(cantidadDecimales));
                 $("#modalAprobarTodosPreview #verMontoTotal").html(consolidado.total.toFixed(cantidadDecimales));
                 requerimientoList = consolidado.requerimientoList;
                 //$("#tableAprobarRequerimientos").footable();
-
+                
                 $("#tableAprobarRequerimientos > tbody").empty();
                 $("#tableAprobarRequerimientos").footable({
                     "paging": {
@@ -3787,9 +3788,9 @@ jQuery(function ($) {
                 var nro = 1;
 
                 for (var i = 0; i < requerimientoList.length; i++) {
-
+                   
                     var observaciones = requerimientoList[i].observaciones == null || requerimientoList[i].observaciones == 'undefined' ? '' : requerimientoList[i].observaciones;
-
+                    
                     /*if (requerimientoList[i].observaciones != null && requerimientoList[i].observaciones.length > 20) {
                         var idComentarioCorto = requerimientoList[i].idRequerimiento + "corto";
                         var idComentarioLargo = requerimientoList[i].idRequerimiento + "largo";
@@ -3807,10 +3808,12 @@ jQuery(function ($) {
                     var cantidad1 = 0
                     var cantidad2 = 0
                     
-
-                    var direcc = requerimientoList[i].direccionEntrega.descripcion + " (" + requerimientoList[i].direccionEntrega.nombre + ") " + requerimientoList[i].direccionEntrega.ubigeo.Departamento + " - " + requerimientoList[i].direccionEntrega.ubigeo.Provincia + " - " + requerimientoList[i].direccionEntrega.ubigeo.Distrito;
-
                     
+                    var direcc = requerimientoList[i].direccionEntrega.direccionConSede + ' ' +
+                        requerimientoList[i].direccionEntrega.ubigeo.Departamento + ' - ' +
+                        requerimientoList[i].direccionEntrega.ubigeo.Provincia + ' - ' +
+                        requerimientoList[i].direccionEntrega.ubigeo.Distrito;
+                   
                     for (j = 0; j < requerimientoList[i].requerimientoDetalleList.length; j++) {
                         var requerimiento = '<tr data-expanded="true">' +
                             '<td>  ' + nro + '  </td>' +
@@ -3823,8 +3826,10 @@ jQuery(function ($) {
                             '<td>  ' + requerimientoList[i].requerimientoDetalleList[j].subTotal.toFixed(cantidadDecimales) + '</td>' 
                             '</tr>';
 
-                        nro = nro + 1;
+                            nro = nro + 1;
+                            
                         $("#tableAprobarRequerimientos").append(requerimiento);
+                            
                     }
                 }
             }

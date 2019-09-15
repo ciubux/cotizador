@@ -15,7 +15,7 @@ namespace Cotizador.Models
 
         public List<PeriodoSolicitud> Data { get; set; }
 
-        public IEnumerable<SelectListItem> Ciudades
+        public IEnumerable<SelectListItem> Periodos
         {
             get
             {

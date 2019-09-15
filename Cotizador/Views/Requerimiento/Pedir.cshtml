@@ -27,13 +27,13 @@
                     <label for="requerimiento_idRequerimiento" class="control-label col-xs-4">Número Requerimiento:</label>
                     <div class="col-xs-8">
                         @if (requerimiento.idRequerimiento != 0)
-        {
-                @Html.TextBoxFor(p => requerimiento.idRequerimiento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-}
-else
-{
-                @Html.TextBoxFor(p => requerimiento.idRequerimiento, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
-}
+                        {
+                                @Html.TextBoxFor(p => requerimiento.idRequerimiento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                                        @Html.TextBoxFor(p => requerimiento.idRequerimiento, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+                        }
                     </div>
                 </div>
             </div>

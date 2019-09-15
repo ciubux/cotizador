@@ -415,19 +415,10 @@ namespace DataLayer
                 case Requerimiento.ClasesRequerimiento.Venta: InputParameterAdd.Char(objCommand, "tipoRequerimiento", ((Char)requerimiento.tipoRequerimientoVentaBusqueda).ToString()); break;
                 case Requerimiento.ClasesRequerimiento.Compra: InputParameterAdd.Char(objCommand, "tipoRequerimiento", ((Char)requerimiento.tipoRequerimientoCompraBusqueda).ToString()); break;
                 case Requerimiento.ClasesRequerimiento.Almacen: InputParameterAdd.Char(objCommand, "tipoRequerimiento", ((Char)requerimiento.tipoRequerimientoAlmacenBusqueda).ToString()); break;
-            }
-            int mes = 8;
-            if (requerimiento.periodo == Requerimiento.periodos.abril)
-                mes = 4;
-            else if (requerimiento.periodo == Requerimiento.periodos.mayo)
-                mes = 5;
-            else if (requerimiento.periodo == Requerimiento.periodos.junio)
-                mes = 6;
-            else if (requerimiento.periodo == Requerimiento.periodos.julio)
-                mes = 7;
+            }           
 
-            InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", new DateTime(requerimiento.fechaCreacionDesde.Year, mes, 1, 0, 0, 0));
-            InputParameterAdd.DateTime(objCommand, "fechaCreacionHasta", new DateTime(requerimiento.fechaCreacionHasta.Year, mes, 30, 23, 59, 59));
+            InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", new DateTime(requerimiento.fechaCreacionDesde.Year, 1, 1, 0, 0, 0));
+            InputParameterAdd.DateTime(objCommand, "fechaCreacionHasta", new DateTime(requerimiento.fechaCreacionHasta.Year, 12, 30, 23, 59, 59));
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", requerimiento.fechaEntregaDesde == null ? requerimiento.fechaEntregaDesde : new DateTime(requerimiento.fechaEntregaDesde.Value.Year, requerimiento.fechaEntregaDesde.Value.Month, requerimiento.fechaEntregaDesde.Value.Day, 0, 0, 0));
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", requerimiento.fechaEntregaHasta == null ? requerimiento.fechaEntregaDesde : new DateTime(requerimiento.fechaEntregaHasta.Value.Year, requerimiento.fechaEntregaHasta.Value.Month, requerimiento.fechaEntregaHasta.Value.Day, 23, 59, 59));
             InputParameterAdd.DateTime(objCommand, "fechaProgramacionDesde", requerimiento.fechaProgramacionDesde == null ? requerimiento.fechaProgramacionDesde : new DateTime(requerimiento.fechaProgramacionDesde.Value.Year, requerimiento.fechaProgramacionDesde.Value.Month, requerimiento.fechaProgramacionDesde.Value.Day, 0, 0, 0));  //requerimiento.fechaProgramacionDesde);
@@ -565,6 +556,14 @@ namespace DataLayer
                 requerimiento.direccionEntrega.codigoCliente = Converter.GetString(row, "direccion_entrega_codigo_cliente");
                 requerimiento.direccionEntrega.codigoMP = Converter.GetString(row, "direccion_entrega_codigo_mp");
                 requerimiento.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
+                requerimiento.direccionEntrega.direccionEntregaAlmacen = new DireccionEntrega();
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega_almacen");
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.descripcion = Converter.GetString(row, "direccion_entrega_almacen_descripcion");
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.ubigeo = new Ubigeo();
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.ubigeo.Departamento = Converter.GetString(row, "direccion_entrega_almacen_departamento");
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.ubigeo.Provincia = Converter.GetString(row, "direccion_entrega_almacen_provincia");
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.ubigeo.Distrito = Converter.GetString(row, "direccion_entrega_almacen_distrito");
+
 
                 requerimiento.solicitante = new Solicitante();
                 requerimiento.solicitante.idSolicitante = Converter.GetGuid(row, "id_solicitante");
@@ -666,6 +665,10 @@ namespace DataLayer
                 requerimiento.usuario.cargo = Converter.GetString(row, "cargo");
                 requerimiento.usuario.contacto = Converter.GetString(row, "contacto_usuario");
                 requerimiento.usuario.email = Converter.GetString(row, "email");
+
+
+                requerimiento.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+
 
             }
 

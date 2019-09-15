@@ -281,7 +281,26 @@ namespace Cotizador.Controllers
 
             //   usuarioBL.updateCotizacionSerializada(usuario, null);
             return RedirectToAction("List", "PeriodoSolicitud");
+        }
 
+
+        public ActionResult GetPeriodosView(string periodoSelectId, string selectedValue = null)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            PeriodoSolicitudBL periodoSolicitudBL = new PeriodoSolicitudBL();
+            PeriodoSolicitud periodoSolicitud = new PeriodoSolicitud { usuario = usuario };
+            periodoSolicitud.IdUsuarioRegistro = usuario.idUsuario;
+
+            List<PeriodoSolicitud> periodoList = periodoSolicitudBL.getPeriodosSolicitud(periodoSolicitud);
+            var model = new PeriodoViewModels
+            {
+                Data = periodoList,
+                PeriodoSelectId = periodoSelectId,
+                SelectedValue = selectedValue
+            };
+
+            return PartialView("_Periodo", model);
         }
     }
 

@@ -288,6 +288,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\PeriodoViewModels.cs" />
     <Compile Include="Models\DTOsSearch\ClienteDTO.cs" />
     <Compile Include="Models\DTOsSearch\CotizacionDTO.cs" />
     <Compile Include="Models\DTOsSearch\FacturaDTO.cs" />
@@ -613,6 +614,7 @@
     <Content Include="Views\Requerimiento\CargarPedidos.cshtml" />
     <Content Include="Views\Requerimiento\CargaIncorrecta.cshtml" />
     <Content Include="Views\Requerimiento\AprobarPedidos.cshtml" />
+    <Content Include="Views\Shared\_Periodo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

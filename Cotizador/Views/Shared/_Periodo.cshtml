@@ -1,0 +1,9 @@
+﻿@model Cotizador.Models.PeriodoViewModels 
+@Html.DropDownList(
+    Model.PeriodoSelectId,
+    Model.Periodos, "Seleccione el periodo",
+    new
+    {
+        id = Model.PeriodoSelectId,
+        @class = "form-control"
+    })

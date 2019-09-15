@@ -46,19 +46,18 @@
 
                 </div>
 
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        <label for="periodo" class="control-label col-xs-4">Periodo:</label>
-
-                        <div class="col-xs-8">
-                            @Html.DropDownList("periodo",
-             EnumHelper.GetSelectList(typeof(Model.Requerimiento.periodos), requerimiento.periodo),
-             new { @class = "form-control" }
-             )
-
-                        </div>
-
-                    </div>
+                <div class="col-sm-6 col-lg-4" id="divCiudadASolicitar">
+	                <div class="form-group">
+		                @Html.LabelFor(p => requerimiento.periodo, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idPeriodo" })
+		                <div class="col-xs-8">
+			                @Html.Action("GetPeriodosView", "PeriodoSolicitud",
+													                new
+													                {
+														                periodoSelectId = "idPeriodo",
+														                selectedValue = requerimiento.periodo.idPeriodoSolicitud
+													                })
+		                </div>
+	                </div>
                 </div>
 
 
@@ -1099,7 +1098,7 @@
 
                     </div>
 
-                    <table id="tableAprobarPedidos" class="table" data-editing="false"
+                    <table id="tableAprobarRequerimientos" class="table" data-editing="false"
                            data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                            data-editing-allow-add="false"
                            data-editing-allow-delete="false"
