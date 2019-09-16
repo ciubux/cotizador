@@ -298,23 +298,23 @@
                 success: function (list) {
 
                     list = eliminateDuplicates(list);
-                    
                     if (list.length != 0) {
-
-
                         $("#imagenMP").before('<a data-notifications="' + list.length + '" class="btnModal" href="javascript:void()"></a>');
 
-
-
+                        var verAutomaticamente = false;
 
                         for (var i = 0; i < list.length; i++) {
+
+                            if (list[i].importancia == 'Alta') {
+                                verAutomaticamente = true;
+                            }
 
                             var ItemRow =
 
                                 '<div class="modal-content">' +
                                 '<div class="modal-header">' +
+                                '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '</h5>' +
                                 '<h4>' + list[i].titulo + '</h4>' +
-                                '<h5> Remitente:' + list[i].usuario_creacion + ' | Fecha de creación:' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + '</h5>' +
                                 '</div>' +
                                 '<div class="modal-body">' +
                                 '<p>' + list[i].mensaje + '<p>' +
@@ -322,13 +322,16 @@
                                 '<div class="modal-footer">' +
                                 '<a  class="Leido btn btn-default ' + list[i].id_mensaje + '">Leido</a>' +
                                 '</div>' +
-                                '</div>';
-
-
+                                '</div></br></br>';
 
                             $("#Mensaje").append(ItemRow);
                         }
 
+                        if (verAutomaticamente) { 
+                            setTimeout(function () {
+                                $('#Mensaje').modal('show');
+                            }, 2000);
+                        }
                     } else {
                         $(".btnModal").remove();
                     }
