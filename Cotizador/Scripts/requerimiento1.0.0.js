@@ -1707,7 +1707,7 @@ jQuery(function ($) {
                 return false;
             }
 
-            if ($("#requerimiento_solicitante").val().trim() == "") {
+       /*     if ($("#requerimiento_solicitante").val().trim() == "") {
                 $('#requerimiento_solicitante').focus();
                 $.alert({
                     title: TITLE_VALIDACION_PEDIDO,
@@ -1717,7 +1717,7 @@ jQuery(function ($) {
                     }
                 });
                 return false;
-            }
+            }*/
 
             if ($("#requerimiento_direccionEntrega_descripcion").val().trim() == "") {
                 $('#requerimiento_direccionEntrega_descripcion').focus();
@@ -1824,7 +1824,7 @@ jQuery(function ($) {
         }
 
 
-
+         /*
         if (tipoRequerimiento == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
             //|| tipoRequerimiento == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
             || tipoRequerimiento == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
@@ -1832,7 +1832,7 @@ jQuery(function ($) {
             //|| tipoRequerimiento == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
         ) {
 
-            if ($("#requerimiento_solicitante_nombre").val().trim() == "") {
+          if ($("#requerimiento_solicitante_nombre").val().trim() == "") {
                 $('#requerimiento_solicitante_nombre').focus();
                 $.alert({
                     title: TITLE_VALIDACION_PEDIDO,
@@ -1844,7 +1844,7 @@ jQuery(function ($) {
                 return false;
             }
 
-
+         
 
             if ($("#requerimiento_solicitante_telefono").val().trim() == "" && $("#requerimiento_solicitante_correo").val().trim() == "") {
                 $('#requerimiento_solicitante_telefono').focus();
@@ -1858,7 +1858,7 @@ jQuery(function ($) {
                 return false;
             }
         }
-
+        */
 
         if ($("#requerimiento_observacionesGuiaRemision").val().length > 200) {
             $("#requerimiento_observacionesGuiaRemision").focus();
@@ -2133,16 +2133,20 @@ jQuery(function ($) {
                 $("#requerimiento_numeroRequerimiento").val(resultado.numeroRequerimiento);
                 $("#idRequerimiento").val(resultado.idRequerimiento);
 
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "El Requerimiento número " + resultado.numeroRequerimiento + " fue editado correctamente.",
+                    buttons: {
+                        OK: function () { window.location = '/Requerimiento/Aprobar'; }
+                    }
+                });
+
+                /*
+
                 if (resultado.estado == ESTADO_INGRESADO) {
                     //alert("El requerimiento número " + resultado.numeroRequerimiento + " fue editado correctamente.");
-                    $.alert({
-                        title: TITLE_EXITO,
-                        type: 'green',
-                        content: "El Requerimiento número " + resultado.numeroRequerimiento + " fue editado correctamente.",
-                        buttons: {
-                            OK: function () { window.location = '/Requerimiento/Aprobar'; }
-                        }
-                    });
+                  
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     //alert("El requerimiento número " + resultado.numeroRequerimiento + " fue editado correctamente, sin embargo requiere APROBACIÓN")
@@ -2161,7 +2165,7 @@ jQuery(function ($) {
                     //alert("El requerimiento ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     mostrarMensajeErrorProceso("El requerimiento ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     window.location = '/Requerimiento/Aprobar';
-                }
+                }*/
             }
         });
     }
@@ -3835,6 +3839,60 @@ jQuery(function ($) {
             }
         });
     });
+
+
+
+    $("#btnGenerarPedidos").click(function () {
+
+
+        var fechaEntregaDesde = $("#requerimiento_fechaEntregaDesdeTodos").val();
+        var fechaEntregaHasta = $("#requerimiento_fechaEntregaHastaTodos").val();
+        var horaEntregaDesde = $("#requerimiento_horaEntregaDesde").val();
+        var horaEntregaHasta = $("#requerimiento_horaEntregaHasta").val();
+        var horaEntregaAdicionalDesde = $("#requerimiento_horaEntregaAdicionalDesde").val();
+        var horaEntregaAdicionalHasta = $("#requerimiento_horaEntregaAdicionalHasta").val();
+
+   
+        $('body').loadingModal({
+            text: 'Creando Pedidos...'
+        });
+        $.ajax({
+            url: "/Requerimiento/CreatePedidos",
+            type: 'POST',
+            data: {
+                fechaEntregaDesde: fechaEntregaDesde,
+                fechaEntregaHasta: fechaEntregaHasta,
+                horaEntregaDesde: horaEntregaDesde,
+                horaEntregaHasta: horaEntregaHasta,
+                horaEntregaAdicionalDesde: horaEntregaAdicionalDesde,
+                horaEntregaAdicionalHasta: horaEntregaAdicionalHasta
+            },            
+            dataType: 'JSON',
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                mostrarMensajeErrorProceso(detalle.responseText);
+            },
+            success: function (resultado) {
+                $('body').loadingModal('hide')
+             /*   $("#requerimiento_numeroRequerimiento").val(resultado.numeroRequerimiento);
+                $("#idRequerimiento").val(resultado.idRequerimiento);*/
+
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "Los Pedidos fueron creados correctamente.",
+                    buttons: {
+                        OK: function () { window.location = '/Pedido/Index'; }
+                    }
+                });
+
+               
+            }
+        })
+    });
+
+
+
 
     $("#btnBusquedaRequerimientos").click(function () {
 

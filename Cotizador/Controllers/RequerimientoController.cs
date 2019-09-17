@@ -1477,7 +1477,6 @@ namespace Cotizador.Controllers
             //RUC_MP
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
             Requerimiento requerimiento = (Requerimiento)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO];
             requerimiento.usuario = usuario;
             RequerimientoBL requerimientoBL = new RequerimientoBL();
@@ -1508,6 +1507,39 @@ namespace Cotizador.Controllers
         }
 
 
+        public String Update()
+        {
+
+            //RUC_MP
+            UsuarioBL usuarioBL = new UsuarioBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Requerimiento requerimiento = (Requerimiento)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO];
+            requerimiento.usuario = usuario;
+            RequerimientoBL requerimientoBL = new RequerimientoBL();
+
+       /*     if (requerimiento.idRequerimiento > 0)
+            {
+                throw new System.Exception("Requerimiento ya se encuentra creado");
+            }*/
+
+            requerimientoBL.UpdateRequerimiento(requerimiento);
+            //long numeroRequerimiento = requerimiento.idRequerimiento;
+            String numeroRequerimientoString = requerimiento.numeroRequerimientoString;
+            Int32 idRequerimiento = requerimiento.idRequerimiento;
+
+
+            // pedido = null;
+            this.Session[Constantes.VAR_SESSION_REQUERIMIENTO] = null;// requerimiento;// null;
+
+
+            usuarioBL.updatePedidoSerializado(usuario, null);
+
+            var v = new { numeroRequerimiento = numeroRequerimientoString, idRequerimiento = idRequerimiento };
+            String resultado = JsonConvert.SerializeObject(v);
+
+            // String resultado = "{ \"codigo\":\"" + numeroRequerimiento + "\", \"estado\":\"" + estado + "\", \"observacion\":\"" + observacion + "\" }";
+            return resultado;
+        }
 
 
 
@@ -1521,7 +1553,6 @@ namespace Cotizador.Controllers
 
 
 
-      
         public void CleanBusqueda()
         {
             instanciarPedidoBusqueda();
@@ -1820,6 +1851,8 @@ namespace Cotizador.Controllers
 
 
             List<Requerimiento> requerimientoList = (List<Requerimiento>)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_CONSOLIDADO];
+
+            Requerimiento requerimientoBusqueda = (Requerimiento)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_BUSQUEDA];
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             PedidoBL pedidoBL = new PedidoBL();
@@ -1827,71 +1860,107 @@ namespace Cotizador.Controllers
             Int64 numeroGrupo = pedidoBL.GetSiguienteNumeroGrupoPedido();
             foreach (Requerimiento requerimiento in  requerimientoList)
             {
-                Pedido pedido = new Pedido();
-                pedido.usuario = usuario;
-                pedido.numeroGrupoPedido = numeroGrupo;
-
-                pedido.documentoDetalle = requerimiento.documentoDetalle;
-                //revisar
-                pedido.ciudad = requerimiento.ciudad;
-                pedido.cliente = requerimiento.cliente;
-                pedido.numeroReferenciaCliente = requerimiento.numeroReferenciaCliente;
-
-                pedido.direccionEntrega = requerimiento.direccionEntrega;
-                pedido.direccionEntrega.idDireccionEntrega = requerimiento.direccionEntrega.idDireccionEntrega;
-                pedido.direccionEntrega.descripcion = requerimiento.direccionEntrega.descripcion;
-                pedido.direccionEntrega.telefono = requerimiento.direccionEntrega.telefono;
-                pedido.direccionEntrega.codigoCliente = requerimiento.direccionEntrega.codigoCliente;
-                pedido.direccionEntrega.codigoMP = requerimiento.direccionEntrega.codigoMP;
-                pedido.direccionEntrega.nombre = requerimiento.direccionEntrega.nombre;
-                pedido.direccionEntrega.observaciones = requerimiento.direccionEntrega.observaciones;
-                pedido.fechaSolicitud = DateTime.Now;
-
-                //OK
-                String[] ftmp = this.Request.Params["fechaEntregaDesde"].Split('/');
-                pedido.fechaEntregaDesde = new DateTime(Int32.Parse(ftmp[2]), Int32.Parse(ftmp[1]), Int32.Parse(ftmp[0]));
-                ftmp = this.Request.Params["fechaEntregaHasta"].Split('/');
-                pedido.fechaEntregaHasta = new DateTime(Int32.Parse(ftmp[2]), Int32.Parse(ftmp[1]), Int32.Parse(ftmp[0]));
-                pedido.esPagoContado = false;
-                DateTime dtTmp = DateTime.Now;
-                String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');
-                DateTime horaEntregaDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaDesdeArray[0]), Int32.Parse(horaEntregaDesdeArray[1]), 0);
-
-                String[] horaEntregaHastaArray = pedido.horaEntregaHasta.Split(':');
-                DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]), 0);
-
-                
-                if (pedido.horaEntregaAdicionalDesde != null && !pedido.horaEntregaAdicionalDesde.Equals("")
-                && pedido.horaEntregaAdicionalDesde != null && !pedido.horaEntregaAdicionalDesde.Equals(""))
+                foreach (RequerimientoDetalle requerimientoDetalle in requerimiento.documentoDetalle)
                 {
-                    String[] horaEntregaAdicionalDesdeArray = pedido.horaEntregaAdicionalDesde.Split(':');
-                    DateTime horaEntregaAdicionalDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaAdicionalDesdeArray[0]), Int32.Parse(horaEntregaAdicionalDesdeArray[1]), 0);
-                    String[] horaEntregaAdicionalHastaArray = pedido.horaEntregaAdicionalHasta.Split(':');
-                    DateTime horaEntregaAdicionalHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaAdicionalHastaArray[0]), Int32.Parse(horaEntregaAdicionalHastaArray[1]), 0);
+                    Pedido pedido = new Pedido();
+                    pedido.usuario = usuario;
+                    pedido.numeroGrupoPedido = numeroGrupo;
+
+                    pedido.pedidoDetalleList = new List<PedidoDetalle>();
+
+                    PedidoDetalle pedidoDetalle = new PedidoDetalle(false, false);
+                    pedidoDetalle.producto = requerimientoDetalle.producto;
+                    pedidoDetalle.cantidad = requerimientoDetalle.cantidad;
+                    pedidoDetalle.producto.precioSinIgv = requerimientoDetalle.producto.precioSinIgv;
+                    pedidoDetalle.producto.costoSinIgv = requerimientoDetalle.producto.costoSinIgv;
+                    pedidoDetalle.esPrecioAlternativo = requerimientoDetalle.esPrecioAlternativo;
+                    if (pedidoDetalle.esPrecioAlternativo)
+                    {
+                        pedidoDetalle.ProductoPresentacion.Equivalencia = requerimientoDetalle.ProductoPresentacion.Equivalencia;
+                        pedidoDetalle.ProductoPresentacion.IdProductoPresentacion = requerimientoDetalle.ProductoPresentacion.IdProductoPresentacion;
+                    }
+
+
+                    pedidoDetalle.unidad = requerimientoDetalle.unidad;
+                    pedidoDetalle.porcentajeDescuento = requerimientoDetalle.porcentajeDescuento;
+                    pedidoDetalle.precioNeto = requerimientoDetalle.precioNeto;
+                    pedidoDetalle.flete = requerimientoDetalle.flete;
+                    pedidoDetalle.observacion = requerimientoDetalle.observacion;
+
+                    //pedidoDetalle.indicadorAprobacion = requerimientoDetalle.indicadorAprobacion;
+                    pedido.pedidoDetalleList.Add(pedidoDetalle);
+                    
+
+                    //revisar
+                    pedido.ciudad = requerimiento.ciudad;
+                    pedido.cliente = requerimiento.cliente;
+                    //pedido.numeroReferenciaCliente = requerimiento.numeroReferenciaCliente;
+
+                    pedido.direccionEntrega = requerimiento.direccionEntrega;
+                    pedido.direccionEntrega.idDireccionEntrega = requerimiento.direccionEntrega.idDireccionEntrega;
+                    pedido.direccionEntrega.descripcion = requerimiento.direccionEntrega.descripcion;
+                    pedido.direccionEntrega.telefono = requerimiento.direccionEntrega.telefono;
+                    pedido.direccionEntrega.codigoCliente = requerimiento.direccionEntrega.codigoCliente;
+                    pedido.direccionEntrega.codigoMP = requerimiento.direccionEntrega.codigoMP;
+                    pedido.direccionEntrega.nombre = requerimiento.direccionEntrega.nombre;
+                    pedido.direccionEntrega.observaciones = requerimiento.direccionEntrega.observaciones;
+                    pedido.fechaSolicitud = DateTime.Now;
+
+                    //OK
+                    String[] ftmp = this.Request.Params["fechaEntregaDesde"].Split('/');
+                    pedido.fechaEntregaDesde = new DateTime(Int32.Parse(ftmp[2]), Int32.Parse(ftmp[1]), Int32.Parse(ftmp[0]));
+                    ftmp = this.Request.Params["fechaEntregaHasta"].Split('/');
+                    pedido.fechaEntregaHasta = new DateTime(Int32.Parse(ftmp[2]), Int32.Parse(ftmp[1]), Int32.Parse(ftmp[0]));
+                    pedido.esPagoContado = false;
+                    DateTime dtTmp = DateTime.Now;
+                    String[] horaEntregaDesdeArray = requerimientoBusqueda.horaEntregaDesde.Split(':');
+                    DateTime horaEntregaDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaDesdeArray[0]), Int32.Parse(horaEntregaDesdeArray[1]), 0);
+
+                    String[] horaEntregaHastaArray = requerimientoBusqueda.horaEntregaHasta.Split(':');
+                    DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]), 0);
+
+                    pedido.horaEntregaDesde = requerimientoBusqueda.horaEntregaDesde;
+                    pedido.horaEntregaHasta = requerimientoBusqueda.horaEntregaHasta;
+
+
+                    if (requerimientoBusqueda.horaEntregaAdicionalDesde != null && !requerimientoBusqueda.horaEntregaAdicionalDesde.Equals("")
+                    && requerimientoBusqueda.horaEntregaAdicionalDesde != null && !requerimientoBusqueda.horaEntregaAdicionalDesde.Equals(""))
+                    {
+                        String[] horaEntregaAdicionalDesdeArray = requerimientoBusqueda.horaEntregaAdicionalDesde.Split(':');
+                        DateTime horaEntregaAdicionalDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaAdicionalDesdeArray[0]), Int32.Parse(horaEntregaAdicionalDesdeArray[1]), 0);
+                        String[] horaEntregaAdicionalHastaArray = requerimientoBusqueda.horaEntregaAdicionalHasta.Split(':');
+                        DateTime horaEntregaAdicionalHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaAdicionalHastaArray[0]), Int32.Parse(horaEntregaAdicionalHastaArray[1]), 0);
+                    }
+
+
+
+                    //Revisar
+                    pedido.solicitante.idSolicitante = requerimiento.solicitante.idSolicitante;
+                    pedido.solicitante.nombre = requerimiento.solicitante.nombre;
+                    pedido.solicitante.telefono = requerimiento.solicitante.telefono;
+                    pedido.solicitante.correo = requerimiento.solicitante.correo;
+
+                    pedido.montoIGV = requerimiento.montoIGV;
+                    pedido.montoTotal = requerimiento.montoTotal;
+                    pedido.observaciones = requerimiento.observaciones;
+                    pedido.ubigeoEntrega = new Ubigeo();
+                    pedido.ubigeoEntrega.Id = requerimiento.direccionEntrega.ubigeo.Id;
+
+                    pedido.seguimientoPedido = new SeguimientoPedido();
+                    pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
+                    pedido.cotizacion = new Cotizacion();
+                    pedido.tipoPedido = Pedido.tiposPedido.Venta;
+                    pedido.clasePedido = Pedido.ClasesPedido.Venta;
+                    pedidoBL.calcularMontosTotales(pedido);
+                    pedidoBL.InsertPedido(pedido);
+                    /*
+                    long numeroPedido = pedido.numeroPedido;
+                    String numeroPedidoString = pedido.numeroPedidoString;
+                    Guid idPedido = pedido.idPedido;
+                    int estado = (int)pedido.seguimientoPedido.estado;
+                    String observacion = pedido.seguimientoPedido.observacion;*/
+                    pedidoList.Add(pedido);
                 }
-
-
-
-                //Revisar
-                pedido.solicitante.idSolicitante = requerimiento.solicitante.idSolicitante;
-                pedido.solicitante.nombre = requerimiento.solicitante.nombre;
-                pedido.solicitante.telefono = requerimiento.solicitante.telefono;
-                pedido.solicitante.correo = requerimiento.solicitante.correo;
-
-                pedido.montoIGV = requerimiento.montoIGV;
-                pedido.montoTotal = requerimiento.montoTotal;
-                pedido.observaciones = requerimiento.observaciones;
-                pedido.ubigeoEntrega.Id = requerimiento.ubigeoEntrega.Id;
-
-                pedidoBL.InsertPedido(pedido);
-                /*
-                long numeroPedido = pedido.numeroPedido;
-                String numeroPedidoString = pedido.numeroPedidoString;
-                Guid idPedido = pedido.idPedido;
-                int estado = (int)pedido.seguimientoPedido.estado;
-                String observacion = pedido.seguimientoPedido.observacion;*/
-                pedidoList.Add(pedido);
-
             }
             //var v = new { numeroPedido = numeroPedidoString, estado = estado, observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(pedidoList);

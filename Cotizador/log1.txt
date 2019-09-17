@@ -115,3 +115,5 @@ Nombre del parámetro: s
 Nombre del parámetro: s
 2019-09-11 16:08:50.6302|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / El valor no puede ser nulo.
 Nombre del parámetro: s
+2019-09-16 13:57:49.5015|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Error en el nivel del transporte al recibir los resultados del servidor. (provider: TCP Provider, error: 0 - Se agotó el tiempo de espera del semáforo.)
+2019-09-16 14:18:13.9021|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Error en el nivel del transporte al recibir los resultados del servidor. (provider: TCP Provider, error: 0 - Se ha forzado la interrupción de una conexión existente por el host remoto.)

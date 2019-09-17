@@ -979,17 +979,17 @@
                 <div class="pull-right">
                     <button type="button" id="btnCancelarVerPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     @if (requerimiento.usuario.tomaPedidos || requerimiento.usuario.apruebaPedidos)
-                    {
-                        <button type="button" id="btnEditarRequerimiento" class="btn btn-primary ">Editar</button>
-                    }
-                    <button type="button" id="btnAprobarIngresoPedido2" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
+    {
+                <button type="button" id="btnEditarRequerimiento" class="btn btn-primary ">Editar</button>
+}
+                    <!--<button type="button" id="btnAprobarIngresoPedido2" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>-->
                     @if (requerimiento.usuario.apruebaPedidos)
-                    {
-                        <!--<button type="button" hidden="hidden" id="btnAprobarIngresoPedido" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>-->
-                    }
+    {
+                    <!--<button type="button" hidden="hidden" id="btnAprobarIngresoPedido" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>-->
+}
                     @if (requerimiento.usuario.apruebaPedidos)
-                    {
-                        <button type="button" id="btnDenegarIngresoPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Rechazar</button>
+    {
+                    <!-- <button type="button" id="btnDenegarIngresoPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Rechazar</button>-->
                     }
 
                     @if (requerimiento.usuario.programaPedidos)
@@ -1050,53 +1050,53 @@
 
                     <div class="row">
                         <!--FECHA ENTREGA -->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(p => requerimiento.rangoFechasEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
-                                <div class="input-group col-xs-6 col-lg-8">
-                                    <div class="input-group-addon" style="width:70px">
-                                        <span class="input-group-text" id="basic-addon1">Desde:</span>
-                                    </div>
-                                    <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesdeTodos" />
-                                    <input class="form-control" type="text" id="requerimiento_fechaEntregaDesdeTodos" name="requerimiento_fechaEntregaDesdeTodos">
-                                </div>
-                                <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
-                                <div class="input-group col-xs-6 col-lg-8">
-
-                                    <div class="input-group-addon" style="width:70px">
-                                        <span class="input-group-text" id="basic-addon1">Hasta:</span>
-                                    </div>
-                                    <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHastaTodos" />
-                                    <input class="form-control" type="text" id="requerimiento_fechaEntregaHastaTodos" name="requerimiento_fechaEntregaHastaTodos">
-
-                                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(p => requerimiento.rangoFechasEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
+                        <div class="input-group col-xs-6 col-lg-8">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Desde:</span>
                             </div>
+                            <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesdeTodos" />
+                            <input class="form-control" type="text" id="requerimiento_fechaEntregaDesdeTodos" name="requerimiento_fechaEntregaDesdeTodos">
                         </div>
+                        <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
+                        <div class="input-group col-xs-6 col-lg-8">
 
-
-
-                        <!--HORA ENTREGA -->
-                        <div class="col-sm-12 col-lg-8">
-                            <div class="form-group">
-                                @Html.LabelFor(p => requerimiento.rangoHoraEntrega, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-2" })
-                                <div class="input-group col-xs-4 col-lg-4">
-                                    <div class="input-group-addon" style="width:70px">
-                                        <span class="input-group-text" id="basic-addon1">1er Turno:</span>
-                                    </div>
-                                    <input class="form-control" type="time" id="requerimiento_horaEntregaDesde" name="requerimiento_horaEntregaDesde" value="@requerimiento.horaEntregaDesde">
-                                    <input class="form-control" type="time" id="requerimiento_horaEntregaHasta" name="requerimiento_horaEntregaHasta" value="@requerimiento.horaEntregaHasta">
-                                </div>
-                                <div class="input-group col-xs-4 col-lg-4">
-                                    <div class="input-group-addon" style="width:70px">
-                                        <span class="input-group-text" id="basic-addon1">2do Turno:</span>
-                                    </div>
-                                    <input class="form-control" type="time" id="requerimiento_horaEntregaAdicionalDesde" name="requerimiento_horaEntregaAdicionalDesde" value="@requerimiento.horaEntregaAdicionalDesde">
-                                    <input class="form-control" type="time" id="requerimiento_horaEntregaAdicionalHasta" name="requerimiento_horaEntregaAdicionalHasta" value="@requerimiento.horaEntregaAdicionalHasta">
-                                </div>
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Hasta:</span>
                             </div>
-                        </div>
+                            <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHastaTodos" />
+                            <input class="form-control" type="text" id="requerimiento_fechaEntregaHastaTodos" name="requerimiento_fechaEntregaHastaTodos">
 
+                        </div>
                     </div>
+                </div>
+
+
+
+                <!--HORA ENTREGA -->
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => requerimiento.rangoHoraEntrega, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-2" })
+                        <div class="input-group col-xs-4 col-lg-4">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">1er Turno:</span>
+                            </div>
+                            <input class="form-control" type="time" id="requerimiento_horaEntregaDesde" name="requerimiento_horaEntregaDesde" value="@requerimiento.horaEntregaDesde">
+                            <input class="form-control" type="time" id="requerimiento_horaEntregaHasta" name="requerimiento_horaEntregaHasta" value="@requerimiento.horaEntregaHasta">
+                        </div>
+                        <div class="input-group col-xs-4 col-lg-4">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">2do Turno:</span>
+                            </div>
+                            <input class="form-control" type="time" id="requerimiento_horaEntregaAdicionalDesde" name="requerimiento_horaEntregaAdicionalDesde" value="@requerimiento.horaEntregaAdicionalDesde">
+                            <input class="form-control" type="time" id="requerimiento_horaEntregaAdicionalHasta" name="requerimiento_horaEntregaAdicionalHasta" value="@requerimiento.horaEntregaAdicionalHasta">
+                        </div>
+                    </div>
+                </div>
+
+                </div>
 
                     <table id="tableAprobarRequerimientos" class="table" data-editing="false"
                            data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
@@ -1164,7 +1164,7 @@
             <div class="modal-footer">
                 <div class="pull-right">
                     <button type="button" id="btnCancelarAprobarTodosPreview" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>  
-                    <button type="button" id="btnPedidosAprobarTodos" class="btn btn-success">Generar Pedido(s)</button>
+                    <button type="button" id="btnGenerarPedidos" class="btn btn-success">Generar Pedido(s)</button>
                 </div>
 
             </div>

@@ -23,7 +23,7 @@ namespace DataLayer
         public void InsertPedido(Pedido pedido)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("CLIENTE.pi_pedido");
+            var objCommand = GetSqlCommand("pi_pedido");
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido); //puede ser null
 
             if (pedido.cotizacion.idCotizacion == Guid.Empty)
@@ -183,13 +183,13 @@ namespace DataLayer
            
             InputParameterAdd.Decimal(objCommand, "otrosCargos", pedido.otrosCargos);
             InputParameterAdd.Char(objCommand, "tipo", ((char)pedido.clasePedido).ToString());
-            InputParameterAdd.Varchar(objCommand, "numeroPedido", pedido.numeroRequerimiento);
-
+            InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", pedido.numeroRequerimiento);
+            /*
             InputParameterAdd.Int(objCommand, "idClienteSunat", pedido.usuario.idClienteSunat);
-            InputParameterAdd.Guid(objCommand, "idDireccionEntregaAlmacen", pedido.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega);
+            InputParameterAdd.Guid(objCommand, "idDireccionEntregaAlmacen", pedido.direccionEntrega.idDireccionEntrega);
             InputParameterAdd.Bit(objCommand, "excedioPresupuesto", pedido.excedioPresupuesto);
             InputParameterAdd.Decimal(objCommand, "topePresupuesto", pedido.topePresupuesto);
-
+            */
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.BigInt(objCommand, "numero");

@@ -177,8 +177,7 @@ namespace DataLayer
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
             var objCommand = GetSqlCommand("CLIENTE.pu_requerimiento");
-
-            InputParameterAdd.Int(objCommand, "idRequerimiento", requerimiento.idRequerimiento);
+            
             InputParameterAdd.Guid(objCommand, "idCiudad", requerimiento.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", requerimiento.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", requerimiento.numeroReferenciaCliente); //puede ser null
@@ -237,7 +236,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", requerimiento.fechaEntregaDesde.Value);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", requerimiento.fechaEntregaHasta.Value);
 
-            InputParameterAdd.Bit(objCommand, "esPagoContado", requerimiento.esPagoContado);
+         
 
             DateTime dtTmp = DateTime.Now;
             String[] horaEntregaDesdeArray = requerimiento.horaEntregaDesde.Split(':');
@@ -303,31 +302,29 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "total", requerimiento.montoTotal);
             InputParameterAdd.Varchar(objCommand, "observaciones", requerimiento.observaciones);  //puede ser null
             InputParameterAdd.Guid(objCommand, "idUsuario", requerimiento.usuario.idUsuario);
-           if (requerimiento.claseRequerimiento == Requerimiento.ClasesRequerimiento.Venta)
+            InputParameterAdd.Bit(objCommand, "esPagoContado", requerimiento.esPagoContado);
+
+            /*if (requerimiento.claseRequerimiento == Requerimiento.ClasesRequerimiento.Venta)
             {
                 InputParameterAdd.Char(objCommand, "tipoRequerimiento", ((char)requerimiento.tipoRequerimiento).ToString());
-                InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", requerimiento.observacionesGuiaRemision);
-                InputParameterAdd.Varchar(objCommand, "observacionesFactura", requerimiento.observacionesFactura);
             }
             else if (requerimiento.claseRequerimiento == Requerimiento.ClasesRequerimiento.Compra)
             {
                 InputParameterAdd.Char(objCommand, "tipoRequerimiento", ((char)requerimiento.tipoRequerimientoCompra).ToString());
-                InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", null);
-                InputParameterAdd.Varchar(objCommand, "observacionesFactura", null);
             }
             else if (requerimiento.claseRequerimiento == Requerimiento.ClasesRequerimiento.Almacen)
             {
-                InputParameterAdd.Char(objCommand, "tipoRequerimiento", ((char)requerimiento.tipoRequerimientoAlmacen).ToString());
-                InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", requerimiento.observacionesGuiaRemision);
-                InputParameterAdd.Varchar(objCommand, "observacionesFactura", null);
-            }
+                
+            }*/
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", requerimiento.ubigeoEntrega.Id);
+            InputParameterAdd.Char(objCommand, "tipoRequerimiento", ((char)requerimiento.tipoRequerimientoAlmacen).ToString());            
             InputParameterAdd.Decimal(objCommand, "otrosCargos", requerimiento.otrosCargos);
-          
+            InputParameterAdd.Char(objCommand, "tipo", ((char)requerimiento.claseRequerimiento).ToString());
             InputParameterAdd.Int(objCommand, "idClienteSunat", requerimiento.usuario.idClienteSunat);
             InputParameterAdd.Guid(objCommand, "idDireccionEntregaAlmacen", requerimiento.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega);
             InputParameterAdd.Bit(objCommand, "excedioPresupuesto", requerimiento.excedioPresupuesto);
             InputParameterAdd.Decimal(objCommand, "topePresupuesto", requerimiento.topePresupuesto);
+            InputParameterAdd.Int(objCommand, "idRequerimiento", requerimiento.idRequerimiento);
             ExecuteNonQuery(objCommand);
 
 
@@ -559,7 +556,14 @@ namespace DataLayer
                 requerimiento.direccionEntrega.direccionEntregaAlmacen = new DireccionEntrega();
                 requerimiento.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega_almacen");
                 requerimiento.direccionEntrega.direccionEntregaAlmacen.descripcion = Converter.GetString(row, "direccion_entrega_almacen_descripcion");
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.contacto = Converter.GetString(row, "direccion_entrega_almacen_contacto_entrega");
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.telefono = Converter.GetString(row, "direccion_entrega_almacen_telefono_contacto_entrega");
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.codigoCliente = Converter.GetString(row, "direccion_entrega_almacen_codigo_cliente");
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.codigoMP = Converter.GetString(row, "direccion_entrega_almacen_codigo_mp");
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.nombre = Converter.GetString(row, "direccion_entrega_almacen_nombre");
+
                 requerimiento.direccionEntrega.direccionEntregaAlmacen.ubigeo = new Ubigeo();
+                requerimiento.direccionEntrega.direccionEntregaAlmacen.ubigeo.Id = Converter.GetString(row, "codigo_ubigeo_entrega_almacen");
                 requerimiento.direccionEntrega.direccionEntregaAlmacen.ubigeo.Departamento = Converter.GetString(row, "direccion_entrega_almacen_departamento");
                 requerimiento.direccionEntrega.direccionEntregaAlmacen.ubigeo.Provincia = Converter.GetString(row, "direccion_entrega_almacen_provincia");
                 requerimiento.direccionEntrega.direccionEntregaAlmacen.ubigeo.Distrito = Converter.GetString(row, "direccion_entrega_almacen_distrito");
@@ -846,13 +850,15 @@ namespace DataLayer
                 requerimiento.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
 
                 requerimiento.claseRequerimiento = (Requerimiento.ClasesRequerimiento)Char.Parse(Converter.GetString(row, "tipo"));
+
+
                 if (requerimiento.claseRequerimiento == Requerimiento.ClasesRequerimiento.Venta)
                     requerimiento.tipoRequerimiento = (Requerimiento.tiposRequerimiento)Char.Parse(Converter.GetString(row, "tipo_requerimiento"));
                 else if (requerimiento.claseRequerimiento == Requerimiento.ClasesRequerimiento.Compra)
                     requerimiento.tipoRequerimientoCompra = (Requerimiento.tiposRequerimientoCompra)Char.Parse(Converter.GetString(row, "tipo_requerimiento"));
                 else
                     requerimiento.tipoRequerimientoAlmacen = (Requerimiento.tiposRequerimientoAlmacen)Char.Parse(Converter.GetString(row, "tipo_requerimiento"));
-
+             
 
 
                 requerimiento.otrosCargos = Converter.GetDecimal(row, "otros_cargos");

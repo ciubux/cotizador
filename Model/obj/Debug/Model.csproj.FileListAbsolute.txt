@@ -218,7 +218,7 @@ C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\EntityFramewo
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\System.Web.Mvc.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\EntityFramework.xml
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.dll
 C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.pdb
-C:\Users\cesar\Documents\MP2\cotizador_4\cotizador\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
