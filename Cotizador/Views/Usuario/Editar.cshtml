@@ -1,0 +1,154 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Usuario";
+    Model.Usuario usuario = ViewBag.usuario;
+
+    int idCategoriaTemp = 0;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal">
+        <div class="row">
+            <input type="hidden" id="idUsuario" name="idUsuario" value="@usuario.idUsuario" />
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => usuario.nombre, htmlAttributes: new { @class = "control-label col-xs-3" })
+                        <div class="col-xs-9">
+                            @Html.TextBoxFor(c => usuario.nombre, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => usuario.email, htmlAttributes: new { @class = "control-label col-xs-3" })
+                        <div class="col-xs-9">
+                            @Html.TextBoxFor(c => usuario.email, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => usuario.password, htmlAttributes: new { @class = "control-label col-xs-3" })
+                        <div class="col-xs-9">
+                            @Html.TextBoxFor(c => usuario.password, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-lg-8">
+                <div class="form-group">
+                    @Html.LabelFor(c => usuario.Estado, htmlAttributes: new { @class = "control-label col-xs-3" })
+                    <div class="col-xs-9">
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (usuario.Estado == 1)
+                                {
+                                    <input class="radio-input" checked type="radio" name="usuario_estado" id="usuario_estado_si" value="1"><span>Activo</span>
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="usuario_estado" id="usuario_estado_si" value="1"><span>Activo</span>
+                                }
+
+                            </label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (usuario.Estado == 0)
+                                {
+                                    <input class="radio-input" checked type="radio" name="usuario_estado" id="usuario_estado_no" value="0"><span>Inactivo</span>
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="usuario_estado" id="usuario_estado_no" value="0"><span>Inactivo</span>
+                                }
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-12 col-xs-12"><h3>Establecimientos</h3></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-lg-12">
+                <!--Usuario-->
+                <div class="form-group">
+                    <label for="idDireccionEntrega" class="control-label col-xs-12 col-lg-3">Buscar Establecimiento:</label>
+
+                    <div class="col-xs-9 col-lg-7">
+                        <select class="form-control input-sm" id="idDireccionEntrega" name="idDireccionEntrega" required>
+                            <option value=""></option>
+                            @foreach (Model.DireccionEntrega dir in ViewBag.direcciones)
+                            {
+                            <option value="@dir.idDireccionEntrega">@dir.direccionConSede</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-xs-3 col-lg-2">
+                        <button id="btnAgregarDireccionUsuario" type="button" class="btn btn-primary">Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-12">
+                <table id="tableDireccionesUsuario" class="table" data-editing="false"
+                        data-editing-allow-add="false"
+                        data-editing-allow-delete="false"
+                        data-editing-allow-edit="false"
+                        data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="idDireccionEntrega" data-visible="false"></th>
+                            <th data-name="direccion" data-visible="true" data-sortable="true">Establecimiento</th>
+                            <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Model.DireccionEntrega item in usuario.direccionEntregaList)
+                        {
+                            <tr data-expanded="true">
+                                <td>  @item.idDireccionEntrega </td>
+                                <td>  @item.direccionConSede </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btnQuitarDireccionUsuario" idDireccionEntrega="@item.idDireccionEntrega">Remover</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnCancelarUsuario" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionUsuario" type="button" class="btn btn-success">Finalizar Creación</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/usuario")
+}
