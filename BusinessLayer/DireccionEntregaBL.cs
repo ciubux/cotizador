@@ -8,11 +8,15 @@ namespace BusinessLayer
 {
     public class DireccionEntregaBL
     {
-        public List<DireccionEntrega> getDireccionesEntrega(Guid idCLiente, String ubigeo = "000000")
+        public List<DireccionEntrega> getDireccionesEntrega(Guid idClienteSunat, string ubigeo = "000000")
+        {
+            return new List<DireccionEntrega>();
+        }
+        public List<DireccionEntrega> getDireccionesEntrega(int idClienteSunat)
         {
             using (var dal = new DireccionEntregaDAL())
             {
-                return dal.getDireccionesEntrega(ubigeo, idCLiente);
+                return dal.getDireccionesEntrega(idClienteSunat);
             }
         }
 

@@ -602,6 +602,7 @@
     <Content Include="Views\PeriodoSolicitud\Editar.cshtml" />
     <Content Include="Views\PeriodoSolicitud\List.cshtml" />
     <Content Include="Views\Pedido\Index.cshtml" />
+    <Content Include="Views\Usuario\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

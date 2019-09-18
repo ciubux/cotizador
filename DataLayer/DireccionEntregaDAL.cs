@@ -17,12 +17,11 @@ namespace DataLayer
         {
         }
 
-        public List<DireccionEntrega> getDireccionesEntrega(String ubigeo, Guid idCLiente)
+        public List<DireccionEntrega> getDireccionesEntrega(int idClienteSunat)
         {
-            var objCommand = GetSqlCommand("ps_DireccionesEntrega");
+            var objCommand = GetSqlCommand("CLIENTE.ps_direcciones_entrega");
 
-            InputParameterAdd.Varchar(objCommand, "ubigeo", ubigeo); 
-            InputParameterAdd.Guid(objCommand, "idCLiente", idCLiente); 
+            InputParameterAdd.Int(objCommand, "idClienteSunat", idClienteSunat); 
 
             DataTable dataTable = Execute(objCommand);
             List<DireccionEntrega> lista = new List<DireccionEntrega>();
@@ -41,7 +40,6 @@ namespace DataLayer
                         Distrito = Converter.GetString(row, "distrito")
                     },
                     codigoCliente = Converter.GetString(row, "codigo_cliente"),
-                    codigoMP = Converter.GetString(row, "codigo_mp"),
                     observaciones = Converter.GetString(row, "observaciones"),
                     nombre = Converter.GetString(row, "nombre"),
                     direccionDomicilioLegal = Converter.GetString(row, "direccionDomicilioLegal"),

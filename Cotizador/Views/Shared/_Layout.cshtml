@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "306";
+    TempData["ScriptVersion"] = "308";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -47,6 +47,8 @@
                         var linkBusquedaPeriodoSolicitud = "";
                         var linkMantenimientoPeriodoSolicitud = "";
 
+                        var linkBusquedaUsuarios = "";
+                        var linkMantenimientoUsuario = "";
 
                         var linkDocumentosVenta = "";
                         var linkBusquedaFactura = "";
@@ -90,13 +92,15 @@
                             case 1001: linkBusquedaPeriodoSolicitud = "ative"; linkAdministracion = "active"; break;
                             case 1002: linkMantenimientoPeriodoSolicitud = "ative"; linkAdministracion = "active"; break;
 
-                                //case 104: linkMantenimientoUsuario = "ative"; linkMaestros = "active"; break;
-                        }
+                            case 1011: linkBusquedaUsuario = "ative"; linkAdministracion = "active"; break;
+                            case 1012: linkMantenimientoUsuario = "ative"; linkAdministracion = "active"; break;
+                        //case 104: linkMantenimientoUsuario = "ative"; linkMaestros = "active"; break;
+                    }
 
 
 
-                        if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
-                        {
+                    if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
+                    {
                             <li class="@linkRequerimientos">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
                                     Requerimientos
@@ -166,7 +170,7 @@
                         }
 
 
-                        if (usuario.modificaPeriodoSolicitud)
+                        if (usuario.modificaPeriodoSolicitud || usuario.modificaUsuario)
                         {
 
                             <li class="@linkAdministracion">
@@ -180,6 +184,11 @@
                                     {
                                         <li id="linkBusquedaPeriodoSolicitud" class="@linkBusquedaPeriodoSolicitud">@Html.ActionLink("Periodo Requerimeinto - Búsqueda", "List", "PeriodoSolicitud")</li>
                                         <li id="linkMantenimientoPeriodoSolicitud" class="@linkMantenimientoPeriodoSolicitud">@Html.ActionLink("Periodo Requerimeinto - Crear/Modificar", "Editar", "PeriodoSolicitud")</li>
+                                    }
+                                    @if (usuario.modificaUsuario)
+                                    {
+                                        <li id="linkBusquedaUsuarios" class="@linkBusquedaUsuarios">@Html.ActionLink("Usuarios - Búsqueda", "List", "Usuario")</li>
+                                        <li id="linkMantenimientoUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar", "Editar", "Usuario")</li>
                                     }
                                 </ul>
                             </li>

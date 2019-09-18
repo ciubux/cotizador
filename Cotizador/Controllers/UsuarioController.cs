@@ -55,6 +55,22 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_USUARIO_BUSQUEDA] = obj;
         }
 
+        private void instanciarUsuario()
+        {
+            Usuario obj = new Usuario();
+            obj.idUsuario = Guid.Empty;
+            obj.Estado = 1;
+            obj.email = String.Empty;
+            obj.nombre = String.Empty;
+            obj.direccionEntregaList = new List<DireccionEntrega>();
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.IdUsuarioRegistro = usuario.idUsuario;
+            obj.usuario = usuario;
+
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
+        }
+
         public String SearchUsuarios()
         {
             String data = this.Request.Params["data[q]"];
@@ -200,12 +216,10 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(list);
 
         }
-        
-        public ActionResult Permisos(Guid? idUsuario)
-        {
-            UsuarioBL bl = new UsuarioBL();
-            Usuario usuarioEdit = new Usuario();
 
+        public ActionResult Editar(Guid? idUsuario = null)
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoUsuario;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             if (!usuario.modificaUsuario)
@@ -213,66 +227,256 @@ namespace Cotizador.Controllers
                 return RedirectToAction("List", "Usuario");
             }
 
-            if (idUsuario == null || idUsuario == Guid.Empty)
+
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] == null && idUsuario == null)
             {
-                return RedirectToAction("List", "Usuario");
+                instanciarUsuario();
             }
 
-            usuarioEdit = bl.getUsuarioMantenedor(idUsuario.Value);
-            usuarioEdit.usuario = usuario;
-            usuarioEdit.IdUsuarioRegistro = usuario.idUsuario;
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
 
-            PermisoBL permisobl = new PermisoBL();
-            List<Permiso> permisos = new List<Permiso>();
-            permisos = permisobl.getPermisos();
+            if (idUsuario != null)
+            {
+                UsuarioBL bL = new UsuarioBL();
+                obj = bL.getUsuario(idUsuario.Value);
+                obj.IdUsuarioRegistro = usuario.idUsuario;
+                obj.usuario = usuario;
 
-            ViewBag.usuario = usuarioEdit;
-            ViewBag.permisos = permisos;
-            
+                this.Session[Constantes.VAR_SESSION_ROL] = obj;
+            }
+
+            DireccionEntregaBL bl = new DireccionEntregaBL();
+            List<DireccionEntrega> direcciones = bl.getDireccionesEntrega(usuario.idClienteSunat);
+
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR_DIRECCIONES] = direcciones;
+
+            ViewBag.direcciones = direcciones;
+            ViewBag.usuario = obj;
+
             return View();
+
         }
-        
-        public String UpdatePermisos()
+
+        public String ConsultarSiExisteUsuario()
         {
-            UsuarioBL bl = new UsuarioBL();
-            Usuario usuarioEdit = new Usuario();
+            Guid idUsuario = Guid.Parse(Request["idUsuario"].ToString());
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            UsuarioBL bL = new UsuarioBL();
+            Usuario obj = bL.getUsuarioMantenedor(idUsuario, usuario.idUsuario);
+            obj.IdUsuarioRegistro = usuario.idUsuario;
+            obj.usuario = usuario;
 
-            Guid idUsuario = Guid.Parse(this.Request.Params["idUsuario"].ToString());
+            this.Session[Constantes.VAR_SESSION_USUARIO_VER] = obj;
 
+            obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+            if (obj == null)
+                return "{\"existe\":\"false\",\"idUsuario\":\"0\"}";
+            else
+                return "{\"existe\":\"true\",\"idUsuario\":\"" + obj.idUsuario + "\"}";
+        }
 
-            if (!usuario.modificaUsuario || idUsuario == null || idUsuario == Guid.Empty)
+        public String Create()
+        {
+            UsuarioBL bL = new UsuarioBL();
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+
+            obj = bL.insertUsuario(obj);
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = null;
+            String resultado = JsonConvert.SerializeObject(obj);
+            return resultado;
+        }
+
+        [HttpPost]
+        public String AddDireccionUsuario()
+        {
+            int success = 1;
+            string message = "";
+
+            Usuario login = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!login.modificaUsuario)
             {
-                return JsonConvert.SerializeObject(new Usuario());
+                return "";
             }
-            
 
-            PermisoBL permisobl = new PermisoBL();
-            List<Permiso> permisos = permisobl.getPermisos();
-            List<Permiso> permisosUsuario = new List<Permiso>();
 
-            foreach(Permiso item in permisos)
+            Guid idDireccion = Guid.Parse(this.Request.Params["idDireccionEntrega"]);
+
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+
+            List<DireccionEntrega> direcciones = (List<DireccionEntrega>) this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR_DIRECCIONES];
+
+            DireccionEntrega toAdd = direcciones.Where(d => d.idDireccionEntrega.Equals(idDireccion)).FirstOrDefault();
+            if (toAdd != null)
             {
-                if (Request["permiso_" + item.idPermiso.ToString()] != null && Int32.Parse(Request["permiso_" + item.idPermiso.ToString()].ToString()) == 1)
+                if (usuario.direccionEntregaList.Where(d => d.idDireccionEntrega.Equals(toAdd.idDireccionEntrega)).FirstOrDefault() == null)
                 {
-                    permisosUsuario.Add(item);
+                    usuario.direccionEntregaList.Add(toAdd);
+                    message = "Se agregó el establecimiento correctamente.";
+                } else
+                {
+                    success = 0;
+                    message = "El establecimiento ya está asociado al usuario.";
                 }
+            } else
+            {
+                success = 0;
+                message = "El establecimiento no existe.";
             }
+
+            String itemJson = JsonConvert.SerializeObject(toAdd);
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\", \"direccion\":" + itemJson + "}";
+        }
+
+        [HttpPost]
+        public String QuitarDireccionUsuario()
+        {
+            int success = 1;
+            string message = "";
+
+            Usuario login = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!login.modificaUsuario)
+            {
+                return "";
+            }
+
+            Guid idDireccion = Guid.Parse(this.Request.Params["idDireccionEntrega"]);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+            usuario.direccionEntregaList.Remove(usuario.direccionEntregaList.Where(d => d.idDireccionEntrega.Equals(idDireccion)).FirstOrDefault());
             
 
-            usuarioEdit = bl.getUsuarioMantenedor(idUsuario);
-            usuarioEdit.usuario = usuario;
-            usuarioEdit.IdUsuarioRegistro = usuario.idUsuario;
-            usuarioEdit.permisoList = permisosUsuario;
+            if (success == 1)
+            {
+                message = "Se removió el establecimiento.";
+            }
+            else
+            {
+                message = "El establecimineto no existe o no esta asociado al usuario.";
+            }
 
-            bl.updatePermisos(usuarioEdit);
-
-
-            return JsonConvert.SerializeObject(usuarioEdit);
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }
 
 
+        public String Update()
+        {
+            UsuarioBL bL = new UsuarioBL();
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+
+            if (obj.idUsuario == Guid.Empty)
+            {
+                obj = bL.insertUsuario(obj);
+                this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = null;
+            }
+            else
+            {
+                obj = bL.updateUsuario(obj);
+                this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = null;
+            }
+            String resultado = JsonConvert.SerializeObject(obj);
+            //this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
+            return resultado;
+        }
+
+
+        public void iniciarEdicionUsuario()
+        {
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_VER];
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
+        }
+
+        public ActionResult CancelarCreacionUsuario()
+        {
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = null;
+
+            return RedirectToAction("List", "Usuario");
+
+        }
+
+        //public ActionResult Permisos(Guid? idUsuario)
+        //{
+        //    UsuarioBL bl = new UsuarioBL();
+        //    Usuario usuarioEdit = new Usuario();
+
+        //    Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+        //    if (!usuario.modificaUsuario)
+        //    {
+        //        return RedirectToAction("List", "Usuario");
+        //    }
+
+        //    if (idUsuario == null || idUsuario == Guid.Empty)
+        //    {
+        //        return RedirectToAction("List", "Usuario");
+        //    }
+
+        //    usuarioEdit = bl.getUsuarioMantenedor(idUsuario.Value);
+        //    usuarioEdit.usuario = usuario;
+        //    usuarioEdit.IdUsuarioRegistro = usuario.idUsuario;
+
+        //    PermisoBL permisobl = new PermisoBL();
+        //    List<Permiso> permisos = new List<Permiso>();
+        //    permisos = permisobl.getPermisos();
+
+        //    ViewBag.usuario = usuarioEdit;
+        //    ViewBag.permisos = permisos;
+
+        //    return View();
+        //}
+
+        //public String UpdatePermisos()
+        //{
+        //    UsuarioBL bl = new UsuarioBL();
+        //    Usuario usuarioEdit = new Usuario();
+        //    Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+        //    Guid idUsuario = Guid.Parse(this.Request.Params["idUsuario"].ToString());
+
+
+        //    if (!usuario.modificaUsuario || idUsuario == null || idUsuario == Guid.Empty)
+        //    {
+        //        return JsonConvert.SerializeObject(new Usuario());
+        //    }
+
+
+        //    PermisoBL permisobl = new PermisoBL();
+        //    List<Permiso> permisos = permisobl.getPermisos();
+        //    List<Permiso> permisosUsuario = new List<Permiso>();
+
+        //    foreach(Permiso item in permisos)
+        //    {
+        //        if (Request["permiso_" + item.idPermiso.ToString()] != null && Int32.Parse(Request["permiso_" + item.idPermiso.ToString()].ToString()) == 1)
+        //        {
+        //            permisosUsuario.Add(item);
+        //        }
+        //    }
+
+
+        //    usuarioEdit = bl.getUsuarioMantenedor(idUsuario);
+        //    usuarioEdit.usuario = usuario;
+        //    usuarioEdit.IdUsuarioRegistro = usuario.idUsuario;
+        //    usuarioEdit.permisoList = permisosUsuario;
+
+        //    bl.updatePermisos(usuarioEdit);
+
+
+        //    return JsonConvert.SerializeObject(usuarioEdit);
+        //}
+
+
         
+
+        public void ChangeInputInt()
+        {
+            Usuario obj = (Usuario) this.UsuarioSession;
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
+            this.UsuarioSession = obj;
+        }
+
 
         public void ChangeInputString()
         {

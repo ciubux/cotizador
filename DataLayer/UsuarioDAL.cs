@@ -149,6 +149,7 @@ namespace DataLayer
                 usuario.cargo = Converter.GetString(row, "cargo");
                 usuario.nombre = Converter.GetString(row, "nombre");
                 usuario.contacto = Converter.GetString(row, "telefono");
+                usuario.esMaestro = Converter.GetInt(row, "master_user") == 1 ? true : false;
                 usuario.esCliente = true;
                 usuario.idClienteSunat = Converter.GetInt(row, "id_cliente_sunat");
                 usuario.sedeMP = new Ciudad();
@@ -344,17 +345,18 @@ namespace DataLayer
 
         public List<Usuario> getUsuariosMantenedor(Usuario usuario)
         {
-            var objCommand = GetSqlCommand("ps_usuarios_mantenedor");
+            var objCommand = GetSqlCommand("CLIENTE.ps_usuarios");
             InputParameterAdd.VarcharEmpty(objCommand, "textoBusqueda", usuario.nombre);
             InputParameterAdd.Int(objCommand, "estado", usuario.Estado);
+            InputParameterAdd.Guid(objCommand, "idUsuarioRegistro", usuario.IdUsuarioRegistro);
             DataTable dataTable = Execute(objCommand);
             List<Usuario> lista = new List<Usuario>();
 
             foreach (DataRow row in dataTable.Rows)
             {
                 Usuario obj = new Usuario();
-                obj.idUsuario = Converter.GetGuid(row, "id_usuario");
-                obj.email = Converter.GetString(row, "email");
+                obj.idUsuario = Converter.GetGuid(row, "id_cliente_usuario");
+                obj.email = Converter.GetString(row, "login");
                 obj.nombre = Converter.GetString(row, "nombre");
                 obj.Estado = Converter.GetInt(row, "estado");
                 lista.Add(obj);
@@ -363,44 +365,154 @@ namespace DataLayer
             return lista;
         }
 
-        public Usuario getUsuarioMantenedor(Guid idUsuario)
+        public Usuario getUsuarioMantenedor(Guid idUsuario, Guid idUsuarioSession)
         {
-            var objCommand = GetSqlCommand("ps_usuario_mantenedor");
+            var objCommand = GetSqlCommand("CLIENTE.ps_usuario_mantenedor");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuarioRegistro", idUsuarioSession);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable usuario = dataSet.Tables[0];
-            DataTable permisos = dataSet.Tables[1];
+            //DataTable permisos = dataSet.Tables[1];
 
             Usuario obj = new Usuario();
 
             foreach (DataRow row in usuario.Rows)
             {
-                obj.idUsuario = Converter.GetGuid(row, "id_usuario");
-                obj.email = Converter.GetString(row, "email");
+                obj.idUsuario = Converter.GetGuid(row, "id_cliente_usuario");
+                obj.email = Converter.GetString(row, "login");
                 obj.nombre = Converter.GetString(row, "nombre");
                 obj.Estado = Converter.GetInt(row, "estado");
             }
 
-            obj.permisoList = new List<Permiso>();
-            foreach (DataRow row in permisos.Rows)
-            {
-                Permiso permiso = new Permiso();
-                permiso.idPermiso = Converter.GetInt(row, "id_permiso");
-                permiso.codigo = Converter.GetString(row, "codigo");
-                permiso.descripcion_corta = Converter.GetString(row, "descripcion_corta");
-                permiso.descripcion_larga = Converter.GetString(row, "descripcion_larga");
-                permiso.categoriaPermiso = new CategoriaPermiso();
-                permiso.categoriaPermiso.idCategoriaPermiso = Converter.GetInt(row, "id_categoria_permiso");
-                permiso.categoriaPermiso.descripcion = Converter.GetString(row, "descripcion_categoria");
-                permiso.byRol = Converter.GetInt(row, "es_rol") == 1;
-                permiso.byUser = Converter.GetInt(row, "es_usuario") == 1;
+            DataTable dataTableDireccionesEntrega = dataSet.Tables[1];
+            List<DireccionEntrega> direccionEntregaList = new List<DireccionEntrega>();
 
-                obj.permisoList.Add(permiso);
+            foreach (DataRow row in dataTableDireccionesEntrega.Rows)
+            {
+                DireccionEntrega item = new DireccionEntrega
+                {
+                    idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega"),
+                    descripcion = Converter.GetString(row, "descripcion"),
+                    contacto = Converter.GetString(row, "contacto"),
+                    telefono = Converter.GetString(row, "telefono"),
+                    ubigeo = new Ubigeo
+                    {
+                        Id = Converter.GetString(row, "ubigeo"),
+                        Departamento = Converter.GetString(row, "departamento"),
+                        Provincia = Converter.GetString(row, "provincia"),
+                        Distrito = Converter.GetString(row, "distrito")
+                    },
+                    codigoCliente = Converter.GetString(row, "codigo_cliente"),
+                    codigoMP = Converter.GetString(row, "codigo_mp"),
+                    observaciones = Converter.GetString(row, "observaciones"),
+                    nombre = Converter.GetString(row, "nombre"),
+                    direccionDomicilioLegal = Converter.GetString(row, "direccionDomicilioLegal"),
+                    codigo = Converter.GetInt(row, "codigo"),
+                    emailRecepcionFacturas = Converter.GetString(row, "email_recepcion_facturas"),
+                };
+                item.cliente = new Cliente
+                {
+                    idCliente = Converter.GetGuid(row, "id_cliente")
+                };
+                item.cliente.ciudad = new Ciudad
+                {
+                    idCiudad = Converter.GetGuid(row, "id_ciudad"),
+                    sede = Converter.GetString(row, "sede"),
+                };
+                item.domicilioLegal = new DomicilioLegal();
+                item.domicilioLegal.idDomicilioLegal = Converter.GetInt(row, "id_domicilio_legal");
+                item.domicilioLegal.direccion = Converter.GetString(row, "direccionDomicilioLegal");
+                item.direccionEntregaAlmacen = new DireccionEntrega();
+                item.direccionEntregaAlmacen.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega_almacen");
+                item.limitePresupuesto = Converter.GetDecimal(row, "limite_presupuesto");
+                direccionEntregaList.Add(item);
             }
+            obj.direccionEntregaList = direccionEntregaList;
+
+            //obj.permisoList = new List<Permiso>();
+            //foreach (DataRow row in permisos.Rows)
+            //{
+            //    Permiso permiso = new Permiso();
+            //    permiso.idPermiso = Converter.GetInt(row, "id_permiso");
+            //    permiso.codigo = Converter.GetString(row, "codigo");
+            //    permiso.descripcion_corta = Converter.GetString(row, "descripcion_corta");
+            //    permiso.descripcion_larga = Converter.GetString(row, "descripcion_larga");
+            //    permiso.categoriaPermiso = new CategoriaPermiso();
+            //    permiso.categoriaPermiso.idCategoriaPermiso = Converter.GetInt(row, "id_categoria_permiso");
+            //    permiso.categoriaPermiso.descripcion = Converter.GetString(row, "descripcion_categoria");
+            //    permiso.byRol = Converter.GetInt(row, "es_rol") == 1;
+            //    permiso.byUser = Converter.GetInt(row, "es_usuario") == 1;
+
+            //    obj.permisoList.Add(permiso);
+            //}
 
             return obj;
         }
 
+        public Usuario insertUsuario(Usuario obj)
+        {
+            var objCommand = GetSqlCommand("CLIENTE.pi_usuario");
+
+            InputParameterAdd.Guid(objCommand, "idUsuarioRegistro", obj.IdUsuarioRegistro);
+            InputParameterAdd.Varchar(objCommand, "nombre", obj.nombre);
+            InputParameterAdd.Varchar(objCommand, "login", obj.email);
+            InputParameterAdd.Varchar(objCommand, "password", obj.password);
+            InputParameterAdd.Int(objCommand, "estado", obj.Estado);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (DireccionEntrega item in obj.direccionEntregaList)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idDireccionEntrega;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@direcciones", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+
+            //OutputParameterAdd.Int(objCommand, "newId");
+
+            ExecuteNonQuery(objCommand);
+
+            //obj.idUsuario = (Guid)objCommand.Parameters["@newId"].Value;
+
+            return obj;
+
+        }
+
+
+        public Usuario updateUsuario(Usuario obj)
+        {
+            var objCommand = GetSqlCommand("CLIENTE.pu_usuario");
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuarioRegistro", obj.IdUsuarioRegistro);
+            InputParameterAdd.Varchar(objCommand, "nombre", obj.nombre);
+            InputParameterAdd.Varchar(objCommand, "login", obj.email);
+            InputParameterAdd.Varchar(objCommand, "password", obj.password);
+            InputParameterAdd.Int(objCommand, "estado", obj.Estado);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (DireccionEntrega item in obj.direccionEntregaList)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idDireccionEntrega;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@direcciones", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            ExecuteNonQuery(objCommand);
+
+            return obj;
+        }
 
         public Usuario updatePermisos(Usuario obj)
         {

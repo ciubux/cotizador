@@ -16,8 +16,10 @@ namespace Model
 
         public Guid idUsuario { get; set; }
         /*DATOS*/
-        [Display(Name = "Email:")]
+        [Display(Name = "E-mail:")]
         public string email { get; set; }
+
+        [Display(Name = "Contraseña:")]
         public string password { get; set; }
         [Display(Name = "Nombre:")]
         public string nombre { get; set; }

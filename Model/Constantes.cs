@@ -185,6 +185,7 @@ namespace Model
         public static String VAR_SESSION_USUARIO_LISTA = "usuarioList";
         public static String VAR_SESSION_USUARIO = "usuario";
         public static String VAR_SESSION_USUARIO_MANTENEDOR = "usuarioMantenedor";
+        public static String VAR_SESSION_USUARIO_MANTENEDOR_DIRECCIONES = "usuarioMantenedorDirecciones";
         public static String VAR_SESSION_USUARIO_BUSQUEDA = "usuarioBusqueda";
         public static String VAR_SESSION_USUARIO_LISTA_MANTENEDOR = "usuarioMantenedorList";
         public static String VAR_SESSION_USUARIO_VER = "usuarioVer";

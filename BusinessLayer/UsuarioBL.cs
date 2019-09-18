@@ -90,11 +90,11 @@ namespace BusinessLayer
             }
         }
 
-        public Usuario getUsuarioMantenedor(Guid idUsuario)
+        public Usuario getUsuarioMantenedor(Guid idUsuario, Guid idUsuarioSession)
         {
             using (var usuarioDAL = new UsuarioDAL())
             {
-                return usuarioDAL.getUsuarioMantenedor(idUsuario);
+                return usuarioDAL.getUsuarioMantenedor(idUsuario, idUsuarioSession);
             }
         }
 
@@ -103,6 +103,22 @@ namespace BusinessLayer
             using (var dal = new UsuarioDAL())
             {
                 return dal.updatePermisos(usuario);
+            }
+        }
+
+        public Usuario insertUsuario(Usuario usuario)
+        {
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                return usuarioDAL.insertUsuario(usuario);
+            }
+        }
+
+        public Usuario updateUsuario(Usuario usuario)
+        {
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                return usuarioDAL.updateUsuario(usuario);
             }
         }
     }

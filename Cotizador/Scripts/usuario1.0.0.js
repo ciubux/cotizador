@@ -9,7 +9,10 @@ jQuery(function ($) {
         $("#btnBusqueda").click();
         //cargarChosenCliente();
         verificarSiExisteCliente();
-        
+
+        $("#idDireccionEntrega").chosen({ placeholder_text_single: "Buscar dirección Establecimiento", no_results_text: "No se encontró establecimiento" });
+
+        FooTable.init('#tableDireccionesUsuario');
         FooTable.init('#tablePermisosUsuario');
     });
 
@@ -24,7 +27,7 @@ jQuery(function ($) {
     }
 
     function limpiarFormulario() {
-        $("#usuario_codigo").val("");
+        $("#usuario_email").val("");
         $("#usuario_nombre").val("");
     }
 
@@ -81,7 +84,19 @@ jQuery(function ($) {
 
 
     function validacionDatosUsuario() {
-        
+
+        if ($("#usuario_email").val().length < 4) {
+            $.alert({
+                title: "E-mail Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un email válido.',
+                buttons: {
+                    OK: function () { $('#usuario_email').focus(); }
+                }
+            });
+            return false;
+        }
+
         if ($("#usuario_nombre").val().length < 4) {
             $.alert({
                 title: "Nombre Inválido",
@@ -112,43 +127,157 @@ jQuery(function ($) {
         ConfirmDialog("¿Seguro que desea cancelar la edición de permisos? Se perderán todos los cambios realizados.", '/Usuario/List', null)
     });
 
-    $("#btnFinalizarEdicionPermisos").click(function () {
+
+    $("#btnFinalizarEdicionUsuario").click(function () {
+        /*Si no tiene codigo el cliente se está creando*/
+        if ($("#usuario_idUsuario").val() == '00000000-0000-0000-0000-000000000000') {
+            crearUsuario();
+        }
+        else {
+            editarUsuario();
+        }
+    });
+
+
+    $("#btnAgregarDireccionUsuario").click(function () {
+        //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+
+        var idDireccionEntrega = $("#idDireccionEntrega").val();
+        var idUsuario = $("#idUsuario").val();
+
+        if (idUsuario == "") {
+            $.alert({
+                title: "Ocurrió un error",
+                type: 'red',
+                content: "Debe seleccionar un establecimiento",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+
+            return;
+        }
+
         $('body').loadingModal({
-            text: 'Actualizando Permisos...'
+            text: 'Agregando Establecimiento'
         });
+
         $.ajax({
-            url: "/Usuario/UpdatePermisos",
+            url: "/Usuario/AddDireccionUsuario",
             type: 'POST',
-            data: $("#formPermisosUsuario").serialize(),
-            dataType: 'JSON',
-            error: function (resultado) {
-                $('body').loadingModal('hide');
-                $.alert({
-                    title: 'Error',
-                    content: 'Se generó un error al intentar actualizar los permisos del usuario.',
-                    type: 'red',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });
+            data: {
+                idDireccionEntrega: idDireccionEntrega
             },
+            type: 'POST',
+            dataType: 'JSON',
             success: function (resultado) {
-                $('body').loadingModal('hide');
-                $.alert({
-                    title: TITLE_EXITO,
-                    content: 'Los permisos se actualizaron correctamente.',
-                    type: 'green',
-                    buttons: {
-                        OK: function () {
-                            window.location = '/Usuario/List';
+                if (resultado.success == 1) {
+
+                    var direccion = resultado.direccion;
+
+                    var dataRow = '<tr data-expanded="true">' +
+                        '<td>  ' + direccion.idDireccionEntrega + '</td>' +
+                        '<td>  ' + direccion.direccionConSede + '  </td>' +
+                        '<td><button type="button" class="btn btn-danger btnQuitarDireccionUsuario" idDireccionEntrega="' + direccion.idDireccionEntrega + '">Remover</button></td>' +
+                        '</tr>';
+
+                    $("#tableDireccionesUsuario").append(dataRow);
+
+                    FooTable.init('#tableDireccionesUsuario');
+
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
                         }
-                    }
-                });
+                    });
+
+                }
+                else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+                $('body').loadingModal('hide');
+            },
+            error: function () {
+                $('body').loadingModal('hide');
             }
         });
     });
 
 
+    $("body").on('click', ".btnQuitarDireccionUsuario", function () {
+        //  desactivarBotonesVer();
+        //Se identifica si existe cotizacion en curso, la consulta es sincrona
+        var that = this;
+        var direccionText = $(this).closest("tr").find("td:nth-child(2)").html();
+        $.confirm({
+            title: 'Confirmar operación',
+            content: 'Esta seguro que desea remover la direccion: ' + direccionText,
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'SI',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        var idDireccionEntrega = $(that).attr("idDireccionEntrega");
+                        var idUsuario = $("#idUsuario").val();
+                        $.ajax({
+                            url: "/Usuario/QuitarDireccionUsuario",
+                            type: 'POST',
+                            data: {
+                                idDireccionEntrega: idDireccionEntrega
+                            },
+                            type: 'POST',
+                            dataType: 'JSON',
+                            success: function (resultado) {
+                                if (resultado.success == 1) {
+
+                                    $(that).closest("tr").remove();
+                                    FooTable.init('#tableDireccionesUsuario');
+
+                                    $.alert({
+                                        title: "Operación exitosa",
+                                        type: 'green',
+                                        content: resultado.message,
+                                        buttons: {
+                                            OK: function () { }
+                                        }
+                                    });
+
+                                }
+                                else {
+                                    $.alert({
+                                        title: "Ocurrió un error",
+                                        type: 'red',
+                                        content: resultado.message,
+                                        buttons: {
+                                            OK: function () { }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                },
+                noAplica: {
+                    text: 'NO',
+                    btnClass: 'btn-danger',
+                    action: function () {
+                    }
+                }
+            }
+        });
+    });
 
     function crearUsuario() {
         if (!validacionDatosUsuario())
@@ -277,7 +406,15 @@ jQuery(function ($) {
         });
     }
 
-    
+    $("#usuario_password").change(function () {
+        changeInputString("password", $("#usuario_password").val());
+    });
+
+    $("#usuario_email").change(function () {
+        changeInputString("email", $("#usuario_email").val());
+    });
+
+
     $("#usuario_nombre").change(function () {
         changeInputString("nombre", $("#usuario_nombre").val());
     });
@@ -418,8 +555,8 @@ jQuery(function ($) {
                         '<td>  ' + list[i].email + '  </td>' +
                         '<td>  ' + list[i].nombre + '  </td>' +
                         '<td>' +
-                        /*'<button type="button" class="' + list[i].idUsuario + ' btnEditarUsuario btn btn-primary ">Editar</button>&nbsp;&nbsp;&nbsp;' +*/
-                        '<button type="button" idUsuario="' + list[i].idUsuario + '" class="btnVerPermisosUsuario btn btn-secundary">Permisos</button>' +
+                        '<button type="button" class="' + list[i].idUsuario + ' btnEditarUsuario btn btn-primary ">Editar</button>&nbsp;&nbsp;&nbsp;' +
+                    /*'<button type="button" idUsuario="' + list[i].idUsuario + '" class="btnVerPermisosUsuario btn btn-secundary">Permisos</button>' +*/
                         '</td>' +
                         '</tr>';
                     
