@@ -3,32 +3,55 @@ jQuery(function ($) {
 
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
-    var TITLE_VALIDACION_PEDIDO = 'Revisar Datos del Pedido';
+    var TITLE_VALIDACION_PEDIDO = 'Revisar Datos del Requerimiento';
     var TITLE_EXITO = 'Operación Realizada';
 
+
+    function obtenerConstantes() {
+        $.ajax({
+            url: "/General/GetConstantes",
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (constantes) {
+                IGV = constantes.IGV;
+                SIMBOLO_SOL = constantes.SIMBOLO_SOL;
+                MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
+                VARIACION_PRECIO_ITEM_PEDIDO = constantes.VARIACION_PRECIO_ITEM_PEDIDO;
+            }
+        });
+    }
+
+
+    function desactivarControles() {
+        $("#ActualDepartamento").attr('disabled', 'disabled');
+        $('#ActualProvincia').attr('disabled', 'disabled');
+        $('#ActualDistrito').attr('disabled', 'disabled');
+        $("#requerimiento_direccionEntrega").attr('disabled', 'disabled');
+        $("#requerimiento_solicitante").attr('disabled', 'disabled');
+        $("#btnAgregarDireccion").attr("disabled", "disabled");
+        $("#btnAgregarSolicitante").attr("disabled", "disabled");
+        $("#requerimiento_direccionEntrega_descripcion").removeAttr("disabled");
+        $("#requerimiento_direccionEntrega_contacto").removeAttr("disabled");
+        $("#requerimiento_direccionEntrega_telefono").removeAttr("disabled");
+        $("#btnAgregarDireccion").hide();
+
+    }
+
     $(document).ready(function () {
-        obtenerConstantes();
-      //  setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
-        cargarChosenCliente();
-        toggleControlesUbigeo();
-        toggleControlesDireccionEntrega();
-        toggleControlesSolicitante();
-        verificarSiExisteNuevaDireccionEntrega();
-        verificarSiExisteNuevoSolicitante();
+        obtenerConstantes();   
+        desactivarControles();
         verificarSiExisteDetalle();
-        verificarSiExisteCliente();
-        $("#btnBusquedaPedidos").click();
+        
         $("#btnBusquedaRequerimientos").click();
         $("#btnAgregarProductosDesdePreciosRegistrados").click()
 
-        var tipoPedido = $("#pedido_tipoPedido").val();
-        validarTipoPedido(tipoPedido);
+        var tipoRequerimiento = $("#requerimiento_tipoRequerimiento").val();
 
-        if ($("#pagina").val() == 2) {
-            if ($("#idPedido").val() != "") {
-                showPedido($("#idPedido").val());
+      /*  if ($("#pagina").val() == 2) {
+            if ($("#idRequerimiento").val() != "") {
+                showRequerimiento($("#idRequerimiento").val());
             }
-        }
+        }*/
 
         $.datepicker.regional['es'] = {
             closeText: 'Cerrar',
@@ -50,10 +73,10 @@ jQuery(function ($) {
         $.datepicker.setDefaults($.datepicker.regional['es']);
 
         var fechaEntregaDesde = $("#fechaEntregaDesdeTodostmp").val();
-        $("#pedido_fechaEntregaDesdeTodos").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
+        $("#requerimiento_fechaEntregaDesdeTodos").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
 
         var fechaEntregaHasta = $("#fechaEntregaHastaTodostmp").val();
-        $("#pedido_fechaEntregaHastaTodos").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
+        $("#requerimiento_fechaEntregaHastaTodos").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
     });
 
    
@@ -115,29 +138,17 @@ jQuery(function ($) {
     }
    
 
-    function obtenerConstantes() {
-        $.ajax({
-            url: "/General/GetConstantes",
-            type: 'POST',
-            dataType: 'JSON',
-            success: function (constantes) {
-                IGV = constantes.IGV;
-                SIMBOLO_SOL = constantes.SIMBOLO_SOL;
-                MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
-                VARIACION_PRECIO_ITEM_PEDIDO = constantes.VARIACION_PRECIO_ITEM_PEDIDO;
-            }
-        });
-    }
+   
 
-    function autoGuardarPedido() {
+    function autoGuardarRequerimiento() {
         $.ajax({
-            url: "/Pedido/autoGuardarPedido",
+            url: "/Requerimiento/autoGuardarRequerimiento",
             type: 'POST',
             error: function () {
-                setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
+                setTimeout(autoGuardarRequerimiento, MILISEGUNDOS_AUTOGUARDADO);
             },
             success: function () {
-                setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
+                setTimeout(autoGuardarRequerimiento, MILISEGUNDOS_AUTOGUARDADO);
             }
         });
     }
@@ -162,169 +173,23 @@ jQuery(function ($) {
     }
 
 
-    function verificarSiExisteNuevaDireccionEntrega() {
-        $('#pedido_direccionEntrega option').each(function () {
-            if ($(this).val() == GUID_EMPTY) {
-                $("#btnAgregarDireccion").attr("disabled", "disabled");
-            }
-        });
-    }
-
-    function verificarSiExisteNuevoSolicitante() {
-        $('#pedido_solicitante option').each(function () {
-            if ($(this).val() == GUID_EMPTY) {
-                $("#btnAgregarSolicitante").attr("disabled", "disabled");
-            }
-        });
-    }
 
     /**
      * ################################ INICIO CONTROLES DE CLIENTE
      */
 
 
-    $("#pedido_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
+    $("#requerimiento_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
 
-    function cargarChosenCliente() {
-
-        $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-                alert("Debe seleccionar la sede MP previamente.");
-                $("#idCliente").trigger('chosen:close');
-                $("#idCiudad").focus();
-                return false;
-            }
-        });
-
-        $("#idCliente").ajaxChosen({
-            dataType: "json",
-            type: "GET",
-            minTermLength: 5,
-            afterTypeDelay: 300,
-            cache: false,
-            url: "/Pedido/SearchClientes"
-        }, {
-                loadingImg: "Content/chosen/images/loading.gif"
-            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
-    }
-
-
-
-
-
-    function toggleControlesUbigeo() {
-        //Si cliente esta Seleccionado se habilitan la seleccion para la direccion de entrega
-
-    //    if ($("#idCliente").val() == "") {
-        var varTmp = $('#pedido_cliente_habilitadoModificarDireccionEntrega').val();
-        var habilitadoModificarDireccionEntrega = varTmp == 'True' || varTmp == 'true';
-
-        if ($("#idCliente").val().trim() != "") {
-            //$("#idCiudad").attr('disabled', 'disabled');
-            if (habilitadoModificarDireccionEntrega) {
-                /*$('#ActualDepartamento').removeAttr('disabled');
-                $('#ActualProvincia').removeAttr('disabled');
-                $('#ActualDistrito').removeAttr('disabled');
-                $("#pedido_direccionEntrega").removeAttr('disabled');
-                $("#btnAgregarDireccion").removeAttr('disabled');
-                */
-                $("#ActualDepartamento").attr('disabled', 'disabled');
-                $('#ActualProvincia').attr('disabled', 'disabled');
-                $('#ActualDistrito').attr('disabled', 'disabled');
-                $("#pedido_direccionEntrega").attr('disabled', 'disabled');
-                $("#btnAgregarDireccion").attr('disabled', 'disabled');
-            }
-            else {
-                $("#ActualDepartamento").attr('disabled', 'disabled');
-                $('#ActualProvincia').attr('disabled', 'disabled');
-                $('#ActualDistrito').attr('disabled', 'disabled');
-                $("#pedido_direccionEntrega").attr('disabled', 'disabled');
-                $("#btnAgregarDireccion").attr('disabled', 'disabled');
-            }
-          
-            $("#pedido_solicitante").removeAttr('disabled');
-            $("#btnAgregarSolicitante").removeAttr('disabled');
-        }
-        else {
-            $("#ActualDepartamento").attr('disabled', 'disabled');
-            $('#ActualProvincia').attr('disabled', 'disabled');
-            $('#ActualDistrito').attr('disabled', 'disabled');
-            $("#pedido_direccionEntrega").attr('disabled', 'disabled');
-            $("#pedido_solicitante").attr('disabled', 'disabled');
-            $("#btnAgregarDireccion").attr("disabled", "disabled");
-            $("#btnAgregarSolicitante").attr("disabled", "disabled");
-
-
-            }
-            toggleControlesDireccionEntrega();
-
-
-        
-
-    //    }
-    }
-
-
-
-
-    function toggleControlesDireccionEntrega() {
-      
-        var idDireccionEntrega = $('#pedido_direccionEntrega').val();
-        var varTmp = $('#pedido_cliente_habilitadoModificarDireccionEntrega').val();
-        var habilitadoModificarDireccionEntrega = varTmp == 'True' || varTmp == 'true';
-        if (idDireccionEntrega != "" && habilitadoModificarDireccionEntrega) {
-            $("#pedido_direccionEntrega_descripcion").removeAttr("disabled");
-            $("#pedido_direccionEntrega_contacto").removeAttr("disabled");
-            $("#pedido_direccionEntrega_telefono").removeAttr("disabled");
-
-
-        }
-        else {
-            $("#pedido_direccionEntrega_descripcion").attr('disabled', 'disabled');
-            $("#pedido_direccionEntrega_contacto").attr('disabled', 'disabled');
-            $("#pedido_direccionEntrega_telefono").attr('disabled', 'disabled');
-        }
-        /*
-        if (habilitadoModificarDireccionEntrega) {
-            $("#btnAgregarDireccion").show();
-
-            $("#ActualDepartamento").removeAttr("disabled");
-            $("#ActualDepartamento").removeAttr("disabled");
-            $("#ActualDistrito").removeAttr("disabled");
-        }
-        else {
-            */
-            $("#btnAgregarDireccion").hide();
-            $("#ActualDepartamento").attr("disabled");
-            $("#ActualDepartamento").attr("disabled");
-            $("#ActualDistrito").attr("disabled");
-        //}
-
-    }
-    
-    function toggleControlesSolicitante() {
-        var idSolicitante = $('#pedido_solicitante').val();
-        if (idSolicitante == "") {
-            $("#pedido_solicitante_nombre").attr('disabled', 'disabled');
-            $("#pedido_solicitante_telefono").attr('disabled', 'disabled');
-            $("#pedido_solicitante_correo").attr('disabled', 'disabled');
-
-        }
-        else {
-            /*  $("#pedido_direccionEntrega_telefono").val($('#pedido_direccionEntrega').find(":selected").attr("telefono"));*/
-            $("#pedido_solicitante_nombre").removeAttr("disabled");
-            $("#pedido_solicitante_telefono").removeAttr("disabled");
-            $("#pedido_solicitante_correo").removeAttr("disabled");
-        }
-    }
-
+       
+   
 
     $("#idCliente").change(function () {
 
         var idCliente = $(this).val();
 
         $.ajax({
-            url: "/Pedido/GetCliente",
+            url: "/Requerimiento/GetCliente",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -332,7 +197,7 @@ jQuery(function ($) {
             },
             success: function (cliente)
             {
-                $("#pedido_cliente_habilitadoModificarDireccionEntrega").val(cliente.habilitadoModificarDireccionEntrega)
+                $("#requerimiento_cliente_habilitadoModificarDireccionEntrega").val(cliente.habilitadoModificarDireccionEntrega)
 
 
                 if (cliente.correoEnvioFactura == null || cliente.correoEnvioFactura == "") {
@@ -342,7 +207,7 @@ jQuery(function ($) {
                         content: "Cliente no cuenta con correo para enviarle la factura electrónica, edite el cliente e intente seleccionarlo nuevamente.",
                         buttons: {
                             OK: function () {
-                                window.location = '/Pedido/Pedir';
+                                window.location = '/Requerimiento/Pedir';
                             }
                         }
                     });
@@ -362,35 +227,35 @@ jQuery(function ($) {
 
 
 
-                $('#pedido_direccionEntrega')
+                $('#requerimiento_direccionEntrega')
                     .find('option')
                     .remove()
                     .end()
                     ;
 
-                window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000);    
+                window.setInterval($("#requerimiento_direccionEntrega").trigger("chosen:updated"), 15000);    
               
-                $('#pedido_direccionEntrega').append($('<option>', {
+                $('#requerimiento_direccionEntrega').append($('<option>', {
                     value: "",
                     text: "Seleccione Dirección de Entrega"
                 }));
               
 
                 for (var i = 0; i < direccionEntregaListTmp.length; i++) {
-                    $('#pedido_direccionEntrega').append($('<option>', {
+                    $('#requerimiento_direccionEntrega').append($('<option>', {
                         value: direccionEntregaListTmp[i].idDireccionEntrega,
                         text: direccionEntregaListTmp[i].direccionConSede
                     }));
                 }
-                //$('#pedido_direccionEntrega').trigger('liszt:updated');
-                $('#pedido_direccionEntrega').prop('disabled', false)
+                //$('#requerimiento_direccionEntrega').trigger('liszt:updated');
+                $('#requerimiento_direccionEntrega').prop('disabled', false)
                 
 
-            /*    window.setInterval($("#pedido_direccionEntrega").trigger("liszt:updated"), 15000);  
-                window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000); */
-                $("#pedido_direccionEntrega").trigger("liszt:updated")
-                $("#pedido_direccionEntrega").trigger("chosen:updated")
-                $('#pedido_direccionEntrega').prop('disabled', false)
+            /*    window.setInterval($("#requerimiento_direccionEntrega").trigger("liszt:updated"), 15000);  
+                window.setInterval($("#requerimiento_direccionEntrega").trigger("chosen:updated"), 15000); */
+                $("#requerimiento_direccionEntrega").trigger("liszt:updated")
+                $("#requerimiento_direccionEntrega").trigger("chosen:updated")
+                $('#requerimiento_direccionEntrega').prop('disabled', false)
 
 
                 //Se limpia controles de Ubigeo
@@ -400,44 +265,44 @@ jQuery(function ($) {
                
                 toggleControlesUbigeo();
              
-                $("#pedido_textoCondicionesPago").val(cliente.textoCondicionesPago);
+                $("#requerimiento_textoCondicionesPago").val(cliente.textoCondicionesPago);
 
 
 
                 ///Solicitante
                 var solicitanteListTmp = cliente.solicitanteList;
 
-                $('#pedido_solicitante')
+                $('#requerimiento_solicitante')
                     .find('option')
                     .remove()
                     .end()
                     ;
 
-                $('#pedido_solicitante').append($('<option>', {
+                $('#requerimiento_solicitante').append($('<option>', {
                     value: "",
                     text: "Seleccione Solicitante"
                 }));
 
 
                 for (var i = 0; i < solicitanteListTmp.length; i++) {
-                    $('#pedido_solicitante').append($('<option>', {
+                    $('#requerimiento_solicitante').append($('<option>', {
                         value: solicitanteListTmp[i].idSolicitante,
                         text: solicitanteListTmp[i].nombre
                     }));
                 }
 
                 //To Do: Set horarios
-                $("#pedido_horaEntregaDesde").val(cliente.horaInicioPrimerTurnoEntregaFormat);
-                $("#pedido_horaEntregaHasta").val(cliente.horaFinPrimerTurnoEntregaFormat);
-                $("#pedido_horaEntregaAdicionalDesde").val(cliente.horaInicioSegundoTurnoEntregaFormat);
-                $("#pedido_horaEntregaAdicionalHasta").val(cliente.horaFinSegundoTurnoEntregaFormat);
+                $("#requerimiento_horaEntregaDesde").val(cliente.horaInicioPrimerTurnoEntregaFormat);
+                $("#requerimiento_horaEntregaHasta").val(cliente.horaFinPrimerTurnoEntregaFormat);
+                $("#requerimiento_horaEntregaAdicionalDesde").val(cliente.horaInicioSegundoTurnoEntregaFormat);
+                $("#requerimiento_horaEntregaAdicionalHasta").val(cliente.horaFinSegundoTurnoEntregaFormat);
 
-                $("#pedido_direccionEntrega_descripcion").val("")
-                $("#pedido_direccionEntrega_contacto").val("")
-                $("#pedido_direccionEntrega_telefono").val("")
-                $("#pedido_direccionEntrega_nombre").val("")
-                $("#pedido_direccionEntrega_codigoCliente").val("")
-                $("#pedido_direccionEntrega_direccionDomicilioLegal").val("")  
+                $("#requerimiento_direccionEntrega_descripcion").val("")
+                $("#requerimiento_direccionEntrega_contacto").val("")
+                $("#requerimiento_direccionEntrega_telefono").val("")
+                $("#requerimiento_direccionEntrega_nombre").val("")
+                $("#requerimiento_direccionEntrega_codigoCliente").val("")
+                $("#requerimiento_direccionEntrega_direccionDomicilioLegal").val("")  
                 $("#ActualDepartamento").val("");
                 $("#ActualProvincia").val("");
                 $("#ActualDistrito").val("");
@@ -446,10 +311,10 @@ jQuery(function ($) {
             //    return;
                 location.reload();
 
-                //window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 5000);     
-                //$("#pedido_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
-                //$("#pedido_direccionEntrega").trigger("chosen:updated");
-          /*      $('#pedido_direccionEntrega')
+                //window.setInterval($("#requerimiento_direccionEntrega").trigger("chosen:updated"), 5000);     
+                //$("#requerimiento_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
+                //$("#requerimiento_direccionEntrega").trigger("chosen:updated");
+          /*      $('#requerimiento_direccionEntrega')
                     .val(1)
                     .trigger('liszt:update')
                     .removeClass('chzn-done');
@@ -461,9 +326,9 @@ jQuery(function ($) {
                     width: "220px",
                     no_results_text: "test"
                 });*/
-              //  $('#pedido_direccionEntrega').chosen("destroy").chosen();
-           //     window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000);     
-             //   $("#pedido_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
+              //  $('#requerimiento_direccionEntrega').chosen("destroy").chosen();
+           //     window.setInterval($("#requerimiento_direccionEntrega").trigger("chosen:updated"), 15000);     
+             //   $("#requerimiento_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
                 //location.reload();
             }
         });
@@ -496,7 +361,7 @@ jQuery(function ($) {
 
     $('#modalAgregarDireccion').on('shown.bs.modal', function () {
         $('#direccionEntrega_descripcion').focus();
-   /*     $('#pedido_direccionEntrega option').each(function () {
+   /*     $('#requerimiento_direccionEntrega option').each(function () {
 
             if ($(this).val() == GUID_EMPTY) {
                 alert("");
@@ -559,7 +424,7 @@ jQuery(function ($) {
                 nombreComercial: nombreComercial,
                 ruc: ruc,
                 contacto: contacto,
-                controller: "pedido"
+                controller: "requerimiento"
             },
             error: function (detalle) {
                 alert("Se generó un error al intentar crear el cliente.");
@@ -581,135 +446,8 @@ jQuery(function ($) {
      */
 
 
-    $("#btnSaveDireccion").click(function () {
-
-        if ($("#direccionEntrega_descripcion").val().trim() == "") {
-            alert("Debe ingresar la dirección de entrega.");
-            $('#direccionEntrega_descripcion').focus();
-            return false;
-        }
-
-        if ($("#direccionEntrega_contacto").val().trim() == "") {
-            alert("Debe ingresar el nombre del contacto de entrega.");
-            $('#direccionEntrega_contacto').focus();
-            return false;
-        }
-
-        if ($("#direccionEntrega_telefono").val().trim() == "") {
-            alert("Debe ingresar el telefono del contacto de entrega.");
-            $('#direccionEntrega_telefono').focus();
-            return false;
-        }
-
-        var direccion = $("#direccionEntrega_descripcion").val();
-        var contacto = $("#direccionEntrega_contacto").val();
-        var telefono = $("#direccionEntrega_telefono").val();
-
-        $.ajax({
-            url: "/Pedido/CreateDireccionTemporal",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                direccion: direccion,
-                contacto: contacto,
-                telefono: telefono
-            },
-            error: function (detalle) { alert("Se generó un error al intentar crear la dirección."); },
-            success: function (direccion) {
-
-                $('#pedido_direccionEntrega').append($('<option>', {
-                    value: direccion.idDireccionEntrega,
-                    text: direccion.descripcion
-                }));
-                $('#pedido_direccionEntrega').val(direccion.idDireccionEntrega);
-
-                $('#pedido_direccionEntrega_descripcion').val(direccion.descripcion);
-                $('#pedido_direccionEntrega_contacto').val(direccion.contacto);
-                $('#pedido_direccionEntrega_telefono').val(direccion.telefono);
-                verificarSiExisteNuevaDireccionEntrega();
-                toggleControlesDireccionEntrega();
-            }
-        });
-
-
-        $('#btnCancelDireccion').click();
-
-    });
-
-
-
-
-    $("#btnSaveSolicitante").click(function () {
-
-        if ($("#solicitante_nombre").val().trim() == "") {
-            alert("Debe ingresar el nombre del solicitante.");
-            $('#solicitante_nombre').focus();
-            return false;
-        }
-
-        if ($("#solicitante_telefono").val().trim() == "") {
-            alert("Debe ingresar el telefono del solicitante.");
-            $('#solicitante_telefono').focus();
-            return false;
-        }
-
-        if ($("#solicitante_correo").val().trim() == "") {
-            alert("Debe ingresar el correo del solicitante.");
-            $('#solicitante_correo').focus();
-            return false;
-        }
-
-        var nombre = $("#solicitante_nombre").val();
-        var telefono = $("#solicitante_telefono").val();
-        var correo = $("#solicitante_correo").val();
-
-        $.ajax({
-            url: "/Pedido/CreateSolicitanteTemporal",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                nombre : nombre,
-                telefono: telefono,
-                correo: correo
-            },
-            error: function (detalle) { alert("Se generó un error al intentar crear el solicitante."); },
-            success: function (solicitante) {
-
-                $('#pedido_solicitante').append($('<option>', {
-                    value: solicitante.idSolicitante,
-                    text: solicitante.nombre
-                }));
-                $('#pedido_solicitante').val(solicitante.idSolicitante);
-
-                $('#pedido_solicitante_nombre').val(solicitante.nombre);
-                $('#pedido_solicitante_telefono').val(solicitante.telefono);
-                $('#pedido_solicitante_correo').val(solicitante.correo);
-                verificarSiExisteNuevoSolicitante();
-                toggleControlesSolicitante();
-            }
-        });
-
-
-        $('#btnCancelSolicitante').click();
-
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
+    
     /**
      * ######################## INICIO CONTROLES DE FECHAS
      */
@@ -737,23 +475,23 @@ jQuery(function ($) {
     $("#fechaSolicitud").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitud);
 
     var fechaCreacionDesde = $("#fechaCreacionDesdetmp").val();
-    $("#pedido_fechaCreacionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaCreacionDesde);
+    $("#requerimiento_fechaCreacionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaCreacionDesde);
 
     var fechaCreacionHasta = $("#fechaCreacionHastatmp").val();
-    $("#pedido_fechaCreacionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaCreacionHasta);
+    $("#requerimiento_fechaCreacionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaCreacionHasta);
     
     var fechaEntregaDesde = $("#fechaEntregaDesdetmp").val();
-    $("#pedido_fechaEntregaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
+    $("#requerimiento_fechaEntregaDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaDesde);
 
     var fechaEntregaHasta = $("#fechaEntregaHastatmp").val();
-    $("#pedido_fechaEntregaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
+    $("#requerimiento_fechaEntregaHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEntregaHasta);
     
 
     var fechaProgramacionDesde = $("#fechaProgramacionDesdetmp").val();
-    $("#pedido_fechaProgramacionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacionDesde);
+    $("#requerimiento_fechaProgramacionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacionDesde);
 
     var fechaProgramacionHasta = $("#fechaProgramacionHastatmp").val();
-    $("#pedido_fechaProgramacionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacionHasta);
+    $("#requerimiento_fechaProgramacionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacionHasta);
 
 
     var fechaPrecios = $("#fechaPreciostmp").val();
@@ -769,7 +507,7 @@ jQuery(function ($) {
     $("#documentoVenta_fechaVencimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaVencimiento);
 
 
-    $("#pedido_fechaEntregaExtendida").datepicker({ dateFormat: "dd/mm/yy", minDate: 0 });
+    $("#requerimiento_fechaEntregaExtendida").datepicker({ dateFormat: "dd/mm/yy", minDate: 0 });
 
 
     /**
@@ -779,50 +517,16 @@ jQuery(function ($) {
 
 
     /* ################################## INICIO CHANGE CONTROLES */
+    
 
-    function validarTipoPedido(tipoPedido) {
-        //Si el tipo de pedido es traslado interno (84->'T')
-      /*  if (tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
-            $("#divReferenciaCliente").hide();
-            $("#divCiudadASolicitar").show();
-            $(".mostrarDatosParaGuia").show();
-        }
-        else {*/
-            $("#divReferenciaCliente").show();
-            $("#divCiudadASolicitar").hide();
-
-            if (tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
-              //  || tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
-                || tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
-                || tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-                //   || tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
-            ) {
-                $(".mostrarDatosParaGuia").show();
-            }
-            else {
-                $(".mostrarDatosParaGuia").hide();
-            }
-       // }
-
-
-        
-        
-
-
-
-
-    }
-
-    $("#pedido_tipoPedido").change(function () { 
-        var tipoPedido = $("#pedido_tipoPedido").val();
-        validarTipoPedido(tipoPedido);
-        
-
+    $("#requerimiento_tipoRequerimiento").change(function () { 
+        var tipoRequerimiento = $("#requerimiento_tipoRequerimiento").val();
+ 
         $.ajax({
-            url: "/Pedido/ChangeTipoPedido",
+            url: "/Requerimiento/ChangeTipoRequerimiento",
             type: 'POST',
             data: {
-                tipoPedido: tipoPedido
+                tipoRequerimiento: tipoRequerimiento
             },
             success: function () { }
         });
@@ -832,7 +536,7 @@ jQuery(function ($) {
         var idCiudadASolicitar = $("#idCiudadASolicitar").val();
 
         $.ajax({
-            url: "/Pedido/ChangeIdCiudadASolicitar",
+            url: "/Requerimiento/ChangeIdCiudadASolicitar",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -848,116 +552,81 @@ jQuery(function ($) {
     });  
 
 
-    $("#pedido_sku").change(function () {
-        changeInputString("sku", $("#pedido_sku").val())
+    $("#requerimiento_sku").change(function () {
+        changeInputString("sku", $("#requerimiento_sku").val())
     });
 
-    $("#pedido_numeroReferenciaCliente").change(function () {
-        changeInputString("numeroReferenciaCliente", $("#pedido_numeroReferenciaCliente").val());
-    });
-
-
-    $("#pedido_numeroRequerimiento").change(function () {
-        changeInputString("numeroRequerimiento", $("#pedido_numeroRequerimiento").val());
+    $("#requerimiento_numeroReferenciaCliente").change(function () {
+        changeInputString("numeroReferenciaCliente", $("#requerimiento_numeroReferenciaCliente").val());
     });
 
 
+    $("#requerimiento_numeroRequerimiento").change(function () {
+        changeInputString("numeroRequerimiento", $("#requerimiento_numeroRequerimiento").val());
+    });
 
-    $("#pedido_otrosCargos").change(function () {
+
+
+    $("#requerimiento_otrosCargos").change(function () {
         $.ajax({
-            url: "/Pedido/ChangeOtrosCargos",
+            url: "/Requerimiento/ChangeOtrosCargos",
             type: 'POST',
             data: {
-                otrosCargos: $("#pedido_otrosCargos").val()
+                otrosCargos: $("#requerimiento_otrosCargos").val()
             },
             success: function () { }
         });
     });
 
-    $('#pedido_direccionEntrega').change(function () {
-        toggleControlesDireccionEntrega();
 
-       /*
-        if ($("#pedido_numeroPedido").val() != "") {
-            $.alert({
-                title: 'Advertencia',
-                type: 'orange',
-                content: 'Asegurese de modificar también las observaciones de guía y factura de ser necesario.',
-                buttons: {
-                    OK: function () {
-                        var idDireccionEntrega = $('#pedido_direccionEntrega').val();
-                        $.ajax({
-                            url: "/Pedido/ChangeDireccionEntrega",
-                            type: 'POST',
-                            dataType: 'JSON',
-                            data: {
-                                idDireccionEntrega: idDireccionEntrega
-                            },
-                            success: function (direccionEntrega) {
 
-                                $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);
-                                $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
-                                $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);
-                                location.reload()
-                            }
-                        })
-                    }
-                }
-            });
-        }
-
-        else {*/
-            var idDireccionEntrega = $('#pedido_direccionEntrega').val();
-            $.ajax({
-                url: "/Pedido/ChangeDireccionEntrega",
-                type: 'POST',
-                dataType: 'JSON',
-                data: {
-                    idDireccionEntrega: idDireccionEntrega
-                },
-                success: function (direccionEntrega) {
-
-               /*     $("#pedido_direccionEntrega_telefono").val(direccionEntrega.telefono);
-                    $("#pedido_direccionEntrega_contacto").val(direccionEntrega.contacto);
-                    $("#pedido_direccionEntrega_descripcion").val(direccionEntrega.descripcion);*/
-                    location.reload()
-                }
-            })
-        //}
+    $('#requerimiento_direccionEntrega').change(function () {      
+        var idDireccionEntrega = $('#requerimiento_direccionEntrega').val();
+        $.ajax({
+            url: "/Requerimiento/ChangeDireccionEntrega",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idDireccionEntrega: idDireccionEntrega
+            },
+            success: function (direccionEntrega) {
+                location.reload()
+            }
+        })
     });
 
 
 
 
 
-    $("#pedido_direccionEntrega_descripcion").change(function () {
+    $("#requerimiento_direccionEntrega_descripcion").change(function () {
         $.ajax({
-            url: "/Pedido/ChangeDireccionEntregaDescripcion",
+            url: "/Requerimiento/ChangeDireccionEntregaDescripcion",
             type: 'POST',
             data: {
-                direccionEntregaDescripcion: $("#pedido_direccionEntrega_descripcion").val()
+                direccionEntregaDescripcion: $("#requerimiento_direccionEntrega_descripcion").val()
             },
             success: function () { }
         });
     });
 
-    $("#pedido_direccionEntrega_contacto").change(function () {
+    $("#requerimiento_direccionEntrega_contacto").change(function () {
         $.ajax({
-            url: "/Pedido/ChangeDireccionEntregaContacto",
+            url: "/Requerimiento/ChangeDireccionEntregaContacto",
             type: 'POST',
             data: {
-                direccionEntregaContacto: $("#pedido_direccionEntrega_contacto").val()
+                direccionEntregaContacto: $("#requerimiento_direccionEntrega_contacto").val()
             },
             success: function () { }
         });
     });
     
-    $("#pedido_direccionEntrega_telefono").change(function () {
+    $("#requerimiento_direccionEntrega_telefono").change(function () {
         $.ajax({
-            url: "/Pedido/ChangeDireccionEntregaTelefono",
+            url: "/Requerimiento/ChangeDireccionEntregaTelefono",
             type: 'POST',
             data: {
-                direccionEntregaTelefono: $("#pedido_direccionEntrega_telefono").val()
+                direccionEntregaTelefono: $("#requerimiento_direccionEntrega_telefono").val()
             },
             success: function () { }
         });
@@ -970,71 +639,20 @@ jQuery(function ($) {
             valor = 0;
         }
         $.ajax({
-            url: "/Pedido/ChangeEsPagoContado",
+            url: "/Requerimiento/ChangeEsPagoContado",
             type: 'POST',
             data: {
                 esPagoContado: valor
             },
             dataType: 'JSON',
             success: function (result) {
-                $("#pedido_textoCondicionesPago").val(result.textoCondicionesPago);
+                $("#requerimiento_textoCondicionesPago").val(result.textoCondicionesPago);
             }
         });
     });
 
 
-
-    $('#pedido_solicitante').change(function () {
-        toggleControlesSolicitante();
-        var idSolicitante = $('#pedido_solicitante').val();
-        $.ajax({
-            url: "/Pedido/ChangeSolicitante",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idSolicitante: idSolicitante
-            },
-            success: function (solicitante) {
-                $("#pedido_solicitante_nombre").val(solicitante.nombre);
-                $("#pedido_solicitante_telefono").val(solicitante.telefono);
-                $("#pedido_solicitante_correo").val(solicitante.correo);
-            }
-        })
-    });
-
-    $("#pedido_solicitante_nombre").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeSolicitanteNombre",
-            type: 'POST',
-            data: {
-                solicitanteNombre: $("#pedido_solicitante_nombre").val()
-            },
-            success: function () { }
-        });
-    });
-
-
-    $("#pedido_solicitante_telefono").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeSolicitanteTelefono",
-            type: 'POST',
-            data: {
-                solicitanteTelefono: $("#pedido_solicitante_telefono").val()
-            },
-            success: function () { }
-        });
-    });
-
-    $("#pedido_solicitante_correo").change(function () {
-        $.ajax({
-            url: "/Pedido/ChangeSolicitanteCorreo",
-            type: 'POST',
-            data: {
-                solicitanteCorreo: $("#pedido_solicitante_correo").val()
-            },
-            success: function () { }
-        });
-    });
+    
 
 
 
@@ -1043,7 +661,7 @@ jQuery(function ($) {
         var fechaSolicitud = $("#fechaSolicitud").val();
         var horaSolicitud = $("#horaSolicitud").val();
         $.ajax({
-            url: "/Pedido/ChangeFechaSolicitud",
+            url: "/Requerimiento/ChangeFechaSolicitud",
             type: 'POST',
             data: {
                 fechaSolicitud: fechaSolicitud,
@@ -1064,7 +682,7 @@ jQuery(function ($) {
 
     function changeInputString(propiedad, valor) {
         $.ajax({
-            url: "/Pedido/ChangeInputString",
+            url: "/Requerimiento/ChangeInputString",
             type: 'POST',
             data: {
                 propiedad: propiedad,
@@ -1074,94 +692,94 @@ jQuery(function ($) {
         });
     }
 
-    $("#pedido_horaEntregaDesde").change(function () {
+    $("#requerimiento_horaEntregaDesde").change(function () {
 
-        var horaEntregaDesde = $("#pedido_horaEntregaDesde").val();
-        var horaEntregaHasta = $("#pedido_horaEntregaHasta").val();
+        var horaEntregaDesde = $("#requerimiento_horaEntregaDesde").val();
+        var horaEntregaHasta = $("#requerimiento_horaEntregaHasta").val();
 
         //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
         //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
         if (convertirHoraToNumero(horaEntregaDesde) + 1 > convertirHoraToNumero(horaEntregaHasta)) {
-            $("#pedido_horaEntregaHasta").val(sumarHoras($("#pedido_horaEntregaDesde").val(),1));
-            $("#pedido_horaEntregaHasta").change();
+            $("#requerimiento_horaEntregaHasta").val(sumarHoras($("#requerimiento_horaEntregaDesde").val(),1));
+            $("#requerimiento_horaEntregaHasta").change();
         }
        
-        changeInputString("horaEntregaDesde", $("#pedido_horaEntregaDesde").val());
+        changeInputString("horaEntregaDesde", $("#requerimiento_horaEntregaDesde").val());
     });
 
-    $("#pedido_horaEntregaHasta").change(function () {
-        var horaEntregaDesde = $("#pedido_horaEntregaDesde").val();
-        var horaEntregaHasta = $("#pedido_horaEntregaHasta").val();
+    $("#requerimiento_horaEntregaHasta").change(function () {
+        var horaEntregaDesde = $("#requerimiento_horaEntregaDesde").val();
+        var horaEntregaHasta = $("#requerimiento_horaEntregaHasta").val();
 
         //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
         //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
         if (convertirHoraToNumero(horaEntregaDesde) + 1 > convertirHoraToNumero(horaEntregaHasta)) {
-            $("#pedido_horaEntregaDesde").val(sumarHoras($("#pedido_horaEntregaHasta").val(), -1));
-            $("#pedido_horaEntregaDesde").change();
+            $("#requerimiento_horaEntregaDesde").val(sumarHoras($("#requerimiento_horaEntregaHasta").val(), -1));
+            $("#requerimiento_horaEntregaDesde").change();
         }
-        changeInputString("horaEntregaHasta", $("#pedido_horaEntregaHasta").val());
+        changeInputString("horaEntregaHasta", $("#requerimiento_horaEntregaHasta").val());
 
     });
 
-    $("#pedido_horaEntregaAdicionalDesde").change(function () {
+    $("#requerimiento_horaEntregaAdicionalDesde").change(function () {
 
-        var horaEntregaDesde = $("#pedido_horaEntregaAdicionalDesde").val();
-        var horaEntregaHasta = $("#pedido_horaEntregaAdicionalHasta").val();
+        var horaEntregaDesde = $("#requerimiento_horaEntregaAdicionalDesde").val();
+        var horaEntregaHasta = $("#requerimiento_horaEntregaAdicionalHasta").val();
 
         //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
         //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
         if (convertirHoraToNumero(horaEntregaDesde) + 1 > convertirHoraToNumero(horaEntregaHasta)) {
-            $("#pedido_horaEntregaAdicionalHasta").val(sumarHoras($("#pedido_horaEntregaAdicionalDesde").val(), 1));
-            $("#pedido_horaEntregaAdicionalHasta").change();
+            $("#requerimiento_horaEntregaAdicionalHasta").val(sumarHoras($("#requerimiento_horaEntregaAdicionalDesde").val(), 1));
+            $("#requerimiento_horaEntregaAdicionalHasta").change();
         }
 
-        changeInputString("horaEntregaAdicionalDesde", $("#pedido_horaEntregaAdicionalDesde").val());
+        changeInputString("horaEntregaAdicionalDesde", $("#requerimiento_horaEntregaAdicionalDesde").val());
     });
 
-    $("#pedido_horaEntregaAdicionalHasta").change(function () {
+    $("#requerimiento_horaEntregaAdicionalHasta").change(function () {
 
-        var horaEntregaDesde = $("#pedido_horaEntregaAdicionalDesde").val();
-        var horaEntregaHasta = $("#pedido_horaEntregaAdicionalHasta").val();
+        var horaEntregaDesde = $("#requerimiento_horaEntregaAdicionalDesde").val();
+        var horaEntregaHasta = $("#requerimiento_horaEntregaAdicionalHasta").val();
 
         //Si la hora de entrega desde tiene una diferencia menor a dos horas con la hora entrega hasta
         //Se reemplaza la hora de entraga hasta con la hora entrega desde más dos horas
         if (convertirHoraToNumero(horaEntregaDesde) + 1 > convertirHoraToNumero(horaEntregaHasta)) {
-            $("#pedido_horaEntregaAdicionalDesde").val(sumarHoras($("#pedido_horaEntregaAdicionalHasta").val(), -1));
-            $("#pedido_horaEntregaAdicionalDesde").change();
+            $("#requerimiento_horaEntregaAdicionalDesde").val(sumarHoras($("#requerimiento_horaEntregaAdicionalHasta").val(), -1));
+            $("#requerimiento_horaEntregaAdicionalDesde").change();
         }
 
-        changeInputString("horaEntregaAdicionalHasta", $("#pedido_horaEntregaAdicionalHasta").val());
+        changeInputString("horaEntregaAdicionalHasta", $("#requerimiento_horaEntregaAdicionalHasta").val());
     });
 
-    $("#pedido_numeroReferenciaCliente").change(function () {
-        changeInputString("numeroReferenciaCliente", $("#pedido_numeroReferenciaCliente").val())
+    $("#requerimiento_numeroReferenciaCliente").change(function () {
+        changeInputString("numeroReferenciaCliente", $("#requerimiento_numeroReferenciaCliente").val())
     });
 
-    $("#pedido_observacionesFactura").change(function () {
-        changeInputString("observacionesFactura", $("#pedido_observacionesFactura").val())
+    $("#requerimiento_observacionesFactura").change(function () {
+        changeInputString("observacionesFactura", $("#requerimiento_observacionesFactura").val())
     });
 
-    $("#pedido_observacionesGuiaRemision").change(function () {
-        changeInputString("observacionesGuiaRemision", $("#pedido_observacionesGuiaRemision").val())
+    $("#requerimiento_observacionesGuiaRemision").change(function () {
+        changeInputString("observacionesGuiaRemision", $("#requerimiento_observacionesGuiaRemision").val())
     });
 
 
     
 
-    $("#pedido_contactoPedido").change(function () {
-        changeInputString("contactoPedido", $("#pedido_contactoPedido").val())
+    $("#requerimiento_contactoRequerimiento").change(function () {
+        changeInputString("contactoRequerimiento", $("#requerimiento_contactoRequerimiento").val())
     });
 
-    $("#pedido_telefonoContactoPedido").change(function () {
-        changeInputString("telefonoContactoPedido", $("#pedido_telefonoContactoPedido").val())
+    $("#requerimiento_telefonoContactoRequerimiento").change(function () {
+        changeInputString("telefonoContactoRequerimiento", $("#requerimiento_telefonoContactoRequerimiento").val())
     });
 
-    $("#pedido_correoContactoPedido").change(function () {
-        changeInputString("correoContactoPedido", $("#pedido_correoContactoPedido").val())
+    $("#requerimiento_correoContactoRequerimiento").change(function () {
+        changeInputString("correoContactoRequerimiento", $("#requerimiento_correoContactoRequerimiento").val())
     });
 
-    $("#pedido_observaciones").change(function () {
-        changeInputString("observaciones", $("#pedido_observaciones").val())
+    $("#requerimiento_observaciones").change(function () {
+        changeInputString("observaciones", $("#requerimiento_observaciones").val())
     });
 
     /**
@@ -1216,7 +834,7 @@ jQuery(function ($) {
             minTermLength: 5,
             afterTypeDelay: 300,
             cache: false,
-            url: "/Pedido/SearchProductos"
+            url: "/Requerimiento/SearchProductos"
         }, {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
@@ -1249,7 +867,7 @@ jQuery(function ($) {
         $("#resultadoAgregarProducto").html("");
         desactivarBtnAddProduct();
         $.ajax({
-            url: "/Pedido/GetProducto",
+            url: "/Requerimiento/GetProducto",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1548,10 +1166,10 @@ jQuery(function ($) {
         var idProducto = event.target.getAttribute("class").split(" ")[0];
 
         var idCliente = "";
-        var sessionPedido = "pedido"
+        var sessionRequerimiento = "requerimiento"
         if ($("#pagina").val() == PAGINA_BUSQUEDA_PEDIDOS_VENTA) {
             idCliente = $("#verIdCliente").val();
-            sessionPedido = "pedidoVer";
+            sessionRequerimiento = "requerimientoVer";
         }
         else {
             idCliente = $("#idCliente").val();
@@ -1572,7 +1190,7 @@ jQuery(function ($) {
             data: {
                 idProducto: idProducto,
                 idCliente: idCliente,
-                controller: sessionPedido
+                controller: sessionRequerimiento
             },
             success: function (producto) {
 
@@ -1627,7 +1245,7 @@ jQuery(function ($) {
     $("#considerarDescontinuados").change(function () {
         var considerarDescontinuados = $('#considerarDescontinuados').prop('checked');
         $.ajax({
-            url: "/Pedido/updateConsiderarDescontinuados",
+            url: "/Requerimiento/updateConsiderarDescontinuados",
             type: 'POST',
             data: {
                 considerarDescontinuados: considerarDescontinuados
@@ -1659,7 +1277,7 @@ jQuery(function ($) {
         
 
         $.ajax({
-            url: "/Pedido/AddProducto",
+            url: "/Requerimiento/AddProducto",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1721,8 +1339,8 @@ jQuery(function ($) {
                 }
 
 
-                $('#tableDetallePedido tbody tr.footable-empty').remove();
-                $("#tableDetallePedido tbody").append('<tr data-expanded="true">' +
+                $('#tableDetalleRequerimiento tbody tr.footable-empty').remove();
+                $("#tableDetalleRequerimiento tbody").append('<tr data-expanded="true">' +
                     '<td>' + detalle.idProducto + '</td>' +
                     '<td>' + esPrecioAlternativo + '</td>' +
 
@@ -1752,8 +1370,8 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detordenamiento"></td>' +
                     '</tr > ');
 
-                $('#tableDetallePedido thead tr th.footable-editing').remove();
-                $('#tableDetallePedido tbody tr td.footable-editing').remove();
+                $('#tableDetalleRequerimiento thead tr th.footable-editing').remove();
+                $('#tableDetalleRequerimiento tbody tr td.footable-editing').remove();
 
 
                 $('#montoIGV').html(detalle.igv);
@@ -1782,7 +1400,7 @@ jQuery(function ($) {
                     buttons: {
 
                         OK: function () {
-                            window.location = '/Pedido/Pedir';
+                            window.location = '/Requerimiento/Pedir';
                         }
                     }
                 });
@@ -1901,7 +1519,7 @@ jQuery(function ($) {
 
 
         if (verificarSiExisteDetalle()) {
-            //alert("No deben existir productos agregados al pedido.");
+            //alert("No deben existir productos agregados al requerimiento.");
             return false;
         }
 
@@ -1923,7 +1541,7 @@ jQuery(function ($) {
         });
 
         $.ajax({
-            url: "/Pedido/obtenerProductosAPartirdePreciosRegistrados",
+            url: "/Requerimiento/obtenerProductosAPartirdePreciosRegistrados",
             data: {
                 idCliente: idCliente,
                 idCiudad: idCiudad,
@@ -1934,8 +1552,8 @@ jQuery(function ($) {
             type: 'POST',
             error: function () {
                 $('body').loadingModal('hide')
-               // alert("Ocurrió un error al armar el detalle del pedido a partir de los precios registrados.");
-                //window.location = '/Pedido/Cotizador';
+               // alert("Ocurrió un error al armar el detalle del requerimiento a partir de los precios registrados.");
+                //window.location = '/Requerimiento/Cotizador';
             },
             success: function () {
                 $('body').loadingModal('hide')
@@ -1945,7 +1563,7 @@ jQuery(function ($) {
                     content: "Los productos importados no consideran los precios registrados para un grupo.",
                     buttons: {
                         OK: function () {*/
-                            window.location = '/Pedido/Pedir';
+                            window.location = '/Requerimiento/Pedir';
                /*         }
                     }
                 });*/
@@ -1964,7 +1582,7 @@ jQuery(function ($) {
     ////////CREAR/EDITAR COTIZACIÓN
 
 
-    function validarIngresoDatosObligatoriosPedido() {
+    function validarIngresoDatosObligatoriosRequerimiento() {
 
 
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
@@ -1995,9 +1613,9 @@ jQuery(function ($) {
         }
 
 
-        var tipoPedido = $("#pedido_tipoPedido").val();
-        //Si el tipo de pedido es traslado interno (84->'T')
-      /*  if (tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
+        var tipoRequerimiento = $("#requerimiento_tipoRequerimiento").val();
+        //Si el tipo de requerimiento es traslado interno (84->'T')
+      /*  if (tipoRequerimiento == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
             if ($("#idCiudadASolicitar").val() == "" || $("#idCiudadASolicitar").val() == null) {
                 $("#idCiudadAsolicitar").focus();
                 $.alert({
@@ -2012,8 +1630,8 @@ jQuery(function ($) {
         }*/
 
 
-        if ($("#pedido_numeroReferenciaCliente").val().length > 20) {
-            $("#pedido_numeroReferenciaCliente").focus();
+        if ($("#requerimiento_numeroReferenciaCliente").val().length > 20) {
+            $("#requerimiento_numeroReferenciaCliente").focus();
             $.alert({
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'El número de referencia del cliente no debe contener más de 20 caracteres, si el dato a ingresar es más extenso agreguelo en Observaciones Factura.',
@@ -2024,9 +1642,9 @@ jQuery(function ($) {
             return false;
         }   
 
-        /*if ($("#pedido_numeroReferenciaCliente").val().trim() == "") {
-            alert('Debe ingresar el número de orden de compra o pedido en el campo "Referencia Doc Cliente".');
-            $('#pedido_numeroReferenciaCliente').focus();
+        /*if ($("#requerimiento_numeroReferenciaCliente").val().trim() == "") {
+            alert('Debe ingresar el número de orden de compra o requerimiento en el campo "Referencia Doc Cliente".');
+            $('#requerimiento_numeroReferenciaCliente').focus();
             return false;
         }*/
 
@@ -2034,11 +1652,11 @@ jQuery(function ($) {
 
 
 
-        if (tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
-            //|| tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
-            || tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
-            || tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-        //    || tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
+        if (tipoRequerimiento == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
+            //|| tipoRequerimiento == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
+            || tipoRequerimiento == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
+            || tipoRequerimiento == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
+        //    || tipoRequerimiento == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
         ) {
 
 
@@ -2077,8 +1695,8 @@ jQuery(function ($) {
             }
 
 
-            if ($("#pedido_direccionEntrega").val().trim() == "") {
-                $('#pedido_direccionEntrega').focus();
+            if ($("#requerimiento_direccionEntrega").val().trim() == "") {
+                $('#requerimiento_direccionEntrega').focus();
                 $.alert({
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe seleccionar la dirección de entrega.',
@@ -2089,8 +1707,8 @@ jQuery(function ($) {
                 return false;
             }
 
-            if ($("#pedido_solicitante").val().trim() == "") {
-                $('#pedido_solicitante').focus();
+       /*     if ($("#requerimiento_solicitante").val().trim() == "") {
+                $('#requerimiento_solicitante').focus();
                 $.alert({
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe seleccionar el solicitante.',
@@ -2099,10 +1717,10 @@ jQuery(function ($) {
                     }
                 });
                 return false;
-            }
+            }*/
 
-            if ($("#pedido_direccionEntrega_descripcion").val().trim() == "") {
-                $('#pedido_direccionEntrega_descripcion').focus();
+            if ($("#requerimiento_direccionEntrega_descripcion").val().trim() == "") {
+                $('#requerimiento_direccionEntrega_descripcion').focus();
                 $.alert({
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar la dirección de entrega.',
@@ -2113,8 +1731,8 @@ jQuery(function ($) {
                 return false;
             }
 
-            if ($("#pedido_direccionEntrega_contacto").val().trim() == "") {
-                $('#pedido_direccionEntrega_contacto').focus();
+            if ($("#requerimiento_direccionEntrega_contacto").val().trim() == "") {
+                $('#requerimiento_direccionEntrega_contacto').focus();
                 $.alert({
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar el contacto de entrega.',
@@ -2125,8 +1743,8 @@ jQuery(function ($) {
                 return false;
             }
 
-            if ($("#pedido_direccionEntrega_telefono").val().trim() == "") {
-                $('#pedido_direccionEntrega_telefono').focus();
+            if ($("#requerimiento_direccionEntrega_telefono").val().trim() == "") {
+                $('#requerimiento_direccionEntrega_telefono').focus();
                 $.alert({
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar una el telefono del contacto de entrega.',
@@ -2165,9 +1783,9 @@ jQuery(function ($) {
         }
 
 
-        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
+        var fechaEntregaDesde = $("#requerimiento_fechaEntregaDesde").val();
         if (fechaEntregaDesde.trim() == "") {
-            $("#pedido_fechaEntregaDesde").focus();
+            $("#requerimiento_fechaEntregaDesde").focus();
             $.alert({
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe ingresar la fecha desde cuando se puede realizar la entrega.',
@@ -2178,9 +1796,9 @@ jQuery(function ($) {
             return false;
         }
 
-        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
+        var fechaEntregaHasta = $("#requerimiento_fechaEntregaHasta").val();
         if (fechaEntregaHasta.trim() == "") {
-            $("#pedido_fechaEntregaHasta").focus();
+            $("#requerimiento_fechaEntregaHasta").focus();
             $.alert({
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe ingresar la fecha hasta cuando se puede realizar la entrega.',
@@ -2206,16 +1824,16 @@ jQuery(function ($) {
         }
 
 
-
-        if (tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
-            //|| tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
-            || tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
-            || tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-            //|| tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
+         /*
+        if (tipoRequerimiento == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
+            //|| tipoRequerimiento == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
+            || tipoRequerimiento == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
+            || tipoRequerimiento == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
+            //|| tipoRequerimiento == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
         ) {
 
-            if ($("#pedido_solicitante_nombre").val().trim() == "") {
-                $('#pedido_solicitante_nombre').focus();
+          if ($("#requerimiento_solicitante_nombre").val().trim() == "") {
+                $('#requerimiento_solicitante_nombre').focus();
                 $.alert({
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar el nombre de la persona que realizó la solicitud.',
@@ -2226,10 +1844,10 @@ jQuery(function ($) {
                 return false;
             }
 
+         
 
-
-            if ($("#pedido_solicitante_telefono").val().trim() == "" && $("#pedido_solicitante_correo").val().trim() == "") {
-                $('#pedido_solicitante_telefono').focus();
+            if ($("#requerimiento_solicitante_telefono").val().trim() == "" && $("#requerimiento_solicitante_correo").val().trim() == "") {
+                $('#requerimiento_solicitante_telefono').focus();
                 $.alert({
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar un telefono y/o correo de contacto de entrega.',
@@ -2240,10 +1858,10 @@ jQuery(function ($) {
                 return false;
             }
         }
+        */
 
-
-        if ($("#pedido_observacionesGuiaRemision").val().length > 200) {
-            $("#pedido_observacionesGuiaRemision").focus();
+        if ($("#requerimiento_observacionesGuiaRemision").val().length > 200) {
+            $("#requerimiento_observacionesGuiaRemision").focus();
             $.alert({
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'El campo observaciones guía de remisión no debe contener más de 200 caracteres.',
@@ -2254,8 +1872,8 @@ jQuery(function ($) {
             return false;
         }  
 
-        if ($("#pedido_observacionesFactura").val().length > 200) {
-            $("#pedido_observacionesFactura").focus();
+        if ($("#requerimiento_observacionesFactura").val().length > 200) {
+            $("#requerimiento_observacionesFactura").focus();
             $.alert({
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'El campo observaciones factura no debe contener más de 200 caracteres.',
@@ -2268,9 +1886,9 @@ jQuery(function ($) {
         
       
         /*
-        if ($("#pedido_correoContactoPedido").val().trim() != "" && !$("#pedido_correoContactoPedido").val().match(/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/)) {
+        if ($("#requerimiento_correoContactoRequerimiento").val().trim() != "" && !$("#requerimiento_correoContactoRequerimiento").val().match(/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/)) {
             alert("Debe ingresar un correo válido.");
-            $("#pedido_correoContactoPedido").focus();
+            $("#requerimiento_correoContactoRequerimiento").focus();
             return false;
         }
 
@@ -2285,7 +1903,7 @@ jQuery(function ($) {
         if (contador == 0) {    
             $.alert({
                 title: TITLE_VALIDACION_PEDIDO,
-                content: 'Debe ingresar el detalle del pedido.',
+                content: 'Debe ingresar el detalle del requerimiento.',
                 buttons: {
                     OK: function () { }
                 }
@@ -2315,7 +1933,7 @@ jQuery(function ($) {
     /*CARGA Y DESCARGA DE ARCHIVOS*/
 
 
-    $('input[name=filePedidos]').change(function (e) {
+    $('input[name=fileRequerimientos]').change(function (e) {
         //$('#nombreArchivos').val(e.currentTarget.files);
         var numFiles = e.currentTarget.files.length;
         var nombreArchivos = "";
@@ -2349,7 +1967,7 @@ jQuery(function ($) {
         cargarArchivosAdjuntos(e.currentTarget.files);
         var data = new FormData($('#formularioConArchivos')[0]);
         $.ajax({
-            url: "/Pedido/ChangeFiles",
+            url: "/Requerimiento/ChangeFiles",
             type: 'POST',
             enctype: 'multipart/form-data',
             contentType: false,
@@ -2374,19 +1992,19 @@ jQuery(function ($) {
         $("#files").val("");
         $("#nombreArchivos > li").remove().end();
         $.ajax({
-            url: "/Pedido/DescartarArchivos",
+            url: "/Requerimiento/DescartarArchivos",
             type: 'POST',
             dataType: 'JSON',
             data: { nombreArchivo: nombreArchivo},
             error: function (detalle) { },
-            success: function (pedidoAdjuntoList) {
+            success: function (requerimientoAdjuntoList) {
 
                 $("#nombreArchivos > li").remove().end();
 
-                for (var i = 0; i < pedidoAdjuntoList.length; i++) {
+                for (var i = 0; i < requerimientoAdjuntoList.length; i++) {
 
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedidoAdjuntoList[i].nombre + '</a>' +
-                        '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + pedidoAdjuntoList[i].nombre + '" class="btnDeleteArchivo" /></a>';
+                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + requerimientoAdjuntoList[i].nombre + '</a>' +
+                        '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + requerimientoAdjuntoList[i].nombre + '" class="btnDeleteArchivo" /></a>';
 
                     $('#nombreArchivos').append($('<li />').html(liHTML));
               //      .appendTo($('#nombreArchivos'));
@@ -2402,10 +2020,10 @@ jQuery(function ($) {
 
         //var arrrayClass = event.target.getAttribute("class").split(" ");
         var nombreArchivo = event.target.innerHTML;
-        //var numeroPedido = arrrayClass[1];
+        //var numeroRequerimiento = arrrayClass[1];
 
         $.ajax({
-            url: "/Pedido/Descargar",
+            url: "/Requerimiento/Descargar",
             type: 'POST',
             //  enctype: 'multipart/form-data',
             dataType: 'JSON',
@@ -2433,8 +2051,8 @@ jQuery(function ($) {
     */
 
 
-    function crearPedido(continuarLuego) {
-        if (!validarIngresoDatosObligatoriosPedido())
+    function crearRequerimiento(continuarLuego) {
+        if (!validarIngresoDatosObligatoriosRequerimiento())
             return false;
 
 
@@ -2442,7 +2060,7 @@ jQuery(function ($) {
             text: 'Creando Requerimiento...'
         });
         $.ajax({
-            url: "/Pedido/Create",
+            url: "/Requerimiento/Create",
             type: 'POST',
           //  enctype: 'multipart/form-data',
             dataType: 'JSON',
@@ -2454,23 +2072,26 @@ jQuery(function ($) {
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
-                $("#pedido_numeroPedido").val(resultado.numeroPedido);
-                $("#idPedido").val(resultado.idPedido);
+                $("#requerimiento_numeroRequerimiento").val(resultado.numeroRequerimiento);
+                $("#idRequerimiento").val(resultado.idRequerimiento);
 
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "El Requerimiento número " + resultado.idRequerimiento + " fue ingresado correctamente.",
+                    buttons: {
+                        OK: function () { window.location = '/Requerimiento/Aprobar'; }
+                    }
+                });
+
+                /*
                 if (resultado.estado == ESTADO_INGRESADO) {
-                    $.alert({
-                        title: TITLE_EXITO,
-                        type: 'green',
-                        content: "El Requerimiento número " + resultado.numeroPedido + " fue ingresado correctamente.",
-                        buttons: {
-                            OK: function () { window.location = '/Pedido/Aprobar';  }
-                        }
-                    });
+                   
                      
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    //alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN")
-                    $("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
+                    //alert("El requerimiento número " + resultado.numeroRequerimiento + " fue ingresado correctamente, sin embargo requiere APROBACIÓN")
+                    $("#solicitudIngresoComentario").html("El requerimiento número " + resultado.numeroRequerimiento + " fue ingresado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
                     $("#comentarioPendienteIngreso").val(resultado.observacion);
                     $("#modalComentarioPendienteIngreso").modal({
                         show: true,
@@ -2479,25 +2100,25 @@ jQuery(function ($) {
                     });
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
-                    ConfirmDialog("El Requerimiento número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
+                    ConfirmDialog("El Requerimiento número " + resultado.numeroRequerimiento + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Requerimiento/CancelarCreacionRequerimiento');
                 }
                 else {
-                    mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    window.location = '/Pedido/Aprobar';
+                    mostrarMensajeErrorProceso("El requerimiento ha tenido problemas para ser procesado; Contacte con el Administrador.");
+                    window.location = '/Requerimiento/Aprobar';
                 }
-
+                */
             }
         });
     }
 
-    function editarPedido(continuarLuego) {
-        if (!validarIngresoDatosObligatoriosPedido())
+    function editarRequerimiento(continuarLuego) {
+        if (!validarIngresoDatosObligatoriosRequerimiento())
             return false;
         $('body').loadingModal({
             text: 'Editando Requerimiento...'
         });
         $.ajax({
-            url: "/Pedido/Update",
+            url: "/Requerimiento/Update",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -2509,23 +2130,27 @@ jQuery(function ($) {
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
-                $("#pedido_numeroPedido").val(resultado.numeroPedido);
-                $("#idPedido").val(resultado.idPedido);
+                $("#requerimiento_numeroRequerimiento").val(resultado.numeroRequerimiento);
+                $("#idRequerimiento").val(resultado.idRequerimiento);
+
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "El Requerimiento número " + resultado.numeroRequerimiento + " fue editado correctamente.",
+                    buttons: {
+                        OK: function () { window.location = '/Requerimiento/Aprobar'; }
+                    }
+                });
+
+                /*
 
                 if (resultado.estado == ESTADO_INGRESADO) {
-                    //alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente.");
-                    $.alert({
-                        title: TITLE_EXITO,
-                        type: 'green',
-                        content: "El Requerimiento número " + resultado.numeroPedido + " fue editado correctamente.",
-                        buttons: {
-                            OK: function () { window.location = '/Pedido/Aprobar'; }
-                        }
-                    });
+                    //alert("El requerimiento número " + resultado.numeroRequerimiento + " fue editado correctamente.");
+                  
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    //alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN")
-                    $("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
+                    //alert("El requerimiento número " + resultado.numeroRequerimiento + " fue editado correctamente, sin embargo requiere APROBACIÓN")
+                    $("#solicitudIngresoComentario").html("El requerimiento número " + resultado.numeroRequerimiento + " fue editado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
                     $("#comentarioPendienteIngreso").val(resultado.observacion);
                     $("#modalComentarioPendienteIngreso").modal({
                         show: true,
@@ -2534,24 +2159,24 @@ jQuery(function ($) {
                     });
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
-                    ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
+                    ConfirmDialog("El requerimiento número " + resultado.numeroRequerimiento + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Requerimiento/CancelarCreacionRequerimiento');
                 }
                 else {
-                    //alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    window.location = '/Pedido/Aprobar';
-                }
+                    //alert("El requerimiento ha tenido problemas para ser procesado; Contacte con el Administrador.");
+                    mostrarMensajeErrorProceso("El requerimiento ha tenido problemas para ser procesado; Contacte con el Administrador.");
+                    window.location = '/Requerimiento/Aprobar';
+                }*/
             }
         });
     }
 
     $("#btnCancelarComentario").click(function () {
-        window.location = '/Pedido/CancelarCreacionPedido';
+        window.location = '/Requerimiento/CancelarCreacionRequerimiento';
     });
 
     $("#btnAceptarComentario").click(function () {
-        var codigoPedido = $("#pedido_numeroPedido").val();
-        var idPedido = $("#idPedido").val();
+        var codigoRequerimiento = $("#requerimiento_numeroRequerimiento").val();
+        var idRequerimiento = $("#idRequerimiento").val();
         var observacion = $("#comentarioPendienteIngreso").val();
         var observacionEditable = $("#comentarioPendienteIngresoEditable").val();
         if (observacionEditable.trim().length < 15) {
@@ -2567,9 +2192,9 @@ jQuery(function ($) {
             return false;
         }   
         $.ajax({
-            url: "/Pedido/updateEstadoPedido",
+            url: "/Requerimiento/updateEstadoRequerimiento",
             data: {
-                idPedido: idPedido,
+                idRequerimiento: idRequerimiento,
                 estado: ESTADO_PENDIENTE_APROBACION,
                 observacion: observacionEditable + "\n"+ observacion
             },
@@ -2582,9 +2207,9 @@ jQuery(function ($) {
                 $.alert({
                     title: TITLE_EXITO,
                     type: 'green',
-                    content: "El comentario del estado del pedido número: " + codigoPedido + " fue modificado.",
+                    content: "El comentario del estado del requerimiento número: " + codigoRequerimiento + " fue modificado.",
                     buttons: {
-                        OK: function () { window.location = '/Pedido/Index';  }
+                        OK: function () { window.location = '/Requerimiento/Index';  }
                     }
                 });
                 $("#btnCancelarComentario").click();
@@ -2594,22 +2219,22 @@ jQuery(function ($) {
     });
     /*
         $("#btnAceptarComentarioCrediticio").click(function () {
-            var codigoPedido = $("#pedido_numeroPedido").val();
+            var codigoRequerimiento = $("#requerimiento_numeroRequerimiento").val();
             var observacion = $("#comentarioPendienteIngreso").val();
             $.ajax({
-                url: "/Cotizacion/updateEstadoPedidoCrediticio",
+                url: "/Cotizacion/updateEstadoRequerimientoCrediticio",
                 data: {
-                    codigo: codigoPedido,
+                    codigo: codigoRequerimiento,
                     estado: ESTADO_PENDIENTE_APROBACION,
                     observacion: observacion
                 },
                 type: 'POST',
                 error: function () {
-                    alert("Ocurrió un problema al intentar agregar un comentario al pedido.")
+                    alert("Ocurrió un problema al intentar agregar un comentario al requerimiento.")
                     $("#btnCancelarComentario").click();
                 },
                 success: function () {
-                    alert("El comentario del estado del pedido número: " + codigoPedido + " se cambió correctamente.");
+                    alert("El comentario del estado del requerimiento número: " + codigoRequerimiento + " se cambió correctamente.");
                     $("#btnCancelarComentario").click();
                 }
             });
@@ -2618,22 +2243,22 @@ jQuery(function ($) {
 
 
 
-    $("#btnFinalizarCreacionPedido").click(function () {
-        crearPedido(0);
+    $("#btnFinalizarCreacionRequerimiento").click(function () {
+        crearRequerimiento(0);
     });
 
 
-    $("#btnFinalizarEdicionPedido").click(function () {
-        editarPedido(0);
+    $("#btnFinalizarEdicionRequerimiento").click(function () {
+        editarRequerimiento(0);
     });
 
     
     $("#btnContinuarEditandoLuego").click(function () {
-        if ($("#pedido_numeroPedido").val() == "" || $("#pedido_numeroPedido").val() == null) {
-            crearPedido(1);
+        if ($("#requerimiento_numeroRequerimiento").val() == "" || $("#requerimiento_numeroRequerimiento").val() == null) {
+            crearRequerimiento(1);
         }
         else {
-            editarPedido(1);
+            editarRequerimiento(1);
         }
     });
 
@@ -2721,196 +2346,165 @@ jQuery(function ($) {
 
 
     /*VER PEDIDO*/
-    $(document).on('click', "button.btnVerPedido", function () {
+    $(document).on('click', "button.btnVerRequerimiento", function () {
 
         $('body').loadingModal({
-            text: 'Abriendo Pedido...'
+            text: 'Abriendo Requerimiento...'
         });
         $('body').loadingModal('show');
         activarBotonesVer();
         var arrrayClass = event.target.getAttribute("class").split(" ");
-        var idPedido = arrrayClass[0];
-        var numeroPedido = arrrayClass[1];
+        var idRequerimiento = arrrayClass[0];
+        var numeroRequerimiento = arrrayClass[1];
       //  $("#tableDetalleCotizacion > tbody").empty();
-        showPedido(idPedido);
+        showRequerimiento(idRequerimiento);
      
     });
 
 
-    function showPedido(idPedido) {
+    function showRequerimiento(idRequerimiento) {
         $.ajax({
-            url: "/Pedido/Show",
+            url: "/Requerimiento/Show",
             data: {
-                idPedido: idPedido
+                idRequerimiento: idRequerimiento
             },
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
-                //alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + ".");
+                //alert("Ocurrió un problema al obtener el detalle del Requerimiento N° " + numeroRequerimiento + ".");
                 $('body').loadingModal('hide');
                 mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $('body').loadingModal('hide');
                 //var cotizacion = $.parseJSON(respuesta);
-                var pedido = resultado.pedido;
+                var requerimiento = resultado.requerimiento;
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
 
                 //  var usuario = resultado.usuario;
 
-                $("#verIdPedido").val(pedido.idPedido);
+                $("#verIdRequerimiento").val(requerimiento.idRequerimiento);
 
-                $('#pedido_numeroGrupo')
+                $('#requerimiento_numeroGrupo')
                     .find('option')
                     .remove()
                     .end()
                     ;
-
-                $('#pedido_numeroGrupo').append($('<option>', {
-                    value: 0,
-                    text: "Seleccione Número Grupo"
-                }));
-
-                for (var m = 0; m < pedido.pedidoGrupoList.length; m++) {
-                    $('#pedido_numeroGrupo').append($('<option>', {
-                        value: pedido.pedidoGrupoList[m].numero,
-                        text: pedido.pedidoGrupoList[m].numeroToString + " Solicitado: " + pedido.pedidoGrupoList[m].fechaSolicitudToString
-                    }));
-                }
-
-                $('#pedido_numeroGrupo').val(pedido.numeroGrupoPedido);
+             
 
 
-
-                $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
-                $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
-                $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+                $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(requerimiento.fechaEntregaDesde.substr(0, 10)));
+                $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(requerimiento.fechaEntregaHasta.substr(0, 10)));
+                $("#fechaProgramaciontmp").val(invertirFormatoFecha(requerimiento.fechaEntregaDesde.substr(0, 10)));
                 //Important
+              
+                $("#idRequerimiento").val(requerimiento.idRequerimiento);
 
-                $("#idPedido").val(pedido.idPedido);
-
-                $("#verNumero").html(pedido.numeroPedidoString);
-                if (pedido.numeroGrupoPedidoString == "") {
-                    $("#verNumero").html(pedido.numeroPedidoString);
+                $("#verNumero").html(requerimiento.numeroRequerimientoString);
+                if (requerimiento.numeroGrupoRequerimientoString == "") {
+                    $("#verNumero").html(requerimiento.numeroRequerimientoString);
                 }
                 else {
-                    $("#verNumero").html(pedido.numeroPedidoString + " (" + pedido.numeroGrupoPedidoString + ")");
+                    $("#verNumero").html(requerimiento.numeroRequerimientoString);
                 }
 
-                if (pedido.cotizacion_tipoCotizacion == 0) {
-                    $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString);
+                if (requerimiento.cotizacion_tipoCotizacion == 0) {
+                    $("#verCotizacionCodigo").html(requerimiento.cotizacion_numeroCotizacionString);
                 }
-                else if (pedido.cotizacion_tipoCotizacion == 1) {
-                    $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Transitoria)");
+                else if (requerimiento.cotizacion_tipoCotizacion == 1) {
+                    $("#verCotizacionCodigo").html(requerimiento.cotizacion_numeroCotizacionString + " (Transitoria)");
                 }
-                else if (pedido.cotizacion_tipoCotizacion == 2) {
-                    $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Trivial)");
+                else if (requerimiento.cotizacion_tipoCotizacion == 2) {
+                    $("#verCotizacionCodigo").html(requerimiento.cotizacion_numeroCotizacionString + " (Trivial)");
                 }
 
+              
 
+                $("#verTipoRequerimiento").html(requerimiento.tiposRequerimientoString);
 
-                $("#verTipoPedido").html(pedido.tiposPedidoString);
+                $("#verResponsableComercial").html(requerimiento.cliente_responsableComercial_codigoDescripcion + " " + requerimiento.cliente_responsableComercial_usuario_email);
+                $("#verSupervisorComercial").html(requerimiento.cliente_supervisorComercial_codigoDescripcion + " " + requerimiento.cliente_supervisorComercial_usuario_email);
+                $("#verAsistenteServicioCliente").html(requerimiento.cliente_asistenteServicioCliente_codigoDescripcion + " " + requerimiento.cliente_asistenteServicioCliente_usuario_email);
 
-                $("#verResponsableComercial").html(pedido.cliente_responsableComercial_codigoDescripcion + " " + pedido.cliente_responsableComercial_usuario_email);
-                $("#verSupervisorComercial").html(pedido.cliente_supervisorComercial_codigoDescripcion + " " + pedido.cliente_supervisorComercial_usuario_email);
-                $("#verAsistenteServicioCliente").html(pedido.cliente_asistenteServicioCliente_codigoDescripcion + " " + pedido.cliente_asistenteServicioCliente_usuario_email);
-
-                /*if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
+                /*if (requerimiento.tipoRequerimiento == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
                     $("#divReferenciaCliente").hide();
                     $("#divCiudadSolicitante").show();
-                    $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+                    $("#verCiudadSolicitante").html(requerimiento.cliente.ciudad.nombre);
                 }
                 else {*/
                 $("#divReferenciaCliente").show();
                 $("#divCiudadSolicitante").hide();
                 //}
 
-                $("#verCondicionesPago").html(pedido.textoCondicionesPago);
+                $("#verCondicionesPago").html(requerimiento.textoCondicionesPago);
 
-                $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
+                $("#verFechaHorarioEntrega").html(requerimiento.fechaHorarioEntrega);
 
-                $("#verCiudad").html(pedido.ciudad_nombre);
-                $("#verIdCliente").val(pedido.cliente_idCliente);
-                $("#verCliente").html(pedido.cliente_codigoRazonSocial);
+                $("#verCiudad").html(requerimiento.ciudad_nombre);
+                $("#verIdCliente").val(requerimiento.cliente_idCliente);
+                $("#verCliente").html(requerimiento.cliente_codigoRazonSocial);
 
 
-                $("#verGrupoCliente").html(pedido.grupoCliente_nombre == null ? "" : pedido.grupoCliente_nombre);
+                $("#verGrupoCliente").html(requerimiento.grupoCliente_nombre == null ? "" : requerimiento.grupoCliente_nombre);
+               
+                $("#verNumeroReferenciaCliente").html(requerimiento.numeroReferenciaCliente);
+                $("#verNumeroReferenciaAdicional").html(requerimiento.numeroReferenciaAdicional);
+                $("#verNumeroRequerimiento").html(requerimiento.numeroRequerimiento);
                 
+                $("#verFechaEntregaExtendida").val(requerimiento.fechaEntregaExtendidaString);
 
-                $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
-                $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
-                $("#verNumeroRequerimiento").html(pedido.numeroRequerimiento);
-                
-                $("#verFechaEntregaExtendida").val(pedido.fechaEntregaExtendidaString);
+                $("#verDireccionEntrega").html(requerimiento.direccionEntrega_descripcion);
+                $("#verTelefonoContactoEntrega").html(requerimiento.direccionEntrega_telefono);
+                $("#verContactoEntrega").html(requerimiento.direccionEntrega_contacto);
 
-                $("#verDireccionEntrega").html(pedido.direccionEntrega_descripcion);
-                $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega_telefono);
-                $("#verContactoEntrega").html(pedido.direccionEntrega_contacto);
+                $("#verUsuarioCreacion").html(requerimiento.usuario_nombre);
+                $("#verFechaHoraRegistro").html(requerimiento.fechaHoraRegistro);
 
-                $("#verUsuarioCreacion").html(pedido.usuario_nombre);
-                $("#verFechaHoraRegistro").html(pedido.fechaHoraRegistro);
+                $("#verUbigeoEntrega").html(requerimiento.ubigeoEntrega.ToString);
 
-                $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
+                $("#verContactoRequerimiento").html(requerimiento.contactoRequerimiento);
+                $("#verTelefonoCorreoContactoRequerimiento").html(requerimiento.telefonoCorreoContactoRequerimiento);
 
-                $("#verContactoPedido").html(pedido.contactoPedido);
-                $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
+           
 
 
+                $("#verFechaHoraSolicitud").html(requerimiento.fechaHoraSolicitud);
+
+                $("#verEstado").html(requerimiento.seguimientoRequerimiento_estadoString);
+                $("#verModificadoPor").html(requerimiento.seguimientoRequerimiento_usuario_nombre);
+                $("#verObservacionEstado").html(requerimiento.seguimientoRequerimiento_observacion);
+
+                $("#verEstadoCrediticio").html(requerimiento.seguimientoCrediticioRequerimiento_estadoString);
+                $("#verModificadoCrediticioPor").html(requerimiento.seguimientoCrediticioRequerimiento_usuario_nombre);
+                $("#verObservacionEstadoCrediticio").html(requerimiento.seguimientoCrediticioRequerimiento_observacion);
 
 
-                $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
+                $("#verObservaciones").html(requerimiento.observaciones);
+                $("#verObservacionesFactura").html(requerimiento.observacionesFactura);
+                $("#verObservacionesGuiaRemision").html(requerimiento.observacionesGuiaRemision);
+                $("#verMontoSubTotal").html(Number(requerimiento.montoSubTotal).toFixed(cantidadDecimales));
+                $("#verMontoIGV").html(Number(requerimiento.montoIGV).toFixed(cantidadDecimales));
+                $("#verMontoTotal").html(Number(requerimiento.montoTotal).toFixed(cantidadDecimales));
+                $("#documentoVenta_observaciones").val(requerimiento.observacionesFactura);
 
-                $("#verEstado").html(pedido.seguimientoPedido_estadoString);
-                $("#verModificadoPor").html(pedido.seguimientoPedido_usuario_nombre);
-                $("#verObservacionEstado").html(pedido.seguimientoPedido_observacion);
-
-                $("#verEstadoCrediticio").html(pedido.seguimientoCrediticioPedido_estadoString);
-                $("#verModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido_usuario_nombre);
-                $("#verObservacionEstadoCrediticio").html(pedido.seguimientoCrediticioPedido_observacion);
-
-
-                $("#verObservaciones").html(pedido.observaciones);
-                $("#verObservacionesFactura").html(pedido.observacionesFactura);
-                $("#verObservacionesGuiaRemision").html(pedido.observacionesGuiaRemision);
-                $("#verMontoSubTotal").html(Number(pedido.montoSubTotal).toFixed(cantidadDecimales));
-                $("#verMontoIGV").html(Number(pedido.montoIGV).toFixed(cantidadDecimales));
-                $("#verMontoTotal").html(Number(pedido.montoTotal).toFixed(cantidadDecimales));
-                $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
-
-                /*      $("#verMontoSubTotalVenta").html(Number(pedido.venta.subTotal).toFixed(cantidadDecimales));
-                      $("#verMontoIGVVenta").html(Number(pedido.venta.igv).toFixed(cantidadDecimales));
-                      $("#verMontoTotalVenta").html(Number(pedido.venta.total).toFixed(cantidadDecimales));
+                /*      $("#verMontoSubTotalVenta").html(Number(requerimiento.venta.subTotal).toFixed(cantidadDecimales));
+                      $("#verMontoIGVVenta").html(Number(requerimiento.venta.igv).toFixed(cantidadDecimales));
+                      $("#verMontoTotalVenta").html(Number(requerimiento.venta.total).toFixed(cantidadDecimales));
       */
                 //  nombreArchivos
 
-                $("#nombreArchivos > li").remove().end();
+            
+              
 
+                $("#tableDetalleRequerimiento > tbody").empty();
 
-                for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
-                    $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                }
-
-
-                $("#verNombreArchivos > li").remove().end();
-
-
-                for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
-                    //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                    $('#verNombreArchivos').append($('<li />').html(liHTML));
-                }
-
-
-                $("#tableDetallePedido > tbody").empty();
-
-                FooTable.init('#tableDetallePedido');
+                FooTable.init('#tableDetalleRequerimiento');
 
                 $("#formVerGuiasRemision").html("");
                 $("#formVerNotasIngreso").html("");
 
                 var d = '';
-                var lista = pedido.pedidoDetalleList;
+                var lista = requerimiento.requerimientoDetalleList;
                 for (var i = 0; i < lista.length; i++) {
 
                     var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
@@ -2944,252 +2538,172 @@ jQuery(function ($) {
                         '</tr>';
                 }
 
+             
+
+
+                $("#verRazonSocialSunat").html(requerimiento.cliente_razonSocialSunat);
+                $("#verRUC").html(requerimiento.cliente_ruc);
+                $("#verDireccionDomicilioLegalSunat").html(requerimiento.cliente_direccionDomicilioLegalSunat);
+                $("#verCodigo").html(requerimiento.cliente_codigo);
+
+                $("#documentoVenta_observaciones").val(requerimiento.observacionesFactura);
+                $("#verCorreoEnvioFactura").html(requerimiento.cliente_correoEnvioFactura);
 
 
 
-                $("#verRazonSocialSunat").html(pedido.cliente_razonSocialSunat);
-                $("#verRUC").html(pedido.cliente_ruc);
-                $("#verDireccionDomicilioLegalSunat").html(pedido.cliente_direccionDomicilioLegalSunat);
-                $("#verCodigo").html(pedido.cliente_codigo);
-
-                $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
-                $("#verCorreoEnvioFactura").html(pedido.cliente_correoEnvioFactura);
-
-
-
-                if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
-                    //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
-                    || pedido.tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
-                    || pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-                    //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
-                ) {
-
-                    var guiaRemisionList = pedido.guiaRemisionList;
-                    for (var j = 0; j < guiaRemisionList.length; j++) {
-                        $("#tableDetalleGuia > tbody").empty();
-                        var plantilla = $("#plantillaVerGuiasRemision").html();
-                        var dGuia = '';
-                        var documentoDetalleList = guiaRemisionList[j].documentoDetalle;
-                        for (var k = 0; k < documentoDetalleList.length; k++) {
-
-                            dGuia += '<tr>' +
-                                '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
-                                '<td>' + documentoDetalleList[k].cantidad + '</td>' +
-                                '<td>' + documentoDetalleList[k].unidad + '</td>' +
-                                '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
-                                '</tr>';
-                        }
-
-                        $("#tableDetalleGuia").append(dGuia);
-
-                        plantilla = $("#plantillaVerGuiasRemision").html();
-
-                        plantilla = plantilla.replace("#serieNumero", guiaRemisionList[j].serieNumeroGuia);
-                        plantilla = plantilla.replace("#fechaEmisionGuia", invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
-
-                        plantilla = plantilla.replace("#serieNumeroFactura", guiaRemisionList[j].documentoVenta.serieNumero);
-                        if (guiaRemisionList[j].documentoVenta.fechaEmision != null) {
-                            plantilla = plantilla.replace("#fechaEmisionFactura", invertirFormatoFecha(guiaRemisionList[j].documentoVenta.fechaEmision.substr(0, 10)));
-                        }
-                        else
-                            plantilla = plantilla.replace("#fechaEmisionFactura", "");
-
-
-                        plantilla = plantilla.replace("tableDetalleGuia", "tableDetalleGuia" + j);
-
-                        $("#formVerGuiasRemision").append(plantilla);
-
-                        /*   var tmp = $("#formVerGuiasRemision").html();
-                           tmp = tmp+"asas";*/
-                    }
-
-                }
-                else {
-                    var notaIngresoList = pedido.guiaRemisionList;
-                    for (var j = 0; j < notaIngresoList.length; j++) {
-                        $("#tableDetalleNotaIngreso > tbody").empty();
-                        var plantilla = $("#plantillaVerNotaIngreso").html();
-                        var dGuia = '';
-                        var documentoDetalleList = notaIngresoList[j].documentoDetalle;
-                        for (var k = 0; k < documentoDetalleList.length; k++) {
-
-                            dGuia += '<tr>' +
-                                '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
-                                '<td>' + documentoDetalleList[k].cantidad + '</td>' +
-                                '<td>' + documentoDetalleList[k].unidad + '</td>' +
-                                '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
-                                '</tr>';
-                        }
-
-                        $("#tableDetalleNotaIngreso").append(dGuia);
-
-                        plantilla = $("#plantillaVerNotaIngreso").html();
-
-                        plantilla = plantilla.replace("#serieNumero", notaIngresoList[j].serieNumeroGuia);
-                        plantilla = plantilla.replace("#fechaEmisionNotaIngreso", invertirFormatoFecha(notaIngresoList[j].fechaEmision.substr(0, 10)));
-
-                        plantilla = plantilla.replace("tableDetalleNotaIngreso", "tableDetalleNotaIngreso" + j);
-
-                        $("#formVerNotasIngreso").append(plantilla);
-
-                        /*   var tmp = $("#formVerGuiasRemision").html();
-                           tmp = tmp+"asas";*/
-                    }
-
-                }
-
-
-
+                
                 //  
                 // sleep
-                $("#tableDetallePedido").append(d);
+                $("#tableDetalleRequerimiento").append(d);
 
-                if (pedido.seguimientoPedido_estado != ESTADO_PROGRAMADO
-                    && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO
-                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO
-                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO_PARCIALMENTE
-                    && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO_PARCIALMENTE) {
-                    $("#btnEditarPedido").show();
-                    if (pedido.seguimientoPedido_estado == ESTADO_EN_EDICION) {
-                        $("#btnEditarPedido").html("Continuar Editando");
+                if (requerimiento.seguimientoRequerimiento_estado != ESTADO_PROGRAMADO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_ATENDIDO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_FACTURADO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_FACTURADO_PARCIALMENTE
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_ATENDIDO_PARCIALMENTE) {
+                    $("#btnEditarRequerimiento").show();
+                    if (requerimiento.seguimientoRequerimiento_estado == ESTADO_EN_EDICION) {
+                        $("#btnEditarRequerimiento").html("Continuar Editando");
                     }
                     else {
-                        $("#btnEditarPedido").html("Editar");
+                        $("#btnEditarRequerimiento").html("Editar");
                     }
-                    $("#btnEditarPedido").show();
+                    $("#btnEditarRequerimiento").show();
                 }
                 else {
-                    $("#btnEditarPedido").hide();
+                    $("#btnEditarRequerimiento").hide();
                 }
 
                 //ACTUALIZAR PEDIDO
-                if (pedido.seguimientoPedido_estado != ESTADO_EN_EDICION
-                    && pedido.seguimientoPedido_estado != ESTADO_DENEGADO
-                    && pedido.seguimientoPedido_estado != ESTADO_ELIMINADO) {
-                    $("#btnActualizarPedido").show();
+                if (requerimiento.seguimientoRequerimiento_estado != ESTADO_EN_EDICION
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_DENEGADO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_ELIMINADO) {
+                    $("#btnActualizarRequerimiento").show();
                 }
                 else {
-                    $("#btnActualizarPedido").hide();
+                    $("#btnActualizarRequerimiento").hide();
                 }
 
-
+                
                 /**/
-                if (pedido.seguimientoPedido_estado == ESTADO_ATENDIDO) {
-                    $("#pedido_observacionesGuiaRemision").attr("disabled", "disabled");
+                if (requerimiento.seguimientoRequerimiento_estado == ESTADO_ATENDIDO) {
+                    $("#requerimiento_observacionesGuiaRemision").attr("disabled", "disabled");
                 }
                 else {
-                    $("#pedido_observacionesGuiaRemision").removeAttr("disabled");
+                    $("#requerimiento_observacionesGuiaRemision").removeAttr("disabled");
                 }
 
-                if (pedido.seguimientoPedido_estado == ESTADO_FACTURADO) {
-                    $("#pedido_observacionesFactura").attr("disabled", "disabled");
+                if (requerimiento.seguimientoRequerimiento_estado == ESTADO_FACTURADO) {
+                    $("#requerimiento_observacionesFactura").attr("disabled", "disabled");
                 }
                 else {
-                    $("#pedido_observacionesFactura").removeAttr("disabled");
+                    $("#requerimiento_observacionesFactura").removeAttr("disabled");
                 }
 
 
-
+                
 
                 //APROBAR PEDIDO
                 if (
-                    (pedido.seguimientoPedido_estado == ESTADO_PENDIENTE_APROBACION ||
-                        pedido.seguimientoPedido_estado == ESTADO_DENEGADO)
+                    (requerimiento.seguimientoRequerimiento_estado == ESTADO_PENDIENTE_APROBACION ||
+                        requerimiento.seguimientoRequerimiento_estado == ESTADO_DENEGADO)
                 ) {
 
-                    $("#btnAprobarIngresoPedido").show();
+                    $("#btnAprobarIngresoRequerimiento").show();
                 }
                 else {
-                    $("#btnAprobarIngresoPedido").hide();
+                    $("#btnAprobarIngresoRequerimiento").hide();
                 }
 
-
+                
                 //DENEGAR PEDIDO
-                if (pedido.seguimientoPedido_estado == ESTADO_PENDIENTE_APROBACION) {
+                if (requerimiento.seguimientoRequerimiento_estado == ESTADO_PENDIENTE_APROBACION) {
 
-                    $("#btnDenegarIngresoPedido").show();
+                    $("#btnDenegarIngresoRequerimiento").show();
                 }
                 else {
-                    $("#btnDenegarIngresoPedido").hide();
+                    $("#btnDenegarIngresoRequerimiento").hide();
                 }
 
                 //LIBERAR PEDIDO
                 if (
-                    pedido.seguimientoCrediticioPedido_estado == ESTADO_PENDIENTE_LIBERACION ||
-                    pedido.seguimientoCrediticioPedido_estado == ESTADO_BLOQUEADO
+                    requerimiento.seguimientoCrediticioRequerimiento_estado == ESTADO_PENDIENTE_LIBERACION ||
+                    requerimiento.seguimientoCrediticioRequerimiento_estado == ESTADO_BLOQUEADO
                 ) {
 
-                    $("#btnLiberarPedido").show();
+                    $("#btnLiberarRequerimiento").show();
                 }
                 else {
-                    $("#btnLiberarPedido").hide();
+                    $("#btnLiberarRequerimiento").hide();
                 }
 
                 //BLOQUEAR PEDIDO
                 if (
-                    (pedido.seguimientoCrediticioPedido_estado == ESTADO_PENDIENTE_LIBERACION ||
-                        pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO)
-                    && pedido.seguimientoPedido_estado != ESTADO_ELIMINADO
-                    && pedido.seguimientoPedido_estado != ESTADO_EN_EDICION
-                    && pedido.seguimientoPedido_estado != ESTADO_DENEGADO
-                    && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO
-                    && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO_PARCIALMENTE
-                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO
-                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO_PARCIALMENTE
+                    (requerimiento.seguimientoCrediticioRequerimiento_estado == ESTADO_PENDIENTE_LIBERACION ||
+                        requerimiento.seguimientoCrediticioRequerimiento_estado == ESTADO_LIBERADO)
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_ELIMINADO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_EN_EDICION
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_DENEGADO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_ATENDIDO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_ATENDIDO_PARCIALMENTE
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_FACTURADO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_FACTURADO_PARCIALMENTE
 
                 ) {
 
-                    $("#btnBloquearPedido").show();
+                    $("#btnBloquearRequerimiento").show();
                 }
                 else {
-                    $("#btnBloquearPedido").hide();
+                    $("#btnBloquearRequerimiento").hide();
                 }
-
+                
 
                 //PROGRAMAR PEDIDO
-                if (pedido.seguimientoPedido_estado == ESTADO_INGRESADO
-                    || pedido.seguimientoPedido_estado == ESTADO_ATENDIDO_PARCIALMENTE
+                if (requerimiento.seguimientoRequerimiento_estado == ESTADO_INGRESADO
+                    || requerimiento.seguimientoRequerimiento_estado == ESTADO_ATENDIDO_PARCIALMENTE
                 ) {
 
-                    $("#btnProgramarPedido").show();
+                    $("#btnProgramarRequerimiento").show();
                 }
                 else {
-                    $("#btnProgramarPedido").hide();
+                    $("#btnProgramarRequerimiento").hide();
                 }
 
                 //ATENDER PEDIDO
-                $("#btnAtenderPedidoVenta").hide();
-                $("#btnIngresarPedidoVenta").hide();
+                $("#btnAtenderRequerimientoVenta").hide();
+                $("#btnIngresarRequerimientoVenta").hide();
                 $("#btnVerAtenciones").hide();
                 $("#btnVerIngresos").hide();
 
 
-                if ((pedido.seguimientoPedido_estado == ESTADO_INGRESADO ||
-                    pedido.seguimientoPedido_estado == ESTADO_PROGRAMADO ||
-                    pedido.seguimientoPedido_estado == ESTADO_ATENDIDO_PARCIALMENTE
+                if ((requerimiento.seguimientoRequerimiento_estado == ESTADO_INGRESADO ||
+                    requerimiento.seguimientoRequerimiento_estado == ESTADO_PROGRAMADO ||
+                    requerimiento.seguimientoRequerimiento_estado == ESTADO_ATENDIDO_PARCIALMENTE
                 ) &&
-                    pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO
+                    requerimiento.seguimientoCrediticioRequerimiento_estado == ESTADO_LIBERADO
                 ) {
-                    if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
-                        //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
-                        || pedido.tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
-                        || pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-                        //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
+                    if (requerimiento.tipoRequerimiento == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
+                        //|| requerimiento.tipoRequerimiento == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
+                        || requerimiento.tipoRequerimiento == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
+                        || requerimiento.tipoRequerimiento == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
+                        //|| requerimiento.tipoRequerimiento == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
                     ) {
-                        $("#btnAtenderPedidoVenta").show();
+                        $("#btnAtenderRequerimientoVenta").show();
 
 
 
                     }
                     else {
-                        $("#btnIngresarPedidoVenta").show();
+                        $("#btnIngresarRequerimientoVenta").show();
 
 
                     }
                 }
 
-                if (pedido.seguimientoPedido_estado == ESTADO_RECIBIDO
-                    || pedido.seguimientoPedido_estado == ESTADO_RECIBIDO_PARCIALMENTE
+                
+
+                if (requerimiento.seguimientoRequerimiento_estado == ESTADO_RECIBIDO
+                    || requerimiento.seguimientoRequerimiento_estado == ESTADO_RECIBIDO_PARCIALMENTE
                 ) {
                     $("#btnVerIngresos").show();
                 }
@@ -3197,10 +2711,10 @@ jQuery(function ($) {
                     $("#btnVerIngresos").hide();
                 }
 
-                if (pedido.seguimientoPedido_estado == ESTADO_ATENDIDO
-                    || pedido.seguimientoPedido_estado == ESTADO_ATENDIDO_PARCIALMENTE
-                    || pedido.seguimientoPedido_estado == ESTADO_FACTURADO
-                    || pedido.seguimientoPedido_estado == ESTADO_FACTURADO_PARCIALMENTE
+                if (requerimiento.seguimientoRequerimiento_estado == ESTADO_ATENDIDO
+                    || requerimiento.seguimientoRequerimiento_estado == ESTADO_ATENDIDO_PARCIALMENTE
+                    || requerimiento.seguimientoRequerimiento_estado == ESTADO_FACTURADO
+                    || requerimiento.seguimientoRequerimiento_estado == ESTADO_FACTURADO_PARCIALMENTE
                 ) {
                     $("#btnVerAtenciones").show();
                 }
@@ -3209,50 +2723,50 @@ jQuery(function ($) {
                 }
 
                 //CANCELAR PROGRAMACION
-                if (pedido.seguimientoPedido_estado == ESTADO_PROGRAMADO) {
-                    $("#btnCancelarProgramacionPedido").show();
+                if (requerimiento.seguimientoRequerimiento_estado == ESTADO_PROGRAMADO) {
+                    $("#btnCancelarProgramacionRequerimiento").show();
                 }
                 else {
-                    $("#btnCancelarProgramacionPedido").hide();
+                    $("#btnCancelarProgramacionRequerimiento").hide();
                 }
 
 
                 //PROGRAMAR PEDIDO
-                if ((pedido.seguimientoPedido_estado == ESTADO_ATENDIDO)
-                    && (pedido.documentoVenta_numero == "" || pedido.documentoVenta_numero == null)
+                if ((requerimiento.seguimientoRequerimiento_estado == ESTADO_ATENDIDO)
+                    && (requerimiento.documentoVenta_numero == "" || requerimiento.documentoVenta_numero == null)
                 ) {
                     $("#btnEditarVenta").show();
-                    // $("#btnFacturarPedido").show();
+                    // $("#btnFacturarRequerimiento").show();
                 }
                 else {
                     $("#btnEditarVenta").hide();
-                    // $("#btnFacturarPedido").hide();
+                    // $("#btnFacturarRequerimiento").hide();
                 }
 
 
+                
 
 
 
 
 
-
-                if (pedido.seguimientoPedido_estado != ESTADO_ATENDIDO
-                    && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO_PARCIALMENTE
-                    && pedido.seguimientoPedido_estado != ESTADO_ELIMINADO
-                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO
-                    && pedido.seguimientoPedido_estado != ESTADO_FACTURADO_PARCIALMENTE
-                    && pedido.seguimientoPedido_estado != ESTADO_RECIBIDO
-                    && pedido.seguimientoPedido_estado != ESTADO_RECIBIDO_PARCIALMENTE
+                if (requerimiento.seguimientoRequerimiento_estado != ESTADO_ATENDIDO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_ATENDIDO_PARCIALMENTE
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_ELIMINADO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_FACTURADO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_FACTURADO_PARCIALMENTE
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_RECIBIDO
+                    && requerimiento.seguimientoRequerimiento_estado != ESTADO_RECIBIDO_PARCIALMENTE
                 ) {
 
-                    $("#btnEliminarPedido").show();
+                    $("#btnEliminarRequerimiento").show();
                 }
                 else {
-                    $("#btnEliminarPedido").hide();
+                    $("#btnEliminarRequerimiento").hide();
                 }
-                $("#modalVerPedido").modal('show');
+                $("#modalVerRequerimiento").modal('show');
 
-                //  window.location = '/Pedido/Index';
+                //  window.location = '/Requerimiento/Index';
             }
         });
     }
@@ -3261,14 +2775,14 @@ jQuery(function ($) {
 
 
    
-    $("#btnCancelarPedido").click(function () {
-        ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Pedido/CancelarCreacionPedido', null)
+    $("#btnCancelarRequerimiento").click(function () {
+        ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Requerimiento/CancelarCreacionRequerimiento', null)
     })
 
 
     
 
-    $("#btnFacturarPedido").click(function () {
+    $("#btnFacturarRequerimiento").click(function () {
         $("#facturacion").show(); 
     ;
 
@@ -3281,7 +2795,7 @@ jQuery(function ($) {
       // $('#facturacion').css({ "min-height": 312, "overflow-y": "auto" });
     });
 
-    $("#btnCancelarFacturarPedido").click(function () {
+    $("#btnCancelarFacturarRequerimiento").click(function () {
 
         $("#facturacion").hide();
         activarBotonesVer();
@@ -3306,11 +2820,11 @@ jQuery(function ($) {
   
 
 
-    $("#btnEditarPedido").click(function () {
+    $("#btnEditarRequerimiento").click(function () {
         desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
-            url: "/Pedido/ConsultarSiExistePedido",
+            url: "/Requerimiento/ConsultarSiExisteRequerimiento",
             type: 'POST',
             async: false,
             dataType: 'JSON',
@@ -3318,24 +2832,24 @@ jQuery(function ($) {
                 if (resultado.existe == "false") {
 
                     $.ajax({
-                        url: "/Pedido/iniciarEdicionPedido",
+                        url: "/Requerimiento/iniciarEdicionRequerimiento",
                         type: 'POST',
-                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del pedido."); },
+                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del requerimiento."); },
                         success: function (fileName) {
-                            window.location = '/Pedido/Pedir';
+                            window.location = '/Requerimiento/Pedir';
                         }
                     });
 
                 }
                 else {
                     if(resultado.numero == 0) {
-                        alert('Está creando un nuevo pedido; para continuar por favor diríjase a la página "Crear/Modificar Pedido" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar y Continuar Editando Luego.');
+                        alert('Está creando un nuevo requerimiento; para continuar por favor diríjase a la página "Crear/Modificar Requerimiento" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar y Continuar Editando Luego.');
                     }
                         else {
                         if(resultado.numero == $("#verNumero").html())
-                                alert('Ya se encuentra editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Pedido".');
+                                alert('Ya se encuentra editando el requerimiento número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Requerimiento".');
                             else
-                                alert('Está editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Pedido" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar y Continuar Editando Luego.');
+                                alert('Está editando el requerimiento número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Requerimiento" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar y Continuar Editando Luego.');
                     }
                     activarBotonesVer();
                 }
@@ -3344,11 +2858,11 @@ jQuery(function ($) {
     });
 
 
-    $("#btnGuardarActualizarPedido").click(function () {
+    $("#btnGuardarActualizarRequerimiento").click(function () {
 
         /*    $("#btnGuardarArchivosAdjuntos").click(function () {
         $.ajax({
-            url: "/Pedido/UpdateArchivosAdjuntos",
+            url: "/Requerimiento/UpdateArchivosAdjuntos",
             type: 'POST',
             dataType: 'JSON',
             error: function (detalle) {
@@ -3358,20 +2872,20 @@ jQuery(function ($) {
                 $.alert({
                     title: TITLE_EXITO,
                     type: 'green',
-                    content: "El pedido número " + resultado.numeroPedido + " fue editado correctamente.",
+                    content: "El requerimiento número " + resultado.numeroRequerimiento + " fue editado correctamente.",
                     buttons: {
                        OK: function() {
-                            $("#btnCancelarVerPedido").click();
+                            $("#btnCancelarVerRequerimiento").click();
                         }
-                        //OK: function () { window.location = '/Pedido/Index'; }
+                        //OK: function () { window.location = '/Requerimiento/Index'; }
                     }
                 });
             }
         });
     })*/
 
-        if ($("#pedido_numeroReferenciaCliente2").val().length > 20) {
-            $("#pedido_numeroReferenciaCliente2").focus();
+        if ($("#requerimiento_numeroReferenciaCliente2").val().length > 20) {
+            $("#requerimiento_numeroReferenciaCliente2").focus();
             $.alert({
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'El número de referencia del cliente no debe contener más de 20 caracteres, si el dato a ingresar es más extenso agreguelo en Observaciones Factura.',
@@ -3383,23 +2897,23 @@ jQuery(function ($) {
         }   
 
 
-        var numeroReferenciaCliente = $("#pedido_numeroReferenciaCliente2").val();
-        var numeroReferenciaAdicional = $("#pedido_numeroReferenciaAdicional").val();
+        var numeroReferenciaCliente = $("#requerimiento_numeroReferenciaCliente2").val();
+        var numeroReferenciaAdicional = $("#requerimiento_numeroReferenciaAdicional").val();
 
-        var fechaEntregaExtendida = $("#pedido_fechaEntregaExtendida").val();
+        var fechaEntregaExtendida = $("#requerimiento_fechaEntregaExtendida").val();
 
-        var observaciones = $("#pedido_observaciones").val();
-        var observacionesGuiaRemision = $("#pedido_observacionesGuiaRemision").val();
-        var observacionesFactura = $("#pedido_observacionesFactura").val();
+        var observaciones = $("#requerimiento_observaciones").val();
+        var observacionesGuiaRemision = $("#requerimiento_observacionesGuiaRemision").val();
+        var observacionesFactura = $("#requerimiento_observacionesFactura").val();
 
-        var pedidoNumeroGrupo = $("#pedido_numeroGrupo").val();
+        var requerimientoNumeroGrupo = $("#requerimiento_numeroGrupo").val();
         
 
 
         $.ajax({
-            url: "/Pedido/UpdatePost",
+            url: "/Requerimiento/UpdatePost",
          /*   data: {
-                idPedido: idPedido
+                idRequerimiento: idRequerimiento
             },
            */
             type: 'POST',
@@ -3410,24 +2924,24 @@ jQuery(function ($) {
                 observaciones: observaciones,
                 observacionesGuiaRemision: observacionesGuiaRemision,
                 observacionesFactura: observacionesFactura,
-                pedidoNumeroGrupo: pedidoNumeroGrupo
+                requerimientoNumeroGrupo: requerimientoNumeroGrupo
             },
             dataType: 'JSON',
             error: function (detalle) {
-                //alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + ".");
+                //alert("Ocurrió un problema al obtener el detalle del Requerimiento N° " + numeroRequerimiento + ".");
                 mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
                 $.alert({
                     title: TITLE_EXITO,
                     type: 'green',
-                    content: "El pedido número " + resultado.numeroPedido + " fue actualizado correctamente.",
+                    content: "El requerimiento número " + resultado.numeroRequerimiento + " fue actualizado correctamente.",
                     buttons: {
                         OK: function () {
-                            $("#btnCancelarActualizarPedido").click();
-                            window.location = '/Pedido/Index';
+                            $("#btnCancelarActualizarRequerimiento").click();
+                            window.location = '/Requerimiento/Index';
                         }
-                        //OK: function () { window.location = '/Pedido/Index'; }
+                        //OK: function () { window.location = '/Requerimiento/Index'; }
                     }
                 });
 
@@ -3439,7 +2953,7 @@ jQuery(function ($) {
 
 
 
-    $("#btnActualizarPedido").click(function () {
+    $("#btnActualizarRequerimiento").click(function () {
         $("#verActualizarNumero").html($("#verNumero").html());
         $("#verActualizarCiudad").html($("#verCiudad").html());
         $("#verActualizarCliente").html($("#verCliente").html());
@@ -3448,14 +2962,14 @@ jQuery(function ($) {
         $("#verActualizarMontoIGV").html($("#verMontoIGV").html());
         $("#verActualizarMontoTotal").html($("#verMontoTotal").html());
 
-        $("#pedido_numeroReferenciaCliente2").val($("#verNumeroReferenciaCliente").html());
-        $("#pedido_numeroReferenciaAdicional").val($("#verNumeroReferenciaAdicional").html());
+        $("#requerimiento_numeroReferenciaCliente2").val($("#verNumeroReferenciaCliente").html());
+        $("#requerimiento_numeroReferenciaAdicional").val($("#verNumeroReferenciaAdicional").html());
 
-        $("#pedido_fechaEntregaExtendida").val($("#verFechaEntregaExtendida").val());
+        $("#requerimiento_fechaEntregaExtendida").val($("#verFechaEntregaExtendida").val());
 
-        $("#pedido_observacionesFactura").val($("#verObservacionesFactura").html());
-        $("#pedido_observacionesGuiaRemision").val($("#verObservacionesGuiaRemision").html());
-        $("#pedido_observaciones").val($("#verObservaciones").html());
+        $("#requerimiento_observacionesFactura").val($("#verObservacionesFactura").html());
+        $("#requerimiento_observacionesGuiaRemision").val($("#verObservacionesGuiaRemision").html());
+        $("#requerimiento_observaciones").val($("#verObservaciones").html());
         
     });
 
@@ -3473,35 +2987,35 @@ jQuery(function ($) {
 
 
 
-    $("#btnLiberarPedido").click(function () {
+    $("#btnLiberarRequerimiento").click(function () {
 
         $("#labelNuevoEstadoCrediticio").html(ESTADO_LIBERADO_STR);
         $("#estadoCrediticioId").val(ESTADO_LIBERADO);
         limpiarComentario();
     });
 
-    $("#btnBloquearPedido").click(function () {
+    $("#btnBloquearRequerimiento").click(function () {
 
         $("#labelNuevoEstadoCrediticio").html(ESTADO_BLOQUEADO_STR);
         $("#estadoCrediticioId").val(ESTADO_BLOQUEADO);
         limpiarComentario();
     });
 
-    $("#btnAprobarIngresoPedido").click(function () {
+    $("#btnAprobarIngresoRequerimiento").click(function () {
         $("#modalAprobacionTitle").html(TITULO_APROBAR_INGRESO);
         $("#labelNuevoEstado").html(ESTADO_INGRESADO_STR);
         $("#estadoId").val(ESTADO_INGRESADO);
         limpiarComentario();
     });
 
-    $("#btnEliminarPedido").click(function () {
+    $("#btnEliminarRequerimiento").click(function () {
         $("#modalAprobacionTitle").html(TITULO_ELIMINAR);
         $("#labelNuevoEstado").html(ESTADO_ELIMINADO_STR);
         $("#estadoId").val(ESTADO_ELIMINADO);
         limpiarComentario();
     });
 
-    $("#btnDenegarIngresoPedido").click(function () {
+    $("#btnDenegarIngresoRequerimiento").click(function () {
         $("#modalAprobacionTitle").html(TITULO_DENEGAR_INGRESO);
         $("#labelNuevoEstado").html(ESTADO_DENEGADO_STR);
         $("#estadoId").val(ESTADO_DENEGADO);
@@ -3510,7 +3024,7 @@ jQuery(function ($) {
 
 
 
-    $("#btnCancelarProgramacionPedido").click(function () {
+    $("#btnCancelarProgramacionRequerimiento").click(function () {
         $("#modalAprobacionTitle").html(TITULO_CANCELAR_PROGRAMACION);
         $("#labelNuevoEstado").html(ESTADO_INGRESADO_STR);
         $("#estadoId").val(ESTADO_INGRESADO);
@@ -3535,27 +3049,27 @@ jQuery(function ($) {
 
         if ($("#labelNuevoEstadoCrediticio").html() == ESTADO_BLOQUEADO_STR) {
             if (comentarioEstado.trim() == "") {
-                alert("Cuando Bloquea un pedido debe ingresar un Comentario.");
+                alert("Cuando Bloquea un requerimiento debe ingresar un Comentario.");
                 return false;
             }
         }
         var codigo = $("#verNumero").html();
-        var idPedido = $("#idPedido").val();
+        var idRequerimiento = $("#idRequerimiento").val();
 
         $.ajax({
-            url: "/Pedido/updateEstadoPedidoCrediticio",
+            url: "/Requerimiento/updateEstadoRequerimientoCrediticio",
             data: {
-                idPedido: idPedido,
+                idRequerimiento: idRequerimiento,
                 estado: estado,
                 observacion: comentarioEstado
             },
             type: 'POST',
             error: function () {
-                alert("Ocurrió un problema al intentar cambiar el estado del pedido.")
+                alert("Ocurrió un problema al intentar cambiar el estado del requerimiento.")
                 $("#btnCancelarCambioEstadoCrediticio").click();
             },
             success: function () {
-                alert("El estado crediticio del pedido número: " + codigo + " se cambió correctamente.");
+                alert("El estado crediticio del requerimiento número: " + codigo + " se cambió correctamente.");
                 location.reload();
             }
         });
@@ -3576,22 +3090,22 @@ jQuery(function ($) {
             }
         }
         var codigo = $("#verNumero").html();
-        var idPedido = $("#idPedido").val();        
+        var idRequerimiento = $("#idRequerimiento").val();        
 
         $.ajax({
-            url: "/Pedido/updateEstadoPedido",
+            url: "/Requerimiento/updateEstadoRequerimiento",
             data: {
-                idPedido: idPedido,
+                idRequerimiento: idRequerimiento,
                 estado: estado,
                 observacion: comentarioEstado
             },
             type: 'POST',
             error: function () {
-                alert("Ocurrió un problema al intentar cambiar el estado del pedido.")
+                alert("Ocurrió un problema al intentar cambiar el estado del requerimiento.")
                 $("#btnCancelarCambioEstado").click();
             },
             success: function () {
-                alert("El estado del pedido número: " + codigo + " se cambió correctamente.");
+                alert("El estado del requerimiento número: " + codigo + " se cambió correctamente.");
                 location.reload();
             }
         });
@@ -3609,7 +3123,7 @@ jQuery(function ($) {
     $("input[name=igv]").on("click", function () {
         var igv = $("input[name=igv]:checked").val();
         $.ajax({
-            url: "/Pedido/updateSeleccionIGV",
+            url: "/Requerimiento/updateSeleccionIGV",
             type: 'POST',
             data: {
                 igv: igv
@@ -3626,7 +3140,7 @@ jQuery(function ($) {
     $("#considerarCantidades").change( function () {
         var considerarCantidades = $("#considerarCantidades").val();
         $.ajax({
-            url: "/Pedido/updateSeleccionConsiderarCantidades",
+            url: "/Requerimiento/updateSeleccionConsiderarCantidades",
             type: 'POST',
             data: {
                 considerarCantidades: considerarCantidades
@@ -3651,7 +3165,7 @@ jQuery(function ($) {
     $("input[name=mostrarcodproveedor]").on("click", function () {
         var mostrarcodproveedor = $("input[name=mostrarcodproveedor]:checked").val();
         $.ajax({
-            url: "/Pedido/updateMostrarCodigoProveedor",
+            url: "/Requerimiento/updateMostrarCodigoProveedor",
             type: 'POST',
             data: {
                 mostrarcodproveedor: mostrarcodproveedor
@@ -3666,7 +3180,7 @@ jQuery(function ($) {
     $("#cliente").change(function () {
 
         $.ajax({
-            url: "/Pedido/updateCliente",
+            url: "/Requerimiento/updateCliente",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -3682,7 +3196,7 @@ jQuery(function ($) {
     $("#contacto").change(function () {
 
         $.ajax({
-            url: "/Pedido/updateContacto",
+            url: "/Requerimiento/updateContacto",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -3710,7 +3224,7 @@ jQuery(function ($) {
 
 
         $.ajax({
-            url: "/Pedido/updateFlete",
+            url: "/Requerimiento/updateFlete",
             type: 'POST',
             data: {
                 flete: flete
@@ -3726,7 +3240,7 @@ jQuery(function ($) {
     $("#mostrarCosto").change(function () {
         var mostrarCosto = $('#mostrarCosto').prop('checked') ;
         $.ajax({
-            url: "/Pedido/changeMostrarCosto",
+            url: "/Requerimiento/changeMostrarCosto",
             type: 'POST',
             data: {
                 mostrarCosto: mostrarCosto
@@ -3752,12 +3266,12 @@ jQuery(function ($) {
      * Se definen los eventos de la grilla
      */
     function cargarTablaDetalle() {
-        var $modal = $('#tableDetallePedido'),
-            $editor = $('#tableDetallePedido'),
-            $editorTitle = $('#tableDetallePedido');
+        var $modal = $('#tableDetalleRequerimiento'),
+            $editor = $('#tableDetalleRequerimiento'),
+            $editorTitle = $('#tableDetalleRequerimiento');
 
      
-        ft = FooTable.init('#tableDetallePedido', {
+        ft = FooTable.init('#tableDetalleRequerimiento', {
             editing: {
                 enabled: true,
                 addRow: function () {
@@ -3774,7 +3288,7 @@ jQuery(function ($) {
                     var idProducto = values.idProducto;
                     /*
                                                 $.ajax({
-                                                    url: "/Pedido/DelProducto",
+                                                    url: "/Requerimiento/DelProducto",
                                                     type: 'POST',
                                                     data: {
                                                         idProducto: idProducto
@@ -3935,16 +3449,16 @@ jQuery(function ($) {
         $("#flete").attr('disabled', 'disabled');
         $("#btnOpenAgregarProducto").attr('disabled', 'disabled');
 
-        var codigo = $("#pedido_numeroPedido").val();
+        var codigo = $("#requerimiento_numeroRequerimiento").val();
         if (codigo == "") {
             $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
-            $("#btnFinalizarCreacionPedido").attr('disabled', 'disabled');
-            $("#btnCancelarPedido").attr('disabled', 'disabled');
+            $("#btnFinalizarCreacionRequerimiento").attr('disabled', 'disabled');
+            $("#btnCancelarRequerimiento").attr('disabled', 'disabled');
         }
         else {
             $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
-            $("#btnFinalizarEdicionPedido").attr('disabled', 'disabled');
-            $("#btnCancelarPedido").attr('disabled', 'disabled');
+            $("#btnFinalizarEdicionRequerimiento").attr('disabled', 'disabled');
+            $("#btnCancelarRequerimiento").attr('disabled', 'disabled');
         }
 
         
@@ -4079,7 +3593,7 @@ jQuery(function ($) {
 
         
         $.ajax({
-            url: "/Pedido/ChangeDetalle",
+            url: "/Requerimiento/ChangeDetalle",
             type: 'POST',
             data: json,
             dataType: 'json',
@@ -4211,9 +3725,9 @@ jQuery(function ($) {
     #####################################################*/
 
 
-    $("#btnLimpiarBusquedaPedidos").click(function () {
+    $("#btnLimpiarBusquedaRequerimientos").click(function () {
         $.ajax({
-            url: "/Pedido/CleanBusqueda",
+            url: "/Requerimiento/CleanBusqueda",
             type: 'POST',
             success: function () {
                 location.reload();
@@ -4226,7 +3740,7 @@ jQuery(function ($) {
 
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idPEdido = arrrayClass[0];
-        var numeroPedido = arrrayClass[1];
+        var numeroRequerimiento = arrrayClass[1];
 
         var stockConfirmado = 0;
         if (event.target.checked) {
@@ -4235,7 +3749,7 @@ jQuery(function ($) {
 
 
         $.ajax({
-            url: "/Pedido/UpdateStockConfirmado",
+            url: "/Requerimiento/UpdateStockConfirmado",
             data: {
                 idPEdido: idPEdido,
                 stockConfirmado: stockConfirmado
@@ -4249,172 +3763,11 @@ jQuery(function ($) {
             }
         });
     });
-
-
-    $("#btnBusquedaPedidos").click(function () {
-
-       
-        var idCiudad = $("#idCiudad").val();
-        var idCliente = $("#idCliente").val();
-        var fechaCreacionDesde = $("#pedido_fechaCreacionDesde").val();
-        var fechaCreacionHasta = $("#pedido_fechaCreacionHasta").val();
-        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
-        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
-        var fechaProgramacionDesde = $("#pedido_fechaProgramacionDesde").val();
-        var fechaProgramacionHasta = $("#pedido_fechaProgramacionHasta").val();
-        var pedido_numeroPedido = $("#pedido_numeroPedido").val();
-        var pedido_numeroGrupoPedido = $("#pedido_numeroGrupoPedido").val();
-        var pedido_idGrupoCliente = $("#pedido_idGrupoCliente").val();
-        var estado = $("#estado").val();
-        var estadoCrediticio = $("#estadoCrediticio").val();
-        $("#btnBusquedaPedidos").attr("disabled", "disabled");
-        $.ajax({
-            url: "/Pedido/Search",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idCiudad: idCiudad,
-                idCliente: idCliente,
-                fechaCreacionDesde: fechaCreacionDesde,
-                fechaCreacionHasta: fechaCreacionHasta,
-                fechaEntregaDesde: fechaEntregaDesde,
-                fechaEntregaHasta: fechaEntregaHasta,
-                fechaProgramacionDesde: fechaProgramacionDesde,
-                fechaProgramacionHasta: fechaProgramacionHasta,
-                numero: pedido_numeroPedido,
-                numeroGrupo: pedido_numeroGrupoPedido,
-                idGrupoCliente: pedido_idGrupoCliente,
-                estado: estado,
-                estadoCrediticio: estadoCrediticio
-            },
-            error: function () {
-                $("#btnBusquedaPedidos").removeAttr("disabled");
-            },
-
-            success: function (pedidoList) {
-                $("#btnBusquedaPedidos").removeAttr("disabled");
-
-                $("#tablePedidos > tbody").empty();
-                //FooTable.init('#tableCotizaciones');
-                $("#tablePedidos").footable({
-                    "paging": {
-                        "enabled": true
-                    }
-                });
-
-                for (var i = 0; i < pedidoList.length; i++) {
-
-                      var fechaProgramacion = "No Programado";
-                    if (pedidoList[i].fechaProgramacion != null && pedidoList[i].fechaProgramacion != "")
-                    {
-                        fechaProgramacion = invertirFormatoFecha(pedidoList[i].fechaProgramacion.substr(0, 10));
-                    }
-
-
-                    var stockConfirmado = '';
-                    if (pedidoList[i].stockConfirmado == 1) {
-                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox" checked></input>'
-                    }
-                    else {
-                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox"></input>'
-                    }
-
-                    var stockConfirmadoLectura = '';
-                    if (pedidoList[i].stockConfirmado == 1) {
-                        stockConfirmadoLectura = '<input disabled type="checkbox" checked></input>'
-                    }
-                    else {
-                        stockConfirmadoLectura = '<input disabled type="checkbox"></input>'
-                    }
-
-                  /*  var codigoCliente = pedidoList[i].cliente.codigo;
-                    if (codigoCliente == null || codigoCliente == 'null') {
-                        codigoCliente = '';
-                    }
-                    var numeroReferenciaCliente = pedidoList[i].numeroReferenciaCliente;
-                    if (numeroReferenciaCliente == null || numeroReferenciaCliente == 'null') {
-                        numeroReferenciaCliente = '';
-                    }*/
-
-                    var observaciones = pedidoList[i].observaciones == null || pedidoList[i].observaciones == 'undefined' ? '' : pedidoList[i].observaciones;
-
-                    if (pedidoList[i].observaciones != null && pedidoList[i].observaciones.length > 20) {
-                        var idComentarioCorto = pedidoList[i].idPedido + "corto";
-                        var idComentarioLargo = pedidoList[i].idPedido + "largo";
-                        var idVerMas = pedidoList[i].idPedido + "verMas";
-                        var idVermenos = pedidoList[i].idPedido + "verMenos";
-                        var comentario = pedidoList[i].observaciones.substr(0, 20) + "...";
-
-                        observaciones = '<div id="' + idComentarioCorto + '" style="display:block;">' + comentario + '</div>' +
-                            '<div id="' + idComentarioLargo + '" style="display:none;">' + pedidoList[i].observaciones + '</div>' +
-                            '<p><a id="' + idVerMas + '" class="' + pedidoList[i].idPedido + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
-                            '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
-                    }
-
-
-                    var cantidad1 = 0 
-                    var cantidad2 = 0
-                    for (var j = 0; j < pedidoList[i].pedidoDetalleList.length; j++) {
-                        if (pedidoList[i].pedidoDetalleList[j].producto.sku == 'HJ1F20')
-                            cantidad1 = pedidoList[i].pedidoDetalleList[j].cantidad;
-                        else
-                            cantidad2 = pedidoList[i].pedidoDetalleList[j].cantidad;
-                    }
-
-
-                    
-                    var grupoCliente = pedidoList[i].grupoCliente_nombre == null ? "" : pedidoList[i].grupoCliente_nombre;
-                    var pedido = '<tr data-expanded="true">' +
-                        '<td>  ' + pedidoList[i].idPedido+'</td>' +
-                        '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + '  </td>' +
-                        '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
-                        '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +
-                        '<td>  ' + pedidoList[i].cliente_razonSocial + '</td>' +
-                        '<td>  ' + grupoCliente + '</td>' +
-                        '<td>  ' + pedidoList[i].numeroReferenciaCliente+'  </td>' +
-                        '<td>  ' + pedidoList[i].usuario_nombre + '  </td>' +
-                        '<td>  ' + pedidoList[i].fechaHoraRegistro + '</td>' +
-                        //'<td>  ' + pedidoList[i].fechaHoraSolicitud + '</td>' +                        
-                        '<td>  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
-                        '<td>  ' + pedidoList[i].rangoHoraEntrega + '</td>' + //horarioEntrega
-                        
-                        //'<td>  ' + pedidoList[i].montoTotal + '  </td>' +
-                        '<td>  ' + pedidoList[i].ubigeoEntrega_distrito + '  </td>' +
-                        
-                      //  '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
-                      //  '<td>  ' + observacion+'  </td>' +
-
-                        '<td> ' + observaciones + ' </td>' + 
-                        '<td>  ' + pedidoList[i].montoSubTotal.toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>  ' + pedidoList[i].seguimientoPedido_estadoString + '</td>' +
-                        '<td>  ' + pedidoList[i].seguimientoCrediticioPedido_estadoString + '</td>' +
-                        '<td>' + stockConfirmado + '</td>' +
-                        '<td>' + stockConfirmadoLectura + '</td>' +
-                        '<td>' +
-                        '<button type="button" class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numeroPedido + ' btnVerPedido btn btn-primary ">Ver</button>' +
-                        '</td>' +
-                        '</tr>';
-
-
-                    $("#tablePedidos").append(pedido);
-                 
-                }
-
-                if (pedidoList.length > 0) {
-                    $("#msgBusquedaSinResultados").hide();
-                    $("#divExportButton").show();
-                }
-                else {
-                    $("#msgBusquedaSinResultados").show();
-                    $("#divExportButton").hide();
-                }
-            }
-        });
-    });
+    
 
     $("#btnAprobarSolicitudesPreview").click(function () {
         $.ajax({
-            url: "/Pedido/AprobarTodosPreview",
+            url: "/Requerimiento/AprobarTodosPreview",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -4422,14 +3775,15 @@ jQuery(function ($) {
             error: function () {
             },
             success: function (consolidado) {
+                
                 $("#modalAprobarTodosPreview #verMontoSubTotal").html(consolidado.subTotal.toFixed(cantidadDecimales));
                 $("#modalAprobarTodosPreview #verMontoIGV").html(consolidado.igv.toFixed(cantidadDecimales));
                 $("#modalAprobarTodosPreview #verMontoTotal").html(consolidado.total.toFixed(cantidadDecimales));
-                pedidoList = consolidado.pedidoList;
-                //$("#tableAprobarPedidos").footable();
-
-                $("#tableAprobarPedidos > tbody").empty();
-                $("#tableAprobarPedidos").footable({
+                requerimientoList = consolidado.requerimientoList;
+                //$("#tableAprobarRequerimientos").footable();
+                
+                $("#tableAprobarRequerimientos > tbody").empty();
+                $("#tableAprobarRequerimientos").footable({
                     "paging": {
                         "enabled": true
                     }
@@ -4437,70 +3791,128 @@ jQuery(function ($) {
 
                 var nro = 1;
 
-                for (var i = 0; i < pedidoList.length; i++) {
-
-                    var observaciones = pedidoList[i].observaciones == null || pedidoList[i].observaciones == 'undefined' ? '' : pedidoList[i].observaciones;
-
-                    /*if (pedidoList[i].observaciones != null && pedidoList[i].observaciones.length > 20) {
-                        var idComentarioCorto = pedidoList[i].idPedido + "corto";
-                        var idComentarioLargo = pedidoList[i].idPedido + "largo";
-                        var idVerMas = pedidoList[i].idPedido + "verMas";
-                        var idVermenos = pedidoList[i].idPedido + "verMenos";
-                        var comentario = pedidoList[i].observaciones.substr(0, 20) + "...";
+                for (var i = 0; i < requerimientoList.length; i++) {
+                   
+                    var observaciones = requerimientoList[i].observaciones == null || requerimientoList[i].observaciones == 'undefined' ? '' : requerimientoList[i].observaciones;
+                    
+                    /*if (requerimientoList[i].observaciones != null && requerimientoList[i].observaciones.length > 20) {
+                        var idComentarioCorto = requerimientoList[i].idRequerimiento + "corto";
+                        var idComentarioLargo = requerimientoList[i].idRequerimiento + "largo";
+                        var idVerMas = requerimientoList[i].idRequerimiento + "verMas";
+                        var idVermenos = requerimientoList[i].idRequerimiento + "verMenos";
+                        var comentario = requerimientoList[i].observaciones.substr(0, 20) + "...";
 
                         observaciones = '<div id="' + idComentarioCorto + '" style="display:block;">' + comentario + '</div>' +
-                            '<div id="' + idComentarioLargo + '" style="display:none;">' + pedidoList[i].observaciones + '</div>' +
-                            '<p><a id="' + idVerMas + '" class="' + pedidoList[i].idPedido + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
-                            '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
+                            '<div id="' + idComentarioLargo + '" style="display:none;">' + requerimientoList[i].observaciones + '</div>' +
+                            '<p><a id="' + idVerMas + '" class="' + requerimientoList[i].idRequerimiento + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
+                            '<p><a id="' + idVermenos + '" class="' + requerimientoList[i].idRequerimiento + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                     }*/
 
 
                     var cantidad1 = 0
                     var cantidad2 = 0
                     
-
-                    var direcc = pedidoList[i].direccionEntrega.descripcion + " (" + pedidoList[i].direccionEntrega.nombre + ") " + pedidoList[i].direccionEntrega.ubigeo.Departamento + " - " + pedidoList[i].direccionEntrega.ubigeo.Provincia + " - " + pedidoList[i].direccionEntrega.ubigeo.Distrito;
-
                     
-                    for (j = 0; j < pedidoList[i].pedidoDetalleList.length; j++) {
-                        var pedido = '<tr data-expanded="true">' +
+                    var direcc = requerimientoList[i].direccionEntrega.direccionConSede + ' ' +
+                        requerimientoList[i].direccionEntrega.ubigeo.Departamento + ' - ' +
+                        requerimientoList[i].direccionEntrega.ubigeo.Provincia + ' - ' +
+                        requerimientoList[i].direccionEntrega.ubigeo.Distrito;
+                   
+                    for (j = 0; j < requerimientoList[i].requerimientoDetalleList.length; j++) {
+                        var requerimiento = '<tr data-expanded="true">' +
                             '<td>  ' + nro + '  </td>' +
                             '<td>  ' + direcc + '  </td>' +
-                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].producto.sku + '  </td>' +
-                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].producto.descripcion + '  </td>' +
-                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].unidad + ' </td>' +
-                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
-                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].cantidad + '</td>' +
-                            '<td>  ' + pedidoList[i].pedidoDetalleList[j].subTotal.toFixed(cantidadDecimales) + '</td>' 
+                            '<td>  ' + requerimientoList[i].requerimientoDetalleList[j].producto.sku + '  </td>' +
+                            '<td>  ' + requerimientoList[i].requerimientoDetalleList[j].producto.descripcion + '  </td>' +
+                            '<td>  ' + requerimientoList[i].requerimientoDetalleList[j].unidad + ' </td>' +
+                            '<td>  ' + requerimientoList[i].requerimientoDetalleList[j].precioUnitario.toFixed(cantidadDecimales) + '</td>' +
+                            '<td>  ' + requerimientoList[i].requerimientoDetalleList[j].cantidad + '</td>' +
+                            '<td>  ' + requerimientoList[i].requerimientoDetalleList[j].subTotal.toFixed(cantidadDecimales) + '</td>' 
                             '</tr>';
 
-                        nro = nro + 1;
-                        $("#tableAprobarPedidos").append(pedido);
+                            nro = nro + 1;
+                            
+                        $("#tableAprobarRequerimientos").append(requerimiento);
+                            
                     }
                 }
             }
         });
     });
 
+
+
+    $("#btnGenerarPedidos").click(function () {
+
+
+        var fechaEntregaDesde = $("#requerimiento_fechaEntregaDesdeTodos").val();
+        var fechaEntregaHasta = $("#requerimiento_fechaEntregaHastaTodos").val();
+        var horaEntregaDesde = $("#requerimiento_horaEntregaDesde").val();
+        var horaEntregaHasta = $("#requerimiento_horaEntregaHasta").val();
+        var horaEntregaAdicionalDesde = $("#requerimiento_horaEntregaAdicionalDesde").val();
+        var horaEntregaAdicionalHasta = $("#requerimiento_horaEntregaAdicionalHasta").val();
+
+   
+        $('body').loadingModal({
+            text: 'Creando Pedidos...'
+        });
+        $.ajax({
+            url: "/Requerimiento/CreatePedidos",
+            type: 'POST',
+            data: {
+                fechaEntregaDesde: fechaEntregaDesde,
+                fechaEntregaHasta: fechaEntregaHasta,
+                horaEntregaDesde: horaEntregaDesde,
+                horaEntregaHasta: horaEntregaHasta,
+                horaEntregaAdicionalDesde: horaEntregaAdicionalDesde,
+                horaEntregaAdicionalHasta: horaEntregaAdicionalHasta
+            },            
+            dataType: 'JSON',
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                mostrarMensajeErrorProceso(detalle.responseText);
+            },
+            success: function (resultado) {
+                $('body').loadingModal('hide')
+             /*   $("#requerimiento_numeroRequerimiento").val(resultado.numeroRequerimiento);
+                $("#idRequerimiento").val(resultado.idRequerimiento);*/
+
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "Los Pedidos fueron creados correctamente.",
+                    buttons: {
+                        OK: function () { window.location = '/Pedido/Index'; }
+                    }
+                });
+
+               
+            }
+        })
+    });
+
+
+
+
     $("#btnBusquedaRequerimientos").click(function () {
 
 
         var idCiudad = $("#idCiudad").val();
         var idCliente = $("#idCliente").val();
-        var fechaCreacionDesde = $("#pedido_fechaCreacionDesde").val();
-        var fechaCreacionHasta = $("#pedido_fechaCreacionHasta").val();
-        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
-        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
-        var fechaProgramacionDesde = $("#pedido_fechaProgramacionDesde").val();
-        var fechaProgramacionHasta = $("#pedido_fechaProgramacionHasta").val();
-        var pedido_numeroPedido = $("#pedido_numeroPedido").val();
-        var pedido_numeroGrupoPedido = $("#pedido_numeroGrupoPedido").val();
-        var pedido_idGrupoCliente = $("#pedido_idGrupoCliente").val();
+        var fechaCreacionDesde = $("#requerimiento_fechaCreacionDesde").val();
+        var fechaCreacionHasta = $("#requerimiento_fechaCreacionHasta").val();
+        var fechaEntregaHasta = $("#requerimiento_fechaEntregaHasta").val();
+        var fechaEntregaDesde = $("#requerimiento_fechaEntregaDesde").val();
+        var fechaProgramacionDesde = $("#requerimiento_fechaProgramacionDesde").val();
+        var fechaProgramacionHasta = $("#requerimiento_fechaProgramacionHasta").val();
+        var requerimiento_idRequerimiento = $("#requerimiento_idRequerimiento").val();
+        var requerimiento_numeroGrupoRequerimiento = $("#requerimiento_numeroGrupoRequerimiento").val();
+        var requerimiento_idGrupoCliente = $("#requerimiento_idGrupoCliente").val();
         var estado = $("#estado").val();
         var estadoCrediticio = $("#estadoCrediticio").val();
-        $("#btnBusquedaPedidos").attr("disabled", "disabled");
+        $("#btnBusquedaRequerimientos").attr("disabled", "disabled");
         $.ajax({
-            url: "/Pedido/SearchRequerimientos",
+            url: "/Requerimiento/Search",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -4512,9 +3924,9 @@ jQuery(function ($) {
                 fechaEntregaHasta: fechaEntregaHasta,
                 fechaProgramacionDesde: fechaProgramacionDesde,
                 fechaProgramacionHasta: fechaProgramacionHasta,
-                numero: pedido_numeroPedido,
-                numeroGrupo: pedido_numeroGrupoPedido,
-                idGrupoCliente: pedido_idGrupoCliente,
+                numero: requerimiento_idRequerimiento,
+                numeroGrupo: requerimiento_numeroGrupoRequerimiento,
+                idGrupoCliente: requerimiento_idGrupoCliente,
                 estado: estado,
                 estadoCrediticio: estadoCrediticio
             },
@@ -4522,128 +3934,109 @@ jQuery(function ($) {
                 $("#btnBusquedaRequerimientos").removeAttr("disabled");
             },
 
-            success: function (pedidoList) {
+            success: function (requerimientoList) {
 
+                //var requerimientoSearch = resultado.requerimiento;
+                //var requerimientoList = resultado.requerimientoList;
+        
                 $("#tableProductos").footable();
 
                 $("#btnBusquedaRequerimientos").removeAttr("disabled");
 
-                $("#tablePedidos > tbody").empty();
+                $("#tableRequerimientos > tbody").empty();
                 //FooTable.init('#tableCotizaciones');
-                $("#tablePedidos").footable({
+                $("#tableRequerimientos").footable({
                     "paging": {
                         "enabled": true
                     }
                 });
 
-                for (var i = 0; i < pedidoList.length; i++) {
+                for (var i = 0; i < requerimientoList.length; i++) {
+                
 
-                    var fechaProgramacion = "No Programado";
-                    if (pedidoList[i].fechaProgramacion != null && pedidoList[i].fechaProgramacion != "") {
-                        fechaProgramacion = invertirFormatoFecha(pedidoList[i].fechaProgramacion.substr(0, 10));
-                    }
+                    var observaciones = requerimientoList[i].observaciones == null || requerimientoList[i].observaciones == 'undefined' ? '' : requerimientoList[i].observaciones;
 
-
-                    var stockConfirmado = '';
-                    if (pedidoList[i].stockConfirmado == 1) {
-                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox" checked></input>'
-                    }
-                    else {
-                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox"></input>'
-                    }
-
-                    var stockConfirmadoLectura = '';
-                    if (pedidoList[i].stockConfirmado == 1) {
-                        stockConfirmadoLectura = '<input disabled type="checkbox" checked></input>'
-                    }
-                    else {
-                        stockConfirmadoLectura = '<input disabled type="checkbox"></input>'
-                    }
-
-                    /*  var codigoCliente = pedidoList[i].cliente.codigo;
-                      if (codigoCliente == null || codigoCliente == 'null') {
-                          codigoCliente = '';
-                      }
-                      var numeroReferenciaCliente = pedidoList[i].numeroReferenciaCliente;
-                      if (numeroReferenciaCliente == null || numeroReferenciaCliente == 'null') {
-                          numeroReferenciaCliente = '';
-                      }*/
-
-                    var observaciones = pedidoList[i].observaciones == null || pedidoList[i].observaciones == 'undefined' ? '' : pedidoList[i].observaciones;
-
-                    if (pedidoList[i].observaciones != null && pedidoList[i].observaciones.length > 20) {
-                        var idComentarioCorto = pedidoList[i].idPedido + "corto";
-                        var idComentarioLargo = pedidoList[i].idPedido + "largo";
-                        var idVerMas = pedidoList[i].idPedido + "verMas";
-                        var idVermenos = pedidoList[i].idPedido + "verMenos";
-                        var comentario = pedidoList[i].observaciones.substr(0, 20) + "...";
+                    if (requerimientoList[i].observaciones != null && requerimientoList[i].observaciones.length > 20) {
+                        var idComentarioCorto = requerimientoList[i].idRequerimiento + "corto";
+                        var idComentarioLargo = requerimientoList[i].idRequerimiento + "largo";
+                        var idVerMas = requerimientoList[i].idRequerimiento + "verMas";
+                        var idVermenos = requerimientoList[i].idRequerimiento + "verMenos";
+                        var comentario = requerimientoList[i].observaciones.substr(0, 20) + "...";
 
                         observaciones = '<div id="' + idComentarioCorto + '" style="display:block;">' + comentario + '</div>' +
-                            '<div id="' + idComentarioLargo + '" style="display:none;">' + pedidoList[i].observaciones + '</div>' +
-                            '<p><a id="' + idVerMas + '" class="' + pedidoList[i].idPedido + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
-                            '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
+                            '<div id="' + idComentarioLargo + '" style="display:none;">' + requerimientoList[i].observaciones + '</div>' +
+                            '<p><a id="' + idVerMas + '" class="' + requerimientoList[i].idRequerimiento + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
+                            '<p><a id="' + idVermenos + '" class="' + requerimientoList[i].idRequerimiento + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                     }
 
+                  
+                
 
-                    var cantidad1 = 0
-                    var cantidad2 = 0
-                    for (var j = 0; j < pedidoList[i].pedidoDetalleList.length; j++) {
-                        if (pedidoList[i].pedidoDetalleList[j].producto.sku == 'HJ1F20')
-                            cantidad1 = pedidoList[i].pedidoDetalleList[j].cantidad;
-                        else
-                            cantidad2 = pedidoList[i].pedidoDetalleList[j].cantidad;
-                    }
-
-
+                  
                     var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
-                    if (pedidoList[i].excedioPresupuesto)
+                    if (requerimientoList[i].excedioPresupuesto)
                         imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"><img class="table-product-img " src="/images/semaforo_rojo_small.png" srcset="semaforo_rojo_min.png 2x"/></a>';
                     /*    imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"> <img class="table-product-img" src="/images/semaforo_naranja_small.png" srcset="semaforo_naranja_min.png 2x"/></a>';
                     else if (lista[i].indicadorAprobacion == 3)*/
                         
-
-
-                    var grupoCliente = pedidoList[i].grupoCliente_nombre == null ? "" : pedidoList[i].grupoCliente_nombre;
-                    var pedido = '<tr data-expanded="true">' +
-                        '<td>  ' + pedidoList[i].idPedido + '</td>' +
-                        '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + '  </td>' +
-                        '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
-                        '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +
-                        '<td>  ' + pedidoList[i].cliente_razonSocial + '</td>' +
+                    //requerimientoList[i].numeroRequerimientoNumeroGrupoString
+                    //requerimientoList[i].seguimientoCrediticioRequerimiento_estadoString
+                
+                    var grupoCliente = requerimientoList[i].grupoCliente_nombre == null ? "" : requerimientoList[i].grupoCliente_nombre;
+          
+                    var requerimiento = '<tr data-expanded="true">' +
+                        '<td>  ' + requerimientoList[i].idRequerimiento + '</td>' +
+                        '<td>  ' + requerimientoList[i].idRequerimiento + '  </td>' +
+                        '<td>  ' + requerimientoList[i].ciudad_nombre + '  </td>' +
+                        '<td>  ' + requerimientoList[i].cliente_codigo + ' </td>' +
+                        '<td>  ' + requerimientoList[i].cliente_razonSocial + '</td>' +
                         '<td>  ' + grupoCliente + '</td>' +
-                        '<td>  ' + pedidoList[i].numeroReferenciaCliente + '  </td>' +
-                        '<td>  ' + pedidoList[i].usuario_nombre + '  </td>' +
-                        '<td>  ' + pedidoList[i].fechaHoraRegistro + '</td>' +
-                        //'<td>  ' + pedidoList[i].fechaHoraSolicitud + '</td>' +                        
-                        '<td>  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
-                        '<td>  ' + pedidoList[i].rangoHoraEntrega + '</td>' + //horarioEntrega
+                        '<td>  ' + requerimientoList[i].numeroReferenciaCliente + '  </td>' +
+                        '<td>  ' + requerimientoList[i].usuario_nombre + '  </td>' +
+                        '<td>  ' + requerimientoList[i].fechaHoraRegistro + '</td>' +
+                        '<td>  ' + requerimientoList[i].rangoFechasEntrega + '</td>' +
+                        '<td>  ' + requerimientoList[i].rangoHoraEntrega + '</td>' +
+                        '<td>  ' + requerimientoList[i].ubigeoEntrega_distrito + '  </td>' +
 
-                        //'<td>  ' + pedidoList[i].montoTotal + '  </td>' +
-                        '<td>  ' + pedidoList[i].ubigeoEntrega_distrito + '  </td>' +
+                        '<td>  ' + 'A' + '</td>' +
+                        '<td> ' + observaciones + ' </td>';
 
-                        //  '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
-                        //  '<td>  ' + observacion+'  </td>' +
-                        '<td>  ' + pedidoList[i].seguimientoCrediticioPedido_estadoString + '</td>' +
-                        '<td> ' + observaciones + ' </td>' +
-                        '<td> ' + cantidad1 + ' </td>' +
-                        '<td> ' + cantidad2 + ' </td>' +
-                        '<td>  ' + pedidoList[i].montoSubTotal.toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>  ' + pedidoList[i].estadoSolicitudString + '</td>' +
-                        '<td>' + stockConfirmado + '</td>' +
-                        '<td>' + stockConfirmadoLectura + '</td>' +
-                        '<td>' + pedidoList[i].topePresupuesto.toFixed(cantidadDecimales) + '  </td>' +
+                    /*    for (var j = 0; j < requerimientoSearch.requerimientoDetalleList.length; j++) 
+                        {*/
+                        for (j = 0; j < requerimientoList[i].requerimientoDetalleList.length; j++) {                          
+
+                            for (var k = 0; k < requerimientoList[i].requerimientoDetalleList.length; k++)
+                            {
+                                //alert(requerimientoList[i].requerimientoDetalleList[k].producto.sku + $("#productosku"+k).val())
+                                if (requerimientoList[i].requerimientoDetalleList[k].producto.sku == $("#productosku"+j).val())
+                                {
+                                    //alert("p")
+                                    requerimiento = requerimiento + '<td> ' + requerimientoList[i].requerimientoDetalleList[k].cantidad + ' </td>';
+                                    break;
+                                }                                
+                            }
+                        };
+                  /*      }*/
+
+                    
+
+                        requerimiento = requerimiento + '<td>  ' + requerimientoList[i].montoSubTotal.toFixed(cantidadDecimales) + '  </td>' +
+                        '<td>  ' + requerimientoList[i].estadoRequerimientoString + '</td>' +
+                        '<td>' + false + '</td>' +
+                        '<td>' + false + '</td>' +
+                        '<td>' + requerimientoList[i].topePresupuesto.toFixed(cantidadDecimales) + '  </td>' +
                         '<td>' + imgIndicadorAprobacion + '</td>' +
                         '<td>' +
-                        '<button type="button" class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numeroPedido + ' btnVerPedido btn btn-primary ">Ver</button>' +
+                        '<button type="button" class="' + requerimientoList[i].idRequerimiento + ' ' + requerimientoList[i].idRequerimiento + ' btnVerRequerimiento btn btn-primary ">Ver</button>' +
                         '</td>' +
+
                         '</tr>';
 
-
-                    $("#tablePedidos").append(pedido);
+                    $("#tableRequerimientos").append(requerimiento);
 
                 }
 
-                if (pedidoList.length > 0) {
+                if (requerimientoList.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
                     $("#divExportButton").show();
                 }
@@ -4655,10 +4048,10 @@ jQuery(function ($) {
         });
     });
 
-    $("#pedido_fechaSolicitudDesde").change(function () {
-        var fechaSolicitudDesde = $("#pedido_fechaSolicitudDesde").val();
+    $("#requerimiento_fechaSolicitudDesde").change(function () {
+        var fechaSolicitudDesde = $("#requerimiento_fechaSolicitudDesde").val();
         $.ajax({
-            url: "/Pedido/ChangeFechaSolicitudDesde",
+            url: "/Requerimiento/ChangeFechaSolicitudDesde",
             type: 'POST',
             data: {
                 fechaSolicitudDesde: fechaSolicitudDesde
@@ -4668,10 +4061,10 @@ jQuery(function ($) {
         });
     });
 
-    $("#pedido_fechaSolicitudHasta").change(function () {
-        var fechaSolicitudHasta = $("#pedido_fechaSolicitudHasta").val();
+    $("#requerimiento_fechaSolicitudHasta").change(function () {
+        var fechaSolicitudHasta = $("#requerimiento_fechaSolicitudHasta").val();
         $.ajax({
-            url: "/Pedido/ChangeFechaSolicitudHasta",
+            url: "/Requerimiento/ChangeFechaSolicitudHasta",
             type: 'POST',
             data: {
                 fechaSolicitudHasta: fechaSolicitudHasta
@@ -4681,20 +4074,20 @@ jQuery(function ($) {
         });
     });
     
-    $("#pedido_fechaEntregaDesde").change(function () {
-        var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
-        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
+    $("#requerimiento_fechaEntregaDesde").change(function () {
+        var fechaEntregaDesde = $("#requerimiento_fechaEntregaDesde").val();
+        var fechaEntregaHasta = $("#requerimiento_fechaEntregaHasta").val();
 
         //Si fecha de entrega hasta es superior a fecha de entrega desde o la fecha de entrega hasta es vacío
         //se reemplaza el valor por la fecha de entrega desde
         if (convertirFechaNumero(fechaEntregaHasta) < convertirFechaNumero(fechaEntregaDesde)
             || fechaEntregaHasta.trim() == "" ) {
-            $("#pedido_fechaEntregaHasta").val(fechaEntregaDesde);
-            $("#pedido_fechaEntregaHasta").change();
+            $("#requerimiento_fechaEntregaHasta").val(fechaEntregaDesde);
+            $("#requerimiento_fechaEntregaHasta").change();
         }
 
         $.ajax({
-            url: "/Pedido/ChangeFechaEntregaDesde",
+            url: "/Requerimiento/ChangeFechaEntregaDesde",
             type: 'POST',
             data: {
                 fechaEntregaDesde: fechaEntregaDesde
@@ -4704,10 +4097,10 @@ jQuery(function ($) {
         });
     });
 
-    $("#pedido_fechaEntregaHasta").change(function () {
-        var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
+    $("#requerimiento_fechaEntregaHasta").change(function () {
+        var fechaEntregaHasta = $("#requerimiento_fechaEntregaHasta").val();
         $.ajax({
-            url: "/Pedido/ChangeFechaEntregaHasta",
+            url: "/Requerimiento/ChangeFechaEntregaHasta",
             type: 'POST',
             data: {
                 fechaEntregaHasta: fechaEntregaHasta
@@ -4719,10 +4112,10 @@ jQuery(function ($) {
 
 
 
-    $("#pedido_numeroPedido").change(function () {
-        var numero = $("#pedido_numeroPedido").val();
+    $("#requerimiento_idRequerimiento").change(function () {
+        var numero = $("#requerimiento_idRequerimiento").val();
         $.ajax({
-            url: "/Pedido/changeNumero",
+            url: "/Requerimiento/changeNumero",
             type: 'POST',
             data: {
                 numero: numero
@@ -4732,10 +4125,10 @@ jQuery(function ($) {
         });
     });
 
-    $("#pedido_numeroGrupoPedido").change(function () {
-        var numeroGrupo = $("#pedido_numeroGrupoPedido").val();
+    $("#requerimiento_numeroGrupoRequerimiento").change(function () {
+        var numeroGrupo = $("#requerimiento_numeroGrupoRequerimiento").val();
         $.ajax({
-            url: "/Pedido/changeNumeroGrupo",
+            url: "/Requerimiento/changeNumeroGrupo",
             type: 'POST',
             data: {
                 numeroGrupo: numeroGrupo
@@ -4745,10 +4138,10 @@ jQuery(function ($) {
         });
     });
 
-    $("#pedido_idGrupoCliente").change(function () {
-        var idGrupoCliente = $("#pedido_idGrupoCliente").val();
+    $("#requerimiento_idGrupoCliente").change(function () {
+        var idGrupoCliente = $("#requerimiento_idGrupoCliente").val();
         $.ajax({
-            url: "/Pedido/ChangeIdGrupoCliente",
+            url: "/Requerimiento/ChangeIdGrupoCliente",
             type: 'POST',
             data: {
                 idGrupoCliente: idGrupoCliente
@@ -4759,10 +4152,10 @@ jQuery(function ($) {
     });
     
 
-    $("#pedido_buscarSedesGrupoCliente").change(function () {
-        var valor = $("input[name=pedido_buscarSedesGrupoCliente]:checked").val();
+    $("#requerimiento_buscarSedesGrupoCliente").change(function () {
+        var valor = $("input[name=requerimiento_buscarSedesGrupoCliente]:checked").val();
         $.ajax({
-            url: "/Pedido/ChangeBuscarSedesGrupoCliente",
+            url: "/Requerimiento/ChangeBuscarSedesGrupoCliente",
             type: 'POST',
             data: {
                 buscarSedesGrupoCliente: valor
@@ -4775,7 +4168,7 @@ jQuery(function ($) {
     $("#estado").change(function () {
         var estado = $("#estado").val();
         $.ajax({
-            url: "/Pedido/changeEstado",
+            url: "/Requerimiento/changeEstado",
             type: 'POST',
             data: {
                 estado: estado
@@ -4788,7 +4181,7 @@ jQuery(function ($) {
     $("#estadoCrediticio").change(function () {
         var estado = $("#estadoCrediticio").val();
         $.ajax({
-            url: "/Pedido/changeEstadoCrediticio",
+            url: "/Requerimiento/changeEstadoCrediticio",
             type: 'POST',
             data: {
                 estadoCrediticio: estado
@@ -4802,7 +4195,7 @@ jQuery(function ($) {
     $("#periodo").change(function () {
         var periodo = $("#periodo").val();
         $.ajax({
-            url: "/Pedido/changePeriodo",
+            url: "/Requerimiento/changePeriodo",
             type: 'POST',
             data: {
                 periodo: periodo
@@ -4825,23 +4218,23 @@ jQuery(function ($) {
             text: 'Obteniendo Historial...'
         });
 
-        var idPedido = $("#verIdPedido").val();
+        var idRequerimiento = $("#verIdRequerimiento").val();
 
         $.ajax({
-            url: "/Pedido/GetHistorial",
+            url: "/Requerimiento/GetHistorial",
             data: {
-                id: idPedido
+                id: idRequerimiento
             },
             type: 'POST',
             dataType: 'JSON',
-            error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial del pedido."); },
+            error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial del requerimiento."); },
             success: function (resultado) {
 
-                $("#historial_titulo_numero_pedido").html($("#verNumero").html());
+                $("#historial_titulo_numero_requerimiento").html($("#verNumero").html());
 
-                $("#tableHistorialPedido > tbody").empty();
+                $("#tableHistorialRequerimiento > tbody").empty();
 
-                FooTable.init('#tableHistorialPedido');
+                FooTable.init('#tableHistorialRequerimiento');
 
                 var d = '';
                 var lista = resultado.result;
@@ -4859,12 +4252,12 @@ jQuery(function ($) {
                 }
                 //  
                 // sleep
-                $("#tableHistorialPedido").append(d);
+                $("#tableHistorialRequerimiento").append(d);
 
 
 
 
-                $("#modalVerHistorialPedido").modal('show');
+                $("#modalVerHistorialRequerimiento").modal('show');
                 $('body').loadingModal('hide');
                 //  window.location = '/Cotizacion/Index';
             }
@@ -4876,21 +4269,21 @@ jQuery(function ($) {
             text: 'Obteniendo Historial Crediticio...'
         });
 
-        var idPedido = $("#verIdPedido").val();
+        var idRequerimiento = $("#verIdRequerimiento").val();
 
         $.ajax({
-            url: "/Pedido/GetHistorialCrediticio",
+            url: "/Requerimiento/GetHistorialCrediticio",
             data: {
-                id: idPedido
+                id: idRequerimiento
             },
             type: 'POST',
             dataType: 'JSON',
-            error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial crediticio del pedido."); },
+            error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial crediticio del requerimiento."); },
             success: function (resultado) {
-                $("#historial_crediticio_titulo_numero_pedido").html($("#verNumero").html());
-                $("#tableHistorialCrediticioPedido > tbody").empty();
+                $("#historial_crediticio_titulo_numero_requerimiento").html($("#verNumero").html());
+                $("#tableHistorialCrediticioRequerimiento > tbody").empty();
 
-                FooTable.init('#tableHistorialCrediticioPedido');
+                FooTable.init('#tableHistorialCrediticioRequerimiento');
 
                 var d = '';
                 var lista = resultado.result;
@@ -4908,12 +4301,12 @@ jQuery(function ($) {
                 }
                 //  
                 // sleep
-                $("#tableHistorialCrediticioPedido").append(d);
+                $("#tableHistorialCrediticioRequerimiento").append(d);
 
 
 
 
-                $("#modalVerHistorialCrediticioPedido").modal('show');
+                $("#modalVerHistorialCrediticioRequerimiento").modal('show');
                 $('body').loadingModal('hide');
                 //  window.location = '/Cotizacion/Index';
             }
@@ -4926,7 +4319,7 @@ jQuery(function ($) {
             ubigeoEntregaId = $("#ActualDepartamento").val() + "0000";
         }
         $.ajax({
-            url: "/Pedido/ChangeUbigeoEntrega",
+            url: "/Requerimiento/ChangeUbigeoEntrega",
             type: 'POST',
             data: {
                 ubigeoEntregaId: ubigeoEntregaId
@@ -4942,7 +4335,7 @@ jQuery(function ($) {
             ubigeoEntregaId = $("#ActualProvincia").val()+"00";
         }
         $.ajax({
-            url: "/Pedido/ChangeUbigeoEntrega",
+            url: "/Requerimiento/ChangeUbigeoEntrega",
             type: 'POST',
             data: {
                 ubigeoEntregaId: ubigeoEntregaId
@@ -4958,7 +4351,7 @@ jQuery(function ($) {
             ubigeoEntregaId = $("#ActualDistrito").val();
         }
         $.ajax({
-            url: "/Pedido/ChangeUbigeoEntrega",
+            url: "/Requerimiento/ChangeUbigeoEntrega",
             type: 'POST',
             data: {
                 ubigeoEntregaId: ubigeoEntregaId
@@ -4981,13 +4374,13 @@ jQuery(function ($) {
         },
         success: function (direccionEntregaListTmp) {
 
-            $('#pedido_direccionEntrega')
+            $('#requerimiento_direccionEntrega')
                 .find('option')
                 .remove()
                 .end()
                 ;
 
-            $('#pedido_direccionEntrega').append($('<option>', {
+            $('#requerimiento_direccionEntrega').append($('<option>', {
                 value: GUID_EMPTY,
                 text: "Seleccione Dirección Entrega",
                 direccion: "",
@@ -4997,7 +4390,7 @@ jQuery(function ($) {
 
 
             for (var i = 0; i < direccionEntregaListTmp.length; i++) {
-                $('#pedido_direccionEntrega').append($('<option>', {
+                $('#requerimiento_direccionEntrega').append($('<option>', {
                     value: direccionEntregaListTmp[i].idDireccionEntrega,
                     text: direccionEntregaListTmp[i].descripcion,
                     direccion: direccionEntregaListTmp[i].descripcion,
@@ -5019,7 +4412,7 @@ jQuery(function ($) {
         var idCiudad = $("#idCiudad").val();
 
         $.ajax({
-            url: "/Pedido/ChangeIdCiudad",
+            url: "/Requerimiento/ChangeIdCiudad",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -5031,6 +4424,26 @@ jQuery(function ($) {
             },
             success: function (ciudad) {
                 location.reload();
+            }
+        });
+    });  
+
+
+    $("#idPeriodo").change(function () {
+        var idPeriodo = $("#idPeriodo").val();
+
+        $.ajax({
+            url: "/Requerimiento/ChangeIdPeriodo",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idPeriodo: idPeriodo
+            },
+            error: function (detalle) {
+                location.reload();
+            },
+            success: function (ciudad) {
+               // location.reload();
             }
         });
     });  
@@ -5080,27 +4493,7 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
-
-    $("#idPeriodo").change(function () {
-        var idPeriodo = $("#idPeriodo").val();
-
-        $.ajax({
-            url: "/Requerimiento/ChangeIdPeriodo",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idPeriodo: idPeriodo
-            },
-            error: function (detalle) {
-                location.reload();
-            },
-            success: function (ciudad) {
-             //   location.reload();
-            }
-        });
-    });  
-
-    $("#btnAceptarProgramarPedido").click(function () {
+    $("#btnAceptarProgramarRequerimiento").click(function () {
 
         if ($("#fechaProgramacion").val() == "" || $("#fechaProgramacion").val() == null) {
             alert("Debe ingresar la fecha de programación.");
@@ -5115,7 +4508,7 @@ jQuery(function ($) {
         if (convertirFechaNumero(fechaProgramacion) < convertirFechaNumero(fechaEntregaDesdeProgramacion)
             || convertirFechaNumero(fechaProgramacion) > convertirFechaNumero(fechaEntregaHastaProgramacion)
         ) {
-            var respuesta = confirm("¡ATENCIÓN! Está programando la atención del pedido en una fecha fuera del rango solicitado por el cliente.");
+            var respuesta = confirm("¡ATENCIÓN! Está programando la atención del requerimiento en una fecha fuera del rango solicitado por el cliente.");
             if (!respuesta) {
                 $("#fechaProgramacion").focus();
                 return false;
@@ -5123,7 +4516,7 @@ jQuery(function ($) {
         }      
 
         $.ajax({
-            url: "/Pedido/Programar",
+            url: "/Requerimiento/Programar",
             type: 'POST',
            // dataType: 'JSON',
             data: {
@@ -5131,11 +4524,11 @@ jQuery(function ($) {
                 comentarioProgramacion: comentarioProgramacion
             },
             success: function (resultado) {
-                alert('El pedido número ' + $("#verNumero").html() + ' se programó para ser atendido.');
+                alert('El requerimiento número ' + $("#verNumero").html() + ' se programó para ser atendido.');
                 location.reload();
             }
         });
-        $("btnCancelarProgramarPedido").click();
+        $("btnCancelarProgramarRequerimiento").click();
     });
 
 

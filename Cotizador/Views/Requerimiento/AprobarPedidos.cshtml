@@ -1,11 +1,11 @@
 ﻿@{
-    /**/
+                /**/
 
-    ViewBag.Title = "Aprobar Requerimientos";
-    Model.Pedido pedido = ViewBag.pedido;
-    Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
-    List<Model.Pedido> pedidoList = ViewBag.pedidoList;
-    Model.DocumentoVenta documentoVenta = ViewBag.documentoVenta;
+                ViewBag.Title = "Búsqueda Pedidos Pendientes Aprobación";
+                Model.Pedido pedido = ViewBag.pedido;
+                Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
+                List<Model.Pedido> pedidoList = ViewBag.pedidoList;
+                Model.DocumentoVenta documentoVenta = ViewBag.documentoVenta;
 }
 
 <div class="page-header">
@@ -20,11 +20,11 @@
 
         <div class="row">
             <!--NÚMERO PEDIDO-->
-            @if (pedido.usuario.esCliente)
+            @if (!pedido.usuario.esCliente)
             {
                 <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
-                        <label for="numeroSolicitud" class="control-label col-xs-4">Número Requerimiento:</label>
+                        @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
 
                         <div class="col-xs-8">
                             @if (pedido.numeroPedido > 0)
@@ -35,69 +35,52 @@
                             {
                                 @Html.TextBoxFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
                             }
-                            <span hidden="hidden" style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los otros criterios no serán considerados en la búsqueda.</span>
+                            <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los otros criterios no serán considerados en la búsqueda.</span>
                         </div>
                     </div>
 
                 </div>
-
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        <label for="periodo" class="control-label col-xs-4">Periodo:</label>
-
-                        <div class="col-xs-8">
-                            @Html.DropDownList("periodo",
-                                EnumHelper.GetSelectList(typeof(Model.Pedido.periodos), pedido.periodo),
-                                new { @class = "form-control" }
-                                )
-
-                        </div>
-
-                    </div>
-                </div>
-
-
 
                 <!--NÚMERO GRUPO PEDIDO-->
-                <div hidden="hidden" class="col-sm-6 col-lg-4">
+                <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
                         @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
 
 
 
 
-                        <div class="col-xs-8">
-                            @if (pedido.numeroGrupoPedido > 0)
-                            {
-                                @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
-                            }
-                        </div>
-
+                    <div class="col-xs-8">
+                        @if (pedido.numeroGrupoPedido > 0)
+                        {
+                        @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                        }
+                        else
+                        {
+                    @Html.TextBoxFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                        }
                     </div>
+
                 </div>
+            </div>
 
                 <!--CIUDAD-->
-                <div hidden="hidden" class="col-sm-6 col-lg-4">
+                <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
 
                         @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                         <div class="col-xs-8">
                             @Html.Action("GetCiudades", "Ciudad",
-                                                                                          new
-                                                                                          {
-                                                                                              ciudadSelectId = "idCiudad",
-                                                                                              selectedValue = pedido.ciudad.idCiudad
-                                                                                          })
+                                                                                       new
+                                                                                       {
+                                                                                           ciudadSelectId = "idCiudad",
+                                                                                           selectedValue = pedido.ciudad.idCiudad
+                                                                                       })
 
                         </div>
                     </div>
                 </div>
 
-                <div hidden="hidden" class="col-sm-6 col-lg-4">
+                <div class="col-sm-6 col-lg-4">
                     <!--Cliente-->
                     <div class="form-group">
                         <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
@@ -141,14 +124,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(p => pedido.numeroRequerimiento, htmlAttributes: new { @class = "control-label col-xs-4" })
-
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => pedido.numeroRequerimiento, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
-
                 </div>
 
             }
@@ -158,21 +133,13 @@
 
         @if (!pedido.usuario.esCliente)
         {
-            <div hidden="hidden" class="row">
+            <div class="row">
                 <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
                         @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
 
                         <div class="col-xs-8">
                             @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(p => pedido.numeroRequerimiento, htmlAttributes: new { @class = "control-label col-xs-4" })
-
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => pedido.numeroRequerimiento, htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
 
@@ -184,23 +151,12 @@
                         <label for="tipoPedido" class="control-label col-xs-4">Tipo Pedido:</label>
                         <div class="col-xs-8">
                             @Html.DropDownList("tipoPedidoBusqueda",
-                                EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedidoVentaBusqueda), pedido.tipoPedidoVentaBusqueda),
-                                new { @class = "form-control" }
-                                )
+                                        EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedidoVentaBusqueda), pedido.tipoPedidoVentaBusqueda),
+                                        new { @class = "form-control" }
+                                        )
 
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(p => pedido.sku, htmlAttributes: new { @class = "control-label col-xs-4" })
-
-                        <div class="col-xs-8">
-                            @Html.TextBoxFor(p => pedido.sku, htmlAttributes: new { @class = "form-control" })
-                            <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Puede ingresar el SKU del producto que se encuentra en el detalle del pedido.</span>
-                        </div>
-
-                    </div>
-
                 </div>
 
                 <!--CODIGO GRUPO CLIENTE-->
@@ -209,11 +165,11 @@
                         <label class="control-label col-xs-4" for="pedido_idGrupoCliente">Grupo Cliente:</label>
                         <div class="col-xs-8">
                             @Html.Action("GetGruposCliente", "GrupoCliente",
-                                       new
-                                       {
-                                           grupoClienteSelectId = "pedido_idGrupoCliente",
-                                           selectedValue = pedido.idGrupoCliente
-                                       })
+                                    new
+                                    {
+                                        grupoClienteSelectId = "pedido_idGrupoCliente",
+                                        selectedValue = pedido.idGrupoCliente
+                                    })
                         </div>
                         @if (pedido.usuario.buscaSedesGrupoCliente)
                         {
@@ -234,7 +190,7 @@
             </div>
         }
 
-        <div hidden="hidden" class="row">
+        <div class="row">
 
             <!--FECHA CREACIÓN-->
             <div class="col-sm-6 col-lg-4">
@@ -281,7 +237,7 @@
             </div>
 
             <!--FECHA PROGRACION-->
-            <div hidden="hidden" class="col-sm-6 col-lg-4">
+            <div class="col-sm-6 col-lg-4">
                 <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4">Fecha de Programación:</label>
                 <div class="input-group col-xs-6 col-lg-8">
                     <div class="input-group-addon" style="width:70px">
@@ -308,28 +264,18 @@
 
 
 
-        <div hidden="hidden" class="row" style="margin-top: 10px">
+        <div class="row" style="margin-top: 10px">
+
+
 
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label for="estado" class="control-label col-xs-4">Estado Atención:</label>
-                    <div class="col-xs-8">
-                        @Html.DropDownList("estado",
-                                                                                EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
-                                                                                new { @class = "form-control" }
-                                                                                )
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    <label for="estadoCrediticio" class="control-label col-xs-4">Estado Solicitud:</label>
+                    <label for="estadoCrediticio" class="control-label col-xs-4">Estado Crediticio:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estadoCrediticio",
-                                          EnumHelper.GetSelectList(typeof(Model.SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido), pedido.seguimientoCrediticioPedido.estado),
-                                          new { @class = "form-control" }
-                                          )
+                                       EnumHelper.GetSelectList(typeof(Model.SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido), pedido.seguimientoCrediticioPedido.estado),
+                                       new { @class = "form-control" }
+                                       )
                     </div>
                 </div>
             </div>
@@ -350,70 +296,15 @@
 
 
 
+
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnLimpiarBusquedaPedidos" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
-            <button id="btnBusquedaRequerimientos" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+            <button id="btnBusquedaPedidos" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
         </div>
 
         <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
-            <button id="btnExportRequerimientosExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchRequerimientosExcel", "Pedido")">Exportar</button>
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Pedido")">Exportar</button>
         </div>
-
-        <div class="row">
-            <div class="col-sm-6 col-lg-12">
-                <h4>Canasta de Productos:</h4>
-            </div>
-        </div>
-
-
-
-        <div class="row">
-            <div class="col-sm-6 col-lg-12">
-                <table id="tableProductos" class="table">
-                    <thead>
-                        <tr>
-                            <th data-name="producto" data-visible="true">Productos</th>
-                            <th data-name="sku" data-visible="true">SKU</th>
-                            <th data-name="skuProv" data-visible="true">SKU Prov</th>
-                            <th data-name="descripcion" data-visible="true">Descripción</th>
-                            <th data-name="unidad" data-visible="true">Unidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Prod 1</td>
-                            <td>HJ1F20</td>
-                            <td>30197006</td>
-                            <td>Jabón Espuma Kleenex Dermo Supreme</td>
-                            <td>Sachet x 800 ml</td>
-                        </tr>
-                        <tr>
-                            <td>Prod 2</td>
-                            <td>HH2S81</td>
-                            <td>30228044</td>
-                            <td>Papel higiénico Scott JRT Super Económico Ahorramax con pre-corte (rollo x 550m)</td>
-                            <td>Bls x 4 x 550 mts</td>
-                        </tr>
-                        <tr>
-                            <td>Prod 3</td>
-                            <td>MPXX01</td>
-                            <td>85894835</td>
-                            <td>Soporte técnico de dispensadores</td>
-                            <td>Unidad</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-sm-6 col-lg-12">
-                <h4>Requerimientos:</h4>
-            </div>
-        </div>
-
 
         <table id="tablePedidos" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
@@ -428,41 +319,36 @@
                 <tr>
                     <th data-name="idPedido" data-visible="false"></th>
                     <th data-name="numero" data-visible="true">N°</th>
-                    <th data-name="sedeMP" data-sortable="false" data-visible="false" data-breakpoints="xs">Sede MP</th>
-                    <th data-name="codigo" data-visible="false" data-sortable="false" data-breakpoints="xs">Cod. Cliente</th>
-                    <th data-name="razonSocial" data-visible="false" data-sortable="true">Razón Social</th>
-                    <th data-name="grupoCliente" data-visible="false" data-sortable="true">Grupo Cliente</th>
-                    <th data-name="numeroReferenciaCliente" data-visible="false">O/C N°</th>
+                    <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
+                    <th data-name="codigo" data-visible="true" data-sortable="false" data-breakpoints="xs">Cod. Cliente</th>
+                    <th data-name="razonSocial" data-visible="true" data-sortable="true">Razón Social</th>
+                    <th data-name="numeroReferenciaCliente" data-visible="true">O/C N°</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
                     <th data-name="fechaRegistro" data-sortable="true" data-breakpoints="xs">Fecha Registro</th>
                     <!--<th data-name="fechaSolicitud" data-sortable="true" data-breakpoints="xs">Fecha y Hora Solicitud</th>-->
-                    <th data-name="rangoFechaEntrega" data-visible="false" data-sortable="true" data-breakpoints="xs">Rango Fecha Entrega</th>
-                    <th data-name="horarioEntrega" data-sortable="true" data-visible="false" data-breakpoints="xs">Horarios Entrega</th>
+                    <th data-name="rangoFechaEntrega" data-sortable="true" data-breakpoints="xs">Rango Fecha Entrega</th>
+                    <th data-name="horarioEntrega" data-sortable="true" data-breakpoints="xs">Horarios Entrega</th>
                     <!--<th data-name="fechaProgramacion" data-sortable="true" data-breakpoints="xs">Programado Para:</th>-->
-
+                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (Incl. IGV)</th>
                     <th data-name="distrito" data-sortable="true" data-breakpoints="xs">Distrito Entrega</th>
-
+                    <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado Atención</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
-                    <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
-                    <th data-name="estadoCrediticio" data-sortable="true" data-visible="false" data-breakpoints="xs">Estado Crediticio</th>
+                <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
+                    <th data-name="estadoCrediticio" data-sortable="true" data-breakpoints="xs">Estado Crediticio</th>
                     <th data-name="observaciones" data-sortable="true" data-breakpoints="xs">Obs. Uso Interno</th>
-                    <th data-name="HJ1F20" data-sortable="true" data-breakpoints="xs">Prod 1</th>
-                    <th data-name="HH2S81" data-sortable="true" data-breakpoints="xs">Prod 2</th>
-                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (No Incl. IGV)</th>
-                    <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
+
                     @if (pedido.usuario.confirmaStock)
                     {
-                        <th data-name="stockConfirmado" data-visible="false">Stock</th>
+                        <th data-name="stockConfirmado" data-visible="true">Stock</th>
                         <th data-name="stockConfirmado" data-visible="false">Stock</th>
                     }
                     else
                     {
 
                         <th data-name="stockConfirmado" data-visible="false">Stock</th>
-                        <th data-name="stockConfirmado" data-visible="false">Stock</th>
+                        <th data-name="stockConfirmado" data-visible="true">Stock</th>
                     }
-                    <th data-name="topePresupuesto" data-sortable="true" data-breakpoints="xs">Tope Ppto.</th>
-                    <th data-name="semaforo" data-sortable="true" data-breakpoints="xs"></th>
+
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
             </thead>
@@ -478,15 +364,9 @@
                 </p>
             </div>
         }
-        else
-        {
-
-        }
 
 
-        <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
-            <button id="btnAprobarSolicitudesPreview" type="button" class="btn btn-success" data-toggle="modal" data-target="#modalAprobarTodosPreview">Aprobar Todos</button>
-        </div>
+
 
     </form>
 </div>
@@ -496,7 +376,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalVerPedido"><b>Información de Requerimiento</b></h4>
+                <h4 class="modal-title" id="modalVerPedido"><b>Información de Pedido Venta</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -514,23 +394,23 @@
                         <!--NÚMERO PEDIDO-->
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
-                                <label for="numeroSolicitud" class="control-label col-xs-4">Número Requerimiento:</label>
+                                @Html.LabelFor(p => pedido.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
                                     <p class="form-control-static" id="verNumero"></p>
                                 </div>
                             </div>
                         </div>
                         <!--NUMERO PEDIDO GRUPO
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verNumeroGrupo"></p>
-                                </div>
-                            </div>
-                        </div>-->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                <div class="col-xs-8">
+                    <p class="form-control-static" id="verNumeroGrupo"></p>
+                </div>
+            </div>
+        </div>-->
                         <!--NUMERO COTIZACION-->
-                        <div hidden="hidden" class="col-sm-6 col-lg-4">
+                        <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
                                 @Html.LabelFor(p => pedido.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
@@ -540,7 +420,7 @@
                         </div>
 
 
-                        <div hidden="hidden" class="col-sm-6 col-lg-4">
+                        <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
                                 @Html.LabelFor(p => pedido.tipoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
@@ -552,7 +432,7 @@
                     </div>
 
                     <!--DATOS DEL CLIENTE-->
-                    <div hidden="hidden" class="row">
+                    <div class="row">
                         <!--CIUDAD-->
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
@@ -572,22 +452,18 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6 col-lg-4">
+                        <div class="col-sm-6 col-lg-4" id="divCiudadSolicitante">
                             <div class="form-group">
-                                <label for="estado" class="control-label col-xs-4">Grupo Cliente:</label>
+                                <label for="estado" class="control-label col-xs-4">Sede MP Solicitante:</label>
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verGrupoCliente"></p>
+                                    <p class="form-control-static" id="verCiudadSolicitante"></p>
                                 </div>
                             </div>
                         </div>
 
 
-
-                    </div>
-
-
-                    <div hidden="hidden" class="row" id="divReferenciaCliente2">
-                        <div class="col-sm-6 col-lg-4">
+                        <!--NUMERO REFERENCIA CLIENTE-->
+                        <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
                             <div class="form-group">
                                 @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
@@ -595,17 +471,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.numeroRequerimiento, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verNumeroRequerimiento"></p>
-                                </div>
-                            </div>
-                        </div>
+
+
 
                     </div>
-
 
 
                     <!--DATOS DE LA CREACIÓN-->
@@ -639,7 +508,7 @@
                     </div>
 
                     <!--DATOS DEL VENDEDOR-->
-                    <div hidden="hidden" class="row">
+                    <div class="row">
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
                                 @Html.LabelFor(p => pedido.cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4" })
@@ -719,7 +588,7 @@
                                 </div>
                             </div>
                             <!--FECHAS ENTREGA-->
-                            <div hidden="hidden" class="col-sm-6 col-lg-4">
+                            <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
 
                                     @Html.LabelFor(p => pedido.fechaHorarioEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
@@ -771,7 +640,7 @@
 
 
                     <!--Otros datos -->
-                    <fieldset hidden="hidden">
+                    <fieldset>
                         <legend id="divpedido_direccionEntrega">Estado Pedido:</legend>
                         <div class="row">
                             <!--Estado-->
@@ -807,7 +676,7 @@
                         </div>
                     </fieldset>
 
-                    <fieldset hidden="hidden">
+                    <fieldset>
                         <legend id="divpedido_direccionEntrega">Estado Crediticio del Pedido:</legend>
                         <div class="row">
                             <!--Estado-->
@@ -854,7 +723,6 @@
                            data-editing-add-text="Descartar cambios">
                         <thead>
                             <tr>
-                                <th data-name="indicadorAprobacion" data-visible="false" data-sortable="false"></th>
                                 <th data-name="proveedor" data-sortable="false">Prov.</th>
                                 <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                                 <th data-name="producto" data-sortable="false">Producto / Descripción</th>
@@ -865,7 +733,7 @@
                                 @if (pedido.usuario.esCliente)
                                 {
                                     <th data-name="precioNeto" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Precio Neto</th>
-                                    <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
                                 }
                                 else
                                 {
@@ -881,23 +749,23 @@
                                     }
                                 }
 
-                                <th data-name="flete" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Flete</th>
+                                <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                                 <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
 
                                 <!--     @if (pedido.usuario.creaDocumentosVenta)
-                                     {
-                                         <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
-                                         }
-                                         else
-                                         {
-                                                         <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
-                                         }
-                                -->
+                     {
+                         <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+                         }
+                         else
+                         {
+                                         <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+                         }
+                -->
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
-                                <th data-name="cantidad" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
+                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
                                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
-                                <th data-name="historialPrecios" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Historial Precios</th>
+                                <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -940,7 +808,7 @@
 
                     </div>
 
-                    <div hidden="hidden" class="row">
+                    <div class="row">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
                                 <label for="verCondicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
@@ -952,7 +820,7 @@
                         </div>
                     </div>
 
-                    <div hidden="hidden" class="row">
+                    <div class="row">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
                                 @Html.LabelFor(p => pedido.observacionesGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-2" })
@@ -964,7 +832,7 @@
                         </div>
                     </div>
 
-                    <div hidden="hidden" class="row">
+                    <div class="row">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
                                 @Html.LabelFor(p => pedido.observacionesFactura, htmlAttributes: new { @class = "control-label col-xs-2" })
@@ -977,7 +845,7 @@
                     </div>
 
 
-                    <div hidden="hidden" class="row" style="margin-right: 10px">
+                    <div class="row" style="margin-right: 10px">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
                                 <label for="verNombreArchivos" class="control-label col-xs-2">Archivos Adjuntos:</label>
@@ -992,22 +860,22 @@
                     @if (pedido.usuario.tomaPedidos)
                     {
                         <!--
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-9">
-                                <div class="form-group">
-                                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
-                                    <div class="col-xs-3">
-                                        <div class="upload-btn-wrapper">
-                                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
-                                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
+                    <div class="col-xs-3">
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
 
                     }
 
@@ -1034,12 +902,12 @@
                     <button type="button" id="btnCancelarVerPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     @if (pedido.usuario.tomaPedidos || pedido.usuario.apruebaPedidos)
                     {
+                        <button type="button" id="btnActualizarPedido" class="btn btn-primary" data-toggle='modal' data-target='#modalActualizarPedido'>Observaciones y Adjuntos</button>
                         <button type="button" id="btnEditarPedido" class="btn btn-primary ">Editar</button>
                     }
-                    <button type="button" id="btnAprobarIngresoPedido2" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
                     @if (pedido.usuario.apruebaPedidos)
                     {
-                        <button type="button" hidden="hidden" id="btnAprobarIngresoPedido" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
+                        <button type="button" id="btnAprobarIngresoPedido" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
                     }
                     @if (pedido.usuario.apruebaPedidos)
                     {
@@ -1082,152 +950,6 @@
         </div>
     </div>
 </div>
-
-
-
-<div class="modal fade" id="modalAprobarTodosPreview" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modalAprobarTodosPreview"><b>Generar Pedidos</b></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <p></p>
-            </div>
-
-
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <input type="hidden" id="verIdPedido" />
-                    <input type="hidden" id="verIdCliente" />
-
-                    <div class="row">
-                        <!--FECHA ENTREGA -->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.rangoFechasEntrega, htmlAttributes: new { @class = "control-label col-xs-6 col-lg-4" })
-                                <div class="input-group col-xs-6 col-lg-8">
-                                    <div class="input-group-addon" style="width:70px">
-                                        <span class="input-group-text" id="basic-addon1">Desde:</span>
-                                    </div>
-                                    <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesdeTodos" />
-                                    <input class="form-control" type="text" id="pedido_fechaEntregaDesdeTodos" name="pedido_fechaEntregaDesdeTodos">
-                                </div>
-                                <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
-                                <div class="input-group col-xs-6 col-lg-8">
-
-                                    <div class="input-group-addon" style="width:70px">
-                                        <span class="input-group-text" id="basic-addon1">Hasta:</span>
-                                    </div>
-                                    <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHastaTodos" />
-                                    <input class="form-control" type="text" id="pedido_fechaEntregaHastaTodos" name="pedido_fechaEntregaHastaTodos">
-
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        <!--HORA ENTREGA -->
-                        <div class="col-sm-12 col-lg-8">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.rangoHoraEntrega, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-2" })
-                                <div class="input-group col-xs-4 col-lg-4">
-                                    <div class="input-group-addon" style="width:70px">
-                                        <span class="input-group-text" id="basic-addon1">1er Turno:</span>
-                                    </div>
-                                    <input class="form-control" type="time" id="pedido_horaEntregaDesde" name="pedido_horaEntregaDesde" value="@pedido.horaEntregaDesde">
-                                    <input class="form-control" type="time" id="pedido_horaEntregaHasta" name="pedido_horaEntregaHasta" value="@pedido.horaEntregaHasta">
-                                </div>
-                                <div class="input-group col-xs-4 col-lg-4">
-                                    <div class="input-group-addon" style="width:70px">
-                                        <span class="input-group-text" id="basic-addon1">2do Turno:</span>
-                                    </div>
-                                    <input class="form-control" type="time" id="pedido_horaEntregaAdicionalDesde" name="pedido_horaEntregaAdicionalDesde" value="@pedido.horaEntregaAdicionalDesde">
-                                    <input class="form-control" type="time" id="pedido_horaEntregaAdicionalHasta" name="pedido_horaEntregaAdicionalHasta" value="@pedido.horaEntregaAdicionalHasta">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <table id="tableAprobarPedidos" class="table" data-editing="false"
-                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
-                           data-editing-allow-add="false"
-                           data-editing-allow-delete="false"
-                           data-editing-allow-edit="false"
-                           data-sorting="true"
-                           data-show-toggle="false"
-                           data-editing-hide-text="Finalizar edición"
-                           data-editing-add-text="Descartar cambios">
-                        <thead>
-                            <tr>
-                                <th data-name="numero" data-sortable="false" data-breakpoints="xs">N°</th>
-                                <th data-name="puntoEntrega" data-sortable="false" data-breakpoints="xs">Punto de Entrega</th>
-                                <th data-name="sku" data-sortable="false" data-breakpoints="xs">SKU</th>
-                                <th data-name="producto" data-sortable="false">Producto / Descripción</th>
-                                <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
-                                <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
-                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
-                                <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-
-
-                    <div class="row" style="margin-right: 10px">
-                        <div class="col-sm-6 col-lg-9">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
-                                <div class="col-xs-10">
-                                    <p class="form-control-static" id="verObservaciones">
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6 col-lg-3" id="montosTotalesDiv">
-
-                            <div class="form-group">
-                                <div class="pull-right">
-                                    <span class="totales">Subtotal: S/ </span>
-                                    <span class="totales" id="verMontoSubTotal"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="pull-right">
-                                    <span class="totales">IGV 18%: S/ </span>
-                                    <span class="totales" id="verMontoIGV"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="pull-right">
-                                    <span class="totales">TOTAL: S/ </span>
-                                    <span class="totales" id="verMontoTotal"></span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </form>
-            </div>
-
-            <div class="modal-footer">
-                <div class="pull-right">
-                    <button type="button" id="btnCancelarAprobarTodosPreview" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>  
-                    <button type="button" id="btnPedidosAprobarTodos" class="btn btn-success">Generar Pedido(s)</button>
-                </div>
-
-            </div>
-
-
-        </div>
-    </div>
-</div>
-
 
 <div class="modal fade" id="modalAprobacion" tabindex="-1">
     <div class="modal-dialog">
@@ -1448,8 +1170,8 @@
                     </div>
 
 
-
-                    <div hidden="hidden" class="row">
+               
+                    <div class="row">
                         <!--ORDEN DE COMPRA-->
                         <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
                             <div class="form-group">
@@ -1470,23 +1192,26 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
-                            <div class="form-group">
-                                @Html.LabelFor(p => pedido.numeroRequerimiento, htmlAttributes: new { @class = "control-label col-xs-4" })
-
-                                <div class="col-xs-8">
-                                    @Html.TextBoxFor(p => pedido.numeroRequerimiento, htmlAttributes: new { @class = "form-control" })
+                        @if (pedido.usuario.modificaPedidoFechaEntregaExtendida)
+                        {
+                            <!--FECHA ENTREGA EXTENDIDA-->
+                        
+                                <div class="col-sm-6 col-lg-4" id="divFechaEntregaExtendida">
+                                    <div class="form-group">
+                                        @Html.LabelFor(p => pedido.fechaEntregaExtendida, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            @Html.TextBoxFor(p => pedido.fechaEntregaExtendida, htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-
+                   
+                        }
                     </div>
 
 
-                    <div class="row">
+                     <div class="row">
                         <!--PEDIDO GRUPO-->
-                        <div class="col-sm-6 col-lg-4">
+                        <div class="col-sm-6 col-lg-4" >
                             <div class="form-group">
                                 @Html.LabelFor(p => pedido.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
@@ -1494,21 +1219,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        @if (pedido.usuario.modificaPedidoFechaEntregaExtendida)
-                        {
-                            <!--FECHA ENTREGA EXTENDIDA-->
-
-                            <div class="col-sm-6 col-lg-4" id="divFechaEntregaExtendida">
-                                <div class="form-group">
-                                    @Html.LabelFor(p => pedido.fechaEntregaExtendida, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                    <div class="col-xs-8">
-                                        @Html.TextBoxFor(p => pedido.fechaEntregaExtendida, htmlAttributes: new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-
-                        }
                     </div>
 
                     <!--Otros datos -->
@@ -1900,7 +1610,7 @@
 
 
 
-                    <div hidden="hidden" class="row">
+                    <div class="row">
                         <!--ORDEN DE COMPRA-->
                         <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
                             <div class="form-group">
@@ -2409,48 +2119,6 @@
     </div>
 </div>
 
-
-<div class="modal fade" id="modalVerHistorialCrediticioPedido" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modalVerHistorialPedido"><b>Historial de Estados Crediticio del Pedido Número: <span id="historial_crediticio_titulo_numero_pedido"></span></b></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <p></p>
-            </div>
-
-
-
-            <div class="modal-body">
-                <table id="tableHistorialCrediticioPedido" class="table" data-editing="false"
-                       data-editing-allow-add="false"
-                       data-editing-allow-delete="false"
-                       data-editing-allow-edit="false"
-                       data-show-toggle="false">
-                    <thead>
-                        <tr>
-                            <th data-name="fecha" data-sortable="false" data-visible="true" data-breakpoints="xs">Fecha</th>
-                            <th data-name="usuario" data-sortable="false" data-breakpoints="xs">Usuario</th>
-                            <th data-name="estado" data-sortable="false" data-breakpoints="xs">Estado</th>
-                            <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-
-            </div>
-
-            <div class="modal-footer">
-                <div class="pull-right">
-                    <button type="button" id="btnCloseHistorialCrediticio" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedido")

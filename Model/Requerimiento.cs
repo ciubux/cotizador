@@ -6,54 +6,42 @@ using System.Web;
 
 namespace Model
 {
-    public class Pedido : Auditoria, IDocumento
+    public class Requerimiento : Auditoria, IDocumento
     {
-        public Pedido(ClasesPedido tipo)
+        public Requerimiento(ClasesRequerimiento tipo)
         {
-            this.clasePedido = tipo;
-            this.tipoPedido = tiposPedido.Venta;
-            this.tipoPedidoCompra = tiposPedidoCompra.Compra;
-            this.tipoPedidoAlmacen = tiposPedidoAlmacen.TrasladoInterno;
-            this.tipoPedidoVentaBusqueda = tiposPedidoVentaBusqueda.Todos;
-            this.tipoPedidoCompraBusqueda = tiposPedidoCompraBusqueda.Todos;
-            this.tipoPedidoAlmacenBusqueda = tiposPedidoAlmacenBusqueda.Todos;
+            this.claseRequerimiento = tipo;
+            this.tipoRequerimiento = tiposRequerimiento.Venta;
+            this.tipoRequerimientoCompra = tiposRequerimientoCompra.Compra;
+            this.tipoRequerimientoAlmacen = tiposRequerimientoAlmacen.TrasladoInterno;
+            this.tipoRequerimientoVentaBusqueda = tiposRequerimientoVentaBusqueda.Todos;
+            this.tipoRequerimientoCompraBusqueda = tiposRequerimientoCompraBusqueda.Todos;
+            this.tipoRequerimientoAlmacenBusqueda = tiposRequerimientoAlmacenBusqueda.Todos;
             this.estadoRequerimiento = estadosRequerimiento.Ingresado;
-
-
             this.periodo = new PeriodoSolicitud();
             this.solicitante = new Solicitante();
-            this.pedidoAdjuntoList = new List<PedidoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
 
             this.idGrupoCliente = 0;
         }
 
-        public Pedido()
+        public Requerimiento()
         {
-            this.tipoPedido = tiposPedido.Venta;
-            this.tipoPedidoCompra = tiposPedidoCompra.Compra;
-            this.tipoPedidoAlmacen = tiposPedidoAlmacen.TrasladoInterno;
-            this.tipoPedidoVentaBusqueda = tiposPedidoVentaBusqueda.Todos;
-            this.tipoPedidoCompraBusqueda = tiposPedidoCompraBusqueda.Todos;
-            this.tipoPedidoAlmacenBusqueda = tiposPedidoAlmacenBusqueda.Todos;
+            this.tipoRequerimiento = tiposRequerimiento.Venta;
+            this.tipoRequerimientoCompra = tiposRequerimientoCompra.Compra;
+            this.tipoRequerimientoAlmacen = tiposRequerimientoAlmacen.TrasladoInterno;
+            this.tipoRequerimientoVentaBusqueda = tiposRequerimientoVentaBusqueda.Todos;
+            this.tipoRequerimientoCompraBusqueda = tiposRequerimientoCompraBusqueda.Todos;
+            this.tipoRequerimientoAlmacenBusqueda = tiposRequerimientoAlmacenBusqueda.Todos;
 
             this.solicitante = new Solicitante();
-            this.pedidoAdjuntoList = new List<PedidoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
 
             this.idGrupoCliente = 0;
         }
-
-        [Display(Name = "Periodo:")]
-        public PeriodoSolicitud periodo { get; set; }
-
-
-        public Guid idPedido { get; set; }
-        [Display(Name = "Número Pedido:")]
-        public Int64 numeroPedido { get; set; }
-        [Display(Name = "Número Grupo Pedido:")]
-        public Int64? numeroGrupoPedido { get; set; }
-
+        [Display(Name = "Número Requerimiento:")]
+        public Int32 idRequerimiento { get; set; }
+        
         public int idGrupoCliente { get; set; }
 
         public bool buscarSedesGrupoCliente { get; set; }
@@ -115,16 +103,16 @@ namespace Model
         [Required(ErrorMessage = "Ingrese la Fecha de Entrega.")]
 
         [Display(Name = "Solicitado Por:")]
-        public String contactoPedido { get; set; }
+        public String contactoRequerimiento { get; set; }
         [Display(Name = "Telefono Solicitante:")]
-        public String telefonoContactoPedido { get; set; }
+        public String telefonoContactoRequerimiento { get; set; }
         [Display(Name = "Correo Solicitante:")]
-        public String correoContactoPedido { get; set; }
+        public String correoContactoRequerimiento { get; set; }
 
         [Display(Name = "Telefono y Correo Solicitante:")]
-        public String telefonoCorreoContactoPedido
+        public String telefonoCorreoContactoRequerimiento
         {
-            get { return "Tef: " + telefonoContactoPedido + " Correo: " + correoContactoPedido; }
+            get { return "Tef: " + telefonoContactoRequerimiento + " Correo: " + correoContactoRequerimiento; }
         }
 
         [Display(Name = "Observaciones para uso interno:")]
@@ -139,12 +127,10 @@ namespace Model
         [Display(Name = "Ciudad Entrega:")]
         public Ubigeo ubigeoEntrega { get; set; }
 
-        [Display(Name = "Número Requerimiento:")]
-        public String numeroRequerimiento { get; set; }
-
 
         [Display(Name = "Fechas de Entrega:")]
-        public String rangoFechasEntrega {
+        public String rangoFechasEntrega
+        {
             get
             {
                 String rangoFechasEntrega = String.Empty;
@@ -197,7 +183,8 @@ namespace Model
         public String fechaHorarioEntrega
         {
 
-            get {
+            get
+            {
                 return rangoFechasEntrega + " " + rangoHoraEntrega;
             }
         }
@@ -223,31 +210,7 @@ namespace Model
             get { return this.FechaRegistro.ToString("dd/MM/yyyy HH:mm"); }
         }
 
-        public String numeroGrupoPedidoString
-        {
-            get { return this.numeroGrupoPedido == 0 || this.numeroGrupoPedido == null ? "" : this.numeroGrupoPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO_GRUPO, Constantes.PAD); }
-        }
-
-        public String numeroPedidoString
-        {
-            get { return this.numeroPedido == 0 ? "" : this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
-        }
-
-
-        public String numeroPedidoNumeroGrupoString
-        {
-            get {
-
-                String numeroPedido = this.numeroPedido == 0 ? "" : this.numeroPedido.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD);
-                if (!numeroGrupoPedidoString.Equals(String.Empty))
-                    numeroPedido = numeroPedido + " (" + numeroGrupoPedidoString + ")";
-                return numeroPedido;
-
-            }
-        }
-
-
-
+   
 
         public Usuario usuario { get; set; }
         public Boolean incluidoIGV { get; set; }
@@ -277,19 +240,11 @@ namespace Model
         public Decimal montoTotal { get; set; }
 
 
-        public List<PedidoDetalle> pedidoDetalleList { get; set; }
+        public List<RequerimientoDetalle> requerimientoDetalleList { get; set; }
 
-        public List<PedidoAdjunto> pedidoAdjuntoList { get; set; }
-        public bool esRePedido { get; set; }
+        public bool esReRequerimiento { get; set; }
         /*0 pendiente, 1 aprobado, 2 rechazado*/
-        public SeguimientoPedido seguimientoPedido { get; set; }
-
-        public List<SeguimientoPedido> seguimientoPedidoList { get; set; }
-
-        public SeguimientoCrediticioPedido seguimientoCrediticioPedido { get; set; }
-
-        public List<SeguimientoCrediticioPedido> seguimientoCrediticioPedidoList { get; set; }
-        public bool mostrarCosto { get; set; }
+       public bool mostrarCosto { get; set; }
 
         public bool considerarDescontinuados { get; set; }
 
@@ -318,9 +273,9 @@ namespace Model
             get
             {
                 List<DocumentoDetalle> documentoDetalle = new List<DocumentoDetalle>();
-                if (this.pedidoDetalleList == null)
-                    this.pedidoDetalleList = new List<PedidoDetalle>();
-                foreach (PedidoDetalle pedidoDetalle in pedidoDetalleList)
+                if (this.requerimientoDetalleList == null)
+                    this.requerimientoDetalleList = new List<RequerimientoDetalle>();
+                foreach (RequerimientoDetalle pedidoDetalle in requerimientoDetalleList)
                 {
                     documentoDetalle.Add(pedidoDetalle);
                 }
@@ -328,16 +283,16 @@ namespace Model
             }
             set
             {
-                this.pedidoDetalleList = new List<PedidoDetalle>();
+                this.requerimientoDetalleList = new List<RequerimientoDetalle>();
                 foreach (DocumentoDetalle documentoDetalle in value)
                 {
-                    pedidoDetalleList.Add((PedidoDetalle)documentoDetalle);
+                    requerimientoDetalleList.Add((RequerimientoDetalle)documentoDetalle);
                 }
             }
         }
 
 
-        public enum ClasesPedido
+        public enum ClasesRequerimiento
         {
             [Display(Name = "Venta")]
             Venta = 'V',
@@ -346,89 +301,90 @@ namespace Model
             [Display(Name = "Almacen")]
             Almacen = 'A'
         }
-        
-        public ClasesPedido clasePedido { get; set; }
+
+        public ClasesRequerimiento claseRequerimiento { get; set; }
 
 
-        [Display(Name = "Tipo Pedido:")]
-        public tiposPedido tipoPedido { get; set; }
-        public enum tiposPedido
+        [Display(Name = "Tipo Requerimiento:")]
+        public tiposRequerimiento tipoRequerimiento { get; set; }
+        public enum tiposRequerimiento
         {
             /*GENERAN GUIA REMISION*/
             [Display(Name = "Venta")]
-            Venta = 'V', 
+            Venta = 'V',
             [Display(Name = "Comodato a Entregar")]
-            ComodatoEntregado = 'M', 
+            ComodatoEntregado = 'M',
             [Display(Name = "Transferencia Gratuita a Entregar")]
-            TransferenciaGratuitaEntregada = 'G', 
+            TransferenciaGratuitaEntregada = 'G',
 
             /*GENERAN NOTAS DE INGRESO*/
- /*           [Display(Name = "Devolución de Venta")]
-            DevolucionVenta = 'D',  //GENERA NOTA DE CREDITO
-            [Display(Name = "Devolución de Comodato Entregado")]
-            DevolucionComodatoEntregado = 'F', 
-            [Display(Name = "Devolución de Transferencia Gratuita Entregada")]
-            DevolucionTransferenciaGratuitaEntregada = 'H' */
+            /*           [Display(Name = "Devolución de Venta")]
+                       DevolucionVenta = 'D',  //GENERA NOTA DE CREDITO
+                       [Display(Name = "Devolución de Comodato Entregado")]
+                       DevolucionComodatoEntregado = 'F', 
+                       [Display(Name = "Devolución de Transferencia Gratuita Entregada")]
+                       DevolucionTransferenciaGratuitaEntregada = 'H' */
         }
 
-        public String tiposPedidoString
+        public String tiposRequerimientoString
         {
             get
             {
-                    return EnumHelper<tiposPedido>.GetDisplayValue(this.tipoPedido);                
+                return EnumHelper<tiposRequerimiento>.GetDisplayValue(this.tipoRequerimiento);
             }
         }
-        
-        [Display(Name = "Tipo Pedido:")]
-        public tiposPedidoCompra tipoPedidoCompra { get; set; }
-        public enum tiposPedidoCompra
+
+        [Display(Name = "Tipo Requerimiento:")]
+        public tiposRequerimientoCompra tipoRequerimientoCompra { get; set; }
+        public enum tiposRequerimientoCompra
         {
             //GENERAN NOTA INGRESO
             [Display(Name = "Compra")]
-            Compra = 'C',  
+            Compra = 'C',
             [Display(Name = "Comodato a Recibir")]
-            ComodatoRecibido = 'M', 
+            ComodatoRecibido = 'M',
             [Display(Name = "Transferencia Gratuita a Recibir")]
             TransferenciaGratuitaRecibida = 'G',
 
             /*GENERAN NOTAS DE INGRESO*/
-   /*         [Display(Name = "Devolución de Compra")]
-            DevolucionCompra = 'B', 
-            [Display(Name = "Devolución de Comodato Recibido")]
-            DevolucionComodatoRecibido = 'F', 
-            [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
-            DevolucionTransferenciaGratuitaRecibida = 'H', 
-    */    }
+            /*         [Display(Name = "Devolución de Compra")]
+                     DevolucionCompra = 'B', 
+                     [Display(Name = "Devolución de Comodato Recibido")]
+                     DevolucionComodatoRecibido = 'F', 
+                     [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
+                     DevolucionTransferenciaGratuitaRecibida = 'H', 
+             */
+        }
 
-        public String tiposPedidoCompraString
+        public String tiposRequerimientoCompraString
         {
             get
             {
-                    return EnumHelper<tiposPedidoCompra>.GetDisplayValue(this.tipoPedidoCompra);
+                return EnumHelper<tiposRequerimientoCompra>.GetDisplayValue(this.tipoRequerimientoCompra);
             }
         }
 
 
 
-        [Display(Name = "Tipo Pedido:")]
-        public tiposPedidoAlmacen tipoPedidoAlmacen { get; set; }
-        public enum tiposPedidoAlmacen
+        [Display(Name = "Tipo Requerimiento:")]
+        public tiposRequerimientoAlmacen tipoRequerimientoAlmacen { get; set; }
+        public enum tiposRequerimientoAlmacen
         {
             [Display(Name = "Solicitud de Traslado")]
             TrasladoInterno = 'T', //GUIA REMISION
-       //     [Display(Name = "Recepción de Traslado Interno")]
-       //s     TrasladoInternoRecibido = 'I',  //NOTA INGRESO
+                                   //     [Display(Name = "Recepción de Traslado Interno")]
+                                   //s     TrasladoInternoRecibido = 'I',  //NOTA INGRESO
             [Display(Name = "Préstamo a Entregar")]
             PrestamoEntregado = 'P',   //GUIA REMISION
-    //        [Display(Name = "Devolución de Préstamo Entregado")]
-    //        DevolucionPrestamoEntregado = 'D', //NOTA INGRESO
+                                       //        [Display(Name = "Devolución de Préstamo Entregado")]
+                                       //        DevolucionPrestamoEntregado = 'D', //NOTA INGRESO
             [Display(Name = "Préstamo a Recibir")]
             PrestamoRecibido = 'R', //NOTA INGRESO
-      /*      [Display(Name = "Devolución de Préstamo Recibido")]
-            DevolucionPrestamoRecibido = 'E', //GUIA REMISION           
-            [Display(Name = "Extorno de Guía Remisión")]
-            ExtornoGuíaRemision = 'X',  //NOTA INGRESO
-            */
+                                    /*      [Display(Name = "Devolución de Préstamo Recibido")]
+                                          DevolucionPrestamoRecibido = 'E', //GUIA REMISION           
+                                          [Display(Name = "Extorno de Guía Remisión")]
+                                          ExtornoGuíaRemision = 'X',  //NOTA INGRESO
+                                          */
         }
 
         public String textoCondicionesPago
@@ -468,78 +424,79 @@ namespace Model
 
         }
 
-        public String tiposPedidoAlmacenString
+        public String tiposRequerimientoAlmacenString
         {
             get
             {
-                return EnumHelper<tiposPedidoAlmacen>.GetDisplayValue(this.tipoPedidoAlmacen);
+                return EnumHelper<tiposRequerimientoAlmacen>.GetDisplayValue(this.tipoRequerimientoAlmacen);
             }
         }
 
-        public List<PedidoGrupo> pedidoGrupoList { get; set; }
-
         #region Criterios de Búsqueda
-        [Display(Name = "Tipo Pedido:")]
-        public tiposPedidoVentaBusqueda tipoPedidoVentaBusqueda { get; set; }
-        public enum tiposPedidoVentaBusqueda
+        [Display(Name = "Tipo Requerimiento:")]
+        public tiposRequerimientoVentaBusqueda tipoRequerimientoVentaBusqueda { get; set; }
+        public enum tiposRequerimientoVentaBusqueda
         {
             Todos = '0',
             [Display(Name = "Venta")]
-            Venta = tiposPedido.Venta,
+            Venta = tiposRequerimiento.Venta,
             [Display(Name = "Comodato a Entregar")]
-            ComodatoEntregado = tiposPedido.ComodatoEntregado,
+            ComodatoEntregado = tiposRequerimiento.ComodatoEntregado,
             [Display(Name = "Transferencia Gratuita a Entregar")]
-            TransferenciaGratuitaEntregada = tiposPedido.TransferenciaGratuitaEntregada,
-      /*      [Display(Name = "Devolución de Venta")]
-            DevolucionVenta = tiposPedido.DevolucionVenta,
-            [Display(Name = "Devolución de Comodato Entregado")]
-            DevolucionComodatoEntregado = tiposPedido.DevolucionComodatoEntregado,
-            [Display(Name = "Devolución de Transferencia Gratuita Entregada")]
-            DevolucionTransferenciaGratuitaEntregada = tiposPedido.DevolucionTransferenciaGratuitaEntregada,
-   */     }
-        
-        [Display(Name = "Tipo Pedido:")]
-        public tiposPedidoCompraBusqueda tipoPedidoCompraBusqueda { get; set; }
-        public enum tiposPedidoCompraBusqueda
+            TransferenciaGratuitaEntregada = tiposRequerimiento.TransferenciaGratuitaEntregada,
+            /*      [Display(Name = "Devolución de Venta")]
+                  DevolucionVenta = tiposRequerimiento.DevolucionVenta,
+                  [Display(Name = "Devolución de Comodato Entregado")]
+                  DevolucionComodatoEntregado = tiposRequerimiento.DevolucionComodatoEntregado,
+                  [Display(Name = "Devolución de Transferencia Gratuita Entregada")]
+                  DevolucionTransferenciaGratuitaEntregada = tiposRequerimiento.DevolucionTransferenciaGratuitaEntregada,
+         */
+        }
+
+        [Display(Name = "Tipo Requerimiento:")]
+        public tiposRequerimientoCompraBusqueda tipoRequerimientoCompraBusqueda { get; set; }
+        public enum tiposRequerimientoCompraBusqueda
         {
             Todos = '0',
             /*GENERAN NOTAS DE INGRESO*/
             [Display(Name = "Compra")]
-            Compra = tiposPedidoCompra.Compra,
+            Compra = tiposRequerimientoCompra.Compra,
             [Display(Name = "Comodato a Recibir")]
-            ComodatoRecibido = tiposPedidoCompra.ComodatoRecibido,
+            ComodatoRecibido = tiposRequerimientoCompra.ComodatoRecibido,
             [Display(Name = "Transferencia Gratuita a Recibir")]
-            TransferenciaGratuitaRecibida = tiposPedidoCompra.TransferenciaGratuitaRecibida,
-      /*      [Display(Name = "Devolución de Compra")]
-            DevolucionCompra = tiposPedidoCompra.DevolucionCompra,
-            [Display(Name = "Devolución de Comodato Recibido")]
-            DevolucionComodatoRecibido = tiposPedidoCompra.DevolucionComodatoRecibido,
-            [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
-            DevolucionTransferenciaGratuitaRecibida = tiposPedidoCompra.DevolucionTransferenciaGratuitaRecibida,
-     */   }
+            TransferenciaGratuitaRecibida = tiposRequerimientoCompra.TransferenciaGratuitaRecibida,
+            /*      [Display(Name = "Devolución de Compra")]
+                  DevolucionCompra = tiposRequerimientoCompra.DevolucionCompra,
+                  [Display(Name = "Devolución de Comodato Recibido")]
+                  DevolucionComodatoRecibido = tiposRequerimientoCompra.DevolucionComodatoRecibido,
+                  [Display(Name = "Devolución de Transferencia Gratuita Recibida")]
+                  DevolucionTransferenciaGratuitaRecibida = tiposRequerimientoCompra.DevolucionTransferenciaGratuitaRecibida,
+           */
+        }
 
 
-        [Display(Name = "Tipo Pedido:")]
-        public tiposPedidoAlmacenBusqueda tipoPedidoAlmacenBusqueda { get; set; }
-        public enum tiposPedidoAlmacenBusqueda
+        [Display(Name = "Tipo Requerimiento:")]
+        public tiposRequerimientoAlmacenBusqueda tipoRequerimientoAlmacenBusqueda { get; set; }
+        public enum tiposRequerimientoAlmacenBusqueda
         {
             Todos = '0',
             /*GENERAN GUÍA REMISIÓN DE INGRESO*/
             [Display(Name = "Traslado Interno a Entregar")]
-            TrasladoInterno = tiposPedidoAlmacen.TrasladoInterno,
-     //       [Display(Name = "Traslado Interno a Recibir")]
-    //        TrasladoInternoRecibido = tiposPedidoAlmacen.TrasladoInternoRecibido,
+            TrasladoInterno = tiposRequerimientoAlmacen.TrasladoInterno,
+            //       [Display(Name = "Traslado Interno a Recibir")]
+            //        TrasladoInternoRecibido = tiposRequerimientoAlmacen.TrasladoInternoRecibido,
             [Display(Name = "Préstamo a Entregar")]
-            PrestamoEntregado = tiposPedidoAlmacen.PrestamoEntregado,
-     //       [Display(Name = "Devolución de Préstamo Entregado")]
-    //        DevolucionPrestamoEntregado = tiposPedidoAlmacen.DevolucionPrestamoEntregado,
+            PrestamoEntregado = tiposRequerimientoAlmacen.PrestamoEntregado,
+            //       [Display(Name = "Devolución de Préstamo Entregado")]
+            //        DevolucionPrestamoEntregado = tiposRequerimientoAlmacen.DevolucionPrestamoEntregado,
             [Display(Name = "Préstamo a Recibir")]
-            PrestamoRecibido = tiposPedidoAlmacen.PrestamoRecibido, 
-   /*         [Display(Name = "Devolución de Préstamo Recibido")]
-            DevolucionPrestamoRecibido = tiposPedidoAlmacen.DevolucionPrestamoRecibido,
-            [Display(Name = "Extorno de Guía Remisión")]
-            ExtornoGuíaRemision = tiposPedidoAlmacen.ExtornoGuíaRemision,
-     */   }
+            PrestamoRecibido = tiposRequerimientoAlmacen.PrestamoRecibido,
+            /*         [Display(Name = "Devolución de Préstamo Recibido")]
+                     DevolucionPrestamoRecibido = tiposRequerimientoAlmacen.DevolucionPrestamoRecibido,
+                     [Display(Name = "Extorno de Guía Remisión")]
+                     ExtornoGuíaRemision = tiposRequerimientoAlmacen.ExtornoGuíaRemision,
+              */
+        }
 
 
         [Display(Name = "Solicitado Desde:")]
@@ -572,9 +529,9 @@ namespace Model
         public enum estadosRequerimiento
         {
             [Display(Name = "Ingresado")]
-            Ingresado = 0, 
+            Ingresado = 0,
             [Display(Name = "Aprobado")]
-            Aprobado = 1,  
+            Aprobado = 1,
             [Display(Name = "Liberada")]
             Liberada = 2
         }
@@ -590,7 +547,40 @@ namespace Model
         public bool excedioPresupuesto { get; set; }
         public decimal topePresupuesto { get; set; }
 
-       
 
+
+     /*   [Display(Name = "Periodo:")]
+        public periodos periodo { get; set; }
+        public enum periodos
+        {
+            [Display(Name = "Abril-2019")]
+            abril = 0,
+            [Display(Name = "Mayo-2019")]
+            mayo = 1,
+            [Display(Name = "Junio-2019")]
+            junio = 2,
+            [Display(Name = "Julio-2019")]
+            julio = 3,
+            [Display(Name = "Agosto-2019")]
+            agosto = 4
+        }*/
+
+  /*      public String periodoString
+        {
+            get
+            {
+                return EnumHelper<periodos>.GetDisplayValue(this.periodo);
+            }
+        }*/
+
+        public Pedido pedido { get; set; }
+
+        public String numeroRequerimientoString
+        {
+            get { return this.idRequerimiento == 0 ? "" : this.idRequerimiento.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
+        }
+
+        [Display(Name = "Periodo:")]
+        public PeriodoSolicitud periodo { get; set; }
     }
 }

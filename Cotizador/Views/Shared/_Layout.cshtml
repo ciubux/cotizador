@@ -1,6 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "308";
-
+    TempData["ScriptVersion"] = "309";
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
 }
@@ -109,16 +108,25 @@
                                 <ul class="dropdown-menu" role="menu">
                                     @if (usuario.tomaPedidos)
                                     {
-                                        <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Requerimientos", "Pedir", "Pedido")</li>
+                                        <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Crear/Modificar Requerimientos", "Pedir", "Requerimiento")</li>
                                     }
-                                    @if (usuario.apruebaPedidos)
+                                    @if (usuario.idUsuario == Guid.Parse("7D485AFF-AC89-462D-BBB8-0F8ADF8C02F1"))
                                     {
-                                        <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Aprobar Requerimientos", "Aprobar", "Pedido")</li>
+                                        if (usuario.apruebaPedidos)
+                                        {
+                                        <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Aprobar Requerimientos", "Aprobar", "Requerimiento")</li>
+                                        }
                                     }
-                        
+                                    else
+                                    {
+                                        <li id="linkAprobarPedidos" class="@linkAprobarPedidos">@Html.ActionLink("Buscar Requerimientos", "Aprobar", "Requerimiento")</li>
+                                    }
+
                                 </ul>
                             </li>
 
+                            if (usuario.idUsuario == Guid.Parse("7D485AFF-AC89-462D-BBB8-0F8ADF8C02F1"))
+                            {
 
                             <li class="@linkPedidos">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -136,23 +144,25 @@
                         
                                 </ul>
                             </li>
+                            }
                         }
 
-
-
-                        <li class="@linkGuiasRemision">
-                            <a class="dropdown-toggle" data-toggle="dropdown">
-                                Guias Remisión
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li id="linkBusquedaGuiasRemision" class="@linkBusquedaPedidos">@Html.ActionLink("Guías Remisión - Búsqueda", "Index", "GuiaRemision")</li>
-                            </ul>
-                        </li>
-
-
-                        if (usuario.visualizaDocumentosVenta)
+                        if (usuario.esMaestro)
                         {
+
+                            <li class="@linkGuiasRemision">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Guias Remisión
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li id="linkBusquedaGuiasRemision" class="@linkBusquedaPedidos">@Html.ActionLink("Guías Remisión - Búsqueda", "Index", "GuiaRemision")</li>
+                                </ul>
+                            </li>
+
+
+                            if (usuario.visualizaDocumentosVenta)
+                            {
 
                             <li class="@linkDocumentosVenta">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -167,31 +177,35 @@
                                     }
                                 </ul>
                             </li>
-                        }
+                            }
 
 
-                        if (usuario.modificaPeriodoSolicitud || usuario.modificaUsuario)
-                        {
+                            if (usuario.modificaPeriodoSolicitud || usuario.modificaUsuario)
+                            {
+                                if (usuario.modificaPeriodoSolicitud)
+                                {
 
-                            <li class="@linkAdministracion">
-                                <a class="dropdown-toggle" data-toggle="dropdown">
-                                    Administración
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu">
+                                <li class="@linkAdministracion">
+                                    <a class="dropdown-toggle" data-toggle="dropdown">
+                                        Administración
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
 
-                                    @if (usuario.modificaPeriodoSolicitud)
+                                        @if (usuario.modificaPeriodoSolicitud)
                                     {
-                                        <li id="linkBusquedaPeriodoSolicitud" class="@linkBusquedaPeriodoSolicitud">@Html.ActionLink("Periodo Requerimeinto - Búsqueda", "List", "PeriodoSolicitud")</li>
-                                        <li id="linkMantenimientoPeriodoSolicitud" class="@linkMantenimientoPeriodoSolicitud">@Html.ActionLink("Periodo Requerimeinto - Crear/Modificar", "Editar", "PeriodoSolicitud")</li>
+                                            <li id="linkBusquedaPeriodoSolicitud" class="@linkBusquedaPeriodoSolicitud">@Html.ActionLink("Periodo Requerimeinto - Búsqueda", "List", "PeriodoSolicitud")</li>
+                                            <li id="linkMantenimientoPeriodoSolicitud" class="@linkMantenimientoPeriodoSolicitud">@Html.ActionLink("Periodo Requerimeinto - Crear/Modificar", "Editar", "PeriodoSolicitud")</li>
                                     }
-                                    @if (usuario.modificaUsuario)
+                                        @if (usuario.modificaUsuario)
                                     {
-                                        <li id="linkBusquedaUsuarios" class="@linkBusquedaUsuarios">@Html.ActionLink("Usuarios - Búsqueda", "List", "Usuario")</li>
-                                        <li id="linkMantenimientoUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar", "Editar", "Usuario")</li>
+                                            <li id="linkBusquedaUsuarios" class="@linkBusquedaUsuarios">@Html.ActionLink("Usuarios - Búsqueda", "List", "Usuario")</li>
+                                            <li id="linkMantenimientoUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar", "Editar", "Usuario")</li>
                                     }
-                                </ul>
-                            </li>
+                                    </ul>
+                                </li>
+                                }
+                            }
                         }
                     }
 

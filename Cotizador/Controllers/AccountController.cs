@@ -556,7 +556,7 @@ namespace Cotizador.Controllers
                 }
             }*/
 
-             return RedirectToAction("Index", "Pedido");
+             return RedirectToAction("Aprobar", "Requerimiento");
            
         }
 

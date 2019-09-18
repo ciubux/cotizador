@@ -238,6 +238,7 @@
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
+    <Compile Include="Controllers\RequerimientoController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\PeriodoSolicitudController.cs" />
     <Compile Include="Controllers\ValidacionController.cs" />
@@ -287,6 +288,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\PeriodoViewModels.cs" />
     <Compile Include="Models\DTOsSearch\ClienteDTO.cs" />
     <Compile Include="Models\DTOsSearch\CotizacionDTO.cs" />
     <Compile Include="Models\DTOsSearch\FacturaDTO.cs" />
@@ -295,6 +297,7 @@
     <Compile Include="Models\DTOsSearch\ParserDTOsSearch.cs" />
     <Compile Include="Models\DTOsSearch\PedidoAlmacenDTO.cs" />
     <Compile Include="Models\DTOsSearch\PedidoCompraDTO.cs" />
+    <Compile Include="Models\DTOsSearch\RequerimientoDTO.cs" />
     <Compile Include="Models\DTOsSearch\PedidoDTO.cs" />
     <Compile Include="Models\DTOsShow\ClienteDTOshow.cs" />
     <Compile Include="Models\DTOsShow\CotizacionDTOshow.cs" />
@@ -304,6 +307,7 @@
     <Compile Include="Models\DTOsShow\ParserDTOsShow.cs" />
     <Compile Include="Models\DTOsShow\PedidoAlmacenDTOshow.cs" />
     <Compile Include="Models\DTOsShow\PedidoCompraDTOshow.cs" />
+    <Compile Include="Models\DTOsShow\RequerimientoDTOshow.cs" />
     <Compile Include="Models\DTOsShow\PedidoDTOshow.cs" />
     <Compile Include="Models\DomicilioLegalViewModels.cs" />
     <Compile Include="Models\GrupoClienteViewModels.cs" />
@@ -421,6 +425,8 @@
     <Content Include="Scripts\documentoCompra1.1.1.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
+    <Content Include="Scripts\requerimientoGeneral1.0.0.js" />
+    <Content Include="Scripts\requerimiento1.0.0.js" />
     <Content Include="Scripts\periodoSolicitud1.0.0.js" />
     <Content Include="Scripts\pedidoLoad.js" />
     <Content Include="Scripts\usuario1.0.0.js" />
@@ -519,7 +525,6 @@
     <Content Include="Views\Proveedor\_SelectProveedorBusquedaPrecios.cshtml" />
     <Content Include="Views\Familia\_SelectFamiliaBusquedaPrecios.cshtml" />
     <Content Include="Views\Pedido\Pedir.cshtml" />
-    <Content Include="Views\Pedido\Aprobar.cshtml" />
     <Content Include="Views\GuiaRemision\Index.cshtml" />
     <Content Include="Views\GuiaRemision\Guiar.cshtml" />
     <Content Include="Views\Shared\_Departamento.cshtml" />
@@ -603,6 +608,14 @@
     <Content Include="Views\PeriodoSolicitud\List.cshtml" />
     <Content Include="Views\Pedido\Index.cshtml" />
     <Content Include="Views\Usuario\Editar.cshtml" />
+    <Content Include="Views\Requerimiento\Aprobar.cshtml" />
+    <Content Include="Views\Requerimiento\Pedir.cshtml" />
+    <Content Include="Views\Requerimiento\Load.cshtml" />
+    <Content Include="Views\Requerimiento\Index.cshtml" />
+    <Content Include="Views\Requerimiento\CargarPedidos.cshtml" />
+    <Content Include="Views\Requerimiento\CargaIncorrecta.cshtml" />
+    <Content Include="Views\Requerimiento\AprobarPedidos.cshtml" />
+    <Content Include="Views\Shared\_Periodo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

@@ -97,3 +97,23 @@ The statement has been terminated.
 2019-08-28 10:34:43.5137|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Intento de dividir por cero.
 2019-08-28 10:35:01.8196|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Intento de dividir por cero.
 2019-08-28 10:37:30.4205|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Intento de dividir por cero.
+2019-09-06 13:10:07.2143|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / No se puede convertir un objeto de tipo 'Model.Pedido' al tipo 'Model.Requerimiento'.
+2019-09-06 13:23:28.0804|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / No se puede convertir un objeto de tipo 'Model.Pedido' al tipo 'Model.Requerimiento'.
+2019-09-10 15:33:37.5574|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-09-10 17:28:02.6675|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-09-10 17:44:44.2087|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / No se puede encontrar la tabla 3.
+2019-09-11 13:16:57.4626|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-09-11 13:17:43.5695|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-09-11 13:19:54.8884|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-09-11 13:42:28.3162|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / No se puede encontrar la tabla 3.
+2019-09-11 13:58:30.0491|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / No se puede encontrar la tabla 3.
+2019-09-11 13:58:54.6069|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-09-11 14:04:44.9910|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Referencia a objeto no establecida como instancia de un objeto.
+2019-09-11 16:06:49.5657|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / El valor no puede ser nulo.
+Nombre del parámetro: s
+2019-09-11 16:07:56.9532|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / El valor no puede ser nulo.
+Nombre del parámetro: s
+2019-09-11 16:08:50.6302|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / El valor no puede ser nulo.
+Nombre del parámetro: s
+2019-09-16 13:57:49.5015|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Error en el nivel del transporte al recibir los resultados del servidor. (provider: TCP Provider, error: 0 - Se agotó el tiempo de espera del semáforo.)
+2019-09-16 14:18:13.9021|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Error en el nivel del transporte al recibir los resultados del servidor. (provider: TCP Provider, error: 0 - Se ha forzado la interrupción de una conexión existente por el host remoto.)

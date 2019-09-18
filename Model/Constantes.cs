@@ -68,6 +68,14 @@ namespace Model
         public static String VAR_SESSION_PEDIDO_LISTA_APROBACION = "pedidoAprobacionList";
         public static String VAR_SESSION_PEDIDO_VER = "pedidoVer";
 
+        public static String VAR_SESSION_REQUERIMIENTO = "requerimiento";
+        public static String VAR_SESSION_REQUERIMIENTO_BUSQUEDA = "requerimientoBusqueda";
+        //public static String VAR_SESSION_REQUERIMIENTO_APROBACION = "requerimientoAprobacion";
+        public static String VAR_SESSION_REQUERIMIENTO_LISTA = "requerimientoList";
+        public static String VAR_SESSION_REQUERIMIENTO_CONSOLIDADO = "requerimientoConsolidado";
+        //public static String VAR_SESSION_REQUERIMIENTO_LISTA_APROBACION = "requerimientoAprobacionList";
+        public static String VAR_SESSION_REQUERIMIENTO_VER = "requerimientoVer";
+
         public static String VAR_SESSION_PEDIDO_COMPRA = "pedidoCompra";
         public static String VAR_SESSION_PEDIDO_COMPRA_BUSQUEDA = "pedidoCompraBusqueda";
         public static String VAR_SESSION_PEDIDO_COMPRA_LISTA = "pedidoCompraList";
@@ -510,6 +518,11 @@ namespace Model
 
             [Display(Name = "MANTENIMIENTO PERMISO")]
             MantenimientoPermisos = 106,
+
+            [Display(Name = "BUSCAR REQUERIMIENTOS")]
+            BusquedaRequerimientos = 107,
+            [Display(Name = "MANTENIMIENTO REQUERIMIENTO")]
+            MantenimientoRequerimientos = 108,
 
             [Display(Name = "BUSQUEDA PERIODOS REQUERIMIENTO")]
             BusquedaPeriodosSolicitud = 1001,

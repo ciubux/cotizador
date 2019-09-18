@@ -51,6 +51,11 @@ namespace Cotizador
                         "~/Scripts/pedido1.2.2.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/requerimiento").Include(
+                       "~/Scripts/requerimientoGeneral1.0.0.js",
+                       "~/Scripts/requerimiento1.0.0.js"
+                       ));
+
             bundles.Add(new ScriptBundle("~/bundles/pedidoCompra").Include(
                         "~/Scripts/pedidoGeneral1.1.6.js",
                         "~/Scripts/pedidoCompra1.2.4.js"

@@ -390,5 +390,58 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.grupoCliente_nombre = pedido.cliente.grupoCliente.nombre;
             return pedidoDTOshow;
         }
+
+        public static RequerimientoDTOshow RequerimientoToRequerimientoDTO(Requerimiento requerimiento)
+        {
+
+            RequerimientoDTOshow pedidoDTOshow = new RequerimientoDTOshow();
+            pedidoDTOshow.idRequerimiento = requerimiento.idRequerimiento;
+            pedidoDTOshow.fechaEntregaDesde = requerimiento.fechaEntregaDesde;
+            pedidoDTOshow.fechaEntregaHasta = requerimiento.fechaEntregaHasta;
+            pedidoDTOshow.numeroRequerimientoString = requerimiento.numeroRequerimientoString;
+            pedidoDTOshow.cotizacion_numeroCotizacionString = requerimiento.cotizacion.numeroCotizacionString;
+            pedidoDTOshow.cliente_responsableComercial_codigoDescripcion = requerimiento.cliente.responsableComercial.codigoDescripcion;
+            //pedidoDTOshow.cliente_responsableComercial_usuario_email = requerimiento.cliente.responsableComercial.usuario.email;
+            pedidoDTOshow.numeroReferenciaCliente = requerimiento.numeroReferenciaCliente;
+            //pedidoDTOshow.cliente_supervisorComercial_usuario_email = requerimiento.cliente.supervisorComercial.usuario.email;
+            pedidoDTOshow.cliente_supervisorComercial_codigoDescripcion = requerimiento.cliente.supervisorComercial.codigoDescripcion;
+            pedidoDTOshow.cliente_asistenteServicioCliente_codigoDescripcion = requerimiento.cliente.asistenteServicioCliente.codigoDescripcion;
+            //pedidoDTOshow.cliente_asistenteServicioCliente_usuario_email = requerimiento.cliente.asistenteServicioCliente.usuario.email;
+            pedidoDTOshow.textoCondicionesPago = requerimiento.textoCondicionesPago;
+            pedidoDTOshow.fechaHorarioEntrega = requerimiento.fechaHorarioEntrega;
+            pedidoDTOshow.ciudad_nombre = requerimiento.ciudad.nombre;
+            pedidoDTOshow.cliente_idCliente = requerimiento.cliente.idCliente;
+            pedidoDTOshow.cliente_codigoRazonSocial = requerimiento.cliente.codigoRazonSocial;
+            pedidoDTOshow.numeroReferenciaCliente = requerimiento.numeroReferenciaCliente;
+            pedidoDTOshow.numeroReferenciaAdicional = requerimiento.numeroReferenciaAdicional;
+            pedidoDTOshow.fechaEntregaExtendidaString = requerimiento.fechaEntregaExtendidaString;
+            pedidoDTOshow.direccionEntrega_descripcion = requerimiento.direccionEntrega.descripcion;
+            pedidoDTOshow.direccionEntrega_telefono = requerimiento.direccionEntrega.telefono;
+            pedidoDTOshow.direccionEntrega_contacto = requerimiento.direccionEntrega.contacto;
+            pedidoDTOshow.usuario_nombre = requerimiento.usuario.nombre;
+            pedidoDTOshow.fechaHoraRegistro = requerimiento.fechaHoraRegistro;
+            pedidoDTOshow.ubigeoEntrega = requerimiento.ubigeoEntrega;
+            pedidoDTOshow.contactoPedido = requerimiento.contactoRequerimiento;
+            pedidoDTOshow.telefonoCorreoContactoPedido = requerimiento.telefonoCorreoContactoRequerimiento;
+            pedidoDTOshow.fechaHoraSolicitud = requerimiento.fechaHoraSolicitud;
+            pedidoDTOshow.observaciones = requerimiento.observaciones;
+            pedidoDTOshow.observacionesFactura = requerimiento.observacionesFactura;
+            pedidoDTOshow.observacionesGuiaRemision = requerimiento.observacionesGuiaRemision;
+            pedidoDTOshow.montoSubTotal = requerimiento.montoSubTotal;
+            pedidoDTOshow.montoIGV = requerimiento.montoIGV;
+            pedidoDTOshow.montoTotal = requerimiento.montoTotal;
+            pedidoDTOshow.requerimientoDetalleList = requerimiento.requerimientoDetalleList;
+            pedidoDTOshow.cliente_razonSocialSunat = requerimiento.cliente.razonSocialSunat;
+            pedidoDTOshow.cliente_ruc = requerimiento.cliente.ruc;
+            pedidoDTOshow.cliente_direccionDomicilioLegalSunat = requerimiento.cliente.direccionDomicilioLegalSunat;
+            pedidoDTOshow.cliente_codigo = requerimiento.cliente.codigo;
+            pedidoDTOshow.cliente_correoEnvioFactura = requerimiento.cliente.correoEnvioFactura;
+            pedidoDTOshow.tipoRequerimiento = requerimiento.tipoRequerimiento;
+            pedidoDTOshow.guiaRemisionList = requerimiento.guiaRemisionList;
+           // pedidoDTOshow.documentoVenta_numero = requerimiento.documentoVenta.numero;
+            //pedidoDTOshow.cotizacion_tipoCotizacion = (int)requerimiento.cotizacion.tipoCotizacion;
+            //pedidoDTOshow.grupoCliente_nombre = requerimiento.cliente.grupoCliente.nombre;
+            return pedidoDTOshow;
+        }
     }
 }

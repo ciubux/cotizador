@@ -159,22 +159,7 @@ namespace DataLayer
             }
 
 
-            //Permisos de usuario
-            if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
-            {
-                DataTable dataTablePermisos = dataSet.Tables[1];
-                usuario.permisoList = new List<Permiso>();
-
-                foreach (DataRow row in dataTablePermisos.Rows)
-                {
-                    Permiso permiso = new Permiso();
-                    permiso.idPermiso = Converter.GetInt(row, "id_Permiso");
-                    permiso.codigo = Converter.GetString(row, "codigo");
-                    permiso.descripcion_corta = Converter.GetString(row, "descripcion_corta");
-                    permiso.descripcion_larga = Converter.GetString(row, "descripcion_larga");
-                    usuario.permisoList.Add(permiso);
-                }
-            }
+            
            
 
             if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
@@ -190,9 +175,28 @@ namespace DataLayer
                     cliente.codigo = Converter.GetString(row, "codigo");
                     cliente.ruc = Converter.GetString(row, "ruc");
                     cliente.nombreComercial = Converter.GetString(row, "nombre_comercial");
+                    cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
                     clienteList.Add(cliente);
                 }
                 usuario.clienteList = clienteList;
+            }
+
+
+            //Permisos de usuario
+            if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
+            {
+                DataTable dataTablePermisos = dataSet.Tables[2];
+                usuario.permisoList = new List<Permiso>();
+
+                foreach (DataRow row in dataTablePermisos.Rows)
+                {
+                    Permiso permiso = new Permiso();
+                    permiso.idPermiso = Converter.GetInt(row, "id_Permiso");
+                    permiso.codigo = Converter.GetString(row, "codigo");
+                    permiso.descripcion_corta = Converter.GetString(row, "descripcion_corta");
+                    permiso.descripcion_larga = Converter.GetString(row, "descripcion_larga");
+                    usuario.permisoList.Add(permiso);
+                }
             }
 
 
