@@ -5080,6 +5080,26 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+
+    $("#idPeriodo").change(function () {
+        var idPeriodo = $("#idPeriodo").val();
+
+        $.ajax({
+            url: "/Requerimiento/ChangeIdPeriodo",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idPeriodo: idPeriodo
+            },
+            error: function (detalle) {
+                location.reload();
+            },
+            success: function (ciudad) {
+             //   location.reload();
+            }
+        });
+    });  
+
     $("#btnAceptarProgramarPedido").click(function () {
 
         if ($("#fechaProgramacion").val() == "" || $("#fechaProgramacion").val() == null) {

@@ -580,6 +580,7 @@ namespace Model
             get { return this.idRequerimiento == 0 ? "" : this.idRequerimiento.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }
         }
 
+        [Display(Name = "Periodo:")]
         public PeriodoSolicitud periodo { get; set; }
     }
 }

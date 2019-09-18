@@ -1320,9 +1320,18 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_BUSQUEDA] = requerimiento;
         }
 
-        
 
 
+        public void ChangeIdPeriodo()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Requerimiento requerimiento = this.RequerimientoSession;
+
+            requerimiento.periodo.idPeriodoSolicitud = Guid.Parse(this.Request.Params["idPeriodo"]);
+
+            this.RequerimientoSession = requerimiento;
+        }
 
         public String ChangeIdCiudad()
         {
@@ -1767,6 +1776,9 @@ namespace Cotizador.Controllers
 
             List<Requerimiento> pedidoList = (List<Requerimiento>)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_LISTA];
 
+
+            pedidoList = pedidoList.Where(p => p.estadoRequerimiento == Requerimiento.estadosRequerimiento.Ingresado).ToList();
+
             List<Requerimiento> finalList = new List<Requerimiento>();
             RequerimientoBL requerimientoBL = new RequerimientoBL();
             Requerimiento requerimientoSearch = new Requerimiento(Requerimiento.ClasesRequerimiento.Venta);
@@ -1853,6 +1865,7 @@ namespace Cotizador.Controllers
             List<Requerimiento> requerimientoList = (List<Requerimiento>)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_CONSOLIDADO];
 
             Requerimiento requerimientoBusqueda = (Requerimiento)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_BUSQUEDA];
+            List<Requerimiento> requerimientoBusquedaList = (List<Requerimiento>)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_LISTA];
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             PedidoBL pedidoBL = new PedidoBL();
@@ -1961,8 +1974,21 @@ namespace Cotizador.Controllers
                     String observacion = pedido.seguimientoPedido.observacion;*/
                     pedidoList.Add(pedido);
                 }
+
+                
+
+
+
+
+
             }
             //var v = new { numeroPedido = numeroPedidoString, estado = estado, observacion = observacion, idPedido = idPedido };
+
+
+            RequerimientoBL requerimientoBL = new RequerimientoBL();
+            requerimientoBL.AprobarRequerimientos(requerimientoBusquedaList, numeroGrupo);
+
+
             String resultado = JsonConvert.SerializeObject(pedidoList);
             return resultado;
         }

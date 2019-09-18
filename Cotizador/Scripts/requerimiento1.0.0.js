@@ -4021,7 +4021,7 @@ jQuery(function ($) {
                     
 
                         requerimiento = requerimiento + '<td>  ' + requerimientoList[i].montoSubTotal.toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>  ' + requerimientoList[i].estadoSolicitudString + '</td>' +
+                        '<td>  ' + requerimientoList[i].estadoRequerimientoString + '</td>' +
                         '<td>' + false + '</td>' +
                         '<td>' + false + '</td>' +
                         '<td>' + requerimientoList[i].topePresupuesto.toFixed(cantidadDecimales) + '  </td>' +
@@ -4424,6 +4424,26 @@ jQuery(function ($) {
             },
             success: function (ciudad) {
                 location.reload();
+            }
+        });
+    });  
+
+
+    $("#idPeriodo").change(function () {
+        var idPeriodo = $("#idPeriodo").val();
+
+        $.ajax({
+            url: "/Requerimiento/ChangeIdPeriodo",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idPeriodo: idPeriodo
+            },
+            error: function (detalle) {
+                location.reload();
+            },
+            success: function (ciudad) {
+               // location.reload();
             }
         });
     });  

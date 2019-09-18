@@ -18,10 +18,9 @@ namespace Model
             this.tipoPedidoCompraBusqueda = tiposPedidoCompraBusqueda.Todos;
             this.tipoPedidoAlmacenBusqueda = tiposPedidoAlmacenBusqueda.Todos;
             this.estadoRequerimiento = estadosRequerimiento.Ingresado;
-            this.periodo = periodos.agosto;
 
 
-
+            this.periodo = new PeriodoSolicitud();
             this.solicitante = new Solicitante();
             this.pedidoAdjuntoList = new List<PedidoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
@@ -45,7 +44,8 @@ namespace Model
             this.idGrupoCliente = 0;
         }
 
-
+        [Display(Name = "Periodo:")]
+        public PeriodoSolicitud periodo { get; set; }
 
 
         public Guid idPedido { get; set; }
@@ -590,31 +590,7 @@ namespace Model
         public bool excedioPresupuesto { get; set; }
         public decimal topePresupuesto { get; set; }
 
-
-
-        [Display(Name = "Periodo:")]
-        public periodos periodo { get; set; }
-        public enum periodos
-        {
-            [Display(Name = "Abril-2019")]
-            abril = 0,
-            [Display(Name = "Mayo-2019")]
-            mayo = 1,
-            [Display(Name = "Junio-2019")]
-            junio = 2,
-            [Display(Name = "Julio-2019")]
-            julio = 3,
-            [Display(Name = "Agosto-2019")]
-            agosto = 4
-        }
-
-        public String periodoString
-        {
-            get
-            {
-                return EnumHelper<periodos>.GetDisplayValue(this.periodo);
-            }
-        }
+       
 
     }
 }

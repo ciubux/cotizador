@@ -55,7 +55,19 @@ namespace BusinessLayer
           
 
         }
-                
+
+
+        public void AprobarRequerimientos(List<Requerimiento> requerimientoList, Int64 numeroGrupo)
+        {
+            using (var dal = new RequerimientoDAL())
+            {
+                dal.AprobarRequerimientos(requerimientoList, numeroGrupo);
+            }
+
+        }
+
+
+
         public void InsertRequerimiento(Requerimiento requerimiento)
         {
             using (var dal = new RequerimientoDAL())

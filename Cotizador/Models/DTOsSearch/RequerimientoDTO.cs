@@ -44,7 +44,7 @@ namespace Cotizador.Models.DTOsSearch
 
         public String seguimientoCrediticioPedido_estadoString { get; set; }
 
-        public String estadoSolicitudString { get; set; }
+        public String estadoRequerimientoString { get; set; }
 
         public String grupoCliente_nombre { get; set; }
 

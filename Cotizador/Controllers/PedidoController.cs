@@ -1482,12 +1482,6 @@ namespace Cotizador.Controllers
             this.PedidoSession.tipoPedidoVentaBusqueda = (Pedido.tiposPedidoVentaBusqueda)tipoPedidoBusqueda;
         }
 
-        public void changePeriodo()
-        {
-            int periodo = Int32.Parse(this.Request.Params["periodo"]);
-            this.PedidoSession.periodo = (Pedido.periodos)periodo;
-        }
-
 
         public String ChangeIdCiudadASolicitar()
         {
@@ -2688,6 +2682,17 @@ namespace Cotizador.Controllers
         {
             Pedido pedido = this.PedidoSession;
             pedido.mostrarCosto = Boolean.Parse(this.Request.Params["mostrarCosto"]);
+            this.PedidoSession = pedido;
+        }
+
+        public void ChangeIdPeriodo()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Pedido pedido = this.PedidoSession;
+
+            pedido.periodo.idPeriodoSolicitud = Guid.Parse(this.Request.Params["idPeriodo"]);
+
             this.PedidoSession = pedido;
         }
     }

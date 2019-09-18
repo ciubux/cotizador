@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using Model;
 using System.Linq;
+using System.Data.SqlClient;
 
 namespace DataLayer
 {
@@ -360,7 +361,42 @@ namespace DataLayer
             this.Commit();
         }
 
-  
+
+        public void AprobarRequerimientos(List<Requerimiento> requerimientoList, Int64 numeroGrupo)
+        {
+
+            this.BeginTransaction(IsolationLevel.ReadCommitted);
+
+
+            var objCommand = GetSqlCommand("CLIENTE.pu_AprobarRequerimientos");
+
+
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("idRequerimientoList", typeof(Int32)));
+
+            // populate DataTable from your List here
+            foreach (Requerimiento requerimiento in requerimientoList)
+                tvp.Rows.Add(requerimiento.idRequerimiento);
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idRequerimientoList", tvp);
+            
+            
+
+            // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.IntegerList";
+
+            //InputParameterAdd.Varchar(objCommand, "idProductoList", tvparam);
+            InputParameterAdd.BigInt(objCommand, "numeroGrupo", numeroGrupo);
+
+            //InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
+            ExecuteNonQuery(objCommand);
+
+            this.Commit();
+        }
+
+
         public void InsertRequerimientoDetalle(RequerimientoDetalle requerimientoDetalle, Usuario usuario)
         {
             var objCommand = GetSqlCommand("CLIENTE.pi_requerimientoDetalle");
@@ -424,6 +460,8 @@ namespace DataLayer
             InputParameterAdd.Char(objCommand, "tipo", ((char)requerimiento.claseRequerimiento).ToString());
             InputParameterAdd.Varchar(objCommand, "sku", requerimiento.sku);
             InputParameterAdd.Int(objCommand, "idClienteSunat", requerimiento.usuario.idClienteSunat);
+            InputParameterAdd.Guid(objCommand, "idPeriodo", requerimiento.periodo.idPeriodoSolicitud);
+
             DataTable dataTable = Execute(objCommand);
 
             List<Requerimiento> requerimientoList = new List<Requerimiento>();
@@ -491,7 +529,7 @@ namespace DataLayer
                     requerimiento.ubigeoEntrega.Id = Converter.GetString(row, "codigo_ubigeo");
                     requerimiento.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
                     requerimiento.requerimientoDetalleList = new List<RequerimientoDetalle>();
-                    requerimiento.estadoRequerimiento = (Requerimiento.estadosRequerimiento)Converter.GetInt(row, "estado_solicitud");
+                    requerimiento.estadoRequerimiento = (Requerimiento.estadosRequerimiento)Converter.GetInt(row, "estado_requerimiento");
                     requerimientoList.Add(requerimiento);
                 }
 

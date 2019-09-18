@@ -285,7 +285,7 @@ namespace Cotizador.Models.DTOsSearch
                 requerimientoDTO.montoTotal = requerimientoTmp.montoTotal;
                 requerimientoDTO.montoSubTotal = requerimientoTmp.montoSubTotal;
                 requerimientoDTO.ubigeoEntrega_distrito = requerimientoTmp.ubigeoEntrega.Distrito;
-                requerimientoDTO.estadoSolicitudString = requerimientoTmp.estadoRequerimientoString;
+                requerimientoDTO.estadoRequerimientoString = requerimientoTmp.estadoRequerimientoString;
                 requerimientoDTO.grupoCliente_nombre = requerimientoTmp.cliente.grupoCliente.nombre;
                 requerimientoDTO.requerimientoDetalleList = requerimientoTmp.requerimientoDetalleList;
                 requerimientoDTO.excedioPresupuesto = requerimientoTmp.excedioPresupuesto;
