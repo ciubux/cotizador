@@ -61,6 +61,32 @@ namespace DataLayer
         }
 
 
+        public List<PeriodoSolicitud> getPeriodosSolicitudVigentes(PeriodoSolicitud objSearch, bool excluirPeriodosConRequerimientos)
+        {
+            var objCommand = GetSqlCommand("CLIENTE.ps_periodos_solicitud_vigentes");
+            InputParameterAdd.Guid(objCommand, "idUsuario", objSearch.IdUsuarioRegistro);
+            InputParameterAdd.Int(objCommand, "periodosSinRequerimientos", excluirPeriodosConRequerimientos ? 1 : 0);
+
+
+            DataTable dataTable = Execute(objCommand);
+            List<PeriodoSolicitud> lista = new List<PeriodoSolicitud>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                PeriodoSolicitud obj = new PeriodoSolicitud();
+                obj.idPeriodoSolicitud = Converter.GetGuid(row, "id_periodo_solicitud");
+                obj.nombre = Converter.GetString(row, "nombre");
+                obj.fechaInicio = Converter.GetDateTime(row, "fecha_inicio");
+                obj.fechaFin = Converter.GetDateTime(row, "fecha_fin");
+                obj.Estado = Converter.GetInt(row, "estado");
+                lista.Add(obj);
+            }
+
+            return lista;
+        }
+
+
+
         public PeriodoSolicitud insertPeriodoSolicitud(PeriodoSolicitud obj)
         {
             var objCommand = GetSqlCommand("CLIENTE.pi_periodo_solicitud");
@@ -88,7 +114,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("CLIENTE.pu_periodo_solicitud");
             
             InputParameterAdd.Guid(objCommand, "idPeriodoSolicitud", obj.idPeriodoSolicitud);
-            InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "nombre", obj.nombre);
             InputParameterAdd.Varchar(objCommand, "fechaInicio", obj.fechaInicio.ToString("yyyy-MM-dd"));
             InputParameterAdd.Varchar(objCommand, "fechaFin", obj.fechaFin.ToString("yyyy-MM-dd"));

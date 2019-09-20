@@ -27,6 +27,15 @@ namespace BusinessLayer
             }
         }
 
+
+        public List<PeriodoSolicitud> getPeriodosSolicitudVigentes(PeriodoSolicitud obj, bool excluirPeriodosConRequerimientos)
+        {
+            using (var dal = new PeriodoSolicitudDAL())
+            {
+                return dal.getPeriodosSolicitudVigentes(obj, excluirPeriodosConRequerimientos);
+            }
+        }
+
         public PeriodoSolicitud insertPeriodoSolicitud(PeriodoSolicitud obj)
         {
             using (var dal = new PeriodoSolicitudDAL())

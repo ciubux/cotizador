@@ -35,8 +35,13 @@ jQuery(function ($) {
         var fecha = $("#periodoSolicitud_fechaInicioFormato").val();
         $("#periodoSolicitud_fechaInicioFormato").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
 
+
+        
+        var today = new Date();
+        var initDate = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+
         var fecha = $("#periodoSolicitud_fechaFinFormato").val();
-        $("#periodoSolicitud_fechaFinFormato").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
+        $("#periodoSolicitud_fechaFinFormato").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha).datepicker("option", "minDate", initDate);
     });
 
     function verificarSiExisteCliente() {
@@ -296,12 +301,39 @@ jQuery(function ($) {
         changeInputString("nombre", $("#periodoSolicitud_nombre").val());
     });
 
+  
     $("#periodoSolicitud_fechaInicioFormato").change(function () {
-        changeInputDate("fechaInicio", $("#periodoSolicitud_fechaInicioFormato").val());
+        var fechaInicio = $("#periodoSolicitud_fechaInicioFormato").val();
+        var fechaFin = $("#periodoSolicitud_fechaFinFormato").val();
+
+        if (fechaFin.trim() != "") {
+            //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
+            if (convertirFechaNumero(fechaFin) < convertirFechaNumero(fechaInicio)) {
+                alert("El fecha de inicio del periodo debe ser menor o igual a la fecha de fin.");
+                $("#periodoSolicitud_fechaInicioFormato").focus();
+                $("#periodoSolicitud_fechaInicioFormato").val("");
+                return false;
+            }
+        }
+
+        changeInputDate("fechaInicio", fechaInicio);
     });
 
     $("#periodoSolicitud_fechaFinFormato").change(function () {
-        changeInputDate("fechaFin", $("#periodoSolicitud_fechaFinFormato").val());
+        var fechaInicio = $("#periodoSolicitud_fechaInicioFormato").val();
+        var fechaFin = $("#periodoSolicitud_fechaFinFormato").val();
+
+        if (fechaInicio.trim() != "") {
+            //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
+            if (convertirFechaNumero(fechaFin) < convertirFechaNumero(fechaInicio)) {
+                alert("El fecha de fin del periodo debe ser mayor o igual a la fecha de inicio.");
+                $("#fechaFinVigenciaPrecios").focus();
+                $("#fechaFinVigenciaPrecios").val("");
+                return false;
+            }
+        }
+
+        changeInputDate("fechaFin", fechaFin);
     });
 
     $("#periodoSolicitud_Estado").change(function () {
@@ -419,6 +451,7 @@ jQuery(function ($) {
                         '<td>  ' + list[i].nombreEstado + '  </td>' +
                         '<td>' +
                         '<button type="button" class="' + list[i].idPeriodoSolicitud + ' btnEditarPeriodoSolicitud btn btn-primary ">Editar</button>' +
+                        '&nbsp;&nbsp;<button type="button" class="' + list[i].idPeriodoSolicitud + ' btnEliminarPeriodoSolicitud btn btn-danger ">Eliminar</button>' +
                         '</td>' +
                         '</tr>';
 
@@ -482,6 +515,62 @@ jQuery(function ($) {
     });
 
 
+    $(document).on('click', "button.btnEliminarPeriodoSolicitud", function () {
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idPeriodoSolicitud = arrrayClass[0];
+
+        $.confirm({
+            title: 'Confirmar operación',
+            content: '¿Esta seguro que desea eliminar el periodo? Si el periodo tiene requerimientos asignados estos se perderán.',
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'SI',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        $.ajax({
+                            url: "/PeriodoSolicitud/EliminarPeriodoSolicitud",
+                            type: 'POST',
+                            async: false,
+                            dataType: 'JSON',
+                            data: {
+                                idPeriodoSolicitud: idPeriodoSolicitud
+                            },
+                            success: function (resultado) {
+                                if (resultado.success == "1") {
+                                    $.alert({
+                                        title: "Operación exitosa",
+                                        type: 'green',
+                                        content: resultado.message,
+                                        buttons: {
+                                            OK: function () { }
+                                        }
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: "Ocurrió un error",
+                                        type: 'red',
+                                        content: resultado.message,
+                                        buttons: {
+                                            OK: function () { }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                },
+                noAplica: {
+                    text: 'CANCELAR',
+                    btnClass: 'btn-danger',
+                    action: function () {
+                    }
+                }
+            }
+        });
+
+        
+    });
 
 });
 

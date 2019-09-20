@@ -65,6 +65,38 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public string EliminarPeriodoSolicitud ()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaPeriodoSolicitud)
+            {
+                return "";
+            }
+
+            Guid idPeriodoSolicitud = Guid.Parse(Request["idPeriodoSolicitud"].ToString());
+
+            PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
+            PeriodoSolicitud obj = bL.getPeriodoSolicitud(idPeriodoSolicitud, usuario.idUsuario);
+            obj.usuario = usuario;
+
+            obj.nombre = obj.nombre + " " + DateTime.Now.ToFileTime().ToString();
+            obj.Estado = 0;
+            bL.updatePeriodoSolicitud(obj);
+
+            int success = 1;
+            string message = "";
+
+            try
+            {
+                message = "Se eliminó el perido";
+            } catch(Exception ex)
+            {
+                message = "Error de sistema"; 
+            }
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
         public ActionResult Editar(Guid? idPeriodoSolicitud = null)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoPeriodoSolicitud;
@@ -284,7 +316,7 @@ namespace Cotizador.Controllers
         }
 
 
-        public ActionResult GetPeriodosView(string periodoSelectId, string selectedValue = null)
+        public ActionResult GetPeriodosView(string periodoSelectId, string selectedValue = null, bool excluirPeriodosConRequerimientos = false)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -292,7 +324,7 @@ namespace Cotizador.Controllers
             PeriodoSolicitud periodoSolicitud = new PeriodoSolicitud { usuario = usuario };
             periodoSolicitud.IdUsuarioRegistro = usuario.idUsuario;
 
-            List<PeriodoSolicitud> periodoList = periodoSolicitudBL.getPeriodosSolicitud(periodoSolicitud);
+            List<PeriodoSolicitud> periodoList = periodoSolicitudBL.getPeriodosSolicitudVigentes(periodoSolicitud, excluirPeriodosConRequerimientos);
             var model = new PeriodoViewModels
             {
                 Data = periodoList,
