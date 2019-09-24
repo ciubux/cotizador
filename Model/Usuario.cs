@@ -209,6 +209,10 @@ namespace Model
         /*Notificacion de Documento de Venta*/
         public bool visualizaDocumentoVentaNotificacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOVENTANOTIFICACION)).FirstOrDefault() != null; } }
 
+        /*Notificacion de Documento de Venta*/
+        public bool visualizaVentas { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENTAS)).FirstOrDefault() != null; } }
+
+
         /*Administra Permisos*/
         public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }
 
@@ -223,3 +227,4 @@ namespace Model
     }
 }
 
+ 

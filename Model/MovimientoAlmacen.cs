@@ -59,6 +59,15 @@ namespace Model
         [Display(Name = "Fecha Emisión:")]
         public DateTime fechaEmision { get; set; }
 
+
+        [Display(Name = "Fecha Emisión Desde:")]
+        public DateTime fechaEmisionDesde { get; set; }
+
+        [Display(Name = "Fecha Emisión Hasta:")]
+        public DateTime fechaEmisionHasta { get; set; }
+
+
+
         [Display(Name = "Fecha Emisión:")]
         public String fechaEmisionFormatoImpresion
         {

@@ -106,6 +106,8 @@
                         var linkMantenimientoLogCampo = "";
                         var linkBusquedaDocumentoVentaNotificacion = "";
 
+                        var linkBusquedaVentas = "";
+
                         var linkCrearMensaje = "";
                         var linkBusquedaMensaje = "";
 
@@ -134,6 +136,7 @@
                             case 19: linkCrearFacturaConsolidada = "ative"; linkDocumentosVenta = "active"; break;
                             case 40: linkBusquedaDocumentosCompra = "ative"; linkDocumentosVenta = "active"; break;
                             case 44: linkBusquedaDocumentoVentaNotificacion = "ative"; linkDocumentosVenta = "active"; break;
+                            case 47: linkBusquedaVentas = "ative"; linkDocumentosVenta = "active"; break;
                             /*case 7: linkMantenimientoFactura = "ative"; linkDocumentosVenta = "active"; break;
                             case 8: linkBusquedaBoleta = "ative"; linkDocumentosVenta = "active"; break;
                             case 9: linkMantenimientoBoleta = "ative"; linkDocumentosVenta = "active"; break;
@@ -179,7 +182,8 @@
                             case 43: linkMantenimientoLogCampo = "ative"; linkMaestros = "active"; break;
 
                             case 45: linkCrearMensaje = "ative"; linkMaestros = "active"; break;
-                            case 46: linkBusquedaMensaje = "ative"; linkMaestros = "active"; break;
+                            case 46: linkBusquedaVentas = "ative"; linkMaestros = "active"; break;
+
                             case 101: linkBusquedaRol = "ative"; linkMaestros = "active"; break;
                             case 102: linkMantenimientoRol = "ative"; linkMaestros = "active"; break;
                             case 103: linkBusquedaUsuario = "ative"; linkMaestros = "active"; break;
@@ -315,6 +319,10 @@
                                     {
                                         <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
                                     }
+                                    @if (usuario.visualizaVentas)
+                                    {
+                                        <li id="linkBusquedaVentas" class="@linkBusquedaVentas">@Html.ActionLink("Venta - Búsqueda", "Lista", "Venta")</li>
+                                    }
                                 </ul>
                             </li>
                         }
@@ -437,9 +445,9 @@
 
 
                                     @*@if (usuario.modificaUsuario)
-        {
-            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
-        }*@
+                                        {
+                                            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
+                                        }*@
 
 
                                     @if (usuario.administraPermisos)

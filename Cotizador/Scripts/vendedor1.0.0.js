@@ -35,7 +35,8 @@
             success: function (list) {
                 $("#btnBusqueda").removeAttr("disabled");
                 $("#tableVendedores > tbody").empty();
-                $("#tableVendedores").footable({
+                $("#tableVendedores").footableita
+                ({
                     "paging": {
                         "enabled": true
                     }

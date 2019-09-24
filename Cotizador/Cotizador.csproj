@@ -602,6 +602,7 @@
     <Content Include="Scripts\mensaje1.0.0.js" />
     <Content Include="Views\Shared\ModalMensaje.cshtml" />
     <Content Include="Views\Mensaje\Lista.cshtml" />
+    <Content Include="Views\Venta\Lista.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

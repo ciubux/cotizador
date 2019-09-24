@@ -181,7 +181,7 @@ namespace Cotizador.Controllers
         {
             GuiaRemision guiaRemision = new GuiaRemision();
             guiaRemision.idMovimientoAlmacen = Guid.Parse(this.Request.Params["idMovimientoAlmacen"]);
-            guiaRemision.estaNoEntregado = Int32.Parse(this.Request.Params["noEntregado"])==1;
+            guiaRemision.estaNoEntregado = Int32.Parse(this.Request.Params["noEntregado"]) == 1;
             guiaRemision.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
@@ -206,7 +206,7 @@ namespace Cotizador.Controllers
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
 
             String[] movDesde = this.Request.Params["fechaTrasladoDesde"].Split('/');
-            guiaRemision.fechaTrasladoDesde = new DateTime(Int32.Parse(movDesde[2]), Int32.Parse(movDesde[1]), Int32.Parse(movDesde[0]),0,0,0);
+            guiaRemision.fechaTrasladoDesde = new DateTime(Int32.Parse(movDesde[2]), Int32.Parse(movDesde[1]), Int32.Parse(movDesde[0]), 0, 0, 0);
 
             String[] movHasta = this.Request.Params["fechaTrasladoHasta"].Split('/');
             guiaRemision.fechaTrasladoHasta = new DateTime(Int32.Parse(movHasta[2]), Int32.Parse(movHasta[1]), Int32.Parse(movHasta[0]), 23, 59, 59);
@@ -266,14 +266,14 @@ namespace Cotizador.Controllers
             guiaRemision.fechaTrasladoDesde = DateTime.Now.AddDays(-45);
             guiaRemision.fechaTrasladoHasta = DateTime.Now.AddDays(1);
             this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA] = guiaRemision;
-        }     
+        }
 
         public void CleanBusquedaFacturaConsolidada()
         {
             instanciarGuiaRemisionBusquedaFacturaConsolidada();
         }
-        
-       
+
+
 
 
         public ActionResult ConsolidarFactura()
@@ -330,7 +330,7 @@ namespace Cotizador.Controllers
         public String SearchParaFacturaConsolidada()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaGuiasRemisionConsolidarFactura;
-  
+
             //Se recupera el pedido Búsqueda de la session
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
 
@@ -345,10 +345,10 @@ namespace Cotizador.Controllers
             guiaRemision.estaAnulado = false;
             guiaRemision.estaFacturado = false;
             guiaRemision.numeroDocumento = 0;
-        //    guiaRemision.pedido.numeroPedido  = 0;
+            //    guiaRemision.pedido.numeroPedido  = 0;
 
             List<GuiaRemision> guiaRemisionList = movimientoAlmacenBL.GetGuiasRemisionGrupoCliente(guiaRemision);
-            List<Guid>  movimientoAlmacenIdList =  new List<Guid>();
+            List<Guid> movimientoAlmacenIdList = new List<Guid>();
 
 
             this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = null;
@@ -378,20 +378,20 @@ namespace Cotizador.Controllers
         {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_FACTURA_CONSOLIDADA];
 
-        //    String idMovimientoAlmacenList = " '";
+            //    String idMovimientoAlmacenList = " '";
             List<Guid> movimientoAlmacenIdList = new List<Guid>();
 
             foreach (MovimientoAlmacenJson movimientoAlmacenJson in MovimientoAlmacenJsonList)
             {
 
-          //      idMovimientoAlmacenList = idMovimientoAlmacenList + movimientoAlmacenJson.idMovimientoAlmacen+"','";
+                //      idMovimientoAlmacenList = idMovimientoAlmacenList + movimientoAlmacenJson.idMovimientoAlmacen+"','";
                 movimientoAlmacenIdList.Add(Guid.Parse(movimientoAlmacenJson.idMovimientoAlmacen));
             }
 
-       //     idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
+            //     idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
 
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
-            this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS] = movimientoAlmacenIdList;            
+            this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS] = movimientoAlmacenIdList;
             DocumentoVenta documentoVenta = movimientoAlmacenBL.obtenerResumenConsolidadoAtenciones(movimientoAlmacenIdList);
             this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO] = documentoVenta;
             String resultado = JsonConvert.SerializeObject(documentoVenta);
@@ -404,17 +404,17 @@ namespace Cotizador.Controllers
 
         public String validarPreciosVentaConsolidada()
         {
-        //    String idMovimientoAlmacenList = " '";
+            //    String idMovimientoAlmacenList = " '";
             List<Guid> movimientoAlmacenIdList = new List<Guid>();
 
             List<Guid> idMovimientoAlmacenList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
-        /*    foreach (Guid idMovimientoAlmacen in guidMovimientoAlmacenList)
-            {
+            /*    foreach (Guid idMovimientoAlmacen in guidMovimientoAlmacenList)
+                {
 
-                idMovimientoAlmacenList = idMovimientoAlmacenList + idMovimientoAlmacen + "','";
-            }
-            idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
-            */
+                    idMovimientoAlmacenList = idMovimientoAlmacenList + idMovimientoAlmacen + "','";
+                }
+                idMovimientoAlmacenList = idMovimientoAlmacenList.Substring(0, idMovimientoAlmacenList.Length - 2);
+                */
 
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             List<GuiaRemision> guiaRemisionList = movimientoAlmacenBL.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList);
@@ -440,9 +440,9 @@ namespace Cotizador.Controllers
             foreach (GuiaRemision guiaRemision in guiaRemisionList)
             {
                 //Se recorren los productos para buscar si existe en la guía
-                foreach (Producto producto in  productoList)
+                foreach (Producto producto in productoList)
                 {
-                     DocumentoDetalle documentoDetalle = guiaRemision.documentoDetalle.Where(d => d.producto.idProducto == producto.idProducto).FirstOrDefault();
+                    DocumentoDetalle documentoDetalle = guiaRemision.documentoDetalle.Where(d => d.producto.idProducto == producto.idProducto).FirstOrDefault();
                     if (documentoDetalle != null)
                     {
                         if (producto.precioSinIgv == 0)
@@ -455,7 +455,7 @@ namespace Cotizador.Controllers
                             break;
 
                         }
-                        
+
                     }
 
                 }
@@ -490,11 +490,11 @@ namespace Cotizador.Controllers
                 mostrarUnidadAlternativaList.Add(documentoVenta.ventaDetalleList[u].producto.sku, Int32.Parse(idProductoPresentacion.ToString()));
                 u++;
             }
-            
+
             List<Guid> movimientoAlmacenIdList = new List<Guid>();
 
             List<Guid> idMovimientoAlmacenList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
- 
+
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             List<GuiaRemision> guiaRemisionList = movimientoAlmacenBL.obtenerDetalleConsolidadoAtenciones(idMovimientoAlmacenList, mostrarUnidadAlternativaList);
 
@@ -512,11 +512,11 @@ namespace Cotizador.Controllers
                 titleCellStyle.SetFont(titleFont);
                 titleCellStyle.FillPattern = FillPattern.SolidForeground;
                 titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
-                
+
                 IDataFormat format = wb.CreateDataFormat();
                 ICellStyle dateFormatStyle = wb.CreateCellStyle();
                 dateFormatStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
-        
+
                 // create sheet
                 sheet = (HSSFSheet)wb.CreateSheet("Atenciones");
 
@@ -524,7 +524,7 @@ namespace Cotizador.Controllers
 
                 /*Cabecera, Sub total*/
                 int rTotal = (guiaRemisionList.Count) + 4;
-                int cTotal = cantidadColumnasDescripcion + (documentoVenta.ventaDetalleList.Count()*2);
+                int cTotal = cantidadColumnasDescripcion + (documentoVenta.ventaDetalleList.Count() * 2);
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -539,7 +539,7 @@ namespace Cotizador.Controllers
                 int i = cantidadColumnasDescripcion + 1;
                 foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
                 {
-                 
+
                     //¿Es alternativo?
                     if (mostrarUnidadAlternativaList[ventaDetalle.producto.sku] > 0)
                     {
@@ -550,11 +550,11 @@ namespace Cotizador.Controllers
                         UtilesHelper.setValorCelda(sheet, 1, i, ventaDetalle.producto.sku + " - " + ventaDetalle.producto.unidad, titleCellStyle);
                     }
 
-                    
+
 
                     UtilesHelper.setValorCelda(sheet, 2, i, "Cantidad", titleCellStyle);
-                    UtilesHelper.setValorCelda(sheet, 2, i+1, "Precio (S/)", titleCellStyle);
-                   
+                    UtilesHelper.setValorCelda(sheet, 2, i + 1, "Precio (S/)", titleCellStyle);
+
 
                     var mergeCell = new NPOI.SS.Util.CellRangeAddress(0, 0, i - 1, i);
                     sheet.AddMergedRegion(mergeCell);
@@ -605,7 +605,7 @@ namespace Cotizador.Controllers
                     UtilesHelper.setValorCelda(sheet, i, "K", guiaRemision.observaciones);
                     UtilesHelper.setValorCelda(sheet, i, "L", guiaRemision.pedido.direccionEntrega.contacto);
                     UtilesHelper.setValorCelda(sheet, i, "M", guiaRemision.pedido.direccionEntrega.telefono);
-                    int ic = cantidadColumnasDescripcion + 1; 
+                    int ic = cantidadColumnasDescripcion + 1;
                     foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
                     {
 
@@ -616,7 +616,7 @@ namespace Cotizador.Controllers
 
                             // UtilesHelper.setValorCelda(sheet, 1, ic, ventaDetalle.producto.sku + " - " + ventaDetalle.producto.unidad);
                             UtilesHelper.setValorCelda(sheet, i, ic, Convert.ToDouble(documentoDetalle.cantidadDecimal));
-                            UtilesHelper.setValorCelda(sheet, i, ic + 1, Convert.ToDouble(documentoDetalle.precioNeto) );
+                            UtilesHelper.setValorCelda(sheet, i, ic + 1, Convert.ToDouble(documentoDetalle.precioNeto));
                         }
                         ic = ic + 2;
                     }
@@ -637,7 +637,8 @@ namespace Cotizador.Controllers
                         sheet.GetRow(i - 1).GetCell(cf).CellFormula = "SUM(" + UtilesHelper.columnas[cf] + "3:" + UtilesHelper.columnas[cf] + (i - 1) + ")";
                         flag++;
                     }
-                    else {
+                    else
+                    {
                         sheet.GetRow(i - 1).GetCell(cf).CellFormula = "AVERAGE(" + UtilesHelper.columnas[cf] + "3:" + UtilesHelper.columnas[cf] + (i - 1) + ")";
                         flag = 0;
                     }
@@ -647,16 +648,16 @@ namespace Cotizador.Controllers
                 for (int cf = cantidadColumnasDescripcion; cf < cTotal; cf++)
                 {
                     sheet.GetRow(i - 1).GetCell(cf).CellStyle = titleCellStyle;
-               
+
                     if (flag == 0)
                     {
-                       // sheet.GetRow(i - 1).GetCell(cf).SetCellValue("SUB TOTAL:");
+                        // sheet.GetRow(i - 1).GetCell(cf).SetCellValue("SUB TOTAL:");
                         flag++;
                     }
                     else
                     {
                         sheet.GetRow(i - 1).GetCell(cf).SetCellType(CellType.Formula);
-                        sheet.GetRow(i - 1).GetCell(cf).CellFormula = UtilesHelper.columnas[cf-1] + (i - 1) + "*" + UtilesHelper.columnas[cf] + (i - 1);
+                        sheet.GetRow(i - 1).GetCell(cf).CellFormula = UtilesHelper.columnas[cf - 1] + (i - 1) + "*" + UtilesHelper.columnas[cf] + (i - 1);
                         flag = 0;
                     }
 
@@ -677,19 +678,19 @@ namespace Cotizador.Controllers
                     FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
 
                     GuiaRemision guiaRemision = this.GuiaRemisionSession;
-                    result.FileDownloadName = "Detalle de Atenciones - "+ guiaRemision.pedido.cliente.razonSocial + " .xls";
+                    result.FileDownloadName = "Detalle de Atenciones - " + guiaRemision.pedido.cliente.razonSocial + " .xls";
 
-                
-                  
+
+
 
 
                     return result;
                 }
 
-              
+
 
             }
-            
+
         }
 
 
@@ -814,8 +815,8 @@ namespace Cotizador.Controllers
                     }
 
                 }
-    
-                    
+
+
 
                 CiudadBL ciudadBL = new CiudadBL();
                 Ciudad ciudadOrigen = ciudadBL.getCiudad(pedido.ciudad.idCiudad);
@@ -853,12 +854,12 @@ namespace Cotizador.Controllers
                 //new NotaIngreso();
                 //notaIngreso.tipoNotaIngreso = (NotaIngreso.TiposNotaIngreso)Char.Parse(Request.Params["tipoNotaIngreso"]);
                 //notaIngreso.guiaRemisionAExtornar = new GuiaRemision();
-                
+
                 guiaRemision.notaIngresoAExtornar = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_VER];
 
                 guiaRemision.pedido = guiaRemision.notaIngresoAExtornar.pedido;
 
-                ClienteBL clienteBL = new ClienteBL();            
+                ClienteBL clienteBL = new ClienteBL();
                 //Revisar si es necesario recuperar el cliente
                 guiaRemision.pedido.cliente = clienteBL.getCliente(guiaRemision.pedido.cliente.idCliente);
 
@@ -875,7 +876,7 @@ namespace Cotizador.Controllers
                 guiaRemision.pedido.ubigeoEntrega = new Ubigeo();
                 guiaRemision.pedido.ubigeoEntrega.Id = Constantes.UBIGEO_VACIO;
 
-              
+
 
                 if (guiaRemision.notaIngresoAExtornar.motivoTraslado == NotaIngreso.motivosTraslado.Compra)
                 {
@@ -914,7 +915,7 @@ namespace Cotizador.Controllers
 
 
 
-              CiudadBL ciudadBL = new CiudadBL();
+                CiudadBL ciudadBL = new CiudadBL();
                 Ciudad ciudadDestino = ciudadBL.getCiudad(guiaRemision.notaIngresoAExtornar.ciudadDestino.idCiudad);
                 ciudadDestino.direccionPuntoLlegada = ciudadDestino.direccionPuntoPartida;
                 guiaRemision.ciudadOrigen = ciudadDestino;
@@ -923,8 +924,8 @@ namespace Cotizador.Controllers
                 guiaRemision.numeroDocumento = ciudadDestino.siguienteNumeroGuiaRemision;
                 TransportistaBL transportistaBL = new TransportistaBL();
                 guiaRemision.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(guiaRemision.notaIngresoAExtornar.ciudadDestino.idCiudad);
-                                
-                
+
+
 
                 this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
             }
@@ -1014,8 +1015,8 @@ namespace Cotizador.Controllers
 
             String jsonGuiaRemisionValidacion = JsonConvert.SerializeObject(guiaRemision.guiaRemisionValidacion);
 
-            if(guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
-            { 
+            if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
+            {
 
                 this.GuiaRemisionSession = null;
             }
@@ -1053,7 +1054,7 @@ namespace Cotizador.Controllers
             return "{\"cantidad\":\"" + guiaRemision.pedido.documentoDetalle.Count + "\"}";
         }
 
-         public string ChangeDireccionEntrega()
+        public string ChangeDireccionEntrega()
         {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
 
@@ -1062,7 +1063,7 @@ namespace Cotizador.Controllers
                 guiaRemision.pedido.direccionEntrega = new DireccionEntrega();
             }
             else
-            { 
+            {
                 Guid idDireccionEntrega = Guid.Parse(this.Request.Params["idDireccionEntrega"]);
                 guiaRemision.pedido.direccionEntrega = guiaRemision.pedido.cliente.direccionEntregaList.Where(d => d.idDireccionEntrega == idDireccionEntrega).FirstOrDefault();
                 guiaRemision.pedido.ubigeoEntrega = guiaRemision.pedido.direccionEntrega.ubigeo;
@@ -1108,15 +1109,15 @@ namespace Cotizador.Controllers
 
         public String Anular()
         {
-            
 
-         //   if (guiaRemision.fechaEmision.Month == DateTime.Now.Month)
-         //   {
+
+            //   if (guiaRemision.fechaEmision.Month == DateTime.Now.Month)
+            //   {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
             guiaRemision.comentarioAnulado = Request["comentarioAnulado"];
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             movimientoAlmacenBL.AnularMovimientoAlmacen(guiaRemision);
-          //  }
+            //  }
 
 
             return JsonConvert.SerializeObject(guiaRemision);
@@ -1126,7 +1127,7 @@ namespace Cotizador.Controllers
 
         #endregion
 
-        
+
 
 
         #region Changes
@@ -1251,7 +1252,7 @@ namespace Cotizador.Controllers
         public void ChangeAtencionParcial()
         {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
-            guiaRemision.atencionParcial = Int32.Parse( this.Request.Params["atencionParcial"])==1;
+            guiaRemision.atencionParcial = Int32.Parse(this.Request.Params["atencionParcial"]) == 1;
 
             if (!guiaRemision.atencionParcial)
             {
@@ -1261,7 +1262,7 @@ namespace Cotizador.Controllers
                 }
 
             }
-            
+
 
 
             this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
@@ -1292,7 +1293,7 @@ namespace Cotizador.Controllers
         public String ChangeTransportista()
         {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
-         
+
             if (this.Request.Params["idTransportista"] == null || this.Request.Params["idTransportista"].Equals(String.Empty))
             {
                 guiaRemision.transportista = new Transportista();
@@ -1302,7 +1303,7 @@ namespace Cotizador.Controllers
                 Guid idTransportista = Guid.Parse(this.Request.Params["idTransportista"]);
                 guiaRemision.transportista = guiaRemision.ciudadOrigen.transportistaList.Where(t => t.idTransportista == idTransportista).FirstOrDefault();
             }
-           
+
             this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
             String jsonTransportista = JsonConvert.SerializeObject(guiaRemision.transportista);
             return jsonTransportista;
@@ -1339,7 +1340,7 @@ namespace Cotizador.Controllers
         public void ChangeNumeroReferenciaAdicionalFacturaConsolidada()
         {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA];
-            guiaRemision.pedido.numeroReferenciaAdicional  = this.Request.Params["numeroReferenciaAdicional"];
+            guiaRemision.pedido.numeroReferenciaAdicional = this.Request.Params["numeroReferenciaAdicional"];
             this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = guiaRemision;
         }
 
