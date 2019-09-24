@@ -1,5 +1,5 @@
 /*********** Create ps_lista_venta - Lista las ventas por guia de remision ********/
-ALTER procedure  [dbo].[ps_lista_venta]
+create procedure  [dbo].[ps_lista_venta]
 (
 @idCiudad uniqueidentifier,
 @idCliente uniqueidentifier,
@@ -53,8 +53,9 @@ where MOVIMIENTO_ALMACEN.tipo_documento = 'GR' and
 		AND pr.sku like @sku)	)
 	order by VENTA.numero asc ;
 end 
+
 else	
-		select 	
+	select 	
 	VENTA.id_venta,venta.id_movimiento_almacen,	
 	pe.numero,
 	CONCAT(CPE_CABECERA_BE.serie,'-',CPE_CABECERA_BE.correlativo) as doc_venta,
@@ -80,11 +81,13 @@ else
 	AND ma.motivo_traslado='V'
 	AND ma.estado=1
 	AND VENTA.estado=1 	
-	AND	CPE_CABECERA_BE.TIP_CPE=@tipoDocumento      	
+	AND	 CPE_CABECERA_BE.TIP_CPE in (case when @tipoDocumento=0 then 1 end,case when @tipoDocumento=0 then 3 end,
+										case when @tipoDocumento=1 then 1 end,
+										case when @tipoDocumento=3 then 3 end)     	
 	AND (ma.id_sede_origen = @idCiudad 	OR (ma.id_sede_origen = (Select id_ciudad FROM USUARIO where id_usuario = @idUsuario)))
-	AND (ma.numero_documento = @numeroGuia OR pe.numero = @numeroPedido OR CPE_CABECERA_BE.CORRELATIVO=@numeroFactura)	
+	AND (ma.numero_documento = @numeroGuia OR pe.numero = @numeroPedido or CONVERT(INT,CPE_CABECERA_BE.CORRELATIVO)=@numeroFactura)	
 	end
-	
+		
 /*************** Create ps_venta_lista_detalle - Obtiene los detalles de una venta por guia de remision ************************************/
 
 ALTER PROCEDURE [dbo].[ps_venta_lista_detalle]

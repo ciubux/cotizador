@@ -4169,7 +4169,7 @@ jQuery(function ($) {
         cargarChosenClienteList();
         $("#VentaList_tipoDocumento").find("option[value='7']").remove();
         $("#VentaList_tipoDocumento").find("option[value='8']").remove();
-        $("#VentaList_tipoDocumento").find("option[value='0']").remove();
+       
         $("#btnBusquedaVentaList").click();
 
     });
