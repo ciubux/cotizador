@@ -423,29 +423,20 @@ namespace Cotizador.Controllers
             {
                 instanciarBusquedaVenta();
             }
+
             Venta objSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
+            Venta guiaRemisionSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA]; 
+            int existeCliente = 0;
+                        if (guiaRemisionSearch.pedido.cliente.idCliente != Guid.Empty)
+                        {
+                            existeCliente = 1;
+                        }
 
-            ViewBag.Venta = objSearch;
-
-            if (this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] == null)
-            {
-                instanciarGuiaRemisionBusqueda();
-            }
-
-            if (this.Session[Constantes.VAR_SESSION_GUIA_LISTA] == null)
-            {
-                this.Session[Constantes.VAR_SESSION_GUIA_LISTA] = new List<GuiaRemision>();
-            }
-            GuiaRemision guiaRemisionSearch = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA];
-            ViewBag.guiaRemision = guiaRemisionSearch;
+            ViewBag.Venta = objSearch; 
+           
+            ViewBag.guiaRemision = guiaRemisionSearch.guiaRemision;
 
             ViewBag.pagina = (int)Constantes.paginas.BusquedaVenta;
-
-            int existeCliente = 0;
-            if (guiaRemisionSearch.pedido.cliente.idCliente != Guid.Empty)
-            {
-                existeCliente = 1;
-            }
 
             ViewBag.pedido = this.VentaSession.pedido;
 
@@ -453,28 +444,7 @@ namespace Cotizador.Controllers
 
             return View();
         }
-
-        public void instanciarGuiaRemisionBusqueda()
-        {
-            GuiaRemision guiaRemision = new GuiaRemision();
-            guiaRemision.motivoTrasladoBusqueda = GuiaRemision.motivosTrasladoBusqueda.Todos;
-            guiaRemision.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
-            guiaRemision.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
-            guiaRemision.ciudadOrigen = new Ciudad();
-            guiaRemision.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-
-            guiaRemision.pedido = new Pedido();
-            guiaRemision.pedido.cliente = new Cliente();
-            guiaRemision.pedido.cliente.idCliente = Guid.Empty;
-            guiaRemision.pedido.buscarSedesGrupoCliente = false;
-
-            guiaRemision.fechaTrasladoDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
-            guiaRemision.fechaTrasladoHasta = DateTime.Now.AddDays(0);
-            guiaRemision.estaFacturado = true;
-
-            this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] = guiaRemision;
-        }
-
+        
         private void instanciarBusquedaVenta()
         {
             Venta obj = new Venta();
@@ -582,7 +552,6 @@ namespace Cotizador.Controllers
                 {
 
                     case Constantes.paginas.BusquedaVenta: obj = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA]; break;
-                    case Constantes.paginas.MantenimientoVenta: obj = (Venta)this.Session[Constantes.VAR_SESSION_VENTA]; break;
                 }
                 return obj;
             }
@@ -591,7 +560,6 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.BusquedaVenta: this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = value; break;
-                    case Constantes.paginas.MantenimientoVenta: this.Session[Constantes.VAR_SESSION_VENTA] = value; break;
                 }
             }
         }
@@ -612,9 +580,8 @@ namespace Cotizador.Controllers
             Venta obj = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
             obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             VentaBL bL = new VentaBL();
-            List<Venta> list = bL.getListVenta(obj);
-            //Se coloca en session el resultado de la búsqueda
-            this.Session[Constantes.VAR_SESSION_VENTA_LISTA] = list;
+            List<Venta> list = bL.getListVenta(obj);           
+            
             //Se retorna la cantidad de elementos encontrados
             return JsonConvert.SerializeObject(list);
         }
@@ -654,7 +621,7 @@ namespace Cotizador.Controllers
             venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             venta = ventaBL.GetVentaList(venta, usuario);
-            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
+            
 
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonVenta = JsonConvert.SerializeObject(venta);

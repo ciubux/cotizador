@@ -3936,19 +3936,7 @@ jQuery(function ($) {
                 }
             });
             return false;
-        }
-        if ($("#VentaList_numeroDocumento").val().length > 1 && $("#VentaList_tipoDocumento").val()==0) {
-
-            $.alert({
-                title: "Tipo de Documento Invalido",
-                type: 'orange',
-                content: 'Debe seleccionar un tipo de documento.',
-                buttons: {
-                    OK: function () { $('#Venta_fechaEmision_Hasta').focus(); }
-                }
-            });
-            return false;
-        }
+        }        
        
         return true;
     }
