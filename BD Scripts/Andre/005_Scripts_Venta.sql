@@ -1,5 +1,5 @@
 /*********** Create ps_lista_venta - Lista las ventas por guia de remision ********/
-create procedure  [dbo].[ps_lista_venta]
+ALTER procedure  [dbo].[ps_lista_venta]
 (
 @idCiudad uniqueidentifier,
 @idCliente uniqueidentifier,
@@ -12,11 +12,11 @@ create procedure  [dbo].[ps_lista_venta]
 @fechaTrasladoHasta datetime,
 @sku varchar(10) = NULL
 )
-as begin 
-
-if  @numeroGuia = 0 AND @numeroPedido = 0 and @numeroFactura = 0
+as
+begin 
+	if  @numeroGuia = 0 AND @numeroPedido = 0 and @numeroFactura =0
 	begin 
-	select 
+	select 	
 	venta.id_venta,venta.id_movimiento_almacen,	
 	PEDIDO.numero,
 	CONCAT(CPE_CABECERA_BE.serie,'-',CPE_CABECERA_BE.correlativo) as doc_venta,
@@ -33,7 +33,6 @@ from VENTA
 	left JOIN CPE_CABECERA_BE on venta.id_documento_venta=CPE_CABECERA_BE.id_cpe_cabecera_be 
 	inner join pedido on PEDIDO.id_pedido=VENTA.id_pedido 
 	INNER JOIN MOVIMIENTO_ALMACEN on MOVIMIENTO_ALMACEN.id_movimiento_almacen=VENTA.id_movimiento_almacen
-
 	inner join cliente on cliente.id_cliente=VENTA.id_cliente	
 	inner join USUARIO on usuario.id_usuario=MOVIMIENTO_ALMACEN.usuario_creacion
 	inner join CIUDAD on ciudad.id_ciudad=MOVIMIENTO_ALMACEN.id_sede_origen
@@ -46,7 +45,7 @@ where MOVIMIENTO_ALMACEN.tipo_documento = 'GR' and
     MOVIMIENTO_ALMACEN.fecha_emision >= @fechaTrasladoDesde AND
 	MOVIMIENTO_ALMACEN.fecha_emision <=  @fechaTrasladoHasta  
 	AND (MOVIMIENTO_ALMACEN.id_cliente = @idCliente OR	(@idCliente = '00000000-0000-0000-0000-000000000000') )
-	and  CIUDAD.id_ciudad = @idCiudad 		
+	and  CIUDAD.id_ciudad = @idCiudad
 	AND (@sku IS NULL OR  @sku = '' OR	EXISTS (SELECT	mad.id_movimiento_almacen_detalle
 		FROM MOVIMIENTO_ALMACEN_DETALLE mad 
 		INNER JOIN PRODUCTO pr ON mad.id_producto = pr.id_producto
@@ -54,8 +53,8 @@ where MOVIMIENTO_ALMACEN.tipo_documento = 'GR' and
 		AND pr.sku like @sku)	)
 	order by VENTA.numero asc ;
 end 
-else
-	select 
+else	
+		select 	
 	VENTA.id_venta,venta.id_movimiento_almacen,	
 	pe.numero,
 	CONCAT(CPE_CABECERA_BE.serie,'-',CPE_CABECERA_BE.correlativo) as doc_venta,
@@ -80,12 +79,12 @@ else
 	AND ma.tipo_documento = 'GR'
 	AND ma.motivo_traslado='V'
 	AND ma.estado=1
-	AND VENTA.estado=1 				
+	AND VENTA.estado=1 	
+	AND	CPE_CABECERA_BE.TIP_CPE=@tipoDocumento      	
 	AND (ma.id_sede_origen = @idCiudad 	OR (ma.id_sede_origen = (Select id_ciudad FROM USUARIO where id_usuario = @idUsuario)))
-	AND (ma.numero_documento = @numeroGuia OR pe.numero = @numeroPedido OR CPE_CABECERA_BE.CORRELATIVO=CONVERT(varchar(10),@numeroFactura))	
-end 
-
-
+	AND (ma.numero_documento = @numeroGuia OR pe.numero = @numeroPedido OR CPE_CABECERA_BE.CORRELATIVO=@numeroFactura)	
+	end
+	
 /*************** Create ps_venta_lista_detalle - Obtiene los detalles de una venta por guia de remision ************************************/
 
 ALTER PROCEDURE [dbo].[ps_venta_lista_detalle]

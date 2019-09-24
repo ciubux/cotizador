@@ -3928,7 +3928,7 @@ jQuery(function ($) {
         if (validate_fechaMayorQue(fechaInicio, fechaVencimiento) == 0) {
 
             $.alert({
-                title: "Fecha Vencimiento Inválida",
+                title: "Fecha Vencimiento Inválido",
                 type: 'orange',
                 content: 'Debe ingresar una fecha posterior o igual a la de inicio.',
                 buttons: {
@@ -3937,9 +3937,21 @@ jQuery(function ($) {
             });
             return false;
         }
-        return true
-    }
+        if ($("#VentaList_numeroDocumento").val().length > 1 && $("#VentaList_tipoDocumento").val()==0) {
 
+            $.alert({
+                title: "Tipo de Documento Invalido",
+                type: 'orange',
+                content: 'Debe seleccionar un tipo de documento.',
+                buttons: {
+                    OK: function () { $('#Venta_fechaEmision_Hasta').focus(); }
+                }
+            });
+            return false;
+        }
+       
+        return true;
+    }
 
 
     $("#btnBusquedaVentaList").click(function () {
@@ -4157,6 +4169,7 @@ jQuery(function ($) {
         cargarChosenClienteList();
         $("#VentaList_tipoDocumento").find("option[value='7']").remove();
         $("#VentaList_tipoDocumento").find("option[value='8']").remove();
+        $("#VentaList_tipoDocumento").find("option[value='0']").remove();
         $("#btnBusquedaVentaList").click();
 
     });
