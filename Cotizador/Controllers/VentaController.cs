@@ -621,8 +621,7 @@ namespace Cotizador.Controllers
             venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             venta = ventaBL.GetVentaList(venta, usuario);
-            
-
+            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;         
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonVenta = JsonConvert.SerializeObject(venta);
 
