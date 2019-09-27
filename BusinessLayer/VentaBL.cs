@@ -9,14 +9,14 @@ namespace BusinessLayer
 {
     public class VentaBL
     {
-         
+
 
         public void UpdateVenta(Venta venta)
         {
             using (var dal = new VentaDAL())
             {
                 dal.UpdateVenta(venta);
-            }           
+            }
         }
 
         public void InsertTransaccionNotaCredito(Transaccion transaccion)
@@ -125,10 +125,10 @@ namespace BusinessLayer
                 String observacionesFacturaAdicional = String.Empty;
 
                 //Pedido cuenta con orden de compra
-           /*     if (venta.pedido.numeroReferenciaCliente != null && venta.pedido.numeroReferenciaCliente.Length > 0)
-                {
-                    observacionesFacturaAdicional = "O/C N° " + venta.pedido.numeroReferenciaCliente + " ";
-                }*/
+                /*     if (venta.pedido.numeroReferenciaCliente != null && venta.pedido.numeroReferenciaCliente.Length > 0)
+                     {
+                         observacionesFacturaAdicional = "O/C N° " + venta.pedido.numeroReferenciaCliente + " ";
+                     }*/
                 //Pedido cuenta con numero requerimiento
                 if (venta.pedido.numeroRequerimiento != null && venta.pedido.numeroRequerimiento.Length > 0)
                 {
@@ -161,7 +161,7 @@ namespace BusinessLayer
             return venta;
         }
 
-        
+
         public Venta GetVentaConsolidada(Venta venta, Usuario usuario)
         {
             using (var dal = new VentaDAL())
@@ -213,6 +213,57 @@ namespace BusinessLayer
         }
 
 
+        public List<Venta> getListVenta(Venta obj)
+        {
+            using (var dal = new VentaDAL())
+            {
+               return  dal.getListVenta(obj);
+            }
+        }
 
+        public Venta GetVentaList(Venta venta, Usuario usuario)
+        {
+            using (var dal = new VentaDAL())
+            {
+                venta = dal.SelectVentaList(venta, usuario);
+                //Se agrega comentarios recuperados de los datos registrados en el pedido
+                String observacionesFacturaAdicional = String.Empty;
+
+                //Pedido cuenta con orden de compra
+                /*     if (venta.pedido.numeroReferenciaCliente != null && venta.pedido.numeroReferenciaCliente.Length > 0)
+                     {
+                         observacionesFacturaAdicional = "O/C N° " + venta.pedido.numeroReferenciaCliente + " ";
+                     }*/
+                //Pedido cuenta con numero requerimiento
+                if (venta.pedido.numeroRequerimiento != null && venta.pedido.numeroRequerimiento.Length > 0)
+                {
+                    observacionesFacturaAdicional = observacionesFacturaAdicional + "NR: " + venta.pedido.numeroRequerimiento + " ";
+                }
+                //Direccion Entrega tiene nombre y codigo 
+                if (venta.pedido.direccionEntrega.nombre != null && venta.pedido.direccionEntrega.nombre.Length > 0)
+                {
+                    if (venta.pedido.direccionEntrega.codigoCliente != null && venta.pedido.direccionEntrega.codigoCliente.Length > 0)
+                    {
+                        observacionesFacturaAdicional = observacionesFacturaAdicional + venta.pedido.direccionEntrega.nombre + " (" + venta.pedido.direccionEntrega.codigoCliente + ")";
+                    }
+                    else
+                    {
+                        observacionesFacturaAdicional = observacionesFacturaAdicional + venta.pedido.direccionEntrega.nombre;
+                    }
+                }
+
+                if (venta.pedido.observacionesFactura != null && !venta.pedido.observacionesFactura.Equals(String.Empty))
+                {
+                    venta.pedido.observacionesFactura = observacionesFacturaAdicional + " / " + venta.pedido.observacionesFactura;
+                }
+                else
+                {
+                    venta.pedido.observacionesFactura = observacionesFacturaAdicional;
+                }
+
+                this.procesarVenta(venta);
+            }
+            return venta;
+        }
     }
 }

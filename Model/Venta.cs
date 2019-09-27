@@ -7,6 +7,6 @@ using System.Web;
 namespace Model
 {
     public class Venta : Transaccion
-    {
-    }
+    {       
+    } 
 }

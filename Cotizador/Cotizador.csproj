@@ -606,6 +606,7 @@
     <Content Include="Views\Mensaje\Lista.cshtml" />
     <Content Include="Views\DocumentoVenta\ExportarCPEs.cshtml" />
     <Content Include="Views\Cotizacion\_ModalImportarDetallesExcel.cshtml" />
+    <Content Include="Views\Venta\Lista.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

@@ -9,9 +9,9 @@ jQuery(function ($) {
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
     var DESCARGAR_XML = 0;
 
-    
 
-    
+
+
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la edición/creación; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_MENSAJE_BUSQUEDA = "Ingresar datos solicitados";
@@ -54,7 +54,7 @@ jQuery(function ($) {
             }
         });
     }
-    
+
 
     function cargarChosenCliente() {
 
@@ -90,17 +90,17 @@ jQuery(function ($) {
             type: 'POST',
             dataType: 'JSON',
             data: {
-            idCiudad: this.value
-            }, 
+                idCiudad: this.value
+            },
             error: function (detalle) {
-                alert('Debe eliminar los productos agregados antes de cambiar de Sede.'); 
-                location.reload(); 
+                alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
+                location.reload();
             },
             success: function (ciudad) {
                 alert(ciudad)
             }
-        }); 
-    }  
+        });
+    }
 
 
 
@@ -111,7 +111,7 @@ jQuery(function ($) {
 
 
     $("#idCliente").change(function () {
-      //  $("#contacto").val("");
+        //  $("#contacto").val("");
         var idCliente = $(this).val();
 
         $.ajax({
@@ -124,7 +124,7 @@ jQuery(function ($) {
             success: function (cliente) {
             }
         });
-      
+
     });
 
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
@@ -169,7 +169,7 @@ jQuery(function ($) {
             }
         });
     });
-    
+
 
     /**
      * FIN CONTROLES DE CLIENTE
@@ -247,7 +247,7 @@ jQuery(function ($) {
             $("#guiaRemision_transportista_ruc").attr('disabled', 'disabled');
             $("#guiaRemision_transportista_direccion").attr('disabled', 'disabled');
             $("#guiaRemision_transportista_brevete").attr('disabled', 'disabled');
-            
+
         }
         else {
             /*  $("#pedido_direccionEntrega_telefono").val($('#pedido_direccionEntrega').find(":selected").attr("telefono"));*/
@@ -286,23 +286,22 @@ jQuery(function ($) {
     });
 
 
- 
-  
-   /* ################################## FIN CHANGE CONTROLES */
 
 
-      
+    /* ################################## FIN CHANGE CONTROLES */
+
+
+
 
 
 
 
     ////////VER COTIZACIÓN  --- CAMBIO DE ESTADO
 
-    function invertirFormatoFecha(fecha)
-    {
+    function invertirFormatoFecha(fecha) {
         var fechaInvertida = fecha.split("-");
         fecha = fechaInvertida[2] + "/" + fechaInvertida[1] + "/" + fechaInvertida[0];
-        return fecha 
+        return fecha
     }
 
     function convertirFechaNumero(fecha) {
@@ -313,8 +312,8 @@ jQuery(function ($) {
 
 
     /*VER PEDIDO*/
-  
-    
+
+
 
     $("#btnCancelarGuiaRemision").click(function () {
         if (confirm(MENSAJE_CANCELAR_EDICION)) {
@@ -327,7 +326,7 @@ jQuery(function ($) {
 
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idDocumentoVenta = arrrayClass[0];
-        var serieNumero = arrrayClass[1];   
+        var serieNumero = arrrayClass[1];
 
 
         $.ajax({
@@ -346,10 +345,10 @@ jQuery(function ($) {
                     type: 'green',
                     content: "El estado de la factura " + serieNumero + " fue actualizado correctamente.",
                     buttons: {
-                        OK: function () { location.reload();}
+                        OK: function () { location.reload(); }
                     }
                 });
-                
+
             }
         });
     });
@@ -371,7 +370,7 @@ jQuery(function ($) {
         var blob = new Blob([byte]);
         var link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-       // var fileName = reportName + ".pdf";
+        // var fileName = reportName + ".pdf";
         link.download = fileName;
         link.click();
     };
@@ -385,7 +384,7 @@ jQuery(function ($) {
         descargarPDF(idDocumentoVenta, serieNumero);
     });
 
-      $("#btnDescargarPDF").click(function () {
+    $("#btnDescargarPDF").click(function () {
 
         //var arrrayClass = event.target.getAttribute("class").split(" ");
         var idDocumentoVenta = $("#idDocumentoVenta").val();
@@ -450,15 +449,15 @@ jQuery(function ($) {
             success: function (documentos) {
 
 
-             //   var filePDF = base64ToArrayBuffer(documentos.pdf);
-            //    saveByteArray(serieNumero + ".pdf", filePDF);
+                //   var filePDF = base64ToArrayBuffer(documentos.pdf);
+                //    saveByteArray(serieNumero + ".pdf", filePDF);
 
-              //  if (DESCARGAR_XML == 1) {
-                    var fileCPE = base64ToArrayBuffer(documentos.cpe);
-                    var fileCDR = base64ToArrayBuffer(documentos.cdr);
-                    saveByteArray(documentos.nombreArchivo + ".xml", fileCPE);
-                    saveByteArray('R-' + documentos.nombreArchivo + ".xml", fileCDR);
-           //     }
+                //  if (DESCARGAR_XML == 1) {
+                var fileCPE = base64ToArrayBuffer(documentos.cpe);
+                var fileCDR = base64ToArrayBuffer(documentos.cdr);
+                saveByteArray(documentos.nombreArchivo + ".xml", fileCPE);
+                saveByteArray('R-' + documentos.nombreArchivo + ".xml", fileCDR);
+                //     }
 
 
 
@@ -472,18 +471,17 @@ jQuery(function ($) {
 
     });
 
-   
-       
 
 
 
-    function desactivarBotonesVer()
-    {
+
+
+    function desactivarBotonesVer() {
         $("#btnContinuarGenerandoNotaCredito").attr("disabled", "disabled");
         $("#btnContinuarGenerandoNotaDebito").attr("disabled", "disabled");
         $("#btnCancelarNotaCredito").attr("disabled", "disabled");
         $("#btnCancelarNotaDebito").attr("disabled", "disabled");
-        $("#btnCancelarFactura").attr("disabled", "disabled");        
+        $("#btnCancelarFactura").attr("disabled", "disabled");
         $("btnSolicitarAnulacion").attr("disabled", "disabled");
         $("btnIniciarNotaCredito").attr("disabled", "disabled");
         $("btnIniciarNotaDebito").attr("disabled", "disabled");
@@ -496,25 +494,24 @@ jQuery(function ($) {
         $("#btnContinuarGenerandoNotaDebito").removeAttr("disabled");
         $("#btnCancelarNotaCredito").removeAttr("disabled");
         $("#btnCancelarNotaDebito").removeAttr("disabled");
-        $("#btnCancelarFactura").removeAttr("disabled");   
+        $("#btnCancelarFactura").removeAttr("disabled");
         $("btnSolicitarAnulacion").removeAttr("disabled");
         $("btnIniciarNotaCredito").removeAttr("disabled");
         $("btnIniciarNotaDebito").removeAttr("disabled");
         $("btnIniciarAprobacion").removeAttr("disabled");
         $("btnIniciarRefacturacion").removeAttr("disabled");
     }
-    
 
 
-    
 
-    function limpiarComentario()
-    {
+
+
+    function limpiarComentario() {
         $("#comentarioEstado").val("");
         $("#comentarioEstado").focus();
     }
 
-    
+
 
 
 
@@ -523,7 +520,7 @@ jQuery(function ($) {
     });
 
 
-    
+
 
     $('#btnSolicitarAnulacion').click(function () {
 
@@ -552,26 +549,26 @@ jQuery(function ($) {
         $("#serieNumeroFacturaParaNotaDebito").val($("#vpSERIE_CORRELATIVO").html());
         $("#modalGenerarNotaDebito").modal();
         $("#divProductoCargo").hide();
-        
+
         //modalAnulacion.modal();
     });
 
 
     $('#btnIniciarRefacturacion').click(function () {
 
-     //   $("#btnContinuarGenerandoNotaDebito").attr("disabled", "disabled");
- //       $("#btnCancelarNotaDebito").attr("disabled", "disabled");
-  //      var tipoNotaDebito = $('input:radio[name=tipoNotaDebito]:checked').val();
+        //   $("#btnContinuarGenerandoNotaDebito").attr("disabled", "disabled");
+        //       $("#btnCancelarNotaDebito").attr("disabled", "disabled");
+        //      var tipoNotaDebito = $('input:radio[name=tipoNotaDebito]:checked').val();
 
         var idDocumentoVenta = $("#idDocumentoVenta").val();
 
 
-   /*     if (tipoNotaDebito == null) {
-            mostrarMensajeErrorProceso("Debe seleccionar el Motivo de la Nota de Débito.");
-            $("#btnContinuarGenerandoNotaDebito").removeAttr("disabled");
-            $("#btnCancelarNotaDebito").removeAttr("disabled");
-            return false;
-        }*/
+        /*     if (tipoNotaDebito == null) {
+                 mostrarMensajeErrorProceso("Debe seleccionar el Motivo de la Nota de Débito.");
+                 $("#btnContinuarGenerandoNotaDebito").removeAttr("disabled");
+                 $("#btnCancelarNotaDebito").removeAttr("disabled");
+                 return false;
+             }*/
 
         var yourWindow;
         $.ajax({
@@ -584,8 +581,8 @@ jQuery(function ($) {
             },
             error: function (error) {
                 mostrarMensajeErrorProceso(MENSAJE_ERROR);
-             //   $("#btnContinuarGenerandoNotaDebito").removeAttr("disabled");
-            //    $("#btnCancelarNotaDebito").removeAttr("disabled");
+                //   $("#btnContinuarGenerandoNotaDebito").removeAttr("disabled");
+                //    $("#btnCancelarNotaDebito").removeAttr("disabled");
             },
             success: function (venta) {
 
@@ -595,8 +592,8 @@ jQuery(function ($) {
                 }
                 else {
                     mostrarMensajeErrorProceso(MENSAJE_ERROR + "\n" + "Detalle Error: " + venta.descripcionError);
-                //    $("#btnContinuarGenerandoNotaDebito").removeAttr("disabled");
-              //      $("#btnCancelarNotaDebito").removeAttr("disabled");
+                    //    $("#btnContinuarGenerandoNotaDebito").removeAttr("disabled");
+                    //      $("#btnCancelarNotaDebito").removeAttr("disabled");
                 }
 
 
@@ -612,17 +609,17 @@ jQuery(function ($) {
         $("#serieNumeroAprobacionAnulacion").val($("#vpSERIE_CORRELATIVO").html());
         $("#modalAprobacionAnulacion").modal();
     });
-    
+
 
 
     $(document).on('click', "button.btnAprobarAnulacion", function () {
 
-    /*    var arrrayClass = event.target.getAttribute("class").split(" ");
-        $("#idDocumentoVenta").val(arrrayClass[0]);
-        $("#serieNumeroAprobacionAnulacion").val(arrrayClass[1]);
-        */
+        /*    var arrrayClass = event.target.getAttribute("class").split(" ");
+            $("#idDocumentoVenta").val(arrrayClass[0]);
+            $("#serieNumeroAprobacionAnulacion").val(arrrayClass[1]);
+            */
 
-     //   modalAnulacion.modal();
+        //   modalAnulacion.modal();
     });
 
 
@@ -656,8 +653,7 @@ jQuery(function ($) {
             },
             success: function (documentoVenta) {
 
-                if (documentoVenta.tipoErrorSolicitudAnulacion == 0)
-                {
+                if (documentoVenta.tipoErrorSolicitudAnulacion == 0) {
                     $.alert({
                         title: TITLE_EXITO,
                         type: 'green',
@@ -673,7 +669,7 @@ jQuery(function ($) {
 
                 $("#btnAceptarAnulacion").removeAttr("disabled");
 
-              
+
             }
         });
     });
@@ -722,7 +718,7 @@ jQuery(function ($) {
                 else {
                     mostrarMensajeErrorProceso(documentoVenta.rPTA_BE.DETALLE);
                 }
-               
+
             }
         });
     });
@@ -763,10 +759,10 @@ jQuery(function ($) {
             }
         });
     });
-    
+
     var ft = null;
 
-    
+
     /*####################################################
     EVENTOS BUSQUEDA FACTURA
     #####################################################*/
@@ -792,7 +788,7 @@ jQuery(function ($) {
     $("#btnBusqueda").click(function () {
 
         var idCiudad = $("#idCiudad").val();
-        if ((idCiudad == "" || idCiudad == GUID_EMPTY)  && $("#documentoVenta_numero").val() != "") {
+        if ((idCiudad == "" || idCiudad == GUID_EMPTY) && $("#documentoVenta_numero").val() != "") {
             $("#idCiudad").focus();
             $.alert({
                 title: TITLE_MENSAJE_BUSQUEDA,
@@ -800,19 +796,19 @@ jQuery(function ($) {
                 buttons: {
                     OK: function () { }
                 }
-            });  
+            });
             return false;
         }
 
 
 
         //sede MP
-        
-        var idCliente = $("#idCliente").val();   
+
+        var idCliente = $("#idCliente").val();
         var numero = $("#documentoVenta_numero").val();
 
-        var numeroPedido = $("#documentoVenta_pedido_numeroPedido").val(); 
-        var numeroGuiaRemision = $("#documentoVenta_guiaRemision_numeroDocumento").val(); 
+        var numeroPedido = $("#documentoVenta_pedido_numeroPedido").val();
+        var numeroGuiaRemision = $("#documentoVenta_guiaRemision_numeroDocumento").val();
 
         var fechaEmisionDesde = $("#documentoVenta_fechaEmisionDesde").val();
         var fechaEmisionHasta = $("#documentoVenta_fechaEmisionHasta").val();
@@ -860,7 +856,7 @@ jQuery(function ($) {
                     var styleEstado = "";
                     var botonAnular = "";
                     var botonGenerarNotaCredito = "";
-                    
+
                     switch (facturaList[i].estadoDocumentoSunat) {
                         case 105: case 104: styleEstado = "style='color: red;font-weight: normal;'";
 
@@ -878,11 +874,11 @@ jQuery(function ($) {
                     }
 
                     if (facturaList[i].usuario.apruebaAnulaciones && facturaList[i].solicitadoAnulacion
-                        && (facturaList[i].estadoDocumentoSunat == 102 ||  facturaList[i].estadoDocumentoSunat == 103)
+                        && (facturaList[i].estadoDocumentoSunat == 102 || facturaList[i].estadoDocumentoSunat == 103)
                     ) {
                         botonAnular = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnAprobarAnulacion  btn btn-danger" data-toggle="modal" data-target="#modalAprobacionAnulacion">Aprobar Anulación</button >';
                     }
-                    else if  (facturaList[i].solicitadoAnulacion) {
+                    else if (facturaList[i].solicitadoAnulacion) {
                         botonAnular = '';
                     }
 
@@ -892,7 +888,7 @@ jQuery(function ($) {
                         botonGenerarNotaCredito = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnGenerarNotaCredito  btn btn-danger" data-toggle="modal" data-target="#modalGenerarNotaCredito">Generar Nota Crédito</button >';
                     }
 
-                    
+
 
                     var botonDescargarXML = '';
                     if (DESCARGAR_XML == 1)
@@ -906,7 +902,7 @@ jQuery(function ($) {
                         movimientoAlmacen = facturaList[i].notaIngreso.serieNumeroNotaIngreso;
                     }
 
-                    var factura = '<tr data-expanded="false">'+
+                    var factura = '<tr data-expanded="false">' +
                         '<td>  ' + facturaList[i].idDocumentoVenta + '</td>' +
                         '<td>  ' + facturaList[i].serieNumero + '</td>' +
                         '<td>  ' + facturaList[i].pedido.numeroPedidoString + '</td>' +
@@ -928,18 +924,18 @@ jQuery(function ($) {
                         '<td ' + styleEstado + ' > ' + facturaList[i].estadoDocumentoSunatString + '</td>' +
                         '<td>  ' + facturaList[i].comentarioSolicitudAnulacion + '</td>' +
 
-                        
+
                         '<td> <button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnVerDocumentoVenta btn btn-primary">Ver</button>' +
                         '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarPDF btn btn-primary bouton-image pdfBoton">PDF</button>' +
                         '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnActualizarEstado  btn btn-success">Act. Estado</button >' +
-                  /*      '<td> <button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarPDF btn btn-primary">Descargar PDF</button>' +
-                        botonDescargarXML +
-                        '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnActualizarEstado  btn btn-primary">Act. Estado</button >' +
-                        botonAnular +
-                        botonGenerarNotaCredito +
-                        '</td> ' +*/
-                         '</tr>';                
-                    
+                        /*      '<td> <button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarPDF btn btn-primary">Descargar PDF</button>' +
+                              botonDescargarXML +
+                              '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnActualizarEstado  btn btn-primary">Act. Estado</button >' +
+                              botonAnular +
+                              botonGenerarNotaCredito +
+                              '</td> ' +*/
+                        '</tr>';
+
                     $("#tableFacturas").append(factura);
                 }
 
@@ -977,7 +973,7 @@ jQuery(function ($) {
 
             }
         });
-    });  
+    });
 
 
     function ConfirmDialogAtencionParcial(message) {
@@ -1045,14 +1041,14 @@ jQuery(function ($) {
         activarBotonesVer();
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idDocumentoVenta = arrrayClass[0];
- 
 
-     /*   $('body').loadingModal({
-            text: 'Creando Factura...'
-        });
-        */
 
-       
+        /*   $('body').loadingModal({
+               text: 'Creando Factura...'
+           });
+           */
+
+
         $.ajax({
             url: "/Factura/Show",
             type: 'POST',
@@ -1083,9 +1079,9 @@ jQuery(function ($) {
 
                 /*Solicitar Anulación */
                 if (documentoVenta.solicitadoAnulacion == false
-                    && 
+                    &&
                     (documentoVenta.estadoDocumentoSunat == '102'
-                        ||  documentoVenta.estadoDocumentoSunat == '103')
+                        || documentoVenta.estadoDocumentoSunat == '103')
                 ) {
                     $('#btnSolicitarAnulacion').show();
 
@@ -1093,65 +1089,63 @@ jQuery(function ($) {
                 else {
                     $('#btnSolicitarAnulacion').hide();
                 }
-                
+
                 /*Aprobar anulacion*/
                 if (documentoVenta.solicitadoAnulacion == true && (documentoVenta.estadoDocumentoSunat == '102'
                     || documentoVenta.estadoDocumentoSunat == '103')
-                    )   
-                {
+                ) {
                     $('#btnIniciarAprobacion').show();
                 }
-                else
-                {
+                else {
                     $('#btnIniciarAprobacion').hide();
                 }
 
 
                 //Nota de Crédito
-            if ((documentoVenta.estadoDocumentoSunat == '102'
-                || documentoVenta.estadoDocumentoSunat == '103')
-                && (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA //|| 
-                //documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA
+                if ((documentoVenta.estadoDocumentoSunat == '102'
+                    || documentoVenta.estadoDocumentoSunat == '103')
+                    && (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA //|| 
+                        //documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA
                     )
-                && documentoVenta.solicitadoAnulacion == false
+                    && documentoVenta.solicitadoAnulacion == false
                 ) {
-                $('#btnIniciarNotaCredito').show();
-            }
-            else {
-                $('#btnIniciarNotaCredito').hide();
+                    $('#btnIniciarNotaCredito').show();
+                }
+                else {
+                    $('#btnIniciarNotaCredito').hide();
                 }
 
 
-            if ((documentoVenta.estadoDocumentoSunat == '102'
-                || documentoVenta.estadoDocumentoSunat == '103')
-                && (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA //||
-                //documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA
-            )
-                && documentoVenta.solicitadoAnulacion == false
-            ) {
-                $('#btnIniciarNotaDebito').show();
-            }
-            else {
-                $('#btnIniciarNotaDebito').hide();
-            }
+                if ((documentoVenta.estadoDocumentoSunat == '102'
+                    || documentoVenta.estadoDocumentoSunat == '103')
+                    && (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA //||
+                        //documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA
+                    )
+                    && documentoVenta.solicitadoAnulacion == false
+                ) {
+                    $('#btnIniciarNotaDebito').show();
+                }
+                else {
+                    $('#btnIniciarNotaDebito').hide();
+                }
 
 
-            if ((documentoVenta.estadoDocumentoSunat == '102'
-                || documentoVenta.estadoDocumentoSunat == '103')
-                && (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA //||
-                    //documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA
-                )
-                && documentoVenta.solicitadoAnulacion == false
-            ) {
-                $('#btnIniciarRefacturacion').show();
-            }
-            else {
-                $('#btnIniciarRefacturacion').hide();
-            }
+                if ((documentoVenta.estadoDocumentoSunat == '102'
+                    || documentoVenta.estadoDocumentoSunat == '103')
+                    && (documentoVenta.tipoDocumento == CONS_TIPO_DOC_FACTURA //||
+                        //documentoVenta.tipoDocumento == CONS_TIPO_DOC_BOLETA
+                    )
+                    && documentoVenta.solicitadoAnulacion == false
+                ) {
+                    $('#btnIniciarRefacturacion').show();
+                }
+                else {
+                    $('#btnIniciarRefacturacion').hide();
+                }
 
-            
 
-            if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO
+
+                if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO
                     || documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_DEBITO) {
 
                     $('.datosNotaCreditoDebito').show();
@@ -1174,7 +1168,7 @@ jQuery(function ($) {
 
                     $('.datosNotaCreditoDebito').hide();
                 }
-           
+
                 $("#idDocumentoVenta").val(documentoVenta.idDocumentoVenta);
                 /*FECHA HORA EMISIÓN -  SERIE CORRELATIVO*/
                 $("#vpFEC_EMI_HOR_EMI").html(documentoVenta.cPE_CABECERA_BE.FEC_EMI + ' ' + documentoVenta.cPE_CABECERA_BE.HOR_EMI)
@@ -1200,8 +1194,8 @@ jQuery(function ($) {
                 }
                 else {
                     $("#vpCODIGO_CLIENTE").html("");
-                    $("#vpOBSERVACIONES").html("");  
-                }           
+                    $("#vpOBSERVACIONES").html("");
+                }
                 $("#vpCORREO").html(documentoVenta.cPE_CABECERA_BE.CORREO_ENVIO);
                 $("#vpCOND_PAGO").html(documentoVenta.tipoPagoString);
                 $("#vpFEC_VCTO").html(documentoVenta.cPE_CABECERA_BE.FEC_VCTO);
@@ -1217,7 +1211,7 @@ jQuery(function ($) {
 
                 $("#modalVerFactura").modal();
 
-              
+
                 $("#tableDetalleFacturaVistaPrevia > tbody").empty();
                 //FooTable.init('#tableCotizaciones');
                 $("#tableDetalleFacturaVistaPrevia").footable();
@@ -1227,7 +1221,7 @@ jQuery(function ($) {
 
                     var lineaFactura = "";
 
-               
+
 
                     var lineaFactura = '<tr data-expanded="false">' +
                         '<td>  ' + lineasFactura[i].LIN_ITM + '</td>' +
@@ -1254,7 +1248,7 @@ jQuery(function ($) {
 
     $("input:radio[name=tipoNotaCredito]").change(function () {
         var tipoNotaCredito = $('input:radio[name=tipoNotaCredito]:checked').val();
-       
+
         if (tipoNotaCredito == TIPO_NOTA_CREDITO_DESCUENTO_GLOBAL) {
             $("#divProductoDescuento").show();
         }
@@ -1263,7 +1257,7 @@ jQuery(function ($) {
         }
     });
 
-  
+
     $("#btnContinuarGenerandoNotaCredito").click(function () {
         desactivarBotonesVer();
 
@@ -1302,7 +1296,7 @@ jQuery(function ($) {
             },
             success: function (venta) {
 
-               
+
                 if (venta.tipoErrorCrearTransaccion == 0) {
                     window.location = '/NotaCredito/Crear';
                 }
@@ -1311,8 +1305,8 @@ jQuery(function ($) {
                     $("#btnContinuarGenerandoNotaCredito").removeAttr("disabled");
                     $("#btnCancelarNotaCredito").removeAttr("disabled");
                 }
-             
-               
+
+
             }
         });
 
@@ -1321,7 +1315,7 @@ jQuery(function ($) {
 
     $("input:radio[name=tipoNotaDebito]").change(function () {
         var tipoNotaDebito = $('input:radio[name=tipoNotaDebito]:checked').val();
-        
+
         if (tipoNotaDebito != TIPO_NOTA_DEBITO_AUMENTO_VALOR) {
             $("#divProductoCargo").show();
         }
@@ -1758,5 +1752,5 @@ jQuery(function ($) {
         });*/
     }
     cargarTablaDetalle();
-    
+
 });

@@ -48,56 +48,56 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             //try
             //{
-                Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
 
 
 
-                DocumentoVenta documentoVenta = new DocumentoVenta();
+            DocumentoVenta documentoVenta = new DocumentoVenta();
 
-                String[] fecha = this.Request.Params["fechaEmision"].Split('/');
-                String[] hora = this.Request.Params["horaEmision"].Split(':');
-                documentoVenta.serie = this.Request.Params["serie"];
-                documentoVenta.cliente = venta.pedido.cliente;
-                documentoVenta.venta = venta;
-
-
-                documentoVenta.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
-
-                fecha = this.Request.Params["fechaVencimiento"].Split('/');
-                documentoVenta.fechaVencimiento = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
-
-                documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPago"]);
-                documentoVenta.formaPago = (DocumentoVenta.FormaPago)Int32.Parse(this.Request.Params["formaPago"]);
-                documentoVenta.usuario = usuario;
+            String[] fecha = this.Request.Params["fechaEmision"].Split('/');
+            String[] hora = this.Request.Params["horaEmision"].Split(':');
+            documentoVenta.serie = this.Request.Params["serie"];
+            documentoVenta.cliente = venta.pedido.cliente;
+            documentoVenta.venta = venta;
 
 
+            documentoVenta.fechaEmision = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), Int32.Parse(hora[0]), Int32.Parse(hora[1]), 0);
+
+            fecha = this.Request.Params["fechaVencimiento"].Split('/');
+            documentoVenta.fechaVencimiento = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+
+            documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(this.Request.Params["tipoPago"]);
+            documentoVenta.formaPago = (DocumentoVenta.FormaPago)Int32.Parse(this.Request.Params["formaPago"]);
+            documentoVenta.usuario = usuario;
 
 
-                //documentoVenta.MovimentoALmacen = new 
-              //  documentoVenta.venta = new Venta();
-                documentoVenta.venta.guiaRemision = new GuiaRemision();
-                documentoVenta.venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(this.Request.Params["idMovimientoAlmacen"]);
-
-           //     documentoVenta.venta.pedido = pedido;
-
-                documentoVenta.venta.pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
-                documentoVenta.observaciones = this.Request.Params["observaciones"];
-
-                DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-
-                if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
-                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
-                else if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
-                    documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
-                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
-                else
-                    throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
 
 
-                documentoVenta = documentoVentaBL.InsertarDocumentoVenta(documentoVenta);
-              
+            //documentoVenta.MovimentoALmacen = new 
+            //  documentoVenta.venta = new Venta();
+            documentoVenta.venta.guiaRemision = new GuiaRemision();
+            documentoVenta.venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(this.Request.Params["idMovimientoAlmacen"]);
 
-                return JsonConvert.SerializeObject(documentoVenta);
+            //     documentoVenta.venta.pedido = pedido;
+
+            documentoVenta.venta.pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
+            documentoVenta.observaciones = this.Request.Params["observaciones"];
+
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+
+            if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
+                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+            else if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
+                documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
+                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
+            else
+                throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
+
+
+            documentoVenta = documentoVentaBL.InsertarDocumentoVenta(documentoVenta);
+
+
+            return JsonConvert.SerializeObject(documentoVenta);
             //}
             //catch (Exception ex)
             //{
@@ -118,8 +118,8 @@ namespace Cotizador.Controllers
                 Guid idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
                 documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).First();
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-                
-                
+
+
                 documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
 
                 if (documentoVenta.tipoDocumento == DocumentoVenta.TipoDocumento.NotaCrédito)
@@ -162,14 +162,14 @@ namespace Cotizador.Controllers
             transaccion.documentoReferencia.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(transaccion.documentoVenta.cPE_CABECERA_BE.TIP_CPE);
             String[] fechaEmisionArray = transaccion.documentoVenta.cPE_CABECERA_BE.FEC_EMI.Split('-');
             transaccion.documentoReferencia.fechaEmision = new DateTime(Int32.Parse(fechaEmisionArray[0]), Int32.Parse(fechaEmisionArray[1]), Int32.Parse(fechaEmisionArray[2]));
-            
+
             transaccion.documentoReferencia.serie = transaccion.documentoVenta.cPE_CABECERA_BE.SERIE;
             transaccion.documentoReferencia.numero = transaccion.documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
 
             transaccion = ventaBL.GetPlantillaVenta(transaccion, usuario);
             if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
             {
-               // venta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
+                // venta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
                 transaccion.documentoVenta.fechaEmision = DateTime.Now;
                 transaccion.documentoVenta.fechaVencimiento = transaccion.documentoVenta.fechaEmision.Value;
                 //venta.documentoVenta.formaPago
@@ -257,7 +257,7 @@ namespace Cotizador.Controllers
                 Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
                 DocumentoVenta documentoVenta = new DocumentoVenta();
                 documentoVenta.venta = venta;
-                documentoVenta.idDocumentoVenta  = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+                documentoVenta.idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
                 documentoVenta.cliente = venta.pedido.cliente;
                 documentoVenta.usuario = usuario;
 
@@ -375,9 +375,9 @@ namespace Cotizador.Controllers
                 instanciarfacturaBusqueda();
             }
 
-            
-           
-             int existeCliente = 0;
+
+
+            int existeCliente = 0;
             //  if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
             if (this.FacturaSession.cliente.idCliente != Guid.Empty)
             {
@@ -436,7 +436,7 @@ namespace Cotizador.Controllers
 
             String[] hasta = this.Request.Params["fechaEmisionHasta"].Split('/');
             this.FacturaSession.fechaEmisionHasta = new DateTime(Int32.Parse(hasta[2]), Int32.Parse(hasta[1]), Int32.Parse(hasta[0]));
-            
+
 
             if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
             {
@@ -467,9 +467,9 @@ namespace Cotizador.Controllers
                 this.FacturaSession.guiaRemision.numeroDocumento = int.Parse(this.Request.Params["numeroGuiaRemision"]);
             }
 
-        
+
             this.FacturaSession.sku = this.Request.Params["sku"];
-        
+
 
 
 
@@ -482,11 +482,11 @@ namespace Cotizador.Controllers
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-    /*        foreach (DocumentoVenta documentoVenta in documentoVentaList)
-            {
-                documentoVenta.usuario.apruebaAnulaciones = usuario.apruebaAnulaciones;
-                documentoVenta.usuario.creaNotasCredito = usuario.creaNotasCredito;
-            }*/
+            /*        foreach (DocumentoVenta documentoVenta in documentoVentaList)
+                    {
+                        documentoVenta.usuario.apruebaAnulaciones = usuario.apruebaAnulaciones;
+                        documentoVenta.usuario.creaNotasCredito = usuario.creaNotasCredito;
+                    }*/
 
 
             //Se coloca en session el resultado de la búsqueda
@@ -506,11 +506,11 @@ namespace Cotizador.Controllers
 
             DocumentoVenta documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).First();
 
-           // documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
-           
+            // documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+
 
             documentoVentaBL.consultarEstadoDocumentoVenta(documentoVenta);
-   
+
         }
 
 
@@ -543,13 +543,13 @@ namespace Cotizador.Controllers
             documentoVenta.comentarioAprobacionAnulacion = this.Request.Params["comentarioAprobacionAnulacion"];
             documentoVenta.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            
+
             documentoVentaBL.aprobarAnulacionDocumentoVenta(documentoVenta, documentoVenta.usuario);
             return JsonConvert.SerializeObject(documentoVenta);
 
         }
 
-        
+
 
 
 
@@ -567,7 +567,8 @@ namespace Cotizador.Controllers
             documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
             documentoVenta = documentoVentaBL.descargarArchivoDocumentoVenta(documentoVenta);
 
-            try {
+            try
+            {
                 documentoVenta.cpeFile = Encoding.GetEncoding(28591).GetBytes(documentoVenta.rPTA_DOC_TRIB_BE.DOC_TRIB_XML);
                 documentoVenta.cdrFile = Encoding.GetEncoding(28591).GetBytes(documentoVenta.rPTA_DOC_TRIB_BE.DOC_TRIB_RPTA);
             }
@@ -582,9 +583,9 @@ namespace Cotizador.Controllers
                 pdf = documentoVenta.rPTA_DOC_TRIB_BE.DOC_TRIB_PDF,
                 cpe = documentoVenta.cpeFile,
                 cdr = documentoVenta.cdrFile,
-                nombreArchivo = 
-                        documentoVenta.cPE_CABECERA_BE.NRO_DOC_EMI+"-"+ 
-                        documentoVenta.cPE_CABECERA_BE.TIP_CPE+"-"+
+                nombreArchivo =
+                        documentoVenta.cPE_CABECERA_BE.NRO_DOC_EMI + "-" +
+                        documentoVenta.cPE_CABECERA_BE.TIP_CPE + "-" +
                         documentoVenta.cPE_CABECERA_BE.SERIE + "-" +
                         documentoVenta.cPE_CABECERA_BE.CORRELATIVO
             };
@@ -630,9 +631,9 @@ namespace Cotizador.Controllers
             }
 
 
-            
 
-            
+
+
 
 
 
@@ -650,7 +651,7 @@ namespace Cotizador.Controllers
 
         }
 
-       
+
 
         public String GetCliente()
         {
@@ -704,7 +705,7 @@ namespace Cotizador.Controllers
             this.FacturaSession.solicitadoAnulacion = Int32.Parse(this.Request.Params["solicitadoAnulacion"]) == 1;
         }
 
-        
+
 
 
 
@@ -717,7 +718,7 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult PreLoad()
         {
-         
+
             if (this.Session["usuario"] == null)
             {
                 return RedirectToAction("Login", "Account");
@@ -725,11 +726,11 @@ namespace Cotizador.Controllers
 
 
 
-       
 
-          /*  FacturaBL facturaBL = new FacturaBL();
-            facturaBL.testFacturaElectronica();
-*/
+
+            /*  FacturaBL facturaBL = new FacturaBL();
+              facturaBL.testFacturaElectronica();
+  */
 
 
             return View();
@@ -753,7 +754,7 @@ namespace Cotizador.Controllers
             HSSFWorkbook hssfwb;
 
             FacturaBL facturaBL = new FacturaBL();
-       //     facturaBL.truncateFacturaStaging();
+            //     facturaBL.truncateFacturaStaging();
 
             hssfwb = new HSSFWorkbook(file.InputStream);
 
