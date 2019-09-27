@@ -2191,12 +2191,22 @@ jQuery(function ($) {
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     //alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN")
-                    $("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
-                    $("#comentarioPendienteIngreso").val(resultado.observacion);
-                    $("#modalComentarioPendienteIngreso").modal({
-                        show: true,
-                        keyboard: false,
-                        backdrop: 'static'
+
+                    //$("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
+                    //$("#comentarioPendienteIngreso").val(resultado.observacion);
+                    //$("#modalComentarioPendienteIngreso").modal({
+                    //    show: true,
+                    //    keyboard: false,
+                    //    backdrop: 'static'
+                    //});
+
+                    $.alert({
+                        title: TITLE_EXITO,
+                        type: 'green',
+                        content: "El pedido número " + resultado.numeroPedido + " fue ingresado correctamente.",
+                        buttons: {
+                            OK: function () { window.location = '/PedidoCompra/Index'; }
+                        }
                     });
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
@@ -2247,13 +2257,24 @@ jQuery(function ($) {
                 }
                 else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
                     //alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN")
-                    $("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
-                    $("#comentarioPendienteIngreso").val(resultado.observacion);
-                    $("#modalComentarioPendienteIngreso").modal({
-                        show: true,
-                        keyboard: false,
-                        backdrop: 'static'
+
+                    //$("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
+                    //$("#comentarioPendienteIngreso").val(resultado.observacion);
+                    //$("#modalComentarioPendienteIngreso").modal({
+                    //    show: true,
+                    //    keyboard: false,
+                    //    backdrop: 'static'
+                    //});
+
+                    $.alert({
+                        title: TITLE_EXITO,
+                        type: 'green',
+                        content: "El pedido número " + resultado.numeroPedido + " fue ingresado correctamente.",
+                        buttons: {
+                            OK: function () { window.location = '/PedidoCompra/Index'; }
+                        }
                     });
+
                 }
                 else if (resultado.estado == ESTADO_EN_EDICION) {
                     ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/PedidoCompra/CancelarCreacionPedido');

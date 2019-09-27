@@ -228,12 +228,23 @@ namespace Cotizador.Controllers
 
         public ActionResult ExportarCPEs()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!usuario.administraPermisos)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
 
         [HttpPost]
         public ActionResult exportStarsoftCPE()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!usuario.administraPermisos)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             String[] fechai = this.Request.Params["fechaInicio"].Split('/');
             DateTime fechaInicio = new DateTime(Int32.Parse(fechai[2]), Int32.Parse(fechai[1]), Int32.Parse(fechai[0]), 0, 0, 0);
 
