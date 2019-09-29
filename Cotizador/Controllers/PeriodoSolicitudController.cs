@@ -324,7 +324,7 @@ namespace Cotizador.Controllers
             PeriodoSolicitud periodoSolicitud = new PeriodoSolicitud { usuario = usuario };
             periodoSolicitud.IdUsuarioRegistro = usuario.idUsuario;
 
-            List<PeriodoSolicitud> periodoList = periodoSolicitudBL.getPeriodosSolicitudVigentes(periodoSolicitud, excluirPeriodosConRequerimientos);
+            List<PeriodoSolicitud> periodoList = periodoSolicitudBL.getPeriodosSolicitudVigentes(periodoSolicitud, false);
             var model = new PeriodoViewModels
             {
                 Data = periodoList,

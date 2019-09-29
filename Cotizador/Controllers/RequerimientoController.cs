@@ -805,7 +805,7 @@ namespace Cotizador.Controllers
                 this.Session[Constantes.VAR_SESSION_REQUERIMIENTO] = null;
                 UsuarioBL usuarioBL = new UsuarioBL();
                 Usuario usuario = (Usuario)this.Session["usuario"];
-                return RedirectToAction("Index", "Pedido");
+                return RedirectToAction("Aprobar", "Requerimiento");
             }
             catch (Exception e)
             {

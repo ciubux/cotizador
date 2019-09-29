@@ -202,6 +202,10 @@
                                             <li id="linkBusquedaUsuarios" class="@linkBusquedaUsuarios">@Html.ActionLink("Usuarios - Búsqueda", "List", "Usuario")</li>
                                             <li id="linkMantenimientoUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar", "Editar", "Usuario")</li>
                                     }
+                                        @if (usuario.modificaPeriodoSolicitud)
+                                        {
+                                                <li id="linkBusquedaDireccionesEntrega" class="@linkBusquedaPeriodoSolicitud">@Html.ActionLink("Direcciones Entrega - Búsqueda", "List", "Direccion Entrega")</li>
+                                        }
                                     </ul>
                                 </li>
                                 }
