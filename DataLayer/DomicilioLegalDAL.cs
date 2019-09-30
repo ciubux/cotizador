@@ -46,6 +46,35 @@ namespace DataLayer
 
             return domicilioLegalList;
         }
-        
+
+        public List<DomicilioLegal> getDomiciliosLegalesPorClienteSunat(int idClienteSunat)
+        {
+            List<DomicilioLegal> domicilioLegalList = new List<DomicilioLegal>();
+            var objCommand = GetSqlCommand("ps_domiciliosLegalesPorClienteSunat");
+            InputParameterAdd.Int(objCommand, "idClienteSunat", idClienteSunat);
+            DataTable dataTable = Execute(objCommand);
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                DomicilioLegal domicilioLegal = new DomicilioLegal();
+                domicilioLegal.idDomicilioLegal = Converter.GetInt(row, "id_domicilio_legal");
+                domicilioLegal.codigo = Converter.GetString(row, "codigo");
+                domicilioLegal.direccion = Converter.GetString(row, "direccion");
+                domicilioLegal.tipoEstablecimiento = Converter.GetString(row, "tipo_establecimiento");
+                domicilioLegal.esEstablecimientoAnexo = Converter.GetBool(row, "es_establecimiento_anexo");
+                domicilioLegal.ubigeo = new Ubigeo
+                {
+                    Id = Converter.GetString(row, "ubigeo"),
+                    Departamento = Converter.GetString(row, "departamento"),
+                    Provincia = Converter.GetString(row, "provincia"),
+                    Distrito = Converter.GetString(row, "distrito")
+                };
+                domicilioLegalList.Add(domicilioLegal);
+
+            }
+
+            return domicilioLegalList;
+        }
+
     }
 }

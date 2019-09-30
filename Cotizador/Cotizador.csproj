@@ -422,6 +422,7 @@
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\chosen\PrintArea.js" />
+    <Content Include="Scripts\direccionEntrega1.1.1.js" />
     <Content Include="Scripts\documentoCompra1.1.1.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
@@ -616,13 +617,13 @@
     <Content Include="Views\Requerimiento\CargaIncorrecta.cshtml" />
     <Content Include="Views\Requerimiento\AprobarPedidos.cshtml" />
     <Content Include="Views\Shared\_Periodo.cshtml" />
+    <Content Include="Views\DireccionEntrega\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
     <Folder Include="pdf\" />
     <Folder Include="Scripts\App_LocalResources\" />
     <Folder Include="Views\Ciudad\" />
-    <Folder Include="Views\DireccionEntrega\" />
     <Folder Include="Views\General\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Mail\" />

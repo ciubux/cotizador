@@ -30,6 +30,10 @@ namespace Cotizador
                         "~/Scripts/documentoCompra1.1.1.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/direccionEntrega").Include(
+                        "~/Scripts/direccionEntrega1.1.1.js"
+                        ));
+
             bundles.Add(new ScriptBundle("~/bundles/boleta").Include(
                         "~/Scripts/boleta.js"
                         ));

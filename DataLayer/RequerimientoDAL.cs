@@ -159,6 +159,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idDireccionEntregaAlmacen", requerimiento.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega);
             InputParameterAdd.Bit(objCommand, "excedioPresupuesto", requerimiento.excedioPresupuesto);
             InputParameterAdd.Decimal(objCommand, "topePresupuesto", requerimiento.topePresupuesto);
+            InputParameterAdd.Guid(objCommand, "idPeriodo", requerimiento.periodo.idPeriodoSolicitud);
             OutputParameterAdd.Int(objCommand, "idRequerimiento");
             ExecuteNonQuery(objCommand);
 
@@ -530,6 +531,7 @@ namespace DataLayer
                     requerimiento.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
                     requerimiento.requerimientoDetalleList = new List<RequerimientoDetalle>();
                     requerimiento.estadoRequerimiento = (Requerimiento.estadosRequerimiento)Converter.GetInt(row, "estado_requerimiento");
+                    requerimiento.topePresupuesto = Converter.GetDecimal(row, "tope_presupuesto");
                     requerimientoList.Add(requerimiento);
                 }
 
@@ -867,8 +869,7 @@ namespace DataLayer
                 requerimiento.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
                 requerimiento.direccionEntrega.direccionEntregaAlmacen = new DireccionEntrega();
                 requerimiento.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega_almacen");             
-	            requerimiento.direccionEntrega.limitePresupuesto = Converter.GetDecimal(row, "limite_presupuesto"); 
-
+	            requerimiento.direccionEntrega.limitePresupuesto = Converter.GetDecimal(row, "limite_presupuesto");
 
 
                 requerimiento.solicitante = new Solicitante();
@@ -946,11 +947,14 @@ namespace DataLayer
                 requerimiento.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 requerimiento.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
 
-             /*   requerimiento.usuario = new Usuario();
-                requerimiento.usuario.nombre = Converter.GetString(row, "nombre_usuario");
-                requerimiento.usuario.cargo = Converter.GetString(row, "cargo");
-                requerimiento.usuario.contacto = Converter.GetString(row, "contacto_usuario");
-                requerimiento.usuario.email = Converter.GetString(row, "email");*/
+
+                requerimiento.periodo = new PeriodoSolicitud();
+                requerimiento.periodo.idPeriodoSolicitud = Guid.Parse(Converter.GetString(row, "id_periodo"));
+                /*   requerimiento.usuario = new Usuario();
+                   requerimiento.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                   requerimiento.usuario.cargo = Converter.GetString(row, "cargo");
+                   requerimiento.usuario.contacto = Converter.GetString(row, "contacto_usuario");
+                   requerimiento.usuario.email = Converter.GetString(row, "email");*/
 
             }
 

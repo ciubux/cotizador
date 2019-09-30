@@ -1,0 +1,305 @@
+﻿@{
+    ViewBag.Title = "Búsqueda Direcciones Entrega";
+    Model.Cliente cliente = ViewBag.cliente;
+    Model.DireccionEntrega direccionEntrega = new Model.DireccionEntrega();
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="idPedido" value="" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+
+
+
+
+
+
+
+    <table id="tableListaDireccionesEntrega" class="table" data-editing="true"
+           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span>Editar Direcciones'
+           data-editing-allow-add="true"
+           data-editing-allow-delete="true"
+           data-editing-allow-edit="true"
+           data-sorting="true"
+           data-show-toggle="false"
+           data-editing-hide-text="Finalizar Edición"
+           data-editing-add-text="Agregar Dirección">
+        <thead>
+            <tr>
+                <th data-name="idDireccionEntrega" data-visible="false"></th>
+                <th data-name="idCliente" data-visible="false"></th>
+                <th data-name="idCiudad" data-visible="false"></th>
+                <th data-name="idDomicilioLegal" data-sortable="false" data-visible="false"></th>
+                <th data-name="codigoUbigeo" data-sortable="false" data-visible="false"></th>
+
+                <th data-name="codigo" data-sortable="false">Código</th>
+                <th data-name="sede" data-visible="true">Sede MP</th>
+                <th data-name="ubigeo" data-sortable="false">Ubigeo</th>
+                <th data-name="direccionEntrega" data-sortable="false">Dirección Entrega</th>
+                <th data-name="contacto" data-sortable="false" data-breakpoints="xs">Nombre Contacto</th>
+                <th data-name="telefono" data-sortable="false">Teléfono Contacto</th>
+                <th data-name="codigoCliente" data-sortable="false">Código Cliente</th>
+                <th data-name="nombre" data-sortable="false">Nombre</th>
+                <th data-name="codigoMP" data-visible="false" data-breakpoints="xs">Código MP</th>
+                <th data-name="emailRecepcionFacturas" data-sortable="false" data-breakpoints="xs">Email Recepción Facturas</th>
+                <th data-name="direccionDomicilioLegal" data-sortable="false" data-breakpoints="xs">Dirección en Factura/Guía</th>
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+
+<!--MODAL IMPORTAR-->
+<div class="modal fade" id="modalActualizarExcel" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalActualizarExcel"><b>Actualizar clientes desde excel </b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-3">Subir Archivo:</label>
+                                <div class="col-xs-9">
+                                    <input id="fileUploadExcel" name="file" type="file" data-url-set-file="@Url.Action("UpdateByExcel", "Cliente")"
+                                           class="btn btn-primary" data-max-size="2097152" data-max-size-text="2MB"
+                                           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button id="btnUpdateByExcel" type="button" class="btn btn-primary" data-dismiss="modal">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--MODAL MOSTRAR PRECIOS-->
+<div class="modal fade" id="modalMostrarPrecios" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación </b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <table id="tableMostrarPrecios" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar Edición Detalle"
+                           data-editing-add-text="Descartar Cambios Detalle">
+                        <thead>
+                            <tr>
+                                <th data-name="idProducto" data-visible="true">Número Cotización</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Unidad</th>
+                                <th data-name="idProducto" data-visible="true">Precio Neto</th>
+                                <th data-name="idProducto" data-visible="true">Flete</th>
+                                <th data-name="idProducto" data-visible="true">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalEdicionDireccionEntrega" tabindex="-1" role="dialog" aria-labelledby="modalEdicionDireccionEntregaTitle">
+    <style scoped>
+        /* provides a red astrix to denote required fields - this should be included in common stylesheet */
+        .form-group.required .control-label:after {
+            content: "*";
+            color: red;
+            margin-left: 4px;
+        }
+    </style>
+    <div class="modal-dialog" role="document">
+        <form class="modal-content form-horizontal" id="editorDireccionEntrega">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="modalEdicionDireccionEntregaTitle">Add Row</h4>
+            </div>
+            <div class="modal-body">
+                <input id="idDireccionEntrega" name="idDireccionEntrega" class="hidden" />
+                <input id="direccionEntrega_codigo" name="direccionEntrega_codigo" class="hidden" />
+                <input id="direccionEntrega_cliente_ciudad_sede" name="direccionEntrega_cliente_ciudad_sede" class="hidden" />
+                <!--  <input id="idCliente" name="idCliente" class="hidden" />-->
+
+
+                <div hidden="hidden" class="form-group required">
+                    @Html.LabelFor(p => direccionEntrega.cliente.ciudad, htmlAttributes: new { @class = "control-label col-sm-3", @for = "idCiudad" })
+                    <div class="col-sm-9">
+                        @Html.Action("GetCiudades", "Ciudad",
+                            new
+                            {
+                                ciudadSelectId = "idCiudad",
+                                selectedValue = ""
+                            })
+                    </div>
+                </div>
+
+
+
+                <div class="form-group required">
+                    <label for="firstName" class="col-sm-3 control-label">Departamento</label>
+                    <div class="col-sm-9">
+                        @Html.Action("GetDepartamentos", "Ubigeo",
+                             new
+                             {
+                                 departamentoSelectId = "Departamento",
+                                 provinciaSelectId = "Provincia",
+                                 distritoSelectId = "Distrito",
+                                 provinciaDivId = "dvProvincias",
+                                 distritoDivId = "dvDistritos",
+                                 selectedValue = ""
+                             })
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="lastName" class="col-sm-3 control-label">Provincia</label>
+                    <div id="dvProvincias" class="col-sm-9">
+                        @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
+                             new
+                             {
+                                 departamentoSelectId = "Departamento",
+                                 provinciaSelectId = "Provincia",
+                                 distritoSelectId = "Distrito",
+                                 distritoDivId = "dvDistritos",
+                                 codigoDepartamento = "",// pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                        selectedValue = ""//pedido.ubigeoEntrega.Id.Substring(0, 4)
+                                    })
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="jobTitle" class="col-sm-3 control-label">Distrito</label>
+                    <div id="dvDistritos" class="col-sm-9">
+                        @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
+                        {
+                            distritoSelectId = "Distrito",
+                            codigoDepartamento = "",// pedido.ubigeoEntrega.Id.Substring(0, 2),
+                            codigoProvincia = "",//pedido.ubigeoEntrega.Id.Substring(0, 4),
+                            selectedValue = "" //pedido.ubigeoEntrega.Id.Substring(0, 6)
+                        })
+                    </div>
+                </div>
+                <div class="form-group required">
+                    @Html.LabelFor(model => direccionEntrega.descripcion, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => direccionEntrega.descripcion, htmlAttributes: new { @class = "form-control" })
+                        <!--<input type="text" class="form-control" id="direccionEntrega" name="direccionEntrega" placeholder="Avenida ...">-->
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => direccionEntrega.contacto, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => direccionEntrega.contacto, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => direccionEntrega.telefono, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => direccionEntrega.telefono, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => direccionEntrega.emailRecepcionFacturas, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => direccionEntrega.emailRecepcionFacturas, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => direccionEntrega.codigoCliente, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => direccionEntrega.codigoCliente, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => direccionEntrega.nombre, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => direccionEntrega.nombre, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => direccionEntrega.domicilioLegal, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        <select class="form-control" id="direccionEntrega_idDomicilioLegal"></select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnGuardarCambiosDireccionEntrega">Guardar Cambios</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/direccionEntrega")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/Scripts/App/ubigeo.js")
+}

@@ -4442,7 +4442,7 @@ jQuery(function ($) {
             error: function (detalle) {
                 location.reload();
             },
-            success: function (ciudad) {
+            success: function () {
                // location.reload();
             }
         });

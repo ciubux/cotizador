@@ -805,7 +805,7 @@ namespace Cotizador.Controllers
                 this.Session[Constantes.VAR_SESSION_REQUERIMIENTO] = null;
                 UsuarioBL usuarioBL = new UsuarioBL();
                 Usuario usuario = (Usuario)this.Session["usuario"];
-                return RedirectToAction("Index", "Pedido");
+                return RedirectToAction("Aprobar", "Requerimiento");
             }
             catch (Exception e)
             {
@@ -1876,6 +1876,7 @@ namespace Cotizador.Controllers
                 foreach (RequerimientoDetalle requerimientoDetalle in requerimiento.documentoDetalle)
                 {
                     Pedido pedido = new Pedido();
+                    pedido.periodo = requerimientoBusqueda.periodo;
                     pedido.usuario = usuario;
                     pedido.numeroGrupoPedido = numeroGrupo;
 

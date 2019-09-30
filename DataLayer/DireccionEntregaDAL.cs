@@ -126,7 +126,7 @@ namespace DataLayer
 
         public void updateDireccionEntrega(DireccionEntrega direccionEntrega)
         {
-            var objCommand = GetSqlCommand("pu_direccionEntrega");
+            var objCommand = GetSqlCommand("CLIENTE.pu_direccionEntrega");
             InputParameterAdd.Guid(objCommand, "idDireccionEntrega", direccionEntrega.idDireccionEntrega);
             InputParameterAdd.Guid(objCommand, "idUsuario", direccionEntrega.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "ubigeo", direccionEntrega.ubigeo.Id);
@@ -142,7 +142,7 @@ namespace DataLayer
 
         public void insertDireccionEntrega(DireccionEntrega direccionEntrega)
         {
-            var objCommand = GetSqlCommand("pi_direccionEntrega");
+            var objCommand = GetSqlCommand("CLIENTE.pi_direccionEntrega");
             InputParameterAdd.Guid(objCommand, "idUsuario", direccionEntrega.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "ubigeo", direccionEntrega.ubigeo.Id);
             InputParameterAdd.Varchar(objCommand, "descripcion", direccionEntrega.descripcion);
