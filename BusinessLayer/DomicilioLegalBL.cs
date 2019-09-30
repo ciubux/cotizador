@@ -16,5 +16,13 @@ namespace BusinessLayer
                 return domicilioLegalDAL.getDomiciliosLegalesPorCliente(cliente);
             }
         }
+
+        public List<DomicilioLegal> getDomiciliosLegalesPorClienteSunat(int idClienteSunat)
+        {
+            using (var domicilioLegalDAL = new DomicilioLegalDAL())
+            {
+                return domicilioLegalDAL.getDomiciliosLegalesPorClienteSunat(idClienteSunat);
+            }
+        }
     }
 }

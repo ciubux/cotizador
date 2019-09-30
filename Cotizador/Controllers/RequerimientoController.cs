@@ -1876,6 +1876,7 @@ namespace Cotizador.Controllers
                 foreach (RequerimientoDetalle requerimientoDetalle in requerimiento.documentoDetalle)
                 {
                     Pedido pedido = new Pedido();
+                    pedido.periodo = requerimientoBusqueda.periodo;
                     pedido.usuario = usuario;
                     pedido.numeroGrupoPedido = numeroGrupo;
 

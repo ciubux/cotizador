@@ -12,9 +12,26 @@ namespace Cotizador.Controllers
     public class DireccionEntregaController : Controller
     {
         // GET: DireccionEntrega
+
+
+        [HttpGet]
         public ActionResult Index()
         {
+
+            //this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BUsqueda;
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA] == null)
+            {
+                //instanciarClienteBusqueda();
+            }
+
             return View();
+
         }
 
         public String GetDireccionesEntrega()
@@ -25,6 +42,22 @@ namespace Cotizador.Controllers
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
             List<DireccionEntrega> direccionEntrega = direccionEntregaBL.getDireccionesEntrega(pedido.cliente.idCliente, ubigeo);
             return JsonConvert.SerializeObject(direccionEntrega);
+        }
+
+        public String GetDireccionesEntregaCliente()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
+            List<DireccionEntrega> direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(usuario.idClienteSunat);
+
+            DomicilioLegalBL domicilioLegalBL = new DomicilioLegalBL();
+            List<DomicilioLegal> domicilioLegalList = domicilioLegalBL.getDomiciliosLegalesPorClienteSunat(usuario.idClienteSunat);
+
+            String resultado = "{\"direccionEntregaList\":" + JsonConvert.SerializeObject(direccionEntregaList) +
+                        ", \"domicilioLegalList\":" + JsonConvert.SerializeObject(domicilioLegalList) + "}";
+
+            //   this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = cliente;
+            return resultado;
         }
 
 
@@ -97,6 +130,11 @@ namespace Cotizador.Controllers
 
             direccionEntregaBL.updateDireccionEntrega(direccionEntrega);
         }
+
+
+
+      
+
 
     }
 }
