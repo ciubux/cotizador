@@ -212,6 +212,74 @@ namespace BusinessLayer
             }
         }
 
+        public Cliente ObtenerCliente(String ubigeo, int idClienteSunat)
+        {
+            Cliente cliente = null;
+            using (var dal = new ClienteDAL())
+            {
+                UbigeoDAL ubDal = new UbigeoDAL();
+                Guid idCiudad = ubDal.getCiudadUbigeo(ubigeo);
+
+                List<Cliente> clientes = dal.getClientesPorIdClienteSunat(idClienteSunat);
+
+                foreach(Cliente cli  in clientes)
+                {
+                    if(cli.ciudad.idCiudad.Equals(idCiudad))
+                    {
+                        cliente = dal.getCliente(cli.idCliente);
+                    }
+                }
+
+                if (cliente == null)
+                {
+                    Cliente clone = null;
+                    foreach (Cliente cli in clientes)
+                    {
+                        if (cli.sedePrincipal)
+                        {
+                            clone = dal.getCliente(cli.idCliente);
+                        }
+                    }
+
+                    if (clone == null)
+                    {
+                        clone = dal.getCliente(clientes[0].idCliente);
+                    }
+
+                    clone.idCliente = Guid.Empty;
+                    clone.ciudad.idCiudad = idCiudad;
+
+                    clone.plazoCreditoSolicitado = DocumentoVenta.TipoPago.NoAsignado;
+                    clone.tipoPagoFactura = DocumentoVenta.TipoPago.NoAsignado;
+                    clone.sobrePlazo = 0;
+
+                    clone.creditoSolicitado = 0;
+                    clone.creditoAprobado = 0;
+                    clone.sobreGiro = 0;
+
+                    clone.responsableComercial.idVendedor = 43;
+                    clone.asistenteServicioCliente.idVendedor = 43;
+                    clone.supervisorComercial.idVendedor = 43;
+
+                    clone.observacionesCredito = "";
+                    clone.observacionHorarioEntrega = "";
+                    clone.observaciones = "Creado automáticamente";
+                    clone.vendedoresAsignados = false;
+                    clone.perteneceCanalLima = false;
+                    clone.perteneceCanalProvincias = false;
+
+                    clone.sedePrincipal = false;
+
+                    dal.insertClienteSunat(clone);
+
+                    cliente = clone;
+                }
+            }
+
+            return cliente;
+        }
+
+
         public String getCLientesBusquedaRUC(String textoBusqueda)
         {
             using (var clienteDAL = new ClienteDAL())

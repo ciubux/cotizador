@@ -43,6 +43,26 @@ namespace DataLayer
 
         }
 
+        public Guid getCiudadUbigeo(String ubigeo)
+        {
+            var objCommand = GetSqlCommand("CLIENTE.ps_ciudad_ubigeo");
+            InputParameterAdd.Char(objCommand, "ubigeo", ubigeo);
+
+            DataTable dataTable = Execute(objCommand);
+            Guid idCiudad = Guid.Empty;
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                if (idCiudad.Equals(Guid.Empty))
+                {
+                    idCiudad = Converter.GetGuid(row, "id_ciudad");
+                }
+            }
+
+            return idCiudad;
+        }
+
+
 
         /*
         public List<UbigeoDTO> ObtenerUbigeos()
@@ -109,7 +129,7 @@ namespace DataLayer
         }*/
 
 
-        
+
 
         public List<Ubigeo> ObtenerDepartamentos()
         {

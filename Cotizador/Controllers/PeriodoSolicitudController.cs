@@ -89,7 +89,7 @@ namespace Cotizador.Controllers
 
             try
             {
-                message = "Se eliminó el perido";
+                message = "Se eliminó el periodo";
             } catch(Exception ex)
             {
                 message = "Error de sistema"; 
@@ -97,6 +97,7 @@ namespace Cotizador.Controllers
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }
+
         public ActionResult Editar(Guid? idPeriodoSolicitud = null)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoPeriodoSolicitud;

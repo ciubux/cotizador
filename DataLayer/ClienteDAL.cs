@@ -153,6 +153,32 @@ namespace DataLayer
             return clienteList;
         }
 
+
+        public List<Cliente> getClientesPorIdClienteSunat(int idClienteSunat)
+        {
+            var objCommand = GetSqlCommand("CLIENTE.obtener_clientes_ruc");
+            InputParameterAdd.Int(objCommand, "idClienteSunat", idClienteSunat);
+
+            DataTable dataTable = Execute(objCommand);
+            List<Cliente> clienteList = new List<Cliente>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente cliente = new Cliente
+                {
+                    sedePrincipal = Converter.GetBool(row, "sede_principal"),
+                    idCliente = Converter.GetGuid(row, "id_cliente")
+                };
+
+                Ciudad ci = new Ciudad();
+                ci.idCiudad = Converter.GetGuid(row, "id_ciudad");
+
+                clienteList.Add(cliente);
+            }
+            return clienteList;
+        }
+
+       
         public List<Cliente> getClientesBusquedaRUC(String textoBusqueda)
         {
             var objCommand = GetSqlCommand("ps_getclientesruc_allsearch");
