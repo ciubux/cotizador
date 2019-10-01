@@ -4043,8 +4043,8 @@ jQuery(function ($) {
         changeInputStringVenta("sku", $("#venta_guiaRemision_sku").val());
     });
 
-    $("#venta_guiaRemision_numeroDocumento").change(function () {
-        changeInputIntGuia("numero", $("#venta_guiaRemision_numeroDocumento").val());
+    $("#venta_guiaRemision_numero_list").change(function () {
+        changeInputIntGuia("numero", $("#venta_guiaRemision_numero_list").val());
     });
 
     $("#venta_pedido_numeroPedido").change(function () {
