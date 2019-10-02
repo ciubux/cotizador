@@ -272,6 +272,8 @@
     <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
+    <Compile Include="ExcelExport\DireccionCliente.cs" />
+    <Compile Include="ExcelExport\CanastaCliente.cs" />
     <Compile Include="ExcelExport\CotizacionDetalleFormatoExcel.cs" />
     <Compile Include="ExcelExport\DocumentoCompraSearch.cs" />
     <Compile Include="ExcelExport\FacturaSearch.cs" />
