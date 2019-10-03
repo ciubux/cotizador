@@ -1780,7 +1780,7 @@ jQuery(function ($) {
                     alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     window.location = '/Pedido/Index';
                 }*/
-               // window.location = '/Pedido/Index';
+                // window.location = '/Pedido/Index';
 
                 window.close();
             }
@@ -1791,7 +1791,7 @@ jQuery(function ($) {
         window.close();
     });
 
-  
+
 
     $("#btnCancelarComentario").click(function () {
         window.location = '/Pedido/CancelarCreacionPedido';
@@ -3797,9 +3797,6 @@ jQuery(function ($) {
                 }
 
 
-
-
-
                 location.reload();
             }
         });
@@ -3907,13 +3904,559 @@ jQuery(function ($) {
         $("#modalMostrarPrecios").modal();
 
     });
-
-
-
-
-
-
-
-
     /****************** FIN PROGRAMACION PEDIDO****************************/
+
+    /********************ANDRE************************************************/
+
+    function validacionBusqueda() {
+
+        var fechaVencimiento = $("#Venta_fechaEmision_Hasta").val();
+        var fechaInicio = $("#Venta_fechaEmision_Desde").val();
+
+        function validate_fechaMayorQue(fechaInicial, fechaFinal) {
+            valuesStart = fechaInicial.split("/");
+            valuesEnd = fechaFinal.split("/");
+
+            var dateStart = new Date(valuesStart[2], (valuesStart[1] - 1), valuesStart[0]);
+            var dateEnd = new Date(valuesEnd[2], (valuesEnd[1] - 1), valuesEnd[0]);
+            if (dateStart > dateEnd) {
+                return 0;
+            }
+            return 1;
+        }
+
+        if (validate_fechaMayorQue(fechaInicio, fechaVencimiento) == 0) {
+
+            $.alert({
+                title: "Fecha Vencimiento Inválido",
+                type: 'orange',
+                content: 'Debe ingresar una fecha posterior o igual a la de inicio.',
+                buttons: {
+                    OK: function () { $('#Venta_fechaEmision_Hasta').focus(); }
+                }
+            });
+            return false;
+        }        
+       
+        return true;
+    }
+
+
+    $("#btnBusquedaVentaList").click(function () {
+
+        var tipoDocumento = $("#VentaList_tipoDocumento").val();
+        var numero = $("#VentaList_numeroDocumento").val();
+
+        if (!validacionBusqueda())
+            return false;
+
+        $("#btnBusquedaVentaList").attr("disabled", "disabled");
+        $.ajax({
+            url: "/Venta/SearchList",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                numero: numero,
+                tipoDocumento: tipoDocumento
+            },
+            error: function () {
+                $("#btnBusquedaVentaList").removeAttr("disabled");
+            },
+
+            success: function (ventaList) {
+
+                mostrarListVenta(ventaList);
+            }
+        });
+    });
+
+    function mostrarListVenta(ventaList) {
+        $("#btnBusquedaVentaList").removeAttr("disabled");
+        $("#tableVentaList > tbody").empty();
+        $("#tableVentaList").footable({
+            "paging": {
+                "enabled": true
+            }
+        });
+
+        for (var i = 0; i < ventaList.length; i++) {
+            if (ventaList[i].documentoVenta.numero == "-") { ventaList[i].documentoVenta.numero = " "; }
+            if (ventaList[i].cliente.responsableComercial.codigo == null) { ventaList[i].cliente.responsableComercial.codigo = " "; }
+            var Venta = '<tr data-expanded="true">' +
+                '<td>  ' + ventaList[i].idVenta + '</td>' +
+                '<td>  ' + ventaList[i].pedido.numeroPedidoString + '</td>' +
+                '<td>  ' + ventaList[i].guiaRemision.serieDocumento + '</td>' +
+                '<td>  ' + ventaList[i].documentoVenta.numero + '</td>' +
+                '<td>  ' + ventaList[i].usuario.nombre + '</td>' +
+                '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(ventaList[i].guiaRemision.fechaEmision)) + '</td>' +
+                '<td>  ' + ventaList[i].cliente.codigo + '</td>' +
+                '<td>  ' + ventaList[i].cliente.razonSocial + '</td>' +
+                '<td>  ' + ventaList[i].cliente.ruc + '</td>' +
+                '<td>  ' + ventaList[i].ciudad.sede + '</td>' +
+                '<td>  ' + ventaList[i].total + '</td>' +
+                '<td>' + ventaList[i].cliente.responsableComercial.codigo + '</td>' +
+
+                '<td> <button type="button" class="' + ventaList[i].guiaRemision.idMovimientoAlmacen + ' ' + ventaList[i].idVenta + ' btnVerVentaList btn btn-primary">Ver</button>' +
+                '</tr>';
+            $("#tableVentaList").append(Venta);
+        }
+
+
+        if (ventaList.length > 0) {
+            $("#msgBusquedaSinResultados").hide();
+        }
+        else {
+            $("#msgBusquedaSinResultados").show();
+        }
+    }
+
+    $("#btnLimpiarBusquedaVentaList").click(function () {
+        $.ajax({
+            url: "/Venta/CleanBusqueda",
+            type: 'POST',
+            success: function () {
+                location.reload();
+            }
+        });
+    });
+
+
+    $("#idCiudadBusquedaList").change(function () {
+        var idCiudad = $("#idCiudadBusquedaList").val();
+
+        $.ajax({
+            url: "/Venta/ChangeIdCiudad",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad
+            },
+            error: function (detalle) {
+
+            },
+            success: function (ciudad) {
+            }
+        });
+    });
+
+    $("#venta_guiaRemision_sku").change(function () {
+        changeInputStringVenta("sku", $("#venta_guiaRemision_sku").val());
+    });
+
+    $("#venta_guiaRemision_numeroDocumento").change(function () {
+        changeInputIntGuia("numero", $("#venta_guiaRemision_numeroDocumento").val());
+    });
+
+    $("#venta_pedido_numeroPedido").change(function () {
+        changeInputIntPedido("numeroPedido", $("#venta_pedido_numeroPedido").val());
+    });
+
+
+    function changeInputIntPedido(propiedad, valor) {
+        $.ajax({
+            url: "/Venta/ChangeInputIntPedido",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+    function changeInputIntGuia(propiedad, valor) {
+        $.ajax({
+            url: "/Venta/ChangeInputIntGuia",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+    $("#Venta_fechaEmision_Desde").change(function () {
+        var fechaEmisionDesde = $(this).val();
+        $.ajax({
+            url: "/Venta/ChangeFechaEmisionDesde",
+            type: 'POST',
+            data: {
+                fechaEmisionDesde: fechaEmisionDesde
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#Venta_fechaEmision_Hasta").change(function () {
+        var fechaEmisionHasta = $(this).val();
+        $.ajax({
+            url: "/Venta/ChangeFechaEmisionHasta",
+            type: 'POST',
+            data: {
+                fechaEmisionHasta: fechaEmisionHasta
+            },
+            success: function () {
+            }
+        });
+    });
+
+    function changeInputStringVenta(propiedad, valor) {
+        $.ajax({
+            url: "/Venta/ChangeInputString",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+    $("#idClienteBusquedaList").change(function () {
+        //  $("#contacto").val("");
+        var idCliente = $(this).val();
+
+        $.ajax({
+            url: "/Venta/GetCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCliente: idCliente
+            },
+            success: function (cliente) {
+            }
+        });
+
+    });
+
+    function cargarChosenClienteList() {
+        $("#idClienteBusquedaList").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
+            if ($("#idCiudadBusquedaList").val() == "" || $("#idCiudadBusquedaList").val() == null) {
+                alert("Debe seleccionar la sede MP previamente.");
+                $("#idClienteBusquedaList").trigger('chosen:close');
+                $("#idCiudadBusquedaList").focus();
+                return false;
+            }
+        });
+
+        $("#idClienteBusquedaList").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Venta/SearchClientes"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
+    }
+
+    $(document).ready(function () {
+
+        cargarChosenClienteList();
+        $("#VentaList_tipoDocumento").find("option[value='7']").remove();
+        $("#VentaList_tipoDocumento").find("option[value='8']").remove();
+       
+        $("#btnBusquedaVentaList").click();
+
+    });
+
+    var fechaEmisionDesde = $("#Venta_fechaEmision_Desde").val();
+    var fechaEmisionHasta = $("#Venta_fechaEmision_Hasta").val();
+
+
+    $("#Venta_fechaEmision_Desde").datepicker({
+        dateFormat: 'dd/mm/yy'
+    }).datepicker("setDate", fechaEmisionDesde);
+
+    $("#Venta_fechaEmision_Hasta").datepicker({
+        dateFormat: 'dd/mm/yy'
+    }).datepicker("setDate", fechaEmisionHasta);
+
+
+    $(document).on('click', "button.btnVerVentaList", function () {
+
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idMovimientoAlmacen = arrrayClass[0];
+
+        $.ajax({
+            url: "/Venta/ShowList",
+            data: {
+                idMovimientoAlmacen: idMovimientoAlmacen
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                mostrarMensajeErrorVenta();
+            },
+            success: function (resultado) {
+                mostrarModalVenta(resultado);
+            }
+        });
+
+    });
+
+    function mostrarModalVenta(resultado) {
+        //var cotizacion = $.parseJSON(respuesta);
+
+        var venta = resultado.venta;
+        var pedido = resultado.venta.pedido;
+        var guiaRemision = resultado.venta.guiaRemision;
+        var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
+
+        //  var usuario = resultado.usuario;
+
+
+        $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+        $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
+        $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+        //Important
+
+        $("#idPedido").val(pedido.idPedido);
+
+        $("#verNumero").html(pedido.numeroPedidoString);
+        $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
+        $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
+        $("#verTipoPedido").html(pedido.tiposPedidoString);
+
+        $("#verUsuarioNombre").html(pedido.usuario.nombre);
+        $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
+
+        if (pedido.tipoPedido == "84") {
+            $("#divReferenciaCliente").hide();
+            $("#divCiudadSolicitante").show();
+            $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+        }
+        else {
+            $("#divReferenciaCliente").show();
+            $("#divCiudadSolicitante").hide();
+        }
+
+
+        $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
+
+        $("#verCiudad").html(pedido.ciudad.nombre);
+        $("#idClienteFacturacion").val(pedido.cliente.idCliente);
+        $("#verCliente").html(pedido.cliente.razonSocial);
+        $("#verClienteCodigo").html(pedido.cliente.codigo);
+        $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
+        $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
+        $("#verObservacionesPedido").html(pedido.observaciones);
+
+        if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_RUC) {
+            $("#modalFacturarTitle").html("<b>Crear Factura</b>");
+            $("#descripcionDatosDocumento").html("<b>Datos de la Factura</b>");
+            $("#observacionesDocumento").html("Observaciones Factura:");
+            $("#btnAceptarFacturarPedido").html("Generar Factura");
+            $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_RUC);
+        }
+        else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_DNI) {
+            $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
+            $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
+            $("#observacionesDocumento").html("Observaciones Boleta:");
+            $("#btnAceptarFacturarPedido").html("Generar Boleta");
+            $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_DNI);
+        }
+        else if (pedido.cliente.tipoDocumento == CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA) {
+            $("#modalFacturarTitle").html("<b>Crear Boleta</b>");
+            $("#descripcionDatosDocumento").html("<b>Datos de la Boleta</b>");
+            $("#observacionesDocumento").html("Observaciones Boleta:");
+            $("#btnAceptarFacturarPedido").html("Generar Boleta");
+            $("#pedido_cliente_tipoDocumento").val(CONS_TIPO_DOC_CLIENTE_CARNET_EXTRANJERIA);
+        }
+
+
+        $("#nombreArchivos > li").remove().end();
+
+
+        for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
+            var liHTML = '<a href="javascript:mostrar();" class="descargarDesdeVenta">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
+            $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+        }
+
+
+
+
+        $("#verDireccionEntrega").html(pedido.direccionEntrega.descripcion);
+        $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
+        $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
+
+        $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
+
+        $("#verContactoPedido").html(pedido.contactoPedido);
+        $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
+
+
+
+
+
+
+        $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
+        $("#facturarver_guiaRemision_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10)));
+        $("#facturarver_guiaRemision_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
+        $("#facturarver_guiaRemision_serieNumeroDocumento").html(guiaRemision.serieDocumento);
+
+        $("#verObservaciones").html(pedido.observaciones);
+        $("#verMontoSubTotal").html(Number(pedido.montoSubTotal).toFixed(cantidadDecimales));
+        $("#verMontoIGV").html(Number(pedido.montoIGV).toFixed(cantidadDecimales));
+        $("#verMontoTotal").html(Number(pedido.montoTotal).toFixed(cantidadDecimales));
+        $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
+
+        $("#verMontoSubTotalVenta").html(Number(venta.subTotal).toFixed(cantidadDecimales));
+        $("#verMontoIGVVenta").html(Number(venta.igv).toFixed(cantidadDecimales));
+        $("#verMontoTotalVenta").html(Number(venta.total).toFixed(cantidadDecimales));
+
+
+
+
+
+        $("#tableDetallePedido > tbody").empty();
+
+        FooTable.init('#tableDetallePedido');
+
+        //    $("#formVerGuiasRemision").html("");
+
+        var d = '';
+        var lista = pedido.pedidoDetalleList;
+        for (var i = 0; i < lista.length; i++) {
+
+            var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+            d += '<tr>' +
+                '<td>' + lista[i].producto.proveedor + '</td>' +
+                '<td>' + lista[i].producto.sku + '</td>' +
+                '<td>' + lista[i].producto.descripcion + '</td>' +
+                '<td>' + lista[i].unidad + '</td>' +
+                '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
+                '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
+                '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
+                '<td>' + lista[i].precioNeto.toFixed(cantidadCuatroDecimales) + '</td>' +
+                '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
+                '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
+                //             '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
+                '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
+                '<td>' + lista[i].cantidad + '</td>' +
+                //     '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
+                '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
+                '<td>' + observacion + '</td>' +
+                '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPreciosVentaList btn btn-primary bouton-image botonPrecios"></button></td>' +
+                '</tr>';
+        }
+
+        $("#verRazonSocialSunat").html(pedido.cliente.razonSocialSunat);
+        $("#verRUC").html(pedido.cliente.ruc);
+        $("#verDireccionDomicilioLegalSunat").html(pedido.cliente.direccionDomicilioLegalSunat);
+        $("#verCodigo").html(pedido.cliente.codigo);
+
+        $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
+
+
+
+        $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
+
+        //$("#documentoVenta_fechaEmision").val(invertirFormatoFecha(venta.guiaRemision.fechaEmision.substr(0, 10)));
+
+        $("#documentoVenta_fechaEmisionList").val($.datepicker.formatDate('dd/mm/yy', new Date(pedido.documentoVenta.FechaRegistro)));
+        $("#documentoVenta_fechaVencimientoList").val($.datepicker.formatDate('dd/mm/yy', new Date(pedido.documentoVenta.fechaVencimiento)));
+
+        var date = new Date(pedido.documentoVenta.horaEmision);
+        hora = date.getHours();
+        minuto = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+        horaImprimible = hora + ":" + minuto;
+        $("#documentoVenta_horaEmisionList").val(horaImprimible);
+
+
+
+
+
+        $("#tipoPagoList").val(pedido.cliente.tipoPagoFactura);
+        $("#formaPagoList").val(pedido.cliente.formaPagoFactura);
+        $("#documentoVenta_serieList").val(pedido.documentoVenta.serie + '-' + pedido.documentoVenta.numero);
+
+
+
+        $("#documentoVenta_fechaEmisionList").attr("disabled", "disabled");
+        $("#documentoVenta_fechaVencimientoList").attr("disabled", "disabled");
+        $("#documentoVenta_horaEmisionList").attr("disabled", "disabled");
+        $("#formaPagoList").attr("disabled", "disabled");
+        $("#documentoVenta_serieList").attr("disabled", "disabled");
+        $("#tipoPagoList").attr("disabled", "disabled");
+
+
+        calcularFechaVencimiento();
+        $("#formaPago").val(pedido.cliente.formaPagoFactura);
+
+
+        $("fieldset#NumeroDocumentoVenta").show();
+        if (pedido.documentoVenta.idDocumentoVenta == '00000000-0000-0000-0000-000000000000') {
+            $("fieldset#NumeroDocumentoVenta").hide();
+        }
+
+        $("#tableDetallePedido").append(d);
+
+        $("#modalFacturar").modal('show');
+    }
+
+
+    $(document).on('click', "button.btnMostrarPreciosVentaList", function () {
+
+        var idProducto = event.target.getAttribute("class").split(" ")[0];
+        var idCliente = $("#idClienteFacturacion").val();
+
+        $.ajax({
+            url: "/Precio/GetPreciosRegistradosVentaVer",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idProducto: idProducto,
+                idCliente: idCliente
+            },
+            success: function (producto) {
+
+                $("#verProducto").html(producto.nombre);
+                $("#verCodigoProducto").html(producto.sku);
+
+                var precioListaList = producto.precioLista;
+
+                // var producto = $.parseJSON(respuesta);
+                $("#tableMostrarPrecios > tbody").empty();
+
+                FooTable.init('#tableMostrarPrecios');
+                for (var i = 0; i < precioListaList.length; i++) {
+                    var fechaInicioVigencia = precioListaList[i].fechaInicioVigencia;
+                    var fechaFinVigencia = precioListaList[i].fechaFinVigencia;
+
+                    if (fechaInicioVigencia == null)
+                        fechaInicioVigencia = "No Definida";
+                    else
+                        fechaInicioVigencia = invertirFormatoFecha(precioListaList[i].fechaInicioVigencia.substr(0, 10));
+
+                    if (fechaFinVigencia == null)
+                        fechaFinVigencia = "No Definida";
+                    else
+                        fechaFinVigencia = invertirFormatoFecha(precioListaList[i].fechaFinVigencia.substr(0, 10));
+
+                    var numeroCotizacion = precioListaList[i].numeroCotizacion;
+                    if (numeroCotizacion == null)
+                        numeroCotizacion = "No Identificado";
+
+                    $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
+
+                        '<td>' + numeroCotizacion + '</td>' +
+                        '<td>' + fechaInicioVigencia + '</td>' +
+                        '<td>' + fechaFinVigencia + '</td>' +
+                        '<td>' + precioListaList[i].unidad + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadCuatroDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + Number(precioListaList[i].precioUnitario).toFixed(cantidadCuatroDecimales) + '</td>' +
+
+                        '</tr>');
+                }
+            }
+        });
+        $("#modalMostrarPrecios").modal();
+
+    });
+
 });

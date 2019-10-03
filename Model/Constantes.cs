@@ -393,8 +393,12 @@ namespace Model
         public const String VISUALIZA_LOGCAMPO = "P824";
 
         public const String VISUALIZA_DOCUMENTOVENTANOTIFICACION = "P420";
+
         public const String MODIFICA_MENSAJE = "P831";
         public const String LISTA_MENSAJE = "P830";
+
+        public const String VISUALIZA_VENTAS = "P730";
+
         public enum paginas
         {
             /*COTIZACION*/
@@ -499,23 +503,27 @@ namespace Model
             [Display(Name = "MANTENIMIENTO COMPRA")]
             MantenimientoCompra = 42,
 
-            /*BUSQUEDA DE VENDEDORES*/
+            /*VENDEDORES*/
             [Display(Name = "BUSQUEDA VENDEDORES")]
             BusquedaVendedores = 43,
             [Display(Name = "MANTENIMIENTO VENDEDORES")]
             MantenimientoVendedores = 44,
 
-            /*BUSQUEDA DE LOGCAMPO*/
+            /*LOGCAMPO*/
             [Display(Name = "BUSQUEDA LOGCAMPO")]
             BusquedaLogCampo = 45,
             [Display(Name = "MANTENIMIENTO LOGCAMPO")]
             MantenimientoLogCampo = 46,
 
-            /*BUSQUEDA DE MENSAJES*/
+            /*MENSAJES*/
             [Display(Name = "BUSQUEDA MENSAJES")]
             BusquedaMensaje = 48,
             [Display(Name = "MANTENIMIENTO MENSAJES")]
             MantenimientoMensaje = 49,
+
+            /*LISTA DE VENTAS*/
+            [Display(Name = "BUSQUEDA VENTAS")]
+            BusquedaVenta = 50,
 
             /*NOTIFICACION DOCUMENTO DE VENTA*/
             [Display(Name = "BUSQUEDA DOCUMENTOVENTANOTIFICACION")]

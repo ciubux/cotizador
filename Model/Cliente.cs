@@ -40,6 +40,8 @@ namespace Model
 
         public List<Cliente> sedeList { get; set; }
 
+        public List<DocumentoDetalle> listaPrecios { get; set; }
+
         [Display(Name = "Asesor Comercial:")]
         public Vendedor responsableComercial { get; set; }
         [Display(Name = "Asistente de Atención al Cliente:")]

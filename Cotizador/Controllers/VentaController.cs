@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Reflection;
 
 namespace Cotizador.Controllers
 {
@@ -43,7 +44,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             venta = ventaBL.GetVenta(venta, usuario);
             this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
-            
+
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonVenta = JsonConvert.SerializeObject(venta);
 
@@ -78,7 +79,7 @@ namespace Cotizador.Controllers
         public String generarVentaConsolidada(List<DocumentoDetalleJson> documentoDetalleJsonList)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            List<Guid> guiaRemisionIdList =  (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
+            List<Guid> guiaRemisionIdList = (List<Guid>)this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS];
 
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA];
 
@@ -97,7 +98,7 @@ namespace Cotizador.Controllers
             foreach (VentaDetalle ventaDetalle in documentoVenta.ventaDetalleList)
             {
                 DocumentoDetalleJson documentoDetalleJson = documentoDetalleJsonList.Where(d => Guid.Parse(d.idProducto) == ventaDetalle.producto.idProducto).FirstOrDefault();
-                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos,usuario.visualizaMargen);
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                 //pedidoDetalle.producto = new Producto();
                 pedidoDetalle.producto = ventaDetalle.producto;
                 pedidoDetalle.cantidad = documentoDetalleJson.cantidad;
@@ -105,7 +106,7 @@ namespace Cotizador.Controllers
                 pedidoDetalle.unidadInternacional = null;
 
 
-                
+
 
 
 
@@ -135,7 +136,7 @@ namespace Cotizador.Controllers
 
             ventaBL.InsertVentaConsolidada(venta);
 
-            ventaBL.GetVentaConsolidada(venta,usuario);
+            ventaBL.GetVentaConsolidada(venta, usuario);
 
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.calcularMontosTotales(venta.pedido);
@@ -155,9 +156,9 @@ namespace Cotizador.Controllers
 
             }
 
-             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
-             return json;
-         }
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
+            return json;
+        }
 
         [HttpPost]
         public String obtenerVentaConsolidada(List<DocumentoDetalleJson> documentoDetalleJsonList)
@@ -190,7 +191,7 @@ namespace Cotizador.Controllers
             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
             return json;
         }
-        
+
 
 
 
@@ -251,8 +252,8 @@ namespace Cotizador.Controllers
 
 
 
-            public String Descargar()
-           {/*
+        public String Descargar()
+        {/*
            
 
             Pedido pedido = venta.pedido; ;
@@ -327,7 +328,7 @@ namespace Cotizador.Controllers
                 }*/
                 Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
                 Pedido pedido = venta.pedido;
-                    
+
 
 
                 int existeCliente = 0;
@@ -384,7 +385,7 @@ namespace Cotizador.Controllers
             return "{\"cantidad\":\"" + documento.documentoDetalle.Count + "\"}";
         }
 
-       
+
 
 
         public String Update()
@@ -400,7 +401,7 @@ namespace Cotizador.Controllers
 
             long numeroPedido = venta.pedido.numeroPedido;
             String numeroPedidoString = venta.pedido.numeroPedidoString;
-        
+
 
             var v = new { numeroPedido = numeroPedidoString };
             String resultado = JsonConvert.SerializeObject(v);
@@ -409,6 +410,231 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        /***********************************************************************/
+
+        [HttpGet]
+        public ActionResult Lista(Guid? idMovimientoAlmacen = null)
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaVenta;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] == null)
+            {
+                instanciarBusquedaVenta();
+            }
+
+            Venta objSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
+            Venta guiaRemisionSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA]; 
+            int existeCliente = 0;
+                        if (guiaRemisionSearch.pedido.cliente.idCliente != Guid.Empty)
+                        {
+                            existeCliente = 1;
+                        }
+
+            ViewBag.Venta = objSearch; 
+           
+            ViewBag.guiaRemision = guiaRemisionSearch.guiaRemision;
+
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaVenta;
+
+            ViewBag.pedido = this.VentaSession.pedido;
+
+            ViewBag.existeCliente = existeCliente;
+
+            return View();
+        }
+        
+        private void instanciarBusquedaVenta()
+        {
+            Venta obj = new Venta();
+            obj.pedido = new Pedido();
+            obj.pedido.cliente = new Cliente();
+            obj.pedido.cliente.idCliente = Guid.Empty;
+            obj.usuario = new Usuario();
+            obj.guiaRemision = new GuiaRemision();
+            obj.guiaRemision.ciudadOrigen = new Ciudad();
+            obj.guiaRemision.ciudadOrigen.idCiudad = Guid.Empty;
+            obj.ciudad = new Ciudad();
+            obj.guiaRemision.pedido = new Pedido();
+            obj.guiaRemision.pedido.cliente = new Cliente();
+            obj.guiaRemision.numero = 0;
+            obj.guiaRemision.fechaEmisionDesde = DateTime.Now.AddDays(-10);
+            obj.guiaRemision.fechaEmisionHasta = DateTime.Now.AddDays(1);
+            obj.guiaRemision.motivoTrasladoBusqueda = GuiaRemision.motivosTrasladoBusqueda.Venta;
+            obj.guiaRemision.sku = String.Empty;
+            obj.pedido.numeroPedido = 0;
+
+            obj.documentoVenta = new DocumentoVenta();
+            obj.documentoVenta.serie = "0";
+            obj.documentoVenta.numero = "0";
+            obj.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Todos;
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.usuario.idUsuario = usuario.idUsuario;
+            this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = obj;
+        }
+
+        public String ChangeIdCiudad()
+        {
+            Venta venta = this.VentaSession;
+
+            Guid idCiudad = Guid.Empty;
+            if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
+            {
+                idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+            }
+            venta.guiaRemision.ciudadOrigen.idCiudad = idCiudad;
+            this.VentaSession = venta;
+            return "{\"idCiudad\": \"" + idCiudad + "\"}";
+
+        }
+
+        public void ChangeInputIntPedido()
+        {
+            Venta venta = this.VentaSession;
+            PropertyInfo propertyInfo = venta.pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
+            try
+            {
+                propertyInfo.SetValue(venta.pedido, Int64.Parse(this.Request.Params["valor"]));
+            }
+            catch (Exception e)
+            {
+                propertyInfo.SetValue(venta.pedido, 0);
+            }
+            this.VentaSession = venta;
+        }
+
+
+        public void ChangeInputIntGuia()
+        {
+            Venta venta = this.VentaSession;
+            PropertyInfo propertyInfo = venta.guiaRemision.GetType().GetProperty(this.Request.Params["propiedad"]);
+            try
+            {
+                propertyInfo.SetValue(venta.guiaRemision, Int64.Parse(this.Request.Params["valor"]));
+            }
+            catch (Exception e)
+            {
+                propertyInfo.SetValue(venta.guiaRemision, 0);
+            }
+            this.VentaSession = venta;
+        }
+
+        public void ChangeFechaEmisionDesde()
+        {
+            Venta obj = (Venta)this.VentaSession;
+            String[] fecha = this.Request.Params["fechaEmisionDesde"].Split('/');
+            obj.guiaRemision.fechaEmisionDesde = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            this.VentaSession = obj;
+        }
+
+        public void ChangeFechaEmisionHasta()
+        {
+            Venta obj = (Venta)this.VentaSession;
+            String[] fecha = this.Request.Params["fechaEmisionHasta"].Split('/');
+            obj.guiaRemision.fechaEmisionHasta = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            this.VentaSession = obj;
+        }
+
+        public void CleanBusqueda()
+        {
+            instanciarBusquedaVenta();
+        }
+
+        private Venta VentaSession
+        {
+            get
+            {
+                Venta obj = null;
+
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+
+                    case Constantes.paginas.BusquedaVenta: obj = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA]; break;
+                }
+                return obj;
+            }
+            set
+            {
+                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
+                {
+                    case Constantes.paginas.BusquedaVenta: this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = value; break;
+                }
+            }
+        }
+
+        public String SearchList()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaVenta;
+            if (this.Request.Params["numero"] == null || this.Request.Params["numero"].Trim().Length == 0)
+            {
+                this.VentaSession.documentoVenta.numero = "0";
+            }
+            else
+            {
+                this.VentaSession.documentoVenta.numero = this.Request.Params["numero"];
+            }
+            this.VentaSession.documentoVenta.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(this.Request.Params["tipoDocumento"]);
+
+            Venta obj = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
+            obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            VentaBL bL = new VentaBL();
+            List<Venta> list = bL.getListVenta(obj);           
+            
+            //Se retorna la cantidad de elementos encontrados
+            return JsonConvert.SerializeObject(list);
+        }
+
+        public String GetCliente()
+        {
+            Venta venta = this.VentaSession;
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+            ClienteBL clienteBl = new ClienteBL();
+            venta.guiaRemision.pedido.cliente = clienteBl.getCliente(idCliente);
+            String resultado = JsonConvert.SerializeObject(venta.guiaRemision.pedido.cliente);
+            this.VentaSession = venta;
+            return resultado;
+        }
+
+        public void ChangeInputString()
+        {
+            Venta obj = (Venta)this.VentaSession;
+            PropertyInfo propertyInfo = obj.guiaRemision.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj.guiaRemision, this.Request.Params["valor"]);
+            this.VentaSession = obj;
+        }
+
+        public String SearchClientes()
+        {
+            String data = this.Request.Params["data[q]"];
+            ClienteBL clienteBL = new ClienteBL();
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
+            return clienteBL.getCLientesBusqueda(data, venta.guiaRemision.ciudadOrigen.idCiudad);
+        }
+
+        public String ShowList()
+        {
+            VentaBL ventaBL = new VentaBL();
+            Venta venta = new Venta();
+            venta.guiaRemision = new GuiaRemision();
+            venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            venta = ventaBL.GetVentaList(venta, usuario);
+            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;         
+            string jsonUsuario = JsonConvert.SerializeObject(usuario);
+            string jsonVenta = JsonConvert.SerializeObject(venta);
+
+            Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == venta.pedido.ciudad.idCiudad).FirstOrDefault();
+
+            string jsonSeries = "[]";
+            if (ciudad != null)
+            {
+                var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
+                jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
+            }
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
+            return json;
+        }
 
     }
 }

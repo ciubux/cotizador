@@ -2816,7 +2816,8 @@ jQuery(function ($) {
                 $("#btnIngresarPedidoCompra").hide();
                 if ((pedido.seguimientoPedido.estado == ESTADO_INGRESADO ||
                     pedido.seguimientoPedido.estado == ESTADO_PROGRAMADO ||
-                    pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE
+                    pedido.seguimientoPedido.estado == ESTADO_ATENDIDO_PARCIALMENTE ||
+                    pedido.seguimientoPedido.estado == ESTADO_RECIBIDO_PARCIALMENTE
                     )&&
                     pedido.seguimientoCrediticioPedido.estado == ESTADO_LIBERADO
                 ) {

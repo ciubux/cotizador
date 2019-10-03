@@ -184,16 +184,19 @@ namespace BusinessLayer
                                 }
                             }
                         }
-                    }
+
+                        //pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                    }                   
                 }
             }
+
+            
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
                 pedidoAdjunto.usuario = pedido.usuario;
                 pedidoAdjunto.idCliente = pedido.cliente.idCliente;
             }
-
         }
                 
         public void InsertPedido(Pedido pedido)

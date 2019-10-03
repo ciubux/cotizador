@@ -2355,6 +2355,14 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    $("#btnExportCanasta").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
+    $("#btnExportDirecciones").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
     $("#lblChkConfigAgregarNombreSedeObservacionFactura").click(function () {
         if ($("#chkConfigAgregarNombreSedeObservacionFactura").is(":checked")) {
             $("#chkConfigAgregarNombreSedeObservacionFactura").prop("checked", false);

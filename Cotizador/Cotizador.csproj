@@ -272,6 +272,8 @@
     <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
+    <Compile Include="ExcelExport\DireccionCliente.cs" />
+    <Compile Include="ExcelExport\CanastaCliente.cs" />
     <Compile Include="ExcelExport\CotizacionDetalleFormatoExcel.cs" />
     <Compile Include="ExcelExport\DocumentoCompraSearch.cs" />
     <Compile Include="ExcelExport\FacturaSearch.cs" />
@@ -607,6 +609,7 @@
     <Content Include="Views\DocumentoVenta\ExportarCPEs.cshtml" />
     <Content Include="Views\Cotizacion\_ModalImportarDetallesExcel.cshtml" />
     <Content Include="Views\ClienteSunat\Index.cshtml" />
+    <Content Include="Views\Venta\Lista.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
