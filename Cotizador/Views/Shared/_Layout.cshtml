@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "317";
+    TempData["ScriptVersion"] = "377";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -231,7 +231,8 @@
                                 <ul class="dropdown-menu" role="menu">
                                     @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                                     {
-                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Pedido Venta - Búsqueda", "Index", "Pedido")</li>}
+                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Pedido Venta - Búsqueda", "Index", "Pedido")</li>
+}
                                     @if (usuario.tomaPedidos)
                                     {
                                         <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Crear/Modificar", "Pedir", "Pedido")</li>
@@ -243,7 +244,8 @@
 
                                     @if (usuario.tomaPedidosCompra)
                                     {
-                                        <li id="linkBusquedaPedidosCompra" class="@linkBusquedaPedidosCompra">@Html.ActionLink("Pedido Compra - Búsqueda", "Index", "PedidoCompra")</li>}
+                                        <li id="linkBusquedaPedidosCompra" class="@linkBusquedaPedidosCompra">@Html.ActionLink("Pedido Compra - Búsqueda", "Index", "PedidoCompra")</li>
+}
                                     @if (usuario.tomaPedidosCompra)
                                     {
                                         <li id="linkMantenimientoPedidoCompra" class="@linkMantenimientoPedidoCompra">@Html.ActionLink("Pedido Compra - Crear/Modificar", "Pedir", "PedidoCompra")</li>
@@ -251,7 +253,8 @@
 
                                     @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
                                     {
-                                        <li id="linkBusquedaPedidosAlmacen" class="@linkBusquedaPedidosAlmacen">@Html.ActionLink("Pedido Almacén - Búsqueda", "Index", "PedidoAlmacen")</li>}
+                                        <li id="linkBusquedaPedidosAlmacen" class="@linkBusquedaPedidosAlmacen">@Html.ActionLink("Pedido Almacén - Búsqueda", "Index", "PedidoAlmacen")</li>
+}
                                     @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
                                     {
                                         <li id="linkMantenimientoPedidoAlmacen" class="@linkMantenimientoPedidoAlmacen">@Html.ActionLink("Pedido Almacén - Crear/Modificar", "Pedir", "PedidoAlmacen")</li>
@@ -323,9 +326,9 @@
                                     }
 
                                     @*@if (usuario.visualizaDocumentoVentaNotificacion)
-                                    {
-                                        <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
-                                    }*@
+                                        {
+                                            <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
+                                        }*@
 
 
                                     @if (usuario.administraPermisos)
@@ -507,6 +510,6 @@
     @Scripts.Render("~/bundles/loadingModal")
     @Scripts.Render("~/bundles/confirm")
     @Scripts.Render("~/bundles/utiles")
-    @Scripts.Render("~/bundles/mensaje")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/mensaje")
 </body>
 </html>

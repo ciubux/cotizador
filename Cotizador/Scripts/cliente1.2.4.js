@@ -271,6 +271,7 @@ jQuery(function ($) {
                     direccion: direccionEntrega,
                     contacto: contacto,
                     telefono: telefono,
+                    idCiudad: idCiudad,
                     emailRecepcionFacturas: emailRecepcionFacturas,
                     codigoCliente: codigoCliente,
                     nombre: nombre,

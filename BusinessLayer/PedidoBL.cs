@@ -295,7 +295,7 @@ namespace BusinessLayer
         private void validarPedidoCompra(Pedido pedido)
         {
             pedido.seguimientoPedido.observacion = String.Empty;
-            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
+            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
             pedido.seguimientoCrediticioPedido.observacion = String.Empty;
             //Cambio Temporal
             pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;

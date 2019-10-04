@@ -101,7 +101,7 @@ namespace Cotizador.ExcelExport
 
                 foreach (Pedido obj in list)
                 {
-                    UtilesHelper.setValorCelda(sheet, i, "A", obj.numeroPedidoString);
+                    UtilesHelper.setValorCelda(sheet, i, "A", obj.numeroPedidoNumeroGrupoString);
                     UtilesHelper.setValorCelda(sheet, i, "B", obj.ciudad.nombre);
                     UtilesHelper.setValorCelda(sheet, i, "C", obj.cliente.codigo);
                     UtilesHelper.setValorCelda(sheet, i, "D", obj.cliente.razonSocial);
