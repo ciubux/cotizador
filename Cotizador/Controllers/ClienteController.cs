@@ -181,7 +181,10 @@ namespace Cotizador.Controllers
             cliente.negociacionMultiregional = false;
             cliente.observacionHorarioEntrega = "";
             cliente.configuraciones = new Model.CONFIGCLASSES.ClienteConfiguracion();
-            
+            cliente.tipoPagoFactura = DocumentoVenta.TipoPago.Contado;
+            cliente.plazoCreditoSolicitado = DocumentoVenta.TipoPago.Contado;
+
+
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 

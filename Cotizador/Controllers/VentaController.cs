@@ -424,12 +424,12 @@ namespace Cotizador.Controllers
             }
 
             Venta objSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
-            Venta guiaRemisionSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA]; 
+            Venta guiaRemisionSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] ;
             int existeCliente = 0;
-                        if (guiaRemisionSearch.pedido.cliente.idCliente != Guid.Empty)
-                        {
-                            existeCliente = 1;
-                        }
+            if (objSearch.guiaRemision.pedido.cliente.idCliente != Guid.Empty)
+            {
+             existeCliente = 1;
+            }
 
             ViewBag.Venta = objSearch; 
            
@@ -476,7 +476,7 @@ namespace Cotizador.Controllers
 
         public String ChangeIdCiudad()
         {
-            Venta venta = this.VentaSession;
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
 
             Guid idCiudad = Guid.Empty;
             if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
@@ -484,14 +484,14 @@ namespace Cotizador.Controllers
                 idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
             }
             venta.guiaRemision.ciudadOrigen.idCiudad = idCiudad;
-            this.VentaSession = venta;
+            this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = venta;
             return "{\"idCiudad\": \"" + idCiudad + "\"}";
 
         }
 
         public void ChangeInputIntPedido()
         {
-            Venta venta = this.VentaSession;
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
             PropertyInfo propertyInfo = venta.pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
             try
             {
@@ -501,13 +501,13 @@ namespace Cotizador.Controllers
             {
                 propertyInfo.SetValue(venta.pedido, 0);
             }
-            this.VentaSession = venta;
+            this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = venta;
         }
 
 
         public void ChangeInputIntGuia()
         {
-            Venta venta = this.VentaSession;
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
             PropertyInfo propertyInfo = venta.guiaRemision.GetType().GetProperty(this.Request.Params["propiedad"]);
             try
             {
@@ -517,23 +517,23 @@ namespace Cotizador.Controllers
             {
                 propertyInfo.SetValue(venta.guiaRemision, 0);
             }
-            this.VentaSession = venta;
+            this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = venta;
         }
 
         public void ChangeFechaEmisionDesde()
         {
-            Venta obj = (Venta)this.VentaSession;
+            Venta obj = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
             String[] fecha = this.Request.Params["fechaEmisionDesde"].Split('/');
             obj.guiaRemision.fechaEmisionDesde = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
-            this.VentaSession = obj;
+            this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = obj;
         }
 
         public void ChangeFechaEmisionHasta()
         {
-            Venta obj = (Venta)this.VentaSession;
+            Venta obj = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
             String[] fecha = this.Request.Params["fechaEmisionHasta"].Split('/');
             obj.guiaRemision.fechaEmisionHasta = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
-            this.VentaSession = obj;
+            this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = obj;
         }
 
         public void CleanBusqueda()
@@ -563,6 +563,8 @@ namespace Cotizador.Controllers
             }
         }
 
+
+
         public String SearchList()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaVenta;
@@ -587,21 +589,21 @@ namespace Cotizador.Controllers
 
         public String GetCliente()
         {
-            Venta venta = this.VentaSession;
+            Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
             venta.guiaRemision.pedido.cliente = clienteBl.getCliente(idCliente);
             String resultado = JsonConvert.SerializeObject(venta.guiaRemision.pedido.cliente);
-            this.VentaSession = venta;
+            this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = venta;
             return resultado;
         }
 
         public void ChangeInputString()
         {
-            Venta obj = (Venta)this.VentaSession;
+            Venta obj = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
             PropertyInfo propertyInfo = obj.guiaRemision.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj.guiaRemision, this.Request.Params["valor"]);
-            this.VentaSession = obj;
+            this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = obj;
         }
 
         public String SearchClientes()

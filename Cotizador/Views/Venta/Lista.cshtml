@@ -13,7 +13,7 @@
 </div>
 <div class="container">
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
-    <input type="hidden" id="idClienteFacturacion" value="" />
+   
     <form class="form-horizontal">
 
         <div class="row">
@@ -26,7 +26,7 @@
                     new
                     {
                         ciudadSelectId = "idCiudadBusquedaList",
-                        selectedValue = venta.ciudad.idCiudad
+                        selectedValue = venta.guiaRemision.ciudadOrigen.idCiudad
                     })
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                         <select class="form-control input-sm" id="idClienteBusquedaList" name="idCliente" required>
                             @if (ViewBag.existeCliente == 1)
                             {
-                                <option selected value="@venta.cliente.idCliente">@venta.cliente</option>
+                                <option selected value="@venta.guiaRemision.pedido.cliente.idCliente">@venta.guiaRemision.pedido.cliente</option>
                             }
                             else
                             {
@@ -87,13 +87,13 @@
                     <label for="documentoVenta_guiaRemision_numero" class="control-label col-xs-4">Número Mov. Almacén:</label>
 
                     <div class="col-xs-8">
-                        @if (venta.guiaRemision.numeroDocumento > 0)
+                        @if (venta.guiaRemision.numero > 0)
                         {
-                            @Html.TextBoxFor(dv => venta.guiaRemision.numeroDocumento, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                            @Html.TextBoxFor(dv => venta.guiaRemision.numero, htmlAttributes: new { @class = "form-control", type = "number", min = "0" ,@id="venta_guiaRemision_numero_list" })
                         }
                         else
                         {
-                            @Html.TextBoxFor(dv => venta.guiaRemision.numeroDocumento, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                            @Html.TextBoxFor(dv => venta.guiaRemision.numero, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" ,@id="venta_guiaRemision_numero_list"})
                         }
                         <!--<span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los demás criterios no serán considerados al realizar la búsqueda.</span>-->
                     </div>
@@ -213,7 +213,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="modalFacturarTitle"><b>Crear Factura</b></h4>
+                    <h4 class="modal-title" id="modalFacturarTitle"><b>Datos de Venta</b></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
