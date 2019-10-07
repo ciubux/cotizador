@@ -22,7 +22,7 @@ namespace BusinessLayer
             }
             return usuario;
         }
-        
+
 
         public Usuario getUsuario(Guid idUsuario)
         {
@@ -104,6 +104,39 @@ namespace BusinessLayer
             {
                 return dal.updatePermisos(usuario);
             }
+        }
+
+        /************************************************************************/
+
+        public String searchUsuariosVenta(String textoBusqueda)
+        {
+            using (var dal = new UsuarioDAL())
+            {
+                List<Usuario> usuarioList = dal.searchUsuariosVendedor(textoBusqueda);
+                String resultado = "{\"q\":\"" + textoBusqueda + "\",\"results\":[";
+                Boolean existeCliente = false;
+                foreach (Usuario usuario in usuarioList)
+                {
+                    resultado += "{\"id\":\"" + usuario.idUsuario + "\",\"text\":\"" +"Nombre: "+ usuario.nombre.ToString() +" - Email:"+ usuario.email.ToString() + "\"},";
+                    existeCliente = true;
+                }
+                if (existeCliente)
+                    resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+                else
+                    resultado = resultado.Substring(0, resultado.Length) + "]}";
+
+                return resultado;
+            }
+        }
+
+        public Usuario getUsuarioVendedor(Guid idUsuario)
+        {
+            Usuario usuario = null;
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                usuario = usuarioDAL.getUsuarioVendedor(idUsuario);
+            }
+            return usuario;
         }
     }
 }

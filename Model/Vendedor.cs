@@ -24,6 +24,11 @@ namespace Model
         public String codigoDescripcion { get { return this.codigo + " - " + this.descripcion; } }
 
         /*-----------------------*/
+
+        public Vendedor supervisor { get; set; }
+
+        public Guid idUsuarioVendedor { get; set; }
+
         [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }
 
@@ -43,10 +48,10 @@ namespace Model
         public Decimal maxdesapro { get; set; }
 
         [Display(Name = "Ciudad:")]
-        public  Guid idCiudad { get; set; }
+        public Guid idCiudad { get; set; }
 
         [Display(Name = "Email:")]
         public string email { get; set; }
-        
+
     }
 }

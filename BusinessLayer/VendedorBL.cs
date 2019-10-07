@@ -43,5 +43,36 @@ namespace BusinessLayer
                 return dal.updateVendedor(obj);
             }
         }
+
+        public String getVendedoresBusqueda(String textoBusqueda)
+        {
+            using (var vendedorDAL = new VendedorDAL())
+            {
+                List<Vendedor> vendedorList = vendedorDAL.searchVendedores(textoBusqueda);
+                String resultado = "{\"q\":\"" + textoBusqueda + "\",\"results\":[";
+                Boolean existeCliente = false;
+                foreach (Vendedor vendedor in vendedorList)
+                {
+                    resultado += "{\"id\":\"" + vendedor.supervisor.idUsuarioVendedor + "\",\"text\":\"" + "Nombre: " + vendedor.supervisor.descripcion.ToString() + " - Email: " + vendedor.supervisor.email.ToString() + "\"},";
+                    existeCliente = true;
+                }
+                if (existeCliente)
+                    resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+                else
+                    resultado = resultado.Substring(0, resultado.Length) + "]}";
+                return resultado;
+            }
+        }
+
+        public Vendedor getSupervisor(Guid idSupervisor)
+        {
+            Vendedor vendedor = null;
+            using (var supervisorDAL = new VendedorDAL())
+            {
+                vendedor = supervisorDAL.getSupervisor(idSupervisor);
+            }
+
+            return vendedor;
+        }
     }
 }

@@ -66,7 +66,7 @@ namespace Cotizador.Controllers
             return PartialView("_Vendedor", model);
         }
 
-        
+
         /*-----------------------------------------------------------*/
 
         [HttpGet]
@@ -93,16 +93,16 @@ namespace Cotizador.Controllers
                 instanciarVendedorBusqueda();
             }
 
-            Vendedor objSearch = (Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR_BUSQUEDA];            
+            Vendedor objSearch = (Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR_BUSQUEDA];
             ViewBag.pagina = (int)Constantes.paginas.BusquedaVendedores;
             ViewBag.vendedor = objSearch;
 
             return View();
         }
-        
+
         private void instanciarVendedorBusqueda()
         {
-            Vendedor obj = new Vendedor();            
+            Vendedor obj = new Vendedor();
             obj.estado = 1;
             obj.codigo = String.Empty;
             obj.descripcion = String.Empty;
@@ -112,9 +112,9 @@ namespace Cotizador.Controllers
             obj.idCiudad = Guid.Empty;
 
             this.Session[Constantes.VAR_SESSION_VENDEDOR_BUSQUEDA] = obj;
-        } 
-        
-        
+        }
+
+
         public String SearchList()
         {
 
@@ -122,7 +122,7 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaVendedores;
             //Se recupera el objeto cliente que contiene los criterios de Búsqueda de la session
             Vendedor obj = (Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR_BUSQUEDA];
-            VendedorBL bL = new VendedorBL();            
+            VendedorBL bL = new VendedorBL();
             List<Vendedor> list = bL.getVendedores(obj);
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_VENDEDOR_LISTA] = list;
@@ -130,7 +130,7 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(list);
         }
 
-        [HttpGet]
+        [HttpPost]
         public String Create()
         {
             VendedorBL bL = new VendedorBL();
@@ -148,41 +148,55 @@ namespace Cotizador.Controllers
             VendedorBL bL = new VendedorBL();
             Vendedor obj = (Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR];
 
-            if (obj.idVendedor ==0)
+            if (obj.idVendedor == 0)
             {
                 obj = bL.insertVendedor(obj);
                 this.Session[Constantes.VAR_SESSION_VENDEDOR] = null;
             }
             else
             {
-                
+                if (obj.esSupervisorComercial == true)
+                {
+                    obj.supervisor.idVendedor = 0;
+                    obj.esAsistenteServicioCliente = false;
+                }
                 obj = bL.updateVendedor(obj);
                 this.Session[Constantes.VAR_SESSION_VENDEDOR] = null;
             }
             String resultado = JsonConvert.SerializeObject(obj);
-           
+
             return resultado;
         }
 
         public void ChangeInputString()
         {
-            Vendedor obj = (Vendedor)this.VendedorSession;                              
+            Vendedor obj = (Vendedor)this.VendedorSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(obj, this.Request.Params["valor"]);          
+            propertyInfo.SetValue(obj, this.Request.Params["valor"]);
             this.VendedorSession = obj;
         }
 
         public void ChangeInputInt()
         {
-            
-            Vendedor obj = (Vendedor)this.VendedorSession;            
+
+            Vendedor obj = (Vendedor)this.VendedorSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
             this.VendedorSession = obj;
-        }      
-      
+        }
 
-    
+
+        public void ChangeInputBoolean()
+        {
+
+            Vendedor obj = (Vendedor)this.VendedorSession;            
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, Boolean.Parse(this.Request.Params["valor"]));
+
+            this.VendedorSession = obj;
+        }
+
+
 
         public void ChangeInputDecimal()
         {
@@ -194,7 +208,7 @@ namespace Cotizador.Controllers
 
         public String ChangeIdCiudad()
         {
-            Vendedor vendedor = this.VendedorSession;
+            Vendedor vendedor = (Vendedor)this.VendedorSession;
 
             Guid idCiudad = Guid.Empty;
             if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
@@ -215,10 +229,10 @@ namespace Cotizador.Controllers
             get
             {
                 Vendedor obj = null;
-                
+
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
-                   
+
                     case Constantes.paginas.BusquedaVendedores: obj = (Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR_BUSQUEDA]; break;
                     case Constantes.paginas.MantenimientoVendedores: obj = (Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR]; break;
                 }
@@ -234,7 +248,7 @@ namespace Cotizador.Controllers
             }
         }
 
-        public ActionResult Editar(int? idVendedor=null)
+        public ActionResult Editar(int? idVendedor = null)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoVendedores;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -243,7 +257,7 @@ namespace Cotizador.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            if (this.Session[Constantes.VAR_SESSION_VENDEDOR] == null && idVendedor == null)
+            if ((Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR] == null && idVendedor == null)
             {
                 instanciarVendedor();
             }
@@ -259,8 +273,20 @@ namespace Cotizador.Controllers
 
                 this.Session[Constantes.VAR_SESSION_VENDEDOR] = obj;
             }
+            int existeUsuario = 0;
+            if (obj.supervisor.usuario.idUsuario != Guid.Empty)
+            {
+                existeUsuario = 1;
+            }
+            int existeSupervisor = 0;
+            if (obj.supervisor.idUsuarioVendedor != Guid.Empty)
+            {
+                existeSupervisor = 1;
+            }
 
 
+            ViewBag.existeUsuario = existeUsuario;
+            ViewBag.existeSupervisor = existeSupervisor;
             ViewBag.vendedor = obj;
             return View();
 
@@ -269,12 +295,15 @@ namespace Cotizador.Controllers
         private void instanciarVendedor()
         {
             Vendedor obj = new Vendedor();
-            obj.idVendedor = 0;           
+            obj.usuario = new Usuario();
+            obj.idVendedor = 0;
             obj.estado = 1;
             obj.cargo = " ";
-            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];                
+            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             obj.usuario = user;
-
+            obj.supervisor = new Vendedor();
+            obj.supervisor.usuario = new Usuario();
+            obj.esResponsableComercial = true;
             this.Session[Constantes.VAR_SESSION_VENDEDOR] = obj;
         }
 
@@ -311,6 +340,56 @@ namespace Cotizador.Controllers
                 return "{\"existe\":\"false\",\"idVendedor\":\"0\"}";
             else
                 return "{\"existe\":\"true\",\"idVendedor\":\"" + obj.idVendedor + "\"}";
+        }
+
+        /*-------------------------------------------------*/
+
+
+        public String SearchUsuario()
+        {
+            String data = this.Request.Params["data[q]"];
+            UsuarioBL usuarioBL = new UsuarioBL();
+            return usuarioBL.searchUsuariosVenta(data);
+        }
+
+        public String SearchVendedor()
+        {
+            String data = this.Request.Params["data[q]"];
+            VendedorBL vendedorBL = new VendedorBL();
+            return vendedorBL.getVendedoresBusqueda(data);
+        }
+
+
+        public String GetUsuario()
+        {
+
+            Vendedor vendedor = (Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR];
+            vendedor.supervisor.usuario = new Usuario();
+            Guid idVendedor = Guid.Parse(Request["idVendedor"].ToString());
+            UsuarioBL clienteBl = new UsuarioBL();
+            vendedor.supervisor.usuario = clienteBl.getUsuarioVendedor(idVendedor);
+            vendedor.cargo = vendedor.supervisor.usuario.cargo;
+            vendedor.descripcion = vendedor.supervisor.usuario.nombre;
+            vendedor.idCiudad = vendedor.supervisor.usuario.sedeMP.idCiudad;
+            vendedor.contacto = vendedor.supervisor.usuario.contacto;
+            String resultado = JsonConvert.SerializeObject(vendedor.supervisor.usuario);
+            this.Session[Constantes.VAR_SESSION_VENDEDOR] = vendedor;
+
+            return resultado;
+        }
+
+        public String GetVendedorSupervisor()
+        {
+            Vendedor vendedor = (Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR];
+            Usuario vende = vendedor.supervisor.usuario;
+            Guid idSupervisor = Guid.Parse(Request["idUsuarioSupervisor"].ToString());
+            VendedorBL supervidorBl = new VendedorBL();
+            vendedor.supervisor = supervidorBl.getSupervisor(idSupervisor);
+            vendedor.supervisor.usuario = vende;
+            String resultado = JsonConvert.SerializeObject(vendedor.supervisor);
+
+            this.Session[Constantes.VAR_SESSION_VENDEDOR] = vendedor;
+            return resultado;
         }
     }
 }

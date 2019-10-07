@@ -6,11 +6,24 @@
 
     $(document).ready(function () {
         $("#btnBusqueda").click();
+        cargarChosenUsuarioList();
+        cargarChosenVendedorList();
         verificarSiExisteVendedor();
+        verificarSiEsSupervisor();
     });
+
+    function verificarSiEsSupervisor() {
+
+        if ($("#supervisor_vendedor").val() == 1)
+        {
+            $("#idVendedorBusquedaList").prop('disabled', true).trigger("chosen:updated"); 
+        }       
+
+    }
 
     function verificarSiExisteVendedor() {
         if ($("#idVendedor").val().trim() != "0") {
+            $("#idUsuarioBusquedaList").prop('disabled', true).trigger("chosen:updated");
             $("#btnFinalizarEdicionVendedor").html('Finalizar Edición');
 
         }
@@ -35,12 +48,12 @@
             success: function (list) {
                 $("#btnBusqueda").removeAttr("disabled");
                 $("#tableVendedores > tbody").empty();
-                $("#tableVendedores").footableita
-                ({
-                    "paging": {
-                        "enabled": true
-                    }
-                });
+                $("#tableVendedores").footable
+                    ({
+                        "paging": {
+                            "enabled": true
+                        }
+                    });
 
                 for (var i = 0; i < list.length; i++) {
                     var act;
@@ -121,7 +134,7 @@
                         type: 'POST',
                         error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del Vendedor."); },
                         success: function (fileName) {
-                            window.location = '/Vendedor/Editar';
+                            window.location = '/Vendedor/Editar';                            
                         }
                     });
 
@@ -302,17 +315,7 @@
             });
             return false;
         }
-        if ($("#vendedor_pass").val().length < 5) {
-            $.alert({
-                title: "Contraseña Inválida",
-                type: 'orange',
-                content: 'Debe ingresar una contraseña válida.',
-                buttons: {
-                    OK: function () { $('#vendedor_pass').focus(); }
-                }
-            });
-            return false;
-        }
+
 
         if ($("#vendedor_idCiudad").val() === "") {
             $.alert({
@@ -325,6 +328,31 @@
             });
             return false;
         }
+        if ($("#idUsuarioBusquedaList").val() === "") {
+            $.alert({
+                title: "Usuario Inválida",
+                type: 'orange',
+                content: 'Debe ingresar un Usuario.',
+                buttons: {
+                    OK: function () { $('#idUsuarioBusquedaList').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#supervisor_vendedor").val() === 1 && $("#idVendedorBusquedaLis").val()=="")
+        {
+            $.alert({
+                title: "Ciudad Inválida",
+                type: 'orange',
+                content: 'Debe ingresar una Sede para el usuario.',
+                buttons: {
+                    OK: function () { $('#vendedor_idCiudad').focus(); }
+                }
+            });
+            return false;
+        }
+
         var reg = /^[0-9]\d*(\.\d+)?$/;
         var var2 = $("#vendedor_maxdesapro").val();
 
@@ -340,16 +368,16 @@
             return false;
         }
 
-        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        var var1 = $("#vendedor_email").val();
-
-        if (regex.test(var1) !== true || $("#vendedor_email").val().indexOf(" ") !== -1 || $("#vendedor_email").val().indexOf("@") == -1 || $("#vendedor_email").val().length < 12) {
+       
+        
+        if ($("#responsable_comercial_vendedor").val() == 1 && ($("#idVendedorBusquedaList").val() == undefined || $("#idVendedorBusquedaList").val() == "") || $("#atencion_cliente_vendedor").val() == 1 && ($("#idVendedorBusquedaList").val() == undefined || $("#idVendedorBusquedaList").val()==""))
+        {
             $.alert({
-                title: "Email Inválido",
+                title: "Supervisor Inválido",
                 type: 'orange',
-                content: 'Debe ingresar un Email válido. Ejem:prueba@mpinstitucional.com',
+                content: 'Debe asignar un Supervisor para el usuario.',
                 buttons: {
-                    OK: function () { $('#vendedor_email').focus(); }
+                    OK: function () { $('#idVendedorBusquedaList').focus(); }
                 }
             });
             return false;
@@ -411,17 +439,20 @@
             });
             return false;
         }
+       
+        if ($("#idVendedorBusquedaList").val() == undefined || $("#idVendedorBusquedaList").val() == "")
+        {
+            $("#idVendedorBusquedaList").val("");
+        }
+       
 
-        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        var var1 = $("#vendedor_email").val();
-
-        if (regex.test(var1) !== true || $("#vendedor_email").val().indexOf(" ") !== -1 || $("#vendedor_email").val().indexOf("@") == -1 || $("#vendedor_email").val().length < 12) {
+        if ($("#responsable_comercial_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "" || $("#atencion_cliente_vendedor").val() == 1 && $("#idVendedorBusquedaList").val() == "") {
             $.alert({
-                title: "Email Inválido",
+                title: "Supervisor Inválido",
                 type: 'orange',
-                content: 'Debe ingresar un Email válido. Ejem:prueba@mpinstitucional.com',
+                content: 'Debe asignar un Supervisor para el usuario.',
                 buttons: {
-                    OK: function () { $('#vendedor_email').focus(); }
+                    OK: function () { $('#idVendedorBusquedaList').focus(); }
                 }
             });
             return false;
@@ -443,15 +474,8 @@
     $("#vendedor_codigo").change(function () {
         changeInputString("codigo", $("#vendedor_codigo").val());
     });
-    $("#vendedor_email").change(function () {
-
-        changeInputString("email", $("#vendedor_email").val());
-    });
-
-
-    $("#vendedor_pass").change(function () {
-        changeInputString("pass", $("#vendedor_pass").val());
-    });
+   
+    
 
     $("#vendedor_contacto").change(function () {
         changeInputString("contacto", $("#vendedor_contacto").val());
@@ -485,7 +509,6 @@
     });
 
 
-
     function changeInputString(propiedad, valor) {
         $.ajax({
             url: "/Vendedor/ChangeInputString",
@@ -511,6 +534,125 @@
     }
 
 
+    function cargarChosenUsuarioList() {
 
+        $("#idUsuarioBusquedaList").chosen({ placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
+
+
+        $("#idUsuarioBusquedaList").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 1,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Vendedor/SearchUsuario"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });
+
+    }
+
+    function cargarChosenVendedorList() {
+
+        $("#idVendedorBusquedaList").chosen({ placeholder_text_single: "Buscar Supervisor", no_results_text: "No se encontró Supervisor", allow_single_deselect: true }).on('chosen:showing_dropdown');
+
+
+        $("#idVendedorBusquedaList").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 1,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Vendedor/SearchVendedor"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Supervisor", no_results_text: "No se encontró Supervisor" });
+    }
+
+    $(document).on('click', "#supervisor_vendedor", function () {
+        $("#idVendedorBusquedaList").prop('disabled', true).trigger("chosen:updated"); 
+        $('#idVendedorBusquedaList').val('').trigger("chosen:updated");
+        changeInputBoolean("esSupervisorComercial", true);
+        changeInputBoolean("esAsistenteServicioCliente", false);
+        changeInputBoolean("esResponsableComercial", false);
+    });
+
+    $(document).on('click', "#atencion_cliente_vendedor", function () {
+        changeInputBoolean("esAsistenteServicioCliente", true);
+        changeInputBoolean("esSupervisorComercial", false);
+        changeInputBoolean("esResponsableComercial", false);
+        $("#idVendedorBusquedaList").removeAttr('disabled').trigger("chosen:updated"); 
+    });
+
+    $(document).on('click', "#responsable_comercial_vendedor", function () {
+        changeInputBoolean("esAsistenteServicioCliente", false);
+        changeInputBoolean("esSupervisorComercial", false);
+        changeInputBoolean("esResponsableComercial", true);
+        $("#idVendedorBusquedaList").removeAttr('disabled').trigger("chosen:updated"); 
+    });
+
+
+    function changeInputBoolean(propiedad, valor) {
+        $.ajax({
+            url: "/Vendedor/ChangeInputBoolean",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+
+
+    $("#idUsuarioBusquedaList").change(function () {
+        //  $("#contacto").val("");
+        var idVendedor = $("#idUsuarioBusquedaList").val();
+        if (idVendedor == "") {
+            idVendedor = "00000000-0000-0000-0000-000000000000";
+        }
+
+        $.ajax({
+            url: "/Vendedor/GetUsuario",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idVendedor: idVendedor
+            },
+            success: function (usuario) {                                               
+                $("#vendedor_idCiudad").val(usuario.sedeMP.idCiudad);
+                $("#vendedor_cargo").val(usuario.cargo);
+                $("#vendedor_descripcion").val(usuario.nombre);
+                $("#vendedor_contacto").val(usuario.contacto);              
+            }
+        });
+
+
+
+    });
+
+
+
+    $("#idVendedorBusquedaList").change(function () {
+        //  $("#contacto").val("");
+        var idUsuarioSupervisor = $(this).val();
+
+        if (idUsuarioSupervisor == "") {
+            idUsuarioSupervisor = "00000000-0000-0000-0000-000000000000";
+        }
+
+        $.ajax({
+            url: "/Vendedor/GetVendedorSupervisor",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idUsuarioSupervisor: idUsuarioSupervisor
+            },
+            success: function (cliente) {
+            }
+        });
+
+    });
 
 });

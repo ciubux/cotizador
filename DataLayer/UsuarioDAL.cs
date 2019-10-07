@@ -596,5 +596,48 @@ namespace DataLayer
 
             return obj;
         }
+
+
+        public List<Usuario> searchUsuariosVendedor(String textoBusqueda)
+        {
+           var objCommand = GetSqlCommand("ps_lista_usuarios");
+            InputParameterAdd.Varchar(objCommand, "BusquedaUsuario", textoBusqueda);
+            DataTable dataTable = Execute(objCommand);
+
+            List<Usuario> usuarioList = new List<Usuario>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Usuario usuario = new Usuario();
+                usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                usuario.email = Converter.GetString(row, "email");
+                usuario.nombre = Converter.GetString(row, "nombre");
+                usuarioList.Add(usuario);
+            }
+
+            return usuarioList;
+        }
+
+        public Usuario getUsuarioVendedor(Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_usuario_get_vendedor");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            DataTable dataTable = Execute(objCommand);
+
+            Usuario obj = new Usuario();
+            obj.sedeMP = new Ciudad();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                obj.idUsuario = Converter.GetGuid(row, "id_usuario");
+                obj.cargo = Converter.GetString(row, "cargo");
+                obj.nombre = Converter.GetString(row, "nombre");
+                obj.email = Converter.GetString(row, "email");
+                obj.contacto = Converter.GetString(row, "contacto");
+                obj.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
+            }
+
+            return obj;
+        }
     }
 }
