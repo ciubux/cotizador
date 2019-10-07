@@ -271,6 +271,7 @@ jQuery(function ($) {
                     direccion: direccionEntrega,
                     contacto: contacto,
                     telefono: telefono,
+                    idCiudad: idCiudad,
                     emailRecepcionFacturas: emailRecepcionFacturas,
                     codigoCliente: codigoCliente,
                     nombre: nombre,
@@ -2351,6 +2352,14 @@ jQuery(function ($) {
     
 
     $("#btnExportExcel").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
+    $("#btnExportCanasta").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
+    $("#btnExportDirecciones").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
 

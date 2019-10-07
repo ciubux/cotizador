@@ -181,7 +181,10 @@ namespace Cotizador.Controllers
             cliente.negociacionMultiregional = false;
             cliente.observacionHorarioEntrega = "";
             cliente.configuraciones = new Model.CONFIGCLASSES.ClienteConfiguracion();
-            
+            cliente.tipoPagoFactura = DocumentoVenta.TipoPago.Contado;
+            cliente.plazoCreditoSolicitado = DocumentoVenta.TipoPago.Contado;
+
+
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 
@@ -287,6 +290,27 @@ namespace Cotizador.Controllers
             return excel.generateExcel(list);
         }
 
+
+        [HttpGet]
+        public ActionResult ExportLastShowCanasta()
+        {
+            Cliente obj = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+
+            CanastaCliente excel = new CanastaCliente();
+            return excel.generateExcel(obj);
+        }
+
+
+        [HttpGet]
+        public ActionResult ExportLastShowDirecciones()
+        {
+            Cliente obj = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+
+            DireccionCliente excel = new DireccionCliente();
+            return excel.generateExcel(obj);
+        }
+
+
         public String SearchClientes()
         {
             String data = this.Request.Params["data[q]"];
@@ -333,8 +357,10 @@ namespace Cotizador.Controllers
             Cliente cliente = clienteBl.getCliente(idCliente);
             cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(idCliente);
+            cliente.listaPrecios = listaPrecios;
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
             List<DireccionEntrega> direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
+            cliente.direccionEntregaList = direccionEntregaList;
             DomicilioLegalBL domicilioLegalBL = new DomicilioLegalBL();
             List<DomicilioLegal> domicilioLegalList = domicilioLegalBL.getDomiciliosLegalesPorCliente(cliente);
 

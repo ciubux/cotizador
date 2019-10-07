@@ -1,7 +1,6 @@
 ﻿@{
-    ViewBag.Title = "Búsqueda Clientes";
+    ViewBag.Title = "Búsqueda CLIENTES RUC";
     Model.Cliente cliente = ViewBag.cliente;
-    Model.DireccionEntrega direccionEntrega = new Model.DireccionEntrega();
     List<Model.Cliente> clienteList = ViewBag.clienteList;
 }
 
@@ -874,9 +873,6 @@
                                     <h5 id="lblChkCanasta" style="width: 80%; margin-left: 45px; margin-top: -22px; font-weight:bold; cursor:pointer;" class="text-muted">Ver solo canasta de compra habitual</h5>
 
                                 </div>
-                                <div class="col-sm-6 col-lg-6 text-right"> 
-                                    <button id="btnExportCanasta" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowCanasta", "Cliente")">Exportar Canasta</button>
-                                </div>
                             </div>
 
                             <table id="tableListaPrecios" class="table" data-editing="false"
@@ -914,16 +910,9 @@
 
                         <div id="cliente_direccionesEntrega" class="tab-pane fade">
                             <!--    <table id="tableListaDireccionesEntrega" class="table">
-         </table>
-    -->
-                            <div class="row">
-                                <div class="col-sm-6 col-lg-6">
-                                    
-                                </div>
-                                <div class="col-sm-6 col-lg-6 text-right">
-                                    <button id="btnExportDirecciones" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowDirecciones", "Cliente")">Exportar Direcciones</button>
-                                </div>
-                            </div>
+          </table>
+     -->
+
                             <table id="tableListaDireccionesEntrega" class="table" data-editing="true"
                                    data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span>Editar Direcciones'
                                    data-editing-allow-add="true"

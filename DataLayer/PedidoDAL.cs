@@ -661,7 +661,7 @@ namespace DataLayer
                 pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
 
                 pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
-                pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
+                //pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
                 pedido.stockConfirmado = Converter.GetBool(row, "stock_confirmado");
                 /*if (row["fecha_programacion"] == DBNull.Value)
                     pedido.fechaProgramacion = null;

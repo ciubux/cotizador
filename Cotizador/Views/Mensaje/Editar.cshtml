@@ -101,7 +101,7 @@
             <div class="col-sm-12 col-lg-12 col-xs-12">
                 <label class="col-form-label col-md-2">Roles:</label>
             </div>
-            <div class="col-sm-6 col-lg-4 col-xs-12">
+            <div class="col-sm-12 col-lg-12 col-xs-12">
                 @foreach (Model.Rol ro in roles)
                 {
                     string itemChecked = mensaje.TieneRol(ro.idRol) ? "checked" : "";
@@ -119,7 +119,7 @@
 
 
         <button hidden type="button" id="btnCancelarMensaje" class="btn btn-danger"> Cancelar</button>
-        <button class="btn btn-info" id="btnEnviarMensaje">Enviar</button>
+        <button class="btn btn-primary" id="btnEnviarMensaje">Finalizar Creación</button>
 
     </div>
 
