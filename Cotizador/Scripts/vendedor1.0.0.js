@@ -373,7 +373,7 @@
         }
              
         
-        if ($("#responsable_comercial_vendedor").val() == 1 && ($("#idVendedorBusquedaList").val() == undefined || $("#idVendedorBusquedaList").val() == "") || $("#atencion_cliente_vendedor").val() == 1 && ($("#idVendedorBusquedaList").val() == undefined || $("#idVendedorBusquedaList").val()==""))
+    if ($("#responsable_comercial_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "" || $("#atencion_cliente_vendedor").val() == 1 && $("#idVendedorBusquedaList").val() == "") 
         {
             $.alert({
                 title: "Supervisor Inválido",
