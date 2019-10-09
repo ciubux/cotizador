@@ -35,8 +35,8 @@ end
 else 
 select 
 id_usuario,
- REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(nombre, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')   as nombre,
-   REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(email, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  as email ,
+ REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(nombre, 'Ã¡', 'a'), 'Ã©','e'), 'Ã­', 'i'), 'Ã³', 'o'), 'Ãº','u'),'"',' ')   as nombre,
+   REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(email, 'Ã¡', 'a'), 'Ã©','e'), 'Ã­', 'i'), 'Ã³', 'o'), 'Ãº','u'),'"',' ')  as email ,
 email,
 nombre from USUARIO 
 where 
@@ -44,9 +44,9 @@ NOT EXISTS(SELECT VENDEDOR.id_usuario FROM VENDEDOR WHERE VENDEDOR.id_usuario=US
 AND USUARIO.usuario_pruebas != 1 
 and USUARIO.estado = 1 
 and USUARIO.es_cliente != 1 
-AND (REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(nombre, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  LIKE '%'+@BusquedaUsuario+'%' OR
+AND (REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(nombre, 'Ã¡', 'a'), 'Ã©','e'), 'Ã­', 'i'), 'Ã³', 'o'), 'Ãº','u'),'"',' ')  LIKE '%'+@BusquedaUsuario+'%' OR
 nombre like '%'+@BusquedaUsuario +'%' or email like '%'+@BusquedaUsuario +'%' or
-REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(email, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  LIKE '%'+@BusquedaUsuario+'%')
+REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(email, 'Ã¡', 'a'), 'Ã©','e'), 'Ã­', 'i'), 'Ã³', 'o'), 'Ãº','u'),'"',' ')  LIKE '%'+@BusquedaUsuario+'%')
 and USUARIO.id_usuario != '412ACDEE-FE20-4539-807C-D00CD71359D6' 
 and  USUARIO.id_usuario != 'AFBE4EB1-B5AE-4430-9EA1-15D79D4B5E98' order by USUARIO.nombre asc
 end 
@@ -67,16 +67,16 @@ else
 select 
 USUARIO.id_usuario,
 VENDEDOR.codigo,VENDEDOR.id_vendedor,
- REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(usuario.nombre, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')   as nombre,
-   REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(usuario.email, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  as email 
+ REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(usuario.nombre, 'Ã¡', 'a'), 'Ã©','e'), 'Ã­', 'i'), 'Ã³', 'o'), 'Ãº','u'),'"',' ')   as nombre,
+   REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(usuario.email, 'Ã¡', 'a'), 'Ã©','e'), 'Ã­', 'i'), 'Ã³', 'o'), 'Ãº','u'),'"',' ')  as email 
 
   from VENDEDOR inner join usuario on usuario.id_usuario=VENDEDOR.id_usuario
 where VENDEDOR.es_supervisor_comercial = 1 
 and VENDEDOR.estado=1
 and VENDEDOR.id_usuario is not  null
-AND (REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(USUARIO.nombre, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  LIKE '%'+@BusquedaVendedor+'%' OR
+AND (REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(USUARIO.nombre, 'Ã¡', 'a'), 'Ã©','e'), 'Ã­', 'i'), 'Ã³', 'o'), 'Ãº','u'),'"',' ')  LIKE '%'+@BusquedaVendedor+'%' OR
 nombre like '%'+@BusquedaVendedor +'%' or email like '%'+@BusquedaVendedor +'%' or
-REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(USUARIO.email, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  LIKE '%'+@BusquedaVendedor+'%')
+REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(USUARIO.email, 'Ã¡', 'a'), 'Ã©','e'), 'Ã­', 'i'), 'Ã³', 'o'), 'Ãº','u'),'"',' ')  LIKE '%'+@BusquedaVendedor+'%')
 end 
 
 /********** Create ps_supervisor_get - Obtiene datos del supervisor seleccionado por el chosen  ****************/
@@ -179,7 +179,7 @@ insert  into VENDEDOR(
 								dbo.getlocaldate(),
 								@usuario_creacion,
 								dbo.getlocaldate(),
-								@id_supervisor_comercial
+								(case when @id_supervisor_comercial = 0 then null else @id_supervisor_comercial end)
 								)  
   END
 
