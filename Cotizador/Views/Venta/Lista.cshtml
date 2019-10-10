@@ -185,19 +185,19 @@
 
             <thead>
                 <tr>
-                    <th data-name="idDocumentoVenta" data-visible="false"></th>
+                    <th data-name="idDocumentoVenta" data-visible="false"></th> 
                     <th data-name="numeroPedido" data-visible="true">Pedido</th>
                     <th data-name="serieNumeroGuia" data-visible="true">Movimiento Almacén</th>
                     <th data-name="serieNumeroFactura" data-visible="true">Factura/Boleta</th>
-                    <th data-name="usuario" data-visible="true">Creado Por</th>
-                    <th data-name="fechaEmision" data-sortable="true" data-breakpoints="xs">Fecha Emisión</th>
-                    <!--<th data-name="fechaVencimiento" data-sortable="true" data-breakpoints="xs">Fecha Vencimiento</th>-->
+                    <!--<th data-name="usuario" data-visible="true">Creado Por</th> --!>
+    <th data-name="fechaEmision" data-sortable="true" data-breakpoints="xs">Fecha Emisión</th>
+    <!--<th data-name="fechaVencimiento" data-sortable="true" data-breakpoints="xs">Fecha Vencimiento</th>-->
                     <th data-name="codigoCliente" data-sortable="true">Cod. Cliente</th>
                     <th data-name="razonSocial" data-sortable="true">Razón Social</th>
                     <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
                     <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
                     <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
-                    <th data-name="asesorComercial" data-sortable="true" data-breakpoints="xs">Cod. Asesor Comercial</th>
+                    <th data-name="asesorComercial" data-sortable="true" data-breakpoints="xs">Asesor Comercial</th>
                     <!--<th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>-->
                     <th data-name="opciones" data-sortable="false" data-breakpoints="xs"></th>
 
@@ -609,6 +609,10 @@
                                data-editing-add-text="Descartar cambios">
                             <thead>
                                 <tr>
+                                    @if (venta.usuario.rectificarVenta)
+                                    {
+                                    <th data-name="proveedor" data-sortable="false">Rectificar<br> Venta</th>
+                                    }                                        
                                     <th data-name="proveedor" data-sortable="false">Prov.</th>
                                     <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                                     <th data-name="producto" data-sortable="false">Producto / Descripción</th>
@@ -628,7 +632,7 @@
                                     <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
                                     <!--           <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>-->
                                     <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
-                                    <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
+                                    <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Obs.    </th>
 
                                     <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
 
@@ -698,8 +702,13 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    @if (venta.usuario.rectificarVenta)
+                    {
+                        <button type="button" id="btnExcluirItemsVenta" class="btn btn-info" data-dismiss="modal">Excluir items de venta</button>
+                    }
+
                     <button type="button" id="btnCancelarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    
+
                 </div>
 
 

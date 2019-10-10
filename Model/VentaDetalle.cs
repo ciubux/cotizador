@@ -15,5 +15,6 @@ namespace Model
         public Decimal sumPrecioNeto { get; set; }
         public Decimal sumPrecioUnitario { get; set; }
 
+                
     }
 }

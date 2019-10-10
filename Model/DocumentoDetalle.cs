@@ -21,6 +21,9 @@ namespace Model
 
         public int cantidadSolicitada { get { return cantidad; } }
 
+        public Boolean excluirVenta { get; set; }
+        public int estadoVenta { get; set; }
+
         public Producto producto { get; set; }
         public String unidad { get; set; }
 
@@ -209,4 +212,6 @@ namespace Model
 
        public ProductoPresentacion ProductoPresentacion { get; set; }
     }
+
+
 }

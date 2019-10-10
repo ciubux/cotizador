@@ -117,5 +117,6 @@ namespace Model
             RechazadoSinPrecio = 3
         }
 
+
     }
 }

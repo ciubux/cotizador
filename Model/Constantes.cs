@@ -399,6 +399,8 @@ namespace Model
 
         public const String VISUALIZA_VENTAS = "P730";
 
+        public const String RECTIFICAR_VENTA = "P731";
+
         public enum paginas
         {
             /*COTIZACION*/

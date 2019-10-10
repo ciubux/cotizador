@@ -991,7 +991,7 @@ namespace DataLayer
                 obj.cliente.codigo = Converter.GetString(row, "codigo");
                 obj.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 obj.cliente.ruc = Converter.GetString(row, "ruc");
-                obj.cliente.responsableComercial.codigo = Converter.GetString(row, "vendedor");
+                obj.cliente.responsableComercial.descripcion = Converter.GetString(row, "vendedor");
                 obj.usuario = new Usuario();
                 obj.usuario.nombre = Converter.GetString(row, "nombre");
                 obj.guiaRemision = new GuiaRemision();
@@ -1131,13 +1131,18 @@ namespace DataLayer
 
             }
 
+            
+            
 
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
-            //Detalle de la cotizacion
+            //Detalle de la cotizacion           
+
             foreach (DataRow row in ventaDetalleDataTable.Rows)
             {
                 PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
+               
                 pedidoDetalle.producto = new Producto();
+               
 
                 pedidoDetalle.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");
                 pedidoDetalle.cantidad = Converter.GetInt(row, "cantidad");
@@ -1181,8 +1186,7 @@ namespace DataLayer
 
                 pedidoDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
 
-                pedidoDetalle.observacion = Converter.GetString(row, "observaciones");
-
+                pedidoDetalle.observacion = Converter.GetString(row, "observaciones");                
 
                 PrecioClienteProducto precioClienteProducto = new PrecioClienteProducto();
 
@@ -1202,6 +1206,10 @@ namespace DataLayer
                 pedidoDetalle.precioUnitarioVenta = Converter.GetDecimal(row, "precio_unitario_venta");
                 pedidoDetalle.idVentaDetalle = Converter.GetGuid(row, "id_venta_detalle");
 
+               
+                pedidoDetalle.excluirVenta = Converter.GetBool(row, "excluir");
+                pedidoDetalle.estadoVenta = Converter.GetInt(row, "estado");
+
                 pedido.pedidoDetalleList.Add(pedidoDetalle);
             }
 
@@ -1218,6 +1226,16 @@ namespace DataLayer
             }
 
             return venta;
+        }
+
+        public void rectificacfionVenta(int estadoCheck, Guid id_detalle_producto, Guid usuario)
+        {
+            var objCommand = GetSqlCommand("pu_rectificacion_venta");
+            
+            InputParameterAdd.Guid(objCommand, "id_venta_detalle", id_detalle_producto);
+            InputParameterAdd.Guid(objCommand, "id_usuario", usuario);
+            InputParameterAdd.Int(objCommand, "valor", estadoCheck);
+            ExecuteNonQuery(objCommand);
         }
 
     }

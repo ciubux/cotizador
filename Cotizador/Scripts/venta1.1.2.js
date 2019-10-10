@@ -3987,14 +3987,14 @@ jQuery(function ($) {
                 '<td>  ' + ventaList[i].pedido.numeroPedidoString + '</td>' +
                 '<td>  ' + ventaList[i].guiaRemision.serieDocumento + '</td>' +
                 '<td>  ' + ventaList[i].documentoVenta.numero + '</td>' +
-                '<td>  ' + ventaList[i].usuario.nombre + '</td>' +
+                //'<td>  ' + ventaList[i].usuario.nombre + '</td>' +
                 '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(ventaList[i].guiaRemision.fechaEmision)) + '</td>' +
                 '<td>  ' + ventaList[i].cliente.codigo + '</td>' +
                 '<td>  ' + ventaList[i].cliente.razonSocial + '</td>' +
                 '<td>  ' + ventaList[i].cliente.ruc + '</td>' +
                 '<td>  ' + ventaList[i].ciudad.sede + '</td>' +
                 '<td>  ' + ventaList[i].total + '</td>' +
-                '<td>' + ventaList[i].cliente.responsableComercial.codigo + '</td>' +
+                '<td>' + ventaList[i].cliente.responsableComercial.descripcion + '</td>' +
 
                 '<td> <button type="button" class="' + ventaList[i].guiaRemision.idMovimientoAlmacen + ' ' + ventaList[i].idVenta + ' btnVerVentaList btn btn-primary">Ver</button>' +
                 '</tr>';
@@ -4189,6 +4189,7 @@ jQuery(function ($) {
             dataType: 'JSON',
             error: function (detalle) {
                 mostrarMensajeErrorVenta();
+                detalle.rectificarVenta.rectificar_venta;
             },
             success: function (resultado) {
                 mostrarModalVenta(resultado);
@@ -4199,14 +4200,14 @@ jQuery(function ($) {
 
     function mostrarModalVenta(resultado) {
         //var cotizacion = $.parseJSON(respuesta);
-
+        var permiso = resultado.PermisoRectificarVenta.Permiso;
         var venta = resultado.venta;
         var pedido = resultado.venta.pedido;
         var guiaRemision = resultado.venta.guiaRemision;
         var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
 
         //  var usuario = resultado.usuario;
-
+        
 
         $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
         $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
@@ -4314,7 +4315,7 @@ jQuery(function ($) {
         $("#tableDetallePedido > tbody").empty();
 
         FooTable.init('#tableDetallePedido');
-
+        
         //    $("#formVerGuiasRemision").html("");
 
         var d = '';
@@ -4323,7 +4324,23 @@ jQuery(function ($) {
 
             var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
 
-            d += '<tr>' +
+            var RectificarVenta;
+            if (permiso == 1) {
+
+                if (lista[i].excluirVenta == 1 && lista[i].estadoVenta == 1)
+                {                    
+                    RectificarVenta = '<td><input type="checkbox" checked class="chkRectificarVenta" id="' + lista[i].idVentaDetalle+'"" name="rectificarVenta"></td>';
+                }
+                else
+                    RectificarVenta = '<td><input type="checkbox" class="chkRectificarVenta" id="' + lista[i].idVentaDetalle + '"" name="rectificarVenta"></td>';
+            }
+            else {
+                RectificarVenta = "";
+            }
+
+
+            d += '<tr>' +               
+                 RectificarVenta +
                 '<td>' + lista[i].producto.proveedor + '</td>' +
                 '<td>' + lista[i].producto.sku + '</td>' +
                 '<td>' + lista[i].producto.descripcion + '</td>' +
@@ -4398,6 +4415,47 @@ jQuery(function ($) {
         $("#modalFacturar").modal('show');
     }
 
+    $(document).on('click', "button#btnExcluirItemsVenta", function () {
+
+        $('.chkRectificarVenta').each(function () {
+            if ($(this).prop('checked')) {
+                var id_detalle_producto = $(this).attr("id");
+                var activado = 1;
+                
+                $.ajax({
+                    url: "/Venta/RectificarVentaCheck",
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        id_detalle_producto: id_detalle_producto,  
+                        valor: activado
+                    },
+                    success: function (producto)
+                    {
+
+                    }
+                });               
+            }
+            if ($(this).prop('checked')==false) {
+                var id_detalle_producto_no = $(this).attr("id");
+                var desactivado = 0;
+                
+                $.ajax({
+                    url: "/Venta/RectificarVentaCheck",
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        id_detalle_producto: id_detalle_producto_no,
+                        valor: desactivado
+                    },
+                    success: function (producto) {
+
+                    }
+                }); 
+                
+            }
+        });
+    });
 
     $(document).on('click', "button.btnMostrarPreciosVentaList", function () {
 

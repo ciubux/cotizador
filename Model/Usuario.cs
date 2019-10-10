@@ -209,8 +209,9 @@ namespace Model
         /*Notificacion de Documento de Venta*/
         public bool visualizaDocumentoVentaNotificacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOVENTANOTIFICACION)).FirstOrDefault() != null; } }
 
-        /*Notificacion de Documento de Venta*/
+        /*Venta*/
         public bool visualizaVentas { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENTAS)).FirstOrDefault() != null; } }
+        public bool rectificarVenta { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.RECTIFICAR_VENTA)).FirstOrDefault() != null; } }
 
 
         /*Administra Permisos*/

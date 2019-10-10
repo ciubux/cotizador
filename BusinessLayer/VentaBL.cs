@@ -265,5 +265,15 @@ namespace BusinessLayer
             }
             return venta;
         }
+
+        public void rectificacfionVenta(int estadoCheck, Guid id_detalle_producto, Guid usuario)
+        {
+            using (var dal = new VentaDAL())
+            {
+               dal.rectificacfionVenta(estadoCheck, id_detalle_producto, usuario);
+            }
+        }
+        
+
     }
 }
