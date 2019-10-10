@@ -1,5 +1,5 @@
 /*********** Create ps_lista_venta - Lista las ventas por guia de remision ********/
-alter procedure  [dbo].[ps_lista_venta]
+create procedure  [dbo].[ps_lista_venta]
 (
 @idCiudad uniqueidentifier,
 @idCliente uniqueidentifier,
@@ -28,7 +28,7 @@ begin
 	cliente.ruc,
 	concat('MP',CIUDAD.codigo_sede) as sede,
 	venta.total,
-	ve.descripcion as vendedor
+	ve.codigo as vendedor
 	
 from VENTA	
 	left JOIN CPE_CABECERA_BE on venta.id_documento_venta=CPE_CABECERA_BE.id_cpe_cabecera_be 
@@ -97,7 +97,7 @@ else
 		
 /*************** Create ps_venta_lista_detalle - Obtiene los detalles de una venta por guia de remision ************************************/
 
-ALTER PROCEDURE [dbo].[ps_venta_lista_detalle]
+create PROCEDURE [dbo].[ps_venta_lista_detalle]
 @idMovimientoAlmacen uniqueIdentifier
 AS
 BEGIN
@@ -193,16 +193,13 @@ BEGIN
 	pd.fecha_modificacion,
 	CAST(pd.precio_neto + pd.flete AS decimal(12,2)) as precio_unitario_original,
 	vd.precio_unitario as precio_unitario_venta,
-	vd.igv_precio_unitario as igv_precio_unitario_venta,
-	RECTIFICACION_V_SELL_OUT.excluir,
-	RECTIFICACION_V_SELL_OUT.estado
+	vd.igv_precio_unitario as igv_precio_unitario_venta
 	FROM 
 	VENTA_DETALLE as vd 
 	INNER JOIN VENTA ve ON vd.id_venta = ve.id_venta
 	INNER JOIN PEDIDO as pe ON ve.id_pedido = pe.id_pedido 
 	INNER JOIN PRODUCTO pr ON vd.id_producto = pr.id_producto
 	LEFT JOIN PEDIDO_DETALLE as pd ON vd.id_pedido_detalle = pd.id_pedido_detalle
-	LEFT JOIN RECTIFICACION_V_SELL_OUT on RECTIFICACION_V_SELL_OUT.id_venta_detalle=vd.id_venta_detalle
 	WHERE ve.id_movimiento_almacen = @idMovimientoAlmacen	
 	AND ve.estado = 1
 	ORDER BY fecha_modificacion ASC;
@@ -221,4 +218,3 @@ insert into PERMISO (id_permiso,estado,fecha_creacion,fecha_modificacion,codigo,
 			
 insert into USUARIO_PERMISO(id_permiso,id_usuario,estado,fecha_creacion,fecha_modificacion) 
 							values (86,'BB85E214-3C69-44A4-B504-4CD223EC389C',1,dbo.getlocaldate(),dbo.getlocaldate())
-
