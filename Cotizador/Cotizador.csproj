@@ -241,6 +241,7 @@
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
     <Compile Include="Controllers\RolController.cs" />
+    <Compile Include="Controllers\RubroController.cs" />
     <Compile Include="Controllers\ValidacionController.cs" />
     <Compile Include="Controllers\PermisoController.cs" />
     <Compile Include="Controllers\SubDistribuidorController.cs" />
@@ -283,6 +284,7 @@
     <Compile Include="ExcelExport\ClienteSearch.cs" />
     <Compile Include="ExcelExport\CotizacionDetalleExcel.cs" />
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
+    <Compile Include="ExcelExport\RubroSearch.cs" />
     <Compile Include="ExcelExport\SubDistribuidorSearch.cs" />
     <Compile Include="ExcelExport\OrigenSearch.cs" />
     <Compile Include="ExcelExport\ProductoSearch.cs" />
@@ -315,6 +317,7 @@
     <Compile Include="Models\RolViewModels.cs" />
     <Compile Include="Models\ProductoMultipleViewModels.cs" />
     <Compile Include="Models\ProductoViewModels.cs" />
+    <Compile Include="Models\RubroViewModels.cs" />
     <Compile Include="Models\SubDistribuidorViewModels.cs" />
     <Compile Include="Models\OrigenViewModels.cs" />
     <Compile Include="Models\VendedorViewModels.cs" />
@@ -424,6 +427,7 @@
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
     <Content Include="Scripts\logcampo1.0.0.js" />
     <Content Include="Scripts\pedidoLoad.js" />
+    <Content Include="Scripts\rubro1.0.0.js" />
     <Content Include="Scripts\usuario1.0.0.js" />
     <Content Include="Scripts\rol1.0.0.js" />
     <Content Include="Scripts\subDistribuidor1.0.0.js" />
@@ -610,6 +614,9 @@
     <Content Include="Views\Cotizacion\_ModalImportarDetallesExcel.cshtml" />
     <Content Include="Views\ClienteSunat\Index.cshtml" />
     <Content Include="Views\Venta\Lista.cshtml" />
+    <Content Include="Views\Rubro\Editar.cshtml" />
+    <Content Include="Views\Rubro\List.cshtml" />
+    <Content Include="Views\Shared\_Rubro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

@@ -1,0 +1,26 @@
+﻿@model Cotizador.Models.RubroViewModels
+
+@if (Model.Disabled)
+{
+    @Html.DropDownList(
+                Model.RubroSelectId,
+                Model.Rubros, "Seleccione",
+                new
+                {
+                    id = Model.RubroSelectId,
+                    @class = "form-control",
+                    @disabled = "disabled"
+                })
+}
+else
+{
+    @Html.DropDownList(
+            Model.RubroSelectId,
+            Model.Rubros, "Seleccione",
+            new
+            {
+                id = Model.RubroSelectId,
+                @class = "form-control"
+
+            })
+}

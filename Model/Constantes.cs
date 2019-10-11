@@ -125,6 +125,13 @@ namespace Model
         public static String VAR_SESSION_SUBDISTRIBUIDOR_LISTA = "subDistribuidorList";
         public static String VAR_SESSION_SUBDISTRIBUIDOR_VER = "subDistribuidorVer";
 
+
+        public static String VAR_SESSION_RUBRO = "rubro";
+        public static String VAR_SESSION_RUBRO_BUSQUEDA = "rubroBusqueda";
+        public static String VAR_SESSION_RUBRO_LISTA = "rubroList";
+        public static String VAR_SESSION_RUBRO_VER = "rubroVer";
+
+
         public static String VAR_SESSION_PROVEEDOR = "proveedor";
 
         public static String VAR_SESSION_GUIA = "guiaRemision";
@@ -399,6 +406,9 @@ namespace Model
 
         public const String VISUALIZA_VENTAS = "P730";
 
+        public const String MODIFICA_RUBRO = "P750";
+        public const String VISUALIZA_RUBROS = "P751";
+
         public enum paginas
         {
             /*COTIZACION*/
@@ -547,9 +557,12 @@ namespace Model
             BusquedaPermisos = 105,
 
             [Display(Name = "MANTENIMIENTO PERMISO")]
-            MantenimientoPermisos = 106
+            MantenimientoPermisos = 106,
 
-
+            [Display(Name = "BUSQUEDA RUBRO")]
+            BusquedaRubros = 750,
+            [Display(Name = "CREATE/UPDATE RUBRO")]
+            MantenimientoRubro = 751
 
         };
 
