@@ -779,6 +779,14 @@ namespace Cotizador.Controllers
                 ClienteSession.subDistribuidor.idSubDistribuidor = Int32.Parse(this.Request.Params["idSubDistribuidor"]);
         }
 
+        public void ChangeIdRubro()
+        {
+            if (this.Request.Params["idRubro"] == null || this.Request.Params["idRubro"] == String.Empty)
+                ClienteSession.rubro.idRubro = 0;
+            else
+                ClienteSession.rubro.idRubro = Int32.Parse(this.Request.Params["idRubro"]);
+        }
+
         public void ChangeIdOrigen()
         {
             if (this.Request.Params["idOrigen"] == null || this.Request.Params["idOrigen"] == String.Empty)

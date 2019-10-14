@@ -26,6 +26,9 @@ namespace Model
             this.origen = new Origen();
             this.subDistribuidor = new SubDistribuidor();
             this.subDistribuidor.idSubDistribuidor = 0;
+
+            this.rubro = new Rubro();
+            this.rubro.idRubro = 0;
             this.tipoDocumentoIdentidad = DocumentoVenta.TiposDocumentoIdentidad.RUC;
             this.plazoCreditoSolicitado = DocumentoVenta.TipoPago.NoAsignado;
             this.horaInicioPrimerTurnoEntrega = "09:00:00";
@@ -245,6 +248,12 @@ namespace Model
 
         [Display(Name = "Categoría:")]
         public SubDistribuidor subDistribuidor
+        {
+            get; set;
+        }
+
+        [Display(Name = "Rubro:")]
+        public Rubro rubro
         {
             get; set;
         }

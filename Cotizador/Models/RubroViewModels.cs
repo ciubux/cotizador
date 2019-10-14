@@ -22,12 +22,10 @@ namespace Cotizador.Models
                 return Data.Select(c => new SelectListItem
                 {
                     Value = c.idRubro.ToString(),
-                    Text = c.codigo + " - " + c.nombre,
+                    Text = c.nombre,
                     Selected = SelectedValue != null && SelectedValue == c.idRubro.ToString()
                 });
             }
         }
-
-        public Boolean Disabled { get; set; }
     }
 }

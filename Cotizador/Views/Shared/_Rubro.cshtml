@@ -1,26 +1,19 @@
 ﻿@model Cotizador.Models.RubroViewModels
+@Html.DropDownList(
+    Model.RubroSelectId,
+    Model.Rubros, "Seleccione",
+    new
+    {
+        id = Model.RubroSelectId,
+        @class = "form-control"
 
-@if (Model.Disabled)
-{
-    @Html.DropDownList(
-                Model.RubroSelectId,
-                Model.Rubros, "Seleccione",
-                new
-                {
-                    id = Model.RubroSelectId,
-                    @class = "form-control",
-                    @disabled = "disabled"
-                })
-}
-else
-{
-    @Html.DropDownList(
-            Model.RubroSelectId,
-            Model.Rubros, "Seleccione",
-            new
-            {
-                id = Model.RubroSelectId,
-                @class = "form-control"
+    })
 
-            })
-}
+
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function (event) {
+    $("#@Model.RubroSelectId").chosen({ placeholder_text_single: "Seleccione el Rubro", no_results_text: "No se encontró Rubro" }).on('chosen:showing_dropdown');
+});
+
+</script>

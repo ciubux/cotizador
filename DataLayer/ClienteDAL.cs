@@ -354,6 +354,10 @@ namespace DataLayer
                 cliente.subDistribuidor.codigo = Converter.GetString(row, "codigo_subdistribuidor");
                 cliente.subDistribuidor.nombre = Converter.GetString(row, "nombre_subdistribuidor");
 
+                cliente.rubro = new Rubro();
+                cliente.rubro.idRubro = Converter.GetInt(row, "id_rubro");
+                cliente.rubro.codigo = Converter.GetString(row, "codigo_rubro");
+                cliente.rubro.nombre = Converter.GetString(row, "nombre_rubro");
                 //cliente.exoneradoValidacionLiberacionCrediticia = Converter.GetBool(row, "exonerado_validacion_liberacion_crediticia");
             }
 
@@ -745,6 +749,7 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
             InputParameterAdd.Int(objCommand, "idSubDistribuidor", (!cliente.esSubDistribuidor) ? 0 : cliente.subDistribuidor.idSubDistribuidor);
+            InputParameterAdd.Int(objCommand, "idRubro", cliente.rubro.idRubro);
 
             InputParameterAdd.Text(objCommand, "configuraciones", JsonConvert.SerializeObject(cliente.configuraciones));
 
@@ -873,6 +878,7 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
             InputParameterAdd.Int(objCommand, "idSubDistribuidor", cliente.subDistribuidor == null ? 0 : cliente.subDistribuidor.idSubDistribuidor);
+            InputParameterAdd.Int(objCommand, "idRubro", cliente.rubro.idRubro);
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente==null?0: cliente.grupoCliente.idGrupoCliente);
             DateTime dtTmp = DateTime.Now;

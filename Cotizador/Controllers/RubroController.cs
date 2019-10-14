@@ -17,7 +17,7 @@ namespace Cotizador.Controllers
 {
     public class RubroController : ParentController
     {
-        public ActionResult GetRubros(string rubroSelectId, string selectedValue = null, string disabled = null)
+        public ActionResult GetRubros(string rubroSelectId, string selectedValue = null)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Rubro obj = new Rubro();
@@ -30,8 +30,7 @@ namespace Cotizador.Controllers
             {
                 Data = list,
                 RubroSelectId = rubroSelectId,
-                SelectedValue = selectedValue,
-                Disabled = disabled == null || disabled != "disabled" ? false : true
+                SelectedValue = selectedValue
             };
 
             return PartialView("_Rubro", model);
