@@ -1,5 +1,5 @@
-/*********** Create ps_lista_venta - Lista las ventas por guia de remision ********/
-create procedure  [dbo].[ps_lista_venta]
+/*********** Create ps_lista_venta - Lista las ventas por guia de remision (CORRECCION DE NOMBRE DE VENDEDOR)********/
+CREATE procedure  [dbo].[ps_lista_venta]
 (
 @idCiudad uniqueidentifier,
 @idCliente uniqueidentifier,
@@ -28,7 +28,7 @@ begin
 	cliente.ruc,
 	concat('MP',CIUDAD.codigo_sede) as sede,
 	venta.total,
-	ve.codigo as vendedor
+	ve.descripcion as vendedor
 	
 from VENTA	
 	left JOIN CPE_CABECERA_BE on venta.id_documento_venta=CPE_CABECERA_BE.id_cpe_cabecera_be 
@@ -71,7 +71,7 @@ else
 	cl.ruc,
 	concat('MP',CIUDAD.codigo_sede) as sede,
 	venta.total,
-	ve.codigo as vendedor	
+	ve.descripcion as vendedor
 	FROM VENTA
 	left JOIN CPE_CABECERA_BE on venta.id_documento_venta=CPE_CABECERA_BE.id_cpe_cabecera_be 
 	inner join pedido AS pe on pe.id_pedido=VENTA.id_pedido 
@@ -95,10 +95,11 @@ else
 	AND (ma.numero_documento = @numeroGuia OR pe.numero = @numeroPedido or CONVERT(INT,CPE_CABECERA_BE.CORRELATIVO)=@numeroFactura)	
 	end
 		
-/*************** Create ps_venta_lista_detalle - Obtiene los detalles de una venta por guia de remision ************************************/
+/*************** Create ps_venta_lista_detalle - Obtiene los detalles de una venta por guia de remision CORRECCION FILTRADO DE DETALLE DE PEDIDO CON ID_VENTA************************************/
 
-create PROCEDURE [dbo].[ps_venta_lista_detalle]
-@idMovimientoAlmacen uniqueIdentifier
+create PROCEDURE [dbo].[ps_venta_lista_detalle] 
+@idMovimientoAlmacen uniqueIdentifier,
+@idVenta uniqueIdentifier
 AS
 BEGIN
 	SELECT 
@@ -193,14 +194,17 @@ BEGIN
 	pd.fecha_modificacion,
 	CAST(pd.precio_neto + pd.flete AS decimal(12,2)) as precio_unitario_original,
 	vd.precio_unitario as precio_unitario_venta,
-	vd.igv_precio_unitario as igv_precio_unitario_venta
+	vd.igv_precio_unitario as igv_precio_unitario_venta,
+	RECTIFICACION_V_SELL_OUT.excluir,
+	RECTIFICACION_V_SELL_OUT.estado
 	FROM 
 	VENTA_DETALLE as vd 
 	INNER JOIN VENTA ve ON vd.id_venta = ve.id_venta
 	INNER JOIN PEDIDO as pe ON ve.id_pedido = pe.id_pedido 
 	INNER JOIN PRODUCTO pr ON vd.id_producto = pr.id_producto
 	LEFT JOIN PEDIDO_DETALLE as pd ON vd.id_pedido_detalle = pd.id_pedido_detalle
-	WHERE ve.id_movimiento_almacen = @idMovimientoAlmacen	
+	LEFT JOIN RECTIFICACION_V_SELL_OUT on RECTIFICACION_V_SELL_OUT.id_venta_detalle=vd.id_venta_detalle
+	WHERE ve.id_venta=@idVenta	and ve.id_movimiento_almacen=@idMovimientoAlmacen
 	AND ve.estado = 1
 	ORDER BY fecha_modificacion ASC;
 
@@ -212,9 +216,3 @@ BEGIN
 	arch.estado = 1 AND parch.estado = 1;
 END
 
-/*----------------------- Permisos para la tabla PERMISO Y USUARIO_PERMISO--------------------------------*/
-insert into PERMISO (id_permiso,estado,fecha_creacion,fecha_modificacion,codigo,descripcion_corta,id_categoria_permiso)
-						values (86,1,dbo.getlocaldate(),dbo.getlocaldate(),'P730','visualiza_ventas',5)
-			
-insert into USUARIO_PERMISO(id_permiso,id_usuario,estado,fecha_creacion,fecha_modificacion) 
-							values (86,'BB85E214-3C69-44A4-B504-4CD223EC389C',1,dbo.getlocaldate(),dbo.getlocaldate())

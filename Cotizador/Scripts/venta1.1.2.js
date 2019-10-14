@@ -4179,11 +4179,14 @@ jQuery(function ($) {
 
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idMovimientoAlmacen = arrrayClass[0];
+        var idVenta = arrrayClass[1];
+
 
         $.ajax({
             url: "/Venta/ShowList",
             data: {
-                idMovimientoAlmacen: idMovimientoAlmacen
+                idMovimientoAlmacen: idMovimientoAlmacen,
+                idVenta: idVenta
             },
             type: 'POST',
             dataType: 'JSON',

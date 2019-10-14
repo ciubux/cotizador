@@ -40,7 +40,7 @@ namespace Cotizador.Controllers
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
             venta.guiaRemision = new GuiaRemision();
-            venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
+            venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());           
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             venta = ventaBL.GetVenta(venta, usuario);
             this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
@@ -626,7 +626,7 @@ namespace Cotizador.Controllers
             Venta venta = new Venta();
             venta.guiaRemision = new GuiaRemision();
             venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
-           
+            venta.idVenta = Guid.Parse(Request["idVenta"].ToString());
             venta = ventaBL.GetVentaList(venta, usuario);
             this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta; 
             
