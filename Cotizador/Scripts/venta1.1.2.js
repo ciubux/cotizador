@@ -1,7 +1,7 @@
 
 jQuery(function ($) {
-
-
+    var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
+    var TITLE_EXITO = 'Operación Realizada';
 
     //CONSTANTES POR DEFECTO
     var cantidadDecimales = 2;
@@ -4419,44 +4419,73 @@ jQuery(function ($) {
     }
 
     $(document).on('click', "button#btnExcluirItemsVenta", function () {
-
+        var total = $('.chkRectificarVenta').length;        
+        var error = 0;
+        var success = 0;
         $('.chkRectificarVenta').each(function () {
+            var valor;
+           
+            var id_detalle_producto;
             if ($(this).prop('checked')) {
-                var id_detalle_producto = $(this).attr("id");
-                var activado = 1;
-                
-                $.ajax({
-                    url: "/Venta/RectificarVentaCheck",
-                    type: 'POST',
-                    dataType: 'JSON',
-                    data: {
-                        id_detalle_producto: id_detalle_producto,  
-                        valor: activado
-                    },
-                    success: function (producto)
-                    {
-
-                    }
-                });               
+                id_detalle_producto = $(this).attr("id");
+                 valor = 1;
+                AjaxCheck();    
             }
             if ($(this).prop('checked')==false) {
-                var id_detalle_producto_no = $(this).attr("id");
-                var desactivado = 0;
-                
+                id_detalle_producto = $(this).attr("id");
+                 valor = 0;
+                AjaxCheck();
+            }
+            function AjaxCheck()
+            {
                 $.ajax({
                     url: "/Venta/RectificarVentaCheck",
-                    type: 'POST',
-                    dataType: 'JSON',
+                    type: 'POST', 
+                    async: false,
                     data: {
-                        id_detalle_producto: id_detalle_producto_no,
-                        valor: desactivado
+                        id_detalle_producto: id_detalle_producto,
+                        valor: valor
                     },
-                    success: function (producto) {
-
+                    success:function()
+                    {
+                        success = success + 1;
+                    },
+                    error: function()
+                    {
+                        error = error + 1;
                     }
-                }); 
+                });
                 
             }
+            if (total == success)
+            {
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: 'Se guardaron correctamente los cambios.',
+                    buttons: {
+                        OK: function ()
+                        {
+                           
+                        }
+                    }
+                });
+            }
+            if (error == 1) {
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'red',
+                    content: 'Ocurrió un problema al guardar los cambios.',
+                    buttons: {
+                        OK: function () {
+
+                        }
+                    }
+                });
+            }
+           
+
+            
         });
     });
 
