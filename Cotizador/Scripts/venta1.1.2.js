@@ -1,6 +1,6 @@
 
 jQuery(function ($) {
-    var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
+    
     var TITLE_EXITO = 'Operación Realizada';
 
     //CONSTANTES POR DEFECTO
@@ -4473,7 +4473,7 @@ jQuery(function ($) {
             }
             if (error == 1) {
                 $.alert({
-                    title: TITLE_EXITO,
+                    title: 'Error',
                     type: 'red',
                     content: 'Ocurrió un problema al guardar los cambios.',
                     buttons: {
