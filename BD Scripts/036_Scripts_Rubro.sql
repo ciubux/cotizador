@@ -9,7 +9,7 @@ CREATE TABLE [RUBRO](
 	[fecha_creacion] [datetime] NOT NULL,
 	[usuario_modificacion] [uniqueidentifier] NULL,
 	[fecha_modificacion] [datetime] NULL,
- CONSTRAINT [PK_SUBDISTRIBUIDOR] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_RUBRO] PRIMARY KEY CLUSTERED 
 (
 	[id_rubro] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -103,13 +103,13 @@ CREATE PROCEDURE [dbo].[pu_rubro]
 AS
 BEGIN
 
-UPDATE SUBDISTRIBUIDOR  
+UPDATE RUBRO  
 	SET codigo = @codigo 
 		,nombre = @nombre
 		,estado = @estado
 		,usuario_modificacion = @idUsuario
 		,fecha_modificacion = dbo.getlocaldate()
-	WHERE id_rubro like @idRubro;
+	WHERE id_rubro = @idRubro;
 
 END
 
