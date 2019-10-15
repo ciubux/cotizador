@@ -516,26 +516,35 @@
 
                             <!--ESTADO CONTRIBUYENTE CLIENTE-->
 
-                            <div class="row">
-                                <div class="col-sm-6 col-lg-4">
-                                    <div class="form-group">
-                                        @Html.LabelFor(c => cliente.estadoContribuyente, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                        <div class="col-xs-8">
-                                            <p class="form-control-static" id="verEstadoContribuyente"></p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!--DONDICIÓN CONTRIBUYENTE CLIENTE-->
-                                <div class="col-sm-6 col-lg-4">
-                                    <div class="form-group">
-                                        @Html.LabelFor(c => cliente.condicionContribuyente, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                        <div class="col-xs-8">
-                                            <p class="form-control-static" id="verCondicionContribuyente"></p>
-                                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => cliente.estadoContribuyente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verEstadoContribuyente"></p>
                                     </div>
                                 </div>
                             </div>
+
+                            <!--DONDICIÓN CONTRIBUYENTE CLIENTE-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => cliente.condicionContribuyente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verCondicionContribuyente"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => cliente.rubro, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verRubro"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                             <div class="row">
                                 <!--Nombre COmercial CLIENTE-->

@@ -78,6 +78,7 @@
     <Compile Include="PedidoAlmacen.cs" />
     <Compile Include="Permiso.cs" />
     <Compile Include="ProductoPresentacion.cs" />
+    <Compile Include="Rubro.cs" />
     <Compile Include="SubDistribuidor.cs" />
     <Compile Include="NotaIngresoValidacion.cs" />
     <Compile Include="NotaIngreso.cs" />

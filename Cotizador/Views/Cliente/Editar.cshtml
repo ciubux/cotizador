@@ -300,12 +300,19 @@
 
                     <div class="col-sm-6 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(c => cliente.contacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                            @Html.LabelFor(c => cliente.rubro, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4", @for = "idRubro" })
                             <div class="col-xs-8 col-sm-8 col-lg-8">
-                                @Html.TextBoxFor(c => cliente.contacto1, htmlAttributes: new { @class = "form-control" })
+                                @Html.Action("GetRubros", "Rubro",
+                                    new
+                                    {
+                                        rubroSelectId = "idRubro",
+                                        selectedValue = cliente.rubro.idRubro,
+                                    })
                             </div>
                         </div>
                     </div>
+
+                    
                 </div>
                 <!--CORREO CLIENTE-->
                 <div class="row">
@@ -324,13 +331,12 @@
 
                     <div class="col-sm-6 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                            @Html.LabelFor(c => cliente.contacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
                             <div class="col-xs-8 col-sm-8 col-lg-8">
-                                @Html.TextBoxFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "form-control" })
+                                @Html.TextBoxFor(c => cliente.contacto1, htmlAttributes: new { @class = "form-control" })
                             </div>
                         </div>
                     </div>
-
                 </div>
 
 
@@ -343,15 +349,21 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                                @Html.TextBoxFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             @Html.LabelFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
                             <div class="col-xs-8 col-sm-8 col-lg-8">
                                 @Html.TextBoxFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "form-control" })
                             </div>
                         </div>
-
-
                     </div>
                 </div>
 

@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "377";
+    TempData["ScriptVersion"] = "378";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -95,6 +95,9 @@
                         var linkBusquedaSubDistribuidor = "";
                         var linkMantenimientoSubDistribuidor = "";
 
+                        var linkBusquedaRubro = "";
+                        var linkMantenimientoRubro = "";
+
                         var linkBusquedaRol = "";
                         var linkMantenimientoRol = "";
 
@@ -165,6 +168,9 @@
 
                             case 32: linkBusquedaSubDistribuidor = "ative"; linkMaestros = "active"; break;
                             case 33: linkMantenimientoSubDistribuidor = "ative"; linkMaestros = "active"; break;
+
+                            case 750: linkBusquedaRubro = "ative"; linkMaestros = "active"; break;
+                            case 751: linkMantenimientoRubro = "ative"; linkMaestros = "active"; break;
 
                             case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
                             case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
@@ -404,6 +410,14 @@
                                         <li id="linkCRSubDistribuidor" class="@linkMantenimientoSubDistribuidor">@Html.ActionLink("Categoría Subdistribuidor - Crear/Modificar ", "Editar", "SubDistribuidor")</li>
                                     }
 
+                                    @if (usuario.modificaRubro || usuario.visualizaRubros)
+                                    {
+                                        <li id="linkBusquedaSubDistribuidor" class="@linkBusquedaSubDistribuidor">@Html.ActionLink("Rubro - Búsqueda", "List", "Rubro")</li>
+                                    }
+                                    @if (usuario.visualizaRubros)
+                                    {
+                                        <li id="linkCRSubDistribuidor" class="@linkMantenimientoSubDistribuidor">@Html.ActionLink("Rubro - Crear/Modificar ", "Editar", "Rubro")</li>
+                                    }
                                 </ul>
                             </li>
                         }

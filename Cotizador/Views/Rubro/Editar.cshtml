@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Rubro";
+    Model.Rubro rubro = ViewBag.rubro;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal">
+        <div class="row">
+            <input type="hidden" id="idRubro" name="idRubro" value="@rubro.idRubro" />
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => rubro.codigo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.TextBoxFor(c => rubro.codigo, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => rubro.nombre, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.TextBoxFor(c => rubro.nombre, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-6">
+                <div class="form-group">
+                    @Html.LabelFor(c => rubro.Estado, htmlAttributes: new { @class = "control-label col-xs-3" })
+                    <div class="col-xs-9">
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (rubro.Estado == 1)
+                                {
+                                    <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
+                                }
+
+                            </label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (rubro.Estado == 0)
+                                {
+                                    <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
+                                }
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnCancelarRubro" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionRubro" type="button" class="btn btn-success">Finalizar Creación</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/rubro")
+}
