@@ -183,7 +183,7 @@ namespace Cotizador.Controllers
             cliente.configuraciones = new Model.CONFIGCLASSES.ClienteConfiguracion();
             cliente.tipoPagoFactura = DocumentoVenta.TipoPago.Contado;
             cliente.plazoCreditoSolicitado = DocumentoVenta.TipoPago.Contado;
-
+            cliente.FechaRegistro = DateTime.Now;
 
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
@@ -332,6 +332,17 @@ namespace Cotizador.Controllers
             //return JsonConvert.SerializeObject(clienteList);
             return JsonConvert.SerializeObject(ParserDTOsSearch.ClienteToClienteDTO(clienteList));
             //return pedidoList.Count();
+        }
+
+        public String GetHistorialReasignaciones()
+        {
+            ClienteBL clienteBL = new ClienteBL();
+            List<ClienteReasignacionHistorico> lista = clienteBL.getHistorialReasignacionesClientePorCampo(Request["campo"].ToString(), Guid.Parse(Request["idCliente"].ToString()));
+            //return JsonConvert.SerializeObject(clienteList);
+            int success = 1;
+            string jsonLista = JsonConvert.SerializeObject(lista);
+            
+            return "{\"success\": " + success.ToString() + ",\"message\": \"" + "" + "\", \"lista\": " + jsonLista + "}";
         }
 
 
@@ -756,6 +767,24 @@ namespace Cotizador.Controllers
             else
                 ClienteSession.responsableComercial.idVendedor = Int32.Parse(this.Request.Params["idResponsableComercial"]);
         }
+
+        public void ChangeCHRFIVAsesor()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                String[] fiv = this.Request.Params["val"].Split('/');
+                ClienteSession.chrAsesor.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            }
+        }
+
+        public void ChangeCHRObservacionAsesor()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                ClienteSession.chrAsesor.observacion = this.Request.Params["val"];
+            }
+        }
+
         public void ChangeIdAsistenteServicioCliente()
         {
             if (this.Request.Params["idAsistenteServicioCliente"] == null || this.Request.Params["idAsistenteServicioCliente"] == String.Empty)
@@ -763,12 +792,47 @@ namespace Cotizador.Controllers
             else
                 ClienteSession.asistenteServicioCliente.idVendedor = Int32.Parse(this.Request.Params["idAsistenteServicioCliente"]);
         }
+
+        public void ChangeCHRFIVAsistente()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                String[] fiv = this.Request.Params["val"].Split('/');
+                ClienteSession.chrAsistente.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            }
+        }
+
+        public void ChangeCHRObservacionAsistente()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                ClienteSession.chrAsistente.observacion = this.Request.Params["val"];
+            }
+        }
+
         public void ChangeIdSupervisorComercial()
         {
             if (this.Request.Params["idSupervisorComercial"] == null || this.Request.Params["idSupervisorComercial"] == String.Empty)
                 ClienteSession.supervisorComercial.idVendedor = 0;
             else
                 ClienteSession.supervisorComercial.idVendedor = Int32.Parse(this.Request.Params["idSupervisorComercial"]);
+        }
+
+        public void ChangeCHRFIVSupervisor()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                String[] fiv = this.Request.Params["val"].Split('/');
+                ClienteSession.chrSupervisor.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            }
+        }
+
+        public void ChangeCHRObservacionSupervisor()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                ClienteSession.chrSupervisor.observacion = this.Request.Params["val"];
+            }
         }
 
         public void ChangeIdSubDistribuidor()

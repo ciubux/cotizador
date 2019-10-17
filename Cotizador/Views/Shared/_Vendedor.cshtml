@@ -9,6 +9,8 @@
                 {
                     id = Model.VendedorSelectId,
                     @class = "form-control",
+                    @prevvalue = Model.SelectedValue,
+                    @mostrarformchr = Model.mostrarFormCHR,
                     @disabled = "disabled"
                 })
 }
@@ -20,6 +22,8 @@ else
             new
             {
                 id = Model.VendedorSelectId,
+                @prevvalue = Model.SelectedValue,
+                @mostrarformchr = Model.mostrarFormCHR,
                 @class = "form-control"
 
             })

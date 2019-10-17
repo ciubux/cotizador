@@ -13,6 +13,10 @@ namespace Cotizador.Models
         public string VendedorSelectId { get; set; }
         public string SelectedValue { get; set; }
 
+        public string mostrarFormCHR { get; set; }
+
+        public string prevValue { get; set; }
+
         public List<Vendedor> Data { get; set; }
 
         public IEnumerable<SelectListItem> Vendedores

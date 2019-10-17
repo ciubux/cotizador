@@ -37,7 +37,7 @@ namespace DataLayer
             InputParameterAdd.Char(objCommand, "sede", clienteStaging.sede);
             InputParameterAdd.Varchar(objCommand, "plazo", clienteStaging.plazo);
             ExecuteNonQuery(objCommand);
-            
+
         }
 
 
@@ -109,7 +109,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_getclientes_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
-            
+
             DataTable dataTable = Execute(objCommand);
             List<Cliente> clienteList = new List<Cliente>();
 
@@ -298,6 +298,8 @@ namespace DataLayer
                 cliente.responsableComercial.usuario = new Usuario();
                 cliente.responsableComercial.usuario.idUsuario = Converter.GetGuid(row, "responsable_comercial_id_usuario");
 
+                cliente.chrAsesor.preValor = cliente.responsableComercial.idVendedor.ToString();
+
                 cliente.supervisorComercial = new Vendedor();
                 cliente.supervisorComercial.idVendedor = Converter.GetInt(row, "supervisor_comercial_id_vendedor");
                 cliente.supervisorComercial.codigo = Converter.GetString(row, "supervisor_comercial_codigo");
@@ -305,12 +307,16 @@ namespace DataLayer
                 cliente.supervisorComercial.usuario = new Usuario();
                 cliente.supervisorComercial.usuario.idUsuario = Converter.GetGuid(row, "supervisor_comercial_id_usuario");
 
+                cliente.chrSupervisor.preValor = cliente.supervisorComercial.idVendedor.ToString();
+
                 cliente.asistenteServicioCliente = new Vendedor();
                 cliente.asistenteServicioCliente.idVendedor = Converter.GetInt(row, "asistente_servicio_cliente_id_vendedor");
                 cliente.asistenteServicioCliente.codigo = Converter.GetString(row, "asistente_servicio_cliente_codigo");
                 cliente.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
                 cliente.asistenteServicioCliente.usuario = new Usuario();
                 cliente.asistenteServicioCliente.usuario.idUsuario = Converter.GetGuid(row, "asistente_servicio_id_usuario");
+
+                cliente.chrAsistente.preValor = cliente.asistenteServicioCliente.idVendedor.ToString();
 
                 cliente.observacionesCredito = Converter.GetString(row, "observaciones_credito");
                 cliente.observaciones = Converter.GetString(row, "observaciones");
@@ -327,6 +333,8 @@ namespace DataLayer
                 cliente.habilitadoNegociacionGrupal = Converter.GetBool(row, "habilitado_negociacion_grupal");
                 cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
                 cliente.negociacionMultiregional = Converter.GetBool(row, "negociacion_multiregional");
+
+                cliente.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
 
                 try
                 {
@@ -564,10 +572,10 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
             InputParameterAdd.Int(objCommand, "sinPlazoCreditoAprobado", cliente.sinPlazoCreditoAprobado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "sinAsesorValidado", cliente.vendedoresAsignados ? 1 : 0);
-            InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int) cliente.tipoLiberacionCrediticia);
+            InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int)cliente.tipoLiberacionCrediticia);
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
-            InputParameterAdd.Int(objCommand, "perteneceCanalLima", cliente.perteneceCanalLima?1:0);
+            InputParameterAdd.Int(objCommand, "perteneceCanalLima", cliente.perteneceCanalLima ? 1 : 0);
             InputParameterAdd.Int(objCommand, "perteneceCanalProvincias", cliente.perteneceCanalProvincias ? 1 : 0);
             InputParameterAdd.Int(objCommand, "perteneceCanalMultiregional", cliente.perteneceCanalMultiregional ? 1 : 0);
             InputParameterAdd.Int(objCommand, "perteneceCanalPCP", cliente.perteneceCanalPCP ? 1 : 0);
@@ -592,7 +600,7 @@ namespace DataLayer
                 ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
                 ClienteResultado.ruc = Converter.GetString(row, "ruc");
 
-               
+
 
                 /*Vendedores*/
                 ClienteResultado.responsableComercial = new Vendedor();
@@ -706,7 +714,7 @@ namespace DataLayer
             //InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
             InputParameterAdd.Int(objCommand, "formaPagoFactura", (int)cliente.formaPagoFactura);
             InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", DateTime.Now.ToString("yyyy-MM-dd"));
-            
+
             /*Plazo credito*/
             InputParameterAdd.Int(objCommand, "plazoCreditoSolicitado", (int)cliente.plazoCreditoSolicitado);
             InputParameterAdd.Int(objCommand, "tipoPagoFactura", (int)cliente.tipoPagoFactura);
@@ -727,10 +735,10 @@ namespace DataLayer
 
             InputParameterAdd.VarcharEmpty(objCommand, "observacionHorarioEntrega", cliente.observacionHorarioEntrega);
 
-            InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados?1:0));
+            InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados ? 1 : 0));
 
 
-            InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int) cliente.tipoLiberacionCrediticia);
+            InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int)cliente.tipoLiberacionCrediticia);
 
 
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalMultiregional", (short)(cliente.perteneceCanalMultiregional ? 1 : 0));
@@ -758,7 +766,7 @@ namespace DataLayer
             DateTime horaInicioPrimerTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
             InputParameterAdd.DateTime(objCommand, "horaInicioPrimerTurnoEntrega", horaInicioPrimerTurnoEntrega);
             horaTmp = cliente.horaFinPrimerTurnoEntrega.Split(':');
-            DateTime horaFinPrimerTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);            
+            DateTime horaFinPrimerTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
             InputParameterAdd.DateTime(objCommand, "horaFinPrimerTurnoEntrega", horaFinPrimerTurnoEntrega);
             if (cliente.horaInicioSegundoTurnoEntrega == null || cliente.horaFinSegundoTurnoEntrega == null
                 || cliente.horaInicioSegundoTurnoEntrega.Equals(String.Empty)
@@ -779,7 +787,7 @@ namespace DataLayer
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             OutputParameterAdd.Int(objCommand, "codigoAlterno");
-            OutputParameterAdd.Varchar(objCommand, "codigo",4);
+            OutputParameterAdd.Varchar(objCommand, "codigo", 4);
 
             ExecuteNonQuery(objCommand);
 
@@ -856,7 +864,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito);
             InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
             InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados ? 1 : 0));
-            InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int) cliente.tipoLiberacionCrediticia);
+            InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int)cliente.tipoLiberacionCrediticia);
 
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalMultiregional", (short)(cliente.perteneceCanalMultiregional ? 1 : 0));
             InputParameterAdd.SmallInt(objCommand, "perteneceCanalLima", (short)(cliente.perteneceCanalLima ? 1 : 0));
@@ -880,7 +888,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idSubDistribuidor", cliente.subDistribuidor == null ? 0 : cliente.subDistribuidor.idSubDistribuidor);
             InputParameterAdd.Int(objCommand, "idRubro", cliente.rubro.idRubro);
 
-            InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente==null?0: cliente.grupoCliente.idGrupoCliente);
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente == null ? 0 : cliente.grupoCliente.idGrupoCliente);
             DateTime dtTmp = DateTime.Now;
             String[] horaTmp = cliente.horaInicioPrimerTurnoEntrega.Split(':');
             DateTime horaInicioPrimerTurnoEntrega = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaTmp[0]), Int32.Parse(horaTmp[1]), 0);
@@ -908,10 +916,10 @@ namespace DataLayer
 
             OutputParameterAdd.Int(objCommand, "existenCambiosCreditos");
             OutputParameterAdd.UniqueIdentifier(objCommand, "usuarioSolicitanteCredito");
-            OutputParameterAdd.Varchar(objCommand, "correoUsuarioSolicitanteCredito",50);
+            OutputParameterAdd.Varchar(objCommand, "correoUsuarioSolicitanteCredito", 50);
             ExecuteNonQuery(objCommand);
 
-            cliente.existenCambiosCreditos = (Boolean) ((int)objCommand.Parameters["@existenCambiosCreditos"].Value == 1);
+            cliente.existenCambiosCreditos = (Boolean)((int)objCommand.Parameters["@existenCambiosCreditos"].Value == 1);
             cliente.usuarioSolicitante = new Usuario();
             cliente.usuarioSolicitante.idUsuario = (Guid)objCommand.Parameters["@usuarioSolicitanteCredito"].Value;
             cliente.usuarioSolicitante.email = (String)objCommand.Parameters["@correoUsuarioSolicitanteCredito"].Value;
@@ -927,6 +935,51 @@ namespace DataLayer
         }
 
 
+
+
+        public void insertClienteReasignacionHistorico(ClienteReasignacionHistorico obj)
+        {
+            var objCommand = GetSqlCommand("pi_cliente_historial_reasignacion");
+            //InputParameterAdd.Guid(objCommand, "idPedido", pedidoAdjunto.idPedido);
+            InputParameterAdd.Guid(objCommand, "idCliente", obj.idCliente);
+            InputParameterAdd.Varchar(objCommand, "campo", obj.campo);
+            InputParameterAdd.Varchar(objCommand, "valor", obj.valor);
+            InputParameterAdd.Varchar(objCommand, "observacion", obj.observacion);
+            InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", obj.fechaInicioVigencia.ToString("yyyy-MM-dd"));
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
+            ExecuteNonQuery(objCommand);
+            obj.idClienteReasignacionHistorico = (Guid)objCommand.Parameters["@newId"].Value;
+        }
+
+
+        public List<ClienteReasignacionHistorico> getHistorialReasignacionesClientePorCampo(String campo, Guid idCliente)
+        {
+            var objCommand = GetSqlCommand("ps_cliente_historial_reasignacion_vendedor");
+            InputParameterAdd.Varchar(objCommand, "campo", campo);
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+ 
+            DataTable dataTable = Execute(objCommand);
+
+            List<ClienteReasignacionHistorico> list = new List<ClienteReasignacionHistorico>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                //SELECT cr.valor, cr.observacion, cr.fecha_inicio_vigencia, cr.fecha_modificacion, v.codigo, v.descripcion
+                ClienteReasignacionHistorico item = new ClienteReasignacionHistorico();
+                item.valor = Converter.GetString(row, "valor");
+                item.observacion = Converter.GetString(row, "observacion");
+                if (item.observacion == null) item.observacion = "";
+                item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                item.FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion");
+                item.dataA = Converter.GetString(row, "codigo");
+                item.dataB = Converter.GetString(row, "descripcion");
+                item.dataC = Converter.GetString(row, "nombre_usuario");
+
+                list.Add(item);
+            }
+
+            return list;
+        }
     }
 }
 

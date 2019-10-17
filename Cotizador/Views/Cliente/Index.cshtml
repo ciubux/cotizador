@@ -777,6 +777,7 @@
                                             @Html.LabelFor(c => cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
                                             <div class="col-xs-8">
                                                 <p class="form-control-static" id="verResponsableComercial"></p>
+                                                <a class="lnkVerHistorialReasignaciones" campo="responsableComercial">Ver Historial</a>
                                             </div>
                                         </div>
                                     </div>
@@ -786,6 +787,7 @@
                                             @Html.LabelFor(c => cliente.supervisorComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idSupervisorComercial" })
                                             <div class="col-xs-8">
                                                 <p class="form-control-static" id="verSupervisorComercial"></p>
+                                                <a class="lnkVerHistorialReasignaciones" campo="supervisorComercial">Ver Historial</a>
                                             </div>
                                         </div>
                                     </div>
@@ -795,7 +797,7 @@
                                             @Html.LabelFor(c => cliente.asistenteServicioCliente, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idSupervisorComercial" })
                                             <div class="col-xs-8">
                                                 <p class="form-control-static" id="verAsistenteServicioCliente"></p>
-
+                                                <a class="lnkVerHistorialReasignaciones" campo="asistenteServicioCliente">Ver Historial</a>
                                             </div>
                                         </div>
                                     </div>
@@ -1234,6 +1236,49 @@
 </div>
 
 
+
+<div class="modal fade" id="modalVerHistorialReasignaciones" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerHistorialReasignaciones"><b>Historial de Reasignaciones de <span id="historial_reasignaciones_tipo_vendedor"></span></b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <table id="tableHistorialReasignaciones" class="table" data-editing="false"
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="fechaInicioVigencia" data-sortable="false" data-breakpoints="xs">Inicio Vigencia</th>
+                            <th data-name="vendedor" data-sortable="false" data-breakpoints="xs"><span id="spn_historial_reasignaciones_tipo_vendedor"></span></th>
+                            <th data-name="fechaRegistro" data-sortable="false" data-breakpoints="xs">Fecha Registro</th>
+                            <th data-name="usuario" data-sortable="false" data-breakpoints="xs">Usuario</th>
+                            <th data-name="observacion" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" id="btnCloseHistorialReasignaciones" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

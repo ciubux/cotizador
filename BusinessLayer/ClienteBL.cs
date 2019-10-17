@@ -359,7 +359,32 @@ namespace BusinessLayer
                 }
                 
 
-                cliente =  clienteDAL.insertClienteSunat(cliente);
+                cliente = clienteDAL.insertClienteSunat(cliente);
+                if(cliente.responsableComercial.idVendedor > 0) {
+                    cliente.chrAsesor.idCliente = cliente.idCliente;
+                    cliente.chrAsesor.usuario = cliente.usuario;
+                    cliente.chrAsesor.valor = cliente.responsableComercial.idVendedor.ToString();
+                    cliente.chrAsesor.defaultValues("responsableComercial");
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsesor);
+                }
+
+                if (cliente.supervisorComercial.idVendedor > 0)
+                {
+                    cliente.chrSupervisor.idCliente = cliente.idCliente;
+                    cliente.chrSupervisor.usuario = cliente.usuario;
+                    cliente.chrSupervisor.valor = cliente.supervisorComercial.idVendedor.ToString();
+                    cliente.chrSupervisor.defaultValues("supervisorComercial");
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrSupervisor);
+                }
+
+                if (cliente.asistenteServicioCliente.idVendedor > 0)
+                {
+                    cliente.chrAsistente.idCliente = cliente.idCliente;
+                    cliente.chrAsistente.usuario = cliente.usuario;
+                    cliente.chrAsistente.valor = cliente.asistenteServicioCliente.idVendedor.ToString();
+                    cliente.chrAsistente.defaultValues("asistenteServicioCliente");
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsistente);
+                }
 
                 enviarNotificacionSolicitudCredito(cliente);
 
@@ -402,7 +427,34 @@ namespace BusinessLayer
                 Cliente clientePrev = clienteDAL.getCliente(cliente.idCliente);
 
                 cliente = clienteDAL.updateClienteSunat(cliente);
-                
+
+                if (!cliente.responsableComercial.idVendedor.ToString().Equals(cliente.chrAsesor.preValor))
+                {
+                    cliente.chrAsesor.idCliente = cliente.idCliente;
+                    cliente.chrAsesor.usuario = cliente.usuario;
+                    cliente.chrAsesor.valor = cliente.responsableComercial.idVendedor.ToString();
+                    cliente.chrAsesor.campo = "responsableComercial";
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsesor);
+                }
+
+                if (!cliente.supervisorComercial.idVendedor.ToString().Equals(cliente.chrSupervisor.preValor))
+                {
+                    cliente.chrSupervisor.idCliente = cliente.idCliente;
+                    cliente.chrSupervisor.usuario = cliente.usuario;
+                    cliente.chrSupervisor.valor = cliente.supervisorComercial.idVendedor.ToString();
+                    cliente.chrSupervisor.campo = "supervisorComercial";
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrSupervisor);
+                }
+
+                if (!cliente.asistenteServicioCliente.idVendedor.ToString().Equals(cliente.chrAsistente.preValor))
+                {
+                    cliente.chrAsistente.idCliente = cliente.idCliente;
+                    cliente.chrAsistente.usuario = cliente.usuario;
+                    cliente.chrAsistente.valor = cliente.asistenteServicioCliente.idVendedor.ToString();
+                    cliente.chrAsistente.campo = "asistenteServicioCliente";
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsistente);
+                }
+
                 if ((cliente.usuario == null || !cliente.usuario.modificaMiembrosGrupoCliente) && 
                     ((cliente.grupoCliente == null && clientePrev.grupoCliente != null) || (cliente.grupoCliente != null && clientePrev.grupoCliente == null) || cliente.grupoCliente.idGrupoCliente != clientePrev.grupoCliente.idGrupoCliente))
                 {
@@ -564,6 +616,23 @@ namespace BusinessLayer
             using (var clienteDAL = new ClienteDAL())
             {
                 clienteDAL.mergeClienteStaging();
+            }
+        }
+
+        public void insertClienteReasignacionHistorico(ClienteReasignacionHistorico obj)
+        {
+            using (var dal = new ClienteDAL())
+            {
+                dal.insertClienteReasignacionHistorico(obj);
+            }
+        }
+
+        
+        public List<ClienteReasignacionHistorico> getHistorialReasignacionesClientePorCampo(String campo, Guid idCliente)
+        {
+            using (var dal = new ClienteDAL())
+            {
+                return dal.getHistorialReasignacionesClientePorCampo(campo, idCliente);
             }
         }
     }

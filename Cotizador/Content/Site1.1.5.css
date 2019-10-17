@@ -218,6 +218,10 @@ textarea {
     #modalEdicionDireccionEntrega .modal-dialog {
         width: 900px;
     }
+
+    #modalVerHistorialReasignaciones .modal-dialog {
+        width: 900px;
+    }
 }
 
 
