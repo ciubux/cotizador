@@ -277,7 +277,7 @@
         return unicos;
     }
 
-    
+
 
 
     var idUsuario;
@@ -327,7 +327,7 @@
                             $("#Mensaje").append(ItemRow);
                         }
 
-                        if (verAutomaticamente) { 
+                        if (verAutomaticamente) {
                             setTimeout(function () {
                                 $('#Mensaje').modal('show');
                             }, 2000);
@@ -415,7 +415,7 @@
 
     $("#mensaje_fechaVencimientoMensaje_edit").change(function () {
         var fechaVencimiento = $("#mensaje_fechaVencimientoMensaje_edit").val();
-       
+
         $.ajax({
             url: "/Mensaje/ChangeFechaVencimiento",
             type: 'POST',

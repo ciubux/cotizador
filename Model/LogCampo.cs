@@ -39,5 +39,9 @@ namespace Model
 
         public String campo_referencia { get; set; }
 
+        public int esFuncional { get; set; }
+
+
+
     }
 }
