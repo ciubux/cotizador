@@ -459,9 +459,14 @@
                                         <li id="linkCRRol" class="@linkMantenimientoRol">@Html.ActionLink("Rol - Crear/Modificar ", "Editar", "Rol")</li>
                                     }
 
-                                    @if (usuario.modificaUsuario || usuario.visualizaUsuarios)
+                                    @if (usuario.visualizaUsuarios)
                                     {
                                         <li id="linkBusquedaUsuario" class="@linkBusquedaUsuario">@Html.ActionLink("Usuario - Búsqueda", "List", "Usuario")</li>
+                                    }
+
+                                    @if (usuario.modificaUsuario || usuario.visualizaUsuarios)
+                                    {
+                                        <li id="linkMantenimientoUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar", "Editar", "Usuario")</li>
                                     }
 
                                     @if (usuario.visualizaMensaje || usuario.modificaMensaje)
@@ -475,9 +480,9 @@
 
 
                                     @*@if (usuario.modificaUsuario)
-                                        {
-                                            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
-                                        }*@
+        {
+            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
+        }*@
 
 
                                     @if (usuario.administraPermisos)

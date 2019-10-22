@@ -290,7 +290,23 @@
     }
 
 
-    function validacionDatosVendedor() {
+    function validacionDatosVendedor() { 
+
+
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        var var1 = $("#usuario_email").val();
+
+        if (regex.test(var1) !== true || $("#usuario_email").val().indexOf(" ") !== -1 || $("#usuario_email").val().indexOf("@") == -1 || $("#usuario_email").val().length < 12) {
+            $.alert({
+                title: "Email Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un Email válido. Ejem:prueba@mpinstitucional.com',
+                buttons: {
+                    OK: function () { $('#usuario_email').focus(); }
+                }
+            });
+            return false;
+        }
 
         if ($("#vendedor_codigo").val().indexOf(" ") !== -1 || $("#vendedor_codigo").val().length == 1 || $("#vendedor_codigo").val().length > 2 || $("#vendedor_codigo").val().length == "") {
             $.alert({

@@ -25,8 +25,11 @@ namespace Model
         public string cargo { get; set; }
         [Display(Name = "Contacto:")]
         public string contacto { get; set; }
+
+        [Display(Name = "Descuento Maximo (%):")]
         public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
 
+        public Guid idUsuarioModificacion { get; set; }
         public Ciudad sedeMP { get; set; }
 
         public List<Ciudad> sedesMP { get; set; }
@@ -70,6 +73,7 @@ namespace Model
             get { return this.vendedorList.Where(v => v.esSupervisorComercial).ToList(); }
         }
 
+        [Display(Name = "Cliente:")]
         public bool esCliente { get; set; }
 
         public bool esVendedor { get; set; }

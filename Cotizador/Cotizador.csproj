@@ -617,6 +617,7 @@
     <Content Include="Views\Rubro\Editar.cshtml" />
     <Content Include="Views\Rubro\List.cshtml" />
     <Content Include="Views\Shared\_Rubro.cshtml" />
+    <Content Include="Views\Usuario\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

@@ -66,7 +66,7 @@
 
     function verificarSiExisteMensaje() {
 
-        if ($("#idMensaje").val().trim() != "00000000-0000-0000-0000-000000000000") {
+        if ($("#idMensaje").val() != "00000000-0000-0000-0000-000000000000") {
             $("#btnEnviarMensaje").html('Finalizar Edición');
         }
         else {

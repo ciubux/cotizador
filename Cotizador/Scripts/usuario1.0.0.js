@@ -6,15 +6,16 @@ jQuery(function ($) {
     var TITLE_EXITO = 'Operación Realizada';
 
     $(document).ready(function () {
+        verificarSiExisteUsuario();
         $("#btnBusqueda").click();
         //cargarChosenCliente();
-        verificarSiExisteCliente();
-        
+        verificarSiExisteCliente();        
         FooTable.init('#tablePermisosUsuario');
+        
     });
 
     function verificarSiExisteCliente() {
-        if ($("#idUsuario").val().trim() != "0") {
+        if ($("#idUsuario").val().trim() != "00000000-0000-0000-0000-000000000000") {
             $("#btnFinalizarEdicionUsuario").html('Finalizar Edición');
         }
         else {
@@ -418,7 +419,7 @@ jQuery(function ($) {
                         '<td>  ' + list[i].email + '  </td>' +
                         '<td>  ' + list[i].nombre + '  </td>' +
                         '<td>' +
-                        /*'<button type="button" class="' + list[i].idUsuario + ' btnEditarUsuario btn btn-primary ">Editar</button>&nbsp;&nbsp;&nbsp;' +*/
+                        '<button type="button" class="' + list[i].idUsuario + ' btnEditarUsuario btn btn-primary ">Editar</button>&nbsp;&nbsp;&nbsp;' +
                         '<button type="button" idUsuario="' + list[i].idUsuario + '" class="btnVerPermisosUsuario btn btn-secundary">Permisos</button>' +
                         '</td>' +
                         '</tr>';
@@ -457,7 +458,7 @@ jQuery(function ($) {
                 idUsuario: idUsuario
             },
             success: function (resultado) {
-                if (resultado.existe == "false") {
+                if (resultado.existe == "true") {
 
                     $.ajax({
                         url: "/Usuario/iniciarEdicionUsuario",
@@ -465,12 +466,13 @@ jQuery(function ($) {
                         error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del Usuario."); },
                         success: function (fileName) {
                             window.location = '/Usuario/Editar';
+                           
                         }
                     });
 
                 }
                 else {
-                    if (resultado.idUsuario == 0) {
+                    if (resultado.idUsuario == '00000000-0000-0000-0000-000000000000') {
                         alert('Está creando un nuevo usuario; para continuar por favor diríjase a la página "Crear/Modificar Usuario" y luego haga clic en el botón Cancelar.');
                     }
                     
@@ -482,7 +484,278 @@ jQuery(function ($) {
         });
     });
 
+    function verificarSiExisteUsuario() {
+       
+        if ($("#idUsuarioMantenimiento").val() != "00000000-0000-0000-0000-000000000000") {           
+            $("#btnFinalizarEdicionUsuarioMantenimiento").html('Finalizar Edición');
+        }
+        else {
+            $("#btnFinalizarEdicionUsuarioMantenimiento").html('Finalizar Creación');
+        }
 
+    }
+
+    $("#btnCancelarUsuarioMantenimiento").click(function () {
+
+        ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Usuario/CancelarCreacionUsuario', null);
+    });
+
+
+    function crearUsuarioMantenedor() {
+        if (!validacionDatosUsuarioMantenedor())
+            return false;
+        var password = $("#usuario_password").val();
+        $('body').loadingModal({
+            text: 'Creando Usuario...'
+        });
+        $.ajax({
+            url: "/Usuario/Create",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                password: password
+            },
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: 'Error',
+                    content: 'Se generó un error al intentar crear el usuario.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (resultado) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: TITLE_EXITO,
+                    content: 'El usuario se creó correctamente.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Usuario/List';
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    $("#btnFinalizarEdicionUsuarioMantenimiento").click(function () {
+    /*Si no tiene codigo el cliente se está creando*/        
+        if ($("#idUsuarioMantenimiento").val() == '00000000-0000-0000-0000-000000000000') {
+            crearUsuarioMantenedor();
+        }
+        else {
+            editarUsuarioMantenedor();
+        }
+    });
+
+
+
+    function editarUsuarioMantenedor() {
+
+        if (!validacionDatosUsuarioMantenedor())
+            return false;
+        var password = $("#usuario_password").val();
+
+        $('body').loadingModal({
+            text: 'Editando Usuario...'
+        });
+        $.ajax({
+            url: "/Usuario/Update",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                password: password
+            },
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: 'Error',
+                    content: 'Se generó un error al intentar editar el usuario.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (resultado) {
+                $('body').loadingModal('hide');
+
+                $.alert({
+                    title: TITLE_EXITO,
+                    content: 'El usuario se editó correctamente.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Usuario/List';
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function validacionDatosUsuarioMantenedor() {
+
+        
+
+        if ($("#usuario_nombre").val().length < 4) {
+            $.alert({
+                title: "Nombre Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un nombre válido.',
+                buttons: {
+                    OK: function () { $('#usuario_nombre').focus(); }
+                }
+            });
+            return false;
+        }
+
+
+        if ($("#usuario_idCiudad").val() === "") {
+            $.alert({
+                title: "Ciudad Inválida",
+                type: 'orange',
+                content: 'Debe ingresar una Sede para el usuario.',
+                buttons: {
+                    OK: function () { $('#usuario_idCiudad').focus(); }
+                }
+            });
+            return false;
+        }
+       
+        if (($("#usuario_password").val().length < 5 && $("#idUsuarioMantenimiento").val() == '00000000-0000-0000-0000-000000000000') || ($("#usuario_password").val().length < 5 && $("#idUsuarioMantenimiento").val() != '00000000-0000-0000-0000-000000000000') ) {
+            $.alert({
+                title: "Contraseña Inválida",
+                type: 'orange',
+                content: 'Debe ingresar una contraseña válida.',
+                buttons: {
+                    OK: function () { $('#usuario_password').focus(); }
+                }
+            });
+            return false;
+        }
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        var var1 = $("#usuario_email").val();
+
+        if (regex.test(var1) !== true || $("#usuario_email").val().indexOf(" ") !== -1 || $("#usuario_email").val().indexOf("@") == -1 || $("#usuario_email").val().length < 12) {
+            $.alert({
+                title: "Email Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un Email válido. Ejem:prueba@mpinstitucional.com',
+                buttons: {
+                    OK: function () { $('#usuario_email').focus(); }
+                }
+            });
+            return false;
+        }
+             
+
+
+        return true;
+
+    }
+
+    $("#usuario_cargo").change(function () {
+        changeInputStringMantenedor("cargo", $("#usuario_cargo").val());
+    });
+
+    $("#usuario_nombre").change(function () {
+        changeInputStringMantenedor("nombre", $("#usuario_nombre").val());
+    });
+
+    $("#usuario_email").change(function () {
+        changeInputStringMantenedor("email", $("#usuario_email").val());
+    });
+
+    
+
+    $("#usuario_contacto").change(function () {
+        changeInputStringMantenedor("contacto", $("#usuario_contacto").val());
+    });
+
+
+
+    $(document).on('click', "#usuario_cliente_si", function () {
+        changeInputBooleanMantenedor("esCliente",true);
+    });
+
+
+    $(document).on('click', "#usuario_cliente_no", function () {
+        changeInputBooleanMantenedor("esCliente", false);
+    });
+
+
+    $("#usuario_idCiudad").change(function () {
+        var idCiudad = $("#usuario_idCiudad").val();
+        
+        $.ajax({
+            url: "/Usuario/ChangeIdCiudad",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad
+            },
+            error: function (detalle) {
+                
+            },
+            success: function (ciudad) {
+            }
+        });
+    });
+
+
+    function changeInputStringMantenedor(propiedad, valor) {
+        $.ajax({
+            url: "/Usuario/changeInputStringMantenedor",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+    function changeInputBooleanMantenedor(propiedad, valor) {
+        $.ajax({
+            url: "/Usuario/changeInputBooleanMantenedor",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+
+
+    $("#usuario_estado_si_mantenedor").click(function () {
+        var valCheck = 1;
+        changeInputIntMantenedor("Estado", valCheck);
+    });
+
+    $("#usuario_estado_no_mantenedor").click(function () {
+        var valCheck = 0;
+        changeInputIntMantenedor("Estado", valCheck);
+    });
+
+    function changeInputIntMantenedor(propiedad, valor) {
+        $.ajax({
+            url: "/Usuario/ChangeInputIntMantenedor",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
 
 });
 

@@ -639,5 +639,68 @@ namespace DataLayer
 
             return obj;
         }
+
+
+        public Usuario getUsuarioMantenimiento(Guid? idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_detalle_usuario_edit");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            DataTable dataTable = Execute(objCommand);
+            Usuario obj = new Usuario();
+            obj.sedeMP = new  Ciudad();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                obj.idUsuario = Converter.GetGuid(row, "id_usuario");               
+                obj.cargo = Converter.GetString(row, "cargo");
+                obj.contacto = Converter.GetString(row, "contacto");
+                obj.nombre = Converter.GetString(row, "nombre");
+                obj.Estado = Converter.GetInt(row, "estado");
+                obj.email = Converter.GetString(row, "email");
+                obj.password = Converter.GetString(row, "password");
+                obj.esCliente = Converter.GetBool(row, "es_cliente");
+                obj.sedeMP.idCiudad= Converter.GetGuid(row, "id_ciudad");
+                obj.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
+
+
+            }
+
+            return obj;
+        }
+
+        public Usuario insertUsuarioMantenedor(Usuario usuario)
+        {
+            var objCommand = GetSqlCommand("pi_usuario_mantenedor");
+            InputParameterAdd.Guid(objCommand, "id_usuario_modificacion", usuario.idUsuarioModificacion);
+            InputParameterAdd.Varchar(objCommand, "cargo", usuario.cargo);
+            InputParameterAdd.Varchar(objCommand, "contacto", usuario.contacto);
+            InputParameterAdd.Varchar(objCommand, "nombre", usuario.nombre);
+            InputParameterAdd.Int(objCommand, "estado", usuario.Estado);
+            InputParameterAdd.Bit(objCommand, "es_cliente", usuario.esCliente);
+            InputParameterAdd.Varchar(objCommand, "email", usuario.email);
+            InputParameterAdd.Varchar(objCommand, "pass", usuario.password);           
+            InputParameterAdd.Guid(objCommand, "id_ciudad", usuario.sedeMP.idCiudad);
+
+
+            ExecuteNonQuery(objCommand);
+            return usuario;
+        }
+
+        public Usuario updateUsuarioMantenedor(Usuario usuario)
+        {
+            var objCommand = GetSqlCommand("pu_usuario_mantenedor");
+            InputParameterAdd.Guid(objCommand, "id_usuario", usuario.idUsuario);
+            InputParameterAdd.Guid(objCommand, "id_usuario_modificacion", usuario.idUsuarioModificacion);
+            InputParameterAdd.Varchar(objCommand, "cargo", usuario.cargo);
+            InputParameterAdd.Varchar(objCommand, "contacto", usuario.contacto);
+            InputParameterAdd.Varchar(objCommand, "nombre", usuario.nombre);
+            InputParameterAdd.Int(objCommand, "estado", usuario.Estado);
+            InputParameterAdd.Bit(objCommand, "es_cliente", usuario.esCliente);
+            InputParameterAdd.Varchar(objCommand, "email", usuario.email);
+            InputParameterAdd.Varchar(objCommand, "pass", usuario.password);
+            InputParameterAdd.Guid(objCommand, "id_ciudad", usuario.sedeMP.idCiudad);
+            ExecuteNonQuery(objCommand);
+            return usuario;
+        }
+
     }
 }
