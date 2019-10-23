@@ -173,7 +173,17 @@ namespace DataLayer
 
             this.Commit();
         }
-        
+
+
+        public void DeleteRequerimiento(Requerimiento requerimiento)
+        {
+            this.BeginTransaction(IsolationLevel.ReadCommitted);
+            var objCommand = GetSqlCommand("CLIENTE.pd_requerimiento");
+            InputParameterAdd.Int(objCommand, "idRequerimiento", requerimiento.idRequerimiento);
+            ExecuteNonQuery(objCommand);
+            this.Commit();
+        }
+
 
         public void UpdateRequerimiento(Requerimiento requerimiento)
         {
@@ -326,6 +336,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idDireccionEntregaAlmacen", requerimiento.direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega);
             InputParameterAdd.Bit(objCommand, "excedioPresupuesto", requerimiento.excedioPresupuesto);
             InputParameterAdd.Decimal(objCommand, "topePresupuesto", requerimiento.topePresupuesto);
+            InputParameterAdd.Guid(objCommand, "idPeriodo", requerimiento.periodo.idPeriodoSolicitud);
             InputParameterAdd.Int(objCommand, "idRequerimiento", requerimiento.idRequerimiento);
             ExecuteNonQuery(objCommand);
 

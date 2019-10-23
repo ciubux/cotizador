@@ -124,7 +124,7 @@ namespace Model
         [Display(Name = "Observaciones Factura:")]
         public String observacionesFactura { get; set; }
 
-        [Display(Name = "Ciudad Entrega:")]
+        [Display(Name = "Ciudad:")]
         public Ubigeo ubigeoEntrega { get; set; }
 
 

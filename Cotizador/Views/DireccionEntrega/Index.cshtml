@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Búsqueda Direcciones Entrega";
+    ViewBag.Title = "Búsqueda Direcciones";
     Model.Cliente cliente = ViewBag.cliente;
     Model.DireccionEntrega direccionEntrega = new Model.DireccionEntrega();
 }
@@ -38,7 +38,7 @@
                 <th data-name="codigo" data-sortable="false">Código</th>
                 <th data-name="sede" data-visible="true">Sede MP</th>
                 <th data-name="ubigeo" data-sortable="false">Ubigeo</th>
-                <th data-name="direccionEntrega" data-sortable="false">Dirección Entrega</th>
+                <th data-name="direccionEntrega" data-sortable="false">Dirección</th>
                 <th data-name="contacto" data-sortable="false" data-breakpoints="xs">Nombre Contacto</th>
                 <th data-name="telefono" data-sortable="false">Teléfono Contacto</th>
                 <th data-name="codigoCliente" data-sortable="false">Código Cliente</th>
@@ -46,8 +46,8 @@
                 <th data-name="codigoMP" data-visible="false" data-breakpoints="xs">Código MP</th>
                 <th data-name="emailRecepcionFacturas" data-sortable="false" data-breakpoints="xs">Email Recepción Facturas</th>
                 <th data-name="direccionDomicilioLegal" data-sortable="false" data-breakpoints="xs">Dirección en Factura/Guía</th>
-                <th data-name="direccionAlmacen" data-sortable="false"  data-breakpoints="xs">Dirección Acopio</th>
-                <th data-name="idDireccionAlmacen" data-sortable="false" data-visible="false" data-breakpoints="xs">Direccion Almacen</th>
+                <th data-name="direccionAlmacen" data-sortable="false" data-breakpoints="xs">Dirección Entrega</th>
+                <th data-name="idDireccionAlmacen" data-sortable="false" data-visible="false" data-breakpoints="xs">Dirección Entrega</th>
 
             </tr>
         </thead>
@@ -258,7 +258,7 @@
                     </div>
                     <div class="col-sm-9">
                         @Html.CheckBoxFor(p => direccionEntrega.esDireccionAcopio)
-                        <span>La dirección de entrega también es la dirección de acopio</span>
+                        <span>La dirección también es la dirección de entrega</span>
                     </div>
                 </div>
 

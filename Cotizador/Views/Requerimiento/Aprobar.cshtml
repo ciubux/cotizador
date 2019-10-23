@@ -386,7 +386,7 @@
                     <th data-name="horarioEntrega" data-sortable="true" data-visible="false" data-breakpoints="xs">Horarios Entrega</th>
                     <!--<th data-name="fechaProgramacion" data-sortable="true" data-breakpoints="xs">Programado Para:</th>-->
 
-                    <th data-name="distrito" data-sortable="true" data-breakpoints="xs">Distrito Entrega</th>
+                    <th data-name="distrito" data-sortable="true" data-breakpoints="xs">Distrito</th>
 
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
                     <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
@@ -618,7 +618,7 @@
 
 
                     <fieldset>
-                        <legend id="divrequerimiento_direccionEntrega">Datos de Entrega:</legend>
+                        <legend id="divrequerimiento_direccionEntrega">Datos del Establecimiento:</legend>
 
                         <!--DIRECCION ENTREGA-->
                         <div class="row">
@@ -1019,7 +1019,7 @@
                     }
                     @if (requerimiento.usuario.tomaPedidos || requerimiento.usuario.apruebaPedidos)
                     {
-                        <button type="button" id="btnEliminarPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Eliminar</button>
+                        <button type="button" id="btnEliminarRequerimiento" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Eliminar</button>
                     }
                 </div>
 
@@ -1111,7 +1111,7 @@
                         <thead>
                             <tr>
                                 <th data-name="numero" data-sortable="false" data-breakpoints="xs">N°</th>
-                                <th data-name="puntoEntrega" data-sortable="false" data-breakpoints="xs">Punto de Entrega</th>
+                                <th data-name="puntoEntrega" data-sortable="false" data-breakpoints="xs">Dirección de Entrega</th>
                                 <th data-name="sku" data-sortable="false" data-breakpoints="xs">SKU</th>
                                 <th data-name="producto" data-sortable="false">Producto / Descripción</th>
                                 <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
@@ -1198,7 +1198,7 @@
 
                     <div class="row">
 
-                        <div class="col-sm-6 col-lg-4">
+                        <div class="col-sm-6 col-lg-4" hidden="hidden">
                             <!--Accion-->
                             <div class="form-group">
                                 <label for="accion" class="control-label col-xs-5">Nuevo Estado:</label>

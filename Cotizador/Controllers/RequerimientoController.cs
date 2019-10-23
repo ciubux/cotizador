@@ -1327,8 +1327,16 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             Requerimiento requerimiento = this.RequerimientoSession;
-            String idRequerimiento = this.Request.Params["idPeriodo"];
-            requerimiento.periodo.idPeriodoSolicitud = Guid.Parse(idRequerimiento);
+            String idPeriodo = this.Request.Params["idPeriodo"];
+            if (idPeriodo.Equals(String.Empty))
+            {
+                requerimiento.periodo.idPeriodoSolicitud = Guid.Empty;
+            }
+            else {
+                requerimiento.periodo.idPeriodoSolicitud = Guid.Parse(idPeriodo);
+            }
+
+            
 
             this.RequerimientoSession = requerimiento;
         }
@@ -1515,6 +1523,19 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+
+        public void Delete()
+        {
+
+            //RUC_MP
+            UsuarioBL usuarioBL = new UsuarioBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Requerimiento requerimiento = (Requerimiento)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_VER];
+            requerimiento.usuario = usuario;
+            RequerimientoBL requerimientoBL = new RequerimientoBL();
+            requerimientoBL.DeleteRequerimiento(requerimiento);
+
+        }
 
         public String Update()
         {

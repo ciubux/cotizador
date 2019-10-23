@@ -9,11 +9,11 @@ namespace Model
     public class DireccionEntrega : Auditoria
     {
         public Guid idDireccionEntrega { get; set; }
-        [Display(Name = "Dirección Entrega:")]
+        [Display(Name = "Dirección:")]
         public String descripcion { get; set; }
-        [Display(Name = "Contacto Entrega:")]
+        [Display(Name = "Contacto:")]
         public String contacto { get; set; }
-        [Display(Name = "Teléfono Contacto Entrega:")]
+        [Display(Name = "Teléfono Contacto:")]
         public String telefono { get; set; }
         public Ubigeo ubigeo { get; set; }
         [Display(Name = "Código Cliente:")]
@@ -46,7 +46,7 @@ namespace Model
 
         public Decimal limitePresupuesto { get; set; }
 
-        [Display(Name = "Dirección Acopio:")]
+        [Display(Name = "Dirección Entrega:")]
         public Boolean esDireccionAcopio { get; set; }
 
     }

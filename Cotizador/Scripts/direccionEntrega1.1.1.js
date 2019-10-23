@@ -5,7 +5,7 @@ jQuery(function ($) {
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
-    var SELECCIONE_DIRECCION_ACOPIO = "Seleccione dirección de acopio";
+    var SELECCIONE_DIRECCION_ACOPIO = "Seleccione dirección de entrega";
     
  
     cargarDireccionesEntrega();
@@ -79,14 +79,14 @@ jQuery(function ($) {
                     $editor.find('#idDireccionEntrega').val("");
                     $modal.removeData('row');
                     $editor[0].reset();
-                    $editorTitle.text('Agregando Dirección de Entrega');
+                    $editorTitle.text('Agregando Dirección');
                     $modal.modal('show');
 
 
                 },
                 editRow: function (row) {
                     $('body').loadingModal({
-                        text: 'Cargando Dirección de Entrega'
+                        text: 'Cargando Dirección'
                     });
 
                     var values = row.val();

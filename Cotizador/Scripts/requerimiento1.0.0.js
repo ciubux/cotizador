@@ -3009,8 +3009,9 @@ jQuery(function ($) {
     });
 
     $("#btnEliminarRequerimiento").click(function () {
-        $("#modalAprobacionTitle").html(TITULO_ELIMINAR);
-        $("#labelNuevoEstado").html(ESTADO_ELIMINADO_STR);
+
+        $("#modalAprobacionTitle").html("ELIMINAR REQUERIMIENTO");
+        $("#labelNuevoEstado").html("Requerimiento Eliminado");
         $("#estadoId").val(ESTADO_ELIMINADO);
         limpiarComentario();
     });
@@ -3078,6 +3079,9 @@ jQuery(function ($) {
 
     $("#btnAceptarCambioEstado").click(function () {
 
+        /*
+
+
         var estado = $("#estadoId").val();
         var comentarioEstado = $("#comentarioEstado").val();
 
@@ -3091,21 +3095,16 @@ jQuery(function ($) {
         }
         var codigo = $("#verNumero").html();
         var idRequerimiento = $("#idRequerimiento").val();        
-
+        */
         $.ajax({
-            url: "/Requerimiento/updateEstadoRequerimiento",
-            data: {
-                idRequerimiento: idRequerimiento,
-                estado: estado,
-                observacion: comentarioEstado
-            },
+            url: "/Requerimiento/Delete",
             type: 'POST',
             error: function () {
-                alert("Ocurrió un problema al intentar cambiar el estado del requerimiento.")
+                alert("Ocurrió un problema al intentar eliminar el requerimiento.")
                 $("#btnCancelarCambioEstado").click();
             },
             success: function () {
-                alert("El estado del requerimiento número: " + codigo + " se cambió correctamente.");
+                alert("El requerimiento número se eliminó correctamente.");
                 location.reload();
             }
         });

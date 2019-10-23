@@ -108,7 +108,16 @@ namespace BusinessLayer
             }
         }
 
-      
+        public void DeleteRequerimiento(Requerimiento requerimiento)
+        {
+            using (var dal = new RequerimientoDAL())
+            {
+               
+                dal.DeleteRequerimiento(requerimiento);
+            }
+        }
+
+
         public List<Requerimiento> GetRequerimientos(Requerimiento requerimiento)
         {
             List<Requerimiento> requerimientoList = null;
