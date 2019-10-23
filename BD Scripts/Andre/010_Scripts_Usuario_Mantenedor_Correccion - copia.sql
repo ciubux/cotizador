@@ -1,15 +1,5 @@
-/******** CREATE  ps_detalle_usuario_edit - Obtiene los datos de un usuario por su id *********/
-CREATE procedure ps_detalle_usuario_edit
-(@idUsuario uniqueidentifier)
-as begin 
-select nombre,cargo,email,contacto,es_cliente,estado,id_usuario,id_ciudad,password,maximo_porcentaje_descuento_aprobacion 
-from usuario where id_usuario=@idUsuario
-end 
-
-
-/********************** CREATE pi_usuario_mantenedor - Inserta un usuario  *********************************/
-
-create procedure pi_usuario_mantenedor
+/********************** ALTER pi_usuario_mantenedor - Inserta un usuario  *********************************/
+alter procedure pi_usuario_mantenedor
 (
 @id_usuario_modificacion uniqueidentifier,
 @cargo varchar(50),
@@ -56,7 +46,7 @@ insert into usuario
 					@max_por_des_apro)
 end 
 
-/********************** CREATE pu_usuario_mantenedor - Actualiza un usuario  *********************************/
+/********************** ALTER pu_usuario_mantenedor - Actualiza un usuario  *********************************/
 
 alter procedure pu_usuario_mantenedor
 (

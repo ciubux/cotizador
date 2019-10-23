@@ -603,13 +603,13 @@ jQuery(function ($) {
 
         
 
-        if ($("#usuario_nombre").val().length < 4) {
+        if ($("#usuario_nombre_mantenedor").val().length < 4) {
             $.alert({
                 title: "Nombre Inválido",
                 type: 'orange',
                 content: 'Debe ingresar un nombre válido.',
                 buttons: {
-                    OK: function () { $('#usuario_nombre').focus(); }
+                    OK: function () { $('#usuario_nombre_mantenedor').focus(); }
                 }
             });
             return false;
@@ -627,8 +627,8 @@ jQuery(function ($) {
             });
             return false;
         }
-       
-        if (($("#usuario_password").val().length < 5 && $("#idUsuarioMantenimiento").val() == '00000000-0000-0000-0000-000000000000') || ($("#usuario_password").val().length < 5 && $("#idUsuarioMantenimiento").val() != '00000000-0000-0000-0000-000000000000') ) {
+        
+        if (($("#usuario_password").val().length < 5 && $("#idUsuarioMantenimiento").val() == '00000000-0000-0000-0000-000000000000') || ($("#usuario_password").val().length > 0 && $("#usuario_password").val().length < 5  && $("#idUsuarioMantenimiento").val() != '00000000-0000-0000-0000-000000000000') ) {
             $.alert({
                 title: "Contraseña Inválida",
                 type: 'orange',
@@ -664,8 +664,8 @@ jQuery(function ($) {
         changeInputStringMantenedor("cargo", $("#usuario_cargo").val());
     });
 
-    $("#usuario_nombre").change(function () {
-        changeInputStringMantenedor("nombre", $("#usuario_nombre").val());
+    $("#usuario_nombre_mantenedor").change(function () {
+        changeInputStringMantenedor("nombre", $("#usuario_nombre_mantenedor").val());
     });
 
     $("#usuario_email").change(function () {
@@ -733,8 +733,22 @@ jQuery(function ($) {
         });
     }
 
+    function ChangeInputDecimalMantenedor(propiedad, valor) {
+        $.ajax({
+            url: "/Usuario/ChangeInputDecimalMantenedor",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
 
-
+    $("#usuario_maximoPorcentajeDescuentoAprobacion").change(function () {
+        ChangeInputDecimalMantenedor("maximoPorcentajeDescuentoAprobacion", $("#usuario_maximoPorcentajeDescuentoAprobacion").val());
+    });
+    
     $("#usuario_estado_si_mantenedor").click(function () {
         var valCheck = 1;
         changeInputIntMantenedor("Estado", valCheck);

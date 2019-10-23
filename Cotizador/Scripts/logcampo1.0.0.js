@@ -104,26 +104,20 @@ jQuery(function ($) {
                     {
                         Programado = '<span class="text-success"><b>Si</b></span>';
                     }
-                    if (list[i].esFuncional == null) {
-                        list[i].esFuncional =0;
-                    }                     
-                    if (list[i].esFuncional == 0)
+                                        
+                    if (list[i].esFuncional == 0 || list[i].esFuncional == null) 
                     {
                         Programado = '<span class="text-danger"><b>No</b></span>';
                     }  
 
-                    
 
                     var ItemRow = '<tr data-expanded="true" id="contenidoTabla">' +
-
 
                         '<td class="nombreCampo">' + list[i].nombre + '</td>' +
                         '<td> <div class="radio radio-inline"><label class="radio-label">' + label + '</label></div><div class="radio radio-inline"><label class="radio-label">' + label2 + '</label></div> </td>' +
                         '<td> <div class="radio radio-inline"><label class="radio-label">' + label3 + '</label></div><div class="radio radio-inline"><label class="radio-label">' + label4 + '</label></div> </td>' +
                         '<td> '+ Programado +'</td>'+
                         '</tr>';
-
-
 
                     $("#tableCatalogo").append(ItemRow);
 

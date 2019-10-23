@@ -679,6 +679,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "email", usuario.email);
             InputParameterAdd.Varchar(objCommand, "pass", usuario.password);           
             InputParameterAdd.Guid(objCommand, "id_ciudad", usuario.sedeMP.idCiudad);
+            InputParameterAdd.Decimal(objCommand, "max_por_des_apro", usuario.maximoPorcentajeDescuentoAprobacion);
 
 
             ExecuteNonQuery(objCommand);
@@ -698,6 +699,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "email", usuario.email);
             InputParameterAdd.Varchar(objCommand, "pass", usuario.password);
             InputParameterAdd.Guid(objCommand, "id_ciudad", usuario.sedeMP.idCiudad);
+            InputParameterAdd.Decimal(objCommand, "max_por_des_apro", usuario.maximoPorcentajeDescuentoAprobacion);
             ExecuteNonQuery(objCommand);
             return usuario;
         }
