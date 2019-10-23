@@ -22,6 +22,14 @@ namespace BusinessLayer
             }
         }
 
+        public List<DireccionEntrega> getDireccionesAcopio(int idClienteSunat)
+        {
+            using (var dal = new DireccionEntregaDAL())
+            {
+                return dal.getDireccionesAcopio(idClienteSunat);
+            }
+        }
+
         public DireccionEntrega getDireccionEntregaPorCodigo(int codigo)
         {
             using (var dal = new DireccionEntregaDAL())

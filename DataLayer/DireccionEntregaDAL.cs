@@ -19,14 +19,14 @@ namespace DataLayer
 
         public List<DireccionEntrega> getDireccionesEntrega(int idClienteSunat)
         {
-            var objCommand = GetSqlCommand("CLIENTE.ps_direcciones_entrega");
+            var objCommand = GetSqlCommand("CLIENTE.ps_direccionesEntrega");
 
-            InputParameterAdd.Int(objCommand, "idClienteSunat", idClienteSunat); 
+            InputParameterAdd.Int(objCommand, "idClienteSunat", idClienteSunat);
+            DataTable dataTableDireccionEntrega = Execute(objCommand); 
 
-            DataTable dataTable = Execute(objCommand);
             List<DireccionEntrega> lista = new List<DireccionEntrega>();
 
-            foreach (DataRow row in dataTable.Rows)
+            foreach (DataRow row in dataTableDireccionEntrega.Rows)
             {
                 DireccionEntrega obj = new DireccionEntrega
                 {
@@ -45,6 +45,59 @@ namespace DataLayer
                     direccionDomicilioLegal = Converter.GetString(row, "direccionDomicilioLegal"),
                     codigo = Converter.GetInt(row, "codigo"),
                     emailRecepcionFacturas  = Converter.GetString(row, "email_recepcion_facturas"),
+                };
+                obj.cliente = new Cliente
+                {
+                    idCliente = Converter.GetGuid(row, "id_cliente")
+                };
+                obj.cliente.ciudad = new Ciudad
+                {
+                    idCiudad = Converter.GetGuid(row, "id_ciudad"),
+                    sede = Converter.GetString(row, "sede"),
+                };
+                obj.domicilioLegal = new DomicilioLegal();
+                obj.domicilioLegal.idDomicilioLegal = Converter.GetInt(row, "id_domicilio_legal");
+                obj.domicilioLegal.direccion = Converter.GetString(row, "direccionDomicilioLegal");
+
+                obj.direccionEntregaAlmacen = new DireccionEntrega();
+                obj.direccionEntregaAlmacen.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega_almacen");
+                obj.direccionEntregaAlmacen.descripcion = Converter.GetString(row, "descripcion_almacen");
+
+                lista.Add(obj);
+            }
+            return lista;
+        }
+
+        public List<DireccionEntrega> getDireccionesAcopio(int idClienteSunat)
+        {
+            var objCommand = GetSqlCommand("CLIENTE.ps_direccionesAcopio");
+
+            InputParameterAdd.Int(objCommand, "idClienteSunat", idClienteSunat);
+            DataTable dataTableDireccionEntrega = Execute(objCommand);
+
+            List<DireccionEntrega> lista = new List<DireccionEntrega>();
+
+            foreach (DataRow row in dataTableDireccionEntrega.Rows)
+            {
+                DireccionEntrega obj = new DireccionEntrega
+                {
+                    idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega"),
+                    descripcion = Converter.GetString(row, "descripcion"),
+                    contacto = Converter.GetString(row, "contacto"),
+                    telefono = Converter.GetString(row, "telefono"),
+                    ubigeo = new Ubigeo
+                    {
+                        Id = Converter.GetString(row, "ubigeo"),
+                        Departamento = Converter.GetString(row, "departamento"),
+                        Provincia = Converter.GetString(row, "provincia"),
+                        Distrito = Converter.GetString(row, "distrito")
+                    },
+                    codigoCliente = Converter.GetString(row, "codigo_cliente"),
+                    observaciones = Converter.GetString(row, "observaciones"),
+                    nombre = Converter.GetString(row, "nombre"),
+                    direccionDomicilioLegal = Converter.GetString(row, "direccionDomicilioLegal"),
+                    codigo = Converter.GetInt(row, "codigo"),
+                    emailRecepcionFacturas = Converter.GetString(row, "email_recepcion_facturas"),
                 };
                 obj.cliente = new Cliente
                 {
@@ -118,7 +171,7 @@ namespace DataLayer
 
         public void deleteDireccionEntrega(DireccionEntrega direccionEntrega)
         {
-            var objCommand = GetSqlCommand("pd_direccionEntrega");
+            var objCommand = GetSqlCommand("CLIENTE.pd_direccionEntrega");
             InputParameterAdd.Guid(objCommand, "idDireccionEntrega", direccionEntrega.idDireccionEntrega);
             InputParameterAdd.Guid(objCommand, "idUsuario", direccionEntrega.usuario.idUsuario);
             ExecuteNonQuery(objCommand);
@@ -137,6 +190,9 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "codigoCliente", direccionEntrega.codigoCliente);
             InputParameterAdd.Varchar(objCommand, "nombre", direccionEntrega.nombre);
             InputParameterAdd.Int(objCommand, "idDomicilioLegal", direccionEntrega.domicilioLegal.idDomicilioLegal);
+            InputParameterAdd.Guid(objCommand, "idCliente", direccionEntrega.cliente.idCliente);
+            InputParameterAdd.Guid(objCommand, "idDireccionEntregaAlmacen", direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega);
+            InputParameterAdd.Bit(objCommand, "esDireccionAcopio", direccionEntrega.esDireccionAcopio);
             ExecuteNonQuery(objCommand);
         }
 
@@ -153,6 +209,10 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "nombre", direccionEntrega.nombre);
             InputParameterAdd.Int(objCommand, "idDomicilioLegal", direccionEntrega.domicilioLegal.idDomicilioLegal);
             InputParameterAdd.Guid(objCommand, "idCliente", direccionEntrega.cliente.idCliente);
+
+
+            InputParameterAdd.Guid(objCommand, "idDireccionEntregaAlmacen", direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega);
+            InputParameterAdd.Bit(objCommand, "esDireccionAcopio", direccionEntrega.esDireccionAcopio);
             OutputParameterAdd.UniqueIdentifier(objCommand, "idDireccionEntrega");
             OutputParameterAdd.Int(objCommand, "codigo");
             ExecuteNonQuery(objCommand);

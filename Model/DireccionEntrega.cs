@@ -46,5 +46,8 @@ namespace Model
 
         public Decimal limitePresupuesto { get; set; }
 
+        [Display(Name = "Dirección Acopio:")]
+        public Boolean esDireccionAcopio { get; set; }
+
     }
 }

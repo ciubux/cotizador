@@ -172,7 +172,8 @@ namespace DataLayer
 
                 Ciudad ci = new Ciudad();
                 ci.idCiudad = Converter.GetGuid(row, "id_ciudad");
-
+                ci.sede = Converter.GetString(row, "sede");
+                cliente.ciudad = ci;
                 clienteList.Add(cliente);
             }
             return clienteList;
@@ -257,6 +258,7 @@ namespace DataLayer
                 cliente.ciudad = new Ciudad();
                 cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 cliente.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
+                cliente.ciudad.sede = Converter.GetString(row, "sede");
 
                 /*Plazo Crédito*/
                 cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");

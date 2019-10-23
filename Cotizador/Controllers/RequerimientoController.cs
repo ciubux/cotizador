@@ -1327,8 +1327,8 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             Requerimiento requerimiento = this.RequerimientoSession;
-
-            requerimiento.periodo.idPeriodoSolicitud = Guid.Parse(this.Request.Params["idPeriodo"]);
+            String idRequerimiento = this.Request.Params["idPeriodo"];
+            requerimiento.periodo.idPeriodoSolicitud = Guid.Parse(idRequerimiento);
 
             this.RequerimientoSession = requerimiento;
         }

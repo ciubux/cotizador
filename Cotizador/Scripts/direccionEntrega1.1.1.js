@@ -5,9 +5,27 @@ jQuery(function ($) {
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
+    var SELECCIONE_DIRECCION_ACOPIO = "Seleccione dirección de acopio";
     
  
     cargarDireccionesEntrega();
+
+    $("#direccionEntrega_esDireccionAcopio").change(
+        function () {
+            if ($('#direccionEntrega_esDireccionAcopio').is(':checked')) {
+             //   $('#idDireccionAlmacen').text($("#direccionEntrega_descripcion").text());
+                $("#idDireccionAlmacen").attr('disabled', 'disabled');
+                $("#idDireccionAlmacen").val(GUID_EMPTY)
+                $("#idDireccionAlmacen").find("option:selected").text($('#direccionEntrega_descripcion').val());
+                //$('#idDireccionAlmacen option:contains("Newest")').text('TEMPEST');
+            }
+            else {
+                $("#idDireccionAlmacen").val(GUID_EMPTY)
+                $("#idDireccionAlmacen").find("option:selected").text(SELECCIONE_DIRECCION_ACOPIO);
+                $("#idDireccionAlmacen").removeAttr('disabled');
+            }
+        }
+    )
 
     var columns = new Array(
         { name: "idDireccionEntrega", title: "idDireccionEntrega" },
@@ -54,15 +72,21 @@ jQuery(function ($) {
             editing: {
                 enabled: true,
                 addRow: function (row) {
+
+                    $("#idDireccionAlmacen").removeAttr('disabled');
+                    $("#direccionEntrega_esDireccionAcopio").prop('checked', false);
+
                     $editor.find('#idDireccionEntrega').val("");
                     $modal.removeData('row');
                     $editor[0].reset();
-                    $editorTitle.text('Agregando Dirección Entrega');
+                    $editorTitle.text('Agregando Dirección de Entrega');
                     $modal.modal('show');
+
+
                 },
                 editRow: function (row) {
                     $('body').loadingModal({
-                        text: 'Cargando Dirección Entrega'
+                        text: 'Cargando Dirección de Entrega'
                     });
 
                     var values = row.val();
@@ -70,6 +94,13 @@ jQuery(function ($) {
                     $editor.find('#direccionEntrega_codigo').val(values.codigo.trim());
                     //$editor.find('#idCliente').val(values.idCliente.trim());
                     //$editor.find('#direccionEntrega_cliente_ciudad_sede').val(values.cliente.ciudad.sede.trim());  
+
+
+                    $("#idDireccionAlmacen").removeAttr('disabled');
+                    $("#direccionEntrega_esDireccionAcopio").prop('checked', false);
+
+
+                    $editor.find('#idDireccionAlmacen').val(values.idDireccionAlmacen.trim());
 
 
                     $editor.find('#idCiudad').val(values.idCiudad.trim());
@@ -92,7 +123,7 @@ jQuery(function ($) {
                     $editor.find('#direccionEntrega_nombre').val(values.nombre.trim());
                     $editor.find('#direccionEntrega_idDomicilioLegal').val(values.idDomicilioLegal.trim());
                     $modal.data('row', row);
-                    $editorTitle.text('Editando Dirección Entrega: ' + values.direccionEntrega);
+                    $editorTitle.text('Editando Dirección de Entrega: ' + values.direccionEntrega);
                     $modal.modal('show');
                 },
                 deleteRow: function (row) {
@@ -111,7 +142,7 @@ jQuery(function ($) {
                                     var values = row.val();
                                     var idDireccionEntrega = values.idDireccionEntrega.trim();
                                     $('body').loadingModal({
-                                        text: 'Creando Dirección Entrega'
+                                        text: 'Eliminando Dirección de Entrega'
                                     });
 
                                     $.ajax({
@@ -134,6 +165,7 @@ jQuery(function ($) {
                                                     OK: function () { }
                                                 }
                                             });
+                                            $('body').loadingModal('hide')
                                         }
                                     });
                                 }
@@ -179,10 +211,15 @@ jQuery(function ($) {
 
       //  sede = sede.split("(")[1].substr(0, 3);
 
-       
+        var idDireccionAlmacen = $editor.find('#idDireccionAlmacen').val();
+        var direccionAlmacen = $('#idDireccionAlmacen option:selected').text();
+
         var idDireccionEntrega = $editor.find('#idDireccionEntrega').val();
+
+        var esDireccionAcopio = $editor.find('#direccionEntrega_esDireccionAcopio').prop('checked');
+     
      //   alert("asa1")
-   //     var idCiudad = $editor.find('#idCiudad').val();
+        var idCiudad = $editor.find('#idCiudad').val();
      //   alert("asa2")
         var contacto = $editor.find('#direccionEntrega_contacto').val();
      //   alert("asa3")
@@ -233,6 +270,19 @@ jQuery(function ($) {
             return;
         }
 
+        if (idDireccionAlmacen == GUID_EMPTY && !$('#direccionEntrega_esDireccionAcopio').is(':checked')) {
+            $.alert({
+                title: "Validación",
+                type: 'orange',
+                content: "Debe seleccionar la dirección de Acopio",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#idDireccionEntrega").focus();
+            return;
+        }
+
         if (idDomicilioLegal == null || idDomicilioLegal == "") {
             $.alert({
                 title: "Validación",
@@ -265,16 +315,21 @@ jQuery(function ($) {
                 codigoCliente: codigoCliente,
                 nombre: nombre,
                 emailRecepcionFacturas: emailRecepcionFacturas,
-                direccionDomicilioLegal: domicilioLegal
+                direccionDomicilioLegal: domicilioLegal,
+                direccionAlmacen: direccionAlmacen,
+                idDireccionAlmacen: idDireccionAlmacen,
+                esDireccionAcopio: esDireccionAcopio
+                
             };
 
         if (row instanceof FooTable.Row) {
             $('body').loadingModal({
-                text: 'Modificando Dirección Entrega'
+                text: 'Modificando Dirección de Entrega'
             });
             $.ajax({
                 url: "/DireccionEntrega/Update",
                 type: 'POST',
+                dataType: 'JSON',
                 data: {
                     idDireccionEntrega: idDireccionEntrega,
                     ubigeo: codigoUbigeo,
@@ -287,23 +342,36 @@ jQuery(function ($) {
                     idDomicilioLegal: idDomicilioLegal,
                     departamento: departamento,
                     provincia: provincia,
-                    distrito, distrito
+                    distrito: distrito,
+                    direccionAlmacen: direccionAlmacen,
+                    idDireccionAlmacen: idDireccionAlmacen,
+                    esDireccionAcopio: esDireccionAcopio
                 },
                 error: function (detalle) {
                     $('body').loadingModal('hide')
                     mostrarMensajeErrorProceso(detalle.responseText);
                 },
-                success: function () {
-                    values.sede = 'MPL'
+                success: function (direccion) {
+                    values.sede = direccion.cliente.ciudad.sede
                     row.val(values);
-
                     $modal.modal('hide');
+                    $('body').loadingModal('hide')
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: "Se actualizó la dirección correctamente.",
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+
+
                 }
             });
 
         } else {
             $('body').loadingModal({
-                text: 'Creando Dirección Entrega'
+                text: 'Creando Dirección de Entrega'
             });
             $.ajax({
                 url: "/DireccionEntrega/Create",
@@ -320,7 +388,10 @@ jQuery(function ($) {
                     idDomicilioLegal: idDomicilioLegal,
                     departamento: departamento,
                     provincia: provincia,
-                    distrito, distrito
+                    distrito: distrito,
+                    direccionAlmacen: direccionAlmacen,
+                    idDireccionAlmacen: idDireccionAlmacen,
+                    esDireccionAcopio: esDireccionAcopio
                 },
                 error: function (detalle) {
                     $('body').loadingModal('hide')
@@ -330,8 +401,18 @@ jQuery(function ($) {
                     values.id = uid++;
                     values.idDireccionEntrega = direccion.idDireccionEntrega;
                     values.codigo = direccion.codigo;
+                    values.sede = direccion.cliente.ciudad.sede
                     ft.rows.add(values);
                     $modal.modal('hide');
+                    $('body').loadingModal('hide')
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: "Se creó la dirección correctamente.",
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
                 }
             });
 
@@ -690,33 +771,7 @@ jQuery(function ($) {
      * ################################ INICIO CONTROLES DE CLIENTE
      */
 
-    function cargarChosenCliente() {
-
-        $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
-                alert("Debe seleccionar la sede MP previamente.");
-                $("#idCliente").trigger('chosen:close');
-                $("#idCiudad").focus();
-                return false;
-            }
-        });        
-
-        $("#idCliente").ajaxChosen({
-            dataType: "json",
-            type: "GET",
-            minTermLength: 5,
-            afterTypeDelay: 300,
-            cache: false,
-            url: "/Cliente/SearchClientes"
-        }, {
-                loadingImg: "Content/chosen/images/loading.gif"
-            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
-
-        //verificarSiExisteCliente();
-    }
-
-
-
+   
 
 
     function toggleControlesUbigeo() {
@@ -1063,71 +1118,7 @@ jQuery(function ($) {
     });
 
     
-
-    function crearCliente() {
-        if (!validacionDatosCliente())
-            return false;   
-        $('body').loadingModal({
-            text: 'Creando Cliente...'
-        });
-        $.ajax({
-            url: "/Cliente/Create",
-            type: 'POST',
-            dataType: 'JSON',
-            error: function (detalle) {
-                $('body').loadingModal('hide')
-                mostrarMensajeErrorProceso(detalle.responseText);
-            },
-            success: function (resultado) {
-                $('body').loadingModal('hide');
-                $.alert({
-                    title: TITLE_EXITO,
-                    content: 'El cliente se creó correctamente.',
-                    type: 'green',
-                    buttons: {
-                        OK: function () {
-                            window.location = '/Cliente/Index';
-                        }
-                    }
-                });
-            }
-        });
-
-    }
-
-    function editarCliente() {
-
-        if (!validacionDatosCliente())
-            return false;       
-
     
-        $('body').loadingModal({
-            text: 'Editando Cliente...'
-        });
-        $.ajax({
-            url: "/Cliente/Update",
-            type: 'POST',
-            dataType: 'JSON',
-            error: function (detalle) {
-                $('body').loadingModal('hide')
-                mostrarMensajeErrorProceso(detalle.responseText);
-            },
-            success: function (resultado) {
-                $('body').loadingModal('hide');
-
-                $.alert({
-                    title: TITLE_EXITO,
-                    content: 'El cliente se editó correctamente.',
-                    type: 'green',
-                    buttons: {
-                        OK: function () {
-                            window.location = '/Cliente/Index';
-                        }
-                    }
-                });
-            }
-        });
-    }
 
     function changeInputInt(propiedad, valor) {
         $.ajax({
@@ -2045,35 +2036,6 @@ jQuery(function ($) {
 
 
 
-    $(document).on('click', "a.verMas", function () {
-        var idCotizacion = event.target.getAttribute("class").split(" ")[0];
-        divCorto = document.getElementById(idCotizacion + "corto");
-        divLargo = document.getElementById(idCotizacion + "largo");
-        divVerMas = document.getElementById(idCotizacion + "verMas");
-        divVerMenos = document.getElementById(idCotizacion + "verMenos");
-
-        divCorto.style.display = 'none';
-        divLargo.style.display = 'block';
-
-        divVerMas.style.display = 'none';
-        divVerMenos.style.display = 'block';
-    });
-
-    $(document).on('click', "a.verMenos", function () {
-        var idCotizacion = event.target.getAttribute("class").split(" ")[0];
-        divCorto = document.getElementById(idCotizacion + "corto");
-        divLargo = document.getElementById(idCotizacion + "largo");
-        divVerMas = document.getElementById(idCotizacion + "verMas");
-        divVerMenos = document.getElementById(idCotizacion + "verMenos");
-
-        divCorto.style.display = 'block';
-        divLargo.style.display = 'none';
-
-        divVerMas.style.display = 'block';
-        divVerMenos.style.display = 'none';
-    });
-
-
     /*VENDEDORES*/
 
 
@@ -2097,203 +2059,13 @@ jQuery(function ($) {
         }*/
     });
 
-
-    $("#modalVerCliente").on('change', ".chkCanasta", function () {
-        var idProducto = $(this).attr("idProducto");
-       
-        if ($(this).is(":checked")) {
-            $.ajax({
-                url: "/Cliente/AgregarProductoACanasta",
-                type: 'POST',
-                dataType: 'JSON',
-                data: {
-                    idProducto: idProducto,
-                    idCliente: idClienteView
-                },
-                success: function (resultado) {
-                    if (resultado.success == 1) {
-                        $.alert({
-                            title: "Operación exitosa",
-                            type: 'green',
-                            content: resultado.message,
-                            buttons: {
-                                OK: function () { }
-                            }
-                        });
-
-                    }
-                    else {
-                        $.alert({
-                            title: "Ocurrió un error",
-                            type: 'red',
-                            content: resultado.message,
-                            buttons: {
-                                OK: function () { }
-                            }
-                        });
-                    }
-                }
-            });
-        } else {
-            $.ajax({
-                url: "/Cliente/RetirarProductoDeCanasta",
-                type: 'POST',
-                dataType: 'JSON',
-                data: {
-                    idProducto: idProducto,
-                    idCliente: idClienteView
-                },
-                success: function (resultado) {
-                    if (resultado.success == 1) {
-                        $.alert({
-                            title: "Operación exitosa",
-                            type: 'green',
-                            content: resultado.message,
-                            buttons: {
-                                OK: function () { }
-                            }
-                        });
-
-                        if ($("#chkSoloCanasta").is(":checked")) {
-                            $("#tableListaPrecios tbody tr").hide();
-                            $(".chkCanasta:checked").closest("tr").show();
-                        }
-                    }
-                    else {
-                        $.alert({
-                            title: "Ocurrió un error",
-                            type: 'red',
-                            content: resultado.message,
-                            buttons: {
-                                OK: function () { }
-                            }
-                        });
-                    }
-                }
-            });
-        }
-    });
+    
 
     
 
+  
 
-
-     /*CARGA Y DESCARGA DE ARCHIVOS*/
-
-    /*
-    $('input[name=filePedidos]').change(function (e) {
-        //$('#nombreArchivos').val(e.currentTarget.files);
-        var numFiles = e.currentTarget.files.length;
-        var nombreArchivos = "";
-        for (i = 0; i < numFiles; i++) {
-            var fileFound = 0;
-            $("#nombreArchivos > li").each(function (index) {
-
-                if ($(this).find("a.descargar")[0].text == e.currentTarget.files[i].name) {
-                    alert('El archivo "' + e.currentTarget.files[i].name + '" ya se encuentra agregado.');
-                    fileFound = 1;
-                }
-            });
-
-            if (fileFound == 0) {
-
-                var liHTML = '<a href="javascript:mostrar();" class="descargar">' + e.currentTarget.files[i].name + '</a>' +
-                    '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + e.currentTarget.files[i].name + '" class="btnDeleteArchivo" /></a>';
-
-                $('#nombreArchivos').append($('<li />').html(liHTML));
-
-
-                ///  $('<li />').text(e.currentTarget.files[i].name).appendTo($('#nombreArchivos'));
-            }
-
-        }
-    });*/
-
-    $("#cliente_sku").change(function () {
-        changeInputString("sku", $("#cliente_sku").val())
-    });
-
-
-    $('input:file[multiple]').change(function (e) {       
-
-        cargarArchivosAdjuntos(e.currentTarget.files);
-
-        var data = new FormData($('#formularioConArchivos')[0]);
-
-        $.ajax({
-            url: "/Cliente/ChangeFiles",
-            type: 'POST',
-            enctype: 'multipart/form-data',
-            contentType: false,
-            processData: false,
-            data: data,
-            error: function (detalle) { },
-            success: function (resultado) { }
-        });
-
-
-    });
-
-
-
-    $(document).on('click', ".btnDeleteArchivo", function () {
-
-        var nombreArchivo = event.target.id;
-
-
-
-
-        //$("#btnDeleteArchivo").click(function () {
-        $("#files").val("");
-        $("#nombreArchivos > li").remove().end();
-        $.ajax({
-            url: "/Cliente/DescartarArchivos",
-            type: 'POST',
-            dataType: 'JSON',
-            data: { nombreArchivo: nombreArchivo },
-            error: function (detalle) { },
-            success: function (pedidoAdjuntoList) {
-
-                $("#nombreArchivos > li").remove().end();
-
-                for (var i = 0; i < pedidoAdjuntoList.length; i++) {
-
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedidoAdjuntoList[i].nombre + '</a>' +
-                        '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + pedidoAdjuntoList[i].nombre + '" class="btnDeleteArchivo" /></a>';
-
-                    $('#nombreArchivos').append($('<li />').html(liHTML));
-                    //      .appendTo($('#nombreArchivos'));
-
-                }
-
-
-            }
-        });
-    });
-
-    $(document).on('click', "a.descargar", function () {
-
-        //var arrrayClass = event.target.getAttribute("class").split(" ");
-        var nombreArchivo = event.target.innerHTML;
-        //var numeroPedido = arrrayClass[1];
-
-        $.ajax({
-            url: "/Cliente/Descargar",
-            type: 'POST',
-            //  enctype: 'multipart/form-data',
-            dataType: 'JSON',
-            //  contentType: 'multipart/form-data',
-            data: { nombreArchivo: nombreArchivo },
-            error: function (detalle) {
-                alert(detalle);
-            },
-            success: function (pedidoAdjunto) {
-                var sampleArr = base64ToArrayBuffer(pedidoAdjunto.adjunto);
-                saveByteArray(nombreArchivo, sampleArr);
-            }
-        });
-    });
-
+    var direccionAcopioList;
 
 
     function cargarDireccionesEntrega() {
@@ -2310,11 +2082,33 @@ jQuery(function ($) {
                 /**
                  * DIRECCIONES
                  */
+
+                direccionAcopioList = result.direccionAcopioList;
+                $("#idDireccionAlmacen").find('option')
+                    .remove()
+                    .end()
+                    ;
+
+                $('#idDireccionAlmacen').append($('<option>', {
+                    value: GUID_EMPTY,
+                    text: SELECCIONE_DIRECCION_ACOPIO
+                }));
+
+                for (var i = 0; i < direccionAcopioList.length; i++) {
+
+                    $('#idDireccionAlmacen').append($('<option>', {
+                        value: direccionAcopioList[i].idDireccionEntrega,
+                        text: direccionAcopioList[i].descripcion
+                    }));
+                }
+
+
+
                 var arrayDireccionEntrega = new Array();
 
                 //    $("#tableListaDireccionesEntrega > tbody").empty();
                 var direccionEntregaList = result.direccionEntregaList;
-                for (var i = 0; i < direccionEntregaList.length; i++) {
+                for (i = 0; i < direccionEntregaList.length; i++) {
                     var contacto = direccionEntregaList[i].contacto == null ? "" : direccionEntregaList[i].contacto;
                     var telefono = direccionEntregaList[i].telefono == null ? "" : direccionEntregaList[i].telefono;
                     var codigoCliente = direccionEntregaList[i].codigoCliente == null ? "" : direccionEntregaList[i].codigoCliente;
@@ -2345,7 +2139,8 @@ jQuery(function ($) {
                         '<td>' + codigoMP + '</td>' +
                         '<td>' + emailRecepcionFacturas + '</td>' +
                         '<td>' + direccionDomicilioLegal + '</td>' +
-
+                        '<td>' + direccionEntregaList[i].direccionEntregaAlmacen.descripcion + '</td>' +
+                        '<td>' + direccionEntregaList[i].direccionEntregaAlmacen.idDireccionEntrega + '</td>' +
                         '</tr>';
 
                     //var rowtmp = $modal.data('row'),
@@ -2364,7 +2159,9 @@ jQuery(function ($) {
                         codigoCliente: codigoCliente,
                         nombre: nombre,
                         emailRecepcionFacturas: emailRecepcionFacturas,
-                        direccionDomicilioLegal: direccionDomicilioLegal
+                        direccionDomicilioLegal: direccionDomicilioLegal,
+                        direccionAlmacen: direccionEntregaList[i].direccionEntregaAlmacen.descripcion,
+                        idDireccionAlmacen: direccionEntregaList[i].direccionEntregaAlmacen.idDireccionEntrega
                     };
 
                     arrayDireccionEntrega.push(values);

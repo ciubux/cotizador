@@ -121,3 +121,4 @@ Nombre del parámetro: s
 Nombre del parámetro: input
 2019-09-23 13:24:22.2069|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / El valor no puede ser nulo.
 Nombre del parámetro: input
+2019-10-22 14:05:16.2968|ERROR|Cotizador.Controllers.ParentController|lbardales@intercorp.com.pe / Cannot open server 'mpinstitucional' requested by the login. Client with IP address '46.222.3.155' is not allowed to access the server.  To enable access, use the Windows Azure Management Portal or run sp_set_firewall_rule on the master database to create a firewall rule for this IP address or address range.  It may take up to five minutes for this change to take effect.

@@ -50,11 +50,14 @@ namespace Cotizador.Controllers
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
             List<DireccionEntrega> direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(usuario.idClienteSunat);
 
+            List<DireccionEntrega> direccionAcopioList = direccionEntregaBL.getDireccionesAcopio(usuario.idClienteSunat);
+
             DomicilioLegalBL domicilioLegalBL = new DomicilioLegalBL();
             List<DomicilioLegal> domicilioLegalList = domicilioLegalBL.getDomiciliosLegalesPorClienteSunat(usuario.idClienteSunat);
 
             String resultado = "{\"direccionEntregaList\":" + JsonConvert.SerializeObject(direccionEntregaList) +
-                        ", \"domicilioLegalList\":" + JsonConvert.SerializeObject(domicilioLegalList) + "}";
+                        ", \"domicilioLegalList\":" + JsonConvert.SerializeObject(domicilioLegalList) +
+                        ", \"direccionAcopioList\":" + JsonConvert.SerializeObject(direccionAcopioList) + "} ";
 
             //   this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = cliente;
             return resultado;
@@ -97,14 +100,25 @@ namespace Cotizador.Controllers
             };
             direccionEntrega.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+
+            ClienteBL clienteBL = new ClienteBL();
+            direccionEntrega.cliente = clienteBL.ObtenerCliente(direccionEntrega.ubigeo.Id, direccionEntrega.usuario.idClienteSunat);
+
+            direccionEntrega.esDireccionAcopio = Boolean.Parse(this.Request.Params["esDireccionAcopio"]);
+            direccionEntrega.direccionEntregaAlmacen = new DireccionEntrega();
+            direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega = Guid.Parse(Request["idDireccionAlmacen"].ToString());
+
+
             direccionEntregaBL.insertDireccionEntrega(direccionEntrega);
             return JsonConvert.SerializeObject(direccionEntrega);
         }
 
 
         [HttpPost]
-        public void Update()
+        public String Update()
         {
+
+
             Guid idDireccionEntrega = Guid.Parse(Request["idDireccionEntrega"].ToString());
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
             DireccionEntrega direccionEntrega = new DireccionEntrega();
@@ -128,7 +142,18 @@ namespace Cotizador.Controllers
             direccionEntrega.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
 
+            ClienteBL clienteBL = new ClienteBL();
+            direccionEntrega.cliente = clienteBL.ObtenerCliente(direccionEntrega.ubigeo.Id, direccionEntrega.usuario.idClienteSunat);
+
+            direccionEntrega.esDireccionAcopio =  Boolean.Parse(this.Request.Params["esDireccionAcopio"]);
+
+
+            direccionEntrega.direccionEntregaAlmacen = new DireccionEntrega();
+            direccionEntrega.direccionEntregaAlmacen.idDireccionEntrega = Guid.Parse(Request["idDireccionAlmacen"].ToString());
             direccionEntregaBL.updateDireccionEntrega(direccionEntrega);
+
+
+            return JsonConvert.SerializeObject(direccionEntrega);
         }
 
 
