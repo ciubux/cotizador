@@ -2,7 +2,7 @@
 CREATE TABLE [CLIENTE_HISTORIAL_REASIGNACION](
 	[id_cliente_historial_reasignacion] [uniqueidentifier] NOT NULL,
 	[id_cliente] [uniqueidentifier] NOT NULL,
-	[fecha_inicio_vigencia] NOT [date] NULL,
+	[fecha_inicio_vigencia] [date] NOT NULL,
 	[campo] [varchar](100) NOT NULL,
 	[valor] [varchar](250) NOT NULL,
 	[observacion] [varchar](500) NULL,
