@@ -1603,7 +1603,7 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult ExportLastSearchRequerimientosExcel()
         {
-            List<Pedido> list = (List<Pedido>)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_LISTA];
+            List<Requerimiento> list = (List<Requerimiento>)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_LISTA];
 
             PedidoSearch excel = new PedidoSearch();
             return excel.generateExcelRequerimientos(list);

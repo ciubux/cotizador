@@ -3104,7 +3104,7 @@ jQuery(function ($) {
                 $("#btnCancelarCambioEstado").click();
             },
             success: function () {
-                alert("El requerimiento número se eliminó correctamente.");
+                alert("El requerimiento  se eliminó correctamente.");
                 location.reload();
             }
         });

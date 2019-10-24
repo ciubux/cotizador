@@ -141,7 +141,7 @@ namespace Cotizador.ExcelExport
             }
         }
 
-        public FileStreamResult generateExcelRequerimientos(List<Pedido> list)
+        public FileStreamResult generateExcelRequerimientos(List<Requerimiento> list)
         {
 
             HSSFWorkbook wb;
@@ -297,12 +297,12 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 4, "D", "Papel higiénico Scott JRT Super Económico Ahorramax con pre-corte (rollo x 550m)", dataCellStyle);
                 UtilesHelper.setValorCelda(sheet, 4, "E", "Bls x 4 x 550 mts", dataCellStyle);
 
-                UtilesHelper.setRowHeight(sheet, 5, 540);
+          /*     UtilesHelper.setRowHeight(sheet, 5, 540);
                 UtilesHelper.setValorCelda(sheet, 5, "A", "Prod 3", dataCellStyle);
                 UtilesHelper.setValorCelda(sheet, 5, "B", "MPXX01", dataCenterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 5, "C", "85894835", dataCenterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 5, "D", "Soporte técnico de dispensadores", dataCellStyle);
-                UtilesHelper.setValorCelda(sheet, 5, "E", "Unidad", dataCellStyle);
+                UtilesHelper.setValorCelda(sheet, 5, "E", "Unidad", dataCellStyle);*/
 
                 int i = 8;
                 UtilesHelper.setRowHeight(sheet, i-1, 350);
@@ -318,23 +318,23 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i - 1, "I", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "J", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "K", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "L", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "M", "", titleMasterCellStyle);
+                /*  UtilesHelper.setValorCelda(sheet, i - 1, "K", "", titleMasterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i - 1, "L", "", titleMasterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i - 1, "M", "", titleMasterCellStyle);*/
 
                 UtilesHelper.setRowHeight(sheet, i, 540);
                 UtilesHelper.setValorCelda(sheet, i, "A", "N° Req", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "B", "Creado por", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "C", "Fecha Registro", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "D", "Dirección Acopio", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "E", "Dirección Establecimiento", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "F", "Nombre Sede", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "G", "Cant. Prod 1", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "H", "Cant. Prod 2", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "I", "Cant. Prod 3", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "D", "Distrito", titleCellStyle);
+                //UtilesHelper.setValorCelda(sheet, i, "E", "Dirección", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "E", "Obs. Uso interno", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "F", "Cant. Prod 1", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "G", "Cant. Prod 2", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "H", "Total (No Incl. IGV)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "I", "Estado", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "J", "Tope Ppto.", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "K", "Total", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "L", "(X)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "M", "Estado", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "K", "Excedió Presupuesto.", titleCellStyle);
 
 
                 i++;
@@ -344,23 +344,23 @@ namespace Cotizador.ExcelExport
                 string desf = "{0} ({1}) {2} - {3} - {4}";
                 string desdr = "{0}  {1} - {2} - {3}";
                 String des;
-                foreach (Pedido obj in list)
+                foreach (Requerimiento obj in list)
                 {
                     UtilesHelper.setRowHeight(sheet, i, 540);
-                    UtilesHelper.setValorCelda(sheet, i, "A", obj.numeroPedidoString, dataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "A", obj.numeroRequerimientoString, dataCenterCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "B", obj.usuario.nombre, dataCenterCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "C", obj.fechaHoraRegistro, dataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "D", obj.ubigeoEntrega.Distrito, dataCellStyle);
+                    /*      DireccionEntrega de = obj.direccionEntrega.direccionEntregaAlmacen;
+                          des = string.Format(desf, de.descripcion, de.nombre,
+                                              de.ubigeo.Departamento,
+                                              de.ubigeo.Provincia,
+                                              de.ubigeo.Distrito);*/
 
-                    DireccionEntrega de = obj.direccionEntrega.direccionEntregaAlmacen;
-                    des = string.Format(desf, de.descripcion, de.nombre,
-                                        de.ubigeo.Departamento,
-                                        de.ubigeo.Provincia,
-                                        de.ubigeo.Distrito);
 
-                   
-                    
 
-                    UtilesHelper.setValorCelda(sheet, i, "D", des, dataCellStyle);
+
+            /*        UtilesHelper.setValorCelda(sheet, i, "E", obj.observaciones, dataCellStyle);
                     de = obj.direccionEntrega;
 
                     des = string.Format(desdr, de.descripcion, 
@@ -369,48 +369,49 @@ namespace Cotizador.ExcelExport
                                         obj.ubigeoEntrega.Distrito);
 
                     UtilesHelper.setValorCelda(sheet, i, "E",des, dataCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "F", obj.observaciones, dataCenterCellStyle);
-                    foreach (PedidoDetalle pedidoDetalle in obj.pedidoDetalleList)
+                    UtilesHelper.setValorCelda(sheet, i, "F", obj.observaciones, dataCenterCellStyle);*/
+                    foreach (RequerimientoDetalle pedidoDetalle in obj.requerimientoDetalleList)
                     {
                         switch (pedidoDetalle.producto.sku)
                         {
-                            case "HJ1F20": UtilesHelper.setValorCelda(sheet, i, "G", pedidoDetalle.cantidad, dataCenterCellStyle); break;
-                            case "HH2S81": UtilesHelper.setValorCelda(sheet, i, "H", pedidoDetalle.cantidad, dataCenterCellStyle); break;
-                            case "MPXX01": UtilesHelper.setValorCelda(sheet, i, "I", pedidoDetalle.cantidad, dataCenterCellStyle); break;
-                            default: UtilesHelper.setValorCelda(sheet, i, "I", pedidoDetalle.cantidad, dataCenterCellStyle); break;
+                            case "HJ1F20": UtilesHelper.setValorCelda(sheet, i, "F", pedidoDetalle.cantidad, dataCenterCellStyle); break;
+                            case "HH2S81": UtilesHelper.setValorCelda(sheet, i, "G", pedidoDetalle.cantidad, dataCenterCellStyle); break;
+                //            case "MPXX01": UtilesHelper.setValorCelda(sheet, i, "I", pedidoDetalle.cantidad, dataCenterCellStyle); break;
+                     //       default: UtilesHelper.setValorCelda(sheet, i, "I", pedidoDetalle.cantidad, dataCenterCellStyle); break;
                         }
                     }
 
-                    UtilesHelper.setValorCelda(sheet, i, "J", (double)obj.montoTotal, twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "K", (double)obj.topePresupuesto, twoDecCellStyle);
-                    
+                   UtilesHelper.setValorCelda(sheet, i, "H", (double)obj.montoTotal, twoDecCellStyle);
+           // 
+                  
+
+                    UtilesHelper.setValorCelda(sheet, i, "I", obj.estadoRequerimientoString, dataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "J", (double)obj.topePresupuesto, twoDecCellStyle);
                     if (obj.excedioPresupuesto)
                     {
                         sheet.GetRow(i - 1).GetCell(9).CellStyle = twoDecErrorCellStyle;
-                        UtilesHelper.setValorCelda(sheet, i, "L", "X", dataCenterCellStyle);
-                    } else
+                        UtilesHelper.setValorCelda(sheet, i, "K", "X", dataCenterCellStyle);
+                    }
+                    else
                     {
                         sheet.GetRow(i - 1).GetCell(9).CellStyle = twoDecSuccessCellStyle;
                     }
-
-                    UtilesHelper.setValorCelda(sheet, i, "M", obj.estadoRequerimientoString, dataCenterCellStyle);
-
                     i++;
                 }
 
-                UtilesHelper.setRowHeight(sheet, i, 540);
-                sheet.GetRow(i - 1).GetCell(6).CellFormula = "SUM(" + UtilesHelper.columnas[6] + "2:" + UtilesHelper.columnas[6] + (i - 1) + ")";
-                sheet.GetRow(i - 1).GetCell(6).CellStyle = dataCenterCellStyle;
+               UtilesHelper.setRowHeight(sheet, i, 540);
+                sheet.GetRow(i - 1).GetCell(6-1).CellFormula = "SUM(" + UtilesHelper.columnas[6 - 1] + "2:" + UtilesHelper.columnas[6 - 1] + (i - 1) + ")";
+                sheet.GetRow(i - 1).GetCell(6 - 1).CellStyle = dataCenterCellStyle;
                 
-                sheet.GetRow(i - 1).GetCell(7).CellFormula = "SUM(" + UtilesHelper.columnas[7] + "2:" + UtilesHelper.columnas[7] + (i - 1) + ")";
-                sheet.GetRow(i - 1).GetCell(7).CellStyle = dataCenterCellStyle;
+                sheet.GetRow(i - 1).GetCell(7 - 1).CellFormula = "SUM(" + UtilesHelper.columnas[7 - 1] + "2:" + UtilesHelper.columnas[7 - 1] + (i - 1) + ")";
+                sheet.GetRow(i - 1).GetCell(7 - 1).CellStyle = dataCenterCellStyle;
 
-                sheet.GetRow(i - 1).GetCell(8).CellFormula = "SUM(" + UtilesHelper.columnas[8] + "2:" + UtilesHelper.columnas[8] + (i - 1) + ")";
-                sheet.GetRow(i - 1).GetCell(8).CellStyle = dataCenterCellStyle;
+                sheet.GetRow(i - 1).GetCell(8 - 1).CellFormula = "SUM(" + UtilesHelper.columnas[8 - 1] + "2:" + UtilesHelper.columnas[8 - 1] + (i - 1) + ")";
+                sheet.GetRow(i - 1).GetCell(8 - 1).CellStyle = dataCenterCellStyle;
 
-                sheet.GetRow(i - 1).GetCell(9).CellFormula = "SUM(" + UtilesHelper.columnas[9] + "2:" + UtilesHelper.columnas[9] + (i - 1) + ")";
+          /*      sheet.GetRow(i - 1).GetCell(9).CellFormula = "SUM(" + UtilesHelper.columnas[9] + "2:" + UtilesHelper.columnas[9] + (i - 1) + ")";
                 sheet.GetRow(i - 1).GetCell(9).CellStyle = twoDecCellStyle;
-
+                */
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())
                 {
