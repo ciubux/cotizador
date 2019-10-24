@@ -18,6 +18,7 @@ namespace Model
         /*DATOS*/
         [Display(Name = "Email:")]
         public string email { get; set; }
+        [Display(Name = "Contraseña:")]
         public string password { get; set; }
         [Display(Name = "Nombre:")]
         public string nombre { get; set; }
