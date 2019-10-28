@@ -650,11 +650,13 @@ namespace Cotizador.Controllers
             pedidoBL.calcularMontosTotales(pedido);
 
 
-            detalle.unidad = detalle.producto.unidad;
-            //si esPrecioAlternativo  se mostrará la unidad alternativa
-            if (detalle.esPrecioAlternativo)
-            {
-                detalle.unidad = detalle.producto.unidad_alternativa;
+            if (detalle.unidad.Trim().Equals("")) { 
+                detalle.unidad = detalle.producto.unidad;
+                //si esPrecioAlternativo  se mostrará la unidad alternativa
+                if (detalle.esPrecioAlternativo)
+                {
+                    detalle.unidad = detalle.producto.unidad_alternativa;
+                }
             }
 
             var nombreProducto = detalle.producto.descripcion;
