@@ -82,8 +82,8 @@ BEGIN
 
 	ma.permite_anulacion, ma.anulacion_aprobada, ma.anulacion_solicitada,
 	ma.comentario_solicitud_anulacion, 
-	ma.usuario_solicita_anulacion, usa.nombre,
-    ma.usuario_aprueba_anulacion, uaa.nombre,
+	ma.usuario_solicita_anulacion, usa.nombre usuario_solicita_anulacion_nombre,
+    ma.usuario_aprueba_anulacion, uaa.nombre usuario_aprueba_anulacion_nombre,
 
 
 	--USUARIO

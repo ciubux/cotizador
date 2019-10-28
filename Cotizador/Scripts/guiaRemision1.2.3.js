@@ -729,7 +729,23 @@ jQuery(function ($) {
                 $("#ver_guiaRemision_estadoDescripcion").html(guiaRemision.estadoDescripcion);
 
                 $("#btnRefacturar").hide();
+                 
+                $("#verComentariSolicitudAnulacion").val(guiaRemision.comentarioSolicitudAnulacion);
+                $("#verUsuarioSolicitaAnulacion").val(guiaRemision.usuarioSolicitaAnulacion.nombre);
+                $("#ver_permite_anulacion").val(guiaRemision.permiteAnulacion);
+                $("#ver_anulacion_solicitada").val(guiaRemision.anulacionSolicitada);
+                $("#ver_solicitud_anulacion_aprobada").val(guiaRemision.solicitudAnulacionAprobada);
 
+                
+                $(".mensajeNoPermiteAnulacion").show();
+                $("#btnAceptarAnulacion").hide();
+                $("#btnAceptarSolicitudAnulacion").hide();
+
+                if (guiaRemision.permiteAnulacion) {
+                    $(".mensajeNoPermiteAnulacion").hide();
+                    $("#btnAceptarAnulacion").show();
+                    $("#btnAceptarSolicitudAnulacion").show();
+                }
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {

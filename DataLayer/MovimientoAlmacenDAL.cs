@@ -765,6 +765,15 @@ namespace DataLayer
                 guiaRemision.transportista.ruc = Converter.GetString(row, "ruc_transportista");
                 guiaRemision.transportista.descripcion = Converter.GetString(row, "nombre_transportista");
 
+                guiaRemision.permiteAnulacion = Converter.GetInt(row, "permite_anulacion") == 1 ? true : false;
+                guiaRemision.anulacionSolicitada = Converter.GetInt(row, "anulacion_aprobada") == 1 ? true : false;
+                guiaRemision.solicitudAnulacionAprobada = Converter.GetInt(row, "anulacion_solicitada") == 1 ? true : false;
+                guiaRemision.comentarioSolicitudAnulacion = Converter.GetString(row, "comentario_solicitud_anulacion");
+
+                guiaRemision.usuarioSolicitaAnulacion = new Usuario();
+                guiaRemision.usuarioSolicitaAnulacion.idUsuario = Converter.GetGuid(row, "usuario_solicita_anulacion");
+                guiaRemision.usuarioSolicitaAnulacion.nombre = Converter.GetString(row, "usuario_solicita_anulacion_nombre");
+
                 //ADICIONALES
                 guiaRemision.placaVehiculo = Converter.GetString(row, "placa_vehiculo");
                 guiaRemision.certificadoInscripcion = Converter.GetString(row, "certificado_inscripcion");

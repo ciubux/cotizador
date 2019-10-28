@@ -24,9 +24,16 @@ namespace Model
         public Boolean estaFacturado { get; set; }
 
         public Boolean estaNoEntregado { get; set; }
-        
-     
 
+        public Boolean permiteAnulacion { get; set; }
+
+        public Boolean anulacionSolicitada { get; set; }
+        public Boolean solicitudAnulacionAprobada { get; set; }
+
+        public String comentarioSolicitudAnulacion { get; set; }
+
+
+        public Usuario usuarioSolicitaAnulacion { get; set; }
         public String comentarioAnulado { get; set; }
 
         public long numero { get; set; }

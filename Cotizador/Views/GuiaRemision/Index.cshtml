@@ -360,6 +360,13 @@
                 <form class="form-horizontal">
 
                     <input type="hidden" id="idMovimientoAlmacen" value="@ViewBag.idMovimientoAlmacen" />
+
+                    <input type="hidden" id="ver_comentario_solicitud_anulacion" value="" />
+                    <input type="hidden" id="ver_usuario_solicitud_anulacion" value="" />
+                    <input type="hidden" id="ver_permite_anulacion" value="0" />
+                    <input type="hidden" id="ver_anulacion_solicitada" value="0" />
+                    <input type="hidden" id="ver_solicitud_anulacion_aprobada" value="0" />
+
                     <!--Sede-->
                     <div class="row">
                         <!--SEDE MP-->
@@ -696,7 +703,7 @@
                     }
                     @if (guiaRemision.usuario.creaGuias)
                     {
-                        <button type="button" id="btnSolicitarAnularGuiaRemision" class="btn btn-warning" data-toggle='modal' data-target='#modalSolicitarAnulacion'>Solicitar Anular</button>
+                        <button type="button" id="btnSolicitarAnularGuiaRemision" class="btn btn-warning" data-toggle='modal' data-target='#modalSolicitudAnulacion'>Solicitar Anular</button>
                         <button type="button" id="btnAnularGuiaRemision" class="btn btn-danger" data-toggle='modal' data-target='#modalAnulacion'>Anular</button>
                         <button type="button" id="btnExtornar" class="btn btn-danger">Extornar</button>
                         <button type="button" id="btnIngresar" class="btn btn-primary">Ingresar</button>
@@ -744,6 +751,88 @@
 
 
 
+<div class="modal fade" id="modalSolicitarAnulacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalSolicitarAnulacionTitle"><b>Solicitar Anulación de Guía Remisión</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <p class="alert-danger mensajeNoPermiteAnulacion" style="display:none;">No se puede anular esta guía debido a que ya pasaron 3 días desde de la fecha de emisión.</p>
+                            <!--MOTIVO ANULACION-->
+                            <div class="form-group">
+                                <label for="comentarioAnulado" class="control-label col-xs-3">Comentario:</label>
+                                <div class="col-xs-9">
+                                    <textarea class="form-control" rows="5" id="comentarioSolicitudAnulacion" name="comentarioSolicitudAnulacion"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarSolicitudAnulacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAceptarSolicitudAnulacion" class="btn btn-primary">Enviar Solicitud Anulación</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalAprobarSolicitudAnulacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAprobarSolicitudAnulacionTitle"><b>Aprobar Solicitud de Anulación de Guía Remisión</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <p class="alert-danger mensajeNoPermiteAnulacion" style="display:none;">No se puede anular esta guía debido a que ya pasaron 3 días desde de la fecha de emisión.</p>
+                            <!--MOTIVO ANULACION-->
+                            <div class="form-group">
+                                <label class="control-label col-xs-3">Usuario Solicitante:</label>
+                                <div class="col-xs-9">
+                                    <p class="form-control" id="verUsuarioSolicitaAnulacion" ></p>
+                                </div>
+                                <label for="comentarioAnulado" class="control-label col-xs-3">Comentario:</label>
+                                <div class="col-xs-9">
+                                    <p class="form-control" id="verComentariSolicitudAnulacion" ></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarAprobarSolicitudAnulacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAprobarSolicitudAnulacion" class="btn btn-primary">Aprobar Solicitud Anulación</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="modalAnulacion" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -761,8 +850,8 @@
                     <div class="row">
 
 
-                        <div class="col-sm-6 col-lg-12">
-
+                        <div class="col-sm-12 col-lg-12">
+                            <p class="alert-danger mensajeNoPermiteAnulacion" style="display:none;">No se puede anular esta guía debido a que ya pasaron 3 días desde de la fecha de emisión.</p>
                             <!--MOTIVO ANULACION-->
                             <div class="form-group">
                                 <label for="comentarioAnulado" class="control-label col-xs-3">Comentario:</label>
