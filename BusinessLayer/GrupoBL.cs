@@ -140,5 +140,14 @@ namespace BusinessLayer
                 return dal.retiraProductoCanastaGrupoCliente(idGrupoCliente, idProducto, usuario.idUsuario);
             }
         }
+
+        public bool limpiaCanasta(int idGrupoCliente, int aplicaMiembros)
+        {
+            using (var dal = new PrecioClienteProductoDAL())
+            {
+
+                return dal.limpiaCanastaCliente(idGrupoCliente, aplicaMiembros);
+            }
+        }
     }
 }

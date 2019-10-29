@@ -1876,11 +1876,13 @@ jQuery(function ($) {
                 if (cotizacion.cliente_idCliente == GUID_EMPTY) {
                     $("#labelCliente").hide();
                     $("#labelGrupo").show();
+                    $("#spnTitleGrupo").show();
                     $("#verClienteGrupo").html(cotizacion.grupo_codigoNombre);
                 }
                 else {
                     $("#labelCliente").show();
                     $("#labelGrupo").hide();
+                    $("#spnTitleGrupo").hide();
                     $("#verClienteGrupo").html(cotizacion.cliente_codigoRazonSocial);
                 }     
 

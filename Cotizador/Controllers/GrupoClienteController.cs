@@ -628,6 +628,40 @@ namespace Cotizador.Controllers
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\", \"cliente\":" + clienteJson + "}";
         }
 
+
+        [HttpPost]
+        public String LimpiaCanasta()
+        {
+            int success = 1;
+            string message = "";
+            GrupoClienteBL bl = new GrupoClienteBL();
+            GrupoCliente grupoCliente = (GrupoCliente)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_VER];
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            int aplicaMiembros = int.Parse(this.Request.Params["aplicaMiembros"]);
+
+            if (usuario.modificaCanastaGrupoCliente)
+            {
+                if (bl.limpiaCanasta(grupoCliente.idGrupoCliente, aplicaMiembros))
+                {
+                    message = "Se limpió la canasta habitual de grupo";
+                    if (aplicaMiembros == 1)
+                    {
+                        message = message + " y de los miembros que heredan precios";
+                    }
+                    message = message + ".";
+
+                }
+                else
+                {
+                    success = 0;
+                    message = "Ocurrió un error al limpiar la canasta habitual de grupo.";
+                }
+            }
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
+
         [HttpPost]
         public String AgregarProductoACanasta()
         {
@@ -643,7 +677,7 @@ namespace Cotizador.Controllers
             if (usuario.modificaCanastaGrupoCliente) { 
                 if (bl.agregarProductoCanasta(grupoCliente.idGrupoCliente, idProducto, usuario))
                 {
-                    message = "Se agregó el producto a la canasta.";
+                    message = "Se agregó el producto a la canasta habitual de grupo y de los miembros que heredan precios.";
                 }
                 else
                 {
@@ -671,7 +705,7 @@ namespace Cotizador.Controllers
             {
                 if (bl.retiraProductoCanasta(grupoCliente.idGrupoCliente, idProducto, usuario))
                 {
-                    message = "Se retiró el producto de la canasta.";
+                    message = "Se retiró el producto a la canasta habitual de grupo y de los miembros que heredan precios.";
                 }
                 else
                 {
