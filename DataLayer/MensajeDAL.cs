@@ -47,6 +47,21 @@ namespace DataLayer
             tvparam.SqlDbType = SqlDbType.Structured;
             tvparam.TypeName = "dbo.IntegerList";
 
+
+            DataTable tmpuser = new DataTable();
+            tmpuser.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Usuario item in obj.listUsuario)
+            {
+                DataRow rowObj = tmpuser.NewRow();
+                rowObj["ID"] = item.idUsuario;
+                tmpuser.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam2 = objCommand.Parameters.AddWithValue("@usuarios", tmpuser);
+            tvparam2.SqlDbType = SqlDbType.Structured;
+            tvparam2.TypeName = "dbo.UniqueIdentifierList";
+            
             ExecuteNonQuery(objCommand);
 
             return obj;
@@ -78,6 +93,19 @@ namespace DataLayer
             SqlParameter tvparam = objCommand.Parameters.AddWithValue("@roles", tvp);
             tvparam.SqlDbType = SqlDbType.Structured;
             tvparam.TypeName = "dbo.IntegerList";
+
+
+            DataTable tmpuser = new DataTable();
+            tmpuser.Columns.Add(new DataColumn("ID", typeof(Guid)));
+            foreach (Usuario item in obj.listUsuario)
+            {
+                DataRow rowObj = tmpuser.NewRow();
+                rowObj["ID"] = item.idUsuario;
+                tmpuser.Rows.Add(rowObj);
+            }
+            SqlParameter tvparam2 = objCommand.Parameters.AddWithValue("@usuarios", tmpuser);
+            tvparam2.SqlDbType = SqlDbType.Structured;
+            tvparam2.TypeName = "dbo.UniqueIdentifierList";
 
 
             ExecuteNonQuery(objCommand);
@@ -120,8 +148,12 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_lista_mensajes");
             List<Mensaje> lista = new List<Mensaje>();
             InputParameterAdd.Int(objCommand, "estado", mensaje.estado);
-            InputParameterAdd.SmallDateTime(objCommand, "fecha_creacion", mensaje.fechaCreacionMensaje);
-            InputParameterAdd.SmallDateTime(objCommand, "fecha_vencimiento", mensaje.fechaVencimientoMensaje);
+            InputParameterAdd.DateTime(objCommand, "fecha_creacion_desde",mensaje.fechaCreacionMensajeDesde);
+            InputParameterAdd.DateTime(objCommand, "fecha_creacion_hasta", mensaje.fechaCreacionMensajeHasta);
+
+            InputParameterAdd.DateTime(objCommand, "fecha_vencimiento_desde", mensaje.fechaVencimientoMensajeDesde);
+            InputParameterAdd.DateTime(objCommand, "fecha_vencimiento_hasta", mensaje.fechaVencimientoMensajeHasta);
+            
             InputParameterAdd.Guid(objCommand, "id_usuario_creacion", mensaje.user.idUsuario);
             DataTable dataTable = Execute(objCommand);
             foreach (DataRow row in dataTable.Rows)
@@ -160,6 +192,7 @@ namespace DataLayer
 
             DataTable mensaje = dataSet.Tables[0];
             DataTable roles = dataSet.Tables[1];
+            DataTable usuario = dataSet.Tables[2];
 
             Mensaje obj = new Mensaje();
 
@@ -180,6 +213,16 @@ namespace DataLayer
                 Rol rol = new Rol();
                 rol.idRol = Converter.GetInt(row, "id_rol");
                 obj.roles.Add(rol);
+            }
+
+            obj.listUsuario = new List<Usuario>();
+            foreach (DataRow row in usuario.Rows)
+            {
+                Usuario user = new Usuario();
+                user.idUsuario = Converter.GetGuid(row, "id_usuario");
+                user.nombre = Converter.GetString(row, "nombre");
+                user.email = Converter.GetString(row, "email");
+                obj.listUsuario.Add(user);
             }
 
 

@@ -706,13 +706,11 @@ $darkred: darken($red, 0.2);*/
     }
 
 
-.ModalMensaje {
-    margin: auto;
-    width: 80%;
-    overflow-y: scroll;
+.ModalMensaje p {
+    word-wrap: break-word;
 }
+/*#MensajeDialog {
+    width: 50%;
+}*/
 
-::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-}
+

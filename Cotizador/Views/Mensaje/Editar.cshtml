@@ -20,10 +20,7 @@
 
 
 
-
-
-
-
+            
         <div class="row form-group">
             <label for="color" class="col-form-label col-md-2">Importancia:</label>
 
@@ -96,24 +93,46 @@
             </div>
         </div>
 
+
+
+        <div class="row form-group">
+            <label for="idCliente" class="col-form-label col-md-2">Usuario:</label>
+
+            <div class="col-xs-12 col-md-10">
+                <select multiple class="form-control form-control" id="idUsuarioBusquedaMensaje" name="idCliente" required>
+                    
+                        @foreach (var item in mensaje.listUsuario)
+                        {
+
+                            <option selected value="@item.idUsuario">@item.nombre (@item.email)</option>
+
+                        }
+
+                    
+                   
+                </select>
+            </div>
+        </div>
+
+
         <div class="row form-group">
 
-            <div class="col-sm-12 col-lg-12 col-xs-12">
+            
                 <label class="col-form-label col-md-2">Roles:</label>
-            </div>
-            <div class="col-sm-12 col-lg-12 col-xs-12">
-                @foreach (Model.Rol ro in roles)
-                {
-                    string itemChecked = mensaje.TieneRol(ro.idRol) ? "checked" : "";
+           
+                <div class="col-md-10">
+                    @foreach (Model.Rol ro in roles)
+                    {
+                        string itemChecked = mensaje.TieneRol(ro.idRol) ? "checked" : "";
 
-                    <div class="col-sm-6 col-lg-4 col-xs-12">
-                        <label class="radio-label" for="permiso_@ro.idRol">
-                            <input type="checkbox" @itemChecked class="chk-rol" name="rol_@ro.idRol" id="rol_@ro.idRol" value="1">
-                            <span>@ro.nombre - (@ro.codigo)</span>
-                        </label>
-                    </div>
-                }
-            </div>
+                        <div class="col-sm-6 col-lg-4 col-xs-12">
+                            <label class="radio-label" for="permiso_@ro.idRol">
+                                <input type="checkbox" @itemChecked class="chk-rol" name="rol_@ro.idRol" id="rol_@ro.idRol" value="1">
+                                <span>@ro.nombre - (@ro.codigo)</span>
+                            </label>
+                        </div>
+                    }
+                </div>
 
         </div>
 

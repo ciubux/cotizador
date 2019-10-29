@@ -18,10 +18,7 @@
 </head>
 
 <body>
-    @{
-        Layout = "~/Views/Shared/ModalMensaje.cshtml";
-    }
-
+    @RenderPage("ModalMensaje.cshtml")
 
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -238,7 +235,7 @@
                                     @if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                                     {
                                         <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Pedido Venta - Búsqueda", "Index", "Pedido")</li>
-}
+                                    }
                                     @if (usuario.tomaPedidos)
                                     {
                                         <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Crear/Modificar", "Pedir", "Pedido")</li>
@@ -251,7 +248,7 @@
                                     @if (usuario.tomaPedidosCompra)
                                     {
                                         <li id="linkBusquedaPedidosCompra" class="@linkBusquedaPedidosCompra">@Html.ActionLink("Pedido Compra - Búsqueda", "Index", "PedidoCompra")</li>
-}
+                                    }
                                     @if (usuario.tomaPedidosCompra)
                                     {
                                         <li id="linkMantenimientoPedidoCompra" class="@linkMantenimientoPedidoCompra">@Html.ActionLink("Pedido Compra - Crear/Modificar", "Pedir", "PedidoCompra")</li>
@@ -260,7 +257,7 @@
                                     @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
                                     {
                                         <li id="linkBusquedaPedidosAlmacen" class="@linkBusquedaPedidosAlmacen">@Html.ActionLink("Pedido Almacén - Búsqueda", "Index", "PedidoAlmacen")</li>
-}
+                                    }
                                     @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
                                     {
                                         <li id="linkMantenimientoPedidoAlmacen" class="@linkMantenimientoPedidoAlmacen">@Html.ActionLink("Pedido Almacén - Crear/Modificar", "Pedir", "PedidoAlmacen")</li>
@@ -480,9 +477,9 @@
 
 
                                     @*@if (usuario.modificaUsuario)
-        {
-            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
-        }*@
+                                        {
+                                            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
+                                        }*@
 
 
                                     @if (usuario.administraPermisos)

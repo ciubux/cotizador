@@ -656,6 +656,5 @@ namespace Cotizador.Controllers
             obj.rectificacfionVenta(estadoCheck,id_detalle_producto,usuario.idUsuario);
         }
 
-
     }
 }
