@@ -1,5 +1,5 @@
 /***********ALTER ps_alerta_mensaje_usuario -Correccion de alerta de mensaje para usuario***************/
- ALTER procedure [dbo].[ps_alerta_mensaje_usuario] 
+ALTER procedure [dbo].[ps_alerta_mensaje_usuario] 
 (@id_usuario uniqueidentifier)
 as begin 
 select mensaje.id_mensaje,titulo,mensaje,importancia,mensaje.fecha_creacion,USUARIO.nombre,mensaje.fecha_vencimiento,mensaje.fecha_inicio from mensaje

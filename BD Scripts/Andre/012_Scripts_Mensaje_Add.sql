@@ -62,29 +62,26 @@ BEGIN
 			   
 		 VALUES
 			   (@idUsuario,
-			    @id_mensaje)
-			   
+			    @id_mensaje)			   
 
     FETCH NEXT
 	FROM @usuarioCursor INTO @idUsuario
 END
-END
-
+end 
 /***************************** ALTER ps_alerta_mensaje_usuario - USUARIO AÑADIDO **********************************/
-alter procedure [dbo].[ps_alerta_mensaje_usuario] 
+ALTER procedure [dbo].[ps_alerta_mensaje_usuario] 
 (@id_usuario uniqueidentifier)
 as begin 
-select mensaje.* from mensaje 
+select mensaje.id_mensaje,titulo,mensaje,importancia,mensaje.fecha_creacion,USUARIO.nombre,mensaje.fecha_vencimiento,mensaje.fecha_inicio from mensaje
 left join MENSAJE_USUARIO on mensaje.id_mensaje=MENSAJE_USUARIO.id_mensaje
 left join mensaje_roles on   mensaje_roles.id_mensaje=mensaje.id_mensaje
 left join  ROL_USUARIO on ROL_USUARIO.id_rol=mensaje_roles.id_rol
-left join MENSAJE_LEIDO on MENSAJE_LEIDO.id_usuario = mensaje.id_mensaje and MENSAJE_LEIDO.id_usuario = @id_usuario
 inner join USUARIO on mensaje.id_usuario_creacion=usuario.id_usuario
-where Mensaje.id_mensaje and MENSAJE_LEIDO.fecha_leido is null  and (ROL_USUARIO.id_usuario=@id_usuario or ROL_USUARIO.id_usuario is null) and mensaje.estado=1 
-and fecha_inicio <= dbo.getlocaldate()  and fecha_vencimiento >= dbo.getlocaldate()
+where Mensaje.id_mensaje not in (select id_mensaje from MENSAJE_LEIDO where id_usuario=@id_usuario)  
+and (ROL_USUARIO.id_usuario=@id_usuario or MENSAJE_USUARIO.id_usuario=@id_usuario) and mensaje.estado=1 
+and fecha_inicio <= convert(date,dbo.getlocaldate())  and fecha_vencimiento >= convert(date,dbo.getlocaldate())
 order by  mensaje.fecha_creacion desc
 end
-
 /********************************** ALTER ps_detalle_mensaje - USUARIO AÑADIDO  **************************************/
 ALTER procedure [dbo].[ps_detalle_mensaje] 
 (@id_mensaje uniqueidentifier)
@@ -96,8 +93,7 @@ SELECT mensaje_usuario.id_usuario,nombre,email from mensaje_usuario left join us
 end 
 /********************************** ALTER pi_mensaje - USUARIO AÑADIDO *****************************************/
 ALTER   procedure [dbo].[pi_mensaje]
-(
-@titulo varchar(60),
+(@titulo varchar(60),
 @mensaje text,
 @importancia varchar(20),
 @id_usuario_creacion uniqueidentifier,
@@ -105,7 +101,8 @@ ALTER   procedure [dbo].[pi_mensaje]
 @usuarios UniqueIdentifierList readonly,
 @fecha_vencimiento datetime,
 @id_usuario_modificacion uniqueidentifier,
-@fecha_inicio datetime)
+@fecha_inicio datetime
+)
 as  begin 
 
 DECLARE @idRol int 
@@ -140,7 +137,6 @@ BEGIN
     FETCH NEXT
 	FROM @rolCursor INTO @idRol
 end
-
 SET @usuarioCursor = CURSOR FOR
 SELECT ID
 FROM @usuarios
@@ -155,7 +151,8 @@ BEGIN
 			   
 		 VALUES
 			   (@idUsuario,
-			    @id_mensaje)			   
+			    @id_mensaje)
+			   
 
     FETCH NEXT
 	FROM @usuarioCursor INTO @idUsuario
@@ -163,7 +160,7 @@ END
 end
 /********************************** ALTER ps_lista_mensajes - USUARIO AÑADIDO  **********************************************************/
 
-alter procedure [dbo].[ps_lista_mensajes] 
+ALTER procedure [dbo].[ps_lista_mensajes] 
 (@estado smallint,
 @fecha_creacion_desde datetime,
 @fecha_creacion_hasta datetime,
@@ -186,7 +183,6 @@ or (mensaje.fecha_vencimiento >= @fecha_vencimiento_desde AND	mensaje.fecha_venc
 order by fecha_creacion desc
 end
 end 
-
 
 /********************************** CREATE MENSAJE_USUARIO  **********************************************************/
 CREATE TABLE [dbo].[MENSAJE_USUARIO](
