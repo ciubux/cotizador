@@ -73,6 +73,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pu_mensaje");
 
+
             InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);
             InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
             InputParameterAdd.Text(objCommand, "mensaje", obj.mensaje);

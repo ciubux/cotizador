@@ -94,7 +94,7 @@
         if ($("input:checkbox:checked").length == 0 && $("#idUsuarioBusquedaMensaje").val().length==0)    
         {
             $.alert({
-                title: "Rol Inválido",
+                title: "Rol o Usuario Inválido",
                 type: 'orange',
                 content: 'Debe ingresar al menos un Rol o un Usuario para enviar el mensaje.',
                 buttons: {
@@ -341,7 +341,7 @@
                         }
                        
 
-                        if (verAutomaticamente) {
+                        if (verAutomaticamente) {                           
                             setTimeout(function () {
                                 $('#Mensaje').modal('show');
                             }, 2000);
@@ -370,13 +370,10 @@
                 idMensaje: idMensaje,
                 idUsuario: idUsuario
             },
-            success: function () {
-
-                $(".Leido." + idMensaje).closest(".modal-content").remove();
+            success: function () {           
+                $('#Mensaje').modal('hide');
                 $("#MensajeDialog").empty(); 
-                $('#Mensaje').modal('hide'); 
                 ActulizarMensaje();
-
             }
         });
 
