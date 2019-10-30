@@ -30,7 +30,7 @@
     };
 
     $.datepicker.setDefaults($.datepicker.regional["es"]);
-          
+
     var fechaInicio = $("#mensaje_fechaInicioMensaje").val();
 
     var fechaCreacionDesde = $("#mensaje_fechaCreacionDesde").val();
@@ -90,9 +90,8 @@
     }
 
     ActulizarMensaje();
-    function validacionMensaje() {        
-        if ($("input:checkbox:checked").length == 0 && $("#idUsuarioBusquedaMensaje").val().length==0)    
-        {
+    function validacionMensaje() {
+        if ($("input:checkbox:checked").length == 0 && $("#idUsuarioBusquedaMensaje").val().length == 0) {
             $.alert({
                 title: "Rol o Usuario Inválido",
                 type: 'orange',
@@ -309,20 +308,20 @@
                 data: {
                     idUsuario: idUsuario
                 },
-                success: function (list) {                    
+                success: function (list) {
 
                     list = eliminateDuplicates(list);
                     if (list.length != 0) {
                         $("#imagenMP").before('<a data-notifications="' + list.length + '" class="btnModal" href="javascript:void()"></a>');
 
                         var verAutomaticamente = false;
-                       
+
                         for (var i = 0; i < list.length; i++) {
 
                             if (list[i].importancia == 'Alta') {
                                 verAutomaticamente = true;
                             }
-                            
+
                             var ItemRow =
                                 '</br >' +
                                 '<div class="modal-content">' +
@@ -334,14 +333,14 @@
                                 '<p>' + list[i].mensaje + '<p>' +
                                 '</div>' +
                                 '<div class="modal-footer">' +
-                                '<a  class="Leido btn btn-default ' + list[i].id_mensaje + '">Leido</a>';                                +
-                                
+                                '<a  class="Leido btn btn-default ' + list[i].id_mensaje + '">Leido</a>'; +
+
 
                                     $("#MensajeDialog").append(ItemRow);
                         }
-                       
 
-                        if (verAutomaticamente) {                           
+
+                        if (verAutomaticamente) {
                             setTimeout(function () {
                                 $('#Mensaje').modal('show');
                             }, 2000);
@@ -370,9 +369,9 @@
                 idMensaje: idMensaje,
                 idUsuario: idUsuario
             },
-            success: function () {           
+            success: function () {
                 $('#Mensaje').modal('hide');
-                $("#MensajeDialog").empty(); 
+                $("#MensajeDialog").empty();
                 ActulizarMensaje();
             }
         });
@@ -392,36 +391,34 @@
             }
         });
     });
-    
 
-    $("#mensaje_fechaVencimientoDesde").change(function () {   
-        var valor = $("#mensaje_fechaVencimientoDesde").val();        
-        if ($("#mensaje_fechaVencimientoHasta").val() == null || $("#mensaje_fechaVencimientoHasta").val() == undefined || $("#mensaje_fechaVencimientoHasta").val() == "")
-        {
+
+    $("#mensaje_fechaVencimientoDesde").change(function () {
+        var valor = $("#mensaje_fechaVencimientoDesde").val();
+        if ($("#mensaje_fechaVencimientoHasta").val() == null || $("#mensaje_fechaVencimientoHasta").val() == undefined || $("#mensaje_fechaVencimientoHasta").val() == "") {
             $("#mensaje_fechaVencimientoHasta").val(valor);
         }
-        var valor2 = $("#mensaje_fechaVencimientoHasta").val();  
-        ChangefechaVencimiento('fechaVencimientoMensajeDesde', valor);   
-        ChangefechaVencimiento('fechaVencimientoMensajeHasta', valor2); 
+        var valor2 = $("#mensaje_fechaVencimientoHasta").val();
+        ChangefechaVencimiento('fechaVencimientoMensajeDesde', valor);
+        ChangefechaVencimiento('fechaVencimientoMensajeHasta', valor2);
         ChangefechaCreacion('fechaCreacionMensajeDesde', null);
         ChangefechaCreacion('fechaCreacionMensajeHasta', null);
         $("#mensaje_fechaCreacionDesde").val(null);
-        $("#mensaje_fechaCreacionHasta").val(null);  
+        $("#mensaje_fechaCreacionHasta").val(null);
     });
 
     $("#mensaje_fechaVencimientoHasta").change(function () {
-        var valor = $("#mensaje_fechaVencimientoHasta").val();        
-        if ($("#mensaje_fechaVencimientoDesde").val() == null || $("#mensaje_fechaVencimientoDesde").val() == undefined || $("#mensaje_fechaVencimientoDesde").val() == "")
-        {
+        var valor = $("#mensaje_fechaVencimientoHasta").val();
+        if ($("#mensaje_fechaVencimientoDesde").val() == null || $("#mensaje_fechaVencimientoDesde").val() == undefined || $("#mensaje_fechaVencimientoDesde").val() == "") {
             $("#mensaje_fechaVencimientoDesde").val(valor);
         }
         var valor2 = $("#mensaje_fechaVencimientoDesde").val();
-        ChangefechaVencimiento('fechaVencimientoMensajeHasta', valor);  
-        ChangefechaVencimiento('fechaVencimientoMensajeDesde', valor2); 
+        ChangefechaVencimiento('fechaVencimientoMensajeHasta', valor);
+        ChangefechaVencimiento('fechaVencimientoMensajeDesde', valor2);
         ChangefechaCreacion('fechaCreacionMensajeDesde', null);
         ChangefechaCreacion('fechaCreacionMensajeHasta', null);
         $("#mensaje_fechaCreacionDesde").val(null);
-        $("#mensaje_fechaCreacionHasta").val(null);   
+        $("#mensaje_fechaCreacionHasta").val(null);
     });
 
     function ChangefechaVencimiento(propiedad, valor) {
@@ -440,47 +437,45 @@
 
 
     $("#mensaje_fechaCreacionDesde").change(function () {
-        var valor = $("#mensaje_fechaCreacionDesde").val(); 
-       
-        if ($("#mensaje_fechaCreacionHasta").val() == null || $("#mensaje_fechaCreacionHasta").val() == undefined || $("#mensaje_fechaCreacionHasta").val() == "")
-        {
+        var valor = $("#mensaje_fechaCreacionDesde").val();
+
+        if ($("#mensaje_fechaCreacionHasta").val() == null || $("#mensaje_fechaCreacionHasta").val() == undefined || $("#mensaje_fechaCreacionHasta").val() == "") {
             $("#mensaje_fechaCreacionHasta").val(valor);
         }
         var valor2 = $("#mensaje_fechaCreacionHasta").val();
         ChangefechaCreacion('fechaCreacionMensajeDesde', valor);
         ChangefechaCreacion('fechaCreacionMensajeHasta', valor2);
         ChangefechaVencimiento('fechaVencimientoMensajeDesde', null);
-        ChangefechaVencimiento('fechaVencimientoMensajeHasta', null);       
+        ChangefechaVencimiento('fechaVencimientoMensajeHasta', null);
         $("#mensaje_fechaVencimientoDesde").val(null);
-        $("#mensaje_fechaVencimientoHasta").val(null); 
+        $("#mensaje_fechaVencimientoHasta").val(null);
 
 
     });
 
     $("#mensaje_fechaCreacionHasta").change(function () {
         var valor = $("#mensaje_fechaCreacionHasta").val();
-       
-        if ($("#mensaje_fechaCreacionDesde").val() == null || $("#mensaje_fechaCreacionDesde").val() == undefined || $("#mensaje_fechaCreacionDesde").val() == "")
-        {
+
+        if ($("#mensaje_fechaCreacionDesde").val() == null || $("#mensaje_fechaCreacionDesde").val() == undefined || $("#mensaje_fechaCreacionDesde").val() == "") {
             $("#mensaje_fechaCreacionDesde").val(valor);
         }
         var valor2 = $("#mensaje_fechaCreacionDesde").val();
         ChangefechaCreacion('fechaCreacionMensajeHasta', valor);
         ChangefechaCreacion('fechaCreacionMensajeDesde', valor2);
         ChangefechaVencimiento('fechaVencimientoMensajeDesde', null);
-        ChangefechaVencimiento('fechaVencimientoMensajeHasta', null); 
+        ChangefechaVencimiento('fechaVencimientoMensajeHasta', null);
         $("#mensaje_fechaVencimientoDesde").val(null);
-        $("#mensaje_fechaVencimientoHasta").val(null);  
+        $("#mensaje_fechaVencimientoHasta").val(null);
     });
 
-    function ChangefechaCreacion(propiedad,valor) {
-      
+    function ChangefechaCreacion(propiedad, valor) {
+
         $.ajax({
             url: "/Mensaje/ChangeFechaCreacion",
             type: 'POST',
             data: {
                 fechaCreacion: valor,
-                propiedad:propiedad
+                propiedad: propiedad
             },
             success: function () {
             }
@@ -695,7 +690,7 @@
 
     function cargarChosenUsuarioMensaje() {
 
-       
+
         $("#idUsuarioBusquedaMensaje").chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
 
 
@@ -713,7 +708,7 @@
 
     $("#idUsuarioBusquedaMensaje").change(function () {
 
-        var idUsuario = $("#idUsuarioBusquedaMensaje").val();       
+        var idUsuario = $("#idUsuarioBusquedaMensaje").val();
 
         $.ajax({
             url: "/Mensaje/ChangeUsuarioMensaje",
@@ -727,5 +722,5 @@
 
     });
 
-    
+
 });

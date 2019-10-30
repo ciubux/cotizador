@@ -12,3 +12,4 @@ and (ROL_USUARIO.id_usuario=@id_usuario or MENSAJE_USUARIO.id_usuario=@id_usuari
 and fecha_inicio <= convert(date,dbo.getlocaldate())  and fecha_vencimiento >= convert(date,dbo.getlocaldate())
 order by  mensaje.fecha_creacion desc
 end
+

@@ -647,9 +647,7 @@
                 $("#vendedor_contacto").val(usuario.contacto);              
             }
         });
-
-
-
+        
     });
 
 
