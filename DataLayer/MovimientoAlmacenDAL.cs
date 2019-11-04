@@ -769,10 +769,12 @@ namespace DataLayer
                 guiaRemision.anulacionSolicitada = Converter.GetInt(row, "anulacion_aprobada") == 1 ? true : false;
                 guiaRemision.solicitudAnulacionAprobada = Converter.GetInt(row, "anulacion_solicitada") == 1 ? true : false;
                 guiaRemision.comentarioSolicitudAnulacion = Converter.GetString(row, "comentario_solicitud_anulacion");
+                if (guiaRemision.comentarioSolicitudAnulacion == null) { guiaRemision.comentarioSolicitudAnulacion = ""; }
 
                 guiaRemision.usuarioSolicitaAnulacion = new Usuario();
                 guiaRemision.usuarioSolicitaAnulacion.idUsuario = Converter.GetGuid(row, "usuario_solicita_anulacion");
                 guiaRemision.usuarioSolicitaAnulacion.nombre = Converter.GetString(row, "usuario_solicita_anulacion_nombre");
+                if (guiaRemision.usuarioSolicitaAnulacion.nombre == null) { guiaRemision.usuarioSolicitaAnulacion.nombre = ""; }
 
                 //ADICIONALES
                 guiaRemision.placaVehiculo = Converter.GetString(row, "placa_vehiculo");

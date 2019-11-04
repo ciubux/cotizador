@@ -41,7 +41,13 @@ namespace Cotizador.Models.DTOshow
         public bool ingresado { get; set; }
         public List<Model.DocumentoDetalle> documentoDetalle { get; set; }
         
-       
+        public Model.Usuario usuarioSolicitaAnulacion { get; set; }
 
+        public Boolean permiteAnulacion { get; set; }
+
+        public Boolean anulacionSolicitada { get; set; }
+        public Boolean solicitudAnulacionAprobada { get; set; }
+
+        public String comentarioSolicitudAnulacion { get; set; }
     }
 }

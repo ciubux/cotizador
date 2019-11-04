@@ -164,6 +164,12 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.motivoTraslado = guiaRemision.motivoTraslado;
             guiaRemisionDTOshow.ingresado = guiaRemision.ingresado;
             guiaRemisionDTOshow.documentoDetalle = guiaRemision.documentoDetalle;
+            guiaRemisionDTOshow.usuarioSolicitaAnulacion = guiaRemision.usuarioSolicitaAnulacion;
+            guiaRemisionDTOshow.permiteAnulacion = guiaRemision.permiteAnulacion;
+            guiaRemisionDTOshow.anulacionSolicitada = guiaRemision.anulacionSolicitada;
+            guiaRemisionDTOshow.solicitudAnulacionAprobada = guiaRemision.solicitudAnulacionAprobada;
+            guiaRemisionDTOshow.comentarioSolicitudAnulacion = guiaRemision.comentarioSolicitudAnulacion;
+            
             return guiaRemisionDTOshow;
         }
 

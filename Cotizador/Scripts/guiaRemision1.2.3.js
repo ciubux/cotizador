@@ -738,14 +738,18 @@ jQuery(function ($) {
 
                 
                 $(".mensajeNoPermiteAnulacion").show();
-                $("#btnAceptarAnulacion").hide();
-                $("#btnAceptarSolicitudAnulacion").hide();
+                $("#btnAnularGuiaRemision").hide();
+                $("#btnAprobarAnularGuiaRemision").hide();
 
                 if (guiaRemision.permiteAnulacion) {
                     $(".mensajeNoPermiteAnulacion").hide();
-                    $("#btnAceptarAnulacion").show();
-                    $("#btnAceptarSolicitudAnulacion").show();
+                } else {
+                    if (guiaRemision.estaAnulado) {
+                        $("#btnSolicitarAnularGuiaRemision").hide();
+                    }
                 }
+
+               
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
@@ -763,7 +767,16 @@ jQuery(function ($) {
                     $("#guiaRemision_tipoExtorno").val(guiaRemision.tipoExtorno);
                     /*Si se encuentra NO EXTORNADA*/
                     if (guiaRemision.tipoExtorno == MOV_TIPO_EXTORNO_SIN_EXTORNO) {
-                        $("#btnAnularGuiaRemision").show();
+                        //$("#btnAnularGuiaRemision").show();
+
+                        if (guiaRemision.anulacionSolicitada) {
+                            $("#btnAprobarAnularGuiaRemision").show();
+                        }
+
+                        if (guiaRemision.solicitudAnulacionAprobada) {
+                            $("#btnAnularGuiaRemision").show();
+                        }
+
                         $("#btnExtornar").show();
 
                         $("#divTipoExtorno").hide();
@@ -774,6 +787,8 @@ jQuery(function ($) {
                     /*Si se encuentra EXTORNADA no se puede Anular, Ni facturar*/
                     else {
                         $("#btnAnularGuiaRemision").hide();
+                        $("#btnSolicitarAnularGuiaRemision").hide();
+
                         $("#btnFacturarGuiaRemision").hide();
 
                         $("#divTipoExtorno").show();
@@ -807,6 +822,7 @@ jQuery(function ($) {
                     if (guiaRemision.estaFacturado == 1) {
                         $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:green")
                         $("#btnAnularGuiaRemision").hide();
+                        $("#btnSolicitarAnularGuiaRemision").hide();
                         $("#btnFacturarGuiaRemision").hide();
                         $("#btnRefacturar").show();
                     }

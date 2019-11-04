@@ -1081,12 +1081,15 @@ namespace Cotizador.Controllers
 
         public String Show()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             GuiaRemision guiaRemision = new GuiaRemision();
             guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
             guiaRemision = movimientoAlmacenBL.GetGuiaRemision(guiaRemision);
+            guiaRemision.usuario = usuario;
             this.Session[Constantes.VAR_SESSION_GUIA_VER] = guiaRemision;
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+           
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             //string jsonGuiaRemision = JsonConvert.SerializeObject(guiaRemision);
             string jsonGuiaRemision = JsonConvert.SerializeObject(ParserDTOsShow.GuiaRemisionToGuiaRemisionDTO(guiaRemision));
