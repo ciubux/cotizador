@@ -292,12 +292,21 @@ namespace Cotizador.Controllers
 
 
         [HttpGet]
-        public ActionResult ExportLastShowCanasta()
+        public ActionResult ExportLastShowCanasta(int tipoDescarga)
         {
             Cliente obj = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
 
             CanastaCliente excel = new CanastaCliente();
-            return excel.generateExcel(obj);
+            ClienteBL bl = new ClienteBL();
+
+            bool soloCanastaHabitual = false;
+            switch(tipoDescarga)
+            {
+                case 2: soloCanastaHabitual = true; break;
+                case 3: obj.listaPrecios = bl.getPreciosHistoricoCliente(obj.idCliente);break;
+            }
+
+            return excel.generateExcel(obj, soloCanastaHabitual);
         }
 
 
@@ -406,6 +415,10 @@ namespace Cotizador.Controllers
                     success = 0;
                     message = "No se pudo agregar el producto a la canasta.";
                 }
+            } else
+            {
+                success = 0;
+                message = "No tiene permiso para realizar esta acción.";
             }
             
 
@@ -436,6 +449,11 @@ namespace Cotizador.Controllers
                     success = 0;
                     message = "No se pudo retirar el producto de la canasta.";
                 }
+            }
+            else
+            {
+                success = 0;
+                message = "No tiene permiso para realizar esta acción.";
             }
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";

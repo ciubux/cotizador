@@ -639,6 +639,7 @@ namespace Cotizador.Controllers
             else
             {
                 detalle.precioNeto = precioNeto;
+                detalle.unidad = detalle.producto.unidad;
             }
             detalle.flete = flete;
             pedido.pedidoDetalleList.Add(detalle);

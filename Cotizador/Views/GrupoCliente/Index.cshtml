@@ -317,7 +317,7 @@
                         <div id="grupo_precio" class="tab-pane fade">
                             <div class="row">
 
-                                <div class="col-sm-6 col-lg-6">
+                                <div class="col-sm-12 col-lg-6">
                                     <div class="onoffswitch">
                                         <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkSoloCanasta">
                                         <label class="onoffswitch-label" for="chkSoloCanasta"></label>
@@ -325,9 +325,10 @@
                                     <h5 id="lblChkCanasta" style="width: 80%; margin-left: 45px; margin-top: -22px; font-weight:bold; cursor:pointer;" class="text-muted">Ver solo canasta de compra habitual</h5>
 
                                 </div>
-                                <div class="col-sm-6 col-lg-6">
+                                <div class="col-sm-12 col-lg-6">
                                     <div class="form-group right" style="padding-right: 10px;">
                                         <button type="button" id="btnLimpiarCanasta" class="btn btn-primary ">Limpiar Canasta Habitual</button>
+                                        <button id="btnExportCanasta" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowCanasta", "GrupoCliente")">Exportar Canasta</button>
                                     </div>
                                 </div>
                             </div>

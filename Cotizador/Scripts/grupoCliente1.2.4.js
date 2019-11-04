@@ -1346,6 +1346,40 @@ jQuery(function ($) {
 
     var idClienteView = "";
 
+    $("#btnExportCanasta").click(function () {
+        var actionLink = $(this).attr("actionLink");
+        $.confirm({
+            title: 'Tipo descarga',
+            content: 'Seleccione el tipo de descarga de la canasta:',
+            type: 'orange',
+            buttons: {
+                list: {
+                    text: 'LISTA PRECIOS VIGENTES',
+                    btnClass: 'btn-green',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=1";
+                    }
+                },
+                basket: {
+                    text: 'CANASTA HABITUAL',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=2";
+                    }
+                },
+                record: {
+                    text: 'LISTA PRECIOS HISTORICO',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=3";
+                    }
+                }
+            },
+        });
+
+
+    });
+
     $("#btnBusqueda").click(function () {
         /*
         if ($("#grupoCliente_nombre").val().length < 3 &&

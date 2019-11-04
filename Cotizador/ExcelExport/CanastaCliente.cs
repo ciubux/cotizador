@@ -24,7 +24,7 @@ namespace Cotizador.ExcelExport
         protected int cantFilasRegistrosAdicionales = 3;
         public static int filaInicioDatos { get { return 2; } }
 
-        public FileStreamResult generateExcel(Cliente obj)
+        public FileStreamResult generateExcel(Cliente obj, bool soloCanastaHabitual = false)
         {
             HSSFWorkbook wb;
             //  Dictionary<String, ICellStyle> styles = CreateExcelStyles(wb);
@@ -169,7 +169,7 @@ namespace Cotizador.ExcelExport
                 twoDecLastCellStyle.BorderBottom = BorderStyle.Thin;
 
                 // create sheet
-                sheet = (HSSFSheet)wb.CreateSheet("COT-" + obj.codigo);
+                sheet = (HSSFSheet)wb.CreateSheet("LISTA PRECIOS");
 
 
                 /*guiaRemision,fecha_emision, ma.direccion_entrega, ub.distrito, 
@@ -253,43 +253,46 @@ namespace Cotizador.ExcelExport
 
                 foreach (DocumentoDetalle det in obj.listaPrecios)
                 {
-                    UtilesHelper.setRowHeight(sheet, i, 810);
-
-                    int picDet = newWorkbook.AddPicture(det.producto.image, PictureType.PNG);
-                    HSSFClientAnchor detAnchor = helper.CreateClientAnchor() as HSSFClientAnchor;
-                    detAnchor.Col1 = 3;
-                    detAnchor.Row1 = i - 1;
-                    detAnchor.AnchorType = AnchorType.DontMoveAndResize;
-
-                    HSSFPicture pictdet = drawing.CreatePicture(detAnchor, picDet) as HSSFPicture;
-                    pictdet.Resize(1);
-
-                    
-
-                    UtilesHelper.setValorCelda(sheet, i, "A", det.producto.proveedor, tableDataCenterCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "B", det.producto.sku, tableDataCenterCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "C", det.producto.descripcion, tableDataCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "E", det.unidad, tableDataCenterCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "F", (double) det.producto.precioClienteProducto.equivalencia, twoDecCellStyle);
-
-                    UtilesHelper.setValorCelda(sheet, i, "G", (double) det.precioLista, twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "H", (double) det.porcentajeDescuentoMostrar, twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "I", (double) det.precioNeto, twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "J", (double) det.flete, twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "K", (double) det.producto.precioClienteProducto.precioUnitario, twoDecCellStyle);
-
-
-                    if (obj.usuario.visualizaMargen)
+                    if (!soloCanastaHabitual || (soloCanastaHabitual && det.producto.precioClienteProducto.estadoCanasta))
                     {
-                        UtilesHelper.setValorCelda(sheet, i, "L", (double)det.porcentajeMargenMostrar, twoDecCellStyle);
-                        UtilesHelper.setValorCelda(sheet, i, "M", det.producto.precioClienteProducto.estadoCanasta ? "SI" : "NO", tableDataCenterCellStyle);
-                    }
-                    else
-                    {
-                        UtilesHelper.setValorCelda(sheet, i, "L", det.producto.precioClienteProducto.estadoCanasta ? "SI" : "NO", tableDataCenterCellStyle);
-                    }
+                        UtilesHelper.setRowHeight(sheet, i, 810);
 
-                    i++;
+                        int picDet = newWorkbook.AddPicture(det.producto.image, PictureType.PNG);
+                        HSSFClientAnchor detAnchor = helper.CreateClientAnchor() as HSSFClientAnchor;
+                        detAnchor.Col1 = 3;
+                        detAnchor.Row1 = i - 1;
+                        detAnchor.AnchorType = AnchorType.DontMoveAndResize;
+
+                        HSSFPicture pictdet = drawing.CreatePicture(detAnchor, picDet) as HSSFPicture;
+                        pictdet.Resize(1);
+
+
+
+                        UtilesHelper.setValorCelda(sheet, i, "A", det.producto.proveedor, tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "B", det.producto.sku, tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "C", det.producto.descripcion, tableDataCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "E", det.unidad, tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "F", (double)det.producto.precioClienteProducto.equivalencia, twoDecCellStyle);
+
+                        UtilesHelper.setValorCelda(sheet, i, "G", (double)det.precioLista, twoDecCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "H", (double)det.porcentajeDescuentoMostrar, twoDecCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "I", (double)det.precioNeto, twoDecCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "J", (double)det.flete, twoDecCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "K", (double)det.producto.precioClienteProducto.precioUnitario, twoDecCellStyle);
+
+
+                        if (obj.usuario.visualizaMargen)
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "L", (double)det.porcentajeMargenMostrar, twoDecCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "M", det.producto.precioClienteProducto.estadoCanasta ? "SI" : "NO", tableDataCenterCellStyle);
+                        }
+                        else
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "L", det.producto.precioClienteProducto.estadoCanasta ? "SI" : "NO", tableDataCenterCellStyle);
+                        }
+
+                        i++;
+                    }
                 }
 
                 UtilesHelper.setValorCelda(sheet, i, "A", "", lastDataCellStyle);
