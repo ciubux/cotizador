@@ -562,7 +562,7 @@
         $("#idUsuarioBusquedaList").ajaxChosen({
             dataType: "json",
             type: "GET",
-            minTermLength: 1,
+            minTermLength: 0,
             afterTypeDelay: 300,
             cache: false,
             url: "/Vendedor/SearchUsuario"
@@ -580,7 +580,7 @@
         $("#idVendedorBusquedaList").ajaxChosen({
             dataType: "json",
             type: "GET",
-            minTermLength: 1,
+            minTermLength: 0,
             afterTypeDelay: 300,
             cache: false,
             url: "/Vendedor/SearchVendedor"

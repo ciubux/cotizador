@@ -376,7 +376,7 @@ namespace Cotizador.Controllers
         {
             Mensaje obj = (Mensaje)this.MensajeSession;
             String[] fecha = this.Request.Params["fechaVencimiento"].Split('/');
-            obj.fechaVencimientoMensaje = obj.fechaInicioMensaje = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+            obj.fechaVencimientoMensaje = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
             this.MensajeSession = obj;
 
         }
