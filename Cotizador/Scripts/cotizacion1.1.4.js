@@ -1295,7 +1295,42 @@ jQuery(function ($) {
         indicarProveedorTodos();
     });
 
+    $("#btnAgregarCanasta").click(function () {
 
+        if (!validarSeleccionClienteOGrupo()) {
+            return false;
+        }
+
+        $.confirm({
+            title: 'IMPORTAR PRODUCTOS COTIZADOS',
+            content: 'Seleccione upa de las opciones para importar los productos cotizados.',
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'PRECIOS VIGENTES',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        window.location = '/Cotizacion/CargarProductosCanasta?tipo=1';
+                    }
+                },
+                noAplica: {
+                    text: 'CANASTA HABITUAL',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        window.location = '/Cotizacion/CargarProductosCanasta?tipo=2';
+                    }
+                },
+                cancelar: {
+                    text: 'CANCELAR',
+                    btnClass: '',
+                    action: function () {
+                        
+                    }
+                }
+            }
+        });
+
+    });
 
 
     $("#btnObtenerProductosParaGrupo").click(function () {
