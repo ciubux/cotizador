@@ -635,6 +635,7 @@ namespace DataLayer
                 obj.email = Converter.GetString(row, "email");
                 obj.contacto = Converter.GetString(row, "contacto");
                 obj.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                obj.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row,"maximo_porcentaje_descuento_aprobacion");
             }
 
             return obj;

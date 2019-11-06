@@ -105,9 +105,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", obj.estado);
             InputParameterAdd.Guid(objCommand, "usuario_creacion", obj.usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "maximo_descuento", obj.maxdesapro);
-            InputParameterAdd.Guid(objCommand, "id_ciudad", obj.idCiudad);
-            
-          
+            InputParameterAdd.Guid(objCommand, "id_ciudad", obj.idCiudad); 
             InputParameterAdd.Guid(objCommand, "id_usuario_vendedor", obj.supervisor.usuario.idUsuario);
             InputParameterAdd.Bit(objCommand, "es_supervisor_comercial", obj.esSupervisorComercial);
             InputParameterAdd.Bit(objCommand, "es_responsable_comercial", obj.esResponsableComercial);

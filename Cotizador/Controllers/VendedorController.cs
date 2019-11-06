@@ -299,6 +299,7 @@ namespace Cotizador.Controllers
             obj.idVendedor = 0;
             obj.estado = 1;
             obj.cargo = " ";
+            obj.maxdesapro = 0.00M;
             Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             obj.usuario = user;
             obj.supervisor = new Vendedor();
@@ -366,12 +367,13 @@ namespace Cotizador.Controllers
             Vendedor vendedor = (Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR];
             vendedor.supervisor.usuario = new Usuario();
             Guid idVendedor = Guid.Parse(Request["idVendedor"].ToString());
-            UsuarioBL clienteBl = new UsuarioBL();
-            vendedor.supervisor.usuario = clienteBl.getUsuarioVendedor(idVendedor);
+            UsuarioBL usuarioBl = new UsuarioBL();
+            vendedor.supervisor.usuario = usuarioBl.getUsuarioVendedor(idVendedor);
             vendedor.cargo = vendedor.supervisor.usuario.cargo;
             vendedor.descripcion = vendedor.supervisor.usuario.nombre;
             vendedor.idCiudad = vendedor.supervisor.usuario.sedeMP.idCiudad;
             vendedor.contacto = vendedor.supervisor.usuario.contacto;
+            vendedor.maxdesapro = vendedor.supervisor.usuario.maximoPorcentajeDescuentoAprobacion;
             String resultado = JsonConvert.SerializeObject(vendedor.supervisor.usuario);
             this.Session[Constantes.VAR_SESSION_VENDEDOR] = vendedor;
 

@@ -292,22 +292,6 @@
 
     function validacionDatosVendedor() { 
 
-
-        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        var var1 = $("#usuario_email").val();
-
-        if (regex.test(var1) !== true || $("#usuario_email").val().indexOf(" ") !== -1 || $("#usuario_email").val().indexOf("@") == -1 || $("#usuario_email").val().length < 12) {
-            $.alert({
-                title: "Email Inválido",
-                type: 'orange',
-                content: 'Debe ingresar un Email válido. Ejem:prueba@mpinstitucional.com',
-                buttons: {
-                    OK: function () { $('#usuario_email').focus(); }
-                }
-            });
-            return false;
-        }
-
         if ($("#vendedor_codigo").val().indexOf(" ") !== -1 || $("#vendedor_codigo").val().length == 1 || $("#vendedor_codigo").val().length > 2 || $("#vendedor_codigo").val().length == "") {
             $.alert({
                 title: "Código Inválido",
@@ -384,12 +368,12 @@
             return false;
         }
 
+        var a = $("#idVendedorBusquedaList").val();
         if ($("#idVendedorBusquedaList").val() == undefined || $("#idVendedorBusquedaList").val() == "") {
             $("#idVendedorBusquedaList").val("");
-        }
-             
-        
-    if ($("#responsable_comercial_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "" || $("#atencion_cliente_vendedor").val() == 1 && $("#idVendedorBusquedaList").val() == "") 
+        }             
+       
+        if ($("#responsable_comercial_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "" || ($("#atencion_cliente_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "")) 
         {
             $.alert({
                 title: "Supervisor Inválido",
@@ -457,15 +441,14 @@
                 }
             });
             return false;
-        }
-       
+        }       
+
         if ($("#idVendedorBusquedaList").val() == undefined || $("#idVendedorBusquedaList").val() == "")
         {
             $("#idVendedorBusquedaList").val("");
-        }
-       
-
-        if ($("#responsable_comercial_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "" || $("#atencion_cliente_vendedor").val() == 1 && $("#idVendedorBusquedaList").val() == "")
+        }       
+        
+        if ($("#responsable_comercial_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "" || ($("#atencion_cliente_vendedor").prop('checked') && $("#idVendedorBusquedaList").val()) == "")
         {
             $.alert({
                 title: "Supervisor Inválido",
@@ -562,7 +545,7 @@
         $("#idUsuarioBusquedaList").ajaxChosen({
             dataType: "json",
             type: "GET",
-            minTermLength: 0,
+            minTermLength: 1,
             afterTypeDelay: 300,
             cache: false,
             url: "/Vendedor/SearchUsuario"
@@ -580,7 +563,7 @@
         $("#idVendedorBusquedaList").ajaxChosen({
             dataType: "json",
             type: "GET",
-            minTermLength: 0,
+            minTermLength: 1,
             afterTypeDelay: 300,
             cache: false,
             url: "/Vendedor/SearchVendedor"
@@ -644,7 +627,8 @@
                 $("#vendedor_idCiudad").val(usuario.sedeMP.idCiudad);
                 $("#vendedor_cargo").val(usuario.cargo);
                 $("#vendedor_descripcion").val(usuario.nombre);
-                $("#vendedor_contacto").val(usuario.contacto);              
+                $("#vendedor_contacto").val(usuario.contacto);
+                $("#vendedor_maxdesapro").val(usuario.maximoPorcentajeDescuentoAprobacion);                
             }
         });
         
