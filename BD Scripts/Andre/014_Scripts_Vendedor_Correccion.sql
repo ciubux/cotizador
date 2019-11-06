@@ -1,4 +1,4 @@
-/**********************************************/
+/**************ALTER ps_usuario_get_vendedor -aGREGADO maximo_porcentaje_descuento_aprobacion ********************************/
 ALTER PROCEDURE [dbo].[ps_usuario_get_vendedor]
 	@idUsuario uniqueidentifier
 AS
@@ -7,7 +7,8 @@ BEGIN
 	FROM USUARIO 
 	WHERE id_usuario = @idUsuario;
 END
-/***********************************************************************/
+
+/*********************** ALTER ps_lista_usuarios - Reajuste de busqueda de usuarios que no estan como vendedores**************************/
 ALTER procedure [dbo].[ps_lista_usuarios] 
 (@BusquedaUsuario varchar(50))
 as begin
@@ -28,7 +29,8 @@ nombre like '%'+@BusquedaUsuario +'%' or email like '%'+@BusquedaUsuario +'%' or
 REPLACE( REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(email, 'á', 'a'), 'é','e'), 'í', 'i'), 'ó', 'o'), 'ú','u'),'"',' ')  LIKE '%'+@BusquedaUsuario+'%') 
 order by USUARIO.nombre asc
 end 
-  /*******************************************************************/
+
+  /***********************ALTER [pi_vendedor] - Agregado el maximo_porcentaje_descuento_aprobacion ***************************/
 alter PROCEDURE [dbo].[pi_vendedor]
 ( 
  
@@ -55,7 +57,7 @@ update usuario set
 					contacto=@contacto,
 					id_ciudad=@id_ciudad,
 					usuario_modificacion=@usuario_creacion,				
-					fecha_modificacion=GETDATE(),
+					fecha_modificacion=dbo.getlocaldate(),
 					maximo_porcentaje_descuento_aprobacion=@maximo_descuento
 					where usuario.id_usuario=@id_usuario_vendedor
 					
@@ -89,7 +91,7 @@ insert  into VENDEDOR(
 								)  
   END
 
-  /**********************************************************************/
+  /**************************ALTER [pu_vendedores] - Agregado maximo_porcentaje_descuento_aprobacion ****************************/
 
     ALTER procedure [dbo].[pu_vendedores] 
 						(
