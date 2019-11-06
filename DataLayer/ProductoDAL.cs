@@ -544,8 +544,9 @@ namespace DataLayer
                 if (cotizacionDetalle.esPrecioAlternativo)
                 {
                     cotizacionDetalle.ProductoPresentacion = new ProductoPresentacion();
-                    cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioLista * cotizacionDetalle.ProductoPresentacion.Equivalencia;
+                    cotizacionDetalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
                     cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                    cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioLista * cotizacionDetalle.ProductoPresentacion.Equivalencia;
                 }
 
 

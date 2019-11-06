@@ -1755,7 +1755,7 @@ namespace Cotizador.Controllers
 
                         item.cantidad = cantidad;
                         item.observacion = observacion;
-                        item.unidad = item.producto.unidad;
+                        item.unidad = prod.unidad;
                         item.flete = prod.flete;
 
                         if (prod.ProductoPresentacion == null)
@@ -1796,9 +1796,6 @@ namespace Cotizador.Controllers
 
 
                                 precioNetoAnterior = item.producto.precioClienteProducto.precioNetoAlternativo;
-
-
-                                item.unidad = item.ProductoPresentacion.Presentacion;
                             }
                         }
                         else
