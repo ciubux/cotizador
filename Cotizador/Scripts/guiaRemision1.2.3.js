@@ -730,19 +730,31 @@ jQuery(function ($) {
 
                 $("#btnRefacturar").hide();
                  
-                $("#verComentariSolicitudAnulacion").val(guiaRemision.comentarioSolicitudAnulacion);
-                $("#verUsuarioSolicitaAnulacion").val(guiaRemision.usuarioSolicitaAnulacion.nombre);
+                $("#verComentariSolicitudAnulacion").html(guiaRemision.comentarioSolicitudAnulacion);
+                $("#verUsuarioSolicitaAnulacion").html(guiaRemision.usuarioSolicitaAnulacion.nombre);
                 $("#ver_permite_anulacion").val(guiaRemision.permiteAnulacion);
                 $("#ver_anulacion_solicitada").val(guiaRemision.anulacionSolicitada);
                 $("#ver_solicitud_anulacion_aprobada").val(guiaRemision.solicitudAnulacionAprobada);
-
+                //alert(guiaRemision.permiteAnulacion);
                 
                 $(".mensajeNoPermiteAnulacion").show();
+                $("#btnSolicitarAnularGuiaRemision").show();
                 $("#btnAnularGuiaRemision").hide();
                 $("#btnAprobarAnularGuiaRemision").hide();
 
                 if (guiaRemision.permiteAnulacion) {
                     $(".mensajeNoPermiteAnulacion").hide();
+
+                    if (guiaRemision.anulacionSolicitada) {
+                        $("#btnSolicitarAnularGuiaRemision").hide();
+                        $("#btnAprobarAnularGuiaRemision").show();
+                    }
+
+                    if (guiaRemision.solicitudAnulacionAprobada) {
+                        $("#btnSolicitarAnularGuiaRemision").hide();
+                        $("#btnAprobarAnularGuiaRemision").hide();
+                        $("#btnAnularGuiaRemision").show();
+                    }
                 } else {
                     if (guiaRemision.estaAnulado) {
                         $("#btnSolicitarAnularGuiaRemision").hide();
@@ -769,13 +781,7 @@ jQuery(function ($) {
                     if (guiaRemision.tipoExtorno == MOV_TIPO_EXTORNO_SIN_EXTORNO) {
                         //$("#btnAnularGuiaRemision").show();
 
-                        if (guiaRemision.anulacionSolicitada) {
-                            $("#btnAprobarAnularGuiaRemision").show();
-                        }
-
-                        if (guiaRemision.solicitudAnulacionAprobada) {
-                            $("#btnAnularGuiaRemision").show();
-                        }
+                        
 
                         $("#btnExtornar").show();
 
@@ -1400,6 +1406,86 @@ jQuery(function ($) {
        // window.open("GuiaRemision/Print");
     });
         
+    $("#btnAprobarSolicitudAnulacion").click(function () {
+        $("#btnAprobarSolicitudAnulacion").attr("disabled", "disabled");
+        $.ajax({
+            url: "/GuiaRemision/AprobarAnulacion",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+            },
+            error: function () {
+                $("#btnAprobarSolicitudAnulacion").removeAttr("disabled");
+                alert(MENSAJE_ERROR);
+            },
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    $.alert({
+                        title: "Operación Exitosa",
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () {
+                                window.location = '/GuiaRemision/Index';
+                            }
+                        }
+                    });
+                } else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () {
+                                $("#btnAprobarSolicitudAnulacion").removeAttr("disabled");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    $("#btnAceptarSolicitudAnulacion").click(function () {
+        var comentario = $("#comentarioSolicitudAnulacion").val();
+        $("#btnAceptarSolicitudAnulacion").attr("disabled", "disabled");
+        alert(comentario);
+        $.ajax({
+            url: "/GuiaRemision/SolicitarAnulacion",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                comentario: comentario
+            },
+            error: function () {
+                $("#btnAceptarSolicitudAnulacion").removeAttr("disabled");
+                alert(MENSAJE_ERROR);
+            },
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    $.alert({
+                        title: "Operación Exitosa",
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () {
+                                window.location = '/GuiaRemision/Index';
+                            }
+                        }
+                    });
+                } else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () {
+                                $("#btnAceptarSolicitudAnulacion").removeAttr("disabled");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
 
     function limpiarComentario()
     {

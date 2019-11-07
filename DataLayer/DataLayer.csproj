@@ -53,6 +53,7 @@
     <Compile Include="LogCambioDAL.cs" />
     <Compile Include="PermisoDAL.cs" />
     <Compile Include="OrigenDAL.cs" />
+    <Compile Include="GlobalDAL.cs" />
     <Compile Include="RubroDAL.cs" />
     <Compile Include="SubDistribuidorDAL.cs" />
     <Compile Include="SerieDocumentoDAL.cs" />

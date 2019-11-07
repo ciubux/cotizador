@@ -1126,7 +1126,81 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(guiaRemision);
         }
 
+        [HttpPost]
+        public String SolicitarAnulacion()
+        {
+            int success = 1;
+            string message = "";
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            if (!usuario.creaGuias)
+            {
+                success = 0;
+                message = "No tiene acceso.";
+            }
+
+            if (!guiaRemision.permiteAnulacion)
+            {
+                success = 0;
+                message = "No se puede anular esta guía debido a que ya pasaron 3 días desde de la fecha de emisión.";
+            }
+
+            if (guiaRemision.anulacionSolicitada)
+            {
+                success = 0;
+                message = "La anulación ya fue solicitada anteriormente.";
+            }
+
+            if (success == 1)
+            {
+                guiaRemision.usuario = usuario;
+                guiaRemision.comentarioSolicitudAnulacion = Request["comentario"];
+                MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+                movimientoAlmacenBL.SolicitarAnulacionMovimientoAlmacen(guiaRemision);
+                message = "La solicitud de anulación se registro correctamente.";
+            }
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
+
+        [HttpPost]
+        public String AprobarAnulacion()
+        {
+            int success = 1;
+            string message = "";
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.apruebaAnulacionGuias)
+            {
+                success = 0;
+                message = "No tiene acceso";
+            }
+
+            if (!guiaRemision.permiteAnulacion)
+            {
+                success = 0;
+                message = "No se puede anular esta guía debido a que ya pasaron 3 días desde de la fecha de emisión.";
+            }
+
+            if (guiaRemision.solicitudAnulacionAprobada)
+            {
+                success = 0;
+                message = "La solicitud de anulación ya fue aprobada anteriormente.";
+            }
+
+
+            if (success == 1)
+            {
+                guiaRemision.usuario = usuario;
+                MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+                movimientoAlmacenBL.AprobarAnulacionMovimientoAlmacen(guiaRemision);
+                message = "La solicitud anulación se aprobó correctamente.";
+            }
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
 
         #endregion
 

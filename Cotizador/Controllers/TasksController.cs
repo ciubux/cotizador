@@ -102,5 +102,12 @@ namespace Cotizador.Controllers
 
             logCambioBL.aplicarLogCambios();
         }
+
+        public void ActualizarEstadosDiario()
+        {
+            GlobalBL bl = new GlobalBL();
+
+            bl.JobDiario();
+        }
     }
 }

@@ -703,14 +703,14 @@
                     }
                     @if (guiaRemision.usuario.creaGuias)
                     {
-                        <button type="button" id="btnSolicitarAnularGuiaRemision" class="btn btn-warning" data-toggle='modal' data-target='#modalSolicitudAnulacion'>Solicitar Anulación</button>
+                        <button type="button" id="btnSolicitarAnularGuiaRemision" class="btn btn-warning" data-toggle='modal' data-target='#modalSolicitarAnulacion'>Solicitar Anulación</button>
                         <button type="button" id="btnAnularGuiaRemision" class="btn btn-danger" data-toggle='modal' data-target='#modalAnulacion'>Anular</button>
                         <button type="button" id="btnExtornar" class="btn btn-danger">Extornar</button>
                         <button type="button" id="btnIngresar" class="btn btn-primary">Ingresar</button>
                     }
-                    @if (guiaRemision.usuario.creaGuias)
+                    @if (guiaRemision.usuario.apruebaAnulacionGuias)
                     {
-                        <button type="button" id="btnAprobarAnularGuiaRemision" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobarAnulacion'>Aprobar Anulación</button>
+                        <button type="button" id="btnAprobarAnularGuiaRemision" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobarSolicitudAnulacion'>Aprobar Anulación</button>
                     }
                     @if (guiaRemision.usuario.realizaRefacturacion)
                     {
@@ -805,16 +805,19 @@
                 <form class="form-horizontal">
                     <div class="row">
                         <div class="col-sm-12 col-lg-12">
-                            <p class="alert-danger mensajeNoPermiteAnulacion" style="display:none;">No se puede anular esta guía debido a que ya pasaron 3 días desde de la fecha de emisión.</p>
+                            <p class="alert-danger mensajeNoPermiteAnulacion" style="display:none;">Esta guía no puede ser anulada.</p>
                             <!--MOTIVO ANULACION-->
-                            <div class="form-group">
+                            <div class="row">
                                 <label class="control-label col-xs-3">Usuario Solicitante:</label>
                                 <div class="col-xs-9">
-                                    <p class="form-control" id="verUsuarioSolicitaAnulacion" ></p>
+                                    <p class="form-control" id="verUsuarioSolicitaAnulacion"></p>
                                 </div>
+                            </div>
+                            <div class="row">
+
                                 <label for="comentarioAnulado" class="control-label col-xs-3">Comentario:</label>
                                 <div class="col-xs-9">
-                                    <p class="form-control" id="verComentariSolicitudAnulacion" ></p>
+                                    <p class="form-control" id="verComentariSolicitudAnulacion"></p>
                                 </div>
                             </div>
                         </div>

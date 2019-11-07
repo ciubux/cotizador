@@ -335,6 +335,7 @@ namespace Model
         public const String VISUALIZA_DOCUMENTOS_VENTA = "P017";
         public const String VISUALIZA_PEDIDOS_LIMA = "P018";
         public const String VISUALIZA_GUIAS_REMISION = "P019";
+        public const String APRUEBA_ANULACION_GUIAS_REMISION = "P310";
         public const String VISUALIZA_COTIZACIONES = "P020";
         public const String LIBERA_PEDIDOS = "P021";
         public const String BLOQUEA_PEDIDOS = "P022";

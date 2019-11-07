@@ -20,6 +20,21 @@ namespace BusinessLayer
             }
         }
 
+        public void SolicitarAnulacionMovimientoAlmacen(MovimientoAlmacen movimientoAlmacen)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                dal.UpdateSolicitarAnulacion(movimientoAlmacen);
+            }
+        }
+
+        public void AprobarAnulacionMovimientoAlmacen(MovimientoAlmacen movimientoAlmacen)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                dal.UpdateAprobararAnulacion(movimientoAlmacen);
+            }
+        }
 
         public DocumentoVenta obtenerResumenConsolidadoAtenciones(List<Guid> idMovimientoAlmacenList)
         {
