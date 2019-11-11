@@ -1346,6 +1346,40 @@ jQuery(function ($) {
 
     var idClienteView = "";
 
+    $("#btnExportCanasta").click(function () {
+        var actionLink = $(this).attr("actionLink");
+        $.confirm({
+            title: 'Tipo descarga',
+            content: 'Seleccione el tipo de descarga de la canasta:',
+            type: 'orange',
+            buttons: {
+                list: {
+                    text: 'LISTA PRECIOS VIGENTES',
+                    btnClass: 'btn-green',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=1";
+                    }
+                },
+                basket: {
+                    text: 'CANASTA HABITUAL',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=2";
+                    }
+                },
+                record: {
+                    text: 'LISTA PRECIOS HISTORICO',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=3";
+                    }
+                }
+            },
+        });
+
+
+    });
+
     $("#btnBusqueda").click(function () {
         /*
         if ($("#grupoCliente_nombre").val().length < 3 &&
@@ -1609,10 +1643,72 @@ jQuery(function ($) {
     });
 
 
+    $("#btnLimpiarCanasta").click(function () {
+        $.confirm({
+            title: 'Limpiar Canasta Habitual',
+            content: '¿Desea limpiar también la canasta habitual de todos los miembros que heredan precios?',
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'SOLO AL GRUPO',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        limpiarCanastaHabitual(0);
+                        
+                    }
+                },
+                noAplica: {
+                    text: 'TAMBIÉN A LOS MIEMBROS',
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        limpiarCanastaHabitual(1);
+                    }
+                }
+            }
+        });
+    });
+
+    function limpiarCanastaHabitual(aplicaMiembros) {
+        $.ajax({
+            url: "/GrupoCliente/LimpiaCanasta",
+            type: 'POST',
+            data: {
+                aplicaMiembros: aplicaMiembros
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    $(".chkCanasta:checked").prop('checked', false);
+
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+
+                }
+                else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: resultado.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     $("#modalVerGrupoCliente").on('change', ".chkCanasta", function () {
         var idProducto = $(this).attr("idProducto");
 
-        if ($(this).is(":checked")) {
+        if ($(this).is(":checked")) { 
             $.ajax({
                 url: "/GrupoCliente/AgregarProductoACanasta",
                 type: 'POST',

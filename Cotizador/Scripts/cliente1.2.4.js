@@ -364,6 +364,33 @@ jQuery(function ($) {
             }
         });
 
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        var fecha = $("#chrFechaInicioVigenciaAsesor").val();
+        $("#chrFechaInicioVigenciaAsesor").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
+
+        var fecha = $("#chrFechaInicioVigenciaSupervisor").val();
+        $("#chrFechaInicioVigenciaSupervisor").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
+
+        var fecha = $("#chrFechaInicioVigenciaAsistente").val();
+        $("#chrFechaInicioVigenciaAsistente").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
     });
 
     var fechaDesde = $("#fechaVentasDesdetmp").val();
@@ -1050,6 +1077,84 @@ jQuery(function ($) {
             return false;
         }
 
+
+        if (tieneDiferentePrevVal("#idResponsableComercial")) {
+            if ($('#chrFechaInicioVigenciaAsesor').val() == "") {
+                $.alert({
+                    title: "Se detectó nuevo Asesor Comercial",
+                    type: 'orange',
+                    content: 'Debe ingresar una fecha de inicio de vigencia de la asignación del nuevo Asesor Comercial',
+                    buttons: {
+                        OK: function () { $('#chrFechaInicioVigenciaAsesor').focus(); }
+                    }
+                });
+                return false;
+            }
+
+            if ($('#chrObservacionAsesor').val() == "") {
+                $.alert({
+                    title: "Se detectó nuevo Asesor Comercial",
+                    type: 'orange',
+                    content: 'Debe ingresar una observación o comentario sobre la asignación del nuevo Asesor Comercial',
+                    buttons: {
+                        OK: function () { $('#chrObservacionAsesor').focus(); }
+                    }
+                });
+                return false;
+            }
+        }
+
+        if (tieneDiferentePrevVal("#idSupervisorComercial")) {
+            if ($('#chrFechaInicioVigenciaSupervisor').val() == "") {
+                $.alert({
+                    title: "Se detectó nuevo Supervisor Comercial",
+                    type: 'orange',
+                    content: 'Debe ingresar una fecha de inicio de vigencia de la asignación del nuevo Supervisor Comercial',
+                    buttons: {
+                        OK: function () { $('#chrFechaInicioVigenciaSupervisor').focus(); }
+                    }
+                });
+                return false;
+            }
+
+            if ($('#chrObservacionSupervisor').val() == "") {
+                $.alert({
+                    title: "Se detectó nuevo Supervisor Comercial",
+                    type: 'orange',
+                    content: 'Debe ingresar una observación o comentario sobre la asignación del nuevo Supervisor Comercial',
+                    buttons: {
+                        OK: function () { $('#chrObservacionSupervisor').focus(); }
+                    }
+                });
+                return false;
+            }
+        }
+
+        if (tieneDiferentePrevVal("#idAsistenteServicioCliente")) {
+            if ($('#chrFechaInicioVigenciaAsistente').val() == "") {
+                $.alert({
+                    title: "Se detectó nuevo Asistente de Atención al Cliente",
+                    type: 'orange',
+                    content: 'Debe ingresar una fecha de inicio de vigencia de la asignación del nuevo Asistente de Atención al Cliente',
+                    buttons: {
+                        OK: function () { $('#chrFechaInicioVigenciaAsistente').focus(); }
+                    }
+                });
+                return false;
+            }
+
+            if ($('#chrObservacionAsistente').val() == "") {
+                $.alert({
+                    title: "Se detectó nuevo Asistente de Atención al Cliente",
+                    type: 'orange',
+                    content: 'Debe ingresar una observación o comentario sobre la asignación del nuevo Asistente de Atención al Cliente',
+                    buttons: {
+                        OK: function () { $('#chrObservacionAsistente').focus(); }
+                    }
+                });
+                return false;
+            }
+        }
 
         return true;
 
@@ -2135,6 +2240,7 @@ jQuery(function ($) {
 
     $("#idResponsableComercial").change(function () {
         var idResponsableComercial = $("#idResponsableComercial").val();
+        verificarChrForm("#idResponsableComercial", "#divChrAsesor");
         $.ajax({
             url: "/Cliente/ChangeIdResponsableComercial", type: 'POST', 
             data: {
@@ -2147,6 +2253,7 @@ jQuery(function ($) {
 
     $("#idSupervisorComercial").change(function () {
         var idSupervisorComercial = $("#idSupervisorComercial").val();
+        verificarChrForm("#idSupervisorComercial", "#divChrSupervisor");
         $.ajax({
             url: "/Cliente/ChangeIdSupervisorComercial", type: 'POST',
             data: {
@@ -2160,6 +2267,7 @@ jQuery(function ($) {
 
     $("#idAsistenteServicioCliente").change(function () {
         var idAsistenteServicioCliente = $("#idAsistenteServicioCliente").val();
+        verificarChrForm("#idAsistenteServicioCliente", "#divChrAsistente");
         $.ajax({
             url: "/Cliente/ChangeIdAsistenteServicioCliente", type: 'POST',
             data: {
@@ -2170,7 +2278,63 @@ jQuery(function ($) {
         });
     });
 
-       
+
+    function tieneDiferentePrevVal(elId) {
+        var val = $(elId).val();
+        var prevVal = $(elId).attr("prevvalue");
+        if (prevVal == "0") prevVal = "";
+
+        var mostrarCHRForm = $(elId).attr("mostrarformchr");
+        if (val != prevVal && mostrarCHRForm == "1") {
+            return true;
+        }
+
+        return false;
+    }
+
+    function verificarChrForm(elId, divId) {
+        if (tieneDiferentePrevVal(elId)) {
+            $(divId).show();
+        } else {
+            $(divId).hide();
+        }
+    }
+
+    $("#chrFechaInicioVigenciaAsesor").change(function () {
+        changeAjaxVal($(this).val(), "ChangeCHRFIVAsesor");
+    });
+
+    $("#chrObservacionAsesor").change(function () {
+        changeAjaxVal($(this).val(), "ChangeCHRObservacionAsesor");
+    });
+
+    $("#chrFechaInicioVigenciaAsistente").change(function () {
+        changeAjaxVal($(this).val(), "ChangeCHRFIVAsistente");
+    });
+
+    $("#chrObservacionAsistente").change(function () {
+        changeAjaxVal($(this).val(), "ChangeCHRObservacionAsistente");
+    });
+
+    $("#chrFechaInicioVigenciaSupervisor").change(function () {
+        changeAjaxVal($(this).val(), "ChangeCHRFIVSupervisor");
+    });
+
+    $("#chrObservacionSupervisor").change(function () {
+        changeAjaxVal($(this).val(), "ChangeCHRObservacionSupervisor");
+    });
+
+    function changeAjaxVal(val, url) {
+        $.ajax({
+            url: "/Cliente/" + url,
+            type: 'POST',
+            data: {
+                val: val
+            },
+            success: function () { }
+        });
+    }
+
     $("#cliente_habilitadoNegociacionGrupal").change(function () {
         var valor = 1;
         if (!$('#cliente_habilitadoNegociacionGrupal').prop('checked')) {
@@ -2378,7 +2542,37 @@ jQuery(function ($) {
     });
 
     $("#btnExportCanasta").click(function () {
-        window.location.href = $(this).attr("actionLink");
+        var actionLink = $(this).attr("actionLink");
+        $.confirm({
+            title: 'Tipo descarga',
+            content: 'Seleccione el tipo de descarga de la canasta:',
+            type: 'orange',
+            buttons: {
+                list: {
+                    text: 'LISTA PRECIOS VIGENTES',
+                    btnClass: 'btn-green',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=1";
+                    }
+                },
+                basket: {
+                    text: 'CANASTA HABITUAL',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=2";
+                    }
+                },
+                record: {
+                    text: 'LISTA PRECIOS HISTORICO',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=3";
+                    }
+                }
+            },
+        });
+
+
     });
 
     $("#btnExportDirecciones").click(function () {
@@ -2971,6 +3165,60 @@ jQuery(function ($) {
         }
     });
 
+
+    $("#modalVerCliente").on('click', ".lnkVerHistorialReasignaciones", function () {
+        var campo = $(this).attr("campo");
+        cargarModalHistoricoReasignaciones($(this).attr("campo"), idClienteView);
+
+        if (campo == "responsableComercial") {
+            $("#historial_reasignaciones_tipo_vendedor").html("Asesor Comercial");
+            $("#spn_historial_reasignaciones_tipo_vendedor").html("Asesor Comercial");
+        }
+
+        if (campo == "supervisorComercial") {
+            $("#historial_reasignaciones_tipo_vendedor").html("Supervisor Comercial");
+            $("#spn_historial_reasignaciones_tipo_vendedor").html("Supervisor Comercial");
+        }
+
+        if (campo == "asistenteServicioCliente") {
+            $("#historial_reasignaciones_tipo_vendedor").html("Asistente de Atención al Cliente");
+            $("#spn_historial_reasignaciones_tipo_vendedor").html("Asistente de Atención al Cliente");
+        }
+    });
+
+    function cargarModalHistoricoReasignaciones(campo, idCliente) {
+
+        $.ajax({
+            url: "/Cliente/GetHistorialReasignaciones",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                campo: campo,
+                idCliente: idCliente
+            },
+            success: function (res) {
+                var lista = res.lista;
+
+                // var producto = $.parseJSON(respuesta);
+                $("#tableHistorialReasignaciones > tbody").empty();
+
+                for (var i = 0; i < lista.length; i++) {
+
+                    $("#tableHistorialReasignaciones").append('<tr data-expanded="true">' +
+                        '<td>' + lista[i].FechaInicioVigenciaDesc + '</td>' +
+                        '<td>' + lista[i].dataA + ' - ' + lista[i].dataB + '</td>' +
+                        '<td>' + lista[i].FechaEdicionDesc + '</td>' +
+                        '<td>' + lista[i].dataC + '</td>' +
+                        '<td>' + lista[i].observacion + '</td>' +
+                        '</tr>');
+
+                }
+
+                FooTable.init('#tableHistorialReasignaciones');
+            }
+        });
+        $("#modalVerHistorialReasignaciones").modal();
+    }
 
     $("#chkSoloCanasta").change(function () {
         if ($(this).is(":checked")) {

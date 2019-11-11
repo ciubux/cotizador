@@ -264,7 +264,7 @@ namespace BusinessLayer
                 return lista;
             }
         }
-
+        
         public List<DocumentoDetalle> getPreciosVigentesCliente(Guid idCliente)
         {
             using (var productoDal = new ProductoDAL())
@@ -300,6 +300,46 @@ namespace BusinessLayer
                     pedidoDetalle.porcentajeMargen = (1 - (pedidoDetalle.costoLista / (pedidoDetalle.precioNeto == 0 ? 1 : pedidoDetalle.precioNeto))) * 100;
                 }
                 
+
+                return items;
+            }
+        }
+
+        public List<DocumentoDetalle> getPreciosHistoricoCliente(Guid idCliente)
+        {
+            using (var productoDal = new ProductoDAL())
+            {
+                List<DocumentoDetalle> items = productoDal.getPreciosHistoricoCliente(idCliente);
+                foreach (DocumentoDetalle pedidoDetalle in items)
+                {
+                    if (pedidoDetalle.producto.image == null)
+                    {
+                        FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                        MemoryStream storeStream = new MemoryStream();
+                        storeStream.SetLength(inStream.Length);
+                        inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                        storeStream.Flush();
+                        inStream.Close();
+                        pedidoDetalle.producto.image = storeStream.GetBuffer();
+                    }
+
+
+                    //Se agrega el IGV al precioLista
+                    pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.precioSinIgv));
+                    pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.costoSinIgv));
+
+
+
+                    /*      if (pedidoDetalle.esPrecioAlternativo)
+                          {
+                              pedidoDetalle.producto.precioClienteProducto.precioUnitario =
+                              pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.ProductoPresentacion.Equivalencia;
+                          }*/
+
+                    pedidoDetalle.porcentajeDescuento = (1 - (pedidoDetalle.precioNeto / (pedidoDetalle.precioLista == 0 ? 1 : pedidoDetalle.precioLista))) * 100;
+                    pedidoDetalle.porcentajeMargen = (1 - (pedidoDetalle.costoLista / (pedidoDetalle.precioNeto == 0 ? 1 : pedidoDetalle.precioNeto))) * 100;
+                }
+
 
                 return items;
             }
@@ -359,7 +399,32 @@ namespace BusinessLayer
                 }
                 
 
-                cliente =  clienteDAL.insertClienteSunat(cliente);
+                cliente = clienteDAL.insertClienteSunat(cliente);
+                if(cliente.responsableComercial.idVendedor > 0) {
+                    cliente.chrAsesor.idCliente = cliente.idCliente;
+                    cliente.chrAsesor.usuario = cliente.usuario;
+                    cliente.chrAsesor.valor = cliente.responsableComercial.idVendedor.ToString();
+                    cliente.chrAsesor.defaultValues("responsableComercial");
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsesor);
+                }
+
+                if (cliente.supervisorComercial.idVendedor > 0)
+                {
+                    cliente.chrSupervisor.idCliente = cliente.idCliente;
+                    cliente.chrSupervisor.usuario = cliente.usuario;
+                    cliente.chrSupervisor.valor = cliente.supervisorComercial.idVendedor.ToString();
+                    cliente.chrSupervisor.defaultValues("supervisorComercial");
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrSupervisor);
+                }
+
+                if (cliente.asistenteServicioCliente.idVendedor > 0)
+                {
+                    cliente.chrAsistente.idCliente = cliente.idCliente;
+                    cliente.chrAsistente.usuario = cliente.usuario;
+                    cliente.chrAsistente.valor = cliente.asistenteServicioCliente.idVendedor.ToString();
+                    cliente.chrAsistente.defaultValues("asistenteServicioCliente");
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsistente);
+                }
 
                 enviarNotificacionSolicitudCredito(cliente);
 
@@ -402,7 +467,34 @@ namespace BusinessLayer
                 Cliente clientePrev = clienteDAL.getCliente(cliente.idCliente);
 
                 cliente = clienteDAL.updateClienteSunat(cliente);
-                
+
+                if (!cliente.responsableComercial.idVendedor.ToString().Equals(cliente.chrAsesor.preValor))
+                {
+                    cliente.chrAsesor.idCliente = cliente.idCliente;
+                    cliente.chrAsesor.usuario = cliente.usuario;
+                    cliente.chrAsesor.valor = cliente.responsableComercial.idVendedor.ToString();
+                    cliente.chrAsesor.campo = "responsableComercial";
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsesor);
+                }
+
+                if (!cliente.supervisorComercial.idVendedor.ToString().Equals(cliente.chrSupervisor.preValor))
+                {
+                    cliente.chrSupervisor.idCliente = cliente.idCliente;
+                    cliente.chrSupervisor.usuario = cliente.usuario;
+                    cliente.chrSupervisor.valor = cliente.supervisorComercial.idVendedor.ToString();
+                    cliente.chrSupervisor.campo = "supervisorComercial";
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrSupervisor);
+                }
+
+                if (!cliente.asistenteServicioCliente.idVendedor.ToString().Equals(cliente.chrAsistente.preValor))
+                {
+                    cliente.chrAsistente.idCliente = cliente.idCliente;
+                    cliente.chrAsistente.usuario = cliente.usuario;
+                    cliente.chrAsistente.valor = cliente.asistenteServicioCliente.idVendedor.ToString();
+                    cliente.chrAsistente.campo = "asistenteServicioCliente";
+                    clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsistente);
+                }
+
                 if ((cliente.usuario == null || !cliente.usuario.modificaMiembrosGrupoCliente) && 
                     ((cliente.grupoCliente == null && clientePrev.grupoCliente != null) || (cliente.grupoCliente != null && clientePrev.grupoCliente == null) || cliente.grupoCliente.idGrupoCliente != clientePrev.grupoCliente.idGrupoCliente))
                 {
@@ -564,6 +656,23 @@ namespace BusinessLayer
             using (var clienteDAL = new ClienteDAL())
             {
                 clienteDAL.mergeClienteStaging();
+            }
+        }
+
+        public void insertClienteReasignacionHistorico(ClienteReasignacionHistorico obj)
+        {
+            using (var dal = new ClienteDAL())
+            {
+                dal.insertClienteReasignacionHistorico(obj);
+            }
+        }
+
+        
+        public List<ClienteReasignacionHistorico> getHistorialReasignacionesClientePorCampo(String campo, Guid idCliente)
+        {
+            using (var dal = new ClienteDAL())
+            {
+                return dal.getHistorialReasignacionesClientePorCampo(campo, idCliente);
             }
         }
     }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using Cotizador.ExcelExport;
 
 namespace Cotizador.Controllers
 {
@@ -183,6 +184,24 @@ namespace Cotizador.Controllers
 
             ViewBag.grupoCliente = grupoCliente;
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult ExportLastShowCanasta(int tipoDescarga)
+        {
+            GrupoCliente obj = (GrupoCliente)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_VER];
+
+            CanastaGrupoCliente excel = new CanastaGrupoCliente();
+            GrupoClienteBL bl = new GrupoClienteBL();
+
+            bool soloCanastaHabitual = false;
+            switch (tipoDescarga)
+            {
+                case 2: soloCanastaHabitual = true; break;
+                case 3: obj.listaPrecios = bl.getPreciosHistoricoGrupoCliente(obj.idGrupoCliente); break;
+            }
+
+            return excel.generateExcel(obj, soloCanastaHabitual);
         }
 
 
@@ -469,6 +488,7 @@ namespace Cotizador.Controllers
             List<Cliente> clientes = bl.getClientesGrupo(idGrupoCliente);
 
             grupoCliente.miembros = clientes;
+            grupoCliente.listaPrecios = listaPrecios;
 
             String resultado = "{\"grupoCliente\":" + JsonConvert.SerializeObject(grupoCliente) + ", \"precios\":" + JsonConvert.SerializeObject(listaPrecios)  + "}";
             
@@ -628,6 +648,45 @@ namespace Cotizador.Controllers
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\", \"cliente\":" + clienteJson + "}";
         }
 
+
+        [HttpPost]
+        public String LimpiaCanasta()
+        {
+            int success = 1;
+            string message = "";
+            GrupoClienteBL bl = new GrupoClienteBL();
+            GrupoCliente grupoCliente = (GrupoCliente)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_VER];
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            int aplicaMiembros = int.Parse(this.Request.Params["aplicaMiembros"]);
+
+            if (usuario.modificaCanastaGrupoCliente)
+            {
+                if (bl.limpiaCanasta(grupoCliente.idGrupoCliente, aplicaMiembros))
+                {
+                    message = "Se limpió la canasta habitual de grupo";
+                    if (aplicaMiembros == 1)
+                    {
+                        message = message + " y de los miembros que heredan precios";
+                    }
+                    message = message + ".";
+
+                }
+                else
+                {
+                    success = 0;
+                    message = "Ocurrió un error al limpiar la canasta habitual de grupo.";
+                }
+            }
+            else
+            {
+                success = 0;
+                message = "No tiene permiso para realizar esta acción.";
+            }
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
+
         [HttpPost]
         public String AgregarProductoACanasta()
         {
@@ -643,13 +702,18 @@ namespace Cotizador.Controllers
             if (usuario.modificaCanastaGrupoCliente) { 
                 if (bl.agregarProductoCanasta(grupoCliente.idGrupoCliente, idProducto, usuario))
                 {
-                    message = "Se agregó el producto a la canasta.";
+                    message = "Se agregó el producto a la canasta habitual de grupo y de los miembros que heredan precios.";
                 }
                 else
                 {
                     success = 0;
                     message = "No se pudo agregar el producto a la canasta.";
                 }
+            }
+            else
+            {
+                success = 0;
+                message = "No tiene permiso para realizar esta acción.";
             }
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
@@ -671,13 +735,18 @@ namespace Cotizador.Controllers
             {
                 if (bl.retiraProductoCanasta(grupoCliente.idGrupoCliente, idProducto, usuario))
                 {
-                    message = "Se retiró el producto de la canasta.";
+                    message = "Se retiró el producto a la canasta habitual de grupo y de los miembros que heredan precios.";
                 }
                 else
                 {
                     success = 0;
                     message = "No se pudo retirar el producto de la canasta.";
                 }
+            }
+            else
+            {
+                success = 0;
+                message = "No tiene permiso para realizar esta acción.";
             }
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";

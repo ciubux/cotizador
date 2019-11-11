@@ -62,6 +62,45 @@ namespace BusinessLayer
             }
         }
 
+        public List<DocumentoDetalle> getPreciosHistoricoGrupoCliente(int idGrupoCliente)
+        {
+            using (var productoDal = new ProductoDAL())
+            {
+                List<DocumentoDetalle> items = productoDal.getPreciosHistoricoGrupoCliente(idGrupoCliente);
+                foreach (DocumentoDetalle pedidoDetalle in items)
+                {
+                    if (pedidoDetalle.producto.image == null)
+                    {
+                        FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                        MemoryStream storeStream = new MemoryStream();
+                        storeStream.SetLength(inStream.Length);
+                        inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                        storeStream.Flush();
+                        inStream.Close();
+                        pedidoDetalle.producto.image = storeStream.GetBuffer();
+                    }
+
+
+                    //Se agrega el IGV al precioLista
+                    pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.precioSinIgv));
+                    pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.costoSinIgv));
+
+                    if (pedidoDetalle.esPrecioAlternativo)
+                    {
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario =
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.ProductoPresentacion.Equivalencia;
+                    }
+
+                    pedidoDetalle.porcentajeDescuento = (1 - (pedidoDetalle.precioNeto / (pedidoDetalle.precioLista == 0 ? 1 : pedidoDetalle.precioLista))) * 100;
+                    pedidoDetalle.porcentajeMargen = (1 - (pedidoDetalle.costoLista / (pedidoDetalle.precioNeto == 0 ? 1 : pedidoDetalle.precioNeto))) * 100;
+                }
+
+
+                return items;
+            }
+        }
+
+
         public List<Cliente> getClientesGrupo(int idGrupo)
         {
             using (var dal = new ClienteDAL())
@@ -138,6 +177,15 @@ namespace BusinessLayer
             {
 
                 return dal.retiraProductoCanastaGrupoCliente(idGrupoCliente, idProducto, usuario.idUsuario);
+            }
+        }
+
+        public bool limpiaCanasta(int idGrupoCliente, int aplicaMiembros)
+        {
+            using (var dal = new PrecioClienteProductoDAL())
+            {
+
+                return dal.limpiaCanastaCliente(idGrupoCliente, aplicaMiembros);
             }
         }
     }

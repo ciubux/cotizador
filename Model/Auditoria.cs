@@ -50,5 +50,15 @@ namespace Model
         {
             get { return FechaEdicion.ToString(Constantes.formatoFecha); }
         }
+
+        public string FechaInicioVigenciaDesc
+        {
+            get { return fechaInicioVigencia.ToString("dd/MM/yyyy"); }
+        }
+
+        public bool hoyEsFechaRegistro
+        {
+            get { return FechaRegistro.ToString("yyyyMMdd").Equals(DateTime.Now.ToString("yyyyMMdd")); }
+        }
     }
 }
