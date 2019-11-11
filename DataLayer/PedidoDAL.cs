@@ -643,11 +643,11 @@ namespace DataLayer
             }
 
             InputParameterAdd.Guid(objCommand, "idPeriodo", pedido.periodo.idPeriodoSolicitud);
-            //InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", new DateTime(pedido.fechaCreacionDesde.Year, mes, 1, 0, 0, 0));
-            //InputParameterAdd.DateTime(objCommand, "fechaCreacionHasta", new DateTime(pedido.fechaCreacionHasta.Year, mes, 30, 23, 59, 59));
-          /*  InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde == null ? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaDesde.Value.Year, pedido.fechaEntregaDesde.Value.Month, pedido.fechaEntregaDesde.Value.Day, 0, 0, 0));
-            InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta == null ? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaHasta.Value.Year, pedido.fechaEntregaHasta.Value.Month, pedido.fechaEntregaHasta.Value.Day, 23, 59, 59));
-            InputParameterAdd.DateTime(objCommand, "fechaProgramacionDesde", pedido.fechaProgramacionDesde == null ? pedido.fechaProgramacionDesde : new DateTime(pedido.fechaProgramacionDesde.Value.Year, pedido.fechaProgramacionDesde.Value.Month, pedido.fechaProgramacionDesde.Value.Day, 0, 0, 0));  //pedido.fechaProgramacionDesde);
+            InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", new DateTime(pedido.fechaCreacionDesde.Year, pedido.fechaCreacionDesde.Month, pedido.fechaCreacionDesde.Day, 0, 0, 0));
+            InputParameterAdd.DateTime(objCommand, "fechaCreacionHasta", new DateTime(pedido.fechaCreacionHasta.Year, pedido.fechaCreacionHasta.Month, pedido.fechaCreacionHasta.Day, 23, 59, 59));
+            //InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde == null ? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaDesde.Value.Year, pedido.fechaEntregaDesde.Value.Month, pedido.fechaEntregaDesde.Value.Day, 0, 0, 0));
+            //InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta == null ? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaHasta.Value.Year, pedido.fechaEntregaHasta.Value.Month, pedido.fechaEntregaHasta.Value.Day, 23, 59, 59));
+           /* InputParameterAdd.DateTime(objCommand, "fechaProgramacionDesde", pedido.fechaProgramacionDesde == null ? pedido.fechaProgramacionDesde : new DateTime(pedido.fechaProgramacionDesde.Value.Year, pedido.fechaProgramacionDesde.Value.Month, pedido.fechaProgramacionDesde.Value.Day, 0, 0, 0));  //pedido.fechaProgramacionDesde);
             InputParameterAdd.DateTime(objCommand, "fechaProgramacionHasta", pedido.fechaProgramacionHasta == null ? pedido.fechaProgramacionHasta : new DateTime(pedido.fechaProgramacionHasta.Value.Year, pedido.fechaProgramacionHasta.Value.Month, pedido.fechaProgramacionHasta.Value.Day, 0, 0, 0));  //pedido.fechaProgramacionDesde); //pedido.fechaProgramacionHasta);
            */ InputParameterAdd.Char(objCommand, "tipo", ((char)pedido.clasePedido).ToString());
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);

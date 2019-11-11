@@ -407,7 +407,7 @@ namespace DataLayer
                         Distrito = Converter.GetString(row, "distrito")
                     },
                     codigoCliente = Converter.GetString(row, "codigo_cliente"),
-                    codigoMP = Converter.GetString(row, "codigo_mp"),
+                    //codigoMP = Converter.GetString(row, "codigo_mp"),
                     observaciones = Converter.GetString(row, "observaciones"),
                     nombre = Converter.GetString(row, "nombre"),
                     direccionDomicilioLegal = Converter.GetString(row, "direccionDomicilioLegal"),
@@ -500,7 +500,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
 
             DataTable tvp = new DataTable();
-            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
 
             foreach (DireccionEntrega item in obj.direccionEntregaList)
             {

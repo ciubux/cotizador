@@ -59,8 +59,8 @@ namespace Cotizador.Controllers
                 pedidoTmp.fechaCreacionDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
                 pedidoTmp.fechaCreacionHasta = fechaHasta;
 
-                pedidoTmp.fechaEntregaDesde = null;// new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
-                pedidoTmp.fechaEntregaHasta = null;// DateTime.Now.AddDays(Constantes.DIAS_DESDE_BUSQUEDA);
+                //pedidoTmp.fechaEntregaDesde = DateTime.Now.AddDays(-15);// new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
+                //pedidoTmp.fechaEntregaHasta = DateTime.Now;// DateTime.Now.AddDays(Constantes.DIAS_DESDE_BUSQUEDA);
 
                 pedidoTmp.fechaProgramacionDesde = null;// new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
                 pedidoTmp.fechaProgramacionHasta = null;// new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
@@ -2691,8 +2691,16 @@ namespace Cotizador.Controllers
 
             Pedido pedido = this.PedidoSession;
 
-            pedido.periodo.idPeriodoSolicitud = Guid.Parse(this.Request.Params["idPeriodo"]);
+            string test = this.Request.Params["idPeriodo"].ToString();
 
+            if (test.Trim().Equals(""))
+            {
+                pedido.periodo.idPeriodoSolicitud = Guid.Empty;
+            }
+            else
+            {
+                pedido.periodo.idPeriodoSolicitud = Guid.Parse(this.Request.Params["idPeriodo"]);
+            }
             this.PedidoSession = pedido;
         }
     }

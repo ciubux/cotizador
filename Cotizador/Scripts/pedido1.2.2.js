@@ -5085,7 +5085,7 @@ jQuery(function ($) {
         var idPeriodo = $("#idPeriodo").val();
 
         $.ajax({
-            url: "/Requerimiento/ChangeIdPeriodo",
+            url: "/Pedido/ChangeIdPeriodo",
             type: 'POST',
             dataType: 'JSON',
             data: {
