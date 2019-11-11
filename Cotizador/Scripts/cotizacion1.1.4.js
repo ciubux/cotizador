@@ -1303,7 +1303,7 @@ jQuery(function ($) {
 
         $.confirm({
             title: 'IMPORTAR PRODUCTOS COTIZADOS',
-            content: 'Seleccione upa de las opciones para importar los productos cotizados.',
+            content: 'Seleccione una de las opciones para importar los productos cotizados.',
             type: 'orange',
             buttons: {
                 aplica: {

@@ -49,7 +49,7 @@ namespace Model
             [Display(Name = "CONTADO")]
             Contado = 1,
             [Display(Name = "CRÉDITO A 1 DÍA")]
-            Crédito1 = 1001,
+            Crédito1 = 101,
             [Display(Name = "CRÉDITO A 7 DÍAS")]
             Crédito7 = 2,
             [Display(Name = "CRÉDITO A 15 DÍAS")]
