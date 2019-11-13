@@ -767,14 +767,14 @@
         $("#MensajeRapido").modal("hide");
     });    
 
+    setTimeout(function () {
     $(document).on('shown.bs.modal', '#MensajeRapido', function () {
         $('#idUsuarioBusquedaMensajeModal', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
-
-        setTimeout(function () {
+                
             //$('#idUsuarioBusquedaMensajeModal', this).chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
             $('#mensajeFechaInicioMensajeModal').datepicker().datepicker("setDate", new Date());
             $('#mensajeFechaVencimientoMensajeModal').datepicker().datepicker("setDate", '+7');
-            }, 1000);
+        
         $('#idUsuarioBusquedaMensajeModal', this).ajaxChosen({
             dataType: "json",
             type: "GET",
@@ -786,6 +786,7 @@
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });  
     });
+    }, 1000);
 
 
     $(document).on('change', "#mensajeFechaInicioMensajeModal", function () {

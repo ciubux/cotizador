@@ -3,7 +3,7 @@ add password_modificado datetime
 
 /***************************************************************************/
 
-alter procedure sp_comparar_comtraseña 
+create procedure ps_comparar_comtraseña 
 (@id_usuario uniqueidentifier,
 @password_actual varchar(50))
 as begin 
@@ -17,7 +17,7 @@ end
 
 /***********************************************************************/
 
-alter procedure update_password
+create procedure pu_cambiar_password
 (@id_usuario uniqueidentifier,
 @pass_nuevo varchar(50))
 as begin 
@@ -25,4 +25,3 @@ update usuario set  password=pwdencrypt(@pass_nuevo) ,password_modificado=dbo.ge
 end  
 
 /************************************************************************/
-

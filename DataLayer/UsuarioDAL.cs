@@ -707,7 +707,7 @@ namespace DataLayer
 
         public bool confirmarPassword(string passActual, Guid idUsuario)
         {
-            var objCommand = GetSqlCommand("sp_comparar_comtraseña");
+            var objCommand = GetSqlCommand("ps_comparar_comtraseña");
             InputParameterAdd.Varchar(objCommand, "password_actual", passActual);
             InputParameterAdd.Guid(objCommand, "id_usuario", idUsuario);
             bool result = (bool)objCommand.ExecuteScalar();
@@ -716,7 +716,7 @@ namespace DataLayer
 
         public void updateUsuarioCambioPassword(string passNuevo, Guid idUsuario)
         {
-            var objCommand = GetSqlCommand("update_password");
+            var objCommand = GetSqlCommand("pu_cambiar_password");
             InputParameterAdd.Guid(objCommand, "id_usuario", idUsuario);
             InputParameterAdd.Varchar(objCommand, "pass_nuevo", passNuevo);
             ExecuteNonQuery(objCommand);            

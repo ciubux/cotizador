@@ -412,12 +412,7 @@ namespace Cotizador.Controllers
         public ActionResult EditarRapido(Guid? id_mensaje)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoMensaje;
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-
-            if (!usuario.modificaMensaje)
-            {
-                return RedirectToAction("Lista", "Mensaje");
-            }
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];          
 
             RolBL rolbl = new RolBL();
             List<Rol> roles = new List<Rol>();
@@ -433,6 +428,7 @@ namespace Cotizador.Controllers
             }
 
             Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
+            mensaje.user.idUsuario = usuario.idUsuario;
             mensaje.fechaVencimientoMensaje =DateTime.Now.AddDays(7);
             mensaje.importancia = "Alta";
             ViewBag.Mensaje = mensaje;
