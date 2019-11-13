@@ -786,7 +786,7 @@
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });  
     });
-    }, 1000);
+    }, 2000);
 
 
     $(document).on('change', "#mensajeFechaInicioMensajeModal", function () {
