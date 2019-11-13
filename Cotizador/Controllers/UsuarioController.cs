@@ -470,5 +470,25 @@ namespace Cotizador.Controllers
             propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
             this.UsuarioSession = obj;
         }
+
+        //[HttpPost]
+        public int cambiarContraseña(/*Guid idUsuarioCambioPass, string passActual, string passNuevo*/)
+        {
+            Guid idUsuarioCambioPass = Guid.Parse(Request["idUsuarioCambioPass"]);
+            String passActual = Request["passActual"].ToString();
+            String passNuevo = Request["passNuevo"].ToString();           
+
+            UsuarioBL user = new UsuarioBL();
+            bool a =user.confirmarPassword(passActual, idUsuarioCambioPass);
+            if (a == true)
+            {                    
+                user.updateUsuarioCambioPassword(passNuevo, idUsuarioCambioPass);                
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }

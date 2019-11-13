@@ -105,10 +105,13 @@ namespace Cotizador
                      "~/Scripts/rol1.0.0.js"
                      ));
 
+            bundles.Add(new ScriptBundle("~/bundles/account").Include(
+                     "~/Scripts/account1.0.0.js"
+                     ));
+
             bundles.Add(new ScriptBundle("~/bundles/usuario").Include(
                      "~/Scripts/usuario1.0.0.js"
                      ));
-
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
                         "~/Scripts/guiaRemision1.2.3.js"
                         ));

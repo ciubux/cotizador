@@ -100,7 +100,7 @@ namespace DataLayer
 
             // populate DataTable from your List here
             foreach (var id in usuarioLit)
-                tvp.Rows.Add(id.idUsuario);            
+                tvp.Rows.Add(id.idUsuario);
 
             SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idUsuarioList", tvp);
             // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
@@ -109,7 +109,7 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idPermiso", permiso.idPermiso);
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
-            ExecuteNonQuery(objCommand);      
+            ExecuteNonQuery(objCommand);
         }
 
         public Usuario getUsuario(Guid idUsuario)
@@ -131,7 +131,7 @@ namespace DataLayer
 
             return obj;
         }
-        
+
 
         public Usuario getUsuarioLogin(Usuario usuario)
         {
@@ -153,91 +153,91 @@ namespace DataLayer
                 usuario.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
                 usuario.cotizacionSerializada = Converter.GetString(row, "cotizacion_serializada");
 
-        /*        usuario.apruebaCotizacionesLima = Converter.GetBool(row, "aprueba_cotizaciones_lima");
-                usuario.apruebaCotizacionesProvincias = Converter.GetBool(row, "aprueba_cotizaciones_provincias");
-                usuario.creaCotizaciones = Converter.GetBool(row, "crea_cotizaciones");
-                usuario.creaCotizacionesProvincias = Converter.GetBool(row, "crea_cotizaciones_provincias");
-                usuario.creaCotizacionesGrupales = Converter.GetBool(row, "crea_cotizaciones_grupales");
-                usuario.apruebaCotizacionesGrupales = Converter.GetBool(row, "aprueba_cotizaciones_grupales");
-                usuario.visualizaCotizaciones = Converter.GetBool(row, "visualiza_cotizaciones");
-                */
+                /*        usuario.apruebaCotizacionesLima = Converter.GetBool(row, "aprueba_cotizaciones_lima");
+                        usuario.apruebaCotizacionesProvincias = Converter.GetBool(row, "aprueba_cotizaciones_provincias");
+                        usuario.creaCotizaciones = Converter.GetBool(row, "crea_cotizaciones");
+                        usuario.creaCotizacionesProvincias = Converter.GetBool(row, "crea_cotizaciones_provincias");
+                        usuario.creaCotizacionesGrupales = Converter.GetBool(row, "crea_cotizaciones_grupales");
+                        usuario.apruebaCotizacionesGrupales = Converter.GetBool(row, "aprueba_cotizaciones_grupales");
+                        usuario.visualizaCotizaciones = Converter.GetBool(row, "visualiza_cotizaciones");
+                        */
                 //Pedidos
-      /*          usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
-                usuario.realizaCargaMasivaPedidos = Converter.GetBool(row, "realiza_carga_masiva_pedidos");
+                /*          usuario.tomaPedidos = Converter.GetBool(row, "toma_pedidos");
+                          usuario.realizaCargaMasivaPedidos = Converter.GetBool(row, "realiza_carga_masiva_pedidos");
 
-                usuario.apruebaPedidosLima = Converter.GetBool(row, "aprueba_pedidos_lima");
-                usuario.apruebaPedidosProvincias = Converter.GetBool(row, "aprueba_pedidos_provincias");
-                usuario.pedidoSerializado = Converter.GetString(row, "pedido_serializado");
-                usuario.tomaPedidosProvincias = Converter.GetBool(row, "toma_pedidos_provincias");
-                usuario.programaPedidos = Converter.GetBool(row, "programa_pedidos");
-                usuario.visualizaPedidosLima = Converter.GetBool(row, "visualiza_pedidos_lima");
-                usuario.visualizaPedidosProvincias = Converter.GetBool(row, "visualiza_pedidos_provincias");
-                usuario.bloqueaPedidos = Converter.GetBool(row, "bloquea_pedidos");
-                usuario.liberaPedidos = Converter.GetBool(row, "libera_pedidos");
-                usuario.visualizaCostos = Converter.GetBool(row, "visualiza_costos");
-                */
+                          usuario.apruebaPedidosLima = Converter.GetBool(row, "aprueba_pedidos_lima");
+                          usuario.apruebaPedidosProvincias = Converter.GetBool(row, "aprueba_pedidos_provincias");
+                          usuario.pedidoSerializado = Converter.GetString(row, "pedido_serializado");
+                          usuario.tomaPedidosProvincias = Converter.GetBool(row, "toma_pedidos_provincias");
+                          usuario.programaPedidos = Converter.GetBool(row, "programa_pedidos");
+                          usuario.visualizaPedidosLima = Converter.GetBool(row, "visualiza_pedidos_lima");
+                          usuario.visualizaPedidosProvincias = Converter.GetBool(row, "visualiza_pedidos_provincias");
+                          usuario.bloqueaPedidos = Converter.GetBool(row, "bloquea_pedidos");
+                          usuario.liberaPedidos = Converter.GetBool(row, "libera_pedidos");
+                          usuario.visualizaCostos = Converter.GetBool(row, "visualiza_costos");
+                          */
                 //Guia
-     /*           usuario.creaGuias = Converter.GetBool(row, "crea_guias");
-                usuario.administraGuiasLima = Converter.GetBool(row, "administra_guias_lima");
-                usuario.administraGuiasProvincias = Converter.GetBool(row, "administra_guias_provincias");
-                usuario.visualizaGuias = Converter.GetBool(row, "visualiza_guias_remision");
+                /*           usuario.creaGuias = Converter.GetBool(row, "crea_guias");
+                           usuario.administraGuiasLima = Converter.GetBool(row, "administra_guias_lima");
+                           usuario.administraGuiasProvincias = Converter.GetBool(row, "administra_guias_provincias");
+                           usuario.visualizaGuias = Converter.GetBool(row, "visualiza_guias_remision");
 
-                //DOCUMENTOS VENTA
-                usuario.creaDocumentosVenta = Converter.GetBool(row, "crea_documentos_venta");
-                usuario.creaFacturaConsolidadaMultiregional = Converter.GetBool(row, "crea_factura_consolidada_multiregional");
-                usuario.creaFacturaConsolidadaLocal = Converter.GetBool(row, "crea_factura_consolidada_local");
-                usuario.visualizaGuiasPendienteFacturacion = Converter.GetBool(row, "visualiza_guias_pendientes_facturacion");
+                           //DOCUMENTOS VENTA
+                           usuario.creaDocumentosVenta = Converter.GetBool(row, "crea_documentos_venta");
+                           usuario.creaFacturaConsolidadaMultiregional = Converter.GetBool(row, "crea_factura_consolidada_multiregional");
+                           usuario.creaFacturaConsolidadaLocal = Converter.GetBool(row, "crea_factura_consolidada_local");
+                           usuario.visualizaGuiasPendienteFacturacion = Converter.GetBool(row, "visualiza_guias_pendientes_facturacion");
 
-                usuario.administraDocumentosVentaLima = Converter.GetBool(row, "administra_documentos_venta_lima");
-                usuario.administraDocumentosVentaProvincias = Converter.GetBool(row, "administra_documentos_venta_provincias");
-                usuario.visualizaDocumentosVenta = Converter.GetBool(row, "visualiza_documentos_venta");
-                usuario.apruebaAnulaciones = Converter.GetBool(row, "aprueba_anulaciones");
-                */
+                           usuario.administraDocumentosVentaLima = Converter.GetBool(row, "administra_documentos_venta_lima");
+                           usuario.administraDocumentosVentaProvincias = Converter.GetBool(row, "administra_documentos_venta_provincias");
+                           usuario.visualizaDocumentosVenta = Converter.GetBool(row, "visualiza_documentos_venta");
+                           usuario.apruebaAnulaciones = Converter.GetBool(row, "aprueba_anulaciones");
+                           */
                 usuario.sedeMP = new Ciudad();
                 usuario.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
 
-         /*       usuario.modificaMaestroClientes = Converter.GetBool(row, "modifica_maestro_clientes");
-                usuario.modificaMaestroProductos = Converter.GetBool(row, "modifica_maestro_productos");
+                /*       usuario.modificaMaestroClientes = Converter.GetBool(row, "modifica_maestro_clientes");
+                       usuario.modificaMaestroProductos = Converter.GetBool(row, "modifica_maestro_productos");
 
-                usuario.modificaSubDistribuidor = Converter.GetBool(row, "modifica_subdistribuidor");
-                usuario.modificaOrigen = Converter.GetBool(row, "modifica_origen");
+                       usuario.modificaSubDistribuidor = Converter.GetBool(row, "modifica_subdistribuidor");
+                       usuario.modificaOrigen = Converter.GetBool(row, "modifica_origen");
 
-                usuario.creaNotasCredito = Converter.GetBool(row, "crea_notas_credito");
-                usuario.creaNotasDebito = Converter.GetBool(row, "crea_notas_debito");
-                usuario.realizaRefacturacion = Converter.GetBool(row, "realiza_refacturacion");
+                       usuario.creaNotasCredito = Converter.GetBool(row, "crea_notas_credito");
+                       usuario.creaNotasDebito = Converter.GetBool(row, "crea_notas_debito");
+                       usuario.realizaRefacturacion = Converter.GetBool(row, "realiza_refacturacion");
 
-                usuario.visualizaMargen = Converter.GetBool(row, "visualiza_margen");
-                usuario.confirmaStock = Converter.GetBool(row, "confirma_stock");
-                */
+                       usuario.visualizaMargen = Converter.GetBool(row, "visualiza_margen");
+                       usuario.confirmaStock = Converter.GetBool(row, "confirma_stock");
+                       */
                 usuario.esCliente = Converter.GetBool(row, "es_cliente");
-/*
-                usuario.tomaPedidosCompra = Converter.GetBool(row, "toma_pedidos_compra");
-                usuario.tomaPedidosAlmacen = Converter.GetBool(row, "toma_pedidos_almacen");
-                usuario.apruebaPlazoCredito = Converter.GetBool(row, "define_plazo_credito");
-                usuario.apruebaMontoCredito = Converter.GetBool(row, "define_monto_credito");
-                usuario.modificaResponsableComercial = Converter.GetBool(row, "define_responsable_comercial");
-                usuario.modificaSupervisorComercial = Converter.GetBool(row, "define_supervisor_comercial");
-                usuario.modificaAsistenteAtencionCliente = Converter.GetBool(row, "define_asistente_atencion_cliente");
-                usuario.modificaResponsablePortafolio = Converter.GetBool(row, "define_responsable_portafolio");
-                usuario.modificaPedidoVentaFechaEntregaHasta = Converter.GetBool(row, "modifica_pedido_venta_fecha_entrega_hasta");
-                usuario.modificaCanales = Converter.GetBool(row, "modifica_canales");
-                //usuario.modificaProducto = Converter.GetBool(row, "modifica_producto");
-                usuario.bloqueaClientes = Converter.GetBool(row, "bloquea_clientes");
-                usuario.modificaPedidoFechaEntregaExtendida = Converter.GetBool(row, "modifica_pedido_fecha_entrega_extendida");
-                usuario.modificaNegociacionMultiregional = Converter.GetBool(row, "modifica_negociacion_multiregional");
-                usuario.buscaSedesGrupoCliente = Converter.GetBool(row, "busca_sedes_grupo_cliente");
+                /*
+                                usuario.tomaPedidosCompra = Converter.GetBool(row, "toma_pedidos_compra");
+                                usuario.tomaPedidosAlmacen = Converter.GetBool(row, "toma_pedidos_almacen");
+                                usuario.apruebaPlazoCredito = Converter.GetBool(row, "define_plazo_credito");
+                                usuario.apruebaMontoCredito = Converter.GetBool(row, "define_monto_credito");
+                                usuario.modificaResponsableComercial = Converter.GetBool(row, "define_responsable_comercial");
+                                usuario.modificaSupervisorComercial = Converter.GetBool(row, "define_supervisor_comercial");
+                                usuario.modificaAsistenteAtencionCliente = Converter.GetBool(row, "define_asistente_atencion_cliente");
+                                usuario.modificaResponsablePortafolio = Converter.GetBool(row, "define_responsable_portafolio");
+                                usuario.modificaPedidoVentaFechaEntregaHasta = Converter.GetBool(row, "modifica_pedido_venta_fecha_entrega_hasta");
+                                usuario.modificaCanales = Converter.GetBool(row, "modifica_canales");
+                                //usuario.modificaProducto = Converter.GetBool(row, "modifica_producto");
+                                usuario.bloqueaClientes = Converter.GetBool(row, "bloquea_clientes");
+                                usuario.modificaPedidoFechaEntregaExtendida = Converter.GetBool(row, "modifica_pedido_fecha_entrega_extendida");
+                                usuario.modificaNegociacionMultiregional = Converter.GetBool(row, "modifica_negociacion_multiregional");
+                                usuario.buscaSedesGrupoCliente = Converter.GetBool(row, "busca_sedes_grupo_cliente");
 
-                usuario.modificaGrupoClientes = Converter.GetBool(row, "modifica_grupo_clientes");
+                                usuario.modificaGrupoClientes = Converter.GetBool(row, "modifica_grupo_clientes");
 
-                usuario.visualizaGrupoClientes = Converter.GetBool(row, "visualiza_grupo_cliente");
-                usuario.visualizaClientes = Converter.GetBool(row, "visualiza_clientes");
-                usuario.visualizaProductos = Converter.GetBool(row, "visualiza_productos");
-                usuario.visualizaSubDistribuidores = Converter.GetBool(row, "visualiza_subdistribuidores");
-                usuario.visualizaOrigenes = Converter.GetBool(row, "visualiza_origenes");
-                usuario.realizaCargaMasivaCliente = Converter.GetBool(row, "realiza_carga_masiva_clientes");
-                usuario.realizaCargaMasivaProductos = Converter.GetBool(row, "realiza_carga_masiva_productos");
-                usuario.eliminaCotizacionesAceptadas = Converter.GetBool(row, "elimina_cotizaciones_aceptadas");
-                */
+                                usuario.visualizaGrupoClientes = Converter.GetBool(row, "visualiza_grupo_cliente");
+                                usuario.visualizaClientes = Converter.GetBool(row, "visualiza_clientes");
+                                usuario.visualizaProductos = Converter.GetBool(row, "visualiza_productos");
+                                usuario.visualizaSubDistribuidores = Converter.GetBool(row, "visualiza_subdistribuidores");
+                                usuario.visualizaOrigenes = Converter.GetBool(row, "visualiza_origenes");
+                                usuario.realizaCargaMasivaCliente = Converter.GetBool(row, "realiza_carga_masiva_clientes");
+                                usuario.realizaCargaMasivaProductos = Converter.GetBool(row, "realiza_carga_masiva_productos");
+                                usuario.eliminaCotizacionesAceptadas = Converter.GetBool(row, "elimina_cotizaciones_aceptadas");
+                                */
             }
 
             DataTable dataTableParametros = dataSet.Tables[1];
@@ -289,7 +289,7 @@ namespace DataLayer
                         Constantes.ID_VENDEDOR_POR_ASIGNAR = int.Parse(valorParametro); break;
                     case "DIAS_MAX_COTIZACION_TRANSITORIA":
                         Constantes.DIAS_MAX_COTIZACION_TRANSITORIA = int.Parse(valorParametro); break;
-                        
+
 
                     case "HORA_CORTE_CREDITOS_LIMA":
                         {
@@ -331,9 +331,9 @@ namespace DataLayer
 
 
                     case "AMBIENTE_EOL":
-                        { 
+                        {
                             Constantes.AMBIENTE_EOL = valorParametro;
-                          //  Constantes.AMBIENTE_EOL = "TEST";
+                            //  Constantes.AMBIENTE_EOL = "TEST";
                         }
                         break; //
 
@@ -366,7 +366,7 @@ namespace DataLayer
             {
                 DataTable dataTableUsuariosCreaCotizacion = dataSet.Tables[2];
                 List<Usuario> usuarioList = new List<Usuario>();
-              
+
                 foreach (DataRow row in dataTableUsuariosCreaCotizacion.Rows)
                 {
                     Usuario usuarioTmp = new Usuario();
@@ -379,7 +379,7 @@ namespace DataLayer
                 usuario.usuarioCreaCotizacionList = usuarioList;
             }
 
-            if (usuario.apruebaPedidos || ( usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)) 
+            if (usuario.apruebaPedidos || ( usuario.idUsuario != null && usuario.idUsuario != Guid.Empty))
             {
                 DataTable dataTableUsuariosTomaPedido = dataSet.Tables[3];
                 List<Usuario> usuarioList = new List<Usuario>();
@@ -429,7 +429,7 @@ namespace DataLayer
                 }
                 usuario.usuarioCreaDocumentoVentaList = usuarioList;
             }
-            
+
             if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
             {
                 DataTable dataTableClientes = dataSet.Tables[6];
@@ -471,9 +471,9 @@ namespace DataLayer
                     }
                 }
                 usuario.vendedorList = vendedorList;
-                
+
             }
-            
+
             if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
             {
                 DataTable dataTableProductosDescuento = dataSet.Tables[8];
@@ -503,7 +503,7 @@ namespace DataLayer
                     Constantes.CARGOS_LIST.Add(producto);
                 }
             }
-            
+
             AlertaValidacionDAL alertaDal = new AlertaValidacionDAL();
             usuario.alertasList = alertaDal.getAlertasPorUsuario(usuario);
 
@@ -600,7 +600,7 @@ namespace DataLayer
 
         public List<Usuario> searchUsuariosVendedor(String textoBusqueda)
         {
-           var objCommand = GetSqlCommand("ps_lista_usuarios");
+            var objCommand = GetSqlCommand("ps_lista_usuarios");
             InputParameterAdd.Varchar(objCommand, "BusquedaUsuario", textoBusqueda);
             DataTable dataTable = Execute(objCommand);
 
@@ -635,7 +635,7 @@ namespace DataLayer
                 obj.email = Converter.GetString(row, "email");
                 obj.contacto = Converter.GetString(row, "contacto");
                 obj.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                obj.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row,"maximo_porcentaje_descuento_aprobacion");
+                obj.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
             }
 
             return obj;
@@ -648,10 +648,10 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             DataTable dataTable = Execute(objCommand);
             Usuario obj = new Usuario();
-            obj.sedeMP = new  Ciudad();
+            obj.sedeMP = new Ciudad();
             foreach (DataRow row in dataTable.Rows)
             {
-                obj.idUsuario = Converter.GetGuid(row, "id_usuario");               
+                obj.idUsuario = Converter.GetGuid(row, "id_usuario");
                 obj.cargo = Converter.GetString(row, "cargo");
                 obj.contacto = Converter.GetString(row, "contacto");
                 obj.nombre = Converter.GetString(row, "nombre");
@@ -659,7 +659,7 @@ namespace DataLayer
                 obj.email = Converter.GetString(row, "email");
                 obj.password = Converter.GetString(row, "password");
                 obj.esCliente = Converter.GetBool(row, "es_cliente");
-                obj.sedeMP.idCiudad= Converter.GetGuid(row, "id_ciudad");
+                obj.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 obj.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
 
 
@@ -678,7 +678,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", usuario.Estado);
             InputParameterAdd.Bit(objCommand, "es_cliente", usuario.esCliente);
             InputParameterAdd.Varchar(objCommand, "email", usuario.email);
-            InputParameterAdd.Varchar(objCommand, "pass", usuario.password);           
+            InputParameterAdd.Varchar(objCommand, "pass", usuario.password);
             InputParameterAdd.Guid(objCommand, "id_ciudad", usuario.sedeMP.idCiudad);
             InputParameterAdd.Decimal(objCommand, "max_por_des_apro", usuario.maximoPorcentajeDescuentoAprobacion);
 
@@ -705,5 +705,21 @@ namespace DataLayer
             return usuario;
         }
 
+        public bool confirmarPassword(string passActual, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("sp_comparar_comtraseña");
+            InputParameterAdd.Varchar(objCommand, "password_actual", passActual);
+            InputParameterAdd.Guid(objCommand, "id_usuario", idUsuario);
+            bool result = (bool)objCommand.ExecuteScalar();
+            return result;
+        }
+
+        public void updateUsuarioCambioPassword(string passNuevo, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("update_password");
+            InputParameterAdd.Guid(objCommand, "id_usuario", idUsuario);
+            InputParameterAdd.Varchar(objCommand, "pass_nuevo", passNuevo);
+            ExecuteNonQuery(objCommand);            
+        }
     }
 }

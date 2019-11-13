@@ -9,6 +9,7 @@
         $("#btnBusquedaMensaje").click();
         verificarSiExisteMensaje();
         cargarChosenUsuarioMensaje();
+
     });
 
     $.datepicker.regional['es'] = {
@@ -117,7 +118,7 @@
 
         if ($("#titulo").val() == "" || $("#titulo").val() == null) {
             $.alert({
-                title: "Titulo Inválida",
+                title: "Titulo Inválido",
                 type: 'orange',
                 content: 'Debe ingresar un titulo válido.',
                 buttons: {
@@ -620,7 +621,7 @@
                 }
             });
         document.body.scrollTop = default_scrollTop;
-    };
+    }
 
     $("#mensaje_estado_si").click(function () {
         var valCheck = 1;
@@ -723,4 +724,229 @@
     });
 
 
+    $(document).on('click', '#MensajeRapidoMenu', function (event) {
+        event.preventDefault();
+
+        var url = $('#MensajeRapido').data('url');
+
+        $("#MensajeRapido").modal("show");
+
+        $("#MensajeRapidoDialog").load(url, function (data) {
+
+            $("select[name=UsuarioMensajeRapido]").chosen();
+
+        });
+    });
+
+
+
+    $(document).on('change', '#importanciaModal', function (event) {
+        changeInputString("importancia", $("#importanciaModal").val());
+    });
+    $(document).on('change', '#tituloModal', function (event) {
+        changeInputString("titulo", $("#tituloModal").val());
+    });
+    $(document).on('change', '#txtMensajeModal', function (event) {
+        changeInputString("mensaje", $("#txtMensajeModal").val());
+    });
+
+    $(document).on('change', "#idUsuarioBusquedaMensajeModal", function () {
+        var idUsuario = $("#idUsuarioBusquedaMensajeModal").val();
+        $.ajax({
+            url: "/Mensaje/ChangeUsuarioMensaje",
+            type: 'POST',
+            data: {
+                idUsuario: idUsuario
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $(document).on('click', "#btnCancelarMensajeModal", function () {
+        $("#MensajeRapido").modal("hide");
+    });    
+
+    $(document).on('shown.bs.modal', '#MensajeRapido', function () {
+        $('#idUsuarioBusquedaMensajeModal', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
+
+        setTimeout(function () {
+            //$('#idUsuarioBusquedaMensajeModal', this).chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
+            $('#mensajeFechaInicioMensajeModal').datepicker().datepicker("setDate", new Date());
+            $('#mensajeFechaVencimientoMensajeModal').datepicker().datepicker("setDate", '+7');
+            }, 1000);
+        $('#idUsuarioBusquedaMensajeModal', this).ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 3,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Usuario/SearchUsuarios"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });  
+    });
+
+
+    $(document).on('change', "#mensajeFechaInicioMensajeModal", function () {
+        var fechaInicio = $("#mensajeFechaInicioMensajeModal").val();
+        $.ajax({
+            url: "/Mensaje/ChangeFechaInicio",
+            type: 'POST',
+            data: {
+                fechaInicio: fechaInicio
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $(document).on('change', "#mensajeFechaVencimientoMensajeModal", function () {
+        var fechaVencimiento = $("#mensajeFechaVencimientoMensajeModal").val();
+
+        $.ajax({
+            url: "/Mensaje/ChangeFechaVencimientoEdit",
+            type: 'POST',
+            data: {
+                fechaVencimiento: fechaVencimiento
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $(document).on('change', ".RolMensajeModal", function () {
+        var valor = 0;
+        if ($(this).prop("checked")) {
+            valor = 1;
+        }
+        changeInputPermiso($(this).attr("id"), valor);
+    }); 
+
+    $(document).on('click', "#btnEnviarMensajeModal", function () {
+        crearMensajeModal();
+    });
+
+    function crearMensajeModal() {
+        if (!validacionMensajeModal())
+            return false;
+       
+            event.preventDefault();
+            $.ajax({
+                url: "/Mensaje/Create",
+                type: 'POST',                 
+                error: function () {
+
+                    $.alert({
+                        title: 'Error',
+                        content: 'Se generó un error al intentar crear el mensaje.',
+                        type: 'red',
+                        buttons: {
+                            OK: function () {                                
+                                $("#MensajeRapido").modal("hide");
+                            }
+                        }
+                    });
+                },
+                success: function () {
+
+                    $.alert({
+                        title: TITLE_EXITO,
+                        content: 'El mensaje se creó correctamente.',
+                        type: 'green',
+                        buttons: {
+                            OK: function () {
+                                $("#MensajeRapido").modal("hide");
+                                ActulizarMensaje();
+                            }
+                        }
+                    });
+                }
+            });        
+    }
+
+    function validacionMensajeModal() {
+        if ($("input:checkbox:checked").length == 0 && $("#idUsuarioBusquedaMensajeModal").val().length == 0) {
+            $.alert({
+                title: "Rol o Usuario Inválido",
+                type: 'orange',
+                content: 'Debe ingresar al menos un Rol o un Usuario para enviar el mensaje.',
+                buttons: {
+                    OK: function () { $('input:checkbox:checked').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#importanciaModal").val() == "") {
+            $.alert({
+                title: "Importancia Inválida",
+                type: 'orange',
+                content: 'Debe ingresar una Importacia.',
+                buttons: {
+                    OK: function () { $('#importanciaModal').focus(); }
+                }
+            });
+            return false;
+        }
+       
+        if ($("#tituloModal").val() === "" || $("#tituloModal").val() === null)
+        {
+            $.alert({
+                title: "Titulo Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un titulo válido.',
+                buttons: {
+                    OK: function () { $('#tituloModal').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#txtMensajeModal").val() == "" || $("#txtMensajeModal").val() == null)
+        {
+            $.alert({
+                title: "Mensaje Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un mensaje válido.',
+                buttons: {
+                    OK: function () { $('#txtMensajeModal').focus(); }
+                }
+            });
+            return false;
+        }
+
+        var fechaVencimiento = $("#mensajeFechaVencimientoMensajeModal").val();
+        var fechaInicio = $("#mensajeFechaInicioMensajeModal").val();
+
+        function validate_fechaMayorQue(fechaInicial, fechaFinal) {
+            valuesStart = fechaInicial.split("/");
+            valuesEnd = fechaFinal.split("/");
+
+            var dateStart = new Date(valuesStart[2], (valuesStart[1] - 1), valuesStart[0]);
+            var dateEnd = new Date(valuesEnd[2], (valuesEnd[1] - 1), valuesEnd[0]);
+            if (dateStart > dateEnd) {
+                return 0;
+            }
+            return 1;
+        }
+
+
+        if (validate_fechaMayorQue(fechaInicio, fechaVencimiento) == 0) {
+
+            $.alert({
+                title: "Fecha Vencimiento Inválida",
+                type: 'orange',
+                content: 'Debe ingresar una fecha posterior o igual a la de inicio.',
+                buttons: {
+                    OK: function () { $('#mensajeFechaVencimientoMensajeModal').focus(); }
+                }
+            });
+            return false;
+        }
+
+        return true;
+
+    }    
 });
+

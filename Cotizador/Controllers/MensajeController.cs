@@ -405,5 +405,40 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             return RedirectToAction("Lista", "Mensaje");
         }
+
+
+
+        [HttpGet]
+        public ActionResult EditarRapido(Guid? id_mensaje)
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoMensaje;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaMensaje)
+            {
+                return RedirectToAction("Lista", "Mensaje");
+            }
+
+            RolBL rolbl = new RolBL();
+            List<Rol> roles = new List<Rol>();
+            Rol rol = new Rol();
+            rol.Estado = 1;            
+            roles = rolbl.getRoles(rol);
+           
+            this.Session[Constantes.VAR_SESSION_ROL_LISTA] = roles;
+            
+            if (this.Session[Constantes.VAR_SESSION_MENSAJE] == null && id_mensaje == null)
+            {
+                instanciarMensaje();
+            }
+
+            Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
+            mensaje.fechaVencimientoMensaje =DateTime.Now.AddDays(7);
+            mensaje.importancia = "Alta";
+            ViewBag.Mensaje = mensaje;
+            ViewBag.roles = roles;
+
+            return PartialView(mensaje);
+        }
     }
 }

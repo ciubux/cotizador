@@ -416,6 +416,7 @@
     <None Include="Properties\PublishProfiles\cotizadormp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\zasmp - Web Deploy.pubxml" />
+    <Content Include="Scripts\account1.0.0.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen\chosen.ajaxaddition.jquery.js" />
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
@@ -618,6 +619,8 @@
     <Content Include="Views\Rubro\List.cshtml" />
     <Content Include="Views\Shared\_Rubro.cshtml" />
     <Content Include="Views\Usuario\Editar.cshtml" />
+    <Content Include="Views\Shared\CambiarPassword.cshtml" />
+    <Content Include="Views\Mensaje\EditarRapido.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
