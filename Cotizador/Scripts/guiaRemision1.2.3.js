@@ -2459,6 +2459,7 @@ jQuery(function ($) {
                         '<td>  ' + guiaRemisionList[i].pedido.cliente.razonSocial + '</td>' +
                         '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
                         '<td>  ' + guiaRemisionList[i].ciudadOrigen.nombre + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido.direccionEntrega.nombre + '</td>' +
                         '<td ' + style + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
                         '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerGuiaRemision btn btn-primary ">Ver</button></td > ' +
                         '</tr>';

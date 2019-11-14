@@ -982,7 +982,7 @@ namespace DataLayer
                 guiaRemision.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
                 guiaRemision.pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
                 guiaRemision.pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
-                
+
                 //CLIENTE
                 guiaRemision.pedido.cliente = new Cliente();
                 guiaRemision.pedido.cliente.codigo = Converter.GetString(row, "codigo");
@@ -991,7 +991,9 @@ namespace DataLayer
                 guiaRemision.pedido.cliente.ruc = Converter.GetString(row, "ruc");
                 guiaRemision.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
 
-                
+                guiaRemision.pedido.direccionEntrega = new DireccionEntrega();
+                guiaRemision.pedido.direccionEntrega.nombre = Converter.GetString(row, "nombre_direccion_entrega");
+                if (guiaRemision.pedido.direccionEntrega.nombre == null) { guiaRemision.pedido.direccionEntrega.nombre = ""; }
                 //USUARIO
                 guiaRemision.usuario = new Usuario();
                 guiaRemision.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");

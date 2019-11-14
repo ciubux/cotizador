@@ -566,6 +566,8 @@ namespace BusinessLayer
             {
                 if (!canastaHabitual || (canastaHabitual && documentoDetalle.producto.precioClienteProducto.estadoCanasta))
                 {
+                    pedido.pedidoDetalleList.Remove(pedido.pedidoDetalleList.Where(p => p.producto.idProducto == documentoDetalle.producto.idProducto).FirstOrDefault());
+
                     PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                     pedidoDetalle.producto = new Producto();
                     pedidoDetalle.cantidad = 1;

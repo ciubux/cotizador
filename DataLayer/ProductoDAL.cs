@@ -569,6 +569,7 @@ namespace DataLayer
 
 
                 cotizacionDetalle.precioCliente = new PrecioClienteProducto();
+                cotizacionDetalle.precioCliente.skuCliente = Converter.GetString(row, "sku_cliente");
                 if (row["fecha_inicio_vigencia"] == DBNull.Value)
                 {
                     cotizacionDetalle.precioCliente.fechaInicioVigencia = null;

@@ -525,13 +525,14 @@
 
                         '<td>  ' + list[i].id_mensaje + '  </td>' +
                         '<td>  ' + list[i].titulo + '  </td>' +
+                        '<td>  ' + list[i].mensaje + '  </td>' +
                         '<td>  ' + list[i].usuario_creacion + '  </td>' +
-                        '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + '  </td>' +
+                        //'<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + '  </td>' +
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '  </td>' +
-                        '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
-                        '<td>' +
-                        '<button type="button" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary ">Ver</button>' +
-                        '</td>' +
+                        //'<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
+                        //'<td>' +
+                        //'<button type="button" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary ">Ver</button>' +
+                        //'</td>' +
                         '</tr>';
 
                     $("#tableMensaje").append(ItemRow);
