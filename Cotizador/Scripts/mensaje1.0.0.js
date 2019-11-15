@@ -321,9 +321,8 @@
                             if (list[i].importancia == 'Alta') {
                                 verAutomaticamente = true;
                             }
-                           var BtnLabel = list.length === 1 ? "Marcar como leído" : "Marcar como leído y mostrar siguiente";
-                           // var btnSiguiente = list.length > 1 ? '<button type = "button" class="btn btn-default btn-next">Siguiente</button>' : '';
-                            var numeroModal = i + 1;
+                           var BtnLabel = list.length === 1 ? "Marcar como leído" : "Marcar como leído y mostrar siguiente";                           
+                           var numeroModal = i + 1;
                             if (list.length-1 === i)
                             {
                                 BtnLabel ="Marcar como leído";
