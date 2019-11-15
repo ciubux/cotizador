@@ -278,7 +278,7 @@
 
 
     $(".navbar-header").on("click", "a.btnModal", function () {
-        $('#Mensaje').modal('show');
+        $('#Mensaje1').modal('show');
     });
 
 
@@ -290,10 +290,7 @@
         });
         return unicos;
     }
-
-
-
-
+           
     var idUsuario;
 
     function ActulizarMensaje() {
@@ -313,37 +310,52 @@
 
                     list = eliminateDuplicates(list);
                     if (list.length != 0) {
+                       
                         $("#imagenMP").before('<a data-notifications="' + list.length + '" class="btnModal" href="javascript:void()"></a>');
-
+                                               
                         var verAutomaticamente = false;
-
-                        for (var i = 0; i < list.length; i++) {
-
+                        var esVisible = $(".ModalMensajeAlerta").is(":visible");
+                        
+                        for (var i = 0; i < list.length; i++)
+                        {                           
                             if (list[i].importancia == 'Alta') {
                                 verAutomaticamente = true;
                             }
-
-                            var ItemRow =
-                                '</br >' +
-                                '<div class="modal-content">' +
-                                '<div class="modal-header">' +
-                                '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '</h5>' +
-                                '<h4>' + list[i].titulo + '</h4>' +
-                                '</div>' +
-                                '<div class="modal-body">' +
-                                '<p>' + list[i].mensaje + '<p>' +
-                                '</div>' +
-                                '<div class="modal-footer">' +
-                                '<a  class="Leido btn btn-default ' + list[i].id_mensaje + '">Leido</a>'; +
-
-
-                                    $("#MensajeDialog").append(ItemRow);
-                        }
-
-
-                        if (verAutomaticamente) {
+                           var BtnLabel = list.length === 1 ? "Marcar como leído" : "Marcar como leído y mostrar siguiente";
+                           // var btnSiguiente = list.length > 1 ? '<button type = "button" class="btn btn-default btn-next">Siguiente</button>' : '';
+                            var numeroModal = i + 1;
+                            if (list.length-1 === i)
+                            {
+                                BtnLabel ="Marcar como leído";
+                            }
+                                                            
+                                var ItemRow =
+                                    '<div id="Mensaje'+numeroModal+'" class="modal fade ModalMensajeAlerta" role="dialog">' +
+                                    '<div class="modal-dialog" id="MensajeDialog">' +
+                                    '<div class="modal-content">' +
+                                    '<div class="modal-header">' +
+                                    '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '</h5>' +
+                                    '<h4>' + list[i].titulo + '</h4>' +
+                                    '</div>' +
+                                    '<div class="modal-body">' +
+                                    '<p>' + list[i].mensaje + '<p>' +
+                                    '</div>' +
+                                    '<div class="modal-footer">' +                                    
+                                    '<a  class="Leido btn btn-default ' + list[i].id_mensaje +' ">'+BtnLabel+'</a>'+                                
+                                    '</div>' +
+                                    '</div>';
+                                
+                                if (esVisible == false)
+                                { 
+                                $("body").append(ItemRow);
+                                }
+                               
+                            
+                        }                        
+                       
+                        if (verAutomaticamente && esVisible === false) {
                             setTimeout(function () {
-                                $('#Mensaje').modal('show');
+                                $('#Mensaje1').modal('show');
                             }, 2000);
                         }
                     } else {
@@ -355,14 +367,10 @@
 
         }
 
-    }
-
-    $("body").on("click", "a.Leido", function () {
-
+    }   
+    $(document).on("click", "a.Leido", function () {        
         var arrrayClass = event.target.getAttribute("class").split(" ");
-        var idMensaje = arrrayClass[3];
-
-
+        var idMensaje = arrrayClass[3];       
         $.ajax({
             url: "/Mensaje/UpdateMensajeVisto",
             type: 'POST',
@@ -370,10 +378,19 @@
                 idMensaje: idMensaje,
                 idUsuario: idUsuario
             },
-            success: function () {
-                $('#Mensaje').modal('hide');
-                $("#MensajeDialog").empty();
+            success: function () { 
+                
+                let dialog = $('.' + idMensaje + '').closest('.modal');
+                var btnFinal = dialog.find('.Leido').html();   
+                if (btnFinal == "Marcar como leído") {
+                    dialog.modal('hide');                  
+                }
+                else {
+                dialog.modal('hide');                
+                    dialog.next().modal('show');                    
+                }
                 ActulizarMensaje();
+
             }
         });
 
@@ -786,7 +803,7 @@
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });  
     });
-    }, 1000);
+    }, 2000);
 
 
     $(document).on('change', "#mensajeFechaInicioMensajeModal", function () {
