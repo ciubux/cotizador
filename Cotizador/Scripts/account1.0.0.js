@@ -8,28 +8,30 @@
         var idUsuarioCambioPass = $('#usuario_idUsuario').val();
         var passActual = $("#passActual").val();
         var passNuevo = $("#passNuevo").val();
-        var passConfirmacion = $("#passNuevoConfirmacion").val();
+        var passConfirmacion = $("#passNuevoConfirmacion").val();      
+              
 
-        $.ajax({
-            url: "/Usuario/cambiarContraseña",
-            type: 'POST',
-            datatype: "bool",            
-            data: {
-                idUsuarioCambioPass: idUsuarioCambioPass,
-                passActual: passActual,
-                passNuevo: passNuevo
-            },
-            success: function (resp) {
-                RespuestaFinal(resp);  
-            }
-        });
-        if (passNuevo != passConfirmacion || passNuevo == '' || passConfirmacion == '')
-        {
-            $('#avisoCambioPasswordConfirmacion').show();  
-        } 
-
-        function RespuestaFinal(resp)
-        {
+            $.ajax({
+                url: "/Usuario/cambiarContraseña",
+                type: 'POST',
+                datatype: "bool",
+                data: {
+                    idUsuarioCambioPass: idUsuarioCambioPass,
+                    passActual: passActual,
+                    passNuevo: passNuevo
+                },
+                success: function (resp) {
+                    if (passNuevo != passConfirmacion || passNuevo == '' || passConfirmacion == '') {
+                        $('#avisoCambioPasswordConfirmacion').show();
+                    }
+                    else
+                    {
+                        RespuestaFinal(resp);
+                    } 
+                }
+            });
+        
+        function RespuestaFinal(resp) {
             if (resp == 1) {
                 $.alert({
                     title: "Operación Realizada",
@@ -41,10 +43,11 @@
                         }
                     }
                 });
-
             }
-            else 
-            $('#avisoCambioPasswordActual').show();
+            else
+            {
+                $('#avisoCambioPasswordActual').show();
+            } 
         }        
     });
 });
