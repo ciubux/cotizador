@@ -48,5 +48,8 @@ namespace Model
                 return nEstado;
             }
         }
+
+        public List<DocumentoDetalle> canasta { get; set; }
+
     }
 }

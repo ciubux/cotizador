@@ -124,6 +124,11 @@ namespace BusinessLayer
             using (var dal = new RequerimientoDAL())
             {
                 requerimientoList = dal.SelectRequerimientos(requerimiento);
+                foreach (Requerimiento requerimientoObj in requerimientoList)
+                {
+                    requerimientoObj.excedioPresupuesto = requerimientoObj.topePresupuesto < requerimientoObj.montoTotal;
+                }
+
             }
             return requerimientoList;
         }
@@ -256,7 +261,7 @@ namespace BusinessLayer
             {
                 RequerimientoDetalle requerimientoDetalle = new RequerimientoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                 requerimientoDetalle.producto = new Producto();
-                requerimientoDetalle.cantidad = 1;
+                requerimientoDetalle.cantidad = 0;
                 requerimientoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
                 requerimientoDetalle.unidad = documentoDetalle.unidad;
                 requerimientoDetalle.producto = documentoDetalle.producto;

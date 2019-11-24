@@ -585,8 +585,8 @@
                 <button  id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary">Importar Detalle Desde Precios Registrados en Facturación</button>
             </div>
 
-            <div class="pull-right">
-                <button id="btnOpenAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
+            <div class="pull-right" hidden="hidden">
+                <button id="btnOpenAgregarProducto" hidden="hidden" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
             </div>
 
         </div>
@@ -609,7 +609,7 @@
             </div>
         }
 
-        <table id="tableDetalleRequerimiento" class="table" data-editing="true"
+        <table id="tableDetalleRequerimiento" class="table" data-editing="false"
                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                data-editing-allow-add="true"
                data-editing-allow-delete="true"
@@ -687,77 +687,81 @@
                 @{int contador = 0;}
                 @foreach (var requerimientoDetalle in requerimiento.requerimientoDetalleList)
                 {
-                    contador++;
-                    <tr data-expanded="true">
-                        <td>  @requerimientoDetalle.producto.idProducto  </td>
-                        <td>  @requerimientoDetalle.esPrecioAlternativo  </td>
-                        <td>  @requerimientoDetalle.producto.proveedor  </td>
-                        <td>  @requerimientoDetalle.producto.sku  </td>
-                        <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
-                        <td>
-                            @requerimientoDetalle.producto.skuProveedor - @requerimientoDetalle.producto.descripcion
-                            <br />
-                            <span class="@requerimientoDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @requerimientoDetalle.observacion</span>
-                        </td>
+                    //if(requerimientoDetalle.producto.precioClienteProducto.estadoCanasta)
+                    { 
+
+                        contador++;
+                        <tr data-expanded="true">
+                            <td>  @requerimientoDetalle.producto.idProducto  </td>
+                            <td>  @requerimientoDetalle.esPrecioAlternativo  </td>
+                            <td>  @requerimientoDetalle.producto.proveedor  </td>
+                            <td>  @requerimientoDetalle.producto.sku  </td>
+                            <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
+                            <td>
+                                @requerimientoDetalle.producto.skuProveedor - @requerimientoDetalle.producto.descripcion
+                                <br />
+                                <span class="@requerimientoDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @requerimientoDetalle.observacion</span>
+                            </td>
 
 
 
 
-                        <td>  @requerimientoDetalle.unidad  </td>
-                        <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(requerimientoDetalle.producto.image)"></td>
-                        <td class="@requerimientoDetalle.producto.idProducto detprecioLista" style="text-align:right">@requerimientoDetalle.precioLista</td>
+                            <td>  @requerimientoDetalle.unidad  </td>
+                            <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(requerimientoDetalle.producto.image)"></td>
+                            <td class="@requerimientoDetalle.producto.idProducto detprecioLista" style="text-align:right">@requerimientoDetalle.precioLista</td>
 
 
-                        <td class="@requerimientoDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@requerimientoDetalle.porcentajeDescuento %</td>
-                        <td class="@requerimientoDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@requerimientoDetalle.porcentajeDescuentoMostrar %</td>
-                        <td class="@requerimientoDetalle.producto.idProducto detprecio" style="text-align:right">@requerimientoDetalle.precioNeto</td>
-                        <td class="@requerimientoDetalle.producto.idProducto detcostoLista">@requerimientoDetalle.costoLista  </td>
-                        <td class="@requerimientoDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@requerimientoDetalle.margen %</td>
+                            <td class="@requerimientoDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@requerimientoDetalle.porcentajeDescuento %</td>
+                            <td class="@requerimientoDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@requerimientoDetalle.porcentajeDescuentoMostrar %</td>
+                            <td class="@requerimientoDetalle.producto.idProducto detprecio" style="text-align:right">@requerimientoDetalle.precioNeto</td>
+                            <td class="@requerimientoDetalle.producto.idProducto detcostoLista">@requerimientoDetalle.costoLista  </td>
+                            <td class="@requerimientoDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@requerimientoDetalle.margen %</td>
 
 
-                        <td class="@requerimientoDetalle.producto.idProducto detflete" style="text-align:right">@requerimientoDetalle.flete</td>
+                            <td class="@requerimientoDetalle.producto.idProducto detflete" style="text-align:right">@requerimientoDetalle.flete</td>
 
-                        @if (requerimientoDetalle.producto.precioClienteProducto.precioUnitario == 0)
-                        {
-                            if (requerimientoDetalle.precioUnitario >= requerimientoDetalle.producto.precioLista - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
-                      && requerimientoDetalle.precioUnitario <= requerimientoDetalle.producto.precioLista + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                            @if (requerimientoDetalle.producto.precioClienteProducto.precioUnitario == 0)
                             {
-                                <td class="@requerimientoDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@requerimientoDetalle.precioUnitario </td>
+                                if (requerimientoDetalle.precioUnitario >= requerimientoDetalle.producto.precioLista - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+                          && requerimientoDetalle.precioUnitario <= requerimientoDetalle.producto.precioLista + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                                {
+                                    <td class="@requerimientoDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@requerimientoDetalle.precioUnitario </td>
+
+                                }
+                                else
+                                {
+                                    <td class="@requerimientoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@requerimientoDetalle.precioUnitario </td>
+                                }
 
                             }
                             else
                             {
-                                <td class="@requerimientoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@requerimientoDetalle.precioUnitario </td>
+                                if (requerimientoDetalle.precioUnitario >= requerimientoDetalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+                                && requerimientoDetalle.precioUnitario <= requerimientoDetalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                                {
+                                    <td class="@requerimientoDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@requerimientoDetalle.precioUnitario </td>
+
+                                }
+                                else
+                                {
+                                    <td class="@requerimientoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@requerimientoDetalle.precioUnitario </td>
+                                }
                             }
+                            <td class="@requerimientoDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@requerimientoDetalle.producto.precioClienteProducto.precioUnitario </td>
 
-                        }
-                        else
-                        {
-                            if (requerimientoDetalle.precioUnitario >= requerimientoDetalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
-                            && requerimientoDetalle.precioUnitario <= requerimientoDetalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
-                            {
-                                <td class="@requerimientoDetalle.producto.idProducto detprecioUnitario" style="text-align:right">@requerimientoDetalle.precioUnitario </td>
+                            <td class="@requerimientoDetalle.producto.idProducto detcantidad" style="text-align:right">@requerimientoDetalle.cantidad</td>
+                            <td class="@requerimientoDetalle.producto.idProducto detsubtotal" style="text-align:right">@requerimientoDetalle.subTotal</td>
+                            <td class="@requerimientoDetalle.producto.idProducto detobservacion" style="text-align:left">@requerimientoDetalle.observacion</td>
+                            <td class="@requerimientoDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@requerimientoDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
 
-                            }
-                            else
-                            {
-                                <td class="@requerimientoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@requerimientoDetalle.precioUnitario </td>
-                            }
-                        }
-                        <td class="@requerimientoDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@requerimientoDetalle.producto.precioClienteProducto.precioUnitario </td>
-
-                        <td class="@requerimientoDetalle.producto.idProducto detcantidad" style="text-align:right">@requerimientoDetalle.cantidad</td>
-                        <td class="@requerimientoDetalle.producto.idProducto detsubtotal" style="text-align:right">@requerimientoDetalle.subTotal</td>
-                        <td class="@requerimientoDetalle.producto.idProducto detobservacion" style="text-align:left">@requerimientoDetalle.observacion</td>
-                        <td class="@requerimientoDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@requerimientoDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
-
-                        <td class="@requerimientoDetalle.producto.idProducto detordenamiento"></td>
+                            <td class="@requerimientoDetalle.producto.idProducto detordenamiento"></td>
 
 
 
 
 
-                    </tr>
+                        </tr>
+                    }
                 }
 
             </tbody>

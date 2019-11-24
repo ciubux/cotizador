@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Model;
+using System.Data.SqlClient;
 
 namespace DataLayer
 {
@@ -23,10 +24,13 @@ namespace DataLayer
             var objCommand = GetSqlCommand("CLIENTE.ps_periodo_solicitud");
             InputParameterAdd.Guid(objCommand, "idPeriodoSolcitud", id);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
-            DataTable dataTable = Execute(objCommand);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable dataTablePeriodo = dataSet.Tables[0];
+            DataTable dataTableCanasta = dataSet.Tables[1];
+
             PeriodoSolicitud obj = new PeriodoSolicitud();
 
-            foreach (DataRow row in dataTable.Rows)
+            foreach (DataRow row in dataTablePeriodo.Rows)
             {
                 obj.idPeriodoSolicitud = Converter.GetGuid(row, "id_periodo_solicitud");
                 obj.nombre = Converter.GetString(row, "nombre");
@@ -34,7 +38,17 @@ namespace DataLayer
                 obj.fechaFin = Converter.GetDateTime(row, "fecha_fin");
                 obj.Estado = Converter.GetInt(row, "estado");
             }
+            List<DocumentoDetalle> documentoDetalleList = new List<DocumentoDetalle>();
 
+            foreach (DataRow row in dataTableCanasta.Rows)
+            {
+                DocumentoDetalle documentoDetalle = new DocumentoDetalle();
+                documentoDetalle.producto = new Producto();
+                documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                documentoDetalleList.Add(documentoDetalle);
+            }
+
+            obj.canasta = documentoDetalleList;
             return obj;
         }
 
@@ -98,6 +112,25 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "fechaFin", obj.fechaFin.ToString("yyyy-MM-dd"));
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
 
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("idProductoList", typeof(Guid)));
+
+            // populate DataTable from your List here
+            foreach (var itemCanasta in obj.canasta)
+            {
+                if (itemCanasta.producto.precioClienteProducto.estadoCanasta)
+                    tvp.Rows.Add(itemCanasta.producto.idProducto);
+                
+            }
+                
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idProductoList", tvp);
+            // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
 
             ExecuteNonQuery(objCommand);
@@ -119,6 +152,23 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "fechaInicio", obj.fechaInicio.ToString("yyyy-MM-dd"));
             InputParameterAdd.Varchar(objCommand, "fechaFin", obj.fechaFin.ToString("yyyy-MM-dd"));
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("idProductoList", typeof(Guid)));
+
+            // populate DataTable from your List here
+            foreach (var itemCanasta in obj.canasta)
+            {
+                if (itemCanasta.producto.precioClienteProducto.estadoCanasta)
+                    tvp.Rows.Add(itemCanasta.producto.idProducto);
+
+            }
+
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idProductoList", tvp);
+            // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
 
             ExecuteNonQuery(objCommand);
 

@@ -573,9 +573,9 @@ namespace Cotizador.Controllers
                 {
                     RequerimientoDetalle pedidoDetalle = new RequerimientoDetalle(requerimiento.usuario.visualizaCostos, requerimiento.usuario.visualizaMargen);
                     pedidoDetalle.cantidad = documentoDetalle.cantidad;
-                    if (documentoDetalle.cantidad == 0)
+                /*    if (documentoDetalle.cantidad == 0)
                         pedidoDetalle.cantidad = 1;
-
+                        */
                     //pedidoDetalle.costoAnterior = documentoDetalle.costoAnterior;
                     pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
                     pedidoDetalle.flete = documentoDetalle.flete;
@@ -1168,6 +1168,10 @@ namespace Cotizador.Controllers
             requerimiento.existeCambioDireccionEntrega = false;
             this.Session[Constantes.VAR_SESSION_REQUERIMIENTO] = requerimiento;
             return JsonConvert.SerializeObject(requerimiento.direccionEntrega);
+
+
+
+
         }
 
         public void ChangeDireccionEntregaDescripcion()
@@ -1328,15 +1332,28 @@ namespace Cotizador.Controllers
 
             Requerimiento requerimiento = this.RequerimientoSession;
             String idPeriodo = this.Request.Params["idPeriodo"];
+            PeriodoSolicitud periodoSolicitud = new PeriodoSolicitud();
+            periodoSolicitud.canasta = new List<DocumentoDetalle>();
+
             if (idPeriodo.Equals(String.Empty))
             {
                 requerimiento.periodo.idPeriodoSolicitud = Guid.Empty;
             }
             else {
                 requerimiento.periodo.idPeriodoSolicitud = Guid.Parse(idPeriodo);
+                PeriodoSolicitudBL periodoSolicitudBL = new PeriodoSolicitudBL();
+                periodoSolicitud = periodoSolicitudBL.getPeriodoSolicitud(requerimiento.periodo.idPeriodoSolicitud, usuario.idUsuario, usuario);
             }
 
-            
+            foreach (DocumentoDetalle documentoDetalle in requerimiento.documentoDetalle)
+            {
+                documentoDetalle.producto.precioClienteProducto.estadoCanasta = true;
+            }
+
+            foreach (DocumentoDetalle documentoDetalle in requerimiento.documentoDetalle)
+            {
+                documentoDetalle.producto.precioClienteProducto.estadoCanasta = periodoSolicitud.canasta.Where(c => c.producto.idProducto == documentoDetalle.producto.idProducto && c.producto.precioClienteProducto.estadoCanasta).FirstOrDefault() != null;
+            }
 
             this.RequerimientoSession = requerimiento;
         }

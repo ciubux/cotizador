@@ -6,6 +6,9 @@ jQuery(function ($) {
     var TITLE_EXITO = 'Operación Realizada';
 
     $(document).ready(function () {
+
+        FooTable.init('#tableListaPrecios');
+
         //$("#btnBusqueda").click();
         //cargarChosenCliente();
         verificarSiExisteCliente();
@@ -57,7 +60,105 @@ jQuery(function ($) {
     function limpiarFormulario() {
         //$("#periodoSolicitud_nombre").val("");
     }
+    $("#chkSoloCanasta").change(function () {
+        if ($(this).is(":checked")) {
 
+            $("#tableListaPrecios tbody tr").hide();
+            $(".chkCanasta:checked").closest("tr").show();
+            $("#lblChkCanasta").removeClass("text-muted");
+        } else {
+            $("#tableListaPrecios tbody tr").show();
+            $("#lblChkCanasta").addClass("text-muted");
+        }
+    });
+
+    $("#lblChkCanasta").click(function () {
+        if ($("#chkSoloCanasta").is(":checked")) {
+            $("#chkSoloCanasta").prop("checked", false);
+            $("#tableListaPrecios tbody tr").show();
+            $("#lblChkCanasta").addClass("text-muted");
+        } else {
+            $("#chkSoloCanasta").prop("checked", true);
+            $("#tableListaPrecios tbody tr").hide();
+            $(".chkCanasta:checked").closest("tr").show();
+            $("#lblChkCanasta").removeClass("text-muted");
+        }
+    });
+
+
+    $(document).on('change', ".chkCanasta", function () {
+        var idProducto = $(this).attr("idProducto");
+        if ($(this).is(":checked")) {
+            $.ajax({
+                url: "/PeriodoSolicitud/AgregarProductoACanasta",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idProducto: idProducto
+                },
+                success: function () {
+                  /*  if (resultado.success == 1) {
+                        $.alert({
+                            title: "Operación exitosa",
+                            type: 'green',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+
+                    }
+                    else {
+                        $.alert({
+                            title: "Ocurrió un error",
+                            type: 'red',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }*/
+                }
+            });
+        } else {
+            $.ajax({
+                url: "/PeriodoSolicitud/RetirarProductoDeCanasta",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idProducto: idProducto
+                },
+                success: function () {
+                    /*
+                    if (resultado.success == 1) {
+                        $.alert({
+                            title: "Operación exitosa",
+                            type: 'green',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+
+                        if ($("#chkSoloCanasta").is(":checked")) {
+                            $("#tableListaPrecios tbody tr").hide();
+                            $(".chkCanasta:checked").closest("tr").show();
+                        }
+                    }
+                    else {
+                        $.alert({
+                            title: "Ocurrió un error",
+                            type: 'red',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }*/
+                }
+            });
+        }
+    });
 
 
 

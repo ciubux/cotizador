@@ -7,6 +7,86 @@ jQuery(function ($) {
     var TITLE_EXITO = 'Operación Realizada';
 
 
+
+    function obtenerCanasta() {
+
+
+
+
+        $("#tableListaPrecios > tbody").empty();
+
+        for (var i = 0; i < preciosList.length; i++) {
+            var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
+            var fechaFinVigencia = preciosList[i].precioCliente.fechaFinVigencia;
+
+            if (fechaInicioVigencia == null)
+                fechaInicioVigencia = "No Definida";
+            else
+                fechaInicioVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaInicioVigencia.substr(0, 10));
+
+            if (fechaFinVigencia == null)
+                fechaFinVigencia = "No Definida";
+            else
+                fechaFinVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaFinVigencia.substr(0, 10));
+
+            margenText = "";
+            if ($("#tableListaPrecios th.porcentajeMargen").length) {
+                margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1) + ' % </td>';
+            }
+
+            var checkedCanasta = "";
+            if (preciosList[i].producto.precioClienteProducto.estadoCanasta) {
+                checkedCanasta = "checked";
+            }
+
+            canastaText = "";
+            if (cliente.modificaCanasta != 1) {
+                disabledCanasta = "disabled";
+            }
+
+            if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
+                canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanasta + '>  </td>';
+            }
+
+            var preciosRow = '<tr data-expanded="true">' +
+                '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
+                canastaText +
+                '<td>  ' + preciosList[i].producto.proveedor + '  </td>' +
+                '<td>  ' + preciosList[i].producto.sku + '  </td>' +
+                '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
+                '<td>' + fechaInicioVigencia + '</td>' +
+                '<td>' + fechaFinVigencia + '</td>' +
+                '<td>  ' + preciosList[i].unidad + '</td>' +
+                '<td>  ' + preciosList[i].producto.precioClienteProducto.equivalencia.toFixed(cantidadDecimales) + '</td>' +
+                '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
+                '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
+                '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
+
+                '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
+                '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+
+                '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                margenText +
+                '<td>' +
+                '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +
+                '</td>' +
+                '</tr>';
+
+            $("#tableListaPrecios").append(preciosRow);
+
+        }
+
+        if (preciosList.length > 0) {
+            $("#msgPreciosSinResultados").hide();
+        }
+        else {
+            $("#msgPreciosSinResultados").show();
+        }
+        FooTable.init('#tableListaPrecios');
+
+    }
+
+   
     function obtenerConstantes() {
         $.ajax({
             url: "/General/GetConstantes",
@@ -38,6 +118,8 @@ jQuery(function ($) {
     }
 
     $(document).ready(function () {
+
+        
         obtenerConstantes();   
         desactivarControles();
         verificarSiExisteDetalle();
@@ -2244,12 +2326,32 @@ jQuery(function ($) {
 
 
     $("#btnFinalizarCreacionRequerimiento").click(function () {
-        crearRequerimiento(0);
+        var json = finalizarDetalle();
+        $.ajax({
+            url: "/Requerimiento/ChangeDetalle",
+            type: 'POST',
+            data: json,
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (respuesta) {
+                crearRequerimiento(0);
+            }
+        });
     });
 
 
-    $("#btnFinalizarEdicionRequerimiento").click(function () {
-        editarRequerimiento(0);
+    $("#btnFinalizarEdicionRequerimiento").click(function () { 
+        var json = finalizarDetalle();
+        $.ajax({
+            url: "/Requerimiento/ChangeDetalle",
+            type: 'POST',
+            data: json,
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (respuesta) {
+                editarRequerimiento(0);
+            }
+        });
     });
 
     
@@ -3314,7 +3416,7 @@ jQuery(function ($) {
         });*/
     }
     cargarTablaDetalle();
-
+    activarEdicionDetalle();
 
  
 
@@ -3426,14 +3528,7 @@ jQuery(function ($) {
 
 
 
-
-
-
-    
-
-    /*Evento que se dispara cuando se hace clic en el boton EDITAR en la edición de la grilla*/
-    $(document).on('click', "button.footable-show", function () {
-
+    function activarEdicionDetalle() {
 
 
 
@@ -3448,7 +3543,7 @@ jQuery(function ($) {
         $("#flete").attr('disabled', 'disabled');
         $("#btnOpenAgregarProducto").attr('disabled', 'disabled');
 
-        var codigo = $("#requerimiento_numeroRequerimiento").val();
+    /*    var codigo = $("#requerimiento_numeroRequerimiento").val();
         if (codigo == "") {
             $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
             $("#btnFinalizarCreacionRequerimiento").attr('disabled', 'disabled');
@@ -3458,9 +3553,9 @@ jQuery(function ($) {
             $("#btnContinuarEditandoLuego").attr('disabled', 'disabled');
             $("#btnFinalizarEdicionRequerimiento").attr('disabled', 'disabled');
             $("#btnCancelarRequerimiento").attr('disabled', 'disabled');
-        }
+        }*/
 
-        
+
         $("input[name=mostrarcodproveedor]").attr('disabled', 'disabled');
 
 
@@ -3494,8 +3589,7 @@ jQuery(function ($) {
                 value.innerHTML = "<textarea class='" + arrId[0] + " detobservacionarea form-control'/>" + observacion + "</textarea>";
             });
         }
-        else if (considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES) 
-        {
+        else if (considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES) {
             var $j_object = $("span.detproductoObservacion");
             $.each($j_object, function (key, value) {
 
@@ -3506,7 +3600,7 @@ jQuery(function ($) {
 
         }
 
-     //   @cotizacionDetalle.producto.idProducto detproductoObservacion"
+        //   @cotizacionDetalle.producto.idProducto detproductoObservacion"
 
 
 
@@ -3532,6 +3626,17 @@ jQuery(function ($) {
         });
 
 
+    }
+
+
+
+    
+
+    /*Evento que se dispara cuando se hace clic en el boton EDITAR en la edición de la grilla*/
+    $(document).on('click', "button.footable-show", function () {
+
+        activarEdicionDetalle();
+
 
     });
 
@@ -3542,55 +3647,8 @@ jQuery(function ($) {
 
     /*Evento que se dispara cuando se hace clic en FINALIZAR en la edición de la grilla*/
     $(document).on('click', "button.footable-hide", function () {
+        var json = finalizarDetalle();
 
-        //Se habilitan controles
-        $("#considerarCantidades").removeAttr('disabled');
-        $("input[name=igv]").removeAttr('disabled');
-        $("#flete").removeAttr('disabled');
-        $("#btnOpenAgregarProducto").removeAttr('disabled');
-        $("input[name=mostrarcodproveedor]").removeAttr('disabled');
-
-        //  $(".ordenar").attr('data-visible', 'false');
- //       $(".updown").hide();
- //       $(".ordenar, .detordenamiento").width('0px');
-       // FooTable.init();
-      //  <th class="ordenar" data-name="ordenar" data-visible="true"></th>
-
-        var json = "[ ";
-        var $j_object = $("td.detcantidad");
-        $.each($j_object, function (key, value) {
-            var arrId = value.getAttribute("class").split(" ");
-
-             /*Se elimina control input en columna cantidad*/
-            var cantidad = $("." + arrId[0] + ".detincantidad").val();
-            value.innerText = cantidad;
-
-            /*Se elimina control input en columna porcentaje descuento*/
-            var porcentajeDescuento = $("." + arrId[0] + ".detinporcentajedescuento").val();
-            $("." + arrId[0] + ".detporcentajedescuento").text(porcentajeDescuento + " %");
-
-            var margen = $("." + arrId[0] + ".detmargen").text().replace("%", "").trim();
-            var precio = $("." + arrId[0] + ".detprecio").text();
-          //  var subtotal = $("." + arrId[0] + ".detsubtotal").text();
-            var flete = $("." + arrId[0] + ".detinflete").val();
-
-            var costo = $("." + arrId[0] + ".detcostoLista").text();
-
-            var observacion = $("." + arrId[0] + ".detobservacionarea").val(); 
-
-            json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo + '", "observacion":"' + observacion+'"},' 
-        });
-        json = json.substr(0, json.length - 1) + "]";
-
-    
-        /*
-        var cotizacionDetalleJson = [
-            { "idProducto": "John", "cantidad": "1", "porcentajeDescuento": "0" },
-            { "idProducto": "Anna", "cantidad": "1", "porcentajeDescuento": "0" },
-            { "idProducto": "Peter", "cantidad": "1", "porcentajeDescuento": "0" }];
-        var   json3 = JSON.stringify(cotizacionDetalleJson);*/
-
-        
         $.ajax({
             url: "/Requerimiento/ChangeDetalle",
             type: 'POST',
@@ -3602,6 +3660,60 @@ jQuery(function ($) {
             }
         });
     });
+
+    function finalizarDetalle() {
+
+        //Se habilitan controles
+        $("#considerarCantidades").removeAttr('disabled');
+        $("input[name=igv]").removeAttr('disabled');
+        $("#flete").removeAttr('disabled');
+        $("#btnOpenAgregarProducto").removeAttr('disabled');
+        $("input[name=mostrarcodproveedor]").removeAttr('disabled');
+
+        //  $(".ordenar").attr('data-visible', 'false');
+        //       $(".updown").hide();
+        //       $(".ordenar, .detordenamiento").width('0px');
+        // FooTable.init();
+        //  <th class="ordenar" data-name="ordenar" data-visible="true"></th>
+
+        var json = "[ ";
+        var $j_object = $("td.detcantidad");
+        $.each($j_object, function (key, value) {
+            var arrId = value.getAttribute("class").split(" ");
+
+            /*Se elimina control input en columna cantidad*/
+            var cantidad = $("." + arrId[0] + ".detincantidad").val();
+            value.innerText = cantidad;
+
+            /*Se elimina control input en columna porcentaje descuento*/
+            var porcentajeDescuento = $("." + arrId[0] + ".detinporcentajedescuento").val();
+            $("." + arrId[0] + ".detporcentajedescuento").text(porcentajeDescuento + " %");
+
+            var margen = $("." + arrId[0] + ".detmargen").text().replace("%", "").trim();
+            var precio = $("." + arrId[0] + ".detprecio").text();
+            //  var subtotal = $("." + arrId[0] + ".detsubtotal").text();
+            var flete = $("." + arrId[0] + ".detinflete").val();
+
+            var costo = $("." + arrId[0] + ".detcostoLista").text();
+
+            var observacion = $("." + arrId[0] + ".detobservacionarea").val();
+
+            json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo + '", "observacion":"' + observacion + '"},'
+        });
+        json = json.substr(0, json.length - 1) + "]";
+
+
+        /*
+        var cotizacionDetalleJson = [
+            { "idProducto": "John", "cantidad": "1", "porcentajeDescuento": "0" },
+            { "idProducto": "Anna", "cantidad": "1", "porcentajeDescuento": "0" },
+            { "idProducto": "Peter", "cantidad": "1", "porcentajeDescuento": "0" }];
+        var   json3 = JSON.stringify(cotizacionDetalleJson);*/
+
+
+        return json;
+    }
+
 
     /*Evento que se dispara cuando se hace clic en el boton calcular descuento de la grilla*/
     $(document).on('click', "button.btnCalcularDescuento", function () {
@@ -3972,9 +4084,9 @@ jQuery(function ($) {
                 
 
                   
-                    var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
+                    var imgIndicadorExcedePresupuesto = '<a data-toggle="tooltip" title="Dentro del Presupuesto"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
                     if (requerimientoList[i].excedioPresupuesto)
-                        imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"><img class="table-product-img " src="/images/semaforo_rojo_small.png" srcset="semaforo_rojo_min.png 2x"/></a>';
+                        imgIndicadorExcedePresupuesto = '<a data-toggle="tooltip" title="Excedió Presupuesto"><img class="table-product-img " src="/images/semaforo_rojo_small.png" srcset="semaforo_rojo_min.png 2x"/></a>';
                     /*    imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"> <img class="table-product-img" src="/images/semaforo_naranja_small.png" srcset="semaforo_naranja_min.png 2x"/></a>';
                     else if (lista[i].indicadorAprobacion == 3)*/
                         
@@ -4024,7 +4136,7 @@ jQuery(function ($) {
                         '<td>' + false + '</td>' +
                         '<td>' + false + '</td>' +
                         '<td>' + requerimientoList[i].topePresupuesto.toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>' + imgIndicadorAprobacion + '</td>' +
+                        '<td>' + imgIndicadorExcedePresupuesto + '</td>' +
                         '<td>' +
                         '<button type="button" class="' + requerimientoList[i].idRequerimiento + ' ' + requerimientoList[i].idRequerimiento + ' btnVerRequerimiento btn btn-primary ">Ver</button>' +
                         '</td>' +

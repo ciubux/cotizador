@@ -9,7 +9,7 @@ namespace Model
     public class DireccionEntrega : Auditoria
     {
         public Guid idDireccionEntrega { get; set; }
-        [Display(Name = "Dirección:")]
+        [Display(Name = "Dirección Establecimiento:")]
         public String descripcion { get; set; }
         [Display(Name = "Contacto:")]
         public String contacto { get; set; }
@@ -46,7 +46,7 @@ namespace Model
 
         public Decimal limitePresupuesto { get; set; }
 
-        [Display(Name = "Dirección Entrega:")]
+        [Display(Name = "Dirección Entrega Proveedor:")]
         public Boolean esDireccionAcopio { get; set; }
 
     }

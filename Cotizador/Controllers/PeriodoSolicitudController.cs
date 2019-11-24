@@ -55,10 +55,10 @@ namespace Cotizador.Controllers
 
         public String Show()
         {
-            Usuario usuerio = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Guid idPeriodoSolicitud = Guid.Parse(Request["idPeriodoSolicitud"].ToString());
             PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
-            PeriodoSolicitud obj = bL.getPeriodoSolicitud(idPeriodoSolicitud, usuerio.idUsuario);
+            PeriodoSolicitud obj = bL.getPeriodoSolicitud(idPeriodoSolicitud, usuario.idUsuario, usuario);
             obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             String resultado =  JsonConvert.SerializeObject(obj);
             this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_VER] = obj;
@@ -77,7 +77,7 @@ namespace Cotizador.Controllers
             Guid idPeriodoSolicitud = Guid.Parse(Request["idPeriodoSolicitud"].ToString());
 
             PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
-            PeriodoSolicitud obj = bL.getPeriodoSolicitud(idPeriodoSolicitud, usuario.idUsuario);
+            PeriodoSolicitud obj = bL.getPeriodoSolicitud(idPeriodoSolicitud, usuario.idUsuario, usuario);
             obj.usuario = usuario;
 
             obj.nombre = obj.nombre + " " + DateTime.Now.ToFileTime().ToString();
@@ -120,14 +120,15 @@ namespace Cotizador.Controllers
             if (idPeriodoSolicitud != null)
             {
                 PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
-                obj = bL.getPeriodoSolicitud(idPeriodoSolicitud.Value, usuario.IdUsuarioRegistro);
+                obj = bL.getPeriodoSolicitud(idPeriodoSolicitud.Value, usuario.IdUsuarioRegistro, usuario);
+
+
                 obj.IdUsuarioRegistro = usuario.idUsuario;
                 obj.usuario = usuario;
                 
                 this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD] = obj;
             }
             
-
             ViewBag.periodoSolicitud = obj;
             return View();
 
@@ -145,6 +146,18 @@ namespace Cotizador.Controllers
             obj.IdUsuarioRegistro = usuario.idUsuario;
             obj.usuario = usuario;
 
+            Cliente cliente = usuario.clienteList.Where(c => c.sedePrincipal).FirstOrDefault();
+
+            ClienteBL clienteBl = new ClienteBL();
+            //cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(cliente.idCliente);
+
+            foreach (DocumentoDetalle precio in listaPrecios)
+            {
+                precio.producto.precioClienteProducto.estadoCanasta = false;
+            }
+
+            obj.canasta = listaPrecios;
             this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD] = obj;
         }
 
@@ -195,7 +208,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Guid idPeriodoSolicitud = Guid.Parse(Request["idPeriodoSolicitud"].ToString());
             PeriodoSolicitudBL bL = new PeriodoSolicitudBL();
-            PeriodoSolicitud obj = bL.getPeriodoSolicitud(idPeriodoSolicitud, usuario.idUsuario);
+            PeriodoSolicitud obj = bL.getPeriodoSolicitud(idPeriodoSolicitud, usuario.idUsuario, usuario);
             obj.usuario = usuario;
             String resultado = JsonConvert.SerializeObject(obj);
             this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD_VER] = obj;
@@ -334,6 +347,66 @@ namespace Cotizador.Controllers
             };
 
             return PartialView("_Periodo", model);
+        }
+
+
+          [HttpPost]
+        public void AgregarProductoACanasta()
+        {
+            int success = 1;
+            string message = "";
+           
+
+            PeriodoSolicitud periodoSolicitud = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD];
+
+            PeriodoSolicitudBL periodoSolicitudBL = new PeriodoSolicitudBL();
+
+
+            Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+
+            DocumentoDetalle itemCanasta = periodoSolicitud.canasta.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
+            itemCanasta.producto.precioClienteProducto.estadoCanasta = true;
+
+      /*      if (periodoSolicitudBL.agregarProductoCanasta(periodoSolicitud.idPeriodoSolicitud, idProducto, usuario))
+            {
+                message = "Se agregó el producto a la canasta.";
+            }
+            else
+            {
+                success = 0;
+                message = "No se pudo agregar el producto a la canasta.";
+            }*/
+
+            //return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
+
+
+        [HttpPost]
+        public void RetirarProductoDeCanasta()
+        {
+            PeriodoSolicitud periodoSolicitud = (PeriodoSolicitud)this.Session[Constantes.VAR_SESSION_PERIODOSOLICITUD];
+            Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            DocumentoDetalle itemCanasta = periodoSolicitud.canasta.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
+            itemCanasta.producto.precioClienteProducto.estadoCanasta = false;
+
+            /*
+            if (cliente.modificaCanasta == 1)
+            {
+                if (clienteBl.retiraProductoCanasta(cliente.idCliente, idProducto, usuario))
+                {
+                    message = "Se retiró el producto de la canasta.";
+                }
+                else
+                {
+                    success = 0;
+                    message = "No se pudo retirar el producto de la canasta.";
+                }
+            }*/
+
+            //return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }
     }
 
