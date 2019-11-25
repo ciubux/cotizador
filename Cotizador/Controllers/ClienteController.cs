@@ -392,6 +392,41 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        [HttpPost]
+        public String ActualizarSKUCliente()
+        {
+            int success = 1;
+            string message = "";
+            ClienteBL clienteBl = new ClienteBL();
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+
+            string skuCliente = this.Request.Params["skuCliente"].ToString();
+            Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (cliente.modificaCanasta == 1)
+            {
+                DocumentoDetalle prod = cliente.listaPrecios.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
+                int isdas = 0;
+                if (cliente.listaPrecios.Where(p => p.producto.idProducto == idProducto).FirstOrDefault() != null &&clienteBl.setSKUCliente(skuCliente, cliente.idCliente, usuario.idUsuario, idProducto))
+                {
+                    message = "Se registró el SKU del cliente.";
+                }
+                else
+                {
+                    success = 0;
+                    message = "No se pudo registrar el SKU.";
+                }
+            }
+            else
+            {
+                success = 0;
+                message = "No tiene permiso para realizar esta acción.";
+            }
+
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
 
         [HttpPost]
         public String AgregarProductoACanasta()

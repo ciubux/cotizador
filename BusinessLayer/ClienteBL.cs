@@ -345,6 +345,14 @@ namespace BusinessLayer
             }
         }
 
+        public bool setSKUCliente(String skuCliente, Guid idCliente, Guid idUsuario, Guid idProducto)
+        {
+            using (ProductoDAL productoDal = new ProductoDAL())
+            {
+                return productoDal.setSKUCliente(skuCliente, idCliente, idUsuario, idProducto);
+            }
+        }
+
         public List<Cliente> getClientes(Cliente cliente)
         {
             using (var clienteDAL = new ClienteDAL())

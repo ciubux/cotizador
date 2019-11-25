@@ -794,6 +794,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.estadoCanasta = Converter.GetInt(row, "estado_canasta") == 1 ? true : false;
 
                 cotizacionDetalle.precioCliente = new PrecioClienteProducto();
+                cotizacionDetalle.precioCliente.skuCliente = Converter.GetString(row, "sku_cliente");
                 if (row["fecha_inicio_vigencia"] == DBNull.Value)
                 {
                     cotizacionDetalle.precioCliente.fechaInicioVigencia = null;
@@ -1132,6 +1133,36 @@ namespace DataLayer
 
         }
 
+        public bool setSKUCliente(String skuCliente, Guid idCliente, Guid idUsuario, Guid idProducto)
+        {
+            var objCommand = GetSqlCommand("piu_cliente_producto");
+
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Varchar(objCommand, "sku", skuCliente);
+            InputParameterAdd.Int(objCommand, "estado", 1);
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
+
+        public bool setSKUClienteGrupo(String skuCliente, int idGrupo, Guid idUsuario, Guid idProducto, int replicarMiembros)
+        {
+            var objCommand = GetSqlCommand("piu_grupo_cliente_producto");
+
+            InputParameterAdd.Int(objCommand, "idGrupo", idGrupo);
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Varchar(objCommand, "sku", skuCliente);
+            InputParameterAdd.Int(objCommand, "estado", 1);
+            InputParameterAdd.Int(objCommand, "replicarMiembros", replicarMiembros);
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
 
         public Producto updateProducto(Producto producto)
         {

@@ -2937,8 +2937,7 @@ jQuery(function ($) {
                         '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
                         canastaText +
                         '<td>  ' + preciosList[i].producto.proveedor  + '  </td>' +
-                        '<td>  ' + preciosList[i].producto.sku + spnSkuCliente
-                        + '</td>' +
+                        '<td>  ' + preciosList[i].producto.sku + spnSkuCliente + '</td>' +
                         '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
                         '<td>' + fechaInicioVigencia + '</td>' +
                         '<td>' + fechaFinVigencia + '</td>' +
@@ -3105,6 +3104,7 @@ jQuery(function ($) {
     $("#modalVerCliente").on('click', ".btnGuardarSkuCliente", function () {
         var skuCliente = $(this).closest("td").find(".inputSkuCliente").val();
         skuCliente = skuCliente.trim();
+        var idProducto = $(this).closest("tr").find("td:first-child").html();
         if (skuCliente == "") {
             $.alert({
                 title: "SKU Cliente Inválido",
@@ -3115,9 +3115,46 @@ jQuery(function ($) {
                 }
             });
         } else {
-            $(this).closest("td").find(".spnTextSkuCliente").attr("savedValue", skuCliente);
 
-            $(this).closest("td").find(".spnTextSkuCliente").html(' - <span class="spnSkuCliente">' + skuCliente + '</span>' + '<br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Editar SKU Cliente</a>');
+            var that = this;
+
+            $.ajax({
+                url: "/Cliente/ActualizarSKUCliente",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idProducto: idProducto,
+                    skuCliente: skuCliente
+                },
+                success: function (resultado) {
+                    if (resultado.success == 1) {
+                        $.alert({
+                            title: "Operación exitosa",
+                            type: 'green',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () {
+                                    
+                                }
+                            }
+                        });
+
+                        $(that).closest("td").find(".spnTextSkuCliente").attr("savedValue", skuCliente);
+                        $(that).closest("td").find(".spnTextSkuCliente").html(' - <span class="spnSkuCliente">' + skuCliente + '</span>' + '<br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Editar SKU Cliente</a>');
+                    }
+                    else {
+                        $.alert({
+                            title: "Ocurrió un error",
+                            type: 'red',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+            
         }
 
     });

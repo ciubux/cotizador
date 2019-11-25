@@ -498,6 +498,42 @@ namespace Cotizador.Controllers
         }
 
 
+        [HttpPost]
+        public String ActualizarSKUCliente()
+        {
+            int success = 1;
+            string message = "";
+
+            GrupoCliente grupoCliente = (GrupoCliente)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_VER];
+            GrupoClienteBL bl = new GrupoClienteBL();
+
+            string skuCliente = this.Request.Params["skuCliente"].ToString();
+            Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
+            int replicaMiembros = int.Parse(this.Request.Params["replicaMiembros"]);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (grupoCliente.modificaCanasta == 1)
+            {
+                if (grupoCliente.listaPrecios.Where(p => p.producto.idProducto == idProducto).FirstOrDefault() != null && bl.setSKUCliente(skuCliente, grupoCliente.idGrupoCliente, usuario.idUsuario, idProducto, replicaMiembros))
+                {
+                    message = "Se registró el SKU del cliente en el Grupo y sus miembros que heredan precios.";
+                }
+                else
+                {
+                    success = 0;
+                    message = "No se pudo registrar el SKU.";
+                }
+            }
+            else
+            {
+                success = 0;
+                message = "No tiene permiso para realizar esta acción.";
+            }
+
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
+
         public String ConsultarSiExisteGrupoCliente()
         {
             GrupoCliente grupoCliente = (GrupoCliente)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE];

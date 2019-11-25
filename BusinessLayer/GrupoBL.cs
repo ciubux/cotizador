@@ -100,6 +100,13 @@ namespace BusinessLayer
             }
         }
 
+        public bool setSKUCliente(String skuCliente, int idGrupo, Guid idUsuario, Guid idProducto, int replicarMiembros)
+        {
+            using (ProductoDAL productoDal = new ProductoDAL())
+            {
+                return productoDal.setSKUClienteGrupo(skuCliente, idGrupo, idUsuario, idProducto, replicarMiembros);
+            }
+        }
 
         public List<Cliente> getClientesGrupo(int idGrupo)
         {

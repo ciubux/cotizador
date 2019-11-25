@@ -1556,11 +1556,16 @@ jQuery(function ($) {
                         canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanasta + '>  </td>';
                     }
 
+                    spnSkuCliente = '<span class="spnTextSkuCliente" savedValue=""> <span class="spnSkuCliente"></span><br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Agregar SKU Cliente</a></span>';
+                    if (preciosList[i].precioCliente.skuCliente != null && preciosList[i].precioCliente.skuCliente != '') {
+                        spnSkuCliente = '<span class="spnTextSkuCliente" savedValue="' + preciosList[i].precioCliente.skuCliente + '"> - <span class="spnSkuCliente">' + preciosList[i].precioCliente.skuCliente + '</span>' + '<br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Editar SKU Cliente</a></span>';
+                    }
+
                     var preciosRow = '<tr data-expanded="true">' +
                         '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
                         canastaText +
                         '<td>  ' + preciosList[i].producto.proveedor + '  </td>' +
-                        '<td>  ' + preciosList[i].producto.sku + '  </td>' +
+                        '<td>  ' + preciosList[i].producto.sku + spnSkuCliente + '</td>' +
                         '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
                         '<td>' + fechaInicioVigencia + '</td>' +
                         '<td>' + fechaFinVigencia + '</td>' +
@@ -1642,6 +1647,80 @@ jQuery(function ($) {
         });
     });
 
+
+    $("#modalVerGrupoCliente").on('click', ".lnkAgregarSkuCliente", function () {
+        var skuCliente = $(this).closest("td").find(".spnSkuCliente").html();
+        $(this).closest("td").find(".spnTextSkuCliente").html('<br/><input class="form-control inputSkuCliente" value="' + skuCliente + '"><br/><button type="button" class="btn btn-primary btnGuardarSkuCliente">Guardar</button><br/><button type="button" class="btn btn-secondary btnCancelarSkuCliente" style="margin-top: 5px;">Cancelar</button>');
+    });
+
+    $("#modalVerGrupoCliente").on('click', ".btnGuardarSkuCliente", function () {
+        var skuCliente = $(this).closest("td").find(".inputSkuCliente").val();
+        skuCliente = skuCliente.trim();
+        var idProducto = $(this).closest("tr").find("td:first-child").html();
+        if (skuCliente == "") {
+            $.alert({
+                title: "SKU Cliente Inválido",
+                type: 'red',
+                content: "Debe digitar un SKU.",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+        } else {
+
+            var that = this;
+
+            $.ajax({
+                url: "/GrupoCliente/ActualizarSKUCliente",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idProducto: idProducto,
+                    skuCliente: skuCliente,
+                    replicaMiembros: 1
+                },
+                success: function (resultado) {
+                    if (resultado.success == 1) {
+                        $.alert({
+                            title: "Operación exitosa",
+                            type: 'green',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () {
+
+                                }
+                            }
+                        });
+
+                        $(that).closest("td").find(".spnTextSkuCliente").attr("savedValue", skuCliente);
+                        $(that).closest("td").find(".spnTextSkuCliente").html(' - <span class="spnSkuCliente">' + skuCliente + '</span>' + '<br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Editar SKU Cliente</a>');
+                    }
+                    else {
+                        $.alert({
+                            title: "Ocurrió un error",
+                            type: 'red',
+                            content: resultado.message,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+
+        }
+
+    });
+
+    $("#modalVerGrupoCliente").on('click', ".btnCancelarSkuCliente", function () {
+        var skuCliente = $(this).closest("td").find(".spnTextSkuCliente").attr("savedValue");
+
+        if (skuCliente == "") {
+            $(this).closest("td").find(".spnTextSkuCliente").html('<span class="spnSkuCliente"></span><br/><a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Agregar SKU Cliente</a>');
+        } else {
+            $(this).closest("td").find(".spnTextSkuCliente").html(' - <span class="spnSkuCliente">' + skuCliente + '</span>' + '<br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Editar SKU Cliente</a>');
+        }
+    });
 
     $("#btnLimpiarCanasta").click(function () {
         $.confirm({
