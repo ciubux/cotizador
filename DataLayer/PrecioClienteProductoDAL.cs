@@ -101,6 +101,20 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idGrupoCliente", idGrupoCliente);
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Int(objCommand, "aplicaMiembros", 1);
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
+
+
+        public bool limpiaCanastaCliente(int idGrupoCliente, int aplicaMiembros)
+        {
+            var objCommand = GetSqlCommand("pd_limpiarCanastaGrupoCliente");
+
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", idGrupoCliente);
+            InputParameterAdd.Int(objCommand, "aplicaMiembros", aplicaMiembros);
 
             ExecuteNonQuery(objCommand);
 
@@ -113,6 +127,7 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", idGrupoCliente);
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Int(objCommand, "aplicaMiembros", 1);
 
             ExecuteNonQuery(objCommand);
 

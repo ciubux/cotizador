@@ -64,6 +64,7 @@ namespace Cotizador.Controllers
 
                 this.Session[Constantes.VAR_SESSION_MENSAJE] = mensaje;
             }
+
             ViewBag.Mensaje = mensaje;
             ViewBag.roles = roles;
 
@@ -82,6 +83,7 @@ namespace Cotizador.Controllers
             obj.estado = 1;
             obj.fechaInicioMensaje = DateTime.Now;
             obj.fechaVencimientoMensaje = DateTime.Now;
+            obj.listUsuario = new List<Usuario>();
             obj.user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             this.Session[Constantes.VAR_SESSION_MENSAJE] = obj;
 
@@ -112,8 +114,12 @@ namespace Cotizador.Controllers
             obj.user = new Usuario();
             obj.estado = 1;
             obj.id_mensaje = Guid.Empty;
-            obj.fechaCreacionMensaje = null;
-            obj.fechaVencimientoMensaje = null;
+            obj.fechaCreacionMensajeDesde = null;
+            obj.fechaCreacionMensajeHasta = null;
+
+            obj.fechaVencimientoMensajeDesde = null;
+            obj.fechaVencimientoMensajeHasta = null;
+         
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             obj.user.idUsuario = usuario.idUsuario;
@@ -268,6 +274,27 @@ namespace Cotizador.Controllers
         }
 
 
+        public void ChangeUsuarioMensaje(Guid[] idUsuario)
+        {
+            Mensaje obj = (Mensaje)this.MensajeSession;
+            obj.listUsuario = new List<Usuario>();
+            if (idUsuario != null)
+            {
+                for (var i = 0; i < idUsuario.Length; i++)
+                {
+                    Usuario user = new Usuario();
+                    UsuarioBL userbl= new UsuarioBL();
+                    user = userbl.getUsuario(idUsuario[i]);                    
+                    obj.listUsuario.Add(user);
+                }
+            }
+            else
+            {
+                obj.listUsuario = new List<Usuario>();
+            }            
+            this.MensajeSession = obj;
+        }
+
         public String ShowMensaje()
         {
             Guid idUsuario;
@@ -325,14 +352,31 @@ namespace Cotizador.Controllers
             String[] fecha = this.Request.Params["fechaInicio"].Split('/');
             obj.fechaInicioMensaje = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
             this.MensajeSession = obj;
-        }
+        }       
 
         public void ChangeFechaVencimiento()
         {
             Mensaje obj = (Mensaje)this.MensajeSession;
             String[] fecha = this.Request.Params["fechaVencimiento"].Split('/');
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            if (fecha[0] == "")
+            {
+                propertyInfo.SetValue(obj,null);
+            }
+            else
+            {
+                propertyInfo.SetValue(obj, new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0])));
+            }
+           
+            this.MensajeSession = obj;
+
+        }
+
+        public void ChangeFechaVencimientoEdit()
+        {
+            Mensaje obj = (Mensaje)this.MensajeSession;
+            String[] fecha = this.Request.Params["fechaVencimiento"].Split('/');
             obj.fechaVencimientoMensaje = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
-            obj.fechaCreacionMensaje = null;
             this.MensajeSession = obj;
 
         }
@@ -341,10 +385,17 @@ namespace Cotizador.Controllers
         {
             Mensaje obj = (Mensaje)this.MensajeSession;
             String[] fecha = this.Request.Params["fechaCreacion"].Split('/');
-            obj.fechaCreacionMensaje = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
-            obj.fechaVencimientoMensaje = null;
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            if (fecha[0] == "")
+            {
+                propertyInfo.SetValue(obj,null);
+            }
+            else
+            {
+                propertyInfo.SetValue(obj,new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0])));
+            }
+            
             this.MensajeSession = obj;
-
 
         }
 

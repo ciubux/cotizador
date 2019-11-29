@@ -61,6 +61,11 @@ namespace DataLayer
                 tvp.Rows.Add(AlertaValidacion.CREA_GRUPO_CLIENTE);
             }
 
+            if (usuario.apruebaAnulacionGuias)
+            {
+                tvp.Rows.Add(AlertaValidacion.SOLICITUD_ANULACION_GUIA);
+            }
+
             SqlParameter tvparam = objCommand.Parameters.AddWithValue("@tipoList", tvp);
             tvparam.SqlDbType = SqlDbType.Structured;
             tvparam.TypeName = "dbo.VarcharCList";

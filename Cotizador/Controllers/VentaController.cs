@@ -40,7 +40,7 @@ namespace Cotizador.Controllers
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
             venta.guiaRemision = new GuiaRemision();
-            venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
+            venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());           
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             venta = ventaBL.GetVenta(venta, usuario);
             this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
@@ -470,7 +470,7 @@ namespace Cotizador.Controllers
             obj.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Todos;
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            obj.usuario.idUsuario = usuario.idUsuario;
+            obj.usuario = usuario;
             this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] = obj;
         }
 
@@ -616,16 +616,23 @@ namespace Cotizador.Controllers
 
         public String ShowList()
         {
+            int? rectificar_venta=null;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (usuario.rectificarVenta == true)
+            {
+                rectificar_venta = 1;
+            }           
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
             venta.guiaRemision = new GuiaRemision();
             venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            venta.idVenta = Guid.Parse(Request["idVenta"].ToString());
             venta = ventaBL.GetVentaList(venta, usuario);
-            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;         
+            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta; 
+            
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonVenta = JsonConvert.SerializeObject(venta);
-
+            dynamic jsonPermisorectificarventa = JsonConvert.DeserializeObject("{'Permiso': '"+ rectificar_venta + "'}");
             Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == venta.pedido.ciudad.idCiudad).FirstOrDefault();
 
             string jsonSeries = "[]";
@@ -634,8 +641,19 @@ namespace Cotizador.Controllers
                 var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
                 jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
             }
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
+
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + ",\"PermisoRectificarVenta\":" + jsonPermisorectificarventa + "}";
             return json;
+        }
+
+        public void RectificarVentaCheck()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            
+            Guid id_detalle_producto= Guid.Parse(this.Request.Params["id_detalle_producto"]);
+            int estadoCheck = int.Parse(this.Request.Params["valor"]);
+            VentaBL obj = new VentaBL();
+            obj.rectificacfionVenta(estadoCheck,id_detalle_producto,usuario.idUsuario);
         }
 
     }

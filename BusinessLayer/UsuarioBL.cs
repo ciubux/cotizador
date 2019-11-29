@@ -138,5 +138,34 @@ namespace BusinessLayer
             }
             return usuario;
         }
+
+
+        public Usuario getUsuarioMantenimiento(Guid? idUsuario)
+        {
+            Usuario usuario = null;
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                usuario = usuarioDAL.getUsuarioMantenimiento(idUsuario);
+            }
+            return usuario;
+        }
+
+
+        public Usuario insertUsuarioMantenedor(Usuario usuario)
+        {
+            using (var dal = new UsuarioDAL())
+            {
+                return dal.insertUsuarioMantenedor(usuario);
+            }
+        }
+
+        public Usuario updateUsuarioMantenedor(Usuario usuario)
+        {
+            using (var dal = new UsuarioDAL())
+            {
+                return dal.updateUsuarioMantenedor(usuario);
+            }
+        }
+
     }
 }

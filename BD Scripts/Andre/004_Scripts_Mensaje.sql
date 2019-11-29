@@ -76,7 +76,7 @@ inner join mensaje_roles on   mensaje_roles.id_mensaje=mensaje.id_mensaje
 inner join  ROL_USUARIO on ROL_USUARIO.id_rol=mensaje_roles.id_rol
 inner join USUARIO on mensaje.id_usuario_creacion=usuario.id_usuario
 where Mensaje.id_mensaje not in (select id_mensaje from MENSAJE_LEIDO)  and ROL_USUARIO.id_usuario=@id_usuario and mensaje.estado=1 
-and fecha_inicio <= dbo.getlocaldate()  and fecha_vencimiento >= dbo.getlocaldate() and not mensaje.id_usuario = @id_usuarop 
+and fecha_inicio <= dbo.getlocaldate()  and fecha_vencimiento >= dbo.getlocaldate() and not mensaje.id_usuario = @id_usuario 
 order by  mensaje.fecha_creacion desc
 end 
 /*********** Create pi_mensaje_visto - Inserta el mensaje leido por un usuario especifico ********/

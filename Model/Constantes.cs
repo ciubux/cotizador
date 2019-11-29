@@ -407,8 +407,12 @@ namespace Model
 
         public const String VISUALIZA_VENTAS = "P730";
 
+
+        public const String RECTIFICAR_VENTA = "P731";
+
         public const String MODIFICA_RUBRO = "P750";
         public const String VISUALIZA_RUBROS = "P751";
+
 
         public enum paginas
         {

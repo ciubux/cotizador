@@ -1172,6 +1172,8 @@ namespace Cotizador.Controllers
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            int tipo = int.Parse(Request["tipo"]);
+
             if (!usuario.apruebaAnulacionGuias)
             {
                 success = 0;
@@ -1195,8 +1197,17 @@ namespace Cotizador.Controllers
             {
                 guiaRemision.usuario = usuario;
                 MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
-                movimientoAlmacenBL.AprobarAnulacionMovimientoAlmacen(guiaRemision);
-                message = "La solicitud anulación se aprobó correctamente.";
+
+                if (tipo == 1)
+                {
+                    movimientoAlmacenBL.AprobarAnulacionMovimientoAlmacen(guiaRemision);
+                    message = "La solicitud anulación se APROBÓ correctamente.";
+                }
+                else
+                {
+                    movimientoAlmacenBL.RechazarAnulacionMovimientoAlmacen(guiaRemision);
+                    message = "La solicitud anulación se RECHAZÓ correctamente.";
+                }
             }
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";

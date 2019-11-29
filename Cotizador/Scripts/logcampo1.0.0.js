@@ -82,7 +82,7 @@ jQuery(function ($) {
 
 
                     if (list[i].estadoCatalogo == null && list[i].puede_persistir == null) {
-                        list[i].nombre = list[i].nombre + "<span style='color: darkred;' class='has - activate'><br>*No se encuentra configurado en el LOG</span>";
+                        list[i].nombre = list[i].nombre + "<span class='text-danger'><br>*No se encuentra configurado en el LOG</span>";
                         if (list[i].estadoCatalogo == null) {
 
                             label = '<input class="estadoCatalogo ' + list[i].catalogoId + ' add radio-input" type="radio" name="catalogo_estado_' + list[i].catalogoId + '" value="1"><span>Activo</span>';
@@ -99,17 +99,25 @@ jQuery(function ($) {
                         }
 
                     }
+                    var Programado = "";
+                    if (list[i].esFuncional == 1)
+                    {
+                        Programado = '<span class="text-success"><b>Si</b></span>';
+                    }
+                                        
+                    if (list[i].esFuncional == 0 || list[i].esFuncional == null) 
+                    {
+                        Programado = '<span class="text-danger"><b>No</b></span>';
+                    }  
 
 
                     var ItemRow = '<tr data-expanded="true" id="contenidoTabla">' +
 
-
                         '<td class="nombreCampo">' + list[i].nombre + '</td>' +
                         '<td> <div class="radio radio-inline"><label class="radio-label">' + label + '</label></div><div class="radio radio-inline"><label class="radio-label">' + label2 + '</label></div> </td>' +
                         '<td> <div class="radio radio-inline"><label class="radio-label">' + label3 + '</label></div><div class="radio radio-inline"><label class="radio-label">' + label4 + '</label></div> </td>' +
+                        '<td> '+ Programado +'</td>'+
                         '</tr>';
-
-
 
                     $("#tableCatalogo").append(ItemRow);
 
@@ -142,7 +150,7 @@ jQuery(function ($) {
             opcion = "Inactivo";
         }
 
-        var nombreCampo = $(this).closest("tr").find("td.nombreCampo").text().replace("*No se encuentra configurado en el LOG", "");;
+        var nombreCampo = $(this).closest("tr").find("td.nombreCampo").text().replace("*No se encuentra configurado en el LOG", "");
 
 
         if (add != "add") {

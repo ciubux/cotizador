@@ -47,7 +47,6 @@ namespace Model
 
         public tiposMovimiento tipoMovimiento { get; set; }
 
-        public Usuario usuario { get; set; }
 
         public SeguimientoMovimientoAlmacenSalida seguimientoMovimientoAlmacenSalida { get; set; }
 

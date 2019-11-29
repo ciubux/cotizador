@@ -56,7 +56,7 @@ namespace Cotizador.Controllers
             LogCampoBL bL = new LogCampoBL();
             List<LogCampo> list = bL.getCatalogo(obj);
             //Se coloca en session el resultado de la búsqueda
-            this.Session[Constantes.VAR_SESSION_LOGCAMPO_LISTA] = list;
+            //this.Session[Constantes.VAR_SESSION_LOGCAMPO_LISTA] = list;
             //Se retorna la cantidad de elementos encontrados
             return JsonConvert.SerializeObject(list);
         }

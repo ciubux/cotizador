@@ -80,6 +80,11 @@ namespace Model
                 {
                     return "Se creó el Grupo Cliente \"" + this.data.ObjData + "\" ";
                 }
+
+                if (this.tipo == AlertaValidacion.SOLICITUD_ANULACION_GUIA)
+                {
+                    return "El usuario solicitó anulación de la Guía N° " + this.data.ObjData + ".";
+                }
                 return "";
             }
             
@@ -88,7 +93,7 @@ namespace Model
 
         public static String CAMBIA_GRUPO_CLIENTE = "CAMBIA_GRUPO_CLIENTE";
         public static String CREA_GRUPO_CLIENTE = "CREA_GRUPO_CLIENTE";
-
+        public static String SOLICITUD_ANULACION_GUIA = "SOLICITUD_ANULACION_GUIA";
 
         public static String NO_DATA_TEXT = "NO DATA";
     }

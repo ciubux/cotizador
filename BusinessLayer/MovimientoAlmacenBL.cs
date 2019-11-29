@@ -20,19 +20,69 @@ namespace BusinessLayer
             }
         }
 
-        public void SolicitarAnulacionMovimientoAlmacen(MovimientoAlmacen movimientoAlmacen)
+        public void SolicitarAnulacionMovimientoAlmacen(GuiaRemision movimientoAlmacen)
         {
             using (var dal = new MovimientoALmacenDAL())
             {
                 dal.UpdateSolicitarAnulacion(movimientoAlmacen);
+
+                AlertaValidacion alerta = new AlertaValidacion();
+                alerta.idRegistro = movimientoAlmacen.idMovimientoAlmacen.ToString();
+                alerta.nombreTabla = "MOVIMIENTO_ALMACEN";
+                alerta.Estado = 1;
+                alerta.UsuarioCreacion = movimientoAlmacen.usuario;
+                alerta.IdUsuarioCreacion = movimientoAlmacen.usuario.idUsuario;
+                alerta.tipo = AlertaValidacion.SOLICITUD_ANULACION_GUIA;
+                alerta.data = new DataAlertaValidacion();
+
+                
+                alerta.data.ObjData = movimientoAlmacen.serieNumeroGuia;
+
+                AlertaValidacionDAL alertaDal = new AlertaValidacionDAL();
+                alertaDal.insertAlertaValidacion(alerta);
+
             }
         }
 
-        public void AprobarAnulacionMovimientoAlmacen(MovimientoAlmacen movimientoAlmacen)
+        public void AprobarAnulacionMovimientoAlmacen(GuiaRemision movimientoAlmacen)
         {
             using (var dal = new MovimientoALmacenDAL())
             {
                 dal.UpdateAprobararAnulacion(movimientoAlmacen);
+
+                Mensaje notificacion = new Mensaje();
+                notificacion.titulo = "Respuesta solicitud anulación " + movimientoAlmacen.serieNumeroGuia;
+                notificacion.mensaje = "La solicitud de anulación de la guía de remisión " + movimientoAlmacen.serieNumeroGuia + " fue APROBADA, ya puede anular la guía de remisión.";
+                notificacion.fechaInicioMensaje = DateTime.Now;
+                notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                notificacion.user = movimientoAlmacen.usuario;
+                notificacion.importancia = "Alta";
+                notificacion.listUsuario = new List<Usuario>();
+                notificacion.listUsuario.Add(movimientoAlmacen.usuarioSolicitaAnulacion);
+
+                MensajeDAL mensajeDal = new MensajeDAL();
+                mensajeDal.insertMensaje(notificacion);
+            }
+        }
+
+        public void RechazarAnulacionMovimientoAlmacen(GuiaRemision movimientoAlmacen)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                dal.UpdateAprobararAnulacion(movimientoAlmacen);
+
+                Mensaje notificacion = new Mensaje();
+                notificacion.titulo = "Respuesta solicitud anulación " + movimientoAlmacen.serieNumeroGuia;
+                notificacion.mensaje = "La solicitud de anulación de la guía de remisión " + movimientoAlmacen.serieNumeroGuia  + " fue RECHAZADA.";
+                notificacion.fechaInicioMensaje = DateTime.Now;
+                notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                notificacion.user = movimientoAlmacen.usuario;
+                notificacion.importancia = "Alta";
+                notificacion.listUsuario = new List<Usuario>();
+                notificacion.listUsuario.Add(movimientoAlmacen.usuarioSolicitaAnulacion);
+
+                MensajeDAL mensajeDal = new MensajeDAL();
+                mensajeDal.insertMensaje(notificacion);
             }
         }
 

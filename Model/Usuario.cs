@@ -18,6 +18,7 @@ namespace Model
         /*DATOS*/
         [Display(Name = "Email:")]
         public string email { get; set; }
+        [Display(Name = "Contraseña:")]
         public string password { get; set; }
         [Display(Name = "Nombre:")]
         public string nombre { get; set; }
@@ -25,8 +26,11 @@ namespace Model
         public string cargo { get; set; }
         [Display(Name = "Contacto:")]
         public string contacto { get; set; }
+
+        [Display(Name = "Descuento Maximo (%):")]
         public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
 
+        public Guid idUsuarioModificacion { get; set; }
         public Ciudad sedeMP { get; set; }
 
         public List<Ciudad> sedesMP { get; set; }
@@ -70,6 +74,7 @@ namespace Model
             get { return this.vendedorList.Where(v => v.esSupervisorComercial).ToList(); }
         }
 
+        [Display(Name = "Cliente:")]
         public bool esCliente { get; set; }
 
         public bool esVendedor { get; set; }
@@ -217,8 +222,9 @@ namespace Model
         /*Notificacion de Documento de Venta*/
         public bool visualizaDocumentoVentaNotificacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOVENTANOTIFICACION)).FirstOrDefault() != null; } }
 
-        /*Notificacion de Documento de Venta*/
+        /*Venta*/
         public bool visualizaVentas { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENTAS)).FirstOrDefault() != null; } }
+        public bool rectificarVenta { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.RECTIFICAR_VENTA)).FirstOrDefault() != null; } }
 
 
         /*Administra Permisos*/

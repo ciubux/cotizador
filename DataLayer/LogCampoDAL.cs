@@ -80,6 +80,7 @@ namespace DataLayer
                 obj.puede_persistir = Converter.GetInt(row, "puede_persistir");
                 obj.nombre = Converter.GetString(row, "nombre");
                 obj.orden = Converter.GetInt(row, "orden");
+                obj.esFuncional = Converter.GetInt(row, "es_funcional");
                 listcata.Add(obj);
 
             }

@@ -281,5 +281,194 @@ namespace Cotizador.Controllers
             propertyInfo.SetValue(obj, this.Request.Params["valor"]);
             this.UsuarioSession = obj;
         }
+
+
+        public String ConsultarSiExisteUsuario()
+        {
+            Guid idUsuario = Guid.Parse(Request["idUsuario"].ToString());
+            UsuarioBL bL = new UsuarioBL();
+            Usuario obj = bL.getUsuarioMantenimiento(idUsuario);
+
+            //Usuario objuser = new Usuario();
+            //objuser = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
+
+            //obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+            if (obj == null)
+                return "{\"existe\":\"false\",\"idUsuario\":\"00000000-0000-0000-0000-000000000000\"}";
+            else
+                return "{\"existe\":\"true\",\"idUsuario\":\"" + obj.idUsuario + "\"}";
+        }
+
+        public ActionResult Editar(Guid? idUsuario)
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoUsuario;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaUsuario)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if ((Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] == null && idUsuario == null)
+            {
+                instanciarUsuario();
+            }
+
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+
+            if (idUsuario != null)
+            {
+                UsuarioBL bL = new UsuarioBL();
+                obj = bL.getUsuarioMantenimiento(idUsuario);
+                obj.idUsuarioModificacion = usuario.idUsuario;                
+                this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
+            }
+            ViewBag.usuario = obj;
+            return View();
+
+        }
+
+        private void instanciarUsuario()
+        {
+            Usuario obj = new Usuario();
+            obj.sedeMP = new Ciudad();
+            obj.idUsuario = Guid.Empty;            
+            obj.cargo = String.Empty;
+            obj.contacto = String.Empty;
+            obj.maximoPorcentajeDescuentoAprobacion = 0.00M;
+            obj.nombre = String.Empty;
+            obj.Estado = 1;
+            obj.email = String.Empty;
+            obj.password = String.Empty;
+            obj.esCliente = false;
+
+            obj.sedeMP.idCiudad = Guid.Empty;
+
+            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.idUsuarioModificacion = user.idUsuarioModificacion;
+            
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
+        }
+
+        public void iniciarEdicionUsuario()
+        {            
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+           
+        }
+
+        public ActionResult CancelarCreacionUsuario()
+        {
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = null;
+           
+            return RedirectToAction("List", "Usuario");
+
+        }
+
+        [HttpPost]
+        public String Create()
+        {
+            UsuarioBL bL = new UsuarioBL();
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+
+            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.idUsuarioModificacion = user.idUsuario;
+
+            String pass = Request["password"].ToString();
+            obj.password = pass;
+
+            obj = bL.insertUsuarioMantenedor(obj);
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = null;
+            String resultado = JsonConvert.SerializeObject(obj);
+            return resultado;
+        }
+        public String Update()
+        {
+            UsuarioBL bL = new UsuarioBL();
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+
+            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.idUsuarioModificacion = user.idUsuario;
+
+            String pass = Request["password"];
+            obj.password = pass;
+
+            if (obj.idUsuario == Guid.Empty)
+            {
+                obj = bL.insertUsuarioMantenedor(obj);
+                this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = null;
+            }
+            else
+            {
+                obj = bL.updateUsuarioMantenedor(obj);
+                this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = null;
+            }
+            String resultado = JsonConvert.SerializeObject(obj);
+
+            return resultado;
+        }
+
+        public void ChangeInputStringMantenedor()
+        {
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, this.Request.Params["valor"]);
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
+        }
+
+        public void ChangeInputDecimalMantenedor()
+        {
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, Decimal.Parse(this.Request.Params["valor"]));
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
+        }
+
+
+
+        public String ChangeIdCiudad()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+
+            Guid idCiudad = Guid.Empty;
+            if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
+            {
+                idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+            }
+
+            //CiudadBL ciudadBL = new CiudadBL();
+            //Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
+            usuario.sedeMP.idCiudad = idCiudad;
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = usuario;
+            return "{\"idCiudad\": \"" + idCiudad + "\"}";
+
+        }
+
+
+        public void ChangeInputBooleanMantenedor()
+        {
+
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, Boolean.Parse(this.Request.Params["valor"]));
+
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
+        }
+
+        public void ChangeInputIntMantenedor()
+        {
+
+            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
+        }
+        public void ChangeInputInt()
+        {
+            Usuario obj = (Usuario)this.UsuarioSession;
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
+            this.UsuarioSession = obj;
+        }
     }
 }

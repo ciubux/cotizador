@@ -1407,21 +1407,34 @@ jQuery(function ($) {
     });
         
     $("#btnAprobarSolicitudAnulacion").click(function () {
+        updateEstadoSolicitudAnulacion(1);
+    });
+
+    $("#btnRechazarSolicitudAnulacion").click(function () {
+        updateEstadoSolicitudAnulacion(-1);
+    }); 
+
+    function updateEstadoSolicitudAnulacion(tipo) {
         $("#btnAprobarSolicitudAnulacion").attr("disabled", "disabled");
+        $("#btnRechazarSolicitudAnulacion").attr("disabled", "disabled");
+
         $.ajax({
             url: "/GuiaRemision/AprobarAnulacion",
             type: 'POST',
             dataType: 'JSON',
             data: {
+                tipo: tipo,
             },
             error: function () {
                 $("#btnAprobarSolicitudAnulacion").removeAttr("disabled");
+                $("#btnRechazarSolicitudAnulacion").removeAttr("disabled");
                 alert(MENSAJE_ERROR);
             },
             success: function (resultado) {
                 if (resultado.success == 1) {
                     $.alert({
                         title: "Operación Exitosa",
+                        type: "green",
                         content: resultado.message,
                         buttons: {
                             OK: function () {
@@ -1437,14 +1450,14 @@ jQuery(function ($) {
                         buttons: {
                             OK: function () {
                                 $("#btnAprobarSolicitudAnulacion").removeAttr("disabled");
+                                $("#btnRechazarSolicitudAnulacion").removeAttr("disabled");
                             }
                         }
                     });
                 }
             }
         });
-    });
-
+    }
     $("#btnAceptarSolicitudAnulacion").click(function () {
         var comentario = $("#comentarioSolicitudAnulacion").val();
         $("#btnAceptarSolicitudAnulacion").attr("disabled", "disabled");
@@ -1464,6 +1477,7 @@ jQuery(function ($) {
                 if (resultado.success == 1) {
                     $.alert({
                         title: "Operación Exitosa",
+                        type: "green",
                         content: resultado.message,
                         buttons: {
                             OK: function () {
@@ -2577,6 +2591,7 @@ jQuery(function ($) {
                         '<td>  ' + guiaRemisionList[i].pedido.cliente.razonSocial + '</td>' +
                         '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
                         '<td>  ' + guiaRemisionList[i].ciudadOrigen.nombre + '</td>' +
+                        '<td>  ' + guiaRemisionList[i].pedido.direccionEntrega.nombre + '</td>' +
                         '<td ' + style + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +
                         '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerGuiaRemision btn btn-primary ">Ver</button></td > ' +
                         '</tr>';

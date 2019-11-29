@@ -1,0 +1,179 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Usuario";
+    Model.Usuario usuario = ViewBag.usuario;
+}
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal">
+        <div class="row">
+           <input type="hidden" id="idUsuarioMantenimiento" name="idVendedor" value="@usuario.idUsuario" />
+           <div class="row">
+
+
+               <div class="col-sm-12 col-lg-8">
+                   <div class="form-group">
+                       <label class="control-label col-xs-3">Ciudad:</label>
+                       <div class="col-xs-7">
+                           @Html.Action("GetCiudades", "Ciudad",
+                             new
+                             {
+                                 ciudadSelectId = "usuario_idCiudad",
+                                 selectedValue = usuario.sedeMP.idCiudad
+                             })
+                       </div>
+                   </div>
+               </div>
+
+
+
+
+               <div class="col-sm-12 col-lg-8">
+                   <div class="form-group">
+                       @Html.LabelFor(dv => usuario.cargo, htmlAttributes: new { @class = "control-label col-xs-3" })
+                       <div class="col-xs-7">
+                           @Html.TextBoxFor(c => usuario.cargo, htmlAttributes: new { @class = "form-control" })
+                       </div>
+                   </div>
+               </div>
+
+               <div class="col-sm-12 col-lg-8">
+                   <div class="form-group">
+                       @Html.LabelFor(dv => usuario.nombre, htmlAttributes: new { @class = "control-label col-xs-3" })
+                       <div class="col-xs-7">
+                           @Html.TextBoxFor(c => usuario.nombre, htmlAttributes: new { @class = "form-control",@id="usuario_nombre_mantenedor" })
+                       </div>
+                   </div>
+               </div>
+
+               <div class="col-sm-12 col-lg-8">
+                   <div class="form-group">
+                       @Html.LabelFor(dv => usuario.email, htmlAttributes: new { @class = "control-label col-xs-3" })
+                       <div class="col-xs-7">
+                           @Html.TextBoxFor(c => usuario.email, htmlAttributes: new { @class = "form-control", type = "email" })
+                       </div>
+                   </div>
+               </div>
+
+               <div class="col-sm-12 col-lg-8">
+                   <div class="form-group">
+                       @Html.LabelFor(dv => usuario.password, htmlAttributes: new { @class = "control-label col-xs-3" })
+                       <div class="col-xs-7">
+                           <input id="usuario_password" name="Name" class="form-control" type="password" />
+                       </div>
+                   </div>
+               </div>
+
+
+
+               <div class="col-sm-12 col-lg-8">
+                   <div class="form-group">
+                       @Html.LabelFor(dv => usuario.contacto, htmlAttributes: new { @class = "control-label col-xs-3" })
+                       <div class="col-xs-7">
+                           @Html.TextBoxFor(c => usuario.contacto, htmlAttributes: new { @class = "form-control" })
+                       </div>
+                   </div>
+               </div>
+
+
+               <div class="col-sm-12 col-lg-8">
+                   <div class="form-group">
+                       @Html.LabelFor(dv => usuario.maximoPorcentajeDescuentoAprobacion, htmlAttributes: new { @class = "control-label col-xs-3" })
+                       <div class="col-xs-2">
+                           @Html.TextBoxFor(c => usuario.maximoPorcentajeDescuentoAprobacion, htmlAttributes: new { @class = "form-control" ,@type="number" ,@step="0.05" , @min="0" ,@max="100" })
+                       </div>
+                   </div>
+               </div>
+
+
+
+               <div class="col-sm-12 col-lg-8">
+                   <div class="form-group">
+                       @Html.LabelFor(c => usuario.esCliente, htmlAttributes: new { @class = "control-label col-xs-3" })
+                       <div class="col-xs-7">
+                           <div class="radio radio-inline">
+                               <label class="radio-label">
+                                   @if (usuario.esCliente == true)
+                                   {
+                                       <input class="radio-input"  type="radio" name="usuario_cliente" id="usuario_cliente_si" value="1" checked><span>Si</span>
+                                   }
+                                   else
+                                   {
+                                       <input class="radio-input" type="radio" name="usuario_cliente" id="usuario_cliente_si" value="1"><span>Si</span>
+                                   }
+                               </label>
+                           </div>
+                           <div class="radio radio-inline">
+                               <label class="radio-label">
+                                   @if (usuario.esCliente == false)
+                                   {
+                                       <input class="radio-input" checked type="radio" name="usuario_cliente" id="usuario_cliente_no" value="0"><span>No</span>
+                                   }
+                                   else
+                                   {
+                                       <input class="radio-input" type="radio" name="usuario_cliente" id="usuario_cliente_no" value="0"><span>No</span>
+                                   }
+                               </label>
+                           </div>
+                       </div>
+                       </div>
+                   </div>
+
+               <div class="col-sm-12 col-lg-8">
+                   <div class="form-group">
+
+                       @Html.LabelFor(c => usuario.Estado, htmlAttributes: new { @class = "control-label col-xs-3" })
+                       <div class="col-xs-7">
+                           <div class="radio radio-inline">
+                               <label class="radio-label">
+                                   @if (usuario.Estado == 1)
+                                   {
+                                       <input class="radio-input" checked type="radio" name="vendedor_estado" id="usuario_estado_si_mantenedor" value="1"><span>Activo</span>
+                                   }
+                                   else
+                                   {
+                                       <input class="radio-input" type="radio" name="vendedor_estado" id="usuario_estado_si_mantenedor" value="1"><span>Activo</span>
+                                   }
+                               </label>
+                           </div>
+                           <div class="radio radio-inline">
+                               <label class="radio-label">
+                                   @if (usuario.Estado == 0)
+                                   {
+                                       <input class="radio-input" checked type="radio" name="vendedor_estado" id="usuario_estado_no_mantenedor" value="0"><span>Inactivo</span>
+                                   }
+                                   else
+                                   {
+                                       <input class="radio-input" type="radio" name="vendedor_estado" id="usuario_estado_no_mantenedor" value="0"><span>Inactivo</span>
+                                   }
+                               </label>
+                           </div>
+                       </div>
+                       </div>
+                   </div>
+
+
+
+
+
+
+
+
+
+               </div>
+        </div>
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnCancelarUsuarioMantenimiento" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionUsuarioMantenimiento" type="button" class="btn btn-success">Finalizar Creación</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/usuario")
+}
