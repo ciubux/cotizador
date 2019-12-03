@@ -1,7 +1,65 @@
-﻿<div id="MensajeRapido" class="modal fade ModalMensajeRapido" role="dialog" data-url='@Url.Action("EditarRapido","Mensaje")'>
+﻿<div id="MensajeRapido" class="modal fade ModalMensajeRapido" role="dialog" tabindex="-1" data-url='@Url.Action("EditarRapido","Mensaje")'>
     <div class="modal-dialog" id="MensajeRapidoDialog">
 
 
 
     </div>
 </div>
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalListado">
+    <div class="modal-dialog" role="document" id="MensajeVerLista">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="tituloMensaje"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </br>
+            </div>
+            <div class="modal-body">
+
+                <table id="tableMensajeVer" class="table footable footable-4 breakpoint-lg"
+                       data-editing="false" data-editing-allow-add="false"
+                       data-editing-allow-delete="false" data-editing-allow-edit="false"
+                       data-show-toggle="false" style="">
+
+                    <thead>
+                        <tr>
+                            <th data-name="Numero" data-visible="true" data-sortable="true">N°</th>
+                            <th data-name="nombre" data-visible="true">Usuario</th>
+                            <th data-name="nombre" data-visible="true">Fecha de Confirmación</th>
+                            <th data-name="titulo" data-visible="true" data-sortable="true">Titulo del mensaje</th>
+
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div id="MensajeRapido" class="modal fade ModalMensajeRapido" role="dialog" tabindex="-1" data-url='@Url.Action("EditarRapido","Mensaje")'>
+    <div class="modal-dialog" id="MensajeRapidoDialog">
+
+
+
+    </div>
+</div>
+
+
+
+

@@ -61,7 +61,7 @@ namespace DataLayer
             SqlParameter tvparam2 = objCommand.Parameters.AddWithValue("@usuarios", tmpuser);
             tvparam2.SqlDbType = SqlDbType.Structured;
             tvparam2.TypeName = "dbo.UniqueIdentifierList";
-            
+
             ExecuteNonQuery(objCommand);
 
             return obj;
@@ -149,12 +149,12 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_lista_mensajes");
             List<Mensaje> lista = new List<Mensaje>();
             InputParameterAdd.Int(objCommand, "estado", mensaje.estado);
-            InputParameterAdd.DateTime(objCommand, "fecha_creacion_desde",mensaje.fechaCreacionMensajeDesde);
+            InputParameterAdd.DateTime(objCommand, "fecha_creacion_desde", mensaje.fechaCreacionMensajeDesde);
             InputParameterAdd.DateTime(objCommand, "fecha_creacion_hasta", mensaje.fechaCreacionMensajeHasta);
 
             InputParameterAdd.DateTime(objCommand, "fecha_vencimiento_desde", mensaje.fechaVencimientoMensajeDesde);
             InputParameterAdd.DateTime(objCommand, "fecha_vencimiento_hasta", mensaje.fechaVencimientoMensajeHasta);
-            
+
             InputParameterAdd.Guid(objCommand, "id_usuario_creacion", mensaje.user.idUsuario);
             DataTable dataTable = Execute(objCommand);
             foreach (DataRow row in dataTable.Rows)
@@ -229,8 +229,40 @@ namespace DataLayer
 
             return obj;
         }
+        public Mensaje MensajeVistoRespuesta(Mensaje obj)
+        {
+            var objCommand = GetSqlCommand("pi_mensaje_visto_repuesta");
+            InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);
+            InputParameterAdd.Guid(objCommand, "id_usuario", obj.user.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "respuesta", obj.mensaje);
+            InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
+            InputParameterAdd.Varchar(objCommand, "importancia", obj.importancia);
+
+            ExecuteNonQuery(objCommand);
+            return obj;
+        }
 
 
-
+        public List<Mensaje> getHiloMensaje(Mensaje obj)
+        {
+            var objCommand = GetSqlCommand("ps_ver_hilo_mensaje");
+            InputParameterAdd.Guid(objCommand, "id_mensaje_mensaje_recibido", obj.id_mensaje);
+            InputParameterAdd.Guid(objCommand, "id_usuario", obj.user.idUsuario);
+            List<Mensaje> list = new List<Mensaje>();
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Mensaje mensaje = new Mensaje();
+                mensaje.user = new Usuario();
+                mensaje.id_mensaje = Converter.GetGuid(row, "id_mensaje");
+                mensaje.user.nombre = Converter.GetString(row, "nombre");
+                mensaje.user.idUsuario = Converter.GetGuid(row, "id_usuario");
+                mensaje.fechaCreacionMensaje = Converter.GetDateTime(row, "fecha_creacion");
+                mensaje.user.email = Converter.GetString(row, "email");
+                mensaje.mensaje = Converter.GetString(row, "mensaje");
+                list.Add(mensaje);
+            }
+            return list;
+        }
     }
 }

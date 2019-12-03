@@ -119,7 +119,7 @@ namespace Cotizador.Controllers
 
             obj.fechaVencimientoMensajeDesde = null;
             obj.fechaVencimientoMensajeHasta = null;
-         
+
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             obj.user.idUsuario = usuario.idUsuario;
@@ -129,7 +129,7 @@ namespace Cotizador.Controllers
 
         public String SearchList()
         {
-                       
+
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaMensaje;
             Mensaje obj = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA];
             obj.user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -283,15 +283,15 @@ namespace Cotizador.Controllers
                 for (var i = 0; i < idUsuario.Length; i++)
                 {
                     Usuario user = new Usuario();
-                    UsuarioBL userbl= new UsuarioBL();
-                    user = userbl.getUsuario(idUsuario[i]);                    
+                    UsuarioBL userbl = new UsuarioBL();
+                    user = userbl.getUsuario(idUsuario[i]);
                     obj.listUsuario.Add(user);
                 }
             }
             else
             {
                 obj.listUsuario = new List<Usuario>();
-            }            
+            }
             this.MensajeSession = obj;
         }
 
@@ -308,9 +308,9 @@ namespace Cotizador.Controllers
         {
             Mensaje obj = new Mensaje();
             obj.user = new Usuario();
-
             obj.id_mensaje = Guid.Parse(Request["idMensaje"].ToString());
-            obj.user.idUsuario = Guid.Parse(Request["idUsuario"].ToString());
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.user.idUsuario = usuario.idUsuario;
             MensajeBL bL = new MensajeBL();
             bL.updateMensajeVisto(obj);
         }
@@ -352,7 +352,7 @@ namespace Cotizador.Controllers
             String[] fecha = this.Request.Params["fechaInicio"].Split('/');
             obj.fechaInicioMensaje = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
             this.MensajeSession = obj;
-        }       
+        }
 
         public void ChangeFechaVencimiento()
         {
@@ -361,13 +361,13 @@ namespace Cotizador.Controllers
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             if (fecha[0] == "")
             {
-                propertyInfo.SetValue(obj,null);
+                propertyInfo.SetValue(obj, null);
             }
             else
             {
                 propertyInfo.SetValue(obj, new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0])));
             }
-           
+
             this.MensajeSession = obj;
 
         }
@@ -388,13 +388,13 @@ namespace Cotizador.Controllers
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             if (fecha[0] == "")
             {
-                propertyInfo.SetValue(obj,null);
+                propertyInfo.SetValue(obj, null);
             }
             else
             {
-                propertyInfo.SetValue(obj,new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0])));
+                propertyInfo.SetValue(obj, new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0])));
             }
-            
+
             this.MensajeSession = obj;
 
         }
@@ -412,16 +412,16 @@ namespace Cotizador.Controllers
         public ActionResult EditarRapido(Guid? id_mensaje)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoMensaje;
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];          
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             RolBL rolbl = new RolBL();
             List<Rol> roles = new List<Rol>();
             Rol rol = new Rol();
-            rol.Estado = 1;            
+            rol.Estado = 1;
             roles = rolbl.getRoles(rol);
-           
+
             this.Session[Constantes.VAR_SESSION_ROL_LISTA] = roles;
-            
+
             if (this.Session[Constantes.VAR_SESSION_MENSAJE] == null && id_mensaje == null)
             {
                 instanciarMensaje();
@@ -429,12 +429,47 @@ namespace Cotizador.Controllers
 
             Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
             mensaje.user.idUsuario = usuario.idUsuario;
-            mensaje.fechaVencimientoMensaje =DateTime.Now.AddDays(7);
+            mensaje.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
             mensaje.importancia = "Alta";
             ViewBag.Mensaje = mensaje;
             ViewBag.roles = roles;
 
             return PartialView(mensaje);
         }
+
+        public void MensajeVistoRespuesta()
+        {
+            Mensaje obj = new Mensaje();
+            MensajeBL mensajebl = new MensajeBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.id_mensaje = Guid.Parse(Request["idMensaje"].ToString());
+            obj = mensajebl.getMensajeById(obj.id_mensaje);
+            obj.user = new Usuario();
+            obj.mensaje = Request["respuesta"];
+            obj.fechaVencimientoMensaje = null;
+            obj.user.idUsuario = usuario.idUsuario;
+            mensajebl.MensajeVistoRespuesta(obj);
+        }
+
+
+
+        public String verHiloMensaje()
+        {
+            List<Mensaje> list = new List<Mensaje>();
+            Mensaje obj = new Mensaje();
+            obj.user = new Usuario();
+            MensajeBL mensajebl = new MensajeBL();
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.user.idUsuario = usuario.idUsuario;
+
+            obj.id_mensaje = Guid.Parse(Request["idMensaje"].ToString());
+
+            list = mensajebl.getHiloMensaje(obj);
+            return JsonConvert.SerializeObject(list);
+        }
+
+
+
     }
 }

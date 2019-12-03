@@ -64,7 +64,21 @@ namespace BusinessLayer
             }
         }
 
+        public void MensajeVistoRespuesta(Mensaje obj)
+        {
+            using (var dal = new MensajeDAL())
+            {
+                dal.MensajeVistoRespuesta(obj);
+            }
+        }
 
+        public List<Mensaje> getHiloMensaje(Mensaje obj)
+        {
+            using (var dal = new MensajeDAL())
+            {
+               return dal.getHiloMensaje(obj);
+            }
+        }
 
     }
 }

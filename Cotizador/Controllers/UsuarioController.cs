@@ -472,17 +472,25 @@ namespace Cotizador.Controllers
         }
 
         //[HttpPost]
-        public int cambiarContraseña(/*Guid idUsuarioCambioPass, string passActual, string passNuevo*/)
+        public void cambiarPassword(/*Guid idUsuarioCambioPass, string passActual, string passNuevo*/)
         {
-            Guid idUsuarioCambioPass = Guid.Parse(Request["idUsuarioCambioPass"]);
-            String passActual = Request["passActual"].ToString();
-            String passNuevo = Request["passNuevo"].ToString();           
+            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Guid idUsuarioCambioPass = user.idUsuario;            
+            String passNuevo = Request["passNuevo"].ToString();
+            UsuarioBL userBl = new UsuarioBL();
+            userBl.updateUsuarioCambioPassword(passNuevo, idUsuarioCambioPass); 
+        }
 
-            UsuarioBL user = new UsuarioBL();
-            bool a =user.confirmarPassword(passActual, idUsuarioCambioPass);
+        public int confirmarPasswordActual(/*Guid idUsuarioCambioPass, string passActual, string passNuevo*/)
+        {
+            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Guid idUsuarioCambioPass = user.idUsuario;
+            String passActual = Request["passActual"].ToString();          
+
+            UsuarioBL userBl = new UsuarioBL();
+            bool a = userBl.confirmarPassword(passActual, idUsuarioCambioPass);
             if (a == true)
-            {                    
-                user.updateUsuarioCambioPassword(passNuevo, idUsuarioCambioPass);                
+            {                
                 return 1;
             }
             else
