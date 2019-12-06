@@ -388,8 +388,8 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "G", det.cantidad, tableDataCenterCellStyle);
 
                     UtilesHelper.setValorCelda(sheet, i, "H", (double)det.precioLista, twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "I", (double)det.porcentajeDescuento, twoDecCellStyle);
-                    UtilesHelper.setFormulaCelda(sheet, i, "J", "H" + i.ToString() + "*(1-(I" + i.ToString() + "/100))", twoDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "I", (double)(det.porcentajeDescuento/100), twoDecPercentageCellStyle);
+                    UtilesHelper.setFormulaCelda(sheet, i, "J", "H" + i.ToString() + "*(1-I" + i.ToString() + ")", twoDecCellStyle);
 
                     UtilesHelper.setValorCelda(sheet, i, "K", (double)det.flete, twoDecCellStyle);
                     UtilesHelper.setFormulaCelda(sheet, i, "L", "J" + i.ToString() + "+K" + i.ToString() + "", twoDecCellStyle);
