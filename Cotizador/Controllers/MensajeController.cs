@@ -68,6 +68,9 @@ namespace Cotizador.Controllers
             ViewBag.Mensaje = mensaje;
             ViewBag.roles = roles;
 
+            ViewBag.mensaje_fechaInicio = mensaje.fechaInicioMensaje.Value.ToString(Constantes.formatoFecha);
+            ViewBag.mensaje_fechaVencimiento = mensaje.fechaVencimientoMensaje.Value.ToString(Constantes.formatoFecha);
+
             return View();
 
         }
@@ -77,7 +80,7 @@ namespace Cotizador.Controllers
             Mensaje obj = new Mensaje();
             obj.user = new Usuario();
             obj.id_mensaje = Guid.Empty;
-            obj.importancia = "";
+            obj.prioridad = "no";
             obj.mensaje = String.Empty;
             obj.titulo = String.Empty;
             obj.estado = 1;
@@ -323,12 +326,7 @@ namespace Cotizador.Controllers
             MensajeBL bL = new MensajeBL();
             Mensaje obj = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
             obj.user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            //Mensaje update = (Mensaje)this.MensajeSession;
-            //obj.titulo = update.titulo;
-            //obj.importancia = update.importancia;
-            //obj.fechaInicioMensaje = update.fechaInicioMensaje;
-            //obj.fechaVencimientoMensaje = update.fechaVencimientoMensaje;
-            //obj.mensaje = update.mensaje;
+            
             if (obj.id_mensaje == null || obj.id_mensaje == Guid.Empty)
             {
                 obj = bL.insertMensaje(obj);
@@ -430,7 +428,7 @@ namespace Cotizador.Controllers
             Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
             mensaje.user.idUsuario = usuario.idUsuario;
             mensaje.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
-            mensaje.importancia = "Alta";
+            mensaje.prioridad = "si";
             ViewBag.Mensaje = mensaje;
             ViewBag.roles = roles;
 
@@ -450,9 +448,7 @@ namespace Cotizador.Controllers
             obj.user.idUsuario = usuario.idUsuario;
             mensajebl.MensajeVistoRespuesta(obj);
         }
-
-
-
+               
         public String verHiloMensaje()
         {
             List<Mensaje> list = new List<Mensaje>();
@@ -467,9 +463,7 @@ namespace Cotizador.Controllers
 
             list = mensajebl.getHiloMensaje(obj);
             return JsonConvert.SerializeObject(list);
-        }
-
-
-
+        }    
+               
     }
 }

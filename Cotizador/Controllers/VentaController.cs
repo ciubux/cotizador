@@ -422,7 +422,7 @@ namespace Cotizador.Controllers
             {
                 instanciarBusquedaVenta();
             }
-
+            
             Venta objSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
             Venta guiaRemisionSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] ;
             int existeCliente = 0;
@@ -430,7 +430,7 @@ namespace Cotizador.Controllers
             {
              existeCliente = 1;
             }
-
+           
             ViewBag.Venta = objSearch; 
            
             ViewBag.guiaRemision = guiaRemisionSearch.guiaRemision;
@@ -440,6 +440,9 @@ namespace Cotizador.Controllers
             ViewBag.pedido = this.VentaSession.pedido;
 
             ViewBag.existeCliente = existeCliente;
+
+            ViewBag.venta_fechaEmisionDesde = objSearch.guiaRemision.fechaEmisionDesde.ToString(Constantes.formatoFecha);
+            ViewBag.venta_fechaEmisionHasta = objSearch.guiaRemision.fechaEmisionHasta.ToString(Constantes.formatoFecha);
 
             return View();
         }
@@ -457,7 +460,7 @@ namespace Cotizador.Controllers
             obj.ciudad = new Ciudad();
             obj.guiaRemision.pedido = new Pedido();
             obj.guiaRemision.pedido.cliente = new Cliente();
-            obj.guiaRemision.numero = 0;
+            obj.guiaRemision.numero = 0;            
             obj.guiaRemision.fechaEmisionDesde = DateTime.Now.AddDays(-10);
             obj.guiaRemision.fechaEmisionHasta = DateTime.Now.AddDays(1);
             obj.guiaRemision.motivoTrasladoBusqueda = GuiaRemision.motivosTrasladoBusqueda.Venta;

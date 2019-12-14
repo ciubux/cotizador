@@ -22,43 +22,35 @@
 
             
         <div class="row form-group">
-            <label for="color" class="col-form-label col-md-2">Importancia:</label>
-
+            <label for="color" class="col-form-label col-md-2">Prioridad:</label>
 
             <div class="col-md-5">
+                <div class="radio-inline">
+                    <label class="radio-label">
+                        @if (mensaje.prioridad == "si")
+                        {
+                            <input class="radio-input" checked type="radio" name="vendedor_prioridad" id="vendedor_prioridad_si" value="1"><span style="font-weight: normal">Si</span>
+                        }                        
+                        else
+                        {
+                        <input class="radio-input" type="radio" name="vendedor_prioridad" id="vendedor_prioridad_si" value="1"><span style="font-weight: normal">Si</span>
+                        }
 
-                <select name="importancia" id="importancia" class="form-control">
-                    @if (mensaje.importancia == "" || mensaje.importancia == null)
-                    {
-                        <option value="" selected>Selecciona una opción</option>
-                        <option value="Alta">Alta</option>
-                        <option value="Normal">Normal</option>
-                        <option value="Baja">Baja</option>
-                    }
-                    @if (mensaje.importancia == "Alta")
-                    {
-                        <option value="">Selecciona una opción</option>
-                        <option value="Alta" selected>Alta</option>
-                        <option value="Normal">Normal</option>
-                        <option value="Baja">Baja</option>
-                    }
-                    @if (mensaje.importancia == "Normal")
-                    {
-                        <option value="">Selecciona una opción</option>
-                        <option value="Alta">Alta</option>
-                        <option value="Normal" selected>Normal</option>
-                        <option value="Baja">Baja</option>
-                    }
-                    @if (mensaje.importancia == "Baja")
-                    {
-                        <option value="">Selecciona una opción</option>
-                        <option value="Alta">Alta</option>
-                        <option value="Normal">Normal</option>
-                        <option value="Baja" selected>Baja</option>
-                    }
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label class="radio-label">
+                        @if (mensaje.prioridad == "no")
+                        {
+                            <input class="radio-input" checked type="radio" name="vendedor_prioridad" id="vendedor_prioridad_no" value="0"><span style="font-weight: normal">No</span>
+                        }
+                        else
+                        {
+                            <input class="radio-input" type="radio" name="vendedor_prioridad" id="vendedor_prioridad_no" value="0"><span style="font-weight: normal">No</span>
+                        }
+                    </label>
+                </div>
 
-
-                </select>
             </div>
 
         </div>
@@ -67,14 +59,14 @@
         <div class=" row form-group">
             <label for="fechaHasta" class="col-form-label col-md-2">Fecha de Inicio:</label>
             <div class="col-md-5">
-                <input class="form-control" type="text" id="mensaje_fechaInicioMensaje" name="fechaHasta" value="@mensaje.fechaInicioMensaje">
+                <input class="form-control" type="text" id="mensaje_fechaInicioMensaje" name="fechaHasta" value="@ViewBag.mensaje_fechaInicio">
             </div>
         </div>
 
         <div class=" row form-group">
             <label for="fechaHasta" class="col-form-label col-md-2">Fecha de Vencimiento:</label>
             <div class="col-md-5">
-                <input class="form-control" type="text" id="mensaje_fechaVencimientoMensaje_edit" name="fechaHasta" value="@mensaje.fechaVencimientoMensaje">
+                <input class="form-control" type="text" id="mensaje_fechaVencimientoMensaje_edit" name="fechaHasta" value="@ViewBag.mensaje_fechaVencimiento">
             </div>
         </div>
 
@@ -126,9 +118,9 @@
                         string itemChecked = mensaje.TieneRol(ro.idRol) ? "checked" : "";
 
                         <div class="col-sm-6 col-lg-4 col-xs-12">
-                            <label class="radio-label" for="permiso_@ro.idRol">
+                            <label class="radio-label" for="rol_@ro.idRol">
                                 <input type="checkbox" @itemChecked class="chk-rol" name="rol_@ro.idRol" id="rol_@ro.idRol" value="1">
-                                <span>@ro.nombre - (@ro.codigo)</span>
+                                <span class="listaUsuarioRoles" id="tooltip_@ro.idRol" data-toggle="tooltip" data-tipso="">@ro.nombre - (@ro.codigo)</span>
                             </label>
                         </div>
                     }

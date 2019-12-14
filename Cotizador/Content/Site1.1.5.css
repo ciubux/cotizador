@@ -713,4 +713,8 @@ $darkred: darken($red, 0.2);*/
     width: 450px;
 }
 
+.tooltip-inner {
+    white-space: pre-wrap;
+}
+
 

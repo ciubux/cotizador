@@ -56,9 +56,9 @@
                     });
 
                 for (var i = 0; i < list.length; i++) {
-                    var act;
-                    if (list[i].estado == 1) { act = "Activo" };
-                    if (list[i].estado == 0) { act = "Inactivo" };
+                    var act = list[i].estado == 1 ? "Activo" : "Inactivo" ;  
+                    list[i].cargo = list[i].cargo == null ? "" : list[i].cargo;
+
                     var ItemRow = '<tr data-expanded="true">' +
 
                         '<td>  ' + list[i].idVendedor + '  </td>' +
@@ -67,6 +67,7 @@
                         '<td>  ' + list[i].cargo + '  </td>' +
                         '<td>  ' + act + '  </td>' +
                         '<td>  ' + list[i].email + '  </td>' +
+                        '<td>  ' + list[i].ciudad.nombre + '  </td>' +
                         '<td>' +
                         '<button type="button" class="' + list[i].idVendedor + ' btnEditarVendedor btn btn-primary ">Editar</button>' +
                         '</td>' +
@@ -83,6 +84,16 @@
                     $("#msgBusquedaSinResultados").show();
                 }
 
+            }
+        });
+    });
+
+    $("#btnLimpiarBusquedaVendedor").click(function () {
+        $.ajax({
+            url: "/Vendedor/CleanBusqueda",
+            type: 'POST',
+            success: function () {
+                location.reload();
             }
         });
     });
@@ -159,13 +170,6 @@
 
         ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Vendedor/CancelarCreacionVendedor', null);
     });
-
-
-
-
-
-
-
 
     function ConfirmDialog(message, redireccionSI, redireccionNO) {
         $('<div></div>').appendTo('body')
@@ -245,12 +249,10 @@
             editarVendedor();
         }
     });
-
-
-
+    
     function editarVendedor() {
 
-        if (!validacionDatosVendedor2())
+        if (!validacionDatosVendedor())
             return false;
 
 
@@ -304,33 +306,21 @@
             return false;
         }
 
-        if ($("#vendedor_descripcion").val().length < 4) {
-            $.alert({
-                title: "Nombre Inválido",
-                type: 'orange',
-                content: 'Debe ingresar un nombre válido.',
-                buttons: {
-                    OK: function () { $('#vendedor_descripcion').focus(); }
-                }
-            });
-            return false;
-        }
-
-
         if ($("#vendedor_idCiudad").val() === "") {
             $.alert({
                 title: "Ciudad Inválida",
                 type: 'orange',
-                content: 'Debe ingresar una Sede para el usuario.',
+                content: 'Debe ingresar una Sede para el vendedor.',
                 buttons: {
                     OK: function () { $('#vendedor_idCiudad').focus(); }
                 }
             });
             return false;
         }
+      
         if ($("#idUsuarioBusquedaList").val() === "") {
             $.alert({
-                title: "Usuario Inválida",
+                title: "Usuario Incorrecto",
                 type: 'orange',
                 content: 'Debe ingresar un Usuario.',
                 buttons: {
@@ -339,20 +329,7 @@
             });
             return false;
         }
-
-        if ($("#supervisor_vendedor").val() === 1 && $("#idVendedorBusquedaLis").val()=="")
-        {
-            $.alert({
-                title: "Ciudad Inválida",
-                type: 'orange',
-                content: 'Debe ingresar una Sede para el usuario.',
-                buttons: {
-                    OK: function () { $('#vendedor_idCiudad').focus(); }
-                }
-            });
-            return false;
-        }
-
+                  
         var reg = /^[0-9]\d*(\.\d+)?$/;
         var var2 = $("#vendedor_maxdesapro").val();
 
@@ -368,88 +345,15 @@
             return false;
         }
 
-        var a = $("#idVendedorBusquedaList").val();
-        if ($("#idVendedorBusquedaList").val() == undefined || $("#idVendedorBusquedaList").val() == "") {
-            $("#idVendedorBusquedaList").val("");
-        }             
-       
-        if ($("#responsable_comercial_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "" || ($("#atencion_cliente_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "")) 
-        {
-            $.alert({
-                title: "Supervisor Inválido",
-                type: 'orange',
-                content: 'Debe asignar un Supervisor para el usuario.',
-                buttons: {
-                    OK: function () { $('#idVendedorBusquedaList').focus(); }
-                }
-            });
-            return false;
-        }
-
-        return true;
-
-    }
-
-    function validacionDatosVendedor2() {
-
-        if ($("#vendedor_codigo").val().indexOf(" ") !== -1 || $("#vendedor_codigo").val().length == 1 || $("#vendedor_codigo").val().length > 2 || $("#vendedor_codigo").val().length == "") {
-            $.alert({
-                title: "Código Inválido",
-                type: 'orange',
-                content: 'Debe ingresar un Código de Vendedor válido.',
-                buttons: {
-                    OK: function () { $('#vendedor_codigo').focus(); }
-                }
-            });
-            return false;
-        }
-
-        if ($("#vendedor_descripcion").val().length < 4) {
-            $.alert({
-                title: "Nombre Inválido",
-                type: 'orange',
-                content: 'Debe ingresar un nombre válido.',
-                buttons: {
-                    OK: function () { $('#vendedor_descripcion').focus(); }
-                }
-            });
-            return false;
-        }
-
-        if ($("#vendedor_idCiudad").val() === "") {
-            $.alert({
-                title: "Ciudad Inválida",
-                type: 'orange',
-                content: 'Debe ingresar una sede para el usuario.',
-                buttons: {
-                    OK: function () { $('#vendedor_idCiudad').focus(); }
-                }
-            });
-            return false;
-        }
-
-
-        var reg = /^[0-9]\d*(\.\d+)?$/;
-        var var2 = $("#vendedor_maxdesapro").val()
-        if (reg.test(var2) == false || $("#vendedor_maxdesapro").val() > 100) {
-            $.alert({
-                title: "Maximo descuento aprobado Inválido",
-                type: 'orange',
-                content: 'Debe ingresar un numero correcto.',
-                buttons: {
-                    OK: function () { $('#vendedor_maxdesapro').focus(); }
-                }
-            });
-            return false;
-        }       
-
         if ($("#idVendedorBusquedaList").val() == undefined || $("#idVendedorBusquedaList").val() == "")
         {
             $("#idVendedorBusquedaList").val("");
-        }       
-        
-        if ($("#responsable_comercial_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "" || ($("#atencion_cliente_vendedor").prop('checked') && $("#idVendedorBusquedaList").val()) == "")
+        }             
+     
+        if ($("#supervisor_vendedor").prop('checked') == false)
         {
+            if ($("#responsable_comercial_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "" || $("#atencion_cliente_vendedor").prop('checked') && $("#idVendedorBusquedaList").val() == "") 
+            {
             $.alert({
                 title: "Supervisor Inválido",
                 type: 'orange',
@@ -459,13 +363,24 @@
                 }
             });
             return false;
+            }            
         }
 
-
+        if ($("#responsable_comercial_vendedor").prop('checked') == false && $("#supervisor_vendedor").prop('checked') == false && $("#atencion_cliente_vendedor").prop('checked') == false)
+        {
+            $.alert({
+                title: "Tipo de Vendedor Inválido",
+                type: 'orange',
+                content: 'Debe elegir al menos un tipo de Vendedor.',
+                buttons: {
+                    OK: function () { $('#responsable_comercial_vendedor').focus(); }
+                }
+            });
+            return false;
+        }
         return true;
-
     }
-
+        
     $("#vendedor_idVendedor").change(function () {
         ChangeInputInt("idVendedor", $("#vendedor_idVendedor").val());
     });
@@ -572,26 +487,36 @@
             }, { placeholder_text_single: "Buscar Supervisor", no_results_text: "No se encontró Supervisor" });
     }
 
-    $(document).on('click', "#supervisor_vendedor", function () {
+    $('body').on('change', "#supervisor_vendedor", function () {       
         $("#idVendedorBusquedaList").prop('disabled', true).trigger("chosen:updated"); 
         $('#idVendedorBusquedaList').val('').trigger("chosen:updated");
-        changeInputBoolean("esSupervisorComercial", true);
-        changeInputBoolean("esAsistenteServicioCliente", false);
-        changeInputBoolean("esResponsableComercial", false);
+        var a = $("#supervisor_vendedor").prop('checked');
+        changeInputBoolean("esSupervisorComercial", a);        
+        if ($("#supervisor_vendedor").prop('checked') == false)
+        {
+            $("#idVendedorBusquedaList").removeAttr('disabled').trigger("chosen:updated");
+        }
     });
 
-    $(document).on('click', "#atencion_cliente_vendedor", function () {
-        changeInputBoolean("esAsistenteServicioCliente", true);
-        changeInputBoolean("esSupervisorComercial", false);
-        changeInputBoolean("esResponsableComercial", false);
-        $("#idVendedorBusquedaList").removeAttr('disabled').trigger("chosen:updated"); 
+    $('body').on('change', "#atencion_cliente_vendedor", function () {
+        var a = $("#atencion_cliente_vendedor").prop('checked');
+        changeInputBoolean("esAsistenteServicioCliente", a);        
+        if ($("#supervisor_vendedor").prop('checked') == false)
+        {
+            $("#idVendedorBusquedaList").removeAttr('disabled').trigger("chosen:updated");
+        }
+           
+       
     });
 
-    $(document).on('click', "#responsable_comercial_vendedor", function () {
-        changeInputBoolean("esAsistenteServicioCliente", false);
-        changeInputBoolean("esSupervisorComercial", false);
-        changeInputBoolean("esResponsableComercial", true);
-        $("#idVendedorBusquedaList").removeAttr('disabled').trigger("chosen:updated"); 
+    $('body').on('change', "#responsable_comercial_vendedor", function () {  
+        var a = $('#responsable_comercial_vendedor').prop('checked');
+        changeInputBoolean("esResponsableComercial", a);
+        if ($("#supervisor_vendedor").prop('checked') == false)
+        {
+            $("#idVendedorBusquedaList").removeAttr('disabled').trigger("chosen:updated");
+        }
+        
     });
 
 

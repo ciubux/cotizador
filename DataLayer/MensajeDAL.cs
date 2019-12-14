@@ -27,7 +27,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_mensaje");
             InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
             InputParameterAdd.Text(objCommand, "mensaje", obj.mensaje);
-            InputParameterAdd.Varchar(objCommand, "importancia", obj.importancia);
+            InputParameterAdd.Varchar(objCommand, "prioridad", obj.prioridad);
             InputParameterAdd.Guid(objCommand, "id_usuario_creacion", obj.user.idUsuario);
             InputParameterAdd.Guid(objCommand, "id_usuario_modificacion", obj.user.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fecha_vencimiento", obj.fechaVencimientoMensaje);
@@ -77,7 +77,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);
             InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
             InputParameterAdd.Text(objCommand, "mensaje", obj.mensaje);
-            InputParameterAdd.Varchar(objCommand, "importancia", obj.importancia);
+            InputParameterAdd.Varchar(objCommand, "prioridad", obj.prioridad);
             InputParameterAdd.Guid(objCommand, "id_usuario_modificacion", obj.user.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fecha_vencimiento", obj.fechaVencimientoMensaje);
             InputParameterAdd.DateTime(objCommand, "fecha_inicio", obj.fechaInicioMensaje);
@@ -132,7 +132,7 @@ namespace DataLayer
                 obj.id_mensaje = Converter.GetGuid(row, "id_mensaje");
                 obj.titulo = Converter.GetString(row, "titulo");
                 obj.mensaje = Converter.GetString(row, "mensaje");
-                obj.importancia = Converter.GetString(row, "importancia");
+                obj.prioridad = Converter.GetString(row, "prioridad");
                 obj.fechaCreacionMensaje = Converter.GetDateTime(row, "fecha_creacion");
                 obj.fechaVencimientoMensaje = Converter.GetDateTime(row, "fecha_vencimiento");
                 obj.fechaInicioMensaje = Converter.GetDateTime(row, "fecha_inicio");
@@ -204,7 +204,7 @@ namespace DataLayer
                 obj.fechaVencimientoMensaje = Converter.GetDateTime(row, "fecha_vencimiento");
                 obj.fechaInicioMensaje = Converter.GetDateTime(row, "fecha_inicio");
                 obj.titulo = Converter.GetString(row, "titulo");
-                obj.importancia = Converter.GetString(row, "importancia");
+                obj.prioridad = Converter.GetString(row, "prioridad");
                 obj.mensaje = Converter.GetString(row, "mensaje");
             }
 
@@ -236,7 +236,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "id_usuario", obj.user.idUsuario);
             InputParameterAdd.Varchar(objCommand, "respuesta", obj.mensaje);
             InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
-            InputParameterAdd.Varchar(objCommand, "importancia", obj.importancia);
+            InputParameterAdd.Varchar(objCommand, "prioridad", obj.prioridad);
 
             ExecuteNonQuery(objCommand);
             return obj;

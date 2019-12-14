@@ -8,8 +8,8 @@
     $(document).ready(function () {
         $("#btnBusquedaMensaje").click();
         verificarSiExisteMensaje();
-        cargarChosenUsuarioMensaje();
-
+        cargarChosenUsuarioMensaje();       
+        cargarTooltipLista();        
     });
 
     $.datepicker.regional['es'] = {
@@ -104,18 +104,6 @@
             return false;
         }
 
-        if ($("#importancia").val() == "") {
-            $.alert({
-                title: "Importancia Inválida",
-                type: 'orange',
-                content: 'Debe ingresar una Importacia.',
-                buttons: {
-                    OK: function () { $('#importancia').focus(); }
-                }
-            });
-            return false;
-        }
-
         if ($("#titulo").val() == "" || $("#titulo").val() == null) {
             $.alert({
                 title: "Titulo Inválido",
@@ -181,14 +169,15 @@
 
     $("#titulo").change(function () {
         changeInputString("titulo", $("#titulo").val());
+    });  
+
+    $("#vendedor_prioridad_si").click(function () {
+        changeInputString("prioridad","si");
     });
 
-    $("#importancia").change(function () {
-        changeInputString("importancia", $("#importancia").val());
+    $("#vendedor_prioridad_no").click(function () {
+        changeInputString("prioridad", "no");
     });
-
-
-
 
     function crearMensaje() {
 
@@ -317,7 +306,7 @@
                         var esVisible = $(".ModalMensajeAlerta").is(":visible");
 
                         for (var i = 0; i < list.length; i++) {
-                            if (list[i].importancia == 'Alta') {
+                            if (list[i].prioridad == 'si') {
                                 verAutomaticamente = true;
                             }
                             var BtnLabel = list.length === 1 ? "Marcar como leído" : "Marcar como leído y mostrar siguiente";
@@ -325,7 +314,9 @@
                             if (list.length - 1 === i) {
                                 BtnLabel = "Marcar como leído";
                             }
-
+                            var imagenAdvertencia = list[i].prioridad == "si" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height = "20px"  >' +
+                                    '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
+                            
                             var ItemRow =
                                 '<div id="Mensaje' + numeroModal + '" class="modal fade ModalMensajeAlerta" tabindex="-1" role="dialog">' +
                                 '<div class="modal-dialog" id="MensajeDialog' + numeroModal + '">' +
@@ -339,8 +330,10 @@
                                 '</div><br><br>' +
                                 '</div>' +                               
                                 '<div class="modal-body">' +
-                                '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '</h5>' +
-                                '<h4><u>' + list[i].titulo + '</u></h4>' +
+                               
+                                 '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '</h5>' +
+                                
+                                '<h4 style="display: inline-block;">' + imagenAdvertencia +'<u>' + list[i].titulo + '</u></h4>' +
                                 '<p>' + list[i].mensaje + '</p>' +
                                 '<textarea class="form-control" id ="respuesta' + numeroModal + '" rows="4" style="display:none" placeholder="Respuesta..."> </textarea>' +
                                 '<div class="botonesRespuesta' + numeroModal + ' pull-right btn-group" style="display:none">' +
@@ -401,7 +394,7 @@
                     var a =  
 
                         '<b><P STYLE="margin-bottom: 0.11in"><A NAME="_GoBack"></A><SPAN LANG="es-PE">' + list[i].user.nombre+'</SPAN></b><FONT SIZE=3><SPAN LANG="es-PE"> </SPAN></FONT> <FONT SIZE=2 > <SPAN LANG="es-PE">' +
-                        '</SPAN></FONT > <FONT COLOR="#808080"><FONT SIZE=2><SPAN LANG="es-PE">'
+                        '</SPAN></FONT> <FONT COLOR="#808080"><FONT SIZE=2><SPAN LANG="es-PE">'
                         + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) +' '+ horaImprimible +'</SPAN></FONT></FONT > <FONT COLOR="#808080"><FONT SIZE=2 STYLE="font-size: 9pt"><SPAN LANG="es-PE">' +
                         '</SPAN></FONT></FONT>' +
                         '</P>' +
@@ -898,7 +891,7 @@
 
 
     $(document).on('change', '#importanciaModal', function (event) {
-        changeInputString("importancia", $("#importanciaModal").val());
+        changeInputString("prioridad", $("#importanciaModal").val());
     });
     $(document).on('change', '#tituloModal', function (event) {
         changeInputString("titulo", $("#tituloModal").val());
@@ -1036,18 +1029,6 @@
             return false;
         }
 
-        if ($("#importanciaModal").val() == "") {
-            $.alert({
-                title: "Importancia Inválida",
-                type: 'orange',
-                content: 'Debe ingresar una Importacia.',
-                buttons: {
-                    OK: function () { $('#importanciaModal').focus(); }
-                }
-            });
-            return false;
-        }
-
         if ($("#tituloModal").val() === "" || $("#tituloModal").val() === null) {
             $.alert({
                 title: "Titulo Inválido",
@@ -1104,5 +1085,49 @@
         return true;
 
     }
+
+    function cargarTooltipLista()
+    {
+        var idRol;      
+        $(".listaUsuarioRoles").each(function () {
+            idRol = $(this).attr('id');
+            idRol = idRol.replace('tooltip_','');
+            UsuariosRoles(idRol);            
+        });
+        
+        function UsuariosRoles(idRol)
+        {
+            $.ajax({
+                url: "/Rol/ListUsuarios",
+                type: 'POST',
+                dataType: 'JSON',
+            data: 
+            {
+                idRol: idRol
+            },
+                success: function (list)
+                {                  
+                    var lista="";
+                    for (var i = 0; i < list.length;i++)
+                    {
+                        lista += list[i].nombre + ' (' + list[i].email+')'+'</br> ';                        
+                    }
+                    $('#tooltip_' + idRol + '').attr('data-tipso', lista);
+                    $('#tooltip_' + idRol + '').tipso(
+                        {
+                            titleContent: 'DESTINATARIOS',
+                            titleBackground: '#428bca',
+                            titleColor: '#ffffff',
+                            background: '#ffffff',
+                            color: '#686868',
+                            width: 400
+                        });        
+                }
+            });
+        }  
+    }
+
 });
+
+
 

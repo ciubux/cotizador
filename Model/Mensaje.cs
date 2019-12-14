@@ -37,7 +37,7 @@ namespace Model
 
         public String mensaje { get; set; }
 
-        public String importancia { get; set; }
+        public String prioridad { get; set; }
 
 
         [Display(Name = "Estado:")]

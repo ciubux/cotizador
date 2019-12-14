@@ -365,12 +365,17 @@
     <Content Include="Content\PrintGuiaO.css" />
     <Content Include="Content\PrintGuiaT.css" />
     <Content Include="Content\Site - Copia.css" />
+    <Content Include="Content\tipso\tipso.css" />
+    <Content Include="Content\tipso\tipso.js" />
+    <Content Include="Content\tipso\tipso.min.css" />
+    <Content Include="Content\tipso\tipso.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site1.1.5.css" />
     <Content Include="images\Add-Male-User-icon.png" />
     <Content Include="images\add.png" />
+    <Content Include="images\advertencia.svg" />
     <Content Include="images\calculadora.png" />
     <Content Include="images\calculadora2.png" />
     <Content Include="images\calculadora3.png" />

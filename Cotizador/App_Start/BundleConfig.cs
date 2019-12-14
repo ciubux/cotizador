@@ -123,7 +123,8 @@ namespace Cotizador
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-3.1.1.min.js",
                         "~/Scripts/footable.min.js",
-                        "~/Scripts/jquery-timepicker/jquery.timepicker.min.js"
+                        "~/Scripts/jquery-timepicker/jquery.timepicker.min.js",
+                        "~/Content/tipso/tipso.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
@@ -174,7 +175,8 @@ namespace Cotizador
                       "~/Content/chosen/chosen.css",
                       "~/Content/jquery.loadingModal.css",
                       "~/Scripts/jquery-timepicker/jquery.timepicker.min.css",
-                      "~/Content/jquery-confirm.css"));
+                      "~/Content/jquery-confirm.css",
+                      "~/Content/tipso/tipso.css"));
 
             bundles.Add(new StyleBundle("~/Content/PrintGuiaL").Include(
                        "~/Content/PrintGuiaL.css"

@@ -131,8 +131,8 @@
                 <div class="form-group">
                     @Html.LabelFor(dv => venta.guiaRemision.fechaEmisionDesde, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEmisionDesde" />
-                        <input class="form-control" type="text" id="Venta_fechaEmision_Desde" name="Venta_fechaEmision_Desde" value="@ViewBag.venta.guiaRemision.fechaEmisionDesde">
+                        <input type="hidden" id="fechaEntregaDesdetmp"/>
+                        <input class="form-control" type="text" id="Venta_fechaEmision_Desde" name="Venta_fechaEmision_Desde" value="@ViewBag.venta_fechaEmisionDesde">
                     </div>
                 </div>
             </div>
@@ -141,8 +141,8 @@
                 <div class="form-group">
                     @Html.LabelFor(dv => venta.guiaRemision.fechaEmisionHasta, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEmisionHasta" />
-                        <input class="form-control" type="text" id="Venta_fechaEmision_Hasta" name="Venta_fechaEmision_Hasta" value="@ViewBag.venta.guiaRemision.fechaEmisionHasta">
+                        <input type="hidden" id="fechaEntregaHastatmp"/>
+                        <input class="form-control" type="text" id="Venta_fechaEmision_Hasta" name="Venta_fechaEmision_Hasta" value="@ViewBag.venta_fechaEmisionHasta">
                     </div>
                 </div>
             </div>
@@ -611,7 +611,7 @@
                                 <tr>
                                     @if (venta.usuario.rectificarVenta)
                                     {
-                                    <th data-name="proveedor" data-sortable="false">Rectificar<br> Venta</th>
+                                    <th data-name="proveedor" data-sortable="false">Excluir de <br> Reporte Comercial </th>
                                     }                                        
                                     <th data-name="proveedor" data-sortable="false">Prov.</th>
                                     <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
@@ -704,7 +704,7 @@
                 <div class="modal-footer">
                     @if (venta.usuario.rectificarVenta)
                     {
-                        <button type="button" id="btnExcluirItemsVenta" class="btn btn-danger" data-dismiss="modal">Excluir items de venta</button>
+                        <button type="button" id="btnExcluirItemsVenta" class="btn btn-danger" data-dismiss="modal">Excluir de Reporte Comercial</button>
                     }
 
                     <button type="button" id="btnCancelarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
