@@ -8,8 +8,8 @@
     $(document).ready(function () {
         $("#btnBusquedaMensaje").click();
         verificarSiExisteMensaje();
-        cargarChosenUsuarioMensaje();       
-        cargarTooltipLista();        
+        cargarChosenUsuarioMensaje();
+        cargarTooltipLista();
     });
 
     $.datepicker.regional['es'] = {
@@ -169,13 +169,13 @@
 
     $("#titulo").change(function () {
         changeInputString("titulo", $("#titulo").val());
-    });  
-
-    $("#vendedor_prioridad_si").click(function () {
-        changeInputString("prioridad","si");
     });
 
-    $("#vendedor_prioridad_no").click(function () {
+    $("#vendedor_prioridad_si").change(function () {
+        changeInputString("prioridad", "si");
+    });
+
+    $("#vendedor_prioridad_no").change(function () {
         changeInputString("prioridad", "no");
     });
 
@@ -315,8 +315,8 @@
                                 BtnLabel = "Marcar como leído";
                             }
                             var imagenAdvertencia = list[i].prioridad == "si" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height = "20px"  >' +
-                                    '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
-                            
+                                '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
+
                             var ItemRow =
                                 '<div id="Mensaje' + numeroModal + '" class="modal fade ModalMensajeAlerta" tabindex="-1" role="dialog">' +
                                 '<div class="modal-dialog" id="MensajeDialog' + numeroModal + '">' +
@@ -328,12 +328,12 @@
                                 '<div class="btn-group" style="float:right">' +
                                 '<button  type="button"  class="Leido btn btn-primary ' + list[i].id_mensaje + ' ">' + BtnLabel + '</button>' +
                                 '</div><br><br>' +
-                                '</div>' +                               
+                                '</div>' +
                                 '<div class="modal-body">' +
-                               
-                                 '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '</h5>' +
-                                
-                                '<h4 style="display: inline-block;">' + imagenAdvertencia +'<u>' + list[i].titulo + '</u></h4>' +
+
+                                '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '</h5>' +
+
+                                '<h4 style="display: inline-block;">' + imagenAdvertencia + '<u>' + list[i].titulo + '</u></h4>' +
                                 '<p>' + list[i].mensaje + '</p>' +
                                 '<textarea class="form-control" id ="respuesta' + numeroModal + '" rows="4" style="display:none" placeholder="Respuesta..."> </textarea>' +
                                 '<div class="botonesRespuesta' + numeroModal + ' pull-right btn-group" style="display:none">' +
@@ -342,11 +342,11 @@
                                 '<button   class="EnviarRespuesta btn btn-primary ' + list[i].id_mensaje + '">Aceptar</button>' +
                                 '</div>' +
                                 '</div>' +
-                                
+
                                 '<div class="modal-body" id="modalHistorialMensaje' + numeroModal + '">' +
 
                                 '</div>' +
-                                
+
 
                                 '</div>' +
                                 '</div>';
@@ -382,7 +382,7 @@
                 idMensaje: idMensaje
             },
             success: function (list) {
-                $('#modalHistorialMensaje'+numeroModal+'').empty();
+                $('#modalHistorialMensaje' + numeroModal + '').empty();
                 for (var i = 0; i < list.length; i++) {
 
                     var date = new Date(list[i].fechaCreacionMensaje);
@@ -391,17 +391,17 @@
                     segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
                     horaImprimible = hora + ":" + minuto + ":" + segundo;
 
-                    var a =  
+                    var a =
 
-                        '<b><P STYLE="margin-bottom: 0.11in"><A NAME="_GoBack"></A><SPAN LANG="es-PE">' + list[i].user.nombre+'</SPAN></b><FONT SIZE=3><SPAN LANG="es-PE"> </SPAN></FONT> <FONT SIZE=2 > <SPAN LANG="es-PE">' +
+                        '<b><P STYLE="margin-bottom: 0.11in"><A NAME="_GoBack"></A><SPAN LANG="es-PE">' + list[i].user.nombre + '</SPAN></b><FONT SIZE=3><SPAN LANG="es-PE"> </SPAN></FONT> <FONT SIZE=2 > <SPAN LANG="es-PE">' +
                         '</SPAN></FONT> <FONT COLOR="#808080"><FONT SIZE=2><SPAN LANG="es-PE">'
-                        + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) +' '+ horaImprimible +'</SPAN></FONT></FONT > <FONT COLOR="#808080"><FONT SIZE=2 STYLE="font-size: 9pt"><SPAN LANG="es-PE">' +
+                        + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + ' ' + horaImprimible + '</SPAN></FONT></FONT > <FONT COLOR="#808080"><FONT SIZE=2 STYLE="font-size: 9pt"><SPAN LANG="es-PE">' +
                         '</SPAN></FONT></FONT>' +
                         '</P>' +
-                        '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' +'</SPAN></FONT></P></br>';                       
-                        
+                        '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' + '</SPAN></FONT></P></br>';
 
-                    $('#modalHistorialMensaje'+numeroModal+'').append(a);
+
+                    $('#modalHistorialMensaje' + numeroModal + '').append(a);
                 }
             }
         });
@@ -873,25 +873,21 @@
 
     });
 
-
-    $(document).on('click', '#MensajeRapidoMenu', function (event) {
-        event.preventDefault();
-
-        var url = $('#MensajeRapido').data('url');
-
-        $("#MensajeRapido").modal("show");
-
-        $("#MensajeRapidoDialog").load(url, function (data) {
-
-            $("select[name=UsuarioMensajeRapido]").chosen();
-
-        });
+    setTimeout(function () {
+    $('body').on('click', '#MensajeRapidoMenu', function (event) {
+        event.preventDefault();        
+        var url = $('#MensajeRapido').data('url');        
+        $("#MensajeRapidoDialog").load(url, function (data)
+        { $("#MensajeRapido").modal("show"); });        
     });
+    }, 3000);
 
 
-
-    $(document).on('change', '#importanciaModal', function (event) {
-        changeInputString("prioridad", $("#importanciaModal").val());
+    $('body').on('change', '#mensaje_prioridad_si_modal', function (event) {
+        changeInputString("prioridad", "si");
+    });
+    $('body').on('change', '#mensaje_prioridad_no_modal', function (event) {
+        changeInputString("prioridad", "no");
     });
     $(document).on('change', '#tituloModal', function (event) {
         changeInputString("titulo", $("#tituloModal").val());
@@ -913,15 +909,14 @@
         });
     });
 
-    $(document).on('click', "#btnCancelarMensajeModal", function () {
+    $('body').on('click', "#btnCancelarMensajeModal", function () {
         $("#MensajeRapido").modal("hide");
     });
 
-    setTimeout(function () {
-        $(document).on('shown.bs.modal', '#MensajeRapido', function () {
+    
+        $('body').on('shown.bs.modal', '#MensajeRapido', function () {
+            cargarTooltipLista();            
             $('#idUsuarioBusquedaMensajeModal', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
-
-            //$('#idUsuarioBusquedaMensajeModal', this).chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
             $('#mensajeFechaInicioMensajeModal').datepicker().datepicker("setDate", new Date());
             $('#mensajeFechaVencimientoMensajeModal').datepicker().datepicker("setDate", '+7');
 
@@ -936,7 +931,7 @@
                     loadingImg: "Content/chosen/images/loading.gif"
                 }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });
         });
-    }, 2000);
+
 
 
     $(document).on('change', "#mensajeFechaInicioMensajeModal", function () {
@@ -1086,48 +1081,44 @@
 
     }
 
-    function cargarTooltipLista()
+    function cargarTooltipLista() 
     {
-        var idRol;      
+        var idRol;
         $(".listaUsuarioRoles").each(function () {
             idRol = $(this).attr('id');
-            idRol = idRol.replace('tooltip_','');
-            UsuariosRoles(idRol);            
-        });
-        
-        function UsuariosRoles(idRol)
-        {
-            $.ajax({
-                url: "/Rol/ListUsuarios",
-                type: 'POST',
-                dataType: 'JSON',
-            data: 
+            idRol = idRol.replace('tooltip_', '');
+            UsuariosRoles(idRol);
+        });               
+    }
+
+    function UsuariosRoles(idRol) {
+        $.ajax({
+            url: "/Rol/ListUsuarios",
+            type: 'POST',
+            dataType: 'JSON',
+            data:
             {
                 idRol: idRol
             },
-                success: function (list)
-                {                  
-                    var lista="";
-                    for (var i = 0; i < list.length;i++)
-                    {
-                        lista += list[i].nombre + ' (' + list[i].email+')'+'</br> ';                        
-                    }
-                    $('#tooltip_' + idRol + '').attr('data-tipso', lista);
-                    $('#tooltip_' + idRol + '').tipso(
-                        {
-                            titleContent: 'DESTINATARIOS',
-                            titleBackground: '#428bca',
-                            titleColor: '#ffffff',
-                            background: '#ffffff',
-                            color: '#686868',
-                            width: 400
-                        });        
+            success: function (list) {
+                var lista = "";
+                for (var i = 0; i < list.length; i++) {
+                    lista += list[i].nombre + ' (' + list[i].email + ')' + '</br> ';
                 }
-            });
-        }  
+                $('#tooltip_' + idRol + '').attr('data-tipso', lista);
+                $('#tooltip_' + idRol + '').tipso(
+                    {
+                        titleContent: 'DESTINATARIOS',
+                        titleBackground: '#428bca',
+                        titleColor: '#ffffff',
+                        background: '#ffffff',
+                        color: '#686868',
+                        width: 400
+                    });
+            }
+        });
     }
 
 });
-
 
 

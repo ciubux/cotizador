@@ -220,7 +220,7 @@ namespace Cotizador.Controllers
             Mensaje obj = (Mensaje)this.MensajeSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, this.Request.Params["valor"]);
-            this.MensajeSession = obj; ;
+            this.MensajeSession = obj;
 
         }
 
@@ -423,12 +423,13 @@ namespace Cotizador.Controllers
             if (this.Session[Constantes.VAR_SESSION_MENSAJE] == null && id_mensaje == null)
             {
                 instanciarMensaje();
+                Mensaje instanciaMensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
+                instanciaMensaje.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                instanciaMensaje.prioridad = "si";
             }
 
             Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
-            mensaje.user.idUsuario = usuario.idUsuario;
-            mensaje.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
-            mensaje.prioridad = "si";
+            mensaje.user.idUsuario = usuario.idUsuario;            
             ViewBag.Mensaje = mensaje;
             ViewBag.roles = roles;
 

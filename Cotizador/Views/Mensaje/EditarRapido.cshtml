@@ -20,18 +20,18 @@
 
 
                             <div class="row form-group">
-                                <label for="color" class="col-form-label col-md-3">Importancia:</label>
+                                <label for="color" class="col-form-label col-md-3">Prioridad:</label>
 
                                 <div class="col-md-9">
                                     <div class="radio-inline">
                                         <label class="radio-label">
                                             @if (mensaje.prioridad == "si")
                                             {
-                                                <input class="radio-input" checked type="radio" name="vendedor_prioridad" id="vendedor_prioridad_si" value="1"><span style="font-weight: normal">Si</span>
+                                                <input class="radio-input" checked type="radio" name="mensaje_prioridad_modal" id="mensaje_prioridad_si_modal" value="1"><span style="font-weight: normal">Si</span>
                                             }
                                             else
                                             {
-                                                <input class="radio-input" type="radio" name="vendedor_prioridad" id="vendedor_prioridad_si" value="1"><span style="font-weight: normal">Si</span>
+                                                <input class="radio-input" type="radio" name="mensaje_prioridad_modal" id="mensaje_prioridad_si_modal" value="1"><span style="font-weight: normal">Si</span>
                                             }
 
                                         </label>
@@ -40,15 +40,14 @@
                                         <label class="radio-label">
                                             @if (mensaje.prioridad == "no")
                                             {
-                                                <input class="radio-input" checked type="radio" name="vendedor_prioridad" id="vendedor_prioridad_no" value="0"><span style="font-weight: normal">No</span>
+                                                <input class="radio-input" checked type="radio" name="mensaje_prioridad_modal" id="mensaje_prioridad_no_modal" value="0"><span style="font-weight: normal">No</span>
                                             }
                                             else
                                             {
-                                                <input class="radio-input" type="radio" name="vendedor_prioridad" id="vendedor_prioridad_no" value="0"><span style="font-weight: normal">No</span>
+                                                <input class="radio-input" type="radio" name="mensaje_prioridad_modal" id="mensaje_prioridad_no_modal" value="0"><span style="font-weight: normal">No</span>
                                             }
                                         </label>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -107,7 +106,7 @@
                                         <div class="col-sm-6 col-lg-4 col-xs-12">
                                             <label class="radio-label" for="permiso_@ro.idRol">
                                                 <input type="checkbox" @itemChecked class="chk-rol RolMensajeModal" name="rol_@ro.idRol" id="rol_@ro.idRol" value="1">
-                                                <span class="UsuarioTooltip" id="@ro.idRol">@ro.nombre - (@ro.codigo)</span>
+                                                <span class="listaUsuarioRoles" id="tooltip_@ro.idRol" data-toggle="tooltip" data-tipso="">@ro.nombre - (@ro.codigo)</span>
                                             </label>
                                         </div>
 
