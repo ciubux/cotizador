@@ -78,13 +78,13 @@
 .tipso_bubble:after {
     content: '';
     position: absolute;
-    left: 175px;
-    bottom: -11px;
+    left: 180px;
+    bottom: -10.8px;
     width: 20px;
     height: 20px;
     background: white;
     transform: rotate(45deg);
-    box-shadow: inset -5px -5px 2px -4px #428bca;   
+    box-shadow: inset -1px -1px #428bca;   
 }
 
 
