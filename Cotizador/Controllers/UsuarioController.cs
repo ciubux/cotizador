@@ -416,16 +416,6 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
         }
 
-        public void ChangeInputDecimalMantenedor()
-        {
-            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
-            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(obj, Decimal.Parse(this.Request.Params["valor"]));
-            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
-        }
-
-
-
         public String ChangeIdCiudad()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
