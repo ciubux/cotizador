@@ -641,8 +641,7 @@
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<button type="button" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary">Editar</button>' +
-                        '<button type="button" id ="' + list[i].id_mensaje + '" class="btnVerMensaje btn btn-success">Ver</button>' +
+                        '<button type="button" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary">Editar</button>' +                        
                         '</div>' +
                         '</td>' +
                         '</tr>';
@@ -653,51 +652,7 @@
             }
         });
     });
-
-    $('body').on('click', "button.btnVerMensaje", function () {
-        var idMensaje = $(this).attr('id');
-        $.ajax({
-            url: "/Mensaje/verHiloMensaje",
-            type: 'POST',
-            async: false,
-            dataType: 'JSON',
-            data: {
-                idMensaje: idMensaje
-            },
-            success: function (list) {
-                $("#tableMensajeVer > tbody").empty();
-                $('#tituloMensaje').html('Titulo de Mensaje:' + list[list.length - 1].mensaje + '');
-                list = eliminateDuplicates(list);
-                function eliminateDuplicates(arrayIn) {
-
-                    var arrayOut = {};
-                    var unicos = arrayIn.filter(function (e) {
-                        return arrayOut[e.fechaCreacionMensaje] ? false : (arrayOut[e.fechaCreacionMensaje] = true);
-                    });
-                    return unicos;
-                }
-
-                for (var i = 0; i < list.length; i++) {
-                    var date = new Date(list[i].fechaCreacionMensaje);
-                    hora = (date.getHours() < 10 ? '0' : '') + date.getHours();
-                    minuto = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
-                    segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
-                    horaImprimible = hora + ":" + minuto + ":" + segundo;
-                    var numero = list.length - i;
-                    var ItemRow =
-                        '<tr data-expanded="true"> ' +
-                        '<td style="display: table-cell;">  ' + numero + '  </td>' +
-                        '<td style="display: table-cell;">  ' + list[i].user.nombre + '  </td>' +
-                        '<td style="display: table-cell;">  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + ' ' + horaImprimible + '  </td>' +
-                        '<td style="display: table-cell;">  ' + list[i].mensaje + '  </td>' +
-                        '</tr>';
-                    $("#tableMensajeVer").append(ItemRow);
-                }
-            }
-        });
-        $('#modalListado').modal('show');
-    });
-
+    
     $('body').on('click', "button.btnEditarMensaje", function () {
 
         var arrrayClass = event.target.getAttribute("class").split(" ");
