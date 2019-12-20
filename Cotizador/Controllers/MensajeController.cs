@@ -87,10 +87,8 @@ namespace Cotizador.Controllers
             obj.fechaInicioMensaje = DateTime.Now;
             obj.fechaVencimientoMensaje = DateTime.Now;
             obj.listUsuario = new List<Usuario>();
-            obj.user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.user = (Usuario)Session[Constantes.VAR_SESSION_USUARIO];
             this.Session[Constantes.VAR_SESSION_MENSAJE] = obj;
-
-
         }
 
         [HttpGet]
@@ -420,7 +418,7 @@ namespace Cotizador.Controllers
 
             this.Session[Constantes.VAR_SESSION_ROL_LISTA] = roles;
 
-            if (this.Session[Constantes.VAR_SESSION_MENSAJE] == null && id_mensaje == null)
+            if (this.Session[Constantes.VAR_SESSION_MENSAJE] == null)
             {
                 instanciarMensaje();
                 Mensaje instanciaMensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
