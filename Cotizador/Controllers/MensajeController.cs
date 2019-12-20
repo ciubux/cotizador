@@ -418,15 +418,15 @@ namespace Cotizador.Controllers
 
             this.Session[Constantes.VAR_SESSION_ROL_LISTA] = roles;
 
-            if (this.Session[Constantes.VAR_SESSION_MENSAJE] == null)
+            if (this.Session[Constantes.VAR_SESSION_MENSAJE] == null && id_mensaje == null)
             {
                 instanciarMensaje();
                 Mensaje instanciaMensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
                 instanciaMensaje.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
                 instanciaMensaje.prioridad = "si";
             }
-
             Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
+            if (mensaje.user == null) { mensaje.user = new Usuario(); }
             mensaje.user.idUsuario = usuario.idUsuario;            
             ViewBag.Mensaje = mensaje;
             ViewBag.roles = roles;
