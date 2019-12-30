@@ -274,6 +274,7 @@
     <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="ExcelExport\CanastaGrupoCliente.cs" />
+    <Compile Include="ExcelExport\KardexExcel.cs" />
     <Compile Include="ExcelExport\DireccionCliente.cs" />
     <Compile Include="ExcelExport\CanastaCliente.cs" />
     <Compile Include="ExcelExport\CotizacionDetalleFormatoExcel.cs" />

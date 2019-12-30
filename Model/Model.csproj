@@ -52,9 +52,11 @@
     <Compile Include="AlertaValidacion.cs" />
     <Compile Include="Auditoria.cs" />
     <Compile Include="CampoPersistir.cs" />
+    <Compile Include="CiudadViewModels.cs" />
     <Compile Include="ClienteSunat.cs" />
     <Compile Include="CONFIGCLASSES\ClienteConfiguracion.cs" />
     <Compile Include="ClienteReasignacionHistorico.cs" />
+    <Compile Include="MovimientoKardex.cs" />
     <Compile Include="LogCambio.cs" />
     <Compile Include="LogTabla.cs" />
     <Compile Include="LogCampo.cs" />
