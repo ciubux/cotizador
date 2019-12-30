@@ -2654,9 +2654,9 @@ jQuery(function ($) {
 
     $("#chkAjusteCalculoPrecios").change(function () {
         if ($("#chkAjusteCalculoPrecios").is(":checked")) {
-            $("#chkAjusteCalculoPreciosModal").prop("checked", false);
-        } else {
             $("#chkAjusteCalculoPreciosModal").prop("checked", true);
+        } else {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", false);
         }
 
         cambioChkAjusteCalculoPrecios();
@@ -2664,9 +2664,9 @@ jQuery(function ($) {
 
     $("#chkAjusteCalculoPreciosModal").change(function () {
         if ($("#chkAjusteCalculoPreciosModal").is(":checked")) {
-            $("#chkAjusteCalculoPrecios").prop("checked", false);
-        } else {
             $("#chkAjusteCalculoPrecios").prop("checked", true);
+        } else {
+            $("#chkAjusteCalculoPrecios").prop("checked", false);
         }
 
         cambioChkAjusteCalculoPrecios();

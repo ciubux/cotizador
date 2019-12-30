@@ -1955,7 +1955,17 @@ namespace Cotizador.Controllers
                                 /* precio unitario  */
                                 if (sheet.GetRow(row).GetCell(colPrecioNeto) != null)
                                 {
-                                    precioNeto = Decimal.Parse(sheet.GetRow(row).GetCell(colPrecioNeto).ToString());
+                                    ICell precioCell = sheet.GetRow(row).GetCell(colPrecioNeto);
+                                    if (precioCell.CellType == CellType.Formula)
+                                    {
+                                        precioNeto = (decimal) precioCell.NumericCellValue;
+                                    }
+                                    else
+                                    {
+                                        precioNeto = Decimal.Parse(sheet.GetRow(row).GetCell(colPrecioNeto).ToString());
+                                    }
+
+                                    precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
                                 }
 
                                 /* flete */

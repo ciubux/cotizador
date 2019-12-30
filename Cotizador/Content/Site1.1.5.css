@@ -718,3 +718,8 @@ $darkred: darken($red, 0.2);*/
 }*/
 
 
+
+/* Bootstrap navbar override */
+.navbar-nav > li > a {
+    padding: 10px 12px !important;
+}
