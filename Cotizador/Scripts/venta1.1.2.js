@@ -1,6 +1,6 @@
 
 jQuery(function ($) {
-    
+
     var TITLE_EXITO = 'Operación Realizada';
 
     //CONSTANTES POR DEFECTO
@@ -3936,8 +3936,8 @@ jQuery(function ($) {
                 }
             });
             return false;
-        }        
-       
+        }
+
         return true;
     }
 
@@ -4157,7 +4157,7 @@ jQuery(function ($) {
         cargarChosenClienteList();
         $("#VentaList_tipoDocumento").find("option[value='7']").remove();
         $("#VentaList_tipoDocumento").find("option[value='8']").remove();
-       
+
         $("#btnBusquedaVentaList").click();
 
     });
@@ -4210,7 +4210,7 @@ jQuery(function ($) {
         var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
 
         //  var usuario = resultado.usuario;
-        
+
 
         $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
         $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
@@ -4318,7 +4318,7 @@ jQuery(function ($) {
         $("#tableDetallePedido > tbody").empty();
 
         FooTable.init('#tableDetallePedido');
-        
+
         //    $("#formVerGuiasRemision").html("");
 
         var d = '';
@@ -4330,9 +4330,8 @@ jQuery(function ($) {
             var RectificarVenta;
             if (permiso == 1) {
 
-                if (lista[i].excluirVenta == 1 && lista[i].estadoVenta == 1)
-                {                    
-                    RectificarVenta = '<td><input type="checkbox" checked class="chkRectificarVenta" id="' + lista[i].idVentaDetalle+'"" name="rectificarVenta"></td>';
+                if (lista[i].excluirVenta == 1 && lista[i].estadoVenta == 1) {
+                    RectificarVenta = '<td><input type="checkbox" checked class="chkRectificarVenta" id="' + lista[i].idVentaDetalle + '"" name="rectificarVenta"></td>';
                 }
                 else
                     RectificarVenta = '<td><input type="checkbox" class="chkRectificarVenta" id="' + lista[i].idVentaDetalle + '"" name="rectificarVenta"></td>';
@@ -4342,8 +4341,8 @@ jQuery(function ($) {
             }
 
 
-            d += '<tr>' +               
-                 RectificarVenta +
+            d += '<tr>' +
+                RectificarVenta +
                 '<td>' + lista[i].producto.proveedor + '</td>' +
                 '<td>' + lista[i].producto.sku + '</td>' +
                 '<td>' + lista[i].producto.descripcion + '</td>' +
@@ -4415,58 +4414,60 @@ jQuery(function ($) {
 
         $("#tableDetallePedido").append(d);
 
+        $('#btnEditarVentaModal').remove();
+        
+        var a = pedido.documentoVenta.numero == null ? '<button type="button" id="btnEditarVentaModal" class="btn btn-danger">Editar Venta</button>' : "";
+
+        $('#btnExcluirItemsVenta').after(a);
+
+
         $("#modalFacturar").modal('show');
     }
 
     $(document).on('click', "button#btnExcluirItemsVenta", function () {
-        var total = $('.chkRectificarVenta').length;        
+        var total = $('.chkRectificarVenta').length;
         var error = 0;
         var success = 0;
         $('.chkRectificarVenta').each(function () {
             var valor;
-           
+
             var id_detalle_producto;
             if ($(this).prop('checked')) {
                 id_detalle_producto = $(this).attr("id");
-                 valor = 1;
-                AjaxCheck();    
-            }
-            if ($(this).prop('checked')==false) {
-                id_detalle_producto = $(this).attr("id");
-                 valor = 0;
+                valor = 1;
                 AjaxCheck();
             }
-            function AjaxCheck()
-            {
+            if ($(this).prop('checked') == false) {
+                id_detalle_producto = $(this).attr("id");
+                valor = 0;
+                AjaxCheck();
+            }
+            function AjaxCheck() {
                 $.ajax({
                     url: "/Venta/RectificarVentaCheck",
-                    type: 'POST', 
+                    type: 'POST',
                     async: false,
                     data: {
                         id_detalle_producto: id_detalle_producto,
                         valor: valor
                     },
-                    success:function()
-                    {
+                    success: function () {
                         success = success + 1;
                     },
-                    error: function()
-                    {
+                    error: function () {
                         error = error + 1;
                     }
                 });
-                
+
             }
-            if (total == success)
-            {
+            if (total == success) {
                 $.alert({
                     title: TITLE_EXITO,
                     type: 'green',
                     content: 'Se guardaron correctamente los cambios.',
                     buttons: {
-                        OK: function ()
-                        {
-                           
+                        OK: function () {
+
                         }
                     }
                 });
@@ -4483,13 +4484,13 @@ jQuery(function ($) {
                     }
                 });
             }
-           
 
-            
+
+
         });
     });
 
-    $(document).on('click', "button.btnMostrarPreciosVentaList", function () {
+    $('body').on('click', "button.btnMostrarPreciosVentaList", function () {
 
         var idProducto = event.target.getAttribute("class").split(" ")[0];
         var idCliente = $("#idClienteFacturacion").val();
@@ -4548,5 +4549,26 @@ jQuery(function ($) {
         $("#modalMostrarPrecios").modal();
 
     });
+    
+    $('#modalFacturar').on('click', "#btnEditarVentaModal", function () {
 
+        $("#btnCancelarFacturarPedido").click();
+        // desactivarBotonesVer();
+
+        $.ajax({
+            url: "/Venta/iniciarEdicionVenta",
+            type: 'POST',
+            error: function (detalle) { alert("Ocurrió un problema al iniciar la edición de la venta."); },
+            success: function (fileName) {
+
+                var popupWindow = window.open(
+                    "/Venta/Vender",
+                    "Edición de Venta",
+                    "resizable,scrollbars,status"
+                );
+
+            }
+        });
+    });
+    
 });
