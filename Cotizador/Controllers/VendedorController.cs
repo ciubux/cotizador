@@ -80,9 +80,17 @@ namespace Cotizador.Controllers
         {
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.modificaVendedor)
+
+            if (usuario == null)
             {
                 return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                if (!usuario.modificaVendedor)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
             }
 
             return View();
@@ -92,6 +100,19 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Lista()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                if (!usuario.modificaVendedor)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaVendedores;
             if (this.Session[Constantes.VAR_SESSION_VENDEDOR_BUSQUEDA] == null)
