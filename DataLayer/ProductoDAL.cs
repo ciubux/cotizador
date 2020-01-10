@@ -164,7 +164,7 @@ namespace DataLayer
                 producto.Stock = Converter.GetInt(row, "stock");
 
                 /*Obtenido a partir de precio Lista*/
-                if (row["precio_neto"] != DBNull.Value)
+                if (row["precio_neto"] != DBNull.Value && !esCompra)
                 {
                     producto.precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto");
                     producto.precioClienteProducto.flete = Converter.GetDecimal(row, "flete");
@@ -220,6 +220,13 @@ namespace DataLayer
                 precioLista.precioNeto = Converter.GetDecimal(row, "precio_neto");
                 precioLista.flete = Converter.GetDecimal(row, "flete");
                 precioLista.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
+
+                if (esCompra)
+                {
+                    precioLista.precioNeto = producto.costoSinIgv;
+                    precioLista.precioUnitario = producto.costoSinIgv;
+                }
+
                 if (row["numero_cotizacion"] == DBNull.Value)
                 {
                     precioLista.numeroCotizacion = null;
@@ -247,6 +254,12 @@ namespace DataLayer
                 productoPresentacion.PrecioSinIGV = productoPresentacion.PrecioLimaSinIGV;
                 productoPresentacion.UnidadInternacional = Converter.GetString(row, "unidad_internacional");
                 productoPresentacion.Stock = Converter.GetInt(row, "stock");
+
+                if(esCompra)
+                {
+                    productoPresentacion.PrecioLimaSinIGV = productoPresentacion.CostoSinIGV;
+                    productoPresentacion.PrecioProvinciasSinIGV = productoPresentacion.CostoSinIGV;
+                }
                 producto.ProductoPresentacionList.Add(productoPresentacion);
             }           
 

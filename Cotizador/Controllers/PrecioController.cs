@@ -39,6 +39,17 @@ namespace Cotizador.Controllers
                 }
             }
 
+            foreach (PrecioClienteProducto precio in precioClienteProductoList)
+            {
+                if (precio.numeroCotizacion == null)
+                {
+                    precio.numeroCotizacion = "No Identificado";
+                } else
+                {
+                    precio.numeroCotizacion = precio.numeroCotizacion + " - " + precio.tipoCotizacion;
+                }
+            }
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
             String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";

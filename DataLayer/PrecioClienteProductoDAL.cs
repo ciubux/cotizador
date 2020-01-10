@@ -54,6 +54,7 @@ namespace DataLayer
                 precioLista.precioNeto = Converter.GetDecimal(row, "precio_neto");
                 precioLista.flete = Converter.GetDecimal(row, "flete");
                 precioLista.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
+                precioLista.tipoCotizacion = Converter.GetString(row, "tipo_cotizacion");
                 if (row["numero_cotizacion"] == DBNull.Value)
                 {
                     precioLista.numeroCotizacion = null;
