@@ -483,6 +483,8 @@ namespace BusinessLayer
                     cliente.chrAsesor.valor = cliente.responsableComercial.idVendedor.ToString();
                     cliente.chrAsesor.campo = "responsableComercial";
                     clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsesor);
+
+                    // Notificar
                 }
 
                 if (!cliente.supervisorComercial.idVendedor.ToString().Equals(cliente.chrSupervisor.preValor))

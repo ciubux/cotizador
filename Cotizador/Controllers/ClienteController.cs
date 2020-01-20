@@ -813,12 +813,36 @@ namespace Cotizador.Controllers
         }
 
         /*MANTENIMIENTO DE VENDEDORES*/
-        public void ChangeIdResponsableComercial()
+        public String ChangeIdResponsableComercial()
         {
+            int idSupervisor = -1;
             if (this.Request.Params["idResponsableComercial"] == null || this.Request.Params["idResponsableComercial"] == String.Empty)
+            {
                 ClienteSession.responsableComercial.idVendedor = 0;
+            }
             else
-                ClienteSession.responsableComercial.idVendedor = Int32.Parse(this.Request.Params["idResponsableComercial"]);
+            {
+                int idVendedor = Int32.Parse(this.Request.Params["idResponsableComercial"]);
+                if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.MantenimientoCliente)
+                {
+                    Usuario usuario = ((Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]);
+                    Vendedor asesor = usuario.vendedorList.Where(v => v.idVendedor == idVendedor).FirstOrDefault();
+                    Vendedor supervisor = null;
+                    if (asesor != null && (ClienteSession.supervisorComercial == null || ClienteSession.supervisorComercial.idVendedor == 0
+                             || ClienteSession.supervisorComercial.idVendedor == 21 || ClienteSession.supervisorComercial.idVendedor == Constantes.ID_VENDEDOR_POR_ASIGNAR))
+                    {
+                        supervisor = usuario.supervisorComercialList.Where(v => v.idVendedor == asesor.idSupervisorComercial).FirstOrDefault();
+                        if (supervisor != null)
+                        {
+                            ClienteSession.supervisorComercial.idVendedor = supervisor.idVendedor;
+                            idSupervisor = ClienteSession.supervisorComercial.idVendedor;
+                        }
+                    }
+                }
+                ClienteSession.responsableComercial.idVendedor = idVendedor;
+            }
+
+            return "{\"success\":\"true\",\"idSupervisor\":" + idSupervisor + "}";
         }
 
         public void ChangeCHRFIVAsesor()

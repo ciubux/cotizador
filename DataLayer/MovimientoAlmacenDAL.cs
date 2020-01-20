@@ -869,12 +869,12 @@ namespace DataLayer
             return MovimientoAlmacenExtornantesList;
         }
 
-        
+
 
         public List<GuiaRemision> SelectGuiasRemision(GuiaRemision guiaRemision)
         {
             List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
-            
+
             var objCommand = GetSqlCommand("ps_guiasRemision");
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", guiaRemision.numeroDocumento);
             InputParameterAdd.Guid(objCommand, "idCiudad", guiaRemision.ciudadOrigen.idCiudad);
@@ -884,9 +884,10 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", guiaRemision.fechaTrasladoDesde);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", guiaRemision.fechaTrasladoHasta);
-            InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado?1:0);
+            InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "facturado", guiaRemision.estaFacturado ? 1 : 0);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", guiaRemision.pedido.numeroPedido);
+            InputParameterAdd.Int(objCommand, "estadoFiltro", (int)guiaRemision.estadoFiltro);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)guiaRemision.motivoTrasladoBusqueda).ToString());
             InputParameterAdd.Varchar(objCommand, "sku", guiaRemision.sku);
 
@@ -1188,6 +1189,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "numeroGuiaReferencia", notaIngreso.numeroGuiaReferencia);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", notaIngreso.pedido.numeroPedido);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)notaIngreso.motivoTrasladoBusqueda).ToString());
+            InputParameterAdd.Int(objCommand, "estadoFiltro", (int) notaIngreso.estadoFiltro);
             InputParameterAdd.Varchar(objCommand, "sku", notaIngreso.sku);
             DataTable dataTable = Execute(objCommand);
 

@@ -463,6 +463,7 @@ namespace DataLayer
                     vendedor.esSupervisorComercial = Converter.GetBool(row, "es_supervisor_comercial");
                     vendedor.usuario = new Usuario();
                     vendedor.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                    vendedor.idSupervisorComercial = Converter.GetInt(row, "id_supervisor_comercial");
                     vendedorList.Add(vendedor);
 
                     if (vendedor.usuario.idUsuario == usuario.idUsuario)

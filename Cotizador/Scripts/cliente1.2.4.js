@@ -2243,11 +2243,17 @@ jQuery(function ($) {
         verificarChrForm("#idResponsableComercial", "#divChrAsesor");
         $.ajax({
             url: "/Cliente/ChangeIdResponsableComercial", type: 'POST', 
+            dataType: 'JSON',
             data: {
                 idResponsableComercial: idResponsableComercial
             },
             error: function () { location.reload();      },
-            success: function () {     }
+            success: function (res) {
+                if (res.idSupervisor > 0) {
+                    $('#idSupervisorComercial').val(res.idSupervisor);
+                    verificarChrForm("#idSupervisorComercial", "#divChrSupervisor");
+                }
+            }
         });
     });
 

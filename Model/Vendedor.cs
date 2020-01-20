@@ -11,6 +11,8 @@ namespace Model
     {
         public int idVendedor { get; set; }
 
+        public int idSupervisorComercial { get; set; }
+
         [Display(Name = "Codigo:")]
         public String codigo { get; set; }
         [Display(Name = "Nombre:")]

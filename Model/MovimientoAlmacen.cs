@@ -24,8 +24,8 @@ namespace Model
         public Boolean estaFacturado { get; set; }
 
         public Boolean estaNoEntregado { get; set; }
-        
-     
+
+
 
         public String comentarioAnulado { get; set; }
 
@@ -45,6 +45,7 @@ namespace Model
 
         public SeguimientoMovimientoAlmacenEntrada seguimientoMovimientoAlmacenEntrada { get; set; }
 
+        
 
         public enum estadosMovimiento {
             [Display(Name = "Anulado")]

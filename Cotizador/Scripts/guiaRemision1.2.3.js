@@ -1833,6 +1833,18 @@ jQuery(function ($) {
 
 
 
+    $("#estadoFiltro").on("click", function () {
+        var estado = $("#estadoFiltro").val();
+        $.ajax({
+            url: "/GuiaRemision/ChangeEstadoFiltro",
+            type: 'POST',
+            data: {
+                estado: estado
+            },
+            success: function () {
+            }
+        });
+    });
 
 
 
